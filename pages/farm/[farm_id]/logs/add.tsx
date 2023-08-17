@@ -1,8 +1,11 @@
-import AddLogs from "@/components/AddLogs/AddLogs";
+import FarmsaddLogs from "@/components/index";
+
 
 const AddLogsPage = () => {
     return (
-        <AddLogs />
+        <FarmsaddLogs />
+        // <ViewLogsContainer />
+
     )
 }
 

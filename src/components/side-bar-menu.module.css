@@ -1,8 +1,8 @@
 .apps1Icon,
-.sideMenuChild {
+.logoIcon {
   position: relative;
   width: 56px;
-    height: 61.83px;
+  height: 61.83px;
 }
 .apps1Icon {
   width: 24px;
@@ -10,43 +10,29 @@
   overflow: hidden;
   flex-shrink: 0;
 }
-.dashboard,
-.home25 {
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 .dashboard {
+  text-decoration: none;
   border-radius: var(--br-5xs);
   background-color: var(--color-mediumseagreen-100);
   overflow: hidden;
-  display: flex;
   padding: var(--padding-3xs);
 }
-.home25 {
-  display: none;
-}
-.home22,
-.home25 {
-  border-radius: var(--br-5xs);
-  overflow: hidden;
-  padding: var(--padding-3xs);
-}
-.home22,
-.home26,
-.menu {
+.dashboard,
+.menubar,
+.support {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.home26 {
+.support {
+  text-decoration: none;
   border-radius: var(--br-5xs);
   overflow: hidden;
   padding: var(--padding-3xs);
-  opacity: 0.3;
 }
-.menu {
+.menubar {
+  margin: 0;
   gap: var(--gap-21xl);
 }
 .profileChild {
@@ -56,34 +42,29 @@
   height: 40px;
   object-fit: cover;
 }
-.profile,
-.profileWrapper,
-.sideMenu {
+.profile1 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 }
-.profileWrapper,
-.sideMenu {
-  flex-direction: column;
+.profile {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
 }
-.sideMenu {
-  position: absolute;
-  top: 0;
-  left: 0;
+.sidebarmenu {
+  position: relative;
   background: linear-gradient(142.18deg, #3462cf, #2b53be);
   border-right: 1px solid var(--stroke);
   box-sizing: border-box;
   width: 100px;
   height: 1084px;
+  display: flex;
+  flex-direction: column;
   padding: var(--padding-xl) var(--padding-5xs) var(--padding-61xl);
-    gap: var(--gap-166xl);
-}
-.farmsaddLogs {
-  position: relative;
-  background-color: var(--background);
-  width: calc(100vw - 100px);
-  height: 1084px;
-  overflow: hidden;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-166xl);
 }

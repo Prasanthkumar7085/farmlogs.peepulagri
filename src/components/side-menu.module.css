@@ -1,12 +1,12 @@
 .apps1Icon,
-.sideMenuChild {
+.objectsIcon {
   position: relative;
-  width: 56px;
-    height: 61.83px;
+  width: 3rem;
+  height: 3rem;
 }
 .apps1Icon {
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -52,8 +52,8 @@
 .profileChild {
   position: relative;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   object-fit: cover;
 }
 .profile,
@@ -75,15 +75,8 @@
   background: linear-gradient(142.18deg, #3462cf, #2b53be);
   border-right: 1px solid var(--stroke);
   box-sizing: border-box;
-  width: 100px;
-  height: 1084px;
+  width: 6.25rem;
+  height: 62.75rem;
   padding: var(--padding-xl) var(--padding-5xs) var(--padding-61xl);
-    gap: var(--gap-166xl);
-}
-.farmsaddLogs {
-  position: relative;
-  background-color: var(--background);
-  width: calc(100vw - 100px);
-  height: 1084px;
-  overflow: hidden;
+  justify-content: space-between;
 }

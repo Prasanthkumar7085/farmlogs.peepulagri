@@ -30,7 +30,7 @@
   justify-content: flex-start;
   gap: var(--gap-5xs);
   text-align: left;
-  font-size: var(--font-size-sm);
+  font-size: var(--text-sm-medium-size);
   color: var(--title);
-  font-family: var(--text-md-normal);
+  font-family: var(--text-sm-medium);
 }

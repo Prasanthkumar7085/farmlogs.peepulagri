@@ -2,8 +2,20 @@ import type { NextPage } from "next";
 import { useMemo, type CSSProperties } from "react";
 import styles from "./body-cell.module.css";
 
+type BodyCellType = {
+  para?: string;
 
-const BodyCell: NextPage<any> = ({
+  /** Style props */
+  bodyCellPosition?: CSSProperties["position"];
+  bodyCellWidth?: CSSProperties["width"];
+  dataColor?: CSSProperties["color"];
+  dataBackground?: CSSProperties["background"];
+  dataWebkitBackgroundClip?: CSSProperties["webkitBackgroundClip"];
+  dataWebkitTextFillColor?: CSSProperties["webkitTextFillColor"];
+  dataFlex?: CSSProperties["flex"];
+};
+
+const BodyCell: NextPage<BodyCellType> = ({
   para = "data",
   bodyCellPosition,
   bodyCellWidth,
@@ -12,7 +24,7 @@ const BodyCell: NextPage<any> = ({
   dataWebkitBackgroundClip,
   dataWebkitTextFillColor,
   dataFlex,
-}: any) => {
+}) => {
   const bodyCellStyle: CSSProperties = useMemo(() => {
     return {
       position: bodyCellPosition,

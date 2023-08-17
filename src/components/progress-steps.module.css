@@ -1,0 +1,123 @@
+.stepIconBase {
+  position: relative;
+  border-radius: var(--br-xs);
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.connector {
+  flex: 1;
+  position: relative;
+  border-radius: var(--br-11xs);
+  background-color: var(--gray-200);
+  width: 2px;
+}
+.connectorWrap {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 var(--padding-9xs);
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-9xs);
+}
+.supportingText,
+.text {
+  align-self: stretch;
+  position: relative;
+  line-height: 20px;
+}
+.text {
+  font-weight: 500;
+}
+.supportingText {
+  color: var(--body);
+}
+.stepBase,
+.textAndSupportingText {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.textAndSupportingText {
+  flex: 1;
+  flex-direction: column;
+  padding: var(--padding-11xs) 0 var(--padding-5xl);
+}
+.stepBase {
+  align-self: stretch;
+  flex-direction: row;
+  gap: var(--gap-xs);
+}
+.stepIconBase1 {
+  position: relative;
+  border-radius: var(--br-xs);
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.stepBase1 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-xs);
+  color: var(--gray-700);
+}
+.optional {
+  color: var(--color-slategray-100);
+}
+.connector3 {
+  flex: 1;
+  position: relative;
+  border-radius: var(--br-11xs);
+  background-color: var(--gray-200);
+  width: 2px;
+  display: none;
+}
+.supportingText3 {
+  align-self: stretch;
+  position: relative;
+  line-height: 20px;
+  color: var(--gray-500);
+}
+.textAndSupportingText3 {
+  flex: 1;
+  flex-direction: column;
+  padding: var(--padding-11xs) 0 0;
+}
+.card,
+.progressSteps,
+.progressStepsProgressIcon,
+.textAndSupportingText3 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.progressStepsProgressIcon {
+  width: 343px;
+  flex-direction: column;
+}
+.card,
+.progressSteps {
+  flex-direction: row;
+}
+.card {
+  border-radius: var(--br-base);
+  background-color: var(--white);
+  box-shadow: var(--shadow-field);
+  overflow: hidden;
+  padding: var(--padding-21xl);
+}
+.progressSteps {
+  flex: 1;
+  min-width: 300px;
+  max-width: 450px;
+  text-align: left;
+  font-size: var(--text-sm-medium-size);
+  color: var(--primary);
+  font-family: var(--text-sm-medium);
+}

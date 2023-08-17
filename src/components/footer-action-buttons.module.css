@@ -1,0 +1,59 @@
+.arrowLeft1Icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.text {
+  position: relative;
+  line-height: 24px;
+  font-weight: 500;
+}
+.buttonBase {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-5xs);
+}
+.button,
+.button1,
+.buttons {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.button {
+  display: none;
+}
+.button1,
+.buttons {
+  display: flex;
+}
+.button1 {
+  border-radius: var(--br-5xs);
+}
+.buttons {
+  gap: var(--gap-xs);
+}
+.footerActionButtons,
+.modalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.modalActions {
+  width: 1261px;
+  align-items: center;
+  gap: var(--gap-5xl);
+}
+.footerActionButtons {
+  align-self: stretch;
+  align-items: flex-start;
+  text-align: left;
+  font-size: var(--font-size-base);
+  color: var(--gray-500);
+  font-family: var(--text-sm-medium);
+}

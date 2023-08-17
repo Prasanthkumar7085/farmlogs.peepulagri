@@ -1,0 +1,89 @@
+.add1Icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+.addALog {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 46px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-family: inherit;
+}
+.title {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  padding: 0 var(--padding-11xs);
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-3xs);
+}
+.inputTitle {
+  border: 0;
+  background-color: transparent;
+  flex: 1;
+  position: relative;
+}
+.row,
+.rowParent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.row {
+  flex: 1;
+}
+.rowParent {
+  align-self: stretch;
+  padding: var(--padding-3xs) var(--padding-xl);
+  gap: var(--gap-3xs);
+  z-index: 0;
+}
+.description {
+  align-self: stretch;
+  z-index: 1;
+}
+.threeDotsChild {
+  position: relative;
+  border-radius: 50%;
+  background-color: var(--stroke);
+  width: 4px;
+  height: 4px;
+}
+.container,
+.primaryFormField,
+.threeDots {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.threeDots {
+  margin: 0 !important;
+  position: absolute;
+  top: 20.5px;
+  left: 7.5px;
+  gap: var(--gap-9xs);
+  z-index: 2;
+}
+.container,
+.primaryFormField {
+  align-self: stretch;
+}
+.container {
+  border-radius: var(--br-base);
+  background-color: var(--white);
+  box-shadow: var(--shadow-field);
+  position: relative;
+}
+.primaryFormField {
+  gap: var(--gap-3xs);
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--color-sienna);
+  font-family: var(--text-sm-medium);
+}

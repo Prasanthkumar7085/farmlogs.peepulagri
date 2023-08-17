@@ -1,13 +1,15 @@
-import { AppProps } from "next/app";
+import SideBarMenu from "@/components/SideBar/SideBarMenu";
 
 function MyApp({
     Component,
     pageProps,
     ...rest
-}: AppProps) {
+}: any) {
 
     return (
-        <Component {...pageProps} />
+        <SideBarMenu>
+            <Component {...pageProps} />
+        </SideBarMenu>
     )
 }
 

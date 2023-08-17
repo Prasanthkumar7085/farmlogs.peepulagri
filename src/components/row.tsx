@@ -24,19 +24,19 @@ type RowType = {
   showSpray?: boolean;
 
   /** Style props */
-  rowPosition?: CSSProperties["position"];
-  rowBackgroundColor?: CSSProperties["backgroundColor"];
-  rowJustifyContent?: CSSProperties["justifyContent"];
-  rowAlignSelf?: CSSProperties["alignSelf"];
-  dataFlex?: CSSProperties["flex"];
-  frameDivBackgroundColor?: CSSProperties["backgroundColor"];
-  frameDivBorder?: CSSProperties["border"];
-  frameDivAlignItems?: CSSProperties["alignItems"];
-  soilPreparationColor?: CSSProperties["color"];
-  dataColor?: CSSProperties["color"];
-  dataBackground?: CSSProperties["background"];
-  dataWebkitBackgroundClip?: CSSProperties["webkitBackgroundClip"];
-  dataWebkitTextFillColor?: CSSProperties["webkitTextFillColor"];
+  rowPosition?: Partial<CSSProperties>;
+  rowBackgroundColor?: Partial<CSSProperties>;
+  rowJustifyContent?: Partial<CSSProperties>;
+  rowAlignSelf?: Partial<CSSProperties>;
+  dataFlex?: Partial<CSSProperties>;
+  frameDivBackgroundColor?: Partial<CSSProperties>;
+  frameDivBorder?: Partial<CSSProperties>;
+  frameDivAlignItems?: Partial<CSSProperties>;
+  soilPreparationColor?: Partial<CSSProperties>;
+  dataColor?: Partial<CSSProperties>;
+  dataBackground?: Partial<CSSProperties>;
+  dataWebkitBackgroundClip?: Partial<CSSProperties>;
+  dataWebkitTextFillColor?: Partial<CSSProperties>;
 };
 
 const Row: NextPage<RowType> = ({
@@ -72,8 +72,8 @@ const Row: NextPage<RowType> = ({
   dataBackground,
   dataWebkitBackgroundClip,
   dataWebkitTextFillColor,
-}) => {
-  const rowStyle: CSSProperties = useMemo(() => {
+}: any) => {
+  const rowStyle: Partial<CSSProperties> = useMemo(() => {
     return {
       position: rowPosition,
       backgroundColor: rowBackgroundColor,

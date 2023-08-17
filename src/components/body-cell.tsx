@@ -6,13 +6,13 @@ type BodyCellType = {
   para?: string;
 
   /** Style props */
-  bodyCellPosition?: CSSProperties["position"];
-  bodyCellWidth?: CSSProperties["width"];
-  dataColor?: CSSProperties["color"];
-  dataBackground?: CSSProperties["background"];
-  dataWebkitBackgroundClip?: CSSProperties["webkitBackgroundClip"];
-  dataWebkitTextFillColor?: CSSProperties["webkitTextFillColor"];
-  dataFlex?: CSSProperties["flex"];
+  bodyCellPosition?: Partial<CSSProperties>;
+  bodyCellWidth?: Partial<CSSProperties>;
+  dataColor?: Partial<CSSProperties>;
+  dataBackground?: Partial<CSSProperties>;
+  dataWebkitBackgroundClip?: Partial<CSSProperties>;
+  dataWebkitTextFillColor?: Partial<CSSProperties>;
+  dataFlex?: Partial<CSSProperties>;
 };
 
 const BodyCell: NextPage<BodyCellType> = ({
@@ -24,7 +24,7 @@ const BodyCell: NextPage<BodyCellType> = ({
   dataWebkitBackgroundClip,
   dataWebkitTextFillColor,
   dataFlex,
-}) => {
+}: any) => {
   const bodyCellStyle: CSSProperties = useMemo(() => {
     return {
       position: bodyCellPosition,

@@ -12,14 +12,15 @@ import ImageComponent from "../Core/ImageComponent";
 
 const FarmTableLogs = () => {
 
-    const router = useRouter();
+    const router: any = useRouter();
 
-    const [farmId, setFarmId] = useState();
+    const [farmId, setFarmId] = useState<any>();
     const [data, setData] = useState(farmData.slice(0, 10));
 
 
     useEffect(() => {
-        setFarmId(router.query.farm_id);
+        if (router.isReady) {
+            setFarmId(router.query.farm_id);
 
         if (router.query.farm_id == 1) {
             setData(farmData.slice(0, 10));
@@ -31,6 +32,7 @@ const FarmTableLogs = () => {
             setData(farmData.slice(30, 40));
         } else if (router.query.farm_id == 5) {
             setData(farmData.slice(40, 50));
+        }
         }
     }, [router]);
 
@@ -95,7 +97,7 @@ const FarmTableLogs = () => {
                                     console.log(item.logo, '000');
 
                                     return (
-                                        <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", itemAlign: "center", justifyContent: "center", padding: "5px" }} >
+                                        <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", padding: "5px" }} >
                                             <ImageComponent src={item.logo} width={15} height={15} alt={item.logo + '1'} />
                                             {item.quantity}
                                         </div>

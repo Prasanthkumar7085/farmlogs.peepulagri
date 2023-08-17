@@ -1,3 +1,4 @@
+import './global.css';
 import SideBarMenu from "@/components/SideBar/SideBarMenu";
 
 function MyApp({

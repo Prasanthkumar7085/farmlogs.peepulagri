@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next';
 
-
 const HomePage = () => {
     return (
         <div>

@@ -18,7 +18,7 @@ const FarmCardsLayOut = ({ children }: any) => {
             <div style={{ width: "300px", }}>
                 {data.map((item: FarmCardTypes) => {
                     return (
-                        <div>
+                        <div key={item.id}>
                             <Link href="/farm/[farm_id]/logs" as={`/farm/${item.id}/logs`} style={{ textDecoration: "none", color: "#000000" }}>
                                 <FarmCard
                                     id={item.id}

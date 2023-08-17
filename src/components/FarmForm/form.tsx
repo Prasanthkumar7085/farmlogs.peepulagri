@@ -15,11 +15,11 @@ import "rsuite/dist/rsuite.css";
 import Divider from '@mui/material/Divider';
 
 
-
 const Form: NextPage = () => {
 
   return (
     <Card style={{ marginTop: "100px", marginLeft: "40%", padding: "20px" }}>
+
       <section className={styles.form}>
         <div className={styles.cardworktype}>
           <div className={styles.conatiner}>
@@ -39,22 +39,6 @@ const Form: NextPage = () => {
             <div className={styles.date}>
               <p className={styles.label}>Date</p>
               <div className={styles.dropdown}>
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    value={inputDateTimePickerValue}
-                    onChange={(newValue: any) => {
-                      setInputDateTimePickerValue(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        variant: "standard",
-                        size: "medium",
-                        required: true,
-                        color: "primary",
-                      },
-                    }}
-                  />
-                </LocalizationProvider> */}
 
                 <Stack direction="column" spacing={8} alignItems="flex-start">
                   <DateRangePicker

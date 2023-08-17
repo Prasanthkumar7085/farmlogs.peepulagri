@@ -13,6 +13,8 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.5",
     "@mui/x-date-pickers": "^6.11.1",
+    "@mui/x-date-pickers-pro": "^6.11.1",
+    "@tanstack/react-table": "^8.9.3",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
@@ -20,6 +22,7 @@
     "next": "13.4.16",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.4",
     "rsuite": "^5.37.4",
     "typescript": "5.1.6"
   },

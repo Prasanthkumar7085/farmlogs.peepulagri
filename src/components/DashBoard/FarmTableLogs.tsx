@@ -88,13 +88,12 @@ const FarmTableLogs = () => {
                     Header: "Resources",
                     accessor: (row: any) => {
                         const updatedRowModules = getUpdatedResources(row.resources);
-                        console.log(updatedRowModules, 'data');
 
 
                         return (
                             <div style={{ display: "flex", gap: "2px" }}>
                                 {updatedRowModules.length && updatedRowModules.map((item: any, index: number) => {
-                                    console.log(item.logo, '000');
+
 
                                     return (
                                         <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", padding: "5px" }} >

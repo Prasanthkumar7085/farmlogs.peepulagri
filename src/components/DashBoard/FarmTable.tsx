@@ -17,21 +17,21 @@ const FarmTable = ({ columns, data }: any) => {
         <div style={{ height: "70vh", overflow: "scroll" }}>
             <table {...getTableProps()} style={{ position: "sticky" }}>
             <thead>
-                {headerGroups.map((headerGroup: any) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column: any) => (
-                            <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                    {headerGroups.map((headerGroup: any, index: number) => (
+                        <tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                            {headerGroup.headers.map((column: any, columnIndex: number) => (
+                                <th {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
                         ))}
                     </tr>
                 ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-                {rows.map((row: any, i: number) => {
+                    {rows.map((row: any, index: number) => {
                     prepareRow(row);
                     return (
-                        <tr {...row.getRowProps()}>
-                            {row.cells.map((cell: any) => {
-                                return <td style={{ padding: "10px", border: ".1px solid" }} {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                        <tr {...row.getRowProps()} key={index}>
+                            {row.cells.map((cell: any, cellIndex: number) => {
+                                return <td style={{ padding: "10px", border: ".1px solid" }} {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
                             })}
                         </tr>
                     );

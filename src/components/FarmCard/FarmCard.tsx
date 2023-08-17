@@ -34,7 +34,7 @@ const FarmCard: NextPage<FarmCardType> = ({
   const router = useRouter();
 
   return (
-    <a className={id == router.query.farm_id ? styles.farmcard : ""}>
+    <div className={id == router.query.farm_id ? styles.farmcard : ""}>
       <div className={styles.farmcarddetails}>
         <img className={styles.farmshapeIcon} alt="" src={farmShape} />
         <div className={styles.title}>
@@ -59,7 +59,7 @@ const FarmCard: NextPage<FarmCardType> = ({
         </div>
       </div>
       <div className={styles.activebar} />
-    </a>
+    </div>
   );
 };
 

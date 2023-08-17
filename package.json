@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.5",
     "@mui/x-date-pickers": "^6.11.1",
     "@mui/x-date-pickers-pro": "^6.11.1",
@@ -19,10 +20,12 @@
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "date-fns": "^2.30.0",
+    "moment": "^2.29.4",
     "next": "13.4.16",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
+    "react-table": "^7.8.0",
     "rsuite": "^5.37.4",
     "typescript": "5.1.6"
   },

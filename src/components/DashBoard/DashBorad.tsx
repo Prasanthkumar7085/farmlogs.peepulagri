@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import Link from "next/link";
 import SearchComponent from "../Core/SearchComponent";
 import { useEffect } from "react";
-import FarmTable from "./FarmTable";
+import FarmTableLogs from "./FarmTableLogs";
 
 const DashBoard = () => {
 
@@ -22,7 +22,7 @@ const DashBoard = () => {
     return (
         <div style={{ width: "100%" }}>
             <FarmCardsLayOut>
-                <div style={{ border: "1px solid", display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "40px", paddingRight: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "40px", paddingRight: "20px" }}>
                     <SearchComponent onChange={onChange} placeholder={'Search Logs'} />
                     <Link href="/farm/[farm_id]/logs/add" as={`/farm/${router.query.farm_id}/logs/add`} style={{ textDecoration: "none", color: "#000000" }}>
                         <Button>
@@ -31,7 +31,7 @@ const DashBoard = () => {
                     </Link>
                 </div>
 
-                <FarmTable />
+                <FarmTableLogs />
             </FarmCardsLayOut>
         </div>
     )

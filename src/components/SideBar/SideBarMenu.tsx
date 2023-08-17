@@ -32,16 +32,15 @@ const SideBarMenu = ({ children }: any) => {
     return (
         <div>
             <aside className={styles.sidebarmenu}>
-                <Link href={'/farm/1/logs'}>
+                <Link href={'/farm/1/logs'} className={styles.logo}>
                     <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} />
                 </Link>
-                <nav className={styles.menubar} style={{ marginTop: "40px" }}>
+                <nav className={styles.menubar}>
                     <List>
                         {menuListItems.map((item: item, index: number) => {
                             return (
-                                <ListItem className={styles.dashboard} key={index}>
+                                <ListItem className={styles.menuItem} key={index}>
                                     <ListItemButton>
-
                                         <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
 
                                     </ListItemButton>
@@ -56,7 +55,7 @@ const SideBarMenu = ({ children }: any) => {
                     </div>
                 </button>
             </aside>
-            <div style={{ margin: "50px 100px" }}>
+            <div className={styles.main}>
                 {children}
             </div>
         </div>

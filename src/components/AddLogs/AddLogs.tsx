@@ -22,7 +22,7 @@ const AddLogs: NextPage = () => {
                 <h1 className={styles.addALog}>Add A Log</h1>
             </div>
             <div className={styles.container}>
-                <div style={{ border: "1px solid red", minWidth: "100%" }}>
+                <div style={{ minWidth: "100%" }}>
                     <div className={styles.row}>
                         <TextField
                             className={styles.inputTitle}

@@ -1,3 +1,8 @@
+.logo {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
 .apps1Icon,
 .logoIcon {
   position: relative;
@@ -12,12 +17,15 @@
   flex-shrink: 0;
 }
 
-.dashboard {
+.menuItem {
   text-decoration: none;
+}
+
+.menuItem.active {
   background-color: var(--color-mediumseagreen-100);
 }
 
-.dashboard,
+.menuItem,
 .support {
   border-radius: var(--br-5xs);
   overflow: hidden;
@@ -34,7 +42,6 @@
 }
 
 .menubar {
-  height: 400px;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -56,7 +63,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .profile {
@@ -74,11 +81,14 @@
   border-right: 1px solid var(--stroke);
   box-sizing: border-box;
   width: 100px;
-  height: 1084px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: var(--padding-xl) var(--padding-5xs) var(--padding-61xl);
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--gap-166xl);
+  padding: var(--padding-xl) var(--padding-5xs);
+    align-items: center;
+    justify-content: space-between;
+    }
+    
+    .main {
+      margin-left: 100px;
 }

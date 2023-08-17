@@ -1,0 +1,3202 @@
+[
+  {
+    "_id": "64d9c71f3e026cf3c1045155",
+    "farm_id": "5349b4ddd2781d08c09890f5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-07-05T14:22:37",
+    "to_date_time": "2023-04-21T12:46:09",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 25,
+    "total_machinary_hours": 27,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-04T22:39:52",
+    "updated_at": "2023-05-18T05:40:20"
+  },
+  {
+    "_id": "64d9c71ff987f50ba87c6c74",
+    "farm_id": "5349b4ddd2781d08c09898v5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-01-03T00:25:29",
+    "to_date_time": "2023-01-02T05:24:51",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 26,
+    "total_machinary_hours": 33,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-12T15:08:52",
+    "updated_at": "2023-07-19T05:12:05"
+  },
+  {
+    "_id": "64d9c71f064f6c4dd71e3268",
+    "farm_id": "5349b4ddd2781d08c09899b0",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-06-20T10:22:25",
+    "to_date_time": "2023-06-22T08:09:05",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 26,
+    "total_machinary_hours": 21,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-01-10T10:18:00",
+    "updated_at": "2023-04-20T17:45:52"
+  },
+  {
+    "_id": "64d9c71fbfa3545b3f7bc5d5",
+    "farm_id": "5349b4ddd2781d08c0980nh3",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-05-04T12:39:45",
+    "to_date_time": "2023-06-08T04:18:20",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 21,
+    "total_machinary_hours": 27,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-03-20T18:30:32",
+    "updated_at": "2023-06-23T23:28:08"
+  },
+  {
+    "_id": "64d9c71f73034b73d941a54d",
+    "farm_id": "5349b4ddd2781d08c09865f4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-04-17T19:33:11",
+    "to_date_time": "2023-07-17T15:50:15",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 33,
+    "total_machinary_hours": 35,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-07-02T19:20:11",
+    "updated_at": "2023-02-13T00:00:44"
+  },
+  {
+    "_id": "64d9c71ff1196b0726fca8e5",
+    "farm_id": "5349b4ddd2781d08c09890f5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-05-16T16:09:46",
+    "to_date_time": "2023-01-30T02:41:49",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 40,
+    "total_machinary_hours": 39,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-01-14T06:27:00",
+    "updated_at": "2023-01-05T09:00:43"
+  },
+  {
+    "_id": "64d9c71fc50cab3fa72bf6c5",
+    "farm_id": "5349b4ddd2781d08c098908b",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-07-14T03:40:13",
+    "to_date_time": "2023-06-04T21:12:23",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 29,
+    "total_machinary_hours": 30,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-25T04:13:42",
+    "updated_at": "2023-07-17T11:52:48"
+  },
+  {
+    "_id": "64d9c71fb667cda2f5f1efd9",
+    "farm_id": "5349b4ddd2781d08c098653g",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-06-03T11:20:58",
+    "to_date_time": "2023-07-15T17:17:42",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 30,
+    "total_machinary_hours": 27,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-13T23:14:42",
+    "updated_at": "2023-01-01T13:25:27"
+  },
+  {
+    "_id": "64d9c71f9a828c1d3ffa538e",
+    "farm_id": "5349b4ddd2781d08c09890b4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-02-21T12:04:14",
+    "to_date_time": "2023-03-25T00:19:48",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 28,
+    "total_machinary_hours": 38,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-01T10:00:57",
+    "updated_at": "2023-01-05T23:32:21"
+  },
+  {
+    "_id": "64d9c71fdf4f2cdc4c15f49a",
+    "farm_id": "5349b4ddd2781d08c098912b",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-04-17T09:36:18",
+    "to_date_time": "2023-06-18T18:29:00",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 32,
+    "total_machinary_hours": 37,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-08-12T20:12:53",
+    "updated_at": "2023-03-13T10:24:22"
+  },
+  {
+    "_id": "64d9c71ff1998fc55ff86ff2",
+    "farm_id": "5349b4ddd2781d08c09890p5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-07-29T23:11:58",
+    "to_date_time": "2023-05-26T17:34:28",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 27,
+    "total_machinary_hours": 29,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-01-15T04:39:08",
+    "updated_at": "2023-05-22T21:39:25"
+  },
+  {
+    "_id": "64d9c71f1355859eef93c9db",
+    "farm_id": "5349b4ddd2781d08c09898v5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-07-01T04:16:10",
+    "to_date_time": "2023-05-07T01:30:20",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 30,
+    "total_machinary_hours": 36,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-05-20T12:35:58",
+    "updated_at": "2023-03-04T09:56:37"
+  },
+  {
+    "_id": "64d9c71faf79aa6fd49ea6a4",
+    "farm_id": "5349b4ddd2781d08c098908b",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-08-07T14:08:34",
+    "to_date_time": "2023-03-09T00:47:54",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 25,
+    "total_machinary_hours": 35,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-02T03:07:25",
+    "updated_at": "2023-07-24T00:36:10"
+  },
+  {
+    "_id": "64d9c71f0634693c321ec734",
+    "farm_id": "5349b4ddd2781d08c09890f0",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-07-01T19:52:07",
+    "to_date_time": "2023-02-19T13:25:42",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 34,
+    "total_machinary_hours": 28,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-11T12:38:28",
+    "updated_at": "2023-07-09T04:48:12"
+  },
+  {
+    "_id": "64d9c71fc506dcabe0df3486",
+    "farm_id": "5349b4ddd2781d08c09897v4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-06-19T05:28:56",
+    "to_date_time": "2023-02-20T07:52:09",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 36,
+    "total_machinary_hours": 26,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-13T10:51:17",
+    "updated_at": "2023-06-04T03:06:36"
+  },
+  {
+    "_id": "64d9c71ff89a7a509aeddf7b",
+    "farm_id": "5349b4ddd2781d08c098900n",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-02-04T08:50:06",
+    "to_date_time": "2023-08-04T06:37:54",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 39,
+    "total_machinary_hours": 40,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-03-15T13:31:24",
+    "updated_at": "2023-05-03T10:37:21"
+  },
+  {
+    "_id": "64d9c71f139d6de4920ac288",
+    "farm_id": "5349b4ddd2781d08c09897v4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-07-10T14:50:22",
+    "to_date_time": "2023-03-06T23:50:11",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 27,
+    "total_machinary_hours": 37,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-07-04T12:16:00",
+    "updated_at": "2023-01-26T07:03:47"
+  },
+  {
+    "_id": "64d9c71fbc3118e123cec5fc",
+    "farm_id": "5349b4ddd2781d08c09890j4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-03-01T03:01:01",
+    "to_date_time": "2023-01-02T21:01:27",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 38,
+    "total_machinary_hours": 29,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-07T22:02:01",
+    "updated_at": "2023-06-25T19:00:47"
+  },
+  {
+    "_id": "64d9c71fe1029e3c127786ff",
+    "farm_id": "5349b4ddd2781d08c098945d",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-02-07T19:50:45",
+    "to_date_time": "2023-02-27T04:45:26",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 36,
+    "total_machinary_hours": 29,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-01-23T01:10:17",
+    "updated_at": "2023-01-27T05:35:15"
+  },
+  {
+    "_id": "64d9c71fcd10b78cdef5ec32",
+    "farm_id": "5349b4ddd2781d08c0989ht3",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-03-21T22:30:20",
+    "to_date_time": "2023-07-08T05:06:56",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 30,
+    "total_machinary_hours": 28,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-03-26T13:01:42",
+    "updated_at": "2023-07-19T22:12:27"
+  },
+  {
+    "_id": "64d9c71fb2dc9e9b7bd0d57d",
+    "farm_id": "5349b4ddd2781d08c09897v1",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-01-23T02:00:13",
+    "to_date_time": "2023-05-01T02:38:46",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 35,
+    "total_machinary_hours": 37,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-08-09T23:22:39",
+    "updated_at": "2023-02-14T08:26:17"
+  },
+  {
+    "_id": "64d9c71f0ecbe0bcd4290056",
+    "farm_id": "5349b4ddd2781d08c0988h92",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-03-23T17:23:24",
+    "to_date_time": "2023-01-08T15:36:29",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 25,
+    "total_machinary_hours": 29,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-03-01T11:02:32",
+    "updated_at": "2023-04-21T00:40:28"
+  },
+  {
+    "_id": "64d9c71fecba996e1bf1b6c2",
+    "farm_id": "5349b4ddd2781d08c0980hb4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-03-16T04:56:08",
+    "to_date_time": "2023-03-15T15:14:01",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 22,
+    "total_machinary_hours": 34,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-07-27T07:52:52",
+    "updated_at": "2023-02-17T10:45:29"
+  },
+  {
+    "_id": "64d9c71f789ef718a9261a39",
+    "farm_id": "5349b4ddd2781d08c09890l0",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-01-24T00:05:55",
+    "to_date_time": "2023-04-15T10:41:54",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 33,
+    "total_machinary_hours": 29,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-03-28T03:18:40",
+    "updated_at": "2023-07-12T19:33:55"
+  },
+  {
+    "_id": "64d9c71fa6f5c91a70130f73",
+    "farm_id": "5349b4ddd2781d08c09899b3",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-03-06T20:30:01",
+    "to_date_time": "2023-07-16T22:50:00",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 37,
+    "total_machinary_hours": 23,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-08-04T06:10:56",
+    "updated_at": "2023-06-03T03:40:09"
+  },
+  {
+    "_id": "64d9c71f390efabbbbdf8074",
+    "farm_id": "5349b4ddd2781d08c09827b3",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-03-25T06:29:15",
+    "to_date_time": "2023-07-28T19:05:54",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 20,
+    "total_machinary_hours": 33,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-21T15:45:50",
+    "updated_at": "2023-04-23T06:18:08"
+  },
+  {
+    "_id": "64d9c71f3fd9e1971fcba090",
+    "farm_id": "5349b4ddd2781d08c0989ht3",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-08-12T03:05:22",
+    "to_date_time": "2023-04-15T10:26:43",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 40,
+    "total_machinary_hours": 40,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-07-26T12:28:49",
+    "updated_at": "2023-05-15T06:06:07"
+  },
+  {
+    "_id": "64d9c71f5f70f38fc2e40866",
+    "farm_id": "5349b4ddd2781d08c09865f4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-06-29T13:23:04",
+    "to_date_time": "2023-07-09T20:19:45",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 20,
+    "total_machinary_hours": 38,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-08-12T10:16:13",
+    "updated_at": "2023-05-25T00:08:41"
+  },
+  {
+    "_id": "64d9c71f0aeec3e368c46346",
+    "farm_id": "5349b4ddd2781d08c098965d",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-01-03T14:31:09",
+    "to_date_time": "2023-03-13T09:29:16",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 29,
+    "total_machinary_hours": 28,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-01-30T13:10:31",
+    "updated_at": "2023-06-25T10:31:43"
+  },
+  {
+    "_id": "64d9c71f30ec736dd213c8ca",
+    "farm_id": "5349b4ddd2781d08c09899f2",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-07-25T07:31:40",
+    "to_date_time": "2023-07-16T05:57:39",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 32,
+    "total_machinary_hours": 38,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-16T05:21:30",
+    "updated_at": "2023-04-06T05:02:14"
+  },
+  {
+    "_id": "64d9c71f8b5a5ae45d9adb96",
+    "farm_id": "5349b4ddd2781d08c09890k5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-03-18T15:47:55",
+    "to_date_time": "2023-07-28T15:46:04",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 23,
+    "total_machinary_hours": 20,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-05-06T09:41:03",
+    "updated_at": "2023-04-16T09:35:15"
+  },
+  {
+    "_id": "64d9c71fff2861c8a9781f79",
+    "farm_id": "5349b4ddd2781d08c09890p5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-06-07T20:48:33",
+    "to_date_time": "2023-01-18T03:09:59",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 39,
+    "total_machinary_hours": 23,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-06-28T06:34:55",
+    "updated_at": "2023-04-28T11:54:17"
+  },
+  {
+    "_id": "64d9c71f21c72698d62c3e54",
+    "farm_id": "5349b4ddd2781d08c09897v1",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-04-04T07:29:02",
+    "to_date_time": "2023-01-15T19:31:07",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 32,
+    "total_machinary_hours": 21,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-01-03T10:04:55",
+    "updated_at": "2023-05-08T14:31:45"
+  },
+  {
+    "_id": "64d9c71f21d54a25844fe92b",
+    "farm_id": "5349b4ddd2781d08c098978b4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-05-18T13:42:33",
+    "to_date_time": "2023-08-13T09:35:45",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 24,
+    "total_machinary_hours": 39,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-06-06T06:09:04",
+    "updated_at": "2023-04-03T03:56:32"
+  },
+  {
+    "_id": "64d9c71f23709db9dbd48167",
+    "farm_id": "5349b4ddd2781d08c0980b6e",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-06-08T20:56:36",
+    "to_date_time": "2023-01-06T10:02:40",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 39,
+    "total_machinary_hours": 38,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-25T10:41:26",
+    "updated_at": "2023-02-23T09:56:49"
+  },
+  {
+    "_id": "64d9c71f923450611c194a59",
+    "farm_id": "5349b4ddd2781d08c09898v5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-07-14T05:37:41",
+    "to_date_time": "2023-01-06T09:13:19",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 38,
+    "total_machinary_hours": 21,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-06-09T02:24:03",
+    "updated_at": "2023-07-11T19:15:49"
+  },
+  {
+    "_id": "64d9c71f10b17db9c87bad15",
+    "farm_id": "5349b4ddd2781d08c09890f0",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-01-12T05:49:08",
+    "to_date_time": "2023-02-03T17:51:40",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 22,
+    "total_machinary_hours": 29,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-15T21:58:37",
+    "updated_at": "2023-02-28T00:08:31"
+  },
+  {
+    "_id": "64d9c71fd73211eba440f1ef",
+    "farm_id": "5349b4ddd2781d08c09897v1",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-03-29T23:04:45",
+    "to_date_time": "2023-05-15T08:06:48",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 26,
+    "total_machinary_hours": 40,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-10T16:36:41",
+    "updated_at": "2023-08-02T20:06:08"
+  },
+  {
+    "_id": "64d9c71f2ac4ed85acfac229",
+    "farm_id": "5349b4ddd2781d08c09886d2",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-04-11T01:58:05",
+    "to_date_time": "2023-08-14T01:24:59",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 31,
+    "total_machinary_hours": 27,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-06-06T03:36:23",
+    "updated_at": "2023-01-11T00:37:30"
+  },
+  {
+    "_id": "64d9c71f04cf04acd81624d0",
+    "farm_id": "5349b4ddd2781d08c09890h4",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-06-22T14:42:19",
+    "to_date_time": "2023-02-19T22:40:19",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 26,
+    "total_machinary_hours": 36,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-10T14:14:05",
+    "updated_at": "2023-04-21T16:27:10"
+  },
+  {
+    "_id": "64d9c71f23ee10f8901d7b4c",
+    "farm_id": "5349b4ddd2781d08c0980b63",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-02-12T00:15:10",
+    "to_date_time": "2023-05-11T09:05:33",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 33,
+    "total_machinary_hours": 31,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-06-30T10:23:06",
+    "updated_at": "2023-01-16T18:42:12"
+  },
+  {
+    "_id": "64d9c71f0c00b8ce82ef1823",
+    "farm_id": "5349b4ddd2781d08c09890l3",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-07-31T22:01:27",
+    "to_date_time": "2023-01-17T03:30:48",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 28,
+    "total_machinary_hours": 20,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-08-03T16:39:21",
+    "updated_at": "2023-04-26T09:17:02"
+  },
+  {
+    "_id": "64d9c71fbc09f32a85b86e0e",
+    "farm_id": "5349b4ddd2781d08c09890y3",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-05-11T16:35:56",
+    "to_date_time": "2023-06-16T14:58:05",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 34,
+    "total_machinary_hours": 32,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-19T16:12:36",
+    "updated_at": "2023-03-22T00:52:13"
+  },
+  {
+    "_id": "64d9c71f65f977b77d3ab2c9",
+    "farm_id": "5349b4ddd2781d08c098945d",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-01-19T09:27:05",
+    "to_date_time": "2023-07-27T17:49:27",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 32,
+    "total_machinary_hours": 21,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-04T10:17:35",
+    "updated_at": "2023-05-11T18:14:52"
+  },
+  {
+    "_id": "64d9c71fb7f50dc1dc7b1b5a",
+    "farm_id": "5349b4ddd2781d08c09890f5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MANUAL",
+    "from_date_time": "2023-01-27T13:44:58",
+    "to_date_time": "2023-04-13T02:56:54",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 27,
+    "total_machinary_hours": 37,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-04-18T07:07:26",
+    "updated_at": "2023-07-28T08:25:59"
+  },
+  {
+    "_id": "64d9c71fdba10c841b18eb22",
+    "farm_id": "5349b4ddd2781d08c098912b",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-05-06T17:39:23",
+    "to_date_time": "2023-02-24T09:45:18",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 40,
+    "total_machinary_hours": 27,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-05-05T03:54:36",
+    "updated_at": "2023-06-01T17:38:32"
+  },
+  {
+    "_id": "64d9c71fdd992acdde031f9b",
+    "farm_id": "5349b4ddd2781d08c09890f2",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "ALL",
+    "from_date_time": "2023-04-28T03:29:48",
+    "to_date_time": "2023-02-24T19:16:41",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 37,
+    "total_machinary_hours": 34,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-05-16T19:07:38",
+    "updated_at": "2023-04-01T20:24:54"
+  },
+  {
+    "_id": "64d9c71fe0913f46d39ea0ea",
+    "farm_id": "5349b4ddd2781d08c09890k5",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-05-08T23:25:40",
+    "to_date_time": "2023-04-19T20:10:42",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 25,
+    "total_machinary_hours": 39,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-05-23T06:02:45",
+    "updated_at": "2023-02-08T03:57:36"
+  },
+  {
+    "_id": "64d9c71f37d02843fd576569",
+    "farm_id": "5349b4ddd2781d08c09899f2",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-02-23T21:46:14",
+    "to_date_time": "2023-06-22T08:08:00",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 22,
+    "total_machinary_hours": 25,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-06-25T14:26:31",
+    "updated_at": "2023-07-25T16:18:16"
+  },
+  {
+    "_id": "64d9c71f24f013cead4f2341",
+    "farm_id": "5349b4ddd2781d08c09890f0",
+    "title": "Determining the severity of infestation",
+    "description": "More information regarding Determining the severity of infestations",
+    "categories": [
+      "Soil Preparation",
+      "Fertilization"
+    ],
+    "tags": [
+      "Bio Fertilization"
+    ],
+    "work_type": "MACHINARY",
+    "from_date_time": "2023-04-12T08:24:38",
+    "to_date_time": "2023-04-19T12:19:51",
+    "resources": [
+      {
+        "title": "Tractor",
+        "type": "MACHINARY",
+        "quantity": 4,
+        "total_hours": 10
+      },
+      {
+        "title": "Spayers",
+        "type": "MACHINARY",
+        "quantity": 5,
+        "total_hours": 20
+      },
+      {
+        "title": "Men",
+        "type": "MANUAL",
+        "quantity": 4,
+        "total_hours": 16
+      },
+      {
+        "title": "Women",
+        "type": "MANUAL",
+        "quantity": 8,
+        "total_hours": 16
+      }
+    ],
+    "total_manual_hours": 31,
+    "total_machinary_hours": 27,
+    "additional_resources": [
+      {
+        "title": "Pyrethrum Parthenium Spinosad",
+        "type": "PESTISTIDE",
+        "quantity": 4,
+        "units": "Ltrs"
+      }
+    ],
+    "attachments": [
+      {
+        "name": "2023-09-04_photo.png",
+        "original_name": "2023-09-04 photo.png",
+        "type": "image/png",
+        "size": 2043,
+        "path": "user_id/log_attchments/023-09-04_photo.png"
+      }
+    ],
+    "status": "ACTIVE/INACTIVE/ARCHIVE",
+    "created_at": "2023-02-18T15:17:15",
+    "updated_at": "2023-01-05T05:44:50"
+  }
+]

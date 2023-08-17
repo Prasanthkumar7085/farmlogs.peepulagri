@@ -266,8 +266,6 @@
 }
 
 .farmcardlists {
-  width: 280px;
-  height: 837px;
   overflow-y: auto;
   flex-shrink: 0;
   display: flex;
@@ -277,6 +275,7 @@
   gap: var(--gap-xs);
   min-width: 280px;
   max-width: 400px;
+  gap: 1rem;
 }
 
 .image2Icon {

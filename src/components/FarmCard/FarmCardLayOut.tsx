@@ -11,11 +11,12 @@ const FarmCardsLayOut = ({ children }: any) => {
         { id: 2, farmShape: "/farmshape1.svg", acresCount: 10, farmName: 'Farm-2', totalLogs: 135, barWidth: "10%", para: "01-03-2022" },
         { id: 3, farmShape: "/farmshape2.svg", acresCount: 50, farmName: 'Farm-3', totalLogs: 13, barWidth: "10%", para: "01-03-2022" },
         { id: 4, farmShape: "/farmshape3.svg", acresCount: 40, farmName: 'Farm-4', totalLogs: 64, barWidth: "10%", para: "01-03-2022" },
+        { id: 5, farmShape: "/farmshape2.svg", acresCount: 40, farmName: 'Farm-5', totalLogs: 64, barWidth: "10%", para: "01-03-2022" },
 
     ]
     return (
         <div style={{ display: "flex", gap: "30px", padding: "20px" }}>
-            <div style={{ width: "300px", }}>
+            <div style={{ height: "calc(100vh - 1rem)", overflowY: "scroll", display: "flex", gap: "1rem", flexDirection: "column", width: "300px", }}>
                 {data.map((item: FarmCardTypes) => {
                     return (
                         <div key={item.id}>
@@ -34,7 +35,7 @@ const FarmCardsLayOut = ({ children }: any) => {
                     )
                 })}
             </div>
-            <div>
+            <div className="FarmDetails">
                 <Image alt="" src='/image-2@2x.png' width={1000} height={150} />
                 {children}
             </div>

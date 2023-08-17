@@ -35,7 +35,7 @@
 }
 
 .farmcarddetails {
-
+  position: relative;
   align-self: stretch;
   flex-direction: row;
   align-items: center;
@@ -43,6 +43,7 @@
   z-index: 0;
   font-size: var(--font-size-xl);
 }
+
 
 .calendarIcon {
   position: relative;
@@ -142,9 +143,12 @@
   height: 203px;
   z-index: 3;
 }
-
+.default {
+  display: none;
+}
 .farmcard {
-  border: 3px solid black;
+  position: relative;
+    border: 3px solid var(--stroke);
   text-decoration: none;
   align-self: stretch;
   border-radius: var(--br-3xs);

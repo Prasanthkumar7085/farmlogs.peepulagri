@@ -9,6 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageComponent from "../Core/ImageComponent";
+import getFarmDataById from "../../../lib/services/getFarmDataById";
 
 const FarmTableLogs = () => {
 
@@ -17,23 +18,22 @@ const FarmTableLogs = () => {
     const [farmId, setFarmId] = useState<any>();
     const [data, setData] = useState(farmData.slice(0, 10));
 
+    const getFarmLogs = (farmId: string) => {
+        try {
+            const response = getFarmDataById(farmId);
+            console.log(response);
+            // setData(response);
+
+
+        } catch (err: any) {
+            console.error(err);
+        }
+
+
+    }
 
     useEffect(() => {
-        if (router.isReady) {
-            setFarmId(router.query.farm_id);
-
-        if (router.query.farm_id == 1) {
-            setData(farmData.slice(0, 10));
-        } else if (router.query.farm_id == 2) {
-            setData(farmData.slice(10, 20));
-        } else if (router.query.farm_id == 3) {
-            setData(farmData.slice(20, 30));
-        } else if (router.query.farm_id == 4) {
-            setData(farmData.slice(30, 40));
-        } else if (router.query.farm_id == 5) {
-            setData(farmData.slice(40, 50));
-        }
-        }
+        getFarmLogs(router.query.farm_id);
     }, [router]);
 
     const getUpdatedResources = (rowDetails: any) => {

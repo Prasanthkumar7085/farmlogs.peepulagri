@@ -23,7 +23,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 
 
-const Resource = ({ register }: any) => {
+const Resource = ({ register, setResources: setAllResources }: any) => {
 
   const [resources, setResources] = useState<any>([]);
 
@@ -44,6 +44,7 @@ const Resource = ({ register }: any) => {
 
     if (index == -1) {
       setResources([...resources, obj]);
+      setAllResources([...resources, obj])
       setResourceTitle('')
       setResourceQuantity('')
       setResourceHours('')
@@ -54,7 +55,7 @@ const Resource = ({ register }: any) => {
     let filteredArray = [...resources];
     filteredArray.splice(index, 1);
     setResources(filteredArray);
-
+    setAllResources(filteredArray)
   }
 
   return (
@@ -133,7 +134,8 @@ const Resource = ({ register }: any) => {
           </div>
         </div>
       </div>
-      {resources.length ? <div className={styles.table}>
+      {resources.length ?
+        <div className={styles.table}>
         <Table>
           <TableHead>
             <TableRow>

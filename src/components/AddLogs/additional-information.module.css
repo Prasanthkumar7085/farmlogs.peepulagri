@@ -92,6 +92,10 @@
   gap: var(--gap-7xs);
   max-width: 222px;
 }
+.table {
+  border: 1px solid;
+  min-width: 100%;
+}
 .additionalInformation,
 .container {
   align-self: stretch;

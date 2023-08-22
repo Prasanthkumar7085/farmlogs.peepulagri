@@ -8,7 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageComponent from "../Core/ImageComponent";
-import getFarmDataById from "../../../lib/services/getFarmDataById";
+import getLogsByFarmId from "../../../lib/services/LogsService/getLogsByFarmId";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import TablePaginationComponent from "../Core/TablePaginationComponent";
@@ -37,7 +37,7 @@ const FarmTableLogs = () => {
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
         try {
-            const response = await getFarmDataById({ farmId: farmId, page: page, limit: limit, search: search });
+            const response = await getLogsByFarmId({ farmId: farmId, page: page, limit: limit, search: search });
             if (response.success) {
             console.log(response);
                 const { data, limit, page, total, total_pages } = response;
@@ -60,12 +60,14 @@ const FarmTableLogs = () => {
             const updatedArray = rowDetails.map((item: any) => {
                 if (item.title.toLowerCase() == 'tractor') {
                     return { ...item, logo: '/tractor.svg' }
-                } else if (item.title.toLowerCase() == 'spayers') {
+                } else if (item.title.toLowerCase() == "sprayers" || item.title.toLowerCase() == "spayers") {
                     return { ...item, logo: '/sprayer.svg' }
                 } else if (item.title.toLowerCase() == 'men') {
                     return { ...item, logo: '/man.svg' }
                 } else if (item.title.toLowerCase() == 'women') {
                     return { ...item, logo: '/women.svg' }
+                } else {
+                    return { ...item, logo: '/' }
                 }
             })
             return updatedArray;
@@ -127,13 +129,9 @@ const FarmTableLogs = () => {
                     Header: "Resources",
                     accessor: (row: any) => {
                         const updatedRowModules = getUpdatedResources(row.resources);
-
-
                         return (
                             <div style={{ display: "flex", gap: "2px" }}>
                                 {updatedRowModules.length && updatedRowModules.map((item: any, index: number) => {
-
-
                                     return (
                                         <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", padding: "5px" }} >
                                             <ImageComponent src={item.logo} width={15} height={15} alt={item.logo + '1'} />

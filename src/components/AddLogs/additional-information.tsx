@@ -10,7 +10,61 @@ import {
   Select,
 } from "@mui/material";
 import styles from "./additional-information.module.css";
-const AdditionalInformation = ({ register }: any) => {
+import { ChangeEvent, useState } from "react";
+
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import IconButton from "@mui/material/IconButton";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+
+const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
+
+  const [resources, setResources] = useState<any>([]);
+
+  const [resourceTitle, setResourceTitle] = useState('');
+  const [resourceQuantity, setResourceQuantity] = useState('');
+  const [resourceUnits, setResourceUnits] = useState('');
+
+  const units = [
+    'Kilogram',
+    'Gram',
+    'Milligram',
+    'Pound',
+    'Ton',
+    'Milliliter',
+    'Liter',
+    'Cup',
+    'Pint',
+    'Quart',
+    'Liquid Gallon',
+  ]
+
+
+  const addResources = () => {
+    let obj = { title: resourceTitle, quantity: resourceQuantity, units: resourceUnits, type: "Pesticides" };
+    let index = resources.findIndex((item: any) => item.title == obj.title);
+
+    if (index == -1) {
+      setResources([...resources, obj]);
+      setAdditionalResources([...resources, obj]);
+      setResourceTitle('')
+      setResourceQuantity('')
+      setResourceUnits('')
+    }
+  }
+
+  const removeFromAdditionalResources = (index: number) => {
+    let filteredArray = [...resources];
+    filteredArray.splice(index, 1);
+    setResources(filteredArray);
+    setAdditionalResources(filteredArray);
+
+  }
+
+
   return (
     <div className={styles.additionalInformation}>
       <div className={styles.header}>
@@ -24,6 +78,8 @@ const AdditionalInformation = ({ register }: any) => {
           variant="contained"
           color="success"
           startIcon={<Icon>arrow_forward_sharp</Icon>}
+          disabled={!resourceTitle || !resourceQuantity || !resourceUnits}
+          onClick={addResources}
         >
           Add
         </Button>
@@ -40,23 +96,27 @@ const AdditionalInformation = ({ register }: any) => {
             placeholder="Enter the name"
             size="small"
             margin="none"
+            value={resourceTitle}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setResourceTitle(e.target.value)}
           />
         </div>
         <div className={styles.quantity}>
           <div className={styles.inputWithLabel}>
             <p className={styles.label1}>Quantity</p>
           </div>
-          <FormControl className={styles.dropdown} variant="outlined">
-            <InputLabel color="primary" />
-            <Select color="primary" defaultValue="Choose Type" size="small">
-              <MenuItem value="01">01</MenuItem>
-              <MenuItem value="02">02</MenuItem>
-              <MenuItem value="03">03</MenuItem>
-              <MenuItem value="04">04</MenuItem>
-              <MenuItem value="05">05</MenuItem>
-            </Select>
-            <FormHelperText />
-          </FormControl>
+          <TextField
+            className={styles.textInput}
+            sx={{ width: 122 }}
+            color="primary"
+            variant="outlined"
+            defaultValue="0"
+            type="number"
+            placeholder="Enter Quantity"
+            size="small"
+            margin="none"
+            value={resourceQuantity}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setResourceQuantity(e.target.value)}
+          />
         </div>
         <div className={styles.units}>
           <p className={styles.label1}>Units</p>
@@ -65,25 +125,53 @@ const AdditionalInformation = ({ register }: any) => {
             <Select
               color="primary"
               name="Units"
-              defaultValue="Choose Units"
               size="small"
+              value={resourceUnits}
+              onChange={(e: any) => setResourceUnits(e.target.value)}
             >
-              <MenuItem value="kilogram">kilogram</MenuItem>
-              <MenuItem value="gram">gram</MenuItem>
-              <MenuItem value="milligram">milligram</MenuItem>
-              <MenuItem value="Pound">Pound</MenuItem>
-              <MenuItem value="Ton">Ton</MenuItem>
-              <MenuItem value="Milliliter">Milliliter</MenuItem>
-              <MenuItem value="Liter">Liter</MenuItem>
-              <MenuItem value="Cup">Cup</MenuItem>
-              <MenuItem value="Pint">Pint</MenuItem>
-              <MenuItem value="Quart">Quart</MenuItem>
-              <MenuItem value="Liquid Gallon">Liquid Gallon</MenuItem>
+              <MenuItem value=''><em>Select Units</em></MenuItem>
+              {units.map((item: string, index: number) => {
+                return (
+                  <MenuItem key={index} value={item}>{item}</MenuItem>
+                )
+              })}
+
             </Select>
             <FormHelperText />
           </FormControl>
         </div>
       </div>
+
+      {resources.length ?
+        <div className={styles.table}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Resouces Type</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>Units</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {resources.map((item: any, index: number) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{item.title}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>{item.units}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => removeFromAdditionalResources(index)}>
+                        <DeleteOutlineIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </div> : ""}
+
     </div>
   );
 };

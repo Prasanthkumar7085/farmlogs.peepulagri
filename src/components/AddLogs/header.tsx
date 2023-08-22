@@ -56,15 +56,12 @@ const Header = ({ register }: any) => {
               value={category}
               {...register('category')}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                console.log(e.target.value);
-
                 setCategory(e.target.value)
               }}
             >
-
               {categoryOptions.map((item: any, index: number) => {
                 return (
-                  <MenuItem value={item.vale} key={index}>{item.title}</MenuItem>
+                  <MenuItem value={item.value} key={index}>{item.title}</MenuItem>
                 )
               })}
             </Select>

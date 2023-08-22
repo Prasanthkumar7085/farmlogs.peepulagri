@@ -4,12 +4,12 @@ import Resource from "./resource";
 import AdditionalInformation from "./additional-information";
 import Attachments from "./attachments";
 import styles from "./form.module.css";
-const Form = ({ register }: any) => {
+const Form = ({ register, setResources, setAdditionalResources, captureDates }: any) => {
   return (
     <section className={styles.form}>
-      <CardWorkType register={register} />
-      <Resource register={register} />
-      <AdditionalInformation register={register} />
+      <CardWorkType register={register} captureDates={captureDates} />
+      <Resource register={register} setResources={setResources} />
+      <AdditionalInformation register={register} setAdditionalResources={setAdditionalResources} />
       <Attachments />
     </section>
   );

@@ -13,15 +13,15 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import styles from "./card-work-type.module.css";
 import DateRangePickerComponent from "../Core/DateRangePicker";
 
-const CardWorkType = ({ register }: any) => {
+const CardWorkType = ({ register, captureDates }: any) => {
 
 
   const captureDateValue = (fromDate: string, toDate: string) => {
     console.log(fromDate, toDate);
+    captureDates(fromDate, toDate)
 
   }
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div className={styles.cardworktype}>
         <div className={styles.conatiner}>
           <div className={styles.workType}>
@@ -31,9 +31,9 @@ const CardWorkType = ({ register }: any) => {
               <Select color="primary" defaultValue="Choose Type" size="small" {...register('work_type', {
                 onChange: (e: any) => console.log(e)
               })} >
-                <MenuItem value="Select All">Select All</MenuItem>
-                <MenuItem value="Machinery">Machinery</MenuItem>
-                <MenuItem value="Manual">Manual</MenuItem>
+              <MenuItem value="ALL">ALL</MenuItem>
+              <MenuItem value="MACHINARY">MACHINARY</MenuItem>
+              <MenuItem value="MANUAL">MANUAL</MenuItem>
               </Select>
               <FormHelperText />
             </FormControl>
@@ -46,7 +46,7 @@ const CardWorkType = ({ register }: any) => {
           </div>
         </div>
       </div>
-    </LocalizationProvider>
+
   );
 };
 

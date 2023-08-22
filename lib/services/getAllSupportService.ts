@@ -1,9 +1,8 @@
-import { GetLogsByFarmIdPropsType } from './../../src/types/farmCardTypes';
 
-const getFarmDataById = async ({ farmId, page, limit }: GetLogsByFarmIdPropsType) => {
+const getAllSupportService = async () => {
 
     try {
-        const response: any = await fetch(`http://localhost:3000/v1.0/farm/${farmId}/logs/${page}/${limit}`);
+        const response: any = await fetch(`http://localhost:3000/v1.0/support/1/10`);
         const responseData = await response.json();
         if (response.ok) {
             return responseData;
@@ -16,4 +15,4 @@ const getFarmDataById = async ({ farmId, page, limit }: GetLogsByFarmIdPropsType
 
     }
 }
-export default getFarmDataById;
+export default getAllSupportService;

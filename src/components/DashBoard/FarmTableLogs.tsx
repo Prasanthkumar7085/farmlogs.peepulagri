@@ -2,7 +2,6 @@ import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import FarmTable from "./FarmTable";
-import farmData from "./result.json";
 import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -10,31 +9,50 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageComponent from "../Core/ImageComponent";
 import getFarmDataById from "../../../lib/services/getFarmDataById";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import TablePaginationComponent from "../Core/TablePaginationComponent";
+import { GetLogsByFarmIdPropsType, PaginationDetailsType } from "@/types/farmCardTypes";
+import SearchComponent from "../Core/SearchComponent";
+import { Button } from "@mui/material";
+import Link from "next/link";
+
 
 const FarmTableLogs = () => {
 
     const router: any = useRouter();
 
-    const [farmId, setFarmId] = useState<any>();
-    const [data, setData] = useState(farmData.slice(0, 10));
+    const [data, setData] = useState();
+    const [loading, setLoading] = useState(false);
+    const [paginationDetails, setPaginationDetails] = useState<PaginationDetailsType | null>();
+    const [page, setPage] = useState<number | string>(1);
+    const [limit, setLimit] = useState<number | string>(10);
+    const [searchString, setSearchString] = useState<string>('');
 
-    const getFarmLogs = (farmId: string) => {
-        try {
-            const response = getFarmDataById(farmId);
-            console.log(response);
-            // setData(response);
-
-
-        } catch (err: any) {
-            console.error(err);
-        }
-
-
-    }
 
     useEffect(() => {
-        getFarmLogs(router.query.farm_id);
+        getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
     }, [router]);
+
+    const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString }: Partial<GetLogsByFarmIdPropsType>) => {
+        setLoading(true);
+        try {
+            const response = await getFarmDataById({ farmId: farmId, page: page, limit: limit, search: search });
+            if (response.success) {
+            console.log(response);
+                const { data, limit, page, total, total_pages } = response;
+                setData(data);
+
+                setPaginationDetails({ limit: limit, page: page, total: total, total_pages: total_pages });
+
+            }
+        } catch (err: any) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+
+    }
 
     const getUpdatedResources = (rowDetails: any) => {
 
@@ -54,13 +72,34 @@ const FarmTableLogs = () => {
         }
     }
 
+    const capturePageNum = (value: number) => {
+        console.log(value);
+        setPage(value);
+        getFarmLogs({ page: value });
+    }
+
+    const captureRowPerItems = (value: number) => {
+        console.log(value);
+        setPage(1);
+        setLimit(value);
+        getFarmLogs({ page: 1, limit: value });
+    }
+
+
+
+    const searchStringChange = (value: string) => {
+        setPage(1);
+        setSearchString(value);
+        getFarmLogs({ page: 1, search: value });
+    }
+
     const columns = [
         {
             Header: "Details",
             columns: [
                 {
                     Header: "Date",
-                    accessor: (row: any) => timePipe(row.created_at, 'DD, MMM YYYY')
+                    accessor: (row: any) => timePipe(row.createdAt, 'DD, MMM YYYY')
                 },
                 {
                     Header: "Title",
@@ -137,9 +176,27 @@ const FarmTableLogs = () => {
             ],
         },
     ]
+
+
     return (
         <div>
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "40px", paddingRight: "20px" }}>
+                <SearchComponent onChange={searchStringChange} placeholder={'Search By Title'} />
+                <Link href="/farm/[farm_id]/logs/add" as={`/farm/${router.query.farm_id}/logs/add`} style={{ textDecoration: "none", color: "#000000" }}>
+                    <Button>
+                        Add Log
+                    </Button>
+                </Link>
+            </div>
             <FarmTable columns={columns} data={data} />
+            <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' />
+            <Backdrop
+                sx={{ display: "flex", gap: "10px", flexDirection: "column", color: "#0088d1", backgroundColor: "rgba(256, 256, 256, 0.5)", zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress />
+                Loading...
+            </Backdrop>
         </div>
     )
 }

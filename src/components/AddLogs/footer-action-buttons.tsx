@@ -21,12 +21,14 @@ const FooterActionButtons: NextPage = () => {
               variant="outlined"
               color="primary"
               startIcon={<Icon>arrow_back_sharp</Icon>}
+
             >
               Back
             </Button>
           </div>
           <div className={styles.button1}>
             <Button
+              type='submit'
               variant="contained"
               color="primary"
               endIcon={<Icon>arrow_forward_sharp</Icon>}

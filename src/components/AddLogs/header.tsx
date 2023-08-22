@@ -8,7 +8,23 @@ import {
   Select,
 } from "@mui/material";
 import styles from "./header.module.css";
-const Header: NextPage = () => {
+import { ChangeEvent, useState } from "react";
+const Header = ({ register }: any) => {
+
+  const [category, setCategory] = useState<string>('');
+
+  const categoryOptions = [
+    { title: 'Soil Preparation', value: "soil_preparation" },
+    { title: 'Planting', value: "plainting" },
+    { title: 'Irrigation', value: "irrigation" },
+    { title: 'Fertilization', value: "fertilization" },
+    { title: 'Pest Management', value: "pest_management" },
+    { title: 'Weeding', value: "weeding" },
+    { title: 'Crop Rotation', value: "crop_rotation" },
+    { title: 'Harvesting', value: "harvesting" },
+    { title: 'Equipment Management', value: "equipment_management" },
+    { title: 'Other', value: "other" },
+  ]
   return (
     <div className={styles.primaryFormField}>
       <div className={styles.title}>
@@ -27,6 +43,7 @@ const Header: NextPage = () => {
               placeholder="Enter log title"
               size="medium"
               margin="none"
+              {...register('title')}
             />
           </div>
           <FormControl sx={{ width: 200 }} variant="outlined">
@@ -36,19 +53,20 @@ const Header: NextPage = () => {
               name="category"
               size="small"
               label="Select Category"
+              value={category}
+              {...register('category')}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                console.log(e.target.value);
+
+                setCategory(e.target.value)
+              }}
             >
-              <MenuItem value="Soil Preparation">Soil Preparation</MenuItem>
-              <MenuItem value="Planting">Planting</MenuItem>
-              <MenuItem value="Irrigation">Irrigation</MenuItem>
-              <MenuItem value="Fertilization">Fertilization</MenuItem>
-              <MenuItem value="Pest Management">Pest Management</MenuItem>
-              <MenuItem value="Weeding">Weeding</MenuItem>
-              <MenuItem value="Crop Rotation">Crop Rotation</MenuItem>
-              <MenuItem value="Harvesting">Harvesting</MenuItem>
-              <MenuItem value="Equipment Management">
-                Equipment Management
-              </MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
+
+              {categoryOptions.map((item: any, index: number) => {
+                return (
+                  <MenuItem value={item.vale} key={index}>{item.title}</MenuItem>
+                )
+              })}
             </Select>
             <FormHelperText />
           </FormControl>
@@ -62,7 +80,9 @@ const Header: NextPage = () => {
           name="description"
           placeholder="Enter description here"
           margin="normal"
+          {...register('description')}
           fullWidth
+
         />
         <div className={styles.threeDots}>
           <div className={styles.threeDotsChild} />

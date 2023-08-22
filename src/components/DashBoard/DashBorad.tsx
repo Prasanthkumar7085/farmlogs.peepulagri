@@ -13,36 +13,24 @@ const DashBoard = () => {
 
     const [farmsData, setFarmsData] = useState<any>();
 
-    const onChange = (value: string) => {
-
-    }
-
     const getFarmsData = async () => {
         let response: any = await getAllFarms();
-
-        setFarmsData(response);
-        console.log(response);
-
+        if (response.success) {
+            router.push(`/farm/${response?.data[0]._id}/logs`);
+            console.log(response);
+            setFarmsData(response);
+        }
     }
 
     useEffect(() => {
         if (router.isReady) {
             getFarmsData();
         }
-    }, [router]);
+    }, [router.isReady]);
 
     return (
         <div style={{ width: "100%" }}>
             <FarmCardsLayOut farmsData={farmsData}>
-                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "40px", paddingRight: "20px" }}>
-                    <SearchComponent onChange={onChange} placeholder={'Search Logs'} />
-                    <Link href="/farm/[farm_id]/logs/add" as={`/farm/${router.query.farm_id}/logs/add`} style={{ textDecoration: "none", color: "#000000" }}>
-                        <Button>
-                            Add Log
-                        </Button>
-                    </Link>
-                </div>
-
                 <FarmTableLogs />
             </FarmCardsLayOut>
         </div>

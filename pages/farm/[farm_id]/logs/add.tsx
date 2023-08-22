@@ -1,4 +1,4 @@
-import FarmsaddLogs from "@/components/index";
+import FarmsaddLogs from "@/components/AddLogs/index";
 
 
 const AddLogsPage = () => {

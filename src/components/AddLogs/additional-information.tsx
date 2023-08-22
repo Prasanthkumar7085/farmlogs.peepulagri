@@ -10,7 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import styles from "./additional-information.module.css";
-const AdditionalInformation: NextPage = () => {
+const AdditionalInformation = ({ register }: any) => {
   return (
     <div className={styles.additionalInformation}>
       <div className={styles.header}>

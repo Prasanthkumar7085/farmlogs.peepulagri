@@ -17,7 +17,7 @@
 .form {
   position: absolute;
   top: 24px;
-  left: calc(50% - 35vw);
+  left: calc(50% - 43vw);
   flex-direction: column;
   max-width: 70vw;
   text-align: left;

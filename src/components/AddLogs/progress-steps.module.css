@@ -115,7 +115,7 @@
 .progressSteps {
   flex: 1;
   min-width: 300px;
-  max-width: 450px;
+  max-width: 400px;
   text-align: left;
   font-size: var(--text-sm-medium-size);
   color: var(--primary);

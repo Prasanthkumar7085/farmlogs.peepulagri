@@ -4,12 +4,12 @@ import Resource from "./resource";
 import AdditionalInformation from "./additional-information";
 import Attachments from "./attachments";
 import styles from "./form.module.css";
-const Form: NextPage = () => {
+const Form = ({ register }: any) => {
   return (
     <section className={styles.form}>
-      <CardWorkType />
-      <Resource />
-      <AdditionalInformation />
+      <CardWorkType register={register} />
+      <Resource register={register} />
+      <AdditionalInformation register={register} />
       <Attachments />
     </section>
   );

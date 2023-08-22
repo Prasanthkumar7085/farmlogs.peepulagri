@@ -1,5 +1,5 @@
 export interface FarmCardTypes {
-    id: number,
+    id: number;
     farmShape: string;
     acresCount: number;
     farmName: string;
@@ -24,4 +24,19 @@ export interface FarmCardPropsType {
     acresCount: number;
     farmName: string;
     createAt: string
+}
+
+
+export interface PaginationDetailsType {
+    limit: number;
+    page: number;
+    total: number;
+    total_pages: number;
+}
+
+export interface GetLogsByFarmIdPropsType {
+    farmId: string | undefined | number;
+    page: string | undefined | number;
+    limit: string | undefined | number;
+    search: string;
 }

@@ -14,16 +14,17 @@ interface MyProps {
 }
 
 interface item {
-    src: string
+    src: string;
+    link: string
 }
 
 const menuListItems = [
-    { src: '/apps-1.svg' },
-    { src: '/lifering-1.svg' },
-    { src: '/timehalfpast-1-1.svg' },
-    { src: '/settings-12.svg' },
-    { src: '/calendar-1-12.svg' },
-    { src: '/charthistogram-1.svg' },
+    { src: '/apps-1.svg', link: "/" },
+    { src: '/lifering-1.svg', link: "/support" },
+    { src: '/timehalfpast-1-1.svg', link: "/" },
+    { src: '/settings-12.svg', link: "/" },
+    { src: '/calendar-1-12.svg', link: "/" },
+    { src: '/charthistogram-1.svg', link: "/" },
 ]
 
 const SideBarMenu = ({ children }: any) => {
@@ -40,9 +41,8 @@ const SideBarMenu = ({ children }: any) => {
                         {menuListItems.map((item: item, index: number) => {
                             return (
                                 <ListItem className={styles.menuItem} key={index}>
-                                    <ListItemButton>
+                                    <ListItemButton onClick={() => router.push(item.link)}>
                                         <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
-
                                     </ListItemButton>
                                 </ListItem>
                             )

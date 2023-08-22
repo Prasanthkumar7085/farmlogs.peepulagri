@@ -4,16 +4,16 @@ import styles from "./card.module.css";
 
 type FarmDetailsMiniCardType = {
   /** Style props */
-  cardTop?: CSSProperties["top"];
-  cardRight?: CSSProperties["right"];
-  cardAlignItems?: CSSProperties["alignItems"];
-  cardLeft?: CSSProperties["left"];
-  vectorIconWidth?: CSSProperties["width"];
-  vectorIconHeight?: CSSProperties["height"];
-  rectangleDivRight?: CSSProperties["right"];
-  rectangleDivBottom?: CSSProperties["bottom"];
-  rectangleDivWidth?: CSSProperties["width"];
-  rectangleDivHeight?: CSSProperties["height"];
+  cardTop?: Partial<CSSProperties>;
+  cardRight?: Partial<CSSProperties>;
+  cardAlignItems?: Partial<CSSProperties>;
+  cardLeft?: Partial<CSSProperties>;
+  vectorIconWidth?: Partial<CSSProperties>;
+  vectorIconHeight?: Partial<CSSProperties>;
+  rectangleDivRight?: Partial<CSSProperties>;
+  rectangleDivBottom?: Partial<CSSProperties>;
+  rectangleDivWidth?: Partial<CSSProperties>;
+  rectangleDivHeight?: Partial<CSSProperties>;
 };
 
 const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
@@ -27,7 +27,7 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
   rectangleDivBottom,
   rectangleDivWidth,
   rectangleDivHeight,
-}) => {
+}: any) => {
   const cardStyle: CSSProperties = useMemo(() => {
     return {
       top: cardTop,

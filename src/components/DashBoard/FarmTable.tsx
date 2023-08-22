@@ -1,6 +1,6 @@
 import { useTable } from "react-table";
 
-const FarmTable = ({ columns, data }: any) => {
+const FarmTable = ({ columns, data }: any) => { 
 
     const {
         getTableProps, // table props from react-table
@@ -9,8 +9,8 @@ const FarmTable = ({ columns, data }: any) => {
         rows, // rows for the table based on the data passed
         prepareRow // Prepare the row (this function needs to be called for each row before getting the row props)
     } = useTable({
-        columns,
-        data
+        columns: columns?.length ? columns : [],
+        data: data?.length ? data : []
     });
 
     return (
@@ -18,10 +18,16 @@ const FarmTable = ({ columns, data }: any) => {
             <table {...getTableProps()} style={{ position: "sticky" }}>
             <thead>
                     {headerGroups.map((headerGroup: any, index: number) => (
+
                         <tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                            {headerGroup.headers.map((column: any, columnIndex: number) => (
+                            {headerGroup.headers.map((column: any, columnIndex: number) => {
+                                if (column.Header === "Details") {
+                                    return null; // This will hide the header
+                                }
+                                return (
                                 <th {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
-                        ))}
+                                )
+                            })}
                     </tr>
                 ))}
             </thead>

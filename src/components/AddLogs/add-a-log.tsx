@@ -8,6 +8,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router";
 import { useState } from "react";
 import addLog from "../../../lib/services/LogsService/addLog";
+import { log } from "console";
 
 const AddALog: NextPage = () => {
 
@@ -25,8 +26,9 @@ const AddALog: NextPage = () => {
 
   const captureDates = (fromDate: string, toDate: string) => {
     setDates([fromDate, toDate]);
-
   }
+
+
   const addLogs = async (data: any) => {
 
     const { date, category, ...rest } = data;
@@ -36,18 +38,18 @@ const AddALog: NextPage = () => {
       categories: [category],
       farm_id: router.query.farm_id,
       status: 'ACTIVE',
-      total_machinary_hours: 10,
-      total_manual_hours: 20,
       from_date_time: dates[0] ? new Date(dates[0]).toISOString() : "",
       to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : "",
       resources: resources,
-      additional_resources: additionalResources
+      additional_resources: additionalResources,
+      total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinary" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
+      total_manual_hours: resources.reduce((acc: number, item: any) => (item.type == "Manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0)
     }
+
     try {
       let response = addLog(obj);
     } catch (err: any) {
       console.error(err);
-
     }
   }
   return (

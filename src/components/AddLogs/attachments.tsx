@@ -9,7 +9,7 @@ const Attachments: NextPage = () => {
           You can also drag and drop files to upload them.
         </p>
       </div>
-      <input className={styles.link} type="file" />
+      <input className={styles.link} type="file" multiple />
     </div>
   );
 };

@@ -61,7 +61,42 @@ const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
 
   }
 
+  const onChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
 
+    const newValue = e.target.value;
+    const regex = /^\d+(\.\d{0,2})?$/;
+
+    if (regex.test(newValue) || newValue === '') {
+      setResourceQuantity(newValue);
+    }
+
+  }
+
+  const editInResources = (newValue: string, index: number, item: string) => {
+    let tempResources = [...resources];
+    let itemObj = tempResources[index];
+    itemObj = { ...itemObj, [item]: newValue }
+    tempResources[index] = itemObj;
+    setResources(tempResources);
+    setAdditionalResources(tempResources)
+  }
+
+  const editInResourceType = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    editInResources(e.target.value, index, 'title')
+  }
+  const editInQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const newValue = e.target.value;
+    const regex = /^\d+(\.\d{0,2})?$/;
+    if (regex.test(newValue) || newValue === '') {
+      editInResources(newValue, index, 'quantity')
+    }
+  }
+
+
+  const editInResourceTitle = (e: any, index: number) => {
+    editInResources(e.target.value, index, 'units')
+
+  }
 
   return (
     <div className={styles.additionalInformation}>
@@ -108,13 +143,13 @@ const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
             color="primary"
             variant="outlined"
             defaultValue="0"
-            type="number"
             placeholder="Enter Quantity"
             size="small"
             margin="none"
             value={resourceQuantity}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setResourceQuantity(e.target.value)}
+            onChange={onChangeQuantity}
           />
+
         </div>
         <div className={styles.units}>
           <p className={styles.label1}>Units</p>
@@ -155,9 +190,55 @@ const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
               {resources.map((item: any, index: number) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell>{item.title}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>{item.units}</TableCell>
+                    <TableCell>
+                      <TextField
+                        defaultValue={item.title}
+                        value={item.title}
+                        className={styles.textInput}
+                        color="primary"
+                        variant="outlined"
+                        placeholder="Other Resources"
+                        size="small"
+                        margin="none"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => editInResourceType(e, index)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        defaultValue={item.quantity}
+                        value={item.quantity}
+                        className={styles.textInput}
+                        sx={{ width: 122 }}
+                        color="primary"
+                        variant="outlined"
+                        placeholder="Enter hrs"
+                        size="small"
+                        margin="none"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => editInQuantity(e, index)}
+                      />
+                    </TableCell>
+                    <TableCell>{item.units}
+
+                      <FormControl className={styles.dropdown} variant="outlined">
+                        <InputLabel color="primary" />
+                        <Select
+                          color="primary"
+                          name="Units"
+                          size="small"
+                          value={item.units}
+                          onChange={(e: any) => editInResourceTitle(e, index)}
+                        >
+                          <MenuItem value=''><em>Select Units</em></MenuItem>
+                          {units.map((item: string, index: number) => {
+                            return (
+                              <MenuItem key={index} value={item}>{item}</MenuItem>
+                            )
+                          })}
+
+                        </Select>
+                        <FormHelperText />
+                      </FormControl>
+                    </TableCell>
                     <TableCell>
                       <IconButton onClick={() => removeFromAdditionalResources(index)}>
                         <DeleteOutlineIcon />

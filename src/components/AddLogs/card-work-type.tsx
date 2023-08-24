@@ -17,7 +17,6 @@ const CardWorkType = ({ register, captureDates }: any) => {
 
 
   const captureDateValue = (fromDate: string, toDate: string) => {
-    console.log(fromDate, toDate);
     captureDates(fromDate, toDate)
 
   }
@@ -28,9 +27,7 @@ const CardWorkType = ({ register, captureDates }: any) => {
             <p className={styles.label}>Work Type</p>
             <FormControl className={styles.dropdown} variant="outlined">
               <InputLabel color="primary" />
-              <Select color="primary" defaultValue="Choose Type" size="small" {...register('work_type', {
-                onChange: (e: any) => console.log(e)
-              })} >
+            <Select color="primary" defaultValue="Choose Type" size="small" {...register('work_type')} >
               <MenuItem value="ALL">ALL</MenuItem>
               <MenuItem value="MACHINARY">MACHINARY</MenuItem>
               <MenuItem value="MANUAL">MANUAL</MenuItem>

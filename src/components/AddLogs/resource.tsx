@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import {
   Button,
   Icon,
@@ -11,7 +10,7 @@ import {
 } from "@mui/material";
 import styles from "./resource.module.css";
 import ButtonComponent from "../Core/ButtonComponent";
-import { ChangeEvent, FormEvent, PointerEvent, useState } from "react";
+import { ChangeEvent, FormEvent, PointerEvent, useEffect, useState } from "react";
 
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -20,7 +19,6 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
 
 
 const Resource = ({ register, setResources: setAllResources }: any) => {
@@ -39,24 +37,80 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
   ]
 
   const addResources = () => {
-    let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: "Manual" };
-    let index = resources.findIndex((item: any) => item.title == obj.title);
+    let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "Manual" : "Machinary" };
 
-    if (index == -1) {
       setResources([...resources, obj]);
-      setAllResources([...resources, obj])
+    setAllResources([...resources, obj]);
+
       setResourceTitle('')
       setResourceQuantity('')
       setResourceHours('')
+
+  }
+
+  const [renderOnDelete, setRenderOnDelete] = useState(false);
+
+  const removeFromResources = (index: number) => {
+    let array = [...resources];
+    let filteredArray = array.filter((item: any, itemIndex: number) => index != itemIndex);
+    setResources(filteredArray);
+    setAllResources(filteredArray);
+
+    setRenderOnDelete(true);
+    setTimeout(() => {
+      setRenderOnDelete(false);
+    }, 1)
+  }
+
+  const onChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
+
+    const newValue = e.target.value;
+    const regex = /^\d+(\d{0,2})?$/;
+
+    if (regex.test(newValue) || newValue === '') {
+      setResourceQuantity(newValue);
+    }
+
+  }
+
+  const onChangeHrs = (e: ChangeEvent<HTMLInputElement>) => {
+
+    const newValue = e.target.value;
+    const regex = /^\d+(\.\d{0,2})?$/;
+
+    if (regex.test(newValue) || newValue === '') {
+      setResourceHours(newValue);
     }
   }
 
-  const removeFromResources = (index: number) => {
-    let filteredArray = [...resources];
-    filteredArray.splice(index, 1);
-    setResources(filteredArray);
-    setAllResources(filteredArray)
+  const editInResources = (newValue: string, index: number, item: string) => {
+    let tempResources = [...resources];
+    let itemObj = tempResources[index];
+    itemObj = { ...itemObj, [item]: newValue }
+    tempResources[index] = itemObj;
+    setResources(tempResources);
+    setAllResources(tempResources)
+
   }
+  const editInQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const newValue = e.target.value;
+    const regex = /^\d+(\.\d{0,2})?$/;
+    if (regex.test(newValue) || newValue === '') {
+      editInResources(newValue, index, 'quantity')
+    }
+  }
+
+  const editInHours = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const newValue = e.target.value;
+    const regex = /^\d+(\.\d{0,2})?$/;
+
+    if (regex.test(newValue) || newValue === '') {
+      editInResources(newValue, index, 'total_hours')
+    }
+  }
+  useEffect(() => {
+    setResources(resources)
+  }, [resources])
 
   return (
     <div className={styles.resource}>
@@ -91,7 +145,7 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
               >
                 {resourcesType.map((item: any, index: number) => {
                   return (
-                    <MenuItem key={index} value={item} disabled={resources.some((obj: any) => obj.title === item)}>{item}</MenuItem>
+                    <MenuItem key={index} value={item}>{item}</MenuItem>
                   )
                 })}
 
@@ -108,12 +162,11 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
               color="primary"
               variant="outlined"
               defaultValue="0"
-              type="number"
               placeholder="Enter Quantity"
               size="small"
               margin="none"
               value={resourceQuantity}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setResourceQuantity(e.target.value)}
+              onChange={onChangeQuantity}
             />
           </div>
           <div className={styles.inputField}>
@@ -124,12 +177,11 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
               color="primary"
               variant="outlined"
               defaultValue="0"
-              type="number"
-              placeholder="Enter hrs"
+              placeholder="Enter Hours"
               size="small"
               margin="none"
               value={resourceHours}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setResourceHours(e.target.value)}
+              onChange={onChangeHrs}
             />
           </div>
         </div>
@@ -150,8 +202,34 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
               return (
                 <TableRow key={index}>
                   <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>{item.total_hours}</TableCell>
+                  <TableCell>
+                    <TextField
+                      defaultValue={item.quantity}
+                      value={item.quantity}
+                      className={styles.textInput}
+                      sx={{ width: 122 }}
+                      color="primary"
+                      variant="outlined"
+                      placeholder="Enter hrs"
+                      size="small"
+                      margin="none"
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => editInQuantity(e, index)}
+                    /> 
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      defaultValue={item.total_hours}
+                      value={item.total_hours}
+                      className={styles.textInput}
+                      sx={{ width: 122 }}
+                      color="primary"
+                      variant="outlined"
+                      placeholder="Enter hrs"
+                      size="small"
+                      margin="none"
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => editInHours(e, index)}
+                    /> 
+                  </TableCell>
                   <TableCell>
                     <IconButton onClick={() => removeFromResources(index)}>
                       <DeleteOutlineIcon />

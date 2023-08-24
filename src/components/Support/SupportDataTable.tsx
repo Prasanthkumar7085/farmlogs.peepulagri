@@ -26,7 +26,6 @@ const SupportDataTable = () => {
 
         }
     }
-    console.log(data);
     useEffect(() => {
         getAllSupports();
     }, [])
@@ -49,7 +48,6 @@ const SupportDataTable = () => {
                         return (
                             <div style={{ display: "flex" }}>
                                 {row.categories.length && row.categories.map((item: string, index: number) => {
-                                    console.log(item);
                                     return <Chip label={item} key={index} sx={{ margin: "2px" }} />
                                 })}
                             </div>

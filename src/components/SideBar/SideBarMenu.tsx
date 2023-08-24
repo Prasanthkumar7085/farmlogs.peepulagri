@@ -21,7 +21,7 @@ interface item {
 const menuListItems = [
     { src: '/apps-1.svg', link: "/" },
     { src: '/lifering-1.svg', link: "/support" },
-    { src: '/timehalfpast-1-1.svg', link: "/" },
+    { src: '/timehalfpast-1-1.svg', link: "/time-line" },
     { src: '/settings-12.svg', link: "/" },
     { src: '/calendar-1-12.svg', link: "/" },
     { src: '/charthistogram-1.svg', link: "/" },

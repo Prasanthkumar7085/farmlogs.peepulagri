@@ -39,4 +39,6 @@ export interface GetLogsByFarmIdPropsType {
     page: string | undefined | number;
     limit: string | undefined | number;
     search: string;
+    order_by: string | undefined;
+    order_type: string | undefined;
 }

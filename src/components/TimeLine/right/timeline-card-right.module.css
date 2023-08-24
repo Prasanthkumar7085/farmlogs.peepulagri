@@ -1,0 +1,117 @@
+.date1 {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+}
+.date,
+.monthyear {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.monthyear {
+  flex-direction: column;
+  font-size: var(--font-size-xs);
+}
+.date {
+  align-self: stretch;
+  flex-direction: row;
+  gap: var(--gap-9xs);
+}
+.imageIcon {
+  position: relative;
+  border-radius: var(--br-9xs);
+  width: 6.88rem;
+  height: 6.25rem;
+  object-fit: cover;
+}
+.description,
+.heading {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+}
+.heading {
+  font-size: inherit;
+  font-weight: 400;
+  font-family: inherit;
+}
+.description {
+  flex: 1;
+  font-size: var(--text-md-normal-size);
+  color: var(--title);
+}
+.textwrapper {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-6xs);
+}
+.container,
+.container1,
+.textwrapper {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.container1 {
+  flex-direction: row;
+  gap: var(--gap-base);
+  text-align: left;
+  font-size: var(--text-sm-medium-size);
+  color: var(--color-firebrick);
+}
+.container {
+  flex-direction: column;
+  gap: var(--gap-sm);
+  z-index: 0;
+}
+.weeding {
+  margin: 0;
+  position: relative;
+}
+.cardlable,
+.timelinecardrightChild {
+  position: absolute;
+  margin: 0 !important;
+}
+.cardlable {
+  top: 0;
+  right: 0;
+  border-radius: 0 var(--br-3xs) 0 var(--br-3xs);
+  background-color: var(--color-firebrick);
+  border: 1px solid var(--color-firebrick);
+  display: flex;
+  flex-direction: row;
+  padding: var(--padding-8xs) var(--padding-3xs);
+  align-items: flex-start;
+  justify-content: flex-start;
+  z-index: 1;
+  text-align: left;
+  font-size: var(--text-sm-medium-size);
+  color: var(--white);
+}
+.timelinecardrightChild {
+  top: 1.44rem;
+  left: -5.47rem;
+  width: 5.47rem;
+  height: 0.89rem;
+  z-index: 2;
+}
+.timelinecardright {
+  position: relative;
+  left: 56.00rem;
+  border-radius: var(--br-5xs);
+  background-color: var(--white);
+  box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.15);
+  width: 21.88rem;
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-base) var(--padding-base) var(--padding-5xl);
+  box-sizing: border-box;
+  gap: var(--gap-4xs);
+  text-align: center;
+  font-size: var(--font-size-5xl);
+  color: var(--color-black);
+  font-family: var(--text-sm-medium);
+}

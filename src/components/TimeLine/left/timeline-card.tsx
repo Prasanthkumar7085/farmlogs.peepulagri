@@ -30,9 +30,11 @@ const TimelineCard = ({ data }: any) => {
         </div>
       </div>
       <div className={styles.cardlable}>
-        <p className={styles.equipmentManagement}>{data.title}</p>
+        <p className={styles.equipmentManagement}>{data.title.length > 12 ? data.title.slice(0, 10) + "..." : data.title}</p>
       </div>
       <img className={styles.unionIcon} alt="" src="/union.svg" />
+      <div className={styles.unionIcon}
+        style={{ borderRight: "1px solid black", height: "250px", }}></div>
     </div>
 
   );

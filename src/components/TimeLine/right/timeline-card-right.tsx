@@ -33,7 +33,7 @@ const TimelineCardRight = ({ data }: any) => {
         </div>
       </div>
       <div className={styles.cardlable}>
-        <p className={styles.weeding}>{data.title}</p>
+        <p className={styles.weeding}>{data.title.length > 12 ? data.title.slice(0, 10) + "..." : data.title}</p>
       </div>
       <img
         className={styles.timelinecardrightChild}
@@ -41,7 +41,7 @@ const TimelineCardRight = ({ data }: any) => {
         src="/group-36.svg"
       />
       <div className={styles.timelinecardrightChild}
-        style={{ borderLeft: "1px solid black", height: "1000px", }}></div>
+        style={{ borderLeft: "1px solid black", height: "250px", }}></div>
 
     </div>
   );

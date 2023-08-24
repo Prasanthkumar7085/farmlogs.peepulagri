@@ -152,13 +152,13 @@ const FarmTableLogs = () => {
                 },
                 {
                     Header: "Actions",
-                    accessor: () => {
+                    accessor: (row: any) => {
                         return (
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                                 <IconButton onClick={() => router.push('/farm/1/logs/5')}>
                                     <VisibilityIcon color='info' />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton onClick={() => router.push(`/farm/1/logs/${row._id}/edit`)}>
                                     <EditIcon color='warning' />
                                 </IconButton>
                                 <IconButton>

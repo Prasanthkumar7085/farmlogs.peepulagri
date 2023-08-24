@@ -29,21 +29,20 @@ const AddALog: NextPage = () => {
   }
   const addLogs = async (data: any) => {
 
-    const { date, ...rest } = data;
+    const { date, category, ...rest } = data;
 
     const obj = {
       ...rest,
+      categories: [category],
       farm_id: router.query.farm_id,
       status: 'ACTIVE',
       total_machinary_hours: 10,
       total_manual_hours: 20,
-      from_date_time: new Date(dates[0]).toISOString(),
-      to_date_time: new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString(),
+      from_date_time: dates[0] ? new Date(dates[0]).toISOString() : "",
+      to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : "",
       resources: resources,
       additional_resources: additionalResources
     }
-    console.log(obj);
-
     try {
       let response = addLog(obj);
     } catch (err: any) {

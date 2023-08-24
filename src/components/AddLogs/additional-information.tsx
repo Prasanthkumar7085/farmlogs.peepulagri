@@ -10,7 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import styles from "./additional-information.module.css";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -45,15 +45,12 @@ const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
 
   const addResources = () => {
     let obj = { title: resourceTitle, quantity: resourceQuantity, units: resourceUnits, type: "Pesticides" };
-    let index = resources.findIndex((item: any) => item.title == obj.title);
 
-    if (index == -1) {
       setResources([...resources, obj]);
       setAdditionalResources([...resources, obj]);
       setResourceTitle('')
       setResourceQuantity('')
-      setResourceUnits('')
-    }
+    setResourceUnits('')
   }
 
   const removeFromAdditionalResources = (index: number) => {
@@ -63,6 +60,7 @@ const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
     setAdditionalResources(filteredArray);
 
   }
+
 
 
   return (

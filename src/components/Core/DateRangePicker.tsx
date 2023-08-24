@@ -10,7 +10,6 @@ const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
     const [fromDate, setFromDate] = useState<any>([new Date(), new Date()]);
 
     const [date, setDate] = useState([moment(new Date()).format("YYYY-MM-DD"), moment(new Date()).format("YYYY-MM-DD")])
-    console.log(date);
 
     const { register, ...rest } = props;
     return (

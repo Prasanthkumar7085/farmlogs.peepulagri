@@ -18,10 +18,6 @@ const AddSupportForm = () => {
     const [audioChunks, setAudioChunks] = useState([]);
     const [audio, setAudio] = useState(null);
 
-    console.log(audioChunks);
-    console.log(audio);
-
-
     const [categoriesList, setCategoriesList] = useState<Array<categoriesType>>([
         { label: 'Harvesting', value: 'harvesting' },
         { label: 'Irrigation', value: 'irrigation' },

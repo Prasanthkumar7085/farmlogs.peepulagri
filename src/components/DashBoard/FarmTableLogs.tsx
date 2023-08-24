@@ -39,7 +39,6 @@ const FarmTableLogs = () => {
         try {
             const response = await getLogsByFarmId({ farmId: farmId, page: page, limit: limit, search: search });
             if (response.success) {
-            console.log(response);
                 const { data, limit, page, total, total_pages } = response;
                 setData(data);
 
@@ -75,13 +74,11 @@ const FarmTableLogs = () => {
     }
 
     const capturePageNum = (value: number) => {
-        console.log(value);
         setPage(value);
         getFarmLogs({ page: value });
     }
 
     const captureRowPerItems = (value: number) => {
-        console.log(value);
         setPage(1);
         setLimit(value);
         getFarmLogs({ page: 1, limit: value });

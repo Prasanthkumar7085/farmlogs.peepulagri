@@ -17,7 +17,7 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
                                     _id={item?._id}
                                     acresCount={item?.area}
                                     farmName={item?.title}
-                                    createAt={item?.created_at}
+                                    createAt={item?.createdAt}
                                 />
                             </Link>
                         </div>

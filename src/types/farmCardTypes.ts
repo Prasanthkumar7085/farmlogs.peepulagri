@@ -10,7 +10,7 @@ export interface FarmCardTypes {
 
 export interface FarmDataType {
     area: number;
-    created_at: string;
+    createdAt: string;
     geometry: any;
     slug: string;
     status: string;
@@ -39,8 +39,6 @@ export interface GetLogsByFarmIdPropsType {
     page: string | undefined | number;
     limit: string | undefined | number;
     search: string;
-    order_by: string | undefined;
-    order_type: string | undefined;
 }
 
 export interface QueryParamForFarmLogs {

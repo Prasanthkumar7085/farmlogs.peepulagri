@@ -2,7 +2,7 @@
 const getAllFarms = async () => {
 
     try {
-        let response: any = await fetch('http://localhost:3000/v1.0/farm/1/10');
+        let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/1/10`);
         const responseData = await response.json();
         if (response.ok) {
             return responseData;

@@ -11,7 +11,7 @@ const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
 
     const [date, setDate] = useState([moment(new Date()).format("YYYY-MM-DD"), moment(new Date()).format("YYYY-MM-DD")])
 
-    const { register, ...rest } = props;
+    const { ...rest } = props;
     return (
         <Stack >
             <DateRangePicker

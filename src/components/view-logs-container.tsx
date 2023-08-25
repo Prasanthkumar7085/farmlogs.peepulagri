@@ -6,22 +6,26 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import getLogByIdService from "../../lib/services/LogsService/getLogByIdService";
 import { GetLogByIdResponseDataType } from "@/types/logsTypes";
-const ViewLogsContainer: NextPage = () => {
+import LoadingComponent from "./Core/LoadingComponent";
 
+const ViewLogsContainer: NextPage = () => {
 
   const router: any = useRouter();
 
   const [data, setData] = useState<GetLogByIdResponseDataType | null | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchSingleLogData = async () => {
+    setLoading(true);
     try {
       const response = await getLogByIdService(router.query.log_id);
-      console.log(response)
       if (response.success) {
         setData(response?.data)
       }
     } catch (err: any) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
   useEffect(() => {
@@ -35,6 +39,8 @@ const ViewLogsContainer: NextPage = () => {
     <div className={styles.viewLogsContainer}>
       <HeadPart data={data} />
       <MachineryManualCard data={data} />
+
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

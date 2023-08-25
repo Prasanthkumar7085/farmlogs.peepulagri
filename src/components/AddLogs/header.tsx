@@ -8,10 +8,8 @@ import {
   Select,
 } from "@mui/material";
 import styles from "./header.module.css";
-import { ChangeEvent, useState } from "react";
-const Header = ({ register }: any) => {
-
-  const [category, setCategory] = useState<string>('');
+import { ChangeEvent, useEffect, useState } from "react";
+const Header = ({ setFormDetails }: any) => {
 
   const categoryOptions = [
     { title: 'Soil Preparation', value: "soil_preparation" },
@@ -24,7 +22,20 @@ const Header = ({ register }: any) => {
     { title: 'Harvesting', value: "harvesting" },
     { title: 'Equipment Management', value: "equipment_management" },
     { title: 'Other', value: "other" },
-  ]
+  ];
+
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
+
+  useEffect(() => {
+    setFormDetails({
+      title: title,
+      description: description,
+      categories: category
+    })
+  }, [title, description, category])
+
   return (
     <div className={styles.primaryFormField}>
       <div className={styles.title}>
@@ -43,7 +54,8 @@ const Header = ({ register }: any) => {
               placeholder="Enter log title"
               size="medium"
               margin="none"
-              {...register('title')}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <FormControl sx={{ width: 200 }} variant="outlined">
@@ -54,10 +66,7 @@ const Header = ({ register }: any) => {
               size="small"
               label="Select Category"
               value={category}
-              {...register('category')}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setCategory(e.target.value)
-              }}
+              onChange={(e) => setCategory(e.target.value)}
             >
               {categoryOptions.map((item: any, index: number) => {
                 return (
@@ -72,12 +81,11 @@ const Header = ({ register }: any) => {
           className={styles.description}
           color="primary"
           variant="standard"
-          multiline
-          rows={3}
           name="description"
           placeholder="Enter description here"
           margin="normal"
-          {...register('description')}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           fullWidth
 
         />

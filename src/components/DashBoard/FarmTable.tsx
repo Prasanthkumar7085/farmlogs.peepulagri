@@ -1,6 +1,7 @@
 import { useTable } from "react-table";
+import NoDataComponent from "../Core/NoDataComponent";
 
-const FarmTable = ({ columns, data }: any) => { 
+const FarmTable = ({ columns, data, loading }: any) => {
 
     const {
         getTableProps, // table props from react-table
@@ -16,34 +17,35 @@ const FarmTable = ({ columns, data }: any) => {
     return (
         <div style={{ height: "70vh", overflow: "scroll" }}>
             <table {...getTableProps()} style={{ position: "sticky" }}>
-            <thead>
+                <thead>
                     {headerGroups.map((headerGroup: any, index: number) => (
 
                         <tr {...headerGroup.getHeaderGroupProps()} key={index}>
                             {headerGroup.headers.map((column: any, columnIndex: number) => {
-                                if (column.Header === "Details") {
-                                    return null; // This will hide the header
-                                }
                                 return (
-                                <th {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
+                                    <th {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
                                 )
                             })}
-                    </tr>
-                ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-                    {rows.map((row: any, index: number) => {
-                    prepareRow(row);
-                    return (
-                        <tr {...row.getRowProps()} key={index}>
-                            {row.cells.map((cell: any, cellIndex: number) => {
-                                return <td style={{ padding: "10px", border: ".1px solid" }} {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
-                            })}
                         </tr>
-                    );
-                })}
-            </tbody>
-        </table>
+                    ))}
+                </thead>
+                {!loading && data?.length ? <tbody {...getTableBodyProps()}>
+                    {rows.map((row: any, index: number) => {
+                        prepareRow(row);
+                        return (
+                            <tr {...row.getRowProps()} key={index}>
+                                {row.cells.map((cell: any, cellIndex: number) => {
+                                    return <td style={{ padding: "10px", border: ".1px solid" }} {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
+                                })}
+                            </tr>
+                        );
+                    })}
+                </tbody> :
+                    <tr>
+                        <td colSpan={columns.length}> <NoDataComponent noData={data ? !data.length : true} /></td>
+                    </tr>
+                }
+            </table>
         </div>
     );
 }

@@ -2,7 +2,7 @@
 const addLogService = async (body: any) => {
 
     try {
-        const url = 'http://localhost:3000/v1.0/log';
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/log`;
         const options = {
             method: "POST",
             body: JSON.stringify(body),

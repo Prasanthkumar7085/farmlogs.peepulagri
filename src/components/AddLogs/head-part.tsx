@@ -1,14 +1,24 @@
-import type { NextPage } from "next";
+
 import styles from "./head-part.module.css";
+import ButtonComponent from "../Core/ButtonComponent";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useRouter } from "next/router";
+import { Icon } from "@mui/material";
+
 
 const HeadPart = ({ data }: any) => {
 
-
+  const router = useRouter();
 
   return (
     <div className={styles.headPart}>
       <div className={styles.subHeading}>
-        <img className={styles.icon} alt="" src="/icon.svg" />
+        <ButtonComponent
+          direction={false}
+          title='Back'
+          icon={<Icon>arrow_back_sharp</Icon>}
+          onClick={() => router.back()}
+        />
         <h4 className={styles.text}>view Log</h4>
       </div>
       <div className={styles.headerContent}>
@@ -23,10 +33,6 @@ const HeadPart = ({ data }: any) => {
             <span className={styles.identifyingSpecificPests}>
               {data?.description}
             </span>
-            {/* <span className={styles.identifyingSpecificPests}>
-              Monitoring the effectiveness of treatments and reapplying if
-              needed.
-            </span> */}
           </p>
         </div>
       </div>

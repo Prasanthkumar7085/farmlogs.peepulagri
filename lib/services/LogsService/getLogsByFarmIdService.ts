@@ -3,7 +3,7 @@ import { prepareURLEncodedParams } from '../../requestUtils/urlEncoder';
 
 const getLogsByFarmIdService = async ({ farmId, page, limit, search = '' }: GetLogsByFarmIdPropsType) => {
 
-    const url = `http://localhost:3000/v1.0/farm/${farmId}/logs/${page}/${limit}`
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}/logs/${page}/${limit}`
     let queryParams: Partial<QueryParamForFarmLogs> = {};
     if (search) {
         queryParams['search_string'] = search;

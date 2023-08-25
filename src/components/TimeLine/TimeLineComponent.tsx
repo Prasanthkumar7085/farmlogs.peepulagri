@@ -38,7 +38,7 @@ const TimeLineComponent = () => {
 
     const getLogsData = async (id: any, page: number, limit: number) => {
         try {
-            const response: any = await fetch(`http://localhost:3000/v1.0/farm/${id ? id : "64e3255849ac66caca11a9c4"}/logs/${page}/${10}?order_by=${'from_date_time'}&order_type=asc`);
+            const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id ? id : "64e3255849ac66caca11a9c4"}/logs/${page}/${10}?order_by=${'from_date_time'}&order_type=asc`);
             const responseData: any = await response.json()
             console.log(responseData)
 

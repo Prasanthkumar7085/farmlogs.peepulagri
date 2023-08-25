@@ -20,7 +20,7 @@ import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
+const AdditionalInformation = ({ setAdditionalResources }: any) => {
 
   const [resources, setResources] = useState<any>([]);
 
@@ -46,10 +46,10 @@ const AdditionalInformation = ({ register, setAdditionalResources }: any) => {
   const addResources = () => {
     let obj = { title: resourceTitle, quantity: resourceQuantity, units: resourceUnits, type: "Pesticides" };
 
-      setResources([...resources, obj]);
-      setAdditionalResources([...resources, obj]);
-      setResourceTitle('')
-      setResourceQuantity('')
+    setResources([...resources, obj]);
+    setAdditionalResources([...resources, obj]);
+    setResourceTitle('')
+    setResourceQuantity('')
     setResourceUnits('')
   }
 

@@ -9,8 +9,8 @@ import styles from "./table-pagination.module.css";
 const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRowPerItems, values }: any) => {
 
     const router = useRouter();
-    const [pageNum, setPageNum] = useState<any>();
-    const [noOfRows, setNoOfRows] = useState<any>();
+    const [pageNum, setPageNum] = useState<number | string>();
+    const [noOfRows, setNoOfRows] = useState<number | string>();
 
     const handlePagerowChange = (event: any) => {
         setNoOfRows(event.target.value);
@@ -62,6 +62,7 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
 
                     },
                 }}
+                page={paginationDetails?.page}
                 count={paginationDetails?.total_pages}
                 onChange={(event: any, value: any) => {
                     capturePageNum(value)

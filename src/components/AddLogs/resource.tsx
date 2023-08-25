@@ -22,7 +22,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ResourcesType } from "@/types/logsTypes";
 
 
-const Resource = ({ register, setResources: setAllResources }: any) => {
+const Resource = ({ setResources: setAllResources }: any) => {
 
   const [resources, setResources] = useState<Array<ResourcesType>>([]);
 
@@ -40,12 +40,12 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
   const addResources = () => {
     let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "Manual" : "Machinary" };
 
-      setResources([...resources, obj]);
+    setResources([...resources, obj]);
     setAllResources([...resources, obj]);
 
-      setResourceTitle('')
-      setResourceQuantity('')
-      setResourceHours('')
+    setResourceTitle('')
+    setResourceQuantity('')
+    setResourceHours('')
 
   }
 
@@ -182,59 +182,59 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
       </div>
       {resources.length ?
         <div className={styles.table}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Resouces Type</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Total Hours</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {resources.map((item: any, index: number) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>
-                    <TextField
-                      defaultValue={item.quantity}
-                      value={item.quantity}
-                      className={styles.textInput}
-                      sx={{ width: 122 }}
-                      color="primary"
-                      variant="outlined"
-                      placeholder="Enter hrs"
-                      size="small"
-                      margin="none"
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => editInQuantity(e, index)}
-                    /> 
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      defaultValue={item.total_hours}
-                      value={item.total_hours}
-                      className={styles.textInput}
-                      sx={{ width: 122 }}
-                      color="primary"
-                      variant="outlined"
-                      placeholder="Enter hrs"
-                      size="small"
-                      margin="none"
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => editInHours(e, index)}
-                    /> 
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => removeFromResources(index)}>
-                      <DeleteOutlineIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </div> : ""}
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Resouces Type</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>Total Hours</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {resources.map((item: any, index: number) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{item.title}</TableCell>
+                    <TableCell>
+                      <TextField
+                        defaultValue={item.quantity}
+                        value={item.quantity}
+                        className={styles.textInput}
+                        sx={{ width: 122 }}
+                        color="primary"
+                        variant="outlined"
+                        placeholder="Enter hrs"
+                        size="small"
+                        margin="none"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => editInQuantity(e, index)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        defaultValue={item.total_hours}
+                        value={item.total_hours}
+                        className={styles.textInput}
+                        sx={{ width: 122 }}
+                        color="primary"
+                        variant="outlined"
+                        placeholder="Enter hrs"
+                        size="small"
+                        margin="none"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => editInHours(e, index)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => removeFromResources(index)}>
+                        <DeleteOutlineIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </div> : ""}
     </div>
   );
 };

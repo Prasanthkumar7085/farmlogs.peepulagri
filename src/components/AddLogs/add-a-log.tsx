@@ -1,55 +1,34 @@
 import type { NextPage } from "next";
 import ProgressSteps from "./progress-steps";
-import Form from "./form";
 import FooterActionButtons from "./footer-action-buttons";
 import styles from "./add-a-log.module.css";
 import Header from "./header";
-import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import addLogService from "../../../lib/services/LogsService/addLogService";
-import { log } from "console";
-import getLogByIdService from "../../../lib/services/LogsService/getLogByIdService";
+import Form from "./form";
 
 const AddALog: NextPage = () => {
 
-
-  useEffect(() => {
-    getOneLogDetails()
-  }, [])
-
-  const router: any = useRouter();
-  console.log(router, "o")
-
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const router = useRouter();
 
   const [resources, setResources] = useState([]);
   const [additionalResources, setAdditionalResources] = useState([]);
   const [dates, setDates] = useState<any>([]);
-  const [singleLogDetails, setSingleLogDetails] = useState<any>()
+  const [formDetails, setFormDetails] = useState<any>();
+  const [workType, setWorkType] = useState('');
 
   const captureDates = (fromDate: string, toDate: string) => {
     setDates([fromDate, toDate]);
   }
 
-  const getOneLogDetails = async () => {
-    let reponse: any = await getLogByIdService(router?.query?.log_id)
-    setSingleLogDetails(reponse?.data)
-  }
 
   const addLogs = async (data: any) => {
 
-    const { date, category, ...rest } = data;
 
     const obj = {
-      ...rest,
-      categories: [category],
+      ...formDetails,
+      work_type: workType,
       farm_id: router.query.farm_id,
       status: 'ACTIVE',
       from_date_time: dates[0] ? new Date(dates[0]).toISOString() : "",
@@ -59,25 +38,23 @@ const AddALog: NextPage = () => {
       total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinary" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
       total_manual_hours: resources.reduce((acc: number, item: any) => (item.type == "Manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0)
     }
-
     try {
-      let response = addLogService(obj);
+      let response = await addLogService(obj);
     } catch (err: any) {
       console.error(err);
     }
   }
-
-
   return (
     <div className={styles.form}>
-      {router.query.farm_id ? <form onSubmit={handleSubmit(addLogs)}>
-        <Header register={register} />
-        <div className={styles.secondaryFormField}>
-          <ProgressSteps />
-          <Form captureDates={captureDates} register={register} setResources={setResources} setAdditionalResources={setAdditionalResources} />
-        </div>
-        <FooterActionButtons />
-      </form> : ""}
+      {router.query.farm_id ?
+        <div>
+          <Header setFormDetails={setFormDetails} />
+          <div className={styles.secondaryFormField}>
+            <ProgressSteps />
+            <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} />
+          </div>
+          <FooterActionButtons addLogs={addLogs} />
+        </div> : ""}
     </div>
   );
 };

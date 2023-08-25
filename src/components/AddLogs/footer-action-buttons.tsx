@@ -1,7 +1,10 @@
-import type { NextPage } from "next";
-import { Button, Icon } from "@mui/material";
+import { Icon } from "@mui/material";
 import styles from "./footer-action-buttons.module.css";
-const FooterActionButtons: NextPage = () => {
+import { useRouter } from "next/router";
+import ButtonComponent from "../Core/ButtonComponent";
+
+const FooterActionButtons = ({ addLogs }: any) => {
+  const router = useRouter();
   return (
     <div className={styles.footerActionButtons}>
       <div className={styles.modalActions}>
@@ -17,24 +20,25 @@ const FooterActionButtons: NextPage = () => {
         </div>
         <div className={styles.buttons}>
           <div className={styles.button1}>
-            <Button
+
+            <ButtonComponent
+              direction={false}
+              onClick={() => router.back()}
               variant="outlined"
               color="primary"
-              startIcon={<Icon>arrow_back_sharp</Icon>}
-
-            >
-              Back
-            </Button>
+              title={'Back'}
+              endIcon={<Icon>arrow_back_sharp</Icon>}
+            />
           </div>
           <div className={styles.button1}>
-            <Button
-              type='submit'
+            <ButtonComponent
+              direction={true}
+              onClick={addLogs}
               variant="contained"
               color="primary"
+              title={'Submit'}
               endIcon={<Icon>arrow_forward_sharp</Icon>}
-            >
-              Submit
-            </Button>
+            />
           </div>
         </div>
       </div>

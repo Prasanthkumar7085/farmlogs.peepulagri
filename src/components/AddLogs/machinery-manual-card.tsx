@@ -13,13 +13,13 @@ const MachineryManualCard = ({ data }: any) => {
             <h5 className={styles.label}>Work Type</h5>
             <p className={styles.value}>
 
-              {data.work_type = 'ALL' ?
+              {data?.work_type == 'ALL' ?
                 <>
                   <span>{`Machinery`}</span>
                   <span className={styles.span}>{`& `}</span>
                   <span className={styles.manual}>Manual</span>
                 </>
-                : data.work_type}
+                : data?.work_type}
 
             </p>
           </div>
@@ -29,13 +29,13 @@ const MachineryManualCard = ({ data }: any) => {
           <div className={styles.dateRange}>
             <div className={styles.fromDate}>
               <div className={styles.text}>
-                {timePipe(data.from_date_time, 'DD, MMM YYYY')}
+                {timePipe(data?.from_date_time, 'DD, MMM YYYY')}
               </div>
             </div>
             <div className={styles.divider}>-</div>
             <div className={styles.fromDate}>
               <div className={styles.text}>
-                {timePipe(data.to_date_time, 'DD, MMM YYYY')}
+                {timePipe(data?.to_date_time, 'DD, MMM YYYY')}
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@ const MachineryManualCard = ({ data }: any) => {
             </div>
           </div>
 
-          {data.resources.length ? data.resources.map((item: ResourcesType, index: number) => {
+          {data?.resources.length ? data?.resources.map((item: ResourcesType, index: number) => {
             return (
               <div className={styles.tableRow} key={index}>
                 <div className={styles.inputCell}>
@@ -74,12 +74,13 @@ const MachineryManualCard = ({ data }: any) => {
                 </div>
               </div>
             )
-          }) : ""}
-        </div>
-      </div>
+          }) : ""
+          }
+        </div >
+      </div >
 
 
-      {data.additional_resources.length ? <div className={styles.dataGroup2}>
+      {data?.additional_resources.length ? <div className={styles.dataGroup2}>
         <div className={styles.subTitle}>
           <h4 className={styles.text2}>Additional Information</h4>
         </div>
@@ -96,24 +97,25 @@ const MachineryManualCard = ({ data }: any) => {
             </div>
           </div>
 
-          {data.additional_resources.map((item: AdditionalResourcesType, index: number) => {
+          {data?.additional_resources.map((item: AdditionalResourcesType, index: number) => {
             return (
-          <div className={styles.tableRow3}>
-            <div className={styles.inputCell}>
+              <div className={styles.tableRow3} key={index}>
+                <div className={styles.inputCell}>
                   <p className={styles.text3}>{item.title}</p>
-            </div>
-            <div className={styles.inputCell1}>
+                </div>
+                <div className={styles.inputCell1}>
                   <p className={styles.dropdownText}>{item.quantity}</p>
-            </div>
-            <div className={styles.inputCell2}>
+                </div>
+                <div className={styles.inputCell2}>
                   <p className={styles.dropdownText}>{item.units}</p>
-            </div>
-          </div>
+                </div>
+              </div>
             )
           })}
 
         </div>
-      </div> : ""}
+      </div > : ""
+      }
 
 
       <div className={styles.dataGroup3}>
@@ -143,7 +145,7 @@ const MachineryManualCard = ({ data }: any) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

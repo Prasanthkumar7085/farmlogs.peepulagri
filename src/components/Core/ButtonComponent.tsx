@@ -1,9 +1,9 @@
 import Button from "@mui/material/Button";
 
-const ButtonComponent = ({ direction = true, variant = 'contained', title, icon, ...rest }: any) => {
+const ButtonComponent = ({ direction = true, title, icon, ...rest }: any) => {
 
     return (
-        <Button {...rest} variant={variant} sx={{ height: "40px", display: "flex", flexDirection: direction ? 'row' : 'row-reverse', justifyContent: "space-evenly", alignItems: 'center' }}>
+        <Button {...rest} sx={{ height: "40px", display: "flex", flexDirection: direction ? 'row' : 'row-reverse', justifyContent: "space-evenly", alignItems: 'center' }}>
             <div>{title} </div>
             <div>{icon}</div>
         </Button>

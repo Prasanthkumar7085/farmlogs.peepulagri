@@ -1,4 +1,4 @@
-# peepul-agri-demo
+# app.peepul-agri
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/sai.j_oro/peepul-agri-demo.git
+git remote add origin https://gitlab.com/peepul-agri/app.peepul-agri.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/sai.j_oro/peepul-agri-demo/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/peepul-agri/app.peepul-agri/-/settings/integrations)
 
 ## Collaborate with your team
 

@@ -1,0 +1,80 @@
+import type { NextPage } from "next";
+import { useMemo, type CSSProperties } from "react";
+import styles from "./card.module.css";
+
+type FarmDetailsMiniCardType = {
+  /** Style props */
+  cardTop?: Partial<CSSProperties>;
+  cardRight?: Partial<CSSProperties>;
+  cardAlignItems?: Partial<CSSProperties>;
+  cardLeft?: Partial<CSSProperties>;
+  vectorIconWidth?: Partial<CSSProperties>;
+  vectorIconHeight?: Partial<CSSProperties>;
+  rectangleDivRight?: Partial<CSSProperties>;
+  rectangleDivBottom?: Partial<CSSProperties>;
+  rectangleDivWidth?: Partial<CSSProperties>;
+  rectangleDivHeight?: Partial<CSSProperties>;
+};
+
+const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
+  cardTop,
+  cardRight,
+  cardAlignItems,
+  cardLeft,
+  vectorIconWidth,
+  vectorIconHeight,
+  rectangleDivRight,
+  rectangleDivBottom,
+  rectangleDivWidth,
+  rectangleDivHeight,
+}: any) => {
+  const cardStyle: CSSProperties = useMemo(() => {
+    return {
+      top: cardTop,
+      right: cardRight,
+      alignItems: cardAlignItems,
+      left: cardLeft,
+    };
+  }, [cardTop, cardRight, cardAlignItems, cardLeft]);
+
+  const vectorIconStyle: CSSProperties = useMemo(() => {
+    return {
+      width: vectorIconWidth,
+      height: vectorIconHeight,
+    };
+  }, [vectorIconWidth, vectorIconHeight]);
+
+  const rectangleDivStyle: CSSProperties = useMemo(() => {
+    return {
+      right: rectangleDivRight,
+      bottom: rectangleDivBottom,
+      width: rectangleDivWidth,
+      height: rectangleDivHeight,
+    };
+  }, [
+    rectangleDivRight,
+    rectangleDivBottom,
+    rectangleDivWidth,
+    rectangleDivHeight,
+  ]);
+
+  return (
+    <div className={styles.card} style={cardStyle}>
+      <div className={styles.vectorParent}>
+        <img
+          className={styles.frameChild}
+          alt=""
+          src="/vector-13.svg"
+          style={vectorIconStyle}
+        />
+        <div className={styles.farm1Parent}>
+          <div className={styles.farm1}>Farm-1</div>
+          <div className={styles.acres}>60 Acres</div>
+        </div>
+      </div>
+      <div className={styles.cardChild} style={rectangleDivStyle} />
+    </div>
+  );
+};
+
+export default FarmDetailsMiniCard;

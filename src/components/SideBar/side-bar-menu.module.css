@@ -1,0 +1,94 @@
+.logo {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.apps1Icon,
+.logoIcon {
+  position: relative;
+  width: 56px;
+  height: 61.83px;
+}
+
+.apps1Icon {
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.menuItem {
+  text-decoration: none;
+}
+
+.menuItem.active {
+  background-color: var(--color-mediumseagreen-100);
+}
+
+.menuItem,
+.support {
+  border-radius: var(--br-5xs);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-3xs);
+  align-items: center;
+  justify-content: center;
+}
+
+.support,
+.timeline {
+  text-decoration: none;
+}
+
+.menubar {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  justify-content: space-around;
+  gap: var(--gap-21xl);
+}
+
+.profileChild {
+  position: relative;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.profile1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.sidebarmenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(142.18deg, #3462cf, #2b53be);
+  border-right: 1px solid var(--stroke);
+  box-sizing: border-box;
+  width: 100px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-xl) var(--padding-5xs);
+    align-items: center;
+    justify-content: space-between;
+    }
+    
+    .main {
+      margin-left: 100px;
+}

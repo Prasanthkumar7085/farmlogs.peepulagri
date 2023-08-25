@@ -1,0 +1,27 @@
+.form,
+.secondaryFormField {
+  margin-top: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-17xl);
+}
+
+.secondaryFormField {
+  align-self: stretch;
+  flex-direction: row;
+  font-size: var(--text-sm-medium-size);
+  color: var(--primary);
+}
+
+.form {
+  position: absolute;
+  top: 24px;
+  left: calc(50% - 43vw);
+  flex-direction: column;
+  max-width: 70vw;
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--color-sienna);
+  font-family: var(--text-sm-medium);
+}

@@ -1,0 +1,174 @@
+.farmshapeIcon {
+  position: relative;
+  border-radius: 2.98px;
+  width: 66.58px;
+  height: 60px;
+}
+
+.acrescount,
+.farmname {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+}
+
+.farmname {
+  font-size: inherit;
+  font-weight: 400;
+  font-family: inherit;
+}
+
+.acrescount {
+  align-self: stretch;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--body);
+}
+
+.farmcarddetails,
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+}
+
+.farmcarddetails {
+  position: relative;
+  align-self: stretch;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap-lg);
+  z-index: 0;
+  font-size: var(--font-size-xl);
+}
+
+
+.calendarIcon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.para {
+  position: relative;
+  line-height: 100%;
+  font-size: 14px;
+}
+
+.duration {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+  z-index: 1;
+  text-align: center;
+  color: var(--body);
+}
+
+.p,
+.totalLogs {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+}
+
+.p {
+  font-size: var(--text-md-normal-size);
+  font-weight: 500;
+  background: linear-gradient(142.18deg, #3462cf, #2b53be);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logscount {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bar {
+  background-color: var(--color-sandybrown);
+  overflow: hidden;
+}
+
+.progress,
+.progressbar,
+.statsprogress {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.progress {
+  flex: 1;
+  border-radius: var(--br-8xs);
+  background-color: var(--color-gainsboro);
+  overflow: hidden;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.progressbar,
+.statsprogress {
+  align-self: stretch;
+  align-items: center;
+}
+
+.progressbar {
+  flex-direction: row;
+  gap: var(--gap-5xs);
+  font-size: var(--font-size-xs);
+  color: var(--title);
+}
+
+.statsprogress {
+  flex-direction: column;
+  gap: var(--gap-base);
+  z-index: 2;
+  color: var(--color-darkslategray-100);
+}
+
+.activebar {
+  position: absolute;
+  margin: 0 !important;
+  top: calc(50% - 98px);
+  left: 0;
+  background-color: var(--color-sienna);
+  width: 4px;
+  height: 203px;
+  z-index: 3;
+}
+.default {
+  display: none;
+}
+.farmcard {
+  position: relative;
+    border: 3px solid var(--stroke);
+  text-decoration: none;
+  align-self: stretch;
+  border-radius: var(--br-3xs);
+  background-color: var(--white);
+  box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.08);
+  border-top: 1px solid var(--stroke);
+  border-right: 1px solid var(--stroke);
+  border-bottom: 1px solid var(--stroke);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-base) var(--padding-5xl) var(--padding-5xl);
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  gap: var(--gap-base);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  color: var(--color-sienna);
+  font-family: var(--text-md-normal);
+}

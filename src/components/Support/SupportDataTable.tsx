@@ -5,15 +5,18 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FarmTable from "../DashBoard/FarmTable";
-import { SupportResponseDataType } from "@/types/supportTypes";
+import { SupportDataTableProps, SupportResponseDataType } from "@/types/supportTypes";
+import { useRouter } from "next/router";
 
 
-const SupportDataTable = ({ data, loading }: { data: Array<SupportResponseDataType> | null | undefined, loading: Boolean }) => {
 
+const SupportDataTable = ({ data, loading, deleteSupport }: SupportDataTableProps) => {
+
+    const router = useRouter();
     const columns = [
                 {
                     Header: "Date",
-            accessor: (row: any) => timePipe(row.createdAt, 'DD, MMM YYYY')
+            accessor: (row: SupportResponseDataType) => timePipe(row.createdAt, 'DD, MMM YYYY')
                 },
                 {
                     Header: "Query Name",
@@ -21,7 +24,7 @@ const SupportDataTable = ({ data, loading }: { data: Array<SupportResponseDataTy
                 },
                 {
                     Header: "Category",
-                    accessor: (row: any) => {
+                    accessor: (row: SupportResponseDataType) => {
                         return (
                             <div style={{ display: "flex" }}>
                                 {row.categories.length && row.categories.map((item: string, index: number) => {
@@ -37,7 +40,7 @@ const SupportDataTable = ({ data, loading }: { data: Array<SupportResponseDataTy
                 },
                 {
                     Header: "Response Date",
-                    accessor: (row: any) => timePipe(row.recent_response_at, 'DD, MMM YYYY')
+                    accessor: (row: SupportResponseDataType) => timePipe(row.recent_response_at, 'DD, MMM YYYY')
                 },
                 {
                     Header: "Status",
@@ -45,16 +48,16 @@ const SupportDataTable = ({ data, loading }: { data: Array<SupportResponseDataTy
                 },
                 {
                     Header: "Actions",
-                    accessor: () => {
+                    accessor: (row: SupportResponseDataType) => {
                         return (
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                                <IconButton>
+                                <IconButton onClick={() => router.push(`/support/${row._id}`)}>
                                     <VisibilityIcon color='info' />
                                 </IconButton>
                                 <IconButton>
                                     <EditIcon color='warning' />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton onClick={() => deleteSupport(row._id)}>
                                     <DeleteIcon color='error' />
                                 </IconButton>
                             </div>

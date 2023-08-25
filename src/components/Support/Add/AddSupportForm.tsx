@@ -1,12 +1,8 @@
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import MenuItem from "@mui/material/MenuItem";
 import { useState, useRef } from "react";
-import { categoriesType } from "@/types/supportTypes";
 import Attachments from "./../../AddLogs/attachments";
 import FooterActionButtons from "@/components/AddLogs/footer-action-buttons";
+import AddSupportQueryDetails from "./AddSupportQueryDetails";
 
 const AddSupportForm = () => {
 
@@ -18,10 +14,10 @@ const AddSupportForm = () => {
     const [audioChunks, setAudioChunks] = useState([]);
     const [audio, setAudio] = useState(null);
 
-    const [categoriesList, setCategoriesList] = useState<Array<categoriesType>>([
-        { label: 'Harvesting', value: 'harvesting' },
-        { label: 'Irrigation', value: 'irrigation' },
-    ]);
+    const [query, setQuery] = useState<string>('');
+    const [categories, setCategories] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+
 
 
     const getMicrophonePermission = async () => {
@@ -75,26 +71,15 @@ const AddSupportForm = () => {
     return (
         <div style={{ border: "1px solid", display: "flex", flexDirection: "row", justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "row", width: "60%" }}>
-                <div style={{ display: "flex", flexDirection: "column", width: "50%", justifyContent: "center" }}>
-                    <div>
-                        <Typography variant='subtitle2'>Type Youe Query</Typography>
-                        <TextField />
-                    </div>
-                    <div>
-                        <Typography variant='subtitle2'>Category</Typography>
-                        <Select sx={{ minWidth: "200px" }}>
-                            {categoriesList.map((item: categoriesType, index: number) => {
-                                return (
-                                    <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
-                                )
-                            })}
-                        </Select>
-                    </div>
-                    <div>
-                        <Typography variant='subtitle2'>Description</Typography>
-                        <TextareaAutosize minRows={4}></TextareaAutosize>
-                    </div>
-                </div>
+                <AddSupportQueryDetails
+                    query={query}
+                    categories={categories}
+                    description={description}
+                    setQuery={setQuery}
+                    setCategories={setCategories}
+                    setDescription={setDescription}
+                />
+
                 <div style={{ display: "flex", flexDirection: "column", width: "50%", justifyContent: "center" }}>
                     <Typography variant='subtitle2'>Mic</Typography>
                     <div className="audio-controls">

@@ -27,7 +27,7 @@ const CardWorkType = ({ register, captureDates, setWorkType }: any) => {
             <p className={styles.label}>Work Type</p>
             <FormControl className={styles.dropdown} variant="outlined">
               <InputLabel color="primary" />
-            <Select color="primary" defaultValue="Choose Type" size="small" onChange={setWorkType}>
+            <Select color="primary" defaultValue="Choose Type" size="small" onChange={(e: any) => setWorkType(e.target.value)}>
               <MenuItem value="ALL">ALL</MenuItem>
               <MenuItem value="MACHINARY">MACHINARY</MenuItem>
               <MenuItem value="MANUAL">MANUAL</MenuItem>

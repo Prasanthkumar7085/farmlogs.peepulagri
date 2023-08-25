@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import getAllSupportService from "../../../lib/services/SupportService/getAllSupportService";
 import { SupportResponseDataType, SupportServiceTypes } from "@/types/supportTypes";
-import SelectComponent from "../Core/SelectComponent";
 import TablePaginationComponent from "../Core/TablePaginationComponent";
 import LoadingComponent from "../Core/LoadingComponent";
 
@@ -20,7 +19,7 @@ const SupportPage = () => {
     const [status, setStatus] = useState<string | number>('')
     const [paginationDetails, setPaginationDetails] = useState();
     const [data, setData] = useState<Array<SupportResponseDataType> | null>();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const statusOptions = [
         { value: 'OPEN', title: 'Open' },
         { value: 'INPROGRESS', title: "Inprogress" },
@@ -45,8 +44,9 @@ const SupportPage = () => {
     }
 
     const onStatusChange = (e: any) => {
-        setStatus(e.target.value);
-        getAllSupports({ page: 1, limit: limit, searchString: searchString, status: status });
+        const value = e.target.value;
+        setStatus(value);
+        getAllSupports({ page: 1, limit: limit, searchString: searchString, status: value });
     }
 
     const onPageChange = (value: string | number) => {
@@ -59,6 +59,12 @@ const SupportPage = () => {
         setLimit(value)
         getAllSupports({ page: 1, limit: value, searchString: searchString, status: status });
     }
+
+    const deleteSupport = async (id: string) => {
+        console.log(id);
+
+    }
+
 
     //debounce on search String
     useEffect(() => {
@@ -74,12 +80,18 @@ const SupportPage = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <h3>Support</h3>
                 <div style={{ display: "flex", justifyContent: "space-around", width: "500px" }}>
-                    <SearchComponent onChange={(value: string) => setSearchString(value)} placeholder={'Search By Title'} />
-                    <SelectComponent options={statusOptions} onChange={onStatusChange} />
+                    <SearchComponent
+                        onChange={(value: string) => setSearchString(value)}
+                        placeholder={'Search By Title'}
+                        setSearchString={setSearchString}
+                        searchString={searchString}
+                        value={searchString}
+                    />
+                    {/* <SelectComponent options={statusOptions} onChange={onStatusChange} defaultValue='' /> */}
                     <ButtonComponent icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />
                 </div>
             </div>
-            <SupportDataTable data={data} loading={loading} />
+            <SupportDataTable data={data} loading={loading} deleteSupport={deleteSupport} />
             {!loading ? <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={onPageChange} captureRowPerItems={onLimitChange} values='Queries' /> : ""}
             <LoadingComponent loading={loading} />
         </div>

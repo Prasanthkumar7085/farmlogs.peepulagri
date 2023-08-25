@@ -43,3 +43,13 @@ export interface SupportResponseDataType {
     __v: number;
     _id: string
 }
+
+
+
+type DeleteSupportFunction = (supportId: string) => void;
+
+export interface SupportDataTableProps {
+    data: SupportResponseDataType[] | null | undefined;
+    loading: boolean;
+    deleteSupport: DeleteSupportFunction;
+}

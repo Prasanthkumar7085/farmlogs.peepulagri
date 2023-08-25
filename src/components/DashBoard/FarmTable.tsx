@@ -42,7 +42,7 @@ const FarmTable = ({ columns, data, loading }: any) => {
                 })}
                 </tbody> :
                     <tr>
-                        <td colSpan={columns.length}> <NoDataComponent noData={data ? !data.length : true} /></td>
+                        <td colSpan={columns.length}> {!loading ? <NoDataComponent noData={data ? (!data.length) : true} /> : ""}</td>
                     </tr>
                 }
         </table>

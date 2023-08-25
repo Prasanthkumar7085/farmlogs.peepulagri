@@ -6,13 +6,22 @@ import styles from "./add-a-log.module.css";
 import Header from "./header";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router";
-import { useState } from "react";
-import addLog from "../../../lib/services/LogsService/addLog";
+import { useEffect, useState } from "react";
+import addLogService from "../../../lib/services/LogsService/addLogService";
 import { log } from "console";
+import getLogByIdService from "../../../lib/services/LogsService/getLogByIdService";
 
 const AddALog: NextPage = () => {
 
-  const router = useRouter();
+
+  useEffect(() => {
+    getOneLogDetails()
+  }, [])
+
+  const router: any = useRouter();
+  console.log(router, "o")
+
+
   const {
     register,
     handleSubmit,
@@ -23,11 +32,16 @@ const AddALog: NextPage = () => {
   const [resources, setResources] = useState([]);
   const [additionalResources, setAdditionalResources] = useState([]);
   const [dates, setDates] = useState<any>([]);
+  const [singleLogDetails, setSingleLogDetails] = useState<any>()
 
   const captureDates = (fromDate: string, toDate: string) => {
     setDates([fromDate, toDate]);
   }
 
+  const getOneLogDetails = async () => {
+    let reponse: any = await getLogByIdService(router?.query?.log_id)
+    setSingleLogDetails(reponse?.data)
+  }
 
   const addLogs = async (data: any) => {
 
@@ -47,11 +61,13 @@ const AddALog: NextPage = () => {
     }
 
     try {
-      let response = addLog(obj);
+      let response = addLogService(obj);
     } catch (err: any) {
       console.error(err);
     }
   }
+
+
   return (
     <div className={styles.form}>
       {router.query.farm_id ? <form onSubmit={handleSubmit(addLogs)}>

@@ -1,8 +1,5 @@
 import FarmCardsLayOut from "../FarmCard/FarmCardLayOut";
 import { useRouter } from "next/router";
-import { Button } from "@mui/material";
-import Link from "next/link";
-import SearchComponent from "../Core/SearchComponent";
 import { useEffect, useState } from "react";
 import FarmTableLogs from "./FarmTableLogs";
 import getAllFarms from "../../../lib/services/getAllFarmsService";
@@ -15,16 +12,14 @@ const DashBoard = () => {
 
     const getFarmsData = async () => {
         let response: any = await getAllFarms();
-        if (response.success) {
+        if (response?.success) {
             router.push(`/farm/${response?.data[0]._id}/logs`);
             setFarmsData(response);
         }
     }
 
     useEffect(() => {
-        if (router.isReady) {
-            getFarmsData();
-        }
+        getFarmsData();
     }, [router.isReady]);
 
     return (

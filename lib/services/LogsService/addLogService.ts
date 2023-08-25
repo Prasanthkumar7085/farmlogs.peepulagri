@@ -1,5 +1,5 @@
 
-const addLog = async (body: any) => {
+const addLogService = async (body: any) => {
 
     try {
         const url = 'http://localhost:3000/v1.0/log';
@@ -23,4 +23,4 @@ const addLog = async (body: any) => {
 
     }
 }
-export default addLog;
+export default addLogService;

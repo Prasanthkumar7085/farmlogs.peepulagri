@@ -8,7 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageComponent from "../Core/ImageComponent";
-import getLogsByFarmId from "../../../lib/services/LogsService/getLogsByFarmId";
+import getLogsByFarmIdService from "../../../lib/services/LogsService/getLogsByFarmIdService";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import TablePaginationComponent from "../Core/TablePaginationComponent";
@@ -16,6 +16,7 @@ import { GetLogsByFarmIdPropsType, PaginationDetailsType } from "@/types/farmCar
 import SearchComponent from "../Core/SearchComponent";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import deleteALogService from "../../../lib/services/LogsService/deleteALogsService";
 
 
 const FarmTableLogs = () => {
@@ -37,11 +38,10 @@ const FarmTableLogs = () => {
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
         try {
-            const response = await getLogsByFarmId({ farmId: farmId, page: page, limit: limit, search: search });
+            const response = await getLogsByFarmIdService({ farmId: farmId, page: page, limit: limit, search: search });
             if (response.success) {
                 const { data, limit, page, total, total_pages } = response;
                 setData(data);
-
                 setPaginationDetails({ limit: limit, page: page, total: total, total_pages: total_pages });
 
             }
@@ -90,6 +90,22 @@ const FarmTableLogs = () => {
         setPage(1);
         setSearchString(value);
         getFarmLogs({ page: 1, search: value });
+    }
+
+    const deleteLog = (id: string) => {
+
+        setLoading(true);
+        try {
+            let response: any = deleteALogService(id);
+            console.log((response));
+            if (response.success) {
+                getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
+            }
+        } catch (err: any) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     }
 
     const columns = [
@@ -155,13 +171,13 @@ const FarmTableLogs = () => {
                     accessor: (row: any) => {
                         return (
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                                <IconButton onClick={() => router.push('/farm/1/logs/5')}>
+                                <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
                                     <VisibilityIcon color='info' />
                                 </IconButton>
                                 <IconButton onClick={() => router.push(`/farm/1/logs/${row._id}/edit`)}>
                                     <EditIcon color='warning' />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton onClick={() => deleteLog(row._id)}>
                                     <DeleteIcon color='error' />
                                 </IconButton>
                             </div>

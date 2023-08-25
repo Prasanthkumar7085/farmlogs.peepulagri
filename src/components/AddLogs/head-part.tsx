@@ -1,6 +1,10 @@
 import type { NextPage } from "next";
 import styles from "./head-part.module.css";
-const HeadPart: NextPage = () => {
+
+const HeadPart = ({ data }: any) => {
+
+
+
   return (
     <div className={styles.headPart}>
       <div className={styles.subHeading}>
@@ -9,21 +13,20 @@ const HeadPart: NextPage = () => {
       </div>
       <div className={styles.headerContent}>
         <div className={styles.label}>
-          <div className={styles.dropdownText}>Harvesting</div>
+          <div className={styles.dropdownText}>{data?.categories[0]}</div>
         </div>
         <div className={styles.content}>
           <h3 className={styles.h3title}>
-            Sorting and grading harvested produce
+            {data?.title}
           </h3>
           <p className={styles.pdescription}>
             <span className={styles.identifyingSpecificPests}>
-              Identifying specific pests or diseases present. Selecting and
-              applying appropriate pesticides or treatments.
+              {data?.description}
             </span>
-            <span className={styles.identifyingSpecificPests}>
+            {/* <span className={styles.identifyingSpecificPests}>
               Monitoring the effectiveness of treatments and reapplying if
               needed.
-            </span>
+            </span> */}
           </p>
         </div>
       </div>

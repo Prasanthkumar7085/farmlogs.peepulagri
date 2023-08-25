@@ -42,3 +42,10 @@ export interface GetLogsByFarmIdPropsType {
     order_by: string | undefined;
     order_type: string | undefined;
 }
+
+export interface QueryParamForFarmLogs {
+    search_string: string;
+    sort_by: string;
+    sort_type: string;
+
+}

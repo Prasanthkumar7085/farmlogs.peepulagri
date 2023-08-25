@@ -33,7 +33,7 @@ const TimelineCardRight = ({ data }: any) => {
         </div>
       </div>
       <div className={styles.cardlable}>
-        <p className={styles.weeding}>{data.title.length > 12 ? data.title.slice(0, 10) + "..." : data.title}</p>
+        <p className={styles.weeding}>{data?.title?.length > 12 ? data?.title?.slice(0, 10) + "..." : data.title}</p>
       </div>
       <img
         className={styles.timelinecardrightChild}

@@ -1,6 +1,10 @@
-import type { NextPage } from "next";
+
+import timePipe from "@/pipes/timePipe";
 import styles from "./machinery-manual-card.module.css";
-const MachineryManualCard: NextPage = () => {
+import { AdditionalResourcesType, ResourcesType } from "@/types/logsTypes";
+
+
+const MachineryManualCard = ({ data }: any) => {
   return (
     <div className={styles.bodyPart}>
       <div className={styles.dataGroup}>
@@ -8,9 +12,15 @@ const MachineryManualCard: NextPage = () => {
           <div className={styles.inputWithLabel}>
             <h5 className={styles.label}>Work Type</h5>
             <p className={styles.value}>
-              <span>{`Machinery `}</span>
-              <span className={styles.span}>{`& `}</span>
-              <span className={styles.manual}>Manual</span>
+
+              {data.work_type = 'ALL' ?
+                <>
+                  <span>{`Machinery`}</span>
+                  <span className={styles.span}>{`& `}</span>
+                  <span className={styles.manual}>Manual</span>
+                </>
+                : data.work_type}
+
             </p>
           </div>
         </div>
@@ -18,15 +28,21 @@ const MachineryManualCard: NextPage = () => {
           <h5 className={styles.label}>Date</h5>
           <div className={styles.dateRange}>
             <div className={styles.fromDate}>
-              <div className={styles.text}>05, Aug 2023</div>
+              <div className={styles.text}>
+                {timePipe(data.from_date_time, 'DD, MMM YYYY')}
+              </div>
             </div>
             <div className={styles.divider}>-</div>
             <div className={styles.fromDate}>
-              <div className={styles.text}>11, Aug 2023</div>
+              <div className={styles.text}>
+                {timePipe(data.to_date_time, 'DD, MMM YYYY')}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Resouces Table */}
       <div className={styles.dataGroup1}>
         <div className={styles.subTitle}>
           <h4 className={styles.text2}>Resources</h4>
@@ -43,42 +59,27 @@ const MachineryManualCard: NextPage = () => {
               <h5 className={styles.label}>Total Hours</h5>
             </div>
           </div>
-          <div className={styles.tableRow}>
-            <div className={styles.inputCell}>
-              <p className={styles.text3}>Man</p>
-            </div>
-            <div className={styles.inputCell1}>
-              <p className={styles.dropdownText}>02</p>
-            </div>
-            <div className={styles.inputCell2}>
-              <p className={styles.dropdownText}>13</p>
-            </div>
-          </div>
-          <div className={styles.tableRow}>
-            <div className={styles.inputCell}>
-              <p className={styles.text3}>Tractors</p>
-            </div>
-            <div className={styles.inputCell1}>
-              <p className={styles.dropdownText}>02</p>
-            </div>
-            <div className={styles.inputCell2}>
-              <p className={styles.dropdownText}>12</p>
-            </div>
-          </div>
-          <div className={styles.tableRow}>
-            <div className={styles.inputCell}>
-              <p className={styles.text3}>Grading Machine</p>
-            </div>
-            <div className={styles.inputCell1}>
-              <p className={styles.dropdownText}>01</p>
-            </div>
-            <div className={styles.inputCell2}>
-              <p className={styles.dropdownText}>04</p>
-            </div>
-          </div>
+
+          {data.resources.length ? data.resources.map((item: ResourcesType, index: number) => {
+            return (
+              <div className={styles.tableRow} key={index}>
+                <div className={styles.inputCell}>
+                  <p className={styles.text3}>{item.title}</p>
+                </div>
+                <div className={styles.inputCell1}>
+                  <p className={styles.dropdownText}>{item.quantity}</p>
+                </div>
+                <div className={styles.inputCell2}>
+                  <p className={styles.dropdownText}>{item.total_hours}</p>
+                </div>
+              </div>
+            )
+          }) : ""}
         </div>
       </div>
-      <div className={styles.dataGroup2}>
+
+
+      {data.additional_resources.length ? <div className={styles.dataGroup2}>
         <div className={styles.subTitle}>
           <h4 className={styles.text2}>Additional Information</h4>
         </div>
@@ -94,19 +95,27 @@ const MachineryManualCard: NextPage = () => {
               <h5 className={styles.label}>Units</h5>
             </div>
           </div>
+
+          {data.additional_resources.map((item: AdditionalResourcesType, index: number) => {
+            return (
           <div className={styles.tableRow3}>
             <div className={styles.inputCell}>
-              <p className={styles.text3}>Pyrethrin and spinosad</p>
+                  <p className={styles.text3}>{item.title}</p>
             </div>
             <div className={styles.inputCell1}>
-              <p className={styles.dropdownText}>02</p>
+                  <p className={styles.dropdownText}>{item.quantity}</p>
             </div>
             <div className={styles.inputCell2}>
-              <p className={styles.dropdownText}>Litres</p>
+                  <p className={styles.dropdownText}>{item.units}</p>
             </div>
           </div>
+            )
+          })}
+
         </div>
-      </div>
+      </div> : ""}
+
+
       <div className={styles.dataGroup3}>
         <div className={styles.subTitle2}>
           <div className={styles.textWrapper}>

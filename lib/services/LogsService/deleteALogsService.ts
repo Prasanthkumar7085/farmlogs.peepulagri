@@ -1,9 +1,13 @@
-import { GetLogsByFarmIdPropsType } from '../../../src/types/farmCardTypes';
 
-const getLogsByFarmId = async ({ farmId, page, limit }: GetLogsByFarmIdPropsType) => {
 
+const deleteALogService = async (id: string) => {
+
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/log/${id}`;
+    const options = {
+        method: "DELETE"
+    }
     try {
-        const response: any = await fetch(`http://localhost:3000/v1.0/farm/${farmId}/logs/${page}/${limit}`);
+        const response: any = await fetch(url, options);
         const responseData = await response.json();
         if (response.ok) {
             return responseData;
@@ -16,4 +20,4 @@ const getLogsByFarmId = async ({ farmId, page, limit }: GetLogsByFarmIdPropsType
 
     }
 }
-export default getLogsByFarmId;
+export default deleteALogService;

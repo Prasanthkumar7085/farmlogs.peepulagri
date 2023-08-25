@@ -19,11 +19,12 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { ResourcesType } from "@/types/logsTypes";
 
 
 const Resource = ({ register, setResources: setAllResources }: any) => {
 
-  const [resources, setResources] = useState<any>([]);
+  const [resources, setResources] = useState<Array<ResourcesType>>([]);
 
   const [resourceTitle, setResourceTitle] = useState('');
   const [resourceQuantity, setResourceQuantity] = useState('');
@@ -48,18 +49,11 @@ const Resource = ({ register, setResources: setAllResources }: any) => {
 
   }
 
-  const [renderOnDelete, setRenderOnDelete] = useState(false);
-
   const removeFromResources = (index: number) => {
     let array = [...resources];
     let filteredArray = array.filter((item: any, itemIndex: number) => index != itemIndex);
     setResources(filteredArray);
     setAllResources(filteredArray);
-
-    setRenderOnDelete(true);
-    setTimeout(() => {
-      setRenderOnDelete(false);
-    }, 1)
   }
 
   const onChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {

@@ -70,55 +70,55 @@ const AddALog: NextPage = () => {
     }
   }
 
-  const editLog = async () => {
-    const { categories, ...rest } = formDetails;
+  // const editLog = async () => {
+  //   const { categories, ...rest } = formDetails;
 
-    const obj = {
-      ...rest,
-      categories: [categories],
-      work_type: workType,
-      farm_id: router.query.farm_id,
-      status: 'ACTIVE',
-      from_date_time: dates[0] ? new Date(dates[0]).toISOString() : "",
-      to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : "",
-      resources: resources,
-      additional_resources: additionalResources,
-      total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinary" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
-      total_manual_hours: resources.reduce((acc: number, item: any) => (item.type == "Manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0)
-    }
-    try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/log/${router?.query?.log_id}`;
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ ...obj, farm_id: router?.query?.farm_id }),
-        headers: new Headers({
-          'content-type': 'application/json'
-        })
-      }
-      const response: any = await fetch(url, options);
-      const responseData = await response.json();
-      if (response.ok) {
-        return responseData;
-      } else {
-        return { message: 'Something Went Wrong', status: 500, details: responseData }
-      }
+  //   const obj = {
+  //     ...rest,
+  //     categories: [categories],
+  //     work_type: workType,
+  //     farm_id: router.query.farm_id,
+  //     status: 'ACTIVE',
+  //     from_date_time: dates[0] ? new Date(dates[0]).toISOString() : "",
+  //     to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : "",
+  //     resources: resources,
+  //     additional_resources: additionalResources,
+  //     total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinary" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
+  //     total_manual_hours: resources.reduce((acc: number, item: any) => (item.type == "Manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0)
+  //   }
+  //   try {
+  //     const url = `${process.env.NEXT_PUBLIC_API_URL}/log/${router?.query?.log_id}`;
+  //     const options = {
+  //       method: "PATCH",
+  //       body: JSON.stringify({ ...obj, farm_id: router?.query?.farm_id }),
+  //       headers: new Headers({
+  //         'content-type': 'application/json'
+  //       })
+  //     }
+  //     const response: any = await fetch(url, options);
+  //     const responseData = await response.json();
+  //     if (response.ok) {
+  //       return responseData;
+  //     } else {
+  //       return { message: 'Something Went Wrong', status: 500, details: responseData }
+  //     }
 
-    }
-    catch (err: any) {
-      console.error(err);
-    }
-  }
+  //   }
+  //   catch (err: any) {
+  //     console.error(err);
+  //   }
+  // }
   return (
     <div className={styles.form}>
-      {router.query.log_id && singleLogDetails ?
+
         <div>
           <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
           <div className={styles.secondaryFormField}>
             <ProgressSteps />
             <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} />
           </div>
-          <FooterActionButtons addLogs={addLogs} editLog={editLog} singleLogDetails={singleLogDetails} />
-        </div> : ""}
+        <FooterActionButtons addLogs={addLogs} singleLogDetails={singleLogDetails} />
+      </div> 
     </div>
   );
 };

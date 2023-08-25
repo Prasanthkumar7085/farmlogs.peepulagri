@@ -1,11 +1,9 @@
-import FarmsaddLogs from "@/components/AddLogs/index";
+import FarmsEditLogs from "@/components/AddLogs/EditLogs/EditLogs";
 
 
 const EditLogsPage = () => {
     return (
-        <FarmsaddLogs />
-        // <ViewLogsContainer />
-
+        <FarmsEditLogs />
     )
 }
 

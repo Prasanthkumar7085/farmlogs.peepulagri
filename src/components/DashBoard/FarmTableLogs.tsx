@@ -49,7 +49,7 @@ const FarmTableLogs = () => {
             setLoading(false);
         }
     }
-    const deleteLog = async(id: string) => {
+    const deleteLog = async (id: string) => {
 
         setLoading(true);
         try {
@@ -107,77 +107,77 @@ const FarmTableLogs = () => {
 
     const columns = [
         {
-                    Header: "Date",
-                    accessor: (row: any) => timePipe(row.createdAt, 'DD, MMM YYYY')
-                },
-                {
-                    Header: "Title",
-                    accessor: 'title'
-                },
-                {
-                    Header: "Category",
-                    accessor: (row: any) => {
+            Header: "Date",
+            accessor: (row: any) => timePipe(row.createdAt, 'DD, MMM YYYY')
+        },
+        {
+            Header: "Title",
+            accessor: 'title'
+        },
+        {
+            Header: "Category",
+            accessor: (row: any) => {
+                return (
+                    row.categories.length && row.categories.map((item: string, index: number) => {
                         return (
-                            row.categories.length && row.categories.map((item: string, index: number) => {
-                                return (
-                                    <Chip label={item} key={index} sx={{ margin: "2px" }} />
-                                )
-                            })
+                            <Chip label={item} key={index} sx={{ margin: "2px" }} />
                         )
-                    }
-                },
-                {
-                    Header: "Work Type",
-                    accessor: "work_type",
-                },
+                    })
+                )
+            }
+        },
+        {
+            Header: "Work Type",
+            accessor: "work_type",
+        },
 
 
-                {
-                    Header: "Resources",
-                    accessor: (row: any) => {
-                        const updatedRowModules = getUpdatedResources(row.resources);
-                        return (
-                            <div style={{ display: "flex", gap: "2px" }}>
-                                {updatedRowModules.length && updatedRowModules.map((item: any, index: number) => {
-                                    return (
-                                        <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", padding: "5px" }} >
-                                            <ImageComponent src={item.logo} width={15} height={15} alt={item.logo + '1'} />
-                                            {item.quantity}
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        )
-                    },
-                },
+        {
+            Header: "Resources",
+            accessor: (row: any) => {
+                const updatedRowModules = getUpdatedResources(row.resources);
+                return (
+                    <div style={{ display: "flex", gap: "2px" }}>
+                        {updatedRowModules.length && updatedRowModules.map((item: any, index: number) => {
+                            return (
+                                <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", padding: "5px" }} >
+                                    <ImageComponent src={item.logo} width={15} height={15} alt={item.logo + '1'} />
+                                    {item.quantity}
+                                </div>
+                            )
+                        })}
+                    </div>
+                )
+            },
+        },
 
 
-                {
-                    Header: "Manual Hours",
-                    accessor: (row: any) => { return row.total_manual_hours + ' Hours' }
-                },
-                {
-                    Header: "Machine Hours",
-                    accessor: (row: any) => { return row.total_machinary_hours + ' Hours' }
-                },
-                {
-                    Header: "Actions",
-                    accessor: (row: any) => {
-                        return (
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                                <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
-                                    <VisibilityIcon color='info' />
-                                </IconButton>
-                                <IconButton>
-                                    <EditIcon color='warning' />
-                                </IconButton>
-                                <IconButton onClick={() => deleteLog(row._id)}>
-                                    <DeleteIcon color='error' />
-                                </IconButton>
-                            </div>
-                        )
-                    }
-                },
+        {
+            Header: "Manual Hours",
+            accessor: (row: any) => { return row.total_manual_hours + ' Hours' }
+        },
+        {
+            Header: "Machine Hours",
+            accessor: (row: any) => { return row.total_machinary_hours + ' Hours' }
+        },
+        {
+            Header: "Actions",
+            accessor: (row: any) => {
+                return (
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
+                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
+                            <VisibilityIcon color='info' />
+                        </IconButton>
+                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
+                            <EditIcon color='warning' />
+                        </IconButton>
+                        <IconButton onClick={() => deleteLog(row._id)}>
+                            <DeleteIcon color='error' />
+                        </IconButton>
+                    </div>
+                )
+            }
+        },
     ];
 
 
@@ -187,8 +187,8 @@ const FarmTableLogs = () => {
                 <SearchComponent onChange={searchStringChange} placeholder={'Search By Title'} />
                 {/* <Link href="/farm/[farm_id]/logs/add" as={`/farm/${router.query.farm_id}/logs/add`} style={{ textDecoration: "none", color: "#000000" }}> */}
                 <Button onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)}>
-                        Add Log
-                    </Button>
+                    Add Log
+                </Button>
                 {/* </Link> */}
             </div>
             <FarmTable columns={columns} data={data} loading={loading} />

@@ -17,35 +17,35 @@ const FarmTable = ({ columns, data, loading }: any) => {
     return (
         <div style={{ height: "70vh", overflow: "scroll" }}>
             <table {...getTableProps()} style={{ position: "sticky" }}>
-            <thead>
+                <thead>
                     {headerGroups.map((headerGroup: any, index: number) => (
 
                         <tr {...headerGroup.getHeaderGroupProps()} key={index}>
                             {headerGroup.headers.map((column: any, columnIndex: number) => {
                                 return (
-                                <th {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
+                                    <th {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
                                 )
                             })}
-                    </tr>
-                ))}
-            </thead>
+                        </tr>
+                    ))}
+                </thead>
                 {!loading && data?.length ? <tbody {...getTableBodyProps()}>
                     {rows.map((row: any, index: number) => {
-                    prepareRow(row);
-                    return (
-                        <tr {...row.getRowProps()} key={index}>
-                            {row.cells.map((cell: any, cellIndex: number) => {
-                                return <td style={{ padding: "10px", border: ".1px solid" }} {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
-                            })}
-                        </tr>
-                    );
-                })}
+                        prepareRow(row);
+                        return (
+                            <tr {...row.getRowProps()} key={index}>
+                                {row.cells.map((cell: any, cellIndex: number) => {
+                                    return <td style={{ padding: "10px", border: ".1px solid" }} {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
+                                })}
+                            </tr>
+                        );
+                    })}
                 </tbody> :
                     <tr>
                         <td colSpan={columns.length}> {!loading ? <NoDataComponent noData={data ? (!data.length) : true} /> : ""}</td>
                     </tr>
                 }
-        </table>
+            </table>
         </div>
     );
 }

@@ -9,7 +9,10 @@ import {
 } from "@mui/material";
 import styles from "./header.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
-const Header = ({ setFormDetails }: any) => {
+const Header = ({ setFormDetails, singleLogDetails }: any) => {
+
+
+  console.log(singleLogDetails, "o")
 
   const categoryOptions = [
     { title: 'Soil Preparation', value: "soil_preparation" },
@@ -24,9 +27,9 @@ const Header = ({ setFormDetails }: any) => {
     { title: 'Other', value: "other" },
   ];
 
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [category, setCategory] = useState<string>('');
+  const [title, setTitle] = useState<string>(singleLogDetails?.title ? singleLogDetails?.title : "");
+  const [description, setDescription] = useState<string>(singleLogDetails?.description);
+  const [category, setCategory] = useState<string>(singleLogDetails?.categories[0] ? singleLogDetails?.categories[0] : "");
 
   useEffect(() => {
     setFormDetails({

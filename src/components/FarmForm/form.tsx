@@ -15,7 +15,7 @@ import "rsuite/dist/rsuite.css";
 import Divider from '@mui/material/Divider';
 
 
-const Form: NextPage = () => {
+const Form = () => {
 
   return (
     <Card style={{ marginTop: "100px", marginLeft: "40%", padding: "20px" }}>

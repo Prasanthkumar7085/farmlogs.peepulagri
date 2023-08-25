@@ -1,9 +1,9 @@
 import { Icon } from "@mui/material";
 import styles from "./footer-action-buttons.module.css";
-import ButtonComponent from "../Core/ButtonComponent";
 import { useRouter } from "next/router";
+import ButtonComponent from "../Core/ButtonComponent";
 
-const FooterActionButtons = ({ addLogs }: any) => {
+const FooterActionButtons = ({ addLogs, editLog }: any) => {
   const router = useRouter();
   return (
     <div className={styles.footerActionButtons}>
@@ -30,16 +30,29 @@ const FooterActionButtons = ({ addLogs }: any) => {
               endIcon={<Icon>arrow_back_sharp</Icon>}
             />
           </div>
-          <div className={styles.button1}>
-            <ButtonComponent
-              direction={true}
-              onClick={addLogs}
-              variant="contained"
-              color="primary"
-              title={'Submit'}
-              endIcon={<Icon>arrow_forward_sharp</Icon>}
-            />
-          </div>
+          {router?.query.log_id ?
+            <div className={styles.button1}>
+              <ButtonComponent
+                direction={true}
+                onClick={editLog}
+                variant="contained"
+                color="primary"
+                title={'Update'}
+                endIcon={<Icon>arrow_forward_sharp</Icon>}
+              />
+            </div> :
+            <div className={styles.button1}>
+              <ButtonComponent
+                direction={true}
+                onClick={addLogs}
+                variant="contained"
+                color="primary"
+                title={'Submit'}
+                endIcon={<Icon>arrow_forward_sharp</Icon>}
+              />
+            </div>
+          }
+
         </div>
       </div>
     </div>

@@ -74,9 +74,10 @@ const MachineryManualCard = ({ data }: any) => {
                 </div>
               </div>
             )
-          }) : ""}
-        </div>
-      </div>
+          }) : ""
+          }
+        </div >
+      </div >
 
 
       {data?.additional_resources.length ? <div className={styles.dataGroup2}>
@@ -99,21 +100,22 @@ const MachineryManualCard = ({ data }: any) => {
           {data?.additional_resources.map((item: AdditionalResourcesType, index: number) => {
             return (
               <div className={styles.tableRow3} key={index}>
-            <div className={styles.inputCell}>
+                <div className={styles.inputCell}>
                   <p className={styles.text3}>{item.title}</p>
-            </div>
-            <div className={styles.inputCell1}>
+                </div>
+                <div className={styles.inputCell1}>
                   <p className={styles.dropdownText}>{item.quantity}</p>
-            </div>
-            <div className={styles.inputCell2}>
+                </div>
+                <div className={styles.inputCell2}>
                   <p className={styles.dropdownText}>{item.units}</p>
-            </div>
-          </div>
+                </div>
+              </div>
             )
           })}
 
         </div>
-      </div> : ""}
+      </div > : ""
+      }
 
 
       <div className={styles.dataGroup3}>
@@ -143,7 +145,7 @@ const MachineryManualCard = ({ data }: any) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -1,0 +1,65 @@
+.frameChild {
+    position: relative;
+    border-radius: 2.98px;
+    width: 44.39px;
+    height: 40px;
+}
+
+.acres,
+.farm1 {
+    position: relative;
+    line-height: 100%;
+    font-weight: 500;
+}
+
+.acres {
+    font-size: var(--text-sm-medium-size);
+    color: var(--body);
+}
+
+.farm1Parent,
+.vectorParent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--gap-5xs);
+}
+
+.vectorParent {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap-3xs);
+    z-index: 0;
+}
+
+.cardChild {
+    position: absolute;
+    margin: 0 !important;
+    right: 0.39px;
+    bottom: 0;
+    background-color: var(--color-firebrick);
+    width: 4px;
+    height: 70px;
+    z-index: 1;
+}
+
+.card {
+    position: absolute;
+    top: 30px;
+    right: 29.61px;
+    border-radius: var(--br-3xs);
+    background-color: var(--white);
+    border: 1px solid var(--stroke);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding-3xs) var(--padding-5xl) var(--padding-3xs) var(--padding-base);
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: var(--gap-base);
+    text-align: left;
+    font-size: var(--font-size-xl);
+    color: var(--title);
+    font-family: var(--text-sm-medium);
+}

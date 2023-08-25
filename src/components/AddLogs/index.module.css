@@ -1,0 +1,102 @@
+.apps1Icon,
+.sideMenuChild {
+  position: relative;
+  width: 56px;
+  height: 61.83px;
+}
+
+.apps1Icon {
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.dashboard,
+.home25 {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard {
+  border-radius: var(--br-5xs);
+  background-color: var(--color-mediumseagreen-100);
+  overflow: hidden;
+  display: flex;
+  padding: var(--padding-3xs);
+}
+
+.home25 {
+  display: none;
+}
+
+.home22,
+.home25 {
+  border-radius: var(--br-5xs);
+  overflow: hidden;
+  padding: var(--padding-3xs);
+}
+
+.home22,
+.home26,
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home26 {
+  border-radius: var(--br-5xs);
+  overflow: hidden;
+  padding: var(--padding-3xs);
+  opacity: 0.3;
+}
+
+.menu {
+  gap: var(--gap-21xl);
+}
+
+.profileChild {
+  position: relative;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.profile,
+.profileWrapper,
+.sideMenu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.profileWrapper,
+.sideMenu {
+  flex-direction: column;
+}
+
+.sideMenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(142.18deg, #3462cf, #2b53be);
+  border-right: 1px solid var(--stroke);
+  box-sizing: border-box;
+  width: 100px;
+  height: 1084px;
+  padding: var(--padding-xl) var(--padding-5xs) var(--padding-61xl);
+  gap: var(--gap-166xl);
+}
+
+.farmsaddLogs {
+  position: relative;
+  background-color: var(--background);
+  width: calc(100vw - 100px);
+  height: 1084px;
+  overflow: hidden;
+}

@@ -1,0 +1,36 @@
+.status {
+  position: relative;
+  font-weight: 600;
+}
+.frameChild,
+.frameItem {
+  position: relative;
+  width: 7px;
+  height: 7px;
+}
+.frameItem {
+  width: 6.06px;
+  height: 5.25px;
+  margin-top: -1px;
+}
+.headerCell,
+.polygonParent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.headerCell {
+  position: relative;
+  width: 150px;
+  flex-direction: row;
+  padding: var(--padding-3xs);
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+  text-align: left;
+  font-size: var(--text-sm-medium-size);
+  color: var(--title);
+  font-family: var(--text-sm-medium);
+}

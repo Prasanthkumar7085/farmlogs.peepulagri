@@ -20,9 +20,9 @@ import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const AdditionalInformation = ({ setAdditionalResources }: any) => {
+const AdditionalInformation = ({ setAdditionalResources, singleLogDetails }: any) => {
 
-  const [resources, setResources] = useState<any>([]);
+  const [resources, setResources] = useState<any>(singleLogDetails?.additional_resources ? singleLogDetails?.additional_resources : []);
 
   const [resourceTitle, setResourceTitle] = useState('');
   const [resourceQuantity, setResourceQuantity] = useState('');
@@ -217,7 +217,7 @@ const AdditionalInformation = ({ setAdditionalResources }: any) => {
                         onChange={(e: ChangeEvent<HTMLInputElement>) => editInQuantity(e, index)}
                       />
                     </TableCell>
-                    <TableCell>{item.units}
+                    <TableCell>
 
                       <FormControl className={styles.dropdown} variant="outlined">
                         <InputLabel color="primary" />

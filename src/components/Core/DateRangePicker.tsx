@@ -7,7 +7,7 @@ import "rsuite/dist/rsuite.css";
 
 const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
 
-    const [fromDate, setFromDate] = useState<any>([new Date(), new Date()]);
+    const [fromDate, setFromDate] = useState<any>([new Date(props?.defaultValue[0]), new Date(props?.defaultValue[1])]);
 
     const [date, setDate] = useState([moment(new Date()).format("YYYY-MM-DD"), moment(new Date()).format("YYYY-MM-DD")])
 

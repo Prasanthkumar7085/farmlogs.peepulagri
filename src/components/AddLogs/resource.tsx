@@ -22,9 +22,9 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ResourcesType } from "@/types/logsTypes";
 
 
-const Resource = ({ setResources: setAllResources }: any) => {
+const Resource = ({ setResources: setAllResources, singleLogDetails }: any) => {
 
-  const [resources, setResources] = useState<Array<ResourcesType>>([]);
+  const [resourcesData, setResources] = useState<Array<ResourcesType>>(singleLogDetails?.resources ? singleLogDetails?.resources : []);
 
   const [resourceTitle, setResourceTitle] = useState('');
   const [resourceQuantity, setResourceQuantity] = useState('');
@@ -40,8 +40,8 @@ const Resource = ({ setResources: setAllResources }: any) => {
   const addResources = () => {
     let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "Manual" : "Machinary" };
 
-    setResources([...resources, obj]);
-    setAllResources([...resources, obj]);
+    setResources([...resourcesData, obj]);
+    setAllResources([...resourcesData, obj]);
 
     setResourceTitle('')
     setResourceQuantity('')
@@ -50,7 +50,7 @@ const Resource = ({ setResources: setAllResources }: any) => {
   }
 
   const removeFromResources = (index: number) => {
-    let array = [...resources];
+    let array = [...resourcesData];
     let filteredArray = array.filter((item: any, itemIndex: number) => index != itemIndex);
     setResources(filteredArray);
     setAllResources(filteredArray);
@@ -78,7 +78,7 @@ const Resource = ({ setResources: setAllResources }: any) => {
   }
 
   const editInResources = (newValue: string, index: number, item: string) => {
-    let tempResources = [...resources];
+    let tempResources = [...resourcesData];
     let itemObj = tempResources[index];
     itemObj = { ...itemObj, [item]: newValue }
     tempResources[index] = itemObj;
@@ -103,8 +103,8 @@ const Resource = ({ setResources: setAllResources }: any) => {
     }
   }
   useEffect(() => {
-    setResources(resources)
-  }, [resources])
+    setResources(resourcesData)
+  }, [resourcesData])
 
   return (
     <div className={styles.resource}>
@@ -180,7 +180,7 @@ const Resource = ({ setResources: setAllResources }: any) => {
           </div>
         </div>
       </div>
-      {resources.length ?
+      {resourcesData.length ?
         <div className={styles.table}>
           <Table>
             <TableHead>
@@ -192,7 +192,7 @@ const Resource = ({ setResources: setAllResources }: any) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {resources.map((item: any, index: number) => {
+              {resourcesData.map((item: any, index: number) => {
                 return (
                   <TableRow key={index}>
                     <TableCell>{item.title}</TableCell>

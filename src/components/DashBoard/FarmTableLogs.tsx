@@ -168,7 +168,7 @@ const FarmTableLogs = () => {
                         <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
                             <VisibilityIcon color='info' />
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
                             <EditIcon color='warning' />
                         </IconButton>
                         <IconButton onClick={() => deleteLog(row._id)}>

@@ -4,10 +4,12 @@ import TimelineCardRight from "./right/timeline-card-right"
 import SelectComponenent from "../Core/SelectComponent"
 import getAllFarms from "../../../lib/services/getAllFarmsService"
 import InfiniteScroll from "react-infinite-scroll-component"
+import SelectComponenentForLogs from "../Core/SelectComponrntForLogs"
 
 const TimeLineComponent = () => {
 
     const [data, setData] = useState<any>([])
+    console.log(data)
     const [formOptions, setFormOptions] = useState<any>()
     const [items, setItems] = useState<any>([]);
     const [hasMore, setHasMore] = useState<any>(true);
@@ -15,7 +17,7 @@ const TimeLineComponent = () => {
     const [logId, setLogId] = useState<any>()
 
     useEffect(() => {
-        getLogsData(logId ? logId : "64e3255849ac66caca11a9c4", 1, 20)
+        // getLogsData("", 1, 20)
         getFormDetails()
     }, [])
 
@@ -38,7 +40,7 @@ const TimeLineComponent = () => {
 
     const getLogsData = async (id: any, page: number, limit: number) => {
         try {
-            const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id ? id : "64e3255849ac66caca11a9c4"}/logs/${page}/${10}?order_by=${'from_date_time'}&order_type=asc`);
+            const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${10}?order_by=${'from_date_time'}&order_type=asc`);
             const responseData: any = await response.json()
             console.log(responseData)
 
@@ -70,7 +72,7 @@ const TimeLineComponent = () => {
 
     return (
         <div>
-            <SelectComponenent options={formOptions} captureFormName={captureFormName} />
+            <SelectComponenentForLogs options={formOptions} captureFormName={captureFormName} />
 
             <InfiniteScroll
                 dataLength={data.length}
@@ -84,14 +86,14 @@ const TimeLineComponent = () => {
                     if (item.align == "left") {
                         return (
                             <div style={{ marginTop: "30px" }}>
-                                <TimelineCard key={index} data={item} />
+                                <TimelineCard key={index} data1={item} />
                             </div>
                         )
                     }
                     else {
                         return (
                             <div style={{ marginTop: "30px" }}>
-                                <TimelineCardRight key={index} data={item} />
+                                <TimelineCardRight key={index} data1={item} />
                             </div>
                         )
                     }

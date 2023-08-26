@@ -15,7 +15,7 @@ import DateRangePickerComponent from "../Core/DateRangePicker";
 import { useState } from "react";
 
 const CardWorkType = ({ register, captureDates, setWorkType, singleLogDetails }: any) => {
-  console.log(singleLogDetails, "fir")
+
   const [work, setWork] = useState<any>()
 
   const captureDateValue = (fromDate: string, toDate: string) => {

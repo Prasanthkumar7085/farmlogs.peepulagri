@@ -1,8 +1,10 @@
 import Typography from "@mui/material/Typography";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Attachments from "./../../AddLogs/attachments";
 import FooterActionButtons from "@/components/AddLogs/footer-action-buttons";
 import AddSupportQueryDetails from "./AddSupportQueryDetails";
+import { AddSupportPayload } from "@/types/supportTypes";
+import addSupportService from "../../../../lib/services/SupportService/addSupportService";
 
 const AddSupportForm = () => {
 
@@ -15,10 +17,29 @@ const AddSupportForm = () => {
     const [audio, setAudio] = useState(null);
 
     const [query, setQuery] = useState<string>('');
-    const [categories, setCategories] = useState<string>('');
+    const [categories, setCategories] = useState<Array<string>>();
     const [description, setDescription] = useState<string>('');
 
+    const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>()
 
+
+
+    useEffect(() => {
+        collectSupportData();
+    }, [query, categories, description]);
+
+    const collectSupportData = () => {
+        let supportData: Partial<AddSupportPayload> = {
+            title: query,
+            description: description,
+            categories: categories,
+            attachments: [],
+            status: "OPEN",
+            support_id: "SUPPORT123"
+
+        }
+        setSupportDetails(supportData)
+    }
 
     const getMicrophonePermission = async () => {
         if ("MediaRecorder" in window) {
@@ -68,6 +89,17 @@ const AddSupportForm = () => {
         };
     };
 
+    const addSupport = async () => {
+        try {
+            const response = await addSupportService(supportDetails);
+            console.log(response);
+
+        } catch (err: any) {
+            console.error(err);
+
+        }
+    }
+
     return (
         <div style={{ border: "1px solid", display: "flex", flexDirection: "row", justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "row", width: "60%" }}>
@@ -113,7 +145,7 @@ const AddSupportForm = () => {
                         <Attachments />
                     </div>
                     <div>
-                        <FooterActionButtons />
+                        <FooterActionButtons addLogs={addSupport} />
                     </div>
                 </div>
             </div>

@@ -8,8 +8,7 @@ import SelectComponenentForLogs from "../Core/SelectComponrntForLogs"
 
 const TimeLineComponent = () => {
 
-    const [data, setData] = useState<any>([])
-    console.log(data)
+    const [data, setData] = useState<any>([]);
     const [formOptions, setFormOptions] = useState<any>()
     const [items, setItems] = useState<any>([]);
     const [hasMore, setHasMore] = useState<any>(true);
@@ -41,9 +40,7 @@ const TimeLineComponent = () => {
     const getLogsData = async (id: any, page: number, limit: number) => {
         try {
             const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${10}?order_by=${'from_date_time'}&order_type=asc`);
-            const responseData: any = await response.json()
-            console.log(responseData)
-
+            const responseData: any = await response.json();
             //set align key to the objs
             let currentDate: any = null;
             let currentAlign = "left";
@@ -65,7 +62,7 @@ const TimeLineComponent = () => {
 
         }
         catch (err) {
-            console.log(err)
+            console.error(err)
         }
 
     }

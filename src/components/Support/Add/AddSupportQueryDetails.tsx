@@ -11,10 +11,10 @@ const AddSupportQueryDetails = ({
     setDescription
 }: {
     query: string,
-    categories: string,
+        categories: Array<string> | undefined,
     description: string,
     setQuery: React.Dispatch<React.SetStateAction<string>>,
-    setCategories: React.Dispatch<React.SetStateAction<string>>,
+        setCategories: React.Dispatch<React.SetStateAction<Array<string> | undefined>>,
     setDescription: React.Dispatch<React.SetStateAction<string>>
 }) => {
 
@@ -37,7 +37,8 @@ const AddSupportQueryDetails = ({
                 <Select
                     sx={{ minWidth: "200px" }}
                     value={categories}
-                    onChange={(e: any) => setCategories(e.target.value as string)}
+                    onChange={(e: any) => setCategories(e.target.value)}
+                    multiple
                 >
                     {categoriesList.map((item: categoriesType, index: number) => {
                         return (
@@ -49,6 +50,7 @@ const AddSupportQueryDetails = ({
             <div>
                 <Typography variant='subtitle2'>Description</Typography>
                 <TextareaAutosize
+                    value={description}
                     minRows={3}
                     onChange={(e: any) => setDescription(e.target.value)}
                 ></TextareaAutosize>

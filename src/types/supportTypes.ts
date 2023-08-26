@@ -53,3 +53,12 @@ export interface SupportDataTableProps {
     loading: boolean;
     deleteSupport: DeleteSupportFunction;
 }
+
+export interface AddSupportPayload {
+    title: string;
+    description: string;
+    support_id: string; //unique id to trace
+    categories: Array<string>
+    attachments: Array<Partial<SupportResponseAttachments>>;
+    status: string
+}

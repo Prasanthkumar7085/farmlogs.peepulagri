@@ -11,9 +11,6 @@ import styles from "./header.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
 const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
-
-  console.log(singleLogDetails, "o")
-
   const categoryOptions = [
     { title: 'Soil Preparation', value: "soil_preparation" },
     { title: 'Planting', value: "plainting" },

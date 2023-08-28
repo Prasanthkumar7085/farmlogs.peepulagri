@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import styles from "./attachments.module.css";
-const Attachments: NextPage = () => {
+const Attachments = ({ onChangeFile }: any) => {
+
+
   return (
     <div className={styles.attachments}>
       <div className={styles.header}>
@@ -9,7 +11,7 @@ const Attachments: NextPage = () => {
           You can also drag and drop files to upload them.
         </p>
       </div>
-      <input className={styles.link} type="file" multiple />
+      <input className={styles.link} type="file" multiple onChange={onChangeFile} />
     </div>
   );
 };

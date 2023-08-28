@@ -18,7 +18,7 @@ const AddSupportQueryDetails = ({
     setDescription: React.Dispatch<React.SetStateAction<string>>
 }) => {
 
-    const [categoriesList, setCategoriesList] = useState<Array<categoriesType>>([
+    const [categoriesList] = useState<Array<categoriesType>>([
         { label: 'Harvesting', value: 'harvesting' },
         { label: 'Irrigation', value: 'irrigation' },
     ]);
@@ -36,7 +36,7 @@ const AddSupportQueryDetails = ({
                 <Typography variant='subtitle2'>Category</Typography>
                 <Select
                     sx={{ minWidth: "200px" }}
-                    value={categories}
+                    value={categories ? categories : []}
                     onChange={(e: any) => setCategories(e.target.value)}
                     multiple
                 >

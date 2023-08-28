@@ -4,11 +4,13 @@ import FooterActionButtons from "./footer-action-buttons";
 import styles from "./add-a-log.module.css";
 import Header from "./header";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import addLogService from "../../../lib/services/LogsService/addLogService";
 import Form from "./form";
 import { GetLogByIdResponseDataType } from "@/types/logsTypes";
 import getLogByIdService from "../../../lib/services/LogsService/getLogByIdService";
+import LoadingComponent from "../Core/LoadingComponent";
+import AlertComponent from "../Core/AlertComponent";
 
 const AddALog: NextPage = () => {
 
@@ -23,10 +25,13 @@ const AddALog: NextPage = () => {
   const [dates, setDates] = useState<any>([]);
   const [formDetails, setFormDetails] = useState<any>();
   const [workType, setWorkType] = useState(singleLogDetails?.work_type ? singleLogDetails?.work_type : "");
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState(false);
 
   const captureDates = (fromDate: string, toDate: string) => {
     setDates([fromDate, toDate]);
-  }
+  };
+
 
 
   const fetchSingleLogData = async () => {
@@ -49,6 +54,7 @@ const AddALog: NextPage = () => {
   }, [router.isReady]);
 
   const addLogs = async (data: any) => {
+    setLoading(true);
     const { categories, ...rest } = formDetails;
     const obj = {
       ...rest,
@@ -65,49 +71,31 @@ const AddALog: NextPage = () => {
     }
     try {
       let response = await addLogService(obj);
+      if (response.success) {
+        setAlertMessage('Log Added Successfully!');
+        setAlertType(true);
+        router.back();
+      } else {
+        setAlertMessage('Failed to Add Logs!');
+        setAlertType(false);
+      }
+
     } catch (err: any) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
-  // const editLog = async () => {
-  //   const { categories, ...rest } = formDetails;
 
-  //   const obj = {
-  //     ...rest,
-  //     categories: [categories],
-  //     work_type: workType,
-  //     farm_id: router.query.farm_id,
-  //     status: 'ACTIVE',
-  //     from_date_time: dates[0] ? new Date(dates[0]).toISOString() : "",
-  //     to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : "",
-  //     resources: resources,
-  //     additional_resources: additionalResources,
-  //     total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinary" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
-  //     total_manual_hours: resources.reduce((acc: number, item: any) => (item.type == "Manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0)
-  //   }
-  //   try {
-  //     const url = `${process.env.NEXT_PUBLIC_API_URL}/log/${router?.query?.log_id}`;
-  //     const options = {
-  //       method: "PATCH",
-  //       body: JSON.stringify({ ...obj, farm_id: router?.query?.farm_id }),
-  //       headers: new Headers({
-  //         'content-type': 'application/json'
-  //       })
-  //     }
-  //     const response: any = await fetch(url, options);
-  //     const responseData = await response.json();
-  //     if (response.ok) {
-  //       return responseData;
-  //     } else {
-  //       return { message: 'Something Went Wrong', status: 500, details: responseData }
-  //     }
 
-  //   }
-  //   catch (err: any) {
-  //     console.error(err);
-  //   }
-  // }
+  const onChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
+
+
+  }
+
+
   return (
     <div className={styles.form}>
 
@@ -115,10 +103,12 @@ const AddALog: NextPage = () => {
           <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
           <div className={styles.secondaryFormField}>
             <ProgressSteps />
-            <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} />
+          <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} onChangeFile={onChangeFile} />
           </div>
         <FooterActionButtons addLogs={addLogs} singleLogDetails={singleLogDetails} />
       </div> 
+      <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

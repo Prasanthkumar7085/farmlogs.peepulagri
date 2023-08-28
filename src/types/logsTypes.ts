@@ -25,6 +25,13 @@ export interface ResourcesType {
     total_hours: string
     type: string
 }
+export interface ResourcesTypeInResponse {
+    title: string;
+    quantity: string
+    total_hours: string
+    type: string;
+    _id: string;
+}
 
 export interface AdditionalResourcesType {
     title: string;

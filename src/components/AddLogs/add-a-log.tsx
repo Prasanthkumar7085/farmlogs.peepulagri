@@ -52,7 +52,7 @@ const AddALog: NextPage = () => {
     const { categories, ...rest } = formDetails;
     const obj = {
       ...rest,
-      categories: [categories],
+      categories: categories,
       work_type: workType,
       farm_id: router.query.farm_id,
       status: 'ACTIVE',
@@ -111,14 +111,14 @@ const AddALog: NextPage = () => {
   return (
     <div className={styles.form}>
 
-        <div>
-          <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
-          <div className={styles.secondaryFormField}>
-            <ProgressSteps />
-            <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} />
-          </div>
+      <div>
+        <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
+        <div className={styles.secondaryFormField}>
+          <ProgressSteps />
+          <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} />
+        </div>
         <FooterActionButtons addLogs={addLogs} singleLogDetails={singleLogDetails} />
-      </div> 
+      </div>
     </div>
   );
 };

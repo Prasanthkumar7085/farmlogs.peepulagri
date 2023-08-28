@@ -5,9 +5,12 @@ import FooterActionButtons from "@/components/AddLogs/footer-action-buttons";
 import AddSupportQueryDetails from "./AddSupportQueryDetails";
 import { AddSupportPayload } from "@/types/supportTypes";
 import addSupportService from "../../../../lib/services/SupportService/addSupportService";
+import { useRouter } from "next/router";
+import getSupportByIdService from "../../../../lib/services/SupportService/getSupportByIdService";
 
 const AddSupportForm = () => {
 
+    const router: any = useRouter()
 
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef<any>(null);
@@ -15,8 +18,9 @@ const AddSupportForm = () => {
     const [stream, setStream] = useState<any>(null);
     const [audioChunks, setAudioChunks] = useState([]);
     const [audio, setAudio] = useState(null);
+    const [supportOneDetails, setSupportOneDetails] = useState<any>()
 
-    const [query, setQuery] = useState<string>('');
+    const [query, setQuery] = useState<string>(supportOneDetails?.title ? supportOneDetails?.title : "");
     const [categories, setCategories] = useState<Array<string>>();
     const [description, setDescription] = useState<string>('');
 
@@ -36,7 +40,6 @@ const AddSupportForm = () => {
             attachments: [],
             status: "OPEN",
             support_id: "SUPPORT123"
-
         }
         setSupportDetails(supportData)
     }
@@ -100,6 +103,8 @@ const AddSupportForm = () => {
         }
     }
 
+
+
     return (
         <div style={{ border: "1px solid", display: "flex", flexDirection: "row", justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "row", width: "60%" }}>
@@ -109,8 +114,7 @@ const AddSupportForm = () => {
                     description={description}
                     setQuery={setQuery}
                     setCategories={setCategories}
-                    setDescription={setDescription}
-                />
+                    setDescription={setDescription} supportOneDetails={supportOneDetails} />
 
                 <div style={{ display: "flex", flexDirection: "column", width: "50%", justifyContent: "center" }}>
                     <Typography variant='subtitle2'>Mic</Typography>

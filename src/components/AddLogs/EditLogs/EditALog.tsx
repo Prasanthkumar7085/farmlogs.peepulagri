@@ -76,7 +76,7 @@ const EditALog: NextPage = () => {
 
         const obj = {
             ...rest,
-            categories: [categories],
+            categories: categories,
             work_type: workType,
             farm_id: router.query.farm_id,
             status: 'ACTIVE',

@@ -13,6 +13,8 @@ import Header from "../header";
 import updateLogService from "../../../../lib/services/LogsService/updateLogService";
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import addLogsAttachmentService from "../../../../lib/services/LogsService/addLogsAttachmentService";
+import uploadFileToS3 from "../../../../lib/services/SupportService/uploadFileToS3";
 
 const EditALog: NextPage = () => {
 
@@ -20,6 +22,7 @@ const EditALog: NextPage = () => {
 
     const [singleLogDetails, setSingleData] = useState<GetLogByIdResponseDataType | null | undefined>();
     const [loading, setLoading] = useState<boolean>(false);
+    const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlZXB1bEBnbWFpbC5jb20iLCJpZCI6IjY0ZGM2NDNmOThhNzUyM2FkODA5ZDM1YyIsInBhc3N3b3JkIjoiJDJiJDEwJHlMQWZyVlBydlNaVUFCc21ReUYuV3VpbnF6bjU5bmpqY3pmLjFpcnZ4cUMxZ3daVm9LV2ppIiwiaWF0IjoxNjkyNjAyMjY5LCJleHAiOjE2OTc3ODYyNjl9.M8thgp9qQqLcBs0HxZ5uFw7P1dlY0UEUrmMrQXzXyRg'
 
 
     const [resources, setResources] = useState([]);
@@ -29,6 +32,9 @@ const EditALog: NextPage = () => {
     const [workType, setWorkType] = useState("");
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
+
+    const [files, setFiles] = useState<any>([]);
+    const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
 
     const captureDates = (fromDate: string, toDate: string) => {
         setDates([fromDate, toDate]);
@@ -83,7 +89,8 @@ const EditALog: NextPage = () => {
             resources: resources.length ? resources : singleLogDetails?.resources,
             additional_resources: additionalResources.length ? additionalResources : singleLogDetails?.additional_resources,
             total_machinary_hours: getTotalHours("Machinary"),
-            total_manual_hours: getTotalHours("Manual")
+            total_manual_hours: getTotalHours("Manual"),
+            attachments: filesDetailsAfterUpload
         }
         try {
             const response = await updateLogService(obj, router.query.log_id);
@@ -107,6 +114,40 @@ const EditALog: NextPage = () => {
 
     const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
 
+
+
+    const onChangeFile = (e: any) => {
+        setFiles(e.target.files);
+    }
+    const uploadFiles = async () => {
+        let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
+
+        const response = await addLogsAttachmentService({ attachments: tempFilesStorage }, accessToken);
+        console.log(response);
+        if (response.success) {
+            await postAllImages(response.data, tempFilesStorage);
+        }
+
+    }
+
+    const postAllImages = async (response: any, tempFilesStorage: any) => {
+        let arrayForResponse: any = [];
+
+        for (let index = 0; index < response.length; index++) {
+            let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
+            console.log(uploadResponse);
+
+            if (uploadResponse.ok) {
+                const { target_url, ...rest } = response[index];
+                arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
+            }
+        }
+        setFilesDetailsAfterUpload(arrayForResponse);
+        console.log(arrayForResponse);
+
+
+    }
+
     return (
         <div className={styles.form}>
             {router.query.log_id && singleLogDetails ?
@@ -114,7 +155,16 @@ const EditALog: NextPage = () => {
                     <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
                     <div className={styles.secondaryFormField}>
                         <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
-                        <Form setActiveStepBasedOnData={setActiveStepBasedOnData} setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} />
+                        <Form
+                            setActiveStepBasedOnData={setActiveStepBasedOnData}
+                            setWorkType={setWorkType}
+                            captureDates={captureDates}
+                            setResources={setResources}
+                            setAdditionalResources={setAdditionalResources}
+                            singleLogDetails={singleLogDetails}
+                            onChangeFile={onChangeFile}
+                            uploadFiles={uploadFiles}
+                        />
                     </div>
                     <FooterActionButtons editLog={editLog} singleLogDetails={singleLogDetails} />
                 </div> : ""}

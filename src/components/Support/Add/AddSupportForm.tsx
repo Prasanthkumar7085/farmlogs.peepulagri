@@ -29,19 +29,21 @@ const AddSupportForm = () => {
     const [query, setQuery] = useState<string>(supportOneDetails?.title ? supportOneDetails?.title : "");
     const [categories, setCategories] = useState<Array<string>>();
     const [description, setDescription] = useState<string>('');
+    const [files, setFiles] = useState<any>([]);
+    const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
 
     const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>()
 
     useEffect(() => {
         collectSupportData();
-    }, [query, categories, description]);
+    }, [query, categories, description, filesDetailsAfterUpload]);
 
     const collectSupportData = () => {
         let supportData: Partial<AddSupportPayload> = {
             title: query,
             description: description,
             categories: categories,
-            attachments: [],
+            attachments: [...filesDetailsAfterUpload],
             status: "OPEN",
             support_id: "SUPPORT1232"
         }
@@ -109,18 +111,15 @@ const AddSupportForm = () => {
 
     }
 
-    const [files, setFiles] = useState<any>([]);
-    const [filesDetailsForPreSignedUrl, setFilesDetailsForPresignedUrl] = useState<any>([]);
+
+
 
 
     const onChangeFile = (e: any) => {
-        console.log(e.target.files);
-
         setFiles(e.target.files);
     }
     const uploadFiles = async () => {
-        let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type } });
-        setFilesDetailsForPresignedUrl(tempFilesStorage);
+        let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
         const response = await addAttachmentsService({ attachments: tempFilesStorage }, accessToken);
         console.log(response);
@@ -130,17 +129,19 @@ const AddSupportForm = () => {
 
     }
 
-    const postAllImages = (response: any, tempFilesStorage: any) => {
+    const postAllImages = async (response: any, tempFilesStorage: any) => {
         let arrayForResponse: any = [];
-        response.length && response.map((item: any, index: number) => {
-            let uploadResponse: any = uploadFileToS3(item.target_url, files[index], accessToken);
+
+        for (let index = 0; index < response.length; index++) {
+            let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
             console.log(uploadResponse);
 
-            if (uploadResponse.success) {
-                const { target_url, ...rest } = item;
-                arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size })
+            if (uploadResponse.ok) {
+                const { target_url, ...rest } = response[index];
+                arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
             }
-        })
+        }
+        setFilesDetailsAfterUpload(arrayForResponse);
         console.log(arrayForResponse);
 
 
@@ -192,10 +193,7 @@ const AddSupportForm = () => {
                     </div>
                     <div>
                         <Typography variant='subtitle2'>Upload Images</Typography>
-                        <Attachments onChangeFile={onChangeFile} />
-                        <Button disabled={!files.length} onClick={uploadFiles}>
-                            Upload
-                        </Button>
+                        <Attachments onChangeFile={onChangeFile} uploadFiles={uploadFiles} files={files} />
 
                     </div>
                     <div>

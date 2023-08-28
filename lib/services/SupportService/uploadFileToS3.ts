@@ -1,5 +1,5 @@
 
-const uploadFileToS3 = async (preSignedUrl: string, body: any, accessToken: string) => {
+const uploadFileToS3 = async (preSignedUrl: string, body: any) => {
     console.log(body);
 
     try {
@@ -7,11 +7,9 @@ const uploadFileToS3 = async (preSignedUrl: string, body: any, accessToken: stri
         const options = {
             method: "PUT",
             body: JSON.stringify(body),
-            headers: new Headers({
-                'authorization': accessToken
-            })
         }
         const response: any = await fetch(url, options);
+
         return response;
 
     } catch (err: any) {

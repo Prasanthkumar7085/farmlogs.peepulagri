@@ -20,8 +20,18 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
     { title: 'Weeding', value: "weeding" },
     { title: 'Crop Rotation', value: "crop_rotation" },
     { title: 'Harvesting', value: "harvesting" },
-    { title: 'Equipment Management', value: "equipment_management" },
-    { title: 'Other', value: "other" },
+
+    // { title: 'Equipment Management', value: "equipment_management" },
+    // { title: 'Other', value: "other" },
+
+    { title: 'Livestock Care', value: "livestock_care", color: "#FFD700" },
+    { title: 'Breeding & Reproduction', value: "breeding_reproduction", color: "#FF80AB" },
+    { title: 'Equipment Management', value: "equipment_management", color: "#78909C" },
+    { title: 'Market & Scale Management', value: "market_scale_management", color: "#26A69A" },
+    { title: 'Environmental Stewardship', value: "enviranmental_stewardship", color: "#4CAF50" },
+    { title: 'Weather Monitoring', value: "weather_monitoring", color: "#42A5F5" },
+    { title: 'Financial Management', value: "financial_management", color: "#FFB74D" },
+    { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
   ];
 
   const [title, setTitle] = useState<string>(singleLogDetails?.title ? singleLogDetails?.title : "");

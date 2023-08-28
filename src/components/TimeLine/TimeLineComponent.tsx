@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import TimelineCard from "./left/timeline-card"
 import TimelineCardRight from "./right/timeline-card-right"
 import SelectComponenent from "../Core/SelectComponent"
-import getAllFarmsService from "../../../lib/services/getAllFarmsService"
+import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService"
 import InfiniteScroll from "react-infinite-scroll-component"
 import SelectComponenentForLogs from "../Core/SelectComponrntForLogs"
 

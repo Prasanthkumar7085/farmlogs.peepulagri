@@ -2,7 +2,7 @@ import FarmCardsLayOut from "../FarmCard/FarmCardLayOut";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import FarmTableLogs from "./FarmTableLogs";
-import getAllFarmsService from "../../../lib/services/getAllFarmsService";
+import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
 
 const DashBoard = () => {
 

@@ -5,6 +5,8 @@ import FooterActionButtons from "@/components/AddLogs/footer-action-buttons";
 import AddSupportQueryDetails from "./AddSupportQueryDetails";
 import { AddSupportPayload } from "@/types/supportTypes";
 import addSupportService from "../../../../lib/services/SupportService/addSupportService";
+import styles from "./addSupportForm.module.css";
+import { Button } from "@mui/material";
 
 const AddSupportForm = () => {
 
@@ -21,8 +23,6 @@ const AddSupportForm = () => {
     const [description, setDescription] = useState<string>('');
 
     const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>()
-
-
 
     useEffect(() => {
         collectSupportData();
@@ -98,6 +98,12 @@ const AddSupportForm = () => {
         }
     }
 
+    const uploadAudio = () => {
+
+    }
+
+
+
     return (
         <div style={{ border: "1px solid", display: "flex", flexDirection: "row", justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "row", width: "60%" }}>
@@ -112,6 +118,7 @@ const AddSupportForm = () => {
 
                 <div style={{ display: "flex", flexDirection: "column", width: "50%", justifyContent: "center" }}>
                     <Typography variant='subtitle2'>Mic</Typography>
+
                     <div className="audio-controls">
                         {!permission ? (
                             <button onClick={getMicrophonePermission} type="button">
@@ -130,17 +137,22 @@ const AddSupportForm = () => {
                         ) : null}
 
                         {audio ? (
-                            <div className="audio-container">
-                                <audio src={audio} controls></audio>
-                                <a download href={audio} type='.mp3'>
+                            <div>
+                                <audio src={audio} controls controlsList="nodownload"></audio>
+                                {/* <a download="recording.mp3" href={audio} type="audio/mpeg" >
                                     Download Recording
-                                </a>
+                                </a> */}
                             </div>
                         ) : null}
+
+                        <Button disabled={!audio} variant="contained" onClick={uploadAudio}>
+                            Upload
+                        </Button>
                     </div>
                     <div>
                         <Typography variant='subtitle2'>Upload Images</Typography>
                         <Attachments />
+
                     </div>
                     <div>
                         <FooterActionButtons addLogs={addSupport} />

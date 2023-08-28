@@ -1,8 +1,13 @@
 import type { NextPage } from "next";
 import styles from "./attachments.module.css";
-const Attachments = ({ onChangeFile }: any) => {
+import { useState } from "react";
+const Attachments = () => {
 
+  const [files, setFiles] = useState<any>();
 
+  const onChangeFile = (e: any) => {
+
+  }
   return (
     <div className={styles.attachments}>
       <div className={styles.header}>

@@ -1,6 +1,8 @@
 import { categoriesType } from "@/types/supportTypes";
 import { MenuItem, Select, TextField, TextareaAutosize, Typography } from "@mui/material"
 import React, { useState } from "react";
+import getSupportByIdService from "../../../../lib/services/SupportService/getSupportByIdService";
+import { useRouter } from "next/router";
 
 const AddSupportQueryDetails = ({
     query,

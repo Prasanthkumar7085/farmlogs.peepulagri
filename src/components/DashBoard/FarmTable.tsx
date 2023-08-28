@@ -15,27 +15,27 @@ const FarmTable = ({ columns, data, loading }: any) => {
     });
 
     return (
-        <div style={{ height: "70vh", overflow: "scroll" }}>
-            <table {...getTableProps()} style={{ position: "sticky" }}>
-                <thead>
+        <div style={{ height: "70vh", overflow: "scroll" }} className="dataTable-container">
+            <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
+                <thead className="thead">
                     {headerGroups.map((headerGroup: any, index: number) => (
 
-                        <tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                        <tr className="table-row" {...headerGroup.getHeaderGroupProps()} key={index}>
                             {headerGroup.headers.map((column: any, columnIndex: number) => {
                                 return (
-                                    <th {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
+                                    <th className="cell" {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
                                 )
                             })}
                         </tr>
                     ))}
                 </thead>
-                {!loading && data?.length ? <tbody {...getTableBodyProps()}>
+                {!loading && data?.length ? <tbody className="tbody" {...getTableBodyProps()}>
                     {rows.map((row: any, index: number) => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()} key={index}>
+                            <tr className="table-row" {...row.getRowProps()} key={index}>
                                 {row.cells.map((cell: any, cellIndex: number) => {
-                                    return <td style={{ padding: "10px", border: ".1px solid" }} {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
+                                    return <td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
                                 })}
                             </tr>
                         );

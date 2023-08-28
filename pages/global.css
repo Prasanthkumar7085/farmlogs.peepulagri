@@ -5,6 +5,10 @@ body {
     font-family: 'Inter', sans-serif;
     margin: 0;
     line-height: normal;
+    color: var(--title, #35353D);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
 }
 
 :root {
@@ -91,4 +95,29 @@ body {
     --shadow-button: 8px 8px 24px rgba(2, 2, 70, 0.15);
     --shadow-field: 8px 8px 24px rgba(2, 2, 70, 0.05);
     --shadow-xs: 0px 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.dataTable-container {
+    background-color: #ffffff;
+}
+.dataTable-container .table{
+    border-collapse: collapse;
+    border: 1px solid #d8d7d6;
+}
+
+.dataTable-container .thead{
+    border-bottom: 1px solid var(--stroke, #E9EDF1);
+    background: var(--color-sienna);
+}
+.dataTable-container .thead .cell {
+    color: var(--white, #FFF);
+    font-family: "Inter",sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 10px;
+    border: 1px solid #d8d7d6;
+}
+.dataTable-container .tbody .cell {
+    padding: 10px 10px;
+    border: 1px solid #d8d7d6;
 }

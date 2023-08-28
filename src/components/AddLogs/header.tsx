@@ -26,7 +26,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
   const [title, setTitle] = useState<string>(singleLogDetails?.title ? singleLogDetails?.title : "");
   const [description, setDescription] = useState<string>(singleLogDetails?.description);
-  const [category, setCategory] = useState<string>(singleLogDetails?.categories[0] ? singleLogDetails?.categories[0] : "");
+  const [category, setCategory] = useState<string>(singleLogDetails?.categories ? singleLogDetails?.categories : []);
 
   useEffect(() => {
     setFormDetails({
@@ -63,10 +63,13 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
             <Select
               color="primary"
               name="category"
-              size="small"
+              multiple
+              size="medium"
               label="Select Category"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => {
+                setCategory(e.target.value)
+              }}
             >
               {categoryOptions.map((item: any, index: number) => {
                 return (

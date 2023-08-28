@@ -14,55 +14,55 @@ const SupportDataTable = ({ data, loading, deleteSupport }: SupportDataTableProp
 
     const router = useRouter();
     const columns = [
-                {
-                    Header: "Date",
+        {
+            Header: "Date",
             accessor: (row: SupportResponseDataType) => timePipe(row.createdAt, 'DD, MMM YYYY')
-                },
-                {
-                    Header: "Query Name",
-                    accessor: 'title'
-                },
-                {
-                    Header: "Category",
-                    accessor: (row: SupportResponseDataType) => {
-                        return (
-                            <div style={{ display: "flex" }}>
-                                {row.categories.length && row.categories.map((item: string, index: number) => {
-                                    return <Chip label={item} key={index} sx={{ margin: "2px" }} />
-                                })}
-                            </div>
-                        )
-                    }
-                },
-                {
-                    Header: "Description",
-                    accessor: 'description'
-                },
-                {
-                    Header: "Response Date",
-                    accessor: (row: SupportResponseDataType) => timePipe(row.recent_response_at, 'DD, MMM YYYY')
-                },
-                {
-                    Header: "Status",
-                    accessor: 'status'
-                },
-                {
-                    Header: "Actions",
-                    accessor: (row: SupportResponseDataType) => {
-                        return (
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                                <IconButton onClick={() => router.push(`/support/${row._id}`)}>
-                                    <VisibilityIcon color='info' />
-                                </IconButton>
-                                <IconButton>
-                                    <EditIcon color='warning' />
-                                </IconButton>
-                                <IconButton onClick={() => deleteSupport(row._id)}>
-                                    <DeleteIcon color='error' />
-                                </IconButton>
-                            </div>
-                        )
-                    }
+        },
+        {
+            Header: "Query Name",
+            accessor: 'title'
+        },
+        {
+            Header: "Category",
+            accessor: (row: SupportResponseDataType) => {
+                return (
+                    <div style={{ display: "flex" }}>
+                        {row.categories.length && row.categories.map((item: string, index: number) => {
+                            return <Chip label={item} key={index} sx={{ margin: "2px" }} />
+                        })}
+                    </div>
+                )
+            }
+        },
+        {
+            Header: "Description",
+            accessor: 'description'
+        },
+        {
+            Header: "Response Date",
+            accessor: (row: SupportResponseDataType) => timePipe(row.recent_response_at, 'DD, MMM YYYY')
+        },
+        {
+            Header: "Status",
+            accessor: 'status'
+        },
+        {
+            Header: "Actions",
+            accessor: (row: SupportResponseDataType) => {
+                return (
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
+                        <IconButton onClick={() => router.push(`/support/${row._id}`)}>
+                            <VisibilityIcon color='info' />
+                        </IconButton>
+                        <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
+                            <EditIcon color='warning' />
+                        </IconButton>
+                        <IconButton onClick={() => deleteSupport(row._id)}>
+                            <DeleteIcon color='error' />
+                        </IconButton>
+                    </div>
+                )
+            }
         },
     ]
 

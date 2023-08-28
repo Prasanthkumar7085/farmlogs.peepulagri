@@ -1,8 +1,6 @@
 import { categoriesType } from "@/types/supportTypes";
 import { MenuItem, Select, TextField, TextareaAutosize, Typography } from "@mui/material"
 import React, { useState } from "react";
-import getSupportByIdService from "../../../../lib/services/SupportService/getSupportByIdService";
-import { useRouter } from "next/router";
 
 const AddSupportQueryDetails = ({
     query,
@@ -23,8 +21,8 @@ const AddSupportQueryDetails = ({
 
 
     const [categoriesList] = useState<Array<categoriesType>>([
-        { label: 'Harvesting', value: 'harvesting' },
-        { label: 'Irrigation', value: 'irrigation' },
+        { label: 'Harvesting', value: 'Harvesting' },
+        { label: 'Irrigation', value: 'Irrigation' },
     ]);
 
 

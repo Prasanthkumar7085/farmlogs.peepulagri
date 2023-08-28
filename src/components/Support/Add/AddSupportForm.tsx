@@ -7,10 +7,14 @@ import { AddSupportPayload } from "@/types/supportTypes";
 import addSupportService from "../../../../lib/services/SupportService/addSupportService";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
+import addAttachmentsService from "../../../../lib/services/SupportService/addAttachmentsService";
+import uploadFileToS3 from "../../../../lib/services/SupportService/uploadFileToS3";
 
 const AddSupportForm = () => {
 
     const router: any = useRouter()
+
+    const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlZXB1bEBnbWFpbC5jb20iLCJpZCI6IjY0ZGM2NDNmOThhNzUyM2FkODA5ZDM1YyIsInBhc3N3b3JkIjoiJDJiJDEwJHlMQWZyVlBydlNaVUFCc21ReUYuV3VpbnF6bjU5bmpqY3pmLjFpcnZ4cUMxZ3daVm9LV2ppIiwiaWF0IjoxNjkyNjAyMjY5LCJleHAiOjE2OTc3ODYyNjl9.M8thgp9qQqLcBs0HxZ5uFw7P1dlY0UEUrmMrQXzXyRg'
 
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef<any>(null);
@@ -37,7 +41,7 @@ const AddSupportForm = () => {
             categories: categories,
             attachments: [],
             status: "OPEN",
-            support_id: "SUPPORT123"
+            support_id: "SUPPORT1232"
         }
         setSupportDetails(supportData)
     }
@@ -103,7 +107,42 @@ const AddSupportForm = () => {
 
     }
 
+    const [files, setFiles] = useState<any>([]);
+    const [filesDetailsForPreSignedUrl, setFilesDetailsForPresignedUrl] = useState<any>([]);
 
+
+    const onChangeFile = (e: any) => {
+        console.log(e.target.files);
+
+        setFiles(e.target.files);
+    }
+    const uploadFiles = async () => {
+        let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type } });
+        setFilesDetailsForPresignedUrl(tempFilesStorage);
+
+        const response = await addAttachmentsService({ attachments: tempFilesStorage }, accessToken);
+        console.log(response);
+        if (response.success) {
+            await postAllImages(response.data, tempFilesStorage);
+        }
+
+    }
+
+    const postAllImages = (response: any, tempFilesStorage: any) => {
+        let arrayForResponse: any = [];
+        response.length && response.map((item: any, index: number) => {
+            let uploadResponse: any = uploadFileToS3(item.target_url, files[index], accessToken);
+            console.log(uploadResponse);
+
+            if (uploadResponse.success) {
+                const { target_url, ...rest } = item;
+                arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size })
+            }
+        })
+        console.log(arrayForResponse);
+
+
+    }
 
     return (
         <div style={{ border: "1px solid", display: "flex", flexDirection: "row", justifyContent: "center" }}>
@@ -151,7 +190,10 @@ const AddSupportForm = () => {
                     </div>
                     <div>
                         <Typography variant='subtitle2'>Upload Images</Typography>
-                        <Attachments />
+                        <Attachments onChangeFile={onChangeFile} />
+                        <Button disabled={!files.length} onClick={uploadFiles}>
+                            Upload
+                        </Button>
 
                     </div>
                     <div>

@@ -47,11 +47,13 @@ export interface SupportResponseDataType {
 
 
 type DeleteSupportFunction = (supportId: string) => void;
+type UpdateStatusFunction = (status: string, id: string) => void;
 
 export interface SupportDataTableProps {
     data: SupportResponseDataType[] | null | undefined;
     loading: boolean;
     deleteSupport: DeleteSupportFunction;
+    updateStatus: UpdateStatusFunction;
 }
 
 export interface AddSupportPayload {

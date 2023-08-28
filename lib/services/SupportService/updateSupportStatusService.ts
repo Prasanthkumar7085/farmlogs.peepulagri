@@ -1,8 +1,8 @@
 
-const editSupportService = async (body: any, id: any) => {
+const updateSupportStatusService = async (body: { status: string }, id: string) => {
 
     try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/support/${id}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/support/update-status/${id}`;
         const options = {
             method: "PATCH",
             body: JSON.stringify(body),
@@ -23,4 +23,4 @@ const editSupportService = async (body: any, id: any) => {
 
     }
 }
-export default editSupportService;
+export default updateSupportStatusService;

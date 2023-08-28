@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 
 
 
-const SupportDataTable = ({ data, loading, deleteSupport }: SupportDataTableProps) => {
+const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: SupportDataTableProps) => {
 
     const router = useRouter();
     const columns = [

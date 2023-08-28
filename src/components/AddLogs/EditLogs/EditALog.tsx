@@ -74,7 +74,7 @@ const EditALog: NextPage = () => {
         const obj = {
             title: title ? title : singleLogDetails?.title,
             description: description ? description : singleLogDetails?.description,
-            categories: [categories],
+            categories: categories,
             work_type: workType ? workType : singleLogDetails?.work_type,
             farm_id: router.query.farm_id,
             status: 'ACTIVE',

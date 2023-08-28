@@ -33,8 +33,14 @@ const FarmTableLogs = () => {
     useEffect(() => {
         if (router.isReady) {
             getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
+            getSingleFarm(router.query.farm_id);
         }
     }, [router]);
+
+
+    const getSingleFarm = (id: string) => {
+
+    }
 
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
@@ -119,6 +125,22 @@ const FarmTableLogs = () => {
         getFarmLogs({ page: 1, search: value });
     }
 
+    const getLabel = (item: string) => {
+        const categoryOptions = [
+            { title: 'Soil Preparation', value: "soil_preparation" },
+            { title: 'Planting', value: "plainting" },
+            { title: 'Irrigation', value: "irrigation" },
+            { title: 'Fertilization', value: "fertilization" },
+            { title: 'Pest Management', value: "pest_management" },
+            { title: 'Weeding', value: "weeding" },
+            { title: 'Crop Rotation', value: "crop_rotation" },
+            { title: 'Harvesting', value: "harvesting" },
+            { title: 'Equipment Management', value: "equipment_management" },
+            { title: 'Other', value: "other" },
+        ];
+
+        return (categoryOptions.find((categoryItem: { title: string, value: string }) => categoryItem.value == item))?.title
+    }
 
 
     const columns = [
@@ -136,7 +158,7 @@ const FarmTableLogs = () => {
                 return (
                     row.categories.length && row.categories.map((item: string, index: number) => {
                         return (
-                            <Chip label={item} key={index} sx={{ margin: "2px" }} />
+                            <Chip label={getLabel(item)} key={index} sx={{ margin: "2px" }} />
                         )
                     })
                 )

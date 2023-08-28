@@ -28,12 +28,20 @@ const EditSupportForm = () => {
     const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>()
 
 
+    useEffect(() => {
+        setQuery(supportOneDetails?.title);
+        setCategories(supportOneDetails?.categories);
+        setDescription(supportOneDetails?.description);
+    }, [supportOneDetails]);
 
     console.log(query, "query")
     useEffect(() => {
         collectSupportData();
-        getOneSupportDetails();
     }, [query, categories, description]);
+
+    useEffect(() => {
+        getOneSupportDetails();
+    }, [router]);
 
     const collectSupportData = () => {
         let supportData: Partial<AddSupportPayload> = {

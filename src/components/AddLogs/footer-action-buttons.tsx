@@ -30,28 +30,18 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
               endIcon={<Icon>arrow_back_sharp</Icon>}
             />
           </div>
-          {router?.query.log_id ?
-            <div className={styles.button1}>
-              <ButtonComponent
-                direction={true}
-                onClick={editLog}
-                variant="contained"
-                color="primary"
-                title={'Update'}
-                endIcon={<Icon>arrow_forward_sharp</Icon>}
-              />
-            </div> :
+
             <div className={styles.button1}>
               <ButtonComponent
                 direction={true}
                 onClick={addLogs}
                 variant="contained"
                 color="primary"
-                title={'Submit'}
+              title={router?.query.log_id || router?.query.support_id ? 'Update' : 'Submit'}
                 endIcon={<Icon>arrow_forward_sharp</Icon>}
               />
             </div>
-          }
+
 
         </div>
       </div>

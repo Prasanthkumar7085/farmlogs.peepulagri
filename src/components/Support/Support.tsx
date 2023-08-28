@@ -8,6 +8,10 @@ import getAllSupportService from "../../../lib/services/SupportService/getAllSup
 import { SupportResponseDataType, SupportServiceTypes } from "@/types/supportTypes";
 import TablePaginationComponent from "../Core/TablePaginationComponent";
 import LoadingComponent from "../Core/LoadingComponent";
+import deleteASupportService from "../../../lib/services/SupportService/deleteASupportService";
+import AlertComponent from "../Core/AlertComponent";
+import SelectComponent from "../Core/SelectComponent";
+import updateSupportStatusService from "../../../lib/services/SupportService/updateSupportStatusService";
 
 const SupportPage = () => {
 
@@ -26,6 +30,12 @@ const SupportPage = () => {
         { value: 'RESOLVED', title: "Resolved" },
         { value: 'ARCHIVED', title: "Archived" }
     ];
+
+    const updateStatus = async (value: string, id: string) => {
+        let response = await updateSupportStatusService({ status: value }, id);
+        console.log(response);
+
+    }
 
     const getAllSupports = async ({ page = 1, limit = 10, searchString = '', status = '' }: Partial<SupportServiceTypes>) => {
         setLoading(true);
@@ -60,8 +70,28 @@ const SupportPage = () => {
         getAllSupports({ page: 1, limit: value, searchString: searchString, status: status });
     }
 
+    const [alertMessage, setAlertMessage] = useState<string>('');
+    const [alertType, setAlertType] = useState<boolean>(false);
+
     const deleteSupport = async (id: string) => {
-        console.log(id);
+        setLoading(true)
+        try {
+            let response = await deleteASupportService(id);
+            console.log(response);
+
+            if (response.success) {
+                setAlertMessage(response.message);
+                setAlertType(true);
+                getAllSupports({ page: page, limit: limit, searchString: searchString, status: status })
+            } else {
+                setAlertMessage(response.message);
+                setAlertType(false);
+            }
+        } catch (err: any) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
 
     }
 
@@ -87,13 +117,14 @@ const SupportPage = () => {
                         searchString={searchString}
                         value={searchString}
                     />
-                    {/* <SelectComponent options={statusOptions} onChange={onStatusChange} defaultValue='' /> */}
+                    <SelectComponent options={statusOptions} onChange={onStatusChange} defaultValue='' />
                     <ButtonComponent icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />
                 </div>
             </div>
-            <SupportDataTable data={data} loading={loading} deleteSupport={deleteSupport} />
+            <SupportDataTable data={data} loading={loading} deleteSupport={deleteSupport} updateStatus={updateStatus} />
             {!loading ? <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={onPageChange} captureRowPerItems={onLimitChange} values='Queries' /> : ""}
             <LoadingComponent loading={loading} />
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
         </div>
     )
 }

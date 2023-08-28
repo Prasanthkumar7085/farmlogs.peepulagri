@@ -88,12 +88,6 @@ const AddALog: NextPage = () => {
     }
   }
 
-
-
-  const onChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
-  }
-
   const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
 
   return (
@@ -103,7 +97,7 @@ const AddALog: NextPage = () => {
           <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
           <div className={styles.secondaryFormField}>
           <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
-          <Form setActiveStepBasedOnData={setActiveStepBasedOnData} setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} onChangeFile={onChangeFile} />
+          <Form setActiveStepBasedOnData={setActiveStepBasedOnData} setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} />
           </div>
         <FooterActionButtons addLogs={addLogs} singleLogDetails={singleLogDetails} />
       </div> 

@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import getAllFarmsService from '../lib/services/getAllFarmsService';
+import getAllFarmsService from '../lib/services/FarmsService/getAllFarmsService';
 
 const HomePage = () => {
     return (

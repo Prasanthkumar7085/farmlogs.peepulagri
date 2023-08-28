@@ -33,6 +33,15 @@ export interface ResourcesTypeInResponse {
     _id: string;
 }
 
+export interface ResourcesTypeInResponseWithLogo {
+    title: string;
+    quantity: string
+    total_hours: string
+    type: string;
+    _id: string;
+    logo: string;
+}
+
 export interface AdditionalResourcesType {
     title: string;
     quantity: string;

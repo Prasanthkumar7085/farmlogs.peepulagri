@@ -15,6 +15,7 @@ import SearchComponent from "../Core/SearchComponent";
 import { Button } from "@mui/material";
 import deleteALogService from "../../../lib/services/LogsService/deleteALogsService";
 import LoadingComponent from "../Core/LoadingComponent";
+import { ResourcesTypeInResponse, ResourcesTypeInResponseWithLogo } from "@/types/logsTypes";
 
 
 const FarmTableLogs = () => {
@@ -66,23 +67,36 @@ const FarmTableLogs = () => {
         }
     }
 
-    const getUpdatedResources = (rowDetails: any) => {
+    const checkForDuplicatesAndAdd = (updatedArray: Array<ResourcesTypeInResponse>, item: ResourcesTypeInResponse, logo: string) => {
+        let arrayTest: any = [...updatedArray];
+        let index = arrayTest.findIndex((arrayItem: ResourcesTypeInResponseWithLogo) => arrayItem.title.toLowerCase() == item.title.toLowerCase());
+        if (index == -1) {
+            arrayTest.push({ ...item, logo: logo });
+        } else {
+            arrayTest[index] = { ...arrayTest[index], quantity: arrayTest[index].quantity + item.quantity }
+        }
+        return arrayTest
 
+    }
+    const stayUpdatedResources = (rowDetails: Array<ResourcesTypeInResponse>) => {
+
+        let updatedArray: Array<ResourcesTypeInResponseWithLogo> = [];
         if (rowDetails && rowDetails.length) {
-            const updatedArray = rowDetails.map((item: any) => {
+            rowDetails.map((item: any) => {
                 if (item.title.toLowerCase() == 'tractor') {
-                    return { ...item, logo: '/tractor.svg' }
-                } else if (item.title.toLowerCase() == "sprayers" || item.title.toLowerCase() == "spayers") {
-                    return { ...item, logo: '/sprayer.svg' }
+                    updatedArray = checkForDuplicatesAndAdd(updatedArray, item, '/tractor.svg')
+                } else if (item.title.toLowerCase() == "sprayers") {
+                    updatedArray = checkForDuplicatesAndAdd(updatedArray, item, '/sprayer.svg')
                 } else if (item.title.toLowerCase() == 'men') {
-                    return { ...item, logo: '/man.svg' }
+                    updatedArray = checkForDuplicatesAndAdd(updatedArray, item, '/man.svg')
                 } else if (item.title.toLowerCase() == 'women') {
-                    return { ...item, logo: '/women.svg' }
+                    updatedArray = checkForDuplicatesAndAdd(updatedArray, item, '/women.svg')
                 } else {
-                    return { ...item, logo: '/' }
+                    updatedArray = checkForDuplicatesAndAdd(updatedArray, item, '/')
                 }
             })
-            return updatedArray;
+
+            return updatedArray.length ? updatedArray : null;
         }
     }
 
@@ -137,10 +151,10 @@ const FarmTableLogs = () => {
         {
             Header: "Resources",
             accessor: (row: any) => {
-                const updatedRowModules = getUpdatedResources(row.resources);
+                const updatedRowModules: any = stayUpdatedResources(row.resources);
                 return (
                     <div style={{ display: "flex", gap: "2px" }}>
-                        {updatedRowModules.length && updatedRowModules.map((item: any, index: number) => {
+                        {updatedRowModules && updatedRowModules.length && updatedRowModules.map((item: any, index: number) => {
                             return (
                                 <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", padding: "5px" }} >
                                     <ImageComponent src={item.logo} width={15} height={15} alt={item.logo + '1'} />
@@ -186,7 +200,7 @@ const FarmTableLogs = () => {
     return (
         <div>
             <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "40px", paddingRight: "20px" }}>
-                <SearchComponent onChange={searchStringChange} placeholder={'Search By Title'} />
+                <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
                 {/* <Link href="/farm/[farm_id]/logs/add" as={`/farm/${router.query.farm_id}/logs/add`} style={{ textDecoration: "none", color: "#000000" }}> */}
                 <Button onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)}>
                     Add Log

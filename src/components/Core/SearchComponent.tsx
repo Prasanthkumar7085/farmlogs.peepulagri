@@ -17,7 +17,7 @@ const SearchComponent = (props: any) => {
                 ),
                 endAdornment: (
                     <InputAdornment position="end">
-                        {searchString ? <IconButton onClick={() => setSearchString('')}>   <Clear /> </IconButton> : ""}
+                        {searchString ? <IconButton onClick={() => { setSearchString; onChange('') }}>   <Clear /> </IconButton> : ""}
                     </InputAdornment>
                 ),
             }}

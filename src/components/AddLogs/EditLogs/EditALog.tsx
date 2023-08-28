@@ -109,13 +109,19 @@ const EditALog: NextPage = () => {
             console.error(err);
         }
     }
+
+
+    const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
+    const setActiveStep = () => {
+        activeStepBasedOnData
+    }
     return (
         <div className={styles.form}>
             {router.query.log_id && singleLogDetails ?
                 <div>
                     <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
                     <div className={styles.secondaryFormField}>
-                        <ProgressSteps />
+                        <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
                         <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} />
                     </div>
                     <FooterActionButtons editLog={editLog} singleLogDetails={singleLogDetails} />

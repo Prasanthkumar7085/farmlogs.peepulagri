@@ -20,7 +20,7 @@ import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const AdditionalInformation = ({ setAdditionalResources, singleLogDetails }: any) => {
+const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setActiveStepBasedOnData }: any) => {
 
   const [resources, setResources] = useState<any>(singleLogDetails?.additional_resources ? singleLogDetails?.additional_resources : []);
 
@@ -48,6 +48,9 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails }: any
 
     setResources([...resources, obj]);
     setAdditionalResources([...resources, obj]);
+
+    setActiveStepBasedOnData(3);
+
     setResourceTitle('')
     setResourceQuantity('')
     setResourceUnits('')
@@ -58,6 +61,10 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails }: any
     filteredArray.splice(index, 1);
     setResources(filteredArray);
     setAdditionalResources(filteredArray);
+
+    if (!filteredArray.length) {
+      setActiveStepBasedOnData(2);
+    }
 
   }
 

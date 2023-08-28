@@ -14,13 +14,15 @@ import styles from "./card-work-type.module.css";
 import DateRangePickerComponent from "../Core/DateRangePicker";
 import { useState } from "react";
 
-const CardWorkType = ({ register, captureDates, setWorkType, singleLogDetails }: any) => {
+const CardWorkType = ({ register, captureDates, setWorkType, singleLogDetails, setActiveStepBasedOnData }: any) => {
 
   const [work, setWork] = useState<any>()
 
   const captureDateValue = (fromDate: string, toDate: string) => {
     captureDates(fromDate, toDate)
-
+    if (fromDate && toDate && work) {
+      setActiveStepBasedOnData(1);
+    }
   }
   const handleChange = (e: any) => {
     setWork(e.target.value)

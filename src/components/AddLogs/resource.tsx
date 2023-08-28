@@ -22,7 +22,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ResourcesType } from "@/types/logsTypes";
 
 
-const Resource = ({ setResources: setAllResources, singleLogDetails }: any) => {
+const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveStepBasedOnData }: any) => {
 
   const [resourcesData, setResources] = useState<Array<ResourcesType>>(singleLogDetails?.resources ? singleLogDetails?.resources : []);
 
@@ -40,6 +40,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails }: any) => {
   const addResources = () => {
     let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "Manual" : "Machinary" };
 
+    setActiveStepBasedOnData(2);
     setResources([...resourcesData, obj]);
     setAllResources([...resourcesData, obj]);
 
@@ -54,6 +55,9 @@ const Resource = ({ setResources: setAllResources, singleLogDetails }: any) => {
     let filteredArray = array.filter((item: any, itemIndex: number) => index != itemIndex);
     setResources(filteredArray);
     setAllResources(filteredArray);
+    if (!filteredArray.length) {
+      setActiveStepBasedOnData(1);
+    }
   }
 
   const onChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {

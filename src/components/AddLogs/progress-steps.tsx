@@ -1,11 +1,73 @@
-import type { NextPage } from "next";
 import styles from "./progress-steps.module.css";
-const ProgressSteps: NextPage = () => {
+import * as React from 'react';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+import Typography from '@mui/material/Typography';
+import { useState } from "react";
+
+const ProgressSteps = ({ activeStepBasedOnData }: { activeStepBasedOnData: number }) => {
+
+  const steps = [
+    {
+      label: 'Work Type',
+      description: `Choose type : Machinery & Manual or both`,
+    },
+    {
+      label: 'Resources',
+      description:
+        'Add machinery like Tractors, Weed remover or man power',
+    },
+    {
+      label: 'Additional Information (Optional)',
+      description: `You can add additional details based on the category and work type`,
+    },
+    {
+      label: 'Attachments',
+      description:
+        'Attach images videos and documents related to the logs',
+    },
+  ];
+
+  const [activeStep, setActiveStep] = useState(activeStepBasedOnData);
+  React.useEffect(() => {
+    setActiveStep(activeStepBasedOnData)
+  }, [activeStepBasedOnData])
+
   return (
     <div className={styles.progressSteps}>
       <div className={styles.card}>
         <div className={styles.progressStepsProgressIcon}>
-          <div className={styles.stepBase}>
+          <Stepper activeStep={activeStep} orientation="vertical">
+            {steps.map((step, index) => (
+              <Step key={index}>
+                <StepLabel>
+                  {step.label}
+                </StepLabel>
+                <StepContent>
+                  <Typography>{step.description}</Typography>
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProgressSteps;
+
+
+
+
+
+
+
+
+
+{/* <div className={styles.stepBase}>
             <div className={styles.connectorWrap}>
               <img
                 className={styles.stepIconBase}
@@ -71,11 +133,4 @@ const ProgressSteps: NextPage = () => {
                 Attach images videos and documents related to the logs
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ProgressSteps;
+          </div> */}

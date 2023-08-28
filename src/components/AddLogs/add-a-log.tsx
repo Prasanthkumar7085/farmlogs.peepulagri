@@ -53,8 +53,9 @@ const AddALog: NextPage = () => {
     }
   }, [router.isReady]);
 
-  const addLogs = async (data: any) => {
+  const addLogs = async () => {
     setLoading(true);
+
     const { categories, ...rest } = formDetails;
     const obj = {
       ...rest,
@@ -91,10 +92,9 @@ const AddALog: NextPage = () => {
 
   const onChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e);
-
-
   }
 
+  const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
 
   return (
     <div className={styles.form}>
@@ -102,8 +102,8 @@ const AddALog: NextPage = () => {
         <div>
           <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
           <div className={styles.secondaryFormField}>
-            <ProgressSteps />
-          <Form setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} onChangeFile={onChangeFile} />
+          <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
+          <Form setActiveStepBasedOnData={setActiveStepBasedOnData} setWorkType={setWorkType} captureDates={captureDates} setResources={setResources} setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} onChangeFile={onChangeFile} />
           </div>
         <FooterActionButtons addLogs={addLogs} singleLogDetails={singleLogDetails} />
       </div> 

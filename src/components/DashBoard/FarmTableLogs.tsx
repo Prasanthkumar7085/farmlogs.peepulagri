@@ -30,7 +30,9 @@ const FarmTableLogs = () => {
 
 
     useEffect(() => {
-        getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
+        if (router.isReady) {
+            getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
+        }
     }, [router]);
 
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString }: Partial<GetLogsByFarmIdPropsType>) => {

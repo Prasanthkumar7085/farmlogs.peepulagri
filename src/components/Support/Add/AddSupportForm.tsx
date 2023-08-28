@@ -92,8 +92,6 @@ const AddSupportForm = () => {
     const addSupport = async () => {
         try {
             const response = await addSupportService(supportDetails);
-            console.log(response);
-
         } catch (err: any) {
             console.error(err);
 

@@ -2,7 +2,7 @@ import FarmCardsLayOut from "../FarmCard/FarmCardLayOut";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import FarmTableLogs from "./FarmTableLogs";
-import getAllFarms from "../../../lib/services/getAllFarmsService";
+import getAllFarmsService from "../../../lib/services/getAllFarmsService";
 
 const DashBoard = () => {
 
@@ -11,7 +11,7 @@ const DashBoard = () => {
     const [farmsData, setFarmsData] = useState<any>();
 
     const getFarmsData = async () => {
-        let response: any = await getAllFarms();
+        let response: any = await getAllFarmsService();
         if (response?.success) {
             router.push(`/farm/${response?.data[0]._id}/logs`);
             setFarmsData(response);

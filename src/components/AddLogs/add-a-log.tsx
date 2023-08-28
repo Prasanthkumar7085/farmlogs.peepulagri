@@ -59,7 +59,7 @@ const AddALog: NextPage = () => {
     const { categories, ...rest } = formDetails;
     const obj = {
       ...rest,
-      categories: [categories],
+      categories: categories,
       work_type: workType,
       farm_id: router.query.farm_id,
       status: 'ACTIVE',
@@ -101,6 +101,8 @@ const AddALog: NextPage = () => {
           </div>
         <FooterActionButtons addLogs={addLogs} singleLogDetails={singleLogDetails} />
       </div> 
+
+      
       <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
       <LoadingComponent loading={loading} />
     </div>

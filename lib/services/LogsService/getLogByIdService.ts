@@ -1,5 +1,3 @@
-import { GetLogsByFarmIdPropsType, QueryParamForFarmLogs } from '../../../src/types/farmCardTypes';
-import { prepareURLEncodedParams } from '../../requestUtils/urlEncoder';
 
 const getLogByIdService = async (logId: string) => {
 

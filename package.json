@@ -33,6 +33,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-media-recorder": "^1.6.6",
     "react-table": "^7.8.0",
     "rsuite": "^5.37.4",
     "typescript": "5.1.6"

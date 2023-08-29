@@ -5,13 +5,18 @@ import editSupportService from "../../../lib/services/SupportService/editSupport
 import getSupportByIdService from "../../../lib/services/SupportService/getSupportByIdService";
 import AddSupportQueryDetails from "./Add/AddSupportQueryDetails";
 import { Typography } from "@mui/material";
-import Attachments from "../AddLogs/attachments";
 import FooterActionButtons from "../AddLogs/footer-action-buttons";
+import SupportAttachments from "../AddLogs/SupportAttachments";
+import addAttachmentsService from "../../../lib/services/SupportService/addAttachmentsService";
+import uploadFileToS3 from "../../../lib/services/LogsService/uploadFileToS3InLog";
 
 
 const EditSupportForm = () => {
 
-    const router: any = useRouter()
+    const router: any = useRouter();
+
+    const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlZXB1bEBnbWFpbC5jb20iLCJpZCI6IjY0ZGM2NDNmOThhNzUyM2FkODA5ZDM1YyIsInBhc3N3b3JkIjoiJDJiJDEwJHlMQWZyVlBydlNaVUFCc21ReUYuV3VpbnF6bjU5bmpqY3pmLjFpcnZ4cUMxZ3daVm9LV2ppIiwiaWF0IjoxNjkyNjAyMjY5LCJleHAiOjE2OTc3ODYyNjl9.M8thgp9qQqLcBs0HxZ5uFw7P1dlY0UEUrmMrQXzXyRg'
+
 
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef<any>(null);
@@ -25,7 +30,10 @@ const EditSupportForm = () => {
     const [categories, setCategories] = useState<Array<string>>();
     const [description, setDescription] = useState<string>('');
 
-    const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>()
+    const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>();
+
+    const [files, setFiles] = useState<any>([]);
+    const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
 
 
     useEffect(() => {
@@ -44,13 +52,14 @@ const EditSupportForm = () => {
     }, [router]);
 
     const collectSupportData = () => {
+
+        const array = [...supportOneDetails?.attachments]
         let supportData: Partial<AddSupportPayload> = {
             title: query,
             description: description,
             categories: categories,
-            attachments: [],
             status: "OPEN",
-            support_id: "SUPPORT123"
+            attachments: [...filesDetailsAfterUpload, ...array]
 
         }
         setSupportDetails(supportData)
@@ -105,7 +114,7 @@ const EditSupportForm = () => {
     };
 
 
-    const addSupport = async () => {
+    const editSupport = async () => {
         try {
             const response = await editSupportService(supportDetails, router?.query?.support_id);
             console.log(response);
@@ -119,13 +128,48 @@ const EditSupportForm = () => {
     const getOneSupportDetails = async () => {
         try {
             const response = await getSupportByIdService(router?.query?.support_id);
-            setSupportOneDetails(response?.data)
+            setSupportOneDetails(response?.data);
 
         } catch (err: any) {
             console.error(err);
 
         }
     }
+
+
+
+    const onChangeFile = (e: any) => {
+        setFiles(e.target.files);
+    }
+    const uploadFiles = async () => {
+        let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
+
+        const response = await addAttachmentsService({ attachments: tempFilesStorage }, accessToken);
+        console.log(response);
+        if (response.success) {
+            await postAllImages(response.data, tempFilesStorage);
+        }
+
+    }
+
+    const postAllImages = async (response: any, tempFilesStorage: any) => {
+        let arrayForResponse: any = [];
+
+        for (let index = 0; index < response.length; index++) {
+            let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
+            console.log(uploadResponse);
+
+            if (uploadResponse.ok) {
+                const { target_url, ...rest } = response[index];
+                arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
+            }
+        }
+        setFilesDetailsAfterUpload(arrayForResponse);
+        console.log(arrayForResponse);
+
+
+    }
+
 
     return (
         <div style={{ border: "1px solid", display: "flex", flexDirection: "row", justifyContent: "center" }}>
@@ -172,10 +216,10 @@ const EditSupportForm = () => {
                         </div>
                         <div>
                             <Typography variant='subtitle2'>Upload Images</Typography>
-                            <Attachments />
+                            <SupportAttachments onChangeFile={onChangeFile} uploadFiles={uploadFiles} files={files} />
                         </div>
                         <div>
-                            <FooterActionButtons addLogs={addSupport} />
+                            <FooterActionButtons editLog={editSupport} />
                         </div>
                     </div>
                 </div> : ""}

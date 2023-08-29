@@ -29,13 +29,6 @@ const HeadPart = ({ data }: any) => {
       setDownloadUrls(response.data.download_urls);
     }
 
-
-    // if(attachments&&attachments.length){
-    //   for(let i=0; i<attachments.length;i++){
-    //       let response = 
-    //   }
-    // }
-
   }
 
   const getLabel = (item: string) => {

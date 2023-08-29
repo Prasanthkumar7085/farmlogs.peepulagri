@@ -1,6 +1,5 @@
 import Typography from "@mui/material/Typography";
 import { useState, useRef, useEffect } from "react";
-import Attachments from "../../AddLogs/attachments";
 import FooterActionButtons from "@/components/AddLogs/footer-action-buttons";
 import AddSupportQueryDetails from "./AddSupportQueryDetails";
 import { AddSupportPayload } from "@/types/supportTypes";
@@ -8,8 +7,10 @@ import addSupportService from "../../../../lib/services/SupportService/addSuppor
 import addAttachmentsService from "../../../../lib/services/SupportService/addAttachmentsService";
 import uploadFileToS3 from "../../../../lib/services/LogsService/uploadFileToS3InLog";
 import styles from "./addSupportForm.module.css";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
+import SupportAttachments from "@/components/AddLogs/SupportAttachments";
+import AlertComponent from "@/components/Core/AlertComponent";
 
 const AddSupportForm = () => {
 
@@ -22,7 +23,7 @@ const AddSupportForm = () => {
     const [recordingStatus, setRecordingStatus] = useState("inactive");
     const [stream, setStream] = useState<any>(null);
     const [audioChunks, setAudioChunks] = useState([]);
-    const [audio, setAudio] = useState(null);
+    const [audio, setAudio] = useState<any>(null);
     const [supportOneDetails, setSupportOneDetails] = useState<any>()
 
     const [query, setQuery] = useState<string>(supportOneDetails?.title ? supportOneDetails?.title : "");
@@ -30,19 +31,20 @@ const AddSupportForm = () => {
     const [description, setDescription] = useState<string>('');
     const [files, setFiles] = useState<any>([]);
     const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
+    const [audioDetailsAfterUpload, setAudioDetailsAfterUpload] = useState<any>({});
 
     const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>()
 
     useEffect(() => {
         collectSupportData();
-    }, [query, categories, description, filesDetailsAfterUpload]);
+    }, [query, categories, description, filesDetailsAfterUpload, audioDetailsAfterUpload]);
 
     const collectSupportData = () => {
         let supportData: Partial<AddSupportPayload> = {
             title: query,
             description: description,
             categories: categories,
-            attachments: [...filesDetailsAfterUpload],
+            attachments: [...filesDetailsAfterUpload, audioDetailsAfterUpload],
             status: "OPEN",
             support_id: "SUPPORT1232"
         }
@@ -100,13 +102,64 @@ const AddSupportForm = () => {
     const addSupport = async () => {
         try {
             const response = await addSupportService(supportDetails);
+            if (response.success) {
+                setAlertMessage('Add Support Successful!');
+                setAlertType(true);
+                setTimeout(() => {
+                    router.back();
+                }, 1000)
+            } else {
+                setAlertMessage('Add Support Failed!');
+                setAlertType(false);
+            }
         } catch (err: any) {
             console.error(err);
 
         }
     }
 
-    const uploadAudio = () => {
+
+    const [alertMessage, setAlertMessage] = useState<string>('');
+    const [alertType, setAlertType] = useState<boolean>(false);
+    const [loadingOnMicUpload, setLoadingOnMicUpload] = useState<boolean>(false);
+    const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
+
+    const uploadAudio = async () => {
+        setLoadingOnMicUpload(true);
+        try {
+
+            let audioResponseAfterUpload = {};
+
+            const res = await fetch(audio);
+            const blob = await res.blob();
+            const sizeInBytes = blob.size;
+            const blobName = blob.name || 'audio_blob.wav';
+            const blobType = 'audio/wav';
+
+            let ob = {
+                original_name: blobName,
+                type: blobType,
+                size: sizeInBytes
+            }
+            const response = await addAttachmentsService({ attachments: [ob] }, accessToken);
+            if (response.success) {
+                const { target_url, ...rest } = response.data[0]
+                let uploadResponse: any = await uploadFileToS3(target_url, blob);
+                if (uploadResponse.ok) {
+                    setAlertMessage('Audio Uploaded Successful!');
+                    setAlertType(true);
+                    audioResponseAfterUpload = { ...rest };
+                    setAudioDetailsAfterUpload(audioResponseAfterUpload);
+                } else {
+                    setAlertMessage('Audio Uploaded Failed!');
+                    setAlertType(false);
+                }
+            }
+        } catch (err: any) {
+            console.error(err);
+        } finally {
+            setLoadingOnMicUpload(false);
+        }
 
     }
 
@@ -118,14 +171,14 @@ const AddSupportForm = () => {
         setFiles(e.target.files);
     }
     const uploadFiles = async () => {
+        setLoadingOnImagesUpload(true);
         let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
         const response = await addAttachmentsService({ attachments: tempFilesStorage }, accessToken);
-        console.log(response);
         if (response.success) {
             await postAllImages(response.data, tempFilesStorage);
         }
-
+        setLoadingOnImagesUpload(false);
     }
 
     const postAllImages = async (response: any, tempFilesStorage: any) => {
@@ -133,17 +186,17 @@ const AddSupportForm = () => {
 
         for (let index = 0; index < response.length; index++) {
             let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
-            console.log(uploadResponse);
-
             if (uploadResponse.ok) {
+                setAlertMessage('Attachment(s) Uploaded Successful!');
+                setAlertType(true);
                 const { target_url, ...rest } = response[index];
                 arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
+            } else {
+                setAlertMessage('Attachment(s) Uploaded Failed!');
+                setAlertType(false);
             }
         }
         setFilesDetailsAfterUpload(arrayForResponse);
-        console.log(arrayForResponse);
-
-
     }
 
     return (
@@ -186,20 +239,24 @@ const AddSupportForm = () => {
                             </div>
                         ) : null}
 
-                        <Button disabled={!audio} variant="contained" onClick={uploadAudio}>
-                            Upload
+                        <Button disabled={!audio} variant="contained" onClick={uploadAudio} sx={{ minWidth: '100px', maxWidth: "100px" }}>
+                            {loadingOnMicUpload ?
+                                <CircularProgress size="1.5rem" sx={{ color: " white" }} />
+                                : 'Upload'}
                         </Button>
                     </div>
                     <div>
                         <Typography variant='subtitle2'>Upload Images</Typography>
-                        <Attachments onChangeFile={onChangeFile} uploadFiles={uploadFiles} files={files} setFiles={setFiles} />
+                        <SupportAttachments onChangeFile={onChangeFile} uploadFiles={uploadFiles} files={files} loadingOnImagesUpload={loadingOnImagesUpload} />
 
                     </div>
                     <div>
                         <FooterActionButtons addLogs={addSupport} />
+                        <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
                     </div>
                 </div>
             </div>
+
         </div>
     )
 }

@@ -14,6 +14,7 @@ import { Button } from "@mui/material";
 import deleteALogService from "../../../lib/services/LogsService/deleteALogsService";
 import LoadingComponent from "../Core/LoadingComponent";
 import { ResourcesTypeInResponse, ResourcesTypeInResponseWithLogo } from "@/types/logsTypes";
+import { categoriesType } from "@/types/supportTypes";
 
 
 const FarmTableLogs = () => {
@@ -128,7 +129,7 @@ const FarmTableLogs = () => {
         { title: 'Machinary', value: "machinery", color: "#D94841" },
     ];
 
-    const categoryOptions = [
+    const categoryOptions: Array<categoriesType> = [
         { title: 'Soil Preparation', value: "soil_preparation", color: "#E57373" },
         { title: 'Planting', value: "plainting", color: "#66BB6A" },
         { title: 'Irrigation', value: "irrigation", color: "#64B5F6" },
@@ -147,13 +148,13 @@ const FarmTableLogs = () => {
         { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
     ];
     const getLabel = (item: string) => {
-        return (categoryOptions.find((categoryItem: { title: string, value: string }) => categoryItem.value == item))?.title
+        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value == item))?.title
     }
     const getTypeColor = (item: string) => {
-        return (workTypeOptions.find((categoryItem: { title: string, value: string }) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
+        return (workTypeOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
     }
     const setBackColor = (item: any) => {
-        return (categoryOptions.find((categoryItem: { title: string, value: string }) => categoryItem.value == item))?.color
+        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value == item))?.color
     }
 
     const columns = [

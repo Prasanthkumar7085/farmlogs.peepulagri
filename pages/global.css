@@ -104,16 +104,19 @@ body {
 
 .dataTable-container {
     background-color: #ffffff;
+    overflow: hidden;
+    border-radius: 10px;
 }
 .dataTable-container .table{
     border-collapse: collapse;
-    border: 1px solid #d8d7d6;
+    border: 1px solid #E9EDF1;
     width: 100%;
 }
 
 .dataTable-container .thead{
     border-bottom: 1px solid var(--stroke, #E9EDF1);
     background: var(--color-sienna);
+    text-align: left;
 }
 .dataTable-container .thead .cell {
     color: var(--white, #FFF);
@@ -123,12 +126,26 @@ body {
     padding: 15px 10px;
     border: 1px solid #d8d7d6;
 }
+.dataTable-container .table-row:hover {
+    background-color: #fbfbfb;
+}
 .dataTable-container .tbody .cell {
-    padding: 10px 10px;
+    padding: 6px 10px;
     border: 1px solid #d8d7d6;
 }
 
 .mapImage{
     width: 100%;
     border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar{
+    background: transparent;
+    width: 5px;
+}
+.scrollbar::-webkit-scrollbar:hover{
+    opacity: 1;
+}
+.scrollbar:hover::-webkit-scrollbar-thumb{
+    background: rgb(198, 198, 198);
 }

@@ -260,9 +260,9 @@ const FarmTableLogs = () => {
 
     return (
         <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "40px"}}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "40px", margin: "10px 0 5px"}}>
                 <h3 className="title">Farm Dashboard</h3>
-                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "16px", paddingRight: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "16px" }}>
                     <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
                     <Button color="success"  variant="contained" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
                         Add Log

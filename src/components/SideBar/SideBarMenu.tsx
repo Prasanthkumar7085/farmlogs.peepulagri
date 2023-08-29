@@ -19,12 +19,12 @@ interface item {
 }
 
 const menuListItems = [
-    { src: '/apps-1.svg', link: "/" },
-    { src: '/lifering-1.svg', link: "/support" },
-    { src: '/timehalfpast-1-1.svg', link: "/timeline" },
-    { src: '/settings-12.svg', link: "/" },
-    { src: '/calendar-1-12.svg', link: "/" },
-    { src: '/charthistogram-1.svg', link: "/" },
+    { src: '/dashboard-icon.svg', link: "/" },
+    { src: '/support-icon.svg', link: "/support" },
+    { src: '/timeline-icon.svg', link: "/timeline" },
+    { src: '/settings-icon.svg', link: "/" },
+    { src: '/calendaricon.svg', link: "/" },
+    { src: '/graph-icon.svg', link: "/" },
 ]
 
 const SideBarMenu = ({ children }: any) => {
@@ -51,7 +51,7 @@ const SideBarMenu = ({ children }: any) => {
                 </nav>
                 <button className={styles.profile}>
                     <div className={styles.profile1}>
-                        <Image src={'/charthistogram-1.svg'} className={styles.profileChild} alt="" width={20} height={20} />
+                        <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />
                     </div>
                 </button>
             </aside>

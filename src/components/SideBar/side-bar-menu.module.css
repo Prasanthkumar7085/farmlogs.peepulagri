@@ -7,7 +7,7 @@
 .logoIcon {
   position: relative;
   width: 56px;
-  height: 61.83px;
+  height: 60px;
 }
 
 .apps1Icon {
@@ -74,7 +74,7 @@
 }
 
 .sidebarmenu {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   background: linear-gradient(142.18deg, #3462cf, #2b53be);

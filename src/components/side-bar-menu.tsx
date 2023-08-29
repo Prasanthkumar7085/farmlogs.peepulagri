@@ -6,25 +6,25 @@ const SideBarMenu: NextPage = () => {
       <img className={styles.logoIcon} alt="" src="/logo.svg" />
       <nav className={styles.menubar}>
         <a className={styles.dashboard}>
-          <img className={styles.apps1Icon} alt="" src="/apps-1.svg" />
+          <img className={styles.apps1Icon} alt="" src="/dashboard.svg" />
         </a>
         <a className={styles.support}>
-          <img className={styles.apps1Icon} alt="" src="/lifering-1.svg" />
+          <img className={styles.apps1Icon} alt="" src="/support-icon.svg" />
         </a>
         <a className={styles.support}>
-          <img className={styles.apps1Icon} alt="" src="/route-111.svg" />
+          <img className={styles.apps1Icon} alt="" src="/timeline-icon.svg" />
         </a>
         <a className={styles.support}>
-          <img className={styles.apps1Icon} alt="" src="/settings-111.svg" />
+          <img className={styles.apps1Icon} alt="" src="/settings-icon.svg" />
         </a>
         <a className={styles.support}>
-          <img className={styles.apps1Icon} alt="" src="/calendar-1-11.svg" />
+          <img className={styles.apps1Icon} alt="" src="/calendaricon.svg" />
         </a>
         <a className={styles.support}>
           <img
             className={styles.apps1Icon}
             alt=""
-            src="/charthistogram-112.svg"
+            src="/graph-icon.svg"
           />
         </a>
       </nav>

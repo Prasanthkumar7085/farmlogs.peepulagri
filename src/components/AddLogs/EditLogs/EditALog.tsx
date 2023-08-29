@@ -14,13 +14,13 @@ import updateLogService from "../../../../lib/services/LogsService/updateLogServ
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import addLogsAttachmentService from "../../../../lib/services/LogsService/addLogsAttachmentService";
-import uploadFileToS3 from "../../../../lib/services/SupportService/uploadFileToS3";
+import uploadFileToS3 from "../../../../lib/services/LogsService/uploadFileToS3InLog";
 
 const EditALog: NextPage = () => {
 
     const router: any = useRouter();
 
-    const [singleLogDetails, setSingleData] = useState<GetLogByIdResponseDataType | null | undefined>();
+    const [singleLogDetails, setSingleLogDetails] = useState<GetLogByIdResponseDataType | null | undefined>();
     const [loading, setLoading] = useState<boolean>(false);
     const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlZXB1bEBnbWFpbC5jb20iLCJpZCI6IjY0ZGM2NDNmOThhNzUyM2FkODA5ZDM1YyIsInBhc3N3b3JkIjoiJDJiJDEwJHlMQWZyVlBydlNaVUFCc21ReUYuV3VpbnF6bjU5bmpqY3pmLjFpcnZ4cUMxZ3daVm9LV2ppIiwiaWF0IjoxNjkyNjAyMjY5LCJleHAiOjE2OTc3ODYyNjl9.M8thgp9qQqLcBs0HxZ5uFw7P1dlY0UEUrmMrQXzXyRg'
 
@@ -41,12 +41,16 @@ const EditALog: NextPage = () => {
     }
 
 
+    useEffect(() => {
+        setFiles(singleLogDetails?.attachments)
+    }, [singleLogDetails])
+    console.log(files);
     const fetchSingleLogData = async () => {
         setLoading(true);
         try {
             const response = await getLogByIdService(router.query.log_id);
             if (response.success) {
-                setSingleData(response?.data)
+                setSingleLogDetails(response?.data)
             }
         } catch (err: any) {
             console.error(err);
@@ -73,6 +77,7 @@ const EditALog: NextPage = () => {
         }
     }
     const editLog = async () => {
+        console.log('testing');
 
         setLoading(true);
         const { categories, title, description } = formDetails;
@@ -90,7 +95,7 @@ const EditALog: NextPage = () => {
             additional_resources: additionalResources.length ? additionalResources : singleLogDetails?.additional_resources,
             total_machinary_hours: getTotalHours("Machinary"),
             total_manual_hours: getTotalHours("Manual"),
-            attachments: filesDetailsAfterUpload
+            attachments: filesDetailsAfterUpload.length ? filesDetailsAfterUpload : singleLogDetails?.attachments
         }
         try {
             const response = await updateLogService(obj, router.query.log_id);
@@ -117,6 +122,8 @@ const EditALog: NextPage = () => {
 
 
     const onChangeFile = (e: any) => {
+        console.log(e.target.files);
+
         setFiles(e.target.files);
     }
     const uploadFiles = async () => {
@@ -132,8 +139,11 @@ const EditALog: NextPage = () => {
 
     const postAllImages = async (response: any, tempFilesStorage: any) => {
         let arrayForResponse: any = [];
+        console.log(files);
 
         for (let index = 0; index < response.length; index++) {
+            console.log(files[index]);
+
             let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
             console.log(uploadResponse);
 
@@ -143,7 +153,6 @@ const EditALog: NextPage = () => {
             }
         }
         setFilesDetailsAfterUpload(arrayForResponse);
-        console.log(arrayForResponse);
 
 
     }
@@ -164,6 +173,7 @@ const EditALog: NextPage = () => {
                             singleLogDetails={singleLogDetails}
                             onChangeFile={onChangeFile}
                             uploadFiles={uploadFiles}
+                            files={files}
                         />
                     </div>
                     <FooterActionButtons editLog={editLog} singleLogDetails={singleLogDetails} />

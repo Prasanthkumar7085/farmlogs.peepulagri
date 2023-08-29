@@ -11,7 +11,7 @@ import { GetLogByIdResponseDataType } from "@/types/logsTypes";
 import getLogByIdService from "../../../lib/services/LogsService/getLogByIdService";
 import LoadingComponent from "../Core/LoadingComponent";
 import AlertComponent from "../Core/AlertComponent";
-import uploadFileToS3 from "../../../lib/services/SupportService/uploadFileToS3";
+import uploadFileToS3 from "../../../lib/services/LogsService/uploadFileToS3InLog";
 import addLogsAttachmentService from "../../../lib/services/LogsService/addLogsAttachmentService";
 import { Button } from "@mui/material";
 
@@ -35,30 +35,15 @@ const AddALog: NextPage = () => {
   const [files, setFiles] = useState<any>([]);
   const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
 
+  const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
+
   const captureDates = (fromDate: string, toDate: string) => {
     setDates([fromDate, toDate]);
   };
 
 
 
-  const fetchSingleLogData = async () => {
-    setLoading(true);
-    try {
-      const response = await getLogByIdService(router.query.log_id);
-      if (response.success) {
-        setSingleData(response?.data)
-      }
-    } catch (err: any) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-  useEffect(() => {
-    if (router.isReady) {
-      fetchSingleLogData();
-    }
-  }, [router.isReady]);
+
 
   const addLogs = async () => {
     setLoading(true);
@@ -96,7 +81,6 @@ const AddALog: NextPage = () => {
     }
   }
 
-  const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
 
 
   const onChangeFile = (e: any) => {
@@ -118,8 +102,6 @@ const AddALog: NextPage = () => {
 
     for (let index = 0; index < response.length; index++) {
       let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
-      console.log(uploadResponse);
-
       if (uploadResponse.ok) {
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
@@ -140,7 +122,6 @@ const AddALog: NextPage = () => {
           <div className={styles.secondaryFormField}>
           <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
           <Form
-            setFiles={setFiles}
             setActiveStepBasedOnData={setActiveStepBasedOnData}
             setWorkType={setWorkType}
             captureDates={captureDates}

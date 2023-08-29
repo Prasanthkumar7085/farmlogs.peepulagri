@@ -34,7 +34,7 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
             <div className={styles.button1}>
               <ButtonComponent
                 direction={true}
-                onClick={addLogs}
+              onClick={router?.query.log_id || router?.query.support_id ? () => editLog() : () => addLogs()}
                 variant="contained"
                 color="primary"
               title={router?.query.log_id || router?.query.support_id ? 'Update' : 'Submit'}

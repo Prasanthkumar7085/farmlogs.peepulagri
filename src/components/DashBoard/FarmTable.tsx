@@ -29,7 +29,8 @@ const FarmTable = ({ columns, data, loading }: any) => {
                         </tr>
                     ))}
                 </thead>
-                {!loading && data?.length ? <tbody className="tbody" {...getTableBodyProps()}>
+                {!loading && data?.length ?
+                    <tbody className="tbody" {...getTableBodyProps()}>
                     {rows.map((row: any, index: number) => {
                         prepareRow(row);
                         return (
@@ -41,9 +42,11 @@ const FarmTable = ({ columns, data, loading }: any) => {
                         );
                     })}
                 </tbody> :
+                    <tbody className="tbody" {...getTableBodyProps()}>
                     <tr>
                         <td colSpan={columns.length}> {!loading ? <NoDataComponent noData={data ? (!data.length) : true} /> : ""}</td>
                     </tr>
+                    </tbody>
                 }
             </table>
         </div>

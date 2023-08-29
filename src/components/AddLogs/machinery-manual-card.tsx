@@ -1,10 +1,38 @@
 
 import timePipe from "@/pipes/timePipe";
 import styles from "./machinery-manual-card.module.css";
-import { AdditionalResourcesType, ResourcesType } from "@/types/logsTypes";
+import { AdditionalResourcesType, GetLogByIdResponseDataType, ResourcesType } from "@/types/logsTypes";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import IconButton from "@mui/material/IconButton";
 
 
-const MachineryManualCard = ({ data }: any) => {
+const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null | undefined | any }) => {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (data && router.isReady) {
+      getDownloadLinks();
+    }
+  }, [data, router.isReady])
+
+  const [downloadUrls, setDownloadUrls] = useState<any>([]);
+
+  const getDownloadLinks = async () => {
+    const { attachments } = data;
+    console.log(attachments);
+    // let downloadUrls = []
+
+    let response = await getLogAttachmentsService(router.query.log_id);
+    if (response.success) {
+      setDownloadUrls(response.data.download_urls);
+    }
+  }
+
+
   return (
     <div className={styles.bodyPart}>
       <div className={styles.dataGroup}>
@@ -29,13 +57,13 @@ const MachineryManualCard = ({ data }: any) => {
           <div className={styles.dateRange}>
             <div className={styles.fromDate}>
               <div className={styles.text}>
-                {timePipe(data?.from_date_time, 'DD, MMM YYYY')}
+                {data?.from_date_time ? timePipe(data?.from_date_time, 'DD, MMM YYYY') : ""}
               </div>
             </div>
             <div className={styles.divider}>-</div>
             <div className={styles.fromDate}>
               <div className={styles.text}>
-                {timePipe(data?.to_date_time, 'DD, MMM YYYY')}
+                {data?.to_date_time ? timePipe(data?.to_date_time, 'DD, MMM YYYY') : ""}
               </div>
             </div>
           </div>
@@ -124,25 +152,22 @@ const MachineryManualCard = ({ data }: any) => {
             <div className={styles.text8}>Attachments</div>
           </div>
         </div>
-        <div className={styles.attachments}>
-          <div className={styles.eachFile}>
-            <a className={styles.deleteButton}>
+        <div className={styles.attachments} style={{ display: "flex", flexDirection: "row" }}>
+          {downloadUrls.map((link: string, index: number) => {
+            return (
+              <div className={styles.eachFile} key={index}>
               <img
-                className={styles.trashXmarkIcon}
-                alt=""
-                src="/trashxmark.svg"
+                  alt={`image-${index}`}
+                  height={150}
+                  width={250}
+                  src={link}
               />
-            </a>
-          </div>
-          <div className={styles.eachFile1}>
-            <a className={styles.deleteButton1}>
-              <img
-                className={styles.trashXmarkIcon}
-                alt=""
-                src="/trashxmark1.svg"
-              />
-            </a>
-          </div>
+                <IconButton onClick={() => window.open(link)}>
+                  <OpenInNewIcon />
+                </IconButton>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div >

@@ -1,16 +1,15 @@
 import Typography from "@mui/material/Typography";
 import { useState, useRef, useEffect } from "react";
-import Attachments from "./../../AddLogs/attachments";
+import Attachments from "../../AddLogs/attachments";
 import FooterActionButtons from "@/components/AddLogs/footer-action-buttons";
 import AddSupportQueryDetails from "./AddSupportQueryDetails";
 import { AddSupportPayload } from "@/types/supportTypes";
 import addSupportService from "../../../../lib/services/SupportService/addSupportService";
 import addAttachmentsService from "../../../../lib/services/SupportService/addAttachmentsService";
-import uploadFileToS3 from "../../../../lib/services/SupportService/uploadFileToS3";
+import uploadFileToS3 from "../../../../lib/services/LogsService/uploadFileToS3InLog";
 import styles from "./addSupportForm.module.css";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import getSupportByIdService from "../../../../lib/services/SupportService/getSupportByIdService";
 
 const AddSupportForm = () => {
 
@@ -193,7 +192,7 @@ const AddSupportForm = () => {
                     </div>
                     <div>
                         <Typography variant='subtitle2'>Upload Images</Typography>
-                        <Attachments onChangeFile={onChangeFile} uploadFiles={uploadFiles} files={files} />
+                        <Attachments onChangeFile={onChangeFile} uploadFiles={uploadFiles} files={files} setFiles={setFiles} />
 
                     </div>
                     <div>

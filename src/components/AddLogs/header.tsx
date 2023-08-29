@@ -49,7 +49,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
   return (
     <div className={styles.primaryFormField}>
       <div className={styles.title}>
-        <img className={styles.add1Icon} alt="" src="/add-1.svg" />
+        <img className={styles.addAIcon} alt="Add Icon" src="/add-icon.svg" />
         <h2 className={styles.addALog}>Add A Log</h2>
       </div>
       <div className={styles.container}>
@@ -74,7 +74,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
               color="primary"
               name="category"
               multiple
-              size="medium"
+              size="small"
               label="Select Category"
               value={category}
               onChange={(e) => {

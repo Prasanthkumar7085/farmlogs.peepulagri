@@ -2,7 +2,6 @@
   flex: 1;
   border-radius: var(--br-3xs);
   background-color: var(--white);
-  overflow: scroll;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -12,4 +11,5 @@
   color: var(--gray-900);
   font-family: var(--text-sm-medium);
   max-height: 700px;
+  margin-bottom: 1.5rem;
 }

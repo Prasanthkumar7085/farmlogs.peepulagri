@@ -4,17 +4,17 @@
     width: 44.39px;
     height: 40px;
 }
-
-.acres,
+.acre,
 .farm1 {
     position: relative;
     line-height: 100%;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: var(--font-size-lg);
 }
-
 .acres {
-    font-size: var(--text-sm-medium-size);
     color: var(--body);
+    font-weight: 500;
+    font-size: var(--text-sm-normal-size);
 }
 
 .farm1Parent,
@@ -45,7 +45,7 @@
 }
 
 .card {
-    position: absolute;
+    position: fixed;
     top: 30px;
     right: 29.61px;
     border-radius: var(--br-3xs);

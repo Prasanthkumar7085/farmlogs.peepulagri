@@ -110,11 +110,10 @@
   background-color: var(--white);
   box-shadow: var(--shadow-field);
   overflow: hidden;
-  padding: var(--padding-21xl);
+  padding: var(--gap-5xl);
 }
 .progressSteps {
   flex: 1;
-  min-width: 300px;
   max-width: 400px;
   text-align: left;
   font-size: var(--text-sm-medium-size);

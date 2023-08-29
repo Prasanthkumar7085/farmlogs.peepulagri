@@ -18,9 +18,9 @@ const AddLogs: NextPage = () => {
     return (
         <div className={styles.header}>
             <div className={styles.title}>
-                <img className={styles.add1Icon} alt="" src="/add-1.svg" />
+                <img className={styles.add1Icon} alt="Add Log" src="/add-icon.svg" />
                 <h1 className={styles.addALog}>Add A Log</h1>
-            </div>
+            </div>  
             <div className={styles.container}>
                 <div style={{ minWidth: "100%" }}>
                     <div className={styles.row}>

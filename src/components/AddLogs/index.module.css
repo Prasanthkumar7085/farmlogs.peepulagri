@@ -99,4 +99,6 @@
   width: calc(100vw - 100px);
   height: 1084px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 }

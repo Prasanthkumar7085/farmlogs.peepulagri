@@ -9,6 +9,7 @@ const SearchComponent = (props: any) => {
         <TextField
             onChange={(e: any) => onChange(e.target.value)}
             {...rest}
+            size="small"
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">

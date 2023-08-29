@@ -7,8 +7,8 @@ import { FarmDataType } from "@/types/farmCardTypes";
 const FarmCardsLayOut = ({ children, farmsData }: any) => {
 
     return (
-        <div style={{ display: "flex", gap: "30px", padding: "20px" }}>
-            <div style={{ height: "calc(100vh - 1rem)", overflowY: "scroll", display: "flex", gap: "1rem", flexDirection: "column", width: "300px", }}>
+        <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: "30px", padding: "20px" }}>
+            <div style={{ height: "calc(100vh - 1rem)", display: "flex", gap: "1rem", flexDirection: "column", width: "320px", }}>
                 {farmsData?.data?.length && farmsData?.data.map((item: FarmDataType) => {
                     return (
                         <div key={item._id}>
@@ -25,7 +25,7 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
                 })}
             </div>
             <div className="FarmDetails">
-                <Image alt="" src='/image-2@2x.png' width={1000} height={150} />
+                <Image alt="" src='/image-2@2x.png' className="mapImage" width={1000} height={150} style={{ objectFit: "cover", objectPosition: "center" }} />
                 {children}
             </div>
         </div>

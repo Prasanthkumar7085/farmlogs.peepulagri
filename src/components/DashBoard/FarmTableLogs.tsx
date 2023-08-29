@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import FarmTable from "./FarmTable";
 import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import ImageComponent from "../Core/ImageComponent";
 import getLogsByFarmIdService from "../../../lib/services/LogsService/getLogsByFarmIdService";
 import TablePaginationComponent from "../Core/TablePaginationComponent";
@@ -124,6 +122,11 @@ const FarmTableLogs = () => {
         setSearchString(value);
         getFarmLogs({ page: 1, search: value });
     }
+    const workTypeOptions = [
+        { title: 'All', value: "all", color: "#3462CF" },
+        { title: 'Manual', value: "manual", color: "#5E9765" },
+        { title: 'Machinary', value: "machinery", color: "#D94841" },
+    ];
 
     const categoryOptions = [
         { title: 'Soil Preparation', value: "soil_preparation", color: "#E57373" },
@@ -134,7 +137,6 @@ const FarmTableLogs = () => {
         { title: 'Weeding', value: "weeding", color: "#AED581" },
         { title: 'Crop Rotation', value: "crop_rotation", color: "#9575CD" },
         { title: 'Harvesting', value: "harvesting", color: "#FF8A65" },
-
         { title: 'Livestock Care', value: "livestock_care", color: "#FFD700" },
         { title: 'Breeding & Reproduction', value: "breeding_reproduction", color: "#FF80AB" },
         { title: 'Equipment Management', value: "equipment_management", color: "#78909C" },
@@ -143,12 +145,13 @@ const FarmTableLogs = () => {
         { title: 'Weather Monitoring', value: "weather_monitoring", color: "#42A5F5" },
         { title: 'Financial Management', value: "financial_management", color: "#FFB74D" },
         { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
-
     ];
     const getLabel = (item: string) => {
         return (categoryOptions.find((categoryItem: { title: string, value: string }) => categoryItem.value == item))?.title
     }
-
+    const getTypeColor = (item: string) => {
+        return (workTypeOptions.find((categoryItem: { title: string, value: string }) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
+    }
     const setBackColor = (item: any) => {
         return (categoryOptions.find((categoryItem: { title: string, value: string }) => categoryItem.value == item))?.color
     }
@@ -175,7 +178,7 @@ const FarmTableLogs = () => {
                 return (
                     row.categories.length && row.categories.map((item: string, index: number) => {
                         return (
-                            <Chip label={getLabel(item)} key={index} sx={{ margin: "2px", backgroundColor: setBackColor(item), color: 'white' }} />
+                            <Chip label={getLabel(item)} key={index} sx={{ margin: "2px", height: "auto", padding: "4px 0", backgroundColor: setBackColor(item), color: 'white' }} />
                         )
                     })
                 )
@@ -183,10 +186,16 @@ const FarmTableLogs = () => {
         },
         {
             Header: "Work Type",
-            accessor: "work_type",
+            accessor: (row: any) => {
+                return (
+                    <span style={{ color: getTypeColor(row.work_type), fontSize:"15px"}}>  { row.work_type }</span>
+                )
+            }
         },
-
-
+        // {
+        //     Header: "Work Type",
+        //     accessor: "work_type",
+        // },
         {
             Header: "Resources",
             accessor: (row: any) => {
@@ -251,13 +260,14 @@ const FarmTableLogs = () => {
 
     return (
         <div>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "40px", paddingRight: "20px" }}>
-                <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
-                {/* <Link href="/farm/[farm_id]/logs/add" as={`/farm/${router.query.farm_id}/logs/add`} style={{ textDecoration: "none", color: "#000000" }}> */}
-                <Button onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)}>
-                    Add Log
-                </Button>
-                {/* </Link> */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "40px"}}>
+                <h3 className="title">Farm Dashboard</h3>
+                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "16px", paddingRight: "20px" }}>
+                    <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
+                    <Button color="success"  variant="contained" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
+                        Add Log
+                    </Button>
+                </div>
             </div>
             <FarmTable columns={columns} data={data} loading={loading} />
             <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' />

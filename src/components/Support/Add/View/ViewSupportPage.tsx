@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import getSupportByIdService from "../../../../../lib/services/SupportService/getSupportByIdService";
 import { SupportResponseDataType } from "@/types/supportTypes";
+import HeadSupportPart from "./HeadSupportPart";
+import ViewSupportBody from "./ViewSupportBody";
 
 const ViewSupportPage = () => {
 
@@ -38,7 +40,9 @@ const ViewSupportPage = () => {
     }
     return (
         <div>
-            support
+            <HeadSupportPart data={data} />
+
+            <ViewSupportBody data={data} />
 
             <LoadingComponent loading={loading} />
         </div>

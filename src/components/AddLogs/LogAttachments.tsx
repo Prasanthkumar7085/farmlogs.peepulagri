@@ -5,7 +5,9 @@ import { Button, IconButton } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
 import { useRouter } from "next/router";
-const Attachments = ({ onChangeFile, uploadFiles, files }: any) => {
+import DeleteIcon from '@mui/icons-material/Delete';
+
+const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
 
   const router = useRouter();
 
@@ -20,7 +22,7 @@ const Attachments = ({ onChangeFile, uploadFiles, files }: any) => {
   }
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && router.query.log_id) {
       getAttachmentPreview();
     }
   }, [router]);
@@ -35,6 +37,12 @@ const Attachments = ({ onChangeFile, uploadFiles, files }: any) => {
 
   console.log(files);
 
+  const deleteImage = async (index: number) => {
+    const array = [...files];
+    console.log(array, index);
+
+  }
+
   return (
     <div className={styles.attachments}>
       <div className={styles.header}>
@@ -48,37 +56,42 @@ const Attachments = ({ onChangeFile, uploadFiles, files }: any) => {
         {files &&
           Array.from(files).map((file: any, index) => {
             return (
-            <div key={index} style={{ display: "flex", gap: '20px' }}>
-                {/* <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={20} width={20} /> */}
-              <div>
-                {file.name}
+              <div key={index} style={{ display: "flex", gap: '20px' }}>
+                {file && <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={60} width={90} />}
+                <div>
+                  {file.name}
+                </div>
+                <div onClick={() => deleteFile(index)}>X</div>
               </div>
-              <div onClick={() => deleteFile(index)}>X</div>
-            </div>
             )
           })}
-      </div>
-      <div style={{ display: "flex" }}>
-        {downloadLinks && downloadLinks.length && downloadLinks.map((link: string, index: number) => {
-          return (
-            <div className={styles.eachFile} key={index}>
-              <img
-                alt={`image-${index}`}
-                height={70}
-                width={120}
-                src={link}
-                style={{ borderRadius: "5%" }}
-              />
-              <IconButton onClick={() => window.open(link)}>
-                <OpenInNewIcon />
-              </IconButton>
-            </div>
-          )
-        })}
       </div>
       <Button disabled={!files?.length} onClick={uploadFiles}>
         Upload
       </Button>
+      <div style={{ display: "flex" }}>
+        {downloadLinks && downloadLinks.length ? downloadLinks.map((link: string, index: number) => {
+          return (
+            <div className={styles.eachFile} key={index} style={{ display: "flex", flexDirection: "row" }}>
+              <img
+                alt={`image-${index}`}
+                height={50}
+                width={100}
+                src={link}
+                style={{ borderRadius: "5%" }}
+              />
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <IconButton onClick={() => window.open(link)}>
+                  <OpenInNewIcon />
+                </IconButton>
+                <IconButton onClick={() => deleteImage(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </div>
+          )
+        }) : ""}
+      </div>
 
 
 
@@ -86,4 +99,4 @@ const Attachments = ({ onChangeFile, uploadFiles, files }: any) => {
   );
 };
 
-export default Attachments;
+export default LogAttachments;

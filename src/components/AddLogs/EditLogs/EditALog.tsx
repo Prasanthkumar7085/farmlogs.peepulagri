@@ -41,9 +41,9 @@ const EditALog: NextPage = () => {
     }
 
 
-    useEffect(() => {
-        setFiles(singleLogDetails?.attachments)
-    }, [singleLogDetails])
+    // useEffect(() => {
+    //     setFiles(singleLogDetails?.attachments)
+    // }, [singleLogDetails])
     console.log(files);
     const fetchSingleLogData = async () => {
         setLoading(true);
@@ -95,16 +95,17 @@ const EditALog: NextPage = () => {
             additional_resources: additionalResources.length ? additionalResources : singleLogDetails?.additional_resources,
             total_machinary_hours: getTotalHours("Machinary"),
             total_manual_hours: getTotalHours("Manual"),
-            attachments: filesDetailsAfterUpload.length ? filesDetailsAfterUpload : singleLogDetails?.attachments
+            // attachments: filesDetailsAfterUpload.length ? filesDetailsAfterUpload : singleLogDetails?.attachments,
+            attachments: [...filesDetailsAfterUpload, ...singleLogDetails?.attachments]
         }
         try {
             const response = await updateLogService(obj, router.query.log_id);
             if (response.success) {
-                setAlertMessage('Log Added Successfully!');
+                setAlertMessage('Log Updated Successfully!');
                 setAlertType(true);
                 setTimeout(() => router.back(), 1000)
             } else {
-                setAlertMessage('Failed to Add Logs!');
+                setAlertMessage('Failed to Update Log!');
                 setAlertType(false);
             }
 

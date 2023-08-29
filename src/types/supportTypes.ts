@@ -1,6 +1,7 @@
 export interface categoriesType {
-    label: string;
+    title: string;
     value: string;
+    color: string;
 }
 
 export interface SupportServiceTypes {

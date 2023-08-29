@@ -156,7 +156,14 @@ const FarmTableLogs = () => {
     const columns = [
         {
             Header: "Date",
-            accessor: (row: any) => timePipe(row.createdAt, 'DD, MMM YYYY')
+            accessor: (row: any) => {
+                const updatedRowModules: any = stayUpdatedResources(row.resources);
+                return (
+                    <div style={{ color: "var(--body)" }}>
+                        { timePipe(row.createdAt, 'DD, MMM YYYY') }
+                    </div>
+                    )
+            }
         },
         {
             Header: "Title",
@@ -188,7 +195,7 @@ const FarmTableLogs = () => {
                     <div style={{ display: "flex", gap: "2px" }}>
                         {updatedRowModules && updatedRowModules.length && updatedRowModules.map((item: any, index: number) => {
                             return (
-                                <div key={index} style={{ border: ".1px solid #c1c1c1", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", padding: "5px" }} >
+                                <div key={index} style={{ background: "var(--white)", border: "1px solid var(--stroke)", borderRadius: "4px", display: "flex", alignItems: "center", gap: "4px", padding: "2px 4px" }} >
                                     <ImageComponent src={item.logo} width={15} height={15} alt={item.logo + '1'} />
                                     {item.quantity}
                                 </div>
@@ -199,14 +206,27 @@ const FarmTableLogs = () => {
             },
         },
 
-
         {
             Header: "Manual Hours",
-            accessor: (row: any) => { return row.total_manual_hours + ' Hours' }
+            accessor: (row: any) => {
+                return (
+                    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                       <img src="/timehalfpast-green.svg" alt="view" width="18" />
+                       <span style={{ color: "var(--body)" }}>{ row.total_manual_hours + ' Hours' }</span>
+                    </div>
+                       )
+            }
         },
         {
             Header: "Machine Hours",
-            accessor: (row: any) => { return row.total_machinary_hours + ' Hours' }
+            accessor: (row: any) => {
+                return (
+                    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                       <img src="/timehalfpast-blue.svg" alt="view" width="18" />
+                       <span style={{ color: "var(--body)" }}>{ row.total_machinary_hours + ' Hours' }</span>
+                    </div>
+                       )
+            }
         },
         {
             Header: "Actions",
@@ -214,13 +234,13 @@ const FarmTableLogs = () => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                         <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
-                            <VisibilityIcon color='info' />
+                            <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
-                            <EditIcon color='warning' />
+                            <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteLog(row._id)}>
-                            <DeleteIcon color='error' />
+                            <img src="/trast-icon.svg" alt="view" width="18" />
                         </IconButton>
                     </div>
                 )

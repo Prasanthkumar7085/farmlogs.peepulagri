@@ -182,11 +182,11 @@ const Row: NextPage<RowType> = ({
       </div>
       <div className={styles.bodyCell7}>
         <img className={styles.trashXmark1Icon} alt="" src={eye11} />
-        <img className={styles.trashXmark1Icon} alt="" src="/pencil-2-1.svg" />
+        <img className={styles.trashXmark1Icon} alt="" src="/pencil-icon.svg" />
         <img
           className={styles.trashXmark1Icon}
           alt=""
-          src="/trashxmark-1.svg"
+          src="/trast-icon.svg"
         />
       </div>
     </div>

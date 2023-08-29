@@ -4,14 +4,16 @@
   align-self: stretch;
   position: relative;
 }
+
 .title {
   font-size: inherit;
-  line-height: 18px;
-  font-weight: 500;
+  line-height: 12px;
+  font-weight: 600;
   font-family: inherit;
 }
+
 .description {
-  font-size: var(--text-sm-medium-size);
+  font-size: var(--text-sm-normal-size);
   line-height: 14px;
   color: var(--body);
 }

@@ -7,44 +7,22 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
   const router = useRouter();
   return (
     <div className={styles.footerActionButtons}>
-      <div className={styles.modalActions}>
-        <div className={styles.button}>
-          <div className={styles.buttonBase}>
-            <img
-              className={styles.arrowLeft1Icon}
-              alt=""
-              src="/arrowleft-1.svg"
-            />
-            <div className={styles.text}>Back</div>
-          </div>
-        </div>
-        <div className={styles.buttons}>
-          <div className={styles.button1}>
-
-            <ButtonComponent
-              direction={false}
-              onClick={() => router.back()}
-              variant="outlined"
-              color="primary"
-              title={'Back'}
-              endIcon={<Icon>arrow_back_sharp</Icon>}
-            />
-          </div>
-
-            <div className={styles.button1}>
-              <ButtonComponent
-                direction={true}
-              onClick={router?.query.log_id || router?.query.support_id ? () => editLog() : () => addLogs()}
-                variant="contained"
-                color="primary"
-              title={router?.query.log_id || router?.query.support_id ? 'Update' : 'Submit'}
-                endIcon={<Icon>arrow_forward_sharp</Icon>}
-              />
-            </div>
-
-
-        </div>
-      </div>
+          <ButtonComponent
+            direction={false}
+            onClick={() => router.back()}
+            variant="outlined"
+            color="primary"
+            title={'Back'}
+            endIcon={<Icon>arrow_back_sharp</Icon>}
+          />
+          <ButtonComponent
+            direction={true}
+          onClick={router?.query.log_id || router?.query.support_id ? () => editLog() : () => addLogs()}
+            variant="contained"
+            color="primary"
+          title={router?.query.log_id || router?.query.support_id ? 'Update' : 'Submit'}
+            endIcon={<Icon>arrow_forward_sharp</Icon>}
+          />
     </div>
   );
 };

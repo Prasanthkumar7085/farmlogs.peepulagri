@@ -126,14 +126,13 @@ body {
     padding: 15px 10px;
     border: 1px solid #d8d7d6;
 }
-.dataTable-container .table-row:hover {
+.dataTable-container .tbody .table-row:hover {
     background-color: #fbfbfb;
 }
 .dataTable-container .tbody .cell {
     padding: 6px 10px;
     border: 1px solid #d8d7d6;
 }
-
 .mapImage{
     width: 100%;
     border-radius: 4px;

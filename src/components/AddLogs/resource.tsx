@@ -156,7 +156,6 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
 
             <TextField
               className={styles.textInput}
-              sx={{ width: 122 }}
               color="primary"
               variant="outlined"
               defaultValue="0"
@@ -171,7 +170,6 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
             <p className={styles.label}>Total Hours</p>
             <TextField
               className={styles.textInput}
-              sx={{ width: 122 }}
               color="primary"
               variant="outlined"
               defaultValue="0"

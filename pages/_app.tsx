@@ -1,5 +1,7 @@
-import './global.css';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/themes/themes';
 import SideBarMenu from "@/components/SideBar/SideBarMenu";
+import './global.css';
 
 function MyApp({
     Component,
@@ -8,10 +10,13 @@ function MyApp({
 }: any) {
 
     return (
-        <SideBarMenu>
-            <Component {...pageProps} />
-        </SideBarMenu>
+        <ThemeProvider theme={theme}>
+            <SideBarMenu>
+                <Component {...pageProps} />
+            </SideBarMenu>
+        </ThemeProvider>
     )
 }
+
 
 export default MyApp;

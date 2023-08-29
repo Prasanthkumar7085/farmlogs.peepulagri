@@ -141,7 +141,7 @@
   left: 0;
   background-color: var(--color-sienna);
   width: 4px;
-  height: 203px;
+  height: 100%;
   z-index: 3;
 }
 .default {

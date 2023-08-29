@@ -88,7 +88,6 @@
   border-right: 1px solid var(--stroke);
   box-sizing: border-box;
   width: 100px;
-  height: 1084px;
   padding: var(--padding-xl) var(--padding-5xs) var(--padding-61xl);
   gap: var(--gap-166xl);
 }
@@ -97,8 +96,9 @@
   position: relative;
   background-color: var(--background);
   width: calc(100vw - 100px);
-  height: 1084px;
-  overflow: hidden;
+  height: 100vh;
+  overflow-y: scroll;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
 }

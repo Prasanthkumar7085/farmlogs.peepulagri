@@ -7,13 +7,13 @@
 
 .title {
   font-size: inherit;
-  line-height: 18px;
-  font-weight: 500;
+  line-height: 12px;
+  font-weight: 600;
   font-family: inherit;
 }
 
 .description {
-  font-size: var(--text-sm-medium-size);
+  font-size: var(--text-sm-normal-size);
   line-height: 14px;
   color: var(--body);
 }
@@ -52,19 +52,16 @@
 
 .quantity,
 .resourcetype {
-  align-self: stretch;
   flex: 1;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-7xs);
-  max-width: 420px;
 }
 
-.quantity {
-  max-width: 142px;
-}
+
 
 .textInput {
   border: 0;
@@ -79,16 +76,12 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-7xs);
-  max-width: 222px;
 }
 
 .resourcetypeParent {
-  overflow: hidden;
-  flex-direction: row;
-  padding: var(--padding-11xs) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--gap-5xl);
-  font-size: var(--text-sm-medium-size);
-  color: var(--gray-700);
 }
 
 .container,
@@ -98,6 +91,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  max-width: 100%;
 }
 
 .container {

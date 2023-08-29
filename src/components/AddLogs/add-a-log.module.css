@@ -18,12 +18,12 @@
 }
 
 .form {
-  position: absolute;
-  top: 24px;
+  position: relative;
   flex-direction: column;
-  max-width: 70vw;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   text-align: left;
-  font-size: var(--font-size-xl);
+  margin-bottom: 1.5rem;
   color: var(--color-sienna);
-  font-family: var(--text-sm-medium);
 }

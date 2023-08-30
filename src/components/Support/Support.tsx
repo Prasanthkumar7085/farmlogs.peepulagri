@@ -33,7 +33,6 @@ const SupportPage = () => {
 
     const updateStatus = async (value: string, id: string) => {
         let response = await updateSupportStatusService({ status: value }, id);
-        console.log(response);
 
     }
 
@@ -77,7 +76,6 @@ const SupportPage = () => {
         setLoading(true)
         try {
             let response = await deleteASupportService(id);
-            console.log(response);
 
             if (response.success) {
                 setAlertMessage(response.message);
@@ -98,7 +96,7 @@ const SupportPage = () => {
 
     //debounce on search String
     useEffect(() => {
-        const delay = 1000;
+        const delay = 500;
         const debounce = setTimeout(() => {
             getAllSupports({ page: 1, limit: limit, searchString: searchString });
         }, delay);

@@ -42,7 +42,6 @@ const EditSupportForm = () => {
         setDescription(supportOneDetails?.description);
     }, [supportOneDetails]);
 
-    console.log(query, "query")
     useEffect(() => {
         collectSupportData();
     }, [query, categories, description]);
@@ -117,7 +116,6 @@ const EditSupportForm = () => {
     const editSupport = async () => {
         try {
             const response = await editSupportService(supportDetails, router?.query?.support_id);
-            console.log(response);
 
         } catch (err: any) {
             console.error(err);
@@ -145,7 +143,6 @@ const EditSupportForm = () => {
         let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
         const response = await addAttachmentsService({ attachments: tempFilesStorage }, accessToken);
-        console.log(response);
         if (response.success) {
             await postAllImages(response.data, tempFilesStorage);
         }
@@ -157,7 +154,6 @@ const EditSupportForm = () => {
 
         for (let index = 0; index < response.length; index++) {
             let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
-            console.log(uploadResponse);
 
             if (uploadResponse.ok) {
                 const { target_url, ...rest } = response[index];
@@ -165,7 +161,6 @@ const EditSupportForm = () => {
             }
         }
         setFilesDetailsAfterUpload(arrayForResponse);
-        console.log(arrayForResponse);
 
 
     }

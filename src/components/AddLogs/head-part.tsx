@@ -20,9 +20,6 @@ const HeadPart = ({ data }: any) => {
   const [downloadUrls, setDownloadUrls] = useState<any>([]);
 
   const getDownloadLinks = async () => {
-    const { attachments } = data;
-    console.log(attachments);
-    // let downloadUrls = []
 
     let response = await getLogAttachmentsService(router.query.log_id);
     if (response.success) {

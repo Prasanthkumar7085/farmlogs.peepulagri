@@ -44,7 +44,6 @@ const EditALog: NextPage = () => {
     // useEffect(() => {
     //     setFiles(singleLogDetails?.attachments)
     // }, [singleLogDetails])
-    console.log(files);
     const fetchSingleLogData = async () => {
         setLoading(true);
         try {
@@ -77,7 +76,6 @@ const EditALog: NextPage = () => {
         }
     }
     const editLog = async () => {
-        console.log('testing');
 
         setLoading(true);
         const { categories, title, description } = formDetails;
@@ -123,7 +121,6 @@ const EditALog: NextPage = () => {
 
 
     const onChangeFile = (e: any) => {
-        console.log(e.target.files);
 
         setFiles(e.target.files);
     }
@@ -131,7 +128,6 @@ const EditALog: NextPage = () => {
         let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
         const response = await addLogsAttachmentService({ attachments: tempFilesStorage }, accessToken);
-        console.log(response);
         if (response.success) {
             await postAllImages(response.data, tempFilesStorage);
         }
@@ -140,13 +136,10 @@ const EditALog: NextPage = () => {
 
     const postAllImages = async (response: any, tempFilesStorage: any) => {
         let arrayForResponse: any = [];
-        console.log(files);
 
         for (let index = 0; index < response.length; index++) {
-            console.log(files[index]);
 
             let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
-            console.log(uploadResponse);
 
             if (uploadResponse.ok) {
                 const { target_url, ...rest } = response[index];

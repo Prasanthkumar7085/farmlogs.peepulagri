@@ -29,17 +29,13 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
 
   const getAttachmentPreview = async () => {
     let response: any = await getLogAttachmentsService(router.query.log_id);
-
-    console.log(response);
     setDownloadLinks(response?.data?.download_urls)
 
   }
 
-  console.log(files);
 
   const deleteImage = async (index: number) => {
     const array = [...files];
-    console.log(array, index);
 
   }
 

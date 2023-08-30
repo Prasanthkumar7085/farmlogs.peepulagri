@@ -2,7 +2,7 @@ const setCookie = async () => {
     let options = {
         method: "POST",
         body: JSON.stringify({
-            cookie_name: 'log_in',
+            cookie_name: 'loggedIn',
             cookie_value: true
         })
     }

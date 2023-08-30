@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 const HeadSupportPart = ({ data }: { data: SupportResponseDataType | undefined }) => {
 
     const router = useRouter();
-    console.log(data);
 
     const getLabel = (item: string) => {
         const categoryOptions = [

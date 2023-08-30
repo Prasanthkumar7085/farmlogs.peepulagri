@@ -26,7 +26,6 @@ const ViewSupportPage = () => {
         setLoading(true);
         try {
             let response = await getSupportByIdService(id);
-            console.log(response);
             if (response.success) {
                 setData(response.data)
             }

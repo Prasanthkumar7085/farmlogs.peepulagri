@@ -13,17 +13,20 @@ export default Logs;
 
 
 
-
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+
 
     const { req } = context;
     const { cookies } = req;
 
-    console.log(context);
-    console.log(req);
-    console.log(cookies);
-
-
+    if (!(cookies.loggedIn == 'true')) {
+        return {
+            redirect: {
+                destination: `/`,
+                permanent: false,
+            },
+        };
+    }
     return {
         props: {},
     };

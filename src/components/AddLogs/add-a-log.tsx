@@ -90,7 +90,6 @@ const AddALog: NextPage = () => {
     let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
     const response = await addLogsAttachmentService({ attachments: tempFilesStorage }, accessToken);
-    console.log(response);
     if (response.success) {
       await postAllImages(response.data, tempFilesStorage);
     }
@@ -108,7 +107,6 @@ const AddALog: NextPage = () => {
       }
     }
     setFilesDetailsAfterUpload(arrayForResponse);
-    console.log(arrayForResponse);
 
 
   }

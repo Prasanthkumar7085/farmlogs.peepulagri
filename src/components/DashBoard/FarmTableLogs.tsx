@@ -22,7 +22,7 @@ const FarmTableLogs = () => {
     const router: any = useRouter();
 
     const [data, setData] = useState();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [paginationDetails, setPaginationDetails] = useState<PaginationDetailsType | null>();
     const [page, setPage] = useState<number | string>(1);
     const [limit, setLimit] = useState<number | string>(10);
@@ -117,12 +117,20 @@ const FarmTableLogs = () => {
     }
 
 
+    useEffect(() => {
+        const delay = 500;
+        const debounce = setTimeout(() => {
+            getFarmLogs({ page: 1, search: searchString });
+        }, delay);
+        return () => clearTimeout(debounce);
+    }, [searchString]);
+
 
     const searchStringChange = (value: string) => {
         setPage(1);
         setSearchString(value);
-        getFarmLogs({ page: 1, search: value });
     }
+
     const workTypeOptions = [
         { title: 'All', value: "all", color: "#3462CF" },
         { title: 'Manual', value: "manual", color: "#5E9765" },

@@ -7,6 +7,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { IconButton } from "@mui/material";
 
 
 interface MyProps {
@@ -30,10 +32,23 @@ const menuListItems = [
 const SideBarMenu = ({ children }: any) => {
     const router = useRouter();
 
+
+    const logout = async () => {
+        try {
+            const response = await fetch('/api/remove-cookie');
+            if (response.status) {
+                router.push('/');
+            } else throw response;
+
+        } catch (err: any) {
+            console.error(err);
+
+        }
+    }
     return (
         <div>
             <aside className={styles.sidebarmenu}>
-                <Link href={'/farm/1/logs'} className={styles.logo}>
+                <Link href={`/farm/${router.query.farm_id}/logs`} className={styles.logo}>
                     <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} />
                 </Link>
                 <nav className={styles.menubar}>
@@ -49,6 +64,11 @@ const SideBarMenu = ({ children }: any) => {
                         })}
                     </List>
                 </nav>
+
+                <IconButton onClick={logout}>
+                    <LogoutIcon sx={{ color: "white" }} />
+                </IconButton>
+
                 <button className={styles.profile}>
                     <div className={styles.profile1}>
                         <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />

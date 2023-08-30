@@ -1,10 +1,13 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import loginService from "../../../lib/services/AuthServices/loginService";
 import LoadingComponent from "../Core/LoadingComponent";
 import setCookie from "../../../lib/CookieHandler/setCookie";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
 import { useRouter } from "next/router";
+import ErrorMessages from "../Core/ErrorMessages";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const Login = () => {
 
@@ -13,20 +16,25 @@ const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    const [errorMessages, setErrorMessages] = useState<any>({});
 
 
-    const login = async () => {
+    const login = async (e: any) => {
+        e.preventDefault();
         setLoading(true);
         try {
             let response = await loginService({ email: email, password: password });
-            console.log(response);
-
             if (response.success) {
                 setCookie();
                 let response = await getAllFarmsService();
                 const id = response.data[0]._id;
-                router.push('/farm/${id}/logs');
-
+                router.push(`/farm/${id}/logs`);
+            } else if (response.status == 422) {
+                setErrorMessages(response.errors)
+            } else if (response.status == 401) {
+                setErrorMessages({ message: response.message })
             }
         } catch (err: any) {
             console.error(err);
@@ -36,16 +44,16 @@ const Login = () => {
     }
 
     return (
-        <div style={{ display: "flex", padding: '50px', justifyContent: "center" }}>
+        <div style={{ border: "1px solid", display: "flex", padding: '50px', justifyContent: "center" }}>
 
-            <div style={{
+            <form onSubmit={login} style={{
                 display: "flex",
                 flexDirection: "column",
                 border: "3px solid #315dca",
-                width: "300px",
-                height: "250px",
-                padding: "5%",
-                paddingTop: "5%",
+                minWidth: "350px",
+                height: "300px",
+                padding: "3%",
+                paddingTop: "50px",
                 gap: "30px",
                 alignItems: "center",
                 borderRadius: "10px"
@@ -58,19 +66,35 @@ const Login = () => {
                         fullWidth
                         placeholder="Enter Email"
                     />
+                    <div style={{ minHeight: "25px" }}>
+                        <ErrorMessages errorMessages={errorMessages} keyname={'email'} />
+                    </div>
                 </div>
                 <div style={{ width: "100%" }}>
                     <Typography>Password</Typography>
                     <TextField
-                        type={'password'}
+                        type={showPassword ? "text" : 'password'}
                         value={password}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         fullWidth
                         placeholder="Enter Password"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setShowPassword(!showPassword)}>
+                                        {!showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
+                    <div style={{ minHeight: "25px" }}>
+                        {errorMessages.password ? <ErrorMessages errorMessages={errorMessages} keyname={'password'} /> :
+                            <ErrorMessages errorMessages={errorMessages} keyname={'message'} />}
+                    </div>
                 </div>
-                <Button onClick={login}>Login</Button>
-            </div>
+                <Button type={'submit'}>Login</Button>
+            </form>
 
             <LoadingComponent loading={loading} />
         </div>

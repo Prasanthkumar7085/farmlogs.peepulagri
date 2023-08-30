@@ -24,6 +24,8 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
   const getDownloadLinks = async () => {
 
     let response = await getLogAttachmentsService(router.query.log_id);
+    console.log(response);
+
     if (response.success) {
       setDownloadUrls(response.data.download_urls);
     }

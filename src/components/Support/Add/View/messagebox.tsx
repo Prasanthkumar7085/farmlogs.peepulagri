@@ -25,6 +25,7 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
         type: 'REPLY',
         attachments: []
       }
+      setMessage('')
       dispatch(addNewMessage(body))
       const response = await postAMessageInSupportService(router.query.support_id as string, body, accessToken);
 
@@ -56,7 +57,7 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
       <div className={styles.actions}>
         <div className={styles.attachments}>
           <Button variant="outlined" color="primary" size="large" />
-          <input className={styles.image} type="file" />
+          <input className={styles.image} type="file" multiple />
         </div>
         <div className={styles.button}>
           <Button

@@ -6,22 +6,10 @@ import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import getDownloadLinksByMessageId from "../../../../../lib/services/SupportService/getDownloadLinksByMessageId";
 import { useSelector } from "react-redux"
-import { useEffect, useState } from "react";
 
 const InMessage = ({ data }: { data: SupportMessageType }) => {
 
   const router = useRouter();
-
-  const messages = useSelector((state: any) => state.conversation.messages);
-  console.log(messages);
-
-  const [messagesFromStore, setMessagesFromStore] = useState([]);
-
-  useEffect(() => {
-    if (messages) {
-      setMessagesFromStore(messages);
-    }
-  }, [messages])
 
   const getImagesByMessageId = async (supportId: string, messageId: string) => {
     let response = await getDownloadLinksByMessageId(supportId, messageId);
@@ -39,20 +27,18 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
           <p className={styles.theProblemIm}>
             {data.content}
           </p>
-          {messages?.length ? data?.attachments.map((item: any, index: number) => {
-            return (
-              <div className={styles.attachment} key={index}>
+          {data?.attachments?.length ?
+            <div className={styles.attachment}>
                 <div className={styles.row}>
                   <div className={styles.icon}>
                     <img className={styles.groupIcon} alt="" src="/group.svg" />
                     <img className={styles.groupIcon1} alt="" src="/group2.svg" />
                   </div>
-                  <Button className={styles.imageName} onClick={() => getImagesByMessageId(data.support_id, item._id)}>View Images</Button>
+                <Button className={styles.imageName} onClick={() => getImagesByMessageId(router.query.support_id as string, data._id)}>View Images</Button>
                 </div>
 
               </div>
-            )
-          }) : ""}
+            : ""}
         </div>
         {/* <div className={styles.reply}>
           <div className={styles.reply1}>Reply</div>

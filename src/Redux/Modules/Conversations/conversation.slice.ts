@@ -15,7 +15,7 @@ export const conversationSlice = createSlice({
       state.messages = [...action.payload];
     },
     addNewMessage: (state: any, action: any) => {
-      state.messages = [...state.messages, action.payload];
+      state.messages = [action.payload, ...state.messages];
     }
   },
 });

@@ -32,6 +32,22 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
 
     }
 
+    const getImage = (item: any) => {
+        if (item.file_type == 'application/pdf') {
+            return '/pdf.svg'
+        } else if (item.file_type == 'audio/wav') {
+            return '/audio.svg'
+        } else return item.downloadUrl
+    }
+
+    const getImageObjectUrl = (file: any) => {
+        console.log(file.type, 'plpl');
+        if (file.type == 'application/pdf')
+            return '/pdf.svg'
+        else if (file.type.includes('audio'))
+            return '/audio.svg'
+        else return URL.createObjectURL(file)
+    }
     return (
         <div className={styles.attachments}>
             <div className={styles.header}>
@@ -44,9 +60,11 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
             <div>
                 {files &&
                     Array.from(files).map((file: any, index) => {
+
+
                         return (
                             <div key={index} className={styles.attachmentItem}>
-                                {file ? <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit:"cover" }} /> : ""}
+                                {file ? <img src={getImageObjectUrl(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
                                 <Typography> 
                                     {file.name}
                                 </Typography>
@@ -63,17 +81,17 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                     : 'Upload'}
             </Button>
             <div style={{ display: "flex" }}>
-                {downloadLinks && downloadLinks.length ? downloadLinks.map((link: string, index: number) => {
+                {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
                     return (
                         <div className={styles.eachFile} key={index}>
                             <img
                                 alt={`image-${index}`}
                                 height={70}
                                 width={120}
-                                src={link}
+                                src={getImage(item)}
                                 style={{ borderRadius: "5%" }}
                             />
-                            <IconButton onClick={() => window.open(link)}>
+                            <IconButton onClick={() => window.open(item.downloadUrl)}>
                                 <OpenInNewIcon />
                             </IconButton>
                         </div>

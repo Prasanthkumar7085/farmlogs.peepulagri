@@ -27,8 +27,6 @@ const SupportConversationScreen = ({ data }: { data: SupportResponseDataType | u
 
     const getAllMessagesBySupportId = async () => {
         const response = await getMessageBySupportId(router.query.support_id as string);
-        console.log(response, 'tst');
-
 
         if (response.success) {
             setConversationMessages(response.data);
@@ -40,13 +38,13 @@ const SupportConversationScreen = ({ data }: { data: SupportResponseDataType | u
     return (
         <div>
             <Messagebox getAllMessagesBySupportId={getAllMessagesBySupportId} />
-            {messages.length && messages.map((item: SupportMessageType, index: number) => {
+            {messages.length ? messages.map((item: SupportMessageType, index: number) => {
                 return (
                     <div key={index} >
                         <InMessage data={item} />
                     </div>
                 )
-            })}
+            }) : ""}
         </div>
     )
 }

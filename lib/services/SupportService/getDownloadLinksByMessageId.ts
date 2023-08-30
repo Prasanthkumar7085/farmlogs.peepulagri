@@ -3,8 +3,6 @@
 const getDownloadLinksByMessageId = async (supportId: string, attachmentId: string) => {
 
     const url = `${process.env.NEXT_PUBLIC_API_URL}/support/${supportId}/conversation-messages/${attachmentId}/attachments-download`;
-    console.log(supportId);
-    console.log(attachmentId);
 
 
 

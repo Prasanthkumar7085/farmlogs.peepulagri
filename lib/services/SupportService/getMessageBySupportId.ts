@@ -2,7 +2,7 @@
 
 const getMessageBySupportId = async (supportId: string) => {
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/support/${supportId}/messages/1/100`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/support/${supportId}/conversation/messages`;
 
     try {
         const response: any = await fetch(url);

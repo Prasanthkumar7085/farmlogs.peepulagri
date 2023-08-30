@@ -63,7 +63,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
               type="text"
               name="log-title"
               placeholder="Enter log title"
-              size="medium"
+              fullWidth
               margin="none"
               value={title}
               onChange={(e) => setTitle(e.target.value)}

@@ -3,7 +3,14 @@ import AddSupportHeader from "./AddSupportHeader";
 
 const AddSupportPage = () => {
     return (
-        <div>
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            maxWidth: "800px",
+            minHeight: "100vh",
+            margin: "0 auto",
+        }}>
             <AddSupportHeader />
             <AddSupportForm />
         </div>

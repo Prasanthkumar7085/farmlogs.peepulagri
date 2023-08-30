@@ -32,10 +32,16 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
         return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
     }
 
-    const columns = [
+    const columns = [   
         {
             Header: "Date",
-            accessor: (row: SupportResponseDataType) => timePipe(row.createdAt, 'DD, MMM YYYY')
+            accessor: (row: SupportResponseDataType) => {
+                return (
+                    <div style={{ color: "var(--body)" }}>
+                        { timePipe(row.createdAt, 'DD, MMM YYYY') }
+                    </div>
+                    )
+            }
         },
         {
             Header: "Query Name",
@@ -59,7 +65,13 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
         },
         {
             Header: "Response Date",
-            accessor: (row: SupportResponseDataType) => timePipe(row.recent_response_at, 'DD, MMM YYYY')
+            accessor: (row: SupportResponseDataType) => {
+                return (
+                    <div style={{ color: "var(--body)" }}>
+                        { timePipe(row.recent_response_at, 'DD, MMM YYYY') }
+                    </div>
+                    )
+            }
         },
         {
             Header: "Status",
@@ -71,13 +83,13 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                         <IconButton onClick={() => router.push(`/support/${row._id}`)}>
-                            <VisibilityIcon color='info' />
+                            <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
-                            <EditIcon color='warning' />
+                            <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteSupport(row._id)}>
-                            <DeleteIcon color='error' />
+                            <img src="/trast-icon.svg" alt="view" width="18" />
                         </IconButton>
                     </div>
                 )

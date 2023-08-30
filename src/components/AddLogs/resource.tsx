@@ -124,6 +124,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
             direction={true}
             variant="contained"
             color="success"
+            size="small"
             startIcon={<Icon>arrow_forward_shar</Icon>}
             onClick={addResources}
           >
@@ -227,7 +228,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
                       />
                     </TableCell>
                     <TableCell>
-                      <IconButton onClick={() => removeFromResources(index)}>
+                      <IconButton color="error" onClick={() => removeFromResources(index)}>
                         <DeleteOutlineIcon />
                       </IconButton>
                     </TableCell>

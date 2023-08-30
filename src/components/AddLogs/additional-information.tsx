@@ -9,6 +9,7 @@ import {
   FormHelperText,
   Select,
 } from "@mui/material";
+import ButtonComponent from "../Core/ButtonComponent";
 import styles from "./additional-information.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -114,15 +115,19 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
             className={styles.description}
           >{`You can add additional details based on the category and work type `}</p>
         </div>
-        <Button
-          variant="contained"
-          color="success"
-          startIcon={<Icon>arrow_forward_sharp</Icon>}
-          disabled={!resourceTitle || !resourceQuantity || !resourceUnits}
-          onClick={addResources}
-        >
-          Add
-        </Button>
+
+        <ButtonComponent
+            title={'Add'}
+            direction={true}
+            variant="contained"
+            color="success"
+            size="small"
+            startIcon={<Icon>arrow_forward_shar</Icon>}
+            disabled={!resourceTitle || !resourceQuantity || !resourceUnits}
+            onClick={addResources}
+          >
+            Add
+          </ButtonComponent>
       </div>
       <div className={styles.container}>
         <div className={styles.pesticide}>

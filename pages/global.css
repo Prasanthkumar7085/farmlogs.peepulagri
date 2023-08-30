@@ -164,8 +164,9 @@ body {
     border-color: #3462CF!important;
     box-shadow: 0 0 0 1px #3462CF!important;
   }
-
-
+.rs-picker-default .rs-picker-toggle-value {
+    color: var(--grey-900);
+}
   
 [class*="progressSteps"] .MuiStepLabel-label {
     font-family: 'Inter',sans-serif;

@@ -12,6 +12,7 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
             onClick={() => router.back()}
             variant="outlined"
             color="primary"
+            size="medium"
             title={'Back'}
             endIcon={<Icon>arrow_back_sharp</Icon>}
           />
@@ -20,6 +21,7 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
           onClick={router?.query.log_id || router?.query.support_id ? () => editLog() : () => addLogs()}
             variant="contained"
             color="primary"
+            size="medium"
           title={router?.query.log_id || router?.query.support_id ? 'Update' : 'Submit'}
             endIcon={<Icon>arrow_forward_sharp</Icon>}
           />

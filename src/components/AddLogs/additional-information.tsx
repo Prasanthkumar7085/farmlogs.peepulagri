@@ -146,7 +146,6 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
           </div>
           <TextField
             className={styles.textInput}
-            sx={{ width: 122 }}
             color="primary"
             variant="outlined"
             defaultValue="0"

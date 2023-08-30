@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import {
   TextField,
+  TextareaAutosize,
   FormControl,
   InputLabel,
   MenuItem,
@@ -62,7 +63,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
               type="text"
               name="log-title"
               placeholder="Enter log title"
-              size="large"
+              size="medium"
               margin="none"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -90,17 +91,15 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
             <FormHelperText />
           </FormControl>
         </div>
-        <TextField
+        <TextareaAutosize
           className={styles.description}
           color="primary"
-          variant="standard"
           name="description"
           placeholder="Enter description here"
-          margin="normal"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          fullWidth
-
+          minRows={3}
+          maxRows={7}
         />
         <div className={styles.threeDots}>
           <div className={styles.threeDotsChild} />

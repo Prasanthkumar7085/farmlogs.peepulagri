@@ -42,7 +42,7 @@ const ProgressSteps = ({ activeStepBasedOnData }: { activeStepBasedOnData: numbe
           <Stepper activeStep={activeStep} orientation="vertical">
             {steps.map((step, index) => (
               <Step key={index}>
-                <StepLabel>
+                <StepLabel sx={{ fontWeight: "600"}}>
                   {step.label}
                 </StepLabel>
                 <StepContent>

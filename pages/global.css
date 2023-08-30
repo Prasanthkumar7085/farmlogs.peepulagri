@@ -148,3 +148,41 @@ body {
 .scrollbar:hover::-webkit-scrollbar-thumb{
     background: rgb(198, 198, 198);
 }
+
+/* Custom Date Picker */
+.rs-picker-default .rs-picker-toggle.rs-btn-lg {
+    box-shadow: none;
+    border-color: rgba(0, 0, 0, 0.23);
+    border-radius: 3px;
+    width: 100%;
+    padding-block: 8px;
+  }
+  .rs-picker-default .rs-picker-toggle {
+    border-color: var(--gray-900);
+  }
+  .rs-picker-default .rs-picker-toggle.rs-btn-lg.rs-picker-toggle-active{
+    border-color: #3462CF!important;
+    box-shadow: 0 0 0 1px #3462CF!important;
+  }
+
+
+  
+[class*="progressSteps"] .MuiStepLabel-label {
+    font-family: 'Inter',sans-serif;
+    font-size: var(--text-md-medium-size);
+    font-weight: 600;
+    line-height: 20px;
+} 
+[class*="progressSteps"] .MuiTypography-root{
+    font-family: 'Inter',sans-serif;
+    font-size: var(--text-sm-normal-size);
+    line-height: 20px;
+}
+[class*="progressSteps"] .MuiSvgIcon-root{
+    fill: #dddddd;
+}
+[class*="progressSteps"] .MuiSvgIcon-root.Mui-active {
+    fill: #3462CF;
+    box-shadow: 0 0 0 4px #eaedff;
+    border-radius: 50%;
+}

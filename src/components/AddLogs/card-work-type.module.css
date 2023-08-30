@@ -7,6 +7,7 @@
 .dropdown,
 .label {
   align-self: stretch;
+  width: 100%;
 }
 .workType {
   flex: 1;
@@ -44,3 +45,4 @@
   color: var(--gray-700);
   font-family: var(--text-sm-medium);
 }
+

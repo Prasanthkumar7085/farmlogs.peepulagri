@@ -12,10 +12,13 @@ export interface FarmDataType {
     area: number;
     createdAt: string;
     geometry: any;
+    logCount: number;
     slug: string;
     status: string;
     title: string;
-    updated_at: string;
+    updatedAt: string;
+    user_id: string;
+    __v: number;
     _id: string;
 }
 
@@ -23,7 +26,8 @@ export interface FarmCardPropsType {
     _id: string;
     acresCount: number;
     farmName: string;
-    createAt: string
+    createAt: string;
+    logCount: number;
 }
 
 

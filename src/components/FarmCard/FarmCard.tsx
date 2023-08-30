@@ -10,6 +10,7 @@ const FarmCard = ({
   acresCount,
   farmName,
   createAt,
+  logCount
 }: FarmCardPropsType) => {
 
   const barStyle: CSSProperties = useMemo(() => {
@@ -36,7 +37,7 @@ const FarmCard = ({
       <div className={styles.statsprogress}>
         <div className={styles.logscount}>
           <p className={styles.totalLogs}>Total Logs</p>
-          <p className={styles.p}>125</p>
+          <p className={styles.p}>{logCount}</p>
         </div>
         <div className={styles.progressbar}>
           <span className={styles.para}>Progress</span>

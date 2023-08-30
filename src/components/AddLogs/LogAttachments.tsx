@@ -90,9 +90,7 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
                 <IconButton onClick={() => window.open(item.downloadUrl)}>
                   <OpenInNewIcon />
                 </IconButton>
-                <IconButton onClick={() => deleteImage(item._id)}>
-                  <DeleteIcon />
-                </IconButton>
+
               </div>
             </div>
           )

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import IconButton from "@mui/material/IconButton";
+import Image from "next/image";
 
 
 const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null | undefined | any }) => {
@@ -29,6 +30,28 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
     if (response.success) {
       setDownloadUrls(response.data.download_urls);
     }
+  }
+
+  const getImageName = (name: string) => {
+
+    let array = name.split('.');
+
+    let lastElement = array[array.length - 1];
+
+    let startAlpha = name.slice(0, 10);
+
+    if (name.length > 13) {
+      return startAlpha + '...' + lastElement;
+    } else {
+      return name
+    }
+
+  }
+
+  const getSourceForThumnail = (src: string) => {
+    if (src && src.includes('.pdf')) {
+      return '/pdf.svg'
+    } else return '/image.svg'
   }
 
 
@@ -155,7 +178,8 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
           {downloadUrls.map((item: any, index: number) => {
             return (
               <div className={styles.eachFile} key={index}>
-                <span className={styles.fileName}>File Name Come Here</span>
+                <Image src={getSourceForThumnail(item.file_name)} height={20} width={20} alt={'image'} />
+                <span className={styles.fileName}>{getImageName(item.file_name)}</span>
                 <IconButton onClick={() => window.open(item.downloadUrl)}>
                   <OpenInNewIcon />
                 </IconButton>

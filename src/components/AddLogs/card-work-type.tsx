@@ -37,7 +37,7 @@ const CardWorkType = ({ register, captureDates, setWorkType, singleLogDetails, s
             <InputLabel color="primary" />
             <Select color="primary" size="small" onChange={handleChange} value={work} defaultValue={singleLogDetails?.work_type}>
               <MenuItem value="ALL">ALL</MenuItem>
-              <MenuItem value="MACHINARY">MACHINARY</MenuItem>
+              <MenuItem value="MACHINERY">MACHINERY</MenuItem>
               <MenuItem value="MANUAL">MANUAL</MenuItem>
             </Select>
             <FormHelperText />

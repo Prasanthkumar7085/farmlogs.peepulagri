@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import styles from "./attachments.module.css";
 import { useEffect, useState } from "react";
 import { Button, IconButton } from "@mui/material";
@@ -6,6 +5,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
 import { useRouter } from "next/router";
 import DeleteIcon from '@mui/icons-material/Delete';
+import Image from "next/image";
+import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
 
 const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
 
@@ -34,8 +35,17 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
   }
 
 
-  const deleteImage = async (index: number) => {
-    const array = [...files];
+  const deleteImage = async (id: string) => {
+
+    if (typeof (router.query.log_id) == 'string') {
+      let response = await deleteLogAttachmentService(router.query.log_id, id);
+
+
+      if (response.success) {
+
+      }
+    }
+
 
   }
 
@@ -47,7 +57,7 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
           You can also drag and drop files to upload them.
         </p>
       </div>
-      <input className={styles.link} type="file" multiple onChange={onChangeFile} />
+      <input className={styles.link} type="file" multiple onChange={onChangeFile} accept="image/*, .pdf" />
       <div>
         {files &&
           Array.from(files).map((file: any, index) => {
@@ -66,21 +76,21 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
         Upload
       </Button>
       <div style={{ display: "flex" }}>
-        {downloadLinks && downloadLinks.length ? downloadLinks.map((link: string, index: number) => {
+        {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
           return (
             <div className={styles.eachFile} key={index} style={{ display: "flex", flexDirection: "row" }}>
-              <img
+              <Image
                 alt={`image-${index}`}
                 height={50}
                 width={100}
-                src={link}
+                src={item.file_name.includes('.pdf') ? '/pdf.svg' : item.downloadUrl}
                 style={{ borderRadius: "5%" }}
               />
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <IconButton onClick={() => window.open(link)}>
+                <IconButton onClick={() => window.open(item.downloadUrl)}>
                   <OpenInNewIcon />
                 </IconButton>
-                <IconButton onClick={() => deleteImage(index)}>
+                <IconButton onClick={() => deleteImage(item._id)}>
                   <DeleteIcon />
                 </IconButton>
               </div>

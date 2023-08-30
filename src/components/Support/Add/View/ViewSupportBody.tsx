@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { SupportResponseDataType } from "@/types/supportTypes";
 import getSupportAttachmentsService from "../../../../../lib/services/SupportService/getSupportAttachmentService";
+import Image from "next/image";
 
 const ViewSupportBody = ({ data }: { data: SupportResponseDataType | undefined }) => {
 
@@ -33,16 +34,16 @@ const ViewSupportBody = ({ data }: { data: SupportResponseDataType | undefined }
                 </div>
             </div>
             <div className={styles.attachments} style={{ display: "flex", flexDirection: "row" }}>
-                {downloadUrls.map((link: string, index: number) => {
+                {downloadUrls.map((item: any, index: number) => {
                     return (
                         <div className={styles.eachFile} key={index}>
-                            <img
+                            <Image
                                 alt={`image-${index}`}
                                 height={100}
                                 width={150}
-                                src={link}
+                                src={item.downloadUrl}
                             />
-                            <IconButton onClick={() => window.open(link)}>
+                            <IconButton onClick={() => window.open(item.downloadUrl)}>
                                 <OpenInNewIcon />
                             </IconButton>
                         </div>

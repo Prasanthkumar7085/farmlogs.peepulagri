@@ -8,10 +8,15 @@ import { useRouter } from "next/router";
 import ErrorMessages from "../Core/ErrorMessages";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "@/Redux/Modules/Auth";
+import { AuthResponseDataType, AuthResponseErrorDataType } from "@/types/AuthTypes";
+type ResponseData = AuthResponseDataType | AuthResponseErrorDataType;
 
 const Login = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -25,14 +30,22 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            let response = await loginService({ email: email, password: password });
+            let response: AuthResponseDataType | AuthResponseErrorDataType;
+            response = await loginService({ email: email, password: password });
+
             if (response.success) {
                 setCookie();
-                let response = await getAllFarmsService();
-                const id = response.data[0]._id;
+                if ('data' in response) {
+                    dispatch(setUserDetails(response?.data));
+                }
+                let FarmResponse = await getAllFarmsService();
+                const id = FarmResponse.data[0]._id;
                 router.push(`/farm/${id}/logs`);
             } else if (response.status == 422) {
-                setErrorMessages(response.errors)
+                if ('errors' in response) {
+                    setErrorMessages(response.errors)
+                }
+
             } else if (response.status == 401) {
                 setErrorMessages({ message: response.message })
             }

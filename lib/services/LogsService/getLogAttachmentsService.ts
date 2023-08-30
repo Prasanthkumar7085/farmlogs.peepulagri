@@ -2,7 +2,7 @@
 
 const getLogAttachmentsService = async (logId: any) => {
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/log/attachments/${logId}/download`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/log/${logId}/attachments/download`;
 
     try {
         const options = {

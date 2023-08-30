@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import { useMemo, type CSSProperties } from "react";
 import styles from "./farm-card.module.css";
 import { useRouter } from "next/router";

@@ -40,7 +40,6 @@ const ViewSupportPage = () => {
     return (
         <div>
             <HeadSupportPart data={data} />
-
             <ViewSupportBody data={data} />
 
             <LoadingComponent loading={loading} />

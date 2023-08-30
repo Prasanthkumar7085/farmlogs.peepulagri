@@ -179,7 +179,7 @@ const FarmTableLogs = () => {
         },
         {
             Header: "Title",
-            accessor: 'title'
+            accessor: 'title',
         },
         {
             Header: "Category",

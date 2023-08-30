@@ -9,13 +9,16 @@ import FooterActionButtons from "../AddLogs/footer-action-buttons";
 import SupportAttachments from "../AddLogs/SupportAttachments";
 import addAttachmentsService from "../../../lib/services/SupportService/addAttachmentsService";
 import uploadFileToS3 from "../../../lib/services/LogsService/uploadFileToS3InLog";
+import { useSelector } from "react-redux";
 
 
 const EditSupportForm = () => {
 
     const router: any = useRouter();
 
-    const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlZXB1bEBnbWFpbC5jb20iLCJpZCI6IjY0ZGM2NDNmOThhNzUyM2FkODA5ZDM1YyIsInBhc3N3b3JkIjoiJDJiJDEwJHlMQWZyVlBydlNaVUFCc21ReUYuV3VpbnF6bjU5bmpqY3pmLjFpcnZ4cUMxZ3daVm9LV2ppIiwiaWF0IjoxNjkyNjAyMjY5LCJleHAiOjE2OTc3ODYyNjl9.M8thgp9qQqLcBs0HxZ5uFw7P1dlY0UEUrmMrQXzXyRg'
+    const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+
+
 
 
     const [permission, setPermission] = useState(false);
@@ -43,7 +46,9 @@ const EditSupportForm = () => {
     }, [supportOneDetails]);
 
     useEffect(() => {
+
         collectSupportData();
+
     }, [query, categories, description]);
 
     useEffect(() => {
@@ -51,14 +56,13 @@ const EditSupportForm = () => {
     }, [router]);
 
     const collectSupportData = () => {
-
-        const array = [...supportOneDetails?.attachments]
+        const array = supportOneDetails?.attachments;
         let supportData: Partial<AddSupportPayload> = {
             title: query,
             description: description,
             categories: categories,
             status: "OPEN",
-            attachments: [...filesDetailsAfterUpload, ...array]
+            attachments: array ? [...filesDetailsAfterUpload, ...array] : filesDetailsAfterUpload
 
         }
         setSupportDetails(supportData)
@@ -116,7 +120,7 @@ const EditSupportForm = () => {
     const editSupport = async () => {
         try {
             const response = await editSupportService(supportDetails, router?.query?.support_id);
-
+        collectSupportData();
         } catch (err: any) {
             console.error(err);
 

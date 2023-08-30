@@ -13,7 +13,8 @@ import LoadingComponent from "../Core/LoadingComponent";
 import AlertComponent from "../Core/AlertComponent";
 import uploadFileToS3 from "../../../lib/services/LogsService/uploadFileToS3InLog";
 import addLogsAttachmentService from "../../../lib/services/LogsService/addLogsAttachmentService";
-import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
+
 
 const AddALog: NextPage = () => {
 
@@ -22,7 +23,7 @@ const AddALog: NextPage = () => {
   const [singleLogDetails, setSingleData] = useState<GetLogByIdResponseDataType | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlZXB1bEBnbWFpbC5jb20iLCJpZCI6IjY0ZGM2NDNmOThhNzUyM2FkODA5ZDM1YyIsInBhc3N3b3JkIjoiJDJiJDEwJHlMQWZyVlBydlNaVUFCc21ReUYuV3VpbnF6bjU5bmpqY3pmLjFpcnZ4cUMxZ3daVm9LV2ppIiwiaWF0IjoxNjkyNjAyMjY5LCJleHAiOjE2OTc3ODYyNjl9.M8thgp9qQqLcBs0HxZ5uFw7P1dlY0UEUrmMrQXzXyRg'
+  const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails.access_token);
 
   const [resources, setResources] = useState([]);
   const [additionalResources, setAdditionalResources] = useState([]);

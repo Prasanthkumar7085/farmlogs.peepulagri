@@ -150,11 +150,11 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
           </div>
         </div>
         <div className={styles.attachments}>
-          {downloadUrls.map((link: string, index: number) => {
+          {downloadUrls.map((item: any, index: number) => {
             return (
               <div className={styles.eachFile} key={index}>
                 <span className={styles.fileName}>File Name Come Here</span>
-                <IconButton onClick={() => window.open(link)}>
+                <IconButton onClick={() => window.open(item.downloadUrl)}>
                   <OpenInNewIcon />
                 </IconButton>
               </div>

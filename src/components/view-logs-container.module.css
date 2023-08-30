@@ -8,4 +8,6 @@
   font-size: var(--font-size-xl);
   color: var(--neutral-800);
   font-family: var(--text-sm-medium);
+  max-width: 800px;
+  margin: 1rem auto;
 }

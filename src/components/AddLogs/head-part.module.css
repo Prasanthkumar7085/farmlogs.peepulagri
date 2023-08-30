@@ -39,6 +39,8 @@
   padding: var(--padding-10xs) var(--padding-sm);
   align-items: flex-start;
   justify-content: flex-start;
+  border-radius: 0px 0px 14px 0px;
+  padding: 3px 8px;
 }
 .h3title {
   margin: 0;

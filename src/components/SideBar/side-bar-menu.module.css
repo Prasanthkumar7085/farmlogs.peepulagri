@@ -85,10 +85,12 @@
   display: flex;
   flex-direction: column;
   padding: var(--padding-xl) var(--padding-5xs);
-    align-items: center;
-    justify-content: space-between;
-    }
-    
-    .main {
-      margin-left: 100px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main {
+  margin-left: 100px;
+  background: var(--background, #F5F7FA);
+  height: 100vh;
 }

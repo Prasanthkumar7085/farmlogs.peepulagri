@@ -152,16 +152,11 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
             <div className={styles.text8}>Attachments</div>
           </div>
         </div>
-        <div className={styles.attachments} style={{ display: "flex", flexDirection: "row" }}>
+        <div className={styles.attachments}>
           {downloadUrls.map((link: string, index: number) => {
             return (
               <div className={styles.eachFile} key={index}>
-              <img
-                  alt={`image-${index}`}
-                  height={150}
-                  width={250}
-                  src={link}
-              />
+                <span className={styles.fileName}>File Name Come Here</span>
                 <IconButton onClick={() => window.open(link)}>
                   <OpenInNewIcon />
                 </IconButton>

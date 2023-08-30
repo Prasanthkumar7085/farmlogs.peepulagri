@@ -38,12 +38,8 @@ const AddSupportForm = () => {
   const [categories, setCategories] = useState<Array<string>>();
   const [description, setDescription] = useState<string>("");
   const [files, setFiles] = useState<any>([]);
-  const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>(
-    []
-  );
-  const [audioDetailsAfterUpload, setAudioDetailsAfterUpload] = useState<any>(
-    {}
-  );
+  const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
+  const [audioDetailsAfterUpload, setAudioDetailsAfterUpload] = useState<any>({});
 
   const [supportDetails, setSupportDetails] =
     useState<Partial<AddSupportPayload>>();
@@ -139,8 +135,7 @@ const AddSupportForm = () => {
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [alertType, setAlertType] = useState<boolean>(false);
   const [loadingOnMicUpload, setLoadingOnMicUpload] = useState<boolean>(false);
-  const [loadingOnImagesUpload, setLoadingOnImagesUpload] =
-    useState<boolean>(false);
+  const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
 
   const uploadAudio = async () => {
     setLoadingOnMicUpload(true);

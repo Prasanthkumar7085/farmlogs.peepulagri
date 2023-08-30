@@ -17,16 +17,15 @@ const ViewSupportPage = () => {
 
     useEffect(() => {
         if (router.isReady) {
-
-            getOneSupportById(router.query.support_id);
+            getOneSupportById();
         }
     }, [router])
 
 
-    const getOneSupportById = async (id: any) => {
+    const getOneSupportById = async () => {
         setLoading(true);
         try {
-            let response = await getSupportByIdService(id);
+            let response = await getSupportByIdService(router.query.support_id as string);
             if (response.success) {
                 setData(response.data)
             }
@@ -41,7 +40,7 @@ const ViewSupportPage = () => {
     return (
         <div>
             <HeadSupportPart data={data} />
-            <ViewSupportBody data={data} />
+            <ViewSupportBody data={data} getOneSupportById={getOneSupportById} />
             <SupportConversationScreen data={data} />
             <LoadingComponent loading={loading} />
         </div>

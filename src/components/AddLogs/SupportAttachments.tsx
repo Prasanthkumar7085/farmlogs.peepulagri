@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+
 import styles from "./attachments.module.css";
 import { useEffect, useState } from "react";
 import { Button, CircularProgress, IconButton, Typography } from "@mui/material";
@@ -6,6 +6,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useRouter } from "next/router";
 import getSupportAttachmentsService from "../../../lib/services/SupportService/getSupportAttachmentService";
 import CloseIcon from '@mui/icons-material/Close';
+
 const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesUpload }: any) => {
 
     const router = useRouter();
@@ -20,6 +21,9 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
 
     }
 
+
+
+
     useEffect(() => {
         if (router.isReady && router.query.support_id) {
             getAttachmentPreview();
@@ -32,6 +36,8 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
 
     }
 
+
+    //setting audio/pdf thumbnail and returning image for other files from download url
     const getImage = (item: any) => {
         if (item.file_type == 'application/pdf') {
             return '/pdf.svg'
@@ -40,6 +46,7 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
         } else return item.downloadUrl
     }
 
+    //setting audio/pdf thumbnail and returning image for other files from selected files
     const getImageObjectUrl = (file: any) => {
         console.log(file.type, 'plpl');
         if (file.type == 'application/pdf')
@@ -48,6 +55,7 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
             return '/audio.svg'
         else return URL.createObjectURL(file)
     }
+
     return (
         <div className={styles.attachments}>
             <div className={styles.header}>
@@ -94,6 +102,7 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                             <IconButton onClick={() => window.open(item.downloadUrl)}>
                                 <OpenInNewIcon />
                             </IconButton>
+
                         </div>
                     )
                 }) : ""}

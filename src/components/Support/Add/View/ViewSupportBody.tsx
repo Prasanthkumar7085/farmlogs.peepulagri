@@ -6,8 +6,11 @@ import { useEffect, useState } from "react";
 import { SupportResponseDataType } from "@/types/supportTypes";
 import getSupportAttachmentsService from "../../../../../lib/services/SupportService/getSupportAttachmentService";
 import Image from "next/image";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import deleteSupportAttachmentService from "../../../../../lib/services/SupportService/deleteSupportAttachmentService";
 
-const ViewSupportBody = ({ data }: { data: SupportResponseDataType | undefined }) => {
+type getOneSupportByIdType = () => void
+const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDataType | undefined; getOneSupportById: getOneSupportByIdType }) => {
 
     const router = useRouter();
 
@@ -25,6 +28,16 @@ const ViewSupportBody = ({ data }: { data: SupportResponseDataType | undefined }
         if (response.success) {
             setDownloadUrls(response.data.download_urls);
         }
+    }
+
+    const deleteImage = async (item: any) => {
+
+        const response = await deleteSupportAttachmentService(router.query.support_id as string, item.attachment_id);
+        console.log(response);
+        if (response.success) {
+            await getOneSupportById();
+        }
+
     }
 
     const getSrc = (item: any) => {
@@ -54,6 +67,9 @@ const ViewSupportBody = ({ data }: { data: SupportResponseDataType | undefined }
                             />
                             <IconButton onClick={() => window.open(item.downloadUrl)}>
                                 <OpenInNewIcon />
+                            </IconButton>
+                            <IconButton onClick={() => deleteImage(item)}>
+                                <DeleteOutlineIcon />
                             </IconButton>
                         </div>
                     )

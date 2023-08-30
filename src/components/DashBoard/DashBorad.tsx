@@ -12,9 +12,16 @@ const DashBoard = () => {
 
     const getFarmsData = async () => {
         let response: any = await getAllFarmsService();
+
+
         if (response?.success) {
-            router.push(`/farm/${response?.data[0]._id}/logs`);
             setFarmsData(response);
+            if (router.query.farm_id) {
+                router.push(`/farm/${router.query.farm_id}/logs`);
+            } else {
+                router.push(`/farm/${response?.data[0]._id}/logs`);
+            }
+
         }
     }
 

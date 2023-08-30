@@ -7,7 +7,7 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
   const router = useRouter();
   return (
     <div className={styles.footerActionButtons}>
-          <ButtonComponent
+          {/* <ButtonComponent
             direction={false}
             onClick={() => router.back()}
             variant="outlined"
@@ -15,7 +15,7 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
             size="medium"
             title={'Back'}
             endIcon={<Icon>arrow_back_sharp</Icon>}
-          />
+          /> */}
           <ButtonComponent
             direction={true}
           onClick={router?.query.log_id || router?.query.support_id ? () => editLog() : () => addLogs()}

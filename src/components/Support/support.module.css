@@ -1,0 +1,9 @@
+.supportDashboard {
+    padding: 1.5rem;
+}
+.tableFilters {
+    display: grid;
+    grid-template-columns: 300px 150px 1fr;
+    align-items: center;
+    gap: 1rem;
+}

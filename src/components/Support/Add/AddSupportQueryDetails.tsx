@@ -35,16 +35,13 @@ const AddSupportQueryDetails = ({
         { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting" },
     ];
 
-
-
-
-
-
     return (
-        <div style={{ display: "flex", flexDirection: "column", width: "50%", justifyContent: "center" }}>
+        <div className="form-fields">
             <div>
-                <Typography variant='subtitle2'>Type Youe Query</Typography>
+                <Typography variant='subtitle2' style={{fontFamily: "Inter", fontWeight: "600", color: "var(--gray-700)", marginBottom: '4px'}}>Type Youe Query</Typography>
                 <TextField
+                    style = {{width: "100%", marginBlockEnd: "1rem", backgroundColor: "#ffffff"}}
+                    size="small"
                     value={query}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setQuery(e.target.value)
@@ -52,9 +49,10 @@ const AddSupportQueryDetails = ({
                 />
             </div>
             <div>
-                <Typography variant='subtitle2'>Category</Typography>
+                <Typography variant='subtitle2' style={{fontFamily: "Inter", fontWeight: "600", color: "var(--gray-700)", marginBottom: '4px'}}>Category</Typography>
                 <Select
-                    sx={{ minWidth: "200px", maxWidth: "200px" }}
+                    style = {{ width: "100%", marginBlockEnd: "1rem", backgroundColor: "#ffffff" }}
+                    size="small"
                     multiple
                     value={categories ? categories : []}
                     onChange={(e: any) => setCategories(e.target.value)}
@@ -68,10 +66,11 @@ const AddSupportQueryDetails = ({
                 </Select>
             </div>
             <div>
-                <Typography variant='subtitle2'>Description</Typography>
+                <Typography variant='subtitle2' style={{fontFamily: "Inter", fontWeight: "600", color: "var(--gray-700)", marginBottom: '4px'}}>Description</Typography>
                 <TextareaAutosize
+                    style = {{width: "100%", marginBlockEnd: "1rem"}}
                     value={description}
-                    minRows={3}
+                    minRows={4}
                     onChange={(e: any) => setDescription(e.target.value)}
                 ></TextareaAutosize>
             </div>

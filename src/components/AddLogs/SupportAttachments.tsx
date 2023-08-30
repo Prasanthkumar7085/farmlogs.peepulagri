@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
 import styles from "./attachments.module.css";
 import { useEffect, useState } from "react";
-import { Button, CircularProgress, IconButton } from "@mui/material";
+import { Button, CircularProgress, IconButton, Typography } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useRouter } from "next/router";
 import getSupportAttachmentsService from "../../../lib/services/SupportService/getSupportAttachmentService";
+import CloseIcon from '@mui/icons-material/Close';
 const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesUpload }: any) => {
 
     const router = useRouter();
@@ -34,7 +35,7 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
     return (
         <div className={styles.attachments}>
             <div className={styles.header}>
-                <h4 className={styles.title}>Attachments</h4>
+                <h4 className={styles.title}>Attachments (or) Images</h4>
                 <p className={styles.description}>
                     You can also drag and drop files to upload them.
                 </p>
@@ -44,17 +45,19 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                 {files &&
                     Array.from(files).map((file: any, index) => {
                         return (
-                            <div key={index} style={{ display: "flex", gap: '20px' }}>
-                                {file ? <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={60} width={90} /> : ""}
-                                <div>
+                            <div key={index} className={styles.attachmentItem}>
+                                {file ? <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit:"cover" }} /> : ""}
+                                <Typography> 
                                     {file.name}
-                                </div>
-                                <div onClick={() => deleteFile(index)}>X</div>
+                                </Typography>
+                                <IconButton color="error" aria-label="delete" onClick={() => deleteFile(index)}>
+                                    <CloseIcon  />
+                                </IconButton>
                             </div>
                         )
                     })}
             </div>
-            <Button disabled={!files?.length} variant="contained" onClick={uploadFiles} sx={{ minWidth: '100px', maxWidth: "100px" }}>
+            <Button disabled={!files?.length} color="success" variant="contained" onClick={uploadFiles} size="small"   sx={{ width: "100px" }}>
                 {loadingOnImagesUpload ?
                     <CircularProgress sx={{ color: " white" }} size="1.5rem" />
                     : 'Upload'}

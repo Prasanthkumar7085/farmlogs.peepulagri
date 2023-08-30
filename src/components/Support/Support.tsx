@@ -12,6 +12,7 @@ import deleteASupportService from "../../../lib/services/SupportService/deleteAS
 import AlertComponent from "../Core/AlertComponent";
 import SelectComponent from "../Core/SelectComponent";
 import updateSupportStatusService from "../../../lib/services/SupportService/updateSupportStatusService";
+import styles from "./support.module.css";
 
 const SupportPage = () => {
 
@@ -106,10 +107,10 @@ const SupportPage = () => {
     }, [searchString]);
 
     return (
-        <div style={{ margin: "30px 30px 0px 30px" }}>
+        <div className={styles.supportDashboard}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3>Support</h3>
-                <div style={{ display: "flex", justifyContent: "space-around", width: "500px" }}>
+                <h3 className="title">Support</h3>
+                <div className={styles.tableFilters}>
                     <SearchComponent
                         onChange={(value: string) => setSearchString(value)}
                         placeholder={'Search By Title'}
@@ -117,8 +118,8 @@ const SupportPage = () => {
                         searchString={searchString}
                         value={searchString}
                     />
-                    <SelectComponent options={statusOptions} onChange={onStatusChange} defaultValue='' />
-                    <ButtonComponent icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />
+                    <SelectComponent options={statusOptions} size="small" onChange={onStatusChange} defaultValue='' />
+                    <ButtonComponent  variant="contained" icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />
                 </div>
             </div>
             <SupportDataTable data={data} loading={loading} deleteSupport={deleteSupport} updateStatus={updateStatus} />

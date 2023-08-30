@@ -21,11 +21,19 @@ const ViewSupportBody = ({ data }: { data: SupportResponseDataType | undefined }
 
     const getDownloadLinks = async () => {
         let response = await getSupportAttachmentsService(router.query.support_id);
+
         if (response.success) {
             setDownloadUrls(response.data.download_urls);
         }
     }
 
+    const getSrc = (item: any) => {
+        if (item.file_name.includes('.wav'))
+            return '/audio.svg'
+        else if (item.file_name.includes('.pdf'))
+            return '/pdf.svg'
+        else return item.downloadUrl
+    }
     return (
         <div className={styles.dataGroup3}>
             <div className={styles.subTitle2}>
@@ -41,7 +49,8 @@ const ViewSupportBody = ({ data }: { data: SupportResponseDataType | undefined }
                                 alt={`image-${index}`}
                                 height={100}
                                 width={150}
-                                src={item.downloadUrl}
+                                src={getSrc(item)}
+
                             />
                             <IconButton onClick={() => window.open(item.downloadUrl)}>
                                 <OpenInNewIcon />

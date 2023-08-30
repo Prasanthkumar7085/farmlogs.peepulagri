@@ -6,6 +6,7 @@ import getSupportByIdService from "../../../../../lib/services/SupportService/ge
 import { SupportResponseDataType } from "@/types/supportTypes";
 import HeadSupportPart from "./HeadSupportPart";
 import ViewSupportBody from "./ViewSupportBody";
+import SupportConversationScreen from "./SupportConversationScreen";
 
 const ViewSupportPage = () => {
 
@@ -41,7 +42,7 @@ const ViewSupportPage = () => {
         <div>
             <HeadSupportPart data={data} />
             <ViewSupportBody data={data} />
-
+            <SupportConversationScreen data={data} />
             <LoadingComponent loading={loading} />
         </div>
     )

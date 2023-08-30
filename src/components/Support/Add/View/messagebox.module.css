@@ -1,0 +1,47 @@
+.chatBox {
+  border: 0;
+  background-color: transparent;
+  align-self: stretch;
+}
+.attachments,
+.image {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.image {
+  overflow: hidden;
+}
+.attachments {
+  align-self: stretch;
+  gap: var(--gap-base);
+}
+.delete {
+  position: relative;
+}
+.actions,
+.button,
+.inputForm {
+  display: flex;
+  flex-direction: row;
+}
+.button {
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-5xl);
+}
+.actions,
+.inputForm {
+  align-self: stretch;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.inputForm {
+  background-color: var(--white);
+  flex-direction: column;
+  padding: 0 var(--padding-base);
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+}

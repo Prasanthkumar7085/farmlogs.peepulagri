@@ -23,7 +23,7 @@ const AddALog: NextPage = () => {
   const [singleLogDetails, setSingleData] = useState<GetLogByIdResponseDataType | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails.access_token);
+  const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
 
   const [resources, setResources] = useState([]);
   const [additionalResources, setAdditionalResources] = useState([]);

@@ -24,9 +24,9 @@ const menuListItems = [
     { src: '/dashboard-icon.svg', link: "/" },
     { src: '/support-icon.svg', link: "/support" },
     { src: '/timeline-icon.svg', link: "/timeline" },
-    { src: '/settings-icon.svg', link: "/" },
-    { src: '/calendaricon.svg', link: "/" },
-    { src: '/graph-icon.svg', link: "/" },
+    // { src: '/settings-icon.svg', link: "/" },
+    // { src: '/calendaricon.svg', link: "/" },
+    // { src: '/graph-icon.svg', link: "/" },
 ]
 
 const SideBarMenu = ({ children }: any) => {

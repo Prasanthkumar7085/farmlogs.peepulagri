@@ -112,3 +112,14 @@
   color: var(--gray-900);
   font-family: var(--text-sm-medium);
 }
+
+.table {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  min-width: 100%;
+  margin-top: .5rem;
+  border-radius: 3px;
+}
+.table tbody td,
+.table thead th {
+  padding-block: 8px;
+}

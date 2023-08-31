@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import {
   TextField,
-  TextareaAutosize,
   FormControl,
   InputLabel,
   MenuItem,
@@ -96,7 +95,6 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
         <TextField
           multiline
           className={styles.description}
-          color="primary"
           name="description"
           placeholder="Enter description here"
           value={description}

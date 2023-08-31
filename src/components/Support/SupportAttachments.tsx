@@ -62,7 +62,7 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                 </p>
             </div>
 
-            <label style={{ cursor: "pointer" }} >
+            <label className={styles.UpdateFiles} >
                 <div className={styles.link}>
                     Select Files
                 </div>

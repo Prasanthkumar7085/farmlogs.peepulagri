@@ -15,22 +15,22 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
     const router = useRouter();
     const categoryOptions: Array<categoriesType> = [
 
-        { title: 'Input Resources', value: "input_resources", color: "#66BB6A" },
-        { title: 'Irrigation', value: "irrigation", color: "#64B5F6" },
-        { title: 'Tools', value: "tools", color: "#FFD54F" },
-        { title: 'Harvesting', value: "harvesting", color: "#AB47BC" },
-        { title: 'Alerts', value: "alerts", color: "#AED581" },
-        { title: 'Notifications', value: "notifications", color: "#9575CD" },
-        { title: 'Climate & Weather', value: "climate_and_weather", color: "#FF8A65" },
-        { title: 'Dashboard', value: "dashboard", color: "#FFD700" },
-        { title: 'New Features', value: "new_features", color: "#FF80AB" },
-        { title: 'Data Analysis', value: "data_analysis", color: "#78909C" },
-        { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting", color: "#26A69A" },
+        { title: 'Input Resources', value: "input_resources", color: "#66BB6A", textColor: "#ffffff" },
+        { title: 'Irrigation', value: "irrigation", color: "#64B5F6", textColor: "#ffffff" },
+        { title: 'Tools', value: "tools", color: "#FFD54F", textColor: "#ffffff" },
+        { title: 'Harvesting', value: "harvesting", color: "#AB47BC", textColor: "#ffffff"  },
+        { title: 'Alerts', value: "alerts", color: "#AED581", textColor: "#ffffff"  },
+        { title: 'Notifications', value: "notifications", color: "#9575CD", textColor: "#ffffff"  },
+        { title: 'Climate & Weather', value: "climate_and_weather", color: "#FF8A65", textColor: "#ffffff"  },
+        { title: 'Dashboard', value: "dashboard", color: "#FFD700", textColor: "#ffffff"  },
+        { title: 'New Features', value: "new_features", color: "#FF80AB", textColor: "#ffffff"  },
+        { title: 'Data Analysis', value: "data_analysis", color: "#78909C", textColor: "#ffffff"  },
+        { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting", color: "#26A69A", textColor: "#ffffff"  },
     ];
 
     const getColor = (item: any) => {
         return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
-    }
+    } 
 
     const columns = [   
         {

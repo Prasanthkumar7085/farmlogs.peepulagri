@@ -2,6 +2,7 @@ export interface categoriesType {
     title: string;
     value: string;
     color: string;
+    textColor: string;
 }
 
 export interface SupportServiceTypes {

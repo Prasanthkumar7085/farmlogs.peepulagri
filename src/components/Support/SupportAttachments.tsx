@@ -1,5 +1,5 @@
 
-import styles from "./attachments.module.css";
+import styles from "./../../components/AddLogs/attachments.module.css";
 import { useEffect, useState } from "react";
 import { Button, CircularProgress, IconButton, Typography } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -15,14 +15,11 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
 
     const deleteFile = (index: number) => {
         let array = [...files];
-        let tempArray = array.filter((item: any, itemIndex: number) => itemIndex != index)
-        let e = { target: { files: tempArray } }
-        onChangeFile(e)
+        let tempArray = array.filter((item: any, itemIndex: number) => itemIndex != index);
+        let e = { target: { files: tempArray } };
+        onChangeFile(e);
 
     }
-
-
-
 
     useEffect(() => {
         if (router.isReady && router.query.support_id) {
@@ -64,7 +61,16 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                     You can also drag and drop files to upload them.
                 </p>
             </div>
-            <input className={styles.link} type="file" multiple onChange={onChangeFile} />
+
+            <label style={{ cursor: "pointer" }} >
+                <div className={styles.link}>
+                    Select Files
+                </div>
+                <input className={styles.link} type="file" multiple onChange={onChangeFile}
+                    style={{ display: "none" }}
+                    accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" />
+            </label>
+
             <div>
                 {files &&
                     Array.from(files).map((file: any, index) => {
@@ -73,17 +79,17 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                         return (
                             <div key={index} className={styles.attachmentItem}>
                                 {file ? <img src={getImageObjectUrl(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
-                                <Typography> 
+                                <Typography>
                                     {file.name}
                                 </Typography>
                                 <IconButton color="error" aria-label="delete" onClick={() => deleteFile(index)}>
-                                    <CloseIcon  />
+                                    <CloseIcon />
                                 </IconButton>
                             </div>
                         )
                     })}
             </div>
-            <Button disabled={!files?.length} color="success" variant="contained" onClick={uploadFiles} size="small"   sx={{ width: "100px" }}>
+            <Button disabled={!files?.length} color="success" variant="contained" onClick={uploadFiles} size="small" sx={{ width: "100px" }}>
                 {loadingOnImagesUpload ?
                     <CircularProgress sx={{ color: " white" }} size="1.5rem" />
                     : 'Upload'}

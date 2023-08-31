@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import styles from "./header.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
+import AddLogHeader from "./AddLogHeader";
 const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
   const categoryOptions = [
@@ -49,10 +50,11 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
   return (
     <div className={styles.primaryFormField}>
-      <div className={styles.title}>
+      <AddLogHeader />
+      {/* <div className={styles.title}>
         <img className={styles.addAIcon} alt="Add Icon" src="/add-icon.svg" />
         <h2 className={styles.addALog}>Add A Log</h2>
-      </div>
+      </div> */}
       <div className={styles.container}>
         <div className={styles.rowParent}>
           <div className={styles.row}>
@@ -91,7 +93,8 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
             <FormHelperText />
           </FormControl>
         </div>
-        <TextareaAutosize
+        <TextField
+          multiline
           className={styles.description}
           color="primary"
           name="description"

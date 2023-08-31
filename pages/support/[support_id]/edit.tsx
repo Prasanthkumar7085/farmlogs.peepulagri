@@ -1,3 +1,4 @@
+import AddSupportHeader from "@/components/Support/Add/AddSupportHeader";
 import AddSupportPage from "@/components/Support/Add/AddSupportPage";
 import EditSupportForm from "@/components/Support/Add/EditSupportForm";
 import { GetServerSideProps } from "next";
@@ -5,6 +6,7 @@ import { GetServerSideProps } from "next";
 const EditSupport = () => {
     return (
         <div>
+            <AddSupportHeader />
             <EditSupportForm />
         </div>
     )

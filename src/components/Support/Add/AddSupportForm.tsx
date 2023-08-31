@@ -11,7 +11,7 @@ import addSupportService from "../../../../lib/services/SupportService/addSuppor
 import addAttachmentsService from "../../../../lib/services/SupportService/addAttachmentsService";
 import uploadFileToS3 from "../../../../lib/services/LogsService/uploadFileToS3InLog";
 import { useRouter } from "next/router";
-import SupportAttachments from "@/components/AddLogs/SupportAttachments";
+import SupportAttachments from "@/components/Support/SupportAttachments";
 import AlertComponent from "@/components/Core/AlertComponent";
 import { useSelector } from "react-redux";
 

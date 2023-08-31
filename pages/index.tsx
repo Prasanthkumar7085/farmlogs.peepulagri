@@ -22,7 +22,13 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (cookies.loggedIn == 'true') {
 
         let response = await getAllFarmsService();
-        const id = response.data[0]._id;
+        let id;
+        if (response && response.success) {
+            id = response.data[0]._id;
+        } else {
+            id = 'log_id'
+        }
+
         return {
             redirect: {
                 destination: `/farm/${id}/logs`,

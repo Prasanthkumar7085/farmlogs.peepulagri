@@ -62,7 +62,7 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
         <div className={styles.link}>
           Select Files
           </div>
-      <input id="upload-files" hidden className={styles.link} name="file" type="file" multiple onChange={onChangeFile} accept="image/*, .pdf" />
+        <input id="upload-files" style={{ display: "none" }} className={styles.link} name="file" type="file" multiple onChange={onChangeFile} accept="image/*, .pdf" />
       </label>
       <div>
         {files &&

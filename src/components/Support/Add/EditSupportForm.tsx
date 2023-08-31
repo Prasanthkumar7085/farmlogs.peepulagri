@@ -6,7 +6,7 @@ import getSupportByIdService from "../../../../lib/services/SupportService/getSu
 import AddSupportQueryDetails from "./AddSupportQueryDetails";
 import { Button, Chip, CircularProgress, Fab, Grid, Typography } from "@mui/material";
 import FooterActionButtons from "../../AddLogs/footer-action-buttons";
-import SupportAttachments from "../../AddLogs/SupportAttachments";
+import SupportAttachments from "../SupportAttachments";
 import addAttachmentsService from "../../../../lib/services/SupportService/addAttachmentsService";
 import uploadFileToS3 from "../../../../lib/services/LogsService/uploadFileToS3InLog";
 import { useSelector } from "react-redux";
@@ -280,6 +280,7 @@ const EditSupportForm = () => {
 
     return (
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+
             {router?.query?.support_id && supportOneDetails?.title ?
 
                 <div className={styles.addSupportForm}>
@@ -416,47 +417,3 @@ const EditSupportForm = () => {
 
 
 export default EditSupportForm;
-
-{/* {permission && recordingStatus === "inactive" ? (
-                                <button onClick={startRecording} type="button">
-                                    Start Recording
-                                </button>
-                            ) : null} */}
-{/* {recordingStatus === "recording" ? (
-                                <button onClick={stopRecording} type="button">
-                                    Stop Recording
-                                </button>
-                            ) : null} */}
-
-
-
-
-
-
-
-
-
-
-{/* {audio ? (
-                                <div className="audio-container">
-                                    <audio src={audio} controls></audio>
-
-                                </div>
-                            ) : null}
-
-                            {audio ? (
-                                <Button
-                                    disabled={!audio}
-                                    variant="contained"
-                                    onClick={uploadAudio}
-                                    size="small"
-                                    sx={{ width: "100px", fontWeight: "600" }}
-                                >
-                                    {loadingOnMicUpload ? (
-                                        <CircularProgress size="1.5rem" sx={{ color: " white" }} />
-                                    ) : (
-                                        "Upload"
-                                    )}
-                                </Button>
-
-                            ) : null} */}

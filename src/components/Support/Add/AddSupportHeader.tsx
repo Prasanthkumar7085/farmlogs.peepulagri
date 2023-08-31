@@ -22,7 +22,7 @@ const AddSupportHeader = () => {
         onClick={() => router.back()}
         style= {{ paddingInline : "0", minWidth: "auto" }}
     />
-    <Typography variant="h6" className="title">Add Support</Typography>
+      <Typography variant="h6" className="title">{router.query.support_id ? 'Edit Support' : 'Add Support'}</Typography>
     </div>
   );
 };

@@ -91,32 +91,24 @@
   font-family: inherit;
 }
 .inputField,
-.subTitle,
-.tableHead {
+.subTitle{
   display: flex;
   justify-content: flex-start;
 }
+
+
 .subTitle {
   align-self: stretch;
   flex-direction: row;
   align-items: center;
 }
-.inputField,
-.tableHead {
+.inputField {
   align-items: flex-start;
 }
 .inputField {
   flex: 1;
   flex-direction: column;
-  padding: var(--padding-8xs) var(--padding-3xs) var(--padding-8xs)
-    var(--padding-11xs);
-}
-.tableHead {
-  align-self: stretch;
-  background-color: var(--white);
-  flex-direction: row;
-  font-size: var(--text-sm-medium-size);
-  color: var(--gray-700);
+  padding: var(--padding-8xs) var(--padding-3xs);
 }
 .text3 {
   margin: 0;
@@ -150,11 +142,11 @@
 .dataGroup1,
 .inputCell1,
 .inputCell2,
-.tableGroup,
-.tableRow {
+.tableGroup {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  row-gap: 4px;
 }
 .inputCell2 {
   flex: 1;
@@ -162,22 +154,30 @@
   padding: var(--padding-8xs) var(--padding-3xs);
 }
 .dataGroup1,
-.tableGroup,
-.tableRow {
+.tableGroup {
   align-self: stretch;
 }
+
 .tableRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 4px;
   border-radius: var(--br-8xs);
   background-color: var(--background);
   border: 1px solid var(--stroke);
-  flex-direction: row;
+} 
+.tableHead {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  background-color: var(--white);
 }
 .dataGroup1,
 .tableGroup {
   flex-direction: column;
 }
 .tableGroup {
-  gap: var(--gap-8xs);
+  gap: 5px;
   font-size: var(--font-size-base);
 }
 .dataGroup1 {
@@ -338,4 +338,5 @@
   font-size: var(--font-size-lg);
   color: var(--gray-900);
   font-family: var(--text-sm-medium);
+  width: 100%;
 }

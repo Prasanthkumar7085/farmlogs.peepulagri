@@ -134,8 +134,8 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
         <div className={styles.subTitle}>
           <h4 className={styles.text2}>Additional Information</h4>
         </div>
-        <div className={styles.tableGroup1}>
-          <div className={styles.tableHead1}>
+        <div className={styles.tableGroup}>
+          <div className={styles.tableHead}>
             <div className={styles.inputField}>
               <h5 className={styles.label}>Pesticide</h5>
             </div>
@@ -149,7 +149,7 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
 
           {data?.additional_resources.map((item: AdditionalResourcesType, index: number) => {
             return (
-              <div className={styles.tableRow3} key={index}>
+              <div className={styles.tableRow} key={index}>
                 <div className={styles.inputCell}>
                   <p className={styles.text3}>{item.title}</p>
                 </div>

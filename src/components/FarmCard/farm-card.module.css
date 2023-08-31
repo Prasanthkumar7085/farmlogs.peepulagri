@@ -1,3 +1,12 @@
+.cardContainer {
+  height: calc(100vh - 1rem); 
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  width: 320px;
+  overflow-y: scroll;
+}
+
 .farmshapeIcon {
   position: relative;
   border-radius: 2.98px;

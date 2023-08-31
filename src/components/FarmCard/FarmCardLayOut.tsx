@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FarmDataType } from "@/types/farmCardTypes";
 import { useRouter } from "next/router";
-
+import styles from "./FarmCardLayout.module.css";
 
 const FarmCardsLayOut = ({ children, farmsData }: any) => {
 
@@ -11,7 +11,7 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
 
     return (
         <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: "30px", padding: "20px" }}>
-            <div style={{ height: "calc(100vh - 1rem)", display: "flex", gap: "1rem", flexDirection: "column", width: "320px", }}>
+            <div className={styles.cardContainer}>
                 {farmsData?.data?.length && farmsData?.data.map((item: FarmDataType) => {
                     console.log(item);
 

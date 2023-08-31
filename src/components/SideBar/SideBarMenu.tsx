@@ -61,11 +61,11 @@ const SideBarMenu = ({ children }: any) => {
                             )
                         })}
                     </List>
+                    <IconButton onClick={logout}>
+                        <LogoutIcon sx={{ color: "white" }} />
+                    </IconButton>
                 </nav>
 
-                <IconButton onClick={logout}>
-                    <LogoutIcon sx={{ color: "white" }} />
-                </IconButton>
 
                 <button className={styles.profile}>
                     <div className={styles.profile1}>

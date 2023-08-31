@@ -3,7 +3,7 @@
   display: flex;
   gap: 1rem;
   flex-direction: column;
-  width: 320px;
+  width: 280px;
   overflow-y: scroll;
 }
 
@@ -79,14 +79,14 @@
   color: var(--body);
 }
 
-.p,
+.count,
 .totalLogs {
   margin: 0;
   position: relative;
   line-height: 100%;
 }
 
-.p {
+.count {
   font-size: var(--text-md-normal-size);
   font-weight: 500;
   background: linear-gradient(142.18deg, #3462cf, #2b53be);
@@ -146,11 +146,11 @@
 .activebar {
   position: absolute;
   margin: 0 !important;
-  top: calc(50% - 98px);
+  top: 0;
+  bottom: 0;
   left: 0;
   background-color: var(--color-sienna);
   width: 4px;
-  height: 100%;
   z-index: 3;
 }
 .default {
@@ -158,12 +158,12 @@
 }
 .farmcard {
   position: relative;
-    border: 3px solid var(--stroke);
+  border: 3px solid var(--stroke);
   text-decoration: none;
   align-self: stretch;
   border-radius: var(--br-3xs);
   background-color: var(--white);
-  box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.08);
+  /* box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.08); */
   border-top: 1px solid var(--stroke);
   border-right: 1px solid var(--stroke);
   border-bottom: 1px solid var(--stroke);
@@ -171,11 +171,11 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  padding: var(--padding-base) var(--padding-5xl) var(--padding-5xl);
+  padding: 0.75vw;
   align-items: center;
   justify-content: flex-start;
   position: relative;
-  gap: var(--gap-base);
+  gap: var(--gap-3xs);
   text-align: left;
   font-size: var(--font-size-sm);
   color: var(--color-sienna);

@@ -37,14 +37,14 @@ const FarmCard = ({
       <div className={styles.statsprogress}>
         <div className={styles.logscount}>
           <p className={styles.totalLogs}>Total Logs</p>
-          <p className={styles.p}>{logCount}</p>
+          <p className={styles.count}>{logCount}</p>
         </div>
-        <div className={styles.progressbar}>
+        {/* <div className={styles.progressbar}>
           <span className={styles.para}>Progress</span>
           <div className={styles.progress}>
             <div className={styles.bar} style={barStyle} />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className={_id == router.query.farm_id ? styles.activebar : styles.default} />
     </div>

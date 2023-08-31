@@ -10,7 +10,7 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
     const router = useRouter();
 
     return (
-        <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: "30px", padding: "20px" }}>
+        <div className={styles.innerWrapper}>
             <div className={styles.cardContainer}>
                 {farmsData?.data?.length && farmsData?.data.map((item: FarmDataType) => {
                     console.log(item);
@@ -28,7 +28,7 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
                     )
                 })}
             </div>
-            <div className="FarmDetails">
+            <div className={styles.FarmDetails}>
                 <Image alt="" src='/image-2@2x.png' className="mapImage" width={1000} height={150} style={{ objectFit: "cover", objectPosition: "center" }} />
                 {children}
             </div>

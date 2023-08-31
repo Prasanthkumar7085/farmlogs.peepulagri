@@ -7,10 +7,13 @@ import { useEffect, useState } from "react";
 import getLogByIdService from "../../lib/services/LogsService/getLogByIdService";
 import { GetLogByIdResponseDataType } from "@/types/logsTypes";
 import LoadingComponent from "./Core/LoadingComponent";
+import { useSelector } from "react-redux";
 
 const ViewLogsContainer: NextPage = () => {
 
   const router: any = useRouter();
+
+  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
   const [data, setData] = useState<GetLogByIdResponseDataType | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,10 +32,10 @@ const ViewLogsContainer: NextPage = () => {
     }
   }
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && accessToken) {
       fetchSingleLogData();
     }
-  }, [router.isReady]);
+  }, [accessToken, router.isReady]);
 
 
   return (

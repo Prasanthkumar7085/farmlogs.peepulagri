@@ -5,8 +5,12 @@ import SelectComponenent from "../Core/SelectComponent"
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService"
 import InfiniteScroll from "react-infinite-scroll-component"
 import SelectComponenentForLogs from "../Core/SelectComponrntForLogs"
+import { useSelector } from "react-redux";
+
 
 const TimeLineComponent = () => {
+
+    const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
 
     const [data, setData] = useState<any>([]);
     const [formOptions, setFormOptions] = useState<any>()
@@ -21,7 +25,7 @@ const TimeLineComponent = () => {
     }, [])
 
     const getFormDetails = async () => {
-        let response = await getAllFarmsService()
+        let response = await getAllFarmsService(accessToken)
         setFormOptions(response.data)
     }
 

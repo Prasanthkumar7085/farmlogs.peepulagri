@@ -17,10 +17,15 @@ import { ResourcesTypeInResponse, ResourcesTypeInResponseWithLogo } from "@/type
 import { categoriesType } from "@/types/supportTypes";
 import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 
+import { useSelector } from "react-redux";
+
+
 
 const FarmTableLogs = () => {
 
     const router: any = useRouter();
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
 
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
@@ -37,7 +42,7 @@ const FarmTableLogs = () => {
 
 
     useEffect(() => {
-        if (router.isReady) {
+        if (router.isReady && accessToken) {
             getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, search: router.query.search_string, orderBy: router.query?.order_by, orderType: router.query?.order_type });
             getSingleFarm(router.query.farm_id);
 
@@ -45,7 +50,7 @@ const FarmTableLogs = () => {
             setOrderBy(router.query?.order_by)
             setOrderType(router.query?.order_type)
         }
-    }, [router.query.farm_id, router.isReady]);
+    }, [router.query.farm_id, router.isReady, accessToken]);
 
 
     const getSingleFarm = (id: string) => {
@@ -147,14 +152,14 @@ const FarmTableLogs = () => {
     useEffect(() => {
         const delay = 500;
         const debounce = setTimeout(() => {
-            if (searchString && router.isReady) {
+            if (searchString && router.isReady && accessToken) {
                 getFarmLogs({ page: 1, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
             } else {
                 getFarmLogs({ page: 1, search: '', orderBy: router.query?.order_by, orderType: router.query?.order_type });
             }
         }, delay);
         return () => clearTimeout(debounce);
-    }, [searchString]);
+    }, [searchString, accessToken]);
 
 
     const searchStringChange = (value: string) => {

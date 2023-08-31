@@ -4,9 +4,14 @@ import { prepareURLEncodedParams } from '../../requestUtils/urlEncoder';
 const getLogsByFarmIdService = async ({ farmId, page, limit, paramString = '' }: Partial<GetLogsByFarmIdPropsType>) => {
 
     const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}/logs/${page}/${limit}${paramString}`
-
+    let options = {
+        method: "GET",
+        // headers: new Headers({
+        //     'authorization': accessToken
+        // })
+    }
     try {
-        const response: any = await fetch(url);
+        const response: any = await fetch(url, options);
         const responseData = await response.json();
         if (response.ok) {
             return responseData;

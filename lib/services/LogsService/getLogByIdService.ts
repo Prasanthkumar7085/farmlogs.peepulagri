@@ -2,9 +2,14 @@
 const getLogByIdService = async (logId: string) => {
 
     const url = `${process.env.NEXT_PUBLIC_API_URL}/log/${logId}`
-
+    let options = {
+        method: "GET",
+        // headers: new Headers({
+        //     'authorization': accessToken
+        // })
+    }
     try {
-        const response: any = await fetch(url);
+        const response: any = await fetch(url, options);
         const responseData = await response.json();
         if (response.ok) {
             return responseData;

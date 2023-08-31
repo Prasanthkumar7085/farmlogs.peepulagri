@@ -1,6 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
+import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
 
 const SignUp = () => {
 
@@ -26,13 +27,27 @@ const SignUp = () => {
         }
     };
 
+    const [errorMessages, setErrorMessages] = useState<string>();
+
     const router = useRouter();
-    const getOtp = (e: FormEvent<HTMLFormElement>) => {
+    const getOtp = async (e: FormEvent<HTMLFormElement>) => {
+        setErrorMessages('');
         e.preventDefault();
-        router.push({
-            pathname: "/signup-verify",
-            query: { mobile: mobile }
-        });
+        const body = {
+            full_name: name,
+            email: email,
+            phone: mobile
+        }
+        const response = await getOtpService(body);
+        if (response.success) {
+            router.push({
+                pathname: "/signup-verify",
+                query: { mobile: mobile }
+            });
+        } else {
+            setErrorMessages('Login Failed')
+        }
+
 
     }
 
@@ -46,7 +61,7 @@ const SignUp = () => {
                     <div>
                         <label>Name</label>
                         <TextField
-                            required
+
                             fullWidth
                             value={name}
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
@@ -55,7 +70,7 @@ const SignUp = () => {
                     <div>
                         <label>Email</label>
                         <TextField
-                            required
+
                             fullWidth
                             value={email}
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
@@ -64,13 +79,18 @@ const SignUp = () => {
                     <div>
                         <label>Mobile</label>
                         <TextField
-                            required
+
                             fullWidth
                             value={mobile}
                             onChange={setMobileNumber}
                             onKeyPress={handleKeyPress}
                         />
                     </div>
+                    {errorMessages ?
+                        <p style={{ color: "red" }}>
+                            {errorMessages}
+                        </p>
+                        : ""}
                     <Button type='submit' variant="contained">
                         Login
                     </Button>

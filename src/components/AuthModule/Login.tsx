@@ -43,7 +43,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      let response: AuthResponseDataType | AuthResponseErrorDataType;
+      let response: AuthResponseDataType | AuthResponseErrorDataType | any;
       response = await loginService({ email: email, password: password });
 
       if (response.success) {
@@ -51,9 +51,12 @@ const Login = () => {
         if ("data" in response) {
           dispatch(setUserDetails(response?.data));
         }
-        let FarmResponse = await getAllFarmsService();
-        const id = FarmResponse.data[0]._id;
-        router.push(`/farm/${id}/logs`);
+        let accessToken = response.data.access_token;
+        let farmResponse = await getAllFarmsService(accessToken);
+        if (farmResponse.success) {
+          const id = farmResponse.data[0]._id;
+          router.push(`/farm/${id}/logs`);
+        }
       } else if (response.status == 422) {
         if ("errors" in response) {
           setErrorMessages(response.errors);

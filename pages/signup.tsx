@@ -1,6 +1,6 @@
 import SignUp from "@/components/AuthModule/SignUp/SignUp";
 import { GetServerSideProps } from "next";
-import getAllFarmsService from "../lib/services/FarmsService/getAllFarmsService";
+
 
 const SignUpPage = () => {
     return (
@@ -28,13 +28,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     if (cookies.loggedIn == 'true') {
 
-        let response = await getAllFarmsService();
-        let id;
-        if (response && response.success) {
-            id = response.data[0]._id;
-        } else {
-            id = 'log_id'
-        }
+        let id = 'log_id'
+
 
         return {
             redirect: {

@@ -13,8 +13,6 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
         <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: "30px", padding: "20px" }}>
             <div style={{ height: "calc(100vh - 1rem)", display: "flex", gap: "1rem", flexDirection: "column", width: "320px", }}>
                 {farmsData?.data?.length && farmsData?.data.map((item: FarmDataType) => {
-                    console.log(item);
-
                     return (
                         <div key={item._id} onClick={() => router.push(`/farm/${item._id}/logs`)} style={{ cursor: "pointer" }}>
                                 <FarmCard

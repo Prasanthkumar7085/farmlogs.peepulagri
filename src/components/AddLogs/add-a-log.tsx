@@ -35,8 +35,9 @@ const AddALog: NextPage = () => {
 
   const [files, setFiles] = useState<any>([]);
   const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
-
   const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
+  const [uploadButtonLoading, setUploadButtonLoading] = useState(false);
+  const [uploadFailed, setUploadFailed] = useState(false);
 
   const captureDates = (fromDate: string, toDate: string) => {
     setDates([fromDate, toDate]);
@@ -85,14 +86,20 @@ const AddALog: NextPage = () => {
 
 
   const onChangeFile = (e: any) => {
+    setUploadFailed(false);
     setFiles(e.target.files);
   }
   const uploadFiles = async () => {
+    setUploadButtonLoading(true);
+    setUploadFailed(false);
     let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
     const response = await addLogsAttachmentService({ attachments: tempFilesStorage }, accessToken);
     if (response.success) {
       await postAllImages(response.data, tempFilesStorage);
+    } else {
+      setUploadFailed(true);
+      setUploadButtonLoading(false)
     }
 
   }
@@ -105,11 +112,11 @@ const AddALog: NextPage = () => {
       if (uploadResponse.ok) {
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
-      }
+      } 
     }
     setFilesDetailsAfterUpload(arrayForResponse);
 
-
+    setUploadButtonLoading(false);
   }
 
 
@@ -130,6 +137,9 @@ const AddALog: NextPage = () => {
             onChangeFile={onChangeFile}
             uploadFiles={uploadFiles}
             files={files}
+            uploadButtonLoading={uploadButtonLoading}
+            uploadFailed={uploadFailed}
+
           />
 
           </div>

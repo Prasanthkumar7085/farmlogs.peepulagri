@@ -1,16 +1,12 @@
 import { GetLogsByFarmIdPropsType, QueryParamForFarmLogs } from '../../../src/types/farmCardTypes';
 import { prepareURLEncodedParams } from '../../requestUtils/urlEncoder';
 
-const getLogsByFarmIdService = async ({ farmId, page, limit, search = '' }: GetLogsByFarmIdPropsType) => {
+const getLogsByFarmIdService = async ({ farmId, page, limit, paramString = '' }: Partial<GetLogsByFarmIdPropsType>) => {
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}/logs/${page}/${limit}`
-    let queryParams: Partial<QueryParamForFarmLogs> = {};
-    if (search) {
-        queryParams['search_string'] = search;
-    }
-    let encodedUrl = prepareURLEncodedParams(url, queryParams);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}/logs/${page}/${limit}${paramString}`
+
     try {
-        const response: any = await fetch(encodedUrl);
+        const response: any = await fetch(url);
         const responseData = await response.json();
         if (response.ok) {
             return responseData;

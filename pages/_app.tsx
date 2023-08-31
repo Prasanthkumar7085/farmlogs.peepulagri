@@ -15,10 +15,16 @@ function MyApp({
     const { store, props } = wrapper.useWrappedStore(rest);
 
     const router = useRouter();
+
+    const sideBarList = [
+        '/',
+        '/signup',
+        '/signup-verify'
+    ]
     return (
         <ThemeProvider theme={theme}>
             <Provider store={store}>
-            {router.pathname == '/' ?
+                {sideBarList.includes(router.pathname) ?
                 <Component {...pageProps} /> :
                 <SideBarMenu>
                     <Component {...pageProps} />

@@ -57,7 +57,7 @@ const Login = () => {
     }
 
     return (
-        <div style={{ border: "1px solid", display: "flex", padding: '50px', justifyContent: "center" }}>
+        <div style={{ display: "flex", padding: '50px', justifyContent: "center" }}>
 
             <form onSubmit={login} style={{
                 display: "flex",

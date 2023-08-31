@@ -8,14 +8,7 @@ const Support = () => {
         </div>
     )
 }
-
-
 export default Support;
-
-
-
-
-
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 

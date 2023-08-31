@@ -1,14 +1,14 @@
 import styles from "./attachments.module.css";
 import { useEffect, useState } from "react";
-import { Button, IconButton } from "@mui/material";
+import { Button, CircularProgress, IconButton } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
 import { useRouter } from "next/router";
-import DeleteIcon from '@mui/icons-material/Delete';
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import Image from "next/image";
 import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
 
-const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
+const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed }: any) => {
 
   const router = useRouter();
 
@@ -39,8 +39,6 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
 
     if (typeof (router.query.log_id) == 'string') {
       let response = await deleteLogAttachmentService(router.query.log_id, id);
-
-
       if (response.success) {
 
       }
@@ -62,7 +60,8 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
         <div className={styles.link}>
           Select Files
           </div>
-        <input id="upload-files" style={{ display: "none" }} className={styles.link} name="file" type="file" multiple onChange={onChangeFile} accept="image/*, .pdf" />
+        <input id="upload-files" style={{ display: "none" }} className={styles.link} name="file" type="file" multiple onChange={onChangeFile}
+          accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf" />
       </label>
       <div>
         {files &&
@@ -78,9 +77,21 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
             )
           })}
       </div>
-      <Button disabled={!files?.length} onClick={uploadFiles}>
-        Upload
+      {files?.length ?
+
+        <Button onClick={uploadFiles}>
+          Upload
+          {uploadButtonLoading ?
+            <CircularProgress size="1.5rem" />
+            : <CloudUploadOutlinedIcon />}
       </Button>
+
+        : ""}
+      {uploadFailed ?
+        <p style={{ color: "red", fontSize: "12px" }}>
+          Oops! Upload Failed, Please try again
+        </p>
+        : ""}
       <div style={{ display: "flex" }}>
         {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
           return (

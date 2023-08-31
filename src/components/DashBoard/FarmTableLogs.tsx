@@ -34,7 +34,7 @@ const FarmTableLogs = () => {
             getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
             getSingleFarm(router.query.farm_id);
         }
-    }, [router]);
+    }, [router.query.farm_id, router.isReadyres]);
 
 
     const getSingleFarm = (id: string) => {

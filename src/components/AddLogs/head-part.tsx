@@ -1,6 +1,6 @@
 
 import styles from "./head-part.module.css";
-import ButtonComponent from "../Core/ButtonComponent";
+import IconButtonComponent from "../Core/IconButtonComponent";
 import { useRouter } from "next/router";
 import { Chip, Icon } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -65,13 +65,12 @@ const HeadPart = ({ data }: any) => {
   return (
     <div className={styles.headPart}>
       <div className={styles.subHeading}>
-        <ButtonComponent
-          direction={false}
-          title='Back'
+        <IconButtonComponent
           icon={<Icon>arrow_back_sharp</Icon>}
           onClick={() => router.back()}
+          size="small"
         />
-        <h4 className={styles.text}>view Log</h4>
+        <h4 className={styles.text}>View Logs</h4>
       </div>
       <div className={styles.headerContent}>
         <div className={styles.label}>

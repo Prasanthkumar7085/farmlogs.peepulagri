@@ -168,7 +168,7 @@ const FarmTableLogs = () => {
         { title: 'Machinary', value: "machinery", color: "#D94841" },
     ];
 
-    const categoryOptions: Array<categoriesType> = [
+    const categoryOptions: Array<Partial<categoriesType>> = [
         { title: 'Soil Preparation', value: "soil_preparation", color: "#E57373" },
         { title: 'Planting', value: "plainting", color: "#66BB6A" },
         { title: 'Irrigation', value: "irrigation", color: "#64B5F6" },
@@ -187,13 +187,13 @@ const FarmTableLogs = () => {
         { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
     ];
     const getLabel = (item: string) => {
-        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value == item))?.title
+        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.title
     }
     const getTypeColor = (item: string) => {
-        return (workTypeOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
+        return (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))?.color
     }
     const setBackColor = (item: any) => {
-        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value == item))?.color
+        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.color
     }
 
 

@@ -1,0 +1,53 @@
+#loginPage {
+  background-color: #F6F4FF;
+  background: radial-gradient(221.47% 64.72% at 35.43% 53.77%, #FFF 0%, #F7F7F7 39.58%, #F6F4FF 51.56%, #F8F7FC 63.6%, #F9F9F9 75.52%, #FFF 98.44%);
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.logo {
+  margin: -2rem 0 2rem;
+  height: 100px;
+  width: 150px;
+}
+.formCard {
+  background-color: #ffffff;
+  padding: 2em;
+}
+.formCard .title {
+  line-height: 100%;
+  color: #000;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.formCard .para {
+  color: var(--gray-700);
+  font-size: var(--text-sm-normal-size);
+}
+.formCard .submitButton {
+  font-family: 'Inter', sans-serif;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+}
+.submitButton .MuiSvgIcon-root{
+  position: absolute;
+  right: 0;
+  top: 5px;
+}
+.submitButton path{
+  fill: #ffffff;
+}
+.innerForm {
+  margin-top: 1rem;
+}
+.copyrightText {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 14px;
+}

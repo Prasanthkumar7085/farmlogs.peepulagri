@@ -34,13 +34,13 @@
   font-size: var(--text-md-medium-size);
 }
 .description textarea::-webkit-input-placeholder { /* Edge */
-  color: #A6AAB6;
+  color: #000000;
 }
 .description textarea:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: #A6AAB6;
+  color: #000000;
 }
 .description textarea::placeholder {
-  color: #A6AAB6;
+  color: #000000;
 }
 .description textarea:focus-visible {
   outline: none;
@@ -49,13 +49,10 @@
   position: relative;
   align-self: stretch;
   z-index: 1;
-  border: none;
-  background-color: transparent;
-  padding-inline: 16px;
+  padding-inline: 0;
 }
 
-.description div::after,
-.description div::before,
+.description fieldset,
 .inputTitle div:after,
 .inputTitle div:before {
   display: none;
@@ -114,6 +111,5 @@
   gap: var(--gap-3xs);
   text-align: left;
   font-size: var(--font-size-xl);
-  color: var(--color-sienna);
   font-family: var(--text-sm-medium);
 }

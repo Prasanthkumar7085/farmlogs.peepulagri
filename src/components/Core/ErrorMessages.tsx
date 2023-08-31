@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 
 const ErrorMessages = ({ errorMessages, keyname }: any) => {
     return (
-        <Typography variant='subtitle1' color="error" sx={{ height: "5vh" }}>
+        <Typography color="error" sx={{ lineHeight: "100%", marginBlock: "4px" }}>
             {errorMessages[keyname]}
         </Typography>
     )

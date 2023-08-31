@@ -1,12 +1,14 @@
 import styles from "./attachments.module.css";
 import { useEffect, useState } from "react";
-import { Button, CircularProgress, IconButton } from "@mui/material";
+import { Button, CircularProgress, IconButton,Typography } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
 import { useRouter } from "next/router";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import Image from "next/image";
 import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed }: any) => {
 
@@ -56,30 +58,32 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
         </p>
       </div>
 
-      <label style={{ cursor: "pointer" }} >
+      <div className={styles.UpdateFiles} >
         <div className={styles.link}>
           Select Files
-          </div>
-        <input id="upload-files" style={{ display: "none" }} className={styles.link} name="file" type="file" multiple onChange={onChangeFile}
-          accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf" />
-      </label>
+        </div>
+        <input id="upload-files" className={styles.uploadFiles} name="file" type="file" multiple onChange={onChangeFile} 
+         accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf"  />
+      </div>
       <div>
         {files &&
           Array.from(files).map((file: any, index) => {
             return (
-              <div key={index} style={{ display: "flex", gap: '20px' }}>
-                {file && <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={60} width={90} />}
-                <div>
+              <div key={index} className={styles.attachmentItem} style={{backgroundColor: "#F5F7FA"}}>
+              {file ? <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
+              <Typography>
                   {file.name}
-                </div>
-                <div onClick={() => deleteFile(index)}>X</div>
+              </Typography>
+              <IconButton color="error" aria-label="delete" onClick={() => deleteFile(index)}>
+                  <CloseIcon />
+              </IconButton>
               </div>
             )
           })}
       </div>
       {files?.length ?
 
-        <Button onClick={uploadFiles}>
+        <Button  color="success" variant="contained" onClick={uploadFiles} size="small" sx={{ width: "100px" }}>
           Upload
           {uploadButtonLoading ?
             <CircularProgress size="1.5rem" />

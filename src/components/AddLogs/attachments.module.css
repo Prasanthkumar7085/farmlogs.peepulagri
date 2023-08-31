@@ -31,8 +31,21 @@
   display: flex;
   justify-content: flex-start;
 }
+.UpdateFiles {
+  width: 100%;
+  position: relative;
+}
+.uploadFiles{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+}
+.uploadFiles,
 .link {
-  border-radius: var(--br-5xs);
+  border-radius: var(--br-8xs);
   background-color: var(--background);
   box-shadow: var(--shadow-xs);
   border: 1px dashed var(--gray-300);
@@ -43,21 +56,25 @@
   flex-direction: row;
   padding: var(--padding-3xs) var(--padding-base);
   align-items: center;
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1;
 }
 .attachments {
   border-top: 1px solid var(--stroke);
   flex-direction: column;
-  padding: var(--padding-base) 0;
+  padding: var(--padding-13xl);
   align-items: flex-start;
   gap: var(--gap-xs);
   text-align: left;
   font-size: var(--font-size-lg);
   color: var(--gray-900);
   font-family: var(--text-sm-medium);
+  flex: 1;
 }
 .attachments .attachmentItem {
   display: grid;
-  grid-template-columns: 50px auto 50px;
+  grid-template-columns: 50px auto 40px;
   column-gap: 1rem;
   align-items: center;
   margin-bottom: 0.5rem;
@@ -71,4 +88,15 @@
 }
 .attachments .attachmentItem img{
   border-radius: 8px;
+}
+
+.table {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  min-width: 100%;
+  margin-top: .5rem;
+  border-radius: 3px;
+}
+.table tbody td,
+.table thead th {
+  padding-block: 8px;
 }

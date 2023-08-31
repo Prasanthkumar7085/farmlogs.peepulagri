@@ -1,16 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
-html, body {
+html,body {
     font-family: 'Inter', sans-serif;
     margin: 0;
     line-height: normal;
     color: var(--title, #35353D);
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 :root {
@@ -100,8 +101,7 @@ html, body {
 }
 
 .title {
-    font-weight: 500;
-    font-weight: 1.5rem;
+    font-weight: 500;   
 }
 
 .dataTable-container {
@@ -183,9 +183,13 @@ html, body {
 }
 [class*="progressSteps"] .MuiSvgIcon-root{
     fill: #dddddd;
+    border-radius: 50%;
 }
 [class*="progressSteps"] .MuiSvgIcon-root.Mui-active {
     fill: #3462CF;
     box-shadow: 0 0 0 4px #eaedff;
-    border-radius: 50%;
+}
+[class*="progressSteps"] .Mui-completed .MuiSvgIcon-root{
+    fill: #05a155;
+    box-shadow: 0 0 0 4px #f0ffea;
 }

@@ -30,16 +30,12 @@
 .input {
   margin: 0 !important;
   position: absolute;
-  top: -0.5px;
-  left: 1042.5px;
+  top: 5px;
+  right: 5px;
   border-radius: var(--br-8xs);
   background: linear-gradient(142.18deg, #3462cf, #2b53be);
   box-shadow: var(--shadow-xs);
   overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
   z-index: 1;
 }
 .row,

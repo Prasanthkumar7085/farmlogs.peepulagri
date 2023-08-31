@@ -92,5 +92,5 @@
 .main {
   margin-left: 100px;
   background: var(--background, #F5F7FA);
-  height: 100vh;
+  min-height: 100vh;
 }

@@ -1,17 +1,24 @@
 import { AddSupportPayload } from "@/types/supportTypes";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import editSupportService from "../../../lib/services/SupportService/editSupportService";
-import getSupportByIdService from "../../../lib/services/SupportService/getSupportByIdService";
-import AddSupportQueryDetails from "./Add/AddSupportQueryDetails";
-import { Button, CircularProgress, Typography } from "@mui/material";
-import FooterActionButtons from "../AddLogs/footer-action-buttons";
-import SupportAttachments from "../AddLogs/SupportAttachments";
-import addAttachmentsService from "../../../lib/services/SupportService/addAttachmentsService";
-import uploadFileToS3 from "../../../lib/services/LogsService/uploadFileToS3InLog";
+import editSupportService from "../../../../lib/services/SupportService/editSupportService";
+import getSupportByIdService from "../../../../lib/services/SupportService/getSupportByIdService";
+import AddSupportQueryDetails from "./AddSupportQueryDetails";
+import { Button, Chip, CircularProgress, Fab, Grid, Typography } from "@mui/material";
+import FooterActionButtons from "../../AddLogs/footer-action-buttons";
+import SupportAttachments from "../../AddLogs/SupportAttachments";
+import addAttachmentsService from "../../../../lib/services/SupportService/addAttachmentsService";
+import uploadFileToS3 from "../../../../lib/services/LogsService/uploadFileToS3InLog";
 import { useSelector } from "react-redux";
-import AlertComponent from "../Core/AlertComponent";
+import AlertComponent from "../../Core/AlertComponent";
+import styles from "./addSupportForm.module.css";
 
+
+// Icons
+import KeyboardVoiceRoundedIcon from '@mui/icons-material/KeyboardVoiceRounded';
+import GraphicEqRoundedIcon from '@mui/icons-material/GraphicEqRounded';
+import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const EditSupportForm = () => {
 
@@ -190,7 +197,7 @@ const EditSupportForm = () => {
     const editSupport = async () => {
         try {
             const response = await editSupportService(supportDetails, router?.query?.support_id);
-        collectSupportData();
+            collectSupportData();
         } catch (err: any) {
             console.error(err);
 
@@ -263,7 +270,7 @@ const EditSupportForm = () => {
                 }
                 const { target_url, ...rest } = response[index];
                 arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
-            } 
+            }
         }
         setFilesDetailsAfterUpload(arrayForResponse);
 
@@ -272,40 +279,165 @@ const EditSupportForm = () => {
 
 
     return (
-        <div style={{ border: "1px solid", display: "flex", flexDirection: "row", justifyContent: "center" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
             {router?.query?.support_id && supportOneDetails?.title ?
 
-                <div style={{ display: "flex", flexDirection: "row", width: "60%" }}>
-                    <AddSupportQueryDetails
-                        query={query}
-                        categories={categories}
-                        description={description}
-                        setQuery={setQuery}
-                        setCategories={setCategories}
-                        supportOneDetails={supportOneDetails}
-                        setDescription={setDescription}
-                    />
+                <div className={styles.addSupportForm}>
+                    <Grid container direction="row" justifyContent="center" spacing={3}>
+                        <Grid item xs={12} sm={10} md={6}>
+                            <AddSupportQueryDetails
+                                query={query}
+                                categories={categories}
+                                description={description}
+                                setQuery={setQuery}
+                                setCategories={setCategories}
+                                supportOneDetails={supportOneDetails}
+                                setDescription={setDescription}
+                            />
+                        </Grid>
 
-                    <div style={{ display: "flex", flexDirection: "column", width: "50%", justifyContent: "center" }}>
-                        <Typography variant='subtitle2'>Mic</Typography>
-                        <div className="audio-controls">
-                            {!permission ? (
-                                <button onClick={getMicrophonePermission} type="button">
-                                    Get Microphone
-                                </button>
-                            ) : null}
-                            {permission && recordingStatus === "inactive" ? (
+                        <Grid item xs={12} sm={10} md={6}>
+                            <div style={{ display: "flex", flexDirection: "column", width: "100%", justifyContent: "center" }}>
+                                <Typography variant='subtitle2'
+                                    style={{
+                                        fontFamily: "Inter",
+                                        fontWeight: "600",
+                                        color: "var(--gray-700)",
+                                        marginBlock: "4px",
+                                    }}>
+                                    Mic
+                                </Typography>
+                                <div className={styles.audioControls}>
+                                    <div className={styles.voiceRecording}>
+                                        {!permission ? (
+                                            <Fab size="small" color="error" aria-label="Get Microphone" onClick={getMicrophonePermission}>
+                                                <KeyboardVoiceRoundedIcon />
+                                            </Fab>
+                                        ) : null}
+                                        {!permission ? (
+                                            <Typography color="error">Get Microphone</Typography>
+                                        ) : null}
+                                    </div>
+
+                                    <div className={styles.voiceRecording}>
+                                        {permission && recordingStatus === "inactive" ? (
+                                            <Fab size="small" color="primary" aria-label="Start Recording" onClick={startRecording}>
+                                                <FiberManualRecordRoundedIcon />
+                                            </Fab>
+                                        ) : null}
+                                        {permission && recordingStatus === "inactive" ? (
+                                            <Typography color="primary">Start Recording</Typography>
+                                        ) : null}
+                                    </div>
+
+                                    <div className={styles.voiceRecording}>
+                                        {recordingStatus === "recording" ? (
+                                            <Fab size="small" color="success" aria-label="Stop Recording" onClick={stopRecording}>
+                                                <GraphicEqRoundedIcon />
+                                            </Fab>
+                                        ) : null}
+
+                                        {recordingStatus === "recording" ? (
+                                            <Chip label="01" variant="outlined" />
+                                        ) : null}
+                                        {recordingStatus === "recording" ? (
+                                            <Typography color="success">Stop Recording</Typography>
+                                        ) : null}
+                                    </div>
+
+                                    <div className={styles.recordedAudio}>
+                                        {audio ? (
+                                            <div>
+                                                <audio
+                                                    src={audio}
+                                                    controls
+                                                    controlsList="nodownload"
+                                                ></audio>
+                                                {/* <a download="recording.mp3" href={audio} type="audio/mpeg" >
+                                                            Download Recording
+                                                        </a> */}
+                                            </div>
+                                        ) : null}
+                                        {audio ? (
+                                            <Button
+                                                disabled={!audio}
+                                                onClick={uploadAudio}
+                                                size="small"
+                                                sx={{ paddingInline: "0", minWidth: "auto" }}
+                                            >
+                                                <DeleteForeverIcon color="error" />
+                                            </Button>
+
+                                        ) : null}
+                                        {audio ? (
+                                            <Button
+                                                disabled={!audio}
+                                                variant="contained"
+                                                onClick={uploadAudio}
+                                                size="small"
+                                                sx={{ width: "100px", fontWeight: "600" }}
+                                            >
+                                                {loadingOnMicUpload ? (
+                                                    <CircularProgress size="1.5rem" sx={{ color: " white" }} />
+                                                ) : (
+                                                    "Upload"
+                                                )}
+                                            </Button>
+
+                                        ) : null}
+                                    </div>
+                                </div>
+                                <div>
+                                    <Typography variant='subtitle2'>Upload Images</Typography>
+                                    <SupportAttachments
+                                        onChangeFile={onChangeFile}
+                                        uploadFiles={uploadFiles}
+                                        files={files}
+                                        loadingOnImagesUpload={loadingOnImagesUpload}
+                                    />
+                                </div>
+                                <div>
+                                    <FooterActionButtons editLog={editSupport} />
+                                    <AlertComponent
+                                        alertMessage={alertMessage}
+                                        alertType={alertType}
+                                        setAlertMessage={setAlertMessage}
+                                    />
+                                </div>
+                            </div>
+                        </Grid>
+
+                    </Grid>
+                </div> : ""}
+
+        </div >
+    )
+}
+
+
+export default EditSupportForm;
+
+{/* {permission && recordingStatus === "inactive" ? (
                                 <button onClick={startRecording} type="button">
                                     Start Recording
                                 </button>
-                            ) : null}
-                            {recordingStatus === "recording" ? (
+                            ) : null} */}
+{/* {recordingStatus === "recording" ? (
                                 <button onClick={stopRecording} type="button">
                                     Stop Recording
                                 </button>
-                            ) : null}
+                            ) : null} */}
 
-                            {audio ? (
+
+
+
+
+
+
+
+
+
+{/* {audio ? (
                                 <div className="audio-container">
                                     <audio src={audio} controls></audio>
 
@@ -327,30 +459,4 @@ const EditSupportForm = () => {
                                     )}
                                 </Button>
 
-                            ) : null}
-                        </div>
-                        <div>
-                            <Typography variant='subtitle2'>Upload Images</Typography>
-                            <SupportAttachments
-                                onChangeFile={onChangeFile}
-                                uploadFiles={uploadFiles}
-                                files={files}
-                                loadingOnImagesUpload={loadingOnImagesUpload}
-                            />
-                        </div>
-                        <div>
-                            <FooterActionButtons editLog={editSupport} />
-                            <AlertComponent
-                                alertMessage={alertMessage}
-                                alertType={alertType}
-                                setAlertMessage={setAlertMessage}
-                            />
-                        </div>
-                    </div>
-                </div> : ""}
-        </div>
-    )
-}
-
-
-export default EditSupportForm;
+                            ) : null} */}

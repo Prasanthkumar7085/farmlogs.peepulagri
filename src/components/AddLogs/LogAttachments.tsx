@@ -57,7 +57,13 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files }: any) => {
           You can also drag and drop files to upload them.
         </p>
       </div>
-      <input className={styles.link} type="file" multiple onChange={onChangeFile} accept="image/*, .pdf" />
+
+      <label style={{ cursor: "pointer" }} >
+        <div className={styles.link}>
+          Select Files
+          </div>
+      <input id="upload-files" hidden className={styles.link} name="file" type="file" multiple onChange={onChangeFile} accept="image/*, .pdf" />
+      </label>
       <div>
         {files &&
           Array.from(files).map((file: any, index) => {

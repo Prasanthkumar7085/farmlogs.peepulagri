@@ -1,5 +1,5 @@
 import AddSupportPage from "@/components/Support/Add/AddSupportPage";
-import EditSupportForm from "@/components/Support/EditSupportForm";
+import EditSupportForm from "@/components/Support/Add/EditSupportForm";
 import { GetServerSideProps } from "next";
 
 const EditSupport = () => {

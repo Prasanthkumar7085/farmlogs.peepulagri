@@ -8,6 +8,7 @@ import getSupportAttachmentsService from "../../../../../lib/services/SupportSer
 import Image from "next/image";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import deleteSupportAttachmentService from "../../../../../lib/services/SupportService/deleteSupportAttachmentService";
+import timePipe from "@/pipes/timePipe";
 
 type getOneSupportByIdType = () => void
 const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDataType | undefined; getOneSupportById: getOneSupportByIdType }) => {
@@ -48,12 +49,48 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
         else return item.downloadUrl
     }
     return (
+
         <div className={styles.dataGroup3}>
+            <div>
+                <div style={{}}>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "2%" }}>
+                        <div>
+                            Support ID
+                        </div>
+                        <div>
+                            Status
+                        </div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "2%" }}>
+                        <div>
+                            {data?.support_id}
+                        </div>
+                        <div>
+                            {data?.status}
+                        </div>
+                    </div>
+                </div>
+                <div style={{}}>
+                    <div style={{ display: "flex", justifyContent: "start", gap: "5%", padding: "2%" }}>
+                        <div>
+                            Date
+                            {timePipe(data?.createdAt as string, 'DD, MMM YYYY')}
+                        </div>
+                        <div>
+                            Response Date
+                            ---
+                        </div>
+                    </div>
+
+                </div >
+
+            </div >
             <div className={styles.subTitle2}>
                 <div className={styles.textWrapper}>
                     <div className={styles.text8}>Attachments</div>
                 </div>
             </div>
+
             <div className={styles.attachments} style={{ display: "flex", flexDirection: "row" }}>
                 {downloadUrls.map((item: any, index: number) => {
                     return (

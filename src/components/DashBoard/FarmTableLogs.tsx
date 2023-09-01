@@ -15,36 +15,68 @@ import deleteALogService from "../../../lib/services/LogsService/deleteALogsServ
 import LoadingComponent from "../Core/LoadingComponent";
 import { ResourcesTypeInResponse, ResourcesTypeInResponseWithLogo } from "@/types/logsTypes";
 import { categoriesType } from "@/types/supportTypes";
+import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
+
+import { useSelector } from "react-redux";
+
 
 
 const FarmTableLogs = () => {
 
     const router: any = useRouter();
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
 
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
     const [paginationDetails, setPaginationDetails] = useState<PaginationDetailsType | null>();
     const [page, setPage] = useState<number | string>(1);
     const [limit, setLimit] = useState<number | string>(10);
-    const [searchString, setSearchString] = useState<string>('');
+    const [sortCount, setSortCount] = useState(0);
+    const [sortSortKeyValue, setSortKeyValue] = useState<string>();
+
+
+    const [searchString, setSearchString] = useState<string>(router.query.search_string ? router.query.search_string : "");
+    const [orderBy, setOrderBy] = useState(router.query.order_by ? router.query.order_by : "")
+    const [orderType, setOrderType] = useState<string>(router.query.order_type ? router.query.order_type : "");
 
 
     useEffect(() => {
-        if (router.isReady) {
-            getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
+        if (router.isReady && accessToken) {
+            getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, search: router.query.search_string, orderBy: router.query?.order_by, orderType: router.query?.order_type });
             getSingleFarm(router.query.farm_id);
+
+            setSearchString(router.query?.search_string)
+            setOrderBy(router.query?.order_by)
+            setOrderType(router.query?.order_type)
         }
-    }, [router.query.farm_id, router.isReadyres]);
+    }, [router.query.farm_id, router.isReady, accessToken]);
 
 
     const getSingleFarm = (id: string) => {
 
     }
 
-    const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString }: Partial<GetLogsByFarmIdPropsType>) => {
+    const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString, orderBy, orderType }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
         try {
-            const response = await getLogsByFarmIdService({ farmId: farmId, page: page, limit: limit, search: search });
+
+
+            let queryParams: any = {};
+            if (search) {
+                queryParams['search_string'] = search;
+            }
+            if (orderBy) {
+                queryParams['order_by'] = orderBy;
+            }
+            if (orderType) {
+                queryParams['order_type'] = orderType;
+            }
+            router.push({ pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
+            let paramString = prepareURLEncodedParams('', queryParams);
+
+
+            const response = await getLogsByFarmIdService({ farmId: farmId, page: page, limit: limit, paramString: paramString });
             if (response.success) {
                 const { data, limit, page, total, total_pages } = response;
                 setData(data);
@@ -120,10 +152,14 @@ const FarmTableLogs = () => {
     useEffect(() => {
         const delay = 500;
         const debounce = setTimeout(() => {
-            getFarmLogs({ page: 1, search: searchString });
+            if (searchString && router.isReady && accessToken) {
+                getFarmLogs({ page: 1, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            } else {
+                getFarmLogs({ page: 1, search: '', orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            }
         }, delay);
         return () => clearTimeout(debounce);
-    }, [searchString]);
+    }, [searchString, accessToken]);
 
 
     const searchStringChange = (value: string) => {
@@ -137,7 +173,7 @@ const FarmTableLogs = () => {
         { title: 'Machinary', value: "machinery", color: "#D94841" },
     ];
 
-    const categoryOptions: Array<categoriesType> = [
+    const categoryOptions: Array<Partial<categoriesType>> = [
         { title: 'Soil Preparation', value: "soil_preparation", color: "#E57373" },
         { title: 'Planting', value: "plainting", color: "#66BB6A" },
         { title: 'Irrigation', value: "irrigation", color: "#64B5F6" },
@@ -156,23 +192,75 @@ const FarmTableLogs = () => {
         { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
     ];
     const getLabel = (item: string) => {
-        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value == item))?.title
+        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.title
     }
     const getTypeColor = (item: string) => {
-        return (workTypeOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
+        return (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))?.color
     }
     const setBackColor = (item: any) => {
-        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value == item))?.color
+        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.color
     }
 
+
+
+
+    const appliedSort = async (sortKey: string) => {
+
+        if (sortKey) {
+
+            let sortTempValueCount = sortCount;
+
+
+            let sortByField = '';
+            let orderTypeField = '';
+
+            if (sortKey == 'date') {
+                sortByField = 'createdAt';
+            } if (sortKey == 'workType') {
+                sortByField = 'work_type';
+            } if (sortKey == 'manualHours') {
+                sortByField = 'total_manual_hours'
+            } if (sortKey == 'machineHours') {
+                sortByField = 'total_machinary_hours'
+            }
+
+
+            if (sortKey != sortSortKeyValue) {
+                setSortKeyValue(sortKey);
+                sortTempValueCount = 0
+            } else {
+                sortTempValueCount = sortTempValueCount + 1;
+            }
+            if (sortTempValueCount > 2) {
+                sortTempValueCount = 0;
+            }
+
+            if (sortTempValueCount == 0) {
+                orderTypeField = 'asc';
+            } else if (sortTempValueCount == 1) {
+                orderTypeField = 'desc';
+            } else {
+                orderTypeField = '';
+                sortByField = '';
+            }
+
+            setSortCount(sortTempValueCount)
+
+            setOrderBy(sortByField);
+            setOrderType(orderTypeField)
+            getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, orderBy: sortByField, orderType: orderTypeField });
+
+        }
+    }
     const columns = [
         {
+            columnId: "date",
+            isSorted: true,
             Header: "Date",
             accessor: (row: any) => {
-                const updatedRowModules: any = stayUpdatedResources(row.resources);
                 return (
                     <div style={{ color: "var(--body)" }}>
-                        { timePipe(row.createdAt, 'DD, MMM YYYY') }
+                        {timePipe(row.createdAt, 'DD, MMM YYYY')}
                     </div>
                     )
             }
@@ -194,6 +282,8 @@ const FarmTableLogs = () => {
             }
         },
         {
+            columnId: "workType",
+            isSorted: true,
             Header: "Work Type",
             accessor: (row: any) => {
                 return (
@@ -225,6 +315,8 @@ const FarmTableLogs = () => {
         },
 
         {
+            columnId: "manualHours",
+            isSorted: true,
             Header: "Manual Hours",
             accessor: (row: any) => {
                 return (
@@ -236,6 +328,8 @@ const FarmTableLogs = () => {
             }
         },
         {
+            columnId: "machineHours",
+            isSorted: true,
             Header: "Machine Hours",
             accessor: (row: any) => {
                 return (
@@ -278,7 +372,7 @@ const FarmTableLogs = () => {
                     </Button>
                 </div>
             </div>
-            <FarmTable columns={columns} data={data} loading={loading} />
+            <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
             <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' />
             <LoadingComponent loading={loading} />
         </div>

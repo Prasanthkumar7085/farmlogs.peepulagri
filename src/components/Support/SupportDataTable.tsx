@@ -30,7 +30,13 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
 
     const getColor = (item: any) => {
         return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
-    } 
+    }
+    const appliedSort = async (sortKey: string) => {
+        if (sortKey) {
+            console.log(sortKey);
+
+        }
+    }
 
     const columns = [   
         {
@@ -98,7 +104,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
     ]
 
     return (
-        <FarmTable columns={columns} data={data} loading={loading} />
+        <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
     )
 }
 

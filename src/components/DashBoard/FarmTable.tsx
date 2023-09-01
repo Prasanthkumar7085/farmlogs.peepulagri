@@ -1,7 +1,8 @@
 import { useTable } from "react-table";
 import NoDataComponent from "../Core/NoDataComponent";
+import ImageComponent from "../Core/ImageComponent";
 
-const FarmTable = ({ columns, data, loading }: any) => {
+const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
 
     const {
         getTableProps, // table props from react-table
@@ -23,7 +24,20 @@ const FarmTable = ({ columns, data, loading }: any) => {
                         <tr className="table-row" {...headerGroup.getHeaderGroupProps()} key={index}>
                             {headerGroup.headers.map((column: any, columnIndex: number) => {
                                 return (
-                                    <th className="cell" {...column.getHeaderProps()} key={columnIndex}>{column.render("Header")}</th>
+                                    <th className="cell" {...column.getHeaderProps()} key={columnIndex} onClick={() => appliedSort(column?.columnId)}
+                                        style={{
+                                            cursor: column?.isSorted ? "pointer" : "default",
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                                            {column.render("Header")}
+                                            {column.isSorted ?
+                                                <span>
+                                                    <ImageComponent src='/sorted.svg' height={15} width={15} alt='image' />
+                                                </span>
+                                                : ""}
+                                        </div>
+                                    </th>
                                 )
                             })}
                         </tr>

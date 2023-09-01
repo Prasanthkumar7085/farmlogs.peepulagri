@@ -1,18 +1,22 @@
-import AddSupportHeader from "@/components/Support/Add/AddSupportHeader";
-import EditSupportForm from "@/components/Support/Add/EditSupportForm";
+import SignUp from "@/components/AuthModule/SignUp/SignUp";
 import { GetServerSideProps } from "next";
 
-const EditSupport = () => {
+
+const SignUpPage = () => {
     return (
         <div>
-            <AddSupportHeader />
-            <EditSupportForm />
+            <SignUp />
         </div>
     )
 }
 
+export default SignUpPage;
 
-export default EditSupport;
+
+
+
+
+
 
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -21,10 +25,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     const { req } = context;
     const { cookies } = req;
 
-    if (!(cookies.loggedIn == 'true')) {
+
+    if (cookies.loggedIn == 'true') {
+
+        let id = 'log_id'
+
+
         return {
             redirect: {
-                destination: `/`,
+                destination: `/farm/${id}/logs`,
                 permanent: false,
             },
         };

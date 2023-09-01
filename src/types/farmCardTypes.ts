@@ -42,7 +42,11 @@ export interface GetLogsByFarmIdPropsType {
     farmId: string | undefined | number;
     page: string | undefined | number;
     limit: string | undefined | number;
+    paramString: string;
     search: string;
+    orderBy: string;
+    orderType: string;
+
 }
 
 export interface QueryParamForFarmLogs {

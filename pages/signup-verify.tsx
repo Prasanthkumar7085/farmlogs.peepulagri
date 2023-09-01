@@ -1,18 +1,20 @@
-import AddSupportHeader from "@/components/Support/Add/AddSupportHeader";
-import EditSupportForm from "@/components/Support/Add/EditSupportForm";
+import SignUpVerify from "@/components/AuthModule/SignUp/SignUpVerify";
 import { GetServerSideProps } from "next";
 
-const EditSupport = () => {
+const SignUpVerifyPage = () => {
     return (
         <div>
-            <AddSupportHeader />
-            <EditSupportForm />
+            <SignUpVerify />
         </div>
     )
 }
 
+export default SignUpVerifyPage;
 
-export default EditSupport;
+
+
+
+
 
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -21,10 +23,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     const { req } = context;
     const { cookies } = req;
 
-    if (!(cookies.loggedIn == 'true')) {
+
+    if (cookies.loggedIn == 'true') {
+        let id = 'log_id';
         return {
             redirect: {
-                destination: `/`,
+                destination: `/farm/${id}/logs`,
                 permanent: false,
             },
         };

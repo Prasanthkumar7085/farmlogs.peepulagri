@@ -13,8 +13,6 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
         <div className={styles.innerWrapper}>
             <div className={styles.cardContainer}>
                 {farmsData?.data?.length && farmsData?.data.map((item: FarmDataType) => {
-                    console.log(item);
-
                     return (
                         <div key={item._id} onClick={() => router.push(`/farm/${item._id}/logs`)} style={{ cursor: "pointer" }}>
                                 <FarmCard

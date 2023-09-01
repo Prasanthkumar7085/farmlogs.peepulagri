@@ -28,9 +28,13 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
         { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting", color: "#26A69A", textColor: "#ffffff"  },
     ];
 
-    const getColor = (item: any) => {
-        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
+    const getColorOrTitle = (item: any, field: string) => {
+        let value: any = (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))
+        return value[field]
     }
+    // const getTitle = (item: any) => {
+    //     return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.title
+    // }
     const appliedSort = async (sortKey: string) => {
         if (sortKey) {
             console.log(sortKey);
@@ -59,7 +63,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
                 return (
                     <div style={{ display: "flex" }}>
                         {row.categories.length && row.categories.map((item: string, index: number) => {
-                            return <Chip label={item} key={index} sx={{ margin: "2px", color: "white", backgroundColor: getColor(item) }} />
+                            return <Chip label={getColorOrTitle(item, 'title')} key={index} sx={{ margin: "2px", color: "white", backgroundColor: getColorOrTitle(item, 'color') }} />
                         })}
                     </div>
                 )

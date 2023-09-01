@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from "@mui/material";
+import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
+import { useSelector } from "react-redux";
 
 
 interface MyProps {
@@ -20,17 +22,21 @@ interface item {
     link: string
 }
 
-const menuListItems = [
-    { src: '/dashboard-icon.svg', link: "/" },
-    { src: '/support-icon.svg', link: "/support" },
-    { src: '/timeline-icon.svg', link: "/timeline" },
-    // { src: '/settings-icon.svg', link: "/" },
-    // { src: '/calendaricon.svg', link: "/" },
-    // { src: '/graph-icon.svg', link: "/" },
-]
 
 const SideBarMenu = ({ children }: any) => {
+
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
     const router = useRouter();
+
+    const menuListItems = [
+        { src: '/dashboard-icon.svg', link: `/farm/farm_id/logs` },
+        { src: '/support-icon.svg', link: "/support" },
+        { src: '/timeline-icon.svg', link: "/timeline" },
+        // { src: '/settings-icon.svg', link: "/" },
+        // { src: '/calendaricon.svg', link: "/" },
+        // { src: '/graph-icon.svg', link: "/" },
+    ]
 
 
     const logout = async () => {

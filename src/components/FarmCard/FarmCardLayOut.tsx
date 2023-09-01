@@ -16,12 +16,14 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
                     return (
                         <div key={item._id} onClick={() => router.push(`/farm/${item._id}/logs`)} style={{ cursor: "pointer" }}>
                                 <FarmCard
-                                    _id={item?._id}
+                                _id={item._id}
+                                progress={70}
                                     acresCount={item?.area}
                                     farmName={item?.title}
                                     createAt={item?.createdAt}
                                 logCount={item?.logCount}
                             />
+
                         </div>
                     )
                 })}

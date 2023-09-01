@@ -24,6 +24,7 @@ export interface FarmDataType {
 
 export interface FarmCardPropsType {
     _id: string;
+    progress: number;
     acresCount: number;
     farmName: string;
     createAt: string;

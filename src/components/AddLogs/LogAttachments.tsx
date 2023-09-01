@@ -45,9 +45,18 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
 
       }
     }
-
-
   }
+
+  //setting audio/pdf thumbnail and returning image for other files from selected files
+  const getImageObjectUrl = (file: any) => {
+    console.log(file.type, 'plpl');
+    if (file.type == 'application/pdf')
+      return '/pdf.svg'
+    else if (file.type.includes('audio'))
+      return '/audio.svg'
+    else return URL.createObjectURL(file)
+  }
+
 
   return (
     <div className={styles.attachments}>
@@ -70,7 +79,7 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
           Array.from(files).map((file: any, index) => {
             return (
               <div key={index} className={styles.attachmentItem} style={{backgroundColor: "#F5F7FA"}}>
-              {file ? <img src={URL.createObjectURL(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
+                {file ? <img src={getImageObjectUrl(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
               <Typography>
                   {file.name}
               </Typography>
@@ -86,7 +95,7 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
         <Button  color="success" variant="contained" onClick={uploadFiles} size="small" sx={{ width: "100px" }}>
           Upload
           {uploadButtonLoading ?
-            <CircularProgress size="1.5rem" />
+            <CircularProgress size="1.5rem" sx={{ color: "white" }} />
             : <CloudUploadOutlinedIcon />}
       </Button>
 
@@ -96,15 +105,15 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
           Oops! Upload Failed, Please try again
         </p>
         : ""}
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", maxWidth: "700px", flexWrap: 'wrap' }}>
         {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
           return (
-            <div className={styles.eachFile} key={index} style={{ display: "flex", flexDirection: "row" }}>
+            <div key={index} style={{ maxWidth: "174.5px", display: "flex", flexDirection: "row", padding: "20px" }}>
               <Image
                 alt={`image-${index}`}
                 height={50}
                 width={100}
-                src={item.file_name.includes('.pdf') ? '/pdf.svg' : item.downloadUrl}
+                src={item.file_name.includes('.pdf') ? '/pdf.svg' : '/image.svg'}
                 style={{ borderRadius: "5%" }}
               />
               <div style={{ display: "flex", flexDirection: "column" }}>

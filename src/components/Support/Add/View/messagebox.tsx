@@ -16,7 +16,10 @@ type getAllMessagesBySupportIdType = () => void
 
 const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: getAllMessagesBySupportIdType }) => {
 
-  const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const userName = useSelector((state: any) => state.auth.userDetails?.user_details?.full_name);
+  console.log(userName);
+
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -30,16 +33,26 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
 
   const onSendMessage = async () => {
 
+    let createdAt = new Date().toISOString();
+    console.log(createdAt);
+
     if (message) {
       const body = {
         content: message,
         type: 'REPLY',
         attachments: [...filesDetailsAfterUpload]
       }
+      const bodyToStore = {
+        ...body,
+        createdAt: createdAt,
+        reply_to_message_id: {
+          full_name: userName
+        },
+      }
       setMessage('');
       setFiles(null);
       setFilesDetailsAfterUpload([]);
-      dispatch(addNewMessage(body))
+      dispatch(addNewMessage(bodyToStore))
       const response = await postAMessageInSupportService(router.query.support_id as string, body, accessToken);
 
       if (response.success) {

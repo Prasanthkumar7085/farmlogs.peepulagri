@@ -13,10 +13,14 @@ import AlertComponent from "../Core/AlertComponent";
 import SelectComponent from "../Core/SelectComponent";
 import updateSupportStatusService from "../../../lib/services/SupportService/updateSupportStatusService";
 import styles from "./support.module.css";
+import { useSelector } from "react-redux";
+
 
 const SupportPage = () => {
 
     const router = useRouter();
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
 
     const [searchString, setSearchString] = useState<string>('');
     const [page, setPage] = useState<string | number>(1);
@@ -40,7 +44,7 @@ const SupportPage = () => {
     const getAllSupports = async ({ page = 1, limit = 10, searchString = '', status = '' }: Partial<SupportServiceTypes>) => {
         setLoading(true);
         try {
-            const response = await getAllSupportService({ page: page, limit: limit, searchString: searchString, status: status });
+            const response = await getAllSupportService({ page: page, limit: limit, searchString: searchString, status: status, accessToken: accessToken });
             if (response.success) {
                 const { data, ...rest } = response;
                 setPaginationDetails(rest);
@@ -99,10 +103,12 @@ const SupportPage = () => {
     useEffect(() => {
         const delay = 500;
         const debounce = setTimeout(() => {
-            getAllSupports({ page: 1, limit: limit, searchString: searchString });
+            if (router?.isReady && accessToken) {
+                getAllSupports({ page: 1, limit: limit, searchString: searchString });
+            }
         }, delay);
         return () => clearTimeout(debounce);
-    }, [searchString]);
+    }, [searchString, router.isReady, accessToken]);
 
     return (
         <div className={styles.supportDashboard}>

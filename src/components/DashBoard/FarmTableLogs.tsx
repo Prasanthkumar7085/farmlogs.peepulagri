@@ -44,7 +44,6 @@ const FarmTableLogs = () => {
     useEffect(() => {
         if (router.isReady && accessToken) {
             getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, search: router.query.search_string, orderBy: router.query?.order_by, orderType: router.query?.order_type });
-            getSingleFarm(router.query.farm_id);
 
             setSearchString(router.query?.search_string)
             setOrderBy(router.query?.order_by)
@@ -53,9 +52,7 @@ const FarmTableLogs = () => {
     }, [router.query.farm_id, router.isReady, accessToken]);
 
 
-    const getSingleFarm = (id: string) => {
 
-    }
 
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString, orderBy, orderType }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
@@ -72,8 +69,16 @@ const FarmTableLogs = () => {
             if (orderType) {
                 queryParams['order_type'] = orderType;
             }
+            if (page) {
+                queryParams['page'] = page;
+            }
+            if (limit) {
+                queryParams['limit'] = limit;
+            }
+
+            const { page: pageCount, limit: limitCount, ...restParams } = queryParams;
             router.push({ pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
-            let paramString = prepareURLEncodedParams('', queryParams);
+            let paramString = prepareURLEncodedParams('', restParams);
 
 
             const response = await getLogsByFarmIdService({ farmId: farmId, page: page, limit: limit, paramString: paramString });
@@ -152,14 +157,14 @@ const FarmTableLogs = () => {
     useEffect(() => {
         const delay = 500;
         const debounce = setTimeout(() => {
-            if (searchString && router.isReady && accessToken) {
-                getFarmLogs({ page: 1, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
-            } else {
-                getFarmLogs({ page: 1, search: '', orderBy: router.query?.order_by, orderType: router.query?.order_type });
-            }
+            getFarmLogs({ page: 1, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            // if (searchString && router.isReady) {
+            // } else {
+            //     getFarmLogs({ page: 1, search: '', orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            // }
         }, delay);
         return () => clearTimeout(debounce);
-    }, [searchString, accessToken]);
+    }, [searchString, accessToken, router.query.farm_id]);
 
 
     const searchStringChange = (value: string) => {
@@ -170,7 +175,7 @@ const FarmTableLogs = () => {
     const workTypeOptions = [
         { title: 'All', value: "all", color: "#3462CF" },
         { title: 'Manual', value: "manual", color: "#5E9765" },
-        { title: 'Machinary', value: "machinery", color: "#D94841" },
+        { title: 'Machinery', value: "machinery", color: "#D94841" },
     ];
 
     const categoryOptions: Array<Partial<categoriesType>> = [

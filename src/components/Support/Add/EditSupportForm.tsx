@@ -24,7 +24,7 @@ const EditSupportForm = () => {
 
     const router: any = useRouter();
 
-    const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
 
 

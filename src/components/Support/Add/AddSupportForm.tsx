@@ -23,7 +23,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 const AddSupportForm = () => {
   const router: any = useRouter();
 
-    const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef<any>(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
@@ -40,9 +40,12 @@ const AddSupportForm = () => {
   const [files, setFiles] = useState<any>([]);
   const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
   const [audioDetailsAfterUpload, setAudioDetailsAfterUpload] = useState<any>({});
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertType, setAlertType] = useState<boolean>(false);
+  const [loadingOnMicUpload, setLoadingOnMicUpload] = useState<boolean>(false);
+  const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
 
-  const [supportDetails, setSupportDetails] =
-    useState<Partial<AddSupportPayload>>();
+  const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>();
 
   useEffect(() => {
     collectSupportData();
@@ -64,6 +67,25 @@ const AddSupportForm = () => {
       support_id: "SUPPORT1232",
     };
     setSupportDetails(supportData);
+  };
+
+
+  const addSupport = async () => {
+    try {
+      const response = await addSupportService(supportDetails, accessToken);
+      if (response.success) {
+        setAlertMessage("Add Support Successful!");
+        setAlertType(true);
+        setTimeout(() => {
+          router.back();
+        }, 1000);
+      } else {
+        setAlertMessage("Add Support Failed!");
+        setAlertType(false);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   };
 
   const getMicrophonePermission = async () => {
@@ -114,28 +136,8 @@ const AddSupportForm = () => {
     };
   };
 
-  const addSupport = async () => {
-    try {
-      const response = await addSupportService(supportDetails);
-      if (response.success) {
-        setAlertMessage("Add Support Successful!");
-        setAlertType(true);
-        setTimeout(() => {
-          router.back();
-        }, 1000);
-      } else {
-        setAlertMessage("Add Support Failed!");
-        setAlertType(false);
-      }
-    } catch (err: any) {
-      console.error(err);
-    }
-  };
 
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertType, setAlertType] = useState<boolean>(false);
-  const [loadingOnMicUpload, setLoadingOnMicUpload] = useState<boolean>(false);
-  const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
+
 
   const uploadAudio = async () => {
     setLoadingOnMicUpload(true);
@@ -205,12 +207,12 @@ const AddSupportForm = () => {
         files[index]
       );
       if (uploadResponse.ok) {
-        setAlertMessage("Attachment(s) Uploaded Successful!");
+        setAlertMessage(`${index + 1} File(s) Uploaded!`);
         setAlertType(true);
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
       } else {
-        setAlertMessage("Attachment(s) Uploaded Failed!");
+        setAlertMessage("File(s) Uploaded Failed!");
         setAlertType(false);
       }
     }

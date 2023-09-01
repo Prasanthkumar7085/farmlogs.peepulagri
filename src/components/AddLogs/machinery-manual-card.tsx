@@ -8,6 +8,9 @@ import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAt
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import IconButton from "@mui/material/IconButton";
 import Image from "next/image";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
+import { CircularProgress } from "@mui/material";
 
 
 const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null | undefined | any }) => {
@@ -52,6 +55,22 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
     if (src && src.includes('.pdf')) {
       return '/pdf.svg'
     } else return '/image.svg'
+  }
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const [deleteIndex, setDeleteIndex] = useState(0);
+  const deletePhoto = async (item: any, index: number) => {
+
+    setDeleteIndex(index);
+    setDeleteLoading(true);
+    const response = await deleteLogAttachmentService(router?.query?.log_id as string, item.attachment_id);
+    console.log(response);
+    if (response.success) {
+      getDownloadLinks();
+    }
+    setDeleteLoading(false);
+
   }
 
 
@@ -180,9 +199,16 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
               <div className={styles.eachFile} key={index}>
                 <Image src={getSourceForThumnail(item.file_name)} height={20} width={20} alt={'image'} />
                 <span className={styles.fileName}>{getImageName(item.file_name)}</span>
+                <div>
+                  <IconButton onClick={() => deletePhoto(item, index)}>
+                    {deleteLoading && index == deleteIndex ?
+                      <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                      : <DeleteForeverIcon color="error" />}
+                  </IconButton>
                 <IconButton onClick={() => window.open(item.downloadUrl)}>
                   <OpenInNewIcon />
                 </IconButton>
+                </div>
               </div>
             )
           })}

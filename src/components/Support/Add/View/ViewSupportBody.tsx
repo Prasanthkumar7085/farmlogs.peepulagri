@@ -9,11 +9,16 @@ import Image from "next/image";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import deleteSupportAttachmentService from "../../../../../lib/services/SupportService/deleteSupportAttachmentService";
 import timePipe from "@/pipes/timePipe";
+import { useSelector } from "react-redux";
 
 type getOneSupportByIdType = () => void
 const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDataType | undefined; getOneSupportById: getOneSupportByIdType }) => {
 
     const router = useRouter();
+
+
+    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+    console.log(userType);
 
     useEffect(() => {
         if (data && router.isReady) {
@@ -24,7 +29,7 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
     const [downloadUrls, setDownloadUrls] = useState<any>([]);
 
     const getDownloadLinks = async () => {
-        let response = await getSupportAttachmentsService(router.query.support_id);
+        let response = await getSupportAttachmentsService(router.query?.support_id);
 
         if (response.success) {
             setDownloadUrls(response.data.download_urls);
@@ -42,11 +47,13 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
     }
 
     const getSrc = (item: any) => {
-        if (item.file_name.includes('.wav'))
+        if (item) {
+            if (item.file_name?.includes('.wav'))
             return '/audio.svg'
-        else if (item.file_name.includes('.pdf'))
+            else if (item.file_name?.includes('.pdf'))
             return '/pdf.svg'
         else return item.downloadUrl
+        }
     }
     return (
 
@@ -73,12 +80,12 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                 <div style={{}}>
                     <div style={{ display: "flex", justifyContent: "start", gap: "5%", padding: "2%" }}>
                         <div>
-                            Date
+                            Date&nbsp;&nbsp;
                             {timePipe(data?.createdAt as string, 'DD, MMM YYYY')}
                         </div>
                         <div>
                             Response Date
-                            ---
+                            {timePipe(data?.recent_response_at as string, 'DD, MMM YYYY')}
                         </div>
                     </div>
 

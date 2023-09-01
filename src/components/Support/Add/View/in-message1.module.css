@@ -76,6 +76,7 @@
     position: relative;
     line-height: 1.5rem;
     font-weight: 500;
+    
 }
 
 .row {
@@ -96,7 +97,7 @@
 .attachment {
     border-radius: var(--br-9xs);
     background-color: var(--color-gainsboro-100);
-    width: 14.56rem;
+    width: 20.56rem;
     display: flex;
     flex-direction: row;
     padding: var(--padding-9xs) var(--padding-5xs);

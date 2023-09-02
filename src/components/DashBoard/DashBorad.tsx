@@ -23,10 +23,10 @@ const DashBoard = () => {
     }
 
     useEffect(() => {
-        if (router.isReady && accessToken) {
+        if (accessToken) {
             getFarmsData();
         }
-    }, [router.isReady]);
+    }, [accessToken]);
 
     return (
         <div style={{ width: "100%" }}>

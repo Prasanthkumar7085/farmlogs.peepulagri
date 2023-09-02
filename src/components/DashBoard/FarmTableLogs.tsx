@@ -77,7 +77,7 @@ const FarmTableLogs = () => {
             }
 
             const { page: pageCount, limit: limitCount, ...restParams } = queryParams;
-            router.push({ pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
+            router.replace({ pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
             let paramString = prepareURLEncodedParams('', restParams);
 
 
@@ -350,10 +350,10 @@ const FarmTableLogs = () => {
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
+                        <IconButton onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
+                        <IconButton onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteLog(row._id)}>
@@ -372,7 +372,7 @@ const FarmTableLogs = () => {
                 <h3 className="title">Farm Dashboard</h3>
                 <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "16px" }}>
                     <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
-                    <Button color="success"  variant="contained" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
+                    <Button color="success" variant="contained" onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
                         Add Log
                     </Button>
                 </div>

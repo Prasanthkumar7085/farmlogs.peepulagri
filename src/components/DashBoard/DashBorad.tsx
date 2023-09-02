@@ -26,7 +26,7 @@ const DashBoard = () => {
         if (router.isReady && accessToken) {
             getFarmsData();
         }
-    }, [router.isReady, accessToken]);
+    }, [router.isReady]);
 
     return (
         <div style={{ width: "100%" }}>

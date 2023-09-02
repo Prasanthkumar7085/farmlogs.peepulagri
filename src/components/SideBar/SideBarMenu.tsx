@@ -33,7 +33,7 @@ const SideBarMenu = ({ children }: any) => {
     const router = useRouter();
 
     const menuListItems = [
-        { src: '/dashboard-icon.svg', link: `/farm/farm_id/logs`, isVisible: userName !== 'ADMIN' },
+        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN' },
         { src: '/support-icon.svg', link: "/support", isVisible: true },
         { src: '/timeline-icon.svg', link: "/timeline", isVisible: userName !== 'ADMIN' },
         // { src: '/settings-icon.svg', link: "/" },
@@ -46,7 +46,7 @@ const SideBarMenu = ({ children }: any) => {
         try {
             const response = await fetch('/api/remove-cookie');
             if (response.status) {
-                router.push('/');
+                router.replace('/');
             } else throw response;
 
         } catch (err: any) {
@@ -66,7 +66,7 @@ const SideBarMenu = ({ children }: any) => {
                             if (item.isVisible) {
                             return (
                                 <ListItem className={styles.menuItem} key={index}>
-                                    <ListItemButton onClick={() => router.push(item.link)}>
+                                    <ListItemButton onClick={() => router.replace(item.link)}>
                                         <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
                                     </ListItemButton>
                                 </ListItem>

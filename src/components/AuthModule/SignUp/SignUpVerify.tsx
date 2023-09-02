@@ -41,14 +41,16 @@ const SignUpVerify = () => {
             }
             let accessToken = response.data.access_token;
             if (response?.data?.user_details?.user_type == 'ADMIN') {
-                router.push('/support')
+                router.replace('/support')
             } else {
                 let farmResponse = await getAllFarmsService(accessToken);
                 console.log(farmResponse);
 
-            if (farmResponse.success) {
-                const id = farmResponse.data[0]._id;
-                router.push(`/farm/${id}/logs`);
+                if (farmResponse.success && farmResponse.data && farmResponse?.data.length) {
+                    const id = farmResponse?.data[0]?._id;
+                    router.replace(`/farm/${id}/logs`);
+                } else {
+                    router.replace('/farm')
             }
             }
 
@@ -56,10 +58,10 @@ const SignUpVerify = () => {
             if ("errors" in response) {
                 setErrorMessages(response.errors);
             }
-        } else if (response.status == 401) {
+        } else if (response.status == 401 || response.status == 409) {
             setErrorMessages({ message: response.message });
         }
-        setLoadingWhileVerifyingOtp(false)
+        setLoadingWhileVerifyingOtp(false);
     }
     return (
         <div style={{ flexDirection: "row", display: "flex", justifyContent: "center" }}>
@@ -70,11 +72,15 @@ const SignUpVerify = () => {
                         Mobile: {mobile}
                     </Typography>
                 <TextField
+                        autoFocus
                         fullWidth
                         placeholder="Enter Otp"
                         value={otp}
                         onChange={(e: any) => setOtp(e.target.value)}
                 />
+                    <p style={{ color: "red" }}>
+                        {errorMessages.message}
+                    </p>
                     <Button type={'submit'} variant='contained'>
                         {loadingWhileVerifyingOtp ?
                             <CircularProgress size="1.5rem" sx={{ color: 'white' }} />

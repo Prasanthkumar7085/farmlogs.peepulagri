@@ -14,7 +14,7 @@ const SignUpVerify = () => {
     const dispatch = useDispatch()
 
     const [mobile, setMobile] = useState<string>();
-    const [otp, setOtp] = useState<string>('123456');
+    const [otp, setOtp] = useState<string>('');
     const [errorMessages, setErrorMessages] = useState<any>({});
     const [loadingWhileVerifyingOtp, setLoadingWhileVerifyingOtp] = useState(false);
 
@@ -71,7 +71,7 @@ const SignUpVerify = () => {
                     </Typography>
                 <TextField
                         fullWidth
-                        placeholder="Default Otp : 123456"
+                        placeholder="Enter Otp"
                         value={otp}
                         onChange={(e: any) => setOtp(e.target.value)}
                 />

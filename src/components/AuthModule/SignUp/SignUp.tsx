@@ -34,8 +34,8 @@ const SignUp = () => {
         setErrorMessages('');
         e.preventDefault();
         const body = {
-            full_name: name,
-            email: email,
+            // full_name: name,
+            // email: email,
             phone: mobile
         }
 
@@ -59,7 +59,7 @@ const SignUp = () => {
                     <h3>
                         Login with OTP
                     </h3>
-                    <div>
+                    {/* <div>
                         <label>Name</label>
                         <TextField
                             fullWidth
@@ -76,7 +76,7 @@ const SignUp = () => {
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                             onKeyDown={(e: any) => { if (e.key == 'Enter') getOtp(e) }}
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label>Mobile</label>
                         <TextField

@@ -17,13 +17,12 @@ const DashBoard = () => {
         let response: any = await getAllFarmsService(accessToken);
         if (response?.success) {
             setFarmsData(response);
-            let id = (router?.query?.farm_id && router?.query?.farm_id != 'farm_id') ? router?.query?.farm_id : response?.data[0]?._id
-            router.push(`/farm/${id}/logs`);
+            let id = (router?.query?.farm_id && router?.query?.farm_id != 'farm_id') ? router?.query?.farm_id : response?.data[0]?._id;
+            router.replace(`/farm/${id}/logs`, undefined, { shallow: true });
         }
     }
 
     useEffect(() => {
-
         if (router.isReady && accessToken) {
             getFarmsData();
         }

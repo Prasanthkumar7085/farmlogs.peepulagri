@@ -1,9 +1,22 @@
 import { useTable } from "react-table";
 import NoDataComponent from "../Core/NoDataComponent";
 import ImageComponent from "../Core/ImageComponent";
+import { useSelector } from "react-redux";
+
 
 const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
 
+
+    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+
+
+    const getHiddenColumns = () => {
+        console.log(userType);
+
+        if (userType !== 'ADMIN')
+            return ['user_id.full_name']
+        return []
+    }
     const {
         getTableProps, // table props from react-table
         getTableBodyProps, // table body props from react-table
@@ -12,7 +25,10 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
         prepareRow // Prepare the row (this function needs to be called for each row before getting the row props)
     } = useTable({
         columns: columns?.length ? columns : [],
-        data: data?.length ? data : []
+        data: data?.length ? data : [],
+        initialState: {
+            hiddenColumns: getHiddenColumns()
+        }
     });
 
     return (
@@ -43,15 +59,17 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
                         </tr>
                     ))}
                 </thead>
+
                 {!loading && data?.length ?
                     <tbody className="tbody" {...getTableBodyProps()}>
                     {rows.map((row: any, index: number) => {
                         prepareRow(row);
                         return (
                             <tr className="table-row" {...row.getRowProps()} key={index}>
-                                {row.cells.map((cell: any, cellIndex: number) => {
-                                    return <td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>;
-                                })}
+                                {row.cells.map((cell: any, cellIndex: number) => (
+                                    <td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>
+
+                                ))}
                             </tr>
                         );
                     })}
@@ -68,3 +86,5 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
 }
 
 export default FarmTable;
+
+// (!cell.column.show && userType == 'ADMIN') ? (<td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>) : null

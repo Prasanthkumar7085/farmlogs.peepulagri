@@ -17,7 +17,7 @@ const DashBoard = () => {
         let response: any = await getAllFarmsService(accessToken);
         if (response?.success) {
             setFarmsData(response);
-            let id = (router?.query?.farm_id && router?.query?.farm_id != 'farm_id') ? router?.query?.farm_id : response?.data[0]._id
+            let id = (router?.query?.farm_id && router?.query?.farm_id != 'farm_id') ? router?.query?.farm_id : response?.data[0]?._id
             router.push(`/farm/${id}/logs`);
         }
     }

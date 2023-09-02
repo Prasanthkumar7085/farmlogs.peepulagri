@@ -8,11 +8,16 @@ import FarmTable from "../DashBoard/FarmTable";
 import { SupportDataTableProps, SupportResponseDataType, categoriesType } from "@/types/supportTypes";
 import { useRouter } from "next/router";
 
+import { useSelector } from "react-redux";
+
 
 
 const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: SupportDataTableProps) => {
 
     const router = useRouter();
+
+    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+
     const categoryOptions: Array<categoriesType> = [
 
         { title: 'Input Resources', value: "input_resources", color: "#66BB6A", textColor: "#ffffff" },
@@ -86,6 +91,18 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
         {
             Header: "Status",
             accessor: 'status'
+        },
+        {
+            Header: "User Name",
+            show: userType === 'ADMIN',
+            accessor: "user_id.full_name",
+            // accessor: (row: SupportResponseDataType) => {
+            //     return (
+            //         <div style={{ color: "var(--body)" }}>
+            //             {row.user_id?.full_name}
+            //         </div>
+            //     )
+            // }
         },
         {
             Header: "Actions",

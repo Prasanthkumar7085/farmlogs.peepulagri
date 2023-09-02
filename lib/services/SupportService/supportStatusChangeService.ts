@@ -1,13 +1,14 @@
 
-const updateLogService = async (body: any, logId: string) => {
+const supportStatusChangeService = async (supportId: string, body: { status: string }, accessToken: string) => {
 
     try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/log/${logId}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/support/update-status/${supportId}`;
         const options = {
             method: "PATCH",
             body: JSON.stringify(body),
             headers: new Headers({
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'authorization': accessToken
             })
         }
         const response: any = await fetch(url, options);
@@ -19,4 +20,4 @@ const updateLogService = async (body: any, logId: string) => {
 
     }
 }
-export default updateLogService;
+export default supportStatusChangeService;

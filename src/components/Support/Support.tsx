@@ -33,7 +33,7 @@ const SupportPage = () => {
         { value: 'OPEN', title: 'Open' },
         { value: 'INPROGRESS', title: "Inprogress" },
         { value: 'RESOLVED', title: "Resolved" },
-        { value: 'ARCHIVED', title: "Archived" }
+        { value: 'ARCHIVE', title: "Archive" }
     ];
 
     const updateStatus = async (value: string, id: string) => {

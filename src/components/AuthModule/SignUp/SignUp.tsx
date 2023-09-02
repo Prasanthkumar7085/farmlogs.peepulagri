@@ -55,7 +55,7 @@ const SignUp = () => {
     return (
         <div style={{ display: "flex", justifyContent: "center", padding: '5%' }}>
             <form onSubmit={getOtp} style={{ minWidth: "100%", display: "flex", justifyContent: "center" }}>
-                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: '2% 5% 5% 5%', border: "2px solid", borderRadius: "10px", gap: "20px", width: "300px" }}>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: '2% 5% 5% 5%', border: "2px solid", borderRadius: "10px", gap: "20px", width: "400px" }}>
                     <h3>
                         Login with OTP
                     </h3>

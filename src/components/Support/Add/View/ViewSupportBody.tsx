@@ -10,15 +10,51 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import deleteSupportAttachmentService from "../../../../../lib/services/SupportService/deleteSupportAttachmentService";
 import timePipe from "@/pipes/timePipe";
 import { useSelector } from "react-redux";
+import SelectComponent from "@/components/Core/SelectComponent";
+import supportStatusChangeService from "../../../../../lib/services/SupportService/supportStatusChangeService";
+import AlertComponent from "@/components/Core/AlertComponent";
 
 type getOneSupportByIdType = () => void
 const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDataType | undefined; getOneSupportById: getOneSupportByIdType }) => {
 
     const router = useRouter();
 
-
     const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
-    console.log(userType);
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
+    const [supportStatus, setSupportStatus] = useState<string>('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState(false);
+
+    useEffect(() => {
+        setSupportStatus(data?.status as string)
+    }, [data?.status])
+
+    const statusOptions = [
+        { value: 'OPEN', title: 'Open' },
+        { value: 'INPROGRESS', title: "Inprogress" },
+        { value: 'RESOLVED', title: "Resolved" },
+        { value: 'ARCHIVE', title: "Archive" }
+    ];
+
+
+    const onChangeStatus = async (e: any) => {
+
+        setSupportStatus(e.target.value);
+        const body = {
+            status: e.target.value
+        }
+        const response = await supportStatusChangeService(router.query?.support_id as string, body, accessToken);
+        if (response.success) {
+            // getOneSupportById()
+            setAlertMessage(response?.message);
+            setAlertType(response?.success)
+        } else {
+            setAlertMessage('Failed to Update Status');
+            setAlertType(response?.success)
+        }
+
+    }
 
     useEffect(() => {
         if (data && router.isReady) {
@@ -30,20 +66,16 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
 
     const getDownloadLinks = async () => {
         let response = await getSupportAttachmentsService(router.query?.support_id);
-
         if (response.success) {
             setDownloadUrls(response.data.download_urls);
         }
     }
 
     const deleteImage = async (item: any) => {
-
         const response = await deleteSupportAttachmentService(router.query.support_id as string, item.attachment_id);
-        console.log(response);
         if (response.success) {
             await getOneSupportById();
         }
-
     }
 
     const getSrc = (item: any) => {
@@ -73,7 +105,15 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                             {data?.support_id}
                         </div>
                         <div>
-                            {data?.status}
+                            {userType == 'ADMIN' ?
+                                <SelectComponent
+                                    value={supportStatus}
+                                    defaultValue={supportStatus}
+                                    options={statusOptions}
+                                    onChange={onChangeStatus}
+                                    disabled={supportStatus == 'ARCHIVE' ? true : false}
+                                />
+                                : data?.status}
                         </div>
                     </div>
                 </div>
@@ -119,6 +159,7 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                     )
                 })}
             </div>
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
         </div>
     )
 }

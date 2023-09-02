@@ -63,7 +63,7 @@ const EditSupportForm = () => {
 
     useEffect(() => {
         collectSupportData();
-    }, [query, categories, description, filesDetailsAfterUpload]);
+    }, [query, categories, description]);
 
     useEffect(() => {
         getOneSupportDetails();
@@ -114,33 +114,12 @@ const EditSupportForm = () => {
 
 
     const collectSupportData = () => {
-        const array = supportOneDetails?.attachments;
-        console.log(array);
-        console.log(filesDetailsAfterUpload);
-
-        let attachmentsArray: any = [];
-
-        if (array) {
-            if (Object.keys(audioDetailsAfterUpload).length) {
-                attachmentsArray = [...filesDetailsAfterUpload, ...array, audioDetailsAfterUpload]
-            } else {
-                attachmentsArray = [...filesDetailsAfterUpload, ...array]
-            }
-        } else {
-            if (Object.keys(audioDetailsAfterUpload).length) {
-                attachmentsArray = [...filesDetailsAfterUpload, audioDetailsAfterUpload]
-            } else {
-                attachmentsArray = [...filesDetailsAfterUpload]
-            }
-        }
 
         let supportData: Partial<AddSupportPayload> = {
             title: query,
             description: description,
             categories: categories,
             status: "OPEN",
-            attachments: [...attachmentsArray]
-
         }
         setSupportDetails(supportData)
     }
@@ -195,9 +174,42 @@ const EditSupportForm = () => {
 
 
     const editSupport = async () => {
+        const array = supportOneDetails?.attachments;
+
+        let attachmentsArray: any = [];
+
+        if (array) {
+            if (Object.keys(audioDetailsAfterUpload).length) {
+                attachmentsArray = [...filesDetailsAfterUpload, ...array, audioDetailsAfterUpload]
+            } else {
+                attachmentsArray = [...filesDetailsAfterUpload, ...array]
+            }
+        } else {
+            if (Object.keys(audioDetailsAfterUpload).length) {
+                attachmentsArray = [...filesDetailsAfterUpload, audioDetailsAfterUpload]
+            } else {
+                attachmentsArray = [...filesDetailsAfterUpload]
+            }
+        }
+
+        let body = {
+            ...supportDetails,
+            attachments: [...attachmentsArray]
+        }
+
         try {
-            const response = await editSupportService(supportDetails, router?.query?.support_id);
+            const response = await editSupportService(body, router?.query?.support_id);
             collectSupportData();
+            if (response?.success) {
+                setAlertMessage(response?.message);
+                setAlertType(true);
+                setTimeout(() => {
+                    // router.back();
+                }, 500)
+            } else {
+                setAlertMessage(response?.message);
+                setAlertType(false);
+            }
         } catch (err: any) {
             console.error(err);
 
@@ -218,6 +230,8 @@ const EditSupportForm = () => {
 
 
     const onChangeFile = (e: any, check = false) => {
+
+        setFilesDetailsAfterUpload([])
         setFiles(e.target.files);
 
         // if (check) {
@@ -260,7 +274,7 @@ const EditSupportForm = () => {
 
             if (uploadResponse.ok) {
                 if (uploadResponse.ok) {
-                    setAlertMessage("Attachment(s) Uploaded Successful!");
+                    setAlertMessage(`${index + 1} attachment(s) Uploaded!`);
                     setAlertType(true);
                     const { target_url, ...rest } = response[index];
                     arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });

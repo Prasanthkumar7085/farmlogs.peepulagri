@@ -1,7 +1,9 @@
-import { Button, CircularProgress, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
 import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
+import styles from "./SignUp.module.css";
+import ImageComponent from "../../../components/Core/ImageComponent";
 
 const SignUp = () => {
 
@@ -53,12 +55,23 @@ const SignUp = () => {
     }
 
     return (
-        <div style={{ display: "flex", justifyContent: "center", padding: '5%' }}>
-            <form onSubmit={getOtp} style={{ minWidth: "100%", display: "flex", justifyContent: "center" }}>
-                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: '2% 5% 5% 5%', border: "2px solid", borderRadius: "10px", gap: "20px", width: "400px" }}>
-                    <h3>
-                        Login with OTP
-                    </h3>
+        <div id={styles.loginPage}>
+            <div className={styles.bgImage}>
+                <img src="/login-bg.webp" alt="Bg Image" />
+            </div>
+            <form onSubmit={getOtp} className={styles.formCard}>
+                <div className={styles.innerWrap}>
+                    <div className={styles.header}>
+                        <ImageComponent src="./Logo-color.svg" width="90" height="70" />
+                        <span className={styles.content}>
+                            <Typography variant="h5">
+                                Welcome!
+                            </Typography>
+                            <Typography component="p">
+                                Please enter your details
+                            </Typography>
+                        </span>
+                    </div>
                     {/* <div>
                         <label>Name</label>
                         <TextField
@@ -78,24 +91,27 @@ const SignUp = () => {
                         />
                     </div> */}
                     <div>
-                        <label>Mobile</label>
+                        
+                        <Typography className={styles.label}>
+                            Login With Mobile Number
+                        </Typography>
+                        <label  ></label>
                         <TextField
                             fullWidth
+                            error={ Boolean(errorMessages) }
+                            helperText={errorMessages}
                             value={mobile}
+                            size="small"
+                            placeholder="+91 xxxxx xxxxx"
                             onChange={setMobileNumber}
                             onKeyPress={handleKeyPress}
+                            className={styles.phoneNo}
                             onKeyDown={(e: any) => { if (e.key == 'Enter') getOtp(e) }}
                         />
                     </div>
-                    {errorMessages ?
-                        <p style={{ color: "red" }}>
-                            {errorMessages}
-                        </p>
-                        : ""}
-                    <Button type='submit' variant="contained">
-                        {loadingWhileGettingOtp ?
-                            <CircularProgress size="1.5rem" sx={{ color: 'white' }} />
-                            : 'Login'}
+                    
+                    <Button className={styles.cta_button} type='submit' size="large" variant="contained">
+                        Login
                     </Button>
                 </div>
             </form>

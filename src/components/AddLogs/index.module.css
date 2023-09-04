@@ -95,7 +95,7 @@
 .farmsaddLogs {
   position: relative;
   background-color: var(--background);
-  width: calc(100vw - 100px);
+  width: calc(100vw - 70px);
   height: 100vh;
   overflow-y: scroll;
   display: flex;

@@ -20,11 +20,16 @@ import KeyboardVoiceRoundedIcon from '@mui/icons-material/KeyboardVoiceRounded';
 import GraphicEqRoundedIcon from '@mui/icons-material/GraphicEqRounded';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+
+
 const AddSupportForm = () => {
   const router: any = useRouter();
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-  const [permission, setPermission] = useState(false);
+  const [permission, setPermission] = useState<boolean | null>(false);
   const mediaRecorder = useRef<any>(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState<any>(null);
@@ -58,16 +63,24 @@ const AddSupportForm = () => {
   ]);
 
   const collectSupportData = () => {
+
     let supportData: Partial<AddSupportPayload> = {
       title: query,
       description: description,
       categories: categories,
-      attachments: [...filesDetailsAfterUpload, audioDetailsAfterUpload],
-      status: "OPEN",
-      support_id: "SUPPORT1232",
+      attachments: getAttachments(),
+      status: "OPEN"
     };
     setSupportDetails(supportData);
   };
+
+  const getAttachments = () => {
+    console.log(Object.keys(audioDetailsAfterUpload));
+
+    if (Object.keys(audioDetailsAfterUpload).length)
+      return [...filesDetailsAfterUpload, audioDetailsAfterUpload]
+    return [...filesDetailsAfterUpload]
+  }
 
 
   const addSupport = async () => {
@@ -105,7 +118,15 @@ const AddSupportForm = () => {
     }
   };
 
+  useEffect(() => {
+    if (!permission) {
+      getMicrophonePermission();
+    }
+  }, []);
+
+
   const startRecording = async () => {
+    restartTimer();
     setRecordingStatus("recording");
     //create new Media recorder instance using the stream
     const media = new MediaRecorder(stream);
@@ -123,6 +144,8 @@ const AddSupportForm = () => {
   };
 
   const stopRecording = () => {
+    resetTimer();
+    setIsRunning(false);
     setRecordingStatus("inactive");
     //stops the recording instance
     mediaRecorder.current.stop();
@@ -135,6 +158,7 @@ const AddSupportForm = () => {
       setAudioChunks([]);
     };
   };
+
 
 
 
@@ -219,6 +243,51 @@ const AddSupportForm = () => {
     setFilesDetailsAfterUpload(arrayForResponse);
   };
 
+
+  const removeAudio = () => {
+    setAudio(null);
+    setAudioDetailsAfterUpload({});
+  }
+
+  const [timeInSeconds, setTimeInSeconds] = useState(1);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    let timerInterval: any;
+
+    if (isRunning && timeInSeconds >= 0) {
+      timerInterval = setInterval(() => {
+        setTimeInSeconds((prevTime) => prevTime + 1);
+      }, 1000);
+    } else if (timeInSeconds === 0) {
+      clearInterval(timerInterval);
+    }
+
+    return () => clearInterval(timerInterval);
+  }, [isRunning, timeInSeconds]);
+
+  const toggleTimer = () => {
+    setIsRunning((prevState) => !prevState);
+  };
+
+  const resetTimer = () => {
+    setTimeInSeconds(0);
+    setIsRunning(false);
+  };
+  const restartTimer = () => {
+    setTimeInSeconds(0);
+    setIsRunning(true);
+  };
+
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = timeInSeconds % 60;
+  const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+
+
+
+
+
   return (
     <div
       style={{
@@ -283,20 +352,36 @@ const AddSupportForm = () => {
                     <Typography color="primary">Start Recording</Typography>
                     ) : null}
                 </div>
-                <div className={styles.voiceRecording}>
-                     {recordingStatus === "recording" ? (
-                        <Fab size="small" color="success" aria-label="Stop Recording" onClick={stopRecording}>
-                            <GraphicEqRoundedIcon />
+
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <div className={styles.voiceRecording}>
+                    {recordingStatus === "recording" ? (
+                      isRunning ? <Fab size="small" color="success" aria-label="Stop Recording" onClick={toggleTimer}>
+                        <PauseIcon />
+                      </Fab> :
+                        <Fab size="small" color="primary" aria-label="Stop Recording" onClick={toggleTimer}>
+                          <PlayArrowIcon />
+                        </Fab>
+                    ) : null}
+                  </div>
+
+                  <div className={styles.voiceRecording}>
+                    {recordingStatus === "recording" ? (
+                      <Fab size="small" color="error" aria-label="Stop Recording" onClick={stopRecording}>
+                        <StopIcon />
                         </Fab> 
                     ) : null}
                     
                     {recordingStatus === "recording" ? (
-                      <Chip label="01" variant="outlined" />
+                      <Chip label={formattedTime} variant="outlined" />
                     ) : null }
                     {recordingStatus === "recording" ? (
                     <Typography color="success">Stop Recording</Typography>
-                    ) : null }
+                    ) : null}
+                  </div>
                 </div>
+
+
                 <div className={styles.recordedAudio}>
                   {audio ? (
                     <div>
@@ -313,7 +398,7 @@ const AddSupportForm = () => {
                    {audio ? (
                       <Button
                         disabled={!audio}
-                        onClick={uploadAudio}
+                      onClick={removeAudio}
                         size="small"
                         sx={{ paddingInline: "0", minWidth: "auto"}}
                       >

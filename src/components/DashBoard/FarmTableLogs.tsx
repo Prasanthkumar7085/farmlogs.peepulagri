@@ -74,13 +74,11 @@ const FarmTableLogs = () => {
                 queryParams['limit'] = limit;
             }
 
-            console.log(queryParams);
-
             const { page: pageCount, limit: limitCount, ...restParams } = queryParams;
 
             router.push({ asPath: "/farm/[farm_id]/logs", pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
             let paramString = prepareURLEncodedParams('', restParams);
-            console.log(queryParams);
+
 
 
             const response = await getLogsByFarmIdService({ farmId: farmId, page: page, limit: limit, paramString: paramString });

@@ -49,7 +49,6 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
 
   //setting audio/pdf thumbnail and returning image for other files from selected files
   const getImageObjectUrl = (file: any) => {
-    console.log(file.type, 'plpl');
     if (file.type == 'application/pdf')
       return '/pdf.svg'
     else if (file.type.includes('audio'))

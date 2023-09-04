@@ -72,9 +72,7 @@ const EditALog: NextPage = () => {
     const getTotalHours = (type: string) => {
 
         let result = resources.reduce((acc: number, item: any) => (item.type?.toLowerCase() == type.toLowerCase() ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0)
-        console.log(result, 'testi');
 
-        console.log(resources, 'testi');
         return result;
     }
     const editLog = async () => {
@@ -103,7 +101,7 @@ const EditALog: NextPage = () => {
             if (response.success) {
                 setAlertMessage('Log Updated Successfully!');
                 setAlertType(true);
-                setTimeout(() => router.back(), 1000)
+                setTimeout(() => router.push(`farm/${router.query?.farm_id}/logs`), 1000)
             } else {
                 setAlertMessage('Failed to Update Log!');
                 setAlertType(false);

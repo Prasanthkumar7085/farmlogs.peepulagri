@@ -32,7 +32,6 @@ const SignUpVerify = () => {
             otp: otp
         }
         const response = await verifyOtpService(body);
-        console.log(response);
 
         if (response.success) {
             setCookie();
@@ -44,7 +43,6 @@ const SignUpVerify = () => {
                 router.replace('/support')
             } else {
                 let farmResponse = await getAllFarmsService(accessToken);
-                console.log(farmResponse);
 
                 if (farmResponse.success && farmResponse.data && farmResponse?.data.length) {
                     const id = farmResponse?.data[0]?._id;

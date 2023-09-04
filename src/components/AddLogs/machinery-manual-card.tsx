@@ -28,7 +28,6 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
   const getDownloadLinks = async () => {
 
     let response = await getLogAttachmentsService(router.query.log_id);
-    console.log(response);
 
     if (response.success) {
       setDownloadUrls(response.data.download_urls);
@@ -65,7 +64,7 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
     setDeleteIndex(index);
     setDeleteLoading(true);
     const response = await deleteLogAttachmentService(router?.query?.log_id as string, item.attachment_id);
-    console.log(response);
+
     if (response.success) {
       getDownloadLinks();
     }

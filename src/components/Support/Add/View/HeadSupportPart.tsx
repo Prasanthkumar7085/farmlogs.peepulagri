@@ -42,7 +42,7 @@ const HeadSupportPart = ({ data }: { data: SupportResponseDataType | undefined }
                     direction={false}
                     title='Back'
                     icon={<Icon>arrow_back_sharp</Icon>}
-                    onClick={() => router.back()}
+                    onClick={() => router.push('/support')}
                 />
                 <h4 className={styles.text}>View Support</h4>
             </div>

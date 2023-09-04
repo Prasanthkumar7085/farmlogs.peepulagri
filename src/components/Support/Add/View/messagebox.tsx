@@ -18,8 +18,6 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userName = useSelector((state: any) => state.auth.userDetails?.user_details?.full_name);
-  console.log(userName);
-
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -34,7 +32,6 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   const onSendMessage = async () => {
 
     let createdAt = new Date().toISOString();
-    console.log(createdAt);
 
     if (message) {
       const body = {
@@ -63,7 +60,6 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   }
 
   const getImageObjectUrl = (file: any) => {
-    console.log(file.type, 'plpl');
     if (file.type == 'application/pdf')
       return '/pdf.svg'
     else if (file.type.includes('audio'))
@@ -99,7 +95,6 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   };
   const postAllImages = async (filesFromArgs: any, response: any, tempFilesStorage: any) => {
     let arrayForResponse: any = [];
-    console.log(response.length);
 
     for (let index = 0; index < response.length; index++) {
       let uploadResponse: any = await uploadFileToS3(

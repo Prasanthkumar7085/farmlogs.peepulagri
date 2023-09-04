@@ -37,13 +37,9 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
         let value: any = (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))
         return value[field]
     }
-    // const getTitle = (item: any) => {
-    //     return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.title
-    // }
+
     const appliedSort = async (sortKey: string) => {
         if (sortKey) {
-            console.log(sortKey);
-
         }
     }
 

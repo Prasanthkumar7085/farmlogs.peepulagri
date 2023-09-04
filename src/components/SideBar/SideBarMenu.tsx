@@ -61,7 +61,6 @@ const SideBarMenu = ({ children }: any) => {
                 <nav className={styles.menubar}>
                     <List>
                         {menuListItems.map((item: item, index: number) => {
-                            console.log(item.isVisible);
 
                             if (item.isVisible) {
                             return (

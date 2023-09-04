@@ -32,7 +32,7 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
   const deleteImage = async (item: any) => {
 
     const response = await deleteSupportAttachmentService(router.query.support_id as string, item.attachment_id);
-    console.log(response);
+
     if (response.success) {
       await getImagesByMessageId();
     }

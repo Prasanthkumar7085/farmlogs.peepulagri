@@ -1,6 +1,6 @@
 import { categoriesType } from "@/types/supportTypes";
 import { MenuItem, Select, TextField, TextareaAutosize, Typography } from "@mui/material"
-import React, { useState } from "react";
+import React from "react";
 
 const AddSupportQueryDetails = ({
     query,
@@ -8,15 +8,14 @@ const AddSupportQueryDetails = ({
     description,
     setQuery,
     setCategories,
-    setDescription,
-    supportOneDetails }: {
+    setDescription }: {
         query: string,
         categories: Array<string> | undefined,
         description: string,
         setQuery: React.Dispatch<React.SetStateAction<string>>,
         setCategories: React.Dispatch<React.SetStateAction<Array<string> | undefined>>,
         setDescription: React.Dispatch<React.SetStateAction<string>>
-        supportOneDetails: any
+
     }) => {
 
 

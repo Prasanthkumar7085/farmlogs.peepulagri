@@ -11,7 +11,6 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
 
 
     const getHiddenColumns = () => {
-        console.log(userType);
 
         if (userType !== 'ADMIN')
             return ['user_id.full_name']

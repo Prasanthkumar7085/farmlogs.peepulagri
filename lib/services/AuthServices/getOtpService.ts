@@ -1,7 +1,5 @@
 const getOtpService = async (body: any) => {
 
-    console.log(body);
-
     try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/users/signup-or-signin`;
 

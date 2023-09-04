@@ -49,7 +49,7 @@ const FarmCard = ({
         </div> */}
       </div>
       <div className={_id == router.query.farm_id ? styles.activebar : styles.default} />
-      <div style={{ minWidth: '280px' }}>
+      <div className={styles.progressbar}>
         <LinearProgress variant="determinate" value={progress} color="success" />
       </div>
 

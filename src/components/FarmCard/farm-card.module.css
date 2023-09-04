@@ -1,12 +1,3 @@
-.cardContainer {
-  height: calc(100vh - 1rem); 
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-  width: 280px;
-  overflow-y: scroll;
-}
-
 .farmshapeIcon {
   position: relative;
   border-radius: 2.98px;
@@ -107,14 +98,9 @@
   overflow: hidden;
 }
 
-.progress,
-.progressbar,
-.statsprogress {
+.progress{
   display: flex;
   justify-content: flex-start;
-}
-
-.progress {
   flex: 1;
   border-radius: var(--br-8xs);
   background-color: var(--color-gainsboro);
@@ -122,27 +108,19 @@
   flex-direction: column;
   align-items: flex-start;
 }
-
-.progressbar,
+.progressbar{
+  width: 100%;
+}
 .statsprogress {
+  display: flex;
+  justify-content: flex-start;
   align-self: stretch;
   align-items: center;
-}
-
-.progressbar {
-  flex-direction: row;
-  gap: var(--gap-5xs);
-  font-size: var(--font-size-xs);
-  color: var(--title);
-}
-
-.statsprogress {
   flex-direction: column;
   gap: var(--gap-base);
   z-index: 2;
   color: var(--color-darkslategray-100);
 }
-
 .activebar {
   position: absolute;
   margin: 0 !important;

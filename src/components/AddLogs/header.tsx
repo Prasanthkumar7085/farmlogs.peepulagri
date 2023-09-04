@@ -42,6 +42,12 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
       description: description,
       categories: category
     })
+    console.log({
+      title: title,
+      description: description,
+      categories: category
+    });
+
   }, [title, description, category])
 
   return (

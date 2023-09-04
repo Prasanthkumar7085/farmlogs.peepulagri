@@ -20,6 +20,7 @@ import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 import { useSelector } from "react-redux";
 import { CategoriesType } from "@/types/categoryTypes";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
+import DeleteDialogCompoennt from "../Core/DeleteDialogComponent";
 
 
 
@@ -107,9 +108,17 @@ const FarmTableLogs = () => {
             setLoading(false);
         }
     }
-    const deleteLog = async (id: string) => {
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [deleteContent, setDeleteContent] = useState<any>({});
 
-        setLoading(true);
+    const deleteLog = async (item: any) => {
+        setDeleteDialogOpen(true);
+        setDeleteContent(item);
+    }
+
+    const confirmDelete = async (check: boolean, id: string) => {
+        if (check) {
+            setLoading(true);
         try {
             let response: any = await deleteALogService(id);
             if (response.success) {
@@ -119,6 +128,10 @@ const FarmTableLogs = () => {
             console.error(err);
         } finally {
             setLoading(false);
+                setDeleteDialogOpen(false);
+            }
+        } else {
+            setDeleteDialogOpen(false);
         }
     }
 
@@ -375,7 +388,7 @@ const FarmTableLogs = () => {
                         <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => deleteLog(row._id)}>
+                        <IconButton onClick={() => deleteLog(row)}>
                             <img src="/trast-icon.svg" alt="view" width="18" />
                         </IconButton>
                     </div>
@@ -399,6 +412,7 @@ const FarmTableLogs = () => {
             <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
             <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' />
             <LoadingComponent loading={loading} />
+            <DeleteDialogCompoennt deleteContent={deleteContent} deleteDialogOpen={deleteDialogOpen} confirmDelete={confirmDelete} />
         </div>
     )
 }

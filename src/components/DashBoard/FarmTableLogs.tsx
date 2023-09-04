@@ -42,23 +42,21 @@ const FarmTableLogs = () => {
 
 
     useEffect(() => {
-        if (router.isReady && accessToken) {
+        if (router.isReady && accessToken && router.query.farm_id) {
             getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, search: router.query.search_string, orderBy: router.query?.order_by, orderType: router.query?.order_type });
 
-            setSearchString(router.query?.search_string)
-            setOrderBy(router.query?.order_by)
-            setOrderType(router.query?.order_type)
+            setLimit(router.query?.limit);
+            setPage(router.query?.page);
+            setSearchString(router.query?.search_string);
+            setOrderBy(router.query?.order_by);
+            setOrderType(router.query?.order_type);
         }
-    }, [router.query.farm_id, router.isReady, accessToken]);
-
-
+    }, [router.query.farm_id, accessToken]);
 
 
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString, orderBy, orderType }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
         try {
-
-
             let queryParams: any = {};
             if (search) {
                 queryParams['search_string'] = search;
@@ -76,9 +74,13 @@ const FarmTableLogs = () => {
                 queryParams['limit'] = limit;
             }
 
+            console.log(queryParams);
+
             const { page: pageCount, limit: limitCount, ...restParams } = queryParams;
-            router.replace({ pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
+
+            router.push({ asPath: "/farm/[farm_id]/logs", pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
             let paramString = prepareURLEncodedParams('', restParams);
+            console.log(queryParams);
 
 
             const response = await getLogsByFarmIdService({ farmId: farmId, page: page, limit: limit, paramString: paramString });
@@ -86,7 +88,6 @@ const FarmTableLogs = () => {
                 const { data, limit, page, total, total_pages } = response;
                 setData(data);
                 setPaginationDetails({ limit: limit, page: page, total: total, total_pages: total_pages });
-
             }
         } catch (err: any) {
             console.error(err);
@@ -144,32 +145,33 @@ const FarmTableLogs = () => {
 
     const capturePageNum = (value: number) => {
         setPage(value);
-        getFarmLogs({ page: value });
+        getFarmLogs({ page: value, limit: limit, orderBy: orderBy, orderType: orderType });
     }
 
     const captureRowPerItems = (value: number) => {
         setPage(1);
         setLimit(value);
-        getFarmLogs({ page: 1, limit: value });
+        getFarmLogs({ page: 1, limit: value, orderBy: orderBy, orderType: orderType });
     }
 
 
     useEffect(() => {
         const delay = 500;
         const debounce = setTimeout(() => {
-            getFarmLogs({ page: 1, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
-            // if (searchString && router.isReady) {
-            // } else {
-            //     getFarmLogs({ page: 1, search: '', orderBy: router.query?.order_by, orderType: router.query?.order_type });
-            // }
+            if (searchString) {
+                getFarmLogs({ page: 1, limit: router.query.limit, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            } else {
+                getFarmLogs({ page: router.query.page, limit: router.query.limit, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            }
         }, delay);
         return () => clearTimeout(debounce);
-    }, [searchString, accessToken, router.query.farm_id]);
+    }, [searchString]);
 
 
     const searchStringChange = (value: string) => {
         setPage(1);
         setSearchString(value);
+        // getFarmLogs({ page: 1, limit: router.query.limit, search: value, orderBy: router.query?.order_by, orderType: router.query?.order_type });
     }
 
     const workTypeOptions = [
@@ -253,7 +255,7 @@ const FarmTableLogs = () => {
 
             setOrderBy(sortByField);
             setOrderType(orderTypeField)
-            getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, orderBy: sortByField, orderType: orderTypeField });
+            getFarmLogs({ farmId: router.query.farm_id, page: 1, limit: router.query.limit, orderBy: sortByField, orderType: orderTypeField });
 
         }
     }
@@ -350,10 +352,10 @@ const FarmTableLogs = () => {
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
+                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
+                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteLog(row._id)}>
@@ -372,7 +374,7 @@ const FarmTableLogs = () => {
                 <h3 className="title">Farm Dashboard</h3>
                 <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "16px" }}>
                     <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
-                    <Button color="success" variant="contained" onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
+                    <Button color="success" variant="contained" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
                         Add Log
                     </Button>
                 </div>

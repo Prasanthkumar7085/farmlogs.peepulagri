@@ -99,7 +99,7 @@ const EditSupportForm = () => {
                 setAlertMessage(response?.message);
                 setAlertType(true);
                 setTimeout(() => {
-                    router.push('/support');
+                    router.back();
                 }, 500)
             } else {
                 setAlertMessage(response?.message);

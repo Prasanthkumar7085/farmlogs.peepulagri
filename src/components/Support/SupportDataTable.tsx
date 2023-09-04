@@ -105,10 +105,10 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.replace(`/support/${row._id}`)}>
+                        <IconButton onClick={() => router.push(`/support/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.replace(`/support/${row._id}/edit`)}>
+                        <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteSupport(row._id)}>

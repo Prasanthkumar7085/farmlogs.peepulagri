@@ -123,7 +123,7 @@ const SupportPage = () => {
                         value={searchString}
                     />
                     <SelectComponent options={statusOptions} size="small" onChange={onStatusChange} defaultValue='' />
-                    <ButtonComponent variant="contained" icon={<AddIcon />} title='ADD' onClick={() => router.replace('/support/add')} />
+                    <ButtonComponent variant="contained" icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />
                 </div>
             </div>
             <SupportDataTable data={data} loading={loading} deleteSupport={deleteSupport} updateStatus={updateStatus} />

@@ -19,7 +19,7 @@ const AddLogHeader = () => {
                 direction={false}
                 icon={<ArrowBackIcon />}
                 size="small"
-                onClick={() => router.replace(`/support`)}
+                onClick={() => router.push(`/farm/${router.query.farm_id}/logs`)}
                 style={{ paddingInline: "0", minWidth: "auto" }}
             />
             <Typography variant="h6" className="title">{router.query.log_id ? 'Edit Log' : 'Add Log'}</Typography>

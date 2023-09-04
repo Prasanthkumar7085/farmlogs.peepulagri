@@ -101,7 +101,7 @@ const EditALog: NextPage = () => {
             if (response.success) {
                 setAlertMessage('Log Updated Successfully!');
                 setAlertType(true);
-                setTimeout(() => router.push(`farm/${router.query?.farm_id}/logs`), 1000)
+                setTimeout(() => router.back(), 1000)
             } else {
                 setAlertMessage('Failed to Update Log!');
                 setAlertType(false);

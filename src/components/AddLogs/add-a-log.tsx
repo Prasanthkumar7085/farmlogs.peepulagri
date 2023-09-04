@@ -70,7 +70,7 @@ const AddALog: NextPage = () => {
       if (response.success) {
         setAlertMessage('Log Added Successfully!');
         setAlertType(true);
-        router.replace(`farm/${router.query.farm_id}/logs`);
+        router.push(`farm/${router.query.farm_id}/logs`);
       } else {
         setAlertMessage('Failed to Add Logs!');
         setAlertType(false);

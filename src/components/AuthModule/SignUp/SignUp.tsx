@@ -41,7 +41,7 @@ const SignUp = () => {
 
         const response = await getOtpService(body);
         if (response.success) {
-            router.replace({
+            router.push({
                 pathname: "/signup-verify",
                 query: { mobile: mobile }
             });

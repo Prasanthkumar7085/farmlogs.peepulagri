@@ -40,15 +40,15 @@ const SignUpVerify = () => {
             }
             let accessToken = response.data.access_token;
             if (response?.data?.user_details?.user_type == 'ADMIN') {
-                router.replace('/support')
+                router.push('/support')
             } else {
                 let farmResponse = await getAllFarmsService(accessToken);
 
                 if (farmResponse.success && farmResponse.data && farmResponse?.data.length) {
                     const id = farmResponse?.data[0]?._id;
-                    router.replace(`/farm/${id}/logs`);
+                    router.push(`/farm/${id}/logs`);
                 } else {
-                    router.replace('/farm')
+                    router.push('/farm')
             }
             }
 

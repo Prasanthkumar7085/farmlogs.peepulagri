@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 
 
-const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: SupportDataTableProps) => {
+const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: SupportDataTableProps) => {
 
     const router = useRouter();
 
@@ -38,13 +38,12 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
         return value[field]
     }
 
-    const appliedSort = async (sortKey: string) => {
-        if (sortKey) {
-        }
-    }
+
 
     const columns = [   
         {
+            columnId: "date",
+            isSorted: true,
             Header: "Date",
             accessor: (row: SupportResponseDataType) => {
                 return (
@@ -55,6 +54,8 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             }
         },
         {
+            columnId: "query_name",
+            isSorted: true,
             Header: "Query Name",
             accessor: 'title'
         },
@@ -71,10 +72,14 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             }
         },
         {
+            columnId: "description",
+            isSorted: true,
             Header: "Description",
             accessor: 'description'
         },
         {
+            columnId: "response_date",
+            isSorted: true,
             Header: "Response Date",
             accessor: (row: SupportResponseDataType) => {
                 return (
@@ -85,10 +90,14 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             }
         },
         {
+            columnId: "status",
+            isSorted: true,
             Header: "Status",
             accessor: 'status'
         },
         {
+            columnId: "user_name",
+            isSorted: true,
             Header: "User Name",
             show: userType === 'ADMIN',
             accessor: "user_id.full_name",
@@ -101,14 +110,15 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             // }
         },
         {
+
             Header: "Actions",
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.replace(`/support/${row._id}`)}>
+                        <IconButton onClick={() => router.push(`/support/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.replace(`/support/${row._id}/edit`)}>
+                        <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteSupport(row._id)}>

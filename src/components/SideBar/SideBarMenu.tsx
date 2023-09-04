@@ -46,7 +46,7 @@ const SideBarMenu = ({ children }: any) => {
         try {
             const response = await fetch('/api/remove-cookie');
             if (response.status) {
-                router.replace('/');
+                router.push('/');
             } else throw response;
 
         } catch (err: any) {
@@ -65,7 +65,7 @@ const SideBarMenu = ({ children }: any) => {
                             if (item.isVisible) {
                             return (
                                 <ListItem className={styles.menuItem} key={index}>
-                                    <ListItemButton onClick={() => router.replace(item.link)}>
+                                    <ListItemButton onClick={() => router.push(item.link)}>
                                         <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
                                     </ListItemButton>
                                 </ListItem>

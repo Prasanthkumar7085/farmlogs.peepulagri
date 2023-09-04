@@ -6,11 +6,14 @@ export interface categoriesType {
 }
 
 export interface SupportServiceTypes {
-    page: string | number;
-    limit: string | number;
-    searchString: string;
+    page: undefined | string | number;
+    limit: string | number | undefined;
+    search: string;
     status: string | number;
     accessToken: string;
+    orderBy: string;
+    orderType: string;
+
 }
 
 
@@ -50,13 +53,13 @@ export interface SupportResponseDataType {
 
 
 type DeleteSupportFunction = (supportId: string) => void;
-type UpdateStatusFunction = (status: string, id: string) => void;
+type UpdateStatusFunction = (sortKey: string) => void;
 
 export interface SupportDataTableProps {
     data: SupportResponseDataType[] | null | undefined;
     loading: boolean;
     deleteSupport: DeleteSupportFunction;
-    updateStatus: UpdateStatusFunction;
+    appliedSort: UpdateStatusFunction;
 }
 
 export interface AddSupportPayload {

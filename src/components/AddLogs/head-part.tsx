@@ -67,7 +67,7 @@ const HeadPart = ({ data }: any) => {
       <div className={styles.subHeading}>
         <IconButtonComponent
           icon={<Icon>arrow_back_sharp</Icon>}
-          onClick={() => router.push(`/farm/${router.query.farm_id}/logs`)}
+          onClick={() => router.back()}
           size="small"
         />
         <h4 className={styles.text}>View Logs</h4>

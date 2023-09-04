@@ -72,7 +72,7 @@ const AddSupportForm = () => {
         setAlertMessage("Add Support Successful!");
         setAlertType(true);
         setTimeout(() => {
-          router.push('/support');
+          router.back();
         }, 1000);
       } else {
         setAlertMessage("Add Support Failed!");

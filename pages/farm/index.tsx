@@ -18,7 +18,7 @@ const FarmPage = () => {
         setLoading(true)
         const response = await getAllFarmsService(accessToken);
         if (response.success && response.data && response.data.length) {
-            router.replace(`/farm/${response?.data[0]._id}/logs`);
+            router.push(`/farm/${response?.data[0]._id}/logs`);
         }
         setLoading(false);
     }

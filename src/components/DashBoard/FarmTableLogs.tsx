@@ -18,6 +18,8 @@ import { categoriesType } from "@/types/supportTypes";
 import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 
 import { useSelector } from "react-redux";
+import { CategoriesType } from "@/types/categoryTypes";
+import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
 
 
 
@@ -40,9 +42,21 @@ const FarmTableLogs = () => {
     const [orderBy, setOrderBy] = useState(router.query.order_by ? router.query.order_by : "")
     const [orderType, setOrderType] = useState<string>(router.query.order_type ? router.query.order_type : "");
 
+    const [categoriesList, setCategoriesList] = useState<Array<CategoriesType>>([]);
+
+
+    const getAllCategories = async () => {
+        const response = await getAllCategoriesService();
+        if (response?.success) {
+            setCategoriesList(response?.data);
+
+        }
+
+    }
 
     useEffect(() => {
         if (router.isReady && accessToken && router.query.farm_id) {
+            getAllCategories();
             getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, search: router.query.search_string, orderBy: router.query?.order_by, orderType: router.query?.order_type });
 
             setLimit(router.query?.limit);
@@ -178,32 +192,37 @@ const FarmTableLogs = () => {
         { title: 'Machinery', value: "machinery", color: "#D94841" },
     ];
 
-    const categoryOptions: Array<Partial<categoriesType>> = [
-        { title: 'Soil Preparation', value: "soil_preparation", color: "#E57373" },
-        { title: 'Planting', value: "plainting", color: "#66BB6A" },
-        { title: 'Irrigation', value: "irrigation", color: "#64B5F6" },
-        { title: 'Fertilization', value: "fertilization", color: "#FFD54F" },
-        { title: 'Pest Management', value: "pest_management", color: "#AB47BC" },
-        { title: 'Weeding', value: "weeding", color: "#AED581" },
-        { title: 'Crop Rotation', value: "crop_rotation", color: "#9575CD" },
-        { title: 'Harvesting', value: "harvesting", color: "#FF8A65" },
-        { title: 'Livestock Care', value: "livestock_care", color: "#FFD700" },
-        { title: 'Breeding & Reproduction', value: "breeding_reproduction", color: "#FF80AB" },
-        { title: 'Equipment Management', value: "equipment_management", color: "#78909C" },
-        { title: 'Market & Scale Management', value: "market_scale_management", color: "#26A69A" },
-        { title: 'Environmental Stewardship', value: "enviranmental_stewardship", color: "#4CAF50" },
-        { title: 'Weather Monitoring', value: "weather_monitoring", color: "#42A5F5" },
-        { title: 'Financial Management', value: "financial_management", color: "#FFB74D" },
-        { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
+    const categoriesColors: Array<string> = [
+        "#E57373",
+        "#66BB6A",
+        "#64B5F6",
+        "#FFD54F",
+        "#AB47BC",
+        "#AED581",
+        "#9575CD",
+        "#FF8A65",
+        "#FFD700",
+        "#FF80AB",
+        "#26A69A",
+        "#4CAF50",
+        "#42A5F5",
+        "#FFB74D",
+        "#FF5722",
+        "#78909C",
     ];
+
     const getLabel = (item: string) => {
-        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.title
+        return (categoriesList.find((categoryItem: Partial<CategoriesType>) => categoryItem.slug == item))?.category
     }
     const getTypeColor = (item: string) => {
         return (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))?.color
     }
     const setBackColor = (item: any) => {
-        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.color
+        let index = categoriesList.findIndex((categoryItem: CategoriesType, index: number) => item == categoryItem.slug);
+        if (categoriesColors[index])
+            return categoriesColors[index];
+        return '#a4a6a9'
+
     }
 
 

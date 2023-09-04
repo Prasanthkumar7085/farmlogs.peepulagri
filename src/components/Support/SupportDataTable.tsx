@@ -9,6 +9,9 @@ import { SupportDataTableProps, SupportResponseDataType, categoriesType } from "
 import { useRouter } from "next/router";
 
 import { useSelector } from "react-redux";
+import { CategoriesType } from "@/types/categoryTypes";
+import { useEffect, useState } from "react";
+import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
 
 
 
@@ -18,26 +21,54 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
 
     const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
 
-    const categoryOptions: Array<categoriesType> = [
 
-        { title: 'Input Resources', value: "input_resources", color: "#66BB6A", textColor: "#ffffff" },
-        { title: 'Irrigation', value: "irrigation", color: "#64B5F6", textColor: "#ffffff" },
-        { title: 'Tools', value: "tools", color: "#FFD54F", textColor: "#ffffff" },
-        { title: 'Harvesting', value: "harvesting", color: "#AB47BC", textColor: "#ffffff"  },
-        { title: 'Alerts', value: "alerts", color: "#AED581", textColor: "#ffffff"  },
-        { title: 'Notifications', value: "notifications", color: "#9575CD", textColor: "#ffffff"  },
-        { title: 'Climate & Weather', value: "climate_and_weather", color: "#FF8A65", textColor: "#ffffff"  },
-        { title: 'Dashboard', value: "dashboard", color: "#FFD700", textColor: "#ffffff"  },
-        { title: 'New Features', value: "new_features", color: "#FF80AB", textColor: "#ffffff"  },
-        { title: 'Data Analysis', value: "data_analysis", color: "#78909C", textColor: "#ffffff"  },
-        { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting", color: "#26A69A", textColor: "#ffffff"  },
-    ];
+    const [categoriesList, setCategoriesList] = useState<Array<CategoriesType>>([]);
 
-    const getColorOrTitle = (item: any, field: string) => {
-        let value: any = (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))
-        return value[field]
+
+    const getAllCategories = async () => {
+        const response = await getAllCategoriesService();
+        if (response?.success) {
+            setCategoriesList(response?.data);
+        }
     }
 
+    useEffect(() => {
+        getAllCategories();
+    }, [])
+
+
+    const categoriesColors: Array<string> = [
+        "#E57373",
+        "#66BB6A",
+        "#64B5F6",
+        "#FFD54F",
+        "#AB47BC",
+        "#AED581",
+        "#9575CD",
+        "#FF8A65",
+        "#FFD700",
+        "#FF80AB",
+        "#26A69A",
+        "#4CAF50",
+        "#42A5F5",
+        "#FFB74D",
+        "#FF5722",
+        "#78909C",
+    ];
+
+    const getColorOrTitle = (value: string, name: string) => {
+        let index = categoriesList.findIndex((categoryItem: CategoriesType) => categoryItem.slug == value);
+
+        if (name == 'color') {
+            if (categoriesColors[index])
+                return categoriesColors[index];
+            return '#a4a6a9'
+        } else {
+            return categoriesList[index]?.category
+        }
+
+
+    }
 
 
     const columns = [   

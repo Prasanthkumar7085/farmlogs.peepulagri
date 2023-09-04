@@ -10,30 +10,27 @@ import {
 import styles from "./header.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
 import AddLogHeader from "./AddLogHeader";
+import { CategoriesType } from "@/types/categoryTypes";
+import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
 const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
-  const categoryOptions = [
-    { title: 'Soil Preparation', value: "soil_preparation" },
-    { title: 'Planting', value: "plainting" },
-    { title: 'Irrigation', value: "irrigation" },
-    { title: 'Fertilization', value: "fertilization" },
-    { title: 'Pest Management', value: "pest_management" },
-    { title: 'Weeding', value: "weeding" },
-    { title: 'Crop Rotation', value: "crop_rotation" },
-    { title: 'Harvesting', value: "harvesting" },
 
-    // { title: 'Equipment Management', value: "equipment_management" },
-    // { title: 'Other', value: "other" },
+  const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>([]);
 
-    { title: 'Livestock Care', value: "livestock_care", color: "#FFD700" },
-    { title: 'Breeding & Reproduction', value: "breeding_reproduction", color: "#FF80AB" },
-    { title: 'Equipment Management', value: "equipment_management", color: "#78909C" },
-    { title: 'Market & Scale Management', value: "market_scale_management", color: "#26A69A" },
-    { title: 'Environmental Stewardship', value: "enviranmental_stewardship", color: "#4CAF50" },
-    { title: 'Weather Monitoring', value: "weather_monitoring", color: "#42A5F5" },
-    { title: 'Financial Management', value: "financial_management", color: "#FFB74D" },
-    { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
-  ];
+  useEffect(() => {
+    getAllCategories();
+  }, [])
+
+  const getAllCategories = async () => {
+    const response = await getAllCategoriesService();
+    console.log(response);
+    if (response.success) {
+      setCategoryOptions(response?.data);
+    } else {
+      setCategoryOptions([]);
+    }
+
+  }
 
   const [title, setTitle] = useState<string>(singleLogDetails?.title ? singleLogDetails?.title : "");
   const [description, setDescription] = useState<string>(singleLogDetails?.description);
@@ -85,7 +82,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
             >
               {categoryOptions.map((item: any, index: number) => {
                 return (
-                  <MenuItem value={item.value} key={index}>{item.title}</MenuItem>
+                  <MenuItem value={item.slug} key={index}>{item.category}</MenuItem>
                 )
               })}
             </Select>

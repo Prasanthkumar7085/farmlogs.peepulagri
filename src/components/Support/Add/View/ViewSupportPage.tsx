@@ -1,4 +1,5 @@
 
+import styles from "./ViewSupportPage.module.css";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -38,7 +39,8 @@ const ViewSupportPage = () => {
         }
     }
     return (
-        <div>
+        
+        <div className={styles.viewSupportContainer}>
             <HeadSupportPart data={data} />
             <ViewSupportBody data={data} getOneSupportById={getOneSupportById} />
             <SupportConversationScreen data={data} />

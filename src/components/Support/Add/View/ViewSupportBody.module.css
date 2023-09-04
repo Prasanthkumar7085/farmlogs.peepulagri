@@ -1,0 +1,86 @@
+.supportBody {
+  background-color: #ffffff;
+  border-radius: 20px;
+  width: calc(100% - 3rem);
+  padding: 1.5rem;
+}
+.dateRangeRow,
+.eachModule {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1em;
+    gap: 10px;
+    width: calc(100% - 2rem);
+}
+.dateRangeRow {
+  justify-content: flex-start;
+  gap: 10px;
+}
+.dateRangeRow .eachCell{
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+.dateRangeRow .label,
+.eachModule .label{
+  color: var(--gray-700);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  line-height:  1.4;
+}
+.eachModule .value{
+  color: var(--color-sienna);
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height:  1.4;
+}
+.dateRangeRow .date {
+  font-size: 16px;
+}
+.subTitle {
+  color: var(--gray-900);
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.attachmentsList {
+  padding-top: 1rem;
+}
+.attachmentsList .container{
+  display: grid;
+  gap: var(--gap-5xs);
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.attachmentsList .eachFile {
+  position: relative;
+  border: 1px solid var(--stroke);
+  padding: 5px;
+  border-radius: var(--gap-9xs);
+  transition: 0.3s all ease-in-out;
+}
+.actionButton {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  display: flex;
+  visibility: none;
+  opacity: 0;
+  justify-content: flex-end;
+  transition: 0.3s all ease-in-out;
+  background-color: #0202469c;
+  border-radius: 4px;
+}
+.actionButton .iconButton {
+  color: #ffffff;
+}
+.eachFile img {
+  width: 100%;
+}
+.eachFile:hover .actionButton {
+  opacity: 1;
+  visibility: visible;
+}

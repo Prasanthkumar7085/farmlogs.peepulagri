@@ -45,7 +45,7 @@ const HeadPart = ({ data }: any) => {
   const getCategoriesList = (list: any) => {
 
     let array = categories.map((categoryItem: any) => {
-      if (list.includes(categoryItem?.slug)) {
+      if (list && list.includes(categoryItem?.slug)) {
         return categoryItem?.category
       }
     }).filter((e) => e)

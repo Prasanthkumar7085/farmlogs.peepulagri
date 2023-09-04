@@ -1,5 +1,5 @@
-import { IconButton } from "@mui/material";
-import styles from "./../../../AddLogs/head-part.module.css";
+import { Chip, IconButton, Typography } from "@mui/material";
+import styles from "./ViewSupportBody.module.css";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -89,22 +89,22 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
     }
     return (
 
-        <div className={styles.dataGroup3}>
+        <div className={styles.supportBody}>
             <div>
-                <div style={{}}>
-                    <div style={{ display: "flex", justifyContent: "space-between", padding: "2%" }}>
-                        <div>
+                <div className={styles.eachModule}>
+                    <div className={styles.eachCell}>
+                        <Typography className={styles.label}>
                             Support ID
-                        </div>
-                        <div>
-                            Status
-                        </div>
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", padding: "2%" }}>
-                        <div>
+                        </Typography>
+                        <Typography className={styles.value}>
                             {data?.support_id}
-                        </div>
-                        <div>
+                        </Typography>
+                    </div>
+                    <div className={styles.eachCell}>
+                        <Typography className={styles.label}>
+                            Status
+                        </Typography>
+                        <Typography className={styles.value}>
                             {userType == 'ADMIN' ?
                                 <SelectComponent
                                     value={supportStatus}
@@ -114,51 +114,51 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                                     disabled={supportStatus == 'ARCHIVE' ? true : false}
                                 />
                                 : data?.status}
-                        </div>
+                        </Typography>
                     </div>
                 </div>
-                <div style={{}}>
-                    <div style={{ display: "flex", justifyContent: "start", gap: "5%", padding: "2%" }}>
-                        <div>
-                            Date&nbsp;&nbsp;
-                            {timePipe(data?.createdAt as string, 'DD, MMM YYYY')}
-                        </div>
-                        <div>
+                <div className={styles.dateRangeRow}>
+                    <div className={styles.eachCell}>
+
+                        <Typography className={styles.label}>
+                            Date
+                        </Typography>
+                        <Chip className={styles.date} label={timePipe(data?.createdAt as string, 'DD, MMM YYYY')} />
+                    </div>
+                    <div className={styles.eachCell}>
+                        <Typography className={styles.label}>
                             Response Date
-                            {timePipe(data?.recent_response_at as string, 'DD, MMM YYYY')}
-                        </div>
+                        </Typography>
+                        <Chip className={styles.date} label={timePipe(data?.recent_response_at as string, 'DD, MMM YYYY')} />
                     </div>
-
-                </div >
-
-            </div >
-            <div className={styles.subTitle2}>
-                <div className={styles.textWrapper}>
-                    <div className={styles.text8}>Attachments</div>
+                </div>
+                <div className={styles.attachmentsList}>
+                    <div className={styles.subTitle}>Attachments</div>
+                    <div className={styles.container}>
+                        {downloadUrls.map((item: any, index: number) => {
+                            return (
+                                <div className={styles.eachFile} key={index}>
+                                    <Image
+                                        alt={`image-${index}`}
+                                        height={100}
+                                        width={150}
+                                        src={getSrc(item)}
+                                    />
+                                    <div className={styles.actionButton}>
+                                        <IconButton className={styles.iconButton} onClick={() => window.open(item.downloadUrl)}>
+                                            <OpenInNewIcon />
+                                        </IconButton>
+                                        <IconButton className={styles.iconButton} onClick={() => deleteImage(item)}>
+                                            <DeleteOutlineIcon />
+                                        </IconButton>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
 
-            <div className={styles.attachments} style={{ display: "flex", flexDirection: "row" }}>
-                {downloadUrls.map((item: any, index: number) => {
-                    return (
-                        <div className={styles.eachFile} key={index}>
-                            <Image
-                                alt={`image-${index}`}
-                                height={100}
-                                width={150}
-                                src={getSrc(item)}
-
-                            />
-                            <IconButton onClick={() => window.open(item.downloadUrl)}>
-                                <OpenInNewIcon />
-                            </IconButton>
-                            <IconButton onClick={() => deleteImage(item)}>
-                                <DeleteOutlineIcon />
-                            </IconButton>
-                        </div>
-                    )
-                })}
-            </div>
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
         </div>
     )

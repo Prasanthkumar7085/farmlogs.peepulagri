@@ -1,4 +1,4 @@
-import ButtonComponent from "@/components/Core/ButtonComponent";
+import IconButtonComponent from "../../../Core/IconButtonComponent";
 import { SupportResponseDataType } from "@/types/supportTypes";
 import styles from "./../../../AddLogs/head-part.module.css";
 import { Icon } from "@mui/material";
@@ -41,12 +41,11 @@ const HeadSupportPart = ({ data }: { data: SupportResponseDataType | undefined }
     return (
         <div className={styles.headPart}>
             <div className={styles.subHeading}>
-                <ButtonComponent
-                    direction={false}
-                    title='Back'
+                <IconButtonComponent
                     icon={<Icon>arrow_back_sharp</Icon>}
                     onClick={() => router.back()}
-                />
+                    size="small"
+                    />
                 <h4 className={styles.text}>View Support</h4>
             </div>
             <div className={styles.headerContent}>

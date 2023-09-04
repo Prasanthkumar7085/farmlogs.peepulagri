@@ -32,6 +32,7 @@ const AddSupportForm = () => {
   const [alertType, setAlertType] = useState<boolean>(false);
   const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+  const [uploadOrNot, setUploadOrNot] = useState(false);
 
   const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>();
 
@@ -72,7 +73,7 @@ const AddSupportForm = () => {
         setAlertMessage("Add Support Successful!");
         setAlertType(true);
         setTimeout(() => {
-          router.push('/support');
+          router.back();
         }, 1000);
       } else {
         setAlertMessage("Add Support Failed!");
@@ -87,6 +88,7 @@ const AddSupportForm = () => {
 
 
   const onChangeFile = (e: any) => {
+    setUploadOrNot(false);
     setFiles(e.target.files);
   };
   const uploadFiles = async () => {
@@ -105,9 +107,11 @@ const AddSupportForm = () => {
     setLoadingOnImagesUpload(false);
   };
 
+
   const postAllImages = async (response: any, tempFilesStorage: any) => {
     let arrayForResponse: any = [];
 
+    let checkUploadOrNot = false;
     for (let index = 0; index < response.length; index++) {
       let uploadResponse: any = await uploadFileToS3(
         response[index].target_url,
@@ -118,11 +122,15 @@ const AddSupportForm = () => {
         setAlertType(true);
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
+        checkUploadOrNot = true;
       } else {
         setAlertMessage("File(s) Uploaded Failed!");
         setAlertType(false);
+        checkUploadOrNot = false;
+        break;
       }
     }
+    setUploadOrNot(checkUploadOrNot)
     setFilesDetailsAfterUpload(arrayForResponse);
   };
 
@@ -173,6 +181,7 @@ const AddSupportForm = () => {
                   uploadFiles={uploadFiles}
                   files={files}
                   loadingOnImagesUpload={loadingOnImagesUpload}
+                  uploadOrNot={uploadOrNot}
                 />
               </div>
               <div>

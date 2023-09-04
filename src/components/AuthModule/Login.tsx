@@ -55,7 +55,7 @@ const Login = () => {
         let farmResponse = await getAllFarmsService(accessToken);
         if (farmResponse.success) {
           const id = farmResponse.data[0]._id;
-          router.replace(`/farm/${id}/logs`);
+          router.push(`/farm/${id}/logs`);
         }
       } else if (response.status == 422) {
         if ("errors" in response) {

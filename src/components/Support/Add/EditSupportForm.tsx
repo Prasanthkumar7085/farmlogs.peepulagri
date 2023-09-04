@@ -38,6 +38,7 @@ const EditSupportForm = () => {
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertType, setAlertType] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
+    const [uploadOrNot, setUploadOrNot] = useState(false);
 
 
 
@@ -73,7 +74,10 @@ const EditSupportForm = () => {
 
         let attachmentsArray: any = [];
 
-        if (array) {
+
+
+
+        if (array.length) {
             if (Object.keys(audioDetailsAfterUpload).length) {
                 attachmentsArray = [...filesDetailsAfterUpload, ...array, audioDetailsAfterUpload]
             } else {
@@ -87,6 +91,7 @@ const EditSupportForm = () => {
             }
         }
 
+
         let body = {
             ...supportDetails,
             attachments: [...attachmentsArray]
@@ -99,7 +104,7 @@ const EditSupportForm = () => {
                 setAlertMessage(response?.message);
                 setAlertType(true);
                 setTimeout(() => {
-                    router.push('/support');
+                    router.back();
                 }, 500)
             } else {
                 setAlertMessage(response?.message);
@@ -116,17 +121,14 @@ const EditSupportForm = () => {
         try {
             const response = await getSupportByIdService(router?.query?.support_id);
             setSupportOneDetails(response?.data);
-
         } catch (err: any) {
             console.error(err);
-
         }
     }
 
 
     const onChangeFile = (e: any, check = false) => {
-
-        setFilesDetailsAfterUpload([])
+        setUploadOrNot(false);
         setFiles(e.target.files);
     }
     const uploadFiles = async () => {
@@ -143,7 +145,7 @@ const EditSupportForm = () => {
     const postAllImages = async (response: any, tempFilesStorage: any) => {
         let arrayForResponse: any = [];
 
-
+        let checkUploadOrNot = false;
         for (let index = 0; index < response.length; index++) {
             let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
 
@@ -153,15 +155,17 @@ const EditSupportForm = () => {
                     setAlertType(true);
                     const { target_url, ...rest } = response[index];
                     arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
+                    checkUploadOrNot = true;
                 } else {
                     setAlertMessage("Attachment(s) Uploaded Failed!");
                     setAlertType(false);
+                    checkUploadOrNot = false;
+                    break;
                 }
-                const { target_url, ...rest } = response[index];
-                arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
             }
         }
-        setFilesDetailsAfterUpload(arrayForResponse);
+        setUploadOrNot(checkUploadOrNot)
+        setFilesDetailsAfterUpload([...filesDetailsAfterUpload, ...arrayForResponse]);
 
         setLoadingOnImagesUpload(false);
     }
@@ -206,6 +210,7 @@ const EditSupportForm = () => {
                                         uploadFiles={uploadFiles}
                                         files={files}
                                         loadingOnImagesUpload={loadingOnImagesUpload}
+                                        uploadOrNot={uploadOrNot}
                                     />
                                 </div>
                                 <div>

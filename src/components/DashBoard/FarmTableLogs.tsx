@@ -18,6 +18,9 @@ import { categoriesType } from "@/types/supportTypes";
 import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 
 import { useSelector } from "react-redux";
+import { CategoriesType } from "@/types/categoryTypes";
+import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
+import DeleteDialogCompoennt from "../Core/DeleteDialogComponent";
 
 
 
@@ -40,25 +43,35 @@ const FarmTableLogs = () => {
     const [orderBy, setOrderBy] = useState(router.query.order_by ? router.query.order_by : "")
     const [orderType, setOrderType] = useState<string>(router.query.order_type ? router.query.order_type : "");
 
+    const [categoriesList, setCategoriesList] = useState<Array<CategoriesType>>([]);
+
+
+    const getAllCategories = async () => {
+        const response = await getAllCategoriesService();
+        if (response?.success) {
+            setCategoriesList(response?.data);
+
+        }
+
+    }
 
     useEffect(() => {
-        if (router.isReady && accessToken) {
+        if (router.isReady && accessToken && router.query.farm_id) {
+            getAllCategories();
             getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, search: router.query.search_string, orderBy: router.query?.order_by, orderType: router.query?.order_type });
 
-            setSearchString(router.query?.search_string)
-            setOrderBy(router.query?.order_by)
-            setOrderType(router.query?.order_type)
+            setLimit(router.query?.limit);
+            setPage(router.query?.page);
+            setSearchString(router.query?.search_string);
+            setOrderBy(router.query?.order_by);
+            setOrderType(router.query?.order_type);
         }
-    }, [router.query.farm_id, router.isReady, accessToken]);
-
-
+    }, [router.query.farm_id, accessToken]);
 
 
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString, orderBy, orderType }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
         try {
-
-
             let queryParams: any = {};
             if (search) {
                 queryParams['search_string'] = search;
@@ -77,8 +90,10 @@ const FarmTableLogs = () => {
             }
 
             const { page: pageCount, limit: limitCount, ...restParams } = queryParams;
-            router.replace({ pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
+
+            router.push({ asPath: "/farm/[farm_id]/logs", pathname: `/farm/${router.query.farm_id}/logs`, query: queryParams });
             let paramString = prepareURLEncodedParams('', restParams);
+
 
 
             const response = await getLogsByFarmIdService({ farmId: farmId, page: page, limit: limit, paramString: paramString });
@@ -86,7 +101,6 @@ const FarmTableLogs = () => {
                 const { data, limit, page, total, total_pages } = response;
                 setData(data);
                 setPaginationDetails({ limit: limit, page: page, total: total, total_pages: total_pages });
-
             }
         } catch (err: any) {
             console.error(err);
@@ -94,9 +108,17 @@ const FarmTableLogs = () => {
             setLoading(false);
         }
     }
-    const deleteLog = async (id: string) => {
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [deleteContent, setDeleteContent] = useState<any>({});
 
-        setLoading(true);
+    const deleteLog = async (item: any) => {
+        setDeleteDialogOpen(true);
+        setDeleteContent(item);
+    }
+
+    const confirmDelete = async (check: boolean, id: string) => {
+        if (check) {
+            setLoading(true);
         try {
             let response: any = await deleteALogService(id);
             if (response.success) {
@@ -106,6 +128,10 @@ const FarmTableLogs = () => {
             console.error(err);
         } finally {
             setLoading(false);
+                setDeleteDialogOpen(false);
+            }
+        } else {
+            setDeleteDialogOpen(false);
         }
     }
 
@@ -144,32 +170,33 @@ const FarmTableLogs = () => {
 
     const capturePageNum = (value: number) => {
         setPage(value);
-        getFarmLogs({ page: value });
+        getFarmLogs({ page: value, limit: limit, orderBy: orderBy, orderType: orderType });
     }
 
     const captureRowPerItems = (value: number) => {
         setPage(1);
         setLimit(value);
-        getFarmLogs({ page: 1, limit: value });
+        getFarmLogs({ page: 1, limit: value, orderBy: orderBy, orderType: orderType });
     }
 
 
     useEffect(() => {
         const delay = 500;
         const debounce = setTimeout(() => {
-            getFarmLogs({ page: 1, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
-            // if (searchString && router.isReady) {
-            // } else {
-            //     getFarmLogs({ page: 1, search: '', orderBy: router.query?.order_by, orderType: router.query?.order_type });
-            // }
+            if (searchString) {
+                getFarmLogs({ page: 1, limit: router.query.limit, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            } else {
+                getFarmLogs({ page: router.query.page, limit: router.query.limit, search: searchString, orderBy: router.query?.order_by, orderType: router.query?.order_type });
+            }
         }, delay);
         return () => clearTimeout(debounce);
-    }, [searchString, accessToken, router.query.farm_id]);
+    }, [searchString]);
 
 
     const searchStringChange = (value: string) => {
         setPage(1);
         setSearchString(value);
+        // getFarmLogs({ page: 1, limit: router.query.limit, search: value, orderBy: router.query?.order_by, orderType: router.query?.order_type });
     }
 
     const workTypeOptions = [
@@ -178,32 +205,37 @@ const FarmTableLogs = () => {
         { title: 'Machinery', value: "machinery", color: "#D94841" },
     ];
 
-    const categoryOptions: Array<Partial<categoriesType>> = [
-        { title: 'Soil Preparation', value: "soil_preparation", color: "#E57373" },
-        { title: 'Planting', value: "plainting", color: "#66BB6A" },
-        { title: 'Irrigation', value: "irrigation", color: "#64B5F6" },
-        { title: 'Fertilization', value: "fertilization", color: "#FFD54F" },
-        { title: 'Pest Management', value: "pest_management", color: "#AB47BC" },
-        { title: 'Weeding', value: "weeding", color: "#AED581" },
-        { title: 'Crop Rotation', value: "crop_rotation", color: "#9575CD" },
-        { title: 'Harvesting', value: "harvesting", color: "#FF8A65" },
-        { title: 'Livestock Care', value: "livestock_care", color: "#FFD700" },
-        { title: 'Breeding & Reproduction', value: "breeding_reproduction", color: "#FF80AB" },
-        { title: 'Equipment Management', value: "equipment_management", color: "#78909C" },
-        { title: 'Market & Scale Management', value: "market_scale_management", color: "#26A69A" },
-        { title: 'Environmental Stewardship', value: "enviranmental_stewardship", color: "#4CAF50" },
-        { title: 'Weather Monitoring', value: "weather_monitoring", color: "#42A5F5" },
-        { title: 'Financial Management', value: "financial_management", color: "#FFB74D" },
-        { title: 'Research and Learning', value: "research_and_learning", color: "#FF5722" },
+    const categoriesColors: Array<string> = [
+        "#E57373",
+        "#66BB6A",
+        "#64B5F6",
+        "#FFD54F",
+        "#AB47BC",
+        "#AED581",
+        "#9575CD",
+        "#FF8A65",
+        "#FFD700",
+        "#FF80AB",
+        "#26A69A",
+        "#4CAF50",
+        "#42A5F5",
+        "#FFB74D",
+        "#FF5722",
+        "#78909C",
     ];
+
     const getLabel = (item: string) => {
-        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.title
+        return (categoriesList.find((categoryItem: Partial<CategoriesType>) => categoryItem.slug == item))?.category
     }
     const getTypeColor = (item: string) => {
         return (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))?.color
     }
     const setBackColor = (item: any) => {
-        return (categoryOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value == item))?.color
+        let index = categoriesList.findIndex((categoryItem: CategoriesType, index: number) => item == categoryItem.slug);
+        if (categoriesColors[index])
+            return categoriesColors[index];
+        return '#a4a6a9'
+
     }
 
 
@@ -253,7 +285,7 @@ const FarmTableLogs = () => {
 
             setOrderBy(sortByField);
             setOrderType(orderTypeField)
-            getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, orderBy: sortByField, orderType: orderTypeField });
+            getFarmLogs({ farmId: router.query.farm_id, page: 1, limit: router.query.limit, orderBy: sortByField, orderType: orderTypeField });
 
         }
     }
@@ -350,13 +382,13 @@ const FarmTableLogs = () => {
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
+                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
+                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => deleteLog(row._id)}>
+                        <IconButton onClick={() => deleteLog(row)}>
                             <img src="/trast-icon.svg" alt="view" width="18" />
                         </IconButton>
                     </div>
@@ -372,7 +404,7 @@ const FarmTableLogs = () => {
                 <h3 className="title">Farm Dashboard</h3>
                 <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "16px" }}>
                     <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
-                    <Button color="success" variant="contained" onClick={() => router.replace(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
+                    <Button color="success" variant="contained" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
                         Add Log
                     </Button>
                 </div>
@@ -380,6 +412,7 @@ const FarmTableLogs = () => {
             <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
             <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' />
             <LoadingComponent loading={loading} />
+            <DeleteDialogCompoennt deleteContent={deleteContent} deleteDialogOpen={deleteDialogOpen} confirmDelete={confirmDelete} />
         </div>
     )
 }

@@ -1,18 +1,10 @@
 import { SupportServiceTypes } from "@/types/supportTypes";
 import { prepareURLEncodedParams } from "../../requestUtils/urlEncoder";
 
-const getAllSupportService = async ({ page, limit, searchString, status, accessToken }: SupportServiceTypes) => {
+const getAllSupportService = async ({ page, limit, paramString, accessToken }: { page: number | string, limit: number | string, paramString: string, accessToken: string }) => {
 
     try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/support/${page}/${limit}`;
-        let queryParams: any = {};
-        if (searchString) {
-            queryParams['search_string'] = searchString;
-        }
-        if (status) {
-            queryParams['status'] = status
-        }
-        const encodedUrl = prepareURLEncodedParams(url, queryParams);
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/support/${page}/${limit}${paramString}`;
 
         const options = {
             method: "GET",
@@ -20,7 +12,7 @@ const getAllSupportService = async ({ page, limit, searchString, status, accessT
                 'authorization': accessToken
             })
         }
-        const response: any = await fetch(encodedUrl, options);
+        const response: any = await fetch(url, options);
         const responseData = await response.json();
         if (response.ok) {
             return responseData;

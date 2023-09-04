@@ -20,6 +20,8 @@ const AddALog: NextPage = () => {
 
   const router: any = useRouter();
 
+  const id = router.query?.farm_id;
+
   const [singleLogDetails, setSingleData] = useState<GetLogByIdResponseDataType | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -70,7 +72,7 @@ const AddALog: NextPage = () => {
       if (response.success) {
         setAlertMessage('Log Added Successfully!');
         setAlertType(true);
-        router.replace(`farm/${router.query.farm_id}/logs`);
+        router.back();
       } else {
         setAlertMessage('Failed to Add Logs!');
         setAlertType(false);

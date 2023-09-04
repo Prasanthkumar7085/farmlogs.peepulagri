@@ -46,8 +46,23 @@ const EditALog: NextPage = () => {
 
 
     useEffect(() => {
-        setResources(singleLogDetails?.resources)
-    }, [singleLogDetails])
+        setResources(singleLogDetails?.resources);
+
+        setFormDetails({
+            title: singleLogDetails?.title,
+            description: singleLogDetails?.description,
+            categories: singleLogDetails?.categories,
+        })
+        setWorkType(singleLogDetails?.work_type);
+        setDates([singleLogDetails?.from_date_time, singleLogDetails?.to_date_time]);
+        setResources(singleLogDetails?.resources);
+        setAdditionalResources(singleLogDetails?.additional_resources);
+
+
+
+
+    }, [singleLogDetails]);
+
     const fetchSingleLogData = async () => {
         setLoading(true);
         try {
@@ -81,19 +96,19 @@ const EditALog: NextPage = () => {
         const { categories, title, description } = formDetails;
 
         const obj = {
-            title: title ? title : singleLogDetails?.title,
-            description: description ? description : singleLogDetails?.description,
+            title: title,
+            description: description,
             categories: categories,
-            work_type: workType ? workType : singleLogDetails?.work_type,
+            work_type: workType,
             farm_id: router.query.farm_id,
             status: 'ACTIVE',
-            from_date_time: dates[0] ? new Date(dates[0]).toISOString() : singleLogDetails?.from_date_time,
-            to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : singleLogDetails?.to_date_time,
-            resources: resources.length ? resources : singleLogDetails?.resources,
-            additional_resources: additionalResources.length ? additionalResources : singleLogDetails?.additional_resources,
+            from_date_time: dates[0] ? new Date(dates[0]).toISOString() : '',
+            to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : '',
+            resources: resources.length ? resources : [],
+            additional_resources: additionalResources.length ? additionalResources : [],
             total_machinary_hours: getTotalHours("Machinery"),
             total_manual_hours: getTotalHours("Manual"),
-            // attachments: filesDetailsAfterUpload.length ? filesDetailsAfterUpload : singleLogDetails?.attachments,
+
             attachments: [...filesDetailsAfterUpload, ...singleLogDetails?.attachments]
         }
         try {
@@ -101,7 +116,7 @@ const EditALog: NextPage = () => {
             if (response.success) {
                 setAlertMessage('Log Updated Successfully!');
                 setAlertType(true);
-                setTimeout(() => router.push(`farm/${router.query?.farm_id}/logs`), 1000)
+                setTimeout(() => router.back(), 1000)
             } else {
                 setAlertMessage('Failed to Update Log!');
                 setAlertType(false);

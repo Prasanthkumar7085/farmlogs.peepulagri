@@ -19,7 +19,7 @@ const AddSupportHeader = () => {
         direction={false}
         icon={<ArrowBackIcon />}
         size="small"
-        onClick={() => router.replace('/support')}
+        onClick={() => router.push('/support')}
         style= {{ paddingInline : "0", minWidth: "auto" }}
     />
       <Typography variant="h6" className="title">{router.query.support_id ? 'Edit Support' : 'Add Support'}</Typography>

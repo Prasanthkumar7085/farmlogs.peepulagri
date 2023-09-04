@@ -9,42 +9,72 @@ import { SupportDataTableProps, SupportResponseDataType, categoriesType } from "
 import { useRouter } from "next/router";
 
 import { useSelector } from "react-redux";
+import { CategoriesType } from "@/types/categoryTypes";
+import { useEffect, useState } from "react";
+import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
 
 
 
-const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: SupportDataTableProps) => {
+const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: SupportDataTableProps) => {
 
     const router = useRouter();
 
     const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
 
-    const categoryOptions: Array<categoriesType> = [
 
-        { title: 'Input Resources', value: "input_resources", color: "#66BB6A", textColor: "#ffffff" },
-        { title: 'Irrigation', value: "irrigation", color: "#64B5F6", textColor: "#ffffff" },
-        { title: 'Tools', value: "tools", color: "#FFD54F", textColor: "#ffffff" },
-        { title: 'Harvesting', value: "harvesting", color: "#AB47BC", textColor: "#ffffff"  },
-        { title: 'Alerts', value: "alerts", color: "#AED581", textColor: "#ffffff"  },
-        { title: 'Notifications', value: "notifications", color: "#9575CD", textColor: "#ffffff"  },
-        { title: 'Climate & Weather', value: "climate_and_weather", color: "#FF8A65", textColor: "#ffffff"  },
-        { title: 'Dashboard', value: "dashboard", color: "#FFD700", textColor: "#ffffff"  },
-        { title: 'New Features', value: "new_features", color: "#FF80AB", textColor: "#ffffff"  },
-        { title: 'Data Analysis', value: "data_analysis", color: "#78909C", textColor: "#ffffff"  },
-        { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting", color: "#26A69A", textColor: "#ffffff"  },
-    ];
+    const [categoriesList, setCategoriesList] = useState<Array<CategoriesType>>([]);
 
-    const getColorOrTitle = (item: any, field: string) => {
-        let value: any = (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))
-        return value[field]
-    }
 
-    const appliedSort = async (sortKey: string) => {
-        if (sortKey) {
+    const getAllCategories = async () => {
+        const response = await getAllCategoriesService();
+        if (response?.success) {
+            setCategoriesList(response?.data);
         }
     }
 
+    useEffect(() => {
+        getAllCategories();
+    }, [])
+
+
+    const categoriesColors: Array<string> = [
+        "#E57373",
+        "#66BB6A",
+        "#64B5F6",
+        "#FFD54F",
+        "#AB47BC",
+        "#AED581",
+        "#9575CD",
+        "#FF8A65",
+        "#FFD700",
+        "#FF80AB",
+        "#26A69A",
+        "#4CAF50",
+        "#42A5F5",
+        "#FFB74D",
+        "#FF5722",
+        "#78909C",
+    ];
+
+    const getColorOrTitle = (value: string, name: string) => {
+        let index = categoriesList.findIndex((categoryItem: CategoriesType) => categoryItem.slug == value);
+
+        if (name == 'color') {
+            if (categoriesColors[index])
+                return categoriesColors[index];
+            return '#a4a6a9'
+        } else {
+            return categoriesList[index]?.category
+        }
+
+
+    }
+
+
     const columns = [   
         {
+            columnId: "date",
+            isSorted: true,
             Header: "Date",
             accessor: (row: SupportResponseDataType) => {
                 return (
@@ -55,6 +85,8 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             }
         },
         {
+            columnId: "query_name",
+            isSorted: true,
             Header: "Query Name",
             accessor: 'title'
         },
@@ -71,10 +103,14 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             }
         },
         {
+            columnId: "description",
+            isSorted: true,
             Header: "Description",
             accessor: 'description'
         },
         {
+            columnId: "response_date",
+            isSorted: true,
             Header: "Response Date",
             accessor: (row: SupportResponseDataType) => {
                 return (
@@ -85,10 +121,14 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             }
         },
         {
+            columnId: "status",
+            isSorted: true,
             Header: "Status",
             accessor: 'status'
         },
         {
+            columnId: "user_name",
+            isSorted: true,
             Header: "User Name",
             show: userType === 'ADMIN',
             accessor: "user_id.full_name",
@@ -101,14 +141,15 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             // }
         },
         {
+
             Header: "Actions",
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.replace(`/support/${row._id}`)}>
+                        <IconButton onClick={() => router.push(`/support/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.replace(`/support/${row._id}/edit`)}>
+                        <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteSupport(row._id)}>

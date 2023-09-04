@@ -1,6 +1,7 @@
-import { categoriesType } from "@/types/supportTypes";
 import { MenuItem, Select, TextField, TextareaAutosize, Typography } from "@mui/material"
-import React from "react";
+import React, { useEffect, useState } from "react";
+import getAllCategoriesService from "../../../../lib/services/Categories/getAllCategoriesService";
+import { CategoriesType } from "@/types/categoryTypes";
 
 const AddSupportQueryDetails = ({
     query,
@@ -20,19 +21,21 @@ const AddSupportQueryDetails = ({
 
 
 
-    const categoriesList: Array<Partial<categoriesType>> = [
-        { title: 'Input Resources', value: "input_resources" },
-        { title: 'Irrigation', value: "irrigation" },
-        { title: 'Tools', value: "tools" },
-        { title: 'Harvesting', value: "harvesting" },
-        { title: 'Alerts', value: "alerts" },
-        { title: 'Notifications', value: "notifications" },
-        { title: 'Climate & Weather', value: "climate_and_weather" },
-        { title: 'Dashboard', value: "dashboard" },
-        { title: 'New Features', value: "new_features" },
-        { title: 'Data Analysis', value: "data_analysis" },
-        { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting" },
-    ];
+    const [categoriesList, setCategoriesList] = useState<Array<CategoriesType>>([]);
+
+
+    const getAllCategories = async () => {
+        const response = await getAllCategoriesService();
+        if (response?.success) {
+            setCategoriesList(response?.data);
+
+        }
+
+    }
+
+    useEffect(() => {
+        getAllCategories();
+    }, [])
 
     return (
         <div className="form-fields">
@@ -57,9 +60,9 @@ const AddSupportQueryDetails = ({
                     onChange={(e: any) => setCategories(e.target.value)}
 
                 >
-                    {categoriesList.map((item: Partial<categoriesType>, index: number) => {
+                    {categoriesList.map((item: Partial<CategoriesType>, index: number) => {
                         return (
-                            <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
+                            <MenuItem key={index} value={item.slug}>{item.category}</MenuItem>
                         )
                     })}
                 </Select>

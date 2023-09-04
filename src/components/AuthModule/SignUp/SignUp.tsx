@@ -91,7 +91,6 @@ const SignUp = () => {
                         />
                     </div> */}
                     <div>
-                        
                         <Typography className={styles.label}>
                             Login With Mobile Number
                         </Typography>

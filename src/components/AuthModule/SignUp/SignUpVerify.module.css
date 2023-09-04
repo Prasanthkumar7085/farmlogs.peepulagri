@@ -1,0 +1,90 @@
+#loginPage {
+  background-color: #ffffff;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bgImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+.bgImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.logo {
+  margin: -2rem 0 2rem;
+  height: 100px;
+  width: 150px;
+}
+.formCard {
+  position: relative;
+  z-index: 10;
+  border-radius: 32.406px;
+  padding: 3rem;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.75) 2.86%, rgba(255, 255, 255, 0.4) 95.96%);
+  backdrop-filter: blur(10.802083015441895px);
+}
+.formCard .label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.formCard .label span{
+  font-weight: 600;
+  margin-left: 3px;
+}
+.formCard .phoneNo {
+  margin-bottom: 1.5em;
+}
+.formCard .phoneNo input{
+  border-radius: 10px;
+  border: 1px solid #FFF;
+  background: rgba(255, 255, 255, 0.75);
+}
+.formCard .phoneNo fieldset {
+  border-radius: 10px;
+  border-color: rgba(255, 255, 255, 0.75);
+}
+.innerWrap {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  border-radius: 10px;
+  gap: 10px;
+  width: 350px;
+}
+.header {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.header h5 {
+  font-family: 'Inter',sans-serif;
+  font-size: 2rem;
+  font-weight: 500;
+}
+.cta_button {
+  border-radius: 10px;
+}
+.helperText {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.helperText button{
+  text-transform: normal;
+  color: #000;
+  font-family: 'Inter',sans-serif;
+  font-weight: 500;
+  text-decoration-line: underline;
+}

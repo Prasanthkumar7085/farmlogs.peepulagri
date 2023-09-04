@@ -5,11 +5,20 @@ import ButtonComponent from "../Core/ButtonComponent";
 
 const FooterActionButtons = ({ addLogs, editLog }: any) => {
   const router = useRouter();
+
+  const goBack = () => {
+
+    if (router.query.farm_id) {
+      router.push(`/farm/${router.query.farm_id}/logs`)
+    } else {
+      router.push('/support')
+    }
+  }
   return (
     <div className={styles.footerActionButtons}>
       <ButtonComponent
             direction={false}
-            onClick={() => router.back()}
+        onClick={goBack}
             variant="outlined"
             color="primary"
             size="medium"

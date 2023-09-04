@@ -1,5 +1,4 @@
 import FarmCard from "./FarmCard";
-import Link from "next/link";
 import Image from "next/image";
 import { FarmDataType } from "@/types/farmCardTypes";
 import { useRouter } from "next/router";
@@ -14,14 +13,16 @@ const FarmCardsLayOut = ({ children, farmsData }: any) => {
             <div className={styles.cardContainer}>
                 {farmsData?.data?.length && farmsData?.data.map((item: FarmDataType) => {
                     return (
-                        <div key={item._id} onClick={() => router.push(`/farm/${item._id}/logs`)} style={{ cursor: "pointer" }}>
+                        <div key={item._id} onClick={() => router.replace(`/farm/${item._id}/logs`)} style={{ cursor: "pointer" }}>
                                 <FarmCard
-                                    _id={item?._id}
+                                _id={item._id}
+                                progress={70}
                                     acresCount={item?.area}
                                     farmName={item?.title}
                                     createAt={item?.createdAt}
                                 logCount={item?.logCount}
                             />
+
                         </div>
                     )
                 })}

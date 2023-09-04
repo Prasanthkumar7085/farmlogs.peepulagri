@@ -23,7 +23,7 @@ const AddALog: NextPage = () => {
   const [singleLogDetails, setSingleData] = useState<GetLogByIdResponseDataType | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
   const [resources, setResources] = useState([]);
   const [additionalResources, setAdditionalResources] = useState([]);
@@ -61,7 +61,7 @@ const AddALog: NextPage = () => {
       to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : "",
       resources: resources,
       additional_resources: additionalResources,
-      total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinary" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
+      total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinery" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
       total_manual_hours: resources.reduce((acc: number, item: any) => (item.type == "Manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
       attachments: filesDetailsAfterUpload
     }
@@ -70,7 +70,7 @@ const AddALog: NextPage = () => {
       if (response.success) {
         setAlertMessage('Log Added Successfully!');
         setAlertType(true);
-        router.back();
+        router.replace(`farm/${router.query.farm_id}/logs`);
       } else {
         setAlertMessage('Failed to Add Logs!');
         setAlertType(false);
@@ -112,10 +112,15 @@ const AddALog: NextPage = () => {
       if (uploadResponse.ok) {
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
-      } 
+        setAlertMessage(`${index + 1} image(s) Uploaded Successfully`);
+        setAlertType(true);
+      } else {
+        setUploadFailed(true);
+        setAlertMessage('Upload Failed!');
+        setAlertType(false);
+      }
     }
     setFilesDetailsAfterUpload(arrayForResponse);
-
     setUploadButtonLoading(false);
   }
 
@@ -139,7 +144,6 @@ const AddALog: NextPage = () => {
             files={files}
             uploadButtonLoading={uploadButtonLoading}
             uploadFailed={uploadFailed}
-
           />
 
           </div>

@@ -12,31 +12,16 @@ import uploadFileToS3 from "../../../../lib/services/LogsService/uploadFileToS3I
 import { useSelector } from "react-redux";
 import AlertComponent from "../../Core/AlertComponent";
 import styles from "./addSupportForm.module.css";
-
-
-// Icons
-import KeyboardVoiceRoundedIcon from '@mui/icons-material/KeyboardVoiceRounded';
-import GraphicEqRoundedIcon from '@mui/icons-material/GraphicEqRounded';
-import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import SupportRecording from "./SupportRecording";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const EditSupportForm = () => {
 
     const router: any = useRouter();
 
-    const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
-
-
-
-    const [permission, setPermission] = useState(false);
-    const mediaRecorder = useRef<any>(null);
-    const [recordingStatus, setRecordingStatus] = useState("inactive");
-    const [stream, setStream] = useState<any>(null);
-    const [audioChunks, setAudioChunks] = useState([]);
-    const [audio, setAudio] = useState<any>(null);
     const [supportOneDetails, setSupportOneDetails] = useState<any>();
-    const [loadingOnMicUpload, setLoadingOnMicUpload] = useState<boolean>(false);
     const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
 
     const [query, setQuery] = useState<string>(supportOneDetails?.title);
@@ -52,6 +37,7 @@ const EditSupportForm = () => {
 
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertType, setAlertType] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
 
 
 
@@ -63,60 +49,27 @@ const EditSupportForm = () => {
 
     useEffect(() => {
         collectSupportData();
-    }, [query, categories, description, filesDetailsAfterUpload]);
+    }, [query, categories, description]);
 
     useEffect(() => {
         getOneSupportDetails();
     }, [router]);
 
 
-    const uploadAudio = async () => {
-        setLoadingOnMicUpload(true);
-        try {
-            let audioResponseAfterUpload = {};
-
-            const res = await fetch(audio);
-            const blob = await res.blob();
-            const sizeInBytes = blob.size;
-            const blobName = blob.name || "audio_blob.wav";
-            const blobType = "audio/wav";
-
-            let ob = {
-                original_name: blobName,
-                type: blobType,
-                size: sizeInBytes,
-            };
-            const response = await addAttachmentsService(
-                { attachments: [ob] },
-                accessToken
-            );
-            if (response.success) {
-                const { target_url, ...rest } = response.data[0];
-                let uploadResponse: any = await uploadFileToS3(target_url, blob);
-                console.log(uploadResponse);
-
-                if (uploadResponse.ok) {
-                    setAlertMessage("Audio Uploaded Successful!");
-                    setAlertType(true);
-                    audioResponseAfterUpload = { ...rest };
-                    setAudioDetailsAfterUpload(audioResponseAfterUpload);
-                } else {
-                    setAlertMessage("Audio Uploaded Failed!");
-                    setAlertType(false);
-                }
-            }
-        } catch (err: any) {
-            console.error(err);
-        } finally {
-            setLoadingOnMicUpload(false);
-        }
-    };
-
-
     const collectSupportData = () => {
+
+        let supportData: Partial<AddSupportPayload> = {
+            title: query,
+            description: description,
+            categories: categories,
+            status: supportOneDetails?.status,
+        }
+        setSupportDetails(supportData)
+    }
+
+    const editSupport = async () => {
+        setLoading(true);
         const array = supportOneDetails?.attachments;
-        console.log(array);
-        console.log(filesDetailsAfterUpload);
 
         let attachmentsArray: any = [];
 
@@ -134,73 +87,28 @@ const EditSupportForm = () => {
             }
         }
 
-        let supportData: Partial<AddSupportPayload> = {
-            title: query,
-            description: description,
-            categories: categories,
-            status: "OPEN",
+        let body = {
+            ...supportDetails,
             attachments: [...attachmentsArray]
-
         }
-        setSupportDetails(supportData)
-    }
 
-    const getMicrophonePermission = async () => {
-        if ("MediaRecorder" in window) {
-            try {
-                const streamData: any = await navigator.mediaDevices.getUserMedia({
-                    audio: true,
-                    video: false,
-                });
-                setPermission(true);
-                setStream(streamData);
-            } catch (err: any) {
-                alert(err.message);
-            }
-        } else {
-            alert("The MediaRecorder API is not supported in your browser.");
-        }
-    };
-
-    const startRecording = async () => {
-        setRecordingStatus("recording");
-        //create new Media recorder instance using the stream
-        const media = new MediaRecorder(stream);
-        //set the MediaRecorder instance to the mediaRecorder ref
-        mediaRecorder.current = media;
-        //invokes the start method to start the recording process
-        mediaRecorder.current.start();
-        let localAudioChunks: any = [];
-        mediaRecorder.current.ondataavailable = (event: any) => {
-            if (typeof event.data === "undefined") return;
-            if (event.data.size === 0) return;
-            localAudioChunks.push(event.data);
-        };
-        setAudioChunks(localAudioChunks);
-    };
-
-    const stopRecording = () => {
-        setRecordingStatus("inactive");
-        //stops the recording instance
-        mediaRecorder.current.stop();
-        mediaRecorder.current.onstop = () => {
-            //creates a blob file from the audiochunks data
-            const audioBlob = new Blob(audioChunks);
-            //creates a playable URL from the blob file.
-            const audioUrl: any = URL.createObjectURL(audioBlob);
-            setAudio(audioUrl);
-            setAudioChunks([]);
-        };
-    };
-
-
-    const editSupport = async () => {
         try {
-            const response = await editSupportService(supportDetails, router?.query?.support_id);
+            const response = await editSupportService(body, router?.query?.support_id);
             collectSupportData();
+            if (response?.success) {
+                setAlertMessage(response?.message);
+                setAlertType(true);
+                setTimeout(() => {
+                    router.push('/support');
+                }, 500)
+            } else {
+                setAlertMessage(response?.message);
+                setAlertType(false);
+            }
         } catch (err: any) {
             console.error(err);
-
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -216,29 +124,10 @@ const EditSupportForm = () => {
     }
 
 
-
     const onChangeFile = (e: any, check = false) => {
+
+        setFilesDetailsAfterUpload([])
         setFiles(e.target.files);
-
-        // if (check) {
-        //     let arrayForResponse: any = [...filesDetailsAfterUpload];
-
-        //     let tempFiles = e.target.files;
-
-        //     let array: any = []
-        //     Array.from(tempFiles).forEach((item: any, index: number) => (
-        //         arrayForResponse.map((mapItem: any, mapIndex: number) => {
-        //             if (mapItem.original_name == item.name) {
-        //                 array.push(item);
-        //             }
-        //         })
-        //     ))
-        //     console.log(array);
-
-        //     setFilesDetailsAfterUpload([...array])
-
-        // }
-
     }
     const uploadFiles = async () => {
         setLoadingOnImagesUpload(true);
@@ -260,7 +149,7 @@ const EditSupportForm = () => {
 
             if (uploadResponse.ok) {
                 if (uploadResponse.ok) {
-                    setAlertMessage("Attachment(s) Uploaded Successful!");
+                    setAlertMessage(`${index + 1} attachment(s) Uploaded!`);
                     setAlertType(true);
                     const { target_url, ...rest } = response[index];
                     arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
@@ -292,10 +181,10 @@ const EditSupportForm = () => {
                                 description={description}
                                 setQuery={setQuery}
                                 setCategories={setCategories}
-                                supportOneDetails={supportOneDetails}
                                 setDescription={setDescription}
                             />
                         </Grid>
+
 
                         <Grid item xs={12} sm={10} md={6}>
                             <div style={{ display: "flex", flexDirection: "column", width: "100%", justifyContent: "center" }}>
@@ -308,86 +197,8 @@ const EditSupportForm = () => {
                                     }}>
                                     Mic
                                 </Typography>
-                                <div className={styles.audioControls}>
-                                    <div className={styles.voiceRecording}>
-                                        {!permission ? (
-                                            <Fab size="small" color="error" aria-label="Get Microphone" onClick={getMicrophonePermission}>
-                                                <KeyboardVoiceRoundedIcon />
-                                            </Fab>
-                                        ) : null}
-                                        {!permission ? (
-                                            <Typography color="error">Get Microphone</Typography>
-                                        ) : null}
-                                    </div>
+                                <SupportRecording setAudioDetailsAfterUpload={setAudioDetailsAfterUpload} />
 
-                                    <div className={styles.voiceRecording}>
-                                        {permission && recordingStatus === "inactive" ? (
-                                            <Fab size="small" color="primary" aria-label="Start Recording" onClick={startRecording}>
-                                                <FiberManualRecordRoundedIcon />
-                                            </Fab>
-                                        ) : null}
-                                        {permission && recordingStatus === "inactive" ? (
-                                            <Typography color="primary">Start Recording</Typography>
-                                        ) : null}
-                                    </div>
-
-                                    <div className={styles.voiceRecording}>
-                                        {recordingStatus === "recording" ? (
-                                            <Fab size="small" color="success" aria-label="Stop Recording" onClick={stopRecording}>
-                                                <GraphicEqRoundedIcon />
-                                            </Fab>
-                                        ) : null}
-
-                                        {recordingStatus === "recording" ? (
-                                            <Chip label="01" variant="outlined" />
-                                        ) : null}
-                                        {recordingStatus === "recording" ? (
-                                            <Typography color="success">Stop Recording</Typography>
-                                        ) : null}
-                                    </div>
-
-                                    <div className={styles.recordedAudio}>
-                                        {audio ? (
-                                            <div>
-                                                <audio
-                                                    src={audio}
-                                                    controls
-                                                    controlsList="nodownload"
-                                                ></audio>
-                                                {/* <a download="recording.mp3" href={audio} type="audio/mpeg" >
-                                                            Download Recording
-                                                        </a> */}
-                                            </div>
-                                        ) : null}
-                                        {audio ? (
-                                            <Button
-                                                disabled={!audio}
-                                                onClick={uploadAudio}
-                                                size="small"
-                                                sx={{ paddingInline: "0", minWidth: "auto" }}
-                                            >
-                                                <DeleteForeverIcon color="error" />
-                                            </Button>
-
-                                        ) : null}
-                                        {audio ? (
-                                            <Button
-                                                disabled={!audio}
-                                                variant="contained"
-                                                onClick={uploadAudio}
-                                                size="small"
-                                                sx={{ width: "100px", fontWeight: "600" }}
-                                            >
-                                                {loadingOnMicUpload ? (
-                                                    <CircularProgress size="1.5rem" sx={{ color: " white" }} />
-                                                ) : (
-                                                    "Upload"
-                                                )}
-                                            </Button>
-
-                                        ) : null}
-                                    </div>
-                                </div>
                                 <div>
                                     <Typography variant='subtitle2'>Upload Images</Typography>
                                     <SupportAttachments
@@ -410,7 +221,7 @@ const EditSupportForm = () => {
 
                     </Grid>
                 </div> : ""}
-
+            <LoadingComponent loading={loading} />
         </div >
     )
 }

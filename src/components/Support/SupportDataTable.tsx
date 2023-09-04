@@ -8,11 +8,16 @@ import FarmTable from "../DashBoard/FarmTable";
 import { SupportDataTableProps, SupportResponseDataType, categoriesType } from "@/types/supportTypes";
 import { useRouter } from "next/router";
 
+import { useSelector } from "react-redux";
+
 
 
 const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: SupportDataTableProps) => {
 
     const router = useRouter();
+
+    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+
     const categoryOptions: Array<categoriesType> = [
 
         { title: 'Input Resources', value: "input_resources", color: "#66BB6A", textColor: "#ffffff" },
@@ -28,13 +33,13 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
         { title: 'Bug & Trouble Shooting', value: "bug_and_touble_shooting", color: "#26A69A", textColor: "#ffffff"  },
     ];
 
-    const getColor = (item: any) => {
-        return (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))?.color
+    const getColorOrTitle = (item: any, field: string) => {
+        let value: any = (categoryOptions.find((categoryItem: categoriesType) => categoryItem.value.toLowerCase() == item.toLowerCase()))
+        return value[field]
     }
+
     const appliedSort = async (sortKey: string) => {
         if (sortKey) {
-            console.log(sortKey);
-
         }
     }
 
@@ -59,7 +64,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
                 return (
                     <div style={{ display: "flex" }}>
                         {row.categories.length && row.categories.map((item: string, index: number) => {
-                            return <Chip label={item} key={index} sx={{ margin: "2px", color: "white", backgroundColor: getColor(item) }} />
+                            return <Chip label={getColorOrTitle(item, 'title')} key={index} sx={{ margin: "2px", color: "white", backgroundColor: getColorOrTitle(item, 'color') }} />
                         })}
                     </div>
                 )
@@ -84,14 +89,26 @@ const SupportDataTable = ({ data, loading, deleteSupport, updateStatus }: Suppor
             accessor: 'status'
         },
         {
+            Header: "User Name",
+            show: userType === 'ADMIN',
+            accessor: "user_id.full_name",
+            // accessor: (row: SupportResponseDataType) => {
+            //     return (
+            //         <div style={{ color: "var(--body)" }}>
+            //             {row.user_id?.full_name}
+            //         </div>
+            //     )
+            // }
+        },
+        {
             Header: "Actions",
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.push(`/support/${row._id}`)}>
+                        <IconButton onClick={() => router.replace(`/support/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
+                        <IconButton onClick={() => router.replace(`/support/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteSupport(row._id)}>

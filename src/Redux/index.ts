@@ -30,7 +30,7 @@ export const makeStore = ({ isServer }: any) => {
             middleware: (getDefaultMiddleware) =>
                 getDefaultMiddleware({
                     serializableCheck: {
-                        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE,],
+                        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
                     },
                 }),
 

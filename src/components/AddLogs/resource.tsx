@@ -38,7 +38,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
   ]
 
   const addResources = () => {
-    let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "Manual" : "Machinary" };
+    let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "Manual" : "Machinery" };
 
     setActiveStepBasedOnData(2);
     setResources([...resourcesData, obj]);

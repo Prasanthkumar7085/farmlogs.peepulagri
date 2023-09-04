@@ -15,24 +15,18 @@ const DashBoard = () => {
 
     const getFarmsData = async () => {
         let response: any = await getAllFarmsService(accessToken);
-
-
         if (response?.success) {
             setFarmsData(response);
-            if (router.query.farm_id) {
-                router.push(`/farm/${router.query.farm_id}/logs`);
-            } else {
-                router.push(`/farm/${response?.data[0]._id}/logs`);
-            }
-
+            let id = (router?.query?.farm_id && router?.query?.farm_id != 'farm_id') ? router?.query?.farm_id : response?.data[0]?._id;
+            router.replace(`/farm/${id}/logs`, undefined, { shallow: true });
         }
     }
 
     useEffect(() => {
-        if (router.isReady && accessToken) {
+        if (accessToken) {
             getFarmsData();
         }
-    }, [router.isReady, accessToken]);
+    }, [accessToken]);
 
     return (
         <div style={{ width: "100%" }}>

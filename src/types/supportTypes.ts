@@ -10,6 +10,7 @@ export interface SupportServiceTypes {
     limit: string | number;
     searchString: string;
     status: string | number;
+    accessToken: string;
 }
 
 

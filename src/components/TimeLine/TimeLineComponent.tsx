@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 const TimeLineComponent = () => {
 
-    const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     const [data, setData] = useState<any>([]);
     const [formOptions, setFormOptions] = useState<any>()

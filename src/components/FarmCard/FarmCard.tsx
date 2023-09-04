@@ -3,10 +3,12 @@ import styles from "./farm-card.module.css";
 import { useRouter } from "next/router";
 import { FarmCardPropsType, FarmCardTypes } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
+import { LinearProgress } from "@mui/material";
 
 
 const FarmCard = ({
   _id,
+  progress,
   acresCount,
   farmName,
   createAt,
@@ -47,6 +49,10 @@ const FarmCard = ({
         </div> */}
       </div>
       <div className={_id == router.query.farm_id ? styles.activebar : styles.default} />
+      <div style={{ minWidth: '280px' }}>
+        <LinearProgress variant="determinate" value={progress} color="success" />
+      </div>
+
     </div>
   );
 };

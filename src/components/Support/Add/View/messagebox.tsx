@@ -16,7 +16,8 @@ type getAllMessagesBySupportIdType = () => void
 
 const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: getAllMessagesBySupportIdType }) => {
 
-  const accessToken = useSelector((state: any) => state.auth.userDetails.userDetails?.access_token);
+  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const userName = useSelector((state: any) => state.auth.userDetails?.user_details?.full_name);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -30,16 +31,25 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
 
   const onSendMessage = async () => {
 
+    let createdAt = new Date().toISOString();
+
     if (message) {
       const body = {
         content: message,
         type: 'REPLY',
         attachments: [...filesDetailsAfterUpload]
       }
+      const bodyToStore = {
+        ...body,
+        createdAt: createdAt,
+        reply_to_message_id: {
+          full_name: userName
+        },
+      }
       setMessage('');
       setFiles(null);
       setFilesDetailsAfterUpload([]);
-      dispatch(addNewMessage(body))
+      dispatch(addNewMessage(bodyToStore))
       const response = await postAMessageInSupportService(router.query.support_id as string, body, accessToken);
 
       if (response.success) {
@@ -50,7 +60,6 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   }
 
   const getImageObjectUrl = (file: any) => {
-    console.log(file.type, 'plpl');
     if (file.type == 'application/pdf')
       return '/pdf.svg'
     else if (file.type.includes('audio'))
@@ -86,7 +95,6 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   };
   const postAllImages = async (filesFromArgs: any, response: any, tempFilesStorage: any) => {
     let arrayForResponse: any = [];
-    console.log(response.length);
 
     for (let index = 0; index < response.length; index++) {
       let uploadResponse: any = await uploadFileToS3(

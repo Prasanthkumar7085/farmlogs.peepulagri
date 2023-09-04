@@ -6,6 +6,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useRouter } from "next/router";
 import getSupportAttachmentsService from "../../../lib/services/SupportService/getSupportAttachmentService";
 import CloseIcon from '@mui/icons-material/Close';
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+
 
 const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesUpload }: any) => {
 
@@ -18,7 +20,6 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
         let tempArray = array.filter((item: any, itemIndex: number) => itemIndex != index);
         let e = { target: { files: tempArray } };
         onChangeFile(e);
-
     }
 
     useEffect(() => {
@@ -45,7 +46,6 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
 
     //setting audio/pdf thumbnail and returning image for other files from selected files
     const getImageObjectUrl = (file: any) => {
-        console.log(file.type, 'plpl');
         if (file.type == 'application/pdf')
             return '/pdf.svg'
         else if (file.type.includes('audio'))
@@ -90,9 +90,9 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                     })}
             </div>
             <Button disabled={!files?.length} color="success" variant="contained" onClick={uploadFiles} size="small" sx={{ width: "100px" }}>
-                {loadingOnImagesUpload ?
+                Uplaod {loadingOnImagesUpload ?
                     <CircularProgress sx={{ color: " white" }} size="1.5rem" />
-                    : 'Upload'}
+                    : <CloudUploadOutlinedIcon />}
             </Button>
             <div style={{ display: "flex" }}>
                 {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {

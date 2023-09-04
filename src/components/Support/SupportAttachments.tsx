@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 
 
-const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesUpload }: any) => {
+const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesUpload, uploadOrNot }: any) => {
 
     const router = useRouter();
 
@@ -82,7 +82,7 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
                                 <Typography>
                                     {file.name}
                                 </Typography>
-                                <IconButton color="error" aria-label="delete" onClick={() => deleteFile(index)}>
+                                <IconButton color="error" aria-label="delete" disabled={uploadOrNot} onClick={() => deleteFile(index)}>
                                     <CloseIcon />
                                 </IconButton>
                             </div>

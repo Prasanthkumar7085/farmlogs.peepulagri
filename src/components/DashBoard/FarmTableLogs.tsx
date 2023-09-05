@@ -1,27 +1,24 @@
-import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import FarmTable from "./FarmTable";
-import Chip from "@mui/material/Chip";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from '@mui/icons-material/Add';
-import ImageComponent from "../Core/ImageComponent";
-import getLogsByFarmIdService from "../../../lib/services/LogsService/getLogsByFarmIdService";
-import TablePaginationComponent from "../Core/TablePaginationComponent";
-import { GetLogsByFarmIdPropsType, PaginationDetailsType } from "@/types/farmCardTypes";
-import SearchComponent from "../Core/SearchComponent";
-import { Button } from "@mui/material";
-import deleteALogService from "../../../lib/services/LogsService/deleteALogsService";
-import LoadingComponent from "../Core/LoadingComponent";
-import { ResourcesTypeInResponse, ResourcesTypeInResponseWithLogo } from "@/types/logsTypes";
-import { categoriesType } from "@/types/supportTypes";
-import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
-
 import { useSelector } from "react-redux";
-import { CategoriesType } from "@/types/categoryTypes";
-import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
+import { useEffect, useState } from "react";
+import { Button, Chip, IconButton, Typography } from "@mui/material"; 
+import ImageComponent from "../Core/ImageComponent";
+import AddIcon from '@mui/icons-material/Add';
+import timePipe from "@/pipes/timePipe";
+import FarmTable from "./FarmTable";
+import SearchComponent from "../Core/SearchComponent";
+import LoadingComponent from "../Core/LoadingComponent";
 import DeleteDialogCompoennt from "../Core/DeleteDialogComponent";
-
+import TablePaginationComponent from "../Core/TablePaginationComponent";
+import { categoriesType } from "@/types/supportTypes";
+import { CategoriesType } from "@/types/categoryTypes";
+import { GetLogsByFarmIdPropsType, PaginationDetailsType } from "@/types/farmCardTypes";
+import { ResourcesTypeInResponse, ResourcesTypeInResponseWithLogo } from "@/types/logsTypes";
+import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
+import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
+import getLogsByFarmIdService from "../../../lib/services/LogsService/getLogsByFarmIdService";
+import deleteALogService from "../../../lib/services/LogsService/deleteALogsService";
+import styles from "./FarmTableLogs.module.css";
 
 
 const FarmTableLogs = () => {
@@ -178,8 +175,6 @@ const FarmTableLogs = () => {
         setLimit(value);
         getFarmLogs({ page: 1, limit: value, orderBy: orderBy, orderType: orderType });
     }
-
-
     useEffect(() => {
         const delay = 500;
         const debounce = setTimeout(() => {
@@ -192,13 +187,11 @@ const FarmTableLogs = () => {
         return () => clearTimeout(debounce);
     }, [searchString]);
 
-
     const searchStringChange = (value: string) => {
         setPage(1);
         setSearchString(value);
         // getFarmLogs({ page: 1, limit: router.query.limit, search: value, orderBy: router.query?.order_by, orderType: router.query?.order_type });
     }
-
     const workTypeOptions = [
         { title: 'All', value: "all", color: "#3462CF" },
         { title: 'Manual', value: "manual", color: "#5E9765" },
@@ -227,6 +220,7 @@ const FarmTableLogs = () => {
     const getLabel = (item: string) => {
         return (categoriesList.find((categoryItem: Partial<CategoriesType>) => categoryItem.slug == item))?.category
     }
+
     const getTitleOrColor = (item: string, value: string) => {
 
         let objValue: any = (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))
@@ -235,6 +229,7 @@ const FarmTableLogs = () => {
     else  return "#78909C"
 
     }
+
     const setBackColor = (item: any) => {
         let index = categoriesList.findIndex((categoryItem: CategoriesType, index: number) => item == categoryItem.slug);
         if (categoriesColors[index])
@@ -242,9 +237,6 @@ const FarmTableLogs = () => {
         return '#a4a6a9'
 
     }
-
-
-
 
     const appliedSort = async (sortKey: string) => {
 
@@ -294,6 +286,7 @@ const FarmTableLogs = () => {
 
         }
     }
+
     const columns = [
         {
             columnId: "date",
@@ -323,7 +316,7 @@ const FarmTableLogs = () => {
                 return (
                     row.categories.length && row.categories.map((item: string, index: number) => {
                         return (
-                            <Chip label={getLabel(item)} key={index} sx={{ margin: "2px", height: "auto", padding: "4px 0", backgroundColor: setBackColor(item), color: 'white' }} />
+                            <Chip label={getLabel(item)} key={index} sx={{ margin: "2px", height: "auto", padding: "4px 0", backgroundColor: setBackColor(item), color: 'white', fontSize: "13px" }} />
                         )
                     })
                 )
@@ -418,15 +411,13 @@ const FarmTableLogs = () => {
 
 
     return (
-        <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "40px", margin: "10px 0 5px"}}>
-                <h3 className="title">Farm Dashboard</h3>
-                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "16px" }}>
-                    <SearchComponent onChange={searchStringChange} value={searchString} searchString={searchString} placeholder={'Search By Title'} />
-                    <Button color="success" variant="contained" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
-                        Add Log
-                    </Button>
-                </div>
+        <div className="logsDashboardTable">
+            <div className={styles.titleFilters}>
+                <Typography variant="h3" className={styles.title}>Farm Dashboard</Typography>
+                <SearchComponent onChange={searchStringChange} size="small" value={searchString} searchString={searchString} placeholder={'Search By Title'} />
+                <Button color="success" fullWidth variant="contained" size="medium" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
+                    Add Log
+                </Button>
             </div>
             <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
             <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' />

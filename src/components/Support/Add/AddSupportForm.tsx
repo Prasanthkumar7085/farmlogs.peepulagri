@@ -35,6 +35,7 @@ const AddSupportForm = () => {
   const [uploadOrNot, setUploadOrNot] = useState(false);
 
   const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>();
+  const [errorMessages, setErrorMessages] = useState<any>();
 
   useEffect(() => {
     collectSupportData();
@@ -67,14 +68,18 @@ const AddSupportForm = () => {
 
   const addSupport = async () => {
     setLoading(true);
+    setErrorMessages({})
     try {
       const response = await addSupportService(supportDetails, accessToken);
+
       if (response.success) {
         setAlertMessage("Add Support Successful!");
         setAlertType(true);
         setTimeout(() => {
           router.back();
         }, 1000);
+      } else if (response?.status == 422) {
+        setErrorMessages(response?.errors);
       } else {
         setAlertMessage("Add Support Failed!");
         setAlertType(false);
@@ -146,6 +151,7 @@ const AddSupportForm = () => {
         <Grid container direction="row" justifyContent="center" spacing={3}>
           <Grid item xs={12} sm={10} md={6}>
             <AddSupportQueryDetails
+              errorMessages={errorMessages}
               query={query}
               categories={categories}
               description={description}

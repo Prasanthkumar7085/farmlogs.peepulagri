@@ -92,7 +92,7 @@ const EditALog: NextPage = () => {
         return result;
     }
     const editLog = async () => {
-
+        setErrorMessages({});
         setLoading(true);
         const { categories, title, description } = formDetails;
 

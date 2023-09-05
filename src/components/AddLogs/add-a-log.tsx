@@ -48,7 +48,7 @@ const AddALog: NextPage = () => {
 
   const addLogs = async () => {
     setLoading(true);
-
+    setErrorMessages({});
     const { categories, ...rest } = formDetails;
     const obj = {
       ...rest,
@@ -66,7 +66,6 @@ const AddALog: NextPage = () => {
     }
     try {
       let response = await addLogService(obj);
-      console.log(response);
 
       if (response.success) {
         setAlertMessage('Log Added Successfully!');

@@ -91,7 +91,15 @@ const AdditionalInformation = ({ errorMessages, setAdditionalResources, singleLo
   }
 
   const editInResourceType = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    editInResources(e.target.value, index, 'title')
+
+    let newValue = e.target.value
+    let tempResources = [...resources];
+    let itemObj = tempResources[index];
+    itemObj = { ...itemObj, title: newValue ? newValue : null }
+    tempResources[index] = itemObj;
+    setResources(tempResources);
+    setAdditionalResources(tempResources)
+
   }
   const editInQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const newValue = e.target.value;

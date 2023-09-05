@@ -198,6 +198,7 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
           </div>
         </div>
       </div>
+      <ErrorMessagesComponent errorMessage={errorMessages?.resources} />
       {resourcesData.length ?
         <div className={styles.table}>
           <Table>

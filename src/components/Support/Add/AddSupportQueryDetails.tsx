@@ -6,8 +6,9 @@ import styles from "./AddSupportQueryDetails.module.css"
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { SupportQueryDataDDetailsType } from "@/types/supportTypes";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 
-const AddSupportQueryDetails = ({ query, categories, description, setQuery, setCategories, setDescription }: SupportQueryDataDDetailsType) => {
+const AddSupportQueryDetails = ({ errorMessages, query, categories, description, setQuery, setCategories, setDescription }: SupportQueryDataDDetailsType) => {
 
     const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>([]);
     const [category, setCategory] = useState<Array<string>>(categories ? categories : []);
@@ -27,7 +28,7 @@ const AddSupportQueryDetails = ({ query, categories, description, setQuery, setC
 
 
     useEffect(() => {
-        let categoryArray: any = category.length && category.map((item: any) => item?.slug)
+        let categoryArray: any = category.length ? category.map((item: any) => item?.slug) : []
         setCategories(categoryArray);
     }, [category]);
 
@@ -36,6 +37,8 @@ const AddSupportQueryDetails = ({ query, categories, description, setQuery, setC
             let array = [...categories];
             let filterArray: any = categoryOptions.filter((item: CategoriesType) => array.includes(item.slug));
             setDefaultValue(filterArray);
+        } else {
+            setDefaultValue([]);
         }
     }, [categoryOptions, categories])
 
@@ -52,6 +55,7 @@ const AddSupportQueryDetails = ({ query, categories, description, setQuery, setC
                         setQuery(e.target.value)
                     }}
                 />
+                <ErrorMessagesComponent errorMessage={errorMessages?.title} />
             </div>
             <div>
                 <Typography variant='subtitle2' style={{fontFamily: "Inter", fontWeight: "600", color: "var(--gray-700)", marginBottom: '4px'}}>Category</Typography>
@@ -91,14 +95,18 @@ const AddSupportQueryDetails = ({ query, categories, description, setQuery, setC
                         </li>
                     )}
                     onChange={(e: any, value: any, reason: any) => {
+
                         if (reason == 'clear') {
                             setCategory([]);
                         }
-                        if (value) {
+                        if (value.length) {
                             setCategory(value);
+                        } else {
+                            setCategory([]);
                         }
                     }}
                 />
+                <ErrorMessagesComponent errorMessage={errorMessages?.categories} />
             </div>
             <div>
                 <Typography variant='subtitle2' style={{fontFamily: "Inter", fontWeight: "600", color: "var(--gray-700)", marginBottom: '4px'}}>Description</Typography>
@@ -109,6 +117,7 @@ const AddSupportQueryDetails = ({ query, categories, description, setQuery, setC
                     minRows={4}
                     onChange={(e: any) => setDescription(e.target.value)}
                 ></TextareaAutosize>
+                <ErrorMessagesComponent errorMessage={errorMessages?.description} />
             </div>
         </div>
     )

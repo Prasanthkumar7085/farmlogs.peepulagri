@@ -14,9 +14,12 @@
 }
 
 .ijack {
-    font-size: inherit;
-    font-weight: 500;
     font-family: inherit;
+    color: var(--title);
+    font-size: var(--gap-base);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1;
 }
 
 .daysAgo {
@@ -38,6 +41,11 @@
     align-self: stretch;
     position: relative;
     line-height: 130%;
+    color: #17171C;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%; /* 18.2px */
 }
 
 .groupIcon {
@@ -76,11 +84,9 @@
     position: relative;
     line-height: 1.5rem;
     font-weight: 500;
-    
 }
 
 .row {
-    width: 9.22rem;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -134,7 +140,6 @@
     color: var(--primary-blue);
 }
 
-.inMessage,
 .messagebox {
     display: flex;
     align-items: flex-start;
@@ -144,20 +149,37 @@
     flex: 1;
     border-radius: var(--br-base) var(--br-base) var(--br-base) 0;
     flex-direction: column;
-    padding: var(--padding-5xs) 0;
+    padding: var(--br-11xs) 0;
     justify-content: center;
-    gap: var(--gap-base);
+    gap: var(--br-9xs);
 }
 
 .inMessage {
+    display: grid;
+    grid-template-columns: 32px 1fr;
     align-self: stretch;
     background-color: var(--white);
     flex-direction: row;
     padding: var(--padding-base);
     justify-content: flex-start;
-    gap: var(--gap-5xs);
+    gap: var(--br-xs);
     text-align: left;
     font-size: var(--text-md-medium-size);
     color: var(--title);
-    font-family: var(--text-sm-normal);
+}
+.eachAttachment {
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    column-gap: 5px;
+    align-items: center;
+}
+.eachAttachment img{
+    padding: 5px;
+    border: 3px solid #f9f9f9;
+    border-radius: 3px;
+}
+.attachmentsGroup {
+    display: flex;
+    gap: 20px;
+    column-gap: 10px;
 }

@@ -51,11 +51,11 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
       {data?.reply_to_message_id?.full_name == 'admin' ?
         <img className={styles.avatarIcon} alt=""
           src={"/avatar@2x.png"} />
-        : <Avatar sx={{ width: 24, height: 24 }} />}
+        : <Avatar sx={{ width: 32, height: 32 }} />}
       <div className={styles.messagebox}>
         <div className={styles.userName}>
           <h4 className={styles.ijack}>
-            { }
+            Username
           </h4>
           <p className={styles.daysAgo}>
             {timePipe(data?.createdAt, 'DD MMM, YYYY hh:mm A')}
@@ -88,25 +88,28 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
               </div>
             : ""}
         </div>
-        {attachmentImages && attachmentImages?.length ?
-          attachmentImages.map((item: AttachmentDownloadUrlsResponse, index: number) => {
-            return (
-              <div key={index}>
-                <ImageComponent
-                  src={getSrc(item)}
-                  height={50}
-                  width={50}
-                />
-                <IconButton onClick={() => window.open(item.downloadUrl)}>
-                  <OpenInNewIcon />
-                </IconButton>
-                {/* <IconButton onClick={() => deleteImage(item)}>
-                  <DeleteOutlineIcon />
-                </IconButton> */}
-              </div>
-            )
-          })
-          : ""}
+        <div className={styles.attachmentsGroup}>
+          {attachmentImages && attachmentImages?.length ?
+            attachmentImages.map((item: AttachmentDownloadUrlsResponse, index: number) => {
+              return (
+                <div key={index} className={styles.eachAttachment}>
+                  <ImageComponent
+                    src={getSrc(item)}
+                    height={70}
+                    width={70}
+                    className={styles.image}
+                  />
+                  <IconButton onClick={() => window.open(item.downloadUrl)}>
+                    <OpenInNewIcon />
+                  </IconButton>
+                  {/* <IconButton onClick={() => deleteImage(item)}>
+                    <DeleteOutlineIcon />
+                  </IconButton> */}
+                </div>
+              )
+            })
+            : ""}
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ html,body {
     font-family: 'Inter', sans-serif;
     margin: 0;
     line-height: normal;
-    color: var(--title, #35353D);
+    color: var(--title);
     font-size: 14px;
     font-style: normal;
     font-weight: 400;

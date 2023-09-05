@@ -40,8 +40,15 @@
 .inputForm {
   background-color: var(--white);
   flex-direction: column;
-  padding: 0 var(--padding-base);
+  padding: var(--padding-5xl);
   align-items: flex-end;
   justify-content: flex-start;
   gap: var(--gap-5xs);
+  border-radius: var(--padding-xl) var(--padding-xl) 0 0;
+  border-bottom: 1px solid var(--stroke);
+}
+.uploadFiles {
+  display: flex;
+  justify-content: center; 
+  gap: 8px; 
 }

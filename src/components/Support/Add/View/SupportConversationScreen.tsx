@@ -7,6 +7,8 @@ import getMessageBySupportId from "../../../../../lib/services/SupportService/ge
 import { SupportMessageType } from "@/types/SupportConversationTypes";
 import { useSelector, useDispatch } from "react-redux";
 import { setMessages } from "@/Redux/Modules/Conversations";
+import { styled } from "@mui/material";
+import styles from "./SupportConversationScreen.module.css";
 
 
 const SupportConversationScreen = ({ data }: { data: SupportResponseDataType | undefined }) => {
@@ -38,13 +40,15 @@ const SupportConversationScreen = ({ data }: { data: SupportResponseDataType | u
     return (
         <div>
             <Messagebox getAllMessagesBySupportId={getAllMessagesBySupportId} />
-            {messages.length ? messages.map((item: SupportMessageType, index: number) => {
-                return (
-                    <div key={index} >
-                        <InMessage data={item} />
-                    </div>
-                )
-            }) : ""}
+            <div className={styles.threadContainer}>
+                {messages.length ? messages.map((item: SupportMessageType, index: number) => {
+                    return (
+                        <div key={index} >
+                            <InMessage data={item} />
+                        </div>
+                    )
+                }) : ""}
+            </div>
         </div>
     )
 }

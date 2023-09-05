@@ -123,6 +123,8 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
         type="text"
         size="medium"
         margin="none"
+        multiline
+        rows={2}
         value={message}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
         onKeyDown={(e: any) => { if (e.key == 'Enter') onSendMessage() }}
@@ -132,12 +134,14 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
           <label>
 
             {/* <Button variant="outlined" color="primary" size="large" >Select Files</Button> */}
-            <div style={{ border: "2px solid white", borderRadius: "10px", padding: "10px", display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", cursor: "pointer", color: "white", backgroundColor: "#3360cc" }}>
-              Select Files
+            <Button variant="contained" className={styles.uploadFiles}>
+              <span>
+                Select Files
+              </span>
               {loadingOnImagesUpload ?
                 <CircularProgress size="1.5rem" sx={{ color: " white" }} />
                 : <CloudUploadOutlinedIcon />}
-            </div>
+            </Button>
 
             <input
               onChange={selectMessageAttachments}

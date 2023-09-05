@@ -1,7 +1,7 @@
 .addAIcon {
   position: relative;
   width: 24px;
-  height: 24px;
+  height: 24px; 
 }
 .addALog {
   margin: 0;
@@ -32,6 +32,8 @@
 }
 .description textarea{
   font-size: var(--text-md-medium-size);
+  position: relative;
+  z-index: 10;
 }
 .description textarea::-webkit-input-placeholder { /* Edge */
   color: #000000;
@@ -46,9 +48,7 @@
   outline: none;
 }
 .description {
-  position: relative;
   align-self: stretch;
-  z-index: 1;
   padding-inline: 0;
 }
 
@@ -68,6 +68,7 @@
   flex: 1;
 }
 .rowParent {
+  position: relative;
   align-self: stretch;
   padding: var(--padding-3xs) var(--padding-xl);
   gap: var(--gap-3xs);
@@ -108,8 +109,31 @@
   position: relative;
 }
 .primaryFormField {
+  position: relative;
   gap: var(--gap-3xs);
   text-align: left;
   font-size: var(--font-size-xl);
   font-family: var(--text-sm-medium);
+  z-index: 10;
+}
+.categoriesBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  top: 0;
+  max-width: 100%;
+  z-index: 100;
+  max-width: 60vw;
+  height: auto;
+}
+.selectField {
+  min-width: 300px;
+  background-color: #ffffff;
+  align-items: center;
+  min-height: 45px;
+  justify-content: flex-start;
+}
+.selectField > div,
+.selectField fieldset{
+  min-height: 50px;
 }

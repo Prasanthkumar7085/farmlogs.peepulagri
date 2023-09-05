@@ -15,18 +15,17 @@ import { ChangeEvent, useEffect, useState } from "react";
 import AddLogHeader from "./AddLogHeader";
 import { CategoriesType } from "@/types/categoryTypes";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const Header = ({ setFormDetails, singleLogDetails }: any) => {
-
-
-  const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>([]);
+  const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>(
+    []
+  );
 
   useEffect(() => {
     getAllCategories();
-  }, [])
+  }, []);
 
   const getAllCategories = async () => {
     const response = await getAllCategoriesService();
@@ -35,22 +34,26 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
     } else {
       setCategoryOptions([]);
     }
+  };
 
-  }
-
-  const [title, setTitle] = useState<string>(singleLogDetails?.title ? singleLogDetails?.title : "");
-  const [description, setDescription] = useState<string>(singleLogDetails?.description);
-  const [category, setCategory] = useState<Array<string>>(singleLogDetails?.categories ? singleLogDetails?.categories : []);
+  const [title, setTitle] = useState<string>(
+    singleLogDetails?.title ? singleLogDetails?.title : ""
+  );
+  const [description, setDescription] = useState<string>(
+    singleLogDetails?.description
+  );
+  const [category, setCategory] = useState<Array<string>>(
+    singleLogDetails?.categories ? singleLogDetails?.categories : []
+  );
   const [defaultValue, setDefaultValue] = useState<any>([]);
 
   useEffect(() => {
-
     let categories = category.length && category.map((item: any) => item.slug);
-    setDefaultValue(category)
+    setDefaultValue(category);
     setFormDetails({
       title: title,
       description: description,
-      categories: categories
+      categories: categories,
     });
   }, [title, description, category]);
 
@@ -58,19 +61,66 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
     if (singleLogDetails?.categories.length && categoryOptions.length) {
       let array = [...singleLogDetails?.categories];
 
-      let filterArray = categoryOptions.filter((item: CategoriesType) => array.includes(item.slug));
-
+      let filterArray = categoryOptions.filter((item: CategoriesType) =>
+        array.includes(item.slug)
+      );
 
       setDefaultValue(filterArray);
-
     }
   }, [categoryOptions, singleLogDetails]);
 
-
-
-
   return (
     <div className={styles.primaryFormField}>
+      <div className={styles.categoriesBox}>
+        <FormControl variant="outlined">
+          <Box>
+            <Autocomplete
+              value={defaultValue.length ? defaultValue : []}
+              multiple
+              disablePortal
+              id="combo-box-demo"
+              style={{ height: "55px", zIndex: "1000" }}
+              options={categoryOptions?.length ? categoryOptions : []}
+              // renderInput={(params) => <TextField {...params} label="category" />}
+              getOptionLabel={(e) => e.category}
+              limitTags={1}
+              renderInput={(params: any) => (
+                <TextField
+                {...params}
+                placeholder={"Select Categories"}
+                variant="outlined"
+                autoComplete="off"
+                size="small"
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                fullWidth
+                className={styles.selectField}
+                />
+              )}
+              renderOption={(props, option, { selected }) => (
+                <li {...props} className={styles.optionsList}>
+                  <Checkbox
+                    icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                    checkedIcon={<CheckBoxIcon fontSize="small" />}
+                    checked={selected}
+                  />
+                  {option.category}
+                </li>
+              )}
+              onChange={(e: any, value: any, reason: any) => {
+                if (reason == "clear") {
+                  setCategory([]);
+                }
+                if (value) {
+                  setCategory(value);
+                }
+              }}
+            />
+          </Box>
+          <FormHelperText />
+        </FormControl>
+      </div>
       <AddLogHeader />
       <div className={styles.container}>
         <div className={styles.rowParent}>
@@ -88,58 +138,6 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          <FormControl sx={{ width: 200 }} variant="outlined">
-            <Box>
-              <Autocomplete
-                value={defaultValue.length ? defaultValue : []}
-              multiple
-                disablePortal
-                id="combo-box-demo"
-                options={categoryOptions?.length ? categoryOptions : []}
-                sx={{ width: 300 }}
-                // renderInput={(params) => <TextField {...params} label="category" />}
-                getOptionLabel={(e) => e.category}
-                limitTags={1}
-                renderInput={(params: any) => (
-                  <TextField
-                    {...params}
-                    placeholder={'Select Categories'}
-                    variant="outlined"
-                    autoComplete='off'
-                    size="small"
-                    inputProps={{
-                      ...params.inputProps
-                    }}
-                    fullWidth
-                    sx={{ maxWidth: "200px" }}
-                  />
-                )}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Checkbox
-                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                      checkedIcon={<CheckBoxIcon fontSize="small" />}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.category}
-                  </li>
-                )}
-                onChange={(e: any, value: any, reason: any) => {
-
-                  if (reason == 'clear') {
-                    setCategory([]);
-                  }
-                  if (value) {
-                    setCategory(value);
-                  }
-
-
-                }}
-              /> 
-            </Box>
-            <FormHelperText />
-          </FormControl>
         </div>
         <TextField
           multiline

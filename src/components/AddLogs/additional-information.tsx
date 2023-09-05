@@ -20,8 +20,9 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ErrorMessagesComponent from "../Core/ErrorMessagesComponent";
 
-const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setActiveStepBasedOnData }: any) => {
+const AdditionalInformation = ({ errorMessages, setAdditionalResources, singleLogDetails, setActiveStepBasedOnData }: any) => {
 
   const [resources, setResources] = useState<any>(singleLogDetails?.additional_resources ? singleLogDetails?.additional_resources : []);
 
@@ -45,7 +46,7 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
 
 
   const addResources = () => {
-    let obj = { title: resourceTitle, quantity: resourceQuantity, units: resourceUnits, type: "Pesticides" };
+    let obj = { title: resourceTitle, quantity: resourceQuantity ? +resourceQuantity : null, units: resourceUnits, type: "Pesticides" };
 
     setResources([...resources, obj]);
     setAdditionalResources([...resources, obj]);
@@ -83,7 +84,7 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
   const editInResources = (newValue: string, index: number, item: string) => {
     let tempResources = [...resources];
     let itemObj = tempResources[index];
-    itemObj = { ...itemObj, [item]: newValue }
+    itemObj = { ...itemObj, [item]: newValue ? +newValue : null }
     tempResources[index] = itemObj;
     setResources(tempResources);
     setAdditionalResources(tempResources)
@@ -102,15 +103,28 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
 
 
   const editInResourceTitle = (e: any, index: number) => {
-    editInResources(e.target.value, index, 'units')
+
+    let newValue = e.target.value;
+    let tempResources = [...resources];
+    let itemObj = tempResources[index];
+    itemObj = { ...itemObj, units: newValue ? newValue : '' }
+    tempResources[index] = itemObj;
+    setResources(tempResources);
+    setAdditionalResources(tempResources)
 
   }
 
+  const getErrorString = (index: number, value: string) => {
+    if (errorMessages && Object.keys(errorMessages).length) {
+      let tempString: any = `additional_resources.${index}.${value}`;
+      return errorMessages[tempString];
+    }
+  }
   return (
     <div className={styles.additionalInformation}>
       <div className={styles.header}>
         <div className={styles.textwrapper}>
-          <h4 className={styles.title}>Additional Information</h4>
+          <h4 className={styles.title}>Additional Resources</h4>
           <p
             className={styles.description}
           >{`You can add additional details based on the category and work type `}</p>
@@ -213,6 +227,7 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
                         margin="none"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => editInResourceType(e, index)}
                       />
+                      <ErrorMessagesComponent errorMessage={getErrorString(index, 'title')} />
                     </TableCell>
                     <TableCell>
                       <TextField
@@ -227,6 +242,7 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
                         margin="none"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => editInQuantity(e, index)}
                       />
+                      <ErrorMessagesComponent errorMessage={getErrorString(index, 'quantity')} />
                     </TableCell>
                     <TableCell>
 
@@ -247,6 +263,7 @@ const AdditionalInformation = ({ setAdditionalResources, singleLogDetails, setAc
                           })}
 
                         </Select>
+                        <ErrorMessagesComponent errorMessage={getErrorString(index, 'units')} />
                         <FormHelperText />
                       </FormControl>
                     </TableCell>

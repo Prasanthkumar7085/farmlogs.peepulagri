@@ -39,6 +39,7 @@ const EditALog: NextPage = () => {
     const [uploadFailed, setUploadFailed] = useState(false);
 
     const [activeStepBasedOnData, setActiveStepBasedOnData] = useState(0);
+    const [errorMessages, setErrorMessages] = useState<any>();
 
     const captureDates = (fromDate: string, toDate: string) => {
         setDates([fromDate, toDate]);
@@ -117,6 +118,8 @@ const EditALog: NextPage = () => {
                 setAlertMessage('Log Updated Successfully!');
                 setAlertType(true);
                 setTimeout(() => router.back(), 1000)
+            } else if (response?.status == 422) {
+                setErrorMessages(response?.errors);
             } else {
                 setAlertMessage('Failed to Update Log!');
                 setAlertType(false);
@@ -180,7 +183,7 @@ const EditALog: NextPage = () => {
         <div className={styles.form}>
             {router.query.log_id && singleLogDetails ?
                 <div>
-                    <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
+                    <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} errorMessages={errorMessages} />
                     <div className={styles.secondaryFormField}>
                         <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
                         <Form
@@ -195,6 +198,7 @@ const EditALog: NextPage = () => {
                             files={files}
                             uploadButtonLoading={uploadButtonLoading}
                             uploadFailed={uploadFailed}
+                            errorMessages={errorMessages}
                         />
                     </div>
                     <FooterActionButtons editLog={editLog} singleLogDetails={singleLogDetails} />

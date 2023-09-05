@@ -4,12 +4,12 @@ import AdditionalInformation from "./additional-information";
 import LogAttachments from "./LogAttachments";
 import styles from "./form.module.css";
 
-const Form = ({ setResources, setAdditionalResources, captureDates, setWorkType, singleLogDetails, setActiveStepBasedOnData, onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed }: any) => {
+const Form = ({ setResources, setAdditionalResources, captureDates, setWorkType, singleLogDetails, setActiveStepBasedOnData, onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed, errorMessages }: any) => {
   return (
     <section className={styles.form}>
-      <CardWorkType setWorkType={setWorkType} captureDates={captureDates} singleLogDetails={singleLogDetails} setActiveStepBasedOnData={setActiveStepBasedOnData} />
-      <Resource setResources={setResources} singleLogDetails={singleLogDetails} setActiveStepBasedOnData={setActiveStepBasedOnData} />
-      <AdditionalInformation setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} setActiveStepBasedOnData={setActiveStepBasedOnData} />
+      <CardWorkType setWorkType={setWorkType} captureDates={captureDates} singleLogDetails={singleLogDetails} setActiveStepBasedOnData={setActiveStepBasedOnData} errorMessages={errorMessages} />
+      <Resource setResources={setResources} singleLogDetails={singleLogDetails} setActiveStepBasedOnData={setActiveStepBasedOnData} errorMessages={errorMessages} />
+      <AdditionalInformation setAdditionalResources={setAdditionalResources} singleLogDetails={singleLogDetails} setActiveStepBasedOnData={setActiveStepBasedOnData} errorMessages={errorMessages} />
       <LogAttachments onChangeFile={onChangeFile} uploadFiles={uploadFiles} files={files} uploadButtonLoading={uploadButtonLoading} uploadFailed={uploadFailed} />
     </section>
   );

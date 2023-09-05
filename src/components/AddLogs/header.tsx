@@ -17,9 +17,10 @@ import { CategoriesType } from "@/types/categoryTypes";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ErrorMessagesComponent from "../Core/ErrorMessagesComponent";
 
 
-const Header = ({ setFormDetails, singleLogDetails }: any) => {
+const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
 
 
   const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>([]);
@@ -68,12 +69,19 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
 
 
+  useEffect(() => {
+
+
+
+  }, [errorMessages]);
+
 
   return (
     <div className={styles.primaryFormField}>
       <AddLogHeader />
       <div className={styles.container}>
         <div className={styles.rowParent}>
+          <div style={{ width: "90%" }}>
           <div className={styles.row}>
             <TextField
               className={styles.inputTitle}
@@ -87,6 +95,8 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
+          </div>
+            <ErrorMessagesComponent errorMessage={errorMessages?.title} />
           </div>
           <FormControl sx={{ width: 200 }} variant="outlined">
             <Box>
@@ -137,7 +147,9 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
                 }}
               /> 
+              <ErrorMessagesComponent errorMessage={errorMessages?.categories} />
             </Box>
+
             <FormHelperText />
           </FormControl>
         </div>
@@ -151,6 +163,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
           minRows={3}
           maxRows={7}
         />
+        <ErrorMessagesComponent errorMessage={errorMessages?.description} />
         <div className={styles.threeDots}>
           <div className={styles.threeDotsChild} />
           <div className={styles.threeDotsChild} />

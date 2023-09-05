@@ -21,8 +21,8 @@ export interface GetLogByIdResponseDataType {
 
 export interface ResourcesType {
     title: string;
-    quantity: string
-    total_hours: string
+    quantity: string | number | null;
+    total_hours: string | number | null;
     type: string
 }
 export interface ResourcesTypeInResponse {

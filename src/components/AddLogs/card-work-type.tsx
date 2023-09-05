@@ -13,8 +13,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import styles from "./card-work-type.module.css";
 import DateRangePickerComponent from "../Core/DateRangePicker";
 import { useState } from "react";
+import ErrorMessagesComponent from "../Core/ErrorMessagesComponent";
 
-const CardWorkType = ({ register, captureDates, setWorkType, singleLogDetails, setActiveStepBasedOnData }: any) => {
+const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetails, setActiveStepBasedOnData }: any) => {
 
   const [work, setWork] = useState<any>()
 
@@ -40,6 +41,7 @@ const CardWorkType = ({ register, captureDates, setWorkType, singleLogDetails, s
               <MenuItem value="MACHINERY">MACHINERY</MenuItem>
               <MenuItem value="MANUAL">MANUAL</MenuItem>
             </Select>
+            <ErrorMessagesComponent errorMessage={errorMessages?.work_type} />
             <FormHelperText />
           </FormControl>
         </div>
@@ -47,6 +49,7 @@ const CardWorkType = ({ register, captureDates, setWorkType, singleLogDetails, s
           <p className={styles.label}>Date</p>
           <div className={styles.dropdown}>
             <DateRangePickerComponent captureDateValue={captureDateValue} defaultValue={[singleLogDetails?.from_date_time, singleLogDetails?.to_date_time]} />
+            <ErrorMessagesComponent errorMessage={errorMessages?.from_date_time} />
           </div>
         </div>
       </div>

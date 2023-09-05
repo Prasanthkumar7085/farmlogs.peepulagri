@@ -22,7 +22,6 @@ const AddALog: NextPage = () => {
 
   const id = router.query?.farm_id;
 
-  const [singleLogDetails, setSingleData] = useState<GetLogByIdResponseDataType | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
@@ -31,7 +30,7 @@ const AddALog: NextPage = () => {
   const [additionalResources, setAdditionalResources] = useState([]);
   const [dates, setDates] = useState<any>([]);
   const [formDetails, setFormDetails] = useState<any>();
-  const [workType, setWorkType] = useState(singleLogDetails?.work_type ? singleLogDetails?.work_type : "");
+  const [workType, setWorkType] = useState("");
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState(false);
 
@@ -41,13 +40,11 @@ const AddALog: NextPage = () => {
   const [uploadButtonLoading, setUploadButtonLoading] = useState(false);
   const [uploadFailed, setUploadFailed] = useState(false);
 
+  const [errorMessages, setErrorMessages] = useState<any>();
+
   const captureDates = (fromDate: string, toDate: string) => {
     setDates([fromDate, toDate]);
   };
-
-
-
-
 
   const addLogs = async () => {
     setLoading(true);
@@ -63,16 +60,20 @@ const AddALog: NextPage = () => {
       to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : "",
       resources: resources,
       additional_resources: additionalResources,
-      total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type == "Machinery" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
-      total_manual_hours: resources.reduce((acc: number, item: any) => (item.type == "Manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
+      total_machinary_hours: resources.reduce((acc: number, item: any) => (item.type.toLowerCase() == "machinery" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
+      total_manual_hours: resources.reduce((acc: number, item: any) => (item.type.toLowerCase() == "manual" ? acc + ((+item.quantity) * (+item.total_hours)) : acc + 0), 0),
       attachments: filesDetailsAfterUpload
     }
     try {
       let response = await addLogService(obj);
+      console.log(response);
+
       if (response.success) {
         setAlertMessage('Log Added Successfully!');
         setAlertType(true);
         router.back();
+      } else if (response?.status == 422) {
+        setErrorMessages(response?.errors);
       } else {
         setAlertMessage('Failed to Add Logs!');
         setAlertType(false);
@@ -131,7 +132,7 @@ const AddALog: NextPage = () => {
     <div className={styles.form}>
 
         <div>
-          <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} />
+        <Header setFormDetails={setFormDetails} errorMessages={errorMessages} />
           <div className={styles.secondaryFormField}>
           <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
           <Form
@@ -140,16 +141,16 @@ const AddALog: NextPage = () => {
             captureDates={captureDates}
             setResources={setResources}
             setAdditionalResources={setAdditionalResources}
-            singleLogDetails={singleLogDetails}
             onChangeFile={onChangeFile}
             uploadFiles={uploadFiles}
             files={files}
             uploadButtonLoading={uploadButtonLoading}
             uploadFailed={uploadFailed}
+            errorMessages={errorMessages}
           />
 
           </div>
-        <FooterActionButtons addLogs={addLogs} singleLogDetails={singleLogDetails} />
+        <FooterActionButtons addLogs={addLogs} />
       </div> 
 
       

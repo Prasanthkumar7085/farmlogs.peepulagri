@@ -16,6 +16,7 @@ import styles from "./support.module.css";
 import { useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 import { quartersInYear } from "date-fns";
+import DeleteDialogCompoennt from "../Core/DeleteDialogComponent";
 
 
 const SupportPage = () => {
@@ -42,8 +43,7 @@ const SupportPage = () => {
     const statusOptions = [
         { value: 'OPEN', title: 'Open' },
         { value: 'INPROGRESS', title: "Inprogress" },
-        { value: 'RESOLVED', title: "Resolved" },
-        { value: 'ARCHIVE', title: "Archive" }
+        { value: 'RESOLVED', title: "Resolved" }
     ];
 
 
@@ -92,7 +92,6 @@ const SupportPage = () => {
                 } if (status) {
                     queryParams['status'] = status;
                 }
-                console.log(queryParams);
 
 
                 const { page: pageCount, limit: limitCount, ...restParams } = queryParams;
@@ -134,30 +133,41 @@ const SupportPage = () => {
 
 
 
-    const deleteSupport = async (id: string) => {
-        setLoading(true)
-        try {
-            let response = await deleteASupportService(id);
+    const [deleteContent, setDeleteContent] = useState<SupportResponseDataType>();
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-            if (response.success) {
-                setAlertMessage(response.message);
-                setAlertType(true);
-                // { page: 1, limit: limit, orderBy: sortByField, orderType: orderTypeField, search: searchString, status: status }
-                getAllSupports({ page: page, limit: limit, orderBy: orderBy, orderType: orderType, search: searchString, status: status });
-            } else {
-                setAlertMessage(response.message);
-                setAlertType(false);
+    const deleteSupport = (item: any) => {
+        setDeleteDialogOpen(true);
+        setDeleteContent(item);
+    }
+    const confirmDelete = async (deleteOrNot: boolean, id: string) => {
+        if (deleteOrNot) {
+
+            setLoading(true);
+            try {
+                let response = await deleteASupportService(id as string);
+
+                if (response.success) {
+                    setAlertMessage(response.message);
+                    setAlertType(true);
+                    getAllSupports({ page: page, limit: limit, orderBy: orderBy, orderType: orderType, search: searchString, status: status });
+                    setDeleteDialogOpen(false)
+                } else {
+                    setAlertMessage(response.message);
+                    setAlertType(false);
+                }
+            } catch (err: any) {
+                console.error(err);
+            } finally {
+                setLoading(false);
             }
-        } catch (err: any) {
-            console.error(err);
-        } finally {
-            setLoading(false);
+        } else {
+            setDeleteDialogOpen(false)
         }
 
     }
 
     const appliedSort = (sortKey: string) => {
-        console.log(sortKey);
 
         if (sortKey) {
 
@@ -257,6 +267,7 @@ const SupportPage = () => {
             {!loading ? <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={onPageChange} captureRowPerItems={onLimitChange} values='Queries' /> : ""}
             <LoadingComponent loading={loading} />
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+            <DeleteDialogCompoennt deleteContent={deleteContent} deleteDialogOpen={deleteDialogOpen} confirmDelete={confirmDelete} />
         </div>
     )
 }

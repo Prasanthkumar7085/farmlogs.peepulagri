@@ -30,6 +30,15 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
         }
     });
 
+    const getWidth = (name: string | undefined) => {
+        if (name) {
+            if (name == "category")
+                return "200px"
+            else if (name == 'date') return "100px"
+        }
+        return ""
+    }
+
     return (
         <div style={{ height: "calc(100vh - 300px)", overflow: "scroll" }} className="dataTable-container scrollbar">
             <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
@@ -42,6 +51,7 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
                                     <th className="cell" {...column.getHeaderProps()} key={columnIndex} onClick={() => appliedSort(column?.columnId)}
                                         style={{
                                             cursor: column?.isSorted ? "pointer" : "default",
+                                            width: getWidth(column?.columnId)
                                         }}
                                     >
                                         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>

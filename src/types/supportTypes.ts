@@ -5,6 +5,15 @@ export interface categoriesType {
     textColor: string;
 }
 
+export interface SupportQueryDataDDetailsType {
+    query: string,
+    categories: Array<string> | undefined,
+    description: string,
+    setQuery: React.Dispatch<React.SetStateAction<string>>,
+    setCategories: React.Dispatch<React.SetStateAction<Array<string> | undefined>>,
+    setDescription: React.Dispatch<React.SetStateAction<string>>
+
+}
 export interface SupportServiceTypes {
     page: undefined | string | number;
     limit: string | number | undefined;
@@ -52,7 +61,7 @@ export interface SupportResponseDataType {
 
 
 
-type DeleteSupportFunction = (supportId: string) => void;
+type DeleteSupportFunction = (supportId: SupportResponseDataType) => void;
 type UpdateStatusFunction = (sortKey: string) => void;
 
 export interface SupportDataTableProps {

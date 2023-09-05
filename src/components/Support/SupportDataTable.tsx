@@ -131,14 +131,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             isSorted: true,
             Header: "User Name",
             show: userType === 'ADMIN',
-            accessor: "user_id.full_name",
-            // accessor: (row: SupportResponseDataType) => {
-            //     return (
-            //         <div style={{ color: "var(--body)" }}>
-            //             {row.user_id?.full_name}
-            //         </div>
-            //     )
-            // }
+            accessor: "user_id.full_name"
         },
         {
 
@@ -152,7 +145,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
                         <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => deleteSupport(row._id)}>
+                        <IconButton onClick={() => deleteSupport(row)}>
                             <img src="/trast-icon.svg" alt="view" width="18" />
                         </IconButton>
                     </div>

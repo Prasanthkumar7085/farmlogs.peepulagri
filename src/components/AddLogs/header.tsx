@@ -30,7 +30,6 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
   const getAllCategories = async () => {
     const response = await getAllCategoriesService();
-    console.log(response);
     if (response.success) {
       setCategoryOptions(response?.data);
     } else {
@@ -43,12 +42,11 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
   const [description, setDescription] = useState<string>(singleLogDetails?.description);
   const [category, setCategory] = useState<Array<string>>(singleLogDetails?.categories ? singleLogDetails?.categories : []);
   const [defaultValue, setDefaultValue] = useState<any>([]);
-  const [show, setShow] = useState(true);
-
 
   useEffect(() => {
 
-    let categories = category.length && category.map((item: any) => item.slug)
+    let categories = category.length && category.map((item: any) => item.slug);
+    setDefaultValue(category)
     setFormDetails({
       title: title,
       description: description,
@@ -56,22 +54,20 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
     });
   }, [title, description, category]);
 
-
   useEffect(() => {
     if (singleLogDetails?.categories.length && categoryOptions.length) {
       let array = [...singleLogDetails?.categories];
 
       let filterArray = categoryOptions.filter((item: CategoriesType) => array.includes(item.slug));
-      console.log(filterArray);
-      setShow(false);
-      setTimeout(() => {
-        setShow(true);
-      }, 1)
+
 
       setDefaultValue(filterArray);
 
     }
-  }, [categoryOptions, singleLogDetails])
+  }, [categoryOptions, singleLogDetails]);
+
+
+
 
   return (
     <div className={styles.primaryFormField}>
@@ -94,8 +90,8 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
           </div>
           <FormControl sx={{ width: 200 }} variant="outlined">
             <Box>
-              {show ? <Autocomplete
-                defaultValue={defaultValue.length ? defaultValue : []}
+              <Autocomplete
+                value={defaultValue.length ? defaultValue : []}
               multiple
                 disablePortal
                 id="combo-box-demo"
@@ -140,7 +136,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
 
                 }}
-              /> : ""}
+              /> 
             </Box>
             <FormHelperText />
           </FormControl>

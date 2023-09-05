@@ -34,7 +34,7 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
         { value: 'OPEN', title: 'Open' },
         { value: 'INPROGRESS', title: "Inprogress" },
         { value: 'RESOLVED', title: "Resolved" },
-        { value: 'ARCHIVE', title: "Archive" }
+
     ];
 
 

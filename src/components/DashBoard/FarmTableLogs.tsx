@@ -227,8 +227,11 @@ const FarmTableLogs = () => {
     const getLabel = (item: string) => {
         return (categoriesList.find((categoryItem: Partial<CategoriesType>) => categoryItem.slug == item))?.category
     }
-    const getTypeColor = (item: string) => {
-        return (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))?.color
+    const getTitleOrColor = (item: string, value: string) => {
+
+        let objValue: any = (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))
+        return objValue[value];
+
     }
     const setBackColor = (item: any) => {
         let index = categoriesList.findIndex((categoryItem: CategoriesType, index: number) => item == categoryItem.slug);
@@ -297,7 +300,7 @@ const FarmTableLogs = () => {
             accessor: (row: any) => {
                 return (
                     <div style={{ color: "var(--body)" }}>
-                        {timePipe(row.createdAt, 'DD, MMM YYYY')}
+                        {timePipe(row.createdAt, 'DD, MMM YY')}
                     </div>
                     )
             }
@@ -307,6 +310,7 @@ const FarmTableLogs = () => {
             accessor: 'title',
         },
         {
+            columnId: "category",
             Header: "Category",
             accessor: (row: any) => {
                 return (
@@ -324,7 +328,7 @@ const FarmTableLogs = () => {
             Header: "Work Type",
             accessor: (row: any) => {
                 return (
-                    <span style={{ color: getTypeColor(row.work_type), fontSize:"15px"}}>  { row.work_type }</span>
+                    <p style={{ color: getTitleOrColor(row.work_type, 'color'), fontSize: "15px" }}>{getTitleOrColor(row.work_type, 'title')}</p>
                 )
             }
         },
@@ -354,12 +358,12 @@ const FarmTableLogs = () => {
         {
             columnId: "manualHours",
             isSorted: true,
-            Header: "Manual Hours",
+            Header: "Manual Hrs",
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
                        <img src="/timehalfpast-green.svg" alt="view" width="18" />
-                       <span style={{ color: "var(--body)" }}>{ row.total_manual_hours + ' Hours' }</span>
+                        <span style={{ color: "var(--body)" }}>{row.total_manual_hours + ' Hrs'}</span>
                     </div>
                        )
             }
@@ -367,12 +371,12 @@ const FarmTableLogs = () => {
         {
             columnId: "machineHours",
             isSorted: true,
-            Header: "Machine Hours",
+            Header: "Machine Hrs",
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
                        <img src="/timehalfpast-blue.svg" alt="view" width="18" />
-                       <span style={{ color: "var(--body)" }}>{ row.total_machinary_hours + ' Hours' }</span>
+                        <span style={{ color: "var(--body)" }}>{row.total_machinary_hours + ' Hrs'}</span>
                     </div>
                        )
             }

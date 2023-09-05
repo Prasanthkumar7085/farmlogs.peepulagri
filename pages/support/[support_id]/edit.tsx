@@ -4,7 +4,14 @@ import { GetServerSideProps } from "next";
 
 const EditSupport = () => {
     return (
-        <div>
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            maxWidth: "1000px",
+            minHeight: "100vh",
+            margin: "0 auto",
+        }}>
             <AddSupportHeader />
             <EditSupportForm />
         </div>

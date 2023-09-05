@@ -3,6 +3,7 @@
     /* Hide the default audio controls */
 }
 .addSupportForm {
+    max-width: clamp(900px, 60vw, 1000px);
 }
 .audioControls .voiceRecording {
     display: flex;

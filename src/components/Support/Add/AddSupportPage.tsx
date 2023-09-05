@@ -7,7 +7,7 @@ const AddSupportPage = () => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            maxWidth: "800px",
+            maxWidth: "1000px",
             minHeight: "100vh",
             margin: "0 auto",
         }}>

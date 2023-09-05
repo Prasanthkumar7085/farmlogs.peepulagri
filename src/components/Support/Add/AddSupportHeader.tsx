@@ -12,7 +12,8 @@ const AddSupportHeader = () => {
         flexDirection: "row",
         justifyContent: "flex-start",
         marginBlock: "1rem",
-        columnGap: "1rem"
+        columnGap: "1rem",
+        maxWidth: "1000px",
     }}
     >
     <ButtonComponent

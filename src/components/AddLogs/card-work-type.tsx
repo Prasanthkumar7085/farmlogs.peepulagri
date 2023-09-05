@@ -33,7 +33,7 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
     <div className={styles.cardworktype}>
       <div className={styles.conatiner}>
         <div className={styles.workType}>
-          <p className={styles.label}>Work Type</p>
+          <p className={styles.label}>Work Type<span style={{ color: "red" }}>*</span></p>
           <FormControl className={styles.dropdown} variant="outlined">
             <InputLabel color="primary" />
             <Select color="primary" size="small" onChange={handleChange} value={work} defaultValue={singleLogDetails?.work_type}>
@@ -46,7 +46,7 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
           </FormControl>
         </div>
         <div className={styles.date}>
-          <p className={styles.label}>Date</p>
+          <p className={styles.label}>Date<span style={{ color: "red" }}>*</span></p>
           <div className={styles.dropdown}>
             <DateRangePickerComponent captureDateValue={captureDateValue} defaultValue={[singleLogDetails?.from_date_time, singleLogDetails?.to_date_time]} />
             <ErrorMessagesComponent errorMessage={errorMessages?.from_date_time} />

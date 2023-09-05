@@ -134,14 +134,14 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
           <label>
 
             {/* <Button variant="outlined" color="primary" size="large" >Select Files</Button> */}
-            <Button variant="contained" className={styles.uploadFiles}>
+            <div style={{ border: "1px solid", borderRadius: "5px", padding: "5px 20px 5px 20px", backgroundColor: "#3360cc", color: "white", cursor: "pointer" }} className={styles.uploadFiles}>
               <span>
                 Select Files
               </span>
               {loadingOnImagesUpload ?
                 <CircularProgress size="1.5rem" sx={{ color: " white" }} />
                 : <CloudUploadOutlinedIcon />}
-            </Button>
+            </div>
 
             <input
               onChange={selectMessageAttachments}

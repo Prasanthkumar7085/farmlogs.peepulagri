@@ -55,7 +55,7 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
       <div className={styles.messagebox}>
         <div className={styles.userName}>
           <h4 className={styles.ijack}>
-            Username
+            {data?.reply_to_message_id?.full_name}
           </h4>
           <p className={styles.daysAgo}>
             {timePipe(data?.createdAt, 'DD MMM, YYYY hh:mm A')}

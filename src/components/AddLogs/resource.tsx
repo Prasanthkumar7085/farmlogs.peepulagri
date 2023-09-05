@@ -130,7 +130,7 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.textwrapper}>
-            <h4 className={styles.title}>Resources</h4>
+            <h4 className={styles.title}>Resources<span style={{ color: "red" }}>*</span></h4>
             <p className={styles.description}>You can add multiple resources</p>
           </div>
           <ButtonComponent

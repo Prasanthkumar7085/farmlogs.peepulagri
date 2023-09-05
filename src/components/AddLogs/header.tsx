@@ -98,7 +98,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
               renderInput={(params: any) => (
                 <TextField
                 {...params}
-                placeholder={"Select Categories"}
+                  placeholder={"Select Categories*"}
                 variant="outlined"
                 autoComplete="off"
                 size="small"
@@ -128,6 +128,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
                 }
               }}
             />
+            <ErrorMessagesComponent errorMessage={errorMessages?.categories} />
           </Box>
           <FormHelperText />
         </FormControl>
@@ -143,7 +144,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
               variant="standard"
               type="text"
               name="log-title"
-              placeholder="Enter log title"
+                placeholder="Enter log title*"
               fullWidth
               margin="none"
               value={title}
@@ -157,7 +158,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
           multiline
           className={styles.description}
           name="description"
-          placeholder="Enter description here"
+          placeholder="Enter description here*"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           minRows={3}

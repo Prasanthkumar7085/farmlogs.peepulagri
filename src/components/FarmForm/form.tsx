@@ -29,8 +29,8 @@ const Form = () => {
                 <InputLabel color="primary" />
                 <Select color="primary" defaultValue="Choose Type" size="small">
                   <MenuItem value="Select All">Select All</MenuItem>
-                  <MenuItem value="Machinery">Machinery</MenuItem>
-                  <MenuItem value="Manual">Manual</MenuItem>
+                  <MenuItem value="MACHINERY">Machinery</MenuItem>
+                  <MenuItem value="MANUAL">Manual</MenuItem>
                 </Select>
                 {/* <FormHelperText /> */}
               </FormControl>

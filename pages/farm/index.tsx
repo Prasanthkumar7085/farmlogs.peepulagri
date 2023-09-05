@@ -19,8 +19,10 @@ const FarmPage = () => {
         const response = await getAllFarmsService(accessToken);
         if (response.success && response.data && response.data.length) {
             router.push(`/farm/${response?.data[0]._id}/logs`);
+        } else {
+            setLoading(false);
         }
-        setLoading(false);
+
     }
     useEffect(() => {
         if (router.isReady && accessToken) {

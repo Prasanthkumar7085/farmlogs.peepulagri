@@ -259,7 +259,7 @@ const SupportPage = () => {
                         searchString={searchString}
                         value={searchString}
                     />
-                    <SelectComponent options={statusOptions} size="small" onChange={onStatusChange} defaultValue={router.query.status ? router.query.status : ""} />
+                    <SelectComponent options={statusOptions} size="small" onChange={onStatusChange} value={router.query.status ? router.query.status : ''} />
                     <ButtonComponent variant="contained" icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />
                 </div>
             </div>

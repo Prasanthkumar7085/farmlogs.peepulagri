@@ -8,6 +8,7 @@ import getLogByIdService from "../../lib/services/LogsService/getLogByIdService"
 import { GetLogByIdResponseDataType } from "@/types/logsTypes";
 import LoadingComponent from "./Core/LoadingComponent";
 import { useSelector } from "react-redux";
+import FarmDetailsMiniCard from "./AddLogs/farm-details-mini-card";
 
 const ViewLogsContainer: NextPage = () => {
 
@@ -42,6 +43,7 @@ const ViewLogsContainer: NextPage = () => {
     <div className={styles.viewLogsContainer}>
       <HeadPart data={data} />
       <MachineryManualCard data={data} />
+      <FarmDetailsMiniCard />
 
       <LoadingComponent loading={loading} />
     </div>

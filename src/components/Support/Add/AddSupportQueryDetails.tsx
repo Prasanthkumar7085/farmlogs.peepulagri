@@ -67,12 +67,7 @@ const AddSupportQueryDetails = ({
     <div className="form-fields">
       <Typography
         variant="subtitle2"
-        style={{
-          fontFamily: "Inter",
-          fontWeight: "600",
-          color: "var(--gray-700)",
-          marginBottom: "4px",
-        }}
+        className={styles.label}
       >
         Type Youe Query
       </Typography>
@@ -93,12 +88,7 @@ const AddSupportQueryDetails = ({
 
       <Typography
         variant="subtitle2"
-        style={{
-          fontFamily: "Inter",
-          fontWeight: "600",
-          color: "var(--gray-700)",
-          marginBottom: "4px",
-        }}
+        className={styles.label}
       >
         Category
       </Typography>
@@ -151,12 +141,7 @@ const AddSupportQueryDetails = ({
       <ErrorMessagesComponent errorMessage={errorMessages?.categories} />
       <Typography
         variant="subtitle2"
-        style={{
-          fontFamily: "Inter",
-          fontWeight: "600",
-          color: "var(--gray-700)",
-          marginBottom: "4px",
-        }}
+        className={styles.label}
       >
         Description
       </Typography>

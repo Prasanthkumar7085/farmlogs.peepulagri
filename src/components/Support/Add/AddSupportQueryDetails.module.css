@@ -9,3 +9,10 @@
 .selectField {
     background-color: #ffffff;
 }
+.label{
+    font-family: "Inter",sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-block: "4px",
+}

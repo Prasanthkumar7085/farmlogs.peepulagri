@@ -51,7 +51,9 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
                                     <th className="cell" {...column.getHeaderProps()} key={columnIndex} onClick={() => appliedSort(column?.columnId)}
                                         style={{
                                             cursor: column?.isSorted ? "pointer" : "default",
-                                            width: getWidth(column?.columnId)
+                                            width:(column?.width? column?.width : ""),
+                                            minWidth: (column?.minWidth? column?.minWidth : ""),
+                                            maxWidth: (column?.maxWidth? column?.maxWidth : ""),
                                         }}
                                     >
                                         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>

@@ -230,7 +230,9 @@ const FarmTableLogs = () => {
     const getTitleOrColor = (item: string, value: string) => {
 
         let objValue: any = (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))
+        if(objValue)
         return objValue[value];
+    else  return "#78909C"
 
     }
     const setBackColor = (item: any) => {
@@ -297,6 +299,7 @@ const FarmTableLogs = () => {
             columnId: "date",
             isSorted: true,
             Header: "Date",
+            width : "70px",
             accessor: (row: any) => {
                 return (
                     <div style={{ color: "var(--body)" }}>
@@ -308,10 +311,14 @@ const FarmTableLogs = () => {
         {
             Header: "Title",
             accessor: 'title',
+            minWidth: "200px",
+            maxWidth: "300px",
         },
         {
             columnId: "category",
             Header: "Category",
+            minWidth: "200px",
+            maxWidth: "300px",
             accessor: (row: any) => {
                 return (
                     row.categories.length && row.categories.map((item: string, index: number) => {
@@ -326,6 +333,7 @@ const FarmTableLogs = () => {
             columnId: "workType",
             isSorted: true,
             Header: "Work Type",
+            width: "120px",
             accessor: (row: any) => {
                 return (
                     <p style={{ color: getTitleOrColor(row.work_type, 'color'), fontSize: "15px" }}>{getTitleOrColor(row.work_type, 'title')}</p>

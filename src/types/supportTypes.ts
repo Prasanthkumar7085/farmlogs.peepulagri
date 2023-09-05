@@ -6,6 +6,7 @@ export interface categoriesType {
 }
 
 export interface SupportQueryDataDDetailsType {
+    errorMessages: any;
     query: string,
     categories: Array<string> | undefined,
     description: string,

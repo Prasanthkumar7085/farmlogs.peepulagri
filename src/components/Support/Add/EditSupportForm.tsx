@@ -39,6 +39,8 @@ const EditSupportForm = () => {
     const [alertType, setAlertType] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
     const [uploadOrNot, setUploadOrNot] = useState(false);
+    const [errorMessages, setErrorMessages] = useState<any>();
+
 
 
 
@@ -70,12 +72,10 @@ const EditSupportForm = () => {
 
     const editSupport = async () => {
         setLoading(true);
+        setErrorMessages({});
         const array = supportOneDetails?.attachments;
 
         let attachmentsArray: any = [];
-
-
-
 
         if (array.length) {
             if (Object.keys(audioDetailsAfterUpload).length) {
@@ -106,6 +106,8 @@ const EditSupportForm = () => {
                 setTimeout(() => {
                     router.back();
                 }, 500)
+            } else if (response?.status == 422) {
+                setErrorMessages(response?.errors);
             } else {
                 setAlertMessage(response?.message);
                 setAlertType(false);
@@ -180,6 +182,7 @@ const EditSupportForm = () => {
                     <Grid container direction="row" justifyContent="center" spacing={3}>
                         <Grid item xs={12} sm={10} md={6}>
                             <AddSupportQueryDetails
+                                errorMessages={errorMessages}
                                 query={query}
                                 categories={categories}
                                 description={description}

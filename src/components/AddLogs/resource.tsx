@@ -20,9 +20,10 @@ import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ResourcesType } from "@/types/logsTypes";
+import ErrorMessagesComponent from "../Core/ErrorMessagesComponent";
 
 
-const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveStepBasedOnData }: any) => {
+const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetails, setActiveStepBasedOnData }: any) => {
 
   const [resourcesData, setResources] = useState<Array<ResourcesType>>(singleLogDetails?.resources ? singleLogDetails?.resources : []);
 
@@ -38,7 +39,12 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
   ]
 
   const addResources = () => {
-    let obj = { title: resourceTitle, quantity: resourceQuantity, total_hours: resourceHours, type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "Manual" : "Machinery" };
+    let obj = {
+      title: resourceTitle,
+      quantity: resourceQuantity ? +resourceQuantity : null,
+      total_hours: resourceHours ? +resourceHours : null,
+      type: (resourceTitle == 'Men' || resourceTitle == "Women") ? "MANUAL" : "MACHINERY"
+    };
 
     setActiveStepBasedOnData(2);
     setResources([...resourcesData, obj]);
@@ -84,7 +90,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
   const editInResources = (newValue: string, index: number, item: string) => {
     let tempResources = [...resourcesData];
     let itemObj = tempResources[index];
-    itemObj = { ...itemObj, [item]: newValue }
+    itemObj = { ...itemObj, [item]: newValue ? +newValue : null }
     tempResources[index] = itemObj;
     setResources(tempResources);
     setAllResources(tempResources)
@@ -108,7 +114,16 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
   }
   useEffect(() => {
     setResources(resourcesData)
-  }, [resourcesData])
+  }, [resourcesData]);
+
+
+  const getErrorString = (index: number, value: string) => {
+    if (errorMessages && Object.keys(errorMessages).length) {
+      let tempString: any = `resources.${index}.${value}`;
+      return errorMessages[tempString];
+    }
+
+  }
 
   return (
     <div className={styles.resource}>
@@ -183,6 +198,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
           </div>
         </div>
       </div>
+      <ErrorMessagesComponent errorMessage={errorMessages?.resources} />
       {resourcesData.length ?
         <div className={styles.table}>
           <Table>
@@ -212,6 +228,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
                         margin="none"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => editInQuantity(e, index)}
                       />
+                      <ErrorMessagesComponent errorMessage={getErrorString(index, 'quantity')} />
                     </TableCell>
                     <TableCell>
                       <TextField
@@ -226,6 +243,7 @@ const Resource = ({ setResources: setAllResources, singleLogDetails, setActiveSt
                         margin="none"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => editInHours(e, index)}
                       />
+                      <ErrorMessagesComponent errorMessage={getErrorString(index, 'total_hours')} />
                     </TableCell>
                     <TableCell>
                       <IconButton color="error" onClick={() => removeFromResources(index)}>

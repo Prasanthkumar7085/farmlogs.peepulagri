@@ -13,11 +13,8 @@ const addSupportService = async (body: any, accessToken: string) => {
         }
         const response: any = await fetch(url, options);
         const responseData = await response.json();
-        if (response.ok) {
-            return responseData;
-        } else {
-            return { message: 'Something Went Wrong', status: 500, details: responseData }
-        }
+        return responseData;
+
 
     } catch (err: any) {
         console.error(err);

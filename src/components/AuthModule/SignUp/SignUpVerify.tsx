@@ -85,8 +85,8 @@ const SignUpVerify = () => {
             <TextField
             autoFocus
               fullWidth
-            //   error={ Boolean(errorMessages) }
-            //   helperText={errorMessages}
+              error={ Boolean(errorMessages?.message) }
+              helperText={errorMessages?.message}
               size="small"
               placeholder="Enter OTP"
               value={otp}
@@ -107,10 +107,7 @@ const SignUpVerify = () => {
               "Submit"
             )}
           </Button>
-          {errorMessages.message ? (
-            <p style={{ color: "red", margin: "0" }}>
-                {errorMessages.message}
-            </p>) : ("")}           
+                    
           <p className={styles.helperText}>{"Don't receive an OTP "}<Button variant="text">Resent OTP</Button> </p>
         </div>
       </form>

@@ -15,13 +15,15 @@ import { ChangeEvent, useEffect, useState } from "react";
 import AddLogHeader from "./AddLogHeader";
 import { CategoriesType } from "@/types/categoryTypes";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ErrorMessagesComponent from "../Core/ErrorMessagesComponent";
 
-const Header = ({ setFormDetails, singleLogDetails }: any) => {
-  const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>(
-    []
-  );
+
+const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
+
+
+  const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>([]);
 
   useEffect(() => {
     getAllCategories();
@@ -69,6 +71,15 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
     }
   }, [categoryOptions, singleLogDetails]);
 
+
+
+  useEffect(() => {
+
+
+
+  }, [errorMessages]);
+
+
   return (
     <div className={styles.primaryFormField}>
       <div className={styles.categoriesBox}>
@@ -83,7 +94,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
               options={categoryOptions?.length ? categoryOptions : []}
               // renderInput={(params) => <TextField {...params} label="category" />}
               getOptionLabel={(e) => e.category}
-              limitTags={1}
+              limitTags={3}
               renderInput={(params: any) => (
                 <TextField
                 {...params}
@@ -124,6 +135,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
       <AddLogHeader />
       <div className={styles.container}>
         <div className={styles.rowParent}>
+          <div style={{ width: "90%" }}>
           <div className={styles.row}>
             <TextField
               className={styles.inputTitle}
@@ -138,6 +150,8 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
+            <ErrorMessagesComponent errorMessage={errorMessages?.title} />
+          </div>
         </div>
         <TextField
           multiline
@@ -149,6 +163,7 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
           minRows={3}
           maxRows={7}
         />
+        <ErrorMessagesComponent errorMessage={errorMessages?.description} />
         <div className={styles.threeDots}>
           <div className={styles.threeDotsChild} />
           <div className={styles.threeDotsChild} />

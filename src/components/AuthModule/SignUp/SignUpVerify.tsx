@@ -111,7 +111,7 @@ const SignUpVerify = () => {
             <p style={{ color: "red", margin: "0" }}>
                 {errorMessages.message}
             </p>) : ("")}           
-          <p className={styles.helperText}>Don't receive an OTP <Button variant="text">Resent OTP</Button> </p>
+          <p className={styles.helperText}>{"Don't receive an OTP "}<Button variant="text">Resent OTP</Button> </p>
         </div>
       </form>
     </div>

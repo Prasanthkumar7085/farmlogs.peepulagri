@@ -6,12 +6,19 @@ import {
   MenuItem,
   FormHelperText,
   Select,
+  Autocomplete,
+  Box,
+  Checkbox,
 } from "@mui/material";
 import styles from "./header.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
 import AddLogHeader from "./AddLogHeader";
 import { CategoriesType } from "@/types/categoryTypes";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+
 const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
 
@@ -34,29 +41,41 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
 
   const [title, setTitle] = useState<string>(singleLogDetails?.title ? singleLogDetails?.title : "");
   const [description, setDescription] = useState<string>(singleLogDetails?.description);
-  const [category, setCategory] = useState<string>(singleLogDetails?.categories ? singleLogDetails?.categories : []);
+  const [category, setCategory] = useState<Array<string>>(singleLogDetails?.categories ? singleLogDetails?.categories : []);
+  const [defaultValue, setDefaultValue] = useState<any>([]);
+  const [show, setShow] = useState(true);
+
 
   useEffect(() => {
+
+    let categories = category.length && category.map((item: any) => item.slug)
     setFormDetails({
       title: title,
       description: description,
-      categories: category
-    })
-    console.log({
-      title: title,
-      description: description,
-      categories: category
+      categories: categories
     });
+  }, [title, description, category]);
 
-  }, [title, description, category])
+
+  useEffect(() => {
+    if (singleLogDetails?.categories.length && categoryOptions.length) {
+      let array = [...singleLogDetails?.categories];
+
+      let filterArray = categoryOptions.filter((item: CategoriesType) => array.includes(item.slug));
+      console.log(filterArray);
+      setShow(false);
+      setTimeout(() => {
+        setShow(true);
+      }, 1)
+
+      setDefaultValue(filterArray);
+
+    }
+  }, [categoryOptions, singleLogDetails])
 
   return (
     <div className={styles.primaryFormField}>
       <AddLogHeader />
-      {/* <div className={styles.title}>
-        <img className={styles.addAIcon} alt="Add Icon" src="/add-icon.svg" />
-        <h2 className={styles.addALog}>Add A Log</h2>
-      </div> */}
       <div className={styles.container}>
         <div className={styles.rowParent}>
           <div className={styles.row}>
@@ -74,24 +93,55 @@ const Header = ({ setFormDetails, singleLogDetails }: any) => {
             />
           </div>
           <FormControl sx={{ width: 200 }} variant="outlined">
-            <InputLabel color="primary">Select Category</InputLabel>
-            <Select
-              color="primary"
-              name="category"
+            <Box>
+              {show ? <Autocomplete
+                defaultValue={defaultValue.length ? defaultValue : []}
               multiple
-              size="small"
-              label="Select Category"
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value)
-              }}
-            >
-              {categoryOptions.map((item: any, index: number) => {
-                return (
-                  <MenuItem value={item.slug} key={index}>{item.category}</MenuItem>
-                )
-              })}
-            </Select>
+                disablePortal
+                id="combo-box-demo"
+                options={categoryOptions?.length ? categoryOptions : []}
+                sx={{ width: 300 }}
+                // renderInput={(params) => <TextField {...params} label="category" />}
+                getOptionLabel={(e) => e.category}
+                limitTags={1}
+                renderInput={(params: any) => (
+                  <TextField
+                    {...params}
+                    placeholder={'Select Categories'}
+                    variant="outlined"
+                    autoComplete='off'
+                    size="small"
+                    inputProps={{
+                      ...params.inputProps
+                    }}
+                    fullWidth
+                    sx={{ maxWidth: "200px" }}
+                  />
+                )}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                      checkedIcon={<CheckBoxIcon fontSize="small" />}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.category}
+                  </li>
+                )}
+                onChange={(e: any, value: any, reason: any) => {
+
+                  if (reason == 'clear') {
+                    setCategory([]);
+                  }
+                  if (value) {
+                    setCategory(value);
+                  }
+
+
+                }}
+              /> : ""}
+            </Box>
             <FormHelperText />
           </FormControl>
         </div>

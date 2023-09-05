@@ -253,7 +253,6 @@ const FarmTableLogs = () => {
 
             let sortTempValueCount = sortCount;
 
-
             let sortByField = '';
             let orderTypeField = '';
 
@@ -316,7 +315,6 @@ const FarmTableLogs = () => {
             maxWidth: "300px",
         },
         {
-            columnId: "category",
             Header: "Category",
             minWidth: "200px",
             maxWidth: "300px",

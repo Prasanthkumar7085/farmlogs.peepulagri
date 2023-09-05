@@ -74,7 +74,7 @@ const AddSupportQueryDetails = ({
           marginBottom: "4px",
         }}
       >
-        Type Youe Query
+        Type Youe Query<span style={{ color: "red" }}>*</span>
       </Typography>
       <TextField
         style={{
@@ -100,7 +100,7 @@ const AddSupportQueryDetails = ({
           marginBottom: "4px",
         }}
       >
-        Category
+        Category<span style={{ color: "red" }}>*</span>
       </Typography>
       <Autocomplete
         value={defaultValue.length ? defaultValue : []}
@@ -158,7 +158,7 @@ const AddSupportQueryDetails = ({
           marginBottom: "4px",
         }}
       >
-        Description
+        Description<span style={{ color: "red" }}>*</span>
       </Typography>
       <TextareaAutosize
         className={styles.textAreaLg}

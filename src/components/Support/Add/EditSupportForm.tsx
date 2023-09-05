@@ -132,24 +132,25 @@ const EditSupportForm = () => {
     const onChangeFile = (e: any, check = false) => {
         setUploadOrNot(false);
         setFiles(e.target.files);
+        uploadFiles(e.target.files)
     }
-    const uploadFiles = async () => {
+    const uploadFiles = async (filesSelected: any) => {
         setLoadingOnImagesUpload(true);
-        let tempFilesStorage = Array.from(files).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
+        let tempFilesStorage = Array.from(filesSelected).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
         const response = await addAttachmentsService({ attachments: tempFilesStorage }, accessToken);
         if (response.success) {
-            await postAllImages(response.data, tempFilesStorage);
+            await postAllImages(response.data, tempFilesStorage, filesSelected);
         }
 
     }
 
-    const postAllImages = async (response: any, tempFilesStorage: any) => {
+    const postAllImages = async (response: any, tempFilesStorage: any, filesSelected: any) => {
         let arrayForResponse: any = [];
 
         let checkUploadOrNot = false;
         for (let index = 0; index < response.length; index++) {
-            let uploadResponse: any = await uploadFileToS3(response[index].target_url, files[index]);
+            let uploadResponse: any = await uploadFileToS3(response[index].target_url, filesSelected[index]);
 
             if (uploadResponse.ok) {
                 if (uploadResponse.ok) {
@@ -172,6 +173,17 @@ const EditSupportForm = () => {
         setLoadingOnImagesUpload(false);
     }
 
+
+
+    const deleteSelectedFile = (index: any) => {
+        let array = [...filesDetailsAfterUpload];
+        let filesArray = [...files];
+        array.splice(index, 1);
+        filesArray.splice(index, 1);
+        setFiles([...filesArray])
+        setFilesDetailsAfterUpload([...array]);
+
+    }
 
     return (
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
@@ -209,8 +221,8 @@ const EditSupportForm = () => {
                                 <div>
                                     <Typography variant='subtitle2'>Upload Images</Typography>
                                     <SupportAttachments
+                                        deleteSelectedFile={deleteSelectedFile}
                                         onChangeFile={onChangeFile}
-                                        uploadFiles={uploadFiles}
                                         files={files}
                                         loadingOnImagesUpload={loadingOnImagesUpload}
                                         uploadOrNot={uploadOrNot}

@@ -59,6 +59,10 @@
   width: 100%;
   font-size: 1rem;
   line-height: 1;
+  gap: 1em;
+}
+.link .icon {
+  font-size: 24px;
 }
 .attachments {
   border-top: 1px solid var(--stroke);

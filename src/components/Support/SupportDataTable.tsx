@@ -76,6 +76,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             columnId: "date",
             isSorted: true,
             Header: "Date",
+            width: "80px",
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ color: "var(--body)" }}>
@@ -88,13 +89,16 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             columnId: "query_name",
             isSorted: true,
             Header: "Query Name",
-            accessor: 'title'
+            accessor: 'title',
+            maxWidth: "300px",
         },
         {
             Header: "Category",
+            minWidth: "250px",
+            maxWidth: "400px",
             accessor: (row: SupportResponseDataType) => {
                 return (
-                    <div style={{ display: "flex" }}>
+                    <div style={{ display: "flex", flexWrap: "wrap" }}>
                         {row.categories.length && row.categories.map((item: string, index: number) => {
                             return <Chip label={getColorOrTitle(item, 'title')} key={index} sx={{ margin: "2px", color: "white", backgroundColor: getColorOrTitle(item, 'color') }} />
                         })}
@@ -105,6 +109,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
         {
             columnId: "description",
             isSorted: true,
+            minWidth: "250px",
             Header: "Description",
             accessor: 'description'
         },
@@ -112,6 +117,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             columnId: "response_date",
             isSorted: true,
             Header: "Response Date",
+            maxWidth: "140px",
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ color: "var(--body)" }}>
@@ -124,7 +130,8 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             columnId: "status",
             isSorted: true,
             Header: "Status",
-            accessor: 'status'
+            accessor: 'status',
+            width: "80px",
         },
         {
             columnId: "user_name",
@@ -136,6 +143,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
         {
 
             Header: "Actions",
+            maxWidth: "120px",
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>

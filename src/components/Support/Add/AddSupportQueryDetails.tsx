@@ -108,6 +108,7 @@ const AddSupportQueryDetails = ({
         disablePortal
         fullWidth
         id="combo-box-demo"
+        className={styles.selectField}
         options={categoryOptions?.length ? categoryOptions : []}
         // renderInput={(params) => <TextField {...params} label="category" />}
         getOptionLabel={(e) => e.category}

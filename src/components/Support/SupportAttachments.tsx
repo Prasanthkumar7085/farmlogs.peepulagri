@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import getSupportAttachmentsService from "../../../lib/services/SupportService/getSupportAttachmentService";
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import AttachmentIcon from '@mui/icons-material/Attachment';
 
 
 const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesUpload, uploadOrNot }: any) => {
@@ -64,7 +65,8 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
 
             <label className={styles.UpdateFiles} >
                 <div className={styles.link}>
-                    Select Files
+                    <AttachmentIcon className={styles.icon} /> 
+                    <span>Select Files</span>
                 </div>
                 <input className={styles.link} type="file" multiple onChange={onChangeFile}
                     style={{ display: "none" }}

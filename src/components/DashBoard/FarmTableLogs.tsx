@@ -333,7 +333,7 @@ const FarmTableLogs = () => {
             columnId: "workType",
             isSorted: true,
             Header: "Work Type",
-            width: "120px",
+            width: "100px",
             accessor: (row: any) => {
                 return (
                     <p style={{ color: getTitleOrColor(row.work_type, 'color'), fontSize: "15px" }}>{getTitleOrColor(row.work_type, 'title')}</p>
@@ -346,6 +346,8 @@ const FarmTableLogs = () => {
         // },
         {
             Header: "Resources",
+            minWidth: "60px",
+            maxWidth: "130px",
             accessor: (row: any) => {
                 const updatedRowModules: any = stayUpdatedResources(row.resources);
                 return (
@@ -367,6 +369,8 @@ const FarmTableLogs = () => {
             columnId: "manualHours",
             isSorted: true,
             Header: "Manual Hrs",
+            minWidth: "60px",
+            maxWidth: "80px",
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -380,6 +384,8 @@ const FarmTableLogs = () => {
             columnId: "machineHours",
             isSorted: true,
             Header: "Machine Hrs",
+            minWidth: "60px",
+            maxWidth: "80px",
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -391,6 +397,7 @@ const FarmTableLogs = () => {
         },
         {
             Header: "Actions",
+            minWidth: "120px",
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>

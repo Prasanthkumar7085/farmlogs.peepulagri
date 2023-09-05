@@ -8,6 +8,7 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import Image from "next/image";
 import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
 import CloseIcon from '@mui/icons-material/Close';
+import AttachmentIcon from '@mui/icons-material/Attachment';
 
 
 const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed }: any) => {
@@ -68,7 +69,8 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
 
       <div className={styles.UpdateFiles} >
         <div className={styles.link}>
-          Select Files
+           <AttachmentIcon className={styles.icon} />
+           <span>Select Files</span>
         </div>
         <input id="upload-files" className={styles.uploadFiles} name="file" type="file" multiple onChange={onChangeFile} 
          accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf"  />

@@ -18,7 +18,7 @@
   color: var(--body);
 }
 .header {
-  width: 750px;
+  width: 732px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -63,7 +63,7 @@
 .attachments {
   border-top: 1px solid var(--stroke);
   flex-direction: column;
-  padding: var(--padding-13xl) 0;
+  padding: var(--padding-13xl);
   align-items: flex-start;
   gap: var(--gap-xs);
   text-align: left;
@@ -89,6 +89,7 @@
 .attachments .attachmentItem img{
   border-radius: 8px;
 }
+
 .table {
   border: 1px solid rgba(0, 0, 0, 0.2);
   min-width: 100%;

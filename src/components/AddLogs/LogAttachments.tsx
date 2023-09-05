@@ -1,4 +1,4 @@
-import styles from "./attachments.module.css";
+import styles from "./log-attachments.module.css";
 import { useEffect, useState } from "react";
 import { Button, CircularProgress, IconButton,Typography } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';

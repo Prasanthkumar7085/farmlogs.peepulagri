@@ -2,6 +2,7 @@ import { MenuItem, Select, TextField, TextareaAutosize, Typography } from "@mui/
 import React, { useEffect, useState } from "react";
 import getAllCategoriesService from "../../../../lib/services/Categories/getAllCategoriesService";
 import { CategoriesType } from "@/types/categoryTypes";
+import styles from "./AddSupportQueryDetails.module.css"
 
 const AddSupportQueryDetails = ({
     query,
@@ -44,6 +45,7 @@ const AddSupportQueryDetails = ({
                 <TextField
                     style = {{width: "100%", marginBlockEnd: "1rem", backgroundColor: "#ffffff"}}
                     size="small"
+                    placeholder="Enter your query"
                     value={query}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setQuery(e.target.value)
@@ -55,6 +57,7 @@ const AddSupportQueryDetails = ({
                 <Select
                     style = {{ width: "100%", marginBlockEnd: "1rem", backgroundColor: "#ffffff" }}
                     size="small"
+                    placeholder="Select"
                     multiple
                     value={categories ? categories : []}
                     onChange={(e: any) => setCategories(e.target.value)}
@@ -70,8 +73,9 @@ const AddSupportQueryDetails = ({
             <div>
                 <Typography variant='subtitle2' style={{fontFamily: "Inter", fontWeight: "600", color: "var(--gray-700)", marginBottom: '4px'}}>Description</Typography>
                 <TextareaAutosize
-                    style = {{width: "100%", marginBlockEnd: "1rem"}}
+                    className={styles.textAreaLg}
                     value={description}
+                    placeholder="Description"
                     minRows={4}
                     onChange={(e: any) => setDescription(e.target.value)}
                 ></TextareaAutosize>

@@ -31,7 +31,7 @@ const FarmPage = () => {
         <div>
             {!loading ? <div style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <ImageComponent
-                    src={'/no-data.svg'}
+                    src={'../no-logs.svg'}
                     height={600}
                     width={600}
                 />

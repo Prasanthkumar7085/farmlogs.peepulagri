@@ -11,7 +11,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from "@mui/material";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
 import { useSelector } from "react-redux";
-
+import { useDispatch } from 'react-redux';
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 
 interface MyProps {
@@ -31,6 +33,7 @@ const SideBarMenu = ({ children }: any) => {
     const userName = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const menuListItems = [
         { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN' },
@@ -44,10 +47,15 @@ const SideBarMenu = ({ children }: any) => {
 
     const logout = async () => {
         try {
-            const response = await fetch('/api/remove-cookie');
-            if (response.status) {
+            const responseUserType = await fetch('/api/remove-cookie');
+            if (responseUserType) {
+                const responseLogin = await fetch('/api/remove-cookie');
+                if (responseLogin.status) {
                 router.push('/');
-            } else throw response;
+                } else throw responseLogin;
+            }
+            await dispatch(removeUserDetails());
+            await dispatch(deleteAllMessages());
 
         } catch (err: any) {
             console.error(err);

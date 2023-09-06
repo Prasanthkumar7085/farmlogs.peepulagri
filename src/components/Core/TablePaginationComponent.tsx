@@ -66,6 +66,7 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
 
                     },
                 }}
+                page={paginationDetails?.page}
                 count={paginationDetails?.total_pages}
                 onChange={(event: any, value: any) => {
                     capturePageNum(value)

@@ -28,6 +28,13 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
                 permanent: false,
             },
         };
+    } else if (cookies.userType == 'ADMIN') {
+        return {
+            redirect: {
+                destination: `/support`,
+                permanent: false,
+            },
+        };
     }
     return {
         props: {},

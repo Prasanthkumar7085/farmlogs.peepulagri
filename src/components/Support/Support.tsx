@@ -24,6 +24,8 @@ const SupportPage = () => {
     const router = useRouter();
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
+    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+
     const [searchString, setSearchString] = useState<string>('');
     const [page, setPage] = useState<string | number>(1);
     const [limit, setLimit] = useState<string | number>(10);
@@ -187,9 +189,9 @@ const SupportPage = () => {
             } if (sortKey == 'status') {
                 sortByField = 'status'
             }
-            // if (sortKey == 'user_name') {
-            //     sortByField = 'full_name'
-            // }
+            if (sortKey == 'user_name') {
+                sortByField = 'user_id.full_name'
+            }
 
 
             if (sortKey != sortSortKeyValue) {
@@ -254,13 +256,13 @@ const SupportPage = () => {
                 <div className={styles.tableFilters}>
                     <SearchComponent
                         onChange={(value: string) => setSearchString(value)}
-                        placeholder={'Search By Title'}
+                        placeholder={'Search By Query Name'}
                         setSearchString={setSearchString}
                         searchString={searchString}
                         value={searchString}
                     />
                     <SelectComponent options={statusOptions} size="small" onChange={onStatusChange} value={router.query.status ? router.query.status : ''} />
-                    <ButtonComponent variant="contained" icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />
+                    {userType == 'ADMIN' ? "" : <ButtonComponent variant="contained" icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />}
                 </div>
             </div>
             <SupportDataTable data={data} loading={loading} deleteSupport={deleteSupport} appliedSort={appliedSort} />

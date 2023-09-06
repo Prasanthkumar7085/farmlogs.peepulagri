@@ -193,6 +193,7 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
               placeholder="Enter Hours"
               size="small"
               margin="none"
+              fullWidth
               value={resourceHours}
               onChange={onChangeHrs}
             />

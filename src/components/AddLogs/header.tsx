@@ -101,6 +101,8 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
                   placeholder={"Select Categories*"}
                 variant="outlined"
                 autoComplete="off"
+                error = { Boolean(errorMessages?.categories)}
+                helperText={errorMessages?.categories}
                 size="small"
                 inputProps={{
                   ...params.inputProps,
@@ -128,7 +130,6 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
                 }
               }}
             />
-            <ErrorMessagesComponent errorMessage={errorMessages?.categories} />
           </Box>
           <FormHelperText />
         </FormControl>

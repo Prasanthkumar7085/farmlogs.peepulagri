@@ -115,7 +115,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  top: 0;
+  top: -8px;
   max-width: 100%;
   z-index: 100;
   max-width: 60vw;
@@ -123,12 +123,13 @@
 }
 .selectField {
   min-width: 300px;
-  background-color: #ffffff;
-  align-items: center;
   min-height: 45px;
   justify-content: flex-start;
 }
-.selectField > div,
-.selectField fieldset{
+.selectField > div{
+  min-height: 50px;
+  background-color: #ffffff;
+}
+.selectField fieldset {
   min-height: 50px;
 }

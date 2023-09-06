@@ -34,6 +34,7 @@
   font-size: var(--text-md-medium-size);
   position: relative;
   z-index: 10;
+  left: -12px;
 }
 .description textarea::-webkit-input-placeholder { /* Edge */
   color: #000000;
@@ -59,20 +60,14 @@
 }
 .row,
 .rowParent {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-.row {
-  flex: 1;
-}
-.rowParent {
   position: relative;
   align-self: stretch;
-  padding: var(--padding-3xs) var(--padding-xl);
-  gap: var(--gap-3xs);
+  padding: 0 var(--padding-xl) var(--padding-3xs);
   z-index: 0;
+}
+.rowParent {
+  padding-top: var(--padding-3xs);
+  border-bottom: 1px solid #f2f2f2;
 }
 .threeDotsChild {
   position: relative;
@@ -80,7 +75,7 @@
   background-color: var(--stroke);
   width: 4px;
   height: 4px;
-  top: -3px;
+  top: 0px;
 }
 .container,
 .primaryFormField,

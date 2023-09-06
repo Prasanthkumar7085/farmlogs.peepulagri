@@ -178,6 +178,7 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
               placeholder="Enter Quantity"
               size="small"
               margin="none"
+              fullWidth
               value={resourceQuantity}
               onChange={onChangeQuantity}
             />

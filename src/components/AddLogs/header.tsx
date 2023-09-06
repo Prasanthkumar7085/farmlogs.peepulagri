@@ -136,8 +136,6 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
       <AddLogHeader />
       <div className={styles.container}>
         <div className={styles.rowParent}>
-          <div style={{ width: "90%" }}>
-          <div className={styles.row}>
             <TextField
               className={styles.inputTitle}
               color="primary"
@@ -150,21 +148,21 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-          </div>
-            <ErrorMessagesComponent errorMessage={errorMessages?.title} />
-          </div>
+          <ErrorMessagesComponent errorMessage={errorMessages?.title} />
         </div>
-        <TextField
-          multiline
-          className={styles.description}
-          name="description"
-          placeholder="Enter description here*"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          minRows={3}
-          maxRows={7}
-        />
-        <ErrorMessagesComponent errorMessage={errorMessages?.description} />
+        <div className={styles.row}>
+          <TextField
+            multiline
+            className={styles.description}
+            name="description"
+            placeholder="Enter description here*"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            minRows={3}
+            maxRows={7}
+          />
+          <ErrorMessagesComponent errorMessage={errorMessages?.description} />  
+        </div>
         <div className={styles.threeDots}>
           <div className={styles.threeDotsChild} />
           <div className={styles.threeDotsChild} />

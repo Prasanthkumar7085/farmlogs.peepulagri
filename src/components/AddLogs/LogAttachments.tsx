@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { Button, CircularProgress, IconButton,Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import AttachmentIcon from '@mui/icons-material/Attachment';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
@@ -63,7 +64,9 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
 
       <div className={styles.UpdateFiles} >
         <div className={styles.link}>
-          Select Files
+          
+          <AttachmentIcon className={styles.icon} />
+          <span>Select Files</span>
         </div>
         <input id="upload-files" className={styles.uploadFiles} name="file" type="file" multiple onChange={onChangeFile} 
          accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf"  />

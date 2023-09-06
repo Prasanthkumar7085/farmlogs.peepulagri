@@ -104,3 +104,25 @@
 .table thead th {
   padding-block: 8px;
 }
+
+.attachmentsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.attachmentFile {
+  padding: 20px;
+  display: flex;
+  border-radius: var(--br-5xs);
+  overflow: hidden;
+  justify-content: space-between;
+  padding: 0;
+  align-items: center;
+  padding: 2px var(--padding-3xs);
+  border: 1px solid var(--stroke);
+}
+.attachmentFile .fileName {
+  font-size: var(--text-sm-normal-size);
+}

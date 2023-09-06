@@ -37,17 +37,18 @@
     position: absolute;
     margin: 0 !important;
     right: 0.39px;
+    top: 0;
     bottom: 0;
     background-color: var(--color-firebrick);
     width: 4px;
-    height: 70px;
     z-index: 1;
 }
 
 .card {
     position: fixed;
-    top: 30px;
-    right: 29.61px;
+    top: 10px;
+    right: 2rem;
+    min-width: 120px;
     border-radius: var(--br-3xs);
     background-color: var(--white);
     border: 1px solid var(--stroke);

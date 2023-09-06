@@ -40,7 +40,7 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
     }
 
     return (
-        <div style={{ height: "calc(100vh - 300px)", overflow: "scroll" }} className="dataTable-container scrollbar">
+        <div style={{ height: "calc(100vh - 290px)", overflow: "scroll" }} className="dataTable-container scrollbar">
             <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
                 <thead className="thead">
                     {headerGroups.map((headerGroup: any, index: number) => (

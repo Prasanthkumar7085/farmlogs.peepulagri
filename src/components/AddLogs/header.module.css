@@ -28,7 +28,7 @@
   position: relative;
 }
 .inputTitle input {
-  font-size: var(--font-size-xl); 
+  font-size: 1.25vw; 
 }
 .description textarea{
   font-size: var(--text-md-medium-size);

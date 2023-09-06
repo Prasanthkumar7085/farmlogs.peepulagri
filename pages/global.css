@@ -158,14 +158,17 @@ html,body {
     border-radius: 3px;
     width: 100%;
     padding-block: 8px;
-  }
-  .rs-picker-default .rs-picker-toggle {
+}
+.rs-picker-default .rs-picker-toggle {
     border-color: var(--gray-900);
-  }
-  .rs-picker-default .rs-picker-toggle.rs-btn-lg.rs-picker-toggle-active{
+}
+.rs-picker-default .rs-picker-toggle.rs-btn-lg.rs-picker-toggle-active{
     border-color: #3462CF!important;
     box-shadow: 0 0 0 1px #3462CF!important;
-  }
+}
+.dateRangePickerField .rs-picker-toggle.rs-btn-lg {
+    padding-block: 6px;
+}
 .rs-picker-default .rs-picker-toggle-value {
     color: var(--grey-900);
 }

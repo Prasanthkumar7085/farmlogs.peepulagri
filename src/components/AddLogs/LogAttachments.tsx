@@ -1,14 +1,15 @@
 
 import styles from "./log-attachments.module.css";
 import { useEffect, useState } from "react";
-import { Button, CircularProgress, IconButton,Typography } from "@mui/material";
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
-import { useRouter } from "next/router";
-import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import Image from "next/image";
-import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
+import { useRouter } from "next/router";
+import { Button, CircularProgress, IconButton,Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
+import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
 
 
 const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed, deleteSelectedFile }: any) => {
@@ -98,22 +99,25 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
           Oops! Upload Failed, Please try again
         </p>
         : ""}
-      <div style={{ display: "flex", maxWidth: "700px", flexWrap: 'wrap' }}>
+      <div className={styles.attachmentsContainer}>
         {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
           return (
-            <div key={index} style={{ maxWidth: "174.5px", display: "flex", flexDirection: "row", padding: "20px" }}>
+            <div key={index} className={styles.attachmentFile}>
               <Image
                 alt={`image-${index}`}
-                height={50}
-                width={100}
+                height={20}
+                width={20}
                 src={item.file_name.includes('.pdf') ? '/pdf.svg' : '/image.svg'}
                 style={{ borderRadius: "5%" }}
               />
-              <div style={{ display: "flex", flexDirection: "column" }}>
+              <span className={styles.fileName}>Screenshot...png</span>
+              <div>
+                <IconButton onClick={() => window.open(item.downloadUrl)}>
+                  <DeleteForeverIcon color="error" />
+                </IconButton>
                 <IconButton onClick={() => window.open(item.downloadUrl)}>
                   <OpenInNewIcon />
                 </IconButton>
-
               </div>
             </div>
           )

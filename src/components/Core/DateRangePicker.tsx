@@ -3,7 +3,8 @@ import { useState } from "react";
 import { DateRangePicker, Stack } from "rsuite";
 import TextField from '@mui/material/TextField';
 import "rsuite/dist/rsuite.css";
-
+import { styled } from "@mui/material";
+import styles from "./DateRangePicker.module.css"
 
 const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
 
@@ -20,6 +21,7 @@ const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
                 showOneCalendar
                 format="dd-MM-yyyy"
                 size="lg"
+                className={styles.dateRangePickerField}
                 value={fromDate}
                 onChange={(newDate: any) => {
                     setFromDate(newDate)

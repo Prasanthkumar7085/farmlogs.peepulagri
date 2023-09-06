@@ -166,8 +166,10 @@ html,body {
     border-color: #3462CF!important;
     box-shadow: 0 0 0 1px #3462CF!important;
 }
-.rs-picker-default .rs-picker-toggle-value {
-    color: var(--grey-900);
+
+.rs-picker-has-value .rs-btn .rs-picker-toggle-value,  
+.rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+    color: #101828!important;
     line-height: 1;
 }
   

@@ -143,7 +143,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
               variant="standard"
               type="text"
               name="log-title"
-                placeholder="Enter log title*"
+              placeholder="Enter log title*"
               fullWidth
               margin="none"
               value={title}
@@ -161,6 +161,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
             onChange={(e) => setDescription(e.target.value)}
             minRows={3}
             maxRows={7}
+            fullWidth
           />
           <ErrorMessagesComponent errorMessage={errorMessages?.description} />  
         </div>

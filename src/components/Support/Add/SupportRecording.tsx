@@ -77,28 +77,34 @@ const SupportRecording = ({ setAudioDetailsAfterUpload }: any) => {
         resetTimer();
         setIsRunning(false);
         setRecordingStatus("inactive");
+
         //stops the recording instance
         mediaRecorder.current.stop();
-        mediaRecorder.current.onstop = () => {
+        mediaRecorder.current.onstop = async () => {
             //creates a blob file from the audiochunks data
             const audioBlob = new Blob(audioChunks);
             //creates a playable URL from the blob file.
             const audioUrl: any = URL.createObjectURL(audioBlob);
             setAudio(audioUrl);
+
             setAudioChunks([]);
+
+            await uploadAudio(audioUrl);
         };
+
     };
 
 
 
 
 
-    const uploadAudio = async () => {
+    const uploadAudio = async (audioUrl: any) => {
+
         setLoadingOnMicUpload(true);
         try {
             let audioResponseAfterUpload = {};
 
-            const res = await fetch(audio);
+            const res = await fetch(audioUrl);
             const blob = await res.blob();
             const sizeInBytes = blob.size;
             const blobName = blob.name || "audio_blob.wav";
@@ -243,30 +249,34 @@ const SupportRecording = ({ setAudioDetailsAfterUpload }: any) => {
                 {audio ? (
                     <Button
                         disabled={!audio}
-                        onClick={removeAudio}
+                        onClick={() => { loadingOnMicUpload ? "" : removeAudio() }}
                         size="small"
                         sx={{ paddingInline: "0", minWidth: "auto" }}
                     >
+                        {loadingOnMicUpload ?
+                            <CircularProgress size="1.5rem" sx={{ color: "#3462cf" }} />
+                            : 
                         <DeleteForeverIcon color="error" />
+                        }
                     </Button>
 
                 ) : null}
-                {audio ? (
+                {/* {audio ? (
                     <Button
                         disabled={!audio}
                         variant="contained"
-                        onClick={uploadAudio}
                         size="small"
                         sx={{ width: "100px", fontWeight: "600" }}
+                        onClick={() => { loadingOnMicUpload ? "" : removeAudio() }}
                     >
-                        {loadingOnMicUpload ? (
+                        {loadingOnMicUpload ?
                             <CircularProgress size="1.5rem" sx={{ color: " white" }} />
-                        ) : (
-                            "Upload"
-                        )}
+                            :
+                            <DeleteForeverIcon color="error" />
+                        }
                     </Button>
 
-                ) : null}
+                ) : null} */}
             </div>
             <AlertComponent
                 alertMessage={alertMessage}

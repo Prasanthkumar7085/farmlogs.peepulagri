@@ -148,9 +148,9 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                                         <IconButton className={styles.iconButton} onClick={() => window.open(item.downloadUrl)}>
                                             <OpenInNewIcon />
                                         </IconButton>
-                                        <IconButton className={styles.iconButton} onClick={() => deleteImage(item)}>
+                                        {userType == 'ADMIN' ? "" : <IconButton className={styles.iconButton} onClick={() => deleteImage(item)}>
                                             <DeleteOutlineIcon />
-                                        </IconButton>
+                                        </IconButton>}
                                     </div>
                                 </div>
                             )

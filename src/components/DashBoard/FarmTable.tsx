@@ -77,10 +77,13 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
                         prepareRow(row);
                         return (
                             <tr className="table-row" {...row.getRowProps()} key={index}>
-                                {row.cells.map((cell: any, cellIndex: number) => (
-                                    <td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>
+                                {row.cells.map((cell: any, cellIndex: number) => {
+                                    const cellValue = cell.render('Cell').props.value;
+                                    return <td className="cell" {...cell.getCellProps()} key={cellIndex}>
+                                        {cellValue ? cellValue : 'NA'}
+                                    </td>
 
-                                ))}
+                                })}
                             </tr>
                         );
                     })}

@@ -1,15 +1,18 @@
 import { FormControl, MenuItem, Select } from "@mui/material"
 import { useState } from "react";
 
-const SelectComponenentForLogs = ({ options, captureFormName }: any) => {
+const SelectComponenentForLogs = ({ options, captureFarmName, defaultValue, ...rest }: any) => {
 
 
     const [statusOptions, setStatusOptions] = useState<any>();
 
     let handleStatusChange = (event: any) => {
 
-        setStatusOptions(event.target.value);
-        captureFormName(event.target.value)
+        let selectedOption = event.target.value;
+        let selectedObject = options.find((item: any) => item.title == selectedOption);
+
+        setStatusOptions(selectedObject);
+        captureFarmName(selectedObject);
     }
 
 
@@ -45,14 +48,15 @@ const SelectComponenentForLogs = ({ options, captureFormName }: any) => {
         >
 
             <Select
-                value={statusOptions}
+                {...rest}
+                value={statusOptions ? statusOptions : defaultValue}
                 onChange={handleStatusChange}
                 sx={{ width: "150px" }}
             >
 
                 {options?.length && options.map((item: any, index: number) => {
                     return (
-                        <MenuItem value={item.title} key={index}>
+                        <MenuItem value={item.title} key={index}> 
                             {item.title}
                         </MenuItem>
                     )

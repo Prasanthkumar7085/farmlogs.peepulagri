@@ -55,15 +55,15 @@ const TimeLineComponent = () => {
 
         if (selectedObject && Object.keys(selectedObject).length) {
             setLogId(selectedObject?._id);
-            getLogsData(selectedObject._id, 1, 20);
             setPageNumber(1)
 
         }
     }
-    // useEffect(() => {
-    //     if (logId) {
-    //     }
-    // }, [logId])
+    useEffect(() => {
+        if (logId && !data.length) {
+            getLogsData(logId, 1, 20);
+        }
+    }, [logId, data])
 
 
     const getLogsData = async (id: any, page: number, limit: number) => {
@@ -113,7 +113,6 @@ const TimeLineComponent = () => {
                 hasMore={hasMore}
                 loader={<CircularProgress />}
                 endMessage={<p style={{ textAlign: 'center' }}>{"You've reached the end of the data!"}</p>}
-
             >
                 {data && data.map((item: any, index: any) => {
                     if (item.align == "left") {

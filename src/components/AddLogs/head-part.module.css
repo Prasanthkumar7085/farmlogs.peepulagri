@@ -10,10 +10,12 @@
 }
 .text {
   margin: 0;
-  font-size: inherit;
-  line-height: 2.88rem;
-  font-weight: 400;
-  font-family: inherit;
+  color: var(--Title);
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%;
 }
 .subHeading {
   display: flex;

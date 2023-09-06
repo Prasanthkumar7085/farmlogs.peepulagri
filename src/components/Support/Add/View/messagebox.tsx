@@ -3,13 +3,13 @@ import styles from "./messagebox.module.css";
 import { ChangeEvent, useState } from "react";
 import postAMessageInSupportService from "../../../../../lib/services/SupportService/postAMessageInSupportService";
 import { useRouter } from "next/router";
+import CloseIcon from '@mui/icons-material/Close';
 import { useSelector, useDispatch } from "react-redux";
 import { addNewMessage } from "@/Redux/Modules/Conversations";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import addAttachmentsService from "../../../../../lib/services/SupportService/addAttachmentsService";
 import uploadFileToS3 from "../../../../../lib/services/LogsService/uploadFileToS3InLog";
 
-import styles1 from "./../../../AddLogs/attachments.module.css";
 
 
 type getAllMessagesBySupportIdType = () => void
@@ -124,7 +124,7 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
         size="medium"
         margin="none"
         multiline
-        rows={2}
+        rows={3}
         value={message}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
         onKeyDown={(e: any) => { if (e.key == 'Enter') onSendMessage() }}
@@ -151,16 +151,21 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
               style={{ display: "none" }}
               accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" />
           </label>
-          <div>
+          <div className="styles.attachmentsContainer">
             {files &&
               Array.from(files).map((file: any, index) => {
                 return (
-                  <div key={index} className={styles1.attachmentItem}>
-                    {file ? <img src={getImageObjectUrl(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
+
+                  <div key={index} className={styles.attachmentItem} style={{backgroundColor: "#F5F7FA"}}>
+                  {file ? <img src={getImageObjectUrl(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
                     <Typography>
-                      {file.name}
+                        {file.name}
                     </Typography>
-                  </div>
+                      <IconButton color="error" aria-label="delete">
+                        {/* onClick={() => deleteSelectedFile(index)} */}
+                        <CloseIcon />
+                    </IconButton>
+                    </div>
                 )
               })}
             {uploadFailed ?

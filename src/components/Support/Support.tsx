@@ -252,7 +252,7 @@ const SupportPage = () => {
     return (
         <div className={styles.supportDashboard}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3 className="title">Support</h3>
+                <h3 className={styles.title}>Support</h3>
                 <div className={styles.tableFilters}>
                     <SearchComponent
                         onChange={(value: string) => setSearchString(value)}

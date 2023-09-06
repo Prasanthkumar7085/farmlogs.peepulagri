@@ -2,6 +2,7 @@ import ButtonComponent from "@/components/Core/ButtonComponent";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import styles from "./AddLogHeader.module.css";
 
 const AddLogHeader = () => {
     const router = useRouter();
@@ -22,7 +23,7 @@ const AddLogHeader = () => {
                 onClick={() => router.back()}
                 style={{ paddingInline: "0", minWidth: "auto" }}
             />
-            <Typography variant="h6" className="title">{router.query.log_id ? 'Edit Log' : 'Add Log'}</Typography>
+            <Typography variant="h6" className={styles.title}>{router.query.log_id ? 'Edit Log' : 'Add Log'}</Typography>
         </div>
     );
 };

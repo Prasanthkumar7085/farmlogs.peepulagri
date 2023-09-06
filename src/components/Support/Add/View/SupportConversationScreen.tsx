@@ -39,6 +39,7 @@ const SupportConversationScreen = ({ data }: { data: SupportResponseDataType | u
 
     return (
         <div className={styles.comments}>
+            
             <Messagebox getAllMessagesBySupportId={getAllMessagesBySupportId} />
             <div className={styles.threadContainer}>
                 {messages.length ? messages.map((item: SupportMessageType, index: number) => {

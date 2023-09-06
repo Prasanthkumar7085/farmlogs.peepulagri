@@ -1,8 +1,9 @@
 
+import { useRouter } from "next/router";
+import { Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import styles from "./ViewSupportPage.module.css";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import getSupportByIdService from "../../../../../lib/services/SupportService/getSupportByIdService";
 import { SupportResponseDataType } from "@/types/supportTypes";
 import HeadSupportPart from "./HeadSupportPart";
@@ -41,10 +42,15 @@ const ViewSupportPage = () => {
     return (
         
         <div className={styles.viewSupportContainer}>
-            <HeadSupportPart data={data} />
-            <ViewSupportBody data={data} getOneSupportById={getOneSupportById} />
-            <SupportConversationScreen data={data} />
-            <LoadingComponent loading={loading} />
+            <div className={styles.mainDetailBlock}>
+                <HeadSupportPart data={data} />
+                <ViewSupportBody data={data} getOneSupportById={getOneSupportById} />
+            </div>
+            <div className={styles.threads}>
+                <Typography variant="h6" className={styles.cardTitle}>Comments</Typography>
+                <SupportConversationScreen data={data} />
+                <LoadingComponent loading={loading} />
+            </div>
         </div>
     )
 }

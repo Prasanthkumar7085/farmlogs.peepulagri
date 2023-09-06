@@ -1,7 +1,10 @@
-.threadContainer {
-    max-height: 50vh;
+.threadContainer {  
     overflow-y: auto;
+    border-radius: var(--padding-xl);
 }
 .comments {
     width: 100%;
+    display: grid;
+    row-gap: var(--gap-base);
+    grid-template-rows: auto 1fr;
 }

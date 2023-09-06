@@ -66,6 +66,7 @@ const FarmTableLogs = () => {
     }, [router.query.farm_id, accessToken]);
 
 
+
     const getFarmLogs = async ({ farmId = router.query.farm_id, page = 1, limit = 10, search = searchString, orderBy, orderType }: Partial<GetLogsByFarmIdPropsType>) => {
         setLoading(true);
         try {
@@ -224,9 +225,9 @@ const FarmTableLogs = () => {
     const getTitleOrColor = (item: string, value: string) => {
 
         let objValue: any = (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))
-        if(objValue)
+        if (objValue) {
         return objValue[value];
-    else  return "#78909C"
+        } else return "#78909C"
 
     }
 
@@ -243,7 +244,6 @@ const FarmTableLogs = () => {
         if (sortKey) {
 
             let sortTempValueCount = sortCount;
-
 
             let sortByField = '';
             let orderTypeField = '';
@@ -308,7 +308,6 @@ const FarmTableLogs = () => {
             maxWidth: "300px",
         },
         {
-            columnId: "category",
             Header: "Category",
             minWidth: "200px",
             maxWidth: "300px",

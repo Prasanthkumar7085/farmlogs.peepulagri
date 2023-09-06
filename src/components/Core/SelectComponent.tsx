@@ -6,9 +6,13 @@ const SelectComponent = ({ options, ...rest }: any) => {
     const router = useRouter();
     return (
         <Select
+            displayEmpty
             {...rest}
         >
-            <MenuItem value="">{router.query.support_id ? 'Change Status' : 'Select Status'}</MenuItem>
+            <MenuItem value="">
+                <em>{router.query.support_id ? 'Change Status' : 'Select Status'}</em>
+            </MenuItem>
+
             {options.length && options.map((item: { value: string, title: string }, index: number) => {
                 return (
                     <MenuItem key={index} value={item.value}>{item.title}</MenuItem>

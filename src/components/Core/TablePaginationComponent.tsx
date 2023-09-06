@@ -1,6 +1,6 @@
 
 import { Card, MenuItem, Pagination, Select, Typography } from "@mui/material"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "./table-pagination.module.css";
 
@@ -10,7 +10,11 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
 
     const router = useRouter();
     const [pageNum, setPageNum] = useState<number | string>();
-    const [noOfRows, setNoOfRows] = useState<number | string>();
+    const [noOfRows, setNoOfRows] = useState<number | string>(paginationDetails?.limit);
+
+    useEffect(() => {
+        setNoOfRows(paginationDetails?.limit)
+    }, [paginationDetails]);
 
     const handlePagerowChange = (event: any) => {
         setNoOfRows(event.target.value);

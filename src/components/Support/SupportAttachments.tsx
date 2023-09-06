@@ -10,18 +10,11 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 
 
-const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesUpload, uploadOrNot }: any) => {
+const SupportAttachments = ({ deleteSelectedFile, onChangeFile, files, loadingOnImagesUpload }: any) => {
 
     const router = useRouter();
 
     const [downloadLinks, setDownloadLinks] = useState<any>([]);
-
-    const deleteFile = (index: number) => {
-        let array = [...files];
-        let tempArray = array.filter((item: any, itemIndex: number) => itemIndex != index);
-        let e = { target: { files: tempArray } };
-        onChangeFile(e);
-    }
 
     useEffect(() => {
         if (router.isReady && router.query.support_id) {
@@ -76,26 +69,22 @@ const SupportAttachments = ({ onChangeFile, uploadFiles, files, loadingOnImagesU
             <div>
                 {files &&
                     Array.from(files).map((file: any, index) => {
-
-
                         return (
                             <div key={index} className={styles.attachmentItem}>
                                 {file ? <img src={getImageObjectUrl(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
                                 <Typography>
                                     {file.name}
                                 </Typography>
-                                <IconButton color="error" aria-label="delete" disabled={uploadOrNot} onClick={() => deleteFile(index)}>
+                                <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)}>
                                     <CloseIcon />
                                 </IconButton>
                             </div>
                         )
                     })}
             </div>
-            <Button disabled={!files?.length} color="success" variant="contained" onClick={uploadFiles} size="small" sx={{ width: "100px" }}>
-                Uplaod {loadingOnImagesUpload ?
-                    <CircularProgress sx={{ color: " white" }} size="1.5rem" />
-                    : <CloudUploadOutlinedIcon />}
-            </Button>
+            {loadingOnImagesUpload ? <Button disabled={!files?.length} color="success" variant="contained" size="small" sx={{ width: "100px" }}>
+                Uplaod<CircularProgress sx={{ color: " white" }} size="1.5rem" />
+            </Button> : ""}
             <div style={{ display: "flex" }}>
                 {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
                     return (

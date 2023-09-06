@@ -1,3 +1,4 @@
+
 import styles from "./log-attachments.module.css";
 import { useEffect, useState } from "react";
 import { Button, CircularProgress, IconButton,Typography } from "@mui/material";
@@ -8,22 +9,13 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import Image from "next/image";
 import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
 import CloseIcon from '@mui/icons-material/Close';
-import AttachmentIcon from '@mui/icons-material/Attachment';
 
 
-const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed }: any) => {
+const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed, deleteSelectedFile }: any) => {
 
   const router = useRouter();
 
   const [downloadLinks, setDownloadLinks] = useState<any>([]);
-
-  const deleteFile = (index: number) => {
-    let array = [...files];
-    let tempArray = array.filter((item: any, itemIndex: number) => itemIndex != index)
-    let e = { target: { files: tempArray } }
-    onChangeFile(e)
-
-  }
 
   useEffect(() => {
     if (router.isReady && router.query.log_id) {
@@ -50,9 +42,10 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
 
   //setting audio/pdf thumbnail and returning image for other files from selected files
   const getImageObjectUrl = (file: any) => {
-    if (file.type == 'application/pdf')
+
+    if (file?.type == 'application/pdf')
       return '/pdf.svg'
-    else if (file.type.includes('audio'))
+    else if (file?.type?.includes('audio'))
       return '/audio.svg'
     else return URL.createObjectURL(file)
   }
@@ -69,8 +62,7 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
 
       <div className={styles.UpdateFiles} >
         <div className={styles.link}>
-           <AttachmentIcon className={styles.icon} />
-           <span>Select Files</span>
+          Select Files
         </div>
         <input id="upload-files" className={styles.uploadFiles} name="file" type="file" multiple onChange={onChangeFile} 
          accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf"  />
@@ -84,7 +76,7 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
               <Typography>
                   {file.name}
               </Typography>
-              <IconButton color="error" aria-label="delete" onClick={() => deleteFile(index)}>
+                <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)}>
                   <CloseIcon />
               </IconButton>
               </div>
@@ -93,12 +85,12 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
       </div>
       {files?.length ?
 
-        <Button  color="success" variant="contained" onClick={uploadFiles} size="small" sx={{ width: "100px" }}>
-          Upload
+        uploadButtonLoading ? (<Button color="success" variant="contained" onClick={uploadFiles} size="small" sx={{ width: "140px" }} >
+          Uploading...
           {uploadButtonLoading ?
             <CircularProgress size="1.5rem" sx={{ color: "white" }} />
             : <CloudUploadOutlinedIcon />}
-      </Button>
+        </Button>) : ""
 
         : ""}
       {uploadFailed ?

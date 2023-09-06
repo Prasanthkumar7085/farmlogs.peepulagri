@@ -16,6 +16,8 @@ const TimelineCardRight = ({ data1 }: any) => {
           <p className={styles.date1}>{day}</p>
           <div className={styles.monthyear}>
             <p className={styles.date1}>{monthsAbbreviation[month]} {year}</p>
+            <p>{data1?.farm_id}</p>
+
           </div>
         </div>
         <div className={styles.container1}>

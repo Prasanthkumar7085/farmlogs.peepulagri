@@ -17,6 +17,7 @@ const TimelineCard = ({ data1 }: any) => {
           <p className={styles.date1}>{day}</p>
           <p className={styles.daymonth}>
             <div className={styles.aug23}>{monthsAbbreviation[month]} {year}</div>
+            <p>{data1?.farm_id}</p>
           </p>
         </div>
         <div className={styles.container1}>

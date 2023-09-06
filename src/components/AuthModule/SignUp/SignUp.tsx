@@ -14,6 +14,7 @@ const SignUp = () => {
     const [mobile, setMobile] = useState<string>();
     const [errorMessages, setErrorMessages] = useState<string>();
     const [loadingWhileGettingOtp, setLoadingWhileGettingOtp] = useState(false);
+    const [responseErrorMesaages, setResponseErrorMessages] = useState<any>();
 
     const setMobileNumber = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length <= 10) {
@@ -34,6 +35,7 @@ const SignUp = () => {
     const getOtp = async (e: FormEvent<HTMLFormElement>) => {
         setLoadingWhileGettingOtp(true);
         setErrorMessages('');
+        setResponseErrorMessages({})
         e.preventDefault();
         const body = {
             // full_name: name,
@@ -42,11 +44,14 @@ const SignUp = () => {
         }
 
         const response = await getOtpService(body);
+
         if (response.success) {
             router.push({
                 pathname: "/signup-verify",
                 query: { mobile: mobile }
             });
+        } else if (response?.status == 422) {
+            setResponseErrorMessages(response?.errors)
         } else {
             setErrorMessages('Login Failed')
         }
@@ -97,8 +102,8 @@ const SignUp = () => {
                         <label  ></label>
                         <TextField
                             fullWidth
-                            error={ Boolean(errorMessages) }
-                            helperText={errorMessages}
+                            error={Boolean(responseErrorMesaages?.phone)}
+                            helperText={responseErrorMesaages?.phone}
                             value={mobile}
                             size="small"
                             placeholder="+91 xxxxx xxxxx"
@@ -110,7 +115,9 @@ const SignUp = () => {
                     </div>
                     
                     <Button className={styles.cta_button} type='submit' size="large" variant="contained">
-                        Login
+                        {loadingWhileGettingOtp ?
+                            <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                            : "Login"}
                     </Button>
                 </div>
             </form>

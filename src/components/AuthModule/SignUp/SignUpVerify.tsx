@@ -8,6 +8,8 @@ import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarm
 import { useDispatch } from "react-redux";
 import styles from "./SignUpVerify.module.css";
 import ImageComponent from "../../../components/Core/ImageComponent";
+import { doesSectionFormatHaveLeadingZeros } from "@mui/x-date-pickers/internals/hooks/useField/useField.utils";
+import serUserTypeCookie from "../../../../lib/CookieHandler/serUserTypeCookie";
 
 const SignUpVerify = () => {
   const router = useRouter();
@@ -16,8 +18,7 @@ const SignUpVerify = () => {
   const [mobile, setMobile] = useState<string>();
   const [otp, setOtp] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState<any>({});
-  const [loadingWhileVerifyingOtp, setLoadingWhileVerifyingOtp] =
-    useState(false);
+  const [loadingWhileVerifyingOtp, setLoadingWhileVerifyingOtp] = useState(false);
 
   useEffect(() => {
     if (router?.isReady) {
@@ -26,23 +27,31 @@ const SignUpVerify = () => {
   }, [router.isReady]);
 
   const verifyOtp = async (e: FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
     setLoadingWhileVerifyingOtp(true);
+
     const body = {
       phone: mobile,
       otp: otp,
     };
+
     const response = await verifyOtpService(body);
 
     if (response.success) {
-      setCookie();
+
+      await setCookie();
       if ("data" in response) {
         dispatch(setUserDetails(response?.data));
       }
+
       let accessToken = response.data.access_token;
+
+      await serUserTypeCookie(response?.data?.user_details?.user_type);
+
       if (response?.data?.user_details?.user_type == "ADMIN") {
         router.push("/support");
-      } else {
+      } else if ((response?.data?.user_details?.user_type == "USER")) {
         let farmResponse = await getAllFarmsService(accessToken);
 
         if (

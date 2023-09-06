@@ -2,6 +2,7 @@
   border: 0;
   background-color: transparent;
   align-self: stretch;
+  color: var(--gray-900);
 }
 .attachments,
 .image {

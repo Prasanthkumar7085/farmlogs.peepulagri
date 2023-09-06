@@ -31,7 +31,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
 
   const getAllCategories = async () => {
     const response = await getAllCategoriesService();
-    if (response.success) {
+    if (response?.success) {
       setCategoryOptions(response?.data);
     } else {
       setCategoryOptions([]);

@@ -21,6 +21,7 @@ export const authSlice = createSlice({
 });
 
 export const {
-  setUserDetails
+  setUserDetails,
+  removeUserDetails
 }: any = authSlice.actions;
 export const authSliceReducer = { [reducerName]: authSlice.reducer };

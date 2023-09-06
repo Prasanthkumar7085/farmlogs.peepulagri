@@ -80,7 +80,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ color: "var(--body)" }}>
-                        { timePipe(row.createdAt, 'DD, MMM YYYY') }
+                        {timePipe(row.createdAt, 'DD, MMM YYYY')}
                     </div>
                     )
             }
@@ -134,8 +134,8 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             width: "80px",
         },
         {
-            columnId: "user_name",
-            isSorted: true,
+            // columnId: "user_name",
+            // isSorted: true,
             Header: "User Name",
             show: userType === 'ADMIN',
             accessor: "user_id.full_name"
@@ -150,9 +150,9 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
                         <IconButton onClick={() => router.push(`/support/${row._id}`)}>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
+                        {userType !== 'ADMIN' ? <IconButton onClick={() => router.push(`/support/${row._id}/edit`)}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
-                        </IconButton>
+                        </IconButton> : ""}
                         <IconButton onClick={() => deleteSupport(row)}>
                             <img src="/trast-icon.svg" alt="view" width="18" />
                         </IconButton>

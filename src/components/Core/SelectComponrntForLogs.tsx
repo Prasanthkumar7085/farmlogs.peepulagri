@@ -1,18 +1,34 @@
 import { FormControl, MenuItem, Select } from "@mui/material"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
+import { useSelector } from "react-redux";
 
 const SelectComponenentForLogs = ({ options, captureFarmName, defaultValue, ...rest }: any) => {
 
 
     const [statusOptions, setStatusOptions] = useState<any>();
+    const [farmOptions, setFarmOptions] = useState<any>()
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     let handleStatusChange = (event: any) => {
 
         let selectedOption = event.target.value;
-        let selectedObject = options.find((item: any) => item.title == selectedOption);
+        let selectedObject = farmOptions.find((item: any) => item.title == selectedOption);
 
         setStatusOptions(selectedObject);
         captureFarmName(selectedObject);
+
+    }
+    useEffect(() => {
+        getFormDetails()
+    }, [accessToken])
+
+    const getFormDetails = async () => {
+        let response = await getAllFarmsService(accessToken)
+        if (response?.success) {
+            setFarmOptions(response?.data);
+
+        }
     }
 
 
@@ -54,9 +70,9 @@ const SelectComponenentForLogs = ({ options, captureFarmName, defaultValue, ...r
                 sx={{ width: "150px" }}
             >
 
-                {options?.length && options.map((item: any, index: number) => {
+                {farmOptions?.length && farmOptions.map((item: any, index: number) => {
                     return (
-                        <MenuItem value={item.title} key={index}> 
+                        <MenuItem value={item.title} key={index}>
                             {item.title}
                         </MenuItem>
                     )

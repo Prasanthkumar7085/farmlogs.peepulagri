@@ -6,39 +6,62 @@ import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsSe
 import InfiniteScroll from "react-infinite-scroll-component"
 import SelectComponenentForLogs from "../Core/SelectComponrntForLogs"
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router"
 
 
 const TimeLineComponent = () => {
 
+    const router = useRouter();
+
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     const [data, setData] = useState<any>([]);
-    const [formOptions, setFormOptions] = useState<any>()
+    const [farmOptions, setFarmOptions] = useState<any>()
     const [items, setItems] = useState<any>([]);
     const [hasMore, setHasMore] = useState<any>(true);
     const [pageNumber, setPageNumber] = useState(1);
-    const [logId, setLogId] = useState<any>()
+    const [logId, setLogId] = useState<any>();
+    const [defaultValue, setDefaultValue] = useState<any>();
 
     useEffect(() => {
         // getLogsData("", 1, 20)
-        getFormDetails()
-    }, [])
+        if (router.isReady && accessToken) {
+            getFormDetails(router.query?.farm_id as string);
+        }
+    }, [router.isReady, accessToken])
 
-    const getFormDetails = async () => {
+    console.log(defaultValue);
+
+    const getFormDetails = async (id: string) => {
         let response = await getAllFarmsService(accessToken)
-        setFormOptions(response.data)
-    }
-
-    const captureFormName = (value: any) => {
-        if (value) {
-            let a: any = formOptions.find((item: any) => item.title == value)
-            getLogsData(a?._id, 1, 20)
-            setLogId(a?._id)
-            setData([])
-
+        if (response?.success) {
+            setFarmOptions(response?.data);
+            if (id) {
+                let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
+                captureFarmName(selectedObject);
+                setDefaultValue(selectedObject)
+            } else {
+                captureFarmName(response?.data[0]);
+                setDefaultValue(response?.data[0])
+            }
         }
     }
 
+    const captureFarmName = (selectedObject: any) => {
+        console.log(selectedObject);
+
+        if (selectedObject && Object.keys(selectedObject).length) {
+            setData([]);
+            router.push({ pathname: "/timeline", query: { farm_id: selectedObject._id } })
+            setLogId(selectedObject?._id);
+
+        }
+    }
+    useEffect(() => {
+        if (logId) {
+            getLogsData(logId, 1, 20);
+        }
+    }, [logId])
 
 
     const getLogsData = async (id: any, page: number, limit: number) => {
@@ -73,11 +96,11 @@ const TimeLineComponent = () => {
 
     return (
         <div>
-            <SelectComponenentForLogs options={formOptions} captureFormName={captureFormName} />
+            <SelectComponenentForLogs defaultValue={defaultValue} options={farmOptions} captureFarmName={captureFarmName} />
 
             <InfiniteScroll
                 dataLength={data.length}
-                next={() => getLogsData(logId ? logId : "64e3255849ac66caca11a9c4", pageNumber, 10)}
+                next={() => getLogsData(logId ? logId : (farmOptions.length ? farmOptions[0]?._id : ""), pageNumber, 10)}
                 hasMore={hasMore}
                 loader={<h4>Loading...</h4>}
                 endMessage={<p style={{ textAlign: 'center' }}>{"You've reached the end of the data!"}</p>}

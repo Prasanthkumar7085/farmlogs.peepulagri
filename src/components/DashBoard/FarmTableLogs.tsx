@@ -393,10 +393,19 @@ const FarmTableLogs = () => {
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}`)}>
+                        <IconButton onClick={() =>
+                            router.push({
+                                query: { farm_id: router.query.farm_id, log_id: row._id },
+                                pathname: '/farm/[farm_id]/logs/[log_id]'
+                            })
+                        }>
                             <img src="/view-icon.svg" alt="view" width="18" />
                         </IconButton>
-                        <IconButton onClick={() => router.push(`/farm/${router.query.farm_id}/logs/${row._id}/edit`)}>
+                        <IconButton onClick={() =>
+                            router.push({
+                                query: { farm_id: router.query.farm_id, log_id: row._id },
+                                pathname: '/farm/[farm_id]/logs/[log_id]/edit'
+                            })}>
                             <img src="/pencil-icon.svg" alt="view" width="18" />
                         </IconButton>
                         <IconButton onClick={() => deleteLog(row)}>

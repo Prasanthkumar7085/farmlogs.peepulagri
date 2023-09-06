@@ -8,6 +8,7 @@ import getSupportAttachmentsService from "../../../lib/services/SupportService/g
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import AttachmentIcon from '@mui/icons-material/Attachment';
+import Image from "next/image";
 
 
 const SupportAttachments = ({ deleteSelectedFile, onChangeFile, files, loadingOnImagesUpload }: any) => {
@@ -89,7 +90,7 @@ const SupportAttachments = ({ deleteSelectedFile, onChangeFile, files, loadingOn
                 {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
                     return (
                         <div className={styles.eachFile} key={index}>
-                            <img
+                            <Image
                                 alt={`image-${index}`}
                                 height={70}
                                 width={120}

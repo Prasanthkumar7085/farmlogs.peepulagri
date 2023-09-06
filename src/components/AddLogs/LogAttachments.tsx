@@ -53,6 +53,23 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
   }
 
 
+  const getImageName = (name: string) => {
+
+    let array = name.split('.');
+
+    let lastElement = array[array.length - 1];
+
+
+    if (name.length > 30) {
+      let startAlpha = name.slice(0, 27);
+      return startAlpha + '...' + lastElement;
+    } else {
+      return name
+    }
+
+  }
+
+
   return (
     <div className={styles.attachments}>
       <div className={styles.header}>
@@ -113,11 +130,8 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
                 src={item.file_name.includes('.pdf') ? '/pdf.svg' : '/image.svg'}
                 style={{ borderRadius: "5%" }}
               />
-              <span className={styles.fileName}>Screenshot...png</span>
+              <span className={styles.fileName}>{getImageName(item.file_name)}</span>
               <div>
-                <IconButton onClick={() => window.open(item.downloadUrl)}>
-                  <DeleteForeverIcon color="error" />
-                </IconButton>
                 <IconButton onClick={() => window.open(item.downloadUrl)}>
                   <OpenInNewIcon />
                 </IconButton>

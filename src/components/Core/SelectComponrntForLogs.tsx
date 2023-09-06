@@ -2,9 +2,11 @@ import { FormControl, MenuItem, Select } from "@mui/material"
 import { useEffect, useState } from "react";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
-const SelectComponenentForLogs = ({ options, captureFarmName, defaultValue, ...rest }: any) => {
+const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, defaultValue, ...rest }: any) => {
 
+    const router = useRouter();
 
     const [statusOptions, setStatusOptions] = useState<any>();
     const [farmOptions, setFarmOptions] = useState<any>()
@@ -14,21 +16,35 @@ const SelectComponenentForLogs = ({ options, captureFarmName, defaultValue, ...r
 
         let selectedOption = event.target.value;
         let selectedObject = farmOptions.find((item: any) => item.title == selectedOption);
-
+        router.push({ pathname: "/timeline", query: { farm_id: selectedObject?._id } });
         setStatusOptions(selectedObject);
         captureFarmName(selectedObject);
 
     }
     useEffect(() => {
         getFormDetails()
-    }, [accessToken])
+    }, [accessToken, router?.query?.farm_id]);
+
 
     const getFormDetails = async () => {
-        let response = await getAllFarmsService(accessToken)
-        if (response?.success) {
-            setFarmOptions(response?.data);
+
+        setFarmOptions(options);
+        if (options && options?.length) {
+            if (router.query?.farm_id) {
+                const array = options.find((item: any) => item?._id == router.query?.farm_id)
+                setDefaultValue(array?.title)
+
+            } else {
+                setDefaultValue(options[0].title);
+            }
+
 
         }
+
+        // let response = await getAllFarmsService(accessToken)
+        // if (response?.success) {
+        //     setFarmOptions(response?.data);
+        // }
     }
 
 

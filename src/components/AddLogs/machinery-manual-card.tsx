@@ -40,9 +40,9 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
 
     let lastElement = array[array.length - 1];
 
-    let startAlpha = name.slice(0, 10);
 
     if (name.length > 13) {
+      let startAlpha = name.slice(0, 10);
       return startAlpha + '...' + lastElement;
     } else {
       return name

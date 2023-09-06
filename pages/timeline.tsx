@@ -4,9 +4,9 @@ import { GetServerSideProps } from "next";
 
 const TimeLinePage = () => {
     return (
-        <div>
+
             <TimeLineComponent />
-        </div>
+
     )
 }
 

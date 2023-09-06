@@ -30,19 +30,14 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
         }
     });
 
-    const getWidth = (name: string | undefined) => {
-        if (name) {
-            if (name == "category")
-                return "200px"
-            else if (name == 'date') return "100px"
-        }
-        return ""
-    }
-
     return (
         <div style={{ height: "calc(100vh - 290px)", overflow: "scroll" }} className="dataTable-container scrollbar">
             <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
-                <thead className="thead">
+                <thead className="thead" style={{
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 1,
+                }}>
                     {headerGroups.map((headerGroup: any, index: number) => (
 
                         <tr className="table-row" {...headerGroup.getHeaderGroupProps()} key={index}>

@@ -49,8 +49,8 @@ const ViewSupportPage = () => {
             <div className={styles.threads}>
                 <Typography variant="h6" className={styles.cardTitle}>Comments</Typography>
                 <SupportConversationScreen data={data} />
-                <LoadingComponent loading={loading} />
             </div>
+            <LoadingComponent loading={loading} />
         </div>
     )
 }

@@ -16,7 +16,7 @@ const TimelineCardRight = ({ data1 }: any) => {
           <p className={styles.date1}>{day}</p>
           <div className={styles.monthyear}>
             <p className={styles.date1}>{monthsAbbreviation[month]} {year}</p>
-            <p>{data1?.farm_id}</p>
+
 
           </div>
         </div>
@@ -29,14 +29,14 @@ const TimelineCardRight = ({ data1 }: any) => {
           <div className={styles.textwrapper}>
             <h5 className={styles.heading}>{data1.work_type}</h5>
             <p className={styles.description}>
-              {data1.description}
+              {data1.title}
             </p>
           </div>
         </div>
       </div>
-      <div className={styles.cardlable}>
+      {/* <div className={styles.cardlable}>
         <p className={styles.weeding}>{data1?.title?.length > 12 ? data1?.title?.slice(0, 10) + "..." : data1.title}</p>
-      </div>
+      </div> */}
       <img
         className={styles.timelinecardrightChild}
         alt=""

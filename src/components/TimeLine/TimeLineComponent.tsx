@@ -7,6 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import SelectComponenentForLogs from "../Core/SelectComponrntForLogs"
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router"
+import { CircularProgress } from "@mui/material"
 
 
 const TimeLineComponent = () => {
@@ -66,7 +67,7 @@ const TimeLineComponent = () => {
 
     const getLogsData = async (id: any, page: number, limit: number) => {
         try {
-            const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${10}?order_by=${'from_date_time'}&order_type=asc`);
+            const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${5}?order_by=${'from_date_time'}&order_type=desc`);
             const responseData: any = await response.json();
             //set align key to the objs
             let currentDate: any = null;
@@ -102,7 +103,7 @@ const TimeLineComponent = () => {
                 dataLength={data.length}
                 next={() => getLogsData(logId ? logId : (farmOptions.length ? farmOptions[0]?._id : ""), pageNumber, 10)}
                 hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
+                loader={<CircularProgress />}
                 endMessage={<p style={{ textAlign: 'center' }}>{"You've reached the end of the data!"}</p>}
 
             >

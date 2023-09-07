@@ -3,9 +3,6 @@ import Image from "next/image";
 import { FarmDataType } from "@/types/farmCardTypes";
 import { useRouter } from "next/router";
 import styles from "./FarmCardLayout.module.css";
-import { useEffect, useState } from "react";
-import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
-import { useSelector } from "react-redux";
 
 const FarmCardsLayOut = ({ farmsData, children }: any) => {
 

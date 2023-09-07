@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from "@mui/material";
-import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { removeUserDetails } from "@/Redux/Modules/Auth";

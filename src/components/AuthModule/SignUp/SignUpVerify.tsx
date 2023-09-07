@@ -13,6 +13,7 @@ import serUserTypeCookie from "../../../../lib/CookieHandler/serUserTypeCookie";
 import { setOtpCountDown } from "@/Redux/Modules/Otp";
 import { useSelector } from "react-redux";
 import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
+import { setAllFarms } from "@/Redux/Modules/Farms";
 
 const SignUpVerify = () => {
 
@@ -116,6 +117,7 @@ const SignUpVerify = () => {
           farmResponse.data &&
           farmResponse?.data.length
         ) {
+          dispatch(setAllFarms(farmResponse?.data))
           const id = farmResponse?.data[0]?._id;
           router.push(`/farm/${id}/logs`);
         } else {

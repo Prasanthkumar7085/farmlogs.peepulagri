@@ -314,11 +314,16 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
             maxWidth: "300px",
             accessor: (row: any) => {
                 return (
-                    row.categories.length && row.categories.map((item: string, index: number) => {
+                    <div>
+                        {row.categories.length && row.categories.map((item: string, index: number) => {
                         return (
                             <Chip label={getLabel(item)} key={index} sx={{ margin: "2px", height: "auto", padding: "4px 0", backgroundColor: setBackColor(item), color: 'white', fontSize: "13px" }} />
                         )
-                    })
+                        })}
+                        {/* {row.categories.length > 2 ?
+                            <div style={{ border: "1px solid", cursor: "pointer", padding: "0px 0px 0px 10px", width: "50%", borderRadius: "10px" }}>See More...</div>
+                            : ""} */}
+                    </div>  
                 )
             }
         },
@@ -429,7 +434,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
                 </Button>
             </div>
             <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
-            <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' />
+            {!loading ? <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' /> : ""}
             <LoadingComponent loading={loading} />
             <DeleteDialogCompoennt deleteContent={deleteContent} deleteDialogOpen={deleteDialogOpen} confirmDelete={confirmDelete} />
         </div>

@@ -28,6 +28,7 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
   rectangleDivWidth,
   rectangleDivHeight,
 }: any) => {
+
   const cardStyle: CSSProperties = useMemo(() => {
     return {
       top: cardTop,

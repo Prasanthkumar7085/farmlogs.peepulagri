@@ -39,7 +39,8 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
   ]
 
   const addResources = () => {
-    let obj = {
+    if (resourceTitle && resourceQuantity && resourceHours) {
+      let obj = {
       title: resourceTitle,
       quantity: resourceQuantity ? +resourceQuantity : null,
       total_hours: resourceHours ? +resourceHours : null,
@@ -52,7 +53,8 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
 
     setResourceTitle('')
     setResourceQuantity('')
-    setResourceHours('')
+      setResourceHours('')
+    }
 
   }
 
@@ -156,6 +158,7 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
                 size="small"
                 value={resourceTitle}
                 onChange={(e: any) => setResourceTitle(e.target.value)}
+
               >
                 {resourcesType.map((item: any, index: number) => {
                   return (
@@ -171,6 +174,7 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
             <p className={styles.label}>Quantity</p>
 
             <TextField
+              autoFocus
               className={styles.textInput}
               color="primary"
               variant="outlined"
@@ -181,11 +185,13 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
               fullWidth
               value={resourceQuantity}
               onChange={onChangeQuantity}
+              onKeyDown={(e: any) => { if (e.key == 'Enter') addResources() }}
             />
           </div>
           <div className={styles.inputField}>
             <p className={styles.label}>Total Hours</p>
             <TextField
+              autoFocus
               className={styles.textInput}
               color="primary"
               variant="outlined"
@@ -196,6 +202,7 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
               fullWidth
               value={resourceHours}
               onChange={onChangeHrs}
+              onKeyDown={(e: any) => { if (e.key == 'Enter') addResources() }}
             />
           </div>
         </div>

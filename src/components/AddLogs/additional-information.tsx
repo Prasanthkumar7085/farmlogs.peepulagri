@@ -165,6 +165,7 @@ const AdditionalInformation = ({ errorMessages, setAdditionalResources, singleLo
             margin="none"
             value={resourceTitle}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setResourceTitle(e.target.value)}
+            onKeyDown={(e: any) => { if (e.key == 'Enter') addResources() }}
           />
         </div>
         <div className={styles.quantity}>
@@ -181,6 +182,7 @@ const AdditionalInformation = ({ errorMessages, setAdditionalResources, singleLo
             margin="none"
             value={resourceQuantity}
             onChange={onChangeQuantity}
+            onKeyDown={(e: any) => { if (e.key == 'Enter') addResources() }}
           />
 
         </div>

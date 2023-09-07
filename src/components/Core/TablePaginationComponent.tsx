@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import styles from "./table-pagination.module.css";
 
 
-
 const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRowPerItems, values }: any) => {
 
     const router = useRouter();
@@ -26,6 +25,7 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
         <Card className={styles.tablePagination}>
             <div>
                 <Typography variant="caption">{values} Per Page</Typography>
+
                 <Select
                     value={noOfRows}
                     onChange={handlePagerowChange}
@@ -66,11 +66,9 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
 
                     },
                 }}
-                page={router?.query?.page?router?.query?.page:paginationDetails?.page}
+                page={paginationDetails?.page}
                 count={paginationDetails?.total_pages}
                 onChange={(event: any, value: any) => {
-                    console.log(event.target.value,value,'page1');
-                    
                     capturePageNum(value)
                     setPageNum(+value)
                 }}

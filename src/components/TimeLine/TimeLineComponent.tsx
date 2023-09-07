@@ -8,11 +8,14 @@ import SelectComponenentForLogs from "../Core/SelectComponrntForLogs"
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router"
 import { CircularProgress } from "@mui/material"
+import { setAllFarms } from "@/Redux/Modules/Farms";
+import { useDispatch } from "react-redux";
 
 
 const TimeLineComponent = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
@@ -26,6 +29,7 @@ const TimeLineComponent = () => {
 
 
     useEffect(() => {
+
         if (router.isReady && accessToken) {
             getFormDetails(router.query?.farm_id as string);
         }
@@ -34,17 +38,24 @@ const TimeLineComponent = () => {
 
     const getFormDetails = async (id: string) => {
         let response = await getAllFarmsService(accessToken);
-        if (response?.success) {
-            setFarmOptions(response?.data);
-            if (id) {
-                let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
-                captureFarmName(selectedObject);
-                setDefaultValue(selectedObject)
-            } else {
 
-                captureFarmName(response?.data[0]);
-                setDefaultValue(response?.data[0]);
+        try {
+            if (response?.success) {
+                setFarmOptions(response?.data);
+                dispatch(setAllFarms(response?.data))
+                if (id) {
+                    let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
+                    captureFarmName(selectedObject);
+                    setDefaultValue(selectedObject)
+                } else {
+
+                    captureFarmName(response?.data[0]);
+                    setDefaultValue(response?.data[0]);
+                }
             }
+        } catch (err) {
+            console.error(err);
+
         }
     }
 
@@ -65,7 +76,6 @@ const TimeLineComponent = () => {
 
     const getLogsData = async (id: any, page: number, changeFarm: boolean) => {
         setLoading(true);
-
         try {
             const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${5}?order_by=${'from_date_time'}&order_type=desc`);
             const responseData: any = await response.json();

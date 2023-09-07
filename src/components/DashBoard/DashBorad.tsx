@@ -4,10 +4,13 @@ import FarmTableLogs from "./FarmTableLogs";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
-
+import { useDispatch } from "react-redux";
+import { setAllFarms } from "@/Redux/Modules/Farms";
 
 const DashBoard = () => {
+
     const router = useRouter();
+    const dispatch = useDispatch();
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     const [farmsData, setFarmsData] = useState<any>();
@@ -15,6 +18,7 @@ const DashBoard = () => {
     const getFarmsData = async () => {
         let response: any = await getAllFarmsService(accessToken);
         if (response?.success) {
+            dispatch(setAllFarms(response?.data))
             setFarmsData(response);
             let { query } = router;
             let { farm_id, ...restQueries } = query

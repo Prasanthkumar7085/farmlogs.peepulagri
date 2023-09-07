@@ -26,6 +26,7 @@ import {
   AuthResponseDataType,
   AuthResponseErrorDataType,
 } from "@/types/AuthTypes";
+import { setAllFarms } from "@/Redux/Modules/Farms";
 type ResponseData = AuthResponseDataType | AuthResponseErrorDataType;
 
 const Login = () => {
@@ -54,6 +55,7 @@ const Login = () => {
         let accessToken = response.data.access_token;
         let farmResponse = await getAllFarmsService(accessToken);
         if (farmResponse.success) {
+          dispatch(setAllFarms(farmResponse?.data))
           const id = farmResponse.data[0]._id;
           router.push(`/farm/${id}/logs`);
         }

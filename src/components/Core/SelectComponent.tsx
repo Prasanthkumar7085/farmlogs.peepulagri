@@ -8,11 +8,10 @@ const SelectComponent = ({ options, ...rest }: any) => {
         <Select
             displayEmpty
             {...rest}
-            // label={router.query.support_id ? "" : "Select Status"}
         >
-            <MenuItem value="">
-                <em>{router.query.support_id ? 'Change Status' : 'All'}</em>
-            </MenuItem>
+            {!router.query.support_id ? <MenuItem value="">
+                <em>{'All'}</em>
+            </MenuItem> : ""}
 
             {options.length && options.map((item: { value: string, title: string }, index: number) => {
                 return (

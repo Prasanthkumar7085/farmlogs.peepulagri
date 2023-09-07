@@ -1,8 +1,9 @@
 import { FormControl, MenuItem, Select } from "@mui/material"
 import { useEffect, useState } from "react";
-import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import FarmDetailsMiniCard from "../AddLogs/farm-details-mini-card";
+import FarmDetailsCard from "../TimeLine/FarmDetailsCard";
 
 const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, defaultValue, ...rest }: any) => {
 
@@ -95,6 +96,7 @@ const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, d
                 })}
 
             </Select>
+            <FarmDetailsCard />
         </FormControl>
     )
 }

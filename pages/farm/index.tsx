@@ -5,11 +5,14 @@ import { useSelector } from "react-redux";
 import getAllFarmsService from "../../lib/services/FarmsService/getAllFarmsService";
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import { useDispatch } from 'react-redux';
+import { setAllFarms } from "@/Redux/Modules/Farms";
 
 const FarmPage = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch();
+
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     const [loading, setLoading] = useState(true);
@@ -18,6 +21,7 @@ const FarmPage = () => {
         setLoading(true)
         const response = await getAllFarmsService(accessToken);
         if (response.success && response.data && response.data.length) {
+            dispatch(setAllFarms(response?.data))
             router.push(`/farm/${response?.data[0]._id}/logs`);
         } else {
             setLoading(false);

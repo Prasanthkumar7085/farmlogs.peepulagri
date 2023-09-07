@@ -20,6 +20,7 @@ const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
                 {...rest}
                 showOneCalendar
                 format="dd-MM-yyyy"
+                placeholder={'dd-mm-yyyy ~ dd-mm-yyyy'}
                 size="lg"
                 className={styles.dateRangePickerField}
                 value={fromDate}

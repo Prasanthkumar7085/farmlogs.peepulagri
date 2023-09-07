@@ -179,7 +179,7 @@ const SignUpVerify = () => {
                     
           <p className={styles.helperText}>{"Don't receive an OTP "}
             <Button variant="text" onClick={resetCountdown} disabled={otpCountDown}>Resent OTP</Button>
-            {seconds ? `Resend in ${otpCountDown}` : ""}
+            {seconds ? `Resend in 00:${otpCountDown}s` : ""}
           </p>
 
         </div>

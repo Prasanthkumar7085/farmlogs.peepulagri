@@ -63,8 +63,9 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
     let filteredArray = array.filter((item: any, itemIndex: number) => index != itemIndex);
     setResources(filteredArray);
     setAllResources(filteredArray);
+
     if (!filteredArray.length) {
-      setActiveStepBasedOnData(1);
+      setActiveStepBasedOnData(2, false);
     }
   }
 

@@ -122,6 +122,7 @@ const AddALog: NextPage = () => {
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
         setAlertMessage(`${index + 1} image(s) Uploaded Successfully`);
         setAlertType(true);
+        setActiveStep(4);
       } else {
         setUploadFailed(true);
         setAlertMessage('Upload Failed!');
@@ -139,9 +140,32 @@ const AddALog: NextPage = () => {
     filesArray.splice(index, 1);
     setFiles([...filesArray])
     setFilesDetailsAfterUpload([...array]);
-
+    if (!filesArray.length) {
+      setActiveStep(4, false);
+    }
   }
 
+
+  const [activeStepsArray, setActiveStepsArray] = useState([false, false, false, false]);
+  const setActiveStep = (data: number, value = true) => {
+
+    console.log(data, value);
+
+    let arr = [...activeStepsArray];
+    if (data) {
+      arr[data - 1] = value;
+    }
+    setActiveStepsArray(arr);
+
+    let itemIndex = arr.findIndex((item: boolean) => item == false);
+
+    if (itemIndex == -1) {
+      setActiveStepBasedOnData(4);
+    } else {
+      setActiveStepBasedOnData(itemIndex);
+    }
+
+  }
 
   return (
     <div className={styles.form}>
@@ -152,7 +176,7 @@ const AddALog: NextPage = () => {
           <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
           <Form
             deleteSelectedFile={deleteSelectedFile}
-            setActiveStepBasedOnData={setActiveStepBasedOnData}
+            setActiveStepBasedOnData={setActiveStep}
             setWorkType={setWorkType}
             captureDates={captureDates}
             setResources={setResources}

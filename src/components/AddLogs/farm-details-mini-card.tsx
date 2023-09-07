@@ -2,6 +2,13 @@ import type { NextPage } from "next";
 import { useMemo, type CSSProperties } from "react";
 import styles from "./card.module.css";
 
+
+import { setSingleFarm } from "@/Redux/Modules/Farms";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+
 type FarmDetailsMiniCardType = {
   /** Style props */
   cardTop?: Partial<CSSProperties>;
@@ -38,6 +45,7 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
     };
   }, [cardTop, cardRight, cardAlignItems, cardLeft]);
 
+
   const vectorIconStyle: CSSProperties = useMemo(() => {
     return {
       width: vectorIconWidth,
@@ -59,6 +67,22 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
     rectangleDivHeight,
   ]);
 
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const farmDetails = useSelector((state: any) => state.farms?.singleFarm);
+
+
+  useEffect(() => {
+    console.log('called');
+
+    if (router.query?.farm_id && router.isReady) {
+      dispatch(setSingleFarm(router?.query?.farm_id))
+    }
+
+  }, [router.query?.farm_id, router.isReady]);
+
   return (
     <div className={styles.card} style={cardStyle}>
       <div className={styles.vectorParent}>
@@ -69,8 +93,8 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
           style={vectorIconStyle}
         />
         <div className={styles.farm1Parent}>
-          <div className={styles.farm1}>Farm-1</div>
-          <div className={styles.acres}>60 Acres</div>
+          <div className={styles.farm1}>{farmDetails?.title}</div>
+          <div className={styles.acres}>{farmDetails?.area} Acres</div>
         </div>
       </div>
       <div className={styles.cardChild} style={rectangleDivStyle} />

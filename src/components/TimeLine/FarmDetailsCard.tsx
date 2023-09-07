@@ -10,10 +10,10 @@ const FarmDetailsCard = () => {
     const dispatch = useDispatch();
 
     const farmDetails = useSelector((state: any) => state.farms?.singleFarm)
-    const [farmName, setFarmName] = useState();
 
 
     useEffect(() => {
+        console.log('called');
 
         if (router.query?.farm_id && router.isReady) {
             dispatch(setSingleFarm(router?.query?.farm_id))
@@ -21,15 +21,13 @@ const FarmDetailsCard = () => {
 
     }, [router.query?.farm_id, router.isReady])
 
-    useEffect(() => {
-        setFarmName(farmDetails?.title);
-    }, [farmDetails]);
+
 
     return (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "sticky", top: '0px' }}>
 
             <div style={{ border: "2px solid #d94841", width: "100px", alignItems: "center", justifyContent: "center", display: "flex", padding: "10px", borderRadius: '10px', }}>
-                {farmName}
+                {farmDetails?.title}
             </div>
         </div>
     )

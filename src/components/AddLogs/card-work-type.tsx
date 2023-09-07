@@ -23,6 +23,8 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
     captureDates(fromDate, toDate)
     if (fromDate && toDate && work) {
       setActiveStepBasedOnData(1);
+    } else {
+      setActiveStepBasedOnData(1, false);
     }
   }
   const handleChange = (e: any) => {

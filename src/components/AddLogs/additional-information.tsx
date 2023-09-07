@@ -65,7 +65,10 @@ const AdditionalInformation = ({ errorMessages, setAdditionalResources, singleLo
     setAdditionalResources(filteredArray);
 
     if (!filteredArray.length) {
-      setActiveStepBasedOnData(2);
+
+      if (!filteredArray.length) {
+        setActiveStepBasedOnData(3, false);
+      }
     }
 
   }

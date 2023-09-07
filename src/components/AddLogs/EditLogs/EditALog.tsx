@@ -68,8 +68,9 @@ const EditALog: NextPage = () => {
         setLoading(true);
         try {
             const response = await getLogByIdService(router.query.log_id);
-            if (response.success) {
-                setSingleLogDetails(response?.data)
+            if (response?.success) {
+                setSingleLogDetails(response?.data);
+                setActiveStepsFromResponse(response?.data);
             }
         } catch (err: any) {
             console.error(err);
@@ -114,7 +115,7 @@ const EditALog: NextPage = () => {
         }
         try {
             const response = await updateLogService(obj, router.query.log_id);
-            if (response.success) {
+            if (response?.success) {
                 setAlertMessage('Log Updated Successfully!');
                 setAlertType(true);
                 setTimeout(() => router.back(), 1000)
@@ -144,8 +145,8 @@ const EditALog: NextPage = () => {
         let tempFilesStorage = Array.from(filesSelected).map((item: any) => { return { original_name: item.name, type: item.type, size: item.size } });
 
         const response = await addLogsAttachmentService({ attachments: tempFilesStorage }, accessToken);
-        if (response.success) {
-            await postAllImages(response.data, tempFilesStorage, filesSelected);
+        if (response?.success) {
+            await postAllImages(response?.data, tempFilesStorage, filesSelected);
         } else {
             setUploadFailed(true);
         }
@@ -155,16 +156,17 @@ const EditALog: NextPage = () => {
     const postAllImages = async (response: any, tempFilesStorage: any, filesSelected: any) => {
         let arrayForResponse: any = [];
 
-        for (let index = 0; index < response.length; index++) {
+        for (let index = 0; index < response?.length; index++) {
 
             let uploadResponse: any = await uploadFileToS3(response[index].target_url, filesSelected[index]);
 
-            if (uploadResponse.ok) {
+            if (uploadResponse?.ok) {
                 const { target_url, ...rest } = response[index];
                 arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
 
                 setAlertMessage(`${index + 1} image(s) Uploaded Successfully`);
                 setAlertType(true);
+                setActiveStep(4);
             } else {
                 setUploadFailed(true);
                 setAlertMessage('Upload Failed!');
@@ -184,6 +186,43 @@ const EditALog: NextPage = () => {
         filesArray.splice(index, 1);
         setFiles([...filesArray])
         setFilesDetailsAfterUpload([...array]);
+        if (!filesArray.length) {
+            setActiveStep(4, false);
+        }
+    }
+
+    const setActiveStepsFromResponse = (data: any) => {
+
+        if (data) {
+            if (!data?.additional_resources.length) {
+                setActiveStep(3, false);
+                return
+            } else if (!data?.attachments.length) {
+                setActiveStep(4, false);
+                return
+            } else {
+                setActiveStep(2)
+            }
+        }
+    }
+
+    const [activeStepsArray, setActiveStepsArray] = useState([true, true, true, false]);
+
+    const setActiveStep = (data: number, value = true) => {
+
+        let arr = [...activeStepsArray];
+        if (data) {
+            arr[data - 1] = value;
+        }
+        setActiveStepsArray(arr);
+
+        let itemIndex = arr.findIndex((item: boolean) => item == false);
+
+        if (itemIndex == -1) {
+            setActiveStepBasedOnData(4);
+        } else {
+            setActiveStepBasedOnData(itemIndex);
+        }
 
     }
 
@@ -196,7 +235,7 @@ const EditALog: NextPage = () => {
                         <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
                         <Form
                             deleteSelectedFile={deleteSelectedFile}
-                            setActiveStepBasedOnData={setActiveStepBasedOnData}
+                            setActiveStepBasedOnData={setActiveStep}
                             setWorkType={setWorkType}
                             captureDates={captureDates}
                             setResources={setResources}

@@ -48,7 +48,7 @@ const TimeLineComponent = () => {
                     captureFarmName(selectedObject);
                     setDefaultValue(selectedObject)
                 } else {
-
+                    router.push({ pathname: "/timeline", query: { farm_id: response?.data[0]._id } })
                     captureFarmName(response?.data[0]);
                     setDefaultValue(response?.data[0]);
                 }

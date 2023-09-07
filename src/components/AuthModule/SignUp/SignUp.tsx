@@ -9,8 +9,6 @@ const SignUp = () => {
 
     const router = useRouter();
 
-    const [name, setName] = useState<string>();
-    const [email, setEmail] = useState<string>();
     const [mobile, setMobile] = useState<string>();
     const [errorMessages, setErrorMessages] = useState<string>();
     const [loadingWhileGettingOtp, setLoadingWhileGettingOtp] = useState(false);

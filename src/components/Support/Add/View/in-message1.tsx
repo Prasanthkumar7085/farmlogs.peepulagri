@@ -1,6 +1,6 @@
 import styles from "./in-message1.module.css";
 import { AttachmentDownloadUrlsResponse, SupportMessageType } from "@/types/SupportConversationTypes";
-import { Avatar, Button, IconButton } from "@mui/material";
+import { Avatar, Button, CircularProgress, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import getDownloadLinksByMessageId from "../../../../../lib/services/SupportService/getDownloadLinksByMessageId";
 import { useEffect, useState } from "react";
@@ -16,13 +16,15 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
   const router = useRouter();
 
   const [attachmentImages, setAttachmentImages] = useState<Array<AttachmentDownloadUrlsResponse>>([]);
-
+  const [getImagesLoading, setGetImagesLoading] = useState(false);
   const getImagesByMessageId = async () => {
+    setGetImagesLoading(true)
     let response = await getDownloadLinksByMessageId(router.query.support_id as string, data._id);
 
     if (response?.success) {
       setAttachmentImages(response.data?.download_urls);
     }
+    setGetImagesLoading(false)
   }
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
   return (
     <div className={styles.inMessage}>
       {data?.reply_to_message_id?.full_name == 'admin' ?
-        <img className={styles.avatarIcon} alt=""
+        <ImageComponent height={10} width={10} className={styles.avatarIcon} alt=""
           src={"/avatar@2x.png"} />
         : <Avatar sx={{ width: 32, height: 32 }} />}
       <div className={styles.messagebox}>
@@ -69,8 +71,8 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
             <div className={styles.attachment}>
                 <div className={styles.row}>
                   <div className={styles.icon}>
-                    <img className={styles.groupIcon} alt="" src="/group.svg" />
-                    <img className={styles.groupIcon1} alt="" src="/group2.svg" />
+                  <ImageComponent height={10} width={10} className={styles.groupIcon} alt="" src="/group.svg" />
+                  <ImageComponent height={10} width={10} className={styles.groupIcon1} alt="" src="/group2.svg" />
                   </div>
                 <Button className={styles.imageName} onClick={() => {
                   if (attachmentImages && attachmentImages?.length) {
@@ -79,9 +81,7 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
                     getImagesByMessageId()
                   }
                 }}>
-                  {attachmentImages && attachmentImages?.length ? "Hide Images" : "View Images"}
-
-
+                  {attachmentImages && attachmentImages?.length ? "Hide Images" : (getImagesLoading ? <CircularProgress size={'1rem'} /> : "View Images")}
                 </Button>
                 </div>
 
@@ -98,6 +98,7 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
                     height={70}
                     width={70}
                     className={styles.image}
+                    alt={`${item?.file_name}`}
                   />
                   <IconButton onClick={() => window.open(item.downloadUrl)}>
                     <OpenInNewIcon />

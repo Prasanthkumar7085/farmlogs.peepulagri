@@ -28,6 +28,14 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
   const [uploadFailed, setUploadFailed] = useState(false);
 
+  const deleteSelectedFile = (index: number) => {
+    let array = [...filesDetailsAfterUpload];
+    let filesArray = [...files];
+    array.splice(index, 1);
+    filesArray.splice(index, 1);
+    setFiles([...filesArray])
+    setFilesDetailsAfterUpload([...array]);
+  }
 
   const onSendMessage = async () => {
 
@@ -161,8 +169,8 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
                     <Typography>
                         {file.name}
                     </Typography>
-                      <IconButton color="error" aria-label="delete">
-                        {/* onClick={() => deleteSelectedFile(index)} */}
+                    <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)}>
+
                         <CloseIcon />
                     </IconButton>
                     </div>

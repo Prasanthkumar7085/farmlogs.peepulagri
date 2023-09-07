@@ -21,7 +21,7 @@ import deleteALogService from "../../../lib/services/LogsService/deleteALogsServ
 import styles from "./FarmTableLogs.module.css";
 
 
-const FarmTableLogs = () => {
+const FarmTableLogs = ({ getFarmsData }: any) => {
 
     const router: any = useRouter();
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
@@ -121,6 +121,7 @@ const FarmTableLogs = () => {
             let response: any = await deleteALogService(id);
             if (response.success) {
                 getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
+                getFarmsData();
             }
         } catch (err: any) {
             console.error(err);

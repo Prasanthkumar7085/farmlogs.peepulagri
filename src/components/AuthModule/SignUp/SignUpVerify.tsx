@@ -1,6 +1,6 @@
 import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import verifyOtpService from "../../../../lib/services/AuthServices/verifyOtpService";
 import setCookie from "../../../../lib/CookieHandler/setCookie";
 import { setUserDetails } from "@/Redux/Modules/Auth";
@@ -10,21 +10,78 @@ import styles from "./SignUpVerify.module.css";
 import ImageComponent from "../../../components/Core/ImageComponent";
 import { doesSectionFormatHaveLeadingZeros } from "@mui/x-date-pickers/internals/hooks/useField/useField.utils";
 import serUserTypeCookie from "../../../../lib/CookieHandler/serUserTypeCookie";
+import { setOtpCountDown } from "@/Redux/Modules/Otp";
+import { useSelector } from "react-redux";
+import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
 
 const SignUpVerify = () => {
+
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const otpCountDown = useSelector((state: any) => state.otp.resendOtpIn);
 
   const [mobile, setMobile] = useState<string>();
   const [otp, setOtp] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState<any>({});
   const [loadingWhileVerifyingOtp, setLoadingWhileVerifyingOtp] = useState(false);
 
+  const descriptionElementRef = useRef<HTMLElement>(null);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(59);
+
   useEffect(() => {
     if (router?.isReady) {
       setMobile(router.query.mobile as string);
+      setSeconds(59);
+      dispatch(setOtpCountDown(59));
     }
   }, [router.isReady]);
+
+  useEffect(() => {
+    setSeconds(otpCountDown)
+  }, [otpCountDown])
+  useEffect(() => {
+
+
+    const { current: descriptionElement } = descriptionElementRef;
+    if (descriptionElement !== null) {
+      descriptionElement.focus();
+    }
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+        dispatch(setOtpCountDown(seconds - 1));
+      }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          dispatch(setOtpCountDown(59));
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+
+  }, [seconds]);
+
+  const resetCountdown = async () => {
+    setSeconds(59);
+    dispatch(setOtpCountDown(59));
+    const body = {
+
+      phone: mobile
+    }
+
+    const response = await getOtpService(body);
+
+  }
 
   const verifyOtp = async (e: FormEvent<HTMLFormElement>) => {
 
@@ -109,6 +166,7 @@ const SignUpVerify = () => {
             type="submit"
             size="large"
             variant="contained"
+
           >
             {loadingWhileVerifyingOtp ? (
               <CircularProgress size="1.5rem" sx={{ color: "white" }} />
@@ -117,7 +175,11 @@ const SignUpVerify = () => {
             )}
           </Button>
                     
-          <p className={styles.helperText}>{"Don't receive an OTP "}<Button variant="text">Resent OTP</Button> </p>
+          <p className={styles.helperText}>{"Don't receive an OTP "}
+            <Button variant="text" onClick={resetCountdown} disabled={otpCountDown}>Resent OTP</Button>
+            {seconds ? `Resend in ${otpCountDown}` : ""}
+          </p>
+
         </div>
       </form>
     </div>

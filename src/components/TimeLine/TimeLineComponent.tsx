@@ -21,11 +21,11 @@ const TimeLineComponent = () => {
 
     const [data, setData] = useState<any>([]);
     const [farmOptions, setFarmOptions] = useState<any>();
-    const [hasMore, setHasMore] = useState<any>(true);
+    const [hasMore, setHasMore] = useState<boolean>(true);
     const [pageNumber, setPageNumber] = useState(1);
     const [logId, setLogId] = useState<any>();
     const [defaultValue, setDefaultValue] = useState<any>();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
@@ -37,6 +37,7 @@ const TimeLineComponent = () => {
 
 
     const getFormDetails = async (id: string) => {
+        setLoading(true);
         let response = await getAllFarmsService(accessToken);
 
         try {
@@ -55,7 +56,7 @@ const TimeLineComponent = () => {
             }
         } catch (err) {
             console.error(err);
-
+            setLoading(false);
         }
     }
 
@@ -80,7 +81,9 @@ const TimeLineComponent = () => {
             const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${5}?order_by=${'from_date_time'}&order_type=desc`);
             const responseData: any = await response.json();
 
-            setHasMore(responseData.has_more); // No more data available
+            if (responseData?.has_more || responseData?.has_more == false) {
+                setHasMore(responseData?.has_more); // No more data available
+            }
             let currentDate: any = null;
             let currentAlign = "left";
 
@@ -120,7 +123,7 @@ const TimeLineComponent = () => {
                 next={() => setPageNumber(prev => prev + 1)}
                 hasMore={hasMore}
                 loader={<CircularProgress />}
-                endMessage={<p style={{ textAlign: 'center' }}>No More Logs!</p>}
+                endMessage={<p style={{ textAlign: 'center' }}>{hasMore ? "" : 'No More Logs!'}</p>}
             >
                 {data && data.map((item: any, index: any) => {
                     if (item.align == "left") {

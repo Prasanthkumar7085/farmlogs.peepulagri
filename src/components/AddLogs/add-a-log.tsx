@@ -149,8 +149,6 @@ const AddALog: NextPage = () => {
   const [activeStepsArray, setActiveStepsArray] = useState([false, false, false, false]);
   const setActiveStep = (data: number, value = true) => {
 
-    console.log(data, value);
-
     let arr = [...activeStepsArray];
     if (data) {
       arr[data - 1] = value;

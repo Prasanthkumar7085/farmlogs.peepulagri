@@ -133,6 +133,7 @@ const SignUpVerify = () => {
     }
     setLoadingWhileVerifyingOtp(false);
   };
+  
   return (
     <div id={styles.loginPage}>
       <div className={styles.bgImage}>
@@ -153,8 +154,8 @@ const SignUpVerify = () => {
             <TextField
             autoFocus
               fullWidth
-              error={ Boolean(errorMessages?.message) }
-              helperText={errorMessages?.message}
+              error={Boolean(errorMessages?.otp) }
+              helperText={errorMessages?.otp}
               size="small"
               placeholder="Enter OTP"
               value={otp}

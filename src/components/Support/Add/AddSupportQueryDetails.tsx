@@ -69,7 +69,7 @@ const AddSupportQueryDetails = ({
         variant="subtitle2"
         className={styles.label}
       >
-        Type Youe Query<span style={{ color: "red" }}>*</span>
+        Type Your Query<span style={{ color: "red" }}>*</span>
       </Typography>
       <TextField
         style={{

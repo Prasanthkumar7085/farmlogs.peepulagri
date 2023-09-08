@@ -50,8 +50,8 @@ const FarmPage = () => {
                             No Farms Found!
                         </Typography>
                         <Typography className={styles.description}>
-                           Looks like you havn't added any Farm yet. <br />
-                           Add Farms to Get Started
+                            {"Looks like you havn't added any Farm yet."} <br />
+                            {"Add Farms to Get Started"}
                         </Typography>
                     </div>
                     <Button className={styles.ctaButton} variant="contained" color="success" size="large" startIcon={<AddIcon />}> Add Farms </Button>

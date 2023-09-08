@@ -62,6 +62,7 @@ const TimeLineComponent = () => {
 
     const captureFarmName = (selectedObject: any) => {
         setData([]);
+        setHasMore(true)
 
         if (selectedObject && Object.keys(selectedObject).length) {
             setPageNumber(1);

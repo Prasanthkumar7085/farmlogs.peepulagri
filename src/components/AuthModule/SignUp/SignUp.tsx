@@ -15,8 +15,11 @@ const SignUp = () => {
     const [responseErrorMesaages, setResponseErrorMessages] = useState<any>();
 
     const setMobileNumber = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length <= 10) {
-            setMobile(e.target.value)
+
+        let value = e.target.value;
+        value = value.trim();;
+        if (value.length <= 10) {
+            setMobile(value)
         }
     }
 
@@ -36,8 +39,6 @@ const SignUp = () => {
         setResponseErrorMessages({})
         e.preventDefault();
         const body = {
-            // full_name: name,
-            // email: email,
             phone: mobile
         }
 
@@ -56,6 +57,7 @@ const SignUp = () => {
 
         setLoadingWhileGettingOtp(false);
     }
+console.log(mobile);
 
     return (
         <div id={styles.loginPage}>
@@ -75,30 +77,13 @@ const SignUp = () => {
                             </Typography>
                         </span>
                     </div>
-                    {/* <div>
-                        <label>Name</label>
-                        <TextField
-                            fullWidth
-                            value={name}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-                            onKeyDown={(e: any) => { if (e.key == 'Enter') getOtp(e) }}
-                        />
-                    </div>
-                    <div>
-                        <label>Email</label>
-                        <TextField
-                            fullWidth
-                            value={email}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                            onKeyDown={(e: any) => { if (e.key == 'Enter') getOtp(e) }}
-                        />
-                    </div> */}
                     <div>
                         <Typography className={styles.label}>
                             Login With Mobile Number
                         </Typography>
                         <label  ></label>
                         <TextField
+                            type='tel'
                             fullWidth
                             error={Boolean(responseErrorMesaages?.phone)}
                             helperText={responseErrorMesaages?.phone}

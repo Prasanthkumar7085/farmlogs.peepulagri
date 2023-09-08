@@ -1,9 +1,6 @@
 import timePipe from "@/pipes/timePipe";
 import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import FarmTable from "../DashBoard/FarmTable";
 import { SupportDataTableProps, SupportResponseDataType, categoriesType } from "@/types/supportTypes";
 import { useRouter } from "next/router";
@@ -130,7 +127,14 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             columnId: "status",
             isSorted: true,
             Header: "Status",
-            accessor: 'status',
+            // accessor: 'status',
+            accessor: (row: SupportResponseDataType) => {
+                return (
+                    <div style={{ color: "var(--body)" }}>
+                        {row?.status ? row.status.slice(0,1).toUpperCase()+row.status.slice(1,).toLowerCase(): "NA"}
+                    </div>
+                )
+            },
             width: "80px",
         },
         {

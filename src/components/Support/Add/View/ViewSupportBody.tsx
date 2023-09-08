@@ -87,6 +87,17 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
         else return item.downloadUrl
         }
     }
+
+    const getStatusTitle = (status: string) => {
+
+        if (status) {
+            let index = statusOptions.findIndex((item: { value: string, title: string }) => item.value == status)
+
+            if (statusOptions[index])
+                return statusOptions[index].title
+        }
+        else return '-'
+    }
     return (
 
         <div className={styles.supportBody}>
@@ -113,7 +124,7 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                                     onChange={onChangeStatus}
                                     disabled={supportStatus == 'ARCHIVE' ? true : false}
                                 />
-                                : data?.status}
+                                : getStatusTitle(data?.status as string)}
                         </Typography>
                     </div>
                 </div>
@@ -135,7 +146,7 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                 <div className={styles.attachmentsList}>
                     <div className={styles.subTitle}>Attachments</div>
                     <div className={styles.container}>
-                        {downloadUrls.map((item: any, index: number) => {
+                        {downloadUrls.length ? downloadUrls.map((item: any, index: number) => {
                             return (
                                 <div className={styles.eachFile} key={index}>
                                     <Image
@@ -154,7 +165,9 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                                     </div>
                                 </div>
                             )
-                        })}
+                        }) :
+                            <p style={{ color: "#919191" }}>{"No Attachments"}</p>
+                        }
                     </div>
                 </div>
             </div>

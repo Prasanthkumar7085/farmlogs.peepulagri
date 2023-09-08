@@ -15,7 +15,7 @@ const ViewSupportPage = () => {
     const router = useRouter();
 
     const [data, setData] = useState<SupportResponseDataType>();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (router.isReady) {

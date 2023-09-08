@@ -3,12 +3,18 @@ import styles from "./timeline-card.module.css";
 import { Chip } from "@mui/material";
 const TimelineCard = ({ data1 }: any) => {
 
-
-  const date = new Date(data1.from_date_time);
+  const date = new Date(data1.to_date_time);
   const day = date.getUTCDate();
   const monthsAbbreviation = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const month = date.getUTCMonth();
   const year = date.getUTCFullYear();
+
+  const getWorkType = (workType: string) => {
+    if (workType == 'ALL') {
+      return 'Manual & Machinery'
+    }
+    return workType?.slice(0, 1).toUpperCase() + workType?.slice(1,).toLowerCase()
+  }
 
   return (
     <div className={styles.timelinecard}>
@@ -23,7 +29,7 @@ const TimelineCard = ({ data1 }: any) => {
         <div className={styles.container1}>
           <img className={styles.imageIcon} alt="" src="/image@2x.png" />
           <div className={styles.text}>
-            <h5 className={styles.title}>{data1.work_type}</h5>
+            <h5 className={styles.title}>{data1.work_type?.length ? getWorkType(data1?.work_type) :""}</h5>
             <p
               className={styles.description}
             >{data1.title}</p>

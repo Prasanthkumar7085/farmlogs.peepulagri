@@ -4,7 +4,7 @@ import ImageComponent from "./ImageComponent";
 const NoDataComponent = ({ noData }: { noData: Boolean }) => {
     return (
         <React.Fragment>
-            {noData ? <ImageComponent src="/no-data-image.svg" height={500} width={500} alt="nodata" /> : ""}
+            {noData ? <ImageComponent src="/no-support-data.svg" height={400} width={400} alt="nodata" /> : ""}
         </React.Fragment>
     )
 }

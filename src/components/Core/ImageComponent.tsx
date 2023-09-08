@@ -4,7 +4,6 @@ const ImageComponent = (rest: any) => {
 
     return (
         <Image {...rest} />
-
     )
 }
 export default ImageComponent

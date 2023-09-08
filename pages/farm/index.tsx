@@ -7,6 +7,9 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { useDispatch } from 'react-redux';
 import { setAllFarms } from "@/Redux/Modules/Farms";
+import { Typography, Button } from "@mui/material";
+import styles from "./index.module.css";
+import AddIcon from '@mui/icons-material/Add';
 
 const FarmPage = () => {
 
@@ -34,17 +37,26 @@ const FarmPage = () => {
         }
     }, [accessToken, router.isReady]);
     return (
-        <div>
-            {!loading ? <div style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <ImageComponent
-                    src={'../no-logs.svg'}
-                    height={600}
-                    width={600}
-                />
-                <h1 style={{ color: "#48855d" }}>
-                    No Farms Data
-                </h1>
-            </div> : ""}
+        <div className={styles.dashboard}>
+            {!loading ? 
+                <div className={styles.noDataScreen}>
+                    <ImageComponent
+                        src={'../no-logs.svg'}
+                        height={300}
+                        width={300}
+                    />
+                    <div className={styles.content}>
+                        <Typography className={styles.subTitle} variant="h4">
+                            No Farms Found!
+                        </Typography>
+                        <Typography className={styles.description}>
+                           Looks like you havn't added any Farm yet. <br />
+                           Add Farms to Get Started
+                        </Typography>
+                    </div>
+                    <Button className={styles.ctaButton} variant="contained" color="success" size="large" startIcon={<AddIcon />}> Add Farms </Button>
+                </div> 
+            : ""}
             <LoadingComponent loading={loading} />
         </div>
 

@@ -175,7 +175,6 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
             <p className={styles.label}>Quantity</p>
 
             <TextField
-              autoFocus
               className={styles.textInput}
               color="primary"
               variant="outlined"
@@ -192,7 +191,6 @@ const Resource = ({ errorMessages, setResources: setAllResources, singleLogDetai
           <div className={styles.inputField}>
             <p className={styles.label}>Total Hours</p>
             <TextField
-              autoFocus
               className={styles.textInput}
               color="primary"
               variant="outlined"

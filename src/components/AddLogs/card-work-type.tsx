@@ -52,6 +52,7 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
           <div className={styles.dropdown}>
             <DateRangePickerComponent captureDateValue={captureDateValue} defaultValue={[singleLogDetails?.from_date_time, singleLogDetails?.to_date_time]} />
             <ErrorMessagesComponent errorMessage={errorMessages?.from_date_time} />
+            <ErrorMessagesComponent errorMessage={errorMessages?.to_date_time} />
           </div>
         </div>
       </div>

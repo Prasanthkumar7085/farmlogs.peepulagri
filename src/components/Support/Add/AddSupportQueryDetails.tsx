@@ -74,7 +74,7 @@ const AddSupportQueryDetails = ({
       <TextField
         style={{
           width: "100%",
-          marginBlockEnd: "1rem",
+          marginBlockEnd: "0.5rem",
           backgroundColor: "#ffffff",
         }}
         size="small"
@@ -137,6 +137,9 @@ const AddSupportQueryDetails = ({
             setCategory([]);
           }
         }}
+        style={{
+          marginBlockEnd: "0.5rem",
+        }}
       />
       <ErrorMessagesComponent errorMessage={errorMessages?.categories} />
       <Typography
@@ -151,6 +154,9 @@ const AddSupportQueryDetails = ({
         placeholder="Description"
         minRows={4}
         onChange={(e: any) => setDescription(e.target.value)}
+        style={{
+          marginBlockEnd: "0.5rem",
+        }}
       ></TextareaAutosize>
       <ErrorMessagesComponent errorMessage={errorMessages?.description} />
     </div>

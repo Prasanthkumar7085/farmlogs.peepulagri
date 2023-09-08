@@ -31,7 +31,7 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
     });
 
     return (
-        <div style={{ height: "calc(100vh - 150px)", overflow: "scroll" }} className="dataTable-container scrollbar">
+        <div style={{ height: "calc(100vh - 295px)", overflowY: "scroll" }} className="dataTable-container scrollbar">
             <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
                 <thead className="thead" style={{
                     position: "sticky",

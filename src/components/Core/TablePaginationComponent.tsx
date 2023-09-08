@@ -24,7 +24,7 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
     return (
         <Card className={styles.tablePagination}>
             <div>
-                <Typography variant="caption">{values} Per Page</Typography>
+                <Typography variant="caption" className={styles.label}>{values} Per Page</Typography>
 
                 <Select
                     value={noOfRows}

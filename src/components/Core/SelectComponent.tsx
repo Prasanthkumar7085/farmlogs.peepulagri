@@ -10,7 +10,7 @@ const SelectComponent = ({ options, ...rest }: any) => {
             {...rest}
         >
             {!router.query.support_id ? <MenuItem value="">
-                <em>{'All'}</em>
+                <b>{'All'}</b>
             </MenuItem> : ""}
 
             {options.length && options.map((item: { value: string, title: string }, index: number) => {

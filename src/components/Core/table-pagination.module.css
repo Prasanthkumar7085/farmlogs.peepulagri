@@ -3,8 +3,12 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.625rem 0.625rem 0.625rem 0.9375rem;
-    font-size: clamp(0.8125rem, 0.72vw, 1.25rem);
     color: #000000;
     margin-right: 5px;
-
+}
+.tablePagination *{
+    font-size: clamp(0.8125rem, 0.72vw, 1.25rem);
+}
+.label {
+    margin-right: 10px;
 }

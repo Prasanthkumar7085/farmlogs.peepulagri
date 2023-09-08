@@ -35,7 +35,7 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
             <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
                 <thead className="thead" style={{
                     position: "sticky",
-                    top: 0,
+                    top: "-1px",
                     zIndex: 1,
                 }}>
                     {headerGroups.map((headerGroup: any, index: number) => (

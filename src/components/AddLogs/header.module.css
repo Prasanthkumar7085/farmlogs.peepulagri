@@ -113,12 +113,11 @@
 }
 .categoriesBox {
   position: absolute;
-  top: 0;
   right: 0;
-  top: -8px;
+  top: 0px;
   max-width: 100%;
   z-index: 100;
-  max-width: 60vw;
+  max-width: 60%;
   height: auto;
 }
 .selectField {

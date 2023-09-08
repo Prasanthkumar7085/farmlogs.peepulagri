@@ -1,10 +1,10 @@
 .form,
 .secondaryFormField {
-  margin-top: 20px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-17xl);
+  padding-top: 1rem;
 }
 
 .secondaryFormField {
@@ -15,6 +15,7 @@
   flex-direction: row;
   font-size: var(--text-sm-medium-size);
   color: var(--primary);
+  margin-top: 1rem;
 }
 
 .form {
@@ -22,7 +23,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  max-width: clamp(900px, 60vw, 1000px);;
   text-align: left;
   margin-bottom: 1.5rem;
 }

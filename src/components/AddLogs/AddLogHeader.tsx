@@ -12,8 +12,9 @@ const AddLogHeader = () => {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "flex-start",
-                marginBlock: "1rem",
-                columnGap: "1rem"
+                alignItems: "center",
+                columnGap: "1rem",
+                padding: "1rem 0"
             }}
         >
             <ButtonComponent

@@ -78,7 +78,7 @@ const TimeLineComponent = () => {
     const getLogsData = async (id: any, page: number, changeFarm: boolean) => {
         setLoading(true);
         try {
-            const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${5}?order_by=${'from_date_time'}&order_type=desc`);
+            const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${5}?order_by=${'to_date_time'}&order_type=desc`);
             const responseData: any = await response.json();
 
             if (responseData?.has_more || responseData?.has_more == false) {
@@ -95,9 +95,9 @@ const TimeLineComponent = () => {
             }
 
             const newArray = temp.map((item: any) => {
-                    if (item.from_date_time !== currentDate) {
+                    if (item.to_date_time !== currentDate) {
                         currentAlign = currentAlign === "right" ? "left" : "right";
-                        currentDate = item.from_date_time;
+                        currentDate = item.to_date_time;
                     }
 
                     return { ...item, align: currentAlign };

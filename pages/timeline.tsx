@@ -1,15 +1,14 @@
 import TimeLineComponent from "@/components/TimeLine/TimeLineComponent";
 import { GetServerSideProps } from "next";
-
+import styles from './timeline.module.css';
 
 const TimeLinePage = () => {
     return (
-
+        <div className={styles.timeLineContainer}>
             <TimeLineComponent />
-
+        </div>
     )
 }
-
 
 export default TimeLinePage;
 

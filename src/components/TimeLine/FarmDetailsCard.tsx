@@ -1,6 +1,7 @@
 import { setSingleFarm } from "@/Redux/Modules/Farms";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import styles from './FarmDetailsCard.module.css'
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -22,11 +23,8 @@ const FarmDetailsCard = () => {
 
 
     return (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "sticky", top: '0px' }}>
-
-            <div style={{ border: "2px solid #d94841", width: "100px", alignItems: "center", justifyContent: "center", display: "flex", padding: "10px", borderRadius: '10px', }}>
-                {farmDetails?.title}
-            </div>
+        <div className={styles.FarmDetailsCard}> 
+            {farmDetails?.title}
         </div>
     )
 }

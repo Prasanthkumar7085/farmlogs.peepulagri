@@ -80,7 +80,7 @@
   background: linear-gradient(142.18deg, #3462cf, #2b53be);
   border-right: 1px solid var(--stroke);
   box-sizing: border-box;
-  width: 70px;
+  width: 5rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -90,7 +90,8 @@
 }
 
 .main {
-  margin-left: 70px;
+  margin-left: 5rem;
   background: var(--background, #F5F7FA);
   min-height: 100vh;
+  position: relative;
 }

@@ -1,22 +1,22 @@
-.date1 {
-  margin: 0;
-  position: relative;
-  line-height: 100%;
-}
-.date,
-.monthyear {
+.date {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  flex-direction: row;
+  gap: var(--gap-9xs);
+}
+.day {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+  font-weight: 400;
+  font-family: 'Inter',sans-serif;
+  font-weight: 600;
 }
 .monthyear {
   flex-direction: column;
   font-size: var(--font-size-xs);
-}
-.date {
-  align-self: stretch;
-  flex-direction: row;
-  gap: var(--gap-9xs);
+  margin: 0;
 }
 .imageIcon {
   position: relative;
@@ -47,33 +47,29 @@
   gap: var(--gap-6xs);
 }
 .container,
-.container1,
+.content,
 .textwrapper {
   align-self: stretch;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
-.container1 {
+.container {
+  flex-direction: column;
+  gap: var(--gap-sm);
+  z-index: 0;
+  row-gap: 0.5rem;
+}
+.content {
   flex-direction: row;
   gap: var(--gap-base);
   text-align: left;
   font-size: var(--text-sm-medium-size);
   color: var(--color-firebrick);
 }
-.container {
-  flex-direction: column;
-  gap: var(--gap-sm);
-  z-index: 0;
-}
 .weeding {
   margin: 0;
   position: relative;
-}
-.cardlable,
-.timelinecardrightChild {
-  position: absolute;
-  margin: 0 !important;
 }
 .cardlable {
   top: 0;
@@ -91,20 +87,23 @@
   font-size: var(--text-sm-medium-size);
   color: var(--white);
 }
-.timelinecardrightChild {
+.connector {
+  position: absolute;
+  margin: 0 !important;
   top: 1.44rem;
-  left: -5.47rem;
-  width: 5.47rem;
+  left: -5rem;
+  width: 5rem;
   height: 0.89rem;
   z-index: 2;
 }
 .timelinecardright {
   position: relative;
-  left: 56.00rem;
+  z-index: 100;
+  left: calc(50vw + 2.5rem - 5px);
   border-radius: var(--br-5xs);
   background-color: var(--white);
   box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.15);
-  width: 21.88rem;
+  width: 22rem;
   display: flex;
   flex-direction: column;
   padding: var(--padding-base) var(--padding-base) var(--padding-5xl);

@@ -53,14 +53,18 @@ const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, d
         <FormControl
             size="small"
             sx={{
+                position: "sticky",
+                top: "0px",
                 width: "100%",
-
+                zIndex: "150",
+                textAlign: "center",
                 '& .MuiInputBase-root': {
                     fontSize: "clamp(.875rem, 1vw, 1.125rem)",
                     fontFamily: "'IBM plex sans', sans-serif",
                     backgroundColor: "brown",
                     border: "none",
-                    width: "15%",
+                    width: "200px",
+                    margin: "20px 20px 0",
                 },
 
                 '& .MuiSelect-nativeInput': {
@@ -70,8 +74,7 @@ const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, d
                     border: "1px solid rgba(0, 0, 0, 0.231372549) !important",
                     borderRadius: "5px",
                     fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                    minHeight: "40px",
-                    maxHeight: "40px",
+                    height: "40px",
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                     border: "none !important"

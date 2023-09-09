@@ -1,0 +1,41 @@
+.TimelineCardBranch {
+    margin-top: 30px;
+}
+.infiniteScrollComponent{
+}
+.infiniteScrollComponent::-webkit-scrollbar{
+    background: transparent;
+    width: 5px;
+}
+.infiniteScrollComponent::-webkit-scrollbar:hover{
+    opacity: 1;
+}
+.infiniteScrollComponent:hover::-webkit-scrollbar-thumb{
+    background: rgb(198, 198, 198);
+}
+.endOfLogs {
+    display: block;
+    width: 10rem;
+    background-color: #ffffff;
+    border: 2px solid var(--body);
+    padding: 12px;
+    border-radius: 16px;
+    font-weight: 600;
+    z-index: 200;
+    font-size: 1rem;
+    text-align: center;
+    margin: 30px auto;
+    border-radius: 1.75rem;
+    position: relative;
+    left: 8px;
+}
+.endOfLogs::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + 2px);
+    height: 30px;
+    left: calc(50% - 1px);
+    width: 2px;
+    margin: 0 auto;
+    background-color: #F5F7FA;
+} 

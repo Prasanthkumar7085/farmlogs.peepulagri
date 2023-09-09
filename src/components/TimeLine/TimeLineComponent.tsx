@@ -10,6 +10,8 @@ import { useRouter } from "next/router"
 import { CircularProgress } from "@mui/material"
 import { setAllFarms } from "@/Redux/Modules/Farms";
 import { useDispatch } from "react-redux";
+import styles from "./TimeLineComponent.module.css"
+import { relative } from "path"
 
 
 const TimeLineComponent = () => {
@@ -116,35 +118,33 @@ const TimeLineComponent = () => {
     }
 
     return (
-        <div>
+        <div className={styles.containerLg} style={{position : "relative", zIndex: 110}}>
             {!loading ? <SelectComponenentForLogs setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={farmOptions} captureFarmName={captureFarmName} /> : ""}
-
             <InfiniteScroll
+                className={styles.infiniteScrollComponent}
                 dataLength={data.length}
                 next={() => setPageNumber(prev => prev + 1)}
                 hasMore={hasMore}
                 loader={<CircularProgress />}
-                endMessage={<p style={{ textAlign: 'center' }}>{hasMore ? "" : 'No More Logs!'}</p>}
+                endMessage={<p className={styles.endOfLogs}>{hasMore ? "" : 'No More Logs!'}</p>}
             >
                 {data && data.map((item: any, index: any) => {
                     if (item.align == "left") {
                         return (
-                            <div style={{ marginTop: "30px" }} key={index}>
+                            <div className={styles.TimelineCardBranch} key={index}>
                                 <TimelineCard data1={item} />
                             </div>
                         )
                     }
                     else {
                         return (
-                            <div style={{ marginTop: "30px" }} key={index}>
+                            <div className={styles.TimelineCardBranch} key={index}>
                                 <TimelineCardRight data1={item} />
                             </div>
                         )
                     }
                 })}
-            </InfiniteScroll> 
-
-
+            </InfiniteScroll>
         </div >
     )
 }

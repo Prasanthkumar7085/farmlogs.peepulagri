@@ -1,0 +1,17 @@
+.FarmDetailsCard {
+    position: absolute;
+    top: 0px;
+    left: calc(50vw - 10rem);
+    background-color: #ffffff;
+    border: 2px solid #d94841;
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    width: 200px;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    z-index: 200;
+    font-size: 1.25rem;
+}

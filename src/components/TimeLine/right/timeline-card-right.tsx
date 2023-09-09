@@ -20,14 +20,10 @@ const TimelineCardRight = ({ data1 }: any) => {
     <div className={styles.timelinecardright}>
       <div className={styles.container}>
         <div className={styles.date}>
-          <p className={styles.date1}>{day}</p>
-          <div className={styles.monthyear}>
-            <p className={styles.date1}>{monthsAbbreviation[month]} {year}</p>
-
-
-          </div>
+          <p className={styles.day}>{day}</p>
+          <p className={styles.monthyear}>{monthsAbbreviation[month]} {year}</p>
         </div>
-        <div className={styles.container1}>
+        <div className={styles.content}>
           <img
             className={styles.imageIcon}
             alt=""
@@ -41,17 +37,11 @@ const TimelineCardRight = ({ data1 }: any) => {
           </div>
         </div>
       </div>
-      {/* <div className={styles.cardlable}>
-        <p className={styles.weeding}>{data1?.title?.length > 12 ? data1?.title?.slice(0, 10) + "..." : data1.title}</p>
-      </div> */}
       <img
-        className={styles.timelinecardrightChild}
+        className={styles.connector}
         alt=""
         src="/group-36.svg"
       />
-      <div className={styles.timelinecardrightChild}
-        style={{ borderLeft: "1px solid black", height: "250px", }}></div>
-
     </div>
   );
 };

@@ -31,6 +31,7 @@ const AddALog: NextPage = () => {
   const [dates, setDates] = useState<any>([]);
   const [formDetails, setFormDetails] = useState<any>();
   const [workType, setWorkType] = useState("");
+  const [categoriesList, setCategoryList] = useState([])
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState(false);
 
@@ -42,9 +43,12 @@ const AddALog: NextPage = () => {
 
   const [errorMessages, setErrorMessages] = useState<any>();
 
-  const captureDates = (fromDate: string, toDate: string) => {
+  const captureDates = (fromDate: string, toDate: string, details: any) => {
     setDates([fromDate, toDate]);
+    console.log(details, "i")
+    setCategoryList(details)
   };
+
 
   const addLogs = async () => {
     setLoading(true);
@@ -53,7 +57,7 @@ const AddALog: NextPage = () => {
     const { categories, ...rest } = formDetails;
     const obj = {
       ...rest,
-      categories: categories,
+      categories: categoriesList,
       work_type: workType,
       farm_id: router.query.farm_id,
       status: 'ACTIVE',
@@ -165,12 +169,16 @@ const AddALog: NextPage = () => {
 
   }
 
+  const captureCategoriesArray = (values: any) => {
+
+  }
+
   return (
     <div className={styles.form}>
 
-        <div>
+      <div>
         <Header setFormDetails={setFormDetails} errorMessages={errorMessages} />
-          <div className={styles.secondaryFormField}>
+        <div className={styles.secondaryFormField}>
           <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
           <Form
             deleteSelectedFile={deleteSelectedFile}
@@ -185,13 +193,14 @@ const AddALog: NextPage = () => {
             uploadButtonLoading={uploadButtonLoading}
             uploadFailed={uploadFailed}
             errorMessages={errorMessages}
+
           />
 
-          </div>
+        </div>
         <FooterActionButtons addLogs={addLogs} />
-      </div> 
+      </div>
 
-      
+
       <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
       <LoadingComponent loading={loading} />
     </div>

@@ -83,7 +83,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
   return (
     <div className={styles.primaryFormField}>
       <div className={styles.categoriesBox}>
-        <FormControl variant="outlined">
+        {/* <FormControl variant="outlined">
           <Box>
             <Autocomplete
               value={defaultValue.length ? defaultValue : []}
@@ -132,23 +132,23 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
             />
           </Box>
           <FormHelperText />
-        </FormControl>
+        </FormControl> */}
       </div>
       <AddLogHeader />
       <div className={styles.container}>
         <div className={styles.rowParent}>
-            <TextField
-              className={styles.inputTitle}
-              color="primary"
-              variant="standard"
-              type="text"
-              name="log-title"
-              placeholder="Enter log title*"
-              fullWidth
-              margin="none"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
+          <TextField
+            className={styles.inputTitle}
+            color="primary"
+            variant="standard"
+            type="text"
+            name="log-title"
+            placeholder="Enter log title*"
+            fullWidth
+            margin="none"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <ErrorMessagesComponent errorMessage={errorMessages?.title} />
         </div>
         <div className={styles.row}>
@@ -163,7 +163,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
             maxRows={7}
             fullWidth
           />
-          <ErrorMessagesComponent errorMessage={errorMessages?.description} />  
+          <ErrorMessagesComponent errorMessage={errorMessages?.description} />
         </div>
         <div className={styles.threeDots}>
           <div className={styles.threeDotsChild} />

@@ -1,11 +1,12 @@
 
 import styles from "./head-part.module.css";
-import IconButtonComponent from "../Core/IconButtonComponent";
 import { useRouter } from "next/router";
 import { Button, Chip, Icon } from "@mui/material";
 import { useEffect, useState } from "react";
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
+import IconButtonComponent from "../Core/IconButtonComponent";
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 
 const HeadPart = ({ data }: any) => {
@@ -63,7 +64,7 @@ const HeadPart = ({ data }: any) => {
           size="small"
         />
         <h4 className={styles.text}>View Logs</h4>
-        <Button onClick={() => router.push(`/farm/${router.query.form_id}/logs/${router.query.log_id}/edit`)}>Edit</Button>
+        <Button variant="outlined" color="error" onClick={() => router.push(`/farm/${router.query.form_id}/logs/${router.query.log_id}/edit`)}><DriveFileRenameOutlineIcon /></Button>
       </div>
       <div className={styles.headerContent}>
         <div className={styles.label}>

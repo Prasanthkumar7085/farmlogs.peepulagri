@@ -111,24 +111,3 @@
   font-family: var(--text-sm-medium);
   z-index: 10;
 }
-.categoriesBox {
-  position: absolute;
-  right: 0;
-  top: 0px;
-  max-width: 100%;
-  z-index: 100;
-  max-width: 60%;
-  height: auto;
-}
-.selectField {
-  min-width: 300px;
-  min-height: 45px;
-  justify-content: flex-start;
-}
-.selectField > div{
-  min-height: 50px;
-  background-color: #ffffff;
-}
-.selectField fieldset {
-  min-height: 50px;
-}

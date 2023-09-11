@@ -16,7 +16,6 @@
   gap: var(--gap-7xs);
 }
 .cardworktype,
-.conatiner,
 .date,
 .workType {
   display: flex;
@@ -33,9 +32,20 @@
   align-self: stretch;
 }
 .conatiner {
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-self: stretch;
+  /* align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row; */
   padding: 0 var(--padding-13xl);
   gap: var(--gap-5xl);
+}
+.categoriesRow {
+  display: flex;
+  flex-direction: column;
+  grid-area: 1 / 1 / span 1 / span 2;
+  gap: var(--gap-7xs);
 }
 .cardworktype {
   flex-direction: column;
@@ -45,4 +55,15 @@
   color: var(--gray-700);
   font-family: var(--text-sm-medium);
 }
-
+.selectField {
+  min-width: 300px;
+  min-height: 45px;
+  justify-content: flex-start;
+}
+.selectField > div{
+  min-height: 50px;
+  background-color: #ffffff;
+}
+.selectField fieldset {
+  min-height: 50px;
+}

@@ -18,12 +18,13 @@
   line-height: 100%;
 }
 .subHeading {
-  display: flex;
-  flex-direction: row;
+  display: grid; 
+  grid-template-columns: auto 1fr auto;
   padding: 0;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-start;
   gap: var(--gap-3xs);
+  width: 100%;
 }
 .dropdownText {
   position: relative;
@@ -69,7 +70,6 @@
   color: var(--title);
 }
 .content,
-.headPart,
 .headerContent {
   align-self: stretch;
   display: flex;
@@ -93,4 +93,11 @@
   font-size: var(--font-size-xl);
   color: var(--neutral-800);
   font-family: var(--text-sm-medium);
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: 1fr 1fr;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-3xs);
 }

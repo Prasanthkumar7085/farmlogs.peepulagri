@@ -85,58 +85,61 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
 
   return (
     <div className={styles.cardworktype}>
-      <FormControl variant="outlined" fullWidth>
-        <Box>
-          <Autocomplete
-            value={defaultValue.length ? defaultValue : []}
-            multiple
-            disablePortal
-            id="combo-box-demo"
-            style={{ height: "55px", zIndex: "1000" }}
-            options={categoryOptions?.length ? categoryOptions : []}
-            // renderInput={(params) => <TextField {...params} label="category" />}
-            getOptionLabel={(e) => e.category}
-            limitTags={3}
-            renderInput={(params: any) => (
-              <TextField
-                {...params}
-                placeholder={"Select Categories*"}
-                variant="outlined"
-                autoComplete="off"
-                error={Boolean(errorMessages?.categories)}
-                helperText={errorMessages?.categories}
-                size="small"
-                inputProps={{
-                  ...params.inputProps,
-                }}
-                fullWidth
-                className={styles.selectField}
-              />
-            )}
-            renderOption={(props, option, { selected }) => (
-              <li {...props} className={styles.optionsList}>
-                <Checkbox
-                  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                  checkedIcon={<CheckBoxIcon fontSize="small" />}
-                  checked={selected}
-                />
-                {option.category}
-              </li>
-            )}
-            onChange={(e: any, value: any, reason: any) => {
-              if (reason == "clear") {
-                setCategory([]);
-              }
-              if (value) {
-                setCategory(value);
-              }
-            }}
-          />
-        </Box>
-        <FormHelperText />
-      </FormControl>
       <div className={styles.conatiner}>
-
+        <div className={styles.categoriesRow}>
+          
+          <p className={styles.label}>Select Category<span style={{ color: "red" }}>*</span></p>
+          <FormControl variant="outlined" fullWidth>
+            <Box>
+              <Autocomplete
+                value={defaultValue.length ? defaultValue : []}
+                multiple
+                disablePortal
+                id="combo-box-demo"
+                style={{ height: "55px", zIndex: "1000" }}
+                options={categoryOptions?.length ? categoryOptions : []}
+                // renderInput={(params) => <TextField {...params} label="category" />}
+                getOptionLabel={(e) => e.category}
+                limitTags={3}
+                renderInput={(params: any) => (
+                  <TextField
+                    {...params}
+                    placeholder={"Select Categories*"}
+                    variant="outlined"
+                    autoComplete="off"
+                    error={Boolean(errorMessages?.categories)}
+                    helperText={errorMessages?.categories}
+                    size="small"
+                    inputProps={{
+                      ...params.inputProps,
+                    }}
+                    fullWidth
+                    className={styles.selectField}
+                  />
+                )}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props} className={styles.optionsList}>
+                    <Checkbox
+                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                      checkedIcon={<CheckBoxIcon fontSize="small" />}
+                      checked={selected}
+                    />
+                    {option.category}
+                  </li>
+                )}
+                onChange={(e: any, value: any, reason: any) => {
+                  if (reason == "clear") {
+                    setCategory([]);
+                  }
+                  if (value) {
+                    setCategory(value);
+                  }
+                }}
+              />
+            </Box>
+            <FormHelperText />
+          </FormControl>
+        </div>
         <div className={styles.workType}>
 
           <p className={styles.label}>Work Type<span style={{ color: "red" }}>*</span></p>

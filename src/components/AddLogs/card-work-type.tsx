@@ -34,7 +34,9 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
   );
 
   const captureDateValue = (fromDate: string, toDate: string) => {
-    captureDates(fromDate, toDate, list)
+    let categories = category.length && category.map((item: any) => item.slug);
+    setList(categories)
+    captureDates(fromDate, toDate, categories)
     if (fromDate && toDate && work) {
       setActiveStepBasedOnData(1);
     } else {

@@ -2,7 +2,7 @@
 import styles from "./head-part.module.css";
 import IconButtonComponent from "../Core/IconButtonComponent";
 import { useRouter } from "next/router";
-import { Chip, Icon } from "@mui/material";
+import { Button, Chip, Icon } from "@mui/material";
 import { useEffect, useState } from "react";
 import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAttachmentsService";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
@@ -63,6 +63,7 @@ const HeadPart = ({ data }: any) => {
           size="small"
         />
         <h4 className={styles.text}>View Logs</h4>
+        <Button onClick={() => router.push(`/farm/${router.query.form_id}/logs/${router.query.log_id}/edit`)}>Edit</Button>
       </div>
       <div className={styles.headerContent}>
         <div className={styles.label}>

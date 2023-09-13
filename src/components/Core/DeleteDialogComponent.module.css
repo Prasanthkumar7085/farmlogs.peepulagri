@@ -1,0 +1,13 @@
+.deleteDialog {
+    max-width: 500px;
+    margin: 0 auto;
+}
+.deleteDialog .title{
+    display: flex;
+    align-items: center;
+    column-gap: var(--gap-7xs);
+}
+.DefaultBtn {
+    background-color: var(--background);
+    color: var(--title);
+}

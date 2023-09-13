@@ -185,7 +185,7 @@ const AddALog: NextPage = () => {
       <div>
         <Header setFormDetails={setFormDetails} errorMessages={errorMessages} />
         <div className={styles.secondaryFormField}>
-          <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
+          <ProgressSteps activeStepsArray={activeStepsArray} activeStepBasedOnData={activeStepBasedOnData} />
           <Form
             loadAttachments={loadAttachments}
             deleteSelectedFile={deleteSelectedFile}

@@ -245,7 +245,7 @@ const EditALog: NextPage = () => {
                 <div>
                     <Header setFormDetails={setFormDetails} singleLogDetails={singleLogDetails} errorMessages={errorMessages} />
                     <div className={styles.secondaryFormField}>
-                        <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
+                        <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} activeStepsArray={activeStepsArray} />
                         <Form
                             loadAttachments={loadAttachments}
                             deleteSelectedFile={deleteSelectedFile}

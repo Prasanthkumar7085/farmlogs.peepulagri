@@ -63,7 +63,7 @@ const HeadPart = ({ data }: any) => {
           onClick={() => router.back()}
           size="small"
         />
-        <h4 className={styles.text}>View Logs</h4>
+        <h4 className={styles.text}>View Log</h4>
         <Button variant="outlined" color="error" onClick={() => router.push(`/farm/${router.query.form_id}/logs/${router.query.log_id}/edit`)}><DriveFileRenameOutlineIcon /></Button>
       </div>
       <div className={styles.headerContent}>

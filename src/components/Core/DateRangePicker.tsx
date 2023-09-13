@@ -17,6 +17,9 @@ const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
     return (
         <Stack >
             <DateRangePicker
+                disabledDate={(date: any) => {
+                    return date.getTime() > new Date().getTime();
+                }}
                 {...rest}
                 showOneCalendar
                 format="dd-MM-yyyy"

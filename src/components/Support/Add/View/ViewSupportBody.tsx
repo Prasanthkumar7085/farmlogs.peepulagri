@@ -118,7 +118,7 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                         <Typography className={styles.value}>
                             {userType == 'ADMIN' ?
                                 <SelectComponent
-                                    value={supportStatus}
+                                    value={supportStatus ? supportStatus : ""}
                                     defaultValue={supportStatus}
                                     options={statusOptions}
                                     onChange={onChangeStatus}

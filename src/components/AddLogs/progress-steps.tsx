@@ -7,26 +7,30 @@ import StepContent from '@mui/material/StepContent';
 import Typography from '@mui/material/Typography';
 import { useState } from "react";
 
-const ProgressSteps = ({ activeStepBasedOnData }: { activeStepBasedOnData: number }) => {
+const ProgressSteps = ({ activeStepsArray, activeStepBasedOnData }: { activeStepsArray: Array<boolean>, activeStepBasedOnData: number }) => {
 
   const steps = [
     {
       label: 'Work Type',
       description: `Choose type : Machinery & Manual or both`,
+      isActive: activeStepsArray[0]
     },
     {
       label: 'Resources',
       description:
-        'Add machinery like Tractors, Sprayers (or) human resources ',
+        'Add machinery like Tractors, Sprayers etc. (or) human resources ',
+      isActive: activeStepsArray[1]
     },
     {
       label: 'Additional Resources',
       description: `You can add additional details based on the category and work type`,
+      isActive: activeStepsArray[2]
     },
     {
       label: 'Attachments',
       description:
         'Attach images videos and documents related to the logs',
+      isActive: activeStepsArray[3]
     },
   ];
 
@@ -36,12 +40,12 @@ const ProgressSteps = ({ activeStepBasedOnData }: { activeStepBasedOnData: numbe
   }, [activeStepBasedOnData])
 
   return (
-    <div className={styles.progressSteps}>
+    <div className={styles.progressSteps} style={{ position: "sticky", top: "50px" }}>
       <div className={styles.card}>
         <div className={styles.progressStepsProgressIcon}>
           <Stepper activeStep={activeStep} orientation="vertical">
             {steps.map((step, index) => (
-              <Step key={index}>
+              <Step key={index} completed={step.isActive}>
                 <StepLabel sx={{ fontWeight: "600"}}>
                   {step.label}
                 </StepLabel>

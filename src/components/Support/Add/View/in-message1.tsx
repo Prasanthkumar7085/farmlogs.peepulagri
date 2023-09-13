@@ -8,7 +8,7 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import deleteSupportAttachmentService from "../../../../../lib/services/SupportService/deleteSupportAttachmentService";
 import timePipe from "@/pipes/timePipe";
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const InMessage = ({ data }: { data: SupportMessageType }) => {
 
@@ -38,6 +38,12 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
     if (response.success) {
       await getImagesByMessageId();
     }
+  }
+
+  const deleteAMessage = async () => {
+    console.log(data?._id);
+
+
   }
 
 
@@ -110,6 +116,11 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
               )
             })
             : ""}
+        </div>
+        <div>
+          <IconButton onClick={deleteAMessage}>
+            <DeleteOutlineIcon />
+          </IconButton>
         </div>
       </div>
     </div>

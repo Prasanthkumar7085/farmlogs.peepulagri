@@ -188,9 +188,9 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
 
       <div className={styles.dataGroup3}>
         <div className={styles.subTitle2}>
-          <div className={styles.textWrapper}>
+          {downloadUrls.length ? <div className={styles.textWrapper}>
             <div className={styles.text8}>Attachments</div>
-          </div>
+          </div> : ""}
         </div>
         <div className={styles.attachments}>
           {downloadUrls.map((item: any, index: number) => {

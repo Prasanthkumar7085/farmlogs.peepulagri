@@ -27,6 +27,8 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState(false);
   const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
   const [uploadFailed, setUploadFailed] = useState(false);
+  const [loadAttachments, setLoadAttachments] = useState(true);
+
 
   const deleteSelectedFile = (index: number) => {
     let array = [...filesDetailsAfterUpload];
@@ -76,15 +78,21 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   }
 
   const selectMessageAttachments = (e: any) => {
+    setLoadAttachments(false);
+    setTimeout(() => {
+      setLoadAttachments(true);
+    }, 1);
     setUploadFailed(false);
     let selectedFiles = e.target.files;
-    if (selectedFiles.length) {
+
       setFiles(selectedFiles)
       uploadFiles(selectedFiles);
-    }
+
   }
 
   const uploadFiles = async (filesFromArgs: any) => {
+
+
     setLoadingOnImagesUpload(true);
     let tempFilesStorage = Array.from(filesFromArgs).map((item: any) => {
       return { original_name: item.name, type: item.type, size: item.size };
@@ -102,8 +110,8 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
     setLoadingOnImagesUpload(false);
   };
   const postAllImages = async (filesFromArgs: any, response: any, tempFilesStorage: any) => {
-    let arrayForResponse: any = [];
 
+    let arrayForResponse: any = [];
     for (let index = 0; index < response.length; index++) {
       let uploadResponse: any = await uploadFileToS3(
         response[index].target_url,
@@ -113,6 +121,7 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
       } else {
+        setFiles([]);
         setUploadFailed(true);
       }
     }
@@ -140,8 +149,6 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
       <div className={styles.actions}>
         <div className={styles.attachments}>
           <label>
-
-            {/* <Button variant="outlined" color="primary" size="large" >Select Files</Button> */}
             <div style={{ border: "1px solid", borderRadius: "5px", padding: "5px 20px 5px 20px", backgroundColor: "#3360cc", color: "white", cursor: "pointer" }} className={styles.uploadFiles}>
               <span>
                 Select Files
@@ -151,13 +158,13 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
                 : <CloudUploadOutlinedIcon />}
             </div>
 
-            <input
+            {loadAttachments ? <input
               onChange={selectMessageAttachments}
               className={styles.image}
               type="file"
               multiple
               style={{ display: "none" }}
-              accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" />
+              accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" /> : ""}
           </label>
           <div className="styles.attachmentsContainer">
             {files &&

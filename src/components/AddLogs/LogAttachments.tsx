@@ -13,7 +13,7 @@ import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAt
 import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
 
 
-const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed, deleteSelectedFile }: any) => {
+const LogAttachments = ({ loadAttachments, onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed, deleteSelectedFile }: any) => {
 
   const router = useRouter();
 
@@ -85,8 +85,8 @@ const LogAttachments = ({ onChangeFile, uploadFiles, files, uploadButtonLoading,
           <AttachmentIcon className={styles.icon} />
           <span>Select Files</span>
         </div>
-        <input id="upload-files" className={styles.uploadFiles} name="file" type="file" multiple onChange={onChangeFile} 
-         accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf"  />
+        {loadAttachments ? <input id="upload-files" className={styles.uploadFiles} name="file" type="file" multiple onChange={onChangeFile}
+          accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf" /> : ""}
       </div>
       <div>
         {files &&

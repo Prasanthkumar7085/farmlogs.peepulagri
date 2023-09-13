@@ -20,10 +20,11 @@ const EditALog: NextPage = () => {
 
     const router: any = useRouter();
 
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
     const [singleLogDetails, setSingleLogDetails] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
-
-    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+    const [categoriesList, setCategoryList] = useState([])
     const [resources, setResources] = useState([]);
     const [additionalResources, setAdditionalResources] = useState([]);
     const [dates, setDates] = useState<any>([]);
@@ -31,6 +32,8 @@ const EditALog: NextPage = () => {
     const [workType, setWorkType] = useState("");
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
+    const [loadAttachments, setLoadAttachments] = useState(true);
+
 
     const [files, setFiles] = useState<any>([]);
     const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
@@ -45,6 +48,9 @@ const EditALog: NextPage = () => {
         setDates([fromDate, toDate]);
     }
 
+    const captureCategoriesArray = (categories: any) => {
+        setCategoryList(categories)
+    }
 
     useEffect(() => {
         setResources(singleLogDetails?.resources);
@@ -58,9 +64,6 @@ const EditALog: NextPage = () => {
         setDates([singleLogDetails?.from_date_time, singleLogDetails?.to_date_time]);
         setResources(singleLogDetails?.resources);
         setAdditionalResources(singleLogDetails?.additional_resources);
-
-
-
 
     }, [singleLogDetails]);
 
@@ -95,12 +98,12 @@ const EditALog: NextPage = () => {
     const editLog = async () => {
         setErrorMessages({});
         setLoading(true);
-        const { categories, title, description } = formDetails;
+        const { title, description } = formDetails;
 
         const obj = {
             title: title,
             description: description,
-            categories: categories,
+            categories: categoriesList,
             work_type: workType,
             farm_id: router.query.farm_id,
             status: 'ACTIVE',
@@ -136,7 +139,10 @@ const EditALog: NextPage = () => {
 
 
     const onChangeFile = async (e: any) => {
-
+        setLoadAttachments(false);
+        setTimeout(() => {
+            setLoadAttachments(true);
+        }, 1);
         setFiles(e.target.files);
         await uploadFiles(e.target.files)
     }
@@ -168,6 +174,7 @@ const EditALog: NextPage = () => {
                 setAlertType(true);
                 setActiveStep(4);
             } else {
+                setFiles([]);
                 setUploadFailed(true);
                 setAlertMessage('Upload Failed!');
                 setAlertType(false);
@@ -234,11 +241,13 @@ const EditALog: NextPage = () => {
                     <div className={styles.secondaryFormField}>
                         <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
                         <Form
+                            loadAttachments={loadAttachments}
                             deleteSelectedFile={deleteSelectedFile}
                             setActiveStepBasedOnData={setActiveStep}
                             setWorkType={setWorkType}
                             captureDates={captureDates}
                             setResources={setResources}
+                            captureCategoriesArray={captureCategoriesArray}
                             setAdditionalResources={setAdditionalResources}
                             singleLogDetails={singleLogDetails}
                             onChangeFile={onChangeFile}

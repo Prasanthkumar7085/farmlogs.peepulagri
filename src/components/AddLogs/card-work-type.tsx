@@ -21,11 +21,11 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
 import { CategoriesType } from "@/types/categoryTypes";
-const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetails, setActiveStepBasedOnData, setCategoryList }: any) => {
+const CardWorkType = ({ captureCategoriesArray, errorMessages, captureDates, setWorkType, singleLogDetails, setActiveStepBasedOnData, setCategoryList }: any) => {
 
   const [work, setWork] = useState<any>()
   const [categoryOptions, setCategoryOptions] = useState<Array<CategoriesType>>([]);
-  const [list, setList] = useState<any>()
+
 
   const [defaultValue, setDefaultValue] = useState<any>([]);
 
@@ -34,14 +34,26 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
   );
 
   const captureDateValue = (fromDate: string, toDate: string) => {
-    let categories = category.length && category.map((item: any) => item.slug);
-    setList(categories)
-    captureDates(fromDate, toDate, categories)
+
+    captureDates(fromDate, toDate)
     if (fromDate && toDate && work) {
       setActiveStepBasedOnData(1);
     } else {
       setActiveStepBasedOnData(1, false);
     }
+  }
+
+  const captureCategories = (selectedCategories: any) => {
+
+    let categories = []
+    if (selectedCategories.length) {
+      setDefaultValue(selectedCategories);
+      categories = selectedCategories.length && selectedCategories.map((item: any) => item.slug);
+
+    }
+    captureCategoriesArray(categories)
+
+
   }
 
 
@@ -79,7 +91,6 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
 
   useEffect(() => {
     let categories = category.length && category.map((item: any) => item.slug);
-    setList(categories)
     setDefaultValue(category);
   }, [category]);
 
@@ -129,10 +140,10 @@ const CardWorkType = ({ errorMessages, captureDates, setWorkType, singleLogDetai
                 )}
                 onChange={(e: any, value: any, reason: any) => {
                   if (reason == "clear") {
-                    setCategory([]);
+                    captureCategories([]);
                   }
                   if (value) {
-                    setCategory(value);
+                    captureCategories(value);
                   }
                 }}
               />

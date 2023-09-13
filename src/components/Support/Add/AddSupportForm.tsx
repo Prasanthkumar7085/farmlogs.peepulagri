@@ -33,6 +33,8 @@ const AddSupportForm = () => {
   const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [uploadOrNot, setUploadOrNot] = useState(false);
+  const [loadAttachments, setLoadAttachments] = useState(true);
+
 
   const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>();
   const [errorMessages, setErrorMessages] = useState<any>();
@@ -93,6 +95,10 @@ const AddSupportForm = () => {
 
 
   const onChangeFile = (e: any) => {
+    setLoadAttachments(false);
+    setTimeout(() => {
+      setLoadAttachments(true);
+    }, 1);
     setUploadOrNot(false);
     setFiles(e.target.files);
 
@@ -132,6 +138,7 @@ const AddSupportForm = () => {
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
         checkUploadOrNot = true;
       } else {
+        setFiles([]);
         setAlertMessage("File(s) Uploaded Failed!");
         setAlertType(false);
         checkUploadOrNot = false;
@@ -196,6 +203,7 @@ const AddSupportForm = () => {
               <SupportRecording setAudioDetailsAfterUpload={setAudioDetailsAfterUpload} />
               <div>
                 <SupportAttachments
+                  loadAttachments={loadAttachments}
                   deleteSelectedFile={deleteSelectedFile}
                   onChangeFile={onChangeFile}
                   files={files}

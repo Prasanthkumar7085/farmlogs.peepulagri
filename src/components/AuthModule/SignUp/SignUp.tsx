@@ -57,7 +57,6 @@ const SignUp = () => {
 
         setLoadingWhileGettingOtp(false);
     }
-console.log(mobile);
 
     return (
         <div id={styles.loginPage}>

@@ -47,7 +47,7 @@ const ViewSupportPage = () => {
                 <ViewSupportBody data={data} getOneSupportById={getOneSupportById} />
             </div>
             <div className={styles.threads}>
-                <Typography variant="h6" className={styles.cardTitle}>Comments</Typography>
+                <Typography variant="h6" className={styles.cardTitle}>Conversation</Typography>
                 <SupportConversationScreen data={data} />
             </div>
             <LoadingComponent loading={loading} />

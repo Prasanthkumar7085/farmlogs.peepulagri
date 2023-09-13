@@ -129,7 +129,7 @@ const SignUpVerify = () => {
         setErrorMessages(response.errors);
       }
     } else if (response.status == 401 || response.status == 409) {
-      setErrorMessages({ message: response.message });
+      setErrorMessages({ otp: response.message });
     }
     setLoadingWhileVerifyingOtp(false);
   };

@@ -30,29 +30,26 @@ const EditSupportForm = () => {
   );
 
   const [supportOneDetails, setSupportOneDetails] = useState<any>();
-  const [loadingOnImagesUpload, setLoadingOnImagesUpload] =
-    useState<boolean>(false);
+  const [loadingOnImagesUpload, setLoadingOnImagesUpload] = useState<boolean>(false);
 
   const [query, setQuery] = useState<string>(supportOneDetails?.title);
   const [categories, setCategories] = useState<Array<string>>();
   const [description, setDescription] = useState<string>("");
 
-  const [supportDetails, setSupportDetails] =
-    useState<Partial<AddSupportPayload>>();
+  const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>();
 
   const [files, setFiles] = useState<any>([]);
-  const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>(
-    []
-  );
-  const [audioDetailsAfterUpload, setAudioDetailsAfterUpload] = useState<any>(
-    {}
-  );
+  const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
+  const [audioDetailsAfterUpload, setAudioDetailsAfterUpload] = useState<any>({});
 
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [alertType, setAlertType] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [uploadOrNot, setUploadOrNot] = useState(false);
   const [errorMessages, setErrorMessages] = useState<any>();
+  const [loadAttachments, setLoadAttachments] = useState(true);
+
+
 
   useEffect(() => {
     setQuery(supportOneDetails?.title);
@@ -137,15 +134,22 @@ const EditSupportForm = () => {
   };
 
   const getOneSupportDetails = async () => {
+    setLoading(true);
     try {
       const response = await getSupportByIdService(router?.query?.support_id);
       setSupportOneDetails(response?.data);
     } catch (err: any) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const onChangeFile = (e: any, check = false) => {
+    setLoadAttachments(false);
+    setTimeout(() => {
+      setLoadAttachments(true);
+    }, 1);
     setUploadOrNot(false);
     setFiles(e.target.files);
     uploadFiles(e.target.files);
@@ -176,7 +180,7 @@ const EditSupportForm = () => {
       );
 
       if (uploadResponse.ok) {
-        if (uploadResponse.ok) {
+
           setAlertMessage(`${index + 1} attachment(s) Uploaded!`);
           setAlertType(true);
           const { target_url, ...rest } = response[index];
@@ -186,12 +190,13 @@ const EditSupportForm = () => {
           });
           checkUploadOrNot = true;
         } else {
+        setFiles([]);
           setAlertMessage("Attachment(s) Uploaded Failed!");
           setAlertType(false);
           checkUploadOrNot = false;
           break;
         }
-      }
+
     }
     setUploadOrNot(checkUploadOrNot);
     setFilesDetailsAfterUpload([
@@ -201,6 +206,17 @@ const EditSupportForm = () => {
 
     setLoadingOnImagesUpload(false);
   };
+
+
+  const deleteSelectedFile = (index: any) => {
+    let array = [...filesDetailsAfterUpload];
+    let filesArray = [...files];
+    array.splice(index, 1);
+    filesArray.splice(index, 1);
+    setFiles([...filesArray])
+    setFilesDetailsAfterUpload([...array]);
+
+  }
 
   return (
     <div
@@ -251,6 +267,8 @@ const EditSupportForm = () => {
 
                 <div>
                   <SupportAttachments
+                    loadAttachments={loadAttachments}
+                    deleteSelectedFile={deleteSelectedFile}
                     onChangeFile={onChangeFile}  
                     files={files}
                     loadingOnImagesUpload={loadingOnImagesUpload}

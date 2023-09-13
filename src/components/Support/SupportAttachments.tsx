@@ -11,7 +11,7 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import Image from "next/image";
 
 
-const SupportAttachments = ({ deleteSelectedFile, onChangeFile, files, loadingOnImagesUpload }: any) => {
+const SupportAttachments = ({ loadAttachments, deleteSelectedFile, onChangeFile, files, loadingOnImagesUpload }: any) => {
 
     const router = useRouter();
 
@@ -62,9 +62,9 @@ const SupportAttachments = ({ deleteSelectedFile, onChangeFile, files, loadingOn
                     <AttachmentIcon className={styles.icon} /> 
                     <span>Select Files</span>
                 </div>
-                <input className={styles.link} type="file" multiple onChange={onChangeFile}
+                {loadAttachments ? <input className={styles.link} type="file" multiple onChange={onChangeFile}
                     style={{ display: "none" }}
-                    accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" />
+                    accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" /> : ""}
             </label>
 
             <div>

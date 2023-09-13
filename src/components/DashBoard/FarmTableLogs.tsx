@@ -228,7 +228,10 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         let objValue: any = (workTypeOptions.find((categoryItem: Partial<categoriesType>) => categoryItem.value?.toLowerCase() == item.toLowerCase()))
         if (objValue) {
         return objValue[value];
-        } else return "#78909C"
+        } else {
+            if (value == 'color') return "#78909C"
+            else return '-'
+        }
 
     }
 

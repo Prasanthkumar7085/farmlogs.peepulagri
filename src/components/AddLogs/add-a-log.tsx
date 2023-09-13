@@ -4,11 +4,9 @@ import FooterActionButtons from "./footer-action-buttons";
 import styles from "./add-a-log.module.css";
 import Header from "./header";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import addLogService from "../../../lib/services/LogsService/addLogService";
 import Form from "./form";
-import { GetLogByIdResponseDataType } from "@/types/logsTypes";
-import getLogByIdService from "../../../lib/services/LogsService/getLogByIdService";
 import LoadingComponent from "../Core/LoadingComponent";
 import AlertComponent from "../Core/AlertComponent";
 import uploadFileToS3 from "../../../lib/services/LogsService/uploadFileToS3InLog";
@@ -19,8 +17,6 @@ import { useSelector } from "react-redux";
 const AddALog: NextPage = () => {
 
   const router: any = useRouter();
-
-  const id = router.query?.farm_id;
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -42,12 +38,8 @@ const AddALog: NextPage = () => {
   const [uploadFailed, setUploadFailed] = useState(false);
 
   const [errorMessages, setErrorMessages] = useState<any>();
+  const [loadAttachments, setLoadAttachments] = useState(true);
 
-  const captureDates = (fromDate: string, toDate: string, details: any) => {
-    setDates([fromDate, toDate]);
-    console.log(details, "i")
-    setCategoryList(details)
-  };
 
 
   const addLogs = async () => {
@@ -92,8 +84,12 @@ const AddALog: NextPage = () => {
 
 
 
-  const onChangeFile = async (e: any) => {
 
+  const onChangeFile = async (e: any) => {
+    setLoadAttachments(false);
+    setTimeout(() => {
+      setLoadAttachments(true);
+    }, 1);
     let filesSelected = e.target.files;
     setUploadFailed(false);
     setFiles(filesSelected);
@@ -128,6 +124,7 @@ const AddALog: NextPage = () => {
         setAlertType(true);
         setActiveStep(4);
       } else {
+        setFiles([]);
         setUploadFailed(true);
         setAlertMessage('Upload Failed!');
         setAlertType(false);
@@ -169,8 +166,12 @@ const AddALog: NextPage = () => {
 
   }
 
-  const captureCategoriesArray = (values: any) => {
+  const captureDates = (fromDate: string, toDate: string) => {
+    setDates([fromDate, toDate]);
+  };
 
+  const captureCategoriesArray = (categories: any) => {
+    setCategoryList(categories)
   }
 
   return (
@@ -181,6 +182,7 @@ const AddALog: NextPage = () => {
         <div className={styles.secondaryFormField}>
           <ProgressSteps activeStepBasedOnData={activeStepBasedOnData} />
           <Form
+            loadAttachments={loadAttachments}
             deleteSelectedFile={deleteSelectedFile}
             setActiveStepBasedOnData={setActiveStep}
             setWorkType={setWorkType}
@@ -193,6 +195,7 @@ const AddALog: NextPage = () => {
             uploadButtonLoading={uploadButtonLoading}
             uploadFailed={uploadFailed}
             errorMessages={errorMessages}
+            captureCategoriesArray={captureCategoriesArray}
 
           />
 

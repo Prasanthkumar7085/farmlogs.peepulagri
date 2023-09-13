@@ -58,6 +58,7 @@
   position: relative;
   line-height: 100%;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .duration {

@@ -34,7 +34,7 @@ const FarmCard = ({
       </div>
       <div className={styles.duration}>
         <img className={styles.calendarIcon} alt="" src="/calendaricon.svg" />
-        <div className={styles.para}>{timePipe(createAt, 'DD-MM-YYYY')} - current</div>
+        <div className={styles.para}>{timePipe(createAt, 'DD-MM-YYYY')}</div>
       </div>
       <div className={styles.statsprogress}>
         <div className={styles.logscount}>

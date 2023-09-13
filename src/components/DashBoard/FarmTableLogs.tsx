@@ -27,7 +27,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
 
-    const [data, setData] = useState();
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [paginationDetails, setPaginationDetails] = useState<PaginationDetailsType | null>();
     const [page, setPage] = useState<number | string>(1);
@@ -437,7 +437,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
                 </Button>
             </div>
             <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
-            {!loading ? <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' /> : ""}
+            {!loading && data.length ? <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Logs' /> : ""}
             <LoadingComponent loading={loading} />
             <DeleteDialogCompoennt deleteContent={deleteContent} deleteDialogOpen={deleteDialogOpen} confirmDelete={confirmDelete} />
         </div>

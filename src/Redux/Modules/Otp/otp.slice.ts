@@ -5,7 +5,7 @@ import { Otp } from "./otp";
 const reducerName = "otp";
 
 export const initialState: Otp.OtpData = {
-  resendOtpIn: 59
+  resendOtpIn: 0
 };
 
 export const otpSlice = createSlice({

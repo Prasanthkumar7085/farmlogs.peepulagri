@@ -10,7 +10,7 @@ import styles from "./SignUpVerify.module.css";
 import ImageComponent from "../../../components/Core/ImageComponent";
 import { doesSectionFormatHaveLeadingZeros } from "@mui/x-date-pickers/internals/hooks/useField/useField.utils";
 import serUserTypeCookie from "../../../../lib/CookieHandler/serUserTypeCookie";
-import { setOtpCountDown } from "@/Redux/Modules/Otp";
+import { resetOtpCountDown, setOtpCountDown } from "@/Redux/Modules/Otp";
 import { useSelector } from "react-redux";
 import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
 import { setAllFarms } from "@/Redux/Modules/Farms";
@@ -29,22 +29,24 @@ const SignUpVerify = () => {
 
   const descriptionElementRef = useRef<HTMLElement>(null);
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(59);
+  const [seconds, setSeconds] = useState(0);
+
+
 
   useEffect(() => {
-    if (router?.isReady) {
-      setMobile(router.query.mobile as string);
-      setSeconds(59);
-      dispatch(setOtpCountDown(59));
+    setMobile(router.query.mobile as string);
+    if (router?.isReady && otpCountDown) {
+      setSeconds(otpCountDown);
+      dispatch(setOtpCountDown(otpCountDown));
     }
-  }, [router.isReady]);
+  }, [router.isReady, otpCountDown]);
 
   useEffect(() => {
     setSeconds(otpCountDown)
-  }, [otpCountDown])
+  }, [otpCountDown]);
+
+
   useEffect(() => {
-
-
     const { current: descriptionElement } = descriptionElementRef;
     if (descriptionElement !== null) {
       descriptionElement.focus();
@@ -74,9 +76,8 @@ const SignUpVerify = () => {
 
   const resetCountdown = async () => {
     setSeconds(59);
-    dispatch(setOtpCountDown(59));
+    dispatch(resetOtpCountDown());
     const body = {
-
       phone: mobile
     }
 
@@ -165,7 +166,7 @@ const SignUpVerify = () => {
             </span>
           </div>
           <div>
-            <Typography className={styles.label}>We sent a verification code to <span>+91 {mobile}</span></Typography>
+            <Typography className={styles.label}>{"We've sent an OTP to your phone number"}</Typography>
             <TextField
             autoFocus
               fullWidth
@@ -195,10 +196,10 @@ const SignUpVerify = () => {
             )}
           </Button>
                     
-          <p className={styles.helperText}>{"Don't receive an OTP "}
-            <Button variant="text" onClick={resetCountdown} disabled={otpCountDown}>Resent OTP</Button>
-            {seconds ? `Resend in 00:${otpCountDown}s` : ""}
-          </p>
+          {!seconds ? <p className={styles.helperText}>{"Did not receive an OTP?"}
+            <Button variant="text" onClick={resetCountdown} disabled={otpCountDown} sx={{ textTransform: "capitalize" }}>Resend OTP</Button>
+          </p> : ""}
+          {seconds ? `Resend in 00:${otpCountDown}s` : ""}
 
         </div>
       </form>

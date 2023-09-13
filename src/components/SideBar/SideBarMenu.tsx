@@ -23,6 +23,7 @@ interface item {
     src: string;
     link: string;
     isVisible: boolean;
+    active: boolean;
 }
 
 
@@ -35,9 +36,9 @@ const SideBarMenu = ({ children }: any) => {
     const dispatch = useDispatch();
 
     const menuListItems = [
-        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN' },
-        { src: '/support-icon.svg', link: "/support", isVisible: true },
-        { src: '/timeline-icon.svg', link: "/timeline", isVisible: userName !== 'ADMIN' },
+        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN', active: router.pathname.includes('/farm') },
+        { src: '/support-icon.svg', link: "/support", isVisible: true, active: router.pathname.includes('/support') },
+        { src: '/timeline-icon.svg', link: "/timeline", isVisible: userName !== 'ADMIN', active: router.pathname.includes('/timeline') },
         // { src: '/settings-icon.svg', link: "/" },
         // { src: '/calendaricon.svg', link: "/" },
         // { src: '/graph-icon.svg', link: "/" },
@@ -72,7 +73,10 @@ const SideBarMenu = ({ children }: any) => {
                             if (item.isVisible) {
                             return (
                                 <ListItem className={styles.menuItem} key={index}>
-                                    <ListItemButton onClick={() => router.push(item.link)}>
+                                    <ListItemButton
+                                        onClick={() => router.push(item.link)}
+                                        className={item.active ? styles.activeMenuItem : styles.inactiveMenuItem}
+                                    >
                                         <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
                                     </ListItemButton>
                                 </ListItem>

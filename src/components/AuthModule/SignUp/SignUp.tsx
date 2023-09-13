@@ -78,7 +78,7 @@ const SignUp = () => {
                     </div>
                     <div>
                         <Typography className={styles.label}>
-                            Login With Mobile Number
+                            Login with Mobile Number
                         </Typography>
                         <label  ></label>
                         <TextField
@@ -88,7 +88,7 @@ const SignUp = () => {
                             helperText={responseErrorMesaages?.phone}
                             value={mobile}
                             size="small"
-                            placeholder="+91 xxxxx xxxxx"
+                            placeholder="99999 99999"
                             onChange={setMobileNumber}
                             onKeyPress={handleKeyPress}
                             className={styles.phoneNo}

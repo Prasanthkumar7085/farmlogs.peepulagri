@@ -20,7 +20,15 @@
 .menuItem {
   text-decoration: none;
 }
+.inactiveMenuItem {
+  border-radius: 5px;
+  background-color: none;
+}
 
+.activeMenuItem {
+  border-radius: 5px;
+  background-color: #05a155;
+}
 .menuItem.active {
   background-color: #2A51AE;
 }

@@ -1,6 +1,6 @@
 import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import verifyOtpService from "../../../../lib/services/AuthServices/verifyOtpService";
 import setCookie from "../../../../lib/CookieHandler/setCookie";
 import { setUserDetails } from "@/Redux/Modules/Auth";
@@ -133,6 +133,21 @@ const SignUpVerify = () => {
     }
     setLoadingWhileVerifyingOtp(false);
   };
+  const handleKeyPress = (event: any) => {
+    const keyPressed = event.key;
+    const allowedCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+    if (!allowedCharacters.includes(keyPressed)) {
+      event.preventDefault();
+    }
+  };
+  const handleOtpChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    value = value.trim();;
+    if (value.length <= 6) {
+      setOtp(value)
+    }
+  }
   
   return (
     <div id={styles.loginPage}>
@@ -159,8 +174,10 @@ const SignUpVerify = () => {
               size="small"
               placeholder="Enter OTP"
               value={otp}
-              onChange={(e: any) => setOtp(e.target.value)}
+              onChange={handleOtpChange}
               className={styles.phoneNo}
+              onKeyPress={handleKeyPress}
+              onKeyDown={(e: any) => { if (e.key == 'Enter') verifyOtp(e) }}
             />
           </div>
           

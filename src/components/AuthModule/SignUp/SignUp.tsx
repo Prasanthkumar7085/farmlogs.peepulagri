@@ -4,10 +4,14 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
 import styles from "./SignUp.module.css";
 import ImageComponent from "../../../components/Core/ImageComponent";
+import { setOtpCountDown } from "@/Redux/Modules/Otp";
+import { useDispatch } from "react-redux";
 
 const SignUp = () => {
 
     const router = useRouter();
+
+    const dispatch = useDispatch();
 
     const [mobile, setMobile] = useState<string>();
     const [errorMessages, setErrorMessages] = useState<string>();
@@ -45,6 +49,7 @@ const SignUp = () => {
         const response = await getOtpService(body);
 
         if (response?.success) {
+            dispatch(setOtpCountDown(59));
             router.push({
                 pathname: "/signup-verify",
                 query: { mobile: mobile }

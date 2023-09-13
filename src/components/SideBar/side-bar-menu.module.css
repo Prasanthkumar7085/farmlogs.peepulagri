@@ -22,7 +22,7 @@
 }
 
 .menuItem.active {
-  background-color: var(--color-mediumseagreen-100);
+  background-color: #2A51AE;
 }
 
 .menuItem,

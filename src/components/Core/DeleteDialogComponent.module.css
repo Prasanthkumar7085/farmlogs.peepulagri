@@ -11,3 +11,7 @@
     background-color: var(--background);
     color: var(--title);
 }
+.DefaultBtn:hover {
+    background-color: var(--e9edf1);
+    color: var(--title);
+}

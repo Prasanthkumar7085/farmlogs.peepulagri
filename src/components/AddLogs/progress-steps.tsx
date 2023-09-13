@@ -17,10 +17,10 @@ const ProgressSteps = ({ activeStepBasedOnData }: { activeStepBasedOnData: numbe
     {
       label: 'Resources',
       description:
-        'Add machinery like Tractors, Weed remover or man power',
+        'Add machinery like Tractors, Sprayers (or) human resources ',
     },
     {
-      label: 'Additional Information (Optional)',
+      label: 'Additional Resources',
       description: `You can add additional details based on the category and work type`,
     },
     {

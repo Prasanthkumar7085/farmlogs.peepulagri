@@ -156,7 +156,7 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
             multiline
             className={styles.description}
             name="description"
-            placeholder="Enter description here*"
+            placeholder="Enter description here"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             minRows={3}
@@ -165,11 +165,11 @@ const Header = ({ setFormDetails, singleLogDetails, errorMessages }: any) => {
           />
           <ErrorMessagesComponent errorMessage={errorMessages?.description} />
         </div>
-        <div className={styles.threeDots}>
+        {/* <div className={styles.threeDots}>
           <div className={styles.threeDotsChild} />
           <div className={styles.threeDotsChild} />
           <div className={styles.threeDotsChild} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

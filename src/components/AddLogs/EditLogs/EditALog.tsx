@@ -33,6 +33,8 @@ const EditALog: NextPage = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [loadAttachments, setLoadAttachments] = useState(true);
+    const [uploadFailedMessage, setUploadFailedMessage] = useState('');
+
 
 
     const [files, setFiles] = useState<any>([]);
@@ -64,7 +66,7 @@ const EditALog: NextPage = () => {
         setDates([singleLogDetails?.from_date_time, singleLogDetails?.to_date_time]);
         setResources(singleLogDetails?.resources);
         setAdditionalResources(singleLogDetails?.additional_resources);
-
+        captureCategoriesArray(singleLogDetails?.categories);
     }, [singleLogDetails]);
 
     const fetchSingleLogData = async () => {
@@ -154,6 +156,10 @@ const EditALog: NextPage = () => {
         if (response?.success) {
             await postAllImages(response?.data, tempFilesStorage, filesSelected);
         } else {
+            setFiles([]);
+            setUploadFailedMessage(response?.message);
+            setUploadFailed(true);
+            setAlertMessage('File(s) upload failed!');
             setUploadFailed(true);
         }
         setUploadButtonLoading(false);
@@ -170,13 +176,13 @@ const EditALog: NextPage = () => {
                 const { target_url, ...rest } = response[index];
                 arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
 
-                setAlertMessage(`${index + 1} image(s) Uploaded Successfully`);
+                setAlertMessage(`File(s) uploaded successfully`);
                 setAlertType(true);
                 setActiveStep(4);
             } else {
                 setFiles([]);
                 setUploadFailed(true);
-                setAlertMessage('Upload Failed!');
+                setAlertMessage('File(s) upload failed!');
                 setAlertType(false);
                 break;
             }
@@ -255,6 +261,7 @@ const EditALog: NextPage = () => {
                             uploadButtonLoading={uploadButtonLoading}
                             uploadFailed={uploadFailed}
                             errorMessages={errorMessages}
+                            uploadFailedMessage={uploadFailedMessage}
                         />
                     </div>
                     <FooterActionButtons editLog={editLog} singleLogDetails={singleLogDetails} />

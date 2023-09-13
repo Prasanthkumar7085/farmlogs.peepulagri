@@ -1,7 +1,7 @@
 import timePipe from "@/pipes/timePipe";
 import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
-import FarmTable from "../DashBoard/FarmTable";
+
 import { SupportDataTableProps, SupportResponseDataType, categoriesType } from "@/types/supportTypes";
 import { useRouter } from "next/router";
 
@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { CategoriesType } from "@/types/categoryTypes";
 import { useEffect, useState } from "react";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService";
+import SupportTable from "./SupportTable";
 
 
 
@@ -167,7 +168,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
     ]
 
     return (
-        <FarmTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
+        <SupportTable columns={columns} data={data} loading={loading} appliedSort={appliedSort} />
     )
 }
 

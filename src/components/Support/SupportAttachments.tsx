@@ -11,7 +11,7 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import Image from "next/image";
 
 
-const SupportAttachments = ({ loadAttachments, deleteSelectedFile, onChangeFile, files, loadingOnImagesUpload }: any) => {
+const SupportAttachments = ({ uploadFailedMessage, loadAttachments, deleteSelectedFile, onChangeFile, files, loadingOnImagesUpload }: any) => {
 
     const router = useRouter();
 
@@ -64,7 +64,7 @@ const SupportAttachments = ({ loadAttachments, deleteSelectedFile, onChangeFile,
                 </div>
                 {loadAttachments ? <input className={styles.link} type="file" multiple onChange={onChangeFile}
                     style={{ display: "none" }}
-                    accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" /> : ""}
+                    accept="image/jpeg, image/png,image/jpg,image/gif,image/*, .pdf, .mp3, .wav,.docx,.doc" /> : ""}
             </label>
 
             <div>
@@ -86,6 +86,13 @@ const SupportAttachments = ({ loadAttachments, deleteSelectedFile, onChangeFile,
             {loadingOnImagesUpload ? <Button disabled={!files?.length} color="success" variant="contained" size="small" sx={{ width: "100px" }}>
                 Uplaod<CircularProgress sx={{ color: " white" }} size="1.5rem" />
             </Button> : ""}
+
+            {uploadFailedMessage ?
+                <p style={{ color: "red", fontSize: "12px" }}>
+                    {uploadFailedMessage}
+                </p>
+                : ""}
+
             <div style={{ display: "flex" }}>
                 {downloadLinks && downloadLinks.length ? downloadLinks.map((item: any, index: number) => {
                     return (

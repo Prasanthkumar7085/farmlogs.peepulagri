@@ -13,7 +13,7 @@ import getLogAttachmentsService from "../../../lib/services/LogsService/getLogAt
 import deleteLogAttachmentService from "../../../lib/services/LogsService/deleteLogAttachmentService";
 
 
-const LogAttachments = ({ loadAttachments, onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed, deleteSelectedFile }: any) => {
+const LogAttachments = ({ loadAttachments, onChangeFile, uploadFiles, files, uploadButtonLoading, uploadFailed, deleteSelectedFile, uploadFailedMessage }: any) => {
 
   const router = useRouter();
 
@@ -86,7 +86,7 @@ const LogAttachments = ({ loadAttachments, onChangeFile, uploadFiles, files, upl
           <span>Select Files</span>
         </div>
         {loadAttachments ? <input id="upload-files" className={styles.uploadFiles} name="file" type="file" multiple onChange={onChangeFile}
-          accept="image/jpg,image/jpeg,image/webp,image/png,image/gif , .pdf" /> : ""}
+          accept="image/jpg,image/jpeg,image/webp,image/png, .pdf" /> : ""}
       </div>
       <div>
         {files &&
@@ -114,9 +114,9 @@ const LogAttachments = ({ loadAttachments, onChangeFile, uploadFiles, files, upl
         </Button>) : ""
 
         : ""}
-      {uploadFailed ?
+      {uploadFailedMessage ?
         <p style={{ color: "red", fontSize: "12px" }}>
-          Oops! Upload Failed, Please try again
+          {uploadFailedMessage}
         </p>
         : ""}
       <div className={styles.attachmentsContainer}>

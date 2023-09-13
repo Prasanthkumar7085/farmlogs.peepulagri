@@ -156,7 +156,7 @@ const AdditionalInformation = ({ errorMessages, setAdditionalResources, singleLo
       </div>
       <div className={styles.container}>
         <div className={styles.pesticide}>
-          <div className={styles.label}>Pesticide</div>
+          <div className={styles.label}>Title</div>
           <TextField
             className={styles.textInput}
             fullWidth

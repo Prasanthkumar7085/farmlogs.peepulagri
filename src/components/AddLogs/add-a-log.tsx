@@ -39,7 +39,7 @@ const AddALog: NextPage = () => {
 
   const [errorMessages, setErrorMessages] = useState<any>();
   const [loadAttachments, setLoadAttachments] = useState(true);
-
+  const [uploadFailedMessage, setUploadFailedMessage] = useState('');
 
 
   const addLogs = async () => {
@@ -86,6 +86,7 @@ const AddALog: NextPage = () => {
 
 
   const onChangeFile = async (e: any) => {
+    setUploadFailedMessage('');
     setLoadAttachments(false);
     setTimeout(() => {
       setLoadAttachments(true);
@@ -106,8 +107,12 @@ const AddALog: NextPage = () => {
     if (response.success) {
       await postAllImages(response.data, tempFilesStorage, filesSelected);
     } else {
+      setFiles([]);
+      setUploadFailedMessage(response?.message);
       setUploadFailed(true);
       setUploadButtonLoading(false)
+      setAlertMessage("File(s) uploaded failed!");
+      setAlertType(false);
     }
   }
 
@@ -120,13 +125,13 @@ const AddALog: NextPage = () => {
       if (uploadResponse.ok) {
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
-        setAlertMessage(`${index + 1} image(s) Uploaded Successfully`);
+        setAlertMessage(`File(s) uploaded successfully`);
         setAlertType(true);
         setActiveStep(4);
       } else {
         setFiles([]);
         setUploadFailed(true);
-        setAlertMessage('Upload Failed!');
+        setAlertMessage('File(s) upload failed!');
         setAlertType(false);
       }
     }
@@ -190,12 +195,12 @@ const AddALog: NextPage = () => {
             setResources={setResources}
             setAdditionalResources={setAdditionalResources}
             onChangeFile={onChangeFile}
-            // uploadFiles={uploadFiles}
             files={files}
             uploadButtonLoading={uploadButtonLoading}
             uploadFailed={uploadFailed}
             errorMessages={errorMessages}
             captureCategoriesArray={captureCategoriesArray}
+            uploadFailedMessage={uploadFailedMessage}
 
           />
 

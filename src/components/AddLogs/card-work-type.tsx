@@ -46,11 +46,14 @@ const CardWorkType = ({ captureCategoriesArray, errorMessages, captureDates, set
   const captureCategories = (selectedCategories: any) => {
 
     let categories = []
-    if (selectedCategories.length) {
+
       setDefaultValue(selectedCategories);
       categories = selectedCategories.length && selectedCategories.map((item: any) => item.slug);
 
-    }
+    console.log(selectedCategories, 'plpl');
+    console.log(categories, 'plpl');
+
+
     captureCategoriesArray(categories)
 
 
@@ -115,11 +118,9 @@ const CardWorkType = ({ captureCategoriesArray, errorMessages, captureDates, set
                 renderInput={(params: any) => (
                   <TextField
                     {...params}
-                    placeholder={"Select Categories*"}
+                    placeholder={"Select Category*"}
                     variant="outlined"
                     autoComplete="off"
-                    error={Boolean(errorMessages?.categories)}
-                    helperText={errorMessages?.categories}
                     size="small"
                     inputProps={{
                       ...params.inputProps,
@@ -147,6 +148,7 @@ const CardWorkType = ({ captureCategoriesArray, errorMessages, captureDates, set
                   }
                 }}
               />
+              <ErrorMessagesComponent errorMessage={errorMessages?.categories} />
             </Box>
             <FormHelperText />
           </FormControl>
@@ -170,7 +172,6 @@ const CardWorkType = ({ captureCategoriesArray, errorMessages, captureDates, set
           <div className={styles.dropdown}>
             <DateRangePickerComponent captureDateValue={captureDateValue} defaultValue={[singleLogDetails?.from_date_time, singleLogDetails?.to_date_time]} />
             <ErrorMessagesComponent errorMessage={errorMessages?.from_date_time} />
-            <ErrorMessagesComponent errorMessage={errorMessages?.to_date_time} />
           </div>
         </div>
       </div>

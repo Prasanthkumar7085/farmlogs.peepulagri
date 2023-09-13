@@ -9,6 +9,7 @@ import { addNewMessage } from "@/Redux/Modules/Conversations";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import addAttachmentsService from "../../../../../lib/services/SupportService/addAttachmentsService";
 import uploadFileToS3 from "../../../../../lib/services/LogsService/uploadFileToS3InLog";
+import AlertComponent from "@/components/Core/AlertComponent";
 
 
 
@@ -28,6 +29,9 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   const [filesDetailsAfterUpload, setFilesDetailsAfterUpload] = useState<any>([]);
   const [uploadFailed, setUploadFailed] = useState(false);
   const [loadAttachments, setLoadAttachments] = useState(true);
+  const [uploadFailedMessage, setUploadFailedMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertType, setAlertType] = useState<boolean>(false);
 
 
   const deleteSelectedFile = (index: number) => {
@@ -78,6 +82,8 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
   }
 
   const selectMessageAttachments = (e: any) => {
+
+    setUploadFailedMessage('');
     setLoadAttachments(false);
     setTimeout(() => {
       setLoadAttachments(true);
@@ -105,7 +111,11 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
     if (response.success) {
       await postAllImages(filesFromArgs, response.data, tempFilesStorage);
     } else {
+      setFiles([]);
       setUploadFailed(true);
+      setUploadFailedMessage(response?.message);
+      setAlertMessage("File(s) uploaded failed!");
+      setAlertType(false);
     }
     setLoadingOnImagesUpload(false);
   };
@@ -120,9 +130,13 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
       if (uploadResponse.ok) {
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
+        setAlertMessage("File(s) uploaded Successful!");
+        setAlertType(true);
       } else {
         setFiles([]);
         setUploadFailed(true);
+        setAlertMessage("File(s) uploaded failed!");
+        setAlertType(false);
       }
     }
     setFilesDetailsAfterUpload(arrayForResponse);
@@ -164,7 +178,7 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
               type="file"
               multiple
               style={{ display: "none" }}
-              accept="image/jpeg, image/png,image/jpg,image/gif,image/webp, .pdf, .mp3, .wav,.docx,.doc" /> : ""}
+              accept="image/jpeg, image/png,image/jpg,image/gif,image/webp,image/*, .pdf, .mp3, .wav,.docx,.doc" /> : ""}
           </label>
           <div className="styles.attachmentsContainer">
             {files &&
@@ -183,9 +197,9 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
                     </div>
                 )
               })}
-            {uploadFailed ?
+            {uploadFailedMessage ?
               <p style={{ color: "red", fontSize: "12px" }}>
-                Oops! Upload Failed, Please Attach the Files Again
+                {uploadFailedMessage}
               </p>
               : ""}
           </div>
@@ -197,6 +211,12 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
           </Button>
         </div>
       </div>
+
+      <AlertComponent
+        alertMessage={alertMessage}
+        alertType={alertType}
+        setAlertMessage={setAlertMessage}
+      />
     </div>
   );
 };

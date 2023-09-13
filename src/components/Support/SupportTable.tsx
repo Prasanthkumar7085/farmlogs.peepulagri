@@ -4,8 +4,16 @@ import ImageComponent from "../Core/ImageComponent";
 import { useSelector } from "react-redux";
 
 
-const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
+const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
 
+    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+
+    const getHiddenColumns = () => {
+
+        if (userType !== 'ADMIN')
+            return ['user_id.full_name']
+        return []
+    }
     const {
         getTableProps, // table props from react-table
         getTableBodyProps, // table body props from react-table
@@ -15,7 +23,9 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
     } = useTable({
         columns: columns?.length ? columns : [],
         data: data?.length ? data : [],
-
+        initialState: {
+            hiddenColumns: getHiddenColumns()
+        }
     });
 
     return (
@@ -34,9 +44,9 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
                                     <th className="cell" {...column.getHeaderProps()} key={columnIndex} onClick={() => appliedSort(column?.columnId)}
                                         style={{
                                             cursor: column?.isSorted ? "pointer" : "default",
-                                            width:(column?.width? column?.width : ""),
-                                            minWidth: (column?.minWidth? column?.minWidth : ""),
-                                            maxWidth: (column?.maxWidth? column?.maxWidth : ""),
+                                            width: (column?.width ? column?.width : ""),
+                                            minWidth: (column?.minWidth ? column?.minWidth : ""),
+                                            maxWidth: (column?.maxWidth ? column?.maxWidth : ""),
                                         }}
                                     >
                                         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
@@ -56,32 +66,32 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
 
                 {!loading && data?.length ?
                     <tbody className="tbody" {...getTableBodyProps()}>
-                    {rows.map((row: any, index: number) => {
-                        prepareRow(row);
-                        return (
-                            <tr className="table-row" {...row.getRowProps()} key={index}>
-                                {row.cells.map((cell: any, cellIndex: number) => {
-                                    const cellValue = cell.render('Cell').props.value;
-                                    return <td className="cell" {...cell.getCellProps()} key={cellIndex}>
-                                        {cellValue ? cellValue : 'NA'}
-                                    </td>
+                        {rows.map((row: any, index: number) => {
+                            prepareRow(row);
+                            return (
+                                <tr className="table-row" {...row.getRowProps()} key={index}>
+                                    {row.cells.map((cell: any, cellIndex: number) => {
+                                        const cellValue = cell.render('Cell').props.value;
+                                        return <td className="cell" {...cell.getCellProps()} key={cellIndex}>
+                                            {cellValue ? cellValue : 'NA'}
+                                        </td>
 
-                                })}
-                            </tr>
-                        );
-                    })}
-                </tbody> :
-                <tbody className="tbody" {...getTableBodyProps()}>
-                <tr>
-                    <td style={{ width: "100%", height: "calc(100vh - 210px)", textAlign: "center"}} colSpan={columns.length}> {!loading ? <NoDataComponent noData={data ? (!data.length) : true} /> : ""}</td>
-                </tr>
-                </tbody>
+                                    })}
+                                </tr>
+                            );
+                        })}
+                    </tbody> :
+                    <tbody className="tbody" {...getTableBodyProps()}>
+                        <tr>
+                            <td style={{ width: "100%", height: "calc(100vh - 210px)", textAlign: "center" }} colSpan={columns.length}> {!loading ? <NoDataComponent noData={data ? (!data.length) : true} /> : ""}</td>
+                        </tr>
+                    </tbody>
                 }
             </table>
         </div>
     );
 }
 
-export default FarmTable;
+export default SupportTable;
 
 // (!cell.column.show && userType == 'ADMIN') ? (<td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>) : null

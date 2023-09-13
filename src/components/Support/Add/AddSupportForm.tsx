@@ -34,6 +34,7 @@ const AddSupportForm = () => {
   const [loading, setLoading] = useState(false);
   const [uploadOrNot, setUploadOrNot] = useState(false);
   const [loadAttachments, setLoadAttachments] = useState(true);
+  const [uploadFailedMessage, setUploadFailedMessage] = useState('');
 
 
   const [supportDetails, setSupportDetails] = useState<Partial<AddSupportPayload>>();
@@ -95,6 +96,7 @@ const AddSupportForm = () => {
 
 
   const onChangeFile = (e: any) => {
+    setUploadFailedMessage('');
     setLoadAttachments(false);
     setTimeout(() => {
       setLoadAttachments(true);
@@ -117,6 +119,11 @@ const AddSupportForm = () => {
     );
     if (response.success) {
       await postAllImages(response.data, tempFilesStorage, filesSelected);
+    } else {
+      setFiles([]);
+      setUploadFailedMessage(response?.message);
+      setAlertMessage("File(s) uploaded failed!");
+      setAlertType(false);
     }
     setLoadingOnImagesUpload(false);
   };
@@ -132,14 +139,14 @@ const AddSupportForm = () => {
         filesSelected[index]
       );
       if (uploadResponse.ok) {
-        setAlertMessage(`${index + 1} File(s) Uploaded!`);
+        setAlertMessage(`File(s) uploaded successful!`);
         setAlertType(true);
         const { target_url, ...rest } = response[index];
         arrayForResponse.push({ ...rest, size: tempFilesStorage[index].size });
         checkUploadOrNot = true;
       } else {
         setFiles([]);
-        setAlertMessage("File(s) Uploaded Failed!");
+        setAlertMessage("File(s) uploaded failed!");
         setAlertType(false);
         checkUploadOrNot = false;
         break;
@@ -209,6 +216,7 @@ const AddSupportForm = () => {
                   files={files}
                   loadingOnImagesUpload={loadingOnImagesUpload}
                   uploadOrNot={uploadOrNot}
+                  uploadFailedMessage={uploadFailedMessage}
                 />
               </div>
               <div>

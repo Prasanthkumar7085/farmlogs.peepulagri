@@ -114,6 +114,15 @@
   color: var(--color-black);
   font-family: var(--text-sm-medium);
 }
+.timelinecardright:after {
+  content: '';
+  position: absolute;
+  top: -50px;
+  bottom: -20px;
+  width: 1px;
+  left: calc(-5rem + 4.5px);
+  background-color: #6A7185;
+}
 .categoriesAdded {
   display: flex;
   flex-wrap: wrap;

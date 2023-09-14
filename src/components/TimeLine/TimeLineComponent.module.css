@@ -1,10 +1,10 @@
 .TimelineCardBranch {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 .containerLg {
     position: relative;
 }
-.containerLg:after {
+/* .containerLg:after {
     z-index: 99;
     content: "";
     position: fixed;
@@ -13,8 +13,9 @@
     width: 1px;
     left: calc(50vw - 2.5rem + 70px);
     background-color: #6A7185;
-}
+} */
 .infiniteScrollComponent{
+    padding-top: 0px;
 }
 .infiniteScrollComponent::-webkit-scrollbar{
     background: transparent;
@@ -40,20 +41,10 @@
     margin: 30px auto;
     border-radius: 1.75rem;
     position: relative;
-    left: 8px;
+    left: 12px;
     text-decoration: none;
     color: var(--gray-700);
 }
-.endOfLogs::after {
-    content: "";
-    position: absolute;
-    top: calc(100% + 2px);
-    height: 30px;
-    left: calc(50% - 1px);
-    width: 2px;
-    margin: 0 auto;
-    background-color: #F5F7FA;
-} 
 .pageLoader {
     position: fixed;
     right: 20px;

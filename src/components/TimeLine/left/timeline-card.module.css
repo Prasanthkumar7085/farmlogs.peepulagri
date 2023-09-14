@@ -99,6 +99,15 @@
   color: var(--color-black);
   font-family: var(--text-sm-medium);
 }
+.timelinecard:after {
+  content: '';
+  position: absolute;
+  top: -50px;
+  bottom: -30px;
+  width: 1px;
+  right: calc(-5rem + 4.5px);
+  background-color: #6A7185;
+}
 .categoriesAdded {
   display: flex;
   flex-wrap: wrap;

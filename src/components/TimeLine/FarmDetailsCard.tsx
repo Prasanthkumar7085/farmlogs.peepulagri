@@ -30,4 +30,4 @@ const FarmDetailsCard = () => {
 }
 
 
-export default FarmDetailsCard;
+export default FarmDetailsCard;``

@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
 import styles from "./timeline-card-right.module.css";
-const TimelineCardRight = ({ data1 }: any) => {
+import timePipe from "@/pipes/timePipe";
+import { Chip } from "@mui/material";
+import { CategoriesType } from "@/types/categoryTypes";
+import { GetLogByIdResponseDataType } from "@/types/logsTypes";
+const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseDataType, categoriesList: Array<CategoriesType> }) => {
 
-  const date = new Date(data1.to_date_time);
-  const day = date.getUTCDate();
-  const monthsAbbreviation = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const month = date.getUTCMonth();
-  const year = date.getUTCFullYear();
 
 
   const getWorkType=(workType:string)=>{
@@ -16,12 +15,20 @@ const TimelineCardRight = ({ data1 }: any) => {
     return workType?.slice(0, 1).toUpperCase() + workType?.slice(1,).toLowerCase()
   }
 
+  const getItemLabel = (item: string) => {
+    //finding the object in the categories API using slug(item)
+    const titleObject: CategoriesType | undefined = categoriesList.find((listItem: CategoriesType) => listItem.slug == item);
+    if (titleObject) {
+      return titleObject.category;
+    } else return '';
+  }
+
   return (
     <div className={styles.timelinecardright}>
       <div className={styles.container}>
         <div className={styles.date}>
-          <p className={styles.day}>{day}</p>
-          <p className={styles.monthyear}>{monthsAbbreviation[month]} {year}</p>
+          <p className={styles.day}>{timePipe(data?.to_date_time, 'DD')}</p>
+          <p className={styles.monthyear}>{timePipe(data?.to_date_time, 'MMM YYYY')}</p>
         </div>
         <div className={styles.content}>
           <img
@@ -30,12 +37,19 @@ const TimelineCardRight = ({ data1 }: any) => {
             src="/rectangle-105@2x.png"
           />
           <div className={styles.textwrapper}>
-            <h5 className={styles.heading}>{data1.work_type?.length ? getWorkType(data1?.work_type) : ""}</h5>
+            <h5 className={styles.heading}>{data.work_type?.length ? getWorkType(data?.work_type) : ""}</h5>
             <p className={styles.description}>
-              {data1.title}
+              {data.title}
             </p>
           </div>
         </div>
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
+        {data && data?.categories?.length && data?.categories?.map((item: any, index: number) => {
+          return (
+            <Chip label={getItemLabel(item)} key={index} />
+          )
+        })}
       </div>
       <img
         className={styles.connector}

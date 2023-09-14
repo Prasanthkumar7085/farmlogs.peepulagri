@@ -1,13 +1,10 @@
 import type { NextPage } from "next";
 import styles from "./timeline-card.module.css";
 import { Chip } from "@mui/material";
-const TimelineCard = ({ data1 }: any) => {
-
-  const date = new Date(data1.to_date_time);
-  const day = date.getUTCDate();
-  const monthsAbbreviation = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const month = date.getUTCMonth();
-  const year = date.getUTCFullYear();
+import timePipe from "@/pipes/timePipe";
+import { GetLogByIdResponseDataType } from "@/types/logsTypes";
+import { CategoriesType } from "@/types/categoryTypes";
+const TimelineCard = ({ data, categoriesList }: { data: GetLogByIdResponseDataType, categoriesList: Array<CategoriesType> }) => {
 
   const getWorkType = (workType: string) => {
     if (workType == 'ALL') {
@@ -16,33 +13,39 @@ const TimelineCard = ({ data1 }: any) => {
     return workType?.slice(0, 1).toUpperCase() + workType?.slice(1,).toLowerCase()
   }
 
+  const getItemLabel = (item: string) => {
+    //finding the object in the categories API using slug(item)
+    const titleObject: CategoriesType | undefined = categoriesList.find((listItem: CategoriesType) => listItem.slug == item);
+    if (titleObject) {
+      return titleObject.category;
+    } else return '';
+  }
+
   return (
     <div className={styles.timelinecard}>
 
       <div className={styles.container}>
         <div className={styles.date}>
-          <p className={styles.day}>{day}</p>
-          <p className={styles.monthyear}>
-            {monthsAbbreviation[month]} {year}
-          </p>
+          <p className={styles.day}>{timePipe(data?.to_date_time, 'DD')}</p>
+          <p className={styles.monthyear}>{timePipe(data?.to_date_time, 'MMM YYYY')}</p>
         </div>
         <div className={styles.content}>
           <img className={styles.imageIcon} alt="Thumbnail" src="/image@2x.png" />
           <div className={styles.text}>
-            <h5 className={styles.title}>{data1.work_type?.length ? getWorkType(data1?.work_type) :""}</h5>
+            <h5 className={styles.title}>{data.work_type?.length ? getWorkType(data?.work_type) : ""}</h5>
             <p
               className={styles.description}
-            >{data1.title}</p>
+            >{data.title}</p>
           </div>
         </div>
       </div>
       {/* <div className={styles.cardlable}>
-        <p className={styles.equipmentManagement}>{data1.title.length > 12 ? data1.title.slice(0, 10) + "..." : data1.title}</p>
+        <p className={styles.equipmentManagement}>{data.title.length > 12 ? data.title.slice(0, 10) + "..." : data.title}</p>
       </div> */}
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {data1 && data1?.categories?.length && data1?.categories?.map((item: any, index: number) => {
+        {data && data?.categories?.length && data?.categories?.map((item: any, index: number) => {
           return (
-            <Chip label={item} key={index} />
+            <Chip label={getItemLabel(item)} key={index} />
           )
         })}
       </div>

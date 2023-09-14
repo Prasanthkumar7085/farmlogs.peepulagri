@@ -16,7 +16,7 @@ html,body {
 
 :root {
     /* fonts */
-    --text-md-medium: Inter;
+    --text-md-medium: "Inter", sans-serif;
 
     /* font sizes */
     --text-sm-normal-size: 0.88rem;

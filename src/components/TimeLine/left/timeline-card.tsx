@@ -39,10 +39,10 @@ const TimelineCard = ({ data1 }: any) => {
       {/* <div className={styles.cardlable}>
         <p className={styles.equipmentManagement}>{data1.title.length > 12 ? data1.title.slice(0, 10) + "..." : data1.title}</p>
       </div> */}
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className={styles.categoriesAdded}>
         {data1 && data1?.categories?.length && data1?.categories?.map((item: any, index: number) => {
           return (
-            <Chip label={item} key={index} />
+            <Chip className={styles.categoryChip} label={item} key={index} color="primary" />
           )
         })}
       </div>

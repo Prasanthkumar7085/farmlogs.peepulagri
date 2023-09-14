@@ -99,3 +99,15 @@
   color: var(--color-black);
   font-family: var(--text-sm-medium);
 }
+.categoriesAdded {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 1rem;
+}
+.categoryChip {
+  font-family: var(--text-md-medium);
+  height: 24px;
+  letter-spacing: 0.05rem;
+  text-transform: capitalize;
+}

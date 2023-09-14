@@ -430,7 +430,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
     return (
         <div className="logsDashboardTable">
             <div className={styles.titleFilters}>
-                <Typography variant="h3" className={styles.title}>Farm Dashboard</Typography>
+                <h3 className={styles.title}>Farm Dashboard</h3>
                 <SearchComponent onChange={searchStringChange} size="small" value={searchString} searchString={searchString} placeholder={'Search By Title'} />
                 <Button color="success" fullWidth variant="contained" size="medium" onClick={() => router.push(`/farm/${router.query.farm_id}/logs/add`)} startIcon={<AddIcon />}>
                     Add Log

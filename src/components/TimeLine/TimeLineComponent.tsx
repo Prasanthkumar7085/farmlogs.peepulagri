@@ -16,6 +16,7 @@ import ImageComponent from "../Core/ImageComponent"
 import styles1 from "./../../../pages/farm/index.module.css";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService"
 import { CategoriesType } from "@/types/categoryTypes"
+import NorthIcon from '@mui/icons-material/North';
 
 
 const TimeLineComponent = () => {
@@ -148,7 +149,7 @@ const TimeLineComponent = () => {
                 next={() => setPageNumber(prev => prev + 1)}
                 hasMore={hasMore}
                 loader={<CircularProgress />}
-                endMessage={<p className={styles.endOfLogs}>{hasMore ? "" : 'End of Journey'}</p>}
+                endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : 'Scroll to Top'}</a>}
             >
                 {data && data.map((item: any, index: any) => {
                     if (item.align == "left") {

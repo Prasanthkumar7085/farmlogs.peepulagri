@@ -28,6 +28,8 @@
     border-radius: 1.75rem;
     position: relative;
     left: 8px;
+    text-decoration: none;
+    color: var(--gray-700);
 }
 .endOfLogs::after {
     content: "";

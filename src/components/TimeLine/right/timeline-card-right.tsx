@@ -7,6 +7,24 @@ import { GetLogByIdResponseDataType } from "@/types/logsTypes";
 const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseDataType, categoriesList: Array<CategoriesType> }) => {
 
 
+  const categoriesColors: Array<string> = [
+    "#E57373",
+    "#66BB6A",
+    "#64B5F6",
+    "#FFD54F",
+    "#AB47BC",
+    "#AED581",
+    "#9575CD",
+    "#FF8A65",
+    "#FFD700",
+    "#FF80AB",
+    "#26A69A",
+    "#4CAF50",
+    "#42A5F5",
+    "#FFB74D",
+    "#FF5722",
+    "#78909C",
+  ];
 
   const getWorkType=(workType:string)=>{
     if(workType=='ALL'){
@@ -21,6 +39,14 @@ const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseD
     if (titleObject) {
       return titleObject.category;
     } else return '';
+  }
+
+  const setBackColor = (item: any) => {
+    let index = categoriesList.findIndex((categoryItem: CategoriesType, index: number) => item == categoryItem.slug);
+    if (categoriesColors[index])
+      return categoriesColors[index];
+    return '#a4a6a9'
+
   }
 
   return (
@@ -47,7 +73,7 @@ const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseD
       <div  className={styles.categoriesAdded}>
         {data && data?.categories?.length && data?.categories?.map((item: any, index: number) => {
           return (
-            <Chip className={styles.categoryChip} label={getItemLabel(item)} key={index} color="success" />
+            <Chip className={styles.categoryChip} label={getItemLabel(item)} key={index} sx={{ backgroundColor: setBackColor(item), color: "white" }} />
           )
         })}
       </div>

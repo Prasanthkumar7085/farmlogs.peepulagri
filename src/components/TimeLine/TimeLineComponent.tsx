@@ -148,7 +148,7 @@ const TimeLineComponent = () => {
                 next={() => setPageNumber(prev => prev + 1)}
                 hasMore={hasMore}
                 loader={<CircularProgress />}
-                endMessage={<p className={styles.endOfLogs}>{hasMore ? "" : 'No More Logs!'}</p>}
+                endMessage={<p className={styles.endOfLogs}>{hasMore ? "" : 'End of Journey'}</p>}
             >
                 {data && data.map((item: any, index: any) => {
                     if (item.align == "left") {

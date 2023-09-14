@@ -15,7 +15,7 @@
 }
 .endOfLogs {
     display: block;
-    width: 10rem;
+    width: 9rem;
     background-color: #ffffff;
     border: 2px solid var(--body);
     padding: 12px;

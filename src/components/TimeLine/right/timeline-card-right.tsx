@@ -44,10 +44,10 @@ const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseD
           </div>
         </div>
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div  className={styles.categoriesAdded}>
         {data && data?.categories?.length && data?.categories?.map((item: any, index: number) => {
           return (
-            <Chip label={getItemLabel(item)} key={index} />
+            <Chip className={styles.categoryChip} label={getItemLabel(item)} key={index} color="success" />
           )
         })}
       </div>

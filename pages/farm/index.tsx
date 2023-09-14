@@ -18,7 +18,7 @@ const FarmPage = () => {
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const getAllFarms = async () => {
         setLoading(true)

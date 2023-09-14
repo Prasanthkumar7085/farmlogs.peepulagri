@@ -93,7 +93,7 @@ const SignUp = () => {
                             helperText={responseErrorMesaages?.phone}
                             value={mobile}
                             size="small"
-                            placeholder="99999 99999"
+                            placeholder="9866xxxxxx"
                             onChange={setMobileNumber}
                             onKeyPress={handleKeyPress}
                             className={styles.phoneNo}

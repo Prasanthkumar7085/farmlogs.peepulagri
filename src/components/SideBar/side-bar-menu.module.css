@@ -10,6 +10,9 @@
   height: 50px;
 }
 
+.logoIcon {
+  margin-bottom: 2rem;
+}
 .apps1Icon {
   width: 24px;
   height: 24px;
@@ -102,4 +105,10 @@
   background: var(--background, #F5F7FA);
   min-height: 100vh;
   position: relative;
+}
+.profileBtnGroup{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
 }

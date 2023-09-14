@@ -65,8 +65,9 @@ const SideBarMenu = ({ children }: any) => {
     return (
         <div>
             <aside className={styles.sidebarmenu}>
-                <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} />
+
                 <nav className={styles.menubar}>
+                    <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} />
                     <List>
                         {menuListItems.map((item: item, index: number) => {
 
@@ -84,17 +85,19 @@ const SideBarMenu = ({ children }: any) => {
                             }
                         })}
                     </List>
+                </nav>
+                <div className={styles.profileBtnGroup}>
                     <IconButton onClick={logout}>
                         <LogoutIcon sx={{ color: "white" }} />
                     </IconButton>
-                </nav>
 
 
-                <button className={styles.profile}>
-                    <div className={styles.profile1}>
-                        <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />
-                    </div>
-                </button>
+                    <button className={styles.profile}>
+                        <div className={styles.profile1}>
+                            <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />
+                        </div>
+                    </button>
+                </div>
             </aside>
             <div className={styles.main}>
                 {children}

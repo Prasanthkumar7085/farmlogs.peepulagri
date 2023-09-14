@@ -29,7 +29,7 @@ const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
     });
 
     return (
-        <div style={{ height: "calc(100vh - 295px)", overflow: "auto", marginTop: "15px" }} className="dataTable-container scrollbar">
+        <div style={{ height: "calc(100vh - 120px)", overflow: "auto", marginTop: "15px" }} className="dataTable-container scrollbar">
             <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
                 <thead className="thead" style={{
                     position: "sticky",
@@ -83,7 +83,7 @@ const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
                     </tbody> :
                     <tbody className="tbody" {...getTableBodyProps()}>
                         <tr>
-                            <td style={{ width: "100%", height: "calc(100vh - 210px)", textAlign: "center" }} colSpan={columns.length}> {!loading ? <NoDataComponent noData={data ? (!data.length) : true} /> : ""}</td>
+                            <td style={{ width: "100%", height: "calc(100vh - 170px)", textAlign: "center" }} colSpan={columns.length}> {!loading ? <NoDataComponent noData={data ? (!data.length) : true} /> : ""}</td>
                         </tr>
                     </tbody>
                 }

@@ -10,4 +10,7 @@
     width: 1px;
     left: calc(50vw - 2.5rem + 70px);
     background-color: #6A7185;
-  }
+}
+.emptyTimeLineContainer {
+    position: relative;
+}

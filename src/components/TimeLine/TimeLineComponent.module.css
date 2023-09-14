@@ -1,6 +1,19 @@
 .TimelineCardBranch {
     margin-top: 30px;
 }
+.containerLg {
+    position: relative;
+}
+.containerLg:after {
+    z-index: 99;
+    content: "";
+    position: fixed;
+    top: 20px;
+    height: calc(100vh - 20px) ;
+    width: 1px;
+    left: calc(50vw - 2.5rem + 70px);
+    background-color: #6A7185;
+}
 .infiniteScrollComponent{
 }
 .infiniteScrollComponent::-webkit-scrollbar{
@@ -41,3 +54,8 @@
     margin: 0 auto;
     background-color: #F5F7FA;
 } 
+.pageLoader {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+}

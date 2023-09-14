@@ -29,7 +29,7 @@ const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
     });
 
     return (
-        <div style={{ height: "calc(100vh - 120px)", overflow: "auto", marginTop: "15px" }} className="dataTable-container scrollbar">
+        <div style={{ height: "calc(100vh - 160px)", overflow: "auto", marginTop: "15px" }} className="dataTable-container scrollbar">
             <table className="table" {...getTableProps()} style={{ position: "sticky" }}>
                 <thead className="thead" style={{
                     position: "sticky",

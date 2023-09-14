@@ -138,17 +138,16 @@ const TimeLineComponent = () => {
     }
 
     return (
-        <div>
+        <div className={styles.TimelineCards}>
             {farmOptions && farmOptions.length ?
                 <div className={styles.containerLg} style={{ position: "relative", zIndex: 110 }}>
-
             {!loading ? <SelectComponenentForLogs setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={farmOptions} captureFarmName={captureFarmName} /> : ""}
             <InfiniteScroll
                 className={styles.infiniteScrollComponent}
                 dataLength={data.length}
                 next={() => setPageNumber(prev => prev + 1)}
                 hasMore={hasMore}
-                loader={<CircularProgress />}
+                loader={<div className={styles.pageLoader}><CircularProgress /></div>}
                 endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : 'Scroll to Top'}</a>}
             >
                 {data && data.map((item: any, index: any) => {

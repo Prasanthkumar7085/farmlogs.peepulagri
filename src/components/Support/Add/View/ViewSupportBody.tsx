@@ -115,17 +115,16 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
                         <Typography className={styles.label}>
                             Status
                         </Typography>
-                        <Typography className={styles.value}>
-                            {userType == 'ADMIN' ?
-                                <SelectComponent
-                                    value={supportStatus ? supportStatus : ""}
-                                    defaultValue={supportStatus}
-                                    options={statusOptions}
-                                    onChange={onChangeStatus}
-                                    disabled={supportStatus == 'ARCHIVE' ? true : false}
-                                />
-                                : getStatusTitle(data?.status as string)}
-                        </Typography>
+                        {userType == 'ADMIN' ?
+                        <SelectComponent sx={{minWidth: "130px"}}
+                            value={supportStatus ? supportStatus : ""}
+                            defaultValue={supportStatus}
+                            options={statusOptions}
+                            onChange={onChangeStatus}
+                            size="small"
+                            disabled={supportStatus == 'ARCHIVE' ? true : false}
+                        />
+                        : getStatusTitle(data?.status as string)}
                     </div>
                 </div>
                 <div className={styles.dateRangeRow}>

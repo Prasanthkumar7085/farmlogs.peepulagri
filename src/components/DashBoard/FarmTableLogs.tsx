@@ -313,7 +313,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         },
         {
             Header: "Category",
-            minWidth: "160px",
+            minWidth: "150px",
             maxWidth: "300px",
             accessor: (row: any) => {
                 return (
@@ -334,7 +334,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
             columnId: "workType",
             isSorted: true,
             Header: "Work Type",
-            width: "95px",
+            width: "100px",
             accessor: (row: any) => {
                 return (
                     <p style={{ color: getTitleOrColor(row.work_type, 'color'), fontSize: "15px" }}>{getTitleOrColor(row.work_type, 'title')}</p>
@@ -384,9 +384,9 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         {
             columnId: "machineHours",
             isSorted: true,
-            Header: "Machine Hrs",
+            Header: "Mach. Hrs",
             minWidth: "60px",
-            maxWidth: "80px",
+            maxWidth: "120px",
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -398,7 +398,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         },
         {
             Header: "Actions",
-            minWidth: "120px",
+            maxWidth: "120px",
             accessor: (row: any) => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>

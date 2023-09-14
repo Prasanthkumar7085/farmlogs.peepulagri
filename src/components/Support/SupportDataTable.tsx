@@ -88,11 +88,12 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             isSorted: true,
             Header: "Query Name",
             accessor: 'title',
+            minWidth: "150px",
             maxWidth: "300px",
         },
         {
             Header: "Category",
-            minWidth: "250px",
+            minWidth: "150px",
             maxWidth: "400px",
             accessor: (row: SupportResponseDataType) => {
                 return (
@@ -142,6 +143,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             // columnId: "user_name",
             // isSorted: true,
             Header: "User Name",
+            maxWidth: "80px",
             show: userType === 'ADMIN',
             accessor: "user_id.full_name"
         },

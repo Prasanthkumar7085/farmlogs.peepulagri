@@ -133,6 +133,10 @@ html,body {
 .dataTable-container .tbody .table-row:hover {
     background-color: #fbfbfb;
 }
+.dataTable-container .tbody .table-row .cell:first-child{
+    position: sticky;
+    left: 0;
+}
 .dataTable-container .tbody .cell {
     padding: 6px 10px;
     border: 1px solid #d8d7d6;

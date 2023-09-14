@@ -4,5 +4,6 @@ export interface CategoriesType {
     slug: string;
     createdAt: string;
     updatedAt: string;
-    __v: number
+    __v: number;
+    order: number
 }

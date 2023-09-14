@@ -14,6 +14,8 @@ import styles from "./TimeLineComponent.module.css"
 import { relative } from "path"
 import ImageComponent from "../Core/ImageComponent"
 import styles1 from "./../../../pages/farm/index.module.css";
+import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService"
+import { CategoriesType } from "@/types/categoryTypes"
 
 
 const TimeLineComponent = () => {
@@ -30,15 +32,24 @@ const TimeLineComponent = () => {
     const [logId, setLogId] = useState<any>();
     const [defaultValue, setDefaultValue] = useState<any>('');
     const [loading, setLoading] = useState(true);
+    const [categoriesList, setCategoriesList] = useState<Array<CategoriesType>>([]);
 
 
     useEffect(() => {
 
         if (router.isReady && accessToken) {
+            getCategories();
             getFormDetails(router.query?.farm_id as string);
         }
     }, [router.isReady, accessToken]);
 
+    const getCategories = async () => {
+        const response = await getAllCategoriesService();
+
+        if (response && response?.success) {
+            setCategoriesList(response?.data);
+        }
+    }
 
     const getFormDetails = async (id: string) => {
         setLoading(true);
@@ -143,14 +154,14 @@ const TimeLineComponent = () => {
                     if (item.align == "left") {
                         return (
                             <div className={styles.TimelineCardBranch} key={index}>
-                                <TimelineCard data1={item} />
+                                <TimelineCard categoriesList={categoriesList} data={item} />
                             </div>
                         )
                     }
                     else {
                         return (
                             <div className={styles.TimelineCardBranch} key={index}>
-                                <TimelineCardRight data1={item} />
+                                <TimelineCardRight categoriesList={categoriesList} data={item} />
                             </div>
                         )
                     }

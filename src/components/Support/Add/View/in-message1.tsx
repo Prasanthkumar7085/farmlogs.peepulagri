@@ -117,11 +117,11 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
             })
             : ""}
         </div>
-        <div>
+        {/* <div>
           <IconButton onClick={deleteAMessage}>
             <DeleteOutlineIcon />
           </IconButton>
-        </div>
+        </div> */}
       </div>
     </div>
   );

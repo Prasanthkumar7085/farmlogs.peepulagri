@@ -72,6 +72,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
     const columns = [   
         {
             columnId: "date",
+            sortId: "createdAt",
             isSorted: true,
             Header: "Date",
             width: "80px",
@@ -85,6 +86,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
         },
         {
             columnId: "query_name",
+            sortId: "title",
             isSorted: true,
             Header: "Query Name",
             accessor: 'title',
@@ -107,6 +109,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
         },
         {
             columnId: "description",
+            sortId: "description",
             isSorted: true,
             minWidth: "250px",
             Header: "Description",
@@ -115,6 +118,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
         {
             columnId: "response_date",
             isSorted: true,
+            sortId: "recent_response_at",
             Header: "Response Date",
             maxWidth: "140px",
             accessor: (row: SupportResponseDataType) => {
@@ -128,6 +132,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
         {
             columnId: "status",
             isSorted: true,
+            sortId: "status",
             Header: "Status",
             // accessor: 'status',
             accessor: (row: SupportResponseDataType) => {

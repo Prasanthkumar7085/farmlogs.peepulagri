@@ -293,6 +293,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
 
     const columns = [
         {
+            sortId: 'createdAt',
             columnId: "date",
             isSorted: true,
             Header: "Date",
@@ -307,7 +308,13 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         },
         {
             Header: "Title",
-            accessor: 'title',
+            accessor: (row: any) => {
+                return (
+                    <div>
+                        {row.title.slice(0, 1).toUpperCase() + row.title.slice(1,)}
+                    </div>
+                )
+            },
             minWidth: "150px",
             maxWidth: "300px",
         },
@@ -332,6 +339,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         },
         {
             columnId: "workType",
+            sortId: 'work_type',
             isSorted: true,
             Header: "Work Type",
             width: "100px",
@@ -368,6 +376,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
 
         {
             columnId: "manualHours",
+            sortId: 'total_manual_hours',
             isSorted: true,
             Header: "Manual Hrs",
             minWidth: "80px",
@@ -383,6 +392,7 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         },
         {
             columnId: "machineHours",
+            sortId: 'total_machinary_hours',
             isSorted: true,
             Header: "Mach. Hrs",
             minWidth: "60px",

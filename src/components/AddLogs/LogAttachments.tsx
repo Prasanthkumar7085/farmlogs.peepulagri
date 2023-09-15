@@ -97,7 +97,7 @@ const LogAttachments = ({ loadAttachments, onChangeFile, uploadFiles, files, upl
               <Typography>
                   {file.name}
               </Typography>
-                <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)}>
+                <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)} disabled={uploadButtonLoading}>
                   <CloseIcon />
               </IconButton>
               </div>

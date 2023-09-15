@@ -102,6 +102,10 @@ const EditALog: NextPage = () => {
         setLoading(true);
         const { title, description } = formDetails;
 
+        const fromDate = dates[0]?.slice(0, 10);
+        const toDate = dates[1]?.slice(0, 10);
+        console.log(fromDate, toDate);
+
         const obj = {
             title: title,
             description: description,
@@ -109,8 +113,8 @@ const EditALog: NextPage = () => {
             work_type: workType,
             farm_id: router.query.farm_id,
             status: 'ACTIVE',
-            from_date_time: dates[0] ? new Date(dates[0]).toISOString() : '',
-            to_date_time: dates[1] ? new Date(new Date(new Date(dates[1]).toISOString()).getTime() + 86399999).toISOString() : '',
+            from_date_time: fromDate ? new Date(fromDate).toISOString() : '',
+            to_date_time: toDate ? new Date(new Date(new Date(toDate)?.toISOString()).getTime() + 86399999).toISOString() : '',
             resources: resources.length ? resources : [],
             additional_resources: additionalResources.length ? additionalResources : [],
             total_machinary_hours: getTotalHours("Machinery"),

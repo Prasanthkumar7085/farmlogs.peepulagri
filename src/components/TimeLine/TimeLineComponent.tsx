@@ -17,6 +17,7 @@ import styles1 from "./../../../pages/farm/index.module.css";
 import getAllCategoriesService from "../../../lib/services/Categories/getAllCategoriesService"
 import { CategoriesType } from "@/types/categoryTypes"
 import NorthIcon from '@mui/icons-material/North';
+import FarmDetailsCard from "./FarmDetailsCard"
 
 
 const TimeLineComponent = () => {
@@ -104,7 +105,7 @@ const TimeLineComponent = () => {
                 const responseData: any = await response.json();
 
                 if (responseData?.has_more || responseData?.has_more == false) {
-                    setHasMore(responseData?.has_more); // No more data available
+                    setHasMore(responseData?.has_more);
                 }
                 let currentDate: any = null;
                 let currentAlign = "left";
@@ -117,7 +118,7 @@ const TimeLineComponent = () => {
                 }
 
                 const newArray = temp.map((item: any) => {
-                    if (item.to_date_time !== currentDate) {
+                    if (item.to_date_time?.slice(0, 10) !== currentDate?.slice(0, 10)) {
                         currentAlign = currentAlign === "right" ? "left" : "right";
                         currentDate = item.to_date_time;
                     }
@@ -125,8 +126,6 @@ const TimeLineComponent = () => {
                     return { ...item, align: currentAlign };
                 });
                 setData(newArray);
-
-
             }
             catch (err) {
                 console.error(err)
@@ -141,7 +140,7 @@ const TimeLineComponent = () => {
         <div className={styles.TimelineCards}>
             {farmOptions && farmOptions.length ?
                 <div className={styles.containerLg} style={{ position: "relative", zIndex: 110 }}>
-            {!loading ? <SelectComponenentForLogs setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={farmOptions} captureFarmName={captureFarmName} /> : ""}
+                    <SelectComponenentForLogs setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={farmOptions} captureFarmName={captureFarmName} loading={loading} />
             <InfiniteScroll
                 className={styles.infiniteScrollComponent}
                 dataLength={data.length}

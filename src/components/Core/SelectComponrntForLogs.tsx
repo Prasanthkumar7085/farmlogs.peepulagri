@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import FarmDetailsMiniCard from "../AddLogs/farm-details-mini-card";
 import FarmDetailsCard from "../TimeLine/FarmDetailsCard";
 
-const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, defaultValue, ...rest }: any) => {
+const SelectComponenentForLogs = ({ loading, setDefaultValue, options, captureFarmName, defaultValue, ...rest }: any) => {
 
     const router = useRouter();
 
@@ -83,9 +83,9 @@ const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, d
 
         >
 
-            <Select
+            {!loading ? <Select
                 {...rest}
-                value={statusOptions ? statusOptions : defaultValue}
+                value={statusOptions?.title ? statusOptions?.title : defaultValue}
                 onChange={handleStatusChange}
                 sx={{ width: "150px" }}
             >
@@ -98,7 +98,7 @@ const SelectComponenentForLogs = ({ setDefaultValue, options, captureFarmName, d
                     )
                 })}
 
-            </Select>
+            </Select> : ""}
             <FarmDetailsCard />
         </FormControl>
     )

@@ -103,7 +103,7 @@ const MachineryManualCard = ({ data }: { data: GetLogByIdResponseDataType | null
             <div className={styles.divider}>-</div>
             <div className={styles.fromDate}>
               <div className={styles.text}>
-                {data?.to_date_time ? timePipe(data?.to_date_time, 'DD, MMM YYYY') : ""}
+                {data?.to_date_time ? timePipe(data?.to_date_time?.slice(0, 10), 'DD, MMM YYYY') : ""}
               </div>
             </div>
           </div>

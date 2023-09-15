@@ -190,7 +190,7 @@ const Messagebox = ({ getAllMessagesBySupportId }: { getAllMessagesBySupportId: 
                     <Typography>
                         {file.name}
                     </Typography>
-                    <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)}>
+                    <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)} disabled={loadingOnImagesUpload}>
 
                         <CloseIcon />
                     </IconButton>

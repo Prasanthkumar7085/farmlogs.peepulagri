@@ -67,7 +67,7 @@ const SideBarMenu = ({ children }: any) => {
             <aside className={styles.sidebarmenu}>
 
                 <nav className={styles.menubar}>
-                    <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} />
+                    <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} onClick={() => router.push('/farm')} />
                     <List>
                         {menuListItems.map((item: item, index: number) => {
 

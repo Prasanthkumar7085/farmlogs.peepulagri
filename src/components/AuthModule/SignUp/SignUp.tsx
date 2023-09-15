@@ -1,6 +1,6 @@
 import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
 import styles from "./SignUp.module.css";
 import ImageComponent from "../../../components/Core/ImageComponent";
@@ -19,7 +19,6 @@ const SignUp = () => {
     const [responseErrorMesaages, setResponseErrorMessages] = useState<any>();
 
     const setMobileNumber = (e: ChangeEvent<HTMLInputElement>) => {
-
         let value = e.target.value;
         value = value.trim();;
         if (value.length <= 10) {
@@ -62,6 +61,7 @@ const SignUp = () => {
 
         setLoadingWhileGettingOtp(false);
     }
+
 
     return (
         <div id={styles.loginPage}>

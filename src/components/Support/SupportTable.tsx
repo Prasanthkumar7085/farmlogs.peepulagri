@@ -2,11 +2,13 @@ import { useTable } from "react-table";
 import NoDataComponent from "../Core/NoDataComponent";
 import ImageComponent from "../Core/ImageComponent";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 
 const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
 
     const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+    const router = useRouter();
 
     const getHiddenColumns = () => {
 
@@ -53,7 +55,11 @@ const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
                                             {column.render("Header")}
                                             {column.isSorted ?
                                                 <span>
-                                                    <ImageComponent src='/sorted.svg' height={15} width={15} alt='image' />
+                                                    {router.query.order_by == column?.sortId ?
+                                                        (router.query.order_type == 'asc' ?
+                                                            <ImageComponent src='/sort-asc.svg' height={15} width={15} alt='image' /> :
+                                                            <ImageComponent src='/sort-desc.svg' height={15} width={15} alt='image' />)
+                                                        : <ImageComponent src='/unsort.svg' height={15} width={15} alt='image' />}
                                                 </span>
                                                 : ""}
                                         </div>

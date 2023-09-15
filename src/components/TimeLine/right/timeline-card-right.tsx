@@ -53,8 +53,8 @@ const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseD
     <div className={styles.timelinecardright}>
       <div className={styles.container}>
         <div className={styles.date}>
-          <p className={styles.day}>{timePipe(data?.to_date_time, 'DD')}</p>
-          <p className={styles.monthyear}>{timePipe(data?.to_date_time, 'MMM YYYY')}</p>
+          <p className={styles.day}>{timePipe(data?.to_date_time?.slice(0, 10), 'DD')}</p>
+          <p className={styles.monthyear}>{timePipe(data?.to_date_time?.slice(0, 10), 'MMM YYYY')}</p>
         </div>
         <div className={styles.content}>
           <img

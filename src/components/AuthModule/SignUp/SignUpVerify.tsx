@@ -165,6 +165,7 @@ const SignUpVerify = () => {
               <Typography component="p"></Typography>
             </span>
           </div>
+
           <div>
             <Typography className={styles.label}>{"We've sent an OTP to your phone number"}</Typography>
             <TextField
@@ -182,6 +183,7 @@ const SignUpVerify = () => {
             />
           </div>
           
+          <Button variant="outlined" onClick={() => router.push({ pathname: '/' })}>Cancel</Button>
           <Button
             className={styles.cta_button}
             type="submit"

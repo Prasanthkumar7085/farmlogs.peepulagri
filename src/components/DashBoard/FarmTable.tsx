@@ -2,10 +2,12 @@ import { useTable } from "react-table";
 import NoDataComponent from "../Core/NoDataComponent";
 import ImageComponent from "../Core/ImageComponent";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 
 const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
 
+    const router = useRouter();
     const {
         getTableProps, // table props from react-table
         getTableBodyProps, // table body props from react-table
@@ -43,7 +45,11 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
                                             {column.render("Header")}
                                             {column.isSorted ?
                                                 <span>
-                                                    <ImageComponent src='/sorted.svg' height={15} width={15} alt='image' />
+                                                    {router.query.order_by == column?.sortId ?
+                                                        (router.query.order_type == 'asc' ?
+                                                            <ImageComponent src='/sort-asc.svg' height={15} width={15} alt='image' /> :
+                                                            <ImageComponent src='/sort-desc.svg' height={15} width={15} alt='image' />)
+                                                        : <ImageComponent src='/unsort.svg' height={15} width={15} alt='image' />}
                                                 </span>
                                                 : ""}
                                         </div>

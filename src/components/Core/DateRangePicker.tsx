@@ -9,7 +9,9 @@ import styles from "./DateRangePicker.module.css"
 const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
 
 
-    const [fromDate, setFromDate] = useState<any>(props?.defaultValue[0] ? [new Date(props?.defaultValue[0]), new Date(props?.defaultValue[1])] : []);
+    const toDate = props?.defaultValue[1]?.slice(0, 10);
+    console.log(toDate);
+    const [fromDate, setFromDate] = useState<any>(props?.defaultValue[0] ? [new Date(props?.defaultValue[0]), new Date(toDate)] : []);
 
     const [date, setDate] = useState([moment(new Date()).format("YYYY-MM-DD"), moment(new Date()).format("YYYY-MM-DD")])
 

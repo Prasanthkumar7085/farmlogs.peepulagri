@@ -169,7 +169,21 @@ const SupportPage = () => {
 
     }
 
+
+    useEffect(() => {
+        if (router.isReady) {
+            if (router.query.order_type == 'asc') {
+                setSortCount(1);
+            } else if (router.query.order_type == 'desc') {
+                setSortCount(2);
+            } else {
+                setSortCount(0);
+            }
+
+        }
+    }, [router.isReady])
     const appliedSort = (sortKey: string) => {
+
 
         if (sortKey) {
 
@@ -184,7 +198,7 @@ const SupportPage = () => {
                 sortByField = 'title';
             } if (sortKey == 'description') {
                 sortByField = 'description'
-            } if (sortKey == 'response_data') {
+            } if (sortKey == 'response_date') {
                 sortByField = 'recent_response_at'
             } if (sortKey == 'status') {
                 sortByField = 'status'

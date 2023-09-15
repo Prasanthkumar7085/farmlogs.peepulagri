@@ -18,6 +18,7 @@ import getAllCategoriesService from "../../../lib/services/Categories/getAllCate
 import { CategoriesType } from "@/types/categoryTypes"
 import NorthIcon from '@mui/icons-material/North';
 import FarmDetailsCard from "./FarmDetailsCard"
+import LoadingComponent from "../Core/LoadingComponent"
 
 
 const TimeLineComponent = () => {
@@ -35,6 +36,7 @@ const TimeLineComponent = () => {
     const [defaultValue, setDefaultValue] = useState<any>('');
     const [loading, setLoading] = useState(true);
     const [categoriesList, setCategoriesList] = useState<Array<CategoriesType>>([]);
+    const [pageLoading, setPageLoading] = useState(false);
 
 
     useEffect(() => {
@@ -55,6 +57,7 @@ const TimeLineComponent = () => {
 
     const getFormDetails = async (id: string) => {
         setLoading(true);
+        setPageLoading(true);
         let response = await getAllFarmsService(accessToken);
 
         try {
@@ -73,11 +76,12 @@ const TimeLineComponent = () => {
                 }
             } else {
                 setFarmOptions([]);
+                setPageLoading(false);
             }
         } catch (err) {
             console.error(err);
-        } finally {
             setLoading(false);
+            setPageLoading(false);
         }
     }
 
@@ -98,10 +102,13 @@ const TimeLineComponent = () => {
 
 
     const getLogsData = async (id: any, page: number, changeFarm: boolean) => {
+        if (changeFarm) {
+            setPageLoading(true);
+        }
         if (id) {
             setLoading(true);
             try {
-                const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${5}?order_by=${'to_date_time'}&order_type=desc`);
+                const response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/logs/${page}/${10}?order_by=${'to_date_time'}&order_type=asc`);
                 const responseData: any = await response.json();
 
                 if (responseData?.has_more || responseData?.has_more == false) {
@@ -131,6 +138,7 @@ const TimeLineComponent = () => {
                 console.error(err)
             } finally {
                 setLoading(false);
+                setPageLoading(false);
             }
         }
 
@@ -141,35 +149,53 @@ const TimeLineComponent = () => {
             {farmOptions && farmOptions.length ?
                 <div className={styles.containerLg} style={{ position: "relative", zIndex: 110 }}>
                     <SelectComponenentForLogs setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={farmOptions} captureFarmName={captureFarmName} loading={loading} />
-            <InfiniteScroll
-                className={styles.infiniteScrollComponent}
-                dataLength={data.length}
-                next={() => setPageNumber(prev => prev + 1)}
-                hasMore={hasMore}
-                loader={<div className={styles.pageLoader}><CircularProgress /></div>}
-                endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : 'Scroll to Top'}</a>}
-            >
-                {data && data.map((item: any, index: any) => {
-                    if (item.align == "left") {
-                        return (
-                            <div className={styles.TimelineCardBranch} key={index}>
-                                <TimelineCard categoriesList={categoriesList} data={item} />
+                    {data.length ? <InfiniteScroll
+                        className={styles.infiniteScrollComponent}
+                        dataLength={data.length}
+                        next={() => setPageNumber(prev => prev + 1)}
+                        hasMore={hasMore}
+                        loader={<div className={styles.pageLoader}><CircularProgress /></div>}
+                        endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : 'Scroll to Top'}</a>}
+                    >
+                        {data && data.map((item: any, index: any) => {
+                            if (item.align == "left") {
+                                return (
+                                    <div className={styles.TimelineCardBranch} key={index}>
+                                        <TimelineCard categoriesList={categoriesList} data={item} />
+                                    </div>
+                                )
+                            }
+                            else {
+                                return (
+                                    <div className={styles.TimelineCardBranch} key={index}>
+                                        <TimelineCardRight categoriesList={categoriesList} data={item} />
+                                    </div>
+                                )
+                            }
+                        })}
+                    </InfiniteScroll> :
+                        (!loading ? <div>
+                            <div className={styles1.noDataScreen}>
+                                <ImageComponent
+                                    src={'/no-timeline-data.png'}
+                                    height={500}
+                                    width={700}
+                                />
+                                {/* <div className={styles1.content}>
+                                    <Typography className={styles1.subTitle} variant="h4">
+                                        No Logs Found!
+                                    </Typography>
+                                    <Typography className={styles1.description}>
+                                        {"Looks like you havn't added any Logs to this farm yet."} <br />
+                                        {"Add Logs to Get Started"}
+                                    </Typography>
+                                </div> */}
                             </div>
-                        )
+                        </div> : "")
                     }
-                    else {
-                        return (
-                            <div className={styles.TimelineCardBranch} key={index}>
-                                <TimelineCardRight categoriesList={categoriesList} data={item} />
-                            </div>
-                        )
-                    }
-                })}
-                    </InfiniteScroll> 
-
-
                 </div> :
-                (!loading ? <div>
+                (!pageLoading ?
+                    <div>
                     <div className={styles1.noDataScreen}>
                         <ImageComponent
                             src={'../no-logs.svg'}
@@ -187,6 +213,7 @@ const TimeLineComponent = () => {
                         </div>
                     </div>
                 </div> : "")}
+            <LoadingComponent loading={pageLoading} />
         </div>
     )
 }

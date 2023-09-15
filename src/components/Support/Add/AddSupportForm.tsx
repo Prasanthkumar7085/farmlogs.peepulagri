@@ -79,7 +79,7 @@ const AddSupportForm = () => {
         setAlertMessage("Add Support Successful!");
         setAlertType(true);
         setTimeout(() => {
-          router.back();
+          router.push('/support');
         }, 1000);
       } else if (response?.status == 422) {
         setErrorMessages(response?.errors);

@@ -182,8 +182,7 @@ const SignUpVerify = () => {
               onKeyDown={(e: any) => { if (e.key == 'Enter') verifyOtp(e) }}
             />
           </div>
-          
-          <Button variant="outlined" onClick={() => router.push({ pathname: '/' })}>Cancel</Button>
+
           <Button
             className={styles.cta_button}
             type="submit"
@@ -197,6 +196,7 @@ const SignUpVerify = () => {
               "Submit"
             )}
           </Button>
+          <Button variant="outlined" onClick={() => router.push({ pathname: '/' })}>Cancel</Button>
                     
           {!seconds ? <p className={styles.helperText}>{"Did not receive an OTP?"}
             <Button variant="text" onClick={resetCountdown} disabled={otpCountDown} sx={{ textTransform: "capitalize" }}>Resend OTP</Button>

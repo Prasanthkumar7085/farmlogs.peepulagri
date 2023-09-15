@@ -72,7 +72,7 @@ const HeadPart = ({ data }: any) => {
         </div>
         <div className={styles.content}>
           <h3 className={styles.h3title}>
-            {data?.title}
+            {data?.title?.slice(0, 1).toUpperCase() + data?.title?.slice(1,)}
           </h3>
           <p className={styles.pdescription}>
             <span className={styles.identifyingSpecificPests}>

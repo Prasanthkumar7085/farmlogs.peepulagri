@@ -24,7 +24,7 @@ const FooterActionButtons = ({ addLogs, editLog }: any) => {
             variant="contained"
             color="primary"
             size="medium"
-          title={router?.query.log_id || router?.query.support_id ? 'Update' : 'Submit'}
+        title={router?.query.log_id || router?.query.support_id ? 'Update' : 'Submit'}
             endIcon={<Icon>arrow_forward_sharp</Icon>}
           />
     </div>

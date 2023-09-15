@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsService";
 import { useDispatch } from "react-redux";
 import { setAllFarms } from "@/Redux/Modules/Farms";
+import LoadingComponent from "../Core/LoadingComponent";
 
 const DashBoard = () => {
 
@@ -14,6 +15,7 @@ const DashBoard = () => {
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     const [farmsData, setFarmsData] = useState<any>();
+    const [loading, setLoading] = useState(true);
 
     const getFarmsData = async () => {
         let response: any = await getAllFarmsService(accessToken);
@@ -25,6 +27,7 @@ const DashBoard = () => {
             let id = (router?.query?.farm_id && router?.query?.farm_id != 'farm_id') ? router?.query?.farm_id : response?.data[0]?._id;
             router.push({ pathname: `/farm/${id}/logs`, query: restQueries });
         }
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -39,6 +42,8 @@ const DashBoard = () => {
             <FarmCardsLayOut farmsData={farmsData}>
                 <FarmTableLogs getFarmsData={getFarmsData} />
             </FarmCardsLayOut>
+
+            <LoadingComponent loading={loading} />
         </div>
     )
 }

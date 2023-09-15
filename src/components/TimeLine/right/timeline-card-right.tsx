@@ -4,6 +4,7 @@ import timePipe from "@/pipes/timePipe";
 import { Chip } from "@mui/material";
 import { CategoriesType } from "@/types/categoryTypes";
 import { GetLogByIdResponseDataType } from "@/types/logsTypes";
+import ImageComponent from "@/components/Core/ImageComponent";
 const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseDataType, categoriesList: Array<CategoriesType> }) => {
 
 
@@ -57,10 +58,12 @@ const TimelineCardRight = ({ data, categoriesList }: { data: GetLogByIdResponseD
           <p className={styles.monthyear}>{timePipe(data?.to_date_time?.slice(0, 10), 'MMM YYYY')}</p>
         </div>
         <div className={styles.content}>
-          <img
+          <ImageComponent
             className={styles.imageIcon}
             alt=""
-            src="/rectangle-105@2x.png"
+            height={100}
+            width={100}
+            src={`/categories/${data?.categories[0] ? data?.categories[0] : "no-image-found"}.jpg`}
           />
           <div className={styles.textwrapper}>
             <h5 className={styles.heading}>{data.work_type?.length ? getWorkType(data?.work_type) : ""}</h5>

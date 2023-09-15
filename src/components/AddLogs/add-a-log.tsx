@@ -67,7 +67,9 @@ const AddALog: NextPage = () => {
       if (response.success) {
         setAlertMessage('Log Added Successfully!');
         setAlertType(true);
-        router.back();
+        setTimeout(() => {
+          router.push(`/farm/${router.query.farm_id}/logs`);
+        }, 300)
       } else if (response?.status == 422) {
         setErrorMessages(response?.errors);
       } else {

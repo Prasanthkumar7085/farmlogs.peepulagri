@@ -120,8 +120,8 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
         try {
             let response: any = await deleteALogService(id);
             if (response.success) {
-                getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit });
                 getFarmsData();
+                getFarmLogs({ farmId: router.query.farm_id, page: router.query.page, limit: router.query.limit, orderBy: router.query.order_by, orderType: router.query.order_type, search: router.query.search_string });
             }
         } catch (err: any) {
             console.error(err);

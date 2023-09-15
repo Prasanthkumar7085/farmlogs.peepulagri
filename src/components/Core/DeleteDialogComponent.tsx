@@ -15,15 +15,15 @@ const DeleteDialogCompoennt = ({ deleteContent, deleteDialogOpen, confirmDelete 
                     <Typography variant="h5" color="secondary" className={Styles.title}>
                         <ReportProblemIcon />
                         <span>
-                            DELETE LOG
+                            DELETE
                         </span> 
                     </Typography>              
                 </div>
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    <Typography> {`Do you really wanna delete the log `}</Typography>
-                    <Typography variant="h6" color="primary">{`${deleteContent?.title}`}</Typography>
+                    <Typography> {`Do you really wanna delete the entry? `}</Typography>
+                    <Typography variant="h6" color="primary">{deleteContent?.title?.slice(0, 1).toUpperCase() + deleteContent?.title?.slice(1,)}</Typography>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

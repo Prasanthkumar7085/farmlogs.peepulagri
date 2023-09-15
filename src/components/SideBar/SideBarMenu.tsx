@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { removeUserDetails } from "@/Redux/Modules/Auth";
@@ -24,6 +24,7 @@ interface item {
     link: string;
     isVisible: boolean;
     active: boolean;
+    toolTitle: string;
 }
 
 
@@ -36,9 +37,9 @@ const SideBarMenu = ({ children }: any) => {
     const dispatch = useDispatch();
 
     const menuListItems = [
-        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN', active: router.pathname.includes('/farm') },
-        { src: '/support-icon.svg', link: "/support", isVisible: true, active: router.pathname.includes('/support') },
-        { src: '/timeline-icon.svg', link: "/timeline", isVisible: userName !== 'ADMIN', active: router.pathname.includes('/timeline') },
+        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN', active: router.pathname.includes('/farm'), toolTitle: 'Logs' },
+        { src: '/support-icon.svg', link: "/support", isVisible: true, active: router.pathname.includes('/support'), toolTitle: 'Support' },
+        { src: '/timeline-icon.svg', link: "/timeline", isVisible: userName !== 'ADMIN', active: router.pathname.includes('/timeline'), toolTitle: 'Time Line' },
         // { src: '/settings-icon.svg', link: "/" },
         // { src: '/calendaricon.svg', link: "/" },
         // { src: '/graph-icon.svg', link: "/" },
@@ -70,16 +71,17 @@ const SideBarMenu = ({ children }: any) => {
                     <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} onClick={() => router.push('/farm')} />
                     <List>
                         {menuListItems.map((item: item, index: number) => {
-
                             if (item.isVisible) {
                             return (
                                 <ListItem className={styles.menuItem} key={index}>
-                                    <ListItemButton
-                                        onClick={() => router.push(item.link)}
-                                        className={item.active ? styles.activeMenuItem : styles.inactiveMenuItem}
-                                    >
-                                        <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
-                                    </ListItemButton>
+                                    <Tooltip title={item.toolTitle} placement='right'>
+                                        <ListItemButton
+                                            onClick={() => router.push(item.link)}
+                                            className={item.active ? styles.activeMenuItem : styles.inactiveMenuItem}
+                                        >
+                                            <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
+                                        </ListItemButton>
+                                    </Tooltip>
                                 </ListItem>
                             )
                             }
@@ -87,9 +89,11 @@ const SideBarMenu = ({ children }: any) => {
                     </List>
                 </nav>
                 <div className={styles.profileBtnGroup}>
-                    <IconButton onClick={logout}>
-                        <LogoutIcon sx={{ color: "white" }} />
-                    </IconButton>
+                    <Tooltip title='Logout'>
+                        <IconButton onClick={logout}>
+                            <LogoutIcon sx={{ color: "white" }} />
+                        </IconButton>
+                    </Tooltip>
 
 
                     <button className={styles.profile}>

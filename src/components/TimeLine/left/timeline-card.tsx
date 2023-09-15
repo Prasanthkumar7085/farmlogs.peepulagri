@@ -4,6 +4,7 @@ import { Chip } from "@mui/material";
 import timePipe from "@/pipes/timePipe";
 import { GetLogByIdResponseDataType } from "@/types/logsTypes";
 import { CategoriesType } from "@/types/categoryTypes";
+import ImageComponent from "@/components/Core/ImageComponent";
 const TimelineCard = ({ data, categoriesList }: { data: GetLogByIdResponseDataType, categoriesList: Array<CategoriesType> }) => {
 
 
@@ -58,7 +59,13 @@ const TimelineCard = ({ data, categoriesList }: { data: GetLogByIdResponseDataTy
           <p className={styles.monthyear}>{timePipe(data?.to_date_time?.slice(0, 10), 'MMM YYYY')}</p>
         </div>
         <div className={styles.content}>
-          <img className={styles.imageIcon} alt="Thumbnail" src="/image@2x.png" />
+          <ImageComponent
+            className={styles.imageIcon}
+            alt=""
+            height={100}
+            width={100}
+            src={`/categories/${data?.categories[0] ? data?.categories[0] : "no-image-found"}.jpg`}
+          />
           <div className={styles.text}>
             <h5 className={styles.title}>{data.work_type?.length ? getWorkType(data?.work_type) : ""}</h5>
             <p
@@ -67,9 +74,6 @@ const TimelineCard = ({ data, categoriesList }: { data: GetLogByIdResponseDataTy
           </div>
         </div>
       </div>
-      {/* <div className={styles.cardlable}>
-        <p className={styles.equipmentManagement}>{data.title.length > 12 ? data.title.slice(0, 10) + "..." : data.title}</p>
-      </div> */}
       <div className={styles.categoriesAdded}>
         {data && data?.categories?.length && data?.categories?.map((item: any, index: number) => {
           return (

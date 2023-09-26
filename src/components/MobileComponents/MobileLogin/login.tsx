@@ -10,10 +10,12 @@ import {
 } from "@mui/material";
 import styles from "./login.module.css";
 import ImageComponent from "@/components/Core/ImageComponent";
+import { useRouter } from "next/router";
 
 const MobileLogin: NextPage = () => {
+  const router = useRouter();
   const onButtonClick = useCallback(() => {
-    // Please sync "Log in " to the project
+    router.push('/signup-verify')
   }, []);
 
   return (
@@ -28,7 +30,7 @@ const MobileLogin: NextPage = () => {
         <div className={styles.loginform}>
           <div className={styles.loginfield}>
             <div className={styles.loginheader}>
-              <Typography className={styles.welcomeBack1}>Welcome Back</Typography>
+              <Typography variant="h5" className={styles.welcomeBack1}>Welcome Back</Typography>
               <Typography className={styles.enterPhoneNumber}>
                 Enter Phone Number to Access Your Account
               </Typography>
@@ -43,11 +45,17 @@ const MobileLogin: NextPage = () => {
               fullWidth={true}
               variant="outlined"
               type="tel"
+              sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "#B4C1D6 !important",
+                  borderRadius: "8px",
+                }
+              }}
             />
           </div>
           <Button
             className={styles.button}
-            color="error"
+            fullWidth
             name="continue"
             id="signin"
             size="large"

@@ -1,0 +1,145 @@
+.logoIcon {
+  position: relative;
+  width: 134.31px;
+  height: 100px;
+}
+.otpVerification {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: inherit;
+  font-weight: 600;
+  font-family: inherit;
+}
+.enterTheOtp {
+  margin: 0;
+}
+.span {
+  color: #35353d;
+}
+.enterTheOtpContainer {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: 16px;
+  line-height: 140%;
+  font-weight: 400;
+  font-family: inherit;
+  color: #6a7185;
+}
+.verifyotpdetailsheader {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.textfield {
+  border: 0;
+  background-color: transparent;
+  flex: 1;
+  position: relative;
+}
+.div1 {
+  position: absolute;
+  top: calc(50% - 7.5px);
+  left: calc(50% - 6.5px);
+  line-height: 100%;
+  font-weight: 500;
+}
+.div {
+  flex: 1;
+  position: relative;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #b4c1d6;
+  box-sizing: border-box;
+  height: 55px;
+  overflow: hidden;
+}
+.otptextboxes {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+}
+.resentOtp {
+  font-weight: 500;
+  color: #05a155;
+}
+.didntYouReceivedContainer {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: 16px;
+  line-height: 140%;
+  color: #6a7185;
+  font-family: inherit;
+}
+.otpfield,
+.verifyotpdetails {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+.otpfield {
+  align-items: flex-end;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  font-size: 24px;
+}
+.verifyotpdetails {
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 25px;
+}
+.submitotp {
+  align-self: stretch;
+  cursor: pointer;
+}
+.verifyotpform,
+.verifyotpscreen {
+  flex-direction: column;
+  align-items: center;
+}
+.verifyotpform {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  max-width: 380px;
+}
+.verifyotpscreen {
+  align-self: stretch;
+  gap: 137px;
+}
+.otpscreen,
+.verifyotp,
+.verifyotpscreen {
+  display: flex;
+  justify-content: flex-start;
+}
+.verifyotp {
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 124px 0 266px;
+  background-image: url(/verifyotp@3x.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+.otpscreen {
+  width: 430px;
+  height: 932px;
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left;
+  font-size: 32px;
+  color: #35353d;
+  font-family: Inter;
+}

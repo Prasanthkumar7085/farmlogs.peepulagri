@@ -36,18 +36,12 @@
   font-family: 'Inter', sans-serif !important;
 }
 
-
 .enterPhoneNumber {
   font-size: 13px;
   font-weight: 300;
   font-family: 'Inter', sans-serif !important;
 }
 
-.logintextfield {
-  border: 0;
-  background-color: transparent;
-  align-self: stretch;
-}
 
 .loginfield {
   align-self: stretch;
@@ -59,23 +53,27 @@
 }
 
 .button {
-  align-self: stretch;
-  cursor: pointer;
+  border-radius: 8px;
+  background: #A05148;
+  padding-block: 10px;
 }
 
+/* 
+.button :hover {
+  background: #A05148;
+} */
 
 .loginform {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   margin-inline: 1.5rem;
+  align-self: stretch;
+  gap: 40px;
 }
 
-.loginform {
-  align-self: stretch;
-  align-items: flex-start;
-  gap: 48px;
+.loginform input {
+  padding-block: 12px;
 }
 
 .login {

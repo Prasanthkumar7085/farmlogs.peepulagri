@@ -3,9 +3,12 @@ import FarmCard from "./farm-card";
 
 const DashboardPage = () => {
     return (
-        <div>
+        <div id="dashboardPage">
             <DashBoardHeader />
             <FarmCard />
+            <div className="addFormPositionIcon">
+                <img src="/add-form-icon.svg" alt="" />
+            </div>
         </div>
     );
 }

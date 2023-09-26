@@ -19,12 +19,14 @@
 }
 
 .farm1 {
-  position: relative;
-  font-size: var(--font-size-5xl);
-  letter-spacing: -0.02em;
-  line-height: 100%;
+  color: #A05148;
+  font-family: Inter;
+  font-size: clamp(20px, 5vw, 24px);
+  font-style: normal;
   font-weight: 500;
-  color: var(--brown);
+  line-height: 100%;
+  /* 24px */
+  letter-spacing: -0.48px;
 }
 
 .farmdetails {
@@ -57,11 +59,11 @@
   justify-content: space-between;
 }
 
-.buttonIcon {
+/* .buttonIcon {
   position: relative;
   width: 16.67px;
   height: 16.67px;
-}
+} */
 
 .farmareablock,
 .viewfarm {
@@ -70,14 +72,19 @@
 }
 
 .viewfarm {
-  border-radius: var(--br-41xl);
+  border-radius: 50%;
   background-color: var(--background);
-  width: 48px;
-  height: 48px;
+  width: 45px;
+  height: 45px;
   align-items: center;
   justify-content: center;
   padding: 16.3799991607666px;
   box-sizing: border-box;
+}
+
+.viewfarm img {
+  width: 16px;
+  height: 20px;
 }
 
 .farmareablock {
@@ -103,10 +110,9 @@
 }
 
 .farmcard {
-  border-radius: var(--br-5xs);
-  background-color: var(--white);
-  border: 1px solid var(--color-lightsteelblue-100);
-  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(180, 193, 214, 0.50);
+  background: #FFF;
   justify-content: flex-start;
   padding: var(--padding-base);
   cursor: pointer;
@@ -114,8 +120,16 @@
   font-size: var(--font-size-xs);
   color: var(--title);
   font-family: var(--text-sm-normal);
+  min-height: 100px;
 }
 
 .allFormsBlock {
   margin-top: 1rem;
+  padding: 1rem;
+  padding-top: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  height: 75vh;
+  overflow-y: scroll;
 }

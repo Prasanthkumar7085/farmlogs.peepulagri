@@ -38,8 +38,9 @@
 
 .enterPhoneNumber {
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 400;
   font-family: 'Inter', sans-serif !important;
+  letter-spacing: 0;
 }
 
 

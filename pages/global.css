@@ -242,3 +242,8 @@ body {
         display: none;
     }
 }
+
+.MuiOutlinedInput-notchedOutline {
+    border-color: #B4C1D6 !important;
+    border-radius: 4px
+}

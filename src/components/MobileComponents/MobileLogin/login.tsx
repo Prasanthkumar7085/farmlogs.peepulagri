@@ -47,8 +47,7 @@ const MobileLogin: NextPage = () => {
               type="tel"
               sx={{
                 '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: "#B4C1D6 !important",
-                  borderRadius: "8px",
+                  borderRadius: "8px !important",
                 }
               }}
             />

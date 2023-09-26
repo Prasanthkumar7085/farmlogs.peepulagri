@@ -1,22 +1,38 @@
-.logoIcon {
-  position: relative;
-  width: 134.31px;
-  height: 100px;
+.bgImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
 }
+
+.bgImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 .otpVerification {
   margin: 0;
-  align-self: stretch;
-  position: relative;
-  font-size: inherit;
   font-weight: 600;
-  font-family: inherit;
+  font-size: 30px;
+  font-family: 'Inter', sans-serif !important;
 }
+
 .enterTheOtp {
   margin: 0;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: #6A7185;
 }
-.span {
+
+.enterTheOtp span {
   color: #35353d;
 }
+
 .enterTheOtpContainer {
   margin: 0;
   align-self: stretch;
@@ -27,6 +43,7 @@
   font-family: inherit;
   color: #6a7185;
 }
+
 .verifyotpdetailsheader {
   align-self: stretch;
   display: flex;
@@ -35,29 +52,15 @@
   justify-content: flex-start;
   gap: 8px;
 }
+
 .textfield {
   border: 0;
   background-color: transparent;
   flex: 1;
   position: relative;
 }
-.div1 {
-  position: absolute;
-  top: calc(50% - 7.5px);
-  left: calc(50% - 6.5px);
-  line-height: 100%;
-  font-weight: 500;
-}
-.div {
-  flex: 1;
-  position: relative;
-  border-radius: 4px;
-  background-color: #fff;
-  border: 1px solid #b4c1d6;
-  box-sizing: border-box;
-  height: 55px;
-  overflow: hidden;
-}
+
+
 .otptextboxes {
   align-self: stretch;
   display: flex;
@@ -66,10 +69,12 @@
   justify-content: flex-start;
   gap: 24px;
 }
+
 .resentOtp {
   font-weight: 500;
   color: #05a155;
 }
+
 .didntYouReceivedContainer {
   margin: 0;
   align-self: stretch;
@@ -79,12 +84,14 @@
   color: #6a7185;
   font-family: inherit;
 }
+
 .otpfield,
 .verifyotpdetails {
   align-self: stretch;
   display: flex;
   flex-direction: column;
 }
+
 .otpfield {
   align-items: flex-end;
   justify-content: center;
@@ -92,54 +99,52 @@
   text-align: center;
   font-size: 24px;
 }
+
 .verifyotpdetails {
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 25px;
+  gap: 1.25rem;
 }
+
 .submitotp {
   align-self: stretch;
   cursor: pointer;
 }
+
 .verifyotpform,
 .verifyotpscreen {
   flex-direction: column;
   align-items: center;
 }
+
 .verifyotpform {
-  width: 100%;
   display: flex;
   justify-content: center;
   gap: 48px;
-  max-width: 380px;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
 }
+
 .verifyotpscreen {
   align-self: stretch;
-  gap: 137px;
+  gap: 6rem;
+  padding-top: 6rem;
+  position: relative;
 }
-.otpscreen,
+
+
 .verifyotp,
 .verifyotpscreen {
   display: flex;
   justify-content: flex-start;
 }
-.verifyotp {
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  padding: 124px 0 266px;
-  background-image: url(/verifyotp@3x.png);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top;
-}
+
+
 .otpscreen {
-  width: 430px;
-  height: 932px;
-  flex-direction: row;
-  align-items: flex-start;
-  text-align: left;
-  font-size: 32px;
-  color: #35353d;
-  font-family: Inter;
+  background-color: #ffffff;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+
 }

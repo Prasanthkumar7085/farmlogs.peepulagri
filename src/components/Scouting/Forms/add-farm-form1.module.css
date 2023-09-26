@@ -1,0 +1,105 @@
+.label {
+  align-self: stretch;
+  position: relative;
+  line-height: 20px;
+  font-weight: 500;
+}
+.inputfarmname {
+  border: 0;
+  background-color: transparent;
+  align-self: stretch;
+}
+.farmname {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-9xs);
+}
+.text {
+  position: relative;
+  line-height: 18px;
+  font-weight: 500;
+}
+.supportingText {
+  align-self: stretch;
+  position: relative;
+  font-size: var(--text-sm-medium-size);
+  line-height: 14px;
+  color: var(--body);
+}
+.locationheading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--gap-5xs);
+}
+.button {
+  cursor: pointer;
+}
+.addlocationbutton {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+  font-size: var(--font-size-base);
+  color: var(--gray-900);
+}
+.label1 {
+  position: relative;
+  line-height: 20px;
+  font-weight: 500;
+}
+.locationdetails {
+  align-self: stretch;
+  overflow: hidden;
+  padding: var(--padding-base) 0 0;
+}
+.formfields,
+.locationdetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.back,
+.formfields {
+  align-self: stretch;
+}
+.submit {
+  flex: 1;
+  cursor: pointer;
+}
+.addfarmform,
+.buttons,
+.footeractionbuttons {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+}
+.buttons {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gap-5xl);
+}
+.addfarmform,
+.footeractionbuttons {
+  flex-direction: column;
+  align-items: center;
+}
+.addfarmform {
+  border-radius: var(--br-5xs) var(--br-5xs) 0 0;
+  align-items: flex-start;
+  padding: var(--padding-base) 0 var(--padding-13xl);
+  gap: var(--gap-13xl);
+  text-align: left;
+  font-size: var(--text-sm-medium-size);
+  color: var(--gray-700);
+  font-family: var(--text-sm-medium);
+}

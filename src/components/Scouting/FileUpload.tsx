@@ -1,4 +1,4 @@
-import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Icon, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
 import CameraCapture from "./Camera";
 import Axios from "axios"
@@ -13,6 +13,7 @@ const FileUploadComponent = () => {
     const [uploadintoChuncks, setUploadIntoChuncks] = useState<any>()
     const [uploadId, setUploadId] = useState<any>()
     const [presignedUrls, sestPresignedUrls] = useState<any>()
+    const [progress, setProgress] = useState<any>(2)
 
     const handleFileChange = (e: any) => {
         setSelectedFile(e.target.files[0]);
@@ -23,15 +24,17 @@ const FileUploadComponent = () => {
         }
         if (bytesToMB(e.target.files[0].size) >= 5) {
             setUploadIntoChuncks(true)
+            startUploadEvent(e.target.files[0])
         }
         else {
             setUploadIntoChuncks(false)
+            fileUploadEvent()
         }
     };
 
-    const startUploadEvent = async () => {
+    const startUploadEvent = async (file: any) => {
         let obj = {
-            file_name: selectedFile.name
+            file_name: file.name
         }
         let options = {
             method: "POST",
@@ -42,12 +45,12 @@ const FileUploadComponent = () => {
 
         }
         try {
-            let response = await fetch("http://localhost:3000/v1.0/scouts/attachments/start-upload", options);
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
                 console.log(responseData)
                 setUploadId(responseData.uploadId)
-                uploadFileintoChuncks(responseData.uploadId, selectedFile.name)
+                uploadFileintoChuncks(responseData.uploadId, file)
             }
         }
         catch (err) {
@@ -57,18 +60,18 @@ const FileUploadComponent = () => {
     }
 
     //file upload into multipart
-    const uploadFileintoChuncks = async (uploadid: any, file_name: any) => {
-        if (!selectedFile) {
+    const uploadFileintoChuncks = async (uploadid: any, file: any) => {
+        if (!file) {
             return;
         }
 
         const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
-        const totalChunks = Math.ceil(selectedFile.size / chunkSize);
+        const totalChunks = Math.ceil(file.size / chunkSize);
         const formData = new FormData();
         let resurls;
 
         let obj = {
-            file_name: selectedFile.name,
+            file_name: file.name,
             upload_id: uploadid,
             parts: totalChunks
         }
@@ -83,7 +86,7 @@ const FileUploadComponent = () => {
 
         try {
             // Send the chunk to the server using a POST request
-            let response = await fetch(`http://localhost:3000/v1.0/scouts/attachments/start-upload/presigned-url`, options);
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`, options);
             let responseData: any = await response.json();
             if (responseData.success == true) {
 
@@ -94,8 +97,8 @@ const FileUploadComponent = () => {
 
                 for (let currentChunk = 0; currentChunk < totalChunks; currentChunk++) {
                     const start = currentChunk * chunkSize;
-                    const end = Math.min(start + chunkSize, selectedFile.size);
-                    const chunk = selectedFile.slice(start, end);
+                    const end = Math.min(start + chunkSize, file.size);
+                    const chunk = file.slice(start, end);
 
                     // promises.push(axios.put(resurls[currentChunk], chunk))
                     let response: any = await fetch(resurls[currentChunk], {
@@ -103,16 +106,22 @@ const FileUploadComponent = () => {
                         body: chunk,
                     });
 
+                    const progress = ((currentChunk + 1) / totalChunks) * 100;
+                    setProgress(progress);
+
                     promises.push(response)
                     console.log(response.headers.get('Etag'))
+
+
                 }
+
 
 
                 let promiseResponseObj = promises.map((part: any, index: any) => ({
                     ETag: part.headers.get('Etag').replace(/"/g, ''),
                     PartNumber: index + 1
                 }))
-                mergeFileChuncksEvent(promiseResponseObj, uploadid)
+                mergeFileChuncksEvent(promiseResponseObj, uploadid, file)
                 console.log(promiseResponseObj)
 
             }
@@ -123,10 +132,10 @@ const FileUploadComponent = () => {
 
     }
 
-    const mergeFileChuncksEvent = async (responseObjs: any, uploadid: any) => {
+    const mergeFileChuncksEvent = async (responseObjs: any, uploadid: any, file: any) => {
 
         let obj = {
-            file_name: selectedFile.name,
+            file_name: file.name,
             upload_id: uploadid,
             parts: responseObjs
         }
@@ -140,9 +149,11 @@ const FileUploadComponent = () => {
 
         }
         try {
-            let response = await fetch(`http://localhost:3000/v1.0/scouts/attachments/complete-upload`, options);
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/complete-upload`, options);
             let responseData: any = await response.json();
             console.log(responseData, "after")
+            setProgress(100); // Set progress to 100% when done
+
         }
         catch (err) {
             console.log(err)
@@ -179,6 +190,8 @@ const FileUploadComponent = () => {
         }
 
     }
+
+
 
 
     return (
@@ -229,17 +242,124 @@ const FileUploadComponent = () => {
                                             alt=""
                                             src="/camera-1.svg"
                                         />
-                                        <div className={styles.capture}>Capture</div>
+
+                                        <div className={styles.capture}><CameraCapture />   </div>
                                     </div>
                                 </div>
                                 <input
                                     className={styles.uploadimage}
                                     type="file"
-                                    accept="image/*"
-                                    multiple
                                     alt="images-upload"
+                                    onChange={handleFileChange}
                                 />
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {selectedFile ?
+                <div className={styles.uploadprogress} id="upload-progress">
+                    <div className={styles.progress} id="progress">
+                        <img className={styles.image21} alt="" src="/image-2-1.svg" />
+                        <div className={styles.progressdetails}>
+                            <div className={styles.uploaddetails}>
+                                <div className={styles.uploadcontroller}>
+                                    <div className={styles.uploadname}>
+                                        <div className={styles.photojpg}>Photo.jpg</div>
+                                        <div className={styles.photojpg}>7.5mb</div>
+                                    </div>
+                                    <img
+                                        className={styles.close41}
+                                        alt=""
+                                        src="/close-4-1.svg"
+                                    />
+                                </div>
+                                <Box sx={{ width: '100%' }}>
+                                    <LinearProgress variant="determinate" value={progress} />
+                                </Box>
+                            </div>
+                            <div className={styles.uploadstatus}>
+                                <div className={styles.completed}>{progress == 100 ? "completed" : progress + "%"}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div> : ""}
+            <div className={styles.scoutdescription} id="scout-description">
+                <div className={styles.descriptionblock}>
+                    <div className={styles.addscoutdetails}>
+                        <div className={styles.inputField}>
+                            <div className={styles.farmselection} id="input-description">
+                                <div className={styles.label1}>Description</div>
+                                <TextField
+                                    className={styles.input}
+                                    color="primary"
+                                    name="desciption"
+                                    id="description"
+                                    rows={4}
+                                    maxRows={4}
+                                    placeholder="Enter your description here"
+                                    fullWidth={true}
+                                    variant="outlined"
+                                    multiline
+                                />
+                            </div>
+                        </div>
+                        <div className={styles.inputField}>
+                            <FormControl className={styles.dropdown} variant="outlined">
+                                <InputLabel color="primary" />
+                                <Select color="primary" name="crops" id="crops">
+                                    <MenuItem value="Jini-2626(R)">Jini-2626(R)</MenuItem>
+                                    <MenuItem value="Prahar(R)">Prahar(R)</MenuItem>
+                                    <MenuItem value="Royal bullet">Royal bullet</MenuItem>
+                                    <MenuItem value="SW-402">SW-402</MenuItem>
+                                    <MenuItem value="SW-434">SW-434</MenuItem>
+                                    <MenuItem value="SW-450">SW-450</MenuItem>
+                                    <MenuItem value="US- 341">US- 341</MenuItem>
+                                    <MenuItem value="HPH – 5531">HPH – 5531</MenuItem>
+                                    <MenuItem value="TMPH – 411(R)">TMPH – 411(R)</MenuItem>
+                                    <MenuItem value="TMPH-489(R)">TMPH-489(R)</MenuItem>
+                                    <MenuItem value="SH-102">SH-102</MenuItem>
+                                    <MenuItem value="LCA-643">LCA-643</MenuItem>
+                                    <MenuItem value="BSS-355">BSS-355</MenuItem>
+                                    <MenuItem value="Armoor">Armoor</MenuItem>
+                                    <MenuItem value="Yesawini(R)s">Yesawini(R)s</MenuItem>
+                                    <MenuItem value="Pallantla (R)">Pallantla (R)</MenuItem>
+                                    <MenuItem value="Denova">Denova</MenuItem>
+                                    <MenuItem value="Wonder Hot">Wonder Hot</MenuItem>
+                                    <MenuItem value="SH-AD">SH-AD</MenuItem>
+                                    <MenuItem value="Sagar">Sagar</MenuItem>
+                                    <MenuItem value="Chandrika-30">Chandrika-30</MenuItem>
+                                    <MenuItem value="Vajra">Vajra</MenuItem>
+                                </Select>
+                                <FormHelperText />
+                            </FormControl>
+                        </div>
+                    </div>
+                    <div className={styles.footeractionbuttons} id="footer-buttons">
+                        <div className={styles.buttons} id="buttons">
+                            <Button
+                                className={styles.input}
+                                sx={{ width: 130 }}
+                                color="primary"
+                                name="back"
+                                id="back"
+                                size="large"
+                                variant="outlined"
+                            >
+                                Back
+                            </Button>
+                            <Button
+                                className={styles.submitButton}
+                                color="primary"
+                                name="submit"
+                                id="submit"
+                                size="large"
+                                variant="contained"
+                                endIcon={<Icon>arrow_forward_sharp</Icon>}
+                            >
+                                Submit
+                            </Button>
                         </div>
                     </div>
                 </div>

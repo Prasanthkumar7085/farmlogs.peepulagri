@@ -5,6 +5,7 @@ import './global.css';
 import { useRouter } from 'next/router';
 import { wrapper } from "@/Redux";
 import { Provider } from "react-redux";
+import ScoutingHeader from '@/components/Scouting/NavBar/NavbarComponent';
 
 function MyApp({
     Component,
@@ -24,11 +25,22 @@ function MyApp({
     return (
         <ThemeProvider theme={theme}>
             <Provider store={store}>
-                {sideBarList.includes(router.pathname) ?
-                <Component {...pageProps} /> :
-                <SideBarMenu>
-                    <Component {...pageProps} />
-                </SideBarMenu>}
+                {router.pathname.includes("scouting") ?
+
+
+                    <ScoutingHeader>
+                        <Component {...pageProps} />
+                    </ScoutingHeader>
+                    :
+
+                    sideBarList.includes(router.pathname) ?
+                        <Component {...pageProps} />
+                        :
+                        <SideBarMenu>
+                            <Component {...pageProps} />
+                        </SideBarMenu>
+
+                }
             </Provider>
         </ThemeProvider>
     )

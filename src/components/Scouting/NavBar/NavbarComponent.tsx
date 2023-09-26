@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
-import styles from "./header.module.css";
+import styles from "./navbar.module.css";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 const ScoutingHeader = ({ children }: any) => {
     return (
-        <div className={styles.header} id="header">
+        <div id="mobileBody">
             <div className={styles.navbar} id="navbar">
-                <img className={styles.groupIcon} alt="logo" src="/group1.svg" />
+                <ImageComponent src="/Logo-color.svg" width="70" height="60" />
                 <img className={styles.menuIicon} alt="options" src="/menuiicon.svg" />
             </div>
             {children}

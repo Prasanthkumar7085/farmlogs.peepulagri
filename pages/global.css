@@ -247,3 +247,12 @@ body {
     border-color: #B4C1D6 !important;
     border-radius: 4px
 }
+
+#mobileBody {
+    width: 100%;
+    max-width: 500px;
+}
+
+#mobileDashboard {
+    padding: 0 1rem 1rem 1rem;
+}

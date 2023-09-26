@@ -1,0 +1,59 @@
+.dashboard {
+  color: #A05148;
+  font-family: Inter;
+  font-size: clamp(20px, 5.5vw, 24px);
+  font-weight: 600;
+  line-height: normal;
+}
+
+
+.srisailam {
+  color: #000;
+  font-family: Inter;
+  font-size: clamp(14px, 3.12vw, 16px);
+  font-style: normal;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+
+
+
+.dashboardheading,
+.selectlocation {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+.dashboardheading {
+  justify-content: space-between;
+}
+
+.searchfarm {
+  border: 0;
+  background-color: transparent;
+  flex: 1;
+}
+
+.dashboardheader,
+.searchbyfarmname {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.dashboardheader {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+  text-align: left;
+  color: var(--brown);
+  font-family: var(--text-sm-normal);
+}

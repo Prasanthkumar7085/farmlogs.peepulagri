@@ -1,0 +1,17 @@
+.menuIicon {
+    width: 32px;
+    height: 32px;
+}
+
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+#mobileBody {
+    width: 100%;
+    max-width: 500px;
+}

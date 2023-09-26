@@ -1,14 +1,17 @@
 import { GetServerSideProps } from 'next';
 import SignUp from '@/components/AuthModule/SignUp/SignUp';
-
+import MobileLogin from '@/components/MobileComponents/MobileLogin/login';
 const HomePage = () => {
-
-
 
     return (
         <div>
             {/* <Login /> */}
-            <SignUp />
+            <div id="webLogin">
+                <SignUp />
+            </div>
+            <div id="mobileLogin">
+                <MobileLogin />
+            </div>
 
         </div>
     )

@@ -5,16 +5,19 @@
   line-height: 100%;
   opacity: 0.6;
 }
+
 .duration,
 .farm1 {
   align-self: stretch;
 }
+
 .duration {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .farm1 {
   position: relative;
   font-size: var(--font-size-5xl);
@@ -23,6 +26,7 @@
   font-weight: 500;
   color: var(--brown);
 }
+
 .farmdetails {
   align-self: stretch;
   display: flex;
@@ -31,6 +35,7 @@
   justify-content: flex-end;
   gap: var(--gap-5xs);
 }
+
 .acres {
   flex: 1;
   position: relative;
@@ -38,9 +43,11 @@
   text-transform: uppercase;
   font-weight: 500;
 }
+
 .area {
   align-self: stretch;
 }
+
 .area,
 .farmarea {
   flex: 1;
@@ -49,16 +56,19 @@
   align-items: flex-end;
   justify-content: space-between;
 }
+
 .buttonIcon {
   position: relative;
   width: 16.67px;
   height: 16.67px;
 }
+
 .farmareablock,
 .viewfarm {
   display: flex;
   flex-direction: row;
 }
+
 .viewfarm {
   border-radius: var(--br-41xl);
   background-color: var(--background);
@@ -69,6 +79,7 @@
   padding: 16.3799991607666px;
   box-sizing: border-box;
 }
+
 .farmareablock {
   align-self: stretch;
   align-items: flex-end;
@@ -77,6 +88,7 @@
   font-size: var(--text-sm-normal-size);
   color: var(--color-dimgray);
 }
+
 .farm,
 .farmcard {
   align-self: stretch;
@@ -84,10 +96,12 @@
   flex-direction: column;
   align-items: flex-start;
 }
+
 .farm {
   justify-content: flex-end;
   gap: var(--gap-base);
 }
+
 .farmcard {
   border-radius: var(--br-5xs);
   background-color: var(--white);
@@ -100,4 +114,8 @@
   font-size: var(--font-size-xs);
   color: var(--title);
   font-family: var(--text-sm-normal);
+}
+
+.allFormsBlock {
+  margin-top: 1rem;
 }

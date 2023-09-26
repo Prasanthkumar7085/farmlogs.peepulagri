@@ -273,8 +273,8 @@
 
 .addscout {
     border-radius: 8px;
-    width: 430px;
-    height: 791px;
+    /* width: 430px; */
+    /* height: 791px; */
     padding: 8px 16px;
     box-sizing: border-box;
     text-align: left;

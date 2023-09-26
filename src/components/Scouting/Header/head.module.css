@@ -45,7 +45,7 @@
     background-color: var(--white);
     border-bottom: 1px solid var(--stroke);
     box-sizing: border-box;
-    width: 440px;
+    /* width: 440px; */
     flex-direction: row;
     justify-content: space-between;
     padding: 0 var(--padding-base);

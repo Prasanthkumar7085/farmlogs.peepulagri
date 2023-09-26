@@ -227,6 +227,36 @@ const FileUploadComponent = () => {
                                 <FormHelperText />
                             </FormControl>
                         </div>
+                        <div className={styles.inputField}>
+                            <FormControl className={styles.dropdown} variant="outlined">
+                                <InputLabel color="primary" />
+                                <Select color="primary" name="crops" id="crops">
+                                    <MenuItem value="Jini-2626(R)">Jini-2626(R)</MenuItem>
+                                    <MenuItem value="Prahar(R)">Prahar(R)</MenuItem>
+                                    <MenuItem value="Royal bullet">Royal bullet</MenuItem>
+                                    <MenuItem value="SW-402">SW-402</MenuItem>
+                                    <MenuItem value="SW-434">SW-434</MenuItem>
+                                    <MenuItem value="SW-450">SW-450</MenuItem>
+                                    <MenuItem value="US- 341">US- 341</MenuItem>
+                                    <MenuItem value="HPH – 5531">HPH – 5531</MenuItem>
+                                    <MenuItem value="TMPH – 411(R)">TMPH – 411(R)</MenuItem>
+                                    <MenuItem value="TMPH-489(R)">TMPH-489(R)</MenuItem>
+                                    <MenuItem value="SH-102">SH-102</MenuItem>
+                                    <MenuItem value="LCA-643">LCA-643</MenuItem>
+                                    <MenuItem value="BSS-355">BSS-355</MenuItem>
+                                    <MenuItem value="Armoor">Armoor</MenuItem>
+                                    <MenuItem value="Yesawini(R)s">Yesawini(R)s</MenuItem>
+                                    <MenuItem value="Pallantla (R)">Pallantla (R)</MenuItem>
+                                    <MenuItem value="Denova">Denova</MenuItem>
+                                    <MenuItem value="Wonder Hot">Wonder Hot</MenuItem>
+                                    <MenuItem value="SH-AD">SH-AD</MenuItem>
+                                    <MenuItem value="Sagar">Sagar</MenuItem>
+                                    <MenuItem value="Chandrika-30">Chandrika-30</MenuItem>
+                                    <MenuItem value="Vajra">Vajra</MenuItem>
+                                </Select>
+                                <FormHelperText />
+                            </FormControl>
+                        </div>
                         <div className={styles.farmselection} id="images">
                             <div className={styles.inputField}>
                                 <div className={styles.label1}>Images</div>
@@ -305,36 +335,7 @@ const FileUploadComponent = () => {
                                 />
                             </div>
                         </div>
-                        <div className={styles.inputField}>
-                            <FormControl className={styles.dropdown} variant="outlined">
-                                <InputLabel color="primary" />
-                                <Select color="primary" name="crops" id="crops">
-                                    <MenuItem value="Jini-2626(R)">Jini-2626(R)</MenuItem>
-                                    <MenuItem value="Prahar(R)">Prahar(R)</MenuItem>
-                                    <MenuItem value="Royal bullet">Royal bullet</MenuItem>
-                                    <MenuItem value="SW-402">SW-402</MenuItem>
-                                    <MenuItem value="SW-434">SW-434</MenuItem>
-                                    <MenuItem value="SW-450">SW-450</MenuItem>
-                                    <MenuItem value="US- 341">US- 341</MenuItem>
-                                    <MenuItem value="HPH – 5531">HPH – 5531</MenuItem>
-                                    <MenuItem value="TMPH – 411(R)">TMPH – 411(R)</MenuItem>
-                                    <MenuItem value="TMPH-489(R)">TMPH-489(R)</MenuItem>
-                                    <MenuItem value="SH-102">SH-102</MenuItem>
-                                    <MenuItem value="LCA-643">LCA-643</MenuItem>
-                                    <MenuItem value="BSS-355">BSS-355</MenuItem>
-                                    <MenuItem value="Armoor">Armoor</MenuItem>
-                                    <MenuItem value="Yesawini(R)s">Yesawini(R)s</MenuItem>
-                                    <MenuItem value="Pallantla (R)">Pallantla (R)</MenuItem>
-                                    <MenuItem value="Denova">Denova</MenuItem>
-                                    <MenuItem value="Wonder Hot">Wonder Hot</MenuItem>
-                                    <MenuItem value="SH-AD">SH-AD</MenuItem>
-                                    <MenuItem value="Sagar">Sagar</MenuItem>
-                                    <MenuItem value="Chandrika-30">Chandrika-30</MenuItem>
-                                    <MenuItem value="Vajra">Vajra</MenuItem>
-                                </Select>
-                                <FormHelperText />
-                            </FormControl>
-                        </div>
+                      
                     </div>
                     <div className={styles.footeractionbuttons} id="footer-buttons">
                         <div className={styles.buttons} id="buttons">

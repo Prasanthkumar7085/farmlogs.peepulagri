@@ -94,4 +94,5 @@
   justify-content: flex-start;
   padding-top: 8rem;
   width: 100%;
+  max-width: 500px;
 }

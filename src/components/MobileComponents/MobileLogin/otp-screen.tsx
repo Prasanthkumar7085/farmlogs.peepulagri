@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import styles from "./otp-screen.module.css";
 import { Button, TextField, Typography } from "@mui/material";
 import ImageComponent from "@/components/Core/ImageComponent";
-
+import OtpInput from "react18-input-otp";
 const MobileOtpScreen: NextPage = () => {
   const onSubmitOtpClick = useCallback(() => {
     // Please sync "Dashboard" to the project
@@ -39,6 +39,22 @@ const MobileOtpScreen: NextPage = () => {
                 <TextField
                   variant="outlined"
                 />
+                {/* <OtpInput
+                  // value={verify}
+                  // onChange={setVerify}
+                  numInputs={4}
+                  isInputNum
+                  shouldAutoFocus
+                  inputStyle={{
+                    width: '60px',
+                    height: '50px',
+                    fontSize: '18px',
+                    // borderBottom: '2px solid #06A3AD',
+                    borderRadius: '0px',
+                    marginRight: '1.8rem',
+                    textAlign: 'center',
+                  }}
+                /> */}
               </div>
               <Typography variant="h6" className={styles.resendContainer}>
                 Didn’t you received OTP?

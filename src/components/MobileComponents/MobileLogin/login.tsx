@@ -56,6 +56,7 @@ const MobileLogin: NextPage = () => {
           <Button
             className={styles.button}
             fullWidth
+            color="error"
             name="continue"
             id="signin"
             size="large"

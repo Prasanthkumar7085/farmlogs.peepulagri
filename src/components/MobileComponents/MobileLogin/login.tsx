@@ -11,6 +11,7 @@ import {
 import styles from "./login.module.css";
 import ImageComponent from "@/components/Core/ImageComponent";
 import { useRouter } from "next/router";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const MobileLogin: NextPage = () => {
   const router = useRouter();
@@ -59,10 +60,9 @@ const MobileLogin: NextPage = () => {
             id="signin"
             size="large"
             variant="contained"
-            endIcon={<Icon>arrow_forward_sharp</Icon>}
             onClick={onButtonClick}
           >
-            Continue
+            Continue <ArrowForwardIcon sx={{ marginTop: "5px" }} />
           </Button>
         </div>
       </div>

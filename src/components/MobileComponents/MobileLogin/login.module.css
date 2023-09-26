@@ -57,6 +57,12 @@
   border-radius: 8px;
   background: #A05148;
   padding-block: 10px;
+  text-transform: capitalize;
+  font-family: inter;
+  font-size: clamp(16px, 4.18vw, 18px);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 /* 

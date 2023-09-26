@@ -28,28 +28,22 @@ const MobileOtpScreen: NextPage = () => {
             <div className={styles.otpfield}>
               <div className={styles.otptextboxes}>
                 <TextField
-                  className={styles.textfield}
-                  color="warning"
                   variant="outlined"
                 />
                 <TextField
-                  className={styles.textfield}
-                  color="warning"
                   variant="outlined"
-                /><TextField
-                  className={styles.textfield}
-                  color="warning"
+                />
+                <TextField
                   variant="outlined"
-                /><TextField
-                  className={styles.textfield}
-                  color="warning"
+                />
+                <TextField
                   variant="outlined"
                 />
               </div>
-              <h6 className={styles.didntYouReceivedContainer}>
-                <span>{`Didn’t you received OTP? `}</span>
-                <span className={styles.resentOtp}>{`Resent OTP `}</span>
-              </h6>
+              <Typography variant="h6" className={styles.resendContainer}>
+                Didn’t you received OTP?
+                <span> Resent OTP</span>
+              </Typography>
             </div>
           </div>
           <Button
@@ -60,6 +54,7 @@ const MobileOtpScreen: NextPage = () => {
             size="large"
             variant="contained"
             onClick={onSubmitOtpClick}
+            fullWidth
           >
             Verify
           </Button>

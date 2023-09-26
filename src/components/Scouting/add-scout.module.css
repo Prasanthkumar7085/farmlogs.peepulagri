@@ -1,0 +1,284 @@
+.label {
+    margin: 0;
+    align-self: stretch;
+    position: relative;
+    font-size: inherit;
+    line-height: 20px;
+    font-weight: 500;
+    font-family: inherit;
+}
+
+.selectfarm {
+    align-self: stretch;
+    transform: rotate(-0.04deg);
+    transform-origin: 0 0;
+    cursor: pointer;
+}
+
+.farmselection {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.label1 {
+    align-self: stretch;
+    position: relative;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+.inputField {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.camera1Icon {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.capture {
+    position: relative;
+    line-height: 24px;
+    text-transform: capitalize;
+}
+
+.camera {
+    position: absolute;
+    top: calc(50% - 32.5px);
+    left: calc(50% - 26.5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.captureimage,
+.uploadimage {
+    flex: 1;
+    position: relative;
+    border-radius: 8px;
+    background-color: #fff;
+    box-sizing: border-box;
+    height: 87px;
+    overflow: hidden;
+}
+
+.captureimage {
+    border: 1px dashed rgba(160, 81, 72, 0.7);
+    cursor: pointer;
+}
+
+.uploadimage {
+    border: 1px dashed #4a86f7;
+}
+
+.addscoutdetails,
+.imagesupload {
+    align-self: stretch;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.imagesupload {
+    flex-direction: row;
+    color: #000;
+}
+
+.addscoutdetails {
+    flex-direction: column;
+}
+
+.image21 {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.photojpg {
+    position: relative;
+    line-height: 100%;
+}
+
+.uploadname {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 11px;
+}
+
+.close41 {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.uploadcontroller {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.progressbar {
+    align-self: stretch;
+    position: relative;
+    border-radius: 1px;
+    background-color: #05a155;
+    height: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.uploaddetails {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.completed {
+    flex: 1;
+    position: relative;
+    line-height: 100%;
+}
+
+.uploadstatus {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.progress,
+.progressdetails {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.progressdetails {
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.progress {
+    align-self: stretch;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.scoutdetails,
+.uploadprogress {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.uploadprogress {
+    align-self: stretch;
+    font-size: 16px;
+    color: #000;
+}
+
+.scoutdetails {
+    border-radius: 8px 8px 0 0;
+    padding: 16px 0;
+    gap: 16px;
+}
+
+.input,
+.scoutdetails {
+    align-self: stretch;
+}
+
+.dropdown,
+.submitButton {
+    align-self: stretch;
+    flex: 1;
+}
+
+.submitButton {
+    cursor: pointer;
+}
+
+.buttons,
+.footeractionbuttons {
+    align-self: stretch;
+    align-items: flex-start;
+}
+
+.buttons {
+    height: 55px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 24px;
+}
+
+.footeractionbuttons {
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    padding: 0 0 24px;
+}
+
+.addscout,
+.descriptionblock,
+.footeractionbuttons,
+.scoutdescription {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.descriptionblock {
+    align-self: stretch;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.addscout,
+.scoutdescription {
+    align-items: center;
+}
+
+.scoutdescription {
+    align-self: stretch;
+}
+
+.addscout {
+    border-radius: 8px;
+    width: 430px;
+    height: 791px;
+    padding: 8px 16px;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 14px;
+    color: #344054;
+    font-family: Inter;
+}

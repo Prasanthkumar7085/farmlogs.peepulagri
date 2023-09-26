@@ -1,7 +1,10 @@
-import { Button } from "@mui/material";
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 import CameraCapture from "./Camera";
 import Axios from "axios"
+import styles from "./add-scout.module.css";
+import Header1 from "./Header/HeaderComponent";
+
 
 const FileUploadComponent = () => {
 
@@ -180,10 +183,69 @@ const FileUploadComponent = () => {
 
     return (
         <div>
-            <input type="file" onChange={handleFileChange} />
-            {uploadintoChuncks == true ? <Button onClick={startUploadEvent}>Upload</Button> : <Button onClick={fileUploadEvent}>Upload</Button>}
-            <CameraCapture />
+            {/* <input type="file" onChange={handleFileChange} />
+            {uploadintoChuncks == true ? <Button onClick={startUploadEvent}>Upload</Button> : <Button onClick={fileUploadEvent}>Upload</Button>} */}
+            < Header1 name={"Add item"} />
+            <div className={styles.addscout} id="add-scout">
+                <div className={styles.scoutdetails} id="scout-details">
+                    <div className={styles.addscoutdetails} id="add-scout-details">
+                        <div className={styles.farmselection} id="farm-selection">
+                            <h5 className={styles.label} id="label-select-farm">
+                                Select Farm
+                            </h5>
+                            <FormControl
+                                className={styles.selectfarm}
+                                variant="outlined"
+                            >
+                                <InputLabel color="primary" />
+                                <Select
+                                    color="primary"
+                                    name="select-farm"
+                                    id="select-farm"
+                                    size="medium"
+                                >
+                                    <MenuItem value="Farm-1">Farm-1</MenuItem>
+                                    <MenuItem value="Farm-2">Farm-2</MenuItem>
+                                    <MenuItem value="Farm-3">Farm-3</MenuItem>
+                                    <MenuItem value="Farm-4">Farm-4</MenuItem>
+                                    <MenuItem value="Farm-5">Farm-5</MenuItem>
+                                    <MenuItem value="Farm-6">Farm-6</MenuItem>
+                                </Select>
+                                <FormHelperText />
+                            </FormControl>
+                        </div>
+                        <div className={styles.farmselection} id="images">
+                            <div className={styles.inputField}>
+                                <div className={styles.label1}>Images</div>
+                            </div>
+                            <div className={styles.imagesupload} id="images-upload">
+                                <div
+                                    className={styles.captureimage}
+                                    id="capture-image"
+                                >
+                                    <div className={styles.camera}>
+                                        <img
+                                            className={styles.camera1Icon}
+                                            alt=""
+                                            src="/camera-1.svg"
+                                        />
+                                        <div className={styles.capture}>Capture</div>
+                                    </div>
+                                </div>
+                                <input
+                                    className={styles.uploadimage}
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    alt="images-upload"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     )
 }
 export default FileUploadComponent;

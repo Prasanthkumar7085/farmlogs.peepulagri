@@ -1,10 +1,16 @@
 import SignUpVerify from "@/components/AuthModule/SignUp/SignUpVerify";
+import MobileOtpScreen from "@/components/MobileComponents/MobileLogin/otp-screen";
 import { GetServerSideProps } from "next";
 
 const SignUpVerifyPage = () => {
     return (
-        <div>
-            <SignUpVerify />
+        <div >
+            <div id="webOtpVerify">
+                <SignUpVerify />
+            </div>
+            <div id="mobileOtpVerify">
+                <MobileOtpScreen />
+            </div>
         </div>
     )
 }

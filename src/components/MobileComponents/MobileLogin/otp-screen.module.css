@@ -1,0 +1,150 @@
+.bgImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.bgImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.otpVerification {
+  margin: 0;
+  font-weight: 600;
+  font-size: 30px;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.enterTheOtp {
+  margin: 0;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: #6A7185;
+}
+
+.enterTheOtp span {
+  color: #35353d;
+}
+
+.enterTheOtpContainer {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: 16px;
+  line-height: 140%;
+  font-weight: 400;
+  font-family: inherit;
+  color: #6a7185;
+}
+
+.verifyotpdetailsheader {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.textfield {
+  border: 0;
+  background-color: transparent;
+  flex: 1;
+  position: relative;
+}
+
+
+.otptextboxes {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+.resentOtp {
+  font-weight: 500;
+  color: #05a155;
+}
+
+.didntYouReceivedContainer {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: 16px;
+  line-height: 140%;
+  color: #6a7185;
+  font-family: inherit;
+}
+
+.otpfield,
+.verifyotpdetails {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+.otpfield {
+  align-items: flex-end;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.verifyotpdetails {
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1.25rem;
+}
+
+.submitotp {
+  align-self: stretch;
+  cursor: pointer;
+}
+
+.verifyotpform,
+.verifyotpscreen {
+  flex-direction: column;
+  align-items: center;
+}
+
+.verifyotpform {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+}
+
+.verifyotpscreen {
+  align-self: stretch;
+  gap: 6rem;
+  padding-top: 6rem;
+  position: relative;
+}
+
+
+.verifyotp,
+.verifyotpscreen {
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+.otpscreen {
+  background-color: #ffffff;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+
+}

@@ -1,0 +1,91 @@
+#mobileLoginPage {
+  background-color: #ffffff;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.bgImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.bgImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+
+.logo {
+  position: relative;
+}
+
+.welcomeBack1 {
+  font-weight: 600;
+  font-size: 30px;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.enterPhoneNumber {
+  font-size: 13px;
+  font-weight: 400;
+  font-family: 'Inter', sans-serif !important;
+  letter-spacing: 0;
+}
+
+
+.loginfield {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+.button {
+  border-radius: 8px;
+  background: #A05148;
+  padding-block: 10px;
+}
+
+/* 
+.button :hover {
+  background: #A05148;
+} */
+
+.loginform {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-inline: 1.5rem;
+  align-self: stretch;
+  gap: 40px;
+}
+
+.loginform input {
+  padding-block: 12px;
+}
+
+.login {
+  flex: 1;
+  gap: 6rem;
+  text-align: left;
+  color: #35353d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 8rem;
+  width: 100%;
+}

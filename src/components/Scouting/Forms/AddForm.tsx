@@ -8,6 +8,7 @@ import {
     Button,
 } from "@mui/material";
 import styles from "./add-farm-form1.module.css";
+import Header1 from "../Header/HeaderComponent";
 
 const AddFarmForm: NextPage = () => {
     const onButtonClick = useCallback(() => {

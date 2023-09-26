@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import styles from "./head.module.css";
+import { Typography } from "@mui/material";
 
 const Header1 = ({ name }: any) => {
     return (
@@ -9,11 +10,8 @@ const Header1 = ({ name }: any) => {
                 alt=""
                 src="/iconsiconarrowleft.svg"
             />
-            <div className={styles.headertitle} id="header-title">
-                <div className={styles.viewFarm}>{name}</div>
-            </div>
+            <Typography className={styles.viewFarm}>{name}</Typography>
             <div className={styles.headericon} id="header-icon">
-                <img className={styles.headericonChild} alt="" src="/frame-40561.svg" />
             </div>
         </div>
     );

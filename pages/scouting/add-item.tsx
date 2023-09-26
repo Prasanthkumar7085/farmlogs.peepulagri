@@ -1,4 +1,4 @@
-import FileUploadComponent from "@/components/Scouting/FileUpload"
+import FileUploadComponent from "@/components/Scouting/AddItem/FileUpload";
 import { GetServerSideProps } from "next";
 
 const FileUploadPage = () => {

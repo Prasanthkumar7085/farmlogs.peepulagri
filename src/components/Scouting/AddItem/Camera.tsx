@@ -1,9 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const CameraCapture = () => {
+const CameraCapture = ({ openCamera, captureCloseCamera }: any) => {
     const videoRef: any = useRef(null);
     const canvasRef: any = useRef(null);
     const [photoData, setPhotoData] = useState(null);
+
+    useEffect(() => {
+        if (openCamera == true) {
+            startCamera()
+        }
+    }, [])
 
     const startCamera = async () => {
         try {
@@ -30,15 +36,19 @@ const CameraCapture = () => {
 
     return (
         <div>
-            <button onClick={startCamera}>Start Camera</button>
-            <button onClick={takePhoto}>Take Photo</button>
-            <div>
-                <video ref={videoRef} autoPlay />
+            <div >
+                <video ref={videoRef} autoPlay style={{ width: "100%", height: "100vh" }} />
             </div>
 
-            <div>
+            <div >
                 <canvas ref={canvasRef} style={{ display: 'none' }} />
             </div>
+            <button onClick={takePhoto}>Take Photo</button>
+            <button onClick={() => {
+                captureCloseCamera(false)
+                location.reload()
+            }}>Close</button>
+
             {photoData && (
                 <div>
                     <h2>Captured Photo</h2>

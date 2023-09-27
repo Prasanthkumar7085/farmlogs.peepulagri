@@ -45,7 +45,7 @@ const AddFarmForm = () => {
 
         let obj = {
             title: title,
-            area: area?+area:null,
+            area: area ? +area : null,
             location: location
         };
 
@@ -86,6 +86,11 @@ const AddFarmForm = () => {
                     <div className={styles.farmname} id="farm-name">
                         <div className={styles.label}>Farm Name</div>
                         <TextField
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    background: "#fff"
+                                }
+                            }}
                             {...register('title')}
                             name='title'
                             fullWidth
@@ -115,6 +120,11 @@ const AddFarmForm = () => {
                     <div className={styles.farmname} id="enter-location">
                         <div className={styles.label}>Location</div>
                         <TextField
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    background: "#fff"
+                                }
+                            }}
                             {...register('location')}
                             className={styles.inputfarmname}
                             name="location"
@@ -129,6 +139,11 @@ const AddFarmForm = () => {
                     <div className={styles.farmname} id="acres">
                         <div className={styles.label}>Total Land (acres)</div>
                         <TextField
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    background: "#fff"
+                                }
+                            }}
                             {...register('area')}
                             className={styles.inputfarmname}
                             name="area"

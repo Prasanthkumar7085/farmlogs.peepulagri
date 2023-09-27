@@ -273,7 +273,7 @@ const FileUploadComponent = () => {
 
     useEffect(() => {
         getFormDetails("")
-    }, [])
+    }, [accessToken])
 
     //onClose camera
     const captureCloseCamera = (value: any, file: any) => {

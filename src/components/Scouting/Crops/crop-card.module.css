@@ -1,38 +1,36 @@
 .folderIcon {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  overflow: hidden;
-  flex-shrink: 0;
+  width: 75px;
+  height: 75px;
 }
-.threedotsIcon {
-  max-height: 100%;
-  width: 2.67px;
-  object-fit: cover;
-}
+
 .icons {
-  align-self: stretch;
+  width: 100%;
   display: flex;
-  flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
 }
+
 .aug2023,
-.redChilliField {
+.FieldCrop {
   margin: 0;
-  align-self: stretch;
-  position: relative;
+}
+
+.FieldCrop {
+  color: #000;
+  font-family: Inter;
+  font-size: clamp(12px, 3.5vw, 16px);
+  font-weight: 500;
   line-height: 100%;
 }
-.redChilliField {
-  font-size: inherit;
-  font-weight: 500;
-  font-family: inherit;
-}
+
 .aug2023 {
-  font-size: var(--font-size-xs);
-  color: var(--body);
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(10px, 3vw, 12px);
+  font-weight: 400;
+  line-height: 100%;
 }
+
 .cropcard,
 .textWrapper {
   align-self: stretch;
@@ -42,14 +40,19 @@
   justify-content: flex-start;
   gap: var(--gap-5xs);
 }
+
 .cropcard {
   border-radius: var(--br-5xs);
-  background-color: var(--color-aliceblue);
-  padding: var(--padding-9xs) var(--padding-5xs) var(--padding-5xs);
+  background: #FFFBEC;
+  padding: 10px;
   gap: var(--gap-9xs);
   cursor: pointer;
-  text-align: left;
-  font-size: var(--text-md-medium-size);
-  color: var(--color-black);
-  font-family: var(--text-sm-normal);
+}
+
+#allCropCardBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  padding: 1rem;
+  padding-top: 0;
 }

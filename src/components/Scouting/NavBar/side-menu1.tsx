@@ -1,105 +1,104 @@
 import type { NextPage } from "next";
 import { useCallback } from "react";
 import styles from "./side-menu1.module.css";
+import { IconButton, MenuItem, MenuList, Typography } from "@mui/material";
 
 const SideMenu1: NextPage = () => {
-  const onScoutingClick = useCallback(() => {
+  const onScoutingCMenuItemck = useCallback(() => {
     // Please sync "Dashboard" to the project
   }, []);
 
-  const onLogoutClick = useCallback(() => {
+  const onLogoutCMenuItemck = useCallback(() => {
     // Please sync "Log in " to the project
   }, []);
 
   return (
     <div className={styles.sideMenu} id="side-menu">
-      <div className={styles.header} id="header">
-        <div className={styles.profile} id="profile">
+      <div className={styles.header}>
+        <div className={styles.profile}  >
           <img
             className={styles.imageIcon}
             loading="lazy"
             alt=""
-            src="/avatar.svg"
+            src="/menu-avatar.svg"
           />
-          <div className={styles.userdetails} id="user-details">
-            <div className={styles.joseph}>Joseph</div>
-            <div className={styles.josephpriestleygmailcom}>
+          <div className={styles.userdetails} >
+            <Typography>Joseph</Typography>
+            <Typography variant="h6">
               joseph.priestley@gmail.com
-            </div>
+            </Typography>
           </div>
         </div>
-        <div className={styles.menuBar1} id="close">
+        <IconButton className={styles.menuBar1} >
           <img
-            className={styles.close11}
             alt="close-icon"
-            src="/close-icon.svg"
+            src="/menu-close-icon.svg"
           />
-        </div>
+        </IconButton>
       </div>
-      <div className={styles.menuitems}>
-        <div className={styles.dashboard} id="dashboard">
+      <MenuList className={styles.menuitems}>
+        <MenuItem className={styles.menuItem} >
           <img
             className={styles.apps1Icon}
-            id="dashboard"
             alt=""
             src="/dashboard-menu-icon.svg"
           />
-          <div className={styles.timelineView}>Dashboard</div>
-        </div>
-        <div className={styles.support} id="support">
+          <Typography>Dashboard</Typography>
+        </MenuItem>
+        <MenuItem className={styles.menuItem
+        }>
           <img
             className={styles.apps1Icon}
             alt="support-menu-icon"
             src="/support-menu-icon.svg"
           />
-          <div className={styles.timelineView}>Support</div>
-        </div>
-        <div className={styles.support} id="timeline">
+          <Typography>Support</Typography>
+        </MenuItem>
+        <MenuItem className={styles.menuItem}>
           <img
             className={styles.apps1Icon}
-            alt="timeline-menu-icon"
+            alt="timeMenuItemne-menu-icon"
             src="/timeline-menu-icon.svg"
           />
-          <div className={styles.timelineView}>Timeline View</div>
-        </div>
-        <div className={styles.support} id="calendar">
+          <Typography>Timeline View</Typography>
+        </MenuItem>
+        <MenuItem className={styles.menuItem} >
           <img
             className={styles.apps1Icon}
             alt="calendar-menu-icon"
             src="/calendar-menu-icon.svg"
           />
-          <div className={styles.timelineView}>Calendar View</div>
-        </div>
-        <div
-          className={styles.scouting}
+          <Typography>Calendar View</Typography>
+        </MenuItem>
+        <MenuItem
+          className={styles.menuItem}
           id="scouting"
-          onClick={onScoutingClick}
+          onClick={onScoutingCMenuItemck}
         >
           <img
             className={styles.apps1Icon}
             alt="scouting-menu-item"
             src="/scouting-menu-item.svg"
           />
-          <div className={styles.timelineView}>Scouting</div>
-        </div>
-        <div className={styles.support} id="settings">
+          <Typography>Scouting</Typography>
+        </MenuItem>
+        <MenuItem className={styles.menuItem} >
           <img
             className={styles.apps1Icon}
             alt="settings-menu-icon"
-            id="settings-menu-icon"
             src="/settings-menu-icon.svg"
           />
-          <div className={styles.timelineView}>Settings</div>
-        </div>
-        <div className={styles.scouting} id="logout" onClick={onLogoutClick}>
+          <Typography>Settings</Typography>
+        </MenuItem>
+        <MenuItem className={styles.menuItem} onClick={onLogoutCMenuItemck}>
           <img
             className={styles.apps1Icon}
             alt="logout-menu-item"
             src="/logout-menu-item.svg"
           />
-          <div className={styles.timelineView}>Sign Out</div>
-        </div>
-      </div>
+          <Typography>Sign Out</Typography>
+        </MenuItem>
+      </MenuList>
     </div>
   );
 };

@@ -27,7 +27,14 @@ const ScoutingHeader = ({ children }: any) => {
                 </IconButton>
             </div>
             {children}
-            <Dialog onClose={handleClose} open={open}>
+            <Dialog onClose={handleClose} open={open} sx={{
+                '& .MuiPaper-root': {
+                    width: "100%",
+                    height: "100vh",
+                    margin: "0",
+                    maxHeight: "inherit !important"
+                }
+            }}>
                 <SideMenu1 />
             </Dialog>
         </div>

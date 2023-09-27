@@ -32,7 +32,7 @@ const FarmCard = ({ farmsData,paginationDetails,loading }: {farmsData:Array<Farm
               <div className={styles.farmareablock} id="farm-area-block">
                 <div className={styles.farmarea} id="farm-area">
                   <div className={styles.area}>
-                    <div className={styles.acres}>{item.area} Acres</div>
+                    <div className={styles.acres}>{item?.area?.toFixed(2)} Acres</div>
                   </div>
                 </div>
                 <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}/crops`)}>

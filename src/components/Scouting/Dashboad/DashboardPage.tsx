@@ -20,7 +20,7 @@ const DashboardPage = () => {
     const [loading, setLoading] = useState(true);
     const [searchString, setSearchString] = useState('');
 
-    const getAllFarms = async ({ page = 1, limit = 10, search_string = '' }: Partial<{ page: number, limit: number, search_string: string }>) => {
+    const getAllFarms = async ({ page = 1, limit = 100, search_string = '' }: Partial<{ page: number, limit: number, search_string: string }>) => {
 
         setLoading(true);
         let url = `farm/${page}/${limit}`
@@ -59,9 +59,9 @@ const DashboardPage = () => {
 
             if (searchFromRouter) {
                 setSearchString(searchFromRouter as string)
-                getAllFarms({ page: 1, limit: 10, search_string: searchFromRouter as string });
+                getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string });
             } else {
-                getAllFarms({ page: 1, limit: 10, search_string: searchString });
+                getAllFarms({ page: 1, limit: 100, search_string: searchString });
             }
 
         }, delay);
@@ -72,7 +72,7 @@ const DashboardPage = () => {
     useEffect(() => {
         if (router.isReady && accessToken) {
             let searchFromRouter = router.query.search_string;
-            getAllFarms({ page: 1, limit: 10, search_string: searchFromRouter as string });
+            getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string });
             setSearchString(searchFromRouter as string)
         }
     }, [router.isReady, accessToken]);
@@ -82,7 +82,7 @@ const DashboardPage = () => {
         if (router.isReady && accessToken) {
             const delay = 500;
             const debounce = setTimeout(() => {
-                getAllFarms({ page: 1, limit: 10, search_string: searchString });
+                getAllFarms({ page: 1, limit: 100, search_string: searchString });
             }, delay);
             return () => clearTimeout(debounce);
         }

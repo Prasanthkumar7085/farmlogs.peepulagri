@@ -29,14 +29,10 @@ const FileUploadComponent = () => {
     const [defaultValue, setDefaultValue] = useState<any>('');
     const [formId, setFormId] = useState<any>()
     const [formOptions, setFarmOptions] = useState<any>()
+    const [selectedCrop, setSelectedCrop] = useState<any>()
+    const [cropOptions, setCropOptions] = useState<any>()
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
-
-
-    const [cropOptions, setCropOptions] = useState<any>([
-        { value: "Jini-2626(R)", title: "Jini-2626(R)" }
-    ])
 
     //convert the kb into mb
     const bytesToMB = (bytes: any) => {
@@ -49,17 +45,26 @@ const FileUploadComponent = () => {
         try {
             if (response?.success && response.data.length) {
                 setFarmOptions(response?.data);
-                // if (id) {
-                //     let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
-
-                //     setDefaultValue(selectedObject.title)
-                //     captureFarmName(selectedObject);
-                // } else {
-                //     setDefaultValue(response?.data[0].title);
-                //     captureFarmName(response?.data[0]);
-                // }
             } else {
                 setFarmOptions([]);
+            }
+        } catch (err) {
+            console.error(err);
+
+        }
+    }
+    //get all crops name
+    const getCropsDetails = async (id: string) => {
+
+        try {
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`, { method: "GET" });
+            let responseData: any = await response.json();
+
+            if (responseData.success == true) {
+                setCropOptions(responseData?.data);
+
+            } else {
+                setCropOptions([]);
             }
         } catch (err) {
             console.error(err);
@@ -96,13 +101,18 @@ const FileUploadComponent = () => {
     //start the file upload event
     const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
         let obj = {
-            file_name: file.name
+            file_name: file.name,
+            farm_id: formId,
+            type: file.type,
+            crop_slug: selectedCrop.slug
         }
         let options = {
             method: "POST",
             headers: new Headers({
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'authorization': accessToken
             }),
+
             body: JSON.stringify(obj)
 
         }
@@ -111,8 +121,8 @@ const FileUploadComponent = () => {
             let responseData = await response.json();
             if (responseData.success == true) {
                 console.log(responseData)
-                setUploadId(responseData.uploadId)
-                await uploadFileintoChuncks(responseData.uploadId, file, index, fileProgressCopy, setFileProgress)
+                setUploadId(responseData.data.upload_id)
+                await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
             }
         }
         catch (err) {
@@ -122,18 +132,16 @@ const FileUploadComponent = () => {
     }
 
     //file upload into multipart
-    const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
-        if (!file) {
-            return;
-        }
+    const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function, key: any) => {
 
+        console.log(file)
         const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
         const totalChunks = Math.ceil(file.size / chunkSize);
         const formData = new FormData();
         let resurls;
 
         let obj = {
-            file_name: file.name,
+            file_key: key,
             upload_id: uploadid,
             parts: totalChunks
         }
@@ -182,7 +190,7 @@ const FileUploadComponent = () => {
                     ETag: part.headers.get('Etag').replace(/"/g, ''),
                     PartNumber: index + 1
                 }))
-                await mergeFileChuncksEvent(promiseResponseObj, uploadid, file, index)
+                await mergeFileChuncksEvent(promiseResponseObj, uploadid, key, index)
 
             }
 
@@ -198,7 +206,7 @@ const FileUploadComponent = () => {
     const mergeFileChuncksEvent = async (responseObjs: any, uploadid: any, file: any, index: any) => {
 
         let obj = {
-            file_name: file.name,
+            file_name: file,
             upload_id: uploadid,
             parts: responseObjs
         }
@@ -223,11 +231,6 @@ const FileUploadComponent = () => {
     }
 
 
-
-
-
-
-
     //file upload normal smaller than 5 mb
     const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
         let obj = {
@@ -239,7 +242,7 @@ const FileUploadComponent = () => {
                 "type": item.type,
                 "size": item.size,
                 "source": "scouts",
-                "crop": "chilli"
+                "crop": selectedCrop.slug
             }
         }
 
@@ -275,12 +278,20 @@ const FileUploadComponent = () => {
         getFormDetails("")
     }, [accessToken])
 
+
+
+    const addScoutDetails = async () => {
+        try {
+
+        }
+        catch (err) {
+
+        }
+    }
+
     //onClose camera
     const captureCloseCamera = (value: any, file: any) => {
-
-
         setOpenCamera(false)
-        console.log(file)
         let fileAfterconevert = base64ToFile(file, "capture_image", "image/jpeg")
         let temp: any = []
         temp.push(fileAfterconevert)
@@ -291,10 +302,17 @@ const FileUploadComponent = () => {
     }
 
     const captureFarmName = (selectedObject: any) => {
-
-
-        if (selectedObject && Object.keys(selectedObject).length) {
+        if (selectedObject) {
             setFormId(selectedObject?._id);
+            getCropsDetails(selectedObject?._id)
+
+        }
+    }
+
+    const captureCropName = (selectedObject: any) => {
+        console.log(selectedObject)
+        if (selectedObject) {
+            setSelectedCrop(selectedObject)
         }
     }
 
@@ -326,8 +344,7 @@ const FileUploadComponent = () => {
                                 <div className={styles.inputField}>
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
-                                        <SelectComponent options={cropOptions} color="primary" name="crops" id="crops" />
-
+                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={cropOptions} captureFarmName={captureCropName} />
                                         <FormHelperText />
                                     </FormControl>
                                 </div>

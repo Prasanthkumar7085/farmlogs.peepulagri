@@ -88,7 +88,7 @@ const AllCropsComponent = () => {
                 <FormHelperText />
             </FormControl>
             {cropOptions && cropOptions?.map((item: any, index: any) => (
-                <CropCard itemDetails={item} />
+                <CropCard itemDetails={item} key={index} />
 
             ))}
             <div className="addFormPositionIcon" >

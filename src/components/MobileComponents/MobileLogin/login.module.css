@@ -64,7 +64,9 @@
   align-items: center;
   gap: 1rem;
 }
-
+.button:hover{
+  background: #A05148;
+}
 /* 
 .button :hover {
   background: #A05148;

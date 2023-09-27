@@ -1,15 +1,29 @@
-import type { NextPage } from "next";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { TextField, InputAdornment, Icon, IconButton, Typography } from "@mui/material";
 import styles from "./dash-board-header.module.css";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import Image from "next/image";
-const DashBoardHeader: NextPage = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const handleShowPasswordClick = () => {
-    setShowPassword(!showPassword);
-  };
+
+type captureSearchStringType = (search: string) => void
+
+interface pageProps{
+  captureSearchString: captureSearchStringType,
+  searchString: string;
+}
+
+const DashBoardHeader = ({ captureSearchString, searchString }: pageProps) => {
+  
+  const [search, setSearch] = useState('');
+
+  const onChangeSearchString = (event:ChangeEvent<HTMLInputElement>) => {
+    captureSearchString(event.target.value);
+  }
+
+  useEffect(() => {
+    setSearch(searchString);
+  }, [searchString]);
+
   return (
     <div className={styles.dashboardheader} id="dashboard-header">
       <div className={styles.dashboardheading} id="dashboard-heading">
@@ -32,13 +46,12 @@ const DashBoardHeader: NextPage = () => {
           placeholder="Search by Name"
           fullWidth={true}
           variant="outlined"
+          value={search}
+          onChange={onChangeSearchString}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={handleShowPasswordClick}
-                  aria-label="toggle password visibility"
-                >
+                <IconButton>
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

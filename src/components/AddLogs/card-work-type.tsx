@@ -50,9 +50,6 @@ const CardWorkType = ({ captureCategoriesArray, errorMessages, captureDates, set
       setDefaultValue(selectedCategories);
       categories = selectedCategories.length && selectedCategories.map((item: any) => item.slug);
 
-    console.log(selectedCategories, 'plpl');
-    console.log(categories, 'plpl');
-
 
     captureCategoriesArray(categories)
 

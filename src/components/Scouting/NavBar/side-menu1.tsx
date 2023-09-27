@@ -2,15 +2,36 @@ import type { NextPage } from "next";
 import { useCallback } from "react";
 import styles from "./side-menu1.module.css";
 import { IconButton, MenuItem, MenuList, Typography } from "@mui/material";
+import { useDispatch } from 'react-redux';
+import { useRouter } from "next/router";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
-const SideMenu1: NextPage = () => {
+const SideMenu1 = ({ toggleDrawer }: any) => {
+  
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const onScoutingCMenuItemck = useCallback(() => {
     // Please sync "Dashboard" to the project
   }, []);
 
-  const onLogoutCMenuItemck = useCallback(() => {
-    // Please sync "Log in " to the project
-  }, []);
+  const onLogoutCMenuItemck = async() => {
+     try {
+            const responseUserType = await fetch('/api/remove-cookie');
+            if (responseUserType) {
+                const responseLogin = await fetch('/api/remove-cookie');
+                if (responseLogin.status) {
+                router.push('/');
+                } else throw responseLogin;
+            }
+            await dispatch(removeUserDetails());
+            await dispatch(deleteAllMessages());
+
+        } catch (err: any) {
+            console.error(err);
+        }
+  }
 
   return (
     <div className={styles.sideMenu} id="side-menu">
@@ -29,7 +50,7 @@ const SideMenu1: NextPage = () => {
             </Typography>
           </div>
         </div>
-        <IconButton className={styles.menuBar1} >
+        <IconButton className={styles.menuBar1} onClick={()=>toggleDrawer(false)}>
           <img
             alt="close-icon"
             src="/menu-close-icon.svg"

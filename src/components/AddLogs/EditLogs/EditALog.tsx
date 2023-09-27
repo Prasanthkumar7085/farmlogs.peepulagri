@@ -104,8 +104,6 @@ const EditALog: NextPage = () => {
 
         const fromDate = dates[0]?.slice(0, 10);
         const toDate = dates[1]?.slice(0, 10);
-        console.log(fromDate, toDate);
-
         const obj = {
             title: title,
             description: description,

@@ -2,41 +2,49 @@ import type { NextPage } from "next";
 import styles from "./navbar.module.css";
 import ImageComponent from "@/components/Core/ImageComponent";
 import { IconButton } from "rsuite";
-import { useState } from "react";
-import { Dialog, DialogTitle } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Dialog, DialogTitle, Drawer } from "@mui/material";
 import SideMenu1 from "./side-menu1";
 
+type Anchor = 'top' | 'left' | 'bottom' | 'right';
+
 const ScoutingHeader = ({ children }: any) => {
-    const [open, setOpen] = useState(false);
-    const [selectedValue, setSelectedValue] = useState<any>();
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const [state, setState] = useState({ right: false });
+    
+    const toggleDrawer = (open: boolean) =>{
+      setState({ ...state, 'right': open });
     };
 
-    const handleClose = (value: any) => {
-        setOpen(false);
-        setSelectedValue(value);
-    };
+
+     const list = (anchor: Anchor) => (
+        <Box
+            sx={{ width: '100%' }}
+            role="presentation"
+            >
+             <SideMenu1 toggleDrawer={toggleDrawer} />
+    </Box>
+     );
+    
     return (
         <div id="mobileBody">
             <div className={styles.navbar} id="navbar">
                 <ImageComponent src="/Logo-color.svg" width="70" height="60" />
-                <IconButton onClick={handleClickOpen}>
+                <IconButton onClick={()=>toggleDrawer(true)}>
                     <img className={styles.menuIicon} alt="options" src="/menuiicon.svg" />
                 </IconButton>
             </div>
             {children}
-            <Dialog onClose={handleClose} open={open} sx={{
-                '& .MuiPaper-root': {
-                    width: "100%",
-                    height: "100vh",
-                    margin: "0",
-                    maxHeight: "inherit !important"
-                }
-            }}>
-                <SideMenu1 />
-            </Dialog>
+
+          
+            <React.Fragment>
+                <Drawer
+                    anchor={'right'}
+                    open={state['right']}
+                >
+                    {list('right')}
+                </Drawer>
+            </React.Fragment>
         </div>
     );
 };

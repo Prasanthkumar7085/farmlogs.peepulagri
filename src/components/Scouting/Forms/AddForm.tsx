@@ -45,7 +45,8 @@ const AddFarmForm = () => {
 
         let obj = {
             title: title,
-            area: +area
+            area: area?+area:null,
+            location: location
         };
 
         let response = await addFarmService(obj, accessToken);
@@ -169,7 +170,7 @@ const AddFarmForm = () => {
                 </div>
             </div>
             <LoadingComponent loading={loading} />
-            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
         </form>
     );
 };

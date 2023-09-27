@@ -30,7 +30,7 @@ const FarmCard = ({ farmsData, paginationDetails, loading }: { farmsData: Array<
                 <div className={styles.farmareablock} id="farm-area-block">
                   <div className={styles.farmarea} id="farm-area">
                     <div className={styles.area}>
-                      <div className={styles.acres}>{item.area?.toFixed(2)} Acres</div>
+                      <div className={styles.acres}>{item?.area? Math.floor(item?.area * 100) / 100:""} Acres</div>
                     </div>
                   </div>
                   <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}/crops`)}>

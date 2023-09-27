@@ -22,8 +22,8 @@ const ViewFarmPage = () => {
     
     const response: any = await getFarmByIdService(router.query.farm_id as string,accessToken as string);
     
-    if (response.success) {
-      setData(response.data);
+    if (response?.success) {
+      setData(response?.data);
     }
     setLoading(false);
   }
@@ -43,7 +43,7 @@ const ViewFarmPage = () => {
       </div>
       <div className={styles.farmareaheading} id="area">
         <div className={styles.text}>Land (acres)</div>
-        <div className={styles.acres}>{data?.area?.toFixed(2)} ACRES</div>
+        <div className={styles.acres}>{data?.area? Math.floor(data?.area * 100) / 100:""} ACRES</div>
       </div>
       <div
         className={styles.locationdetailsblock}

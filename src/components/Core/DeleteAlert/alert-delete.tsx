@@ -12,7 +12,7 @@ interface pagePropsType{
 }
 const AlertDelete = ({ open, deleteFarm,setDialogOpen,loading }: pagePropsType) => {
   return (
-    <Dialog open={open} maxWidth='xl' sx={{minWidth:"100%"}}>
+    <Dialog open={open}  PaperProps={{ sx: { borderRadius: "16px",minWidth:"350px" } }}>
       <div className={styles.alertdelete}>
       <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
       <div className={styles.areYouSure}>{`Are you sure  Want To Delete `}</div>

@@ -66,21 +66,13 @@
 
 }
 
-
-
-.locationdetails {
-  align-self: stretch;
-  overflow: hidden;
-  padding: 0.5rem 0 1.5rem 0;
-}
-
-.formfields,
-.locationdetails {
+.formfields {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-base);
+  width: 100%;
 }
 
 .back {
@@ -110,8 +102,7 @@
 }
 
 .addfarmform,
-.buttons,
-.footeractionbuttons {
+.buttons {
   align-self: stretch;
   display: flex;
   justify-content: flex-start;
@@ -121,10 +112,10 @@
   display: grid;
   grid-template-columns: 2fr 4fr;
   grid-gap: 1.5rem;
+  margin-top: 1rem;
 }
 
-.addfarmform,
-.footeractionbuttons {
+.addfarmform {
   flex-direction: column;
   align-items: center;
 }

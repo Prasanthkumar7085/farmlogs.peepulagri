@@ -8,6 +8,10 @@
     font-family: inherit;
 }
 
+#addCorpsPage {
+    padding: 1rem;
+}
+
 .selectfarm {
     align-self: stretch;
     transform: rotate(-0.04deg);
@@ -48,9 +52,7 @@
 }
 
 .capture {
-    position: relative;
     line-height: 24px;
-    text-transform: capitalize;
 }
 
 .camera {
@@ -71,7 +73,7 @@
     background-color: #fff;
     box-sizing: border-box;
     height: 87px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .captureimage {
@@ -81,10 +83,13 @@
 
 .uploadimage {
     border: 1px dashed #4a86f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.addscoutdetails,
-.imagesupload {
+.addscoutdetails {
     align-self: stretch;
     display: flex;
     align-items: flex-start;
@@ -93,8 +98,10 @@
 }
 
 .imagesupload {
-    flex-direction: row;
-    color: #000;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+    width: 100%;
 }
 
 .addscoutdetails {
@@ -190,6 +197,7 @@
     flex-direction: row;
     align-items: center;
     gap: 16px;
+    margin-bottom: 1rem;
 }
 
 .scoutdetails,
@@ -208,9 +216,10 @@
 
 .scoutdetails {
     border-radius: 8px 8px 0 0;
-    padding: 16px 0;
+    padding-bottom: 1rem;
     gap: 16px;
 }
+
 
 .input,
 .scoutdetails {
@@ -223,8 +232,30 @@
     flex: 1;
 }
 
-.submitButton {
-    cursor: pointer;
+.back {
+    border-radius: 6px;
+    border: 1px solid #D0D5DD;
+    background: #FFF;
+    box-shadow: 4px 4px 10px 0px #0202460a;
+    padding: 8px 20px;
+    color: #344054;
+    font-family: Inter;
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 400;
+    text-transform: capitalize;
+
+}
+
+.submit {
+    border-radius: 6px;
+    border: 1px solid #3462CF;
+    background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+    box-shadow: 4px 4px 10px 0px #0202460d;
+    color: #FFF;
+    font-family: Inter;
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 400;
+    text-transform: capitalize;
 }
 
 .buttons,
@@ -234,12 +265,11 @@
 }
 
 .buttons {
-    height: 55px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 24px;
+    display: grid;
+    grid-template-columns: 2fr 4fr;
+    grid-gap: 1.5rem;
 }
+
 
 .footeractionbuttons {
     border-radius: 0 0 8px 8px;
@@ -273,9 +303,6 @@
 
 .addscout {
     border-radius: 8px;
-    /* width: 430px; */
-    /* height: 791px; */
-    padding: 8px 16px;
     box-sizing: border-box;
     text-align: left;
     font-size: 14px;

@@ -1,0 +1,14 @@
+.camaraPage button {
+
+    border: 0;
+    background: none;
+    padding: 0;
+
+}
+
+.buttonGrp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+}

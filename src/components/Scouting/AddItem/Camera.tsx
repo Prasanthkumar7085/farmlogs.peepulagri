@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-
+import styles from "./camera.module.css";
 const CameraCapture = ({ openCamera, captureCloseCamera }: any) => {
     const videoRef: any = useRef(null);
     const canvasRef: any = useRef(null);
@@ -60,24 +60,35 @@ const CameraCapture = ({ openCamera, captureCloseCamera }: any) => {
     };
 
     return (
-        <div>
+        <div className={styles.camaraPage}>
             {openCamera ?
-                <video ref={videoRef} autoPlay style={{ width: "100%", height: "100vh" }} />
+                <video ref={videoRef} autoPlay style={{ width: "100%", height: "70vh" }} />
                 : ""}
 
             <div >
                 <canvas ref={start == true ? canvasRef : null} style={{ display: 'none' }} />
             </div>
-            {photoData ?
-                <button onClick={() => {
-                    captureCloseCamera(false, photoData)
-                    start = false
-                }}>Upload</button> :
-                <button onClick={takePhoto}>Take Photo</button>
-            }
+            <div style={{ position: "absolute", bottom: "100px", width: "100%" }}>
+                <div className={styles.buttonGrp}>
+                    <button onClick={handleCloseCamera}>
+                        <img src="/cansel-capture-icon.svg" alt="" />
+                    </button>
 
-            <button onClick={handleCloseCamera}>Close</button>
 
+                    {photoData ?
+                        <button onClick={() => {
+                            captureCloseCamera(false, photoData)
+                            start = false
+                        }}>      <img src="/check-capture-icon.svg" alt="" /></button> :
+                        <button onClick={takePhoto}>
+                            <img src="/check-capture-icon.svg" alt="" />
+                        </button>
+                    }
+
+
+
+                </div>
+            </div>
 
             {
                 photoData && (

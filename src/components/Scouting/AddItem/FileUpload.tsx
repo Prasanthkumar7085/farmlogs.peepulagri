@@ -250,158 +250,178 @@ const FileUploadComponent = () => {
 
 
     return (
-        <div>
+        <div >
             {openCamera == true ?
                 <CameraCapture openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
-
                 <div>
                     < Header1 name={"Add item"} />
-                    <div className={styles.addscout} id="add-scout">
-                        <div className={styles.scoutdetails} id="scout-details">
-                            <div className={styles.addscoutdetails} id="add-scout-details">
-                                <div className={styles.farmselection} id="farm-selection">
-                                    <h5 className={styles.label} id="label-select-farm">
-                                        Select Farm
-                                    </h5>
-                                    <FormControl
-                                        className={styles.selectfarm}
-                                        variant="outlined"
-                                    >
-                                        <InputLabel color="primary" />
-                                        <Select
-                                            color="primary"
-                                            name="select-farm"
-                                            id="select-farm"
-                                            size="medium"
-                                        >
-                                            <MenuItem value="Farm-1">Farm-1</MenuItem>
-                                            <MenuItem value="Farm-2">Farm-2</MenuItem>
-                                            <MenuItem value="Farm-3">Farm-3</MenuItem>
-                                            <MenuItem value="Farm-4">Farm-4</MenuItem>
-                                            <MenuItem value="Farm-5">Farm-5</MenuItem>
-                                            <MenuItem value="Farm-6">Farm-6</MenuItem>
-                                        </Select>
-                                        <FormHelperText />
-                                    </FormControl>
-                                </div>
-                                <div className={styles.inputField}>
-                                    <FormControl className={styles.dropdown} variant="outlined">
-                                        <InputLabel color="primary" />
-                                        <SelectComponent options={cropOptions} color="primary" name="crops" id="crops" />
+                    <div id={styles.addCorpsPage}>
 
-                                        <FormHelperText />
-                                    </FormControl>
-                                </div>
-                                <div className={styles.farmselection} id="images">
-                                    <div className={styles.inputField}>
-                                        <div className={styles.label1}>Images</div>
+                        <div className={styles.addscout} id="add-scout">
+                            <div className={styles.scoutdetails} id="scout-details">
+                                <div className={styles.addscoutdetails} id="add-scout-details">
+                                    <div className={styles.farmselection} id="farm-selection">
+                                        <h5 className={styles.label} id="label-select-farm">
+                                            Select Farm
+                                        </h5>
+                                        <FormControl
+                                            className={styles.selectfarm}
+                                            variant="outlined"
+                                        >
+                                            <InputLabel color="primary" />
+                                            <Select
+                                                color="primary"
+                                                name="select-farm"
+                                                id="select-farm"
+                                                size="small"
+                                                sx={{
+                                                    width: "100%",
+                                                    background: "#fff"
+
+                                                }}
+                                            >
+                                                <MenuItem value="Farm-1">Farm-1</MenuItem>
+                                                <MenuItem value="Farm-2">Farm-2</MenuItem>
+                                                <MenuItem value="Farm-3">Farm-3</MenuItem>
+                                                <MenuItem value="Farm-4">Farm-4</MenuItem>
+                                                <MenuItem value="Farm-5">Farm-5</MenuItem>
+                                                <MenuItem value="Farm-6">Farm-6</MenuItem>
+                                            </Select>
+                                            <FormHelperText />
+                                        </FormControl>
                                     </div>
-                                    <div className={styles.imagesupload} id="images-upload">
-                                        <div
-                                            className={styles.captureimage}
-                                            id="capture-image"
-                                        >
-                                            <div className={styles.camera}>
-                                                <img
-                                                    className={styles.camera1Icon}
-                                                    alt=""
-                                                    src="/camera-1.svg"
-                                                    onClick={() => setOpenCamera(true)}
-                                                />
-
-                                                <div className={styles.capture}> Capture </div>
-                                            </div>
+                                    <div className={styles.inputField}>
+                                        <FormControl className={styles.dropdown} variant="outlined">
+                                            <InputLabel color="primary" />
+                                            <SelectComponent options={cropOptions} placeholder="Select Folder" color="primary" name="crops" id="crops" />
+                                            <FormHelperText />
+                                        </FormControl>
+                                    </div>
+                                    <div className={styles.farmselection} id="images">
+                                        <div className={styles.inputField}>
+                                            <div className={styles.label1}>Images</div>
                                         </div>
-                                        <input
-                                            className={styles.uploadimage}
-                                            type="file"
-                                            alt="images-upload"
-                                            multiple
-                                            onChange={handleFileChange}
-                                        />
+                                        <div className={styles.imagesupload} id="images-upload">
+                                            <div
+                                                className={styles.captureimage}
+                                                id="capture-image"
+                                            >
+                                                <div className={styles.camera}>
+                                                    <img
+                                                        className={styles.camera1Icon}
+                                                        alt=""
+                                                        src="/camera-1.svg"
+                                                        onClick={() => setOpenCamera(true)}
+                                                    />
+
+                                                    <div className={styles.capture}> Capture </div>
+                                                </div>
+                                            </div>
+                                            <div
+
+                                                id="capture-image"
+                                            >
+                                                <div className={styles.uploadimage}>
+                                                    <label >
+                                                        <img
+                                                            alt=""
+                                                            src="/upload-image-icon.svg"
+                                                        />
+                                                        <input
+                                                            type="file"
+                                                            alt="images-upload"
+                                                            multiple
+                                                            onChange={handleFileChange}
+                                                            hidden
+                                                        />
+                                                    </label>
+
+                                                    <div className={styles.capture}> Upload </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
-                        <div className={styles.uploadprogress} id="upload-progress" key={index}>
-                            <div className={styles.progress} id="progress">
-                                <img className={styles.image21} alt="" src="/image-2-1.svg" />
-                                <div className={styles.progressdetails}>
-                                    <div className={styles.uploaddetails}>
-                                        <div className={styles.uploadcontroller}>
-                                            <div className={styles.uploadname}>
-                                                <div className={styles.photojpg}>{item.name}</div>
-                                                <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                        {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
+                            <div className={styles.uploadprogress} id="upload-progress" key={index}>
+                                <div className={styles.progress} id="progress">
+                                    <img className={styles.image21} alt="" src="/image-2-1.svg" />
+                                    <div className={styles.progressdetails}>
+                                        <div className={styles.uploaddetails}>
+                                            <div className={styles.uploadcontroller}>
+                                                <div className={styles.uploadname}>
+                                                    <div className={styles.photojpg}>{item.name}</div>
+                                                    <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                                                </div>
+                                                <img
+                                                    className={styles.close41}
+                                                    alt=""
+                                                    src="/close-4-1.svg"
+                                                />
                                             </div>
-                                            <img
-                                                className={styles.close41}
-                                                alt=""
-                                                src="/close-4-1.svg"
+                                            <Box sx={{ width: '100%' }}>
+                                                <LinearProgress variant="determinate" value={fileProgress[index]} />
+                                            </Box>
+                                        </div>
+                                        <div className={styles.uploadstatus}>
+                                            <div className={styles.completed}>{fileProgress[index]}%</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                        < div className={styles.scoutdescription} id="scout-description">
+                            <div className={styles.descriptionblock}>
+                                <div className={styles.addscoutdetails}>
+                                    <div className={styles.inputField}>
+                                        <div className={styles.farmselection} id="input-description">
+                                            <div className={styles.label1}>Description</div>
+                                            <TextField
+                                                className={styles.input}
+                                                color="primary"
+                                                name="desciption"
+                                                id="description"
+                                                rows={4}
+                                                maxRows={4}
+                                                placeholder="Enter your description here"
+                                                fullWidth={true}
+                                                variant="outlined"
+                                                multiline
+                                                sx={{ background: "#fff" }}
                                             />
                                         </div>
-                                        <Box sx={{ width: '100%' }}>
-                                            <LinearProgress variant="determinate" value={fileProgress[index]} />
-                                        </Box>
                                     </div>
-                                    <div className={styles.uploadstatus}>
-                                        <div className={styles.completed}>{fileProgress[index]}%</div>
 
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    ))}
-
-
-                    < div className={styles.scoutdescription} id="scout-description">
-                        <div className={styles.descriptionblock}>
-                            <div className={styles.addscoutdetails}>
-                                <div className={styles.inputField}>
-                                    <div className={styles.farmselection} id="input-description">
-                                        <div className={styles.label1}>Description</div>
-                                        <TextField
-                                            className={styles.input}
+                                <div className={styles.footeractionbuttons} id="footer-buttons">
+                                    <div className={styles.buttons} id="buttons">
+                                        <Button
+                                            className={styles.back}
+                                            sx={{ width: 130 }}
                                             color="primary"
-                                            name="desciption"
-                                            id="description"
-                                            rows={4}
-                                            maxRows={4}
-                                            placeholder="Enter your description here"
-                                            fullWidth={true}
+                                            name="back"
+                                            id="back"
+                                            size="large"
                                             variant="outlined"
-                                            multiline
-                                        />
+                                        >
+                                            Back
+                                        </Button>
+                                        <Button
+                                            className={styles.submit}
+                                            color="primary"
+                                            name="submit"
+                                            id="submit"
+                                            size="large"
+                                            variant="contained"
+                                            endIcon={<Icon>arrow_forward_sharp</Icon>}
+                                        >
+                                            Submit
+                                        </Button>
                                     </div>
-                                </div>
-
-                            </div>
-                            <div className={styles.footeractionbuttons} id="footer-buttons">
-                                <div className={styles.buttons} id="buttons">
-                                    <Button
-                                        className={styles.input}
-                                        sx={{ width: 130 }}
-                                        color="primary"
-                                        name="back"
-                                        id="back"
-                                        size="large"
-                                        variant="outlined"
-                                    >
-                                        Back
-                                    </Button>
-                                    <Button
-                                        className={styles.submitButton}
-                                        color="primary"
-                                        name="submit"
-                                        id="submit"
-                                        size="large"
-                                        variant="contained"
-                                        endIcon={<Icon>arrow_forward_sharp</Icon>}
-                                    >
-                                        Submit
-                                    </Button>
                                 </div>
                             </div>
                         </div>

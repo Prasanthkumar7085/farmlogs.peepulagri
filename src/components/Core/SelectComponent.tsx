@@ -6,6 +6,12 @@ const SelectComponent = ({ options, ...rest }: any) => {
     const router = useRouter();
     return (
         <Select
+            size="small"
+
+            sx={{
+                width: "100%",
+                background: "#fff"
+            }}
             displayEmpty
             {...rest}
         >

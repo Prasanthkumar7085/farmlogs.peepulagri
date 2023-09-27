@@ -30,17 +30,17 @@ const AddFarmForm = () => {
     const [alertType, setAlertType] = useState(false);
 
     const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm()
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
 
-    
+
     const onSubmitClick = async (data: any) => {
         setErrorMessages({});
         setLoading(true);
-        
+
         const { location, title, area } = data;
 
         let obj = {
@@ -49,7 +49,7 @@ const AddFarmForm = () => {
         };
 
         let response = await addFarmService(obj, accessToken);
-        
+
         if (response?.success) {
 
             setAlertMessage(response?.message);
@@ -71,7 +71,7 @@ const AddFarmForm = () => {
 
     const handleKeyPress = (event: any) => {
         const keyPressed = event.key;
-        const allowedCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9','.'];
+        const allowedCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
 
         if (!allowedCharacters.includes(keyPressed)) {
             event.preventDefault();
@@ -96,8 +96,7 @@ const AddFarmForm = () => {
                             helperText={errorMessages?.['title'] ? errorMessages?.['title'] : ""}
                         />
                     </div>
-                    <div className={styles.locationdetails} id="location-details">
-                        {/* <div className={styles.addlocationbutton} id="add-location">
+                    {/* <div className={styles.addlocationbutton} id="add-location">
                             <div className={styles.locationheading} id="location-heading">
                                 <div className={styles.text}>Location</div>
                                 <div className={styles.supportingText}>
@@ -112,50 +111,47 @@ const AddFarmForm = () => {
                                 <MyLocationOutlinedIcon sx={{ fontSize: "12px" }} /> Locate On Map
                             </Button>
                         </div> */}
-                        <div className={styles.farmname} id="enter-location">
-                            <div className={styles.label}>Location</div>
-                            <TextField
-                                 {...register('location')}
-                                className={styles.inputfarmname}
-                                name="location"
-                                size="small"
-                                placeholder="Enter location here"
-                                fullWidth
-                                variant="outlined"
-                                error={Boolean(errorMessages?.['location'])}
-                                helperText={errorMessages?.['location'] ? errorMessages?.['location'] : ""}
-                            />
-                        </div>
-                        <div className={styles.farmname} id="acres">
-                            <div className={styles.label}>Total Land (acres)</div>
-                            <TextField
-                                 {...register('area')}
-                                className={styles.inputfarmname}
-                                name="area"
-                                size="small"
-                                placeholder="Enter acres"
-                                fullWidth
-                                type={'number'}
-                                onWheel={(e:any) => e.target.blur()}
-                                variant="outlined"
-                                error={Boolean(errorMessages?.['area'])}
-                                helperText={errorMessages?.['area'] ? errorMessages?.['area'] : ""}
-                                onKeyPress={handleKeyPress}
-                                inputProps={{
-                                    step: 'any'
-                                }}
-                            />
-                        </div>
+                    <div className={styles.farmname} id="enter-location">
+                        <div className={styles.label}>Location</div>
+                        <TextField
+                            {...register('location')}
+                            className={styles.inputfarmname}
+                            name="location"
+                            size="small"
+                            placeholder="Enter location here"
+                            fullWidth
+                            variant="outlined"
+                            error={Boolean(errorMessages?.['location'])}
+                            helperText={errorMessages?.['location'] ? errorMessages?.['location'] : ""}
+                        />
                     </div>
-                </div>
-                <div className={styles.footeractionbuttons} id="footer-action-buttons">
+                    <div className={styles.farmname} id="acres">
+                        <div className={styles.label}>Total Land (acres)</div>
+                        <TextField
+                            {...register('area')}
+                            className={styles.inputfarmname}
+                            name="area"
+                            size="small"
+                            placeholder="Enter acres"
+                            fullWidth
+                            type={'number'}
+                            onWheel={(e: any) => e.target.blur()}
+                            variant="outlined"
+                            error={Boolean(errorMessages?.['area'])}
+                            helperText={errorMessages?.['area'] ? errorMessages?.['area'] : ""}
+                            onKeyPress={handleKeyPress}
+                            inputProps={{
+                                step: 'any'
+                            }}
+                        />
+                    </div>
                     <div className={styles.buttons}>
                         <Button
                             className={styles.back}
                             name="back"
                             size="medium"
                             variant="outlined"
-                            onClick={()=>router.back()}
+                            onClick={() => router.back()}
                         >
                             Back
                         </Button>
@@ -173,7 +169,7 @@ const AddFarmForm = () => {
                 </div>
             </div>
             <LoadingComponent loading={loading} />
-             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
         </form>
     );
 };

@@ -47,8 +47,8 @@
 
 .otptextboxes {
   display: flex;
-  align-items: center;
-  gap: 24px;
+  justify-content: center;
+  width: 100%;
 }
 
 
@@ -78,7 +78,6 @@
 .otpfield {
   align-items: flex-end;
   justify-content: center;
-  gap: 20px;
   text-align: center;
   font-size: 24px;
 }
@@ -97,7 +96,8 @@
   font-family: inter;
   font-size: clamp(16px, 4.18vw, 18px);
 }
-.submitotp:hover{
+
+.submitotp:hover {
   background: #A05148;
 }
 
@@ -110,7 +110,7 @@
 .verifyotpform {
   display: flex;
   justify-content: center;
-  gap: 48px;
+  gap: 40px;
   flex-direction: column;
   align-items: center;
   width: 90%;
@@ -118,8 +118,8 @@
 
 .verifyotpscreen {
   align-self: stretch;
-  gap: 8rem;
-  padding-top: 6rem;
+  gap: 6rem;
+  padding-top: 5rem;
   position: relative;
   max-width: 500px;
   margin: 0 auto;

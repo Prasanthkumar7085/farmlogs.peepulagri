@@ -258,12 +258,24 @@ body {
     position: relative;
 }
 
-#dashboardPage {
-    position: relative;
-}
+
 
 .addFormPositionIcon {
     position: absolute;
     bottom: 0;
     right: 0;
+}
+
+#mobileOtpVerify p {
+    margin: 0 !important;
+}
+
+.otpInputs {
+    width: 100% !important;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 0px;
+    text-align: center !important;
+    margin-right: 10px;
+    border: 1px solid #B4C1D6 !important;
 }

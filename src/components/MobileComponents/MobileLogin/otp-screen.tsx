@@ -5,7 +5,7 @@ import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import ImageComponent from "@/components/Core/ImageComponent";
 import OtpInput from "react18-input-otp";
 import { useRouter } from "next/router";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { resetOtpCountDown, setOtpCountDown } from "@/Redux/Modules/Otp";
 import verifyOtpService from "../../../../lib/services/AuthServices/verifyOtpService";
 import setCookie from "../../../../lib/CookieHandler/setCookie";
@@ -23,7 +23,7 @@ const MobileOtpScreen: NextPage = () => {
   const dispatch = useDispatch();
 
 
-    const otpCountDown = useSelector((state: any) => state.otp.resendOtpIn);
+  const otpCountDown = useSelector((state: any) => state.otp.resendOtpIn);
 
 
   const [errorMessages, setErrorMessages] = useState<any>({});
@@ -32,7 +32,7 @@ const MobileOtpScreen: NextPage = () => {
   const [otp, setOtp] = useState<string>("");
   const [seconds, setSeconds] = useState(0);
 
-    useEffect(() => {
+  useEffect(() => {
     setMobile(router.query.mobile as string);
     if (router?.isReady && otpCountDown) {
       setSeconds(otpCountDown);
@@ -98,7 +98,7 @@ const MobileOtpScreen: NextPage = () => {
       onSubmitOtpClick(value);
     }
   }
-  
+
   return (
     <div className={styles.otpscreen}>
       <div className={styles.bgImage}>
@@ -113,40 +113,33 @@ const MobileOtpScreen: NextPage = () => {
                 OTP Verification
               </Typography>
               <Typography className={styles.enterTheOtp}>Enter the OTP sent to your mobile number<br /> ends with
-                <span>{' *'+mobile?.slice(7,)}</span></Typography>
+                <span>{' *' + mobile?.slice(7,)}</span></Typography>
             </div>
             <div className={styles.otpfield}>
               <div className={styles.otptextboxes}>
                 <OtpInput
                   value={otp}
-                  onChange={(e:string) => setOtpValue(e)}
+                  onChange={(e: string) => setOtpValue(e)}
                   numInputs={6}
                   isInputNum
                   shouldAutoFocus
-                  inputStyle={{
-                    width: '30px',
-                    height: '40px',
-                    fontSize: '18px',
-                    borderRadius: '0px',
-                    marginRight: '1.5rem',
-                    textAlign: 'center',
-                  }}
+                  inputStyle="otpInputs"
                   errorStyle={Boolean(errorMessages.otp)}
                 />
               </div>
-                <p style={{color:"red", fontSize:"10px",minHeight:"10px"}}>{errorMessages?.otp}</p>
-               <Typography variant="h6" className={styles.resendContainer}>
-                  {!seconds ? <p className={styles.helperText}>{"Did not receive an OTP?"}
+              <p style={{ color: "red", fontSize: "10px", minHeight: "10px" }}>{errorMessages?.otp}</p>
+              <Typography variant="h6" className={styles.resendContainer}>
+                {!seconds ? <p className={styles.helperText}>{"Did not receive an OTP?"}
                   <Button
-                  variant="text"
-                  onClick={resetCountdown}
-                  disabled={otpCountDown}
-                  sx={{ textTransform: "capitalize" }}>
+                    variant="text"
+                    onClick={resetCountdown}
+                    disabled={otpCountDown}
+                    sx={{ textTransform: "capitalize" }}>
                     Resend OTP
                   </Button>
                 </p> : ""}
-          {seconds ? `Resend in 00:${otpCountDown}s` : ""}
-                </Typography>
+                {seconds ? `Resend in 00:${otpCountDown}s` : ""}
+              </Typography>
             </div>
           </div>
           <Button
@@ -156,13 +149,13 @@ const MobileOtpScreen: NextPage = () => {
             id="verify"
             size="large"
             variant="contained"
-            onClick={()=>onSubmitOtpClick()}
+            onClick={() => onSubmitOtpClick()}
             fullWidth
           >
             Verify
             {loadingWhileVerifyingOtp ?
-              <CircularProgress size="1.5rem" sx={{color:"white"}} />
-            : ""}
+              <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+              : ""}
           </Button>
         </div>
       </div>

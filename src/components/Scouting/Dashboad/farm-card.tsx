@@ -14,7 +14,7 @@ const FarmCard = ({ farmsData, paginationDetails, loading }: { farmsData: Array<
   const router = useRouter();
 
   return (
-    <div>
+    <div className={styles.allForms}>
 
       <div className={styles.allFormsBlock}>
         {farmsData.length ? farmsData.map((item: FarmDataType) => {
@@ -25,7 +25,9 @@ const FarmCard = ({ farmsData, paginationDetails, loading }: { farmsData: Array<
                   <div className={styles.duration} id="duration">
                     <div className={styles.aug2023}>{timePipe(item.createdAt, 'DD, MMM YYYY')} - Current</div>
                   </div>
-                  <div className={styles.farm1}>{item.title}</div>
+                  <div className={styles.farm1}>
+                    {item.title.length > 16 ? item.title.slice(0, 12) + '...' : item.title}
+                  </div>
                 </div>
                 <div className={styles.farmareablock} id="farm-area-block">
                   <div className={styles.farmarea} id="farm-area">

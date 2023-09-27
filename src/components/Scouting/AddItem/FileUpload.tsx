@@ -1,11 +1,15 @@
 import { Box, Button, FormControl, FormHelperText, Icon, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CameraCapture from "./Camera";
 import Axios from "axios"
 import styles from "./add-scout.module.css";
 import Header1 from "../Header/HeaderComponent";
 import SelectComponent from "@/components/Core/SelectComponent";
 import { useSelector } from "react-redux";
+import Camera from "./Camera";
+import base64ToFile from "@/pipes/base64FileConvert";
+import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 
 
 
@@ -22,6 +26,9 @@ const FileUploadComponent = () => {
     const [multipleFiles, setMultipleFiles] = useState<any>()
     const [fileIndex, setIndex] = useState<any>()
     const [fileProgress, setFileProgress] = useState<number[] | any>();
+    const [defaultValue, setDefaultValue] = useState<any>('');
+    const [formId, setFormId] = useState<any>()
+    const [formOptions, setFarmOptions] = useState<any>()
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
@@ -34,6 +41,30 @@ const FileUploadComponent = () => {
     //convert the kb into mb
     const bytesToMB = (bytes: any) => {
         return bytes / (1024 * 1024);
+    }
+
+    const getFormDetails = async (id: string) => {
+        let response = await getAllFarmsService(accessToken);
+
+        try {
+            if (response?.success && response.data.length) {
+                setFarmOptions(response?.data);
+                // if (id) {
+                //     let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
+
+                //     setDefaultValue(selectedObject.title)
+                //     captureFarmName(selectedObject);
+                // } else {
+                //     setDefaultValue(response?.data[0].title);
+                //     captureFarmName(response?.data[0]);
+                // }
+            } else {
+                setFarmOptions([]);
+            }
+        } catch (err) {
+            console.error(err);
+
+        }
     }
 
 
@@ -240,19 +271,38 @@ const FileUploadComponent = () => {
 
     }
 
+    useEffect(() => {
+        getFormDetails("")
+    }, [])
+
     //onClose camera
     const captureCloseCamera = (value: any, file: any) => {
+
+
         setOpenCamera(false)
+        console.log(file)
+        let fileAfterconevert = base64ToFile(file, "capture_image", "image/jpeg")
+        let temp: any = []
+        temp.push(fileAfterconevert)
+        setMultipleFiles(temp)
+        const fileProgressCopy = [...new Array(temp?.length).fill(0)]; // Create a copy of the progress array
+        fileUploadEvent(fileAfterconevert, 0, fileProgressCopy, setFileProgress)
 
     }
 
+    const captureFarmName = (selectedObject: any) => {
 
+
+        if (selectedObject && Object.keys(selectedObject).length) {
+            setFormId(selectedObject?._id);
+        }
+    }
 
 
     return (
         <div>
             {openCamera == true ?
-                <CameraCapture openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
+                <Camera openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
 
                 <div>
                     < Header1 name={"Add item"} />
@@ -268,19 +318,8 @@ const FileUploadComponent = () => {
                                         variant="outlined"
                                     >
                                         <InputLabel color="primary" />
-                                        <Select
-                                            color="primary"
-                                            name="select-farm"
-                                            id="select-farm"
-                                            size="medium"
-                                        >
-                                            <MenuItem value="Farm-1">Farm-1</MenuItem>
-                                            <MenuItem value="Farm-2">Farm-2</MenuItem>
-                                            <MenuItem value="Farm-3">Farm-3</MenuItem>
-                                            <MenuItem value="Farm-4">Farm-4</MenuItem>
-                                            <MenuItem value="Farm-5">Farm-5</MenuItem>
-                                            <MenuItem value="Farm-6">Farm-6</MenuItem>
-                                        </Select>
+                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={formOptions} captureFarmName={captureFarmName} />
+
                                         <FormHelperText />
                                     </FormControl>
                                 </div>
@@ -343,11 +382,11 @@ const FileUploadComponent = () => {
                                             />
                                         </div>
                                         <Box sx={{ width: '100%' }}>
-                                            <LinearProgress variant="determinate" value={fileProgress[index]} />
+                                            <LinearProgress variant="determinate" value={fileProgress ? fileProgress[index] : ""} />
                                         </Box>
                                     </div>
                                     <div className={styles.uploadstatus}>
-                                        <div className={styles.completed}>{fileProgress[index]}%</div>
+                                        <div className={styles.completed}>{fileProgress ? fileProgress[index] : ""}%</div>
 
                                     </div>
                                 </div>

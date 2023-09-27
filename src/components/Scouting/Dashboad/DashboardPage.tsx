@@ -9,7 +9,7 @@ const DashboardPage = () => {
             <DashBoardHeader />
             <FarmCard />
             <div className="addFormPositionIcon">
-                <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/scouting/forms/add")} />
+                <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
             </div>
         </div>
     );

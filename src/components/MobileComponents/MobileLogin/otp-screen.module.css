@@ -97,6 +97,9 @@
   font-family: inter;
   font-size: clamp(16px, 4.18vw, 18px);
 }
+.submitotp:hover{
+  background: #A05148;
+}
 
 .verifyotpform,
 .verifyotpscreen {

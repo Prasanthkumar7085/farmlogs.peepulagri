@@ -5,7 +5,7 @@ import styles from "./dash-board-header.module.css";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import Image from "next/image";
-const DashBoardHeader: NextPage = () => {
+const DashBoardHeader = ({captureSearchString,searchString}:any) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleShowPasswordClick = () => {
     setShowPassword(!showPassword);

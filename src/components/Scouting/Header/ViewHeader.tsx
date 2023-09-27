@@ -5,8 +5,7 @@ import {  useState } from "react";
 import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
 import { useSelector } from "react-redux";
 import AlertComponent from "@/components/Core/AlertComponent";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import AlertComponentMobile from "@/components/Core/AlertComponentMobile";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 
 
 const ViewHeader = ({ name }: any) => {
@@ -20,6 +19,7 @@ const ViewHeader = ({ name }: any) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -28,6 +28,7 @@ const ViewHeader = ({ name }: any) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    
     
     const deleteFarm = async () => {
         setLoading(true);
@@ -72,12 +73,13 @@ const ViewHeader = ({ name }: any) => {
                 }}
             >
                 <MenuItem onClick={handleClose}>Edit</MenuItem>
-                <MenuItem onClick={deleteFarm}>Delete</MenuItem>
+                    <MenuItem onClick={() => { setDialogOpen(true); setAnchorEl(null)}}>Delete</MenuItem>
             
             </Menu>
         </div>
-            <AlertComponentMobile alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true}/>
-            <LoadingComponent loading={loading}/>
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true}/>
+            {/* <LoadingComponent loading={loading} /> */}
+            <AlertDelete open={dialogOpen} deleteFarm={deleteFarm} setDialogOpen={setDialogOpen} loading={loading} />
         </div>
      
     );

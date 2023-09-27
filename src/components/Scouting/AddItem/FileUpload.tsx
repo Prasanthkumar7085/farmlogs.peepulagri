@@ -147,10 +147,13 @@ const FileUploadComponent = () => {
     //start the file upload event
     const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
         let obj = {
-            file_name: file.name,
-            farm_id: formId,
-            type: file.type,
-            crop_slug: selectedCrop.slug
+            "attachment": {
+                file_name: file.name,
+                farm_id: formId,
+                type: file.type,
+                crop_slug: selectedCrop?.slug,
+                source: "scouts"
+            }
         }
         let options = {
             method: "POST",
@@ -338,7 +341,7 @@ const FileUploadComponent = () => {
             "farm_id": formId,
             "description": description,
             "attachments": tempFilesStorage,
-            "crop_id": selectedCrop._id
+            "crop_id": selectedCrop?._id
 
         }
 
@@ -513,7 +516,10 @@ const FileUploadComponent = () => {
 
                                             </div>
                                             <Box sx={{ width: '100%' }}>
-                                                <LinearProgress variant="determinate" value={fileProgress[index]} />
+                                                {fileProgress[index] == 0 ?
+                                                    <LinearProgress /> :
+                                                    <LinearProgress variant="determinate" value={fileProgress[index]} />
+                                                }
                                             </Box>
                                         </div>
                                         <div className={styles.uploadstatus}>

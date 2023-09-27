@@ -6,9 +6,9 @@ import { useRouter } from "next/router";
 const Header1 = ({ name }: any) => {
 
     const router = useRouter();
-    
+
     return (
-        <div className={styles.header} id="header">
+        <div className={styles.header} id="header" style={{ paddingTop: "6rem" }}>
             <img
                 className={styles.iconsiconArrowLeft}
                 alt=""

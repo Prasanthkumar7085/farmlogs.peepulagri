@@ -1,5 +1,7 @@
 // src/components/Camera.js
 import React, { useState, useRef, useEffect } from 'react';
+import styles from "./camera.module.css";
+
 
 function Camera({ openCamera, captureCloseCamera }: any) {
     const [stream, setStream] = useState<any>(null);
@@ -85,26 +87,30 @@ function Camera({ openCamera, captureCloseCamera }: any) {
     };
 
     return (
-        <div>
+        <div className={styles.camaraPage}>
             {!capturedImageUrl && !capturedVideoUrl ?
                 <div style={{
                     position: "relative",
                     width: "100%",
-                    paddingBottom: "54.77%",
+                    // paddingBottom: "54.77%",
                 }}>
                     <video ref={videoRef} autoPlay muted style={{
                         position: "absolute",
                         top: 0,
                         left: 0,
                         width: "100%",
-                        height: "100%"
+                        height: "70vh"
                     }} />
                 </div> : ""
             }
             <div>
                 {stream && !capturedImageUrl && !capturedVideoUrl ? (
                     <>
-                        <button onClick={stopCamera}>Close</button>
+                        <button onClick={stopCamera}>
+                            <img src="/cansel-capture-icon.svg" alt="" />
+
+
+                        </button>
                         {mediaRecorder && mediaRecorder.state === 'recording' ? (
                             <button onClick={stopRecording}>Stop Recording</button>
                         ) : (

@@ -93,7 +93,12 @@ const DashboardPage = () => {
         <div id="dashboardPage">
             <DashBoardHeader captureSearchString={captureSearchString} searchString={searchString} />
             {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} /> :
-            (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> : "")}
+                (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> :
+                    <div style={{ minHeight: "75vh" }}>
+
+                    </div>
+
+                )}
             <div className="addFormPositionIcon" >
                 <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
             </div>

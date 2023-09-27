@@ -61,7 +61,7 @@ const MobileOtpScreen: NextPage = () => {
 
     const response = await verifyOtpService(body);
 
-    if (response.success) {
+    if (response?.success) {
       await setCookie();
       if ("data" in response) {
         dispatch(setUserDetails(response?.data));

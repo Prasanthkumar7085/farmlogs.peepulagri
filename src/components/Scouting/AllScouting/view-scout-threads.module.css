@@ -1,0 +1,143 @@
+.aug20231030am,
+.farm1 {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  line-height: 100%;
+}
+
+.farm1 {
+  font-size: inherit;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.aug20231030am {
+  font-size: var(--text-sm-medium-size);
+  color: var(--body);
+}
+
+.headertextwrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 0 0 0 var(--padding-base);
+  gap: var(--gap-5xs);
+}
+
+.heading {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 18px;
+  font-weight: 600;
+  font-family: inherit;
+  display: inline-block;
+  width: 100px;
+}
+
+.imageIcon {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+  border-radius: var(--br-5xs);
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.imagecontainer {
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.row1 {
+  gap: var(--gap-5xs);
+}
+
+.row1,
+.row3 {
+  align-self: stretch;
+  height: 98px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.attachmentscontainer {
+  gap: var(--gap-5xs);
+}
+
+.attachents,
+.attachmentscontainer,
+.headerandattachments {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.attachents {
+  padding: var(--padding-base);
+  font-size: var(--font-size-base);
+  color: var(--title);
+}
+
+.headerandattachments {
+  gap: var(--gap-base);
+}
+
+.heading1 {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: inherit;
+  line-height: 18px;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.identifyingSpecificPests {
+  display: block;
+}
+
+.descriptiontext {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  line-height: 140%;
+}
+
+.description,
+.viewscoutthreads {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.description {
+  padding: 0 var(--padding-base);
+  gap: var(--gap-5xs);
+  font-size: var(--font-size-base);
+  color: var(--title);
+}
+
+.viewscoutthreads {
+  gap: var(--gap-5xl);
+  text-align: left;
+  font-size: var(--font-size-5xl);
+  color: var(--green-gradient);
+  font-family: var(--text-sm-medium);
+  padding-top: 1rem;
+}

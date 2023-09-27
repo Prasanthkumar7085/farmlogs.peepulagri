@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, Icon, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Icon, IconButton, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import CameraCapture from "./Camera";
 import Axios from "axios"
@@ -10,10 +10,16 @@ import Camera from "./Camera";
 import base64ToFile from "@/pipes/base64FileConvert";
 import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
-
+import { useRouter } from "next/router";
+import AlertComponent from "@/components/Core/AlertComponent";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DoneIcon from '@mui/icons-material/Done';
 
 
 const FileUploadComponent = () => {
+
+    const router = useRouter()
 
     const [selectedFile, setSelectedFile] = useState<any>(null);
     const [fileSize, setFileSize] = useState<any>()
@@ -31,20 +37,59 @@ const FileUploadComponent = () => {
     const [formOptions, setFarmOptions] = useState<any>()
     const [selectedCrop, setSelectedCrop] = useState<any>()
     const [cropOptions, setCropOptions] = useState<any>()
+    const [description, setDescription] = useState<any>()
+    const [attachments, setAttachments] = useState<any>([])
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState(false);
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
+    let tempFilesStorage: any = [...attachments]
 
     //convert the kb into mb
     const bytesToMB = (bytes: any) => {
         return bytes / (1024 * 1024);
     }
 
-    const getFormDetails = async (id: string) => {
+    const removeFile = (index: number) => {
+        const selectedFilesCopy = [...multipleFiles];
+        selectedFilesCopy.splice(index, 1);
+
+        const fileProgressCopy = [...fileProgress];
+        fileProgressCopy.splice(index, 1);
+
+        const tempFilesStorageCopy = [...tempFilesStorage]
+        tempFilesStorageCopy.splice(index, 1)
+
+        setMultipleFiles(selectedFilesCopy);
+        setFileProgress(fileProgressCopy);
+    };
+    const removeFileAfterAdding = (index: number) => {
+        const selectedFilesCopy = [...multipleFiles];
+        selectedFilesCopy.splice(index, 1);
+
+        const fileProgressCopy = [...fileProgress];
+        fileProgressCopy.splice(index, 1);
+
+        setMultipleFiles(selectedFilesCopy);
+        setFileProgress(fileProgressCopy);
+    };
+
+    const getFormDetails = async (id: any) => {
         let response = await getAllFarmsService(accessToken);
 
         try {
             if (response?.success && response.data.length) {
                 setFarmOptions(response?.data);
+                if (id) {
+                    let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
+
+                    setDefaultValue(selectedObject.title)
+                    captureFarmName(selectedObject);
+                } else {
+                    setDefaultValue(response?.data[0].title);
+                    captureFarmName(response?.data[0]);
+                }
             } else {
                 setFarmOptions([]);
             }
@@ -98,6 +143,7 @@ const FileUploadComponent = () => {
         })
     };
 
+
     //start the file upload event
     const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
         let obj = {
@@ -123,6 +169,8 @@ const FileUploadComponent = () => {
                 console.log(responseData)
                 setUploadId(responseData.data.upload_id)
                 await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
+                tempFilesStorage.splice(1, 0, { original_name: file.name, type: file.type, size: file.size, name: responseData.data.file_key })
+                setAttachments(tempFilesStorage)
             }
         }
         catch (err) {
@@ -265,6 +313,8 @@ const FileUploadComponent = () => {
                 let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT" });
                 fileProgressCopy[index] = 100;
                 setFileProgress([...fileProgressCopy]);
+                tempFilesStorage.splice(1, 0, { original_name: item.name, type: item.type, size: item.size, name: item.name })
+
             }
 
         }
@@ -275,17 +325,49 @@ const FileUploadComponent = () => {
     }
 
     useEffect(() => {
-        getFormDetails("")
-    }, [accessToken])
+        if (router.query.farm_id) {
+            getFormDetails(router.query.farm_id)
+        }
+    }, [accessToken, router.query.farm_id])
 
 
 
     const addScoutDetails = async () => {
+        setLoading(true)
+        let obj = {
+            "farm_id": formId,
+            "description": description,
+            "attachments": tempFilesStorage,
+            "crop_id": selectedCrop._id
+
+        }
+
+        let options: any = {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': accessToken
+            }),
+        }
+
         try {
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts`, options);
+            let responseData = await response.json();
+            if (responseData.success == true) {
+                setAlertMessage(responseData.message)
+                setAlertType(true)
+                router.push(`/farms/${router.query.farm_id}/crops`)
+
+            }
+            setLoading(false)
 
         }
         catch (err) {
-
+            console.log(err)
+        }
+        finally {
+            setLoading(false)
         }
     }
 
@@ -323,7 +405,7 @@ const FileUploadComponent = () => {
                 <Camera openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
 
                 <div>
-                    < Header1 name={"Add item"} />
+                    < Header1 name={"Add item"} router={`/farms/${router.query.farm_id}/crops`} />
                     <div className={styles.addscout} id="add-scout">
                         <div className={styles.scoutdetails} id="scout-details">
                             <div className={styles.addscoutdetails} id="add-scout-details">
@@ -409,21 +491,33 @@ const FileUploadComponent = () => {
                                         <div className={styles.uploaddetails}>
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
-                                                    <div className={styles.photojpg}>{item.name}</div>
+                                                    <div className={styles.photojpg}>{item.name} </div>
                                                     <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                                                    {fileProgress[index] == 100 ?
+                                                        <div className={styles.photojpg}>
+                                                            <IconButton>
+                                                                <DoneIcon />
+                                                            </IconButton>
+                                                            <IconButton onClick={() => removeFileAfterAdding(index)}>
+                                                                <DeleteForeverIcon />
+                                                            </IconButton>
+                                                        </div> : ""}
                                                 </div>
-                                                <img
-                                                    className={styles.close41}
-                                                    alt=""
-                                                    src="/close-4-1.svg"
-                                                />
+                                                {fileProgress[index] !== 100 ?
+                                                    <img
+                                                        className={styles.close41}
+                                                        alt=""
+                                                        src="/close-4-1.svg"
+                                                        onClick={() => removeFile(index)}
+                                                    /> : ""}
+
                                             </div>
                                             <Box sx={{ width: '100%' }}>
                                                 <LinearProgress variant="determinate" value={fileProgress[index]} />
                                             </Box>
                                         </div>
                                         <div className={styles.uploadstatus}>
-                                            <div className={styles.completed}>{fileProgress[index]}%</div>
+                                            <div className={styles.completed}>{fileProgress[index] == 100 ? "completed" : fileProgress[index] + "%"}</div>
 
                                         </div>
                                     </div>
@@ -447,6 +541,8 @@ const FileUploadComponent = () => {
                                                 fullWidth={true}
                                                 variant="outlined"
                                                 multiline
+                                                value={description}
+                                                onChange={(e) => setDescription(e.target.value)}
                                                 sx={{ background: "#fff" }}
                                             />
                                         </div>
@@ -463,6 +559,7 @@ const FileUploadComponent = () => {
                                             id="back"
                                             size="large"
                                             variant="outlined"
+                                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops`)}
                                         >
                                             Back
                                         </Button>
@@ -473,6 +570,7 @@ const FileUploadComponent = () => {
                                             id="submit"
                                             size="large"
                                             variant="contained"
+                                            onClick={addScoutDetails}
                                             endIcon={<Icon>arrow_forward_sharp</Icon>}
                                         >
                                             Submit
@@ -483,6 +581,8 @@ const FileUploadComponent = () => {
                         </div>
                     </div>
                 </div>}
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+            <LoadingComponent loading={loading} />
         </div >
 
 

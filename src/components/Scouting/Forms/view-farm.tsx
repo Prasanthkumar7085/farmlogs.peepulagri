@@ -1,7 +1,18 @@
 import type { NextPage } from "next";
 import styles from "./view-farm.module.css";
+import { useEffect, useState } from "react";
 
-const ViewFarmPage: NextPage = () => {
+const ViewFarmPage = () => {
+
+  const [data, setData] = useState();
+
+
+  const getFarmDataById = async () => {
+    // const response = getFarm
+  }
+  useEffect(() => {
+    getFarmDataById();
+  },[])
   return (
     <div className={styles.viewfarm} id="view-farm">
       <div className={styles.farmdetailsblock}>

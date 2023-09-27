@@ -32,7 +32,7 @@ const DashboardPage = () => {
         if (search_string) {
             queryParam['search_string'] = search_string;
         }
-        router.push({ pathname: '/scouting/dashboard', query: queryParam })
+        router.push({ pathname: '/farms', query: queryParam })
         url = prepareURLEncodedParams(url, queryParam);
 
 
@@ -93,7 +93,7 @@ const DashboardPage = () => {
             <DashBoardHeader captureSearchString={captureSearchString} searchString={searchString} />
             <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} />
             <div className="addFormPositionIcon" style={{position:'fixed'}}>
-                <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/scouting/forms/add")} />
+                <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/scouting/farms/add")} />
             </div>
             <LoadingComponent loading={loading}/>
         </div>

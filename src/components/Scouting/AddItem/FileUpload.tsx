@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, Icon, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Icon, IconButton, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import CameraCapture from "./Camera";
 import Axios from "axios"
@@ -13,7 +13,8 @@ import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarm
 import { useRouter } from "next/router";
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DoneIcon from '@mui/icons-material/Done';
 
 
 const FileUploadComponent = () => {
@@ -43,12 +44,27 @@ const FileUploadComponent = () => {
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
+    let tempFilesStorage: any = [...attachments]
+
     //convert the kb into mb
     const bytesToMB = (bytes: any) => {
         return bytes / (1024 * 1024);
     }
 
     const removeFile = (index: number) => {
+        const selectedFilesCopy = [...multipleFiles];
+        selectedFilesCopy.splice(index, 1);
+
+        const fileProgressCopy = [...fileProgress];
+        fileProgressCopy.splice(index, 1);
+
+        const tempFilesStorageCopy = [...tempFilesStorage]
+        tempFilesStorageCopy.splice(index, 1)
+
+        setMultipleFiles(selectedFilesCopy);
+        setFileProgress(fileProgressCopy);
+    };
+    const removeFileAfterAdding = (index: number) => {
         const selectedFilesCopy = [...multipleFiles];
         selectedFilesCopy.splice(index, 1);
 
@@ -126,7 +142,6 @@ const FileUploadComponent = () => {
             }
         })
     };
-    let tempFilesStorage: any = [...attachments]
 
 
     //start the file upload event
@@ -342,6 +357,8 @@ const FileUploadComponent = () => {
             if (responseData.success == true) {
                 setAlertMessage(responseData.message)
                 setAlertType(true)
+                router.push(`/farms/${router.query.farm_id}/crops`)
+
             }
             setLoading(false)
 
@@ -474,22 +491,33 @@ const FileUploadComponent = () => {
                                         <div className={styles.uploaddetails}>
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
-                                                    <div className={styles.photojpg}>{item.name}</div>
+                                                    <div className={styles.photojpg}>{item.name} </div>
                                                     <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                                                    {fileProgress[index] == 100 ?
+                                                        <div className={styles.photojpg}>
+                                                            <IconButton>
+                                                                <DoneIcon />
+                                                            </IconButton>
+                                                            <IconButton onClick={() => removeFileAfterAdding(index)}>
+                                                                <DeleteForeverIcon />
+                                                            </IconButton>
+                                                        </div> : ""}
                                                 </div>
-                                                <img
-                                                    className={styles.close41}
-                                                    alt=""
-                                                    src="/close-4-1.svg"
-                                                    onClick={() => removeFile(index)}
-                                                />
+                                                {fileProgress[index] !== 100 ?
+                                                    <img
+                                                        className={styles.close41}
+                                                        alt=""
+                                                        src="/close-4-1.svg"
+                                                        onClick={() => removeFile(index)}
+                                                    /> : ""}
+
                                             </div>
                                             <Box sx={{ width: '100%' }}>
                                                 <LinearProgress variant="determinate" value={fileProgress[index]} />
                                             </Box>
                                         </div>
                                         <div className={styles.uploadstatus}>
-                                            <div className={styles.completed}>{fileProgress[index]}%</div>
+                                            <div className={styles.completed}>{fileProgress[index] == 100 ? "completed" : fileProgress[index] + "%"}</div>
 
                                         </div>
                                     </div>

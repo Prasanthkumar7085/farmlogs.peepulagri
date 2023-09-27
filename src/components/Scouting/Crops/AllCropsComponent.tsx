@@ -66,7 +66,7 @@ const AllCropsComponent = () => {
         if (router.query.farm_id) {
             getFormDetails(router.query.farm_id)
         }
-    }, [accessToken])
+    }, [accessToken, router.query.farm_id])
 
     const captureFarmName = (selectedObject: any) => {
         if (selectedObject && Object.keys(selectedObject).length) {

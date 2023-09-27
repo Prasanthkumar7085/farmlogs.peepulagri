@@ -122,7 +122,7 @@ const AddFarmForm = () => {
             editedData[item] = obj[item];
         })
 
-        const response = await editFarmService(editedData, accessToken);
+        const response = await editFarmService(editedData, accessToken,router.query.farm_id as string);
         detailsAfterResponse(response);
         setLoading(false);
         

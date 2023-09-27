@@ -1,10 +1,10 @@
 
-const editFarmService = async (body: any,token:string) => {
+const editFarmService = async (body: any,token:string,farmId:string) => {
 
     try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/farm`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}`;
         const options = {
-            method: "POST",
+            method: "PATCH",
             body: JSON.stringify(body),
             headers: new Headers({
                 'content-type': 'application/json',

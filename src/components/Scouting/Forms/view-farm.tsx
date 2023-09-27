@@ -5,20 +5,23 @@ import { useRouter } from "next/router";
 import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
 import { FarmDataType } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const ViewFarmPage = () => {
 
   const router = useRouter();
 
   const [data, setData] = useState<FarmDataType>();
-
+  const [loading, setLoading] = useState(true);
 
   const getFarmDataById = async () => {
+    setLoading(true);
     const response: any = await getFarmByIdService(router.query.farm_id as string);
     
     if (response.success) {
       setData(response.data);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -28,14 +31,15 @@ const ViewFarmPage = () => {
   }, [router.isReady]);
   
   return (
-    <div className={styles.viewfarm} id="view-farm">
+    <div>
+      {!loading?<div className={styles.viewfarm} id="view-farm">
       <div className={styles.farmdetailsblock}>
         <div className={styles.farm1}>{data?.title}</div>
         <div className={styles.aug2023}>{timePipe(data?.createdAt as string,'DD, MMM YYYY')} - Current</div>
       </div>
       <div className={styles.farmareaheading} id="area">
         <div className={styles.text}>Land (acres)</div>
-        <div className={styles.acres}>{data?.area} ACRES</div>
+        <div className={styles.acres}>{data?.area?.toFixed(2)} ACRES</div>
       </div>
       <div
         className={styles.locationdetailsblock}
@@ -52,7 +56,7 @@ const ViewFarmPage = () => {
         <p className={styles.locationMarked} id="location-details">
           <span>
             Location:
-          </span>{' '+data?.location}
+          </span>{data?.location ? ' '+data?.location :" N/A"}
           </p>
         {/* <p className={styles.locationMarked} id="location-details">
           <span>
@@ -63,6 +67,8 @@ const ViewFarmPage = () => {
 
         </p> */}
       </div>
+    </div>:""}
+    <LoadingComponent loading={loading}/>
     </div>
   );
 };

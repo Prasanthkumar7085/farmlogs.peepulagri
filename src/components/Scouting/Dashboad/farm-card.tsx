@@ -13,9 +13,6 @@ const FarmCard = ({ farmsData, paginationDetails, loading }: { farmsData: Array<
 
   const router = useRouter();
 
-
-
-
   return (
     <div>
 
@@ -44,7 +41,7 @@ const FarmCard = ({ farmsData, paginationDetails, loading }: { farmsData: Array<
             </div>
           )
         }) :
-          (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> : "")
+          ""
         }
       </div>
     </div>

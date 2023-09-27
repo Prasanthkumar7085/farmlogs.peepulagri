@@ -7,6 +7,7 @@ import { FarmDataType, PaginationInFarmResponse } from "@/types/farmCardTypes";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
+import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 
 
 const DashboardPage = () => {
@@ -20,7 +21,7 @@ const DashboardPage = () => {
     const [loading, setLoading] = useState(true);
     const [searchString, setSearchString] = useState('');
 
-    const getAllFarms = async ({ page = 1, limit = 10, search_string = '' }: Partial<{ page: number, limit: number, search_string: string }>) => {
+    const getAllFarms = async ({ page = 1, limit = 100, search_string = '' }: Partial<{ page: number, limit: number, search_string: string }>) => {
 
         setLoading(true);
         let url = `farm/${page}/${limit}`
@@ -59,9 +60,9 @@ const DashboardPage = () => {
 
             if (searchFromRouter) {
                 setSearchString(searchFromRouter as string)
-                getAllFarms({ page: 1, limit: 10, search_string: searchFromRouter as string });
+                getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string });
             } else {
-                getAllFarms({ page: 1, limit: 10, search_string: searchString });
+                getAllFarms({ page: 1, limit: 100, search_string: searchString });
             }
 
         }, delay);
@@ -72,7 +73,7 @@ const DashboardPage = () => {
     useEffect(() => {
         if (router.isReady && accessToken) {
             let searchFromRouter = router.query.search_string;
-            getAllFarms({ page: 1, limit: 10, search_string: searchFromRouter as string });
+            getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string });
             setSearchString(searchFromRouter as string)
         }
     }, [router.isReady, accessToken]);
@@ -82,7 +83,7 @@ const DashboardPage = () => {
         if (router.isReady && accessToken) {
             const delay = 500;
             const debounce = setTimeout(() => {
-                getAllFarms({ page: 1, limit: 10, search_string: searchString });
+                getAllFarms({ page: 1, limit: 100, search_string: searchString });
             }, delay);
             return () => clearTimeout(debounce);
         }
@@ -91,7 +92,8 @@ const DashboardPage = () => {
     return (
         <div id="dashboardPage">
             <DashBoardHeader captureSearchString={captureSearchString} searchString={searchString} />
-            <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} />
+            {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} /> :
+            (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> : "")}
             <div className="addFormPositionIcon" >
                 <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
             </div>

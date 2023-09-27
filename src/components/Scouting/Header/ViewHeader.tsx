@@ -13,12 +13,12 @@ const ViewHeader = ({ name }: any) => {
                 className={styles.iconsiconArrowLeft}
                 alt=""
                 src="/iconsiconarrowleft.svg"
-                onClick={()=>router.back()}
+                onClick={() => router.back()}
+                style={{cursor:"pointer"}}
             />
             <Typography className={styles.viewFarm}>{name}</Typography>
             <div className={styles.headericon} id="header-icon">
                 <img className={styles.headericonChild} alt="" src="/frame-40561.svg" />
-
             </div>
         </div>
     );

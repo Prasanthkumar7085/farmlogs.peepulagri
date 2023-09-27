@@ -1,48 +1,67 @@
 import type { NextPage } from "next";
 import styles from "./view-farm.module.css";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
+import { FarmDataType } from "@/types/farmCardTypes";
+import timePipe from "@/pipes/timePipe";
 
 const ViewFarmPage = () => {
 
-  const [data, setData] = useState();
+  const router = useRouter();
+
+  const [data, setData] = useState<FarmDataType>();
 
 
   const getFarmDataById = async () => {
-    // const response = getFarm
+    const response: any = await getFarmByIdService(router.query.farm_id as string);
+    
+    if (response.success) {
+      setData(response.data);
+    }
   }
+
   useEffect(() => {
-    getFarmDataById();
-  },[])
+    if (router.isReady) {
+      getFarmDataById();
+    }
+  }, [router.isReady]);
+  
   return (
     <div className={styles.viewfarm} id="view-farm">
       <div className={styles.farmdetailsblock}>
-        <div className={styles.farm1}>Farm-1</div>
-        <div className={styles.aug2023}>25, Aug 2023 - Current</div>
+        <div className={styles.farm1}>{data?.title}</div>
+        <div className={styles.aug2023}>{timePipe(data?.createdAt as string,'DD, MMM YYYY')} - Current</div>
       </div>
       <div className={styles.farmareaheading} id="area">
         <div className={styles.text}>Land (acres)</div>
-        <div className={styles.acres}>20 ACRES</div>
+        <div className={styles.acres}>{data?.area} ACRES</div>
       </div>
       <div
         className={styles.locationdetailsblock}
         id="location-details-block"
       >
-        <div className={styles.map} id="map">
+        {/* <div className={styles.map} id="map">
           <img
             className={styles.mapimage6Icon}
             alt=""
             src="/map-image-form-view.png"
           />
           <img className={styles.locationIcon} alt="" src="/location-blue-icon.svg" />
-        </div>
+        </div> */}
         <p className={styles.locationMarked} id="location-details">
+          <span>
+            Location:
+          </span>{' '+data?.location}
+          </p>
+        {/* <p className={styles.locationMarked} id="location-details">
           <span>
             Location Marked at :
           </span>
           Latitude: 40.7128° N, Longitude: -74.0060° W 123 Farm land,
           Chittore, NY 523113, Andhra Prades.
 
-        </p>
+        </p> */}
       </div>
     </div>
   );

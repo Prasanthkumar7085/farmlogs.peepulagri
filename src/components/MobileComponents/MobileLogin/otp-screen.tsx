@@ -69,7 +69,7 @@ const MobileOtpScreen: NextPage = () => {
       let accessToken = response.data.access_token;
       await serUserTypeCookie(response?.data?.user_details?.user_type);
 
-      router.push('/scouting/dashboard');
+      router.push('/farms');
 
     } else if (response.status == 422) {
       if ("errors" in response) {

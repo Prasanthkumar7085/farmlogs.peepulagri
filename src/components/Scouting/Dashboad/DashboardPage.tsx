@@ -32,7 +32,7 @@ const DashboardPage = () => {
         if (search_string) {
             queryParam['search_string'] = search_string;
         }
-        router.push({ pathname: '/scouting/dashboard', query: queryParam })
+        router.push({ pathname: '/farms', query: queryParam })
         url = prepareURLEncodedParams(url, queryParam);
 
 

@@ -25,6 +25,7 @@ export interface FarmDataType {
     geometry: Geometrytype;
     logCount: number;
     slug: string;
+    location: string;
     status: string;
     title: string;
     updatedAt: string;

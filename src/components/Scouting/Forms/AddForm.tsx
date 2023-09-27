@@ -2,14 +2,11 @@ import type { NextPage } from "next";
 import { useCallback } from "react";
 import {
     TextField,
-    InputAdornment,
     Icon,
-    IconButton,
     Button,
 } from "@mui/material";
 import styles from "./add-farm-form1.module.css";
-import Header1 from "../Header/HeaderComponent";
-
+import MyLocationOutlinedIcon from '@mui/icons-material/MyLocationOutlined';
 const AddFarmForm: NextPage = () => {
     const onButtonClick = useCallback(() => {
         // Please sync "1" to the project
@@ -25,8 +22,8 @@ const AddFarmForm: NextPage = () => {
                 <div className={styles.farmname} id="farm-name">
                     <div className={styles.label}>Farm Name</div>
                     <TextField
+                        fullWidth
                         className={styles.inputfarmname}
-                        color="primary"
                         size="small"
                         placeholder="Enter Farm Name"
                         variant="outlined"
@@ -42,34 +39,31 @@ const AddFarmForm: NextPage = () => {
                         </div>
                         <Button
                             className={styles.button}
-                            color="success"
                             variant="contained"
                             onClick={onButtonClick}
                         >
-                            Locate On Map
+                            <MyLocationOutlinedIcon sx={{ fontSize: "12px" }} /> Locate On Map
                         </Button>
                     </div>
                     <div className={styles.farmname} id="enter-location">
-                        <div className={styles.label1}>Location</div>
+                        <div className={styles.label}>Location</div>
                         <TextField
                             className={styles.inputfarmname}
-                            color="primary"
                             name="location"
                             size="small"
                             placeholder="Enter location here"
-                            fullWidth={true}
+                            fullWidth
                             variant="outlined"
                         />
                     </div>
                     <div className={styles.farmname} id="acres">
-                        <div className={styles.label1}>Total Land (acres)</div>
+                        <div className={styles.label}>Total Land (acres)</div>
                         <TextField
                             className={styles.inputfarmname}
-                            color="primary"
                             name="location"
                             size="small"
                             placeholder="Enter acres"
-                            fullWidth={true}
+                            fullWidth
                             variant="outlined"
                         />
                     </div>
@@ -79,8 +73,6 @@ const AddFarmForm: NextPage = () => {
                 <div className={styles.buttons}>
                     <Button
                         className={styles.back}
-                        sx={{ width: 130 }}
-                        color="primary"
                         name="back"
                         size="medium"
                         variant="outlined"

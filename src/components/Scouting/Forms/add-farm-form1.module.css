@@ -1,14 +1,13 @@
 .label {
-  align-self: stretch;
-  position: relative;
-  line-height: 20px;
+  color: #344054;
+  font-family: Inter;
+  font-size: clamp(12px, 3.25vw, 14px);
   font-weight: 500;
+  line-height: 20px;
 }
 
 .inputfarmname {
-  border: 0;
-  background-color: transparent;
-  align-self: stretch;
+  background-color: #fff;
 }
 
 .farmname {
@@ -21,17 +20,19 @@
 }
 
 .text {
-  position: relative;
-  line-height: 18px;
+  color: #101828;
+  font-family: Inter;
+  font-size: clamp(14px, 3.5vw, 16px);
   font-weight: 500;
+  line-height: 18px;
 }
 
 .supportingText {
-  align-self: stretch;
-  position: relative;
-  font-size: var(--text-sm-medium-size);
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(12px, 3.2vw, 14px);
+  font-weight: 400;
   line-height: 14px;
-  color: var(--body);
 }
 
 .locationheading {
@@ -44,30 +45,33 @@
 }
 
 .button {
-  cursor: pointer;
+  text-transform: capitalize;
+  color: #FFF;
+  font-family: Inter;
+  font-size: clamp(10px, 3vw, 12px);
+  font-weight: 500;
+  border-radius: 4px;
+  border: 1px solid #05A155;
+  background: #05A155;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: none;
 }
 
 .addlocationbutton {
-  align-self: stretch;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: var(--gap-5xs);
-  font-size: var(--font-size-base);
-  color: var(--gray-900);
+
 }
 
-.label1 {
-  position: relative;
-  line-height: 20px;
-  font-weight: 500;
-}
+
 
 .locationdetails {
   align-self: stretch;
   overflow: hidden;
-  padding: var(--padding-base) 0 0;
+  padding: 0.5rem 0 1.5rem 0;
 }
 
 .formfields,
@@ -79,14 +83,30 @@
   gap: var(--gap-base);
 }
 
-.back,
-.formfields {
-  align-self: stretch;
+.back {
+  border-radius: 6px;
+  border: 1px solid #D0D5DD;
+  background: #FFF;
+  box-shadow: 4px 4px 10px 0px #0202460a;
+  padding: 8px 20px;
+  color: #344054;
+  font-family: Inter;
+  font-size: clamp(14px, 3.5vw, 16px);
+  font-weight: 400;
+  text-transform: capitalize;
+
 }
 
 .submit {
-  flex: 1;
-  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #3462CF;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+  box-shadow: 4px 4px 10px 0px #0202460d;
+  color: #FFF;
+  font-family: Inter;
+  font-size: clamp(14px, 3.5vw, 16px);
+  font-weight: 400;
+  text-transform: capitalize;
 }
 
 .addfarmform,
@@ -98,9 +118,9 @@
 }
 
 .buttons {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--gap-5xl);
+  display: grid;
+  grid-template-columns: 2fr 4fr;
+  grid-gap: 1.5rem;
 }
 
 .addfarmform,

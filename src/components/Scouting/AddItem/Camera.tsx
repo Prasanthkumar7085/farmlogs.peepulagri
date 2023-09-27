@@ -4,19 +4,37 @@ const CameraCapture = ({ openCamera, captureCloseCamera }: any) => {
     const videoRef: any = useRef(null);
     const canvasRef: any = useRef(null);
     const [photoData, setPhotoData] = useState(null);
+    let start = openCamera;
+    let mediaStream: MediaStream | null = null; // Store the media stream
+
 
     useEffect(() => {
         if (openCamera == true) {
             startCamera()
         }
-    }, [])
+        else {
+            stopCamera(); // Stop the camera when it's turned off
+        }
+    }, [openCamera])
 
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             videoRef.current.srcObject = stream;
+            mediaStream = stream; // Store the media stream reference
         } catch (error) {
             console.error('Error accessing camera:', error);
+        }
+    };
+    const stopCamera = () => {
+
+        if (mediaStream) {
+            mediaStream.getTracks().forEach((track) => {
+                track.stop(); // Stop all tracks in the media stream
+            });
+            mediaStream = null; // Clear the media stream reference
+            videoRef.current.srcObject = null; // Set the video element's srcObject to null
+
         }
     };
 
@@ -33,29 +51,43 @@ const CameraCapture = ({ openCamera, captureCloseCamera }: any) => {
         const dataURL = canvas.toDataURL('image/jpeg');
         setPhotoData(dataURL);
     };
+    const handleCloseCamera = () => {
+        if (openCamera) {
+            stopCamera(); // Stop the camera when closing
+            captureCloseCamera(false, photoData)
+
+        }
+    };
 
     return (
         <div>
-            <div >
+            {openCamera ?
                 <video ref={videoRef} autoPlay style={{ width: "100%", height: "100vh" }} />
-            </div>
+                : ""}
 
             <div >
-                <canvas ref={canvasRef} style={{ display: 'none' }} />
+                <canvas ref={start == true ? canvasRef : null} style={{ display: 'none' }} />
             </div>
-            <button onClick={takePhoto}>Take Photo</button>
-            <button onClick={() => {
-                captureCloseCamera(false)
-                location.reload()
-            }}>Close</button>
+            {photoData ?
+                <button onClick={() => {
+                    captureCloseCamera(false, photoData)
+                    start = false
+                }}>Upload</button> :
+                <button onClick={takePhoto}>Take Photo</button>
+            }
 
-            {photoData && (
-                <div>
-                    <h2>Captured Photo</h2>
-                    <img src={photoData} alt="Captured" />
-                </div>
-            )}
-        </div>
+            <button onClick={handleCloseCamera}>Close</button>
+
+
+            {
+                photoData && (
+                    <div>
+                        <h2>Captured Photo</h2>
+                        <img src={photoData} alt="Captured" />
+                    </div>
+                )
+            }
+        </div >
     );
 };
 

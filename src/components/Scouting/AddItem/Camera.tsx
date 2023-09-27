@@ -1,105 +1,151 @@
+// src/components/Camera.js
 import React, { useState, useRef, useEffect } from 'react';
-import styles from "./camera.module.css";
-const CameraCapture = ({ openCamera, captureCloseCamera }: any) => {
+
+function Camera({ openCamera, captureCloseCamera }: any) {
+    const [stream, setStream] = useState<any>(null);
+    const [mediaRecorder, setMediaRecorder] = useState<any>(null);
     const videoRef: any = useRef(null);
-    const canvasRef: any = useRef(null);
-    const [photoData, setPhotoData] = useState(null);
-    let start = openCamera;
-    let mediaStream: MediaStream | null = null; // Store the media stream
+    const chunks: any = useRef([]);
+
+    const [capturedImageUrl, setCapturedImageUrl] = useState<any>(null);
+    const [capturedVideoUrl, setCapturedVideoUrl] = useState<any>(null);
 
 
     useEffect(() => {
         if (openCamera == true) {
             startCamera()
         }
-        else {
-            stopCamera(); // Stop the camera when it's turned off
-        }
-    }, [openCamera])
+    }, [])
 
     const startCamera = async () => {
+        setCapturedImageUrl(null)
+        setCapturedVideoUrl(null)
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            videoRef.current.srcObject = stream;
-            mediaStream = stream; // Store the media stream reference
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            setStream(mediaStream);
+            videoRef.current.srcObject = mediaStream;
         } catch (error) {
             console.error('Error accessing camera:', error);
         }
     };
+
     const stopCamera = () => {
-
-        if (mediaStream) {
-            mediaStream.getTracks().forEach((track) => {
-                track.stop(); // Stop all tracks in the media stream
-            });
-            mediaStream = null; // Clear the media stream reference
-            videoRef.current.srcObject = null; // Set the video element's srcObject to null
-
+        if (stream) {
+            stream.getTracks().forEach((track: any) => track.stop());
+            setStream(null);
+        }
+        if (mediaRecorder) {
+            mediaRecorder.stop();
+            setMediaRecorder(null);
         }
     };
 
-    const takePhoto = () => {
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
-
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Convert the canvas image to data URL
-        const dataURL = canvas.toDataURL('image/jpeg');
-        setPhotoData(dataURL);
+    const startRecording = () => {
+        if (stream) {
+            const recorder = new MediaRecorder(stream);
+            recorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    chunks.current.push(event.data);
+                }
+            };
+            recorder.onstop = () => {
+                const videoBlob = new Blob(chunks.current, { type: 'video/webm' });
+                chunks.current = [];
+                const videoUrl = URL.createObjectURL(videoBlob);
+                setCapturedVideoUrl(videoUrl)
+                // You can now use `videoUrl` to display or save the recorded video.
+            };
+            recorder.start();
+            setMediaRecorder(recorder);
+        }
     };
-    const handleCloseCamera = () => {
-        if (openCamera) {
-            stopCamera(); // Stop the camera when closing
-            captureCloseCamera(false, photoData)
 
+    const stopRecording = () => {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+        }
+        stopRecording()
+        videoRef.current.srcObject = null;
+
+
+    };
+
+    const capturePhoto = () => {
+        if (stream) {
+            const canvas = document.createElement('canvas');
+            canvas.width = videoRef.current.videoWidth;
+            canvas.height = videoRef.current.videoHeight;
+            const ctx: any = canvas.getContext('2d');
+            ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+            const imageUrl = canvas.toDataURL('image/jpeg');
+            stopCamera()
+            setCapturedImageUrl(imageUrl);
+            // You can now use `imageUrl` to display or save the captured image.
         }
     };
 
     return (
-        <div className={styles.camaraPage}>
-            {openCamera ?
-                <video ref={videoRef} autoPlay style={{ width: "100%", height: "70vh" }} />
-                : ""}
-
-            <div >
-                <canvas ref={start == true ? canvasRef : null} style={{ display: 'none' }} />
-            </div>
-            <div style={{ position: "absolute", bottom: "100px", width: "100%" }}>
-                <div className={styles.buttonGrp}>
-                    <button onClick={handleCloseCamera}>
-                        <img src="/cansel-capture-icon.svg" alt="" />
-                    </button>
-
-
-                    {photoData ?
-                        <button onClick={() => {
-                            captureCloseCamera(false, photoData)
-                            start = false
-                        }}>      <img src="/check-capture-icon.svg" alt="" /></button> :
-                        <button onClick={takePhoto}>
-                            <img src="/check-capture-icon.svg" alt="" />
-                        </button>
-                    }
-
-
-
-                </div>
+        <div>
+            {!capturedImageUrl && !capturedVideoUrl ?
+                <div style={{
+                    position: "relative",
+                    width: "100%",
+                    paddingBottom: "54.77%",
+                }}>
+                    <video ref={videoRef} autoPlay muted style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%"
+                    }} />
+                </div> : ""
+            }
+            <div>
+                {stream && !capturedImageUrl && !capturedVideoUrl ? (
+                    <>
+                        <button onClick={stopCamera}>Close</button>
+                        {mediaRecorder && mediaRecorder.state === 'recording' ? (
+                            <button onClick={stopRecording}>Stop Recording</button>
+                        ) : (
+                            <button onClick={startRecording}>Start Recording</button>
+                        )}
+                        <button onClick={capturePhoto}>Capture</button>
+                    </>
+                ) : (
+                    <button onClick={startCamera}>Open Camera</button>
+                )}
             </div>
 
             {
-                photoData && (
+                capturedImageUrl &&
+                <div>
+                    <img src={capturedImageUrl} alt="Captured" />
+                    <button onClick={startCamera}>Retake</button>
+                    <button onClick={() => {
+                        captureCloseCamera(false, capturedImageUrl)
+                        stopCamera()
+                    }}>upload</button></div>
+            }
+
+
+
+            {
+                capturedVideoUrl && (
                     <div>
-                        <h2>Captured Photo</h2>
-                        <img src={photoData} alt="Captured" />
+                        <video controls>
+                            <source src={capturedVideoUrl} type="video/webm" />
+                        </video>
+                        <button onClick={startCamera}>Retake</button>
+                        <button onClick={() => {
+                            captureCloseCamera(false, capturedVideoUrl)
+                            stopCamera()
+                        }}>upload</button>
                     </div>
                 )
             }
         </div >
     );
-};
+}
 
-export default CameraCapture;
+export default Camera;

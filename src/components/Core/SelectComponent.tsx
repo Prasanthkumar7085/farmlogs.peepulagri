@@ -19,7 +19,7 @@ const SelectComponent = ({ options, ...rest }: any) => {
                 <b>{'All'}</b>
             </MenuItem> : ""}
 
-            {options.length && options.map((item: { value: string, title: string }, index: number) => {
+            {options?.length && options.map((item: { value: string, title: string }, index: number) => {
                 return (
                     <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
                 )

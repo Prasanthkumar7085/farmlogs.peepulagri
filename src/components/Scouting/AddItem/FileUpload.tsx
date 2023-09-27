@@ -1,11 +1,15 @@
 import { Box, Button, FormControl, FormHelperText, Icon, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CameraCapture from "./Camera";
 import Axios from "axios"
 import styles from "./add-scout.module.css";
 import Header1 from "../Header/HeaderComponent";
 import SelectComponent from "@/components/Core/SelectComponent";
 import { useSelector } from "react-redux";
+import Camera from "./Camera";
+import base64ToFile from "@/pipes/base64FileConvert";
+import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 
 
 
@@ -22,18 +26,50 @@ const FileUploadComponent = () => {
     const [multipleFiles, setMultipleFiles] = useState<any>()
     const [fileIndex, setIndex] = useState<any>()
     const [fileProgress, setFileProgress] = useState<number[] | any>();
+    const [defaultValue, setDefaultValue] = useState<any>('');
+    const [formId, setFormId] = useState<any>()
+    const [formOptions, setFarmOptions] = useState<any>()
+    const [selectedCrop, setSelectedCrop] = useState<any>()
+    const [cropOptions, setCropOptions] = useState<any>()
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
-
-
-    const [cropOptions, setCropOptions] = useState<any>([
-        { value: "Jini-2626(R)", title: "Jini-2626(R)" }
-    ])
 
     //convert the kb into mb
     const bytesToMB = (bytes: any) => {
         return bytes / (1024 * 1024);
+    }
+
+    const getFormDetails = async (id: string) => {
+        let response = await getAllFarmsService(accessToken);
+
+        try {
+            if (response?.success && response.data.length) {
+                setFarmOptions(response?.data);
+            } else {
+                setFarmOptions([]);
+            }
+        } catch (err) {
+            console.error(err);
+
+        }
+    }
+    //get all crops name
+    const getCropsDetails = async (id: string) => {
+
+        try {
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`, { method: "GET" });
+            let responseData: any = await response.json();
+
+            if (responseData.success == true) {
+                setCropOptions(responseData?.data);
+
+            } else {
+                setCropOptions([]);
+            }
+        } catch (err) {
+            console.error(err);
+
+        }
     }
 
 
@@ -65,13 +101,18 @@ const FileUploadComponent = () => {
     //start the file upload event
     const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
         let obj = {
-            file_name: file.name
+            file_name: file.name,
+            farm_id: formId,
+            type: file.type,
+            crop_slug: selectedCrop.slug
         }
         let options = {
             method: "POST",
             headers: new Headers({
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'authorization': accessToken
             }),
+
             body: JSON.stringify(obj)
 
         }
@@ -80,8 +121,8 @@ const FileUploadComponent = () => {
             let responseData = await response.json();
             if (responseData.success == true) {
                 console.log(responseData)
-                setUploadId(responseData.uploadId)
-                await uploadFileintoChuncks(responseData.uploadId, file, index, fileProgressCopy, setFileProgress)
+                setUploadId(responseData.data.upload_id)
+                await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
             }
         }
         catch (err) {
@@ -91,18 +132,16 @@ const FileUploadComponent = () => {
     }
 
     //file upload into multipart
-    const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
-        if (!file) {
-            return;
-        }
+    const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function, key: any) => {
 
+        console.log(file)
         const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
         const totalChunks = Math.ceil(file.size / chunkSize);
         const formData = new FormData();
         let resurls;
 
         let obj = {
-            file_name: file.name,
+            file_key: key,
             upload_id: uploadid,
             parts: totalChunks
         }
@@ -151,7 +190,7 @@ const FileUploadComponent = () => {
                     ETag: part.headers.get('Etag').replace(/"/g, ''),
                     PartNumber: index + 1
                 }))
-                await mergeFileChuncksEvent(promiseResponseObj, uploadid, file, index)
+                await mergeFileChuncksEvent(promiseResponseObj, uploadid, key, index)
 
             }
 
@@ -167,7 +206,7 @@ const FileUploadComponent = () => {
     const mergeFileChuncksEvent = async (responseObjs: any, uploadid: any, file: any, index: any) => {
 
         let obj = {
-            file_name: file.name,
+            file_name: file,
             upload_id: uploadid,
             parts: responseObjs
         }
@@ -192,11 +231,6 @@ const FileUploadComponent = () => {
     }
 
 
-
-
-
-
-
     //file upload normal smaller than 5 mb
     const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
         let obj = {
@@ -208,7 +242,7 @@ const FileUploadComponent = () => {
                 "type": item.type,
                 "size": item.size,
                 "source": "scouts",
-                "crop": "chilli"
+                "crop": selectedCrop.slug
             }
         }
 
@@ -240,63 +274,85 @@ const FileUploadComponent = () => {
 
     }
 
+    useEffect(() => {
+        getFormDetails("")
+    }, [accessToken])
+
+
+
+    const addScoutDetails = async () => {
+        try {
+
+        }
+        catch (err) {
+
+        }
+    }
+
     //onClose camera
     const captureCloseCamera = (value: any, file: any) => {
         setOpenCamera(false)
+        let fileAfterconevert = base64ToFile(file, "capture_image", "image/jpeg")
+        let temp: any = []
+        temp.push(fileAfterconevert)
+        setMultipleFiles(temp)
+        const fileProgressCopy = [...new Array(temp?.length).fill(0)]; // Create a copy of the progress array
+        fileUploadEvent(fileAfterconevert, 0, fileProgressCopy, setFileProgress)
 
     }
 
+    const captureFarmName = (selectedObject: any) => {
+        if (selectedObject) {
+            setFormId(selectedObject?._id);
+            getCropsDetails(selectedObject?._id)
 
+        }
+    }
+
+    const captureCropName = (selectedObject: any) => {
+        console.log(selectedObject)
+        if (selectedObject) {
+            setSelectedCrop(selectedObject)
+        }
+    }
 
 
     return (
         <div >
             {openCamera == true ?
-                <CameraCapture openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
+                <Camera openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
+
                 <div>
                     < Header1 name={"Add item"} />
-                    <div id={styles.addCorpsPage}>
+                    <div className={styles.addscout} id="add-scout">
+                        <div className={styles.scoutdetails} id="scout-details">
+                            <div className={styles.addscoutdetails} id="add-scout-details">
+                                <div className={styles.farmselection} id="farm-selection">
+                                    <h5 className={styles.label} id="label-select-farm">
+                                        Select Farm
+                                    </h5>
+                                    <FormControl
+                                        className={styles.selectfarm}
+                                        variant="outlined"
+                                    >
+                                        <InputLabel color="primary" />
+                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={formOptions} captureFarmName={captureFarmName} />
 
-                        <div className={styles.addscout} id="add-scout">
-                            <div className={styles.scoutdetails} id="scout-details">
-                                <div className={styles.addscoutdetails} id="add-scout-details">
-                                    <div className={styles.farmselection} id="farm-selection">
-                                        <h5 className={styles.label} id="label-select-farm">
-                                            Select Farm
-                                        </h5>
-                                        <FormControl
-                                            className={styles.selectfarm}
-                                            variant="outlined"
-                                        >
-                                            <InputLabel color="primary" />
-                                            <Select
-                                                color="primary"
-                                                name="select-farm"
-                                                id="select-farm"
-                                                size="small"
-                                                sx={{
-                                                    width: "100%",
-                                                    background: "#fff"
-
-                                                }}
-                                            >
-                                                <MenuItem value="Farm-1">Farm-1</MenuItem>
-                                                <MenuItem value="Farm-2">Farm-2</MenuItem>
-                                                <MenuItem value="Farm-3">Farm-3</MenuItem>
-                                                <MenuItem value="Farm-4">Farm-4</MenuItem>
-                                                <MenuItem value="Farm-5">Farm-5</MenuItem>
-                                                <MenuItem value="Farm-6">Farm-6</MenuItem>
-                                            </Select>
-                                            <FormHelperText />
-                                        </FormControl>
-                                    </div>
+                                        <FormHelperText />
+                                    </FormControl>
+                                </div>
+                                <div className={styles.inputField}>
+                                    <FormControl className={styles.dropdown} variant="outlined">
+                                        <InputLabel color="primary" />
+                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={cropOptions} captureFarmName={captureCropName} />
+                                        <FormHelperText />
+                                    </FormControl>
+                                </div>
+                                <div className={styles.farmselection} id="images">
                                     <div className={styles.inputField}>
-                                        <FormControl className={styles.dropdown} variant="outlined">
-                                            <InputLabel color="primary" />
-                                            <SelectComponent options={cropOptions} placeholder="Select Folder" color="primary" name="crops" id="crops" />
-                                            <FormHelperText />
-                                        </FormControl>
+                                        <div className={styles.label1}></div>
                                     </div>
+
                                     <div className={styles.farmselection} id="images">
                                         <div className={styles.inputField}>
                                             <div className={styles.label1}>Images</div>

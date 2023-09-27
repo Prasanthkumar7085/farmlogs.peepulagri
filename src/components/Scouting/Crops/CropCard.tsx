@@ -2,8 +2,9 @@ import type { NextPage } from "next";
 import { memo, useCallback } from "react";
 import styles from "./crop-card.module.css";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import timePipe from "@/pipes/timePipe";
 
-const CropCard: NextPage = () => {
+const CropCard = ({ itemDetails }: any) => {
 
     return (
         <div id={styles.allCropCardBlock}>
@@ -13,8 +14,8 @@ const CropCard: NextPage = () => {
                     <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1rem" }} />
                 </div>
                 <div className={styles.textWrapper}>
-                    <h2 className={styles.FieldCrop}>Red Chilli Field</h2>
-                    <p className={styles.aug2023}>23, Aug 2023</p>
+                    <h2 className={styles.FieldCrop}>{itemDetails.title}</h2>
+                    <p className={styles.aug2023}>{timePipe(itemDetails.createdAt, "DD-MM-YYYY")}</p>
                 </div>
             </div>
         </div>

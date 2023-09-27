@@ -2,10 +2,12 @@ import type { NextPage } from "next";
 import { useCallback } from "react";
 import styles from "./farm-card.module.css";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const FarmCard: NextPage = () => {
+  const router = useRouter();
   const onFarmCardClick = useCallback(() => {
-    // Please sync "View Farm" to the project
+    router.push('/scouting/forms/view')
   }, []);
 
   return (

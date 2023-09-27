@@ -326,7 +326,7 @@ const FileUploadComponent = () => {
                     </div>
 
                     {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
-                        <div className={styles.uploadprogress} id="upload-progress">
+                        <div className={styles.uploadprogress} id="upload-progress" key={index}>
                             <div className={styles.progress} id="progress">
                                 <img className={styles.image21} alt="" src="/image-2-1.svg" />
                                 <div className={styles.progressdetails}>

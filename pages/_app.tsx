@@ -25,7 +25,7 @@ function MyApp({
     return (
         <ThemeProvider theme={theme}>
             <Provider store={store}>
-                {router.pathname.includes("scouting") ?
+                {router.pathname.includes("farms") ?
 
 
                     <ScoutingHeader>

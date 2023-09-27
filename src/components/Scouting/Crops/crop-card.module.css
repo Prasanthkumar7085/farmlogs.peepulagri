@@ -1,0 +1,55 @@
+.folderIcon {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.threedotsIcon {
+  max-height: 100%;
+  width: 2.67px;
+  object-fit: cover;
+}
+.icons {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.aug2023,
+.redChilliField {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  line-height: 100%;
+}
+.redChilliField {
+  font-size: inherit;
+  font-weight: 500;
+  font-family: inherit;
+}
+.aug2023 {
+  font-size: var(--font-size-xs);
+  color: var(--body);
+}
+.cropcard,
+.textWrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+}
+.cropcard {
+  border-radius: var(--br-5xs);
+  background-color: var(--color-aliceblue);
+  padding: var(--padding-9xs) var(--padding-5xs) var(--padding-5xs);
+  gap: var(--gap-9xs);
+  cursor: pointer;
+  text-align: left;
+  font-size: var(--text-md-medium-size);
+  color: var(--color-black);
+  font-family: var(--text-sm-normal);
+}

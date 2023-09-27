@@ -5,48 +5,24 @@ import { useRouter } from "next/router";
 import FarmDetailsMiniCard from "../AddLogs/farm-details-mini-card";
 import FarmDetailsCard from "../TimeLine/FarmDetailsCard";
 
-const SelectComponenentForLogs = ({ loading, setDefaultValue, options, captureFarmName, defaultValue, ...rest }: any) => {
+const SelectComponenentForFarms = ({ loading, setDefaultValue, options, captureFarmName, defaultValue, ...rest }: any) => {
 
     const router = useRouter();
 
     const [statusOptions, setStatusOptions] = useState<any>();
     const [farmOptions, setFarmOptions] = useState<any>()
-    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     let handleStatusChange = (event: any) => {
 
         let selectedOption = event.target.value;
-        let selectedObject = farmOptions.find((item: any) => item.title == selectedOption);
-        router.push({ pathname: "/timeline", query: { farm_id: selectedObject?._id } });
+        let selectedObject = options.find((item: any) => item.title == selectedOption);
         setStatusOptions(selectedObject);
         captureFarmName(selectedObject);
 
     }
-    useEffect(() => {
-        getFormDetails()
-    }, [accessToken, router?.query?.farm_id]);
 
 
-    const getFormDetails = async () => {
 
-        setFarmOptions(options);
-        if (options && options?.length) {
-            if (router.query?.farm_id) {
-                const array = options.find((item: any) => item?._id == router.query?.farm_id)
-                setDefaultValue(array?.title)
-
-            } else {
-                setDefaultValue(options[0].title);
-            }
-
-
-        }
-
-        // let response = await getAllFarmsService(accessToken)
-        // if (response?.success) {
-        //     setFarmOptions(response?.data);
-        // }
-    }
 
 
     return (
@@ -83,14 +59,14 @@ const SelectComponenentForLogs = ({ loading, setDefaultValue, options, captureFa
 
         >
 
-            {!loading ? <Select
+            <Select
                 {...rest}
                 value={statusOptions?.title ? statusOptions?.title : defaultValue}
                 onChange={handleStatusChange}
-                sx={{ width: "150px" }}
+                sx={{ width: "400px" }}
             >
 
-                {farmOptions?.length && farmOptions.map((item: any, index: number) => {
+                {options?.length && options.map((item: any, index: number) => {
                     return (
                         <MenuItem value={item.title} key={index}>
                             {item.title}
@@ -98,9 +74,8 @@ const SelectComponenentForLogs = ({ loading, setDefaultValue, options, captureFa
                     )
                 })}
 
-            </Select> : ""}
-            {/* <FarmDetailsCard /> */}
+            </Select>
         </FormControl>
     )
 }
-export default SelectComponenentForLogs
+export default SelectComponenentForFarms

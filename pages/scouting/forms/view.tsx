@@ -1,10 +1,10 @@
 import ViewFarmPage from "@/components/Scouting/Forms/view-farm";
-import Header1 from "@/components/Scouting/Header/HeaderComponent";
+import ViewHeader from "@/components/Scouting/Header/ViewHeader";
 
 const FormView = () => {
     return (
         <div>
-            <Header1 name={'View'} />
+            <ViewHeader name={'View'} />
             <ViewFarmPage />
         </div>
     );

@@ -43,6 +43,11 @@ const ScoutingHeader = ({ children }: any) => {
                 <Drawer
                     anchor={'right'}
                     open={state['right']}
+                    sx={{
+                        '& .MuiBox-root': {
+                            height: "100vh"
+                        }
+                    }}
                 >
                     {list('right')}
                 </Drawer>

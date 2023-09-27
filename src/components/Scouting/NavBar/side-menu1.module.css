@@ -11,25 +11,17 @@
 .profile {
   flex-direction: row;
   align-items: center;
-  gap: var(--gap-5xs);
+  gap: 1rem;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-}
 
 .menuBar1 {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 1rem;
 }
 
 .menuBar1 img {
-  width: 100%;
-}
-
-.header {
-  justify-content: space-between;
   width: 100%;
 }
 
@@ -87,11 +79,14 @@
   line-height: 100%;
 }
 
+#sideMenu {
+  padding: 1rem 2rem;
+}
+
 .sideMenu {
   flex: 1;
   background-color: #A05148;
   justify-content: flex-start;
-  padding: 54px 24px 24px 24px;
   gap: var(--gap-29xl);
-
+  height: 100%;
 }

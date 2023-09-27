@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
     TextField,
     Icon,
@@ -13,6 +13,9 @@ import addFarmService from "../../../../lib/services/FarmsService/addFarmService
 import { useSelector } from "react-redux";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
+import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
+import { FarmDataType } from "@/types/farmCardTypes";
+import editFarmService from "../../../../lib/services/FarmsService/editFarmService";
 
 
 
@@ -28,29 +31,56 @@ const AddFarmForm = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
+    const [data, setData] = useState<FarmDataType>();
+
+    const [title, setTitle] = useState<string>();
+    const [location, setLocation] = useState<string>();
+    const [area, setArea] = useState<string>();
+
+    const geometryDemo={
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            [
+                                -121.88883540217063,
+                                50.97489195799901,
+                                0
+                            ],
+                            [
+                                -121.88883523174192,
+                                50.97072525131302,
+                                0
+                            ],
+                            [
+                                -121.8950854466247,
+                                50.97072527980969,
+                                0
+                            ],
+                            [
+                                -121.89508560169767,
+                                50.97489198254216,
+                                0
+                            ]
+                        ]
+                    ]
+                ]
+            }
 
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm()
-
-
-    const onSubmitClick = async (data: any) => {
-        setErrorMessages({});
-        setLoading(true);
-
-        const { location, title, area } = data;
-
-        let obj = {
+    } = useForm({
+        defaultValues: {
             title: title,
             area: area ? +area : null,
             location: location
-        };
+        }
+    });
 
-        let response = await addFarmService(obj, accessToken);
-
+    const detailsAfterResponse = (response: any) => {
         if (response?.success) {
 
             setAlertMessage(response?.message);
@@ -61,13 +91,59 @@ const AddFarmForm = () => {
             }, 1000);
 
         } else if (response?.status == 422) {
-
             setErrorMessages(response?.errors);
-
             setAlertMessage(response?.message);
             setAlertType(false);
+        } else {
+            setAlertMessage('Failed while saving the Farm Details');
+            setAlertType(false);
         }
+    };
+
+    const addFarm = async (data:any) => {
+        const { location, title, area } = data;
+
+        let obj = {
+            title: title,
+            area: area?+area:null,
+            location: location,
+            geometry:geometryDemo
+        };
+
+        let response = await addFarmService(obj, accessToken);
+        detailsAfterResponse(response);
         setLoading(false);
+    }
+    const edtiFarm = async (obj: any) => {
+        
+        let editedData: any= { ...data };
+
+        Object.keys(obj).map((item:string) => {
+            editedData[item] = obj[item];
+        })
+
+        const response = await editFarmService(editedData, accessToken);
+        detailsAfterResponse(response);
+        setLoading(false);
+        
+    };
+
+    const onSubmitClick = async (data: any) => {
+        setErrorMessages({});
+        setLoading(true);
+        
+        if (router.query.farm_id) {
+            let obj = {
+                title: title,
+                location: location,
+                area: area?+area:null,
+                geometry:geometryDemo
+            }
+            edtiFarm(obj);
+        } else {
+            addFarm(data)
+        }
+       
     };
 
     const handleKeyPress = (event: any) => {
@@ -78,6 +154,29 @@ const AddFarmForm = () => {
             event.preventDefault();
         }
     };
+
+
+  const getFarmDataById = async () => {
+    setLoading(true);
+    
+    const response: any = await getFarmByIdService(router.query.farm_id as string,accessToken as string);
+    
+    if (response.success) {
+        setData(response.data);
+        
+        setArea(response?.data?.area);
+        setTitle(response?.data?.title);
+        setLocation(response?.data?.location);
+    }
+    setLoading(false);
+  }
+
+
+    useEffect(() => {
+        if (router.isReady && accessToken && router.query.farm_id) {
+            getFarmDataById();
+       }
+    },[router.isReady,accessToken]);
 
     return (
         <form onSubmit={handleSubmit(onSubmitClick)}>
@@ -100,6 +199,8 @@ const AddFarmForm = () => {
                             variant="outlined"
                             error={Boolean(errorMessages?.['title'])}
                             helperText={errorMessages?.['title'] ? errorMessages?.['title'] : ""}
+                            value={title}
+                            onChange={(e)=>setTitle(e.target.value)}
                         />
                     </div>
                     {/* <div className={styles.addlocationbutton} id="add-location">
@@ -134,6 +235,8 @@ const AddFarmForm = () => {
                             variant="outlined"
                             error={Boolean(errorMessages?.['location'])}
                             helperText={errorMessages?.['location'] ? errorMessages?.['location'] : ""}
+                            value={location}
+                            onChange={(e)=>setLocation(e.target.value)}
                         />
                     </div>
                     <div className={styles.farmname} id="acres">
@@ -159,6 +262,8 @@ const AddFarmForm = () => {
                             inputProps={{
                                 step: 'any'
                             }}
+                            value={area}
+                            onChange={(e)=>setArea(e.target.value)}
                         />
                     </div>
                     <div className={styles.buttons}>

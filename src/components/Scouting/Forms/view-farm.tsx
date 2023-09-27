@@ -19,7 +19,6 @@ const ViewFarmPage = () => {
 
   const getFarmDataById = async () => {
     setLoading(true);
-    console.log(accessToken);
     
     const response: any = await getFarmByIdService(router.query.farm_id as string,accessToken as string);
     

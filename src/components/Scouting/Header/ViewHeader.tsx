@@ -72,7 +72,7 @@ const ViewHeader = ({ name }: any) => {
                 'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={handleClose}>Edit</MenuItem>
+                <MenuItem onClick={()=>router.push(`/farms/${router.query.farm_id}/edit`)}>Edit</MenuItem>
                     <MenuItem onClick={() => { setDialogOpen(true); setAnchorEl(null)}}>Delete</MenuItem>
             
             </Menu>

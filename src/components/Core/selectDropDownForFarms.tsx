@@ -29,18 +29,14 @@ const SelectComponenentForFarms = ({ loading, setDefaultValue, options, captureF
         <FormControl
             size="small"
             sx={{
-                position: "sticky",
-                top: "0px",
+                // position: "sticky",
+                // top: "px",
                 width: "100%",
-                zIndex: "150",
+                // zIndex: "150",
                 textAlign: "center",
                 '& .MuiInputBase-root': {
                     fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                    fontFamily: "'IBM plex sans', sans-serif",
-                    backgroundColor: "brown",
                     border: "none",
-                    width: "200px",
-                    margin: "20px 20px 0",
                 },
 
                 '& .MuiSelect-nativeInput': {
@@ -48,9 +44,9 @@ const SelectComponenentForFarms = ({ loading, setDefaultValue, options, captureF
                     bottom: "inherit",
                     padding: "8px 3px 8px 8px",
                     border: "1px solid rgba(0, 0, 0, 0.231372549) !important",
-                    borderRadius: "5px",
+                    borderRadius: "4px",
                     fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                    height: "40px",
+                    height: "35px",
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                     border: "none !important"
@@ -63,7 +59,7 @@ const SelectComponenentForFarms = ({ loading, setDefaultValue, options, captureF
                 {...rest}
                 value={statusOptions?.title ? statusOptions?.title : defaultValue}
                 onChange={handleStatusChange}
-                sx={{ width: "400px" }}
+                fullWidth
             >
 
                 {options?.length && options.map((item: any, index: number) => {

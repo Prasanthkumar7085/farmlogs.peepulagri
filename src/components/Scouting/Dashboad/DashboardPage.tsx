@@ -92,7 +92,7 @@ const DashboardPage = () => {
         <div id="dashboardPage">
             <DashBoardHeader captureSearchString={captureSearchString} searchString={searchString} />
             <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} />
-            <div className="addFormPositionIcon" style={{ position: 'fixed' }}>
+            <div className="addFormPositionIcon" >
                 <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
             </div>
             <LoadingComponent loading={loading} />

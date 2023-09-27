@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import { useSelector } from "react-redux";
 import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
+import { useRouter } from "next/router";
 
 const AllCropsComponent = () => {
 
@@ -12,7 +13,7 @@ const AllCropsComponent = () => {
     const [formId, setFormId] = useState<any>()
     const [formOptions, setFarmOptions] = useState<any>()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
+    const router = useRouter();
     const getFormDetails = async (id: string) => {
         let response = await getAllFarmsService(accessToken);
 
@@ -53,10 +54,13 @@ const AllCropsComponent = () => {
     return (
         <div>
             <Header1 name={"My Crops"} />
-            <div>
+            <div style={{ padding: "1rem" }}>
                 <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={formOptions} captureFarmName={captureFarmName} />
             </div>
             <CropCard />
+            <div className="addFormPositionIcon" >
+                <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
+            </div>
         </div>
     )
 }

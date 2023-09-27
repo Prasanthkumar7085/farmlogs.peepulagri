@@ -4,8 +4,10 @@ import styles from "./farm-card.module.css";
 import Image from "next/image";
 import { FarmDataType, PaginationInFarmResponse } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
+import NoDataComponent from "@/components/Core/NoDataComponent";
+import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 
-const FarmCard = ({ farmsData,paginationDetails }: {farmsData:Array<FarmDataType>,paginationDetails:PaginationInFarmResponse|undefined}) => {
+const FarmCard = ({ farmsData,paginationDetails,loading }: {farmsData:Array<FarmDataType>,paginationDetails:PaginationInFarmResponse|undefined,loading:boolean}) => {
  
   const onFarmCardClick = (item:FarmDataType) => {
     
@@ -40,7 +42,9 @@ const FarmCard = ({ farmsData,paginationDetails }: {farmsData:Array<FarmDataType
             </div>
           </div>
         )
-      }):""}
+      }) :
+       (!loading? <NoFarmDataComponent noData={!Boolean(farmsData.length)} />:"")
+      }
       
     </div>
   );

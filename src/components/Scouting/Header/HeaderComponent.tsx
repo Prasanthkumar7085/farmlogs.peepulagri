@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 const Header1 = ({ name }: any) => {
 
     const router = useRouter();
-    
+
     return (
         <div className={styles.header} id="header">
             <img

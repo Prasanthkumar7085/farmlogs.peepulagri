@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { IconButton, Tooltip } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { removeUserDetails } from "@/Redux/Modules/Auth";
@@ -65,8 +65,8 @@ const SideBarMenu = ({ children }: any) => {
     }
     return (
         <div>
+            <div id={'web-dashboard'}>
             <aside className={styles.sidebarmenu}>
-
                 <nav className={styles.menubar}>
                     <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} onClick={() => router.push('/farm')} />
                     <List>
@@ -106,6 +106,10 @@ const SideBarMenu = ({ children }: any) => {
             <div className={styles.main}>
                 {children}
             </div>
+            </div>
+             <div id='mobile-view'>
+                <Button variant={'contained'} onClick={()=>router.push('/farms')}>Go To Mobile View Page</Button>
+        </div>
         </div>
     );
 };

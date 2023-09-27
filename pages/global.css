@@ -242,6 +242,22 @@ body {
         display: none;
     }
 }
+@media (max-width:768px) {
+    #web-dashboard {
+        display: none;
+    }
+}
+
+@media (max-width:768px) {
+    #mobile-view {
+        display: block;
+    }
+}
+@media (min-width:768px) {
+    #mobile-view {
+        display: none;
+    }
+}
 
 .MuiOutlinedInput-notchedOutline {
     border-color: #B4C1D6 !important;

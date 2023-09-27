@@ -8,18 +8,20 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
+import getAllLocationsService from "../../../../lib/services/Locations/getAllLocations";
 
 
 const DashboardPage = () => {
-
+    
     const router = useRouter();
-
+    
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
+    
     const [farmsData, setFarmsData] = useState<Array<FarmDataType>>([]);
     const [paginationDetails, setPaginationDetails] = useState<PaginationInFarmResponse>();
     const [loading, setLoading] = useState(true);
     const [searchString, setSearchString] = useState('');
+    const [locations, setLocations] = useState<Array<string>>([]);
 
     const getAllFarms = async ({ page = 1, limit = 100, search_string = '' }: Partial<{ page: number, limit: number, search_string: string }>) => {
 
@@ -70,6 +72,18 @@ const DashboardPage = () => {
         return () => clearTimeout(debounce);
     };
 
+
+    const getAllLocations = async () => {
+        const response = await getAllLocationsService(accessToken);
+        if (response.success) {
+            setLocations(response?.data);
+        }
+        
+    }
+
+    useEffect(() => {
+        getAllLocations();
+    },[])
     useEffect(() => {
         if (router.isReady && accessToken) {
             let searchFromRouter = router.query.search_string;
@@ -91,7 +105,7 @@ const DashboardPage = () => {
 
     return (
         <div id="dashboardPage">
-            <DashBoardHeader captureSearchString={captureSearchString} searchString={searchString} />
+            <DashBoardHeader captureSearchString={captureSearchString} searchString={searchString} locations={locations} />
             {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} /> :
                 (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> :
                     <div style={{ minHeight: "75vh" }}>

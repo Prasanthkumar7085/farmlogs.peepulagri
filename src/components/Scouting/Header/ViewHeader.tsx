@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import styles from "./head.module.css";
 import { Typography } from "@mui/material";
 
-const Header1 = ({ name }: any) => {
+const ViewHeader = ({ name }: any) => {
     return (
         <div className={styles.header} id="header">
             <img
@@ -12,9 +12,11 @@ const Header1 = ({ name }: any) => {
             />
             <Typography className={styles.viewFarm}>{name}</Typography>
             <div className={styles.headericon} id="header-icon">
+                <img className={styles.headericonChild} alt="" src="/frame-40561.svg" />
+
             </div>
         </div>
     );
 };
 
-export default Header1;
+export default ViewHeader;

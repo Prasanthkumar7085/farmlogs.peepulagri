@@ -1,0 +1,132 @@
+.farm1 {
+  color: #05A155;
+  font-family: Inter;
+  font-size: clamp(20px, 5vw, 24px);
+  font-weight: 500;
+  line-height: 100%;
+  font-weight: 500;
+}
+
+.aug2023 {
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(12px, 3.5vw, 16px);
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.32px;
+}
+
+
+.farmdetailsblock {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.farmdetailsblock {
+  gap: 0.5rem;
+}
+
+
+.text {
+  color: #35353D;
+  font-family: Inter;
+  font-size: clamp(12px, 3.5vw, 16px);
+  font-weight: 800;
+  line-height: 18px;
+}
+
+.acres {
+  font-size: clamp(12px, 3.5vw, 16px);
+  color: #A05148;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+
+.farmareaheading {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.farmareainacres {
+  height: 20px;
+}
+
+.farmarea,
+.farmareaheading {
+  color: var(--brown);
+}
+
+.farmareaheading {
+  gap: .3125rem;
+}
+
+.mapimage6Icon {
+  position: absolute;
+  top: calc(50% - 74px);
+  left: calc(50% - 181px);
+  width: 430px;
+  height: 932.21px;
+  object-fit: cover;
+}
+
+.locationIcon {
+  position: absolute;
+  top: calc(50% - 14px);
+  left: 223px;
+  width: 24px;
+  height: 28px;
+}
+
+.map {
+  align-self: stretch;
+  position: relative;
+  border-radius: var(--br-5xs);
+  background-color: var(--white);
+  height: 148px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+
+.locationMarked {
+  margin: 0;
+  line-height: 140%;
+  font-weight: 500;
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(12px, 3.5vw, 16px);
+}
+
+.locationMarked span {
+  color: #000 !important;
+}
+
+.locationdetailsblock {
+  align-items: flex-start;
+  gap: var(--gap-5xs);
+}
+
+
+.locationdetailsblock,
+.viewfarm {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.locationdetails {
+  align-items: flex-end;
+  color: var(--color-black);
+}
+
+.viewfarm {
+  gap: var(--gap-base);
+  padding: 1rem;
+}

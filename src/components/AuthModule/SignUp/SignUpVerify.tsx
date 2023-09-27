@@ -169,7 +169,7 @@ const SignUpVerify = () => {
           <div>
             <Typography className={styles.label}>{"We've sent an OTP to your phone number"}</Typography>
             <TextField
-            autoFocus
+              autoFocus
               fullWidth
               error={Boolean(errorMessages?.otp) }
               helperText={errorMessages?.otp}

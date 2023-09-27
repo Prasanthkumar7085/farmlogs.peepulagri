@@ -1,11 +1,11 @@
 import { Box, Button, FormControl, FormHelperText, Icon, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
-import CameraCapture from "./Camera";
 import Axios from "axios"
-import styles from "./add-scout.module.css";
-import Header1 from "../Header/HeaderComponent";
-import SelectComponent from "@/components/Core/SelectComponent";
-import { useSelector } from "react-redux";
+import CameraCapture from "./AddItem/Camera";
+import Header1 from "./Header/HeaderComponent";
+import styles from "./AddItem/add-scout.module.css"
+import SelectComponent from "../Core/SelectComponent";
+
 
 
 
@@ -18,52 +18,29 @@ const FileUploadComponent = () => {
     const [presignedUrls, sestPresignedUrls] = useState<any>()
     const [progress, setProgress] = useState<any>(2)
     const [openCamera, setOpenCamera] = useState<any>(false)
-    const [loading, setLoading] = useState<any>(false)
-    const [multipleFiles, setMultipleFiles] = useState<any>()
-    const [fileIndex, setIndex] = useState<any>()
-    const [fileProgress, setFileProgress] = useState<number[] | any>();
-
-    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
-
 
     const [cropOptions, setCropOptions] = useState<any>([
         { value: "Jini-2626(R)", title: "Jini-2626(R)" }
     ])
 
-    //convert the kb into mb
-    const bytesToMB = (bytes: any) => {
-        return bytes / (1024 * 1024);
-    }
-
-
-    //select the when input select 
-    const handleFileChange = async (e: any) => {
-
-        setMultipleFiles(e.target.files)
-        setFileProgress(new Array(e.target.files?.length).fill(0))
-        const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array
-
-        Array.from(e.target.files).map(async (item: any, index: number) => {
-            setIndex(index)
-            setSelectedFile(item);
-            setFileSize(item.size);
-            const bytesToMB = (bytes: any) => {
-                return bytes / (1024 * 1024);
-            }
-            if (bytesToMB(item.size) >= 5) {
-                setUploadIntoChuncks(true)
-                await startUploadEvent(item, index, fileProgressCopy, setFileProgress)
-            }
-            else {
-                setUploadIntoChuncks(false)
-                await fileUploadEvent(item, index, fileProgressCopy, setFileProgress)
-            }
-        })
+    const handleFileChange = (e: any) => {
+        setSelectedFile(e.target.files[0]);
+        setFileSize(e.target.files[0].size);
+        //file in mb
+        const bytesToMB = (bytes: any) => {
+            return bytes / (1024 * 1024);
+        }
+        if (bytesToMB(e.target.files[0].size) >= 5) {
+            setUploadIntoChuncks(true)
+            startUploadEvent(e.target.files[0])
+        }
+        else {
+            setUploadIntoChuncks(false)
+            fileUploadEvent()
+        }
     };
 
-    //start the file upload event
-    const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
+    const startUploadEvent = async (file: any) => {
         let obj = {
             file_name: file.name
         }
@@ -81,7 +58,7 @@ const FileUploadComponent = () => {
             if (responseData.success == true) {
                 console.log(responseData)
                 setUploadId(responseData.uploadId)
-                await uploadFileintoChuncks(responseData.uploadId, file, index, fileProgressCopy, setFileProgress)
+                uploadFileintoChuncks(responseData.uploadId, file)
             }
         }
         catch (err) {
@@ -91,7 +68,7 @@ const FileUploadComponent = () => {
     }
 
     //file upload into multipart
-    const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
+    const uploadFileintoChuncks = async (uploadid: any, file: any) => {
         if (!file) {
             return;
         }
@@ -117,7 +94,7 @@ const FileUploadComponent = () => {
 
         try {
             // Send the chunk to the server using a POST request
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`, options);
+            let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`, options);
             let responseData: any = await response.json();
             if (responseData.success == true) {
 
@@ -137,12 +114,13 @@ const FileUploadComponent = () => {
                         body: chunk,
                     });
 
-                    const progress = ((currentChunk + 1) / totalChunks) * 100;
+                    const progress: any = ((currentChunk + 1) / totalChunks) * 100;
+                    setProgress(progress);
 
                     promises.push(response)
+                    console.log(response.headers.get('Etag'))
 
-                    fileProgressCopy[index] = progress;
-                    setFileProgress([...fileProgressCopy]);
+
                 }
 
 
@@ -151,10 +129,10 @@ const FileUploadComponent = () => {
                     ETag: part.headers.get('Etag').replace(/"/g, ''),
                     PartNumber: index + 1
                 }))
-                await mergeFileChuncksEvent(promiseResponseObj, uploadid, file, index)
+                mergeFileChuncksEvent(promiseResponseObj, uploadid, file)
+                console.log(promiseResponseObj)
 
             }
-
 
         } catch (error) {
             console.error('Error uploading chunk:', error);
@@ -162,9 +140,7 @@ const FileUploadComponent = () => {
 
     }
 
-
-    //last part of the file upload (merge all presigned urls)
-    const mergeFileChuncksEvent = async (responseObjs: any, uploadid: any, file: any, index: any) => {
+    const mergeFileChuncksEvent = async (responseObjs: any, uploadid: any, file: any) => {
 
         let obj = {
             file_name: file.name,
@@ -183,6 +159,8 @@ const FileUploadComponent = () => {
         try {
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/complete-upload`, options);
             let responseData: any = await response.json();
+            console.log(responseData, "after")
+            setProgress(100); // Set progress to 100% when done
 
         }
         catch (err) {
@@ -197,42 +175,23 @@ const FileUploadComponent = () => {
 
 
 
-    //file upload normal smaller than 5 mb
-    const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
-        let obj = {
-
-            "attachment":
-            {
-
-                "original_name": item.name,
-                "type": item.type,
-                "size": item.size,
-                "source": "scouts",
-                "crop": "chilli"
-            }
-        }
+    //file upload 
+    const fileUploadEvent = async () => {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
 
         let options: any = {
             method: "POST",
-            body: JSON.stringify(obj),
-            headers: new Headers({
-                'content-type': 'application/json',
-                'authorization': accessToken
-
-            }),
-
+            body: formData
         }
 
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/650a63d9760e446071bc08d7/attachments`, options);
-            let responseData = await response.json();
-            if (responseData.success == true) {
-                console.log(responseData)
-                let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT" });
-                fileProgressCopy[index] = 100;
-                setFileProgress([...fileProgressCopy]);
-            }
-
+            // let response = await fetch("url", options);
+            // let responseData = await response.json();
+            // if (responseData) {
+            //     let preSignedResponse = await fetch("", { method: "PUT" });
+            // }
+            console.log("lo")
         }
         catch (err) {
             console.log(err)
@@ -241,9 +200,8 @@ const FileUploadComponent = () => {
     }
 
     //onClose camera
-    const captureCloseCamera = (value: any, file: any) => {
+    const captureCloseCamera = (value: any) => {
         setOpenCamera(false)
-
     }
 
 
@@ -255,7 +213,7 @@ const FileUploadComponent = () => {
                 <CameraCapture openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
 
                 <div>
-                    < Header1 name={"Add item"} />
+                    <Header1 name={"Add item"} />
                     <div className={styles.addscout} id="add-scout">
                         <div className={styles.scoutdetails} id="scout-details">
                             <div className={styles.addscoutdetails} id="add-scout-details">
@@ -316,7 +274,6 @@ const FileUploadComponent = () => {
                                             className={styles.uploadimage}
                                             type="file"
                                             alt="images-upload"
-                                            multiple
                                             onChange={handleFileChange}
                                         />
                                     </div>
@@ -325,16 +282,16 @@ const FileUploadComponent = () => {
                         </div>
                     </div>
 
-                    {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
-                        <div className={styles.uploadprogress} id="upload-progress" key={index}>
+                    {selectedFile ?
+                        <div className={styles.uploadprogress} id="upload-progress">
                             <div className={styles.progress} id="progress">
                                 <img className={styles.image21} alt="" src="/image-2-1.svg" />
                                 <div className={styles.progressdetails}>
                                     <div className={styles.uploaddetails}>
                                         <div className={styles.uploadcontroller}>
                                             <div className={styles.uploadname}>
-                                                <div className={styles.photojpg}>{item.name}</div>
-                                                <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                                                <div className={styles.photojpg}>Photo.jpg</div>
+                                                <div className={styles.photojpg}>7.5mb</div>
                                             </div>
                                             <img
                                                 className={styles.close41}
@@ -343,20 +300,16 @@ const FileUploadComponent = () => {
                                             />
                                         </div>
                                         <Box sx={{ width: '100%' }}>
-                                            <LinearProgress variant="determinate" value={fileProgress[index]} />
+                                            <LinearProgress variant="determinate" value={progress} />
                                         </Box>
                                     </div>
                                     <div className={styles.uploadstatus}>
-                                        <div className={styles.completed}>{fileProgress[index]}%</div>
-
+                                        <div className={styles.completed}>{progress == 100 ? "completed" : progress + "%"}</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-
-
-                    < div className={styles.scoutdescription} id="scout-description">
+                        </div> : ""}
+                    <div className={styles.scoutdescription} id="scout-description">
                         <div className={styles.descriptionblock}>
                             <div className={styles.addscoutdetails}>
                                 <div className={styles.inputField}>
@@ -407,7 +360,7 @@ const FileUploadComponent = () => {
                         </div>
                     </div>
                 </div>}
-        </div >
+        </div>
 
 
     )

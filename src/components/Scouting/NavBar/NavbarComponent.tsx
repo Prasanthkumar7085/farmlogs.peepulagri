@@ -11,32 +11,34 @@ type Anchor = 'top' | 'left' | 'bottom' | 'right';
 const ScoutingHeader = ({ children }: any) => {
 
     const [state, setState] = useState({ right: false });
-    
-    const toggleDrawer = (open: boolean) =>{
-      setState({ ...state, 'right': open });
+
+    const toggleDrawer = (open: boolean) => {
+        setState({ ...state, 'right': open });
     };
 
 
-     const list = (anchor: Anchor) => (
+    const list = (anchor: Anchor) => (
         <Box
             sx={{ width: '100%' }}
             role="presentation"
-            >
-             <SideMenu1 toggleDrawer={toggleDrawer} />
-    </Box>
-     );
-    
+        >
+            <SideMenu1 toggleDrawer={toggleDrawer} />
+        </Box>
+    );
+
     return (
         <div id="mobileBody">
-            <div className={styles.navbar} id="navbar">
-                <ImageComponent src="/Logo-color.svg" width="70" height="60" />
-                <IconButton onClick={()=>toggleDrawer(true)}>
-                    <img className={styles.menuIicon} alt="options" src="/menuiicon.svg" />
-                </IconButton>
+            <div id={styles.navBar}>
+                <div className={styles.navbar} >
+                    <ImageComponent src="/Logo-color.svg" width="70" height="60" />
+                    <IconButton onClick={() => toggleDrawer(true)}>
+                        <img className={styles.menuIicon} alt="options" src="/menuiicon.svg" />
+                    </IconButton>
+                </div>
             </div>
             {children}
 
-          
+
             <React.Fragment>
                 <Drawer
                     anchor={'right'}

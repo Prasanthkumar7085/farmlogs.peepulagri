@@ -8,9 +8,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
     background-color: #fff;
     padding-bottom: 0;
+    padding: 1rem;
+}
+
+#navBar {
+    width: 100%;
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    background-color: #fff;
 }
 
 .navbar button {

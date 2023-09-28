@@ -80,7 +80,7 @@ const SingleViewScoutComponent = () => {
 
     ];
     return (
-        <div >
+        <div style={{ padding: "1rem" }}>
 
             <div role="presentation">
                 <Breadcrumbs aria-label="breadcrumb">

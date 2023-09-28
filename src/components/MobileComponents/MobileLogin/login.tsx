@@ -79,7 +79,7 @@ const MobileLogin: NextPage = () => {
             <div className={styles.loginheader}>
               <Typography variant="h5" className={styles.welcomeBack1}>Welcome Back</Typography>
               <Typography className={styles.enterPhoneNumber}>
-                Enter Phone Number to Access Your Account
+                Enter Mobile Number to Access Your Account
               </Typography>
             </div>
             <TextField

@@ -4,11 +4,12 @@ import { IconButton } from "rsuite";
 import React, { useState } from "react";
 import { Box, Drawer } from "@mui/material";
 import SideMenu1 from "./side-menu1";
+import { useRouter } from "next/router";
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const ScoutingHeader = ({ children }: any) => {
-
+    const router = useRouter();
     const [state, setState] = useState({ right: false });
 
     const toggleDrawer = (open: boolean) => {
@@ -29,7 +30,7 @@ const ScoutingHeader = ({ children }: any) => {
         <div id="mobileBody">
             <div id={styles.navBar}>
                 <div className={styles.navbar}>
-                    <ImageComponent src="/Logo-color.svg" width="70" height="60" />
+                    <ImageComponent onClick={() => router.push('/farms')} src="/Logo-color.svg" width="70" height="60" />
                     <IconButton onClick={() => toggleDrawer(true)}>
                         <img className={styles.menuIicon} alt="options" src="/menuiicon.svg" />
                     </IconButton>

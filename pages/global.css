@@ -273,6 +273,7 @@ body {
     background-color: #f5f7fa;
     margin: 0 auto;
     border: 1px solid #fff7fa;
+    border-bottom: none !important;
     position: relative;
 }
 

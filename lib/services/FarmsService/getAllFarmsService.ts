@@ -8,7 +8,7 @@ const getAllFarmsService = async (token: string) => {
                 'authorization': token
             })
         }
-        let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/1/10?order_by=created_at&order_type=asc`, options);
+        let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/1/100?order_by=created_at&order_type=asc`, options);
         const responseData = await response.json();
         return responseData;
 

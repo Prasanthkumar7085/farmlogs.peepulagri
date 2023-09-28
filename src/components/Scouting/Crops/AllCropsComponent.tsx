@@ -158,7 +158,7 @@ const AllCropsComponent = () => {
             </div>
             <div>
                 {cropOptions && cropOptions?.map((item: any, index: any) => (
-                    <CropCard itemDetails={item} key={index} />
+                    <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
 
                 ))}
             </div>

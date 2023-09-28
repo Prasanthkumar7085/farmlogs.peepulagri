@@ -3,31 +3,33 @@ import styles from "./alert-delete.module.css";
 import { Button, CircularProgress, Dialog } from "@mui/material";
 
 
-interface pagePropsType{
+interface pagePropsType {
   open: boolean;
-  deleteFarm : () => void;
+  deleteFarm: () => void;
   setDialogOpen: (newValue: boolean) => void;
-  loading:boolean
+  loading: boolean
 
 }
-const AlertDelete = ({ open, deleteFarm,setDialogOpen,loading }: pagePropsType) => {
+const AlertDelete = ({ open, deleteFarm, setDialogOpen, loading }: pagePropsType) => {
   return (
-    <Dialog open={open}  PaperProps={{ sx: { borderRadius: "16px",minWidth:"350px" } }}>
+    <Dialog open={open} PaperProps={{ sx: { borderRadius: "16px", minWidth: "350px" } }}>
       <div className={styles.alertdelete}>
-      <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
-      <div className={styles.areYouSure}>{`Are you sure  Want To Delete `}</div>
-      <div className={styles.thisWillBe}>This Will Be deleted Permanently</div>
-      <div className={styles.buttons}>
-        <Button className={styles.buttoncancel} onClick={()=>setDialogOpen(false)}>
-          <div className={styles.text}>Cancel</div>
-        </Button>
-        <Button className={styles.buttongotit}  onClick={()=>deleteFarm()}>
+        <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
+        <div>
+          <div className={styles.areYouSure}>{`Are you sure  Want To Delete `}</div>
+          <div className={styles.thisWillBe}>This Will Be deleted Permanently</div>
+        </div>
+        <div className={styles.buttons}>
+          <Button className={styles.buttoncancel} onClick={() => setDialogOpen(false)}>
+            <div className={styles.text}>Cancel</div>
+          </Button>
+          <Button className={styles.buttongotit} onClick={() => deleteFarm()}>
             <div className={styles.text}>
-              {loading ? <CircularProgress size="1.5rem" sx={{ color: "white" }} />: 'Delete!'}
+              {loading ? <CircularProgress size="1.5rem" sx={{ color: "white" }} /> : 'Delete'}
             </div>
-        </Button>
+          </Button>
+        </div>
       </div>
-    </div>
     </Dialog>
   );
 };

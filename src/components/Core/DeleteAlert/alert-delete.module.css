@@ -1,33 +1,28 @@
 .infoIcon {
-  position: relative;
   width: 40px;
   height: 40px;
-  overflow: hidden;
-  flex-shrink: 0;
 }
+
 .areYouSure {
-  align-self: stretch;
-  position: relative;
   line-height: 24px;
+  font-size: clamp(14px, 3vw, 16px);
   font-weight: 500;
-  font-family: var(--font-dm-sans);
 }
-.text,
+
+
 .thisWillBe {
-  flex: 1;
-  position: relative;
-}
-.thisWillBe {
-  align-self: stretch;
-  font-size: var(--text-sm-medium-size);
+  font-size: clamp(12px, 3vw, 14px);
   line-height: 21px;
   display: flex;
   align-items: center;
+  font-family: 'inter';
 }
+
 .text {
   line-height: 24px;
   font-weight: 500;
 }
+
 .buttoncancel,
 .buttongotit {
   flex: 1;
@@ -37,18 +32,26 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-xs) var(--padding-xl);
+  padding: .5rem;
+  text-transform: capitalize;
+  font-family: 'inter', sans-serif !important;
 }
+
 .buttoncancel {
   background-color: var(--white);
   box-shadow: 4px 4px 10px rgba(2, 2, 70, 0.04);
   border: 1px solid var(--gray-300);
+  color: #000;
+
 }
+
 .buttongotit {
   background: linear-gradient(142.18deg, #3462cf, #2b53be);
   box-shadow: 4px 4px 10px rgba(2, 2, 70, 0.05);
   color: var(--white);
+
 }
+
 .alertdelete,
 .buttons {
   align-self: stretch;
@@ -56,10 +59,11 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: var(--gap-5xl);
+  gap: 1.2rem;
   text-align: center;
   color: var(--gray-700);
 }
+
 .alertdelete {
   border-radius: var(--br-base);
   background-color: var(--white);
@@ -67,8 +71,7 @@
   overflow: hidden;
   flex-direction: column;
   justify-content: center;
-  padding: var(--padding-base) var(--padding-5xl) var(--padding-5xl);
-  gap: var(--gap-base);
+  padding: var(--padding-base);
   text-align: left;
   font-size: var(--text-md-medium-size);
   color: var(--high-emphasis);

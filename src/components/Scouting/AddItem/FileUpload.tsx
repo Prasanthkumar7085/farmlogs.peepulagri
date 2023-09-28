@@ -411,7 +411,7 @@ const FileUploadComponent = () => {
     const captureCameraVedio = (value: any, videofile: any) => {
         setOpenCamera(false)
         const type = "video/webm"
-        const file = new File([videofile], "my video", { type });
+        const file = new File([videofile], `my video.webm`, { type });
         console.log(file)
         let temp: any = []
         temp.push(file)
@@ -441,10 +441,13 @@ const FileUploadComponent = () => {
         }
     }
 
+    const [cropName, setCropName] = useState<any>()
+
     const captureCropName = (selectedObject: any) => {
         console.log(selectedObject)
         if (selectedObject) {
             setSelectedCrop(selectedObject)
+            setCropName(selectedObject.title)
         }
     }
 
@@ -479,7 +482,7 @@ const FileUploadComponent = () => {
                                     </h5>
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
-                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={cropOptions} captureFarmName={captureCropName} />
+                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={cropName} options={cropOptions} captureFarmName={captureCropName} />
                                         <FormHelperText />
                                     </FormControl>
                                 </div>

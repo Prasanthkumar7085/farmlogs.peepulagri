@@ -72,3 +72,45 @@
   margin-top: 1rem;
   font-weight: 500;
 }
+
+.galleryCard {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 4px 4px 20px 0px rgba(211, 211, 211, 0.50);
+}
+
+.galleryCard p {
+  color: #35353D;
+  font-family: Inter;
+  font-size: clamp(10px, 3vw, 12px);
+  font-weight: 400;
+  line-height: 100%;
+  margin-bottom: 5px;
+}
+
+.scoutingView {
+  padding: 1rem;
+  padding-top: 0.5rem;
+
+}
+
+.scoutingView nav {
+  margin-bottom: 0.5rem;
+}
+
+.scoutingView a {
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(14px, 3.5rem, 16px);
+  font-weight: 500;
+}
+
+.scoutingView li p {
+  color: #4A86F7;
+  font-family: Inter;
+  font-size: clamp(14px, 3.5rem, 16px);
+  font-weight: 500;
+  text-decoration-line: underline;
+}

@@ -41,10 +41,13 @@ const FileUploadComponent = () => {
     const [attachments, setAttachments] = useState<any>([])
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
+    const [previewImages, setPreviewImages] = useState<any>([])
+    console.log(previewImages)
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     let tempFilesStorage: any = [...attachments]
+    let previewStorage = [...previewImages]
 
     //convert the kb into mb
     const bytesToMB = (bytes: any) => {
@@ -117,6 +120,21 @@ const FileUploadComponent = () => {
         }
     }
 
+    const previewImagesEvent = (file: any, index: any) => {
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = (e: any) => {
+                previewStorage.splice(1, 0, { fileIndex: index, prieviewUrl: e.target.result })
+                setPreviewImages(previewStorage);
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            setPreviewImages(null);
+        }
+    }
+
 
     //select the when input select 
     const handleFileChange = async (e: any) => {
@@ -126,6 +144,10 @@ const FileUploadComponent = () => {
         const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array
 
         Array.from(e.target.files).map(async (item: any, index: number) => {
+            if (item.type.slice(0, 4) == "imag") {
+                previewImagesEvent(item, index)
+            }
+
             setIndex(index)
             setSelectedFile(item);
             setFileSize(item.size);
@@ -148,7 +170,7 @@ const FileUploadComponent = () => {
     const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
         let obj = {
             "attachment": {
-                file_name: file.name,
+                original_name: file.name,
                 farm_id: formId,
                 type: file.type,
                 crop_slug: selectedCrop?.slug,
@@ -427,6 +449,9 @@ const FileUploadComponent = () => {
                                     </FormControl>
                                 </div>
                                 <div className={styles.inputField}>
+                                    <h5 className={styles.label} id="label-select-farm">
+                                        Select Crop
+                                    </h5>
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
                                         <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={cropOptions} captureFarmName={captureCropName} />
@@ -489,7 +514,7 @@ const FileUploadComponent = () => {
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
-                                    <img className={styles.image21} alt="" src="/image-2-1.svg" />
+                                    <img className={styles.image21} alt="" src={previewImages[index]?.prieviewUrl ? previewImages[index]?.prieviewUrl : "/image-2-1.svg"} />
                                     <div className={styles.progressdetails}>
                                         <div className={styles.uploaddetails}>
                                             <div className={styles.uploadcontroller}>
@@ -518,14 +543,15 @@ const FileUploadComponent = () => {
                                             <Box sx={{ width: '100%' }}>
                                                 {fileProgress[index] == 0 ?
                                                     <LinearProgress /> :
-                                                    <LinearProgress variant="determinate" value={fileProgress[index]} />
+                                                    fileProgress[index] !== 100 ? <LinearProgress variant="determinate" value={fileProgress[index]} /> : ""
                                                 }
                                             </Box>
                                         </div>
-                                        <div className={styles.uploadstatus}>
-                                            <div className={styles.completed}>{fileProgress[index] == 100 ? "completed" : fileProgress[index] + "%"}</div>
+                                        {fileProgress[index] == 100 ? "" :
+                                            <div className={styles.uploadstatus}>
+                                                <div className={styles.completed}>{fileProgress[index].toFixed(2) + "%"}</div>
 
-                                        </div>
+                                            </div>}
                                     </div>
                                 </div>
                             </div>

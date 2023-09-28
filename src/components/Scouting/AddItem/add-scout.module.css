@@ -116,17 +116,17 @@
     flex-shrink: 0;
 }
 
-.photojpg {
-    position: relative;
-    line-height: 100%;
+.photojpg button {
+    padding-block: 0;
+    padding-left: 0;
 }
 
 .uploadname {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: space-between;
     gap: 11px;
+    width: 100%;
 }
 
 .close41 {
@@ -140,7 +140,6 @@
 .uploadcontroller {
     align-self: stretch;
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }
@@ -159,7 +158,7 @@
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     gap: 8px;
 }
@@ -173,7 +172,7 @@
 .uploadstatus {
     align-self: stretch;
     display: flex;
-    flex-direction: row;
+
     align-items: flex-start;
     justify-content: space-between;
     font-size: 12px;
@@ -188,16 +187,15 @@
 .progressdetails {
     flex: 1;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 4px;
 }
 
 .progress {
-    align-self: stretch;
-    flex-direction: row;
     align-items: center;
     gap: 16px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    align-self: stretch;
 }
 
 .scoutdetails,
@@ -209,9 +207,16 @@
 }
 
 .uploadprogress {
-    align-self: stretch;
-    font-size: 16px;
+    width: 100%;
+    font-size: clamp(14px, 3.2vw, 16px);
     color: #000;
+    margin-bottom: 0.5rem;
+}
+
+.uploadItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .scoutdetails {

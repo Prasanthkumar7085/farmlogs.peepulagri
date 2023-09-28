@@ -296,7 +296,7 @@ const FileUploadComponent = () => {
                                             <img
                                                 className={styles.close41}
                                                 alt=""
-                                                src="/close-4-1.svg"
+                                                src="/close-icon.svg"
                                             />
                                         </div>
                                         <Box sx={{ width: '100%' }}>

@@ -21,7 +21,7 @@
 .bgImage img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* object-fit: cover; */
   object-position: center;
 }
 
@@ -31,8 +31,8 @@
 }
 
 .welcomeBack1 {
-  font-weight: 600;
-  font-size: 30px;
+  font-weight: 600 !important;
+  font-size: 30px !important;
   font-family: 'Inter', sans-serif !important;
 }
 
@@ -54,23 +54,21 @@
 }
 
 .button {
-  border-radius: 8px;
-  background: #A05148;
-  padding-block: 10px;
-  text-transform: capitalize;
-  font-family: inter;
-  font-size: clamp(16px, 4.18vw, 18px);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  border-radius: 8px !important;
+  background: #A05148 !important;
+  padding-block: 10px !important;
+  text-transform: capitalize !important;
+  font-family: inter !important;
+  font-size: clamp(16px, 4.18vw, 18px) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
 }
-.button:hover{
-  background: #A05148;
+
+.button:hover {
+  background: #A05148 !important;
 }
-/* 
-.button :hover {
-  background: #A05148;
-} */
+
 
 .loginform {
   position: relative;

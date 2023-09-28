@@ -10,7 +10,7 @@ const CropCard = ({ itemDetails }: any) => {
     const router = useRouter()
 
     return (
-        <div id={styles.allCropCardBlock} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} >
+        <div onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} >
             <div className={styles.cropcard} >
                 <div className={styles.icons}>
                     <img className={styles.folderIcon} alt="" src="/folder.svg" />

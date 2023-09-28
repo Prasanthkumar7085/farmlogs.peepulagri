@@ -6,8 +6,8 @@ import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmS
 import { useSelector } from "react-redux";
 import AlertComponent from "@/components/Core/AlertComponent";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-
-
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 const ViewHeader = ({ name }: any) => {
 
     const router = useRouter();
@@ -71,9 +71,16 @@ const ViewHeader = ({ name }: any) => {
                     MenuListProps={{
                         'aria-labelledby': 'basic-button',
                     }}
+                    sx={{
+                        '& .MuiMenuItem-root': {
+                            display: "flex", alignItems: "center", gap: "0.5rem",
+                            minHeight: "inherit",
+
+                        }
+                    }}
                 >
-                    <MenuItem onClick={() => { handleClose(); router.push(`/farms/${router.query.farm_id}/edit`)}}>Edit</MenuItem>
-                    <MenuItem onClick={() => { setDialogOpen(true); setAnchorEl(null) }}>Delete</MenuItem>
+                    <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); router.push(`/farms/${router.query.farm_id}/edit`) }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
+                    <MenuItem onClick={() => { setDialogOpen(true); setAnchorEl(null) }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
 
                 </Menu>
             </div>

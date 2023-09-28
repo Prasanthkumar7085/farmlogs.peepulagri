@@ -1,19 +1,14 @@
 .iconsiconArrowLeft {
-    position: relative;
     width: 28px;
     height: 28px;
-    overflow: hidden;
-    flex-shrink: 0;
 }
 
 .viewFarm {
-    color: #05A155;
-    font-family: Inter;
-    font-size: clamp(20px, 5vw, 24px);
-    font-weight: 600;
+    color: #05A155 !important;
+    font-family: Inter !important;
+    font-size: clamp(20px, 5vw, 24px) !important;
+    font-weight: 600 !important;
 }
-
-
 
 .header {
     display: flex;

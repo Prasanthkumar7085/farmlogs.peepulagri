@@ -6,6 +6,17 @@
   opacity: 0.6;
 }
 
+.locationArea {
+  flex: 1;
+  position: relative;
+  letter-spacing: -0.02em;
+  line-height: 100%;
+  opacity: 0.6;
+}
+.location{
+  min-height: 10px;
+}
+
 .duration,
 .farm1 {
   align-self: stretch;
@@ -105,7 +116,7 @@
 
 .farm {
   justify-content: flex-end;
-  gap: var(--gap-base);
+  gap: var(--gap-5xs);
 }
 
 .farmcard {

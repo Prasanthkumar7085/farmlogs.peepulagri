@@ -18,12 +18,9 @@ const SelectComponenentForFarms = ({ loading, setDefaultValue, options, captureF
         let selectedObject = options.find((item: any) => item.title == selectedOption);
         setStatusOptions(selectedObject);
         captureFarmName(selectedObject);
+        router.replace(`/farms/${selectedObject?._id}/crops`);
 
     }
-
-
-
-
 
     return (
 

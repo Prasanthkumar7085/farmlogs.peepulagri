@@ -1,27 +1,28 @@
-import type { NextPage } from "next";
 import {
   TextField,
-  InputAdornment,
-  Icon,
-  IconButton,
   Button,
   Dialog,
   CircularProgress,
 } from "@mui/material";
 import styles from "./new-folder1.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 
-const NewFolderDiloag = ({ open, captureResponseDilog, loading }: any) => {
+const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle }: any) => {
 
-  const [title, setTitle] = useState<any>()
+  const [title, setTitle] = useState<any>();
+
+  useEffect(() => {
+    setTitle(defaultTitle);
+  },[defaultTitle])
+
   return (
-    <Dialog open={open} >
+    <Dialog open={open} PaperProps={{ sx: { borderRadius: "16px",minWidth:"350px" } }}>
 
       <div className={styles.newfolder}>
         <div className={styles.frame}>
-          <h3 className={styles.newFolder}>{`New Folder `}</h3>
+          <h3 className={styles.newFolder}>{defaultTitle ? `Rename Folder`:`New Folder`}</h3>
           <TextField
             className={styles.input}
             color="primary"
@@ -29,6 +30,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading }: any) => {
             placeholder="Type folder name here"
             variant="outlined"
             onChange={(e) => setTitle(e.target.value)}
+            value={title}
           />
         </div>
         <div className={styles.buttons}>
@@ -38,9 +40,11 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading }: any) => {
             size="small"
             variant="contained"
             onClick={() => captureResponseDilog(title)}
-
+            disabled={!title}
           >
-            {loading ? <CircularProgress size="1.5rem" sx={{ color: "white" }} /> : 'Create Folder!'}
+            {loading ?
+              <CircularProgress size="1.5rem" sx={{ color: "white" }} /> :
+              (defaultTitle ? 'Update Folder!' : 'Create Folder!')}
 
           </Button>
           <Button

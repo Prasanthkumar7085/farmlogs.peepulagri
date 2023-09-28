@@ -66,13 +66,9 @@
 }
 
 .button:hover {
-  background: #A05148;
+  background: #A05148 !important;
 }
 
-/* 
-.button :hover {
-  background: #A05148;
-} */
 
 .loginform {
   position: relative;

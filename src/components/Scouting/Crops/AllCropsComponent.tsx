@@ -123,6 +123,7 @@ const AllCropsComponent = () => {
         if (selectedObject && Object.keys(selectedObject).length) {
             setFormId(selectedObject?._id);
             getCropsDetails(selectedObject?._id)
+            router.push(`/farms/${selectedObject?._id}/crops`)
 
         }
     }

@@ -14,6 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
+import ImageComponent from "@/components/Core/ImageComponent";
 const AllCropsComponent = () => {
 
     const [defaultValue, setDefaultValue] = useState<any>('');
@@ -157,10 +158,15 @@ const AllCropsComponent = () => {
                 </IconButton>
             </div>
             <div id={styles.allCropCardBlock}>
-                {cropOptions && cropOptions?.map((item: any, index: any) => (
+                {cropOptions?.length ? cropOptions?.map((item: any, index: any) => (
                     <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
 
-                ))}
+                )) : (!loading ? 
+                        <div style={{display:'flex',flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
+                            <ImageComponent src='/no-crops-data.svg' height={400} width={500} alt={'no-crops'} />
+                            <Typography variant="h4">No Crops</Typography>
+                        </div>
+                : "")}
             </div>
 
             <div className="addFormPositionIcon" >

@@ -70,7 +70,7 @@ const CropCard = ({ itemDetails,getCropsDetails }: pagePropsType) => {
     }
 
     return (
-        <div id={styles.allCropCardBlock}>
+        <div>
             <div className={styles.cropcard} >
                 <div className={styles.icons}>
                     <img className={styles.folderIcon} alt="" src="/folder.svg"  onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} />

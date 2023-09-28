@@ -548,7 +548,7 @@ const FileUploadComponent = () => {
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
                                                     <div className={styles.uploadItem}>
-                                                        <div className={styles.photojpg}>{item.name} </div>
+                                                        <div className={styles.photojpg}>{item.name.slice(0, 10)}....{item.type} </div>
                                                         <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
                                                     </div>
                                                     {fileProgress[index] == 100 ?

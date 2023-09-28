@@ -31,8 +31,8 @@
 }
 
 .welcomeBack1 {
-  font-weight: 600;
-  font-size: 30px;
+  font-weight: 600 !important;
+  font-size: 30px !important;
   font-family: 'Inter', sans-serif !important;
 }
 

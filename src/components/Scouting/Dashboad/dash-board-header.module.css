@@ -1,16 +1,16 @@
 .dashboard {
-  color: #A05148;
-  font-family: Inter;
-  font-size: clamp(20px, 5.5vw, 24px);
-  font-weight: 600;
-  line-height: normal;
+  color: #A05148 !important;
+  font-family: Inter !important;
+  font-size: clamp(20px, 5.5vw, 24px) !important;
+  font-weight: 600 !important;
+  line-height: normal !important;
 }
 
 
 .srisailam {
   color: #000;
   font-family: Inter;
-  font-size: clamp(14px, 3.12vw, 16px);
+  font-size: clamp(10px, 3vw, 14px);
   font-style: normal;
   font-weight: 300;
   display: flex;
@@ -57,5 +57,5 @@
   color: var(--brown);
   font-family: var(--text-sm-normal);
   background-color: #fff;
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 1.5rem 1rem 1rem 1rem;
 }

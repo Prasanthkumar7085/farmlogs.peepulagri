@@ -16,7 +16,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
-import { storeFilesArray } from "@/Redux/Modules/Farms";
+import { removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
 
 
 const FileUploadComponent = () => {
@@ -51,11 +51,7 @@ const FileUploadComponent = () => {
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
-    // const [tempFilesStorage, setTempFileStorage] = useState<any>([]);
 
-    // useEffect(() => {
-    //     setTempFileStorage(attachments)
-    // }, [attachments]);
 
     let tempFilesStorage: any = [...attachments]
 
@@ -133,7 +129,7 @@ const FileUploadComponent = () => {
             const reader = new FileReader();
 
             reader.onload = (e: any) => {
-                previewStorage.splice(1, 0, { fileIndex: index, prieviewUrl: e.target.result })
+                previewStorage.splice(1, 0, { fileIndex: file.name, prieviewUrl: e.target.result })
                 setPreviewImages(previewStorage);
             };
 
@@ -160,7 +156,7 @@ const FileUploadComponent = () => {
 
         Array.from(e.target.files).map(async (item: any, index: number) => {
             if (item.type.slice(0, 4) == "imag") {
-                previewImagesEvent(item, index)
+                previewImagesEvent(item, item.name)
             }
 
             setIndex(index)
@@ -209,7 +205,7 @@ const FileUploadComponent = () => {
                 console.log(responseData)
                 setUploadId(responseData.data.upload_id)
                 await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
-                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: file.type, size: file.size, name: responseData.data.name,crop_slug:responseData.data.crop_slug,path:responseData.data.path })
+                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: file.type, size: file.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
                 setAttachments(tempFilesStorage)
             }
         }
@@ -332,7 +328,7 @@ const FileUploadComponent = () => {
                 "size": item.size,
                 "source": "scouting",
                 "crop_slug": selectedCrop?.slug,
-                farm_id:formId
+                farm_id: formId
             }
         }
 
@@ -352,10 +348,10 @@ const FileUploadComponent = () => {
             let responseData = await response.json();
             if (responseData.success == true) {
                 console.log(responseData)
-                let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT",body:item });
+                let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT", body: item });
                 fileProgressCopy[index] = 100;
                 setFileProgress([...fileProgressCopy]);
-                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: item.type, size: item.size, name: responseData.data.name ,crop_slug:responseData.data.crop_slug,path:responseData.data.path})
+                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: item.type, size: item.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
                 setAttachments(tempFilesStorage)
 
             }
@@ -377,8 +373,8 @@ const FileUploadComponent = () => {
 
     const addScoutDetails = async () => {
 
-        console.log(tempFilesStorage,'opop');
-        
+        console.log(tempFilesStorage, 'opop');
+
         setLoading(true)
         let obj = {
             "farm_id": formId,
@@ -400,7 +396,7 @@ const FileUploadComponent = () => {
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
-                dispatch(storeFilesArray([]));
+                dispatch(removeTheFilesFromStore([]));
                 setAlertMessage(responseData.message)
                 setAlertType(true)
                 router.push(`/farms/${router.query.farm_id}/crops`)
@@ -563,7 +559,7 @@ const FileUploadComponent = () => {
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
-                                    <img className={styles.image21} alt="" src={previewImages[index]?.prieviewUrl ? previewImages[index]?.prieviewUrl : "/image-2-1.svg"} />
+                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : "/image-2-1.svg"} />
                                     <div className={styles.progressdetails}>
                                         <div className={styles.uploaddetails}>
                                             <div className={styles.uploadcontroller}>

@@ -2,7 +2,7 @@ import SelectComponenentForLogs from "@/components/Core/SelectComponrntForLogs";
 
 import { useEffect, useState } from "react";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
 import { useRouter } from "next/router";
 import { Button, FormControl, FormHelperText, IconButton, InputLabel, Typography } from "@mui/material";
@@ -16,8 +16,10 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
 import ImageComponent from "@/components/Core/ImageComponent";
+import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 const AllCropsComponent = () => {
 
+    const dispatch = useDispatch()
     const [defaultValue, setDefaultValue] = useState<any>('');
     const [formId, setFormId] = useState<any>()
     const [formOptions, setFarmOptions] = useState<any>();
@@ -119,6 +121,8 @@ const AllCropsComponent = () => {
     useEffect(() => {
         if (router.isReady && router.query.farm_id && accessToken) {
             getFormDetails(router.query.farm_id)
+            dispatch(removeTheFilesFromStore([]));
+
         }
     }, [accessToken, router.isReady]);
 

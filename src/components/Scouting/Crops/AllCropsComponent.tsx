@@ -48,14 +48,12 @@ const AllCropsComponent = () => {
                 }
             } else {
                 setFarmOptions([]);
+                setLoading(false)
             }
         } catch (err) {
             console.error(err);
         }
-        finally {
-            setLoading(false)
-
-        }
+        
     }
 
     //get all crops name
@@ -77,10 +75,12 @@ const AllCropsComponent = () => {
 
         }
         finally {
-            setLoading(false)
+            setLoading(false);
         }
     }
 
+
+    const [errorMessages, setErrorMessages] = useState([]);
     //create crop api call
     const createCrop = async (value: any) => {
         setLoadingForAdd(true)
@@ -97,11 +97,13 @@ const AllCropsComponent = () => {
         try {
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${formId}/crops`, options)
             let responseData = await response.json()
-            if (responseData.success == true) {
-                getCropsDetails(formId)
+            if (responseData.success) {
+                await getCropsDetails(formId)
                 setDilogOpen(false)
                 setAlertMessage(responseData.message)
                 setAlertType(true)
+            } else if (responseData?.status==422) {
+                setErrorMessages(responseData?.errors);
             }
         }
         catch (err) {
@@ -133,8 +135,10 @@ const AllCropsComponent = () => {
     const captureResponseDilog = (value: any) => {
         if (value == false) {
             setDilogOpen(false)
+            setErrorMessages([]);
         }
         else {
+            setErrorMessages([]);
             createCrop(value)
         }
     }
@@ -172,8 +176,13 @@ const AllCropsComponent = () => {
             <div className="addFormPositionIcon" >
                 <img src="/add-form-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />
             </div>
-            <NewFolderDiloag open={dilogOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} />
-            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+            {dilogOpen ? <NewFolderDiloag
+                open={dilogOpen}
+                captureResponseDilog={captureResponseDilog}
+                loading={loadingForAdd}
+                errorMessages={errorMessages}
+            /> : ""}
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
             <LoadingComponent loading={loading} />
         </div>
     )

@@ -6,16 +6,17 @@ import {
 } from "@mui/material";
 import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
+import ErrorMessages from "../ErrorMessages";
 
 
 
-const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle }: any) => {
+const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle,errorMessages }: any) => {
 
-  const [title, setTitle] = useState<any>();
+  const [title, setTitle] = useState<any>(defaultTitle);
 
   useEffect(() => {
     setTitle(defaultTitle);
-  },[defaultTitle])
+  },[open])
 
   return (
     <Dialog open={open} PaperProps={{ sx: { borderRadius: "16px",minWidth:"350px" } }}>
@@ -32,6 +33,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle }: a
             onChange={(e) => setTitle(e.target.value)}
             value={title}
           />
+          {errorMessages?.length?<ErrorMessages errorMessages={errorMessages} keyname='title'/>:""}
         </div>
         <div className={styles.buttons}>
           <Button
@@ -52,7 +54,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle }: a
             color="primary"
             size="small"
             variant="outlined"
-            onClick={() => captureResponseDilog(false)}
+            onClick={() => { captureResponseDilog(false); setTitle('')}}
           >
             Cancel
           </Button>

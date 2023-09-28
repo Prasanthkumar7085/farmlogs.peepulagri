@@ -7,12 +7,13 @@ import { Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteCropService from "../../../../lib/services/CropServices/deleteCropService";
 import AlertComponent from "@/components/Core/AlertComponent";
+import { setCropTitleTemp } from "@/Redux/Modules/Farms";
 
 interface pagePropsType {
     itemDetails: CropTypeResponse;
@@ -21,6 +22,7 @@ interface pagePropsType {
 const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
@@ -103,17 +105,24 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
         setRenameOpen(false);
         setDeleteLoading(false);
     }
-
+    const setToStorage =async (title: string) => {
+        console.log(title,'popo');
+        
+        await dispatch(setCropTitleTemp(title));
+        router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)
+    }
+    // console.log(itemDetails?.title,'popo');
+    
     return (
         <div>
             <div className={styles.cropcard} >
                 <div className={styles.icons}>
-                    <img className={styles.folderIcon} alt="" src="/folder.svg" onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} />
+                    <img className={styles.folderIcon} alt="" src="/folder.svg" onClick={() => setToStorage(itemDetails?.title)} />
                     <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.5rem" }} onClick={(event: any) => setAnchorEl(event.currentTarget)} />
                     <MenuItemsForFolder />
                 </div>
-                <div className={styles.textWrapper} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} >
-                    <h2 className={styles.FieldCrop}>{itemDetails.title}</h2>
+                <div className={styles.textWrapper} onClick={() => setToStorage(itemDetails?.title)} >
+                    <h2 className={styles.FieldCrop}>{itemDetails?.title}</h2>
                     <p className={styles.aug2023}>{timePipe(itemDetails.createdAt, "DD-MM-YYYY")}</p>
                 </div>
             </div>

@@ -157,17 +157,19 @@ const AllCropsComponent = () => {
                     <AddIcon /><Typography variant="caption">New</Typography>
                 </IconButton>
             </div>
-            <div id={styles.allCropCardBlock}>
-                {cropOptions?.length ? cropOptions?.map((item: any, index: any) => (
-                    <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
+            {cropOptions?.length ?
+                <div id={styles.allCropCardBlock}>
+                    {cropOptions?.map((item: any, index: any) => (
+                        <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
 
-                )) : (!loading ? 
-                        <div style={{display:'flex',flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-                            <ImageComponent src='/no-crops-data.svg' height={400} width={500} alt={'no-crops'} />
-                            <Typography variant="h4">No Crops</Typography>
-                        </div>
-                : "")}
-            </div>
+                    ))}
+                </div>
+                : (!loading ?
+                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
+                        <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} />
+                        <Typography variant="h4">No Crops</Typography>
+                    </div>
+                    : "")}
 
             <div className="addFormPositionIcon" >
                 <img src="/add-form-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />

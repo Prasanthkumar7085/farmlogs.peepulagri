@@ -8,14 +8,15 @@ import { useState } from "react";
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
 import { useSelector } from "react-redux";
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
-
-interface pagePropsType{
+interface pagePropsType {
     itemDetails: CropTypeResponse;
     getCropsDetails: (farmId: string) => void;
 }
-const CropCard = ({ itemDetails,getCropsDetails }: pagePropsType) => {
-    
+const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
+
     const router = useRouter();
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
@@ -28,7 +29,7 @@ const CropCard = ({ itemDetails,getCropsDetails }: pagePropsType) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    
+
     const MenuItemsForFolder = () => {
         return (
             <Menu
@@ -39,10 +40,17 @@ const CropCard = ({ itemDetails,getCropsDetails }: pagePropsType) => {
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
+                sx={{
+                    '& .MuiMenuItem-root': {
+                        display: "flex", alignItems: "center", gap: "0.5rem",
+                        minHeight: "inherit",
+
+                    }
+                }}
             >
-                <MenuItem onClick={() => { handleClose(); setRenameOpen(true) }}>Rename</MenuItem>
-                <MenuItem onClick={() => { setMenuOpen(true); setAnchorEl(null) }}>Delete</MenuItem>
-        
+                <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); setRenameOpen(true) }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Rename</MenuItem>
+                <MenuItem onClick={() => { setMenuOpen(true); setAnchorEl(null) }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
+
             </Menu>
         )
     }
@@ -73,11 +81,11 @@ const CropCard = ({ itemDetails,getCropsDetails }: pagePropsType) => {
         <div>
             <div className={styles.cropcard} >
                 <div className={styles.icons}>
-                    <img className={styles.folderIcon} alt="" src="/folder.svg"  onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} />
-                    <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.5rem" }} onClick={(event:any)=>setAnchorEl(event.currentTarget)} />
+                    <img className={styles.folderIcon} alt="" src="/folder.svg" onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} />
+                    <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.5rem" }} onClick={(event: any) => setAnchorEl(event.currentTarget)} />
                     <MenuItemsForFolder />
                 </div>
-                <div className={styles.textWrapper}  onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} >
+                <div className={styles.textWrapper} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} >
                     <h2 className={styles.FieldCrop}>{itemDetails.title}</h2>
                     <p className={styles.aug2023}>{timePipe(itemDetails.createdAt, "DD-MM-YYYY")}</p>
                 </div>

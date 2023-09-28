@@ -4,29 +4,29 @@ import styles from "./dash-board-header.module.css";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import Image from "next/image";
-
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 type captureSearchStringType = (search: string) => void
 
-interface pageProps{
+interface pageProps {
   captureSearchString: captureSearchStringType,
   searchString: string;
   locations: Array<string>;
   location: string;
   setLocation: Dispatch<SetStateAction<string>>;
-  getDataOnLocationChange: (location:string) => void;
+  getDataOnLocationChange: (location: string) => void;
 }
 
-const DashBoardHeader = ({ captureSearchString, searchString,locations,location,setLocation,getDataOnLocationChange }: pageProps) => {
-  
+const DashBoardHeader = ({ captureSearchString, searchString, locations, location, setLocation, getDataOnLocationChange }: pageProps) => {
+
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const onChangeSearchString = (event:ChangeEvent<HTMLInputElement>) => {
+  const onChangeSearchString = (event: ChangeEvent<HTMLInputElement>) => {
     captureSearchString(event.target.value);
   }
-      const handleClick = (event: any) => {
-        setAnchorEl(event.currentTarget);
-    };
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   useEffect(() => {
     setSearch(searchString);
@@ -51,7 +51,7 @@ const DashBoardHeader = ({ captureSearchString, searchString,locations,location,
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={() => setAnchorEl(null)}
-              sx={{maxHeight:'50vh'}}
+              sx={{ maxHeight: '50vh' }}
             >
               {locations.map((item: string, index: number) => {
                 return (
@@ -78,6 +78,13 @@ const DashBoardHeader = ({ captureSearchString, searchString,locations,location,
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
+                <IconButton>
+                  < ClearOutlinedIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+            startAdornment: (
+              <InputAdornment position="start">
                 <IconButton>
                   <SearchIcon />
                 </IconButton>

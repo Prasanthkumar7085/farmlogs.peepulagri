@@ -37,7 +37,7 @@ const MobileLogin: NextPage = () => {
     const response = await getOtpService(body);
 
     if (response?.success) {
-      dispatch(setOtpCountDown(59));
+      dispatch(setOtpCountDown(30));
       router.push({
         pathname: "/signup-verify",
         query: { mobile: mobile }

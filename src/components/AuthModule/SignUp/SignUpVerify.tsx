@@ -61,8 +61,8 @@ const SignUpVerify = () => {
         if (minutes === 0) {
           clearInterval(interval);
         } else {
-          setSeconds(59);
-          dispatch(setOtpCountDown(59));
+          setSeconds(30);
+          dispatch(setOtpCountDown(30));
           setMinutes(minutes - 1);
         }
       }
@@ -75,7 +75,7 @@ const SignUpVerify = () => {
   }, [seconds]);
 
   const resetCountdown = async () => {
-    setSeconds(59);
+    setSeconds(30);
     dispatch(resetOtpCountDown());
     const body = {
       phone: mobile

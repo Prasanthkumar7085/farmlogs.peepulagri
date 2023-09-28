@@ -16,7 +16,7 @@ export const otpSlice = createSlice({
       state.resendOtpIn = action.payload;
     },
     resetOtpCountDown: (state: any) => {
-      state.resendOtpIn = 59
+      state.resendOtpIn = 30;
     }
   },
 });

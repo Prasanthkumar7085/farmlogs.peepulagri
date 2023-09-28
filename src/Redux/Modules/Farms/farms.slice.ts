@@ -7,6 +7,7 @@ const reducerName = "farms";
 export const initialState: Farms.FarmsData = {
   farmsDataArray: [],
   singleFarm: {},
+  filesList: [],
   cropName: ''
 };
 
@@ -24,6 +25,10 @@ export const farmsSlice = createSlice({
       let foundItem = array.find((item: any) => item?._id == id);
       state.singleFarm = foundItem;
     },
+    storeFilesArray: (state: any, action: any) => {
+      let temp = [...state.filesList, ...action.payload]
+      state.filesList = temp
+    },
     setCropTitleTemp: (state: any, action: any) => {
       state.cropName = action.payload;
     }
@@ -32,7 +37,10 @@ export const farmsSlice = createSlice({
 
 export const {
   setAllFarms,
-  setSingleFarm,
+  setSingleFarm, storeFilesArray,
   setCropTitleTemp
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
+
+
+

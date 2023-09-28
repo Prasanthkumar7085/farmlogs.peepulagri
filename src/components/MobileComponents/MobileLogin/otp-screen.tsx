@@ -82,7 +82,7 @@ const MobileOtpScreen: NextPage = () => {
   }
 
   const resetCountdown = async () => {
-    setSeconds(59);
+    setSeconds(30);
     dispatch(resetOtpCountDown());
     const body = {
       phone: mobile
@@ -151,6 +151,7 @@ const MobileOtpScreen: NextPage = () => {
             variant="contained"
             onClick={() => onSubmitOtpClick()}
             fullWidth
+            disabled={loadingWhileVerifyingOtp}
           >
             Verify
             {loadingWhileVerifyingOtp ?

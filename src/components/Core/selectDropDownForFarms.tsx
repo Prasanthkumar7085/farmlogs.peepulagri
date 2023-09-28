@@ -12,7 +12,6 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
         if (router.isReady && router.query.farm_id) {
             setDefaultValueSet(options && options.find((item: any) => item._id == router.query.farm_id))
         }
-
     }, [router.isReady, options, router.query]);
 
     return (

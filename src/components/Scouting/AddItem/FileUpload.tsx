@@ -5,7 +5,7 @@ import Axios from "axios"
 import styles from "./add-scout.module.css";
 import Header1 from "../Header/HeaderComponent";
 import SelectComponent from "@/components/Core/SelectComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Camera from "./Camera";
 import base64ToFile from "@/pipes/base64FileConvert";
 import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
@@ -16,11 +16,15 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
+import { storeFilesArray } from "@/Redux/Modules/Farms";
 
 
 const FileUploadComponent = () => {
 
-    const router = useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
+
+    const filesFromStore = useSelector((state: any) => state.farms?.filesList);
 
     const [selectedFile, setSelectedFile] = useState<any>(null);
     const [fileSize, setFileSize] = useState<any>()
@@ -142,10 +146,17 @@ const FileUploadComponent = () => {
 
     //select the when input select 
     const handleFileChange = async (e: any) => {
+        let copy = [...e.target.files, ...filesFromStore]
+        dispatch(storeFilesArray(e.target.files))
 
-        setMultipleFiles(e.target.files)
-        setFileProgress(new Array(e.target.files?.length).fill(0));
+        setMultipleFiles(copy)
+
         const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array
+        let temp = [...fileProgressCopy, ...new Array(filesFromStore?.length).fill(100)]
+        setFileProgress(temp)
+
+
+
 
         Array.from(e.target.files).map(async (item: any, index: number) => {
             if (item.type.slice(0, 4) == "imag") {
@@ -159,12 +170,12 @@ const FileUploadComponent = () => {
                 return bytes / (1024 * 1024);
             }
             if (bytesToMB(item.size) >= 5) {
-                setUploadIntoChuncks(true);
-                await startUploadEvent(item, index, fileProgressCopy, setFileProgress);
+                setUploadIntoChuncks(true)
+                await startUploadEvent(item, index, temp, setFileProgress)
             }
             else {
-                setUploadIntoChuncks(false);
-                await fileUploadEvent(item, index, fileProgressCopy, setFileProgress);
+                setUploadIntoChuncks(false)
+                await fileUploadEvent(item, index, temp, setFileProgress)
             }
         })
     };
@@ -389,6 +400,7 @@ const FileUploadComponent = () => {
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
+                dispatch(storeFilesArray([]));
                 setAlertMessage(responseData.message)
                 setAlertType(true)
                 router.push(`/farms/${router.query.farm_id}/crops`)
@@ -557,7 +569,7 @@ const FileUploadComponent = () => {
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
                                                     <div className={styles.uploadItem}>
-                                                        <div className={styles.photojpg}>{item.name.slice(0, 10)}....{item.type} </div>
+                                                        <div className={styles.photojpg}>{item.name?.slice(0, 10)}....{item.type} </div>
                                                         <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
                                                     </div>
                                                     {fileProgress[index] == 100 ?

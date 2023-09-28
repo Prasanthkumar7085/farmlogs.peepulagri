@@ -61,9 +61,9 @@ const ViewScoutHeader = ({ name }: any) => {
                 <Typography className={styles.viewFarm}>{name}</Typography>
 
                 <div className={styles.headericon} id="header-icon" onClick={handleClick}>
-                    <img className={styles.headericonChild} alt="" src="/frame-40561.svg" />
+                    {/* <img className={styles.headericonChild} alt="" src="/frame-40561.svg" /> */}
                 </div>
-                <Menu
+                {/* <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
@@ -82,7 +82,7 @@ const ViewScoutHeader = ({ name }: any) => {
                     <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
                     <MenuItem onClick={() => {setAnchorEl(null) }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
 
-                </Menu>
+                </Menu> */}
             </div>
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
             {/* <LoadingComponent loading={loading} /> */}

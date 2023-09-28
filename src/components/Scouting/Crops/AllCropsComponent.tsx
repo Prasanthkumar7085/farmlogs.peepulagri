@@ -154,11 +154,11 @@ const AllCropsComponent = () => {
                 <FormHelperText />
             </FormControl>
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
-                <IconButton>
+                {/* <IconButton>
                     <SortIcon /><Typography variant="caption">Sort By</Typography>
-                </IconButton>
+                </IconButton> */}
                 <IconButton onClick={() => setDilogOpen(true)}>
-                    <AddIcon /><Typography variant="caption">New</Typography>
+                    <AddIcon /><Typography variant="caption">New Folder</Typography>
                 </IconButton>
             </div>
             {cropOptions?.length ?

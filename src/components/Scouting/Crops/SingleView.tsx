@@ -9,22 +9,25 @@ import { useSelector } from "react-redux";
 import timePipe from "@/pipes/timePipe";
 import { ScoutAttachmentDetails } from "@/types/scoutTypes";
 import Image from "next/image";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 const SingleViewScoutComponent = () => {
-    const [urls, setUrls] = useState<any>()
-    const router = useRouter()
+
+    const router = useRouter();
     const [data, setData] = useState<any>()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
-    console.log(farmTitle);
-
-
+    
+    const [loading, setLoading] = useState(true);
+    
+        
     useEffect(() => {
-        if (router.query.farm_id && router.isReady) {
+        if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
             getPresingedURls()
         }
     }, [accessToken, router.isReady])
 
     const getPresingedURls = async () => {
+        setLoading(true);
         let options = {
             method: "GET",
 
@@ -34,7 +37,7 @@ const SingleViewScoutComponent = () => {
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/scouts/1/10`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/scouts/1/100?crop_id=${router.query?.crop_id}`, options)
             let responseData = await response.json()
 
             if (responseData.success) {
@@ -43,53 +46,11 @@ const SingleViewScoutComponent = () => {
         }
         catch (err) {
             console.log(err)
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
-    const images = [
-        {
-            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-            width: 150,
-            height: 70,
-            caption: "After Rain (Jeshu John - designerspics.com)",
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-            width: 150,
-            height: 70,
-            caption: "After Rain (Jeshu John - designerspics.com)",
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-            width: 150,
-            height: 70,
-            tags: [
-                { value: "Ocean", title: "Ocean" },
-                { value: "People", title: "People" },
-            ],
-            alt: "Boats (Jeshu John - designerspics.com)",
-        },
-
-        {
-            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-            width: 150,
-            height: 70,
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-
-            tags: [
-                { value: "Ocean", title: "Ocean" },
-                { value: "People", title: "People" },
-            ],
-            width: 150,
-            height: 70,
-            alt: "Boats (Jeshu John - designerspics.com)",
-        },
-
-
-
-    ];
 
     const getModifiedImage = (item: any) => {
         let obj = item?.attachments?.slice(0, 4)?.map((imageObj: any, index: number) => {
@@ -117,13 +78,12 @@ const SingleViewScoutComponent = () => {
         return obj
     }
     return (
-        <div className=
-            {styles.scoutingView}>
+        <div className={styles.scoutingView}>
 
             <div role="presentation">
                 <Breadcrumbs aria-label="breadcrumb" >
                     <Link underline="hover" color="inherit" href="/farms">
-                        dashboard
+                        Dashboard
                     </Link>
                     <Link
                         underline="hover"
@@ -135,7 +95,7 @@ const SingleViewScoutComponent = () => {
                     <Typography color="text.primary">{farmTitle}</Typography>
                 </Breadcrumbs>
             </div>
-            {data && data.map((item: any, index: any) => {
+            {data?.length ? data.map((item: any, index: any) => {
                 return (
                     <Card key={index} className={styles.galleryCard} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
                         <Typography>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</Typography>
@@ -147,8 +107,14 @@ const SingleViewScoutComponent = () => {
                             </div>}
                     </Card>
                 )
-            })}
-
+            }) :
+                (!loading ?
+                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
+                        {/* <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} /> */}
+                        <Typography variant="h4">No Scouts</Typography>
+                    </div>
+                    : "")}
+    <LoadingComponent loading={loading}/>
         </div>
 
     )

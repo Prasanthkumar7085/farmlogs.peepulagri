@@ -1,10 +1,10 @@
 import AllCropsComponent from "@/components/Scouting/Crops/AllCropsComponent"
-import Header1 from "@/components/Scouting/Header/HeaderComponent"
+import HeaderComponentAllCrops from "@/components/Scouting/Header/HeaderComponentAllCrops"
 
 const AllCropsPage = () => {
     return (
         <div>
-            <Header1 name={"My Crops"} />
+            <HeaderComponentAllCrops name={"My Crops"} />
 
             <AllCropsComponent />
         </div>

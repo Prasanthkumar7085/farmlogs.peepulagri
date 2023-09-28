@@ -61,7 +61,7 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
         </div>
 
         <MenuList className={styles.menuitems}>
-          <MenuItem className={styles.menuItem} >
+          <MenuItem className={styles.menuItem} onClick={() => { router.push("/farms"); toggleDrawer(false); }}>
             <img
               className={styles.apps1Icon}
               alt=""
@@ -69,8 +69,7 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
             />
             <Typography>Dashboard</Typography>
           </MenuItem>
-          <MenuItem className={styles.menuItem
-          }>
+          {/* <MenuItem className={styles.menuItem}>
             <img
               className={styles.apps1Icon}
               alt="support-menu-icon"
@@ -93,8 +92,8 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
               src="/calendar-menu-icon.svg"
             />
             <Typography>Calendar View</Typography>
-          </MenuItem>
-          <MenuItem
+          </MenuItem> */}
+          {/* <MenuItem
             className={styles.menuItem}
             id="scouting"
             onClick={onScoutingCMenuItemck}
@@ -105,15 +104,15 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
               src="/scouting-menu-item.svg"
             />
             <Typography>Scouting</Typography>
-          </MenuItem>
-          <MenuItem className={styles.menuItem} >
+          </MenuItem> */}
+          {/* <MenuItem className={styles.menuItem} >
             <img
               className={styles.apps1Icon}
               alt="settings-menu-icon"
               src="/settings-menu-icon.svg"
             />
             <Typography>Settings</Typography>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem className={styles.menuItem} onClick={onLogoutCMenuItemck}>
             <img
               className={styles.apps1Icon}

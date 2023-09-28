@@ -31,14 +31,17 @@ export const farmsSlice = createSlice({
     },
     setCropTitleTemp: (state: any, action: any) => {
       state.cropName = action.payload;
-    }
+    },
+    removeTheFilesFromStore: (state: any, action: any) => {
+      state.filesList = action.payload
+    },
   },
 });
 
 export const {
   setAllFarms,
   setSingleFarm, storeFilesArray,
-  setCropTitleTemp
+  setCropTitleTemp, removeTheFilesFromStore
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
 

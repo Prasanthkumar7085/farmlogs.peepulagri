@@ -78,8 +78,8 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton>
-                  < ClearOutlinedIcon />
+                <IconButton onClick={() => { setSearch(''); captureSearchString('')}}>
+                  {search ? <ClearOutlinedIcon /> : ""}
                 </IconButton>
               </InputAdornment>
             ),

@@ -233,7 +233,7 @@ const AddFarmForm = () => {
             <div className={styles.addfarmform} id="add-farm">
                 <div className={styles.formfields} id="form-fields">
                     <div className={styles.farmname} id="farm-name">
-                        <div className={styles.label}>Farm Name</div>
+                        <div className={styles.label}>Farm Title</div>
                         <TextField
                             sx={{
                                 '& .MuiInputBase-root': {
@@ -245,7 +245,7 @@ const AddFarmForm = () => {
                             fullWidth
                             className={styles.inputfarmname}
                             size="small"
-                            placeholder="Enter Farm Name"
+                            placeholder="Enter Farm Title"
                             variant="outlined"
                             error={Boolean(errorMessages?.['title'])}
                             helperText={errorMessages?.['title'] ? errorMessages?.['title'] : ""}
@@ -346,7 +346,7 @@ const AddFarmForm = () => {
                         /> */}
                     </div>
                     <div className={styles.farmname} id="acres">
-                        <div className={styles.label}>Total Land (acres)</div>
+                        <div className={styles.label}>Total Area (acres)</div>
                         <TextField
                             sx={{
                                 '& .MuiInputBase-root': {
@@ -357,7 +357,7 @@ const AddFarmForm = () => {
                             className={styles.inputfarmname}
                             name="area"
                             size="small"
-                            placeholder="Enter acres"
+                            placeholder="Enter area"
                             fullWidth
                             type={'number'}
                             onWheel={(e: any) => e.target.blur()}

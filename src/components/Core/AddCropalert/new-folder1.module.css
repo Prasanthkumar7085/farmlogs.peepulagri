@@ -1,17 +1,18 @@
 .newFolder {
-  margin: 0;
-  align-self: stretch;
-  position: relative;
-  font-size: inherit;
+  color: #000;
+  font-family: Inter;
+  font-size: clamp(16px, 3.5vw, 20px);
+  font-weight: 500;
   line-height: 100%;
-  font-weight: 400;
-  font-family: inherit;
+  margin: 0;
 }
+
 .input {
   border: 0;
   background-color: transparent;
   align-self: stretch;
 }
+
 .frame {
   display: flex;
   flex-direction: column;
@@ -19,27 +20,41 @@
   justify-content: flex-start;
   gap: var(--gap-base);
 }
+
 .buttoncreatefolder,
-.frame {
-  align-self: stretch;
+.buttoncancelfolder {
+  align-self: stretch !important;
+  text-transform: capitalize !important;
+  border-radius: 8px !important;
+  border: 1px solid #3462CF !important;
+  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
+  font-size: clamp(14px, 3vw, 16px) !important;
+  padding-block: 0.5rem !important;
+  font-weight: 500 !important;
 }
-.buttons,
-.newfolder {
+
+
+
+.buttoncreatefolder {
+  color: #fff !important;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%) !important;
+}
+
+.buttons {
   align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: var(--gap-base);
+  gap: 1rem;
+  margin-top: 2rem;
+
 }
+
 .newfolder {
-  border-radius: var(--br-5xs);
-  background-color: var(--white);
+  border-radius: 8px;
+  background-color: #fff;
   align-items: center;
-  padding: var(--padding-5xl) var(--padding-5xl) var(--padding-21xl);
-  gap: var(--gap-13xl);
+  padding: 1.5rem 1rem 2rem;
   text-align: center;
-  font-size: var(--font-size-5xl);
-  color: var(--high-emphasis);
-  font-family: var(--text-md-medium);
 }

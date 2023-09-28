@@ -15,6 +15,7 @@ import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
+import ImageComponent from "@/components/Core/ImageComponent";
 const AllCropsComponent = () => {
 
     const [defaultValue, setDefaultValue] = useState<any>('');
@@ -49,14 +50,12 @@ const AllCropsComponent = () => {
                 }
             } else {
                 setFarmOptions([]);
+                setLoading(false)
             }
         } catch (err) {
             console.error(err);
         }
-        finally {
-            setLoading(false)
 
-        }
     }
 
     //get all crops name
@@ -78,10 +77,12 @@ const AllCropsComponent = () => {
 
         }
         finally {
-            setLoading(false)
+            setLoading(false);
         }
     }
 
+
+    const [errorMessages, setErrorMessages] = useState([]);
     //create crop api call
     const createCrop = async (value: any) => {
         setLoadingForAdd(true)
@@ -98,11 +99,13 @@ const AllCropsComponent = () => {
         try {
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${formId}/crops`, options)
             let responseData = await response.json()
-            if (responseData.success == true) {
-                getCropsDetails(formId)
+            if (responseData.success) {
+                await getCropsDetails(formId)
                 setDilogOpen(false)
                 setAlertMessage(responseData.message)
                 setAlertType(true)
+            } else if (responseData?.status == 422) {
+                setErrorMessages(responseData?.errors);
             }
         }
         catch (err) {
@@ -134,8 +137,10 @@ const AllCropsComponent = () => {
     const captureResponseDilog = (value: any) => {
         if (value == false) {
             setDilogOpen(false)
+            setErrorMessages([]);
         }
         else {
+            setErrorMessages([]);
             createCrop(value)
         }
     }
@@ -158,18 +163,30 @@ const AllCropsComponent = () => {
                     <AddIcon /><Typography variant="caption">New</Typography>
                 </IconButton>
             </div>
-            <div id={styles.allCropCardBlock}>
-                {cropOptions && cropOptions?.map((item: any, index: any) => (
-                    <CropCard itemDetails={item} key={index} />
+            {cropOptions?.length ?
+                <div id={styles.allCropCardBlock}>
+                    {cropOptions?.map((item: any, index: any) => (
+                        <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
 
-                ))}
-            </div>
+                    ))}
+                </div>
+                : (!loading ?
+                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
+                        {/* <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} /> */}
+                        <Typography variant="h4">No Crops</Typography>
+                    </div>
+                    : "")}
 
             <div className="addFormPositionIcon" >
                 <img src="/add-form-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />
             </div>
-            <NewFolderDiloag open={dilogOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} />
-            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+            {dilogOpen ? <NewFolderDiloag
+                open={dilogOpen}
+                captureResponseDilog={captureResponseDilog}
+                loading={loadingForAdd}
+                errorMessages={errorMessages}
+            /> : ""}
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
             <LoadingComponent loading={loading} />
         </div>
     )

@@ -1,13 +1,16 @@
 import type { NextPage } from "next";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
 import styles from "./crop-card.module.css";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import timePipe from "@/pipes/timePipe";
+import { useRouter } from "next/router";
+
 
 const CropCard = ({ itemDetails }: any) => {
+    const router = useRouter()
 
     return (
-        <div id={styles.allCropCardBlock}>
+        <div id={styles.allCropCardBlock} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)} >
             <div className={styles.cropcard} >
                 <div className={styles.icons}>
                     <img className={styles.folderIcon} alt="" src="/folder.svg" />

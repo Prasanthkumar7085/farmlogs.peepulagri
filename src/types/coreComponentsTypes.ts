@@ -5,10 +5,3 @@ export interface AlertComponentType {
     alertType: Boolean;
     setAlertMessage: React.Dispatch<React.SetStateAction<string>>
 }
-
-export interface AlertComponentMobileType {
-    alertMessage: string;
-    alertType: Boolean;
-    setAlertMessage: React.Dispatch<React.SetStateAction<string>>,
-    mobile: boolean|undefined;
-}

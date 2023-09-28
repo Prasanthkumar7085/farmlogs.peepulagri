@@ -6,6 +6,7 @@ import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByI
 import { FarmDataType } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import { useSelector } from "react-redux";
 
 const ViewFarmPage = () => {
 
@@ -13,22 +14,25 @@ const ViewFarmPage = () => {
 
   const [data, setData] = useState<FarmDataType>();
   const [loading, setLoading] = useState(true);
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
 
   const getFarmDataById = async () => {
     setLoading(true);
-    const response: any = await getFarmByIdService(router.query.farm_id as string);
     
-    if (response.success) {
-      setData(response.data);
+    const response: any = await getFarmByIdService(router.query.farm_id as string,accessToken as string);
+    
+    if (response?.success) {
+      setData(response?.data);
     }
     setLoading(false);
   }
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady&&accessToken) {
       getFarmDataById();
     }
-  }, [router.isReady]);
+  }, [router.isReady,accessToken]);
   
   return (
     <div>
@@ -39,7 +43,7 @@ const ViewFarmPage = () => {
       </div>
       <div className={styles.farmareaheading} id="area">
         <div className={styles.text}>Land (acres)</div>
-        <div className={styles.acres}>{data?.area?.toFixed(2)} ACRES</div>
+        <div className={styles.acres}>{data?.area? Math.floor(data?.area * 100) / 100:""} ACRES</div>
       </div>
       <div
         className={styles.locationdetailsblock}

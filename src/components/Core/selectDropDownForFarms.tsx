@@ -28,6 +28,13 @@ const SelectComponenentForFarms = ({ loading, setDefaultValue, options, captureF
     return (
 
         <Select
+            size="small"
+            sx={{
+                background: "#fff",
+                '& .MuiInputBase-root': {
+                    background: "#fff"
+                }
+            }}
             {...rest}
             value={statusOptions?.title ? statusOptions?.title : defaultValue}
             onChange={handleStatusChange}

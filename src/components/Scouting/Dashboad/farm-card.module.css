@@ -21,11 +21,9 @@
 .farm1 {
   color: #A05148;
   font-family: Inter;
-  font-size: clamp(20px, 5vw, 24px);
-  font-style: normal;
+  font-size: clamp(14px, 3.5vw, 18px);
   font-weight: 500;
   line-height: 100%;
-  /* 24px */
   letter-spacing: -0.48px;
 }
 
@@ -39,11 +37,12 @@
 }
 
 .acres {
-  flex: 1;
-  position: relative;
   line-height: 100%;
   text-transform: uppercase;
   font-weight: 500;
+  color: #4F4F4F;
+  font-size: clamp(10px, 3vw, 14px);
+  /* white-space: nowrap; */
 }
 
 .area {
@@ -74,8 +73,8 @@
 .viewfarm {
   border-radius: 50%;
   background-color: var(--background);
-  width: 45px;
-  height: 45px;
+  width: 35px;
+  height: 35px;
   align-items: center;
   justify-content: center;
   padding: 16.3799991607666px;
@@ -83,8 +82,8 @@
 }
 
 .viewfarm img {
-  width: 16px;
-  height: 20px;
+  width: 12px;
+  height: 15px;
 }
 
 .farmareablock {
@@ -120,7 +119,8 @@
   font-size: var(--font-size-xs);
   color: var(--title);
   font-family: var(--text-sm-normal);
-  /* min-height: 100px; */
+  min-height: 80px;
+  max-height: 80px;
 }
 
 .allFormsBlock {
@@ -130,6 +130,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
-  /* height: 75vh;
-  overflow-y: scroll; */
+
+}
+
+.allForms {
+  height: 80vh;
+  overflow: scroll;
 }

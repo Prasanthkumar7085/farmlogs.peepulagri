@@ -6,8 +6,8 @@
   line-height: 20px;
 }
 
-.inputfarmname {
-  background-color: #fff;
+.inputfarmname p {
+  margin: 0;
 }
 
 .farmname {

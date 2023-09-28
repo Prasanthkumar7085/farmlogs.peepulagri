@@ -1,12 +1,11 @@
 import styles from "./head.module.css";
 import { Menu, MenuItem, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import {  useState } from "react";
+import { useState } from "react";
 import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
 import { useSelector } from "react-redux";
 import AlertComponent from "@/components/Core/AlertComponent";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import AlertComponentMobile from "@/components/Core/AlertComponentMobile";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 
 
 const ViewHeader = ({ name }: any) => {
@@ -20,6 +19,7 @@ const ViewHeader = ({ name }: any) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -28,7 +28,8 @@ const ViewHeader = ({ name }: any) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    
+
+
     const deleteFarm = async () => {
         setLoading(true);
         handleClose();
@@ -39,47 +40,48 @@ const ViewHeader = ({ name }: any) => {
             setTimeout(() => {
                 router.back();
             }, 600);
-            
+
         } else {
             setAlertMessage(response?.message);
             setAlertType(false);
         }
         setLoading(false);
     };
-    
+
     return (
         <div>
-            <div className={styles.header} id="header">
-            <img
-                className={styles.iconsiconArrowLeft}
-                alt=""
-                src="/iconsiconarrowleft.svg"
-                onClick={() => router.back()}
-                style={{cursor:"pointer"}}
-            />
-            <Typography className={styles.viewFarm}>{name}</Typography>
+            <div className={styles.header} id="header" style={{ paddingTop: "6rem" }}>
+                <img
+                    className={styles.iconsiconArrowLeft}
+                    alt=""
+                    src="/iconsiconarrowleft.svg"
+                    onClick={() => router.back()}
+                    style={{ cursor: "pointer" }}
+                />
+                <Typography className={styles.viewFarm}>{name}</Typography>
 
-            <div className={styles.headericon} id="header-icon" onClick={handleClick}>
-                <img className={styles.headericonChild} alt="" src="/frame-40561.svg" />
+                <div className={styles.headericon} id="header-icon" onClick={handleClick}>
+                    <img className={styles.headericonChild} alt="" src="/frame-40561.svg" />
+                </div>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={() => { handleClose(); router.push(`/farms/${router.query.farm_id}/edit`)}}>Edit</MenuItem>
+                    <MenuItem onClick={() => { setDialogOpen(true); setAnchorEl(null) }}>Delete</MenuItem>
+
+                </Menu>
             </div>
-             <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                MenuListProps={{
-                'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={handleClose}>Edit</MenuItem>
-                <MenuItem onClick={deleteFarm}>Delete</MenuItem>
-            
-            </Menu>
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
+            {/* <LoadingComponent loading={loading} /> */}
+            <AlertDelete open={dialogOpen} deleteFarm={deleteFarm} setDialogOpen={setDialogOpen} loading={loading} />
         </div>
-            <AlertComponentMobile alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true}/>
-            <LoadingComponent loading={loading}/>
-        </div>
-     
+
     );
 };
 

@@ -61,7 +61,7 @@ const MobileOtpScreen: NextPage = () => {
 
     const response = await verifyOtpService(body);
 
-    if (response.success) {
+    if (response?.success) {
       await setCookie();
       if ("data" in response) {
         dispatch(setUserDetails(response?.data));
@@ -94,7 +94,7 @@ const MobileOtpScreen: NextPage = () => {
   const setOtpValue = (value: string) => {
     setErrorMessages({});
     setOtp(value)
-    if (value.length == 6) {
+    if (value.length == 4) {
       onSubmitOtpClick(value);
     }
   }
@@ -120,7 +120,7 @@ const MobileOtpScreen: NextPage = () => {
                 <OtpInput
                   value={otp}
                   onChange={(e: string) => setOtpValue(e)}
-                  numInputs={6}
+                  numInputs={4}
                   isInputNum
                   shouldAutoFocus
                   inputStyle="otpInputs"

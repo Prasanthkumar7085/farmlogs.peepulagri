@@ -242,6 +242,22 @@ body {
         display: none;
     }
 }
+@media (max-width:768px) {
+    #web-dashboard {
+        display: none;
+    }
+}
+
+@media (max-width:768px) {
+    #mobile-view {
+        display: block;
+    }
+}
+@media (min-width:768px) {
+    #mobile-view {
+        display: none;
+    }
+}
 
 .MuiOutlinedInput-notchedOutline {
     border-color: #B4C1D6 !important;
@@ -258,7 +274,9 @@ body {
     position: relative;
 }
 
-
+#dashboardPage {
+    padding-top: 4rem;
+}
 
 .addFormPositionIcon {
     position: absolute;
@@ -278,4 +296,9 @@ body {
     text-align: center !important;
     margin-right: 10px;
     border: 1px solid #B4C1D6 !important;
+    margin-bottom: 10px;
+}
+
+#mobileDashboard {
+    position: relative;
 }

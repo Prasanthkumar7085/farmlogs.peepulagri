@@ -36,8 +36,10 @@ const DashboardPage = () => {
         if (search_string) {
             queryParam['search_string'] = search_string;
         }
-        if (location) {
-            queryParam['location'] = location;
+            if (location) {
+            if (location !== 'All') {
+                queryParam['location'] = location;
+            }
         }
         router.push({ pathname: '/farms', query: queryParam })
         url = prepareURLEncodedParams(url, queryParam);
@@ -78,16 +80,21 @@ const DashboardPage = () => {
 
     const getAllLocations = async () => {
         const response = await getAllLocationsService(accessToken);
-        if (response.success) {
-            setLocations(response?.data);
-            let locationFromRespoonse =  response?.data[0];
-            setLocation(locationFromRespoonse);
-            let searchFromRouter = router.query.search_string;
-            await getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string,location:locationFromRespoonse });
-            if (searchFromRouter) {
-                setSearchString(searchFromRouter as string);
-            }
-        }   
+        setLocations(['All', ...response?.data]);
+       
+
+        let searchFromRouter = router.query.search_string;
+        let locationFromRouter = router.query.location;
+        await getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string,location:locationFromRouter as string});
+        if (searchFromRouter) {
+            setSearchString(searchFromRouter as string);
+        }
+        if (locationFromRouter) {
+            setLocation(locationFromRouter as string);
+        } else {
+            setLocation('All');
+        }
+        
     }
 
 
@@ -119,14 +126,14 @@ const DashboardPage = () => {
             setLocation={setLocation}
             getDataOnLocationChange={getDataOnLocationChange} />
             
-            {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} /> :
+            {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} location={location}/> :
                 (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> :
                     <div style={{ minHeight: "75vh" }}>
 
                     </div>
 
                 )}
-            <div className="addFormPositionIcon" >
+            <div className="addFormPositionIcon">
                 <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
             </div>
             <LoadingComponent loading={loading} />

@@ -221,11 +221,9 @@ const AddFarmForm = () => {
     }
 
     const addInputValue = (e: any, newValue: string) => {
-        // setLocations([newValue as string, ...locations]);
         setLocation(newValue);
-        console.log('asdf');
         
-        if (newValue.trim() !== '' && !locations.includes(newValue)) {
+        if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.some(str => str.includes(newValue))) {
             setLocations([...locations, newValue]);
         }
     };

@@ -175,9 +175,10 @@ const AllCropsComponent = () => {
                     </div>
                     : "")}
 
-            <div className="addFormPositionIcon" >
+            {cropOptions?.length && !loading?<div className="addFormPositionIcon" >
                 <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />
-            </div>
+            </div> : ""}
+            
             {dilogOpen ? <NewFolderDiloag
                 open={dilogOpen}
                 captureResponseDilog={captureResponseDilog}

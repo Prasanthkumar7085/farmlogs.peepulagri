@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useCallback } from "react";
 import styles from "./side-menu1.module.css";
 import { IconButton, MenuItem, MenuList, Typography } from "@mui/material";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/router";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
@@ -11,6 +11,8 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
 
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const mobile = useSelector((state: any) => state.auth.userDetails?.user_details?.phone);
 
   const onScoutingCMenuItemck = useCallback(() => {
     // Please sync "Dashboard" to the project
@@ -51,9 +53,9 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
             src="/menu-avatar.svg"
           />
           <div className={styles.userdetails} >
-            <Typography>Joseph</Typography>
+            <Typography>Profile</Typography>
             <Typography variant="h6">
-              joseph.priestley@gmail.com
+              {mobile ? mobile : ""}
             </Typography>
           </div>
         </div>

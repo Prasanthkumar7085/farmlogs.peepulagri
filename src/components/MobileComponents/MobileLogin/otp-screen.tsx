@@ -138,7 +138,7 @@ const MobileOtpScreen: NextPage = () => {
                     Resend OTP
                   </Button>
                 </p> : ""}
-                {seconds ? `Resend in 00:${otpCountDown}s` : ""}
+                {seconds ? `Resend in ${otpCountDown}s` : ""}
               </Typography>
             </div>
           </div>

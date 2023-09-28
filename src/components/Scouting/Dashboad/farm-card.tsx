@@ -8,13 +8,13 @@ import NoDataComponent from "@/components/Core/NoDataComponent";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import { useRouter } from "next/router";
 
-interface pagePropsType{
+interface pagePropsType {
   farmsData: Array<FarmDataType>;
   paginationDetails: PaginationInFarmResponse | undefined;
   loading: boolean;
   location: string
 }
-const FarmCard = ({ farmsData, paginationDetails, loading,location }: pagePropsType) => {
+const FarmCard = ({ farmsData, paginationDetails, loading, location }: pagePropsType) => {
 
 
   const router = useRouter();
@@ -25,16 +25,21 @@ const FarmCard = ({ farmsData, paginationDetails, loading,location }: pagePropsT
       <div className={styles.allFormsBlock}>
         {farmsData.length ? farmsData.map((item: FarmDataType) => {
           return (
-            <div className={styles.farmcard} id="farm-card" key={item._id}  onClick={() => router.push(`farms/${item._id}/crops`)}>
+            <div className={styles.farmcard} id="farm-card" key={item._id} onClick={() => router.push(`farms/${item._id}/crops`)}>
               <div className={styles.farm} id="farm">
                 <div className={styles.farmdetails} id="farm-detalis">
                   <div className={styles.duration} id="duration">
                     <div className={styles.aug2023}>{timePipe(item.createdAt, 'DD, MMM YYYY')} - Current</div>
                   </div>
                   <div className={styles.farm1}>
-                    {item.title.length > 16 ? item.title.slice(0, 12) + '...' : item.title}
+                    {item.title.length > 16 ?
+
+                      (item.title.slice(0, 1).toUpperCase() +
+                        item.title.slice(1, 12) + '...') :
+
+                      item.title[0].toUpperCase() + item.title.slice(1,)}
                   </div>
-                 
+
                   {/* <div className={styles.location}>
                   {!loading && location && location == 'All' ?<div className={styles.locationArea}>
                         {item?.location.length > 13 ? item?.location.slice(0, 10) + '...' : item?.location}

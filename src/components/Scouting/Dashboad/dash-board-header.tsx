@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TextField, InputAdornment, Icon, IconButton, Typography, Menu, MenuItem } from "@mui/material";
 import styles from "./dash-board-header.module.css";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -10,14 +10,16 @@ type captureSearchStringType = (search: string) => void
 interface pageProps{
   captureSearchString: captureSearchStringType,
   searchString: string;
-  locations:Array<string>
+  locations: Array<string>;
+  location: string;
+  setLocation: Dispatch<SetStateAction<string>>;
+  getDataOnLocationChange: (location:string) => void;
 }
 
-const DashBoardHeader = ({ captureSearchString, searchString,locations }: pageProps) => {
+const DashBoardHeader = ({ captureSearchString, searchString,locations,location,setLocation,getDataOnLocationChange }: pageProps) => {
   
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [location, setLocation] = useState<string>();
 
   const onChangeSearchString = (event:ChangeEvent<HTMLInputElement>) => {
     captureSearchString(event.target.value);
@@ -28,12 +30,12 @@ const DashBoardHeader = ({ captureSearchString, searchString,locations }: pagePr
 
   useEffect(() => {
     setSearch(searchString);
-    setLocation(locations[0])
-  }, [searchString,locations]);
+  }, [searchString]);
 
   const selectCity = (item: string) => {
     setAnchorEl(null);
     setLocation(item);
+    getDataOnLocationChange(item);
   };
 
   return (
@@ -48,7 +50,8 @@ const DashBoardHeader = ({ captureSearchString, searchString,locations }: pagePr
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
-              onClose={()=>setAnchorEl(null)}
+              onClose={() => setAnchorEl(null)}
+              sx={{maxHeight:'50vh'}}
             >
               {locations.map((item: string, index: number) => {
                 return (

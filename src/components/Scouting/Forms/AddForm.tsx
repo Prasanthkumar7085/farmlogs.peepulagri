@@ -1,9 +1,11 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     TextField,
     Icon,
     Button,
+    Autocomplete,
+    CircularProgress,
 } from "@mui/material";
 import styles from "./add-farm-form1.module.css";
 import MyLocationOutlinedIcon from '@mui/icons-material/MyLocationOutlined';
@@ -16,6 +18,7 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
 import { FarmDataType } from "@/types/farmCardTypes";
 import editFarmService from "../../../../lib/services/FarmsService/editFarmService";
+import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 
 
 
@@ -36,6 +39,12 @@ const AddFarmForm = () => {
     const [title, setTitle] = useState<string>();
     const [location, setLocation] = useState<string>();
     const [area, setArea] = useState<string>();
+
+
+    const [open, setOpen] = useState(false);
+    const [optionsLoading, setOptionsLoading] = useState(false);
+
+    const [locations, setLocations] = useState<Array<string>>([]);
 
     const geometryDemo={
                 "type": "Polygon",
@@ -91,7 +100,11 @@ const AddFarmForm = () => {
             }, 1000);
 
         } else if (response?.status == 422) {
-            setErrorMessages(response?.errors);
+            if (response?.errors) {
+                setErrorMessages(response?.errors);
+            } else {
+                setErrorMessages({title:response?.message});
+            }
             setAlertMessage(response?.message);
             setAlertType(false);
         } else {
@@ -175,8 +188,47 @@ const AddFarmForm = () => {
     useEffect(() => {
         if (router.isReady && accessToken && router.query.farm_id) {
             getFarmDataById();
-       }
+            getLocations();
+        }
     },[router.isReady,accessToken]);
+
+
+    const [hiddenLoading, setHiddenLoading] = useState(false);
+
+    useEffect(() => {
+
+        setHiddenLoading(true);
+        setTimeout(() => {
+            setHiddenLoading(false);
+        },1)
+        
+    }, [data]);
+
+
+
+    const getLocations = async () => {
+        setOptionsLoading(true);
+        try {
+            const response = await getAllLocationsService(accessToken);
+        if (response?.success) {
+            setLocations(response?.data);
+        }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setOptionsLoading(false);
+       }
+    }
+
+    const addInputValue = (e: any, newValue: string) => {
+        // setLocations([newValue as string, ...locations]);
+        setLocation(newValue);
+        console.log('asdf');
+        
+        if (newValue.trim() !== '' && !locations.includes(newValue)) {
+            setLocations([...locations, newValue]);
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit(onSubmitClick)}>
@@ -220,7 +272,63 @@ const AddFarmForm = () => {
                         </div> */}
                     <div className={styles.farmname} id="enter-location">
                         <div className={styles.label}>Location</div>
-                        <TextField
+
+                        {!hiddenLoading?<Autocomplete
+                            id="asynchronous-demo"
+                            open={open}
+                            fullWidth
+                            onOpen={() => {
+                                getLocations();
+                                setOpen(true);
+                            }}
+                            onClose={() => {
+                                setOpen(false);
+                            }}
+                            value={location}
+                            isOptionEqualToValue={(option, value) => option === value}
+                            getOptionLabel={(option) => option}
+                            options={locations}
+                            loading={optionsLoading}
+                            onInputChange={addInputValue}
+                                onChange={(e: any, value: any, reason: any) => {
+                                    if (reason == "clear") {
+                                        setLocation('');
+                                    }
+                                    if (value) {
+                                        setLocation(value);
+                                    }
+                                }}
+                            renderInput={(params) => (
+                                <TextField
+                                {...params}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    endAdornment: (
+                                    <React.Fragment>
+                                        {optionsLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                                        {params.InputProps.endAdornment}
+                                    </React.Fragment>
+                                    ),
+                                }}
+                                {...register('location')}
+                                className={styles.inputfarmname}
+                                name="location"
+                                size="small"
+                                placeholder="Enter location here"
+                                fullWidth
+                                variant="outlined"
+                                error={Boolean(errorMessages?.['location'])}
+                                helperText={errorMessages?.['location'] ? errorMessages?.['location'] : ""}
+                                sx={{
+                                    '& .MuiInputBase-root': {
+                                        background: "#fff"
+                                    }
+                                }}
+                                  
+                                />
+                            )}
+                            />:""}
+                        {/* <TextField
                             sx={{
                                 '& .MuiInputBase-root': {
                                     background: "#fff"
@@ -237,7 +345,7 @@ const AddFarmForm = () => {
                             helperText={errorMessages?.['location'] ? errorMessages?.['location'] : ""}
                             value={location}
                             onChange={(e)=>setLocation(e.target.value)}
-                        />
+                        /> */}
                     </div>
                     <div className={styles.farmname} id="acres">
                         <div className={styles.label}>Total Land (acres)</div>

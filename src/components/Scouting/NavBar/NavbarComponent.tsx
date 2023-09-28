@@ -1,9 +1,8 @@
-import type { NextPage } from "next";
 import styles from "./navbar.module.css";
 import ImageComponent from "@/components/Core/ImageComponent";
 import { IconButton } from "rsuite";
 import React, { useState } from "react";
-import { Box, Button, Dialog, DialogTitle, Drawer } from "@mui/material";
+import { Box, Drawer } from "@mui/material";
 import SideMenu1 from "./side-menu1";
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
@@ -29,7 +28,7 @@ const ScoutingHeader = ({ children }: any) => {
     return (
         <div id="mobileBody">
             <div id={styles.navBar}>
-                <div className={styles.navbar} >
+                <div className={styles.navbar}>
                     <ImageComponent src="/Logo-color.svg" width="70" height="60" />
                     <IconButton onClick={() => toggleDrawer(true)}>
                         <img className={styles.menuIicon} alt="options" src="/menuiicon.svg" />
@@ -37,8 +36,6 @@ const ScoutingHeader = ({ children }: any) => {
                 </div>
             </div>
             {children}
-
-
             <React.Fragment>
                 <Drawer
                     anchor={'right'}

@@ -25,10 +25,10 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
         setCapturedImageUrl(null)
         setCapturedVideoUrl(null)
         try {
-            // const constraints = {
-            //     video: { facingMode: { exact: 'environment' } }, // Specify the back camera
-            // };
-            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const constraints = {
+                video: { facingMode: { exact: 'environment' } }, // Specify the back camera
+            };
+            const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
             setStream(mediaStream);
             videoRef.current.srcObject = mediaStream;
         } catch (error) {

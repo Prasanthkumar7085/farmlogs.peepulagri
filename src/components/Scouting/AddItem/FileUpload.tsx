@@ -411,7 +411,7 @@ const FileUploadComponent = () => {
     const captureCameraVedio = (value: any, videofile: any) => {
         setOpenCamera(false)
         const type = "video/webm"
-        const file = new File([videofile], "my video", { type });
+        const file = new File([videofile], `my video.webm`, { type });
         console.log(file)
         let temp: any = []
         temp.push(file)
@@ -441,10 +441,13 @@ const FileUploadComponent = () => {
         }
     }
 
+    const [cropName, setCropName] = useState<any>()
+
     const captureCropName = (selectedObject: any) => {
         console.log(selectedObject)
         if (selectedObject) {
             setSelectedCrop(selectedObject)
+            setCropName(selectedObject.title)
         }
     }
 
@@ -479,7 +482,7 @@ const FileUploadComponent = () => {
                                     </h5>
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
-                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={cropOptions} captureFarmName={captureCropName} />
+                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={cropName} options={cropOptions} captureFarmName={captureCropName} />
                                         <FormHelperText />
                                     </FormControl>
                                 </div>
@@ -545,7 +548,7 @@ const FileUploadComponent = () => {
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
                                                     <div className={styles.uploadItem}>
-                                                        <div className={styles.photojpg}>{item.name} </div>
+                                                        <div className={styles.photojpg}>{item.name.slice(0, 10)}....{item.type} </div>
                                                         <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
                                                     </div>
                                                     {fileProgress[index] == 100 ?

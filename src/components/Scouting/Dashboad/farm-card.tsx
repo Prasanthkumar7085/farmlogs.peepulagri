@@ -25,9 +25,9 @@ const FarmCard = ({ farmsData, paginationDetails, loading,location }: pagePropsT
       <div className={styles.allFormsBlock}>
         {farmsData.length ? farmsData.map((item: FarmDataType) => {
           return (
-            <div className={styles.farmcard} id="farm-card" key={item._id}>
+            <div className={styles.farmcard} id="farm-card" key={item._id}  onClick={() => router.push(`farms/${item._id}/crops`)}>
               <div className={styles.farm} id="farm">
-                <div className={styles.farmdetails} id="farm-detalis" onClick={() => router.push(`farms/${item._id}`)}>
+                <div className={styles.farmdetails} id="farm-detalis">
                   <div className={styles.duration} id="duration">
                     <div className={styles.aug2023}>{timePipe(item.createdAt, 'DD, MMM YYYY')} - Current</div>
                   </div>
@@ -47,7 +47,7 @@ const FarmCard = ({ farmsData, paginationDetails, loading,location }: pagePropsT
                       <div className={styles.acres}>{item?.area ? Math.floor(item?.area * 100) / 100 : ""} Acres</div>
                     </div>
                   </div>
-                  <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}/crops`)}>
+                  <div className={styles.viewfarm} id="icon-button-view-farm">
                     <img alt="" src="/form-card-arrow-icon.svg" />
                   </div>
                 </div>

@@ -10,6 +10,9 @@ import updateCropService from "../../../../lib/services/CropServices/updateCropS
 import { useSelector } from "react-redux";
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import deleteCropService from "../../../../lib/services/CropServices/deleteCropService";
+import AlertComponent from "@/components/Core/AlertComponent";
 
 interface pagePropsType {
     itemDetails: CropTypeResponse;
@@ -23,7 +26,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
 
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [renameOpen, setRenameOpen] = useState(false);
 
     const handleClose = () => {
@@ -48,9 +51,9 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                     }
                 }}
             >
-                <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); setRenameOpen(true) }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Rename</MenuItem>
-                <MenuItem onClick={() => { setMenuOpen(true); setAnchorEl(null) }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
-
+                <MenuItem onClick={() => { handleClose(); setRenameOpen(true) }}>Rename</MenuItem>
+                <MenuItem onClick={() => { setDeleteOpen(true); handleClose() }}>Delete</MenuItem>
+        
             </Menu>
         )
     }
@@ -66,15 +69,39 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
 
 
     const [loadingForAdd, setLoadingForAdd] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState(false);
 
     const renameCrop = async (value: any) => {
         setLoadingForAdd(true)
         const response = await updateCropService(router.query.farm_id as string, itemDetails?._id, value, accessToken);
         if (response?.success) {
             getCropsDetails(router.query.farm_id as string);
+            setAlertMessage(response?.message);
+            setAlertType(true)
+        } else {
+            setAlertMessage(response?.message);
+            setAlertType(false)
         }
         setRenameOpen(false);
         setLoadingForAdd(false);
+    }
+
+    const deleteCrop = async() => {
+        setDeleteLoading(true)
+        const response = await deleteCropService(router.query.farm_id as string, itemDetails?._id, accessToken);
+        if (response?.success) {
+            getCropsDetails(router.query.farm_id as string);
+            setAlertMessage(response?.message);
+            setAlertType(true);
+            setDeleteOpen(false);
+        } else {
+            setAlertMessage(response?.message);
+            setAlertType(false)
+        }
+        setRenameOpen(false);
+        setDeleteLoading(false);
     }
 
     return (
@@ -91,6 +118,8 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                 </div>
             </div>
             <NewFolderDiloag open={renameOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} defaultTitle={itemDetails?.title} />
+            <AlertDelete open={deleteOpen} deleteFarm={deleteCrop} setDialogOpen={setDeleteOpen} loading={deleteLoading} />
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
         </div>
     );
 };

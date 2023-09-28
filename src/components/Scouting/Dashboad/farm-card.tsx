@@ -8,7 +8,13 @@ import NoDataComponent from "@/components/Core/NoDataComponent";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import { useRouter } from "next/router";
 
-const FarmCard = ({ farmsData, paginationDetails, loading }: { farmsData: Array<FarmDataType>, paginationDetails: PaginationInFarmResponse | undefined, loading: boolean }) => {
+interface pagePropsType{
+  farmsData: Array<FarmDataType>;
+  paginationDetails: PaginationInFarmResponse | undefined;
+  loading: boolean;
+  location: string
+}
+const FarmCard = ({ farmsData, paginationDetails, loading,location }: pagePropsType) => {
 
 
   const router = useRouter();
@@ -28,6 +34,12 @@ const FarmCard = ({ farmsData, paginationDetails, loading }: { farmsData: Array<
                   <div className={styles.farm1}>
                     {item.title.length > 16 ? item.title.slice(0, 12) + '...' : item.title}
                   </div>
+                 
+                  {/* <div className={styles.location}>
+                  {!loading && location && location == 'All' ?<div className={styles.locationArea}>
+                        {item?.location.length > 13 ? item?.location.slice(0, 10) + '...' : item?.location}
+                    </div>:""}
+                  </div> */}
                 </div>
                 <div className={styles.farmareablock} id="farm-area-block">
                   <div className={styles.farmarea} id="farm-area">

@@ -15,6 +15,7 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
+import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
 
 
 const FileUploadComponent = () => {
@@ -86,12 +87,8 @@ const FileUploadComponent = () => {
                 setFarmOptions(response?.data);
                 if (id) {
                     let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
-
                     setDefaultValue(selectedObject.title)
                     captureFarmName(selectedObject);
-                } else {
-                    setDefaultValue(response?.data[0].title);
-                    captureFarmName(response?.data[0]);
                 }
             } else {
                 setFarmOptions([]);
@@ -471,7 +468,7 @@ const FileUploadComponent = () => {
                                         variant="outlined"
                                     >
                                         <InputLabel color="primary" />
-                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={formOptions} captureFarmName={captureFarmName} />
+                                        <SelectAutoCompleteForFarms options={formOptions} label={"title"} onSelectValueFromDropDown={captureFarmName} placeholder={"Select Farm"} defaultValue={defaultValue} />
 
                                         <FormHelperText />
                                     </FormControl>
@@ -482,7 +479,7 @@ const FileUploadComponent = () => {
                                     </h5>
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
-                                        <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={cropName} options={cropOptions} captureFarmName={captureCropName} />
+                                        <SelectAutoCompleteForFarms options={cropOptions} label={"title"} onSelectValueFromDropDown={captureCropName} placeholder={"Select Crop"} defaultValue={cropName} />
                                         <FormHelperText />
                                     </FormControl>
                                 </div>

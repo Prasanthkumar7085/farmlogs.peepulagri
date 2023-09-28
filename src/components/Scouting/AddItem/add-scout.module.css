@@ -17,6 +17,7 @@
     transform: rotate(-0.04deg);
     transform-origin: 0 0;
     cursor: pointer;
+    z-index: 999;
 }
 
 .farmselection {

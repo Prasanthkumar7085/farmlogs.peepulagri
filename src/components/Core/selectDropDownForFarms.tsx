@@ -1,51 +1,55 @@
-import { FormControl, MenuItem, Select } from "@mui/material"
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { Autocomplete, TextField } from "@mui/material";
 import { useRouter } from "next/router";
-import FarmDetailsMiniCard from "../AddLogs/farm-details-mini-card";
-import FarmDetailsCard from "../TimeLine/FarmDetailsCard";
+import { useEffect, useState } from "react";
 
-const SelectComponenentForFarms = ({ loading, setDefaultValue, options, captureFarmName, defaultValue, ...rest }: any) => {
+const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown, label, placeholder, defaultValue }: any) => {
 
-    const router = useRouter();
+    const [defaultValueSet, setDefaultValueSet] = useState<any>();
+    const [selectedValue, setSelectedValues] = useState<any>()
+    const router = useRouter()
 
-    const [statusOptions, setStatusOptions] = useState<any>();
-    const [farmOptions, setFarmOptions] = useState<any>()
+    useEffect(() => {
+        if (router.isReady && router.query.farm_id) {
+            setDefaultValueSet(options && options.find((item: any) => item._id == router.query.farm_id))
+        }
 
-    let handleStatusChange = (event: any) => {
-
-        let selectedOption = event.target.value;
-        let selectedObject = options.find((item: any) => item.title == selectedOption);
-        setStatusOptions(selectedObject);
-        captureFarmName(selectedObject);
-        router.replace(`/farms/${selectedObject?._id}/crops`);
-
-    }
+    }, [router.isReady, options, router.query]);
 
     return (
+        <div>
+            <Autocomplete
+                value={defaultValueSet ? defaultValueSet : null}
+                disablePortal
+                size='small'
+                id="combo-box-demo"
+                options={(options && options?.length) ? options : []}
+                getOptionLabel={(option: any) => option[label] ? option[label]?.toUpperCase() : ""}
+                onChange={(e: any, value: any, reason: any) => {
+                    if (value) {
+                        onSelectValueFromDropDown(value, reason);
+                        setDefaultValueSet(value)
+                    }
+                    else {
+                        onSelectValueFromDropDown("", reason)
+                        setDefaultValueSet(value)
 
-        <Select
-            size="small"
-            sx={{
-                background: "#fff",
-                '& .MuiInputBase-root': {
-                    background: "#fff"
-                }
-            }}
-            {...rest}
-            value={statusOptions?.title ? statusOptions?.title : defaultValue}
-            onChange={handleStatusChange}
-        >
+                    }
 
-            {options?.length && options.map((item: any, index: number) => {
-                return (
-                    <MenuItem value={item.title} key={index}>
-                        {item.title}
-                    </MenuItem>
-                )
-            })}
+                }} renderInput={(params) => <TextField {...params} placeholder={placeholder}
+                />}
+                sx={{
+                    width: '100%',
+                    "& .MuiInputBase-input ": {
+                        fontSize: "15px",
+                        fontWeight: "400",
+                        fontFamily: "'Poppins', sans-serif ",
+                        color: "#000"
+                    }
+                }}
+            />
 
-        </Select>
-    )
+        </div>
+    );
 }
-export default SelectComponenentForFarms
+
+export default SelectAutoCompleteForFarms;

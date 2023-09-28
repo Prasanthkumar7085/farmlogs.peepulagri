@@ -14,6 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
+import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
 import ImageComponent from "@/components/Core/ImageComponent";
 const AllCropsComponent = () => {
 
@@ -35,12 +36,13 @@ const AllCropsComponent = () => {
         let response = await getAllFarmsService(accessToken);
 
         try {
-            if (response?.success && response.data.length) {
+            if (response?.success == true && response?.data?.length) {
                 setFarmOptions(response?.data);
                 if (id) {
-                    let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
-
-                    setDefaultValue(selectedObject.title)
+                    console.log(id)
+                    let selectedObject = response?.data?.length && response?.data?.find((item: any) => item._id == id);
+                    console.log(selectedObject)
+                    setDefaultValue(selectedObject?.title)
                     captureFarmName(selectedObject);
                 } else {
                     setDefaultValue(response?.data[0].title);
@@ -66,13 +68,11 @@ const AllCropsComponent = () => {
 
             if (responseData.success == true) {
                 setCropOptions(responseData?.data);
-
             } else {
                 setCropOptions([]);
             }
         } catch (err) {
             console.error(err);
-
         }
         finally {
             setLoading(false);
@@ -117,10 +117,10 @@ const AllCropsComponent = () => {
 
     //useEffect 
     useEffect(() => {
-        if (router.query.farm_id) {
+        if (router.isReady && router.query.farm_id && accessToken) {
             getFormDetails(router.query.farm_id)
         }
-    }, [accessToken, router.query.farm_id])
+    }, [accessToken, router.isReady]);
 
     const captureFarmName = (selectedObject: any) => {
         if (selectedObject && Object.keys(selectedObject).length) {
@@ -150,7 +150,7 @@ const AllCropsComponent = () => {
                 variant="outlined"
             >
                 <InputLabel color="primary" />
-                <SelectComponenentForFarms setDefaultValue={setDefaultValue} defaultValue={defaultValue} options={formOptions} captureFarmName={captureFarmName} />
+                <SelectAutoCompleteForFarms options={formOptions} label={"title"} onSelectValueFromDropDown={captureFarmName} placeholder={"Select Farm"} defaultValue={defaultValue} />
                 <FormHelperText />
             </FormControl>
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>

@@ -53,7 +53,7 @@ const AllCropsComponent = () => {
         } catch (err) {
             console.error(err);
         }
-        
+
     }
 
     //get all crops name
@@ -102,7 +102,7 @@ const AllCropsComponent = () => {
                 setDilogOpen(false)
                 setAlertMessage(responseData.message)
                 setAlertType(true)
-            } else if (responseData?.status==422) {
+            } else if (responseData?.status == 422) {
                 setErrorMessages(responseData?.errors);
             }
         }
@@ -176,7 +176,7 @@ const AllCropsComponent = () => {
                     : "")}
 
             <div className="addFormPositionIcon" >
-                <img src="/add-form-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />
+                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />
             </div>
             {dilogOpen ? <NewFolderDiloag
                 open={dilogOpen}

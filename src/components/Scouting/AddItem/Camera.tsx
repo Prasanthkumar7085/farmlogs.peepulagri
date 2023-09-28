@@ -1,9 +1,11 @@
 // src/components/Camera.js
 import React, { useState, useRef, useEffect } from 'react';
 import styles from "./camera.module.css";
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import CameraIcon from '@mui/icons-material/Camera';
 import VideocamIcon from '@mui/icons-material/Videocam';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import ClearIcon from '@mui/icons-material/Clear';
 function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     const [stream, setStream] = useState<any>(null);
     const [mediaRecorder, setMediaRecorder] = useState<any>(null);
@@ -109,34 +111,38 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
                 </div> : ""
             }
 
-            <div style={{ marginLeft: "29%" }}>
+            <div className={styles.capturingIcons}>
                 {stream && !capturedImageUrl && !capturedVideoUrl ? (
                     <>
-                        {mediaRecorder?.state !== 'recording' ? <Button onClick={stopCamera}>
-                            stop
-                        </Button> : ""}
+                        {mediaRecorder?.state !== 'recording' ? <IconButton onClick={stopCamera}>
+                            < ClearIcon sx={{ fontSize: "2.5rem", color: "#ff0000" }} />
+                        </IconButton> : ""}
 
-                        {mediaRecorder?.state !== 'recording' ? <IconButton onClick={capturePhoto}><CameraIcon /></IconButton> : ""}
+                        {mediaRecorder?.state !== 'recording' ? <IconButton onClick={capturePhoto}><CameraIcon sx={{ fontSize: "2.5rem", color: "#2e58c4" }} /></IconButton> : ""}
                     </>
                 ) : (
-                    <Button onClick={startCamera}>Open Camera</Button>
+                    <IconButton onClick={startCamera}><CameraAltIcon sx={{ fontSize: "2.5rem", color: "#2e58c4" }} /></IconButton>
                 )}
                 {mediaRecorder && mediaRecorder.state === 'recording' ? (
-                    <Button onClick={stopRecording}>Stop Recording</Button>
+                    <Tooltip title="Stop Recording">
+                        <IconButton onClick={stopRecording}> < ClearIcon sx={{ fontSize: "2.5rem", color: "#ff0000" }} /></IconButton></Tooltip>
                 ) : (
-                    <IconButton onClick={startRecording}><VideocamIcon /></IconButton>
+                    <IconButton onClick={startRecording}><VideocamIcon sx={{ fontSize: "3rem", color: "#2e58c4" }} /></IconButton>
                 )}
             </div>
 
             {
                 capturedImageUrl &&
                 <div>
-                    <img src={capturedImageUrl} alt="Captured" />
-                    <button onClick={startCamera}>Retake</button>
-                    <button onClick={() => {
-                        captureCloseCamera(false, capturedImageUrl)
-                        stopCamera()
-                    }}>upload</button></div>
+                    <img src={capturedImageUrl} alt="Captured" style={{ width: "100%" }} />
+                    <div className={styles.ofterCaptureBtns}>
+                        <button className={styles.retakeBtn} onClick={startCamera}>Retake</button>
+                        <button className={styles.uploadBtn} onClick={() => {
+                            captureCloseCamera(false, capturedImageUrl)
+                            stopCamera()
+                        }}>Upload</button>
+                    </div>
+                </div>
             }
 
 
@@ -147,11 +153,13 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
                         <video controls>
                             <source src={capturedVideoUrl} type="video/webm" />
                         </video>
-                        <button onClick={startCamera}>Retake</button>
-                        <button onClick={() => {
-                            captureCameraVedio(false, captureVedioBlob)
-                            stopCamera()
-                        }}>upload</button>
+                        <div className={styles.ofterCaptureBtns}>
+                            <button className={styles.retakeBtn} onClick={startCamera}>Retake</button>
+                            <button className={styles.uploadBtn} onClick={() => {
+                                captureCameraVedio(false, captureVedioBlob)
+                                stopCamera()
+                            }}>Upload</button>
+                        </div>
                     </div>
                 )
             }

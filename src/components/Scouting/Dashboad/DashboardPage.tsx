@@ -12,52 +12,52 @@ import getAllLocationsService from "../../../../lib/services/Locations/getAllLoc
 
 
 const DashboardPage = () => {
-    
+
     const router = useRouter();
-    
+
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-    
+
     const [farmsData, setFarmsData] = useState<Array<FarmDataType>>([]);
     const [paginationDetails, setPaginationDetails] = useState<PaginationInFarmResponse>();
     const [loading, setLoading] = useState(true);
     const [searchString, setSearchString] = useState('');
     const [locations, setLocations] = useState<Array<string>>([]);
 
-    const getAllFarms = async ({ page = 1, limit = 100, search_string = '',location }: Partial<{ page: number, limit: number, search_string: string,location:string }>) => {
+    const getAllFarms = async ({ page = 1, limit = 100, search_string = '', location }: Partial<{ page: number, limit: number, search_string: string, location: string }>) => {
 
         setLoading(true);
         try {
             let url = `farm/${page}/${limit}`
-        let queryParam: any = {
-            order_by: "createdAt",
-            order_type: "desc"
-        };
+            let queryParam: any = {
+                order_by: "createdAt",
+                order_type: "desc"
+            };
 
-        if (search_string) {
-            queryParam['search_string'] = search_string;
-        }
-            if (location) {
-            if (location !== 'All') {
-                queryParam['location'] = location;
+            if (search_string) {
+                queryParam['search_string'] = search_string;
             }
-        }
-        router.push({ pathname: '/farms', query: queryParam })
-        url = prepareURLEncodedParams(url, queryParam);
+            if (location) {
+                if (location !== 'All') {
+                    queryParam['location'] = location;
+                }
+            }
+            router.push({ pathname: '/farms', query: queryParam })
+            url = prepareURLEncodedParams(url, queryParam);
 
 
-        const response = await getAllFarmsService(url, accessToken);
+            const response = await getAllFarmsService(url, accessToken);
 
-        if (response?.success) {
-            const { data, ...rest } = response;
-            setFarmsData(data);
-            setPaginationDetails(rest)
-        }
+            if (response?.success) {
+                const { data, ...rest } = response;
+                setFarmsData(data);
+                setPaginationDetails(rest)
+            }
         } catch (err: any) {
             console.error(err)
         } finally {
             setLoading(false);
         }
-    
+
     };
 
     const captureSearchString = (search: string) => {
@@ -69,10 +69,10 @@ const DashboardPage = () => {
     const [location, setLocation] = useState('');
     useEffect(() => {
         if (router.isReady && accessToken && location) {
-            
+
             const delay = 500;
             const debounce = setTimeout(() => {
-                getAllFarms({ page: 1, limit: 100, search_string: searchString,location:location });
+                getAllFarms({ page: 1, limit: 100, search_string: searchString, location: location });
             }, delay);
             return () => clearTimeout(debounce);
         }
@@ -81,11 +81,11 @@ const DashboardPage = () => {
     const getAllLocations = async () => {
         const response = await getAllLocationsService(accessToken);
         setLocations(['All', ...response?.data]);
-       
+
 
         let searchFromRouter = router.query.search_string;
         let locationFromRouter = router.query.location;
-        await getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string,location:locationFromRouter as string});
+        await getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string, location: locationFromRouter as string });
         if (searchFromRouter) {
             setSearchString(searchFromRouter as string);
         }
@@ -94,15 +94,15 @@ const DashboardPage = () => {
         } else {
             setLocation('All');
         }
-        
+
     }
 
 
 
     const getData = async () => {
         if (router.isReady && accessToken) {
-            
-             await getAllLocations();
+
+            await getAllLocations();
         } else {
             // setLoading(false);
         }
@@ -114,19 +114,19 @@ const DashboardPage = () => {
 
 
     const getDataOnLocationChange = async (location: string) => {
-        await getAllFarms({ page: 1, limit: 100, search_string: searchString as string,location:location });
+        await getAllFarms({ page: 1, limit: 100, search_string: searchString as string, location: location });
     }
     return (
         <div id="dashboardPage">
             <DashBoardHeader
-            captureSearchString={captureSearchString}
-            searchString={searchString}
-            locations={locations}
-            location={location}
-            setLocation={setLocation}
-            getDataOnLocationChange={getDataOnLocationChange} />
-            
-            {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} location={location}/> :
+                captureSearchString={captureSearchString}
+                searchString={searchString}
+                locations={locations}
+                location={location}
+                setLocation={setLocation}
+                getDataOnLocationChange={getDataOnLocationChange} />
+
+            {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} location={location} /> :
                 (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> :
                     <div style={{ minHeight: "75vh" }}>
 
@@ -134,7 +134,7 @@ const DashboardPage = () => {
 
                 )}
             <div className="addFormPositionIcon">
-                <img src="/add-form-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
+                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
             </div>
             <LoadingComponent loading={loading} />
         </div>

@@ -51,7 +51,20 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={() => setAnchorEl(null)}
-              sx={{ maxHeight: '50vh' }}
+              sx={{
+                maxHeight: '50vh', '& .MuiMenuItem-root': {
+                  fontSize: 'clamp(13px, 3.5vw, 16px)',
+                  minHeight: 'inherit',
+                  fontFamily: "'inter !important'",
+                  fontWeight: "500",
+                  paddingRight: "3rem",
+                  paddingBlock: "10px",
+                  borderBottom: "1px dashed #B4C1D6"
+                },
+                '& .MuiMenuItem-root:last-child': {
+                  borderBottom: "none !important"
+                }
+              }}
             >
               {locations.map((item: string, index: number) => {
                 return (
@@ -78,7 +91,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => { setSearch(''); captureSearchString('')}}>
+                <IconButton onClick={() => { setSearch(''); captureSearchString('') }}>
                   {search ? <ClearOutlinedIcon /> : ""}
                 </IconButton>
               </InputAdornment>
@@ -93,7 +106,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
           }}
         />
       </div>
-    </div>
+    </div >
   );
 };
 

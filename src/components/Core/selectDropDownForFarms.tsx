@@ -39,11 +39,13 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
                 />}
                 sx={{
                     width: '100%',
+                    background: "#fff",
                     "& .MuiInputBase-input ": {
-                        fontSize: "15px",
+                        fontSize: "13px",
                         fontWeight: "400",
-                        fontFamily: "'Poppins', sans-serif ",
-                        color: "#000"
+                        fontFamily: "'inter', sans-serif ",
+                        color: "#000",
+
                     }
                 }}
             />

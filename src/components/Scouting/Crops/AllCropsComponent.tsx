@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
 import { useRouter } from "next/router";
 import { Button, FormControl, FormHelperText, IconButton, InputLabel, Typography } from "@mui/material";
-import styles from "../AddItem/add-scout.module.css";
+import styles from "./crop-card.module.css";
 import Header1 from "../Header/HeaderComponent";
 import CropCard from "./CropCard";
 import SortIcon from '@mui/icons-material/Sort';
@@ -138,8 +138,7 @@ const AllCropsComponent = () => {
     }
 
     return (
-        <div>
-            <Header1 name={"My Crops"} />
+        <div className={styles.myCropsPage}>
             <FormControl
                 sx={{ width: "100%" }}
                 variant="outlined"
@@ -156,7 +155,7 @@ const AllCropsComponent = () => {
                     <AddIcon /><Typography variant="caption">New</Typography>
                 </IconButton>
             </div>
-            <div>
+            <div id={styles.allCropCardBlock}>
                 {cropOptions && cropOptions?.map((item: any, index: any) => (
                     <CropCard itemDetails={item} key={index} />
 

@@ -1,6 +1,6 @@
 .folderIcon {
-  width: 75px;
-  height: 75px;
+  width: 60px;
+  height: 60px;
 }
 
 .icons {
@@ -53,6 +53,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
-  padding: 1rem;
   padding-top: 0;
+}
+
+.myCropsPage {
+  padding: 1rem;
 }

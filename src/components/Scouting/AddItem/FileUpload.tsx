@@ -315,7 +315,7 @@ const FileUploadComponent = () => {
                 "type": item.type,
                 "size": item.size,
                 "source": "scouts",
-                "crop": selectedCrop.slug
+                "crop": selectedCrop?.slug
             }
         }
 
@@ -519,15 +519,17 @@ const FileUploadComponent = () => {
                                         <div className={styles.uploaddetails}>
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
-                                                    <div className={styles.photojpg}>{item.name} </div>
-                                                    <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                                                    <div className={styles.uploadItem}>
+                                                        <div className={styles.photojpg}>{item.name} </div>
+                                                        <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                                                    </div>
                                                     {fileProgress[index] == 100 ?
                                                         <div className={styles.photojpg}>
                                                             <IconButton>
-                                                                <DoneIcon />
+                                                                <DoneIcon sx={{ color: "#05A155" }} />
                                                             </IconButton>
                                                             <IconButton onClick={() => removeFileAfterAdding(index)}>
-                                                                <DeleteForeverIcon />
+                                                                <DeleteForeverIcon sx={{ color: "#820707" }} />
                                                             </IconButton>
                                                         </div> : ""}
                                                 </div>
@@ -535,7 +537,7 @@ const FileUploadComponent = () => {
                                                     <img
                                                         className={styles.close41}
                                                         alt=""
-                                                        src="/close-4-1.svg"
+                                                        src="/close-icon.svg"
                                                         onClick={() => removeFile(index)}
                                                     /> : ""}
 

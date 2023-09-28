@@ -66,13 +66,11 @@ const AllCropsComponent = () => {
 
             if (responseData.success == true) {
                 setCropOptions(responseData?.data);
-
             } else {
                 setCropOptions([]);
             }
         } catch (err) {
             console.error(err);
-
         }
         finally {
             setLoading(false);
@@ -117,10 +115,10 @@ const AllCropsComponent = () => {
 
     //useEffect 
     useEffect(() => {
-        if (router.query.farm_id) {
+        if (router.isReady && router.query.farm_id) {
             getFormDetails(router.query.farm_id)
         }
-    }, [accessToken, router.query.farm_id])
+    }, [accessToken, router.isReady]);
 
     const captureFarmName = (selectedObject: any) => {
         if (selectedObject && Object.keys(selectedObject).length) {

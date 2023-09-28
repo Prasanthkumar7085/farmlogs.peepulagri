@@ -1,9 +1,10 @@
 // src/components/Camera.js
 import React, { useState, useRef, useEffect } from 'react';
 import styles from "./camera.module.css";
-
-
-function Camera({ openCamera, captureCloseCamera }: any) {
+import { Button, IconButton } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
+import VideocamIcon from '@mui/icons-material/Videocam';
+function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     const [stream, setStream] = useState<any>(null);
     const [mediaRecorder, setMediaRecorder] = useState<any>(null);
     const videoRef: any = useRef(null);
@@ -11,6 +12,7 @@ function Camera({ openCamera, captureCloseCamera }: any) {
 
     const [capturedImageUrl, setCapturedImageUrl] = useState<any>(null);
     const [capturedVideoUrl, setCapturedVideoUrl] = useState<any>(null);
+    const [captureVedioBlob, setCaptureVedioBlob] = useState<any>()
 
 
     useEffect(() => {
@@ -23,10 +25,10 @@ function Camera({ openCamera, captureCloseCamera }: any) {
         setCapturedImageUrl(null)
         setCapturedVideoUrl(null)
         try {
-            const constraints = {
-                video: { facingMode: { exact: 'environment' } }, // Specify the back camera
-            };
-            const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+            // const constraints = {
+            //     video: { facingMode: { exact: 'environment' } }, // Specify the back camera
+            // };
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
             setStream(mediaStream);
             videoRef.current.srcObject = mediaStream;
         } catch (error) {
@@ -35,6 +37,7 @@ function Camera({ openCamera, captureCloseCamera }: any) {
     };
 
     const stopCamera = () => {
+        console.log(capturedVideoUrl)
         if (stream) {
             stream.getTracks().forEach((track: any) => track.stop());
             setStream(null);
@@ -58,6 +61,7 @@ function Camera({ openCamera, captureCloseCamera }: any) {
                 chunks.current = [];
                 const videoUrl = URL.createObjectURL(videoBlob);
                 setCapturedVideoUrl(videoUrl)
+                setCaptureVedioBlob(videoBlob)
                 // You can now use `videoUrl` to display or save the recorded video.
             };
             recorder.start();
@@ -69,7 +73,6 @@ function Camera({ openCamera, captureCloseCamera }: any) {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
             mediaRecorder.stop();
         }
-        stopRecording()
         videoRef.current.srcObject = null;
 
 
@@ -90,7 +93,7 @@ function Camera({ openCamera, captureCloseCamera }: any) {
     };
 
     return (
-        <div className={styles.camaraPage}>
+        <div >
             {!capturedImageUrl && !capturedVideoUrl ?
                 <div style={{
                     position: "relative",
@@ -98,31 +101,29 @@ function Camera({ openCamera, captureCloseCamera }: any) {
                     // paddingBottom: "54.77%",
                 }}>
                     <video ref={videoRef} autoPlay muted style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
+
                         width: "100%",
                         height: "70vh"
                     }} />
                 </div> : ""
             }
-            <div>
+
+            <div style={{ marginLeft: "29%" }}>
                 {stream && !capturedImageUrl && !capturedVideoUrl ? (
                     <>
-                        <button onClick={stopCamera}>
-                            <img src="/cansel-capture-icon.svg" alt="" />
+                        {mediaRecorder?.state !== 'recording' ? <Button onClick={stopCamera}>
+                            stop
+                        </Button> : ""}
 
-
-                        </button>
-                        {mediaRecorder && mediaRecorder.state === 'recording' ? (
-                            <button onClick={stopRecording}>Stop Recording</button>
-                        ) : (
-                            <button onClick={startRecording}>Start Recording</button>
-                        )}
-                        <button onClick={capturePhoto}>Capture</button>
+                        {mediaRecorder?.state !== 'recording' ? <IconButton onClick={capturePhoto}><CameraIcon /></IconButton> : ""}
                     </>
                 ) : (
-                    <button onClick={startCamera}>Open Camera</button>
+                    <Button onClick={startCamera}>Open Camera</Button>
+                )}
+                {mediaRecorder && mediaRecorder.state === 'recording' ? (
+                    <Button onClick={stopRecording}>Stop Recording</Button>
+                ) : (
+                    <IconButton onClick={startRecording}><VideocamIcon /></IconButton>
                 )}
             </div>
 
@@ -147,12 +148,13 @@ function Camera({ openCamera, captureCloseCamera }: any) {
                         </video>
                         <button onClick={startCamera}>Retake</button>
                         <button onClick={() => {
-                            captureCloseCamera(false, capturedVideoUrl)
+                            captureCameraVedio(false, captureVedioBlob)
                             stopCamera()
                         }}>upload</button>
                     </div>
                 )
             }
+
         </div >
     );
 }

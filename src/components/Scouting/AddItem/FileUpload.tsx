@@ -279,7 +279,7 @@ const FileUploadComponent = () => {
     const mergeFileChuncksEvent = async (responseObjs: any, uploadid: any, file: any, index: any) => {
 
         let obj = {
-            file_name: file,
+            file_key: file,
             upload_id: uploadid,
             parts: responseObjs
         }
@@ -404,7 +404,32 @@ const FileUploadComponent = () => {
         temp.push(fileAfterconevert)
         setMultipleFiles(temp)
         const fileProgressCopy = [...new Array(temp?.length).fill(0)]; // Create a copy of the progress array
+        setFileProgress(fileProgressCopy)
         fileUploadEvent(fileAfterconevert, 0, fileProgressCopy, setFileProgress)
+    }
+    //capture vedio
+    const captureCameraVedio = (value: any, videofile: any) => {
+        setOpenCamera(false)
+        const type = "video/webm"
+        const file = new File([videofile], "my video", { type });
+        console.log(file)
+        let temp: any = []
+        temp.push(file)
+        setMultipleFiles(temp)
+        const fileProgressCopy = [...new Array(temp?.length).fill(0)];
+        console.log(fileProgressCopy)
+        setFileProgress(fileProgressCopy)
+        const bytesToMB = (bytes: any) => {
+            return bytes / (1024 * 1024);
+        }
+        if (bytesToMB(file.size) >= 5) {
+            setUploadIntoChuncks(true)
+            startUploadEvent(file, 0, fileProgressCopy, setFileProgress)
+        }
+        else {
+            setUploadIntoChuncks(false)
+            fileUploadEvent(file, 0, fileProgressCopy, setFileProgress)
+        }
 
     }
 
@@ -427,7 +452,7 @@ const FileUploadComponent = () => {
     return (
         <div >
             {openCamera == true ?
-                <Camera openCamera={openCamera} captureCloseCamera={captureCloseCamera} /> :
+                <Camera openCamera={openCamera} captureCloseCamera={captureCloseCamera} captureCameraVedio={captureCameraVedio} /> :
 
                 <div>
                     < Header1 name={"Add item"} router={`/farms/${router.query.farm_id}/crops`} />

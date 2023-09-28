@@ -36,8 +36,8 @@ const AddFarmForm = () => {
     const [alertType, setAlertType] = useState(false);
     const [data, setData] = useState<FarmDataType>();
 
-    const [title, setTitle] = useState<string>();
-    const [location, setLocation] = useState<string>();
+    const [title, setTitle] = useState<string>('');
+    const [location, setLocation] = useState<string>('');
     const [area, setArea] = useState<string>();
 
 
@@ -119,7 +119,7 @@ const AddFarmForm = () => {
         let obj = {
             title: title,
             area: area?+area:null,
-            location: location,
+            location: location.trim(),
             geometry:geometryDemo
         };
 
@@ -148,7 +148,7 @@ const AddFarmForm = () => {
         if (router.query.farm_id) {
             let obj = {
                 title: title,
-                location: location,
+                location: location.trim(),
                 area: area?+area:null,
                 geometry:geometryDemo
             }

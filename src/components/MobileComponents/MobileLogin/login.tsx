@@ -5,6 +5,8 @@ import {
   Button,
   Typography,
   CircularProgress,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import styles from "./login.module.css";
 import ImageComponent from "@/components/Core/ImageComponent";
@@ -13,12 +15,12 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
 import { useDispatch } from "react-redux";
 import { setOtpCountDown } from "@/Redux/Modules/Otp";
-
+import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 
 const MobileLogin: NextPage = () => {
-  
+
   const router = useRouter();
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [mobile, setMobile] = useState('');
   const [loadingWhileGettingOtp, setLoadingWhileGettingOtp] = useState(false);
@@ -42,27 +44,27 @@ const MobileLogin: NextPage = () => {
       });
     } else if (response?.status == 422) {
       setResponseErrorMessages(response?.errors)
-    } 
+    }
     setLoadingWhileGettingOtp(false);
   };
 
-    const handleKeyPress = (event: any) => {
-        const keyPressed = event.key;
-        const allowedCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const handleKeyPress = (event: any) => {
+    const keyPressed = event.key;
+    const allowedCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-        if (!allowedCharacters.includes(keyPressed)) {
-            event.preventDefault();
-        }
-    };
-    const setMobileNumber = (e: ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value;
-        value = value.trim();;
-        if (value.length <= 10) {
-            setMobile(value)
-        }
+    if (!allowedCharacters.includes(keyPressed)) {
+      event.preventDefault();
     }
-  
-  
+  };
+  const setMobileNumber = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    value = value.trim();;
+    if (value.length <= 10) {
+      setMobile(value)
+    }
+  }
+
+
   return (
     <div id={styles.mobileLoginPage}>
       <div className={styles.login}>
@@ -93,20 +95,36 @@ const MobileLogin: NextPage = () => {
               onKeyPress={handleKeyPress}
               error={Boolean(responseErrorMesaages?.phone)}
               helperText={responseErrorMesaages?.phone}
+              InputProps={{
+
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton>
+                      <PhoneAndroidOutlinedIcon sx={{ color: "#05A155" }} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               sx={{
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderRadius: "8px !important",
+                },
+                '& .MuiInputBase-root': {
+                  background: "#fff"
+                },
+                '& .MuiOutlinedInput-root': {
+                  paddingLeft: "0"
                 }
               }}
               onChange={setMobileNumber}
               onKeyDown={(e) => {
-              if (e.key == 'Enter') {
-                onButtonClick()
-              }
-            }}
+                if (e.key == 'Enter') {
+                  onButtonClick()
+                }
+              }}
             />
           </div>
-          
+
           <Button
             className={styles.button}
             fullWidth
@@ -115,7 +133,7 @@ const MobileLogin: NextPage = () => {
             size="large"
             variant="contained"
             onClick={onButtonClick}
-            
+
           >
             Continue
             {loadingWhileGettingOtp ?

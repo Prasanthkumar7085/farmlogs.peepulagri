@@ -81,7 +81,7 @@ const SingleViewScoutComponent = () => {
     ];
     return (
         <div >
-            <Header1 name={"Scouting"} />
+
             <div role="presentation">
                 <Breadcrumbs aria-label="breadcrumb">
                     <Link underline="hover" color="inherit" href="/farms">

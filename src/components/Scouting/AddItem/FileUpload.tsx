@@ -47,7 +47,14 @@ const FileUploadComponent = () => {
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
+    // const [tempFilesStorage, setTempFileStorage] = useState<any>([]);
+
+    // useEffect(() => {
+    //     setTempFileStorage(attachments)
+    // }, [attachments]);
+
     let tempFilesStorage: any = [...attachments]
+
     let previewStorage = [...previewImages]
 
     //convert the kb into mb
@@ -137,7 +144,7 @@ const FileUploadComponent = () => {
     const handleFileChange = async (e: any) => {
 
         setMultipleFiles(e.target.files)
-        setFileProgress(new Array(e.target.files?.length).fill(0))
+        setFileProgress(new Array(e.target.files?.length).fill(0));
         const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array
 
         Array.from(e.target.files).map(async (item: any, index: number) => {
@@ -152,12 +159,12 @@ const FileUploadComponent = () => {
                 return bytes / (1024 * 1024);
             }
             if (bytesToMB(item.size) >= 5) {
-                setUploadIntoChuncks(true)
-                await startUploadEvent(item, index, fileProgressCopy, setFileProgress)
+                setUploadIntoChuncks(true);
+                await startUploadEvent(item, index, fileProgressCopy, setFileProgress);
             }
             else {
-                setUploadIntoChuncks(false)
-                await fileUploadEvent(item, index, fileProgressCopy, setFileProgress)
+                setUploadIntoChuncks(false);
+                await fileUploadEvent(item, index, fileProgressCopy, setFileProgress);
             }
         })
     };
@@ -171,7 +178,7 @@ const FileUploadComponent = () => {
                 farm_id: formId,
                 type: file.type,
                 crop_slug: selectedCrop?.slug,
-                source: "scouts"
+                source: "scouting"
             }
         }
         let options = {
@@ -191,7 +198,7 @@ const FileUploadComponent = () => {
                 console.log(responseData)
                 setUploadId(responseData.data.upload_id)
                 await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
-                tempFilesStorage.splice(1, 0, { original_name: file.name, type: file.type, size: file.size, name: responseData.data.file_key })
+                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: file.type, size: file.size, name: responseData.data.name,crop_slug:responseData.data.crop_slug,path:responseData.data.path })
                 setAttachments(tempFilesStorage)
             }
         }
@@ -303,6 +310,7 @@ const FileUploadComponent = () => {
 
     //file upload normal smaller than 5 mb
     const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
+        console.log(item)
         let obj = {
 
             "attachment":
@@ -311,8 +319,9 @@ const FileUploadComponent = () => {
                 "original_name": item.name,
                 "type": item.type,
                 "size": item.size,
-                "source": "scouts",
-                "crop": selectedCrop?.slug
+                "source": "scouting",
+                "crop_slug": selectedCrop?.slug,
+                farm_id:formId
             }
         }
 
@@ -328,14 +337,15 @@ const FileUploadComponent = () => {
         }
 
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/650a63d9760e446071bc08d7/attachments`, options);
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
                 console.log(responseData)
-                let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT" });
+                let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT",body:item });
                 fileProgressCopy[index] = 100;
                 setFileProgress([...fileProgressCopy]);
-                tempFilesStorage.splice(1, 0, { original_name: item.name, type: item.type, size: item.size, name: item.name })
+                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: item.type, size: item.size, name: responseData.data.name ,crop_slug:responseData.data.crop_slug,path:responseData.data.path})
+                setAttachments(tempFilesStorage)
 
             }
 
@@ -355,13 +365,15 @@ const FileUploadComponent = () => {
 
 
     const addScoutDetails = async () => {
+
+        console.log(tempFilesStorage,'opop');
+        
         setLoading(true)
         let obj = {
             "farm_id": formId,
             "description": description,
             "attachments": tempFilesStorage,
             "crop_id": selectedCrop?._id
-
         }
 
         let options: any = {

@@ -1,0 +1,45 @@
+.newFolder {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: inherit;
+  line-height: 100%;
+  font-weight: 400;
+  font-family: inherit;
+}
+.input {
+  border: 0;
+  background-color: transparent;
+  align-self: stretch;
+}
+.frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.buttoncreatefolder,
+.frame {
+  align-self: stretch;
+}
+.buttons,
+.newfolder {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.newfolder {
+  border-radius: var(--br-5xs);
+  background-color: var(--white);
+  align-items: center;
+  padding: var(--padding-5xl) var(--padding-5xl) var(--padding-21xl);
+  gap: var(--gap-13xl);
+  text-align: center;
+  font-size: var(--font-size-5xl);
+  color: var(--high-emphasis);
+  font-family: var(--text-md-medium);
+}

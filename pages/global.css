@@ -269,7 +269,7 @@ body {
 #mobileBody {
     width: 100%;
     max-width: 500px;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #f5f7fa;
     margin: 0 auto;
     border: 1px solid #fff7fa;

@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, FormHelperText, Icon, IconButton, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CameraCapture from "./Camera";
 import Axios from "axios"
 import styles from "./add-scout.module.css";
@@ -16,7 +16,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
-import { removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
+import { removeOneElement, removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
 
 
 const FileUploadComponent = () => {
@@ -71,6 +71,7 @@ const FileUploadComponent = () => {
 
         const tempFilesStorageCopy = [...tempFilesStorage]
         tempFilesStorageCopy.splice(index, 1)
+        dispatch(removeOneElement(index))
 
         setMultipleFiles(selectedFilesCopy);
         setFileProgress(fileProgressCopy);
@@ -84,6 +85,8 @@ const FileUploadComponent = () => {
 
         setMultipleFiles(selectedFilesCopy);
         setFileProgress(fileProgressCopy);
+        dispatch(removeOneElement(index))
+
     };
 
     const getFormDetails = async (id: any) => {
@@ -139,6 +142,46 @@ const FileUploadComponent = () => {
         }
     }
 
+    //video previw event
+    let videoRef: any = useRef(null);
+
+    const generateThumbnail = (file: any, index: any) => {
+        console.log(file, "iji")
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = async (e: any) => {
+                const videoDataUrl = e.target.result;
+
+                // Create a video element dynamically
+                const video = document.createElement('video');
+                video.src = videoDataUrl;
+                video.preload = 'auto';
+
+                // Ensure metadata is loaded before capturing a frame
+                video.addEventListener('canplay', () => {
+                    const canvas: any = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    const thumbnailUrl = canvas.toDataURL();
+                    console.log(thumbnailUrl)
+                    previewStorage.splice(1, 0, { fileIndex: file.name, prieviewUrl: thumbnailUrl })
+                    setPreviewImages(previewStorage);
+                    video.remove();
+
+                });
+
+                // Start loading the video metadata
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
+
+
 
     //select the when input select 
     const handleFileChange = async (e: any) => {
@@ -155,9 +198,13 @@ const FileUploadComponent = () => {
 
 
         Array.from(e.target.files).map(async (item: any, index: number) => {
+            if (item.type.slice(0, 4) == "vide") {
+                generateThumbnail(item, item.name)
+            }
             if (item.type.slice(0, 4) == "imag") {
                 previewImagesEvent(item, item.name)
             }
+
 
             setIndex(index)
             setSelectedFile(item);
@@ -559,7 +606,8 @@ const FileUploadComponent = () => {
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
-                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : "/image-2-1.svg"} />
+                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : "/nj.jpg"
+                                    } />
                                     <div className={styles.progressdetails}>
                                         <div className={styles.uploaddetails}>
                                             <div className={styles.uploadcontroller}>

@@ -46,7 +46,6 @@
   background: #FFFBEC;
   padding: 10px;
   gap: var(--gap-9xs);
-  cursor: pointer;
 }
 
 #allCropCardBlock {

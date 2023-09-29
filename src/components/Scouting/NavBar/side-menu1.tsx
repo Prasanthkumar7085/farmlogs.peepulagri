@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/router";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-
+import CancelIcon from '@mui/icons-material/Cancel';
 const SideMenu1 = ({ toggleDrawer }: any) => {
 
   const router = useRouter();
@@ -40,13 +40,13 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
       <div id={styles.sideMenu}>
 
         <div className={styles.menuBarDiv}>
-        <IconButton className={styles.menuBar1} onClick={() => toggleDrawer(false)}>
-          <img
-            alt="close-icon"
-            src="/menu-close-icon.svg"
-          />
+          <IconButton className={styles.menuBar1} onClick={() => toggleDrawer(false)}>
+            <img
+              alt="close-icon"
+              src="/menu-close-icon.svg"
+            />
           </IconButton>
-          </div>
+        </div>
         <div className={styles.profile}  >
           <img
             className={styles.imageIcon}

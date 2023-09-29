@@ -1,25 +1,30 @@
 import { Breadcrumbs, Card, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Gallery } from "react-grid-gallery";
+import Gallery from 'react-photo-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import styles from "./crop-card.module.css";
+import Header1 from "../Header/HeaderComponent";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import timePipe from "@/pipes/timePipe";
+import { ScoutAttachmentDetails } from "@/types/scoutTypes";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import { Image } from "react-grid-gallery";
+export interface CustomImage extends Image {
+    original: string;
+}
 
 const SingleViewScoutComponent = () => {
 
     const router = useRouter();
-
+    const [data, setData] = useState<any>()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-    const cropTitle = useSelector((state: any) => state?.farms?.cropName);
-    const farmTitle = useSelector((state: any) => state?.farms?.farmName);
-    
-    
+    const farmTitle = useSelector((state: any) => state?.farms?.cropName);
+
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<any>();
+
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -58,24 +63,71 @@ const SingleViewScoutComponent = () => {
             if (index + 1 == 4)
                 return {
                     src: imageObj.url,
-                    height: 80,
-                    width: 60,
+                    height: 45,
+                    width: 100,
                     // customOverlay: <div style={{color:"white"}}>Yes</div>
                     tags: [
                         { value: "View More", title: "view_more" },
 
                     ],
+                    alt: "u",
+
                 }
+            if (imageObj.type.slice(0, 4) == "vide") {
+                return {
+                    src: imageObj.url,
+                    height: 65,
+                    width: 100,
+                    alt: "u",
+                    isVideo: true,
+
+                }
+            }
             else
                 return {
                     src: imageObj.url,
-                    height: 80,
-                    width: 60,
+                    height: 65,
+                    width: 100,
+                    alt: "u",
+
+
+
                 }
         });
 
         return obj
     }
+
+    const slidesEvent = (item: any) => {
+        const slides = item?.attachments?.map((imageObj: any, index: number) => {
+            return {
+
+                src: imageObj.url,
+                height: 900,
+                width: 1000,
+                alt: "u",
+                isVideo: true,
+
+            }
+        });
+        return slides
+    }
+
+
+
+
+    const [index1, setIndex] = useState(-1);
+
+    const handleClick = (index: number, item: CustomImage) => setIndex(index);
+    let photos: any = []
+    // State to track the playback state of videos
+    const [videoStates, setVideoStates] = useState(
+        data?.map(() => ({
+            playing: false,
+        }))
+    );
+
+
     return (
         <div className={styles.scoutingView}>
 
@@ -89,18 +141,56 @@ const SingleViewScoutComponent = () => {
                         color="inherit"
                         href={`/farms/${router.query.farm_id}/crops`}
                     >
-                        {farmTitle ? (farmTitle?.length > 20 ? farmTitle.slice(0,1).toUpperCase()+farmTitle.slice(1, 17) + '...' : farmTitle?.slice(0,1).toUpperCase()+farmTitle?.slice(1,)):""}
+                        My Crops
                     </Link>
-                    <Typography color="text.primary">{cropTitle.length > 20 ? cropTitle.slice(0, 17) + '...' : cropTitle}
-                    </Typography>
+                    <Typography color="text.primary">{farmTitle}</Typography>
                 </Breadcrumbs>
             </div>
             {data?.length ? data.map((item: any, index: any) => {
                 return (
-                    <Card key={index} className={styles.galleryCard} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                    <Card key={index} className={styles.galleryCard} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
+                    >
                         <Typography>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</Typography>
                         {item?.attachments?.length ?
-                            <Gallery images={getModifiedImage(item)} rowHeight={140} maxRows={2} /> :
+                            <>
+                                <Gallery
+                                    photos={getModifiedImage(item)}
+                                    direction="row"
+                                    targetRowHeight={140}
+                                    renderImage={({ photo }: any) => (
+                                        <div>
+                                            {photo.isVideo ? (
+                                                // Render video differently, e.g., video icon
+                                                <div>
+                                                    <video
+                                                        src={photo.src}
+                                                        width={photo.width}
+                                                        height={photo.height}
+                                                        controls={true}
+
+                                                    />
+
+                                                </div>
+                                            ) : (
+                                                // Render images as usual
+                                                <img
+                                                    src={photo.src}
+                                                    alt={`Image ${photo.key + 1}`}
+                                                    width={photo.width}
+                                                    height={photo.height}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                />
+                                <Lightbox
+                                    slides={slidesEvent(item)}
+                                    open={index1 >= 0}
+                                    index={index1}
+                                    close={() => setIndex(-1)}
+                                />
+                            </>
+                            :
                             // getModifiedImage(item)
                             <div style={{ color: "#c1c1c1", padding: "10px 0px 10px 10px", display: "flex", justifyContent: "center" }}>
                                 {"No Attachments"}
@@ -115,10 +205,6 @@ const SingleViewScoutComponent = () => {
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />
-
-            <div className="addFormPositionIcon" >
-                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${router.query.farm_id}/crops/add-item?crop_id=${router.query?.crop_id}`)} />
-            </div>
         </div>
 
     )

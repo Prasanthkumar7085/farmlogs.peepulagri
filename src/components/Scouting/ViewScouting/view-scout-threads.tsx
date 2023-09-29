@@ -7,17 +7,19 @@ import getSingleScoutService from "../../../../lib/services/ScoutServices/getSin
 import { AttachmentsForPreview, ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
 import timePipe from "@/pipes/timePipe";
 
-import { Gallery } from "react-grid-gallery";
+import Gallery from 'react-photo-gallery';
 import { Image } from "react-grid-gallery";
 import "react-image-gallery/styles/css/image-gallery.css"
 import { Card, Typography } from "@mui/material";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import Lightbox from "yet-another-react-lightbox";
 
 
 
 
 
 const ViewScoutThreads: NextPage = () => {
+
 
   const router = useRouter();
 
@@ -26,7 +28,7 @@ const ViewScoutThreads: NextPage = () => {
 
   const [data, setData] = useState<SingleScoutResponse>();
   const [downloadUrls, setDownloadUrls] = useState<Array<ScoutAttachmentDetails>>([]);
-  const [images, setImages] = useState<Array<Image>>([]);
+  const [images, setImages] = useState<any>([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -50,7 +52,9 @@ const ViewScoutThreads: NextPage = () => {
       details = attachmentdetails.map((item: ScoutAttachmentDetails, index: number) => {
 
         if (item.type.includes('video')) {
-          return { src: '/video.jpg', width: 200, height: 90, caption: `${index + 1} image` }
+          return {
+            src: item.url, width: 200, height: 90, caption: `${index + 1} image`, isVideo: true,
+          }
         } else {
           return { src: item.url, width: 150, height: 130 }
         }
@@ -65,6 +69,24 @@ const ViewScoutThreads: NextPage = () => {
     }
   }, [router.isReady, accessToken]);
 
+
+  const slidesEvent = (item: any) => {
+    const slides = item?.attachments?.map((imageObj: any, index: number) => {
+      return {
+
+        src: imageObj.url,
+        height: 900,
+        width: 1000,
+        alt: "u",
+        isVideo: true,
+
+      }
+    });
+    return slides
+  }
+  const [index1, setIndex] = useState(-1);
+
+  const handleClick = (index: any) => setIndex((prev: any) => prev + index1);
 
   return (
     <div className={styles.viewscoutthreads} id="view-scout-threads">
@@ -83,13 +105,41 @@ const ViewScoutThreads: NextPage = () => {
         <div className={styles.attachmentscontainer}>
           <h3 className={styles.heading}>Attachments</h3>
           {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
-            <Gallery images={images} rowHeight={180} />
+            <Gallery photos={images} onClick={handleClick}
+              renderImage={({ photo }: any) => (
+                <div>
+                  {photo.isVideo ? (
+                    // Render video differently, e.g., video icon
+                    <div>
+                      <video
+                        src={photo.src}
+                        width={photo.width}
+                        height={photo.height}
+                        controls={true}
+
+                      />
+
+                    </div>
+                  ) : (
+                    // Render images as usual
+                    <img
+                      src={photo.src}
+                      alt={`Image ${photo.key + 1}`}
+                      width={photo.width}
+                      height={photo.height}
+                    />
+                  )}
+                </div>
+              )}
+            />
+            <Lightbox
+              slides={images}
+              open={index1 >= 0}
+              index={index1}
+              close={() => setIndex(-1)}
+            />
           </Card> : ""}
-          {/* {downloadUrls?.length && downloadUrls.map((item: any, index: any) => (
-                <Card key={index} style={{ marginTop: "20px" }} onClick={()=>router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
-                    <Typography>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</Typography>
-                </Card>
-            ))} */}
+
         </div>
 
       </div>

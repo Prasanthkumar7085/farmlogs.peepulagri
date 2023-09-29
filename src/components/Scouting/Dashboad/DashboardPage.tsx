@@ -120,6 +120,11 @@ const DashboardPage = () => {
     const getDataOnLocationChange = async (location: string) => {
         await getAllFarms({ page: 1, limit: 100, search_string: searchString as string, location: location });
     }
+
+    const [routerLocation, setRouterLocation] = useState('');
+    useEffect(() => {
+        setRouterLocation(router?.query.location ? router?.query.location as string : "");
+    },[router?.query.location])
     return (
         <div id="dashboardPage">
             <DashBoardHeader
@@ -138,7 +143,13 @@ const DashboardPage = () => {
 
                 )}
             <div className="addFormPositionIcon">
-                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push("/farms/add")} />
+                <img src="/add-plus-icon.svg" alt="" onClick={() => {
+                    if (routerLocation) {
+                        router.push(`/farms/add?location=${routerLocation}`);
+                    } else {
+                        router.push("/farms/add")
+                    }
+                }} />
             </div>
             <LoadingComponent loading={loading} />
         </div>

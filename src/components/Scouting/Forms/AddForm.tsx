@@ -31,24 +31,31 @@ const AddFarmForm = () => {
     const router = useRouter();
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
+    
     const [errorMessages, setErrorMessages] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [data, setData] = useState<FarmDataType>();
-
+    
     const [title, setTitle] = useState<string>('');
     const [location, setLocation] = useState<{ name: string, _id: string }|null>();
     const [area, setArea] = useState<string>();
-
-
+    
+    
     const [open, setOpen] = useState(false);
     const [optionsLoading, setOptionsLoading] = useState(false);
-
+    
     const [locations, setLocations] = useState<Array<{name:string,_id:string}>>([]);
-
+    
     const [addLocationOpen, setAddLocationOpen] = useState(false);
+    
+    const [hiddenLoading, setHiddenLoading] = useState(false);
+    const [settingLocationLoading, setSettingLocationLoading] = useState(false);
+    const [addLocationLoading, setAddLocationLoading] = useState(false);
+
+    const [newLocation, setNewLocation] = useState('');
+
 
     const geometryDemo = {
         "type": "Polygon",
@@ -191,14 +198,16 @@ const AddFarmForm = () => {
 
 
     useEffect(() => {
-        if (router.isReady && accessToken && router.query.farm_id) {
-            getFarmDataById();
-            
+        if (router.isReady && accessToken) {
+            if (router.query.farm_id) {
+                getFarmDataById();            
+            } else if (router.query.location) {
+                getLocations(router.query.location as string);
+            }
         }
-    }, [router.isReady, accessToken]);
+    }, [router.isReady, accessToken,router.query.location]);
 
 
-    const [hiddenLoading, setHiddenLoading] = useState(false);
 
     useEffect(() => {
 
@@ -211,8 +220,8 @@ const AddFarmForm = () => {
 
 
 
-    const [settingLocationLoading, setSettingLocationLoading] = useState(false);
-    const getLocations = async (newLocation='') => {
+    const getLocations = async (newLocation = '') => {
+        
         setOptionsLoading(true);
         try {
             const response = await getAllLocationsService(accessToken);
@@ -234,7 +243,7 @@ const AddFarmForm = () => {
         }
     }
 
-    const [newLocation, setNewLocation] = useState('');
+    
 
     const addInputValue = (e: any, newValue: string) => {
         setNewLocation(newValue);
@@ -253,7 +262,6 @@ const AddFarmForm = () => {
     }
 
 
-    const [addLocationLoading, setAddLocationLoading] = useState(false);
     const addNewLocation = async (location: string) => {
         setAddLocationLoading(true);
         

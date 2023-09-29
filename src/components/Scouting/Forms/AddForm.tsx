@@ -183,7 +183,10 @@ const AddFarmForm = () => {
 
             setArea(response?.data?.area);
             setTitle(response?.data?.title);
-            setLocation(response?.data?.location);
+            const locationFromResponse = response?.data?.location;
+            // const locationObjFromResponse = locationFromResponse.find((item: {name:string,_id:string})=>item.name==locationFromResponse);
+            // setLocation(locationObjFromResponse);
+            await getLocations(locationFromResponse);
         }
         setLoading(false);
     }
@@ -192,7 +195,7 @@ const AddFarmForm = () => {
     useEffect(() => {
         if (router.isReady && accessToken && router.query.farm_id) {
             getFarmDataById();
-            getLocations();
+            
         }
     }, [router.isReady, accessToken]);
 
@@ -237,11 +240,13 @@ const AddFarmForm = () => {
 
     const addInputValue = (e: any, newValue: string) => {
         setNewLocation(newValue);
-
+        console.log('calling',newValue);
+        
         // if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.every(str => str.includes(newValue))) {
         //     setLocations([...locations, newValue]);
         // }
     };
+
 
     const captureResponseDilog = (value: any) => {
         setErrorMessages([]);
@@ -273,12 +278,11 @@ const AddFarmForm = () => {
             setAlertType(false);
         }
         setAddLocationLoading(false);
-        
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmitClick)}>
-            <div className={styles.addfarmform} id="add-farm">
+            {!loading?<div className={styles.addfarmform} id="add-farm">
                 <div className={styles.formfields} id="form-fields">
                     <div className={styles.farmname} id="farm-name">
                         <div className={styles.label}> Title<span style={{color:"red"}}>*</span></div>
@@ -318,7 +322,7 @@ const AddFarmForm = () => {
                         </div> */}
                     <div className={styles.farmname} id="enter-location">
                         <div className={styles.label} style={{ display: "flex", justifyContent: "space-between",width:"100%" }}>
-                            <span>Location<span style={{color:"red"}}>*</span></span> <span style={{ color: "#3276c3" }} onClick={()=>setAddLocationOpen(true)}>+ Add Location</span>
+                            <span>Location<span style={{ color: "red" }}>*</span></span> <span style={{ color: "#3276c3" }} onClick={() => { setNewLocation(''); setAddLocationOpen(true)}}>+ Add Location</span>
                         </div>
 
                         {!hiddenLoading && !settingLocationLoading ? <Autocomplete
@@ -337,7 +341,6 @@ const AddFarmForm = () => {
                             isOptionEqualToValue={(option, value) => option.name === value.name}
                             getOptionLabel={(option:{name:string,_id:string}) => option.name}
                             options={locations}
-                            
                             loading={optionsLoading}
                             onInputChange={addInputValue}
                             onChange={(e: any, value: any, reason: any) => {
@@ -446,7 +449,7 @@ const AddFarmForm = () => {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </div>:""}
             <LoadingComponent loading={loading} />
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
             <AddLocationDialog

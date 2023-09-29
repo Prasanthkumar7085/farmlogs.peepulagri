@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/router";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { resetOtpCountDown } from "@/Redux/Modules/Otp";
+import { setToInitialState } from "@/Redux/Modules/Farms";
 
 const SideMenu1 = ({ toggleDrawer }: any) => {
 
@@ -29,6 +31,8 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
       }
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
+      await dispatch(resetOtpCountDown());
+      await dispatch(setToInitialState());
 
     } catch (err: any) {
       console.error(err);

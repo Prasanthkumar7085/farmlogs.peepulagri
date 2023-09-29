@@ -6,8 +6,6 @@ import {
 } from "@mui/material";
 import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
-import ErrorMessages from "../ErrorMessages";
-
 
 
 const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle,errorMessages }: any) => {
@@ -16,7 +14,8 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle,erro
 
   useEffect(() => {
     setTitle(defaultTitle);
-  },[open])
+  }, [open]);
+  
 
   return (
     <Dialog open={open} PaperProps={{
@@ -37,13 +36,16 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading,defaultTitle,erro
             variant="outlined"
             onChange={(e) => setTitle(e.target.value)}
             value={title}
+            onKeyDown={(e: any) => { if (e.key == 'Enter') { captureResponseDilog(title) } }}
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 borderRadius: "8px !important"
               }
             }}
+            error={errorMessages ? errorMessages['title'] : ""}
+            helperText={errorMessages ? errorMessages['title'] : ""}
           />
-          {errorMessages?.length?<ErrorMessages errorMessages={errorMessages} keyname='title'/>:""}
+         
         </div>
         <div className={styles.buttons}>
           <Button

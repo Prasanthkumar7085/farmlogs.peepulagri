@@ -65,11 +65,12 @@ const ViewScoutThreads: NextPage = () => {
     }
   }, [router.isReady, accessToken]);
 
+  
   return (
     <div className={styles.viewscoutthreads} id="view-scout-threads">
       <div className={styles.headerandattachments}>
         <div className={styles.headertextwrapper}>
-          <h2 className={styles.farm1}>Farm-1</h2>
+          <h2 className={styles.farm1}>{data?.farm_id?.title ? data?.farm_id?.title :""}</h2>
           <p className={styles.aug20231030am}>{data?.createdAt ? timePipe(data?.createdAt, 'DD, MMM YYYY hh:mm a') : ""}</p>
         </div>
         <div className={styles.description}>

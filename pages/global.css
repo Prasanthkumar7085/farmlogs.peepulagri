@@ -284,8 +284,9 @@ body {
 .addFormPositionIcon {
     cursor: pointer;
     position: absolute;
-    bottom: 1rem;
-    right: 1rem;
+    position: fixed;
+    bottom: 3rem;
+    right: 2rem;
 }
 
 #mobileOtpVerify p {

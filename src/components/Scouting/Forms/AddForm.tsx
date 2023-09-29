@@ -221,7 +221,7 @@ const AddFarmForm = () => {
     const addInputValue = (e: any, newValue: string) => {
         setLocation(newValue);
 
-        if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.some(str => str.includes(newValue))) {
+        if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.every(str => str.includes(newValue))) {
             setLocations([...locations, newValue]);
         }
     };

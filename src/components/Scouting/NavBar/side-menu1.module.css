@@ -14,7 +14,11 @@
   gap: 1rem;
 }
 
-
+.menuBarDiv{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
 .menuBar1 {
   width: 30px;
   height: 30px;

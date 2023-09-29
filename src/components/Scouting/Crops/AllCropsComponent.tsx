@@ -41,9 +41,7 @@ const AllCropsComponent = () => {
             if (response?.success == true && response?.data?.length) {
                 setFarmOptions(response?.data);
                 if (id) {
-                    console.log(id)
                     let selectedObject = response?.data?.length && response?.data?.find((item: any) => item._id == id);
-                    console.log(selectedObject)
                     setDefaultValue(selectedObject?.title)
                     captureFarmName(selectedObject);
                 } else {
@@ -109,7 +107,7 @@ const AllCropsComponent = () => {
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err)
         }
         finally {
             setLoadingForAdd(false)
@@ -130,7 +128,7 @@ const AllCropsComponent = () => {
         if (selectedObject && Object.keys(selectedObject).length) {
             setFormId(selectedObject?._id);
             getCropsDetails(selectedObject?._id)
-            router.push(`/farms/${selectedObject?._id}/crops`)
+            router.replace(`/farms/${selectedObject?._id}/crops`)
 
         }
     }

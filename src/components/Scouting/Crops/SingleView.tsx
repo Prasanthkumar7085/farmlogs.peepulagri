@@ -45,7 +45,7 @@ const SingleViewScoutComponent = () => {
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err)
         } finally {
             setLoading(false);
         }
@@ -72,8 +72,6 @@ const SingleViewScoutComponent = () => {
                     width: 60,
                 }
         });
-
-        console.log(obj);
 
         return obj
     }

@@ -10,7 +10,7 @@ type captureSearchStringType = (search: string) => void
 interface pageProps {
   captureSearchString: captureSearchStringType,
   searchString: string;
-  locations: Array<string>;
+  locations: Array<{name:string,_id:string}>;
   location: string;
   setLocation: Dispatch<SetStateAction<string>>;
   getDataOnLocationChange: (location: string) => void;
@@ -66,9 +66,9 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
                 }
               }}
             >
-              {locations.map((item: string, index: number) => {
+              {locations.map((item: {name:string,_id:string}, index: number) => {
                 return (
-                  <MenuItem onClick={() => selectCity(item)} key={index}>{item}</MenuItem>
+                  <MenuItem onClick={() => selectCity(item.name)} key={index}>{item.name}</MenuItem>
                 )
               })}
 

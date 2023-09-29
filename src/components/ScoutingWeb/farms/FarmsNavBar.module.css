@@ -60,6 +60,42 @@
 
 .AllFarmsPageWeb {
   padding-top: 5rem;
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
+}
+
+.allFarms {
+  height: 70vh;
+  overflow-y: scroll;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.allFarms::-webkit-scrollbar {
+  width: 4px;
+  height: 0px;
+
+}
+
+@media(min-width:1000px) and (max-width: 1500px) {
+  .allFarms::-webkit-scrollbar {
+    height: 3px;
+  }
+}
+
+/* Track */
+.allFarms::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+.allFarms::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.allFarms::-webkit-scrollbar-thumb:hover {
+  background: #00435d;
 }

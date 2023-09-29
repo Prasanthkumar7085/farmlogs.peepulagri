@@ -10,7 +10,7 @@ import { setAllFarms } from "@/Redux/Modules/Farms";
 import { Typography, Button } from "@mui/material";
 import styles from "./index.module.css";
 import AddIcon from '@mui/icons-material/Add';
-import AllFarmsPage from "@/components/ScoutingWeb/WebAllFarmsPage";
+import AllFarmsPage from "@/components/ScoutingWeb/farms/WebAllFarmsPage";
 
 const FarmPage = () => {
 

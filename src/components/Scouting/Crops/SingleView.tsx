@@ -3,22 +3,23 @@ import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import styles from "./crop-card.module.css";
-import Header1 from "../Header/HeaderComponent";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import timePipe from "@/pipes/timePipe";
-import { ScoutAttachmentDetails } from "@/types/scoutTypes";
-import Image from "next/image";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+
+
 const SingleViewScoutComponent = () => {
 
     const router = useRouter();
-    const [data, setData] = useState<any>()
+
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-    const farmTitle = useSelector((state: any) => state?.farms?.cropName);
-
+    const cropTitle = useSelector((state: any) => state?.farms?.cropName);
+    const farmTitle = useSelector((state: any) => state?.farms?.farmName);
+    
+    
     const [loading, setLoading] = useState(true);
-
+    const [data, setData] = useState<any>();
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -88,9 +89,9 @@ const SingleViewScoutComponent = () => {
                         color="inherit"
                         href={`/farms/${router.query.farm_id}/crops`}
                     >
-                        My Crops
+                        {farmTitle ? (farmTitle?.length > 20 ? farmTitle.slice(0,1).toUpperCase()+farmTitle.slice(1, 17) + '...' : farmTitle?.slice(0,1).toUpperCase()+farmTitle?.slice(1,)):""}
                     </Link>
-                    <Typography color="text.primary">{farmTitle.length > 20 ? farmTitle.slice(0, 17) + '...' : farmTitle}
+                    <Typography color="text.primary">{cropTitle.length > 20 ? cropTitle.slice(0, 17) + '...' : cropTitle}
                     </Typography>
                 </Breadcrumbs>
             </div>
@@ -114,6 +115,10 @@ const SingleViewScoutComponent = () => {
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />
+
+            <div className="addFormPositionIcon" >
+                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${router.query.farm_id}/crops/add-item?crop_id=${router.query?.crop_id}`)} />
+            </div>
         </div>
 
     )

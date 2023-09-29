@@ -5,6 +5,7 @@ declare namespace Farms {
     singleFarm: any;
     filesList: any;
     cropName: string;
+    farmName:string
   }
 
 }

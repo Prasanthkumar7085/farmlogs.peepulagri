@@ -44,7 +44,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
         <Typography className={styles.dashboard}>Dashboard</Typography>
         <div className={styles.selectlocation} id="select-location">
           <div className={styles.srisailam}>
-            <Image alt="location" src="/location-icon.svg" width={15} height={15} onClick={handleClick}/>
+            <Image alt="location" src="/location-icon.svg" width={15} height={15} onClick={handleClick} />
             <span onClick={handleClick}>{location}</span>
             <ExpandMoreIcon onClick={handleClick} />
             <Menu
@@ -66,7 +66,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
                 }
               }}
             >
-              {locations.map((item: string, index: number) => {
+              {locations?.map((item: string, index: number) => {
                 return (
                   <MenuItem onClick={() => selectCity(item)} key={index}>{item}</MenuItem>
                 )

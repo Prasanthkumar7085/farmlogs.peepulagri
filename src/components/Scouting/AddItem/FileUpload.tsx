@@ -17,6 +17,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
 import { removeOneElement, removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
+import SelectAutoCompleteForCrops from "@/components/Core/SelectComponentForCrops";
+import timePipe from "@/pipes/timePipe";
 
 
 const FileUploadComponent = () => {
@@ -116,7 +118,15 @@ const FileUploadComponent = () => {
             let responseData: any = await response.json();
 
             if (responseData.success == true) {
-                setCropOptions(responseData?.data);
+                if (responseData.data.length == 1) {
+                    setCropOptions(responseData?.data);
+                    setCropName(responseData?.data[0].title)
+                    setSelectedCrop(responseData?.data[0])
+
+                } else {
+                    setCropOptions(responseData?.data);
+
+                }
 
             } else {
                 setCropOptions([]);
@@ -364,7 +374,7 @@ const FileUploadComponent = () => {
 
     //file upload normal smaller than 5 mb
     const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
-        console.log(item)
+
         let obj = {
 
             "attachment":
@@ -394,7 +404,7 @@ const FileUploadComponent = () => {
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
-                console.log(responseData)
+                console.log(responseData, "dd")
                 let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT", body: item });
                 fileProgressCopy[index] = 100;
                 setFileProgress([...fileProgressCopy]);
@@ -462,37 +472,46 @@ const FileUploadComponent = () => {
 
     //onClose camera
     const captureCloseCamera = (value: any, file: any) => {
-        setOpenCamera(false)
-        let fileAfterconevert = base64ToFile(file, "capture_image", "image/jpeg")
-        let temp: any = []
-        temp.push(fileAfterconevert)
-        setMultipleFiles(temp)
-        const fileProgressCopy = [...new Array(temp?.length).fill(0)]; // Create a copy of the progress array
-        setFileProgress(fileProgressCopy)
-        fileUploadEvent(fileAfterconevert, 0, fileProgressCopy, setFileProgress)
+        if (value == true) {
+            setOpenCamera(false)
+        }
+        else {
+            setOpenCamera(false)
+            let fileAfterconevert = base64ToFile(file, `capture${Math.floor(Math.random() * 100) + 1}_image${timePipe(new Date(), "DD-MM-YY")}.jpeg`, "image/jpeg")
+            previewImagesEvent(fileAfterconevert, 0)
+            let temp1: any = [fileAfterconevert]
+            let copy = [...temp1, ...filesFromStore]
+            setMultipleFiles(copy)
+            const fileProgressCopy = [...new Array(temp1?.length).fill(0)]; // Create a copy of the progress array
+            let temp = [...fileProgressCopy, ...new Array(filesFromStore?.length).fill(100)]
+            setFileProgress(temp)
+            fileUploadEvent(fileAfterconevert, 0, temp, setFileProgress)
+            dispatch(storeFilesArray(temp1))
+        }
     }
     //capture vedio
     const captureCameraVedio = (value: any, videofile: any) => {
         setOpenCamera(false)
         const type = "video/webm"
         const file = new File([videofile], `my video.webm`, { type });
-        console.log(file)
-        let temp: any = []
-        temp.push(file)
-        setMultipleFiles(temp)
-        const fileProgressCopy = [...new Array(temp?.length).fill(0)];
-        console.log(fileProgressCopy)
-        setFileProgress(fileProgressCopy)
+        let temp1: any = [file]
+        let copy = [...temp1, ...filesFromStore]
+        setMultipleFiles(copy)
+        const fileProgressCopy = [...new Array(temp1?.length).fill(0)]; // Create a copy of the progress array
+        let temp = [...fileProgressCopy, ...new Array(filesFromStore?.length).fill(100)]
+        setFileProgress(temp)
+        dispatch(storeFilesArray(temp1))
+
         const bytesToMB = (bytes: any) => {
             return bytes / (1024 * 1024);
         }
         if (bytesToMB(file.size) >= 5) {
             setUploadIntoChuncks(true)
-            startUploadEvent(file, 0, fileProgressCopy, setFileProgress)
+            startUploadEvent(file, 0, temp, setFileProgress)
         }
         else {
             setUploadIntoChuncks(false)
-            fileUploadEvent(file, 0, fileProgressCopy, setFileProgress)
+            fileUploadEvent(file, 0, temp, setFileProgress)
         }
 
     }
@@ -546,7 +565,7 @@ const FileUploadComponent = () => {
                                     </h5>
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
-                                        <SelectAutoCompleteForFarms options={cropOptions} label={"title"} onSelectValueFromDropDown={captureCropName} placeholder={"Select Crop"} defaultValue={cropName} />
+                                        <SelectAutoCompleteForCrops options={cropOptions} label={"title"} onSelectValueFromDropDown={captureCropName} placeholder={"Select Crop"} defaultValue={cropName} />
                                         <FormHelperText />
                                     </FormControl>
                                 </div>
@@ -644,7 +663,7 @@ const FileUploadComponent = () => {
                                         </div>
                                         {fileProgress[index] == 100 ? "" :
                                             <div className={styles.uploadstatus}>
-                                                <div className={styles.completed}>{fileProgress[index].toFixed(2) + "%"}</div>
+                                                <div className={styles.completed}>{fileProgress[index]?.toFixed(2) + "%"}</div>
 
                                             </div>}
                                     </div>

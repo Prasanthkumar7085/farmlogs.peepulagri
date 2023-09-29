@@ -1,19 +1,20 @@
+
 import { Autocomplete, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown, label, placeholder, defaultValue }: any) => {
+const SelectAutoCompleteForCrops = ({ options, value, onSelectValueFromDropDown, label, placeholder, defaultValue }: any) => {
 
     const [defaultValueSet, setDefaultValueSet] = useState<any>();
     const [selectedValue, setSelectedValues] = useState<any>()
     const router = useRouter()
 
     useEffect(() => {
-        if (router.isReady && router.query.farm_id) {
-            setDefaultValueSet(options && options.find((item: any) => item._id == router.query.farm_id))
+        if (router.isReady && defaultValue) {
+            setDefaultValueSet(options && options.find((item: any) => item.title == defaultValue))
         }
 
-    }, [router.isReady, options, router.query]);
+    }, [router.isReady, options, router.query, defaultValue]);
 
     return (
         <div>
@@ -54,4 +55,4 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
     );
 }
 
-export default SelectAutoCompleteForFarms;
+export default SelectAutoCompleteForCrops;

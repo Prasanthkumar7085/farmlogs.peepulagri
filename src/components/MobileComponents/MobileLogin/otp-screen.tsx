@@ -101,9 +101,6 @@ const MobileOtpScreen: NextPage = () => {
 
   return (
     <div className={styles.otpscreen}>
-      <div className={styles.bgImage}>
-        <img src="./verifyotp@3x.png" alt="Bg Image" />
-      </div>
       <div className={styles.verifyotpscreen}>
         <ImageComponent alt="" src="/Logo-color.svg" width={130} height={100} />
         <div className={styles.verifyotpform}>

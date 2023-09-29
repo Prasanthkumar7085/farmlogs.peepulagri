@@ -130,9 +130,13 @@
 
 
 .otpscreen {
-  background-color: #ffffff;
+  background: url(/verifyotp@3x.png);
   height: 100vh;
   width: 100vw;
   position: relative;
+
+  font-family: 'Inter', sans-serif !important;
+  background-size: contain;
+  background-position: center;
 
 }

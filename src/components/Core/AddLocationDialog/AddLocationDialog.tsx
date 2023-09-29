@@ -42,8 +42,8 @@ const AddLocationDialog = ({ open, captureResponseDilog, loading, defaultTitle, 
                 borderRadius: "8px !important"
               }
             }}
-            error={errorMessages ? Boolean(errorMessages['title']) : false}
-            helperText={errorMessages ? errorMessages['title'] : ""}
+            error={errorMessages ? Boolean(errorMessages['name']) : false}
+            helperText={errorMessages ? errorMessages['name'] : ""}
           />
          
         </div>

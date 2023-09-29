@@ -6,6 +6,7 @@ export interface CropTypeInFarms{
 }
 
 export interface CropTypeResponse{
+    crop_area: number;
     title:string;
     active:boolean;
     slug:string;

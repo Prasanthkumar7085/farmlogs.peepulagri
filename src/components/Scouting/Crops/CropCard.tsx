@@ -53,8 +53,8 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                     }
                 }}
             >
-                <MenuItem onClick={() => { handleClose(); setRenameOpen(true) }}>Rename</MenuItem>
-                <MenuItem onClick={() => { setDeleteOpen(true); handleClose() }}>Delete</MenuItem>
+                <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); setRenameOpen(true) }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
+                <MenuItem  onClick={() => { setDeleteOpen(true); handleClose() }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
 
             </Menu>
         )
@@ -119,11 +119,14 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                     <MenuItemsForFolder />
                 </div>
                 <div className={styles.textWrapper} onClick={() => setToStorage(itemDetails?.title)} >
-                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length > 20 ? itemDetails?.title.slice(0, 17) + '...' : itemDetails?.title}</h2>
-                    <p className={styles.aug2023}>{timePipe(itemDetails.createdAt, "DD-MM-YYYY")}</p>
+                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length > 17 ? itemDetails?.title.slice(0, 14) + '...' : itemDetails?.title}</h2>
+                    <div style={{display:"flex", width:"95%", justifyContent:"space-between"}}>
+                        <p className={styles.aug2023}>Crop Area</p>
+                        <p className={styles.aug2023}>{itemDetails.crop_area ? itemDetails.crop_area : 0}</p>
+                    </div>
                 </div>
             </div>
-            {renameOpen ? <NewFolderDiloag open={renameOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} defaultTitle={itemDetails?.title} /> : ""}
+            {renameOpen ? <NewFolderDiloag open={renameOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} defaultTitle={itemDetails?.title} defaultArea={itemDetails?.crop_area} /> : ""}
             {deleteOpen ? <AlertDelete open={deleteOpen} deleteFarm={deleteCrop} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
             {alertMessage ? <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} /> : ""}
         </div>

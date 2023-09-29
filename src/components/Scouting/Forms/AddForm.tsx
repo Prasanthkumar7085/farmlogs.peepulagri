@@ -98,8 +98,6 @@ const AddFarmForm = () => {
 
             setAlertMessage(response?.message);
             setAlertType(true);
-            console.log(response);
-            
 
             setTimeout(() => {
                 router.push(`/farms?location=${response?.data?.location}`);
@@ -149,16 +147,16 @@ const AddFarmForm = () => {
         setErrorMessages({});
         setLoading(true);
 
+        let obj = {
+            title: title,
+            location: location?.name,
+            area: area ? +area : null,
+            geometry: geometryDemo
+        }
         if (router.query.farm_id) {
-            let obj = {
-                title: title,
-                location: location?.name?.trim(),
-                area: area ? +area : null,
-                geometry: geometryDemo
-            }
             edtiFarm(obj);
         } else {
-            addFarm(data)
+            addFarm(obj);
         }
 
     };
@@ -240,11 +238,6 @@ const AddFarmForm = () => {
 
     const addInputValue = (e: any, newValue: string) => {
         setNewLocation(newValue);
-        console.log('calling',newValue);
-        
-        // if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.every(str => str.includes(newValue))) {
-        //     setLocations([...locations, newValue]);
-        // }
     };
 
 
@@ -269,6 +262,7 @@ const AddFarmForm = () => {
             setAlertMessage(response?.message);
             setAlertType(true);
             setAddLocationOpen(false);
+            
             getLocations(response?.data?.name);
             setNewLocation('');
         } else if (response?.status==422) {

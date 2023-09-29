@@ -68,6 +68,7 @@
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
+  height:100%;
 }
 
 /* .buttonIcon {
@@ -117,7 +118,7 @@
 
 .farm {
   justify-content: flex-end;
-  gap: var(--gap-5xs);
+  gap: var(--gap-base);
 }
 
 .farmcard {
@@ -126,7 +127,6 @@
   background: #FFF;
   justify-content: flex-start;
   padding: var(--padding-base);
-  cursor: pointer;
   text-align: left;
   font-size: var(--font-size-xs);
   color: var(--title);

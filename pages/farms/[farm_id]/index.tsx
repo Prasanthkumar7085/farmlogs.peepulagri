@@ -4,7 +4,7 @@ import ViewHeader from "@/components/Scouting/Header/ViewHeader";
 const FormView = () => {
     return (
         <div>
-            <ViewHeader name={'View'} />
+            <ViewHeader name={'View Farm'} />
             <ViewFarmPage />
         </div>
     );

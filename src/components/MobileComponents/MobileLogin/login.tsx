@@ -98,10 +98,8 @@ const MobileLogin: NextPage = () => {
               InputProps={{
 
                 startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton>
-                      <PhoneAndroidOutlinedIcon sx={{ color: "#05A155" }} />
-                    </IconButton>
+                  <InputAdornment position="start" sx={{paddingLeft:"10px"}}>
+                      <PhoneAndroidOutlinedIcon sx={{ color: "#05A155" }} /> +91
                   </InputAdornment>
                 ),
               }}

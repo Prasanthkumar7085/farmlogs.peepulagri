@@ -102,16 +102,13 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
             setAlertMessage(response?.message);
             setAlertType(false)
         }
-        setRenameOpen(false);
+        
         setDeleteLoading(false);
     }
-    const setToStorage =async (title: string) => {
-        console.log(title,'popo');
-        
+    const setToStorage =async (title: string) => {        
         await dispatch(setCropTitleTemp(title));
         router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)
     }
-    // console.log(itemDetails?.title,'popo');
     
     return (
         <div>
@@ -122,7 +119,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                     <MenuItemsForFolder />
                 </div>
                 <div className={styles.textWrapper} onClick={() => setToStorage(itemDetails?.title)} >
-                    <h2 className={styles.FieldCrop}>{itemDetails?.title}</h2>
+                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length>20?itemDetails?.title.slice(0,17)+'...':itemDetails?.title}</h2>
                     <p className={styles.aug2023}>{timePipe(itemDetails.createdAt, "DD-MM-YYYY")}</p>
                 </div>
             </div>

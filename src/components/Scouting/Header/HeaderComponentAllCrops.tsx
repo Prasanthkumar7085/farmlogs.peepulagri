@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import styles from "./head.module.css";
 import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -13,7 +12,9 @@ const HeaderComponentAllCrops = ({ name }: any) => {
                 className={styles.iconsiconArrowLeft}
                 alt=""
                 src="/iconsiconarrowleft.svg"
-                onClick={() => router.push('/farms')}
+                // onClick={() => router.push('/farms')}
+                onClick={() => router.back()}
+
             />
             <Typography className={styles.viewFarm}>{name}</Typography>
             <div className={styles.headericon} id="header-icon">

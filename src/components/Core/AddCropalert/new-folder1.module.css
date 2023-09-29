@@ -21,7 +21,15 @@
   gap: var(--gap-base);
 }
 
-.buttoncreatefolder,
+.buttoncreatefolder{
+  align-self: stretch !important;
+  text-transform: capitalize !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
+  font-size: clamp(14px, 3vw, 16px) !important;
+  padding-block: 0.5rem !important;
+  font-weight: 500 !important;
+}
 .buttoncancelfolder {
   align-self: stretch !important;
   text-transform: capitalize !important;
@@ -34,11 +42,15 @@
 }
 
 
-
 .buttoncreatefolder {
   color: #fff !important;
   background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%) !important;
 }
+.buttoncreatefolder:disabled {
+  color: #6b6a6a !important;
+  background: linear-gradient(142deg, #cfcfcf 0%, #cfcfcf 97.71%) !important;
+}
+
 
 .buttons {
   align-self: stretch;

@@ -44,8 +44,8 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
         <Typography className={styles.dashboard}>Dashboard</Typography>
         <div className={styles.selectlocation} id="select-location">
           <div className={styles.srisailam}>
-            <Image alt="location" src="/location-icon.svg" width={15} height={15} />
-            {location}
+            <Image alt="location" src="/location-icon.svg" width={15} height={15} onClick={handleClick}/>
+            <span onClick={handleClick}>{location}</span>
             <ExpandMoreIcon onClick={handleClick} />
             <Menu
               anchorEl={anchorEl}

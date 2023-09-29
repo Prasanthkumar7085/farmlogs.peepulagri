@@ -19,7 +19,7 @@ export interface CreatedByDetails{
 
 export interface SingleScoutResponse{
     _id: string;
-    farm_id:string;
+    farm_id: { _id: string; title: string}
     crop_id:string;
     description:string;
     attachments: Array<ScoutAttachmentDetails>;

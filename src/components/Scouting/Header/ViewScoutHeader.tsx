@@ -8,6 +8,7 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import deleteScoutService from "../../../../lib/services/ScoutServices/deleteScoutService";
 const ViewScoutHeader = ({ name }: any) => {
 
     const router = useRouter();
@@ -30,13 +31,14 @@ const ViewScoutHeader = ({ name }: any) => {
     };
 
 
-    const deleteFarm = async () => {
+    const deleteScout = async () => {
         setLoading(true);
         handleClose();
-        const response = await deleteFarmService(router.query.farm_id as string, accessToken);
+        const response = await deleteScoutService(router.query.scout_id as string,accessToken);
         if (response?.success) {
             setAlertMessage(response?.message);
             setAlertType(true);
+            setDialogOpen(false);
             setTimeout(() => {
                 router.back();
             }, 600);
@@ -61,9 +63,9 @@ const ViewScoutHeader = ({ name }: any) => {
                 <Typography className={styles.viewFarm}>{name}</Typography>
 
                 <div className={styles.headericon} id="header-icon" onClick={handleClick}>
-                    {/* <img className={styles.headericonChild} alt="" src="/frame-40561.svg" /> */}
+                    <img className={styles.headericonChild} alt="" src="/frame-40561.svg" />
                 </div>
-                {/* <Menu
+                <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
@@ -79,14 +81,13 @@ const ViewScoutHeader = ({ name }: any) => {
                         }
                     }}
                 >
-                    <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
-                    <MenuItem onClick={() => {setAnchorEl(null) }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
-
-                </Menu> */}
+                    {/* <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem> */}
+                    <MenuItem onClick={() => { setAnchorEl(null); setDialogOpen(true)}}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
+                </Menu>
             </div>
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
             {/* <LoadingComponent loading={loading} /> */}
-            <AlertDelete open={dialogOpen} deleteFarm={deleteFarm} setDialogOpen={setDialogOpen} loading={loading} />
+            <AlertDelete open={dialogOpen} deleteFarm={deleteScout} setDialogOpen={setDialogOpen} loading={loading} />
         </div>
 
     );

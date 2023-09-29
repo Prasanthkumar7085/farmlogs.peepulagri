@@ -39,12 +39,14 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
     <div className={styles.sideMenu} >
       <div id={styles.sideMenu}>
 
+        <div className={styles.menuBarDiv}>
         <IconButton className={styles.menuBar1} onClick={() => toggleDrawer(false)}>
           <img
             alt="close-icon"
             src="/menu-close-icon.svg"
           />
-        </IconButton>
+          </IconButton>
+          </div>
         <div className={styles.profile}  >
           <img
             className={styles.imageIcon}

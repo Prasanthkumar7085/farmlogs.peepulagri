@@ -221,7 +221,7 @@ const AddFarmForm = () => {
     const addInputValue = (e: any, newValue: string) => {
         setLocation(newValue);
 
-        if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.some(str => str.includes(newValue))) {
+        if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.every(str => str.includes(newValue))) {
             setLocations([...locations, newValue]);
         }
     };
@@ -231,7 +231,7 @@ const AddFarmForm = () => {
             <div className={styles.addfarmform} id="add-farm">
                 <div className={styles.formfields} id="form-fields">
                     <div className={styles.farmname} id="farm-name">
-                        <div className={styles.label}> Title</div>
+                        <div className={styles.label}> Title<span style={{color:"red"}}>*</span></div>
                         <TextField
                             sx={{
                                 '& .MuiInputBase-root': {
@@ -243,7 +243,7 @@ const AddFarmForm = () => {
                             fullWidth
                             className={styles.inputfarmname}
                             size="small"
-                            placeholder="Enter Farm Title"
+                            placeholder="Enter Title"
                             variant="outlined"
                             error={Boolean(errorMessages?.['title'])}
                             helperText={errorMessages?.['title'] ? errorMessages?.['title'] : ""}
@@ -267,7 +267,9 @@ const AddFarmForm = () => {
                             </Button>
                         </div> */}
                     <div className={styles.farmname} id="enter-location">
-                        <div className={styles.label}>Location</div>
+                        <div className={styles.label} style={{ display: "flex", justifyContent: "space-between",width:"100%" }}>
+                            <span>Location<span style={{color:"red"}}>*</span></span> <span style={{ color: "#a4a6a9" }}>(You can enter new location)</span>
+                        </div>
 
                         {!hiddenLoading ? <Autocomplete
                             id="asynchronous-demo"
@@ -344,7 +346,7 @@ const AddFarmForm = () => {
                         /> */}
                     </div>
                     <div className={styles.farmname} id="acres">
-                        <div className={styles.label}>Total Land (acres)</div>
+                        <div className={styles.label}>Total Land (acres)<span style={{color:"red"}}>*</span></div>
                         <TextField
                             sx={{
                                 '& .MuiInputBase-root': {
@@ -355,7 +357,7 @@ const AddFarmForm = () => {
                             className={styles.inputfarmname}
                             name="area"
                             size="small"
-                            placeholder="Enter area"
+                            placeholder="Enter total area"
                             fullWidth
                             type={'number'}
                             onWheel={(e: any) => e.target.blur()}

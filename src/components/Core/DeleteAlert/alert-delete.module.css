@@ -54,14 +54,14 @@
 
 .alertdelete,
 .buttons {
-  align-self: stretch;
-  display: flex;
+  align-self: stretch !important;
+  display: flex !important;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 1.2rem;
-  text-align: center;
-  color: var(--gray-700);
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 1.2rem !important;
+  text-align: center !important;
+  color: var(--gray-700) !important;
 }
 
 .alertdelete {

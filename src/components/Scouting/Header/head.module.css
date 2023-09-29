@@ -33,4 +33,9 @@
     font-size: var(--font-size-5xl);
     color: var(--green-gradient);
     font-family: var(--text-md-normal);
+
+    position: sticky;
+    top: 0%;
+    z-index:1;
+
 }

@@ -21,7 +21,7 @@ const DashboardPage = () => {
     const [paginationDetails, setPaginationDetails] = useState<PaginationInFarmResponse>();
     const [loading, setLoading] = useState(true);
     const [searchString, setSearchString] = useState('');
-    const [locations, setLocations] = useState<Array<string>>([]);
+    const [locations, setLocations] = useState<Array<{name:string,_id:string}>>([]);
 
     const getAllFarms = async ({ page = 1, limit = 100, search_string = '', location }: Partial<{ page: number, limit: number, search_string: string, location: string }>) => {
 
@@ -80,7 +80,11 @@ const DashboardPage = () => {
 
     const getAllLocations = async () => {
         const response = await getAllLocationsService(accessToken);
-        setLocations(response?.data);
+        if (response?.data?.length) {
+            setLocations([{name:'All',_id:'1'}, ...response?.data]);
+        } else {
+            setLocations([{name:'All',_id:'1'}]);
+        }
 
 
         let searchFromRouter = router.query.search_string;

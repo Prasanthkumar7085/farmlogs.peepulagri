@@ -20,6 +20,7 @@ import { FarmDataType } from "@/types/farmCardTypes";
 import editFarmService from "../../../../lib/services/FarmsService/editFarmService";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import AddLocationDialog from "@/components/Core/AddLocationDialog/AddLocationDialog";
+import addLocationService from "../../../../lib/services/Locations/addLocationService";
 
 
 
@@ -38,14 +39,14 @@ const AddFarmForm = () => {
     const [data, setData] = useState<FarmDataType>();
 
     const [title, setTitle] = useState<string>('');
-    const [location, setLocation] = useState<string>('');
+    const [location, setLocation] = useState<{ name: string, _id: string }|null>();
     const [area, setArea] = useState<string>();
 
 
     const [open, setOpen] = useState(false);
     const [optionsLoading, setOptionsLoading] = useState(false);
 
-    const [locations, setLocations] = useState<Array<string>>([]);
+    const [locations, setLocations] = useState<Array<{name:string,_id:string}>>([]);
 
     const [addLocationOpen, setAddLocationOpen] = useState(false);
 
@@ -151,7 +152,7 @@ const AddFarmForm = () => {
         if (router.query.farm_id) {
             let obj = {
                 title: title,
-                location: location.trim(),
+                location: location?.name?.trim(),
                 area: area ? +area : null,
                 geometry: geometryDemo
             }
@@ -209,12 +210,21 @@ const AddFarmForm = () => {
 
 
 
-    const getLocations = async () => {
+    const [settingLocationLoading, setSettingLocationLoading] = useState(false);
+    const getLocations = async (newLocation='') => {
         setOptionsLoading(true);
         try {
             const response = await getAllLocationsService(accessToken);
             if (response?.success) {
                 setLocations(response?.data);
+                if (newLocation) {
+                    setSettingLocationLoading(true);
+                    const newLocationObject = response?.data?.find((item: any) => item?.name == newLocation);
+                    setLocation(newLocationObject);
+                    setTimeout(() => {
+                        setSettingLocationLoading(false);
+                    }, 1);
+                }
             }
         } catch (e) {
             console.error(e);
@@ -223,27 +233,46 @@ const AddFarmForm = () => {
         }
     }
 
-    const addInputValue = (e: any, newValue: string) => {
-        setLocation(newValue);
+    const [newLocation, setNewLocation] = useState('');
 
-        if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.every(str => str.includes(newValue))) {
-            setLocations([...locations, newValue]);
-        }
+    const addInputValue = (e: any, newValue: string) => {
+        setNewLocation(newValue);
+
+        // if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.every(str => str.includes(newValue))) {
+        //     setLocations([...locations, newValue]);
+        // }
     };
 
     const captureResponseDilog = (value: any) => {
+        setErrorMessages([]);
         if (value == false) {
-            setAddLocationOpen(false)
-            setErrorMessages([]);
+            setAddLocationOpen(false);
+            setNewLocation('')
         }
         else {
-            setErrorMessages([]);
             addNewLocation(value);
         }
     }
 
-    const addNewLocation = async (location:string) => {
-        console.log(location,'location');
+
+    const [addLocationLoading, setAddLocationLoading] = useState(false);
+    const addNewLocation = async (location: string) => {
+        setAddLocationLoading(true);
+        
+        const response = await addLocationService({ name: location }, accessToken);
+        if (response?.success) {
+            setAlertMessage(response?.message);
+            setAlertType(true);
+            setAddLocationOpen(false);
+            getLocations(response?.data?.name);
+            setNewLocation('');
+        } else if (response?.status==422) {
+            setErrorMessages(response?.errors)
+        } else {
+            setAlertMessage(response?.message);
+            setAlertType(false);
+        }
+        setAddLocationLoading(false);
         
     }
 
@@ -289,10 +318,10 @@ const AddFarmForm = () => {
                         </div> */}
                     <div className={styles.farmname} id="enter-location">
                         <div className={styles.label} style={{ display: "flex", justifyContent: "space-between",width:"100%" }}>
-                            <span>Location<span style={{color:"red"}}>*</span></span> <span style={{ color: "#a4a6a9" }}>(You can enter new location)</span>
+                            <span>Location<span style={{color:"red"}}>*</span></span> <span style={{ color: "#3276c3" }} onClick={()=>setAddLocationOpen(true)}>+ Add Location</span>
                         </div>
 
-                        {!hiddenLoading ? <Autocomplete
+                        {!hiddenLoading && !settingLocationLoading ? <Autocomplete
                             id="asynchronous-demo"
                             open={open}
                             fullWidth
@@ -303,16 +332,17 @@ const AddFarmForm = () => {
                             onClose={() => {
                                 setOpen(false);
                             }}
-                            // noOptionsText={<div>{'No such location!'} <span style={{color:"blue"}}  onClick={()=>setAddLocationOpen(true)}>Add New?</span></div>}
+                            noOptionsText={<div>{'No such location!'} <span style={{color:"blue"}}  onClick={()=>setAddLocationOpen(true)}>Add New?</span></div>}
                             value={location}
-                            isOptionEqualToValue={(option, value) => option === value}
-                            getOptionLabel={(option) => option}
+                            isOptionEqualToValue={(option, value) => option.name === value.name}
+                            getOptionLabel={(option:{name:string,_id:string}) => option.name}
                             options={locations}
+                            
                             loading={optionsLoading}
                             onInputChange={addInputValue}
                             onChange={(e: any, value: any, reason: any) => {
                                 if (reason == "clear") {
-                                    setLocation('');
+                                    setLocation(null);
                                 }
                                 if (value) {
                                     setLocation(value);
@@ -419,7 +449,13 @@ const AddFarmForm = () => {
             </div>
             <LoadingComponent loading={loading} />
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
-            <AddLocationDialog open={addLocationOpen} captureResponseDilog={captureResponseDilog} defaultTitle={location} />
+            <AddLocationDialog
+                open={addLocationOpen}
+                captureResponseDilog={captureResponseDilog}
+                defaultTitle={newLocation}
+                errorMessages={errorMessages}
+                loading={addLocationLoading}
+            />
         </form>
     );
 };

@@ -1,0 +1,72 @@
+.newFolder {
+  color: #000;
+  font-family: Inter;
+  font-size: clamp(16px, 3.5vw, 20px);
+  font-weight: 500;
+  line-height: 100%;
+  margin: 0;
+}
+
+.input {
+  border: 0;
+  background-color: transparent;
+  align-self: stretch;
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+
+.buttoncreatefolder{
+  align-self: stretch !important;
+  text-transform: capitalize !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
+  font-size: clamp(14px, 3vw, 16px) !important;
+  padding-block: 0.5rem !important;
+  font-weight: 500 !important;
+}
+.buttoncancelfolder {
+  align-self: stretch !important;
+  text-transform: capitalize !important;
+  border-radius: 8px !important;
+  border: 1px solid #3462CF !important;
+  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
+  font-size: clamp(14px, 3vw, 16px) !important;
+  padding-block: 0.5rem !important;
+  font-weight: 500 !important;
+}
+
+
+.buttoncreatefolder {
+  color: #fff !important;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%) !important;
+}
+.buttoncreatefolder:disabled {
+  color: #6b6a6a !important;
+  background: linear-gradient(142deg, #cfcfcf 0%, #cfcfcf 97.71%) !important;
+}
+
+
+.buttons {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-top: 2rem;
+
+}
+
+.newfolder {
+  border-radius: 8px;
+  background-color: #fff;
+  align-items: center;
+  padding: 1.5rem 1rem 2rem;
+  text-align: center;
+}

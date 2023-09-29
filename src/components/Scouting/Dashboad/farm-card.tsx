@@ -7,6 +7,7 @@ import timePipe from "@/pipes/timePipe";
 import NoDataComponent from "@/components/Core/NoDataComponent";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import { useRouter } from "next/router";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 interface pagePropsType {
   farmsData: Array<FarmDataType>;
@@ -15,8 +16,6 @@ interface pagePropsType {
   location: string
 }
 const FarmCard = ({ farmsData, paginationDetails, loading, location }: pagePropsType) => {
-
-
   const router = useRouter();
 
   return (
@@ -25,9 +24,9 @@ const FarmCard = ({ farmsData, paginationDetails, loading, location }: pageProps
       <div className={styles.allFormsBlock}>
         {farmsData.length ? farmsData.map((item: FarmDataType) => {
           return (
-            <div className={styles.farmcard} id="farm-card" key={item._id} onClick={() => router.push(`farms/${item._id}/crops`)}>
+            <div className={styles.farmcard} id="farm-card" key={item._id} >
               <div className={styles.farm} id="farm">
-                <div className={styles.farmdetails} id="farm-detalis">
+                <div className={styles.farmdetails} id="farm-detalis" onClick={() => router.push(`farms/${item._id}/crops`)}>
                   <div className={styles.duration} id="duration">
                     <div className={styles.aug2023}>{timePipe(item.createdAt, 'DD, MMM YYYY')} - Current</div>
                   </div>
@@ -47,13 +46,13 @@ const FarmCard = ({ farmsData, paginationDetails, loading, location }: pageProps
                   </div> */}
                 </div>
                 <div className={styles.farmareablock} id="farm-area-block">
-                  <div className={styles.farmarea} id="farm-area">
+                  <div className={styles.farmarea} id="farm-area" onClick={() => router.push(`farms/${item._id}/crops`)}>
                     <div className={styles.area}>
                       <div className={styles.acres}>{item?.area ? Math.floor(item?.area * 100) / 100 : ""} Acres</div>
                     </div>
                   </div>
-                  <div className={styles.viewfarm} id="icon-button-view-farm">
-                    <img alt="" src="/form-card-arrow-icon.svg" />
+                  <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}`)}>
+                    <SettingsIcon sx={{color:"#c1c1c1"}} />
                   </div>
                 </div>
               </div>

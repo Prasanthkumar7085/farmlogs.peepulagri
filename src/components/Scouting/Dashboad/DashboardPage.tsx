@@ -80,7 +80,11 @@ const DashboardPage = () => {
 
     const getAllLocations = async () => {
         const response = await getAllLocationsService(accessToken);
-        setLocations(['All', ...response?.data]);
+        if (response?.data?.length) {
+            setLocations(['All', ...response?.data]);
+        } else {
+            setLocations(['All']);
+        }
 
 
         let searchFromRouter = router.query.search_string;

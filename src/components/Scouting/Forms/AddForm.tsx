@@ -19,6 +19,7 @@ import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByI
 import { FarmDataType } from "@/types/farmCardTypes";
 import editFarmService from "../../../../lib/services/FarmsService/editFarmService";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
+import AddLocationDialog from "@/components/Core/AddLocationDialog/AddLocationDialog";
 
 
 
@@ -45,6 +46,8 @@ const AddFarmForm = () => {
     const [optionsLoading, setOptionsLoading] = useState(false);
 
     const [locations, setLocations] = useState<Array<string>>([]);
+
+    const [addLocationOpen, setAddLocationOpen] = useState(false);
 
     const geometryDemo = {
         "type": "Polygon",
@@ -94,9 +97,11 @@ const AddFarmForm = () => {
 
             setAlertMessage(response?.message);
             setAlertType(true);
+            console.log(response);
+            
 
             setTimeout(() => {
-                router.back();
+                router.push(`/farms?location=${response?.data?.location}`);
             }, 1000);
 
         } else if (response?.status == 422) {
@@ -226,6 +231,22 @@ const AddFarmForm = () => {
         }
     };
 
+    const captureResponseDilog = (value: any) => {
+        if (value == false) {
+            setAddLocationOpen(false)
+            setErrorMessages([]);
+        }
+        else {
+            setErrorMessages([]);
+            addNewLocation(value);
+        }
+    }
+
+    const addNewLocation = async (location:string) => {
+        console.log(location,'location');
+        
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmitClick)}>
             <div className={styles.addfarmform} id="add-farm">
@@ -282,6 +303,7 @@ const AddFarmForm = () => {
                             onClose={() => {
                                 setOpen(false);
                             }}
+                            // noOptionsText={<div>{'No such location!'} <span style={{color:"blue"}}  onClick={()=>setAddLocationOpen(true)}>Add New?</span></div>}
                             value={location}
                             isOptionEqualToValue={(option, value) => option === value}
                             getOptionLabel={(option) => option}
@@ -397,6 +419,7 @@ const AddFarmForm = () => {
             </div>
             <LoadingComponent loading={loading} />
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
+            <AddLocationDialog open={addLocationOpen} captureResponseDilog={captureResponseDilog} defaultTitle={location} />
         </form>
     );
 };

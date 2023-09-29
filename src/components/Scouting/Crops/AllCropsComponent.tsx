@@ -1,29 +1,27 @@
-import SelectComponenentForLogs from "@/components/Core/SelectComponrntForLogs";
-
 import { useEffect, useState } from "react";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import { useDispatch, useSelector } from "react-redux";
-import SelectComponenentForFarms from "@/components/Core/selectDropDownForFarms";
 import { useRouter } from "next/router";
-import { Button, FormControl, FormHelperText, IconButton, InputLabel, Typography } from "@mui/material";
+import { FormControl, FormHelperText, IconButton, InputLabel, Typography } from "@mui/material";
 import styles from "./crop-card.module.css";
-import Header1 from "../Header/HeaderComponent";
 import CropCard from "./CropCard";
-import SortIcon from '@mui/icons-material/Sort';
 import AddIcon from '@mui/icons-material/Add';
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
-import ImageComponent from "@/components/Core/ImageComponent";
-import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
-const AllCropsComponent = () => {
+import { removeTheFilesFromStore, setFarmTitleTemp } from "@/Redux/Modules/Farms";
 
-    const dispatch = useDispatch()
+const AllCropsComponent = () => {
+    
+    const router = useRouter();
+    const dispatch = useDispatch();
+
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
     const [defaultValue, setDefaultValue] = useState<any>('');
     const [formId, setFormId] = useState<any>()
     const [formOptions, setFarmOptions] = useState<any>();
-    const [selectedCrop, setSelectedCrop] = useState<any>()
     const [cropOptions, setCropOptions] = useState<any>()
     const [dilogOpen, setDilogOpen] = useState<any>()
     const [loading, setLoading] = useState<any>()
@@ -31,8 +29,6 @@ const AllCropsComponent = () => {
     const [alertType, setAlertType] = useState(false);
     const [loadingForAdd, setLoadingForAdd] = useState<any>()
 
-    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-    const router = useRouter();
     const getFormDetails = async (id: any) => {
         setLoading(true)
         let response = await getAllFarmsService(accessToken);
@@ -43,9 +39,12 @@ const AllCropsComponent = () => {
                 if (id) {
                     let selectedObject = response?.data?.length && response?.data?.find((item: any) => item._id == id);
                     setDefaultValue(selectedObject?.title)
+                    dispatch(setFarmTitleTemp(selectedObject?.title));
                     captureFarmName(selectedObject);
+
                 } else {
                     setDefaultValue(response?.data[0].title);
+                    dispatch(setFarmTitleTemp(response?.data[0].title));
                     captureFarmName(response?.data[0]);
                 }
             } else {

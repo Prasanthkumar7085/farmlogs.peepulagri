@@ -8,7 +8,8 @@ export const initialState: Farms.FarmsData = {
   farmsDataArray: [],
   singleFarm: {},
   filesList: [],
-  cropName: ''
+  cropName: '',
+  farmName:""
 };
 
 export const farmsSlice = createSlice({
@@ -32,6 +33,9 @@ export const farmsSlice = createSlice({
     setCropTitleTemp: (state: any, action: any) => {
       state.cropName = action.payload;
     },
+    setFarmTitleTemp: (state: any, action: any) => {
+      state.farmName = action.payload;
+    },
     removeTheFilesFromStore: (state: any, action: any) => {
       state.filesList = action.payload
     },
@@ -39,6 +43,9 @@ export const farmsSlice = createSlice({
       const selectedFilesCopy = [...state.filesList];
       selectedFilesCopy.splice(action.payload, 1);
       state.filesList = selectedFilesCopy
+    },
+    setToInitialState: (state: any) => {
+      state = initialState;
     }
   },
 });
@@ -46,7 +53,11 @@ export const farmsSlice = createSlice({
 export const {
   setAllFarms,
   setSingleFarm, storeFilesArray,
-  setCropTitleTemp, removeTheFilesFromStore, removeOneElement
+  setCropTitleTemp,
+  setFarmTitleTemp,
+  removeTheFilesFromStore,
+  removeOneElement,
+  setToInitialState
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
 

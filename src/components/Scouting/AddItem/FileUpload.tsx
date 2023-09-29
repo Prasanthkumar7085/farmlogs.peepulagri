@@ -501,6 +501,7 @@ const FileUploadComponent = () => {
         let temp = [...fileProgressCopy, ...new Array(filesFromStore?.length).fill(100)]
         setFileProgress(temp)
         dispatch(storeFilesArray(temp1))
+        generateThumbnail(file, 0)
 
         const bytesToMB = (bytes: any) => {
             return bytes / (1024 * 1024);

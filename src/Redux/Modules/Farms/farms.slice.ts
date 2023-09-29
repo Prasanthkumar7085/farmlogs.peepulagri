@@ -35,13 +35,18 @@ export const farmsSlice = createSlice({
     removeTheFilesFromStore: (state: any, action: any) => {
       state.filesList = action.payload
     },
+    removeOneElement: (state: any, action: any) => {
+      const selectedFilesCopy = [...state.filesList];
+      selectedFilesCopy.splice(action.payload, 1);
+      state.filesList = selectedFilesCopy
+    }
   },
 });
 
 export const {
   setAllFarms,
   setSingleFarm, storeFilesArray,
-  setCropTitleTemp, removeTheFilesFromStore
+  setCropTitleTemp, removeTheFilesFromStore, removeOneElement
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
 

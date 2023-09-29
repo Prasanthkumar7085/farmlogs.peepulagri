@@ -6,7 +6,6 @@ import {
 } from "@mui/material";
 import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 
 const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,errorMessages,defaultArea }: any) => {
@@ -97,8 +96,9 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
                   step: 'any'
               }}
               value={area}
-            onChange={(e) => setArea(e.target.value)}
-            InputProps={{ style: { appearance: 'none' } }}
+              onChange={(e) => setArea(e.target.value)}
+              InputProps={{ style: { appearance: 'none' } }}
+              onKeyDown={(e: any) => { if (e.key == 'Enter') callData(); }}
           />
             
         </div>

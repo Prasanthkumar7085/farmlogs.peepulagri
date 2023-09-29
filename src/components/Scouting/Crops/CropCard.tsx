@@ -61,6 +61,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
     }
 
     const captureResponseDilog = (value: any) => {
+        setErrorMessages([]);
         if (value == false) {
             setRenameOpen(false)
         }
@@ -74,6 +75,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
+    const [errorMessages, setErrorMessages] = useState([]);
 
     const renameCrop = async (value: any) => {
         setLoadingForAdd(true)
@@ -82,11 +84,13 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
             getCropsDetails(router.query.farm_id as string);
             setAlertMessage(response?.message);
             setAlertType(true)
-        } else {
+            setRenameOpen(false);
+        } else if (response?.status == 422) {
+            setErrorMessages(response?.errors);
+        }else {
             setAlertMessage(response?.message);
             setAlertType(false)
         }
-        setRenameOpen(false);
         setLoadingForAdd(false);
     }
 
@@ -126,7 +130,15 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                     </div>
                 </div>
             </div>
-            {renameOpen ? <NewFolderDiloag open={renameOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} defaultTitle={itemDetails?.title} defaultArea={itemDetails?.crop_area} /> : ""}
+            {renameOpen ?
+                <NewFolderDiloag
+                    open={renameOpen}
+                    captureResponseDilog={captureResponseDilog}
+                    loading={loadingForAdd}
+                    defaultTitle={itemDetails?.title}
+                    defaultArea={itemDetails?.crop_area}
+                    errorMessages={errorMessages}
+                /> : ""}
             {deleteOpen ? <AlertDelete open={deleteOpen} deleteFarm={deleteCrop} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
             {alertMessage ? <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} /> : ""}
         </div>

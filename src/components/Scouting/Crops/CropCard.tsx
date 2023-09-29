@@ -55,7 +55,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
             >
                 <MenuItem onClick={() => { handleClose(); setRenameOpen(true) }}>Rename</MenuItem>
                 <MenuItem onClick={() => { setDeleteOpen(true); handleClose() }}>Delete</MenuItem>
-        
+
             </Menu>
         )
     }
@@ -90,7 +90,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
         setLoadingForAdd(false);
     }
 
-    const deleteCrop = async() => {
+    const deleteCrop = async () => {
         setDeleteLoading(true)
         const response = await deleteCropService(router.query.farm_id as string, itemDetails?._id, accessToken);
         if (response?.success) {
@@ -102,16 +102,16 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
             setAlertMessage(response?.message);
             setAlertType(false)
         }
-        
+
         setDeleteLoading(false);
     }
-    const setToStorage =async (title: string) => {        
+    const setToStorage = async (title: string) => {
         await dispatch(setCropTitleTemp(title));
         router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)
     }
-    
+
     return (
-        <div>
+        <div style={{ minHeight: "115px", maxHeight: "115px" }}>
             <div className={styles.cropcard} >
                 <div className={styles.icons}>
                     <img className={styles.folderIcon} alt="" src="/folder.svg" onClick={() => setToStorage(itemDetails?.title)} />
@@ -119,13 +119,13 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                     <MenuItemsForFolder />
                 </div>
                 <div className={styles.textWrapper} onClick={() => setToStorage(itemDetails?.title)} >
-                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length>20?itemDetails?.title.slice(0,17)+'...':itemDetails?.title}</h2>
+                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length > 20 ? itemDetails?.title.slice(0, 17) + '...' : itemDetails?.title}</h2>
                     <p className={styles.aug2023}>{timePipe(itemDetails.createdAt, "DD-MM-YYYY")}</p>
                 </div>
             </div>
-            <NewFolderDiloag open={renameOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} defaultTitle={itemDetails?.title} />
-            <AlertDelete open={deleteOpen} deleteFarm={deleteCrop} setDialogOpen={setDeleteOpen} loading={deleteLoading} />
-            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
+            {renameOpen ? <NewFolderDiloag open={renameOpen} captureResponseDilog={captureResponseDilog} loading={loadingForAdd} defaultTitle={itemDetails?.title} /> : ""}
+            {deleteOpen ? <AlertDelete open={deleteOpen} deleteFarm={deleteCrop} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
+            {alertMessage ? <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} /> : ""}
         </div>
     );
 };

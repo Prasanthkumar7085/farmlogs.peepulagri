@@ -16,10 +16,10 @@ const SingleViewScoutComponent = () => {
     const [data, setData] = useState<any>()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
-    
+
     const [loading, setLoading] = useState(true);
-    
-        
+
+
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
             getPresingedURls()
@@ -90,7 +90,8 @@ const SingleViewScoutComponent = () => {
                     >
                         My Crops
                     </Link>
-                    <Typography color="text.primary">{farmTitle}</Typography>
+                    <Typography color="text.primary">{farmTitle.length > 20 ? farmTitle.slice(0, 17) + '...' : farmTitle}
+                    </Typography>
                 </Breadcrumbs>
             </div>
             {data?.length ? data.map((item: any, index: any) => {
@@ -112,7 +113,7 @@ const SingleViewScoutComponent = () => {
                         <Typography variant="h4">No Scouts</Typography>
                     </div>
                     : "")}
-    <LoadingComponent loading={loading}/>
+            <LoadingComponent loading={loading} />
         </div>
 
     )

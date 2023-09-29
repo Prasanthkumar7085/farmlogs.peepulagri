@@ -6,6 +6,8 @@ import CameraIcon from '@mui/icons-material/Camera';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import ClearIcon from '@mui/icons-material/Clear';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useRouter } from 'next/router';
 function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     const [stream, setStream] = useState<any>(null);
     const [mediaRecorder, setMediaRecorder] = useState<any>(null);
@@ -15,7 +17,7 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     const [capturedImageUrl, setCapturedImageUrl] = useState<any>(null);
     const [capturedVideoUrl, setCapturedVideoUrl] = useState<any>(null);
     const [captureVedioBlob, setCaptureVedioBlob] = useState<any>()
-
+    const router = useRouter();
 
     useEffect(() => {
         if (openCamera == true) {
@@ -30,7 +32,8 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
             const constraints = {
                 video: { facingMode: { exact: 'environment' } }, // Specify the back camera
             };
-            const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            // constraint
 
             setStream(mediaStream);
             videoRef.current.srcObject = mediaStream;
@@ -96,7 +99,8 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     };
 
     return (
-        <div >
+        <div style={{ paddingTop: "6rem" }}>
+
             {!capturedImageUrl && !capturedVideoUrl ?
                 <div style={{
                     position: "relative",

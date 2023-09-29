@@ -271,6 +271,7 @@ body {
     max-width: 500px;
     min-height: 100vh;
     background-color: #f5f7fa;
+    border-inline: 1px solid #9d9e9e;
     margin: 0 auto;
     position: relative;
 }
@@ -281,7 +282,6 @@ body {
 
 .addFormPositionIcon {
     cursor: pointer;
-    position: absolute;
     position: fixed;
     bottom: 3rem;
     right: 2rem;

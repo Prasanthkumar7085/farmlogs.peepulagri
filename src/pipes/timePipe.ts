@@ -1,6 +1,6 @@
 import moment from "moment"
 
-const timePipe = (timeString: string, format: string) => {
+const timePipe = (timeString: any, format: string) => {
 
     if (timeString) {
         if (timeString == 'Invalid date' || timeString == '-') {

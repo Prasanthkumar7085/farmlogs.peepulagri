@@ -11,6 +11,8 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     const [mediaRecorder, setMediaRecorder] = useState<any>(null);
     const videoRef: any = useRef(null);
     const chunks: any = useRef([]);
+    const [seconds, setSeconds] = useState(0);
+    const [isRunning, setIsRunning] = useState(false);
 
     const [capturedImageUrl, setCapturedImageUrl] = useState<any>(null);
     const [capturedVideoUrl, setCapturedVideoUrl] = useState<any>(null);
@@ -22,6 +24,31 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
             startCamera()
         }
     }, [])
+
+
+    useEffect(() => {
+        let intervalId: any;
+
+        if (isRunning) {
+            intervalId = setInterval(() => {
+                if (seconds > 0) {
+                    setSeconds(seconds + 1);
+                } else {
+                    clearInterval(intervalId);
+                    setIsRunning(false);
+                }
+            }, 1000);
+        }
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [seconds, isRunning]);
+
+    const startTimer = () => {
+        setIsRunning(true);
+        setSeconds(1); // Set the initial countdown time here
+    };
 
     const startCamera = async () => {
         setCapturedImageUrl(null)
@@ -40,7 +67,7 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     };
 
     const stopCamera = () => {
-        console.log(capturedVideoUrl)
+
         if (stream) {
             stream.getTracks().forEach((track: any) => track.stop());
             setStream(null);
@@ -52,6 +79,7 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
     };
 
     const startRecording = () => {
+        startTimer()
         if (stream) {
             const recorder = new MediaRecorder(stream);
             recorder.ondataavailable = (event) => {
@@ -95,6 +123,8 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
         }
     };
 
+    const formattedTime = `${Math.floor(seconds / 60)}:${(seconds % 60).toLocaleString('en-US', { minimumIntegerDigits: 2 })}`;
+
     return (
         <div >
             {!capturedImageUrl && !capturedVideoUrl ?
@@ -114,7 +144,13 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
             <div className={styles.capturingIcons}>
                 {stream && !capturedImageUrl && !capturedVideoUrl ? (
                     <>
-                        {mediaRecorder?.state !== 'recording' ? <IconButton onClick={stopCamera}>
+                        {mediaRecorder?.state !== 'recording' ? <IconButton onClick={() => {
+                            stopCamera()
+                            setStream(null);
+                            videoRef.current.srcObject = null;
+                            setMediaRecorder(null)
+                            captureCloseCamera(true, "")
+                        }}>
                             < ClearIcon sx={{ fontSize: "2.5rem", color: "#ff0000" }} />
                         </IconButton> : ""}
 
@@ -124,8 +160,11 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
                     <IconButton onClick={startCamera}><CameraAltIcon sx={{ fontSize: "2.5rem", color: "#2e58c4" }} /></IconButton>
                 )}
                 {mediaRecorder && mediaRecorder.state === 'recording' ? (
-                    <Tooltip title="Stop Recording">
-                        <IconButton onClick={stopRecording}> < ClearIcon sx={{ fontSize: "2.5rem", color: "#ff0000" }} /></IconButton></Tooltip>
+                    <>
+                        <p>Recording... {formattedTime}</p>
+
+                        <Tooltip title="Stop Recording">
+                            <IconButton onClick={stopRecording}> < ClearIcon sx={{ fontSize: "2.5rem", color: "#ff0000" }} /></IconButton></Tooltip></>
                 ) : (
                     <IconButton onClick={startRecording}><VideocamIcon sx={{ fontSize: "3rem", color: "#2e58c4" }} /></IconButton>
                 )}

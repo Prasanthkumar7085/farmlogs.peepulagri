@@ -50,17 +50,19 @@
 }
 
 #allCropCardBlock {
+
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 14vh;
   grid-gap: 1rem;
-  padding-top: 0;
-  height: 72vh;
-  overflow-y: scroll;
 }
 
 .myCropsPage {
   padding: 1rem;
+}
+
+.allCrops {
+  height: 65vh;
+  overflow: scroll;
 }
 
 #noData {

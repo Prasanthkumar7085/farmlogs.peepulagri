@@ -79,19 +79,19 @@ const ViewScoutThreads: NextPage = () => {
             {data?.description ? data?.description : ""}
           </p>
         </div>
-        <div className={styles.attachents}>
-          <div className={styles.attachmentscontainer}>
-            <h3 className={styles.heading}>Attachments</h3>
-            {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
-              <Gallery images={images} rowHeight={180} />
-            </Card> : ""}
-            {/* {downloadUrls?.length && downloadUrls.map((item: any, index: any) => (
+
+        <div className={styles.attachmentscontainer}>
+          <h3 className={styles.heading}>Attachments</h3>
+          {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
+            <Gallery images={images} rowHeight={180} />
+          </Card> : ""}
+          {/* {downloadUrls?.length && downloadUrls.map((item: any, index: any) => (
                 <Card key={index} style={{ marginTop: "20px" }} onClick={()=>router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
                     <Typography>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</Typography>
                 </Card>
             ))} */}
-          </div>
         </div>
+
       </div>
 
 

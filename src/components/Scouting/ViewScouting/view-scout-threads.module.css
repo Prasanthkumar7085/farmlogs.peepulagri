@@ -24,7 +24,6 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-  padding: 0 0 0 var(--padding-base);
   gap: var(--gap-5xs);
 }
 
@@ -39,7 +38,7 @@
 
 
 
-.attachents,
+
 .attachmentscontainer,
 .headerandattachments {
   align-self: stretch;
@@ -47,11 +46,11 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+
 }
 
-.attachents {
-  padding: var(--padding-base);
-
+.attachmentscontainer {
+  gap: .5rem;
 }
 
 .headerandattachments {
@@ -80,16 +79,15 @@
 }
 
 
-.description,
+
 .viewscoutthreads {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 1rem 0px 1rem 0px;
+  padding: 1rem;
 }
 
 .description {
-  padding: 0 var(--padding-base);
   /* gap: var(--gap-5xs); */
   font-size: var(--font-size-base);
   color: var(--title);

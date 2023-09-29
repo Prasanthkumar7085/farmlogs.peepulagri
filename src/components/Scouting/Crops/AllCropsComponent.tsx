@@ -163,24 +163,27 @@ const AllCropsComponent = () => {
                     <AddIcon /><Typography variant="caption">New Folder</Typography>
                 </IconButton>
             </div>
-            {cropOptions?.length ?
-                <div id={styles.allCropCardBlock}>
-                    {cropOptions?.map((item: any, index: any) => (
-                        <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
+            <div className={styles.allCrops}>
 
-                    ))}
-                </div>
-                : (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
-                        {/* <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} /> */}
-                        <Typography variant="h4">No Crops</Typography>
+                {cropOptions?.length ?
+                    <div id={styles.allCropCardBlock}>
+                        {cropOptions?.map((item: any, index: any) => (
+                            <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
+
+                        ))}
                     </div>
-                    : "")}
+                    : (!loading ?
+                        <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
+                            {/* <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} /> */}
+                            <Typography variant="h4">No Crops</Typography>
+                        </div>
+                        : "")}
+            </div>
 
-            {cropOptions?.length && !loading?<div className="addFormPositionIcon" >
+            {cropOptions?.length && !loading ? <div className="addFormPositionIcon" >
                 <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />
             </div> : ""}
-            
+
             {dilogOpen ? <NewFolderDiloag
                 open={dilogOpen}
                 captureResponseDilog={captureResponseDilog}

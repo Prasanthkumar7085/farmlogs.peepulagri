@@ -1,5 +1,6 @@
 #mobileLoginPage {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
+  background: url(/mobile-bg-login.png);
   height: 100vh;
   width: 100vw;
   position: relative;
@@ -8,6 +9,8 @@
   justify-content: center;
   flex-direction: column;
   font-family: 'Inter', sans-serif !important;
+  background-size: contain;
+  background-position: center;
 }
 
 .bgImage {

@@ -68,11 +68,11 @@ const MobileLogin: NextPage = () => {
   return (
     <div id={styles.mobileLoginPage}>
       <div className={styles.login}>
-        <div className={styles.bgImage}>
-          <img src="./mobile-bg-login.png" alt="Bg Image" />
-        </div>
+        {/* <div className={styles.bgImage}>
+          <img src="/mobile-bg-login.png" alt="Bg Image" />
+        </div> */}
         <div className={styles.logo} id="login-logo">
-          <ImageComponent src="./Logo-color.svg" width="150" height="110" alt={'logo'} />
+          <ImageComponent src="/Logo-color.svg" width="150" height="110" alt={'logo'} />
         </div>
         <div className={styles.loginform}>
           <div className={styles.loginfield}>
@@ -98,8 +98,8 @@ const MobileLogin: NextPage = () => {
               InputProps={{
 
                 startAdornment: (
-                  <InputAdornment position="start" sx={{paddingLeft:"10px"}}>
-                      <PhoneAndroidOutlinedIcon sx={{ color: "#05A155" }} /> +91
+                  <InputAdornment position="start" sx={{ paddingLeft: "10px" }}>
+                    <PhoneAndroidOutlinedIcon sx={{ color: "#05A155" }} /> +91
                   </InputAdornment>
                 ),
               }}

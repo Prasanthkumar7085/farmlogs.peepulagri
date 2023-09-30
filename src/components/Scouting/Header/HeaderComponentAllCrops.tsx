@@ -12,8 +12,8 @@ const HeaderComponentAllCrops = ({ name }: any) => {
                 className={styles.iconsiconArrowLeft}
                 alt=""
                 src="/iconsiconarrowleft.svg"
-                // onClick={() => router.push('/farms')}
-                onClick={() => router.back()}
+                onClick={() => router.push('/farms')}
+                // onClick={() => router.back()}
 
             />
             <Typography className={styles.viewFarm}>{name}</Typography>

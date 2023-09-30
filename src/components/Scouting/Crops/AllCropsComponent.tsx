@@ -24,7 +24,7 @@ const AllCropsComponent = () => {
     const [formOptions, setFarmOptions] = useState<any>();
     const [cropOptions, setCropOptions] = useState<any>()
     const [dilogOpen, setDilogOpen] = useState<any>()
-    const [loading, setLoading] = useState<any>()
+    const [loading, setLoading] = useState<any>(true)
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [loadingForAdd, setLoadingForAdd] = useState<any>()
@@ -53,6 +53,7 @@ const AllCropsComponent = () => {
             }
         } catch (err) {
             console.error(err);
+            setLoading(false)
         }
 
     }
@@ -85,9 +86,7 @@ const AllCropsComponent = () => {
         setLoadingForAdd(true)
         let options = {
             method: "POST",
-            body: JSON.stringify({
-                "title": value
-            }),
+            body: JSON.stringify(value),
             headers: new Headers({
                 'content-type': 'application/json',
                 'authorization': accessToken
@@ -114,12 +113,11 @@ const AllCropsComponent = () => {
         }
     }
 
-    //useEffect 
+   
     useEffect(() => {
         if (router.isReady && router.query.farm_id && accessToken) {
             getFormDetails(router.query.farm_id)
             dispatch(removeTheFilesFromStore([]));
-
         }
     }, [accessToken, router.isReady]);
 
@@ -128,7 +126,6 @@ const AllCropsComponent = () => {
             setFormId(selectedObject?._id);
             getCropsDetails(selectedObject?._id)
             router.replace(`/farms/${selectedObject?._id}/crops`)
-
         }
     }
 
@@ -173,7 +170,6 @@ const AllCropsComponent = () => {
                     </div>
                     : (!loading ?
                         <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
-                            {/* <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} /> */}
                             <Typography variant="h4">No Crops</Typography>
                         </div>
                         : "")}

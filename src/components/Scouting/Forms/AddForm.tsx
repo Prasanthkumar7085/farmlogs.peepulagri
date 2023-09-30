@@ -31,24 +31,31 @@ const AddFarmForm = () => {
     const router = useRouter();
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
+    
     const [errorMessages, setErrorMessages] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [data, setData] = useState<FarmDataType>();
-
+    
     const [title, setTitle] = useState<string>('');
     const [location, setLocation] = useState<{ name: string, _id: string }|null>();
     const [area, setArea] = useState<string>();
-
-
+    
+    
     const [open, setOpen] = useState(false);
     const [optionsLoading, setOptionsLoading] = useState(false);
-
+    
     const [locations, setLocations] = useState<Array<{name:string,_id:string}>>([]);
-
+    
     const [addLocationOpen, setAddLocationOpen] = useState(false);
+    
+    const [hiddenLoading, setHiddenLoading] = useState(false);
+    const [settingLocationLoading, setSettingLocationLoading] = useState(false);
+    const [addLocationLoading, setAddLocationLoading] = useState(false);
+
+    const [newLocation, setNewLocation] = useState('');
+
 
     const geometryDemo = {
         "type": "Polygon",
@@ -98,8 +105,6 @@ const AddFarmForm = () => {
 
             setAlertMessage(response?.message);
             setAlertType(true);
-            console.log(response);
-            
 
             setTimeout(() => {
                 router.push(`/farms?location=${response?.data?.location}`);
@@ -149,16 +154,16 @@ const AddFarmForm = () => {
         setErrorMessages({});
         setLoading(true);
 
+        let obj = {
+            title: title,
+            location: location?.name,
+            area: area ? +area : null,
+            geometry: geometryDemo
+        }
         if (router.query.farm_id) {
-            let obj = {
-                title: title,
-                location: location?.name?.trim(),
-                area: area ? +area : null,
-                geometry: geometryDemo
-            }
             edtiFarm(obj);
         } else {
-            addFarm(data)
+            addFarm(obj);
         }
 
     };
@@ -183,21 +188,26 @@ const AddFarmForm = () => {
 
             setArea(response?.data?.area);
             setTitle(response?.data?.title);
-            setLocation(response?.data?.location);
+            const locationFromResponse = response?.data?.location;
+            // const locationObjFromResponse = locationFromResponse.find((item: {name:string,_id:string})=>item.name==locationFromResponse);
+            // setLocation(locationObjFromResponse);
+            await getLocations(locationFromResponse);
         }
         setLoading(false);
     }
 
 
     useEffect(() => {
-        if (router.isReady && accessToken && router.query.farm_id) {
-            getFarmDataById();
-            getLocations();
+        if (router.isReady && accessToken) {
+            if (router.query.farm_id) {
+                getFarmDataById();            
+            } else if (router.query.location) {
+                getLocations(router.query.location as string);
+            }
         }
-    }, [router.isReady, accessToken]);
+    }, [router.isReady, accessToken,router.query.location]);
 
 
-    const [hiddenLoading, setHiddenLoading] = useState(false);
 
     useEffect(() => {
 
@@ -210,8 +220,8 @@ const AddFarmForm = () => {
 
 
 
-    const [settingLocationLoading, setSettingLocationLoading] = useState(false);
-    const getLocations = async (newLocation='') => {
+    const getLocations = async (newLocation = '') => {
+        
         setOptionsLoading(true);
         try {
             const response = await getAllLocationsService(accessToken);
@@ -233,15 +243,12 @@ const AddFarmForm = () => {
         }
     }
 
-    const [newLocation, setNewLocation] = useState('');
+    
 
     const addInputValue = (e: any, newValue: string) => {
         setNewLocation(newValue);
-
-        // if (newValue.trim() !== '' && !locations.includes(newValue) && !locations.every(str => str.includes(newValue))) {
-        //     setLocations([...locations, newValue]);
-        // }
     };
+
 
     const captureResponseDilog = (value: any) => {
         setErrorMessages([]);
@@ -255,7 +262,6 @@ const AddFarmForm = () => {
     }
 
 
-    const [addLocationLoading, setAddLocationLoading] = useState(false);
     const addNewLocation = async (location: string) => {
         setAddLocationLoading(true);
         
@@ -264,6 +270,7 @@ const AddFarmForm = () => {
             setAlertMessage(response?.message);
             setAlertType(true);
             setAddLocationOpen(false);
+            
             getLocations(response?.data?.name);
             setNewLocation('');
         } else if (response?.status==422) {
@@ -273,12 +280,11 @@ const AddFarmForm = () => {
             setAlertType(false);
         }
         setAddLocationLoading(false);
-        
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmitClick)}>
-            <div className={styles.addfarmform} id="add-farm">
+            {!loading?<div className={styles.addfarmform} id="add-farm">
                 <div className={styles.formfields} id="form-fields">
                     <div className={styles.farmname} id="farm-name">
                         <div className={styles.label}> Title<span style={{color:"red"}}>*</span></div>
@@ -318,7 +324,7 @@ const AddFarmForm = () => {
                         </div> */}
                     <div className={styles.farmname} id="enter-location">
                         <div className={styles.label} style={{ display: "flex", justifyContent: "space-between",width:"100%" }}>
-                            <span>Location<span style={{color:"red"}}>*</span></span> <span style={{ color: "#3276c3" }} onClick={()=>setAddLocationOpen(true)}>+ Add Location</span>
+                            <span>Location<span style={{ color: "red" }}>*</span></span> <span style={{ color: "#3276c3" }} onClick={() => { setNewLocation(''); setAddLocationOpen(true)}}>+ Add Location</span>
                         </div>
 
                         {!hiddenLoading && !settingLocationLoading ? <Autocomplete
@@ -337,7 +343,6 @@ const AddFarmForm = () => {
                             isOptionEqualToValue={(option, value) => option.name === value.name}
                             getOptionLabel={(option:{name:string,_id:string}) => option.name}
                             options={locations}
-                            
                             loading={optionsLoading}
                             onInputChange={addInputValue}
                             onChange={(e: any, value: any, reason: any) => {
@@ -446,7 +451,7 @@ const AddFarmForm = () => {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </div>:""}
             <LoadingComponent loading={loading} />
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
             <AddLocationDialog

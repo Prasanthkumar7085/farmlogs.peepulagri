@@ -1,9 +1,7 @@
-const updateCropService =async (farmId:string,cropId:string,title:string,accessToken:string) => {
+const updateCropService =async (farmId:string,cropId:string,body:any,accessToken:string) => {
     let options = {
         method: "PATCH",
-        body: JSON.stringify({
-            "title": title
-        }),
+        body: JSON.stringify(body),
         headers: new Headers({
             'content-type': 'application/json',
             'authorization': accessToken

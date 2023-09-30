@@ -1,12 +1,14 @@
+import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 import { Autocomplete, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown, label, placeholder, defaultValue }: any) => {
 
     const [defaultValueSet, setDefaultValueSet] = useState<any>();
-    const [selectedValue, setSelectedValues] = useState<any>()
-    const router = useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (router.isReady && router.query.farm_id) {
@@ -27,16 +29,18 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
                 onChange={(e: any, value: any, reason: any) => {
                     if (value) {
                         onSelectValueFromDropDown(value, reason);
-                        setDefaultValueSet(value)
+                        setDefaultValueSet(value);
+                        dispatch(setFarmTitleTemp(value?.title));
                     }
                     else {
-                        onSelectValueFromDropDown("", reason)
+                        onSelectValueFromDropDown("", reason);
                         setDefaultValueSet(value)
 
                     }
 
-                }} renderInput={(params) => <TextField {...params} placeholder={placeholder}
-                />}
+                }}
+                renderInput={(params) => <TextField {...params} placeholder={placeholder}/>
+                }
                 sx={{
                     width: '100%',
                     background: "#fff",

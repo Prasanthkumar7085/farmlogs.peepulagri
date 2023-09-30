@@ -31,7 +31,7 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
   const callData = () => {
     let obj = {
       title: title ? title :"",
-      crop_area: area ? +area : null
+      crop_area: (area&&+area) ? +area : null
     }
     captureResponseDilog(obj)
   }
@@ -109,6 +109,7 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
             size="small"
             variant="contained"
             onClick={() => callData()}
+            disabled={loading}
           >
             {loading ?
               <CircularProgress size="1.5rem" sx={{ color: "white" }} /> :

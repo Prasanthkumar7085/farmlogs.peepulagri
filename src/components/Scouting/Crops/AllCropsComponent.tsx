@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { FormControl, FormHelperText, IconButton, InputLabel, Typography } from "@mui/material";
+import { Box, Drawer, FormControl, FormHelperText, IconButton, InputLabel, ListItem, Menu, MenuItem, Typography } from "@mui/material";
 import styles from "./crop-card.module.css";
 import CropCard from "./CropCard";
 import AddIcon from '@mui/icons-material/Add';
@@ -11,6 +11,10 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
 import { removeTheFilesFromStore, setFarmTitleTemp } from "@/Redux/Modules/Farms";
+import SortIcon from '@mui/icons-material/Sort';
+import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
+import DoneIcon from '@mui/icons-material/Done';
+import { id } from "date-fns/locale";
 
 const AllCropsComponent = () => {
     
@@ -27,9 +31,14 @@ const AllCropsComponent = () => {
     const [loading, setLoading] = useState<any>(true)
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
-    const [loadingForAdd, setLoadingForAdd] = useState<any>()
+    const [loadingForAdd, setLoadingForAdd] = useState<any>();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [errorMessages, setErrorMessages] = useState([]);
+    const [state, setState] = useState({ bottom: false });
+    const [sortBy, setSortBy] = useState('createdAt');
+    const [sortType, setSortType] = useState('desc');
 
-    const getFormDetails = async (id: any) => {
+    const getFarmDetails = async (id: any) => {
         setLoading(true)
         let response = await getAllFarmsService(accessToken);
 
@@ -59,11 +68,22 @@ const AllCropsComponent = () => {
     }
 
     //get all crops name
-    const getCropsDetails = async (id: string) => {
+    const getCropsDetails = async (id: string,orderBy=sortBy,orderType=sortType) => {
         setLoading(true)
 
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`, { method: "GET" });
+            let queryParams: any = {};
+
+            if (orderBy) {
+                queryParams['order_by'] = orderBy;
+            }
+            if (orderType) {
+                queryParams['order_type'] = orderType;
+            }
+
+            let url = prepareURLEncodedParams(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`,queryParams);
+
+            let response = await fetch(url, { method: "GET" });
             let responseData: any = await response.json();
 
             if (responseData.success == true) {
@@ -79,8 +99,6 @@ const AllCropsComponent = () => {
         }
     }
 
-
-    const [errorMessages, setErrorMessages] = useState([]);
     //create crop api call
     const createCrop = async (value: any) => {
         setLoadingForAdd(true)
@@ -116,7 +134,7 @@ const AllCropsComponent = () => {
    
     useEffect(() => {
         if (router.isReady && router.query.farm_id && accessToken) {
-            getFormDetails(router.query.farm_id)
+            getFarmDetails(router.query.farm_id)
             dispatch(removeTheFilesFromStore([]));
         }
     }, [accessToken, router.isReady]);
@@ -131,14 +149,73 @@ const AllCropsComponent = () => {
 
     //create new folder (dilog)
     const captureResponseDilog = (value: any) => {
-        if (value == false) {
+        if (!value) {
             setDilogOpen(false)
             setErrorMessages([]);
         }
         else {
+            const { title, crop_area } = value;
+            
+            let obj = {
+                title: title ? title?.trim() : "",
+                crop_area: (crop_area&&+crop_area) ? crop_area : null
+            }
             setErrorMessages([]);
-            createCrop(value)
+            createCrop(obj)
         }
+    }
+
+
+    const toggleDrawer = (open: boolean) => {
+        setState({ ...state, 'bottom': open });
+    };
+
+    const sortMethod = (value: number) => {
+
+        if (sortBy == 'createdAt') {
+            if (value == 1 && sortType == 'desc') {
+                return true;
+            } else if(value == 2 && sortType == 'asc'){
+                return true
+            }
+        } else if (sortBy == 'title') {
+            if (value == 3 && sortType == 'desc') {
+                return true;
+            } else if(value == 4 && sortType == 'asc'){
+                return true
+            }
+        } else if (sortBy == 'crop_area') {
+             if (value == 5 && sortType == 'desc') {
+                return true;
+            } else if(value == 6 && sortType == 'asc'){
+                return true
+            }
+        }
+
+        return false;
+    }
+
+    const sortByMethod = (sortBy: string, sortType: string) => {
+        toggleDrawer(false);
+        getCropsDetails(router.query.farm_id as string, sortBy, sortType);
+        setSortBy(sortBy);
+        setSortType(sortType)
+    }
+
+    const SortMenu = () => {
+        return (
+            <div>
+                <ListItem> <SortIcon /><b>Sort By</b></ListItem>
+
+                <ListItem onClick={()=>sortByMethod('createdAt','desc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(1) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Recent First'}</ListItem>
+                <ListItem onClick={()=>sortByMethod('createdAt','asc')} sx={{ borderBottom: "1px solid #B4C1D6" }}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(2) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Oldest First'}</ListItem>
+                <ListItem onClick={()=>sortByMethod('title','asc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(3) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Title (A-Z)'}</ListItem>
+                <ListItem onClick={()=>sortByMethod('title','desc')} sx={{ borderBottom: "1px solid #B4C1D6" }}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(4) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Title (Z-A)'}</ListItem>
+                <ListItem onClick={()=>sortByMethod('crop_area','desc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(5) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Area Highest first'}</ListItem>
+                <ListItem onClick={()=>sortByMethod('crop_area','asc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(6) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Area Lowest first'}</ListItem>
+                
+           </div>
+        )
     }
 
     return (
@@ -152,15 +229,31 @@ const AllCropsComponent = () => {
                 <FormHelperText />
             </FormControl>
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
-                {/* <IconButton>
+                <IconButton onClick={() => toggleDrawer(true)} >
                     <SortIcon /><Typography variant="caption">Sort By</Typography>
-                </IconButton> */}
+                </IconButton>
+                <React.Fragment>
+                    <Drawer
+                        onClose={()=>toggleDrawer(false)}
+                        anchor={'bottom'}
+                        open={state['bottom']}
+                        sx={{
+                            '& .MuiBox-root': {
+                                height: "35vh"
+                            }
+                        }}
+                    >
+                         <Box>
+                            <SortMenu/>
+                        </Box>
+                    </Drawer>
+                </React.Fragment>
                 <IconButton onClick={() => setDilogOpen(true)}>
                     <AddIcon /><Typography variant="caption">New Folder</Typography>
                 </IconButton>
             </div>
-            <div className={styles.allCrops}>
 
+            <div className={styles.allCrops}>
                 {cropOptions?.length ?
                     <div id={styles.allCropCardBlock}>
                         {cropOptions?.map((item: any, index: any) => (

@@ -24,8 +24,10 @@
 
 .date {
   margin: 0;
-  flex: 1;
-  position: relative;
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(12px, .7vw, 14px);
+  font-weight: 400;
   line-height: 100%;
 }
 
@@ -49,11 +51,8 @@
 }
 
 .trashXmark1Icon {
-  position: relative;
-  width: 18px;
-  height: 18px;
-  overflow: hidden;
-  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
 }
 
 .buttons,
@@ -82,7 +81,6 @@
 }
 
 .carddetails {
-  align-self: stretch;
   justify-content: space-between;
 }
 

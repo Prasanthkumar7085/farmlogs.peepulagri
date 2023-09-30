@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-
+import NorthWestIcon from '@mui/icons-material/NorthWest';
 
 interface MyProps {
     children?: ReactNode;
@@ -52,7 +52,7 @@ const SideBarMenu = ({ children }: any) => {
             if (responseUserType) {
                 const responseLogin = await fetch('/api/remove-cookie');
                 if (responseLogin.status) {
-                router.push('/');
+                    router.push('/');
                 } else throw responseLogin;
             }
             await dispatch(removeUserDetails());
@@ -66,50 +66,52 @@ const SideBarMenu = ({ children }: any) => {
     return (
         <div>
             <div id={'web-dashboard'}>
-            <aside className={styles.sidebarmenu}>
-                <nav className={styles.menubar}>
-                    <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} onClick={() => router.push('/farm')} />
-                    <List>
-                        {menuListItems.map((item: item, index: number) => {
-                            if (item.isVisible) {
-                            return (
-                                <ListItem className={styles.menuItem} key={index}>
-                                    <Tooltip title={item.toolTitle} placement='right'>
-                                        <ListItemButton
-                                            onClick={() => router.push(item.link)}
-                                            className={item.active ? styles.activeMenuItem : styles.inactiveMenuItem}
-                                        >
-                                            <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
-                                        </ListItemButton>
-                                    </Tooltip>
-                                </ListItem>
-                            )
-                            }
-                        })}
-                    </List>
-                </nav>
-                <div className={styles.profileBtnGroup}>
-                    <Tooltip title='Logout'>
-                        <IconButton onClick={logout}>
-                            <LogoutIcon sx={{ color: "white" }} />
-                        </IconButton>
-                    </Tooltip>
+                <aside className={styles.sidebarmenu}>
+                    <nav className={styles.menubar}>
+                        <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} onClick={() => router.push('/farm')} />
+                        <List>
+                            {menuListItems.map((item: item, index: number) => {
+                                if (item.isVisible) {
+                                    return (
+                                        <ListItem className={styles.menuItem} key={index}>
+                                            <Tooltip title={item.toolTitle} placement='right'>
+                                                <ListItemButton
+                                                    onClick={() => router.push(item.link)}
+                                                    className={item.active ? styles.activeMenuItem : styles.inactiveMenuItem}
+                                                >
+                                                    <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
+                                                </ListItemButton>
+                                            </Tooltip>
+                                        </ListItem>
+                                    )
+                                }
+                            })}
+                        </List>
+                    </nav>
+                    <div className={styles.profileBtnGroup}>
+                        <Tooltip title='Logout'>
+                            <IconButton onClick={logout}>
+                                <LogoutIcon sx={{ color: "white" }} />
+                            </IconButton>
+                        </Tooltip>
 
 
-                    <button className={styles.profile}>
-                        <div className={styles.profile1}>
-                            <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />
-                        </div>
-                    </button>
+                        <button className={styles.profile}>
+                            <div className={styles.profile1}>
+                                <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />
+                            </div>
+                        </button>
+                    </div>
+                </aside>
+                <div className={styles.main}>
+                    {children}
                 </div>
-            </aside>
-            <div className={styles.main}>
-                {children}
             </div>
+            <div id='mobile-view'>
+                <div style={{ width: "100%", textAlign: "center" }}>
+                    <Button sx={{ marginTop: "3rem", textTransform: "capitalize", background: "green" }} variant={'contained'} onClick={() => router.push('/farms')}> <NorthWestIcon sx={{color:"#fff",fontSize:"1.5rem"}}/> Go To Mobile View Page</Button>
+                </div>
             </div>
-             <div id='mobile-view'>
-                <Button variant={'contained'} onClick={()=>router.push('/farms')}>Go To Mobile View Page</Button>
-        </div>
         </div>
     );
 };

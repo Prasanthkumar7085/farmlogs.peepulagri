@@ -1,10 +1,13 @@
 import { FunctionComponent, useCallback } from "react";
 import styles from "./FarmDetailsCard.module.css";
 import { IconButton } from "@mui/material";
+import { useRouter } from "next/router";
 
 const ScoutingFarmDetailsCard: FunctionComponent = () => {
+
+  const router = useRouter();
   const onFarmDetailsCardClick = useCallback(() => {
-    // Please sync "Scouting" to the project
+    router.push('/farm/crops')
   }, []);
 
   const onViewClick = useCallback(() => {

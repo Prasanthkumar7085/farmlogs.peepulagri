@@ -7,7 +7,6 @@ const AllFarmsPage = () => {
             <FarmsNavBarWeb />
             <div className={styles.allFarms}>
                 <ScoutingFarmDetailsCard />
-
             </div>
         </div>
     );

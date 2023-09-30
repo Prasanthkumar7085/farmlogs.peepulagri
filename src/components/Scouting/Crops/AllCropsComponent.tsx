@@ -179,9 +179,9 @@ const AllCropsComponent = () => {
                 return true
             }
         } else if (sortBy == 'title') {
-            if (value == 3 && sortType == 'desc') {
+            if (value == 3 && sortType == 'asc') {
                 return true;
-            } else if(value == 4 && sortType == 'asc'){
+            } else if(value == 4 && sortType == 'desc'){
                 return true
             }
         } else if (sortBy == 'crop_area') {

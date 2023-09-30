@@ -1,10 +1,13 @@
 import { FunctionComponent, useCallback } from "react";
 import styles from "./FolderCard.module.css";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useRouter } from "next/router";
 
 const FolderStructure: FunctionComponent = () => {
+    const router = useRouter();
     const onFolderStructureContainerClick = useCallback(() => {
         // Please sync "Scouting" to the project
+        router.push('/farm/crops/scouting')
     }, []);
 
     return (

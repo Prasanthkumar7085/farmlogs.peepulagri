@@ -1,0 +1,96 @@
+.farmname,
+.startdate {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+}
+.farmname {
+  font-size: inherit;
+  line-height: 20px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.startdate {
+  font-size: 16px;
+  line-height: 100%;
+  color: #6a7185;
+}
+.cardDetails,
+.namedateandtime,
+.textwrapper {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.textwrapper {
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+}
+.cardDetails,
+.namedateandtime {
+  flex-direction: row;
+}
+.cardDetails {
+  flex-direction: column;
+  padding: 24px 32px 0;
+}
+.text {
+  margin: 0;
+  position: relative;
+  line-height: 18px;
+  font-weight: 500;
+  display: inline-block;
+  width: 812px;
+  flex-shrink: 0;
+}
+.lable {
+  cursor: pointer;
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.imageIcon {
+  flex: 1;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+  object-fit: cover;
+}
+.attachments,
+.row,
+.scoutingdetails {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.row {
+  flex-direction: row;
+  gap: 8px;
+}
+.attachments,
+.scoutingdetails {
+  flex-direction: column;
+}
+.attachments {
+  padding: 0 32px 32px;
+  gap: 12px;
+  font-size: 18px;
+  color: #101828;
+}
+.scoutingdetails {
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.05);
+  overflow: hidden;
+  flex-shrink: 0;
+  gap: 30px;
+  text-align: left;
+  font-size: 24px;
+  color: #344054;
+  font-family: Inter;
+}

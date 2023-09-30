@@ -1,7 +1,6 @@
 import { Breadcrumbs, Card, Link, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
 import styles from "./crop-card.module.css";
 import Header1 from "../Header/HeaderComponent";
 import { useRouter } from "next/router";
@@ -12,10 +11,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { Image } from "react-grid-gallery";
-import axios from "axios";
-export interface CustomImage extends Image {
-    original: string;
-}
+import VideoDialog from "@/components/Core/VideoDiloag";
 
 const SingleViewScoutComponent = () => {
 
@@ -23,6 +19,8 @@ const SingleViewScoutComponent = () => {
     const [data, setData] = useState<any>()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
+    const [selectedFile, setSelectedFile] = useState<any>([])
+    const [index, setIndex] = useState<any>()
 
     const [loading, setLoading] = useState(true);
 
@@ -31,7 +29,7 @@ const SingleViewScoutComponent = () => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
             getPresingedURls()
         }
-    }, [accessToken, router.isReady])
+    }, [accessToken, router.isReady,])
 
     const getPresingedURls = async () => {
         setLoading(true);
@@ -49,6 +47,7 @@ const SingleViewScoutComponent = () => {
 
             if (responseData.success) {
                 setData(responseData.data);
+                setSelectedFile(responseData.data)
             }
         }
         catch (err) {
@@ -58,67 +57,34 @@ const SingleViewScoutComponent = () => {
         }
     };
 
-    const generateThumbnailFromUrl = (videoUrl: any) => {
-        if (videoUrl) {
-            // Create a video element dynamically
-
-
-            // Ensure metadata is loaded before capturing a frame
-            const video = document.createElement('video');
-            video.src = videoUrl;
-            video.preload = 'auto';
-
-            // Ensure metadata is loaded before capturing a frame
-            video.addEventListener('canplay', () => {
-                const canvas: any = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                const thumbnailUrl = canvas?.toDataURL();
-                console.log(thumbnailUrl)
-                return thumbnailUrl
-                video.remove();
-
-            });
-        }
-    };
-
-
 
     const getModifiedImage = (item: any) => {
         let obj = item?.attachments?.slice(0, 4)?.map((imageObj: any, index: number) => {
-            if (index + 1 == 4)
+
+            if (imageObj.type.slice(0, 4) == "vide") {
                 return {
-                    src: imageObj.url,
+                    src: "/videoimg.png",
+                    original: imageObj.url,
                     height: 80,
                     width: 60,
                     // customOverlay: <div style={{color:"white"}}>Yes</div>
-                    tags: [
-                        { value: "View More", title: "view_more" },
 
-                    ],
-                    alt: "u"
-
+                    alt: "u",
+                    customOverlay: (
+                        <div className="custom-overlay__caption">
+                            <div>{imageObj.name}</div>
+                        </div>
+                    ),
                 }
-            if (imageObj.type.slice(0, 4) == "vide") {
-
-                return {
-                    src: generateThumbnailFromUrl(imageObj.url),
-                    thumbnail: generateThumbnailFromUrl(imageObj.url),
-
-                    height: 80,
-                    width: 60,
-                }
-
             }
             else
                 return {
                     src: imageObj.url,
                     height: 80,
                     width: 60,
-                    isVideo: true, // Indicate that this item is a video
                     alt: "u"
+
+
                 }
         });
 
@@ -126,31 +92,38 @@ const SingleViewScoutComponent = () => {
     }
 
     const slidesEvent = (item: any) => {
-        const slides = item?.attachments?.map((imageObj: any, index: number) => {
-            return {
+        if (item?.attachments) {
+            return item.attachments.map((imageObj: any, index: number) => {
+                return {
+                    src: imageObj.url || '', // Ensure 'url' property is defined
+                    original: imageObj.url || '', // Ensure 'url' property is defined
+                    height: 900,
+                    width: 1000,
+                    alt: "u"
+                };
+            });
+        }
 
-                src: imageObj.url,
-                height: 900,
-                width: 1000,
-                alt: "u"
-            }
-        });
-        return slides
-    }
+    };
 
-    const [videoUrl, setVideoUrl] = useState('');
-    const [thumbnailUrl, setThumbnailUrl] = useState('');
-    const videoRef: any = useRef(null);
-    const timestampRef: any = useRef(null);
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
 
 
 
 
-
-
-    const [index1, setIndex] = useState(-1);
-
-    const handleClick = (index: number, item: CustomImage) => setIndex(index);
+    const handleClick = (index: number, item: any) => {
+        handleOpenDialog()
+        console.log(item)
+        setIndex(item.src == "/videoimg.png" ? item.original : item.src)
+    };
 
     return (
         <div className={styles.scoutingView}>
@@ -170,7 +143,6 @@ const SingleViewScoutComponent = () => {
                     <Typography color="text.primary">{farmTitle}</Typography>
                 </Breadcrumbs>
             </div>
-            {/* onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)} */}
             {data?.length ? data.map((item: any, index: any) => {
                 return (
                     <Card key={index} className={styles.galleryCard} >
@@ -179,18 +151,18 @@ const SingleViewScoutComponent = () => {
                             <>
                                 <Gallery images={getModifiedImage(item)} onClick={handleClick}
                                 />
-                                <Lightbox
-                                    slides={getModifiedImage(item)}
-                                    open={index1 >= 0}
-                                    index={index1}
-                                    close={() => setIndex(-1)}
-                                />
+
                             </>
                             :
                             // getModifiedImage(item)
                             <div style={{ color: "#c1c1c1", padding: "10px 0px 10px 10px", display: "flex", justifyContent: "center" }}>
                                 {"No Attachments"}
                             </div>}
+                        {item?.attachments?.length > 4 ?
+                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
+                                <Typography variant="caption" sx={{ cursor: "pointer" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
+                                >View more</Typography>
+                            </div> : ""}
                     </Card>
                 )
             }) :
@@ -201,6 +173,8 @@ const SingleViewScoutComponent = () => {
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />
+            <VideoDialog open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
+
         </div>
 
     )

@@ -6,19 +6,18 @@ import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import { AttachmentsForPreview, ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
 import timePipe from "@/pipes/timePipe";
-
-import Gallery from 'react-photo-gallery';
-import { Image } from "react-grid-gallery";
-import "react-image-gallery/styles/css/image-gallery.css"
 import { Card, Typography } from "@mui/material";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import Lightbox from "yet-another-react-lightbox";
+import { Gallery } from "react-grid-gallery";
+import VideoDialog from "@/components/Core/VideoDiloag";
+import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 
 
 
 
 
-const ViewScoutThreads: NextPage = () => {
+const ViewScoutThreads = () => {
 
 
   const router = useRouter();
@@ -29,6 +28,18 @@ const ViewScoutThreads: NextPage = () => {
   const [data, setData] = useState<SingleScoutResponse>();
   const [downloadUrls, setDownloadUrls] = useState<Array<ScoutAttachmentDetails>>([]);
   const [images, setImages] = useState<any>([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<any>([])
+  const [indexOfSeletedOne, setIndexOfseletedOne] = useState<any>()
+
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const [loading, setLoading] = useState(true);
 
@@ -39,6 +50,9 @@ const ViewScoutThreads: NextPage = () => {
       setData(response?.data);
       if (response?.data?.attachments?.length) {
         setDownloadUrls(response?.data?.attachments);
+        console.log(response.data)
+        setSelectedFile(response?.data?.attachments)
+
         setResponseAttachmentsFormat({ attachmentdetails: response?.data?.attachments });
       }
     }
@@ -53,10 +67,14 @@ const ViewScoutThreads: NextPage = () => {
 
         if (item.type.includes('video')) {
           return {
-            src: item.url, width: 200, height: 90, caption: `${index + 1} image`, isVideo: true,
+            src: "/videoimg.png", height: 80,
+            width: 60, caption: `${index + 1} image`, original: item.url
           }
         } else {
-          return { src: item.url, width: 150, height: 130 }
+          return {
+            src: item.url, height: 80,
+            width: 60,
+          }
         }
       })
     }
@@ -70,23 +88,12 @@ const ViewScoutThreads: NextPage = () => {
   }, [router.isReady, accessToken]);
 
 
-  const slidesEvent = (item: any) => {
-    const slides = item?.attachments?.map((imageObj: any, index: number) => {
-      return {
 
-        src: imageObj.url,
-        height: 900,
-        width: 1000,
-        alt: "u",
-        isVideo: true,
-
-      }
-    });
-    return slides
-  }
-  const [index1, setIndex] = useState(-1);
-
-  const handleClick = (index: any) => setIndex((prev: any) => prev + index1);
+  const handleClick = (index: number, item: any) => {
+    handleOpenDialog()
+    console.log(item)
+    setIndexOfseletedOne(item.src == "/videoimg.png" ? item.original : item.src)
+  };
 
   return (
     <div className={styles.viewscoutthreads} id="view-scout-threads">
@@ -105,39 +112,9 @@ const ViewScoutThreads: NextPage = () => {
         <div className={styles.attachmentscontainer}>
           <h3 className={styles.heading}>Attachments</h3>
           {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
-            <Gallery photos={images} onClick={handleClick}
-              renderImage={({ photo }: any) => (
-                <div>
-                  {photo.isVideo ? (
-                    // Render video differently, e.g., video icon
-                    <div>
-                      <video
-                        src={photo.src}
-                        width={photo.width}
-                        height={photo.height}
-                        controls={true}
-
-                      />
-
-                    </div>
-                  ) : (
-                    // Render images as usual
-                    <img
-                      src={photo.src}
-                      alt={`Image ${photo.key + 1}`}
-                      width={photo.width}
-                      height={photo.height}
-                    />
-                  )}
-                </div>
-              )}
+            <Gallery images={images} onClick={handleClick}
             />
-            <Lightbox
-              slides={images}
-              open={index1 >= 0}
-              index={index1}
-              close={() => setIndex(-1)}
-            />
+
           </Card> : ""}
 
         </div>
@@ -146,6 +123,8 @@ const ViewScoutThreads: NextPage = () => {
 
 
       <LoadingComponent loading={loading} />
+      <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={indexOfSeletedOne} />
+
     </div>
   );
 };

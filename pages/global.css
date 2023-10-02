@@ -309,4 +309,67 @@ body {
 
 #ReactGridGallery {
     margin: 6px;
+    padding-block: 0.5rem;
+}
+
+.ReactGridGallery_tile-viewport img {
+    cursor: pointer;
+    max-width: none;
+    width: 100% !important;
+    height: 100% !important;
+    margin-left: 0 !important;
+    margin-top: 0px;
+    object-fit: cover !important;
+}
+
+.ReactGridGallery_tile {
+    width: 30% !important;
+    height: 100px !important;
+}
+
+.ReactGridGallery_tile-icon-bar {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.ReactGridGallery_tile-viewport {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.ReactGridGallery div {
+    justify-content: flex-start !important;
+    gap: 3% !important;
+}
+
+.ReactGridGallery_tile-bottom-bar {
+    /* background-color: #0000008f !important; */
+    min-height: inherit !important;
+    max-height: inherit !important;
+    height: 100% !important;
+}
+
+.ReactGridGallery_tile-bottom-bar div {
+    cursor: pointer;
+    pointer-events: visible;
+    margin: 0 !important;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+}
+
+.ReactGridGallery_tile-bottom-bar div span {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    color: #fff !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+#layer {
+    background-color: #0000008f !important;
 }

@@ -59,9 +59,9 @@ const SingleViewScoutComponent = () => {
 
 
     const getModifiedImage = (item: any) => {
-        let obj = item?.attachments?.slice(0, 4)?.map((imageObj: any, index: number) => {
+        let obj = item?.attachments?.slice(0, 3)?.map((imageObj: any, index: number) => {
 
-            if (imageObj.type.slice(0, 4) == "vide") {
+            if (imageObj.type.includes("video")) {
                 return {
                     src: "/videoimg.png",
                     original: imageObj.url,
@@ -70,6 +70,7 @@ const SingleViewScoutComponent = () => {
                     // customOverlay: <div style={{color:"white"}}>Yes</div>
 
                     alt: "u",
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: "View More", title: "view_more" }] : [],
                     customOverlay: (
                         <div className="custom-overlay__caption">
                             <div>{imageObj.name}</div>
@@ -82,9 +83,8 @@ const SingleViewScoutComponent = () => {
                     src: imageObj.url,
                     height: 80,
                     width: 60,
-                    alt: "u"
-
-
+                    alt: "u",
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}>+{item.attachments?.length - 2}</div>, title: "view_more" }] : []
                 }
         });
 
@@ -158,11 +158,11 @@ const SingleViewScoutComponent = () => {
                             <div style={{ color: "#c1c1c1", padding: "10px 0px 10px 10px", display: "flex", justifyContent: "center" }}>
                                 {"No Attachments"}
                             </div>}
-                        
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
-                                <Typography variant="caption" sx={{ cursor: "pointer" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
-                                >View more</Typography>
-                            </div> 
+
+                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
+                            <Typography variant="caption" sx={{ cursor: "pointer" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
+                            >View more</Typography>
+                        </div>
                     </Card>
                 )
             }) :
@@ -175,7 +175,7 @@ const SingleViewScoutComponent = () => {
             <LoadingComponent loading={loading} />
             <VideoDialog open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
 
-            
+
             <div className="addFormPositionIcon">
                 <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)} />
             </div>

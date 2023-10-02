@@ -4,18 +4,11 @@ import FolderStructure from "./FolderCard";
 import CropsNavBarWeb from "./cropsHeader";
 import AddIcon from '@mui/icons-material/Add';
 import SortIcon from "@mui/icons-material/Sort"
+import FarmDetailsMiniCard from "@/components/AddLogs/farm-details-mini-card";
 const AllCropsWebPage = () => {
     return (
         <div className={styles.AllFarmsPageWeb} style={{ paddingTop: "1rem !important" }}>
-            <div className={styles.selectedForm}>
-                <div className={styles.formCard}>
-                    <img src="/farmshape.svg" alt="img" />
-                    <div className={styles.formDetails}>
-                        <h6>Farm1</h6>
-                        <p>60 Acres</p>
-                    </div>
-                </div>
-            </div>
+            <FarmDetailsMiniCard/>
             <CropsNavBarWeb />
             <div className={styles.filterBlock}>
                 <IconButton sx={{ padding: "0", borderRadius: "none" }}>

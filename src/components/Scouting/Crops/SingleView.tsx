@@ -158,11 +158,11 @@ const SingleViewScoutComponent = () => {
                             <div style={{ color: "#c1c1c1", padding: "10px 0px 10px 10px", display: "flex", justifyContent: "center" }}>
                                 {"No Attachments"}
                             </div>}
-                        {item?.attachments?.length > 4 ?
+                        
                             <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
                                 <Typography variant="caption" sx={{ cursor: "pointer" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
                                 >View more</Typography>
-                            </div> : ""}
+                            </div> 
                     </Card>
                 )
             }) :
@@ -175,6 +175,10 @@ const SingleViewScoutComponent = () => {
             <LoadingComponent loading={loading} />
             <VideoDialog open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
 
+            
+            <div className="addFormPositionIcon">
+                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)} />
+            </div>
         </div>
 
     )

@@ -21,7 +21,9 @@ const DashboardPage = () => {
     const [paginationDetails, setPaginationDetails] = useState<PaginationInFarmResponse>();
     const [loading, setLoading] = useState(true);
     const [searchString, setSearchString] = useState('');
-    const [locations, setLocations] = useState<Array<{name:string,_id:string}>>([]);
+    const [locations, setLocations] = useState<Array<{ name: string, _id: string }>>([]);
+    const [location, setLocation] = useState('');
+    const [routerLocation, setRouterLocation] = useState('');
 
     const getAllFarms = async ({ page = 1, limit = 100, search_string = '', location }: Partial<{ page: number, limit: number, search_string: string, location: string }>) => {
 
@@ -62,21 +64,7 @@ const DashboardPage = () => {
 
     const captureSearchString = (search: string) => {
         setSearchString(search);
-
     };
-
-
-    const [location, setLocation] = useState('');
-    useEffect(() => {
-        if (router.isReady && accessToken && location) {
-
-            const delay = 500;
-            const debounce = setTimeout(() => {
-                getAllFarms({ page: 1, limit: 100, search_string: searchString, location: location });
-            }, delay);
-            return () => clearTimeout(debounce);
-        }
-    }, [searchString]);
 
     const getAllLocations = async () => {
         const response = await getAllLocationsService(accessToken);
@@ -85,10 +73,9 @@ const DashboardPage = () => {
         } else {
             setLocations([{name:'All',_id:'1'}]);
         }
-
-
-        let searchFromRouter = router.query.search_string;
-        let locationFromRouter = router.query.location;
+        
+        let searchFromRouter = router.query?.search_string;
+        let locationFromRouter = router.query?.location;
         await getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string, location: locationFromRouter as string });
         if (searchFromRouter) {
             setSearchString(searchFromRouter as string);
@@ -98,33 +85,44 @@ const DashboardPage = () => {
         } else {
             setLocation('All');
         }
-
+        
     }
 
 
 
     const getData = async () => {
         if (router.isReady && accessToken) {
-
             await getAllLocations();
         } else {
             // setLoading(false);
         }
     }
+    
+    const getDataOnLocationChange = async (location: string) => {
+        await getAllFarms({ page: 1, limit: 100, search_string: searchString as string, location: location });
+    }
+    
+
     useEffect(() => {
         getData();
     }, [router.isReady, accessToken]);
 
-
-
-    const getDataOnLocationChange = async (location: string) => {
-        await getAllFarms({ page: 1, limit: 100, search_string: searchString as string, location: location });
-    }
-
-    const [routerLocation, setRouterLocation] = useState('');
     useEffect(() => {
         setRouterLocation(router?.query.location ? router?.query.location as string : "");
-    },[router?.query.location])
+    }, [router?.query.location]);
+
+
+    useEffect(() => {
+        if (router.isReady && accessToken && location) {
+            const delay = 500;
+            const debounce = setTimeout(() => {
+                getAllFarms({ page: 1, limit: 100, search_string: searchString, location: location });
+            }, delay);
+            return () => clearTimeout(debounce);
+        }
+    }, [searchString]);
+    
+    
     return (
         <div id="dashboardPage">
             <DashBoardHeader
@@ -135,7 +133,7 @@ const DashboardPage = () => {
                 setLocation={setLocation}
                 getDataOnLocationChange={getDataOnLocationChange} />
 
-            {farmsData.length ? <FarmCard farmsData={farmsData} paginationDetails={paginationDetails} loading={loading} location={location} /> :
+            {farmsData.length ? <FarmCard farmsData={farmsData}/> :
                 (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> :
                     <div style={{ minHeight: "75vh" }}>
 

@@ -10,6 +10,7 @@ import { setAllFarms } from "@/Redux/Modules/Farms";
 import { Typography, Button } from "@mui/material";
 import styles from "./index.module.css";
 import AddIcon from '@mui/icons-material/Add';
+import AllFarmsPage from "@/components/ScoutingWeb/WebAllFarmsPage";
 
 const FarmPage = () => {
 
@@ -38,7 +39,8 @@ const FarmPage = () => {
     }, [accessToken, router.isReady]);
     return (
         <div className={styles.dashboard}>
-            {!loading ? 
+            <AllFarmsPage />
+            {/* {!loading ?
                 <div className={styles.noDataScreen}>
                     <ImageComponent
                         src={'../no-logs.svg'}
@@ -55,8 +57,8 @@ const FarmPage = () => {
                         </Typography>
                     </div>
                     <Button className={styles.ctaButton} variant="contained" color="success" size="large" startIcon={<AddIcon />}> Add Farms </Button>
-                </div> 
-            : ""}
+                </div>
+                : ""} */}
             <LoadingComponent loading={loading} />
         </div>
 

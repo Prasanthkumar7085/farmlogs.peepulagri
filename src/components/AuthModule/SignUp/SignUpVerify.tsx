@@ -149,7 +149,7 @@ const SignUpVerify = () => {
       setOtp(value)
     }
   }
-  
+
   return (
     <div id={styles.loginPage}>
       <div className={styles.bgImage}>
@@ -171,7 +171,7 @@ const SignUpVerify = () => {
             <TextField
               autoFocus
               fullWidth
-              error={Boolean(errorMessages?.otp) }
+              error={Boolean(errorMessages?.otp)}
               helperText={errorMessages?.otp}
               size="small"
               placeholder="Enter OTP"
@@ -197,11 +197,11 @@ const SignUpVerify = () => {
             )}
           </Button>
           <Button variant="outlined" onClick={() => router.push({ pathname: '/' })}>Cancel</Button>
-                    
+
           {!seconds ? <p className={styles.helperText}>{"Did not receive an OTP?"}
             <Button variant="text" onClick={resetCountdown} disabled={otpCountDown} sx={{ textTransform: "capitalize" }}>Resend OTP</Button>
           </p> : ""}
-          {seconds ? `Resend in 00:${otpCountDown}s` : ""}
+          {seconds ? `Resend in ${otpCountDown}s` : ""}
 
         </div>
       </form>

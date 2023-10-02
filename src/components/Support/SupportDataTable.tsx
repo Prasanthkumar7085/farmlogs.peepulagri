@@ -69,7 +69,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
     }
 
 
-    const columns = [   
+    const columns = [
         {
             columnId: "date",
             sortId: "createdAt",
@@ -81,7 +81,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
                     <div style={{ color: "var(--body)" }}>
                         {timePipe(row.createdAt, 'DD, MMM YYYY')}
                     </div>
-                    )
+                )
             }
         },
         {
@@ -124,9 +124,9 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ color: "var(--body)" }}>
-                        { timePipe(row.recent_response_at, 'DD, MMM YYYY') }
+                        {timePipe(row.recent_response_at, 'DD, MMM YYYY')}
                     </div>
-                    )
+                )
             }
         },
         {
@@ -138,7 +138,7 @@ const SupportDataTable = ({ data, loading, deleteSupport, appliedSort }: Support
             accessor: (row: SupportResponseDataType) => {
                 return (
                     <div style={{ color: "var(--body)" }}>
-                        {row?.status ? row.status.slice(0,1).toUpperCase()+row.status.slice(1,).toLowerCase(): "NA"}
+                        {row?.status ? row.status.slice(0, 1).toUpperCase() + row.status.slice(1,).toLowerCase() : "NA"}
                     </div>
                 )
             },

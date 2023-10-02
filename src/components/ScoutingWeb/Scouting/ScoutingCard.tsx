@@ -1,13 +1,13 @@
 import { FunctionComponent, useCallback } from "react";
-// import { useNavigate } from "react-router-dom";
 import styles from "./ScoutingCard.module.css";
+import { useRouter } from "next/router";
 
 const ScoutingCardWeb: FunctionComponent = () => {
-  // const navigate = useNavigate();
-
-  // const onViewClick = useCallback(() => {
-  //   navigate("/scouting1");
-  // }, [navigate]);
+  const router = useRouter();
+  const onViewClick = useCallback(() => {
+    // Please sync "Scouting" to the project
+    router.push('/farm/crops/scouting/view')
+  }, []);
   const images = [
     {
       img: '/image11@2x.png',
@@ -53,7 +53,7 @@ const ScoutingCardWeb: FunctionComponent = () => {
         <p className={styles.date}>25 Aug 2023 10:30AM</p>
         <div className={styles.buttons}>
           <div className={styles.view}
-          //  onClick={onViewClick}
+            onClick={onViewClick}
           >
             <img
               className={styles.trashXmark1Icon}

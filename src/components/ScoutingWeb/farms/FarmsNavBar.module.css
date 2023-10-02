@@ -1,0 +1,165 @@
+.farmIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.farms {
+  font-size: clamp(18px, 1.25vw, 24px);
+  color: #d94841;
+  font-family: Inter;
+  font-weight: 400;
+  margin: 0;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.button {
+  border-radius: 3px !important;
+  background: #05A155 !important;
+  color: #FFF !important;
+  font-family: Inter;
+  font-size: clamp(12px, 0.833vw, 18px) !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
+  padding-block: 5px !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: none !important;
+}
+
+.button:hover {
+  background-color: #05A155 !important;
+}
+
+.actionsbar,
+.farmsnavbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.actionsbar {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.actionsbar input {
+  padding-block: 6px !important;
+}
+
+.farmsnavbar {
+  justify-content: space-between;
+
+}
+
+.AllFarmsPageWeb {
+  padding-top: 5rem;
+  width: 93%;
+  margin: 0 auto;
+}
+
+.allFarms {
+  height: 70vh;
+  overflow-y: auto;
+  margin-top: 2rem;
+  padding-right: 0.5rem;
+}
+
+.allFarms::-webkit-scrollbar {
+  width: 4px;
+  height: 0px;
+
+}
+
+@media(min-width:1000px) and (max-width: 1500px) {
+  .allFarms::-webkit-scrollbar {
+    height: 3px;
+  }
+}
+
+/* Track */
+.allFarms::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+.allFarms::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.allFarms::-webkit-scrollbar-thumb:hover {
+  background: #00435d;
+}
+
+.filterBlock {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-block: 1rem;
+  gap: 1rem;
+}
+
+.filterBlock p {
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(13px, 0.72vw, 18px);
+  font-weight: 500;
+  line-height: 100%;
+}
+
+.selectedForm {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+}
+
+.formCard {
+  border-radius: 10px;
+  border: 1px solid #E9EDF1;
+  border-right: 4px solid #D94841 !important;
+  background: #FFF;
+  display: flex;
+  padding: 8px 24px 8px 16px;
+  align-items: center;
+  gap: 16px;
+}
+
+.formCard img {
+  width: 25px;
+  height: 25px;
+}
+
+.formDetails h6 {
+  margin: 0;
+  color: #35353D;
+  font-family: Inter;
+  font-size: clamp(16px, 0.833vw, 18px);
+  font-weight: 500;
+}
+
+.formDetails p {
+  margin: 0;
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(11px, 0.62vw, 14px);
+  font-weight: 500;
+  padding-top: 5px;
+}
+
+.allScoutingCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1.5rem;
+}

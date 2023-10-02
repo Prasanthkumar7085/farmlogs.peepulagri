@@ -1,0 +1,97 @@
+.imageIcon {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.imgFlexContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  row-gap: 10px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.eachImgBox {
+  flex-basis: 32%;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.date {
+  margin: 0;
+  color: #6A7185;
+  font-family: Inter;
+  font-size: clamp(12px, .7vw, 14px);
+  font-weight: 400;
+  line-height: 100%;
+}
+
+.edit,
+.view {
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 4px;
+}
+
+.view {
+  background-color: rgba(48, 92, 200, 0.2);
+  cursor: pointer;
+}
+
+.edit {
+  background-color: rgba(106, 113, 133, 0.2);
+}
+
+.trashXmark1Icon {
+  width: 13px;
+  height: 13px;
+}
+
+.buttons,
+.carddetails,
+.delete {
+  display: flex;
+  flex-direction: row;
+}
+
+.delete {
+  border-radius: 4px;
+  background-color: rgba(217, 72, 65, 0.2);
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 4px;
+}
+
+.buttons,
+.carddetails {
+  align-items: center;
+}
+
+.buttons {
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.carddetails {
+  justify-content: space-between;
+}
+
+.scoutingCard {
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 4px 4px 20px rgba(236, 236, 236, 0.5);
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  box-sizing: border-box;
+  gap: 8px;
+
+}

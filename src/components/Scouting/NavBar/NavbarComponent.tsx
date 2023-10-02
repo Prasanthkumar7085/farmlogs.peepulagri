@@ -6,7 +6,7 @@ import { Box, Drawer } from "@mui/material";
 import SideMenu1 from "./side-menu1";
 import { useRouter } from "next/router";
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
+type Anchor =  'right';
 
 const ScoutingHeader = ({ children }: any) => {
     const router = useRouter();

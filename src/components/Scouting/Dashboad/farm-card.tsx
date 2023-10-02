@@ -1,21 +1,13 @@
-import type { NextPage } from "next";
-import { useCallback } from "react";
 import styles from "./farm-card.module.css";
-import Image from "next/image";
-import { FarmDataType, PaginationInFarmResponse } from "@/types/farmCardTypes";
+import { FarmDataType } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
-import NoDataComponent from "@/components/Core/NoDataComponent";
-import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import { useRouter } from "next/router";
 import SettingsIcon from '@mui/icons-material/Settings';
 
 interface pagePropsType {
   farmsData: Array<FarmDataType>;
-  paginationDetails: PaginationInFarmResponse | undefined;
-  loading: boolean;
-  location: string
 }
-const FarmCard = ({ farmsData, paginationDetails, loading, location }: pagePropsType) => {
+const FarmCard = ({ farmsData }: pagePropsType) => {
   const router = useRouter();
 
   return (

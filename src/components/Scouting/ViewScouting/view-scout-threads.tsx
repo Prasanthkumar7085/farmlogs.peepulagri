@@ -1,16 +1,13 @@
-import type { NextPage } from "next";
 import styles from "./view-scout-threads.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
-import { AttachmentsForPreview, ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
+import {  ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
 import timePipe from "@/pipes/timePipe";
-import { Card, Typography } from "@mui/material";
+import { Card } from "@mui/material";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import Lightbox from "yet-another-react-lightbox";
 import { Gallery } from "react-grid-gallery";
-import VideoDialog from "@/components/Core/VideoDiloag";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 
 
@@ -30,7 +27,10 @@ const ViewScoutThreads = () => {
   const [images, setImages] = useState<any>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>([])
-  const [indexOfSeletedOne, setIndexOfseletedOne] = useState<any>()
+  const [indexOfSeletedOne, setIndexOfseletedOne] = useState<any>();
+
+  const [imagesForDelete, setImagesForDelete] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
 
 
   const handleOpenDialog = () => {
@@ -41,7 +41,6 @@ const ViewScoutThreads = () => {
     setOpenDialog(false);
   };
 
-  const [loading, setLoading] = useState(true);
 
   const getSingleScout = async () => {
     const response = await getSingleScoutService(router.query?.scout_id as string, accessToken);
@@ -50,7 +49,6 @@ const ViewScoutThreads = () => {
       setData(response?.data);
       if (response?.data?.attachments?.length) {
         setDownloadUrls(response?.data?.attachments);
-        console.log(response.data)
         setSelectedFile(response?.data?.attachments)
 
         setResponseAttachmentsFormat({ attachmentdetails: response?.data?.attachments });
@@ -59,7 +57,6 @@ const ViewScoutThreads = () => {
     setLoading(false);
   }
 
-  // { attachmentdetails }:{attachmentdetails: <Array<ScoutAttachmentDetails>>}
   const setResponseAttachmentsFormat = ({ attachmentdetails }: any) => {
     let details = [];
     if (attachmentdetails.length) {
@@ -68,12 +65,13 @@ const ViewScoutThreads = () => {
         if (item.type.includes('video')) {
           return {
             src: "/videoimg.png", height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url
+            width: 60, caption: `${index + 1} image`, original: item.url,isSelected: false
           }
         } else {
           return {
             src: item.url, height: 80,
             width: 60,
+            isSelected: false
           }
         }
       })
@@ -90,10 +88,18 @@ const ViewScoutThreads = () => {
 
 
   const handleClick = (index: number, item: any) => {
-    handleOpenDialog()
-    console.log(item)
-    setIndexOfseletedOne(item.src == "/videoimg.png" ? item.original : item.src)
+    handleOpenDialog();
+    setIndexOfseletedOne(item.src == "/videoimg.png" ? item.original : item.src);
   };
+
+  const getSelectedItems = (index: any) => {
+    
+    const nextImages = images.map((image:any, i:number) =>i === index ? { ...image, isSelected: !image.isSelected } : image);
+    setImages([...nextImages]);
+
+    const filteredImages = nextImages.filter((item: any) => item.isSelected);
+    setImagesForDelete([...filteredImages]);
+  }
 
   return (
     <div className={styles.viewscoutthreads} id="view-scout-threads">
@@ -112,9 +118,7 @@ const ViewScoutThreads = () => {
         <div className={styles.attachmentscontainer}>
           <h3 className={styles.heading}>Attachments</h3>
           {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
-            <Gallery images={images} onClick={handleClick}
-            />
-
+            <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
           </Card> : ""}
 
         </div>

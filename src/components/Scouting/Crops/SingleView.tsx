@@ -114,14 +114,14 @@ const SingleViewScoutComponent = () => {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setIndex(-1);
     };
 
 
 
 
     const handleClick = (index: number, item: any) => {
-        handleOpenDialog()
-        console.log(item)
+        handleOpenDialog();
         setIndex(item.src == "/videoimg.png" ? item.original : item.src)
     };
 

@@ -1,25 +1,52 @@
 import ScoutsNavBarWeb from "./ScoutsHeader";
 import styles from "../farms/FarmsNavBar.module.css"
 import ScoutingCardWeb from "./ScoutingCard";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import getAllScoutsService from "../../../../lib/services/ScoutServices/getAllScoutsService";
+import { useSelector } from "react-redux";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 const AllScoutsWebPage = () => {
+
+    const router = useRouter();
+
+    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const getAllScouts = async () => {
+        setLoading(true)
+        const response = await getAllScoutsService(router.query.farm_id as string, router.query.crop_id as string, accessToken);
+        if (response.success) {
+            console.log(response);
+            
+            setData(response?.data);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        if (router.isReady && accessToken) {
+            getAllScouts();
+        }
+    }, [router.isReady, accessToken]);
+
     return (
         <div className={styles.AllFarmsPageWeb} style={{ paddingTop: "1rem !important" }}>
-            <div className={styles.selectedForm}>
-                <div className={styles.formCard}>
-                    <img src="/farmshape.svg" alt="img" />
-                    <div className={styles.formDetails}>
-                        <h6>Farm1</h6>
-                        <p>60 Acres</p>
-                    </div>
-                </div>
-            </div>
             <ScoutsNavBarWeb />
             <div className={styles.allFarms} >
                 <div className={styles.allScoutingCards}>
-                    <ScoutingCardWeb />
-                    <ScoutingCardWeb /> <ScoutingCardWeb /> <ScoutingCardWeb /> <ScoutingCardWeb />
+                    {data.length ? data.map((item: any, index: number) => {
+                        return (
+                            <ScoutingCardWeb key={index} item={item} />
+                        )
+                    }):(!loading ? "No Data" : "")}
                 </div>
             </div>
+
+
+            <LoadingComponent loading={loading}/>
         </div>
     );
 }

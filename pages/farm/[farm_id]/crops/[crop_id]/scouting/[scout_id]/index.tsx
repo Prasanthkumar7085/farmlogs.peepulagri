@@ -1,11 +1,11 @@
 import ScoutingDetails from "@/components/ScoutingWeb/Scouting/ViewScouting/ScoutingDetails";
 
-const ViewScoutingWebPage = () => {
+const ViewSingleScout = () => {
     return (
         <div>
-            <ScoutingDetails />
+            <ScoutingDetails/>
         </div>
-    );
+    )
 }
 
-export default ViewScoutingWebPage;
+export default ViewSingleScout;

@@ -2,15 +2,11 @@ import { Breadcrumbs, Card, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import styles from "./crop-card.module.css";
-import Header1 from "../Header/HeaderComponent";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import timePipe from "@/pipes/timePipe";
-import { ScoutAttachmentDetails } from "@/types/scoutTypes";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import { Image } from "react-grid-gallery";
 import VideoDialog from "@/components/Core/VideoDiloag";
 
 const SingleViewScoutComponent = () => {
@@ -88,7 +84,7 @@ const SingleViewScoutComponent = () => {
                 }
         });
 
-        return obj
+        return obj;
     }
 
     const slidesEvent = (item: any) => {

@@ -3,7 +3,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { AlertComponentType } from '@/types/coreComponentsTypes';
 
-const AlertComponent = ({ alertMessage, setAlertMessage, alertType, mobile }: AlertComponentType | any) => {
+const AlertComponent = ({ alertMessage, setAlertMessage, alertType }: AlertComponentType | any) => {
     return (
         <Stack spacing={2} sx={{ width: '100%' }}>
             <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={Boolean(alertMessage)} autoHideDuration={3000} onClose={() => setAlertMessage('')}>

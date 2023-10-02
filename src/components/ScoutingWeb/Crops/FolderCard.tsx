@@ -4,10 +4,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from "next/router";
 
 const FolderStructure: FunctionComponent = () => {
+
     const router = useRouter();
+    
     const onFolderStructureContainerClick = useCallback(() => {
-        // Please sync "Scouting" to the project
-        router.push('/farm/crops/scouting')
+        router.push(`/farm/${router.query.farm_id}/crops/6517cda84cb71de51fd699b3/scouting`);
     }, []);
 
     return (
@@ -19,7 +20,7 @@ const FolderStructure: FunctionComponent = () => {
                 <div className={styles.foder}>
                     <img className={styles.folderIcon} alt="" src="/folder.svg" />
                     <div className={styles.moreicon}>
-                        < MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.2rem !important" }} />
+                        <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.2rem !important" }} />
                     </div>
                 </div>
                 <div className={styles.textwrapper}>
@@ -34,7 +35,7 @@ const FolderStructure: FunctionComponent = () => {
                 <div className={styles.foder}>
                     <img className={styles.folderIcon} alt="" src="/folder.svg" />
                     <div className={styles.moreicon}>
-                        < MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.2rem !important" }} />
+                        <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.2rem !important" }} />
                     </div>
                 </div>
                 <div className={styles.textwrapper}>

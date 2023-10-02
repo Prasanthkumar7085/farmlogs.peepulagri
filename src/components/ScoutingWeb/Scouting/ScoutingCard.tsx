@@ -1,50 +1,33 @@
-import { FunctionComponent, useCallback } from "react";
+import { useCallback } from "react";
 import styles from "./ScoutingCard.module.css";
 import { useRouter } from "next/router";
+import { ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
+import ImageComponent from "@/components/Core/ImageComponent";
 
-const ScoutingCardWeb: FunctionComponent = () => {
+interface pageProps{
+  item: SingleScoutResponse;
+  
+}
+
+const ScoutingCardWeb = ({ item }: pageProps) => {
+
   const router = useRouter();
+
   const onViewClick = useCallback(() => {
-    // Please sync "Scouting" to the project
-    router.push('/farm/crops/scouting/view')
+    router.push(`/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`);
   }, []);
-  const images = [
-    {
-      img: '/image11@2x.png',
-      title: 'Crop',
-    },
-    {
-      img: '/image12@2x.png',
-      title: 'Crop',
-    },
-    {
-      img: '/image13@2x.png',
-      title: 'Crop',
-    },
-    {
-      img: '/image14@2x.png',
-      title: 'Crop',
-    },
-    {
-      img: '/image9@2x.png',
-      title: 'Crop',
-    },
-    {
-      img: '/image10@2x.png',
-      title: 'Crop',
-    },
-  ];
 
   return (
     <div className={styles.scoutingCard}>
       <div className={styles.imgFlexContainer}>
-        {images.map((item) => (
-          <div key={item.img} className={styles.eachImgBox}>
-            <img
+        {item.attachments.slice(0,6).map((item:ScoutAttachmentDetails,index:number) => (
+          <div key={index} className={styles.eachImgBox}>
+            <ImageComponent
               className={styles.imageIcon}
-              src={item.img}
-              alt={item.title}
-              loading="lazy"
+              height={30}
+              width={30}
+              src={item.url}
+              alt={item.name}
             />
           </div>
         ))}

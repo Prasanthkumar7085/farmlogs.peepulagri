@@ -5,6 +5,15 @@ import { Card } from "@mui/material";
 const ScoutingDetails: FunctionComponent = () => {
   return (
     <div className={styles.viewScoutingPage}>
+      <div className={styles.selectedForm}>
+        <div className={styles.formCard}>
+          <img src="/farmshape.svg" alt="img" />
+          <div className={styles.formDetails}>
+            <h6>Farm1</h6>
+            <p>60 Acres</p>
+          </div>
+        </div>
+      </div>
       <div className={styles.viewScoutingHeader}>
         <div className={styles.iconDiv}>
           <img src="/arrow-left-back.svg" alt="" width={'18px'} />

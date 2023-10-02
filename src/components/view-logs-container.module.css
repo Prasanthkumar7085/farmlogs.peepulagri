@@ -13,3 +13,28 @@
   margin-inline: auto;
   min-height: auto;
 }
+
+.scoutDailogImg img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+
+}
+
+.scoutDailogImg {
+  width: 85%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.positionLeftImg {
+  position: absolute;
+  top: 50%;
+  left: 0;
+}
+
+.positionRightImg {
+  position: absolute;
+  top: 50%;
+  right: 0;
+}

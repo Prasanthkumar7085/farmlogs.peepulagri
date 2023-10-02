@@ -306,3 +306,7 @@ body {
     position: relative;
     height: 100%;
 }
+
+#ReactGridGallery {
+    margin: 6px;
+}

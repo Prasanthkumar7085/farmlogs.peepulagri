@@ -29,10 +29,8 @@ interface item {
 
 
 const SideBarMenu = ({ children }: any) => {
-
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const userName = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
-
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -109,7 +107,7 @@ const SideBarMenu = ({ children }: any) => {
             </div>
             <div id='mobile-view'>
                 <div style={{ width: "100%", textAlign: "center" }}>
-                    <Button sx={{ marginTop: "3rem", textTransform: "capitalize", background: "green" }} variant={'contained'} onClick={() => router.push('/farms')}> <NorthWestIcon sx={{color:"#fff",fontSize:"1.5rem"}}/> Go To Mobile View Page</Button>
+                    <Button sx={{ marginTop: "3rem", textTransform: "capitalize", background: "green" }} variant={'contained'} onClick={() => router.push('/farms')}> <NorthWestIcon sx={{ color: "#fff", fontSize: "1.5rem" }} /> Go To Mobile View Page</Button>
                 </div>
             </div>
         </div>

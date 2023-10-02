@@ -99,13 +99,13 @@ const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageP
                     src="/edit-farm-icon.svg"
                   />
                 </IconButton> */}
-                <IconButton className={styles.delete} onClick={() => { setDeleteDialogOpen(true); setDeleteId(item._id)}}>
+                {/* <IconButton className={styles.delete} onClick={() => { setDeleteDialogOpen(true); setDeleteId(item._id)}}>
                   <img
                     className={styles.trashXmark1Icon}
                     alt=""
                     src="/farm-delete-icon.svg"
                   />
-                </IconButton>
+                </IconButton> */}
               </div>
             </div>
           </div>

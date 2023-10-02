@@ -48,12 +48,9 @@ const FileUploadComponent = () => {
     const [attachments, setAttachments] = useState<any>([])
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
-    const [previewImages, setPreviewImages] = useState<any>([])
-    console.log(previewImages)
+    const [previewImages, setPreviewImages] = useState<any>([]);
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
-
 
     let tempFilesStorage: any = [...attachments]
 
@@ -110,6 +107,7 @@ const FileUploadComponent = () => {
 
         }
     }
+
     //get all crops name
     const getCropsDetails = async (id: string) => {
 
@@ -118,14 +116,21 @@ const FileUploadComponent = () => {
             let responseData: any = await response.json();
 
             if (responseData.success == true) {
-                if (responseData.data.length == 1) {
-                    setCropOptions(responseData?.data);
-                    setCropName(responseData?.data[0].title)
-                    setSelectedCrop(responseData?.data[0])
+                setCropOptions(responseData?.data);
+
+                if (router.query.crop_id) {
+
+                    let cropObj = responseData?.data?.find((item: any) => item._id == router.query.crop_id);
+                    setSelectedCrop(cropObj);
+                    setCropName(cropObj.title);
 
                 } else {
-                    setCropOptions(responseData?.data);
+                    if (responseData.data.length == 1) {
+                        setCropName(responseData?.data[0].title);
+                        setSelectedCrop(responseData?.data[0]);
+                    } else {
 
+                    }
                 }
 
             } else {
@@ -152,11 +157,7 @@ const FileUploadComponent = () => {
         }
     }
 
-    //video previw event
-    let videoRef: any = useRef(null);
-
     const generateThumbnail = (file: any, index: any) => {
-        console.log(file, "iji")
 
         if (file) {
             const reader = new FileReader();
@@ -275,10 +276,11 @@ const FileUploadComponent = () => {
     //file upload into multipart
     const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function, key: any) => {
 
-        console.log(file)
+        console.log(key)
+        console.log(uploadid)
         const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
         const totalChunks = Math.ceil(file.size / chunkSize);
-        const formData = new FormData();
+
         let resurls;
 
         let obj = {
@@ -318,8 +320,7 @@ const FileUploadComponent = () => {
                     });
 
                     const progress = ((currentChunk + 1) / totalChunks) * 100;
-
-                    promises.push(response)
+                    promises.push(response);
 
                     fileProgressCopy[index] = progress;
                     setFileProgress([...fileProgressCopy]);
@@ -410,18 +411,19 @@ const FileUploadComponent = () => {
                 setFileProgress([...fileProgressCopy]);
                 tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: item.type, size: item.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
                 setAttachments(tempFilesStorage)
+                console.log(tempFilesStorage)
 
             }
 
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
 
     }
 
     useEffect(() => {
-        if (router.query.farm_id) {
+        if (router.query.farm_id && accessToken) {
             getFormDetails(router.query.farm_id)
         }
     }, [accessToken, router.query.farm_id])
@@ -456,7 +458,7 @@ const FileUploadComponent = () => {
                 dispatch(removeTheFilesFromStore([]));
                 setAlertMessage(responseData.message)
                 setAlertType(true)
-                router.push(`/farms/${router.query.farm_id}/crops`)
+                router.back()
 
             }
             setLoading(false)
@@ -633,7 +635,7 @@ const FileUploadComponent = () => {
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
                                                     <div className={styles.uploadItem}>
-                                                        <div className={styles.photojpg}>{item.name?.slice(0, 10)}....{item.type} </div>
+                                                        <div className={styles.photojpg}>{item.name?.slice(0, 7)}...{item.type} </div>
                                                         <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
                                                     </div>
                                                     {fileProgress[index] == 100 ?

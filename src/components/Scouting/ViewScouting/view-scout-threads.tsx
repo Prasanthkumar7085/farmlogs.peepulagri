@@ -12,6 +12,7 @@ import Lightbox from "yet-another-react-lightbox";
 import { Gallery } from "react-grid-gallery";
 import VideoDialog from "@/components/Core/VideoDiloag";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
+import CommentsComponent from "../Comments/CommentsComponent";
 
 
 
@@ -105,7 +106,7 @@ const ViewScoutThreads = () => {
         <div className={styles.description}>
           <h3 className={styles.heading1}>Description</h3>
           <p className={styles.descriptiontext}>
-            {data?.description ? data?.description : ""}
+            {data?.description ? data?.description : "-"}
           </p>
         </div>
 
@@ -116,6 +117,7 @@ const ViewScoutThreads = () => {
             />
 
           </Card> : ""}
+          <CommentsComponent />
 
         </div>
 

@@ -62,11 +62,17 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
 
     const captureResponseDilog = (value: any) => {
         setErrorMessages([]);
-        if (value == false) {
+        if (!value) {
             setRenameOpen(false)
         }
         else {
-            renameCrop(value);
+            const { title, crop_area } = value;
+            
+            let obj = {
+                title: title ? title?.trim() : "",
+                crop_area: (crop_area && +crop_area) ? crop_area : null
+            }
+            renameCrop(obj);
         }
     }
 
@@ -123,10 +129,10 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
                     <MenuItemsForFolder />
                 </div>
                 <div className={styles.textWrapper} onClick={() => setToStorage(itemDetails?.title)} >
-                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length > 17 ? itemDetails?.title.slice(0, 14) + '...' : itemDetails?.title}</h2>
+                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length > 15 ? itemDetails?.title.slice(0, 12) + '...' : itemDetails?.title}</h2>
                     <div style={{display:"flex", width:"95%", justifyContent:"space-between"}}>
                         <p className={styles.aug2023}>Crop Area</p>
-                        <p className={styles.aug2023}>{itemDetails.crop_area ? itemDetails.crop_area : 0}</p>
+                        <p className={styles.aug2023}>{itemDetails.crop_area ? itemDetails.crop_area+(itemDetails.crop_area < 2 ? ' acre' : ' acres') : (0 +' acres')}</p>
                     </div>
                 </div>
             </div>

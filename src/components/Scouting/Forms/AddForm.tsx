@@ -57,36 +57,6 @@ const AddFarmForm = () => {
     const [newLocation, setNewLocation] = useState('');
 
 
-    const geometryDemo = {
-        "type": "Polygon",
-        "coordinates": [
-            [
-                [
-                    [
-                        -121.88883540217063,
-                        50.97489195799901,
-                        0
-                    ],
-                    [
-                        -121.88883523174192,
-                        50.97072525131302,
-                        0
-                    ],
-                    [
-                        -121.8950854466247,
-                        50.97072527980969,
-                        0
-                    ],
-                    [
-                        -121.89508560169767,
-                        50.97489198254216,
-                        0
-                    ]
-                ]
-            ]
-        ]
-    }
-
     const {
         register,
         handleSubmit,
@@ -127,9 +97,8 @@ const AddFarmForm = () => {
 
         let obj = {
             title: title,
-            area: area ? +area : null,
-            location: location.trim(),
-            geometry: geometryDemo
+            area: (area&&+area) ? +area : null,
+            location: location ? location.trim() : ""
         };
 
         let response = await addFarmService(obj, accessToken);
@@ -157,8 +126,7 @@ const AddFarmForm = () => {
         let obj = {
             title: title,
             location: location?.name,
-            area: area ? +area : null,
-            geometry: geometryDemo
+            area: area ? +area : null
         }
         if (router.query.farm_id) {
             edtiFarm(obj);

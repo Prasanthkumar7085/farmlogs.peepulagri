@@ -75,7 +75,7 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
 
 
   useEffect(() => {
-
+    
     if (router.query?.farm_id && router.isReady) {
       dispatch(setSingleFarm(router?.query?.farm_id))
     }

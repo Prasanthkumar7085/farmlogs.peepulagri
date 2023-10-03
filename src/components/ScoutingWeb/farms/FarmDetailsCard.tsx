@@ -32,7 +32,9 @@ const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageP
 
   const deleteFarm = async () => {
     setDeleteLoading(true);
+
     const response = await deleteFarmService(deleteId, accessToken);
+    
     if (response.success) {
       setAlertMessage(response?.message);
       setAlertType(true);

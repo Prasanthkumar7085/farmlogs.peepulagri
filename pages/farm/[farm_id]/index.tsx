@@ -1,11 +1,14 @@
 import { GetServerSideProps } from "next";
 import styles from "./../index.module.css";
+import ViewFarmPage from "@/components/Scouting/Forms/view-farm";
+import CardDetails from "@/components/ScoutingWeb/farms/CardDetails";
 
 const FarmPage = () => {
 
     return (
         <div className={styles.dashboard}>
-            Farm Details
+            {/* <ViewFarmPage/> */}
+            <CardDetails/>
         </div>
 
     )

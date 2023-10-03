@@ -86,17 +86,13 @@
 .viewfarm {
   border-radius: 50%;
   background-color: var(--background);
-  width: 35px;
-  height: 35px;
   align-items: center;
   justify-content: center;
-  padding: 16.3799991607666px;
+  padding: 0;
+  height: 32px;
+  width: 32px;
+  line-height: 1;
   box-sizing: border-box;
-}
-
-.viewfarm img {
-  width: 12px;
-  height: 15px;
 }
 
 .farmareablock {
@@ -136,16 +132,13 @@
 }
 
 .allFormsBlock {
-  padding: 1rem;
-  padding-top: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 1rem;
-
+  grid-gap: 0.65rem;
 }
 
 .allForms {
-  height: 70vh;
+  height: calc(100vh - 185px);
   overflow: scroll;
-  margin-top: 1rem;
+  padding: 1rem;
 }

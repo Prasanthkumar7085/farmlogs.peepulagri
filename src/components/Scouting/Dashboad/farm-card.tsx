@@ -2,7 +2,7 @@ import styles from "./farm-card.module.css";
 import { FarmDataType } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
-import SettingsIcon from '@mui/icons-material/Settings';
+import ImageComponent from "../../../components/Core/ImageComponent";
 
 interface pagePropsType {
   farmsData: Array<FarmDataType>;
@@ -44,7 +44,8 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
                     </div>
                   </div>
                   <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}`)}>
-                    <SettingsIcon sx={{color:"#c1c1c1"}} />
+                    
+                    <ImageComponent src="./ViewIcon.svg" width="16" height="16" />
                   </div>
                 </div>
               </div>

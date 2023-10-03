@@ -56,12 +56,15 @@
 }
 
 .myCropsPage {
-  padding: 1rem;
 }
-
+.filterBox {
+  padding: 0.65rem 0.65rem 0;
+  width: calc(100% - 1.3rem);
+}
 .allCrops {
-  height: 65vh;
+  height: calc(100vh - 224px);
   overflow: scroll;
+  padding: 0 0.65rem;
 }
 
 #noData {
@@ -97,9 +100,7 @@
 .scoutingView {
   padding: 1rem;
   padding-top: 0.5rem;
-
 }
-
 .scoutingView nav {
   margin-bottom: 0.5rem;
 }
@@ -117,4 +118,22 @@
   font-size: clamp(14px, 3.5rem, 16px);
   font-weight: 500;
   text-decoration-line: underline;
+}
+
+.sortOptions .subTitle{
+  font-family: 'Inter',sans-serif;
+  font-size: clamp(14px, 3.5rem, 16px);
+  font-weight: 600; 
+  column-gap: 0.65rem;
+  margin-bottom: 0.5rem;
+}
+.sortOptions {
+  padding: 1rem 0;
+}
+.sortOptions li {
+  display: flex;
+  column-gap: 0.5rem;
+}
+.sortOptions .divider {
+  margin: 0.5rem 1rem;
 }

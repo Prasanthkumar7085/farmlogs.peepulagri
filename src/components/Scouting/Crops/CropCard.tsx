@@ -121,7 +121,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
     }
 
     return (
-        <div style={{ minHeight: "115px", maxHeight: "115px" }}>
+        <div className={styles.folder}>
             <div className={styles.cropcard} >
                 <div className={styles.icons}>
                     <img className={styles.folderIcon} alt="" src="/folder.svg" onClick={() => setToStorage(itemDetails?.title)} />

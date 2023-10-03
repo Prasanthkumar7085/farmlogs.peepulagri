@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { Box, Drawer, FormControl, FormHelperText, IconButton, InputLabel, ListItem, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Drawer, Divider, FormControl, FormHelperText, IconButton, InputLabel, ListItem, Menu, MenuItem, Typography } from "@mui/material";
 import styles from "./crop-card.module.css";
 import CropCard from "./CropCard";
 import AddIcon from '@mui/icons-material/Add';
@@ -14,6 +14,8 @@ import { removeTheFilesFromStore, setFarmTitleTemp } from "@/Redux/Modules/Farms
 import SortIcon from '@mui/icons-material/Sort';
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import DoneIcon from '@mui/icons-material/Done';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { id } from "date-fns/locale";
 
 const AllCropsComponent = () => {
@@ -204,16 +206,40 @@ const AllCropsComponent = () => {
 
     const SortMenu = () => {
         return (
-            <div>
-                <ListItem> <SortIcon /><b>Sort By</b></ListItem>
-
-                <ListItem onClick={()=>sortByMethod('createdAt','desc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(1) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Recent First'}</ListItem>
-                <ListItem onClick={()=>sortByMethod('createdAt','asc')} sx={{ borderBottom: "1px solid #B4C1D6" }}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(2) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Oldest First'}</ListItem>
-                <ListItem onClick={()=>sortByMethod('title','asc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(3) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Title (A-Z)'}</ListItem>
-                <ListItem onClick={()=>sortByMethod('title','desc')} sx={{ borderBottom: "1px solid #B4C1D6" }}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(4) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Title (Z-A)'}</ListItem>
-                <ListItem onClick={()=>sortByMethod('crop_area','desc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(5) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Area Highest first'}</ListItem>
-                <ListItem onClick={()=>sortByMethod('crop_area','asc')}><div style={{ minHeight:"1rem", minWidth:"1rem",maxHeight:"1rem", maxWidth:"1rem"}}><DoneIcon sx={{ display: sortMethod(6) ? "flex" : "none", fontSize:"1rem" }} /></div>{'Area Lowest first'}</ListItem>
-                
+            <div className={styles.sortOptions}>
+                <ListItem className={styles.subTitle}> <SortIcon /> <span>Sort By</span></ListItem>
+                <ListItem onClick={()=>sortByMethod('createdAt','desc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(1) ? "none" : "flex", fontSize:"1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(1) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                    <div style={{ color: sortMethod(1) ? "#05a155" : "#333333", }}>{'Recent First'}</div>
+                </ListItem>
+                <ListItem onClick={()=>sortByMethod('createdAt','asc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(2) ? "none" : "flex", fontSize:"1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(2) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                    <div style={{ color: sortMethod(2) ? "#05a155" : "#333333", }}>{'Oldest First'}</div>
+                </ListItem>
+                <Divider variant="middle" className={styles.divider} component="li" />
+                <ListItem onClick={()=>sortByMethod('title','asc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(3) ? "none" : "flex", fontSize:"1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(3) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                    <div style={{ color: sortMethod(3) ? "#05a155" : "#333333", }}>{'Title (A-Z)'}</div>
+                </ListItem>
+                <ListItem onClick={()=>sortByMethod('title','desc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(4) ? "none" : "flex", fontSize:"1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(4) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                    <div style={{ color: sortMethod(4) ? "#05a155" : "#333333", }}>{'Title (Z-A)'}</div>
+                </ListItem>           
+                <Divider variant="middle" className={styles.divider} component="li" />
+                <ListItem onClick={()=>sortByMethod('crop_area','desc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(5) ? "none" : "flex", fontSize:"1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(5) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                    <div style={{ color: sortMethod(5) ? "#05a155" : "#333333", }}>{'Area Highest first'}</div>
+                </ListItem>
+                <ListItem onClick={()=>sortByMethod('crop_area','asc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(6) ? "none" : "flex", fontSize:"1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(6) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                    <div style={{ color: sortMethod(6) ? "#05a155" : "#333333", }}>{'Area Lowest first'}</div>
+                </ListItem>  
            </div>
         )
     }
@@ -221,8 +247,8 @@ const AllCropsComponent = () => {
     return (
         <div className={styles.myCropsPage}>
             <FormControl
-                sx={{ width: "100%" }}
                 variant="outlined"
+                className={styles.filterBox}
             >
                 <InputLabel color="primary" />
                 <SelectAutoCompleteForFarms options={formOptions} label={"title"} onSelectValueFromDropDown={captureFarmName} placeholder={"Select Farm"} defaultValue={defaultValue} />
@@ -237,11 +263,6 @@ const AllCropsComponent = () => {
                         onClose={()=>toggleDrawer(false)}
                         anchor={'bottom'}
                         open={state['bottom']}
-                        sx={{
-                            '& .MuiBox-root': {
-                                height: "35vh"
-                            }
-                        }}
                     >
                          <Box>
                             <SortMenu/>

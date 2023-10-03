@@ -108,6 +108,7 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
             color="primary"
             size="small"
             variant="contained"
+            fullWidth
             onClick={() => callData()}
             disabled={loading}
           >

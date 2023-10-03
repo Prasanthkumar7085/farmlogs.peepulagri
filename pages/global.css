@@ -308,7 +308,7 @@ body {
 }
 
 .ReactGridGallery {
-    padding-block: 0.5rem;
+    /* padding: 0.5rem; */
 }
 
 .ReactGridGallery_tile-viewport img {

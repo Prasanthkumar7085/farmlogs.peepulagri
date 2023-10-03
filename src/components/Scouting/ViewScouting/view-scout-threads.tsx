@@ -14,6 +14,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import AlertImagesDelete from "@/components/Core/DeleteImagesAlert/alert-delete-images";
 import FileUploadEditComponent from "../EditItem/FileUploadEdit";
+import AddIcon from '@mui/icons-material/Add';
 
 
 
@@ -179,11 +180,11 @@ const ViewScoutThreads = () => {
           </div>
 
           <div className={styles.attachmentscontainer}>
-            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <div style={{ display: "flex", width: "100%", alignItems: "center", justifyContent: "space-between" }}>
               <h3 className={styles.heading}>Attachments</h3>
-              <Button sx={{ marginLeft: "100%", width: "100%" }} variant="text" onClick={() => setFileUploadOpen(true)}>Add Attachments</Button>
+              <Button variant="contained" color="primary" size="small" startIcon={<AddIcon />} onClick={() => setFileUploadOpen(true)}>Add</Button>
             </div>
-            {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
+            {images.length ? <Card sx={{ width: "100%", minHeight: "100px", padding: "0.25rem" }}>
               <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
             </Card> : ""}
 

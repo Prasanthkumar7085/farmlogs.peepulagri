@@ -307,8 +307,7 @@ body {
     height: 100%;
 }
 
-#ReactGridGallery {
-    margin: 6px;
+.ReactGridGallery {
     padding-block: 0.5rem;
 }
 
@@ -323,30 +322,26 @@ body {
 }
 
 .ReactGridGallery_tile {
-    width: 30% !important;
     height: 100px !important;
+    max-width: 100%;
 }
 
 .ReactGridGallery_tile-icon-bar {
     height: 100% !important;
-    width: 100% !important;
 }
 
 .ReactGridGallery_tile-viewport {
     height: 100% !important;
-    width: 100% !important;
-}
-
-.ReactGridGallery div {
-    justify-content: flex-start !important;
-    gap: 3% !important;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .ReactGridGallery_tile-bottom-bar {
-    /* background-color: #0000008f !important; */
     min-height: inherit !important;
     max-height: inherit !important;
     height: 100% !important;
+    padding: 0!important;
+    border-radius: 5px;
 }
 
 .ReactGridGallery_tile-bottom-bar div {
@@ -362,7 +357,7 @@ body {
 
 .ReactGridGallery_tile-bottom-bar div span {
     font-size: 18px !important;
-    font-weight: 700 !important;
+    font-weight: 500 !important;
     text-align: center !important;
     white-space: nowrap !important;
     color: #fff !important;

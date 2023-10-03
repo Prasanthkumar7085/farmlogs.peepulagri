@@ -23,7 +23,7 @@ const AlertDelete = ({ open, deleteFarm, setDialogOpen, loading }: pagePropsType
           <Button className={styles.buttoncancel} onClick={() => setDialogOpen(false)}>
             <div className={styles.text}>Cancel</div>
           </Button>
-          <Button className={styles.buttongotit} onClick={() => deleteFarm()}>
+          <Button className={styles.buttongotit} variant="contained" color="error" onClick={() => deleteFarm()}>
             <div className={styles.text}>
               {loading ? <CircularProgress size="1.5rem" sx={{ color: "white" }} /> : 'Delete'}
             </div>

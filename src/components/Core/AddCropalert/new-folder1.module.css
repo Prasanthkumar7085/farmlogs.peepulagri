@@ -22,25 +22,24 @@
 }
 
 .buttoncreatefolder{
+  font-family: 'Inter',sans-serif;
+  font-weight: 500 !important;
   align-self: stretch !important;
   text-transform: capitalize !important;
   border-radius: 8px !important;
-  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
+  box-shadow: none !important;
   font-size: clamp(14px, 3vw, 16px) !important;
   padding: 0.5rem 1rem;
-  font-family: 'Inter',sans-serif;
-  font-weight: 500 !important;
 }
 .buttoncancelfolder {
-  align-self: stretch !important;
+  font-family: 'Inter',sans-serif;
+  font-weight: 500 !important;
   text-transform: capitalize !important;
   border-radius: 8px !important;
   border: 1px solid #999999 !important;
-  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
+  box-shadow: none !important;
   font-size: clamp(14px, 3vw, 16px) !important;
-  padding: 0.5rem 1.5rem;
-  font-family: 'Inter',sans-serif;
-  font-weight: 500 !important;
+  padding: 0.5rem 2.5rem;
   color: #333333;
 }
 

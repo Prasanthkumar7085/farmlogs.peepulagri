@@ -104,6 +104,15 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
         </div>
         <div className={styles.buttons}>
           <Button
+            className={styles.buttoncancelfolder}
+            color="primary"
+            size="small"
+            variant="outlined"
+            onClick={() => { captureResponseDilog(false); setTitle(''); setArea('')}}
+          >
+            Cancel
+          </Button>
+          <Button
             className={styles.buttoncreatefolder}
             color="primary"
             size="small"
@@ -116,15 +125,6 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
               <CircularProgress size="1.5rem" sx={{ color: "white" }} /> :
               (defaultTitle ? 'Update Folder' : 'Create Folder')}
 
-          </Button>
-          <Button
-            className={styles.buttoncancelfolder}
-            color="primary"
-            size="small"
-            variant="outlined"
-            onClick={() => { captureResponseDilog(false); setTitle(''); setArea('')}}
-          >
-            Cancel
           </Button>
         </div>
       </div>

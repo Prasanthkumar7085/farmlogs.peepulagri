@@ -1,0 +1,137 @@
+.dateandtime,
+.farmname {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+}
+
+.viewScoutingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.iconDiv{
+  border:1px solid #c0c0c0;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #fff;
+}
+.viewScoutingHeader h5 {
+  margin: 0;
+  color: #170F49;
+  font-family: Inter;
+  font-size: clamp(16px, 1vw, 20px);
+  font-weight: 400;
+}
+
+.farmname {
+  font-size: inherit;
+  line-height: 20px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.dateandtime {
+  font-size: 16px;
+  line-height: 100%;
+  color: #6a7185;
+}
+.textwrapper {
+  align-self: stretch;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.heading {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 18px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.acres,
+.heading,
+.lable {
+  align-self: stretch;
+}
+.acres {
+  margin: 0;
+  position: relative;
+  line-height: 18px;
+  color: #a05148;
+}
+.lable {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+}
+.locatorIcon {
+  position: absolute;
+  top: calc(50% - 14px);
+  left: 464px;
+  width: 56px;
+  height: 65.33px;
+}
+.maplocation {
+  align-self: stretch;
+  position: relative;
+  height: 270px;
+  background-image: url(/public/maplocation.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+.latitude407128N {
+  color: #6a7185;
+}
+.text {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  line-height: 140%;
+  font-weight: 500;
+}
+.cardDetails,
+.landMark,
+.landdetails,
+.mapdetails {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.mapdetails {
+  margin: 0;
+  justify-content: center;
+}
+.cardDetails,
+.landMark,
+.landdetails {
+  justify-content: flex-start;
+  gap: 30px;
+  font-size: 16px;
+  color: #000;
+}
+.cardDetails,
+.landdetails {
+  padding: 0 0 48px;
+  font-size: 18px;
+  color: #101828;
+}
+.cardDetails {
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 24px 32px 0;
+  gap: 24px;
+  text-align: left;
+  font-size: 24px;
+  color: #344054;
+  font-family: Inter;
+}

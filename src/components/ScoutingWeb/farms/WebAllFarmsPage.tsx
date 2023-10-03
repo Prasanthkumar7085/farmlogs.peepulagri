@@ -3,13 +3,15 @@ import ScoutingFarmDetailsCard from "./FarmDetailsCard";
 import FarmsNavBarWeb, { getFarmsData } from "./FarmsNavBar";
 import styles from "./FarmsNavBar.module.css";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FarmDataType } from "@/types/farmCardTypes";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
+import { setAllFarms } from "@/Redux/Modules/Farms";
 const AllFarmsPage = () => {
 
-    const router = useRouter();
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
@@ -53,6 +55,7 @@ const AllFarmsPage = () => {
         if (response?.success) {
             const { data } = response;
             setData(data);
+          dispatch(setAllFarms(data));
         }
     } catch (err: any) {
         console.error(err)

@@ -2,6 +2,14 @@
   width: 24px;
   height: 24px;
 }
+.viewScoutingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
 
 .farms {
   font-size: clamp(18px, 1.25vw, 24px);

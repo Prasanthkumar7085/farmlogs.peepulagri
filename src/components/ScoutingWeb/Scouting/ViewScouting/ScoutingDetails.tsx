@@ -103,16 +103,20 @@ const ScoutingDetails: FunctionComponent = () => {
           <h1 className={styles.farmname}>Description</h1>
           <p className={styles.startdate}>{data?.description ? data?.description : "-"}</p>
         </div>
-        
+        {/* <Gallery images={finalImages} onClick={handleClick} /> */}
+        {finalImages.length ? 
+        <div><Gallery images={finalImages} onClick={handleClick} /></div>  
+                
+              : ""}
       </Card>
       {/* <div className={styles.gallaryContainer}> */}
             {finalImages.length ?
-              <Card sx={{ width: "100%", minHeight: "100px" }} >
+              <div >
                 <div className={styles.attachments}>
                   <p className={styles.text}>Attachments</p>
                 </div>
                 <Gallery images={finalImages} onClick={handleClick} />
-              </Card> : ""}
+              </div> : ""}
           {/* </div> */}
 
           <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />

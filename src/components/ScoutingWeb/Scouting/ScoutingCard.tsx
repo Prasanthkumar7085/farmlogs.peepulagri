@@ -18,7 +18,6 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [index, setIndex] = useState(-1);
 
-
   const onViewClick = useCallback(() => {
     router.push(`/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`);
   }, []);
@@ -41,14 +40,14 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   return (
     <div className={styles.scoutingCard}>
       <div className={styles.imgFlexContainer}>
-        {item.attachments.slice(0,6).map((item:ScoutAttachmentDetails,index:number) => (
-          <div key={index} className={styles.eachImgBox} onClick={()=>viewImagePreview(index)}>
-            <ImageComponent
+        {item.attachments.slice(0,6).map((itemObj:ScoutAttachmentDetails,index:number) => (
+          <div key={index} className={item.attachments.length>3 ? styles.eachImgBox : styles.eachImgBoxLessThan3} onClick={()=>viewImagePreview(index)}>
+            <img
               className={styles.imageIcon}
-              height={30}
-              width={30}
-              src={item.url}
-              alt={item.name}
+              // height={30}
+              // width={30}
+              src={itemObj.url}
+              alt={itemObj.name}
             />
           </div>
         ))}

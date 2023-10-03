@@ -42,6 +42,7 @@ const ViewSingleImagePreview = ({ open, onClose, media,index }: any) => {
             autoFocus
             onKeyDown={getKey}
             open={open}
+            onClose={handleClose}
             fullWidth
             sx={{
                 background: "#0000008f",

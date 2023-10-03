@@ -13,23 +13,17 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
 
-const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
+const ViewSingleImagePreview = ({ open, onClose, media,index }: any) => {
 
+    console.log(media);
+    
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         setCurrentIndex(index);
     }, [index]);
     
-    const playNext = () => {
-        const nextIndex = (currentIndex + 1) % mediaArray.length;
-        setCurrentIndex(nextIndex);
-    };
-
-    const playPrevious = () => {
-        const prevIndex = currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
-        setCurrentIndex(prevIndex);
-    };
+    
 
     const handleClose = () => {
         setCurrentIndex(-1);
@@ -38,11 +32,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
 
     const getKey = (e: any) => {
         
-        if (e.keyCode == 37) {
-            playPrevious();
-        } else if (e.keyCode == 39) {
-            playNext();
-        }else if (e.keyCode == 27) {
+        if (e.keyCode == 27) {
             handleClose();
         }
         
@@ -79,36 +69,37 @@ const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray.length <= 1}>
+                {/* <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray.length <= 1}>
                     <NavigateBeforeIcon sx={{ color: "#fff" }} />
-                </IconButton>
-                {mediaArray.length > 0 && (
+                </IconButton> */}
+                {media && (
                     <div className={styles.scoutDailogImg}>
-                        {mediaArray[currentIndex]?.type?.includes('video') ? (
+                        {media?.type?.includes('video') ? (
                             <video controls width="100%" height="auto" autoPlay key={currentIndex}>
-                                <source src={mediaArray[currentIndex]?.url} type={mediaArray[currentIndex]?.type} />
+                                <source src={media?.url} type={media?.type} />
                                 Your browser does not support the video tag.
                             </video>
                         ) : (
-                            <img
-                                src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
+                                <img
+                                loading='lazy'
+                                src={media?.url} // Change this to use the mediaArray
                                 alt={`Image ${currentIndex + 1}`}
                             />
                         )}
 
                     </div>
                 )}
-                <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray.length <= 1}>
+                {/* <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray.length <= 1}>
                     <NavigateNextIcon sx={{ color: "#fff" }} />
-                </IconButton>
+                </IconButton> */}
             </DialogContent>
-            <DialogActions>
+            {/* <DialogActions>
                 <Typography variant="caption" display="block" align="center">
                     {currentIndex + 1} of {mediaArray.length}
                 </Typography>
-            </DialogActions>
+            </DialogActions> */}
         </Dialog>
     );
 };
 
-export default VideoDialogForScout;
+export default ViewSingleImagePreview;

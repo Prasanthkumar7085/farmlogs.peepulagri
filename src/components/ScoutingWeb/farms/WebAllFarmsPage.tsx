@@ -23,10 +23,9 @@ const AllFarmsPage = () => {
   }, [router.isReady,accessToken]);
 
   
-  const onViewClick = useCallback(() => {
-    // Please sync "Scouting" to the project
+  const onViewClick = useCallback((farmId:string) => {
+    router.push(`/farm/${farmId}`);
   }, []);
-
 
   const getFarmsData = async ({search_string=''}:{search_string:string}) => {
     setLoading(true);

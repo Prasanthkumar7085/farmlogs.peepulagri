@@ -14,11 +14,8 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 const VideoDialog = ({ open, onClose, mediaArray, index }: any) => {
 
-    console.log(index)
     const [currentIndex, setCurrentIndex] = useState(0);
     const [imageArray, setImageArray] = useState<any[]>([]);
-
-    console.log(mediaArray, "j")
 
     useEffect(() => {
         if (open) {

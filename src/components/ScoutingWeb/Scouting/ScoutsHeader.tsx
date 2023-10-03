@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import styles from "../farms/FarmsNavBar.module.css";
+import FarmDetailsMiniCard from "@/components/AddLogs/farm-details-mini-card";
 
 const ScoutsNavBarWeb: FunctionComponent = () => {
     const onButtonClick = useCallback(() => {
@@ -19,7 +20,8 @@ const ScoutsNavBarWeb: FunctionComponent = () => {
                 <img className={styles.farmIcon} alt="" src="/wer-farm-page-icon.svg" />
                 <h1 className={styles.farms}>Scouting</h1>
             </div>
-            <div className={styles.actionsbar}>
+            <FarmDetailsMiniCard/>
+            {/* <div className={styles.actionsbar}>
                 <Autocomplete
                     size='small'
                     placeholder="Select farm name"
@@ -49,7 +51,7 @@ const ScoutsNavBarWeb: FunctionComponent = () => {
                 >
                     <AddIcon sx={{ fontSize: "1rem" }} />Add
                 </Button>
-            </div>
+            </div> */}
         </div>
     );
 };

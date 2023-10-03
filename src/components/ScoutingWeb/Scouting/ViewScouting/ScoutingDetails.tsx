@@ -8,7 +8,11 @@ import { ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes"
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import FarmDetailsMiniCard from "@/components/AddLogs/farm-details-mini-card";
 import timePipe from "@/pipes/timePipe";
+import "yet-another-react-lightbox/styles.css";
+import VideoDialog from "@/components/Core/VideoDiloag";
 import { Gallery } from "react-grid-gallery";
+import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
+
 
 const ScoutingDetails: FunctionComponent = () => {
 
@@ -20,44 +24,42 @@ const ScoutingDetails: FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
   const [index, setIndex] = useState<number>(-1);
-  
+  const [finalImages, setFinalImages] = useState([]);
+  const [selectedFile, setSelectedFile] = useState<any>([])  
 
   const getSingleScout = async () => {
     setLoading(true);
     const response = await getSingleScoutService(router.query.scout_id as string, accessToken);
     if (response?.success) {
       setData(response?.data);
+      setSelectedFile(response?.data.attachments)
+
+       getModifiedImages({attachmentdetails:response.data.attachments});
+      
     }
     setLoading(false);
   };
 
-  const getModifiedImages = (item: any) => {
-    let obj = item?.attachments?.map((imageObj: any, index: number) => {
 
-        if (imageObj.type.slice(0, 4) == "vide") {
-            return {
-                src: "/videoimg.png",
-                original: imageObj.url,
-                height: 80,
-                width: 60,
-                alt: "u",
-                customOverlay: (
-                    <div className="custom-overlay__caption">
-                        <div>{imageObj.name}</div>
-                    </div>
-                ),
-            }
+  const getModifiedImages = ({ attachmentdetails }: any) => {
+    let details = [];
+    if (attachmentdetails.length) {
+      details = attachmentdetails.map((item: ScoutAttachmentDetails, index: number) => {
+
+        if (item.type.includes('video')) {
+          return {
+            src: "/videoimg.png", height: 80,
+            width: 60, caption: `${index + 1} image`, original: item.url
+          }
+        } else {
+          return {
+            src: item.url, height: 80,
+            width: 60,
+          }
         }
-        else
-            return {
-                src: imageObj.url,
-                height: 80,
-                width: 60,
-                alt: "u"
-            }
-    });
-
-    return obj;
+      })
+    }
+    setFinalImages(details);
   }
 
  
@@ -71,9 +73,8 @@ const ScoutingDetails: FunctionComponent = () => {
   };
   
   const handleClick = (index: number, item: any) => {
-    handleOpenDialog()
-    console.log(item)
-    setIndex(item.src == "/videoimg.png" ? item.original : item.src)
+    handleOpenDialog();
+    setIndex(index);
 };
 
   useEffect(() => {
@@ -102,21 +103,19 @@ const ScoutingDetails: FunctionComponent = () => {
           <h1 className={styles.farmname}>Description</h1>
           <p className={styles.startdate}>{data?.description ? data?.description : "-"}</p>
         </div>
-        <div className={styles.attachments}>
-          <p className={styles.text}>Attachments</p>
-          <div className={styles.gallaryContainer}>
-            {data?.attachments.length ? data.attachments.map((item:ScoutAttachmentDetails, index: number) => {
-              return (
-                <Gallery images={getModifiedImages(item)} onClick={handleClick} key={index} />
-                // <div>
-                //   <ImageComponent className={styles.imageIcon} alt="ss" src={item.url} height={20} width={20} />
-                // </div>
-              )
-            }) : "No Attachments"}
-            
-          </div>
-        </div>
+        
       </Card>
+      {/* <div className={styles.gallaryContainer}> */}
+            {finalImages.length ?
+              <Card sx={{ width: "100%", minHeight: "100px" }} >
+                <div className={styles.attachments}>
+                  <p className={styles.text}>Attachments</p>
+                </div>
+                <Gallery images={finalImages} onClick={handleClick} />
+              </Card> : ""}
+          {/* </div> */}
+
+          <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
       <LoadingComponent loading={loading}/>
     </div>
   );

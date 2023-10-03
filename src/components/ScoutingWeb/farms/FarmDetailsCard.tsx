@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { useState } from "react";
 import styles from "./FarmDetailsCard.module.css";
 import { IconButton } from "@mui/material";
 import { FarmDataType } from "@/types/farmCardTypes";
@@ -9,6 +9,8 @@ import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmS
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import AlertComponent from "@/components/Core/AlertComponent";
+import SettingsIcon from '@mui/icons-material/Settings';
+
 
 interface PageProps{
   data: any;
@@ -89,8 +91,8 @@ const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageP
                 {/* Testung */}
               </div>
               <div className={styles.actionbuttons} >
-                <IconButton className={styles.view} onClick={onViewClick}>
-                  <img className={styles.trashXmark1Icon} alt="" src="/farm-view-icon.svg" />
+                <IconButton className={styles.view} onClick={()=>onViewClick(item._id)}>
+                <SettingsIcon sx={{color:"#c1c1c1"}} />
                 </IconButton>
                 {/* <IconButton className={styles.edit}>
                   <img

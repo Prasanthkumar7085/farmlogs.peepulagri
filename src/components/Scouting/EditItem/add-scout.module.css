@@ -1,0 +1,318 @@
+.label {
+    margin: 0;
+    align-self: stretch;
+    position: relative;
+    font-size: inherit;
+    line-height: 20px;
+    font-weight: 500;
+    font-family: inherit;
+}
+
+#addCorpsPage {
+    padding: 1rem;
+}
+
+.selectfarm {
+    align-self: stretch;
+    transform: rotate(-0.04deg);
+    transform-origin: 0 0;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.farmselection {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.label1 {
+    align-self: stretch;
+    position: relative;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+.inputField {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.camera1Icon {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.capture {
+    line-height: 24px;
+}
+
+.camera {
+    position: absolute;
+    top: calc(50% - 32.5px);
+    left: calc(50% - 26.5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.captureimage,
+.uploadimage {
+    flex: 1;
+    position: relative;
+    border-radius: 8px;
+    background-color: #fff;
+    box-sizing: border-box;
+    height: 87px;
+    /* overflow: hidden; */
+}
+
+.captureimage {
+    border: 1px dashed rgba(160, 81, 72, 0.7);
+    cursor: pointer;
+}
+
+.uploadimage {
+    border: 1px dashed #4a86f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.addscoutdetails {
+    align-self: stretch;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.imagesupload {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+    width: 100%;
+}
+
+.addscoutdetails {
+    flex-direction: column;
+}
+
+.image21 {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.photojpg button {
+    padding-block: 0;
+    padding-left: 0;
+}
+
+.uploadname {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 11px;
+    width: 100%;
+}
+
+.close41 {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.uploadcontroller {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.progressbar {
+    align-self: stretch;
+    position: relative;
+    border-radius: 1px;
+    background-color: #05a155;
+    height: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.uploaddetails {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.completed {
+    flex: 1;
+    position: relative;
+    line-height: 100%;
+}
+
+.uploadstatus {
+    align-self: stretch;
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.progress,
+.progressdetails {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.progressdetails {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.progress {
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 0.5rem;
+    align-self: stretch;
+}
+
+.scoutdetails,
+.uploadprogress {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.uploadprogress {
+    width: 100%;
+    font-size: clamp(14px, 3.2vw, 16px);
+    color: #000;
+    margin-bottom: 0.5rem;
+}
+
+.uploadItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.scoutdetails {
+    border-radius: 8px 8px 0 0;
+    padding-bottom: 1rem;
+    gap: 16px;
+}
+
+
+.input,
+.scoutdetails {
+    align-self: stretch;
+}
+
+.dropdown,
+.submitButton {
+    align-self: stretch;
+    flex: 1;
+}
+
+.back {
+    border-radius: 6px;
+    border: 1px solid #D0D5DD;
+    background: #FFF;
+    box-shadow: 4px 4px 10px 0px #0202460a;
+    padding: 8px 20px;
+    color: #344054;
+    font-family: Inter;
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 400;
+    text-transform: capitalize;
+
+}
+
+.submit {
+    border-radius: 6px;
+    border: 1px solid #3462CF;
+    background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+    box-shadow: 4px 4px 10px 0px #0202460d;
+    color: #FFF;
+    font-family: Inter;
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 400;
+    text-transform: capitalize;
+}
+
+.buttons,
+.footeractionbuttons {
+    align-self: stretch;
+    align-items: flex-start;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 2fr 4fr;
+    grid-gap: 1.5rem;
+}
+
+
+.footeractionbuttons {
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    padding: 0 0 24px;
+}
+
+.addscout,
+.descriptionblock,
+.footeractionbuttons,
+.scoutdescription {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.descriptionblock {
+    align-self: stretch;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.addscout,
+.scoutdescription {
+    align-items: center;
+}
+
+.scoutdescription {
+    align-self: stretch;
+}
+
+.addscout {
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 14px;
+    color: #344054;
+    font-family: Inter;
+    padding: 1rem;
+}

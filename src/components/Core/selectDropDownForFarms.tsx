@@ -8,6 +8,7 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
 
     const [defaultValueSet, setDefaultValueSet] = useState<any>();
     const router = useRouter();
+    console.log(router)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -25,6 +26,7 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
                 size='small'
                 id="combo-box-demo"
                 options={(options && options?.length) ? options : []}
+                disabled={router.pathname == "/farms/[farm_id]/crops/[crop_id]/scouting/[scout_id]/edit" ? true : false}
                 getOptionLabel={(option: any) => option[label] ? option[label]?.toUpperCase() : ""}
                 onChange={(e: any, value: any, reason: any) => {
                     if (value) {
@@ -39,7 +41,7 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
                     }
 
                 }}
-                renderInput={(params) => <TextField {...params} placeholder={placeholder}/>
+                renderInput={(params) => <TextField {...params} placeholder={placeholder} />
                 }
                 sx={{
                     width: '100%',

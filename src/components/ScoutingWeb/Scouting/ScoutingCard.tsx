@@ -36,21 +36,40 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   //   setIndex(index);
   // };
 
+  const [state, setState] = useState(false);
 
+  const  handleImageLoad = () => {
+    setState(true);
+  };
   return (
     <div className={styles.scoutingCard}>
       <div className={styles.imgFlexContainer}>
-        {item.attachments.slice(0,6).map((itemObj:ScoutAttachmentDetails,index:number) => (
-          <div key={index} className={item.attachments.length>3 ? styles.eachImgBox : styles.eachImgBoxLessThan3} onClick={()=>viewImagePreview(index)}>
-            <img
-              className={styles.imageIcon}
-              // height={30}
-              // width={30}
-              src={itemObj.url}
-              alt={itemObj.name}
-            />
+        {item.attachments.length ? item.attachments.slice(0, 6).map((itemObj: ScoutAttachmentDetails, index: number) => {
+          return (
+            <div key={index} className={item.attachments.length > 3 ? styles.eachImgBox : styles.eachImgBoxLessThan3} onClick={() => viewImagePreview(index)}>
+            {itemObj.type.slice(0, 5) == 'video' ?
+                <img
+                  className={styles.imageIcon}
+                  src={'/videoimg.png'}
+                  alt={itemObj.name}
+                  onLoad={handleImageLoad}
+                  style={{ display: state ? "block" : "none" }}
+                />
+                
+              :
+              <img
+                className={styles.imageIcon}
+                src={itemObj.url}
+                alt={itemObj.name}
+                onLoad={handleImageLoad}
+                  style={{ display: state ? "block" : "none" }}
+              />
+            }
           </div>
-        ))}
+          )
+        }):"No Attachments"}
+
+
       </div>
       <div className={styles.carddetails}>
         <p className={styles.date}>{timePipe(item.createdAt,'DD MMM YYYY, hh:mm A')}</p>

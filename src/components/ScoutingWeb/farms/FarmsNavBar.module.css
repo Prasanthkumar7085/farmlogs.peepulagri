@@ -26,6 +26,18 @@
   gap: 10px;
 }
 
+.iconDiv {
+  border-radius: 4px;
+  border: 1px solid var(--Stroke, #E9EDF1);
+  background: #FFF;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .button {
   border-radius: 3px !important;
   background: #05A155 !important;
@@ -50,6 +62,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 10px;
 }
 
 .actionsbar {

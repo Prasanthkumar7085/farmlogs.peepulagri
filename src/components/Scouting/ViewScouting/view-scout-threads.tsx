@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import { ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
 import timePipe from "@/pipes/timePipe";
-import { Card } from "@mui/material";
+import { Button, Card } from "@mui/material";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { Gallery } from "react-grid-gallery";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
@@ -13,6 +13,7 @@ import CommentsComponent from "../Comments/CommentsComponent";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import AlertImagesDelete from "@/components/Core/DeleteImagesAlert/alert-delete-images";
+import FileUploadEditComponent from "../EditItem/FileUploadEdit";
 
 
 
@@ -36,6 +37,8 @@ const ViewScoutThreads = () => {
   const [loading, setLoading] = useState(true);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState<any>()
+  const [cameraOpen, setCameraOpen] = useState<any>(false)
+  const [fileUploadOpen, setFileUploadOpen] = useState<any>(false)
 
 
   const handleOpenDialog = () => {
@@ -133,6 +136,7 @@ const ViewScoutThreads = () => {
       if (responseData.success == true) {
         getSingleScout()
         setDeleteOpen(false)
+        setImagesForDelete([])
       }
     }
     catch (err) {
@@ -142,32 +146,56 @@ const ViewScoutThreads = () => {
       setDeleteLoading(false)
     }
   }
+  const captureFileUploadOptions = (value: any) => {
+    if (value == "close") {
+      setFileUploadOpen(false)
+    }
+    else if (value == "success") {
+      getSingleScout();
+      setFileUploadOpen(false)
+    }
+    else if (value == "camera") {
+      setCameraOpen(true)
+    }
+    else if (value == "cameraoff") {
+      setFileUploadOpen(true)
+      setCameraOpen(false)
+    }
+  }
 
   return (
     <div className={styles.viewscoutthreads} id="view-scout-threads">
-      <div className={styles.headerandattachments}>
-        <div className={styles.headertextwrapper}>
-          <h2 className={styles.farmTitle}>{data?.farm_id?.title ? data?.farm_id?.title : "Farm1"}</h2>
-          <p className={styles.createdAt}>{data?.createdAt ? timePipe(data?.createdAt, 'DD, MMM YYYY hh:mm a') : ""}</p>
-        </div>
-        <div className={styles.description}>
-          <h3 className={styles.heading1}>Description</h3>
-          <p className={styles.descriptiontext}>
-            {data?.description ? data?.description : "-"}
-          </p>
-        </div>
+      {cameraOpen == false ?
+        <div className={styles.headerandattachments}>
+          <div className={styles.headertextwrapper}>
+            <h2 className={styles.farmTitle}>{data?.farm_id?.title ? data?.farm_id?.title : "Farm1"}</h2>
+            <p className={styles.createdAt}>{data?.createdAt ? timePipe(data?.createdAt, 'DD, MMM YYYY hh:mm a') : ""}</p>
+          </div>
+          <div className={styles.description}>
+            <h3 className={styles.heading1}>Description</h3>
+            <p className={styles.descriptiontext}>
+              {data?.description ? data?.description : "-"}
+            </p>
+          </div>
 
-        <div className={styles.attachmentscontainer}>
-          <h3 className={styles.heading}>Attachments</h3>
-          {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
-            <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
-          </Card> : ""}
-          <CommentsComponent />
+          <div className={styles.attachmentscontainer}>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+              <h3 className={styles.heading}>Attachments</h3>
+              <Button sx={{ marginLeft: "100%", width: "100%" }} variant="text" onClick={() => setFileUploadOpen(true)}>Add Attachments</Button>
+            </div>
+            {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
+              <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
+            </Card> : ""}
+
+            {/* <CommentsComponent /> */}
 
 
-        </div>
+          </div>
 
-      </div>
+        </div> : ""}
+      {fileUploadOpen == true &&
+        <FileUploadEditComponent captureFileUploadOptions={captureFileUploadOptions} />}
+
 
 
       <LoadingComponent loading={loading} />

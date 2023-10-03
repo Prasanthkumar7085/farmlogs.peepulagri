@@ -18,7 +18,11 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
     console.log(index)
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    useEffect(() => {
 
+        setCurrentIndex(index)
+
+    }, [index])
 
 
     const playNext = () => {

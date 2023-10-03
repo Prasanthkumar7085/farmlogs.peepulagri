@@ -95,7 +95,7 @@ const ViewScoutThreads = () => {
 
   const handleClick = (index: number, item: any) => {
     handleOpenDialog();
-    setIndexOfseletedOne(item.src == "/videoimg.png" ? item.original : item.src);
+    setIndexOfseletedOne(index);
   };
 
   const getSelectedItems = (index: any) => {

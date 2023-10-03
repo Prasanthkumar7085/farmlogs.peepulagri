@@ -149,7 +149,7 @@ const SingleViewScoutComponent = () => {
                         <Typography>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</Typography>
                         {item?.attachments?.length ?
                             <>
-                                <Gallery images={getModifiedImage(item)} onClick={handleClick}
+                                <Gallery images={getModifiedImage(item)} onClick={handleClick} enableImageSelection={false}
                                 />
 
                             </>

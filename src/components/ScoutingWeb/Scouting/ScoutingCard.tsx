@@ -44,7 +44,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   return (
     <div className={styles.scoutingCard}>
       <div className={styles.imgFlexContainer}>
-        {item.attachments.slice(0, 6).map((itemObj: ScoutAttachmentDetails, index: number) => {
+        {item.attachments.length ? item.attachments.slice(0, 6).map((itemObj: ScoutAttachmentDetails, index: number) => {
           return (
             <div key={index} className={item.attachments.length > 3 ? styles.eachImgBox : styles.eachImgBoxLessThan3} onClick={() => viewImagePreview(index)}>
             {itemObj.type.slice(0, 5) == 'video' ?
@@ -67,7 +67,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
             }
           </div>
           )
-        })}
+        }):"No Attachments"}
 
 
       </div>

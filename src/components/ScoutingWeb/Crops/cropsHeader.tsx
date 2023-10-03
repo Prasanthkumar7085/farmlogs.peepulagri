@@ -48,7 +48,7 @@ const CropsNavBarWeb = ({options,captureFarmData,farmSelected}:pageProps) => {
                     id="combo-box-demo"
                     options={options}
                     getOptionLabel={(options)=>options.title}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => <TextField {...params} placeholder="Select Your Farm"/>}
                     value={farmSelected}
                     sx={{
                         width: "350px",

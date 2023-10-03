@@ -59,9 +59,9 @@ const SingleViewScoutComponent = () => {
 
 
     const getModifiedImage = (item: any) => {
-        let obj = item?.attachments?.slice(0, 4)?.map((imageObj: any, index: number) => {
+        let obj = item?.attachments?.slice(0, 3)?.map((imageObj: any, index: number) => {
 
-            if (imageObj.type.slice(0, 4) == "vide") {
+            if (imageObj.type.includes("video")) {
                 return {
                     src: "/videoimg.png",
                     original: imageObj.url,
@@ -70,6 +70,7 @@ const SingleViewScoutComponent = () => {
                     // customOverlay: <div style={{color:"white"}}>Yes</div>
 
                     alt: "u",
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: "View More", title: "view_more" }] : [],
                     customOverlay: (
                         <div className="custom-overlay__caption">
                             <div>{imageObj.name}</div>
@@ -82,9 +83,8 @@ const SingleViewScoutComponent = () => {
                     src: imageObj.url,
                     height: 80,
                     width: 60,
-                    alt: "u"
-
-
+                    alt: "u",
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}>+{item.attachments?.length - 2}</div>, title: "view_more" }] : []
                 }
         });
 

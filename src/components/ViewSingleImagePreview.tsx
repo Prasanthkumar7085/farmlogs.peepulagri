@@ -15,8 +15,6 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const ViewSingleImagePreview = ({ open, onClose, media, index }: any) => {
 
-    console.log(media.url);
-
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {

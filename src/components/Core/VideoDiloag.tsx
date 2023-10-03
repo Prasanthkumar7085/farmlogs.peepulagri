@@ -10,6 +10,8 @@ import {
 } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import CloseIcon from '@mui/icons-material/Close';
+import styles from "../../components/view-logs-container.module.css"
 
 
 const VideoDialog = ({ open, onClose, mediaArray, index }: any) => {
@@ -52,11 +54,35 @@ const VideoDialog = ({ open, onClose, mediaArray, index }: any) => {
     };
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-            <DialogTitle>Media Dialog</DialogTitle>
+        <Dialog open={open} onClose={handleClose} fullWidth sx={{
+            background: "#0000008f",
+            '& .MuiPaper-root': {
+                margin: "0 !important",
+                width: "95%",
+                background: "#ffffff00",
+                boxShadow: "none !important",
+                height: "calc(100% - 140px)"
+            },
+            '& .MuiTypography-root': {
+                textAlign: "right",
+                color: "#fff"
+            },
+            '& .MuiDialogContent-root': {
+                padding: "1rem"
+            },
+            '& .MuiDialogActions-root ': {
+                justifyContent: "center !important"
+            }
+        }}>
+            <DialogTitle>   <IconButton onClick={handleClose} sx={{ padding: "0" }}>
+                <CloseIcon sx={{ color: "#fff" }} />
+            </IconButton></DialogTitle>
             <DialogContent>
+                <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray.length <= 1}>
+                    <NavigateBeforeIcon sx={{ color: "#fff" }} />
+                </IconButton>
                 {imageArray.length > 0 && (
-                    <div>
+                    <div className={styles.scoutDailogImg}>
                         {imageArray[currentIndex]?.type?.slice(0, 4) == 'vide' ? (
                             <video controls width="100%" height="auto" autoPlay key={currentIndex}>
                                 <source src={imageArray[currentIndex]?.src} type={imageArray[currentIndex]?.type} />
@@ -69,22 +95,19 @@ const VideoDialog = ({ open, onClose, mediaArray, index }: any) => {
                                 style={{ maxWidth: '100%' }}
                             />
                         )}
-                        <Typography variant="caption" display="block" align="center">
-                            {currentIndex + 1} of {imageArray.length}
-                        </Typography>
+
                     </div>
                 )}
+                <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray.length <= 1}>
+                    <NavigateNextIcon sx={{ color: "#fff" }} />
+                </IconButton>
+
             </DialogContent>
             <DialogActions>
-                <IconButton onClick={playPrevious} disabled={mediaArray.length <= 1}>
-                    <NavigateBeforeIcon />
-                </IconButton>
-                <IconButton onClick={playNext} disabled={mediaArray.length <= 1}>
-                    <NavigateNextIcon />
-                </IconButton>
-                <Button onClick={handleClose} variant="outlined" color="secondary">
-                    Close
-                </Button>
+                <Typography variant="caption" display="block" align="center">
+                    {currentIndex + 1} of {imageArray.length}
+                </Typography>
+
             </DialogActions>
         </Dialog>
     );

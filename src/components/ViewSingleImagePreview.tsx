@@ -13,17 +13,17 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
 
-const ViewSingleImagePreview = ({ open, onClose, media,index }: any) => {
+const ViewSingleImagePreview = ({ open, onClose, media, index }: any) => {
 
-    console.log(media);
-    
+    console.log(media.url);
+
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         setCurrentIndex(index);
     }, [index]);
-    
-    
+
+
 
     const handleClose = () => {
         setCurrentIndex(-1);
@@ -31,11 +31,11 @@ const ViewSingleImagePreview = ({ open, onClose, media,index }: any) => {
     };
 
     const getKey = (e: any) => {
-        
+
         if (e.keyCode == 27) {
             handleClose();
         }
-        
+
     }
     return (
         <Dialog
@@ -80,7 +80,7 @@ const ViewSingleImagePreview = ({ open, onClose, media,index }: any) => {
                                 Your browser does not support the video tag.
                             </video>
                         ) : (
-                                <img
+                            <img
                                 loading='lazy'
                                 src={media?.url} // Change this to use the mediaArray
                                 alt={`Image ${currentIndex + 1}`}

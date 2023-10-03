@@ -8,6 +8,7 @@ import timePipe from "@/pipes/timePipe";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import "yet-another-react-lightbox/styles.css";
 import VideoDialog from "@/components/Core/VideoDiloag";
+import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
 
 const SingleViewScoutComponent = () => {
 
@@ -17,6 +18,7 @@ const SingleViewScoutComponent = () => {
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
     const [selectedFile, setSelectedFile] = useState<any>([])
     const [index, setIndex] = useState<any>()
+    const [image, setImage] = useState();
 
     const [loading, setLoading] = useState(true);
 
@@ -61,6 +63,7 @@ const SingleViewScoutComponent = () => {
                 return {
                     src: "/videoimg.png",
                     original: imageObj.url,
+                    url: imageObj.url,
                     height: 80,
                     width: 60,
                     // customOverlay: <div style={{color:"white"}}>Yes</div>
@@ -77,6 +80,7 @@ const SingleViewScoutComponent = () => {
             else
                 return {
                     src: imageObj.url,
+                    url: imageObj.url,
                     height: 80,
                     width: 60,
                     alt: "u",
@@ -118,9 +122,10 @@ const SingleViewScoutComponent = () => {
 
     const handleClick = (index: number, item: any) => {
         handleOpenDialog();
-        setIndex(item.src == "/videoimg.png" ? item.original : item.src)
+        setIndex(index);
+        setImage(item);
     };
-
+    console.log(image);
     return (
         <div className={styles.scoutingView}>
 
@@ -169,7 +174,7 @@ const SingleViewScoutComponent = () => {
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />
-            <VideoDialog open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
+            <ViewSingleImagePreview open={openDialog} onClose={handleCloseDialog} media={image} index={index} />
 
 
             <div className="addFormPositionIcon">

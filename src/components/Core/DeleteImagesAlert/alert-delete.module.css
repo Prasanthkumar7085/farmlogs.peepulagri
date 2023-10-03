@@ -1,0 +1,79 @@
+.infoIcon {
+  width: 40px;
+  height: 40px;
+}
+
+.areYouSure {
+  line-height: 24px;
+  font-size: clamp(14px, 3vw, 16px);
+  font-weight: 500;
+}
+
+
+.thisWillBe {
+  font-size: clamp(12px, 3vw, 14px);
+  line-height: 21px;
+  display: flex;
+  align-items: center;
+  font-family: 'inter';
+}
+
+.text {
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.buttoncancel,
+.buttongotit {
+  flex: 1;
+  border-radius: var(--br-5xs);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  text-transform: capitalize !important;
+  font-family: 'inter', sans-serif !important;
+}
+
+.buttoncancel {
+  background-color: #fff !important;
+  box-shadow: 4px 4px 10px rgba(2, 2, 70, 0.04) !important;
+  border: 1px solid var(--gray-300) !important;
+  color: #000 !important;
+
+}
+
+.buttongotit {
+  background: linear-gradient(142.18deg, #3462cf, #2b53be) !important;
+  box-shadow: 4px 4px 10px rgba(2, 2, 70, 0.05) !important;
+  color: #fff !important;
+
+}
+
+.alertdelete,
+.buttons {
+  align-self: stretch !important;
+  display: flex !important;
+  flex-direction: row;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 1.2rem !important;
+  text-align: center !important;
+  color: var(--gray-700) !important;
+}
+
+.alertdelete {
+  border-radius: var(--br-base);
+  background-color: var(--white);
+  border: 1px solid var(--gray-300);
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--padding-base);
+  text-align: left;
+  font-size: var(--text-md-medium-size);
+  color: var(--high-emphasis);
+  font-family: var(--text-md-medium);
+}

@@ -1,18 +1,18 @@
-import type { NextPage } from "next";
 import styles from "./view-scout-threads.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
-import { AttachmentsForPreview, ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
+import { ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
 import timePipe from "@/pipes/timePipe";
-import { Card, Typography } from "@mui/material";
+import { Card } from "@mui/material";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import Lightbox from "yet-another-react-lightbox";
 import { Gallery } from "react-grid-gallery";
-import VideoDialog from "@/components/Core/VideoDiloag";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
-
+import CommentsComponent from "../Comments/CommentsComponent";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import AlertImagesDelete from "@/components/Core/DeleteImagesAlert/alert-delete-images";
 
 
 
@@ -30,7 +30,12 @@ const ViewScoutThreads = () => {
   const [images, setImages] = useState<any>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>([])
-  const [indexOfSeletedOne, setIndexOfseletedOne] = useState<any>()
+  const [indexOfSeletedOne, setIndexOfseletedOne] = useState<any>();
+
+  const [imagesForDelete, setImagesForDelete] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState<any>()
 
 
   const handleOpenDialog = () => {
@@ -41,7 +46,6 @@ const ViewScoutThreads = () => {
     setOpenDialog(false);
   };
 
-  const [loading, setLoading] = useState(true);
 
   const getSingleScout = async () => {
     const response = await getSingleScoutService(router.query?.scout_id as string, accessToken);
@@ -50,7 +54,6 @@ const ViewScoutThreads = () => {
       setData(response?.data);
       if (response?.data?.attachments?.length) {
         setDownloadUrls(response?.data?.attachments);
-        console.log(response.data)
         setSelectedFile(response?.data?.attachments)
 
         setResponseAttachmentsFormat({ attachmentdetails: response?.data?.attachments });
@@ -59,7 +62,6 @@ const ViewScoutThreads = () => {
     setLoading(false);
   }
 
-  // { attachmentdetails }:{attachmentdetails: <Array<ScoutAttachmentDetails>>}
   const setResponseAttachmentsFormat = ({ attachmentdetails }: any) => {
     let details = [];
     if (attachmentdetails.length) {
@@ -68,12 +70,14 @@ const ViewScoutThreads = () => {
         if (item.type.includes('video')) {
           return {
             src: "/videoimg.png", height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url
+            width: 60, caption: `${index + 1} image`, original: item.url, isSelected: false, id: item._id
           }
         } else {
           return {
             src: item.url, height: 80,
             width: 60,
+            isSelected: false,
+            id: item._id
           }
         }
       })
@@ -90,10 +94,54 @@ const ViewScoutThreads = () => {
 
 
   const handleClick = (index: number, item: any) => {
-    handleOpenDialog()
-    console.log(item)
-    setIndexOfseletedOne(item.src == "/videoimg.png" ? item.original : item.src)
+    handleOpenDialog();
+    setIndexOfseletedOne(index);
   };
+
+  const getSelectedItems = (index: any) => {
+
+    const nextImages = images.map((image: any, i: number) => i === index ? { ...image, isSelected: !image.isSelected } : image);
+    setImages([...nextImages]);
+
+    const filteredImages = nextImages.filter((item: any) => item.isSelected);
+    console.log(filteredImages)
+    // Create a new array of objects by matching urls
+    const newArray = selectedFile.filter((obj1: any) => {
+      return filteredImages.some((obj2: any) => obj1._id === obj2.id);
+    });
+    const attachmentIds = newArray.map((item: any) => item._id)
+    console.log(attachmentIds)
+    setImagesForDelete([...attachmentIds]);
+  }
+
+  const deleteImagesEvent = async () => {
+    setDeleteLoading(true)
+    let obj = {
+      "attachment_ids": imagesForDelete
+    }
+    let options = {
+      method: "DELETE",
+      body: JSON.stringify(obj),
+      headers: new Headers({
+        'content-type': 'application/json',
+        'authorization': accessToken
+      })
+    }
+    try {
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/attachments`, options)
+      let responseData = await response.json()
+      if (responseData.success == true) {
+        getSingleScout()
+        setDeleteOpen(false)
+      }
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setDeleteLoading(false)
+    }
+  }
 
   return (
     <div className={styles.viewscoutthreads} id="view-scout-threads">
@@ -112,10 +160,10 @@ const ViewScoutThreads = () => {
         <div className={styles.attachmentscontainer}>
           <h3 className={styles.heading}>Attachments</h3>
           {images.length ? <Card sx={{ width: "100%", minHeight: "100px" }}>
-            <Gallery images={images} onClick={handleClick}
-            />
-
+            <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
           </Card> : ""}
+          <CommentsComponent />
+
 
         </div>
 
@@ -124,8 +172,22 @@ const ViewScoutThreads = () => {
 
       <LoadingComponent loading={loading} />
       <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={indexOfSeletedOne} />
+      {imagesForDelete?.length !== 0 ?
+        <div style={{
+          position: "sticky",
+          bottom: 0,
+          backgroundColor: "black",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          color: "white",
+          cursor: "pointer"
+        }} onClick={() => setDeleteOpen(true)}>
+          <DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete
+        </div> : ""}
+      {deleteOpen ? <AlertImagesDelete open={deleteOpen} deleteImagesEvent={deleteImagesEvent} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
 
-    </div>
+    </div >
   );
 };
 

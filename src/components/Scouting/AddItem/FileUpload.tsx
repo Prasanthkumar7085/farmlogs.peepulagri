@@ -119,18 +119,17 @@ const FileUploadComponent = () => {
                 setCropOptions(responseData?.data);
 
                 if (router.query.crop_id) {
-                    console.log(responseData);
-                    
+
                     let cropObj = responseData?.data?.find((item: any) => item._id == router.query.crop_id);
                     setSelectedCrop(cropObj);
                     setCropName(cropObj.title);
-                    
+
                 } else {
                     if (responseData.data.length == 1) {
                         setCropName(responseData?.data[0].title);
                         setSelectedCrop(responseData?.data[0]);
                     } else {
-    
+
                     }
                 }
 
@@ -277,6 +276,8 @@ const FileUploadComponent = () => {
     //file upload into multipart
     const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function, key: any) => {
 
+        console.log(key)
+        console.log(uploadid)
         const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
         const totalChunks = Math.ceil(file.size / chunkSize);
 
@@ -410,6 +411,7 @@ const FileUploadComponent = () => {
                 setFileProgress([...fileProgressCopy]);
                 tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: item.type, size: item.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
                 setAttachments(tempFilesStorage)
+                console.log(tempFilesStorage)
 
             }
 
@@ -421,7 +423,7 @@ const FileUploadComponent = () => {
     }
 
     useEffect(() => {
-        if (router.query.farm_id&&accessToken) {
+        if (router.query.farm_id && accessToken) {
             getFormDetails(router.query.farm_id)
         }
     }, [accessToken, router.query.farm_id])

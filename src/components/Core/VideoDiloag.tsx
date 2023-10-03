@@ -27,7 +27,6 @@ const VideoDialog = ({ open, onClose, mediaArray, index }: any) => {
                     }))
                 )
             );
-            console.log(newArray)
             setImageArray(newArray);
             if (index) {
                 let arryindex = newArray.findIndex((item: any) => item.src == index)

@@ -1,0 +1,54 @@
+.chatBox {
+  align-self: stretch;
+}
+.groupIcon {
+  position: relative;
+  width: 19.98px;
+  height: 20px;
+}
+.imageIcon,
+.link {
+  height: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.link {
+  width: 19.98px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.imageIcon {
+  width: 20px;
+  object-fit: cover;
+}
+.attachments {
+  align-self: stretch;
+  width: 59.98px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.sendbutton {
+  cursor: pointer;
+}
+.actions,
+.commentform {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.commentform {
+  background-color: var(--white);
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0 var(--padding-base);
+  gap: var(--gap-13xl);
+}

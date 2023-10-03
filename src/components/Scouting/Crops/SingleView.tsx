@@ -110,14 +110,14 @@ const SingleViewScoutComponent = () => {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setIndex(-1);
     };
 
 
 
 
     const handleClick = (index: number, item: any) => {
-        handleOpenDialog()
-        console.log(item)
+        handleOpenDialog();
         setIndex(item.src == "/videoimg.png" ? item.original : item.src)
     };
 
@@ -145,7 +145,7 @@ const SingleViewScoutComponent = () => {
                         <Typography>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</Typography>
                         {item?.attachments?.length ?
                             <>
-                                <Gallery images={getModifiedImage(item)} onClick={handleClick}
+                                <Gallery images={getModifiedImage(item)} onClick={handleClick} enableImageSelection={false}
                                 />
 
                             </>

@@ -119,7 +119,8 @@ const Threads = ({ details, afterCommentAdd }: any) => {
                     value={comment ? comment : ""}
                     onChange={(e) => setComment(e.target.value)}
                   />
-                  <Button style={{ marginLeft: "80%" }} variant="contained"
+
+                  <Button className={styles.replySendBtn} variant="contained"
                     onClick={() => replyThreads(item._id)}
                     disabled={comment ? false : true}
                   >Send</Button>

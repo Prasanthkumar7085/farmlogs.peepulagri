@@ -1,17 +1,24 @@
 .chatBox {
-  align-self: stretch;
+  background-color: #fff;
 }
+
+.chatBox textarea {
+  height: 60px !important;
+}
+
 .groupIcon {
   position: relative;
   width: 19.98px;
   height: 20px;
 }
+
 .imageIcon,
 .link {
   height: 20px;
   overflow: hidden;
   flex-shrink: 0;
 }
+
 .link {
   width: 19.98px;
   display: flex;
@@ -19,10 +26,12 @@
   align-items: center;
   justify-content: flex-start;
 }
+
 .imageIcon {
   width: 20px;
   object-fit: cover;
 }
+
 .attachments {
   align-self: stretch;
   width: 59.98px;
@@ -32,23 +41,38 @@
   justify-content: flex-start;
   gap: var(--gap-base);
 }
+
 .sendbutton {
-  cursor: pointer;
+  border-radius: 6px;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%) !important;
+  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15) !important;
+  color: #FFF !important;
+  font-family: Inter;
+  font-size: clamp(14px, 0.72vw, 16px);
+  font-weight: 500;
+  line-height: 24px;
+  padding: 6px 35px !important;
+  min-width: 150px;
+  text-transform: capitalize;
 }
+
 .actions,
 .commentform {
-  align-self: stretch;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
 }
+
+.actions {
+  margin-top: 1rem;
+}
+
 .commentform {
-  background-color: var(--white);
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-start;
   width: 100%;
-  padding: 0 var(--padding-base);
   gap: var(--gap-13xl);
 }

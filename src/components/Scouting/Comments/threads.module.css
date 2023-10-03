@@ -5,22 +5,26 @@
   height: 30px;
   object-fit: cover;
 }
+
 .aug20231030am,
 .jack {
   margin: 0;
   position: relative;
   line-height: 100%;
 }
+
 .jack {
   font-size: inherit;
   font-weight: 500;
   font-family: inherit;
 }
+
 .aug20231030am {
   flex: 1;
   font-size: var(--font-size-xs);
   color: var(--gray-3);
 }
+
 .userdetails {
   align-self: stretch;
   display: flex;
@@ -29,18 +33,21 @@
   justify-content: flex-start;
   gap: var(--gap-5xs);
 }
+
 .theProblemIm {
   margin: 0;
   align-self: stretch;
   position: relative;
   line-height: 130%;
 }
+
 .groupIcon {
   position: relative;
   width: 20px;
   height: 20px;
   z-index: 0;
 }
+
 .groupIcon1 {
   position: absolute;
   margin: 0 !important;
@@ -55,6 +62,7 @@
   max-height: 100%;
   z-index: 1;
 }
+
 .icon {
   overflow: hidden;
   display: flex;
@@ -64,11 +72,13 @@
   position: relative;
   gap: 8.33px;
 }
+
 .imageName {
   position: relative;
   line-height: 100%;
   font-weight: 500;
 }
+
 .row {
   width: 147.5px;
   display: flex;
@@ -77,11 +87,13 @@
   justify-content: flex-start;
   gap: var(--gap-xs);
 }
+
 .download11 {
   position: relative;
   width: 20px;
   height: 20px;
 }
+
 .attachment {
   border-radius: var(--br-9xs);
   background-color: var(--background);
@@ -94,6 +106,7 @@
   box-sizing: border-box;
   color: var(--high-emphasis);
 }
+
 .paragraph {
   align-self: stretch;
   display: flex;
@@ -104,12 +117,14 @@
   font-size: var(--text-sm-medium-size);
   color: var(--color-gray-300);
 }
+
 .reply1 {
   flex: 1;
   position: relative;
   line-height: 100%;
   font-weight: 500;
 }
+
 .reply {
   flex: 1;
   display: flex;
@@ -117,6 +132,7 @@
   align-items: flex-end;
   justify-content: flex-start;
 }
+
 .editChild {
   position: relative;
   border-radius: 50%;
@@ -124,16 +140,19 @@
   width: 6px;
   height: 6px;
 }
+
 .edit1 {
   margin: 0;
   position: relative;
   text-decoration: underline;
   line-height: 100%;
 }
+
 .edit {
   justify-content: flex-start;
   gap: var(--gap-9xs);
 }
+
 .actionButton,
 .edit,
 .react {
@@ -141,23 +160,27 @@
   flex-direction: row;
   align-items: center;
 }
+
 .react {
   justify-content: center;
   gap: var(--gap-sm);
   font-size: var(--text-sm-medium-size);
   color: var(--body);
 }
+
 .actionButton {
   align-self: stretch;
   justify-content: flex-start;
   gap: var(--gap-base);
   color: var(--primary-blue);
 }
+
 .inMessage,
 .messagebox {
   display: flex;
   align-items: flex-start;
 }
+
 .messagebox {
   flex: 1;
   border-radius: var(--br-base) var(--br-base) var(--br-base) 0;
@@ -166,6 +189,7 @@
   padding: var(--padding-6xs) 0 var(--padding-5xs);
   gap: var(--gap-base);
 }
+
 .inMessage {
   align-self: stretch;
   background-color: var(--white);
@@ -173,12 +197,15 @@
   justify-content: flex-start;
   padding: var(--padding-5xs);
   gap: var(--gap-5xs);
+  margin-bottom: 0.6rem;
 }
+
 .repliedcontainerChild {
   position: relative;
   width: 12px;
   height: 12px;
 }
+
 .repliedToJack {
   margin: 0;
   flex: 1;
@@ -188,11 +215,13 @@
   font-weight: 400;
   font-family: inherit;
 }
+
 .repliedcontainer {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 }
+
 .repliedcontainer,
 .userName,
 .userdetails1 {
@@ -200,6 +229,7 @@
   display: flex;
   gap: var(--gap-9xs);
 }
+
 .userdetails1 {
   flex-direction: row;
   align-items: center;
@@ -207,11 +237,13 @@
   font-size: var(--font-size-base);
   color: var(--title);
 }
+
 .userName {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
 }
+
 .attachment1 {
   border-radius: var(--br-9xs);
   background-color: var(--white);
@@ -224,6 +256,7 @@
   box-sizing: border-box;
   color: var(--high-emphasis);
 }
+
 .paragraph1 {
   align-self: stretch;
   display: flex;
@@ -233,6 +266,7 @@
   gap: var(--gap-5xs);
   color: var(--color-gray-300);
 }
+
 .reply3 {
   margin: 0;
   flex: 1;
@@ -240,11 +274,13 @@
   line-height: 100%;
   font-weight: 500;
 }
+
 .actionButton1,
 .messagebox1 {
   display: flex;
   gap: var(--gap-base);
 }
+
 .actionButton1 {
   align-self: stretch;
   flex-direction: row;
@@ -252,6 +288,7 @@
   justify-content: flex-start;
   font-size: var(--font-size-base);
 }
+
 .messagebox1 {
   flex: 1;
   border-radius: var(--br-base) var(--br-base) var(--br-base) 0;
@@ -260,12 +297,14 @@
   justify-content: center;
   padding: 0 0 var(--padding-5xs);
 }
+
 .inMessage1,
 .threads {
   align-self: stretch;
   display: flex;
   justify-content: flex-start;
 }
+
 .inMessage1 {
   background-color: var(--background);
   flex-direction: row;
@@ -275,6 +314,7 @@
   font-size: var(--text-sm-medium-size);
   color: var(--primary-blue);
 }
+
 .threads {
   flex-direction: column;
   align-items: flex-end;

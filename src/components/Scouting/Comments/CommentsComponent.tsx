@@ -44,7 +44,7 @@ const CommentsComponent = () => {
     }
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: "100%", marginTop: "1rem" }}>
             <CommentForm afterCommentAdd={afterCommentAdd} />
             <div style={{ marginTop: "30px" }}>
                 <Threads details={data} afterCommentAdd={afterCommentAdd} />

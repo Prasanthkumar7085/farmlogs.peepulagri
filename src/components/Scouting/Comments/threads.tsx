@@ -47,7 +47,7 @@ const Threads = ({ details, afterCommentAdd }: any) => {
       {details?.length ? details.map((item: any, index: any) => {
 
         return (
-          <div className={styles.inMessage}>
+          <div className={styles.inMessage} key={index}>
             <img className={styles.avatarIcon} alt="" src="/avatar@2x.png" />
             <div className={styles.messagebox}>
               <div className={styles.userdetails}>
@@ -143,7 +143,7 @@ const Threads = ({ details, afterCommentAdd }: any) => {
                       </div>
                       <div className={styles.paragraph1}>
                         <p className={styles.theProblemIm}>
-                          The problem I'm facing is with the crop yield prediction feature.
+                          {"The problem I'm facing is with the crop yield prediction feature"}
                         </p>
                         <div className={styles.attachment1}>
                           <div className={styles.row}>

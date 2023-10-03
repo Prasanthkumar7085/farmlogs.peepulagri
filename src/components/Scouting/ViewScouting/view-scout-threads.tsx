@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
-import {  ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
+import { ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
 import timePipe from "@/pipes/timePipe";
 import { Card } from "@mui/material";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { Gallery } from "react-grid-gallery";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import CommentsComponent from "../Comments/CommentsComponent";
-
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import AlertImagesDelete from "@/components/Core/DeleteImagesAlert/alert-delete-images";
 
 
 
@@ -32,6 +34,8 @@ const ViewScoutThreads = () => {
 
   const [imagesForDelete, setImagesForDelete] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState<any>()
 
 
   const handleOpenDialog = () => {
@@ -66,13 +70,14 @@ const ViewScoutThreads = () => {
         if (item.type.includes('video')) {
           return {
             src: "/videoimg.png", height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url,isSelected: false
+            width: 60, caption: `${index + 1} image`, original: item.url, isSelected: false, id: item._id
           }
         } else {
           return {
             src: item.url, height: 80,
             width: 60,
-            isSelected: false
+            isSelected: false,
+            id: item._id
           }
         }
       })
@@ -94,12 +99,48 @@ const ViewScoutThreads = () => {
   };
 
   const getSelectedItems = (index: any) => {
-    
-    const nextImages = images.map((image:any, i:number) =>i === index ? { ...image, isSelected: !image.isSelected } : image);
+
+    const nextImages = images.map((image: any, i: number) => i === index ? { ...image, isSelected: !image.isSelected } : image);
     setImages([...nextImages]);
 
     const filteredImages = nextImages.filter((item: any) => item.isSelected);
-    setImagesForDelete([...filteredImages]);
+    console.log(filteredImages)
+    // Create a new array of objects by matching urls
+    const newArray = selectedFile.filter((obj1: any) => {
+      return filteredImages.some((obj2: any) => obj1._id === obj2.id);
+    });
+    const attachmentIds = newArray.map((item: any) => item._id)
+    console.log(attachmentIds)
+    setImagesForDelete([...attachmentIds]);
+  }
+
+  const deleteImagesEvent = async () => {
+    setDeleteLoading(true)
+    let obj = {
+      "attachment_ids": imagesForDelete
+    }
+    let options = {
+      method: "DELETE",
+      body: JSON.stringify(obj),
+      headers: new Headers({
+        'content-type': 'application/json',
+        'authorization': accessToken
+      })
+    }
+    try {
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/attachments`, options)
+      let responseData = await response.json()
+      if (responseData.success == true) {
+        getSingleScout()
+        setDeleteOpen(false)
+      }
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setDeleteLoading(false)
+    }
   }
 
   return (
@@ -123,6 +164,7 @@ const ViewScoutThreads = () => {
           </Card> : ""}
           <CommentsComponent />
 
+
         </div>
 
       </div>
@@ -130,8 +172,22 @@ const ViewScoutThreads = () => {
 
       <LoadingComponent loading={loading} />
       <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={indexOfSeletedOne} />
+      {imagesForDelete?.length !== 0 ?
+        <div style={{
+          position: "sticky",
+          bottom: 0,
+          backgroundColor: "black",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          color: "white",
+          cursor: "pointer"
+        }} onClick={() => setDeleteOpen(true)}>
+          <DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete
+        </div> : ""}
+      {deleteOpen ? <AlertImagesDelete open={deleteOpen} deleteImagesEvent={deleteImagesEvent} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
 
-    </div>
+    </div >
   );
 };
 

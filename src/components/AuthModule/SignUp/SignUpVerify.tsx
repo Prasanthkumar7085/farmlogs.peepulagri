@@ -120,7 +120,9 @@ const SignUpVerify = () => {
         ) {
           dispatch(setAllFarms(farmResponse?.data))
           const id = farmResponse?.data[0]?._id;
-          router.push(`/farm/${id}/logs`);
+          // router.push(`/farm/${id}/logs`);{To Go Logs}
+          router.push(`/farm`);
+
         } else {
           router.push("/farm");
         }

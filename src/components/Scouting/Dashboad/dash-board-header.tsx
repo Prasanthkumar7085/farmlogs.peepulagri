@@ -10,7 +10,7 @@ type captureSearchStringType = (search: string) => void
 interface pageProps {
   captureSearchString: captureSearchStringType,
   searchString: string;
-  locations: Array<{name:string,_id:string}>;
+  locations: Array<{ name: string, _id: string }>;
   location: string;
   setLocation: Dispatch<SetStateAction<string>>;
   getDataOnLocationChange: (location: string) => void;
@@ -53,7 +53,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
               onClose={() => setAnchorEl(null)}
               sx={{
                 maxHeight: '50vh', '& .MuiMenuItem-root': {
-                  fontSize: 'clamp(13px, 3.5vw, 16px)',
+                  fontSize: 'clamp(12px, 3vw, 16px)',
                   minHeight: 'inherit',
                   fontFamily: "'inter !important'",
                   fontWeight: "500",
@@ -66,7 +66,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
                 }
               }}
             >
-              {locations.map((item: {name:string,_id:string}, index: number) => {
+              {locations.map((item: { name: string, _id: string }, index: number) => {
                 return (
                   <MenuItem onClick={() => selectCity(item.name)} key={index}>{item.name}</MenuItem>
                 )

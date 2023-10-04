@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import ScoutingFarmDetailsCard from "./FarmDetailsCard";
-import FarmsNavBarWeb, { getFarmsData } from "./FarmsNavBar";
+import FarmsNavBarWeb from "./FarmsNavBar";
 import styles from "./FarmsNavBar.module.css";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,61 +20,61 @@ const AllFarmsPage = () => {
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      getFarmsData({ search_string:router.query.search_string as string });
+      getFarmsData({ search_string: router.query.search_string as string, location: router.query.location as string });
     }
-  }, [router.isReady,accessToken]);
+  }, [router.isReady, accessToken]);
 
-  
-  const onViewClick = useCallback((farmId:string) => {
+
+  const onViewClick = useCallback((farmId: string) => {
     router.push(`/farm/${farmId}`);
   }, []);
 
-  const getFarmsData = async ({search_string=''}:{search_string:string}) => {
+  const getFarmsData = async ({ search_string = '', location = 'All' }: { search_string: string, location: string }) => {
     setLoading(true);
     try {
-        let url = `farm/${1}/${100}`;
-        let queryParam: any = {
-            order_by: "createdAt",
-            order_type: "desc"
-        };
+      let url = `farm/${1}/${100}`;
+      let queryParam: any = {
+        order_by: "createdAt",
+        order_type: "desc"
+      };
 
-        if (search_string) {
-            queryParam['search_string'] = search_string;
+      if (search_string) {
+        queryParam['search_string'] = search_string;
+      }
+      if (location) {
+        if (location !== 'All') {
+          queryParam['location'] = location;
         }
-        // if (location) {
-        //     if (location !== 'All') {
-        //         queryParam['location'] = location;
-        //     }
-        // }
-        router.push({ pathname: '/farm', query: queryParam })
-        url = prepareURLEncodedParams(url, queryParam);
+      }
+      router.push({ pathname: '/farm', query: queryParam })
+      url = prepareURLEncodedParams(url, queryParam);
 
 
-        const response = await getAllFarmsService(url, accessToken);
+      const response = await getAllFarmsService(url, accessToken);
 
-        if (response?.success) {
-            const { data } = response;
-            setData(data);
-          dispatch(setAllFarms(data));
-        }
+      if (response?.success) {
+        const { data } = response;
+        setData(data);
+        dispatch(setAllFarms(data));
+      }
     } catch (err: any) {
-        console.error(err)
+      console.error(err)
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   }
 
 
-    
-    
-    return (
-        <div className={styles.AllFarmsPageWeb}>
-            <FarmsNavBarWeb  getFarmsData={getFarmsData} />
-            <div className={styles.allFarms}>
-                <ScoutingFarmDetailsCard  getFarmsData={getFarmsData} data={data} onViewClick={onViewClick} loading={loading} />
-            </div>
-        </div>
-    );
+
+
+  return (
+    <div className={styles.AllFarmsPageWeb}>
+      <FarmsNavBarWeb getFarmsData={getFarmsData} />
+      <div className={styles.allFarms}>
+        <ScoutingFarmDetailsCard getFarmsData={getFarmsData} data={data} onViewClick={onViewClick} loading={loading} />
+      </div>
+    </div>
+  );
 }
 
 export default AllFarmsPage;

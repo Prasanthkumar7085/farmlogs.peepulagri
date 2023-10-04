@@ -12,13 +12,13 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
 
 
-interface PageProps{
+interface PageProps {
   data: any;
   onViewClick: any;
   loading: boolean;
-  getFarmsData:({search_string}:{search_string:string})=>void
+  getFarmsData: ({ search_string, location }: { search_string: string, location: string }) => void
 }
-const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageProps) => {
+const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: PageProps) => {
 
   const router = useRouter();
 
@@ -34,12 +34,12 @@ const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageP
     setDeleteLoading(true);
 
     const response = await deleteFarmService(deleteId, accessToken);
-    
+
     if (response.success) {
       setAlertMessage(response?.message);
       setAlertType(true);
       setDeleteDialogOpen(false);
-      getFarmsData({ search_string: router.query?.search_string as string })
+      getFarmsData({ search_string: router.query?.search_string as string, location: router.query.location as string })
 
     } else {
       setAlertMessage(response?.message);
@@ -52,16 +52,16 @@ const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageP
     <div className={styles.farmCardGridContainer}>
       {data.length ? data.map((item: FarmDataType, index: number) => {
         return (
-          <div className={styles.farmdetailscard} key={index} style={{ cursor:"pointer"}}>
-            <div className={styles.container} onClick={()=> router.push(`/farm/${item?._id}/crops`)}>
+          <div className={styles.farmdetailscard} key={index} style={{ cursor: "pointer" }}>
+            <div className={styles.container} onClick={() => router.push(`/farm/${item?._id}/crops`)}>
               <div className={styles.farmdetailscontainer}>
                 <div className={styles.farmName}>
                   <img className={styles.farmsIcon} alt="" src="/farmshape2.svg" />
                   <h2 className={styles.farm1}>
-                  {item.title.length > 16 ?
-                    (item.title.slice(0, 1).toUpperCase() +
-                      item.title.slice(1, 12) + '...') :
-                    item.title[0].toUpperCase() + item.title.slice(1,)}
+                    {item.title.length > 16 ?
+                      (item.title.slice(0, 1).toUpperCase() +
+                        item.title.slice(1, 12) + '...') :
+                      item.title[0].toUpperCase() + item.title.slice(1,)}
                   </h2>
                 </div>
                 <div className={styles.landdetails}>
@@ -79,22 +79,22 @@ const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageP
                 />
                 <div className={styles.duration}>
                   <p className={styles.from}>
-                    {timePipe(item.createdAt,'DD, MMM YYYY')}
+                    {timePipe(item.createdAt, 'DD, MMM YYYY')}
                   </p>
                   <p className={styles.divider}>-</p>
                   <p className={styles.from}>
-                   Current
+                    Current
                   </p>
                 </div>
               </div>
             </div>
-            <div style={{ width:"100%",display:"flex",justifyContent:"space-between" }} >
-              <div style={{ width: "100%" }} onClick={()=> router.push(`/farm/${item?._id}/crops`)}>
+            <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }} >
+              <div style={{ width: "100%" }} onClick={() => router.push(`/farm/${item?._id}/crops`)}>
                 {/* Testung */}
               </div>
               <div className={styles.actionbuttons} >
-                <IconButton className={styles.view} onClick={()=>onViewClick(item._id)}>
-                <SettingsIcon sx={{color:"#c1c1c1"}} />
+                <IconButton className={styles.view} onClick={() => onViewClick(item._id)}>
+                  <SettingsIcon sx={{ color: "#c1c1c1" }} />
                 </IconButton>
                 {/* <IconButton className={styles.edit}>
                   <img
@@ -114,10 +114,10 @@ const ScoutingFarmDetailsCard = ({getFarmsData,data, onViewClick, loading}:PageP
             </div>
           </div>
         )
-      }):(!loading ? "No Data":"")}
-      
+      }) : (!loading ? "No Data" : "")}
+
       <AlertDelete deleteFarm={deleteFarm} setDialogOpen={setDeleteDialogOpen} open={deleteDialogOpen} loading={deleteLoading} />
-      <LoadingComponent loading={loading}/>
+      <LoadingComponent loading={loading} />
       <AlertComponent alertMessage={alertMessage} setAlertMessage={setAlertMessage} alertType={alertType} />
     </div>
   );

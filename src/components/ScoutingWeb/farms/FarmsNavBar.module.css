@@ -8,9 +8,23 @@
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
+.scoutingViewWeb a {
+  color: #6A7185;
+  font-family: 'Inter';
+  font-size: clamp(14px, 0.72rem, 16px);
+  font-weight: 500;
+}
+
+.scoutingViewWeb li p {
+  color: #4A86F7;
+  font-family: 'Inter';
+  font-size: clamp(14px, 0.72rem, 16px);
+  font-weight: 500;
+  text-decoration-line: underline;
+}
 
 .farms {
   font-size: clamp(18px, 1.25vw, 24px);

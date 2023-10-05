@@ -24,7 +24,32 @@ const ScoutsNavBarWeb: FunctionComponent = () => {
 
     return (
         <div className={styles.farmsnavbar}>
-
+            <div className={styles.scoutingViewWeb}>
+                <div className={styles.viewScoutingHeader}>
+                    <div className={styles.iconDiv} style={{ cursor: "pointer" }} onClick={() => router.back()}>
+                        <img src="/arrow-left-back.svg" alt="" width={'18px'} />
+                    </div>
+                    <div className={styles.title}>
+                        <img className={styles.farmIcon} alt="" src="/wer-farm-page-icon.svg" />
+                        <h1 className={styles.farms}>Scouting</h1>
+                    </div>
+                </div>
+                <div role="presentation">
+                    <Breadcrumbs aria-label="breadcrumb" >
+                        <Link underline="hover" color="inherit" href="/farm">
+                            Farms
+                        </Link>
+                        <Link
+                            underline="hover"
+                            color="inherit"
+                            href={`/farm/${router.query.farm_id}/crops`}
+                        >
+                            My Crops
+                        </Link>
+                        <Typography color="text.primary">{farmTitle}</Typography>
+                    </Breadcrumbs>
+                </div>
+            </div>
             <FarmDetailsMiniCard />
             {/* <div className={styles.actionsbar}>
                 <Autocomplete

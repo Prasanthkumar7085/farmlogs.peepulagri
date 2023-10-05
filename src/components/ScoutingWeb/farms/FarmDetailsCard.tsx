@@ -48,6 +48,15 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
     setDeleteLoading(false);
   };
 
+  // const onFormCardClick = (data: any) => {
+  //   // router.push(`/farm/${data?._id}/crops`);
+  //   // let selectedObject = response?.data?.length && response?.data?.find((item: any) => item._id == id);
+  //   // setDefaultValue(selectedObject?.title)
+  //   // dispatch(setFarmTitleTemp(selectedObject?.title));
+  //   // captureFarmName(selectedObject);
+
+  // }
+
   return (
     <div className={styles.farmCardGridContainer}>
       {data.length ? data.map((item: FarmDataType, index: number) => {

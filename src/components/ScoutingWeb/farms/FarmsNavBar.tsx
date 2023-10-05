@@ -16,9 +16,7 @@ export interface pageProps {
   getFarmsData: ({ search_string, location }: { search_string: string, location: string }) => void;
 }
 const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
-
   const router = useRouter();
-
   const [search, setSearch] = useState('');
   const [changed, setChanged] = useState(false);
   const [hiddenLoading, setHiddenLoading] = useState(false);
@@ -27,8 +25,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   const [locations, setLocations] = useState<Array<{ name: string, _id: string }>>([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [addLocationOpen, setAddLocationOpen] = useState(false);
-
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
 
@@ -39,7 +35,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
-      setLocation(null);
+      setLocation({ name: 'All', _id: '1' });
     }
     if (value) {
       console.log(value);
@@ -49,8 +45,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
 
     }
   }
-
-
 
   useEffect(() => {
     setSearch(router.query?.search_string as string);
@@ -67,7 +61,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   }, [search, location]);
 
   const getLocations = async (newLocation = '') => {
-
     setOptionsLoading(true);
     try {
       const response = await getAllLocationsService(accessToken);
@@ -82,6 +75,12 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           }, 1);
         }
       }
+      if (response?.data?.length) {
+        setLocations([{ name: 'All', _id: '1' }, ...response?.data]);
+      } else {
+        setLocations([{ name: 'All', _id: '1' }]);
+      }
+
     } catch (e) {
       console.error(e);
     } finally {
@@ -98,7 +97,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       </div>
       <div className={styles.actionsbar}>
         <TextField
-          defaultValue="Sear"
           placeholder="Search by farm name"
           fullWidth
           variant="outlined"
@@ -114,8 +112,8 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           //   ),
           // }}
           sx={{
-            width: "350px",
-            maxWidth: "350px",
+            width: "250px",
+            maxWidth: "250px",
             borderRadius: "4px",
             '& .MuiInputBase-root': {
               fontSize: "clamp(.875rem, 1vw, 1.125rem)",
@@ -125,51 +123,57 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
             },
           }}
         />
-        {!hiddenLoading && !settingLocationLoading ? <Autocomplete
-          id="asynchronous-demo"
-          open={open}
-          fullWidth
-          onOpen={() => {
-            getLocations();
-            setOpen(true);
-          }}
-          onClose={() => {
-            setOpen(false);
-          }}
-          noOptionsText={'No such location!'}
-          value={location}
-          isOptionEqualToValue={(option, value) => option.name === value.name}
-          getOptionLabel={(option: { name: string, _id: string }) => option.name}
-          options={locations}
-          loading={optionsLoading}
-          // onInputChange={addInputValue}
-          onChange={onChangeLocation}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <React.Fragment>
-                    {optionsLoading ? <CircularProgress color="inherit" size={20} /> : null}
-                    {params.InputProps.endAdornment}
-                  </React.Fragment>
-                ),
-              }}
-              name="location"
-              size="small"
-              placeholder="Enter location here"
-              fullWidth
-              variant="outlined"
-              sx={{
-                '& .MuiInputBase-root': {
-                  background: "#fff"
-                }
-              }}
+        {!hiddenLoading && !settingLocationLoading ?
+          <Autocomplete
+            sx={{
+              width: "250px",
+              maxWidth: "250px",
+              borderRadius: "4px",
+            }}
+            id="size-small-outlined-multi"
+            size="small"
+            open={open}
+            fullWidth
+            onOpen={() => {
+              getLocations();
+              setOpen(true);
+            }}
+            onClose={() => {
+              setOpen(false);
+            }}
+            noOptionsText={'No such location'}
+            value={location}
+            isOptionEqualToValue={(option, value) => option.name === value.name}
+            getOptionLabel={(option: { name: string, _id: string }) => option.name}
+            options={locations}
+            loading={optionsLoading}
+            onChange={onChangeLocation}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {optionsLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
+                placeholder="Search by locations"
+                variant="outlined"
+                size="small"
+                sx={{
+                  '& .MuiInputBase-root': {
+                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                    backgroundColor: "#fff",
+                    border: "none",
+                  }
+                }}
 
-            />
-          )}
-        /> : ""}
+              />
+            )}
+          /> : ""}
         {/* <Button
           className={styles.button}
           variant="contained"

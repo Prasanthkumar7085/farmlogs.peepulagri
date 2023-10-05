@@ -3,15 +3,20 @@ import {
     TextField,
     Button,
     Autocomplete,
+    Breadcrumbs,
+    Link,
+    Typography,
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import styles from "../farms/FarmsNavBar.module.css";
 import FarmDetailsMiniCard from "@/components/AddLogs/farm-details-mini-card";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 const ScoutsNavBarWeb: FunctionComponent = () => {
 
     const router = useRouter();
+    const farmTitle = useSelector((state: any) => state?.farms?.cropName);
 
     const onButtonClick = useCallback(() => {
         // Please sync "Add Farm " to the project
@@ -19,17 +24,8 @@ const ScoutsNavBarWeb: FunctionComponent = () => {
 
     return (
         <div className={styles.farmsnavbar}>
-            <div className={styles.viewScoutingHeader}>
-            <div className={styles.iconDiv} style={{ cursor:"pointer" }} onClick={()=>router.back()}>
-            <img src="/arrow-left-back.svg" alt="" width={'18px'} />
-            </div>
-            <div className={styles.title}>
-                <img className={styles.farmIcon} alt="" src="/wer-farm-page-icon.svg" />
-                <h1 className={styles.farms}>Scouting</h1>
-            </div>
-        </div>    
-           
-            <FarmDetailsMiniCard/>
+
+            <FarmDetailsMiniCard />
             {/* <div className={styles.actionsbar}>
                 <Autocomplete
                     size='small'

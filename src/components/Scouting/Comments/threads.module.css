@@ -123,6 +123,7 @@
   position: relative;
   line-height: 100%;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .reply {

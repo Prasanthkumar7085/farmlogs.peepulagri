@@ -3,12 +3,14 @@ import CommentForm from "./comment-form"
 import Threads from "./threads"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const CommentsComponent = () => {
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const router = useRouter()
     const [data, setData] = useState<any>()
+    const [loading, setLoading] = useState<any>()
 
 
     useEffect(() => {
@@ -63,6 +65,7 @@ const CommentsComponent = () => {
 
     //delete comment api
     const deleteComment = async (commnet_id: any) => {
+        setLoading(true)
         let options = {
             method: "DELETE",
             headers: new Headers({
@@ -81,9 +84,38 @@ const CommentsComponent = () => {
             console.log(err)
         }
         finally {
-
+            setLoading(false)
         }
 
+    }
+
+    //update any commnet api event
+    const updateComment = async (commnet_id: any, updatedContent: any) => {
+        setLoading(true)
+        let options = {
+            method: "PATCH",
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': accessToken
+            }),
+            body: JSON.stringify({
+                "content": updatedContent
+            })
+        }
+        try {
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${commnet_id}`, options)
+            let responseData = await response.json()
+            if (responseData.success == true) {
+                getAllScoutComments()
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setLoading(false)
+
+        }
     }
 
     //adding comment then call the get all api
@@ -100,14 +132,24 @@ const CommentsComponent = () => {
         }
     }
 
+    //edit commnet function call (after update any commnet)
+    const afterUpdateComment = (id: any, value: any) => {
+        if (value) {
+            updateComment(id, value)
+        }
+    }
+
 
 
     return (
         <div style={{ width: "100%", marginTop: "1rem" }}>
             <CommentForm afterCommentAdd={afterCommentAdd} />
             <div style={{ marginTop: "30px" }}>
-                <Threads details={data} afterCommentAdd={afterCommentAdd} afterDeleteComment={afterDeleteComment} />
+                <Threads details={data} afterCommentAdd={afterCommentAdd} afterDeleteComment={afterDeleteComment} afterUpdateComment={afterUpdateComment} />
             </div>
+
+            <LoadingComponent loading={loading} />
+
         </div>
     )
 }

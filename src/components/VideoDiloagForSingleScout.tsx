@@ -13,7 +13,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
 
-const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
+const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -38,15 +38,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
     };
 
     const getKey = (e: any) => {
-        
+
         if (e.keyCode == 37) {
             playPrevious();
         } else if (e.keyCode == 39) {
             playNext();
-        }else if (e.keyCode == 27) {
+        } else if (e.keyCode == 27) {
             handleClose();
         }
-        
+
     }
     return (
         <Dialog

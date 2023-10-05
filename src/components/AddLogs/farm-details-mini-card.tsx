@@ -75,7 +75,7 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
 
 
   useEffect(() => {
-    
+
     if (router.query?.farm_id && router.isReady) {
       dispatch(setSingleFarm(router?.query?.farm_id))
     }
@@ -92,7 +92,12 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
           style={vectorIconStyle}
         />
         <div className={styles.farm1Parent}>
-          <div className={styles.farm1}>{farmDetails?.title}</div>
+          <div className={styles.farm1}>
+            {farmDetails?.title ? (farmDetails?.title?.length > 16 ?
+              (farmDetails?.title?.slice(0, 1).toUpperCase() +
+                farmDetails?.title?.slice(1, 10) + '...') :
+              farmDetails?.title[0].toUpperCase() + farmDetails?.title?.slice(1,)) : ""}
+          </div>
           <div className={styles.acres}>{farmDetails?.area} Acres</div>
         </div>
       </div>

@@ -188,7 +188,7 @@ const ViewScoutThreads = () => {
               <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
             </Card> : ""}
 
-            {/* <CommentsComponent /> */}
+            <CommentsComponent />
 
 
           </div>

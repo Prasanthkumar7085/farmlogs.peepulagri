@@ -54,12 +54,11 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
   //   // setDefaultValue(selectedObject?.title)
   //   // dispatch(setFarmTitleTemp(selectedObject?.title));
   //   // captureFarmName(selectedObject);
-
   // }
 
   return (
     <div className={styles.farmCardGridContainer}>
-      {data.length ? data.map((item: FarmDataType, index: number) => {
+      {data.map((item: FarmDataType, index: number) => {
         return (
           <div className={styles.farmdetailscard} key={index} style={{ cursor: "pointer" }}>
             <div className={styles.container} onClick={() => router.push(`/farm/${item?._id}/crops`)}>
@@ -123,7 +122,7 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
             </div>
           </div>
         )
-      }) : (!loading ? "No Data" : "")}
+      })}
 
       <AlertDelete deleteFarm={deleteFarm} setDialogOpen={setDeleteDialogOpen} open={deleteDialogOpen} loading={deleteLoading} />
       <LoadingComponent loading={loading} />

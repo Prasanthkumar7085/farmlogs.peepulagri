@@ -25,7 +25,7 @@ const ScoutingDetails: FunctionComponent = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [index, setIndex] = useState<number>(-1);
   const [finalImages, setFinalImages] = useState([]);
-  const [selectedFile, setSelectedFile] = useState<any>([])  
+  const [selectedFile, setSelectedFile] = useState<any>([])
 
   const getSingleScout = async () => {
     setLoading(true);
@@ -34,8 +34,8 @@ const ScoutingDetails: FunctionComponent = () => {
       setData(response?.data);
       setSelectedFile(response?.data.attachments)
 
-       getModifiedImages({attachmentdetails:response.data.attachments});
-      
+      getModifiedImages({ attachmentdetails: response.data.attachments });
+
     }
     setLoading(false);
   };
@@ -62,32 +62,32 @@ const ScoutingDetails: FunctionComponent = () => {
     setFinalImages(details);
   }
 
- 
+
 
   const handleOpenDialog = () => {
-      setOpenDialog(true);
+    setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
-      setOpenDialog(false);
+    setOpenDialog(false);
   };
-  
+
   const handleClick = (index: number, item: any) => {
     handleOpenDialog();
     setIndex(index);
-};
+  };
 
   useEffect(() => {
     if (router.isReady && accessToken) {
       getSingleScout();
     }
-  }, [router.isReady,accessToken]);
+  }, [router.isReady, accessToken]);
 
   return (
     <div className={styles.viewScoutingPage}>
       <FarmDetailsMiniCard />
       <div className={styles.viewScoutingHeader}>
-        <div className={styles.iconDiv} style={{ cursor:"pointer" }} onClick={()=>router.back()}>
+        <div className={styles.iconDiv} style={{ cursor: "pointer" }} onClick={() => router.back()}>
           <img src="/arrow-left-back.svg" alt="" width={'18px'} />
         </div>
         <h5>
@@ -97,30 +97,24 @@ const ScoutingDetails: FunctionComponent = () => {
       <Card className={styles.scoutingdetails}>
         <div className={styles.textwrapper}>
           <h1 className={styles.farmname}>{data?.farm_id.title}</h1>
-          <p className={styles.startdate}>{timePipe(data?.createdAt,'DD MMM YYYY hh:mm A')}</p>
+          <p className={styles.startdate}>{timePipe(data?.createdAt, 'DD MMM YYYY hh:mm A')}</p>
         </div>
         <div className={styles.textwrapper}>
           <h1 className={styles.farmname}>Description</h1>
           <p className={styles.startdate}>{data?.description ? data?.description : "-"}</p>
         </div>
-        {/* <Gallery images={finalImages} onClick={handleClick} /> */}
-        {finalImages.length ? 
-        <div><Gallery images={finalImages} onClick={handleClick} /></div>  
-                
-              : ""}
-      </Card>
-      {/* <div className={styles.gallaryContainer}> */}
-            {finalImages.length ?
-              <div >
-                <div className={styles.attachments}>
-                  <p className={styles.text}>Attachments</p>
-                </div>
-                <Gallery images={finalImages} onClick={handleClick} />
-              </div> : ""}
-          {/* </div> */}
 
-          <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
-      <LoadingComponent loading={loading}/>
+
+        {finalImages.length ?
+          <div style={{ width: "100%" }}>
+            <div className={styles.attachments}>
+              <p className={styles.text}>Attachments</p>
+            </div>
+            <Gallery images={finalImages} onClick={handleClick} />
+          </div> : ""}
+      </Card>
+      <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

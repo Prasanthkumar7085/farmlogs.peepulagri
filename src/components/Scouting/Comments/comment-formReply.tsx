@@ -8,7 +8,7 @@ import { removeOneAttachmentElement, removeTheAttachementsFilesFromStore, storeA
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
+const CommentFormReply = ({ afterCommentAdd, }: any) => {
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -130,9 +130,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
     setLoading(true)
     let body = {
       "content": comment,
-      "type": "REPLY",
-      "attachments": tempFilesStorage
-
+      "type": "DIRECT"
     }
     let options = {
       method: "POST",
@@ -146,7 +144,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${comment_id}/reply`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
-
         setComment("")
         afterCommentAdd(true)
 
@@ -323,7 +320,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
           size="medium"
           variant="contained"
           disabled={comment ? false : true}
-          onClick={() => replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()}
+          onClick={addComment}
         >
           {loading ? "Sending..." : "Send"}
         </Button>
@@ -332,4 +329,4 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   );
 };
 
-export default CommentForm;
+export default CommentFormReply;

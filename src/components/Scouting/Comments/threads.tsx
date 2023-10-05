@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
 import { Button, TextField } from "@mui/material";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment }: any) => {
+import CommentForm from "./comment-form";
+import CommentFormReply from "./comment-formReply";
+const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const router = useRouter()
@@ -18,11 +20,22 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [loading, setLoading] = useState<any>()
   const [isReplies, setIsReplies] = useState<any>(false)
 
-  const replyThreads = async (comment_id: any) => {
-    setLoading(true)
+  useEffect(() => {
+    if (afterReply) {
+      setReplyOpen(false)
+    }
+  }, [afterReply])
+
+  const downLoadAttachements = async (file: any) => {
     let body = {
-      "content": comment,
-      "type": "DIRECT"
+
+      "attachment":
+      {
+
+        "original_name": file.name,
+        "type": file.type,
+        "source": "scouting"
+      }
     }
     let options = {
       method: "POST",
@@ -33,39 +46,11 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${comment_id}/reply`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/attachment/download-url`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
-        setComment("")
-        afterCommentAdd(true)
-        setReplyIndex("")
-        setReplyOpen(false)
+        window.open(responseData.data.download_url)
       }
-    } catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
-    }
-
-  }
-
-  const downLoadAttachements = async () => {
-    let body = {
-      "content": comment,
-      "type": "DIRECT"
-    }
-    let options = {
-      method: "POST",
-      headers: new Headers({
-        'content-type': 'application/json',
-        'authorization': accessToken
-      }),
-      body: JSON.stringify(body)
-    }
-    try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/`, options)
-      let responseData = await response.json()
     }
     catch (err) {
       console.log(err)
@@ -85,7 +70,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
               <div className={styles.messagebox}>
                 <div className={styles.userdetails}>
                   <h4 className={styles.jack}>Jack</h4>
-                  <p className={styles.aug20231030am}>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</p>
+                  <p className={styles.aug20231030am}>{timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}</p>
                 </div>
                 <div className={styles.paragraph}>
                   {editMode[0] == true && editMode[1] == item._id ?
@@ -121,6 +106,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           className={styles.download11}
                           alt=""
                           src="/download-1-1.svg"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => downLoadAttachements(file)}
                         />
                       </div>)
                   })
@@ -130,11 +117,24 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                 </div>
                 <div className={styles.actionButton}>
                   <div className={styles.reply}>
+
                     {replyOpen == false ?
                       <div className={styles.reply1} onClick={() => {
                         setReplyOpen(true)
                         setReplyIndex(index)
-                      }}>Reply</div> : ""}
+                      }}>Reply</div> :
+
+                      index == replyIndex ?
+                        <div className={styles.reply1} onClick={() => {
+                          setReplyOpen(false)
+                          setReplyIndex(index)
+                        }}>Close</div> :
+
+                        <div className={styles.reply1} onClick={() => {
+                          setReplyOpen(true)
+                          setReplyIndex(index)
+                        }}>Reply</div>}
+
 
                     {isReplies == false && item.replies.length !== 0 ?
                       <div className={styles.reply1} onClick={() => {
@@ -175,28 +175,10 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                 </div>
                 {replyOpen == true && index == replyIndex ?
                   <div style={{ width: "100%" }}>
-                    <TextField
-                      className={styles.chatBox}
-                      color="primary"
-                      rows={2}
-                      placeholder="Enter your reply message... "
-                      fullWidth={true}
-                      variant="outlined"
-                      multiline
-                      value={comment ? comment : ""}
-                      onChange={(e) => setComment(e.target.value)}
-                    />
 
-                    <Button className={styles.replySendBtn} variant="contained"
-                      onClick={() => {
-                        setReplyOpen(false)
-                        setReplyIndex(index)
-                      }}
-                    >Close</Button>
-                    <Button className={styles.replySendBtn} variant="contained"
-                      onClick={() => replyThreads(item._id)}
-                      disabled={comment ? false : true}
-                    >{loading ? "Sending..." : "Send"}</Button>
+                    <CommentForm replyThreadEvent={item._id} afterCommentAdd={afterCommentAdd} />
+
+
                   </div>
 
                   : ""}
@@ -216,27 +198,32 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           </div>
                           <div className={styles.userdetails1}>
                             <h4 className={styles.jack}>Jack</h4>
-                            <p className={styles.aug20231030am}>{timePipe(row.createdAt, "DD-MM-YYYY hh:mm a")}</p>
+                            <p className={styles.aug20231030am}>{timePipe(row.updatedAt, "DD-MM-YYYY hh:mm a")}</p>
                           </div>
                         </div>
+
                         <div className={styles.paragraph1}>
                           <p className={styles.theProblemIm}>
                             {row.content}
                           </p>
-                          <div className={styles.attachment1}>
-                            <div className={styles.row}>
-                              <div className={styles.icon}>
-                                <img className={styles.groupIcon} alt="" src="/group2.svg" />
-                                <img className={styles.groupIcon1} alt="" src="/group3.svg" />
-                              </div>
-                              <div className={styles.imageName}>Photo.jpg</div>
-                            </div>
-                            <img
-                              className={styles.download11}
-                              alt=""
-                              src="/download-1-1.svg"
-                            />
-                          </div>
+                          {row.attachments.length ? row.attachments.map((file: any, fileIndex: any) => {
+                            return (
+                              <div className={styles.attachment1} key={fileIndex}>
+                                <div className={styles.row}>
+                                  <div className={styles.icon}>
+                                    <img className={styles.groupIcon} alt="" src="/group2.svg" />
+                                    <img className={styles.groupIcon1} alt="" src="/group3.svg" />
+                                  </div>
+                                  <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
+                                </div>
+                                <img
+                                  className={styles.download11}
+                                  alt=""
+                                  src="/download-1-1.svg"
+                                />
+                              </div>)
+                          }) : ""}
+
                         </div>
                         <div className={styles.actionButton1}>
                           <div className={styles.reply}>

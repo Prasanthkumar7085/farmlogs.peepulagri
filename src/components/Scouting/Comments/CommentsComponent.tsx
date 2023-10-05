@@ -11,6 +11,7 @@ const CommentsComponent = () => {
     const router = useRouter()
     const [data, setData] = useState<any>()
     const [loading, setLoading] = useState<any>()
+    const [afterReply, setAfterReply] = useState<any>()
 
 
     useEffect(() => {
@@ -122,6 +123,7 @@ const CommentsComponent = () => {
     const afterCommentAdd = (value: any) => {
         if (value == true) {
             getAllScoutComments()
+            setAfterReply(true)
         }
     }
 
@@ -145,7 +147,7 @@ const CommentsComponent = () => {
         <div style={{ width: "100%", marginTop: "1rem" }}>
             <CommentForm afterCommentAdd={afterCommentAdd} />
             <div style={{ marginTop: "30px" }}>
-                <Threads details={data} afterCommentAdd={afterCommentAdd} afterDeleteComment={afterDeleteComment} afterUpdateComment={afterUpdateComment} />
+                <Threads details={data} afterCommentAdd={afterCommentAdd} afterDeleteComment={afterDeleteComment} afterUpdateComment={afterUpdateComment} afterReply={afterReply} />
             </div>
 
             <LoadingComponent loading={loading} />

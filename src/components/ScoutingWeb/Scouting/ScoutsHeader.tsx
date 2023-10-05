@@ -17,10 +17,6 @@ const ScoutsNavBarWeb: FunctionComponent = () => {
 
     const router = useRouter();
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
-    console.log(farmTitle);
-    const onButtonClick = useCallback(() => {
-        // Please sync "Add Farm " to the project
-    }, []);
 
     return (
         <div className={styles.farmsnavbar}>

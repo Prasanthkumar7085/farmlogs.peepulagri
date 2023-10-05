@@ -50,7 +50,7 @@ const AllCropsWebPage = () => {
         }
         if (Object.keys(queryParams).length) {
             queryParamsUrl = prepareURLEncodedParams('', queryParams);
-            router.push({ pathname: `/farm/${farmId}/crops`, query: queryParams });
+            router.replace({ pathname: `/farm/${farmId}/crops`, query: queryParams });
         }
         const response = await getAllCropsService(farmId, queryParamsUrl);
 

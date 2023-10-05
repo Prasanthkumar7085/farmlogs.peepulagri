@@ -5,7 +5,7 @@ import styles from "./card.module.css";
 
 import { setSingleFarm } from "@/Redux/Modules/Farms";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 

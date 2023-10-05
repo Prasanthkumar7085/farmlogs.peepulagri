@@ -1,9 +1,10 @@
 import { useCallback } from "react";
 import styles from "./FolderCard.module.css";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from "next/router";
 import { CropTypeResponse } from "@/types/cropTypes";
 import timePipe from "@/pipes/timePipe";
+import { useDispatch } from "react-redux";
+import { setCropTitleTemp } from "@/Redux/Modules/Farms";
 
 interface pageProps {
     cropsData: Array<CropTypeResponse>;
@@ -12,11 +13,12 @@ interface pageProps {
 const FolderStructure = ({ cropsData, loading }: pageProps) => {
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
-    const onFolderStructureContainerClick = useCallback((cropId: string) => {
-        console.log(router.query.farm_id);
-
-        router.push(`/farm/${router.query.farm_id}/crops/${cropId}/scouting`);
+    const onFolderStructureContainerClick = useCallback((crop: CropTypeResponse) => {
+        
+        dispatch(setCropTitleTemp(crop?.title));
+        router.push(`/farm/${router.query.farm_id}/crops/${crop?._id}/scouting`);
     }, []);
 
     return (
@@ -26,7 +28,7 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
                     <div
                         key={index}
                         className={styles.folderStructure}
-                        onClick={() => onFolderStructureContainerClick(item._id)}
+                        onClick={() => onFolderStructureContainerClick(item)}
                     >
                         <div className={styles.foder}>
                             <img className={styles.folderIcon} alt="" src="/folder.svg" />

@@ -733,7 +733,7 @@ const FileUploadComponent = () => {
                                             id="back"
                                             size="large"
                                             variant="outlined"
-                                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops`)}
+                                            onClick={() => router.back()}
                                         >
                                             Back
                                         </Button>

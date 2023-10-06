@@ -19,7 +19,7 @@ const getAllTasksService = async ({ page, limit, paramString, accessToken }: { p
 
     } catch (err: any) {
         console.error(err);
-
+        return
     }
 }
 export default getAllTasksService;

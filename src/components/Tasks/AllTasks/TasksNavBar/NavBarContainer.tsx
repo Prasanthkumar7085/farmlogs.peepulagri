@@ -1,4 +1,4 @@
-import { FunctionComponent, memo, useState, useCallback } from "react";
+import { FunctionComponent, memo, useState, useCallback, useEffect } from "react";
 import {
   Button,
   Icon,
@@ -8,9 +8,18 @@ import {
 import SelectBox from "./SelectBox";
 import PortalPopup from "./PortalPopup";
 import styles from "./NavBarContainer.module.css";
+import { useRouter } from "next/router";
 
-const NavBarContainer: FunctionComponent = memo(() => {
+interface pageProps{
+  onChangeSearch: (search: string) => void;
+}
+const NavBarContainer = ({ onChangeSearch }: pageProps) => {
+  
+  const router = useRouter();
   const [isSelectBoxOpen, setSelectBoxOpen] = useState(false);
+  const [search, setSearch] = useState('');
+
+
 
   const openSelectBox = useCallback(() => {
     setSelectBoxOpen(true);
@@ -21,7 +30,7 @@ const NavBarContainer: FunctionComponent = memo(() => {
   }, []);
 
   const onButtonAddTaskClick = useCallback(() => {
-    // Please sync "Add task" to the project
+    router.push('/tasks/add');
   }, []);
 
   return (
@@ -41,6 +50,8 @@ const NavBarContainer: FunctionComponent = memo(() => {
             Filter
           </Button>
           <TextField
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); onChangeSearch(e.target.value)}}
             className={styles.searchbar}
             color="primary"
             size="small"
@@ -79,6 +90,6 @@ const NavBarContainer: FunctionComponent = memo(() => {
       )}
     </>
   );
-});
+};
 
 export default NavBarContainer;

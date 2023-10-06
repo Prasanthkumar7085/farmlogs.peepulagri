@@ -1,4 +1,5 @@
-import TasksPageComponent from "@/components/Tasks/TasksPageComponent";
+import TasksPageComponent from "@/components/Tasks/AllTasks/TasksPageComponent";
+
 
 export const TasksPage = () => {
     return (

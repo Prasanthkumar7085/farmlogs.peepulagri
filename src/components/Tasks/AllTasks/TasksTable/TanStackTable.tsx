@@ -1,5 +1,4 @@
 import {
-    Column,
     SortingState,
     Table,
     flexRender,
@@ -10,10 +9,12 @@ import {
     getSortedRowModel,
     useReactTable
 } from "@tanstack/react-table";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const TanStackTableComponent = ({ data, columns, paginationDetails, getData }: any) => {
 
+    const router = useRouter();
 
     // const { has_more=false, limit=10, page=1, total=0, total_pages=0 } = paginationDetails;
 
@@ -39,6 +40,28 @@ const TanStackTableComponent = ({ data, columns, paginationDetails, getData }: a
         const width = widthObj?.width;
         return width
     }
+    const sortAndGetData = (header: any) => {
+        
+        if (header.id == 'actions') {
+            return
+        }
+        let orderBy = header.id;
+        let orderType = 'asc';
+        if (router.query.order_by as string == header.id) {
+            if (router.query.order_type == 'asc') {
+                orderType='desc'
+            } else {
+                orderBy = '';
+                orderType = '';
+            }
+        } else {
+            
+        }
+        console.log(header.id,orderBy,orderType,'asdf');
+        
+        getData({ limit:paginationDetails?.limit,page: 1, sortBy: orderBy, sortType: orderType });
+
+    }
     return (
         <div>
             <div>
@@ -48,30 +71,19 @@ const TanStackTableComponent = ({ data, columns, paginationDetails, getData }: a
                             {table.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id}>
                                     {headerGroup.headers.map(header => {
-                                        console.log(header, 'test');
-
                                         return (
                                             <th key={header.id} colSpan={header.colSpan} style={{ minWidth: getWidth(header.id), width: getWidth(header.id) }}>
                                                 {header.isPlaceholder ? null : (
-                                                    <div {...{
-                                                        className: header.column.getCanSort()
-                                                            ? 'cursor-pointer select-none'
-                                                            : '',
-                                                        onClick: header.column.getToggleSortingHandler(),
-                                                    }}>
-                                                        {flexRender(
-                                                            header.column.columnDef.header,
-                                                            header.getContext()
-                                                        )}
-                                                        {{
-                                                            asc: ' 🔼',
-                                                            desc: ' 🔽',
-                                                        }[header.column.getIsSorted() as string] ?? null}
-                                                        {/* {header.column.getCanFilter() ? (
-                                                        <div>
-                                                            <Filter column={header.column} table={table} />
-                                                        </div>
-                                                    ) : null} */}
+                                                    <div onClick={()=>sortAndGetData(header)}>
+                                                        {
+                                                            flexRender(
+                                                                header.column.columnDef.header,
+                                                                header.getContext()
+                                                            )}{
+                                                            router.query.order_by == header.id ?
+                                                                router.query.order_type == 'asc'?' 🔼':' 🔽'
+                                                            : ""
+                                                        }
                                                     </div>
                                                 )}
                                             </th>
@@ -160,66 +172,3 @@ const TanStackTableComponent = ({ data, columns, paginationDetails, getData }: a
 }
 
 export default TanStackTableComponent;
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function Filter({
-//     column,
-//     table,
-// }: {
-//     column: Column<any, any>
-//     table: Table<any>
-// }) {
-//     const firstValue = table
-//         .getPreFilteredRowModel()
-//         .flatRows[0]?.getValue(column.id)
-
-//     const columnFilterValue = column.getFilterValue()
-
-//     return typeof firstValue === 'number' ? (
-//         <div className="flex space-x-2">
-//             <input
-//                 type="number"
-//                 value={(columnFilterValue as [number, number])?.[0] ?? ''}
-//                 onChange={e =>
-//                     column.setFilterValue((old: [number, number]) => [
-//                         e.target.value,
-//                         old?.[1],
-//                     ])
-//                 }
-//                 placeholder={`Min`}
-//                 className="w-24 border shadow rounded"
-//             />
-//             <input
-//                 type="number"
-//                 value={(columnFilterValue as [number, number])?.[1] ?? ''}
-//                 onChange={e =>
-//                     column.setFilterValue((old: [number, number]) => [
-//                         old?.[0],
-//                         e.target.value,
-//                     ])
-//                 }
-//                 placeholder={`Max`}
-//                 className="w-24 border shadow rounded"
-//             />
-//         </div>
-//     ) : (
-//         <input
-//             type="text"
-//             value={(columnFilterValue ?? '') as string}
-//             onChange={e => column.setFilterValue(e.target.value)}
-//             placeholder={`Search...`}
-//             className="w-36 border shadow rounded"
-//         />
-//     )
-// }

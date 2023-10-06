@@ -12,6 +12,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
+import { useSwipeable } from 'react-swipeable';
 
 const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
 
@@ -56,6 +57,14 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
         }
 
     }
+
+    // Define swipe handlers
+    const handlers = useSwipeable({
+        onSwipedLeft: playNext,
+        onSwipedRight: playPrevious,
+    });
+
+
     return (
         <Dialog
             autoFocus
@@ -88,28 +97,31 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray?.length <= 1}>
-                    <NavigateBeforeIcon sx={{ color: "#fff" }} />
-                </IconButton>
-                {mediaArray?.length > 0 && (
-                    <div className={styles.scoutDailogImg}>
-                        {mediaArray[currentIndex]?.type?.includes('video') ? (
-                            <video controls width="100%" height="auto" autoPlay key={currentIndex}>
-                                <source src={mediaArray[currentIndex]?.url} type={mediaArray[currentIndex]?.type} />
-                                Your browser does not support the video tag.
-                            </video>
-                        ) : (
-                            <img
-                                src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
-                                alt={`Image ${currentIndex + 1}`}
-                            />
-                        )}
+                <div {...handlers}>
 
-                    </div>
-                )}
-                <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray?.length <= 1}>
-                    <NavigateNextIcon sx={{ color: "#fff" }} />
-                </IconButton>
+                    <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray?.length <= 1}>
+                        <NavigateBeforeIcon sx={{ color: "#fff" }} />
+                    </IconButton>
+                    {mediaArray?.length > 0 && (
+                        <div className={styles.scoutDailogImg}>
+                            {mediaArray[currentIndex]?.type?.includes('video') ? (
+                                <video controls width="100%" height="auto" autoPlay key={currentIndex}>
+                                    <source src={mediaArray[currentIndex]?.url} type={mediaArray[currentIndex]?.type} />
+                                    Your browser does not support the video tag.
+                                </video>
+                            ) : (
+                                <img
+                                    src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
+                                    alt={`Image ${currentIndex + 1}`}
+                                />
+                            )}
+
+                        </div>
+                    )}
+                    <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray?.length <= 1}>
+                        <NavigateNextIcon sx={{ color: "#fff" }} />
+                    </IconButton>
+                </div>
             </DialogContent>
             <DialogActions>
                 <Typography variant="caption" display="block" align="center">

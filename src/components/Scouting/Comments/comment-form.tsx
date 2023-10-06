@@ -51,6 +51,8 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
   };
+
+
   const removeFileAfterAdding = (index: number) => {
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
@@ -60,8 +62,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
-    dispatch(removeOneAttachmentElement(index))
-
   };
 
 
@@ -237,6 +237,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   return (
     <div className={styles.commentform}>
       <TextField
+        required={true}
         className={styles.chatBox}
         color="primary"
         rows={2}
@@ -268,7 +269,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                 <div className={styles.uploadcontroller}  >
                   <div className={styles.uploadname} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div className={styles.uploadItem}>
-                      <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{item.name?.slice(0, 7)}...{item.type} </div>
+                      <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{index + 1}.    {item.name?.slice(0, 7)}...{item.type} </div>
                       {fileProgress[index] == "fail" ? "" : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
                     </div>
                     {fileProgress[index] == 100 && fileProgress[index] !== "fail" ?
@@ -337,7 +338,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
         <Button
           className={styles.sendbutton}
-          color="primary"
           size="medium"
           variant="contained"
           disabled={comment ? false : true}

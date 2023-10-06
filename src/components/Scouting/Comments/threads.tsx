@@ -51,6 +51,27 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       let responseData = await response.json()
       if (responseData.success == true) {
         window.open(responseData.data.download_url)
+        fetch(responseData.data.download_url)
+          .then((response) => response.blob())
+          .then((blob) => {
+            // Create a URL for the blob
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = blobUrl;
+            downloadLink.download = "image.jpg"; // Specify the desired file name
+            downloadLink.style.display = "none"; // Hide the link
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            // Clean up the blob URL
+            window.URL.revokeObjectURL(blobUrl);
+          })
+          .catch((error) => {
+            console.error("Error downloading image:", error);
+          });
+
       }
     }
     catch (err) {
@@ -213,6 +234,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   className={styles.download11}
                                   alt=""
                                   src="/download-1-1.svg"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => downLoadAttachements(file)}
                                 />
                               </div>)
                           }) : ""}

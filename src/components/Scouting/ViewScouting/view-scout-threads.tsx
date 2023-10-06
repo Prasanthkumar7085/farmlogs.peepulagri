@@ -68,6 +68,10 @@ const ViewScoutThreads = () => {
 
         setResponseAttachmentsFormat({ attachmentdetails: response?.data?.attachments });
       }
+      else {
+        setResponseAttachmentsFormat({ attachmentdetails: response?.data?.attachments });
+
+      }
     }
     setLoading(false);
   }
@@ -206,7 +210,7 @@ const ViewScoutThreads = () => {
                 gridGap: "0.5rem",
                 margin: "0.5rem"
               }}>
-                {images.length ? images.map((image: any, index: any) => (
+                {images.length !== 0 ? images.map((image: any, index: any) => (
 
                   <div style={{ position: "relative", height: "100px", }} key={index}>
                     <img src={image.src} alt={image.alt} width={'100%'} height={"100%"} onClick={() => handleClick(index, image)} style={{ cursor: "pointer", borderRadius: "5px", objectFit: "cover" }} />
@@ -214,9 +218,9 @@ const ViewScoutThreads = () => {
                       <Checkbox
 
                         sx={{
-                          color: "#fff",
+                          color: "#7f7f7f",
                           '& .MuiSvgIcon-root': {
-                            color: "#fff"
+                            color: "#7f7f7f"
                           }
                         }}
                         size="small"
@@ -229,7 +233,7 @@ const ViewScoutThreads = () => {
                     </div>
                   </div>
 
-                )) : ""}
+                )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
               </div>
             </Card>
 

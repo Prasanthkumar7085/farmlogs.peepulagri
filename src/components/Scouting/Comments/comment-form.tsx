@@ -263,10 +263,10 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
           <div className={styles.progress} id="progress" style={{ width: "100%" }}>
             <img className={styles.image21} alt="" src={"/nj.jpg"} />
 
-            <div className={styles.progressdetails}>
-              <div className={styles.uploaddetails}>
-                <div className={styles.uploadcontroller}>
-                  <div className={styles.uploadname}>
+            <div className={styles.progressdetails} >
+              <div className={styles.uploaddetails} style={{ width: "100%" }}>
+                <div className={styles.uploadcontroller}  >
+                  <div className={styles.uploadname} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div className={styles.uploadItem}>
                       <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{item.name?.slice(0, 7)}...{item.type} </div>
                       {fileProgress[index] == "fail" ? "" : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}

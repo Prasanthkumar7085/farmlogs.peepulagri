@@ -3,22 +3,29 @@ import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import styles from "./crop-card.module.css";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import timePipe from "@/pipes/timePipe";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import "yet-another-react-lightbox/styles.css";
 import VideoDialog from "@/components/Core/VideoDiloag";
 import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
+import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
+import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
+import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
+import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 
 const SingleViewScoutComponent = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch()
     const [data, setData] = useState<any>()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
     const [selectedFile, setSelectedFile] = useState<any>([])
     const [index, setIndex] = useState<any>()
     const [image, setImage] = useState();
+    const [sildeShowImages, setSlideShowImages] = useState<any>()
+    const [id, setID] = useState<any>()
 
     const [loading, setLoading] = useState(true);
 
@@ -26,6 +33,9 @@ const SingleViewScoutComponent = () => {
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
             getPresingedURls()
+            dispatch(removeTheFilesFromStore([]));
+            dispatch(removeTheAttachementsFilesFromStore([]))
+
         }
     }, [accessToken, router.isReady,])
 
@@ -57,6 +67,7 @@ const SingleViewScoutComponent = () => {
 
 
     const getModifiedImage = (item: any) => {
+
         let obj = item?.attachments?.slice(0, 3)?.map((imageObj: any, index: number) => {
 
             if (imageObj.type.includes("video")) {
@@ -66,15 +77,14 @@ const SingleViewScoutComponent = () => {
                     url: imageObj.url,
                     height: 80,
                     width: 60,
+                    type: imageObj.type,
+                    id: imageObj._id,
+                    scout_id: item._id,
                     // customOverlay: <div style={{color:"white"}}>Yes</div>
 
                     alt: "u",
                     tags: (item.attachments?.length > 3 && index == 2) ? [{ value: "View More", title: "view_more" }] : [],
-                    customOverlay: (
-                        <div className="custom-overlay__caption">
-                            <div>{imageObj.name}</div>
-                        </div>
-                    ),
+
                 }
             }
             else
@@ -82,29 +92,28 @@ const SingleViewScoutComponent = () => {
                     src: imageObj.url,
                     url: imageObj.url,
                     height: 80,
+                    type: imageObj.type,
+                    id: imageObj._id,
+                    scout_id: item._id,
                     width: 60,
                     alt: "u",
                     tags: (item.attachments?.length > 3 && index == 2) ? [{ value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}>+{item.attachments?.length - 2}</div>, title: "view_more" }] : []
                 }
         });
-
         return obj;
     }
 
-    const slidesEvent = (item: any) => {
-        if (item?.attachments) {
-            return item.attachments.map((imageObj: any, index: number) => {
-                return {
-                    src: imageObj.url || '', // Ensure 'url' property is defined
-                    original: imageObj.url || '', // Ensure 'url' property is defined
-                    height: 900,
-                    width: 1000,
-                    alt: "u"
-                };
-            });
-        }
+    const getSingleScout = async (scoutId: any) => {
+        const response = await getSingleScoutService(scoutId, accessToken);
 
-    };
+        if (response?.success) {
+            if (response?.data?.attachments?.length) {
+                setSlideShowImages(response?.data?.attachments)
+            }
+        }
+        setLoading(false);
+    }
+
 
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -124,8 +133,8 @@ const SingleViewScoutComponent = () => {
         handleOpenDialog();
         setIndex(index);
         setImage(item);
+        getSingleScout(item.scout_id)
     };
-    console.log(image);
     return (
         <div className={styles.scoutingView}>
 
@@ -174,7 +183,7 @@ const SingleViewScoutComponent = () => {
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />
-            <ViewSingleImagePreview open={openDialog} onClose={handleCloseDialog} media={image} index={index} />
+            <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} />
 
 
             <div className="addFormPositionIcon">

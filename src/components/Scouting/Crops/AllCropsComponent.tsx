@@ -19,7 +19,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { id } from "date-fns/locale";
 
 const AllCropsComponent = () => {
-    
+
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -70,7 +70,7 @@ const AllCropsComponent = () => {
     }
 
     //get all crops name
-    const getCropsDetails = async (id: string,orderBy=sortBy,orderType=sortType) => {
+    const getCropsDetails = async (id: string, orderBy = sortBy, orderType = sortType) => {
         setLoading(true)
 
         try {
@@ -83,7 +83,7 @@ const AllCropsComponent = () => {
                 queryParams['order_type'] = orderType;
             }
 
-            let url = prepareURLEncodedParams(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`,queryParams);
+            let url = prepareURLEncodedParams(`${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`, queryParams);
 
             let response = await fetch(url, { method: "GET" });
             let responseData: any = await response.json();
@@ -133,7 +133,7 @@ const AllCropsComponent = () => {
         }
     }
 
-   
+
     useEffect(() => {
         if (router.isReady && router.query.farm_id && accessToken) {
             getFarmDetails(router.query.farm_id)
@@ -157,10 +157,10 @@ const AllCropsComponent = () => {
         }
         else {
             const { title, crop_area } = value;
-            
+
             let obj = {
                 title: title ? title?.trim() : "",
-                crop_area: (crop_area&&+crop_area) ? crop_area : null
+                crop_area: (crop_area && +crop_area) ? crop_area : null
             }
             setErrorMessages([]);
             createCrop(obj)
@@ -177,19 +177,19 @@ const AllCropsComponent = () => {
         if (sortBy == 'createdAt') {
             if (value == 1 && sortType == 'desc') {
                 return true;
-            } else if(value == 2 && sortType == 'asc'){
+            } else if (value == 2 && sortType == 'asc') {
                 return true
             }
         } else if (sortBy == 'title') {
             if (value == 3 && sortType == 'asc') {
                 return true;
-            } else if(value == 4 && sortType == 'desc'){
+            } else if (value == 4 && sortType == 'desc') {
                 return true
             }
         } else if (sortBy == 'crop_area') {
-             if (value == 5 && sortType == 'desc') {
+            if (value == 5 && sortType == 'desc') {
                 return true;
-            } else if(value == 6 && sortType == 'asc'){
+            } else if (value == 6 && sortType == 'asc') {
                 return true
             }
         }
@@ -208,39 +208,39 @@ const AllCropsComponent = () => {
         return (
             <div className={styles.sortOptions}>
                 <ListItem className={styles.subTitle}> <SortIcon /> <span>Sort By</span></ListItem>
-                <ListItem onClick={()=>sortByMethod('createdAt','desc')}>
-                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(1) ? "none" : "flex", fontSize:"1.25rem" }} />
-                    <RadioButtonCheckedIcon sx={{ display: sortMethod(1) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                <ListItem onClick={() => sortByMethod('createdAt', 'desc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(1) ? "none" : "flex", fontSize: "1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(1) ? "flex" : "none", color: "#05a155", fontSize: "1.25rem" }} />
                     <div style={{ color: sortMethod(1) ? "#05a155" : "#333333", }}>{'Recent First'}</div>
                 </ListItem>
-                <ListItem onClick={()=>sortByMethod('createdAt','asc')}>
-                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(2) ? "none" : "flex", fontSize:"1.25rem" }} />
-                    <RadioButtonCheckedIcon sx={{ display: sortMethod(2) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                <ListItem onClick={() => sortByMethod('createdAt', 'asc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(2) ? "none" : "flex", fontSize: "1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(2) ? "flex" : "none", color: "#05a155", fontSize: "1.25rem" }} />
                     <div style={{ color: sortMethod(2) ? "#05a155" : "#333333", }}>{'Oldest First'}</div>
                 </ListItem>
                 <Divider variant="middle" className={styles.divider} component="li" />
-                <ListItem onClick={()=>sortByMethod('title','asc')}>
-                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(3) ? "none" : "flex", fontSize:"1.25rem" }} />
-                    <RadioButtonCheckedIcon sx={{ display: sortMethod(3) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                <ListItem onClick={() => sortByMethod('title', 'asc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(3) ? "none" : "flex", fontSize: "1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(3) ? "flex" : "none", color: "#05a155", fontSize: "1.25rem" }} />
                     <div style={{ color: sortMethod(3) ? "#05a155" : "#333333", }}>{'Title (A-Z)'}</div>
                 </ListItem>
-                <ListItem onClick={()=>sortByMethod('title','desc')}>
-                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(4) ? "none" : "flex", fontSize:"1.25rem" }} />
-                    <RadioButtonCheckedIcon sx={{ display: sortMethod(4) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                <ListItem onClick={() => sortByMethod('title', 'desc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(4) ? "none" : "flex", fontSize: "1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(4) ? "flex" : "none", color: "#05a155", fontSize: "1.25rem" }} />
                     <div style={{ color: sortMethod(4) ? "#05a155" : "#333333", }}>{'Title (Z-A)'}</div>
-                </ListItem>           
+                </ListItem>
                 <Divider variant="middle" className={styles.divider} component="li" />
-                <ListItem onClick={()=>sortByMethod('crop_area','desc')}>
-                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(5) ? "none" : "flex", fontSize:"1.25rem" }} />
-                    <RadioButtonCheckedIcon sx={{ display: sortMethod(5) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                <ListItem onClick={() => sortByMethod('crop_area', 'desc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(5) ? "none" : "flex", fontSize: "1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(5) ? "flex" : "none", color: "#05a155", fontSize: "1.25rem" }} />
                     <div style={{ color: sortMethod(5) ? "#05a155" : "#333333", }}>{'Area Highest first'}</div>
                 </ListItem>
-                <ListItem onClick={()=>sortByMethod('crop_area','asc')}>
-                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(6) ? "none" : "flex", fontSize:"1.25rem" }} />
-                    <RadioButtonCheckedIcon sx={{ display: sortMethod(6) ? "flex" : "none", color:"#05a155", fontSize:"1.25rem" }} />
+                <ListItem onClick={() => sortByMethod('crop_area', 'asc')}>
+                    <RadioButtonUncheckedIcon sx={{ display: sortMethod(6) ? "none" : "flex", fontSize: "1.25rem" }} />
+                    <RadioButtonCheckedIcon sx={{ display: sortMethod(6) ? "flex" : "none", color: "#05a155", fontSize: "1.25rem" }} />
                     <div style={{ color: sortMethod(6) ? "#05a155" : "#333333", }}>{'Area Lowest first'}</div>
-                </ListItem>  
-           </div>
+                </ListItem>
+            </div>
         )
     }
 
@@ -260,17 +260,17 @@ const AllCropsComponent = () => {
                 </IconButton>
                 <React.Fragment>
                     <Drawer
-                        onClose={()=>toggleDrawer(false)}
+                        onClose={() => toggleDrawer(false)}
                         anchor={'bottom'}
                         open={state['bottom']}
                     >
-                         <Box>
-                            <SortMenu/>
+                        <Box>
+                            <SortMenu />
                         </Box>
                     </Drawer>
                 </React.Fragment>
                 <IconButton onClick={() => setDilogOpen(true)}>
-                    <AddIcon /><Typography variant="caption">New Folder</Typography>
+                    <AddIcon /><Typography variant="caption">New Crop</Typography>
                 </IconButton>
             </div>
 

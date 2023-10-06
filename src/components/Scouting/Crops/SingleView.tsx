@@ -18,15 +18,15 @@ const SingleViewScoutComponent = () => {
 
     const router = useRouter();
     const dispatch = useDispatch()
-    const [data, setData] = useState<any>()
+
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
+
+    const [data, setData] = useState<any>()
     const [selectedFile, setSelectedFile] = useState<any>([])
     const [index, setIndex] = useState<any>()
     const [image, setImage] = useState();
     const [sildeShowImages, setSlideShowImages] = useState<any>()
-    const [id, setID] = useState<any>()
-
     const [loading, setLoading] = useState(true);
 
 
@@ -80,7 +80,7 @@ const SingleViewScoutComponent = () => {
                     type: imageObj.type,
                     id: imageObj._id,
                     scout_id: item._id,
-                    // customOverlay: <div style={{color:"white"}}>Yes</div>
+                    customOverlay: <div style={{ color: "white" }}>Yes</div>,
 
                     alt: "u",
                     tags: (item.attachments?.length > 3 && index == 2) ? [{ value: "View More", title: "view_more" }] : [],
@@ -97,7 +97,11 @@ const SingleViewScoutComponent = () => {
                     scout_id: item._id,
                     width: 60,
                     alt: "u",
-                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}>+{item.attachments?.length - 2}</div>, title: "view_more" }] : []
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{
+                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
+                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                            +{item.attachments?.length - 2}</div>, title: "view_more"
+                    }] : []
                 }
         });
         return obj;
@@ -135,6 +139,8 @@ const SingleViewScoutComponent = () => {
         setImage(item);
         getSingleScout(item.scout_id)
     };
+
+
     return (
         <div className={styles.scoutingView}>
 
@@ -178,7 +184,6 @@ const SingleViewScoutComponent = () => {
             }) :
                 (!loading ?
                     <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
-                        {/* <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} /> */}
                         <Typography variant="h4">No Scouts</Typography>
                     </div>
                     : "")}

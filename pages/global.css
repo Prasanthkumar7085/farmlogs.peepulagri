@@ -348,12 +348,13 @@ body {
     cursor: pointer;
     pointer-events: visible;
     margin: 0 !important;
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center !important;
+    justify-content:center !important;
+    width: 100%;
+    height: 100%;
 }
+
 
 .ReactGridGallery_tile-bottom-bar div span {
     font-size: 18px !important;

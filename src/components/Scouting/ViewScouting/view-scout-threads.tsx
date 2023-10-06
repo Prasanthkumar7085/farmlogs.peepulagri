@@ -1,5 +1,5 @@
 import styles from "./view-scout-threads.module.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
@@ -15,6 +15,9 @@ import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import AlertImagesDelete from "@/components/Core/DeleteImagesAlert/alert-delete-images";
 import FileUploadEditComponent from "../EditItem/FileUploadEdit";
 import AddIcon from '@mui/icons-material/Add';
+import Checkbox from '@mui/material/Checkbox';
+import { relative } from "path";
+import CustomGalleryItem from "@/components/Core/CustomCheckBox";
 
 
 
@@ -40,6 +43,9 @@ const ViewScoutThreads = () => {
   const [deleteLoading, setDeleteLoading] = useState<any>()
   const [cameraOpen, setCameraOpen] = useState<any>(false)
   const [fileUploadOpen, setFileUploadOpen] = useState<any>(false)
+  const [selectedItems, setSelectedItems] = useState<any>([]);
+
+  let tempImages: any = [...selectedItems];
 
 
   const handleOpenDialog = () => {
@@ -66,6 +72,22 @@ const ViewScoutThreads = () => {
     setLoading(false);
   }
 
+
+
+  const handleChange = (itemId: any) => {
+    const itemIndex = tempImages.indexOf(itemId);
+    if (itemIndex === -1) {
+      tempImages.splice(1, 0, itemId)
+    }
+    else {
+      tempImages.splice(itemIndex, 1);
+    }
+    setSelectedItems(tempImages)
+
+
+
+  };
+
   const setResponseAttachmentsFormat = ({ attachmentdetails }: any) => {
     let details = [];
     if (attachmentdetails.length) {
@@ -74,14 +96,16 @@ const ViewScoutThreads = () => {
         if (item.type.includes('video')) {
           return {
             src: "/videoimg.png", height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url, isSelected: false, id: item._id
+            width: 60, caption: `${index + 1} image`, original: item.url, isSelected: false, id: item._id,
           }
         } else {
           return {
-            src: item.url, height: 80,
+            src: item.url,
+            height: 80,
             width: 60,
             isSelected: false,
-            id: item._id
+            id: item._id,
+
           }
         }
       })
@@ -102,26 +126,12 @@ const ViewScoutThreads = () => {
     setIndexOfseletedOne(index);
   };
 
-  const getSelectedItems = (index: any) => {
 
-    const nextImages = images.map((image: any, i: number) => i === index ? { ...image, isSelected: !image.isSelected } : image);
-    setImages([...nextImages]);
-
-    const filteredImages = nextImages.filter((item: any) => item.isSelected);
-    console.log(filteredImages)
-    // Create a new array of objects by matching urls
-    const newArray = selectedFile.filter((obj1: any) => {
-      return filteredImages.some((obj2: any) => obj1._id === obj2.id);
-    });
-    const attachmentIds = newArray.map((item: any) => item._id)
-    console.log(attachmentIds)
-    setImagesForDelete([...attachmentIds]);
-  }
 
   const deleteImagesEvent = async () => {
     setDeleteLoading(true)
     let obj = {
-      "attachment_ids": imagesForDelete
+      "attachment_ids": tempImages
     }
     let options = {
       method: "DELETE",
@@ -138,6 +148,8 @@ const ViewScoutThreads = () => {
         getSingleScout()
         setDeleteOpen(false)
         setImagesForDelete([])
+        tempImages = []
+        setSelectedItems([])
       }
     }
     catch (err) {
@@ -184,9 +196,31 @@ const ViewScoutThreads = () => {
               <h3 className={styles.heading}>Attachments</h3>
               <Button variant="contained" color="primary" size="small" startIcon={<AddIcon />} onClick={() => setFileUploadOpen(true)}>Add</Button>
             </div>
-            {images.length ? <Card sx={{ width: "100%", minHeight: "100px", padding: "0.25rem" }}>
-              <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
-            </Card> : ""}
+            <Card sx={{
+              width: "100%", minHeight: "100px", padding: "0.25rem", display: "grid",
+              gridTemplateColumns: "repeat(4, 60px)", /* Four columns with a width of 60px each */
+              gap: "10px",
+            }}>
+
+              {images.length ? images.map((image: any, index: any) => (
+
+                <div style={{ position: "relative" }} key={index}>
+                  <img src={image.src} alt={image.alt} width={60} height={80} onClick={() => handleClick(index, image)} style={{ cursor: "pointer" }} />
+                  <div style={{ position: "absolute", top: 0, right: 0 }}>
+                    <Checkbox
+                      checked={(tempImages.find((ite: any) => ite == image.id)) ? true : false}
+                      onChange={() => handleChange(image.id)}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                      color="secondary"
+                      title={image.id}
+                    />
+                  </div>
+                </div>
+
+              )) : ""}
+            </Card>
+
+
 
             {fileUploadOpen == false ?
               <CommentsComponent /> : ""}
@@ -202,7 +236,7 @@ const ViewScoutThreads = () => {
 
       <LoadingComponent loading={loading} />
       <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={indexOfSeletedOne} />
-      {imagesForDelete?.length !== 0 ?
+      {tempImages?.length !== 0 ?
         <div style={{
           position: "sticky",
           bottom: 0,

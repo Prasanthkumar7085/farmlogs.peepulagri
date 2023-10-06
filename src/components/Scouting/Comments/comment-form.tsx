@@ -245,7 +245,11 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         variant="outlined"
         multiline
         value={comment ? comment : ""}
-        onChange={(e) => setComment(e.target.value)}
+        onChange={(e) => {
+          const newValue = e.target.value.replace(/^\s+/, "");
+          setComment(newValue)
+
+        }}
       />
 
       {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (

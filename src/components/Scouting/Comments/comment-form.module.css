@@ -78,6 +78,7 @@
   width: 100%;
   gap: var(--gap-13xl);
 }
+
 .uploadprogress {
   display: flex;
   flex-direction: column;
@@ -87,9 +88,9 @@
 
 .uploadprogress {
   width: 100%;
-  font-size: clamp(14px, 3.2vw, 16px);
+  font-size: clamp(12px, 3vw, 14px);
   color: #000;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 
 .uploadItem {
@@ -97,6 +98,20 @@
   align-items: center;
   gap: 10px;
 }
+
+
+.progress {
+  align-items: center;
+  gap: 16px;
+  /* margin-bottom: 0.5rem; */
+  align-self: stretch;
+}
+
+.photojpg button {
+  padding-block: 0;
+  padding-left: 0;
+}
+
 .progressdetails {
   display: flex;
   justify-content: flex-start;
@@ -109,13 +124,26 @@
   gap: 4px;
 }
 
-.progress {
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 0.5rem;
+.uploaddetails {
   align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* gap: 8px; */
 }
-.photojpg button {
-  padding-block: 0;
-  padding-left: 0;
+
+.uploadcontroller {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.uploadname {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 11px;
+  width: 100%;
 }

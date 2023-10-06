@@ -188,14 +188,6 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       <img className={styles.avatarIcon} alt="" src="/avatar@2x.png" />
                       <div className={styles.messagebox1}>
                         <div className={styles.userName}>
-                          <div className={styles.repliedcontainer}>
-                            <img
-                              className={styles.repliedcontainerChild}
-                              alt=""
-                              src="/frame-40556.svg"
-                            />
-                            <h4 className={styles.repliedToJack}>Replied to jack</h4>
-                          </div>
                           <div className={styles.userdetails1}>
                             <h4 className={styles.jack}>Jack</h4>
                             <p className={styles.aug20231030am}>{timePipe(row.updatedAt, "DD-MM-YYYY hh:mm a")}</p>
@@ -226,12 +218,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
                         </div>
                         <div className={styles.actionButton1}>
-                          <div className={styles.reply}>
-                          </div>
                           <div className={styles.react}>
-                            <div className={styles.edit}>
-                              <div className={styles.editChild} />
-                            </div>
                             <div className={styles.edit}>
                               <div className={styles.editChild} />
                               <p className={styles.edit1} onClick={() => afterDeleteComment(row._id)}>Delete</p>

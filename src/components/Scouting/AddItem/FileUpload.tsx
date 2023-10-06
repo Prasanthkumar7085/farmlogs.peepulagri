@@ -38,7 +38,7 @@ const FileUploadComponent = () => {
     const [loading, setLoading] = useState<any>(false)
     const [multipleFiles, setMultipleFiles] = useState<any>()
     const [fileIndex, setIndex] = useState<any>()
-    const [fileProgress, setFileProgress] = useState<number[] | any>();
+    const [fileProgress, setFileProgress] = useState<number[] | any>([]);
     const [defaultValue, setDefaultValue] = useState<any>('');
     const [formId, setFormId] = useState<any>()
     const [formOptions, setFarmOptions] = useState<any>()
@@ -202,7 +202,7 @@ const FileUploadComponent = () => {
         setMultipleFiles(copy)
 
         const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array
-        let temp = [...fileProgressCopy, ...new Array(filesFromStore?.length).fill(100)]
+        let temp = [...fileProgressCopy, ...fileProgress]
         setFileProgress(temp)
 
 
@@ -260,7 +260,6 @@ const FileUploadComponent = () => {
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
-                console.log(responseData)
                 setUploadId(responseData.data.upload_id)
                 await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
                 tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: file.type, size: file.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
@@ -413,6 +412,10 @@ const FileUploadComponent = () => {
                 setAttachments(tempFilesStorage)
                 console.log(tempFilesStorage)
 
+            }
+            else {
+                fileProgressCopy[index] = "fail";
+                setFileProgress([...fileProgressCopy]);
             }
 
         }
@@ -655,10 +658,10 @@ const FileUploadComponent = () => {
                                             <div className={styles.uploadcontroller}>
                                                 <div className={styles.uploadname}>
                                                     <div className={styles.uploadItem}>
-                                                        <div className={styles.photojpg}>{item.name?.slice(0, 7)}...{item.type} </div>
-                                                        <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>
+                                                        <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{item.name?.slice(0, 7)}...{item.type} </div>
+                                                        {fileProgress[index] == "fail" ? "" : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
                                                     </div>
-                                                    {fileProgress[index] == 100 ?
+                                                    {fileProgress[index] == 100 && fileProgress[index] !== "fail" ?
                                                         <div className={styles.photojpg}>
                                                             <IconButton>
                                                                 <DoneIcon sx={{ color: "#05A155" }} />
@@ -668,7 +671,7 @@ const FileUploadComponent = () => {
                                                             </IconButton>
                                                         </div> : ""}
                                                 </div>
-                                                {fileProgress[index] !== 100 ?
+                                                {fileProgress[index] !== 100 || fileProgress[index] == "fail" ?
                                                     <img
                                                         className={styles.close41}
                                                         alt=""
@@ -678,13 +681,15 @@ const FileUploadComponent = () => {
 
                                             </div>
                                             <Box sx={{ width: '100%' }}>
-                                                {fileProgress[index] == 0 ?
+                                                {fileProgress[index] == 0 && fileProgress[index] !== "fail" ?
                                                     <LinearProgress /> :
-                                                    fileProgress[index] !== 100 ? <LinearProgress variant="determinate" value={fileProgress[index]} /> : ""
+                                                    fileProgress[index] !== 100 && fileProgress[index] !== "fail" ? <LinearProgress variant="determinate" value={fileProgress[index]} /> : ""
                                                 }
+
+
                                             </Box>
                                         </div>
-                                        {fileProgress[index] == 100 ? "" :
+                                        {fileProgress[index] == 100 || fileProgress[index] == "fail" ? "" :
                                             <div className={styles.uploadstatus}>
                                                 <div className={styles.completed}>{fileProgress[index]?.toFixed(2) + "%"}</div>
 

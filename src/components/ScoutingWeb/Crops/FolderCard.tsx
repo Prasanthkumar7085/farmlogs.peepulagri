@@ -35,7 +35,13 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
                             </div>
                         </div>
                         <div className={styles.textwrapper}>
-                            <h6 className={styles.type}>{item.title ? item.title : ""}</h6>
+                            <h6 className={styles.type}>
+                                {item?.title ? (item?.title?.length > 13 ?
+                                    (item?.title?.slice(0, 1).toUpperCase() +
+                                        item?.title?.slice(1, 10) + '...') :
+                                    item?.title[0].toUpperCase() + item?.title?.slice(1,)) : ""}
+
+                            </h6>
                             <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                                 <div className={styles.date}>{timePipe(item.createdAt, 'DD, MMM YYYY')}</div>
                                 <div className={styles.date}>{item.crop_area ? item.crop_area : 0} {item.crop_area > 1 ? 'acres' : 'acre'}</div>

@@ -18,7 +18,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Checkbox from '@mui/material/Checkbox';
 import { relative } from "path";
 import CustomGalleryItem from "@/components/Core/CustomCheckBox";
-
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 
 
 
@@ -197,27 +197,40 @@ const ViewScoutThreads = () => {
               <Button variant="contained" color="primary" size="small" startIcon={<AddIcon />} onClick={() => setFileUploadOpen(true)}>Add</Button>
             </div>
             <Card sx={{
-              width: "100%", minHeight: "100px", padding: "0.25rem", display: "grid",
-              gridTemplateColumns: "repeat(4, 60px)", /* Four columns with a width of 60px each */
-              gap: "10px",
+              width: "100%", minHeight: "100px", padding: "0.25rem",
             }}>
 
-              {images.length ? images.map((image: any, index: any) => (
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)", /* Four columns with a width of 60px each */
+                gridGap: "0.5rem",
+                margin: "0.5rem"
+              }}>
+                {images.length ? images.map((image: any, index: any) => (
 
-                <div style={{ position: "relative" }} key={index}>
-                  <img src={image.src} alt={image.alt} width={60} height={80} onClick={() => handleClick(index, image)} style={{ cursor: "pointer" }} />
-                  <div style={{ position: "absolute", top: 0, right: 0 }}>
-                    <Checkbox
-                      checked={(tempImages.find((ite: any) => ite == image.id)) ? true : false}
-                      onChange={() => handleChange(image.id)}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                      color="secondary"
-                      title={image.id}
-                    />
+                  <div style={{ position: "relative", height: "100px", }} key={index}>
+                    <img src={image.src} alt={image.alt} width={'100%'} height={"100%"} onClick={() => handleClick(index, image)} style={{ cursor: "pointer", borderRadius: "5px", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", bottom: 0, right: 0 }}>
+                      <Checkbox
+
+                        sx={{
+                          color: "#fff",
+                          '& .MuiSvgIcon-root': {
+                            color: "#fff"
+                          }
+                        }}
+                        size="small"
+                        checked={(tempImages.find((ite: any) => ite == image.id)) ? true : false}
+                        onChange={() => handleChange(image.id)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                        color="secondary"
+                        title={image.id}
+                      />
+                    </div>
                   </div>
-                </div>
 
-              )) : ""}
+                )) : ""}
+              </div>
             </Card>
 
 
@@ -239,15 +252,21 @@ const ViewScoutThreads = () => {
       {tempImages?.length !== 0 ?
         <div style={{
           position: "sticky",
-          bottom: 0,
-          backgroundColor: "black",
+          bottom: "1rem",
+          // backgroundColor: "black",
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
           color: "white",
           cursor: "pointer"
         }} onClick={() => setDeleteOpen(true)}>
-          <DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete
+          <div style={{ background: "#2B53BE", padding: "1rem 2rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", borderRadius: "30px" }}>
+            <DeleteOutlineRoundedIcon sx={{ fontSize: "18px" }} />
+            <p style={{ margin: "0 ", fontWeight: "500" }}>
+
+              Delete
+            </p>
+          </div>
         </div> : ""}
       {deleteOpen ? <AlertImagesDelete open={deleteOpen} deleteImagesEvent={deleteImagesEvent} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
 

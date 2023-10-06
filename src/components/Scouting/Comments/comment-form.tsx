@@ -250,7 +250,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
       {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
         <div className={styles.uploadprogress} id="upload-progress" key={index}>
-          <div className={styles.progress} id="progress">
+          <div className={styles.progress} id="progress" style={{ width: "100%" }}>
             <img className={styles.image21} alt="" src={"/nj.jpg"} />
 
             <div className={styles.progressdetails}>

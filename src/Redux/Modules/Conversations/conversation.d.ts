@@ -1,7 +1,8 @@
 declare namespace Conversation {
 
   export interface ConversationsInitialState {
-    messages: Array;
+    messages: Array,
+    attachmentsFilesList: Array
   }
 }
 

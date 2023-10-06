@@ -126,7 +126,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       }}>Reply</div> :
 
                       index == replyIndex ?
-                        <div className={styles.reply1} onClick={() => {
+                        <div className={styles.reply1} style={{ color: "red" }} onClick={() => {
                           setReplyOpen(false)
                           setReplyIndex(index)
                         }}>Close</div> :

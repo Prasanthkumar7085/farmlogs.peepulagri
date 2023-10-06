@@ -425,8 +425,28 @@ const FileUploadComponent = () => {
     useEffect(() => {
         if (router.query.farm_id && accessToken) {
             getFormDetails(router.query.farm_id)
+            dispatch(removeTheFilesFromStore([]));
         }
     }, [accessToken, router.query.farm_id])
+
+
+    useEffect(() => {
+        const confirmationMessage = 'Are you sure you want to leave this page? Your changes may not be saved.';
+
+        const handleBeforeUnload = (e: any) => {
+            e.preventDefault();
+            e.returnValue = confirmationMessage;
+
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+
+        };
+    }, []);
+
 
 
 

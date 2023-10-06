@@ -8,7 +8,7 @@ import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
 
 
-const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,errorMessages,defaultArea }: any) => {
+const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, errorMessages, defaultArea }: any) => {
 
   const [title, setTitle] = useState('');
   const [area, setArea] = useState('');
@@ -17,21 +17,21 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
     setTitle(defaultTitle);
     setArea(defaultArea);
   }, [open]);
-  
+
 
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
     const allowedCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
 
     if (!allowedCharacters.includes(keyPressed)) {
-        event.preventDefault();
+      event.preventDefault();
     }
   };
 
   const callData = () => {
     let obj = {
-      title: title ? title :"",
-      crop_area: (area&&+area) ? +area : null
+      title: title ? title : "",
+      crop_area: (area && +area) ? +area : null
     }
     captureResponseDilog(obj)
   }
@@ -47,8 +47,8 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
         <div className={styles.frame}>
           <h3 className={styles.newFolder}>{defaultTitle ? `Rename Crop` : `New Crop`}</h3>
 
-          <div style={{textAlign:"left",width:"100%"}}>
-            <h4 style={{margin:"0",paddingBlock:"0.5rem"}}>{'Title'}</h4>
+          <div style={{ textAlign: "left", width: "100%" }}>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Title'}</h4>
           </div>
           <TextField
             className={styles.input}
@@ -67,40 +67,40 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
             error={errorMessages ? errorMessages['title'] : ""}
             helperText={errorMessages ? errorMessages['title'] : ""}
           />
-         
+
         </div>
 
         <div className={styles.frame}>
-          <div style={{textAlign:"left",width:"100%"}}>
+          <div style={{ textAlign: "left", width: "100%" }}>
 
-            <h4 style={{margin:"0",paddingBlock:"0.5rem"}}>{'Crop Area'}</h4>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Crop Area'}</h4>
           </div>
-            <TextField
-              sx={{
-                  '& .MuiInputBase-root': {
-                      background: "#fff"
-                  }
-              }}
-              className={styles.input}
-              name="area"
-              size="small"
-              placeholder="Enter total area"
-              fullWidth
-              type={'number'}
-              onWheel={(e: any) => e.target.blur()}
-              variant="outlined"
-              error={Boolean(errorMessages?.['crop_area'])}
-              helperText={errorMessages?.['crop_area'] ? errorMessages?.['crop_area'] : ""}
-              onKeyPress={handleKeyPress}
-              inputProps={{
-                  step: 'any'
-              }}
-              value={area}
-              onChange={(e) => setArea(e.target.value)}
-              InputProps={{ style: { appearance: 'none' } }}
-              onKeyDown={(e: any) => { if (e.key == 'Enter') callData(); }}
+          <TextField
+            sx={{
+              '& .MuiInputBase-root': {
+                background: "#fff"
+              }
+            }}
+            className={styles.input}
+            name="area"
+            size="small"
+            placeholder="Enter total area"
+            fullWidth
+            type={'number'}
+            onWheel={(e: any) => e.target.blur()}
+            variant="outlined"
+            error={Boolean(errorMessages?.['crop_area'])}
+            helperText={errorMessages?.['crop_area'] ? errorMessages?.['crop_area'] : ""}
+            onKeyPress={handleKeyPress}
+            inputProps={{
+              step: 'any'
+            }}
+            value={area}
+            onChange={(e) => setArea(e.target.value)}
+            InputProps={{ style: { appearance: 'none' } }}
+            onKeyDown={(e: any) => { if (e.key == 'Enter') callData(); }}
           />
-            
+
         </div>
         <div className={styles.buttons}>
           <Button
@@ -108,7 +108,7 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
             color="primary"
             size="small"
             variant="outlined"
-            onClick={() => { captureResponseDilog(false); setTitle(''); setArea('')}}
+            onClick={() => { captureResponseDilog(false); setTitle(''); setArea('') }}
           >
             Cancel
           </Button>
@@ -123,7 +123,7 @@ const NewFolderDiloag = ({ open,captureResponseDilog, loading,defaultTitle,error
           >
             {loading ?
               <CircularProgress size="1.5rem" sx={{ color: "white" }} /> :
-              (defaultTitle ? 'Update Folder' : 'Create Folder')}
+              (defaultTitle ? 'Update Crop' : 'Create Crop')}
 
           </Button>
         </div>

@@ -725,7 +725,10 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                             id="back"
                                             size="large"
                                             variant="outlined"
-                                            onClick={() => captureFileUploadOptions("close")}
+                                            onClick={() => {
+                                                captureFileUploadOptions("close")
+                                                dispatch(removeTheFilesFromStore([]));
+                                            }}
                                         >
                                             Close
                                         </Button>

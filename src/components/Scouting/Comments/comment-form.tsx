@@ -149,6 +149,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
         setComment("")
         afterCommentAdd(true)
+        dispatch(removeTheAttachementsFilesFromStore([]))
 
       }
     } catch (err) {
@@ -169,7 +170,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
     const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array
     let temp = [...fileProgressCopy, ...new Array(filesFromStore?.length).fill(100)]
     setFileProgress(temp)
-    setMultipleFiles(e.target.files)
+    setMultipleFiles(copy)
 
     Array.from(e.target.files).map(async (item: any, index: number) => {
 

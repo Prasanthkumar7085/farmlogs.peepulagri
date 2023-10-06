@@ -14,7 +14,7 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
     <div className={styles.allForms}>
 
       <div className={styles.allFormsBlock}>
-        {farmsData.length ? farmsData.map((item: FarmDataType) => {
+        {farmsData.length ? farmsData.map((item: FarmDataType,index:number) => {
           return (
             <div className={styles.farmcard} id="farm-card" key={item._id} >
               <div className={styles.farm} id="farm">
@@ -45,7 +45,7 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
                   </div>
                   <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}`)}>
                     
-                    <ImageComponent src="./ViewIcon.svg" width="16" height="16" />
+                    <ImageComponent src="./ViewIcon.svg" width="16" height="16" alt={`photo-${index+1}`} />
                   </div>
                 </div>
               </div>

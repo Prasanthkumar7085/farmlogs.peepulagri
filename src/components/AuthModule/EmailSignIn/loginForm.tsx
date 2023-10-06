@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorMessagesComponent from '@/components/Core/ErrorMessagesComponent';
 import setCookie from '../../../../lib/CookieHandler/setCookie';
+import styles from "../SignUp/SignUp.module.css";
 
 
 
@@ -31,9 +32,7 @@ export default function SigninEmail() {
                 }),
             };
 
-            const response = await fetch(`https://peepul-agri-production.up.railway.app/v1.0/users/signin`, requestOptions)
-            console.log(response.status);
-
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/signin`, requestOptions)
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
                 await setCookie();
@@ -70,76 +69,80 @@ export default function SigninEmail() {
     };
 
     return (
-        <div>
-            <Card>
-                <Grid container >
-                    <Grid item xs={12} md={5}>
-                        <div>
-                            <Typography component="h1" variant="h5">
-                                Sign in
-                            </Typography>
-                            <form noValidate >
-                                <div>
-                                    <TextField
-                                        sx={{ marginTop: "1rem", width: "100%" }}
-                                        name="username"
-                                        label="Username"
-                                        type={"text"}
-                                        value={email}
-                                        onChange={(e) => {
-                                            setEmail(e.target.value)
-                                            setErrorMessages(null)
-                                        }}
-                                    />
+        <div id={styles.loginPage}>
+            <div className={styles.bgImage}>
+                <img src="/login-bg.webp" alt="Bg Image" />
+            </div>
 
-                                    <ErrorMessagesComponent errorMessage={errorMessages?.email} />
-                                </div>
-                                <div>
-                                    <TextField
-                                        sx={{ width: "100%" }}
-                                        name="password"
-                                        label="Password"
-                                        type={showPassword ? "text" : "password"}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton onClick={togglePasswordVisibility} edge="end">
-                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            ),
-                                        }}
-                                    />
-                                    <ErrorMessagesComponent errorMessage={errorMessages?.password} />
 
-                                </div>
-                                {invalid ?
-                                    <p style={{ color: "red" }}>
-                                        {invalid}
-                                    </p>
-                                    : ""
-                                }
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleSubmit}
-                                >
-                                    {loading ?
-                                        <CircularProgress /> : "Sign In"}
-                                </Button>
-                            </form>
-                        </div>
-                    </Grid>
-                </Grid>
-            </Card>
+
+            <form noValidate className={styles.formCard}>
+                <div className={styles.innerWrap}>
+                    <div className={styles.header}>
+                        <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
+                            Sign in
+                        </Typography>
+                    </div>
+                    <div>
+                        <TextField
+                            className={styles.phoneNo}
+                            placeholder='Email'
+                            sx={{ width: "100%" }}
+                            size='small'
+                            name="email"
+                            type={"text"}
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value)
+                                setErrorMessages(null)
+                            }}
+                        />
+                        <ErrorMessagesComponent errorMessage={errorMessages?.email} />
+                    </div>
+                    <div>
+                        <TextField
+                            sx={{ width: "100%" }}
+                            size='small'
+                            className={styles.phoneNo}
+                            placeholder='Password'
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={togglePasswordVisibility} edge="end">
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        <ErrorMessagesComponent errorMessage={errorMessages?.password} />
+
+                    </div>
+                    {invalid ?
+                        <p style={{ color: "red" }}>
+                            {invalid}
+                        </p>
+                        : ""
+                    }
+                    <Button
+                        className={styles.cta_button}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmit}
+                    >
+                        {loading ?
+                            <CircularProgress /> : "Sign In"}
+                    </Button>
+                </div>
+            </form>
+
+
+
         </div>
     );
 }
-
-
-
-
-

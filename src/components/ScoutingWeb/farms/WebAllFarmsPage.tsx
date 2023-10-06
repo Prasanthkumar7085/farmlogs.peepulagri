@@ -71,7 +71,12 @@ const AllFarmsPage = () => {
     <div className={styles.AllFarmsPageWeb}>
       <FarmsNavBarWeb getFarmsData={getFarmsData} />
       <div className={styles.allFarms}>
-        <ScoutingFarmDetailsCard getFarmsData={getFarmsData} data={data} onViewClick={onViewClick} loading={loading} />
+        {data.length ?
+          <ScoutingFarmDetailsCard getFarmsData={getFarmsData} data={data} onViewClick={onViewClick} loading={loading} />
+          : (!loading ? <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <img src="/no-farms-image.svg" alt="noFarms" width={450} height={350} />
+            <p style={{ margin: "0" }}>No farms</p>
+          </div> : "")}
       </div>
     </div>
   );

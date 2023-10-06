@@ -6,10 +6,11 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import timePipe from "@/pipes/timePipe";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
+import { setCropTitleTemp, setFarmTitleTemp } from "@/Redux/Modules/Farms";
 
 
 interface PageProps {
@@ -29,6 +30,7 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState(false);
+  const dispatch = useDispatch();
 
   const deleteFarm = async () => {
     setDeleteLoading(true);
@@ -48,12 +50,18 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
     setDeleteLoading(false);
   };
 
+
+  const setToStorage = async (item: any) => {
+    await dispatch(setFarmTitleTemp(item?.title));
+    router.push(`/farm/${item?._id}/crops`)
+  }
+
   return (
     <div className={styles.farmCardGridContainer}>
-      {data.length ? data.map((item: FarmDataType, index: number) => {
+      {data.map((item: FarmDataType, index: number) => {
         return (
           <div className={styles.farmdetailscard} key={index} style={{ cursor: "pointer" }}>
-            <div className={styles.container} onClick={() => router.push(`/farm/${item?._id}/crops`)}>
+            <div className={styles.container} onClick={() => setToStorage(item)}>
               <div className={styles.farmdetailscontainer}>
                 <div className={styles.farmName}>
                   <img className={styles.farmsIcon} alt="" src="/farmshape2.svg" />
@@ -114,7 +122,7 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
             </div>
           </div>
         )
-      }) : (!loading ? "No Data" : "")}
+      })}
 
       <AlertDelete deleteFarm={deleteFarm} setDialogOpen={setDeleteDialogOpen} open={deleteDialogOpen} loading={deleteLoading} />
       <LoadingComponent loading={loading} />

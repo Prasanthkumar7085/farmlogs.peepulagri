@@ -75,7 +75,7 @@ const ViewSingleImagePreview = ({ open, onClose, media, index }: any) => {
                     <div className={styles.scoutDailogImg}>
                         {media?.type?.includes('video') ? (
                             <video controls width="100%" height="auto" autoPlay key={currentIndex}>
-                                <source src={media?.url} type={media?.type} />
+                                <source src={media?.original} type={media?.type} />
                                 Your browser does not support the video tag.
                             </video>
                         ) : (

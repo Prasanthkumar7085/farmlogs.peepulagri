@@ -123,6 +123,7 @@
   position: relative;
   line-height: 100%;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .reply {
@@ -146,6 +147,7 @@
   position: relative;
   text-decoration: underline;
   line-height: 100%;
+  cursor: pointer;
 }
 
 .edit {

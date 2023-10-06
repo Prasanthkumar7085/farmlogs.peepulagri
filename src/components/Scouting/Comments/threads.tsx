@@ -32,8 +32,9 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       "attachment":
       {
 
-        "original_name": file.name,
+        "name": file.name,
         "type": file.type,
+        "crop_slug": file.crop_slug,
         "source": "scouting"
       }
     }

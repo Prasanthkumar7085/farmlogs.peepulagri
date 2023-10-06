@@ -250,6 +250,12 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
           setComment(newValue)
 
         }}
+        onKeyDown={(e: any) => {
+          if (e.key == 'Enter') {
+            replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
+          }
+        }}
+
       />
 
       {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (

@@ -12,8 +12,9 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
+import { useSwipeable } from 'react-swipeable';
 
-const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
+const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -23,7 +24,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
 
 
     const playNext = () => {
-        const nextIndex = (currentIndex + 1) % mediaArray.length;
+        const nextIndex = (currentIndex + 1) % mediaArray?.length;
         setCurrentIndex(nextIndex);
     };
 
@@ -33,21 +34,37 @@ const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
     };
 
     const handleClose = () => {
-        setCurrentIndex(-1);
-        onClose();
+        if (index) {
+            setCurrentIndex(index);
+            onClose();
+
+        }
+        else {
+            setCurrentIndex(0);
+            onClose();
+
+        }
     };
 
     const getKey = (e: any) => {
-        
+
         if (e.keyCode == 37) {
             playPrevious();
         } else if (e.keyCode == 39) {
             playNext();
-        }else if (e.keyCode == 27) {
+        } else if (e.keyCode == 27) {
             handleClose();
         }
-        
+
     }
+
+    // Define swipe handlers
+    const handlers = useSwipeable({
+        onSwipedLeft: playNext,
+        onSwipedRight: playPrevious,
+    });
+
+
     return (
         <Dialog
             autoFocus
@@ -80,32 +97,35 @@ const VideoDialogForScout = ({ open, onClose, mediaArray,index }: any) => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray.length <= 1}>
-                    <NavigateBeforeIcon sx={{ color: "#fff" }} />
-                </IconButton>
-                {mediaArray.length > 0 && (
-                    <div className={styles.scoutDailogImg}>
-                        {mediaArray[currentIndex]?.type?.includes('video') ? (
-                            <video controls width="100%" height="auto" autoPlay key={currentIndex}>
-                                <source src={mediaArray[currentIndex]?.url} type={mediaArray[currentIndex]?.type} />
-                                Your browser does not support the video tag.
-                            </video>
-                        ) : (
-                            <img
-                                src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
-                                alt={`Image ${currentIndex + 1}`}
-                            />
-                        )}
+                <div {...handlers}>
 
-                    </div>
-                )}
-                <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray.length <= 1}>
-                    <NavigateNextIcon sx={{ color: "#fff" }} />
-                </IconButton>
+                    <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray?.length <= 1}>
+                        <NavigateBeforeIcon sx={{ color: "#fff" }} />
+                    </IconButton>
+                    {mediaArray?.length > 0 && (
+                        <div className={styles.scoutDailogImg}>
+                            {mediaArray[currentIndex]?.type?.includes('video') ? (
+                                <video controls width="100%" height="auto" autoPlay key={currentIndex}>
+                                    <source src={mediaArray[currentIndex]?.url} type={mediaArray[currentIndex]?.type} />
+                                    Your browser does not support the video tag.
+                                </video>
+                            ) : (
+                                <img
+                                    src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
+                                    alt={`Image ${currentIndex + 1}`}
+                                />
+                            )}
+
+                        </div>
+                    )}
+                    <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray?.length <= 1}>
+                        <NavigateNextIcon sx={{ color: "#fff" }} />
+                    </IconButton>
+                </div>
             </DialogContent>
             <DialogActions>
                 <Typography variant="caption" display="block" align="center">
-                    {currentIndex + 1} of {mediaArray.length}
+                    {currentIndex + 1} of {mediaArray?.length}
                 </Typography>
             </DialogActions>
         </Dialog>

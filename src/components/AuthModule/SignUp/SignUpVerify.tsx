@@ -110,22 +110,10 @@ const SignUpVerify = () => {
 
       if (response?.data?.user_details?.user_type == "ADMIN") {
         router.push("/support");
-      } else if ((response?.data?.user_details?.user_type == "USER")) {
-        let farmResponse = await getAllFarmsService(accessToken);
-
-        if (
-          farmResponse.success &&
-          farmResponse.data &&
-          farmResponse?.data.length
-        ) {
-          dispatch(setAllFarms(farmResponse?.data))
-          const id = farmResponse?.data[0]?._id;
-          // router.push(`/farm/${id}/logs`);{To Go Logs}
-          router.push(`/farm`);
-
-        } else {
-          router.push("/farm");
-        }
+      } 
+      else if ((response?.data?.user_details?.user_type == "USER" || response?.data?.user_details?.user_type == "AGRONOMIST")) {
+        router.push("/farm");
+       
       }
     } else if (response.status == 422) {
       if ("errors" in response) {

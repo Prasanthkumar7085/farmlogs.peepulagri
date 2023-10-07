@@ -80,11 +80,12 @@ const SingleViewScoutComponent = () => {
                     type: imageObj.type,
                     id: imageObj._id,
                     scout_id: item._id,
-                    customOverlay: <div style={{ color: "white" }}>Yes</div>,
-
                     alt: "u",
-                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: "View More", title: "view_more" }] : [],
-
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{
+                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
+                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                            +{item.attachments?.length - 2}</div>, title: "view_more"
+                    }] : []
                 }
             }
             else
@@ -177,7 +178,7 @@ const SingleViewScoutComponent = () => {
 
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
                             <Typography variant="caption" sx={{ cursor: "pointer", color: "blue", fontSize: "12px" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
-                            >View more</Typography>
+                            >View Scout</Typography>
                         </div>
                     </Card>
                 )

@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import styles from "./threads.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
@@ -8,10 +8,12 @@ import { Button, TextField } from "@mui/material";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CommentForm from "./comment-form";
 import CommentFormReply from "./comment-formReply";
+import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const router = useRouter()
+  const dispatch = useDispatch()
   const [replyOpen, setReplyOpen] = useState<any>(false)
   const [replyIndex, setReplyIndex] = useState<any>()
   const [editMode, setEditMode] = useState<any>([])
@@ -19,6 +21,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [editComment, setEditComment] = useState<any>()
   const [loading, setLoading] = useState<any>()
   const [isReplies, setIsReplies] = useState<any>(false)
+
 
   useEffect(() => {
     if (afterReply) {
@@ -52,15 +55,29 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       if (responseData.success == true) {
         window.open(responseData.data.download_url)
         fetch(responseData.data.download_url)
-          .then((response) => response.blob())
-          .then((blob) => {
+          .then((response) => {
+            // Get the filename from the response headers
+            const contentDisposition = response.headers.get("content-disposition");
+            let filename = "downloaded_file"; // Default filename if not found in headers
+
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (filenameMatch && filenameMatch.length > 1) {
+                filename = filenameMatch[1];
+              }
+            }
+
             // Create a URL for the blob
+            return response.blob()
+              .then((blob) => ({ blob, filename }));
+          })
+          .then(({ blob, filename }) => {
             const blobUrl = window.URL.createObjectURL(blob);
 
             const downloadLink = document.createElement("a");
             downloadLink.href = blobUrl;
-            downloadLink.download = "image.jpg"; // Specify the desired file name
-            downloadLink.style.display = "none"; // Hide the link
+            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.style.display = "none";
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
@@ -69,11 +86,12 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
             window.URL.revokeObjectURL(blobUrl);
           })
           .catch((error) => {
-            console.error("Error downloading image:", error);
+            console.error("Error downloading file:", error);
           });
-
       }
+
     }
+
     catch (err) {
       console.log(err)
     }
@@ -119,7 +137,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       <div className={styles.attachment} key={indexfile}>
                         <div className={styles.row}>
                           <div className={styles.icon}>
-                            <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : ""} />
+                            <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : file.type.includes("application") ? "/pdf-icon.png" : file.type.includes("video") ? "/videoimg.png" : "/doc-icon.webp"
+                            } />
                             <img className={styles.groupIcon1} alt="" src="/group3.svg" />
                           </div>
                           <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
@@ -144,12 +163,14 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       <div className={styles.reply1} onClick={() => {
                         setReplyOpen(true)
                         setReplyIndex(index)
+                        dispatch(removeTheAttachementsFilesFromStore([]))
                       }}>Reply</div> :
 
                       index == replyIndex ?
                         <div className={styles.reply1} style={{ color: "red" }} onClick={() => {
                           setReplyOpen(false)
                           setReplyIndex(index)
+
                         }}>Close</div> :
 
                         <div className={styles.reply1} onClick={() => {

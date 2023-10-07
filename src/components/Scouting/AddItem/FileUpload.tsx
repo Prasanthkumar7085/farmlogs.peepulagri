@@ -633,6 +633,7 @@ const FileUploadComponent = () => {
                                                         <input
                                                             type="file"
                                                             alt="images-upload"
+                                                            accept="image/*,video/*"
                                                             multiple
                                                             onChange={handleFileChange}
                                                             hidden
@@ -651,7 +652,7 @@ const FileUploadComponent = () => {
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
-                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : "/nj.jpg"
+                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : item.type == "application/pdf" ? "/pdf-icon.png" : "/doc-icon.webp"
                                     } />
                                     <div className={styles.progressdetails}>
                                         <div className={styles.uploaddetails}>
@@ -659,7 +660,7 @@ const FileUploadComponent = () => {
                                                 <div className={styles.uploadname}>
                                                     <div className={styles.uploadItem}>
                                                         <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{item.name?.slice(0, 7)}...{item.type} </div>
-                                                        {fileProgress[index] == "fail" ? "" : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
+                                                        {fileProgress[index] == "fail" ? <div className={styles.photojpg} style={{ color: "red" }}>Cancelled</div> : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
                                                     </div>
                                                     {fileProgress[index] == 100 && fileProgress[index] !== "fail" ?
                                                         <div className={styles.photojpg}>

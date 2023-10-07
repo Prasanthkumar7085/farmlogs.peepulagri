@@ -61,12 +61,6 @@ const TasksPageComponent = () => {
         }
         setLoading(false);
     }
-    
-    // useEffect(() => {
-    //     if (router.isReady && accessToken) {
-    //         getAllTasks({page:1,limit:10});
-    //     }
-    // }, [router.isReady, accessToken]);
 
     const [searchString, setSearchString] = useState('');
 
@@ -92,6 +86,8 @@ const TasksPageComponent = () => {
         setSearchString(search);
         
     }
+    console.log(data);
+    
 
     return (
         <div>

@@ -9,7 +9,6 @@ const getSupportByIdService = async (supportId: string) => {
         const responseData = await response.json();
         return responseData;
 
-
     } catch (err: any) {
         console.error(err);
 

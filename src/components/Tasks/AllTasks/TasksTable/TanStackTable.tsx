@@ -97,12 +97,15 @@ const TanStackTableComponent = ({ data, columns, paginationDetails, getData }: a
                                 return (
                                     <tr key={row.id}>
                                         {row.getVisibleCells().map(cell => {
+                                            // console.log(flexRender(
+                                            //     cell.column.columnDef.cell,
+                                            //     cell.getContext()
+                                            // ));
+                                            
                                             return (
+                                                
                                                 <td key={cell.id}>
-                                                    {flexRender(
-                                                        cell.column.columnDef.cell,
-                                                        cell.getContext()
-                                                    )}
+                                                    {flexRender(cell.column.columnDef.cell,cell.getContext())}
                                                 </td>
                                             )
                                         })}
@@ -134,12 +137,10 @@ const TanStackTableComponent = ({ data, columns, paginationDetails, getData }: a
                     </button>
                     <span className="flex items-center gap-1">
                         <strong>
-                            {/* {table.getState().pagination.pageIndex + 1} of{' '}
-                            {table.getPageCount()} */}
-
                             {`Page ${paginationDetails?.page} of ${paginationDetails?.total_pages}`}
                         </strong>
                     </span>
+                    
                     {/* <span className="flex items-center gap-1">
                         | Go to page:
                         <input

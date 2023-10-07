@@ -1,6 +1,7 @@
 import { TaskResponseTypes } from "@/types/tasksTypes";
 import TanStackTableComponent from "./TanStackTable";
 import { Button } from "@mui/material";
+import { useRouter } from "next/router";
 
 
 interface pageProps {
@@ -9,9 +10,10 @@ interface pageProps {
     paginationDetails:any
 
 }
-const TasksTableComponent = ({ data,getData,paginationDetails }: any) => {
+const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
 
-    
+    const router = useRouter();
+
 
     const columns = [
         {
@@ -23,8 +25,8 @@ const TasksTableComponent = ({ data,getData,paginationDetails }: any) => {
             width: "200px"
         },
         {
-            accessorFn: (row: any) => row.farm_id,
-            id: 'farm_name',
+            accessorFn: (row: any) => row.farm_id.title,
+            id: 'farm_id.title',
             cell: (info: any) => <span style={{ padding: "40px 10px 40px 10px" }}>{info.getValue()}</span>,
             header: () => <span>Farm Name</span>,
             footer: (props: any) => props.column.id,
@@ -68,8 +70,8 @@ const TasksTableComponent = ({ data,getData,paginationDetails }: any) => {
             id: 'actions',
             cell: (info: any) => <span style={{ padding: "40px 10px 40px 10px" }}>{
                 <div>
-                    <Button onClick={() => console.log(info.row.original)}>View</Button>
-                    <Button onClick={() => console.log(info.row.original)}>Edit</Button>
+                    <Button onClick={() => console.log(info.row.original?._id)}>View</Button>
+                    <Button onClick={() => router.push(`/tasks/${info.row.original?._id}/edit`)}>Edit</Button>
                     <Button onClick={()=>console.log(info.row.original)}>Delete</Button>
                 </div>
             }</span>,

@@ -1,7 +1,9 @@
+import TaskForm from "./TaskForm";
+
 const AddTaskPageComponent = () => {
     return (
-        <div>
-        Add
+        <div style={{padding:"4rem"}}>
+            <TaskForm/>
         </div>
     )
 }

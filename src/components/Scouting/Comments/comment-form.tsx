@@ -28,8 +28,26 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
   useEffect(() => {
     getCropsDetails()
+    dispatch(removeTheAttachementsFilesFromStore([]))
   }, [])
 
+
+  useEffect(() => {
+    const confirmationMessage = 'Are you sure you want to leave this page? Your changes may not be saved.';
+
+    const handleBeforeUnload = (e: any) => {
+      e.preventDefault();
+      e.returnValue = confirmationMessage;
+
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+
+    };
+  }, []);
 
   //convert the kb into mb
   const bytesToMB = (bytes: any) => {

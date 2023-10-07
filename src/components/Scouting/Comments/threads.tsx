@@ -4,14 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Button, TextField } from "@mui/material";
+import { Avatar, Button, TextField } from "@mui/material";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CommentForm from "./comment-form";
 import CommentFormReply from "./comment-formReply";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import { deepOrange, deepPurple } from '@mui/material/colors';
+
 const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const userDetails = useSelector((state: any) => state.auth.userDetails);
+  console.log(userDetails, "details")
+
   const router = useRouter()
   const dispatch = useDispatch()
   const [replyOpen, setReplyOpen] = useState<any>(false)
@@ -106,10 +111,10 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         if (item.type == "DIRECT") {
           return (
             <div className={styles.inMessage} key={index}>
-              <img className={styles.avatarIcon} alt="" src="/avatar@2x.png" />
+              <Avatar sx={{ bgcolor: deepOrange[500] }}>{item?.user?.user_type?.slice(0, 2)}</Avatar>
               <div className={styles.messagebox}>
                 <div className={styles.userdetails}>
-                  <h4 className={styles.jack}>Jack</h4>
+                  <h4 className={styles.jack}>{userDetails?.user_details?.user_type == item?.user?.user_type ? "You" : item.user.user_type + "(" + item?.user?.phone + ")"}</h4>
                   <p className={styles.aug20231030am}>{timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}</p>
                 </div>
                 <div className={styles.paragraph}>
@@ -156,6 +161,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     : ""}
 
                 </div>
+
                 <div className={styles.actionButton}>
                   <div className={styles.reply}>
 
@@ -192,28 +198,29 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
                   </div>
 
-                  <div className={styles.react}>
-                    <div className={styles.edit}>
-                      <div className={styles.editChild} />
+                  {userDetails?.user_details?.user_type == item?.user?.user_type ?
+                    <div className={styles.react}>
+                      <div className={styles.edit}>
+                        <div className={styles.editChild} />
 
-                      {editMode[0] == true && editMode[1] == item._id ?
+                        {editMode[0] == true && editMode[1] == item._id ?
 
-                        <p className={styles.edit1} onClick={() => {
-                          setEditMode([false, item._id])
-                          afterUpdateComment(item._id, editComment)
-                        }}>Update</p> :
+                          <p className={styles.edit1} onClick={() => {
+                            setEditMode([false, item._id])
+                            afterUpdateComment(item._id, editComment)
+                          }}>Update</p> :
 
-                        <p className={styles.edit1} onClick={() => {
-                          setEditMode([true, item._id])
-                          setEditComment(item.content)
-                        }}>Edit</p>}
+                          <p className={styles.edit1} onClick={() => {
+                            setEditMode([true, item._id])
+                            setEditComment(item.content)
+                          }}>Edit</p>}
 
-                    </div>
-                    <div className={styles.edit}>
-                      <div className={styles.editChild} />
-                      <p className={styles.edit1} onClick={() => afterDeleteComment(item._id)}>Delete</p>
-                    </div>
-                  </div>
+                      </div>
+                      <div className={styles.edit}>
+                        <div className={styles.editChild} />
+                        <p className={styles.edit1} onClick={() => afterDeleteComment(item._id)}>Delete</p>
+                      </div>
+                    </div> : ""}
 
                 </div>
                 {replyOpen == true && index == replyIndex ?
@@ -228,11 +235,11 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                 {isReplies == true && index == replyIndex && item.replies.length ? item.replies.map((row: any) => {
                   return (
                     <div className={styles.inMessage1} key={index}>
-                      <img className={styles.avatarIcon} alt="" src="/avatar@2x.png" />
+                      <Avatar sx={{ bgcolor: deepOrange[500] }}>{row?.user?.user_type?.slice(0, 2)}</Avatar>
                       <div className={styles.messagebox1}>
                         <div className={styles.userName}>
                           <div className={styles.userdetails1}>
-                            <h4 className={styles.jack}>Jack</h4>
+                            <h4 className={styles.jack}>{userDetails?.user_details?.user_type == row?.user?.user_type ? "You" : row?.user?.user_type + "(" + row?.user?.phone + ")"}</h4>
                             <p className={styles.aug20231030am}>{timePipe(row.updatedAt, "DD-MM-YYYY hh:mm a")}</p>
                           </div>
                         </div>
@@ -262,14 +269,17 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           }) : ""}
 
                         </div>
-                        <div className={styles.actionButton1}>
-                          <div className={styles.react}>
-                            <div className={styles.edit}>
-                              <div className={styles.editChild} />
-                              <p className={styles.edit1} onClick={() => afterDeleteComment(row._id)}>Delete</p>
+                        {userDetails?.user_details?.user_type == row?.user?.user_type ?
+
+                          <div className={styles.actionButton1}>
+                            <div className={styles.react}>
+                              <div className={styles.edit}>
+                                <div className={styles.editChild} />
+                                <p className={styles.edit1} onClick={() => afterDeleteComment(row._id)}>Delete</p>
+                              </div>
                             </div>
-                          </div>
-                        </div>
+                          </div> : ""}
+
                       </div>
                     </div>
                   )

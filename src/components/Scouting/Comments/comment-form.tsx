@@ -182,6 +182,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
   //file upload normal smaller than 5 mb
   const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
+    fileProgressCopy[index] = 0;
 
     let obj = {
 
@@ -197,6 +198,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       }
 
     }
+    fileProgressCopy[index] = 25;
 
     let options: any = {
       method: "POST",
@@ -208,10 +210,13 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       }),
 
     }
+    fileProgressCopy[index] = 50;
 
     try {
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`, options);
       let responseData = await response.json();
+      fileProgressCopy[index] = 75;
+
       if (responseData.success == true) {
         let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT", body: item });
         fileProgressCopy[index] = 100;

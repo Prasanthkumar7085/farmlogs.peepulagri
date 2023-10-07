@@ -97,7 +97,7 @@
 .attachment {
   border-radius: var(--br-9xs);
   background-color: var(--background);
-  width: 233px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -196,7 +196,7 @@
   background-color: var(--white);
   flex-direction: row;
   justify-content: flex-start;
-  padding: var(--padding-5xs);
+  padding: 1rem;
   gap: var(--gap-5xs);
   margin-bottom: 0.6rem;
 }
@@ -319,7 +319,7 @@
 .threads {
   flex-direction: column;
   align-items: flex-end;
-  padding: 0 var(--padding-base);
+  padding: 0;
   text-align: left;
   font-size: var(--font-size-base);
   color: var(--title);

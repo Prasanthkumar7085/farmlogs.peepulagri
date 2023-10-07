@@ -17,6 +17,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { id } from "date-fns/locale";
+import Image from "next/image";
 
 const AllCropsComponent = () => {
 
@@ -284,7 +285,8 @@ const AllCropsComponent = () => {
                     </div>
                     : (!loading ?
                         <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
-                            <Typography variant="h4">No Crops</Typography>
+                            <Image src="/no-crops-image.svg" alt="" width={200} height={120} />
+                            <Typography variant="h4">This farm has no crops</Typography>
                         </div>
                         : "")}
             </div>

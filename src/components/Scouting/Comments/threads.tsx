@@ -1,40 +1,42 @@
-import type { NextPage } from "next";
 import styles from "./threads.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, Button, TextField } from "@mui/material";
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { Avatar, TextField } from "@mui/material";
 import CommentForm from "./comment-form";
-import CommentFormReply from "./comment-formReply";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
-import { deepOrange, deepPurple } from '@mui/material/colors';
+import { deepOrange } from '@mui/material/colors';
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
-  console.log(userDetails, "details")
 
-  const router = useRouter()
-  const dispatch = useDispatch()
-  const [replyOpen, setReplyOpen] = useState<any>(false)
-  const [replyIndex, setReplyIndex] = useState<any>()
-  const [editMode, setEditMode] = useState<any>([])
-  const [comment, setComment] = useState<any>()
-  const [editComment, setEditComment] = useState<any>()
-  const [loading, setLoading] = useState<any>()
-  const [isReplies, setIsReplies] = useState<any>(false)
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [replyOpen, setReplyOpen] = useState<any>(false);
+  const [replyIndex, setReplyIndex] = useState<any>();
+  const [editMode, setEditMode] = useState<any>([]);
+  const [editComment, setEditComment] = useState<any>();
+  const [isReplies, setIsReplies] = useState<any>(false);
+  const [loading, setLoading] = useState(false);
+
 
 
   useEffect(() => {
     if (afterReply) {
       setReplyOpen(false)
     }
-  }, [afterReply])
+  }, [afterReply]);
 
-  const downLoadAttachements = async (file: any) => {
+
+
+  const downLoadAttachements = async (file: any, userId: any) => {
+  
+    setLoading(true);
     let body = {
 
       "attachment":
@@ -43,7 +45,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         "name": file.name,
         "type": file.type,
         "crop_slug": file.crop_slug,
-        "source": "scouting"
+        "source": "scouting",
+        "user_id":userId
       }
     }
     let options = {
@@ -99,6 +102,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
     catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false);
     }
 
   }
@@ -153,7 +158,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           alt=""
                           src="/download-1-1.svg"
                           style={{ cursor: "pointer" }}
-                          onClick={() => downLoadAttachements(file)}
+                          onClick={() => downLoadAttachements(file,item.user._id)}
                         />
                       </div>)
                   })
@@ -263,7 +268,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   alt=""
                                   src="/download-1-1.svg"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => downLoadAttachements(file)}
+                                  onClick={() => downLoadAttachements(file,row.user._id)}
                                 />
                               </div>)
                           }) : ""}
@@ -284,11 +289,6 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     </div>
                   )
                 }) : ""}
-
-
-
-
-
               </div>
             </div>
           )
@@ -299,10 +299,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           No Threads
         </div>
       }
-
-
-
-
+      <LoadingComponent loading={loading}/>
     </div>
   );
 };

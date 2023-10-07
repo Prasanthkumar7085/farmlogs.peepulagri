@@ -80,8 +80,6 @@ const SingleViewScoutComponent = () => {
                     type: imageObj.type,
                     id: imageObj._id,
                     scout_id: item._id,
-                    customOverlay: <div style={{ color: "white" }}>Yes</div>,
-
                     alt: "u",
                     tags: (item.attachments?.length > 3 && index == 2) ? [{
                         value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}

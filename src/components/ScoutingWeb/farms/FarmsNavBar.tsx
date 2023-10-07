@@ -9,12 +9,18 @@ import { useRouter } from "next/router";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import { useSelector } from "react-redux";
 import SearchIcon from '@mui/icons-material/Search';
+import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
+
 
 export interface pageProps {
-  getFarmsData: ({ search_string, location }: { search_string: string, location: string }) => void;
+  getFarmsData:
+  ({ search_string, location, userId, page, limit, sortBy, sortType }:
+    { search_string: string, location: string, userId: string,page:string|number,limit:string|number,sortBy:string,sortType:string }) => void;
 }
 const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
-
+  
+  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
 
   const router = useRouter();
   const [search, setSearch] = useState('');
@@ -23,9 +29,11 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   const [location, setLocation] = useState<{ name: string, _id: string } | null>();
   const [locations, setLocations] = useState<Array<{ name: string, _id: string }>>([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
+  const [user, setUser] = useState<string|null>(null);
+  const [users, setUsers] = useState([]);
 
-  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
+  const [page, setPage] = useState<number | string>(1);
+  const [limit, setLimit] = useState<number|string>(1);
 
   const onChangeSearchString = (e: ChangeEvent<HTMLInputElement>) => {
     setChanged(true);
@@ -40,7 +48,15 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       
       setChanged(true);
       setLocation(value);
-      getFarmsData({ search_string: search, location: location?.name as string })
+      getFarmsData({
+        search_string: search,
+        location: location?.name as string,
+        userId: user as string,
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        sortBy: router.query.order_by as string,
+        sortType: router.query.sort_type as string,
+      })
 
     }
   }
@@ -49,14 +65,25 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     setSearch(router.query?.search_string as string);
   }, [router.query?.search_string]);
 
+
+
+  const callData = async () => {
+    if (router.query.location) {
+      getLocations(router.query.location as string);
+    } else {
+      getLocations();
+    }
+    if (router.query.user_id) {
+      getAllUsers(router.query.user_id as string);
+    } else {
+      getAllUsers();
+    }
+
+    
+  }
   useEffect(() => {
     if (router.isReady&&accessToken) {
-      if (router.query.location) {
-        getLocations(router.query.location as string);
-      } else {
-        getLocations();
-      }
-      
+      callData();
     }
   }, [router.isReady,accessToken]);
 
@@ -64,12 +91,39 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     if (changed) {
       const delay = 500;
       const debounce = setTimeout(() => {
-        getFarmsData({ search_string: search, location: location?.name as string });
+        getFarmsData({
+          search_string: search,
+          location: location?.name as string,
+          userId: router.query.user_id as string,
+          page: router.query.page as string,
+          limit: router.query.limit as string,
+          sortBy: router.query.order_by as string,
+          sortType: router.query.sort_type as string,
+        });
       }, delay);
       return () => clearTimeout(debounce);
     }
   }, [search, location]);
 
+  const [settingUserLoading, setSettingUserLoading] = useState(false);
+  const getAllUsers = async (userId = '') => {
+    
+    const response = await getAllUsersService({ token: accessToken });
+    if (response?.success) {
+      setUsers(response?.data);
+      if (userId) {
+        let userObj = response?.data?.find((item: any) => item._id == userId);
+        console.log(userObj,'pkpk');
+        setUser(userObj);
+        setSettingUserLoading(true);
+          setTimeout(() => {
+            setSettingUserLoading(false);
+          }, 1);
+      }
+      
+    }
+  }
+  
   const getLocations = async (newLocation = '') => {
     setOptionsLoading(true);
     try {
@@ -107,6 +161,33 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     }
   }
 
+  const onChangeUser = (e: any, value: any, reason: any) => {
+    if (value) {
+      
+      setUser(value);
+      getFarmsData({
+        search_string: search,
+        location: location?.name as string,
+        userId: value._id as string,
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        sortBy: router.query.order_by as string,
+        sortType: router.query.sort_type as string,
+      })
+    }else{
+      setUser(null);
+      getFarmsData({
+        search_string: search,
+        location: location?.name as string,
+        userId: '',
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        sortBy: router.query.order_by as string,
+        sortType: router.query.sort_type as string,
+      })
+    }
+  }
+  
 
   return (
     <div className={styles.farmsnavbar}>
@@ -177,6 +258,41 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
               />
             )}
           /> : ""}
+        
+        {userType == 'AGRONOMIST' && !settingUserLoading ?
+          <Autocomplete
+          sx={{
+            width: "250px",
+            maxWidth: "250px",
+            borderRadius: "4px",
+          }}
+          id="size-small-outlined-multi"
+          size="small"
+          fullWidth
+          noOptionsText={'No such User'}
+          value={user}
+          isOptionEqualToValue={(option:any, value:any) => option.phone === value.phone}
+          getOptionLabel={(option:any) => option.phone}
+          options={users}
+          onChange={onChangeUser}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Search by User Mobile"
+              variant="outlined"
+              size="small"
+              sx={{
+                '& .MuiInputBase-root': {
+                  fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                  backgroundColor: "#fff",
+                  border: "none",
+                }
+              }}
+
+            />
+          )}
+        />
+        : ""}
         {/* <Button
           className={styles.button}
           variant="contained"
@@ -185,6 +301,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           <AddIcon sx={{ fontSize: "1rem" }} />Add
         </Button> */}
       </div>
+      
     </div>
   );
 };

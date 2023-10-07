@@ -10,20 +10,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
-import { setCropTitleTemp, setFarmTitleTemp } from "@/Redux/Modules/Farms";
+import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 
 
 interface PageProps {
   data: any;
   onViewClick: any;
   loading: boolean;
-  getFarmsData: ({ search_string, location }: { search_string: string, location: string }) => void
+  getFarmsData: ({ search_string, location, userId, page, limit, sortBy, sortType }: { search_string: string, location: string, userId: string, page: number | string, limit:number|string,sortBy:string,sortType:string }) => void
 }
 const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: PageProps) => {
 
   const router = useRouter();
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+  
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
@@ -41,7 +43,15 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
       setAlertMessage(response?.message);
       setAlertType(true);
       setDeleteDialogOpen(false);
-      getFarmsData({ search_string: router.query?.search_string as string, location: router.query.location as string })
+      getFarmsData({
+        search_string: router.query?.search_string as string,
+        location: router.query.location as string,
+        userId: router.query.user_id as string,
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        sortBy: router.query.order_by as string,
+        sortType: router.query.sort_type as string,
+      })
 
     } else {
       setAlertMessage(response?.message);
@@ -97,8 +107,11 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
               </div>
             </div>
             <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }} >
-              <div style={{ width: "100%" }} onClick={() => router.push(`/farm/${item?._id}/crops`)}>
-                {/* Testung */}
+              <div
+                className={styles.mobile}
+                onClick={() => router.push(`/farm/${item?._id}/crops`)}
+              >
+                {userType=='AGRONOMIST'?<p className={styles.mobile}>User Mobile: {item?.user_id?.phone}</p>:""}
               </div>
               <div className={styles.actionbuttons} >
                 <IconButton className={styles.view} onClick={() => onViewClick(item._id)}>

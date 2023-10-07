@@ -124,9 +124,9 @@ const AllCropsWebPage = () => {
             <FarmDetailsMiniCard />
             <CropsNavBarWeb options={farmsData} captureFarmData={captureFarmData} farmSelected={farmSelected} />
             <div className={styles.filterBlock}>
-                <IconButton onClick={(event: any) => setAnchorEl(event.currentTarget)}>
+                <div style={{display:"flex", alignItems:"center", cursor:"pointer"}} onClick={(event: any) => setAnchorEl(event.currentTarget)}>
                     <SortIcon /><Typography>Sort By</Typography>
-                </IconButton>
+                </div>
                 <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}

@@ -236,7 +236,7 @@ const FileUploadComponent = () => {
 
 
     //start the file upload event
-    const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
+    const startUploadEvent = async (file: any, index: any, fileProgressCopy: any, setFileProgress: Function) => {
         let obj = {
             "attachment": {
                 original_name: file.name,
@@ -264,6 +264,10 @@ const FileUploadComponent = () => {
                 await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
                 tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: file.type, size: file.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
                 setAttachments(tempFilesStorage)
+            }
+            else {
+                fileProgressCopy[index] = "fail";
+                setFileProgress([...fileProgressCopy]);
             }
         }
         catch (err) {

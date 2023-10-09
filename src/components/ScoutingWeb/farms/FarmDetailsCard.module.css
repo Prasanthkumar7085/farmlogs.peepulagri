@@ -195,7 +195,7 @@
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  padding: 16px 24px 8px;
+  padding: 1rem 1rem 0.75rem;
   text-align: left;
   font-size: 20px;
   color: #35353d;
@@ -205,5 +205,5 @@
 .farmCardGridContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 2rem;
+  grid-gap: 1rem;
 }

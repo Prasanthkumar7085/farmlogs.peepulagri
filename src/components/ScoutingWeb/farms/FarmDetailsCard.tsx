@@ -73,7 +73,7 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
             <div className={styles.container} onClick={() => setToStorage(item)}>
               <div className={styles.farmdetailscontainer}>
                 <div className={styles.farmName}>
-                  <img className={styles.farmsIcon} alt="" src="/farmshape2.svg" />
+                  <img className={styles.farmsIcon} alt="Farm Shape" src="/farmshape2.svg" />
                   <h2 className={styles.farm1}>
                     {item.title.length > 16 ?
                       (item.title.slice(0, 1).toUpperCase() +
@@ -114,7 +114,7 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
               </div>
               <div className={styles.actionbuttons} >
                 <IconButton className={styles.view} onClick={() => onViewClick(item._id)}>
-                  <SettingsIcon sx={{ color: "#c1c1c1" }} />
+                  <SettingsIcon sx={{ color: "#6A7185" }} />
                 </IconButton>
                 {/* <IconButton className={styles.edit}>
                   <img

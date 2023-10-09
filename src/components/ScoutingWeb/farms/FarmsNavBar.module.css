@@ -92,13 +92,13 @@
 }
 
 .AllFarmsPageWeb {
-  padding-top: 5rem;
+  padding-top: 1rem;
   width: 90%;
   margin: 0 auto;
 }
 
 .allFarms {
-  height: 72vh;
+  height: calc(100vh - 140px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;

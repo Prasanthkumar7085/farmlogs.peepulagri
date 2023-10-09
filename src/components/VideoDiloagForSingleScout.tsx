@@ -78,7 +78,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                     width: "95%",
                     background: "#ffffff00",
                     boxShadow: "none !important",
-                    height: "calc(100% - 140px)"
+                    height: "calc(100% - 140px)",
+                    maxWidth: "400px !important"
                 },
                 '& .MuiTypography-root': {
                     textAlign: "right",

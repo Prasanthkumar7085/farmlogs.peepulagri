@@ -13,6 +13,7 @@ import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import Image from "next/image";
 
 const SingleViewScoutComponent = () => {
 
@@ -184,8 +185,9 @@ const SingleViewScoutComponent = () => {
                 )
             }) :
                 (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
-                        <Typography variant="h4">No Scouts</Typography>
+                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
+                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
+                        <Typography variant="h4">No Scoutings for this crop</Typography>
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />

@@ -11,7 +11,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AlertComponent from "@/components/Core/AlertComponent";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply }: any) => {
+const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
@@ -35,33 +35,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       setReplyOpen(false)
     }
   }, [afterReply]);
-  const deleteAttachements = async (attachmentID: any) => {
-    setLoading(true)
-    let obj = {
-      "attachment_ids": [attachmentID]
-    }
-    let options = {
-      method: "DELETE",
-      body: JSON.stringify(obj),
-      headers: new Headers({
-        'content-type': 'application/json',
-        'authorization': accessToken
-      })
-    }
-    try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/attachments`, options)
-      let responseData = await response.json()
-      if (responseData.success == true) {
 
-      }
-    }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
-    }
-  }
 
 
 
@@ -202,7 +176,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           />
                           {userDetails?.user_details?.user_type == item?.user?.user_type ?
                             <IconButton
-                              onClick={() => deleteAttachements(file._id)}
+                              onClick={() => afterDeleteAttachements(file._id, item._id)}
                             ><DeleteForeverIcon /></IconButton>
                             : ""}
                         </div>
@@ -349,7 +323,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                 />
                                 {userDetails?.user_details?.user_type == row?.user?.user_type ?
                                   <IconButton
-                                    onClick={() => deleteAttachements(file._id)}
+                                    onClick={() => afterDeleteAttachements(file._id, row._id)}
                                   ><DeleteForeverIcon /></IconButton> : ""}
                               </div>)
                           }) : ""}

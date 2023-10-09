@@ -1,4 +1,4 @@
-const updateDescriptionService = async (scoutId: string, token: string, description: any) => {
+const updateDescriptionService = async (scoutId: string, token: string, data: any, attachements: any, description: any) => {
 
     try {
         let options = {
@@ -8,7 +8,10 @@ const updateDescriptionService = async (scoutId: string, token: string, descript
                 'authorization': token
             }),
             body: JSON.stringify({
-                "description": description
+                "farm_id": data.farm_id._id,
+                "description": description,
+                "crop_id": data.crop_id,
+                "attachments": [...attachements, ...data.attachments]
             })
         }
         let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}`, options);

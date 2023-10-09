@@ -8,8 +8,8 @@ const HomePage = () => {
         <div>
             {/* <Login /> */}
             <div id="webLogin">
-                <SignUp />
-                {/* <SigninEmail /> */}
+                {/* <SignUp /> */}
+                <SigninEmail />
             </div>
             <div id="mobileLogin">
                 <MobileLogin />

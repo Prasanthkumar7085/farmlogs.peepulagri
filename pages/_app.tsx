@@ -20,7 +20,9 @@ function MyApp({
     const sideBarList = [
         '/',
         '/signup',
-        '/signup-verify'
+        '/signup-verify',
+        '/forgot-password',
+        '/forgot-password/verify-otp'
     ]
     return (
         <ThemeProvider theme={theme}>

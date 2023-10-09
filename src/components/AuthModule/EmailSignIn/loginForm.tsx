@@ -120,6 +120,7 @@ export default function SigninEmail() {
                             }}
                         />
                         <ErrorMessagesComponent errorMessage={errorMessages?.password} />
+                        <Button onClick={() => router.push('/forgot-password')}>Forgot Password</Button>
 
                     </div>
                     {invalid ?

@@ -293,7 +293,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                   <div className={styles.uploadname} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div className={styles.uploadItem}>
                       <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{index + 1}.    {item.name?.slice(0, 7)}...{item.type} </div>
-                      {fileProgress[index] == "fail" ? "" : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
+                      {fileProgress[index] == "fail" ? <div className={styles.photojpg} style={{ color: "red" }}>Cancelled</div> : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
                     </div>
                     {fileProgress[index] == 100 && fileProgress[index] !== "fail" ?
                       <div className={styles.photojpg}>

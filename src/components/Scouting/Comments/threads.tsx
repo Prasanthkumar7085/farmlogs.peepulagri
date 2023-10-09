@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, TextField } from "@mui/material";
+import { Avatar, Button, TextField, Typography } from "@mui/material";
 import CommentForm from "./comment-form";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import { deepOrange } from '@mui/material/colors';
@@ -35,7 +35,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
 
   const downLoadAttachements = async (file: any, userId: any) => {
-  
+
     setLoading(true);
     let body = {
 
@@ -46,7 +46,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         "type": file.type,
         "crop_slug": file.crop_slug,
         "source": "scouting",
-        "user_id":userId
+        "user_id": userId
       }
     }
     let options = {
@@ -134,12 +134,15 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         variant="outlined"
                         multiline
                         value={editComment}
-                        onChange={(e) => setEditComment(e.target.value)}
+                        onChange={(e) => {
+                          const newValue = e.target.value.replace(/^\s+/, "");
+                          setEditComment(newValue)
+                        }}
                       />
                     </div> :
 
                     <p className={styles.theProblemIm}>
-                      {item.content}
+                      {item.content}{"                     "}<Typography variant="caption">{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
                     </p>}
 
                   {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {
@@ -158,7 +161,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           alt=""
                           src="/download-1-1.svg"
                           style={{ cursor: "pointer" }}
-                          onClick={() => downLoadAttachements(file,item.user._id)}
+                          onClick={() => downLoadAttachements(file, item.user._id)}
                         />
                       </div>)
                   })
@@ -210,10 +213,12 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
                         {editMode[0] == true && editMode[1] == item._id ?
 
-                          <p className={styles.edit1} onClick={() => {
-                            setEditMode([false, item._id])
-                            afterUpdateComment(item._id, editComment)
-                          }}>Update</p> :
+                          <Button className={styles.edit1}
+                            disabled={editComment ? false : true}
+                            onClick={() => {
+                              setEditMode([false, item._id])
+                              afterUpdateComment(item._id, editComment)
+                            }}>Update</Button> :
 
                           <p className={styles.edit1} onClick={() => {
                             setEditMode([true, item._id])
@@ -221,10 +226,18 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           }}>Edit</p>}
 
                       </div>
-                      <div className={styles.edit}>
-                        <div className={styles.editChild} />
-                        <p className={styles.edit1} onClick={() => afterDeleteComment(item._id)}>Delete</p>
-                      </div>
+                      {editMode[0] == true && editMode[1] == item._id ?
+                        <div className={styles.edit}>
+                          <div className={styles.editChild} />
+                          <Button className={styles.edit1} onClick={() => {
+                            setEditMode([false, item._id])
+                            setEditComment("")
+                          }}>Close</Button>
+                        </div> :
+                        <div className={styles.edit}>
+                          <div className={styles.editChild} />
+                          <p className={styles.edit1} onClick={() => afterDeleteComment(item._id)}>Delete</p>
+                        </div>}
                     </div> : ""}
 
                 </div>
@@ -250,9 +263,28 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         </div>
 
                         <div className={styles.paragraph1}>
-                          <p className={styles.theProblemIm}>
-                            {row.content}
-                          </p>
+                          {editMode[0] == true && editMode[1] == row._id ?
+                            <div style={{ width: "100%" }}>
+                              <TextField
+                                className={styles.chatBox}
+                                color="primary"
+                                rows={2}
+                                placeholder="Enter your reply message... "
+                                fullWidth={true}
+                                variant="outlined"
+                                multiline
+                                value={editComment}
+                                onChange={(e) => {
+                                  const newValue = e.target.value.replace(/^\s+/, "");
+                                  setEditComment(newValue)
+                                }}
+                              />
+                            </div> :
+
+                            <p className={styles.theProblemIm}>
+                              {row.content}{"                     "}<Typography variant="caption">{row.createdAt == row.updatedAt ? "" : "(edited)"}</Typography>
+                            </p>}
+
                           {row.attachments.length ? row.attachments.map((file: any, fileIndex: any) => {
                             return (
                               <div className={styles.attachment1} key={fileIndex}>
@@ -268,20 +300,47 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   alt=""
                                   src="/download-1-1.svg"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => downLoadAttachements(file,row.user._id)}
+                                  onClick={() => downLoadAttachements(file, row.user._id)}
                                 />
                               </div>)
                           }) : ""}
 
                         </div>
+
                         {userDetails?.user_details?.user_type == row?.user?.user_type ?
 
                           <div className={styles.actionButton1}>
                             <div className={styles.react}>
                               <div className={styles.edit}>
                                 <div className={styles.editChild} />
-                                <p className={styles.edit1} onClick={() => afterDeleteComment(row._id)}>Delete</p>
+                                {editMode[0] == true && editMode[1] == row._id ?
+                                  <Button className={styles.edit1}
+                                    disabled={editComment ? false : true}
+                                    onClick={() => {
+                                      setEditMode([false, row._id])
+                                      afterUpdateComment(row._id, editComment)
+                                    }}>Update</Button> :
+
+                                  <p className={styles.edit1} onClick={() => {
+                                    setEditMode([true, row._id])
+                                    setEditComment(row.content)
+                                  }}>Edit</p>}
+
+
+                                <div className={styles.editChild} />
+                                {editMode[0] == true && editMode[1] == row._id ?
+                                  <div className={styles.edit}>
+                                    <Button className={styles.edit1} onClick={() => {
+                                      setEditMode([false, row._id])
+                                      setEditComment("")
+                                    }}>Close</Button>
+                                  </div> :
+                                  <div className={styles.edit}>
+                                    <p className={styles.edit1} onClick={() => afterDeleteComment(row._id)}>Delete</p>
+                                  </div>}
+
                               </div>
+
                             </div>
                           </div> : ""}
 
@@ -299,7 +358,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           No Threads
         </div>
       }
-      <LoadingComponent loading={loading}/>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

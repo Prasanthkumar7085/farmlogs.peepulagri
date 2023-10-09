@@ -19,6 +19,7 @@ import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms
 import { removeOneElement, removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
 import SelectAutoCompleteForCrops from "@/components/Core/SelectComponentForCrops";
 import timePipe from "@/pipes/timePipe";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 
 
 const FileUploadComponent = () => {
@@ -49,6 +50,7 @@ const FileUploadComponent = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [previewImages, setPreviewImages] = useState<any>([]);
+    const [validations, setValidations] = useState<any>()
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
@@ -196,6 +198,7 @@ const FileUploadComponent = () => {
 
     //select the when input select 
     const handleFileChange = async (e: any) => {
+        setValidations({})
         let copy = [...e.target.files, ...filesFromStore]
         dispatch(storeFilesArray(e.target.files))
 
@@ -488,6 +491,9 @@ const FileUploadComponent = () => {
                 router.back()
 
             }
+            else if (responseData.status == 422) {
+                setValidations(responseData?.errors)
+            }
             setLoading(false)
 
         }
@@ -547,20 +553,28 @@ const FileUploadComponent = () => {
     }
 
     const captureFarmName = (selectedObject: any) => {
+        setValidations({})
         if (selectedObject) {
             setFormId(selectedObject?._id);
             getCropsDetails(selectedObject?._id)
 
+        }
+        else {
+            setFormId("")
         }
     }
 
     const [cropName, setCropName] = useState<any>()
 
     const captureCropName = (selectedObject: any) => {
+        setValidations({})
         console.log(selectedObject)
         if (selectedObject) {
             setSelectedCrop(selectedObject)
             setCropName(selectedObject.title)
+        }
+        else {
+            setSelectedCrop("")
         }
     }
 
@@ -585,6 +599,7 @@ const FileUploadComponent = () => {
                                     >
                                         <InputLabel color="primary" />
                                         <SelectAutoCompleteForFarms options={formOptions} label={"title"} onSelectValueFromDropDown={captureFarmName} placeholder={"Select Farm"} defaultValue={defaultValue} />
+                                        <ErrorMessagesComponent errorMessage={validations?.farm_id} />
 
                                         <FormHelperText />
                                     </FormControl>
@@ -596,6 +611,8 @@ const FileUploadComponent = () => {
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
                                         <SelectAutoCompleteForCrops options={cropOptions} label={"title"} onSelectValueFromDropDown={captureCropName} placeholder={"Select Crop"} defaultValue={cropName} />
+                                        <ErrorMessagesComponent errorMessage={validations?.crop_id} />
+
                                         <FormHelperText />
                                     </FormControl>
                                 </div>
@@ -653,6 +670,7 @@ const FileUploadComponent = () => {
                                 </div>
                             </div>
                         </div>
+                        <ErrorMessagesComponent errorMessage={validations?.attachments} />
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
@@ -721,9 +739,15 @@ const FileUploadComponent = () => {
                                                 variant="outlined"
                                                 multiline
                                                 value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
+                                                onChange={(e) => {
+                                                    setDescription(e.target.value)
+                                                    setValidations({})
+
+                                                }}
                                                 sx={{ background: "#fff" }}
                                             />
+                                            <ErrorMessagesComponent errorMessage={validations?.description} />
+
                                         </div>
                                     </div>
 

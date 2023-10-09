@@ -144,9 +144,9 @@
 .edit1 {
   margin: 0;
   position: relative;
-  text-decoration: underline;
   line-height: 100%;
   cursor: pointer;
+  
 }
 
 .edit {

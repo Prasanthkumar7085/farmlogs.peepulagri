@@ -80,8 +80,9 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
     const updateScoutDetails = async () => {
         setLoading(true);
-
+        console.log(tempFilesStorage, "after")
         try {
+
             await updateAttachements()
             const response = await updateDescriptionService(router.query?.scout_id as string, accessToken, data, tempFilesStorage, description)
             console.log(response)
@@ -108,26 +109,19 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
         return bytes / (1024 * 1024);
     }
 
-    const removeFile = (index: number) => {
+
+    const removeFileAfterAdding = (index: number, file: any) => {
         const selectedFilesCopy = [...multipleFiles];
         selectedFilesCopy.splice(index, 1);
 
         const fileProgressCopy = [...fileProgress];
         fileProgressCopy.splice(index, 1);
+
 
         const tempFilesStorageCopy = [...tempFilesStorage]
-        tempFilesStorageCopy.splice(index, 1)
-        dispatch(removeOneElement(index))
-
-        setMultipleFiles(selectedFilesCopy);
-        setFileProgress(fileProgressCopy);
-    };
-    const removeFileAfterAdding = (index: number) => {
-        const selectedFilesCopy = [...multipleFiles];
-        selectedFilesCopy.splice(index, 1);
-
-        const fileProgressCopy = [...fileProgress];
-        fileProgressCopy.splice(index, 1);
+        const newArray = tempFilesStorageCopy.filter((item: any) => item.original_name !== file.name);
+        tempFilesStorage = newArray
+        setAttachments(newArray)
 
         setMultipleFiles(selectedFilesCopy);
         setFileProgress(fileProgressCopy);
@@ -501,8 +495,6 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
             let responseData = await response.json();
             if (responseData.success == true) {
                 dispatch(removeTheFilesFromStore([]));
-
-
             }
             setLoading(false)
 
@@ -583,6 +575,23 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
         }
     }
 
+
+    useEffect(() => {
+        const confirmationMessage = 'Are you sure you want to leave this page? Your changes may not be saved.';
+
+        const handleBeforeUnload = (e: any) => {
+            e.preventDefault();
+            e.returnValue = confirmationMessage;
+
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+
+        };
+    }, []);
 
     return (
         <div >
@@ -671,7 +680,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                                             <IconButton>
                                                                 <DoneIcon sx={{ color: "#05A155" }} />
                                                             </IconButton>
-                                                            <IconButton onClick={() => removeFileAfterAdding(index)}>
+                                                            <IconButton onClick={() => removeFileAfterAdding(index, item)}>
                                                                 <DeleteForeverIcon sx={{ color: "#820707" }} />
                                                             </IconButton>
                                                         </div> : ""}
@@ -681,7 +690,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                                         className={styles.close41}
                                                         alt=""
                                                         src="/close-icon.svg"
-                                                        onClick={() => removeFile(index)}
+                                                        onClick={() => removeFileAfterAdding(index, item)}
                                                     /> : ""}
 
                                             </div>

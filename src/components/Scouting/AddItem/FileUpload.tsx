@@ -63,26 +63,19 @@ const FileUploadComponent = () => {
         return bytes / (1024 * 1024);
     }
 
-    const removeFile = (index: number) => {
+
+    const removeFileAfterAdding = (index: number, file: any) => {
         const selectedFilesCopy = [...multipleFiles];
         selectedFilesCopy.splice(index, 1);
 
         const fileProgressCopy = [...fileProgress];
         fileProgressCopy.splice(index, 1);
+
 
         const tempFilesStorageCopy = [...tempFilesStorage]
-        tempFilesStorageCopy.splice(index, 1)
-        dispatch(removeOneElement(index))
-
-        setMultipleFiles(selectedFilesCopy);
-        setFileProgress(fileProgressCopy);
-    };
-    const removeFileAfterAdding = (index: number) => {
-        const selectedFilesCopy = [...multipleFiles];
-        selectedFilesCopy.splice(index, 1);
-
-        const fileProgressCopy = [...fileProgress];
-        fileProgressCopy.splice(index, 1);
+        const newArray = tempFilesStorageCopy.filter((item: any) => item.original_name !== file.name);
+        tempFilesStorage = newArray
+        setAttachments(newArray)
 
         setMultipleFiles(selectedFilesCopy);
         setFileProgress(fileProgressCopy);
@@ -462,7 +455,6 @@ const FileUploadComponent = () => {
 
     const addScoutDetails = async () => {
 
-        console.log(tempFilesStorage, 'opop');
 
         setLoading(true)
         let obj = {
@@ -689,7 +681,7 @@ const FileUploadComponent = () => {
                                                             <IconButton>
                                                                 <DoneIcon sx={{ color: "#05A155" }} />
                                                             </IconButton>
-                                                            <IconButton onClick={() => removeFileAfterAdding(index)}>
+                                                            <IconButton onClick={() => removeFileAfterAdding(index, item)}>
                                                                 <DeleteForeverIcon sx={{ color: "#820707" }} />
                                                             </IconButton>
                                                         </div> : ""}
@@ -699,7 +691,7 @@ const FileUploadComponent = () => {
                                                         className={styles.close41}
                                                         alt=""
                                                         src="/close-icon.svg"
-                                                        onClick={() => removeFile(index)}
+                                                        onClick={() => removeFileAfterAdding(index, item)}
                                                     /> : ""}
 
                                             </div>

@@ -1,12 +1,11 @@
-import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
-import { TextField, Button, Icon, IconButton, LinearProgress, Box } from "@mui/material";
-import styles from "./comment-form.module.css";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
 import { removeOneAttachmentElement, removeTheAttachementsFilesFromStore, storeAttachementsFilesArray } from "@/Redux/Modules/Conversations";
-import DoneIcon from '@mui/icons-material/Done';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DoneIcon from '@mui/icons-material/Done';
+import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./comment-form.module.css";
 
 const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
@@ -28,8 +27,26 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
   useEffect(() => {
     getCropsDetails()
+    dispatch(removeTheAttachementsFilesFromStore([]))
   }, [])
 
+
+  useEffect(() => {
+    const confirmationMessage = 'Are you sure you want to leave this page? Your changes may not be saved.';
+
+    const handleBeforeUnload = (e: any) => {
+      e.preventDefault();
+      e.returnValue = confirmationMessage;
+
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+
+    };
+  }, []);
 
   //convert the kb into mb
   const bytesToMB = (bytes: any) => {
@@ -51,6 +68,8 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
   };
+
+
   const removeFileAfterAdding = (index: number) => {
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
@@ -60,8 +79,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
-    dispatch(removeOneAttachmentElement(index))
-
   };
 
 
@@ -182,6 +199,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
   //file upload normal smaller than 5 mb
   const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
+    fileProgressCopy[index] = 0;
 
     let obj = {
 
@@ -197,6 +215,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       }
 
     }
+    fileProgressCopy[index] = 25;
 
     let options: any = {
       method: "POST",
@@ -208,10 +227,13 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       }),
 
     }
+    fileProgressCopy[index] = 50;
 
     try {
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`, options);
       let responseData = await response.json();
+      fileProgressCopy[index] = 75;
+
       if (responseData.success == true) {
         let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT", body: item });
         fileProgressCopy[index] = 100;
@@ -237,6 +259,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   return (
     <div className={styles.commentform}>
       <TextField
+        required={true}
         className={styles.chatBox}
         color="primary"
         rows={2}
@@ -245,7 +268,18 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         variant="outlined"
         multiline
         value={comment ? comment : ""}
-        onChange={(e) => setComment(e.target.value)}
+        onChange={(e) => {
+          const newValue = e.target.value.replace(/^\s+/, "");
+          setComment(newValue)
+
+        }}
+        onKeyDown={(e: any) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            comment&&(replyThreadEvent ? replyThreads(replyThreadEvent) : addComment())
+        }
+        }}
+
       />
 
       {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
@@ -253,13 +287,13 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
           <div className={styles.progress} id="progress" style={{ width: "100%" }}>
             <img className={styles.image21} alt="" src={"/nj.jpg"} />
 
-            <div className={styles.progressdetails}>
-              <div className={styles.uploaddetails}>
-                <div className={styles.uploadcontroller}>
-                  <div className={styles.uploadname}>
+            <div className={styles.progressdetails} >
+              <div className={styles.uploaddetails} style={{ width: "100%" }}>
+                <div className={styles.uploadcontroller}  >
+                  <div className={styles.uploadname} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div className={styles.uploadItem}>
-                      <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{item.name?.slice(0, 7)}...{item.type} </div>
-                      {fileProgress[index] == "fail" ? "" : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
+                      <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{index + 1}.    {item.name?.slice(0, 7)}...{item.type} </div>
+                      {fileProgress[index] == "fail" ? <div className={styles.photojpg} style={{ color: "red" }}>Cancelled</div> : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
                     </div>
                     {fileProgress[index] == 100 && fileProgress[index] !== "fail" ?
                       <div className={styles.photojpg}>
@@ -327,7 +361,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
         <Button
           className={styles.sendbutton}
-          color="primary"
           size="medium"
           variant="contained"
           disabled={comment ? false : true}

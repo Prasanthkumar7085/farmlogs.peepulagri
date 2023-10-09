@@ -1,5 +1,5 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { TextField, InputAdornment, Icon, IconButton, Typography, Menu, MenuItem } from "@mui/material";
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { TextField, InputAdornment, Icon, IconButton, Typography, Menu, MenuItem, Autocomplete } from "@mui/material";
 import styles from "./dash-board-header.module.css";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
@@ -21,58 +21,90 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  const [locationValue, setLocationValue] = useState<{ name: string, _id: string } | null>();
+  const [dataSetting, setDataSetting] = useState(false);
+
+  useEffect(() => {
+
+    console.log(location);
+
+    if (locations?.length) {
+      let obj: any = locations?.find((item: { name: string, _id: string }) => item.name == location);
+      console.log(obj);
+
+      if (obj) {
+        setDataSetting(true);
+        setLocationValue(obj);
+        setTimeout(() => {
+          setDataSetting(false);
+        }, 1)
+      } else {
+        setLocation('');
+      }
+    }
+  }, [locations, location])
+
   const onChangeSearchString = (event: ChangeEvent<HTMLInputElement>) => {
     captureSearchString(event.target.value);
   }
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
+
 
   useEffect(() => {
     setSearch(searchString);
   }, [searchString]);
 
-  const selectCity = (item: string) => {
-    setAnchorEl(null);
-    setLocation(item);
-    getDataOnLocationChange(item);
+  const addInputValue = (event: any, value: any) => {
+
+    if (value) {
+      setLocation(value?.name);
+      getDataOnLocationChange(value?.name);
+    } else {
+      setLocationValue(null);
+      setLocation('');
+      getDataOnLocationChange('');
+
+    }
+
   };
 
   return (
     <div className={styles.dashboardheader} id="dashboard-header">
       <div className={styles.dashboardheading} id="dashboard-heading">
         <Typography className={styles.dashboard}>Dashboard</Typography>
-        <div className={styles.selectlocation} id="select-location">
+        <div className={styles.selectlocation} id="select-location" >
           <div className={styles.srisailam}>
-            <Image alt="location" src="/location-icon.svg" width={15} height={15} onClick={handleClick} />
-            <span onClick={handleClick}>{location}</span>
-            <ExpandMoreIcon onClick={handleClick} />
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={() => setAnchorEl(null)}
-              sx={{
-                maxHeight: '50vh', '& .MuiMenuItem-root': {
-                  fontSize: 'clamp(12px, 3vw, 16px)',
-                  minHeight: 'inherit',
-                  fontFamily: "'inter !important'",
-                  fontWeight: "500",
-                  paddingRight: "3rem",
-                  paddingBlock: "10px",
-                  borderBottom: "1px dashed #B4C1D6"
-                },
-                '& .MuiMenuItem-root:last-child': {
-                  borderBottom: "none !important"
-                }
-              }}
-            >
-              {locations.map((item: { name: string, _id: string }, index: number) => {
-                return (
-                  <MenuItem onClick={() => selectCity(item.name)} key={index}>{item.name}</MenuItem>
-                )
-              })}
+            {!dataSetting ? <Autocomplete
+              id="asynchronous-demo"
+              fullWidth
+              noOptionsText={<div>{'No such location!'}</div>}
+              value={locationValue}
+              getOptionLabel={(option: { name: string, _id: string }) => option.name}
+              isOptionEqualToValue={(option, value) => option.name === value.name}
+              options={locations}
+              onChange={addInputValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  className={styles.inputfarmname}
+                  name="location"
+                  size="small"
+                  placeholder="Enter location here"
+                  fullWidth
+                  variant="outlined"
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      background: "#fff"
+                    }
+                  }}
 
-            </Menu>
+                />
+              )}
+            /> : ""}
+
+
+
+
+
           </div>
         </div>
       </div>

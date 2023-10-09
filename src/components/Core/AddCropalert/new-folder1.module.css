@@ -1,6 +1,6 @@
 .newFolder {
   color: #000;
-  font-family: "Inter",sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: clamp(16px, 3.65vw, 24px);
   font-weight: 500;
   line-height: 100%;
@@ -13,6 +13,17 @@
   align-self: stretch;
 }
 
+.input input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+.input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .frame {
   display: flex;
   flex-direction: column;
@@ -21,8 +32,8 @@
   margin-top: 0.6rem;
 }
 
-.buttoncreatefolder{
-  font-family: 'Inter',sans-serif;
+.buttoncreatefolder {
+  font-family: 'Inter', sans-serif;
   font-weight: 500 !important;
   align-self: stretch !important;
   text-transform: capitalize !important;
@@ -31,8 +42,9 @@
   font-size: clamp(14px, 3vw, 16px) !important;
   padding: 0.5rem 1rem;
 }
+
 .buttoncancelfolder {
-  font-family: 'Inter',sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 500 !important;
   text-transform: capitalize !important;
   border-radius: 8px !important;
@@ -48,6 +60,7 @@
   color: #fff !important;
   background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%) !important;
 }
+
 .buttoncreatefolder:disabled {
   color: #6b6a6a !important;
   background: linear-gradient(142deg, #cfcfcf 0%, #cfcfcf 97.71%) !important;

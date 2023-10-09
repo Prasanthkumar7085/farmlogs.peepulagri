@@ -60,7 +60,7 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
                 video: { facingMode: { exact: 'environment' } }, // Specify the back camera
             };
             const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-            // constraint
+            // constraints
 
             setStream(mediaStream);
             videoRef.current.srcObject = mediaStream;
@@ -176,7 +176,7 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
 
             {
                 capturedImageUrl &&
-                <div>
+                <div style={{ padding: "1rem" }}>
                     <img src={capturedImageUrl} alt="Captured" style={{ width: "100%" }} />
                     <div className={styles.ofterCaptureBtns}>
                         <button className={styles.retakeBtn} onClick={startCamera}>Retake</button>
@@ -192,8 +192,8 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
 
             {
                 capturedVideoUrl && (
-                    <div>
-                        <video controls>
+                    <div style={{ paddingInline: "1rem" }}>
+                        <video controls style={{ width: "100%" }}>
                             <source src={capturedVideoUrl} type="video/webm" />
                         </video>
                         <div className={styles.ofterCaptureBtns}>

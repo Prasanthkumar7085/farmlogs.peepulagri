@@ -19,6 +19,7 @@ import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms
 import { removeOneElement, removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
 import SelectAutoCompleteForCrops from "@/components/Core/SelectComponentForCrops";
 import timePipe from "@/pipes/timePipe";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 
 
 const FileUploadComponent = () => {
@@ -49,6 +50,7 @@ const FileUploadComponent = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [previewImages, setPreviewImages] = useState<any>([]);
+    const [validations, setValidations] = useState<any>()
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
@@ -196,6 +198,7 @@ const FileUploadComponent = () => {
 
     //select the when input select 
     const handleFileChange = async (e: any) => {
+        setValidations({})
         let copy = [...e.target.files, ...filesFromStore]
         dispatch(storeFilesArray(e.target.files))
 
@@ -236,7 +239,7 @@ const FileUploadComponent = () => {
 
 
     //start the file upload event
-    const startUploadEvent = async (file: any, index: any, fileProgressCopy: number[], setFileProgress: Function) => {
+    const startUploadEvent = async (file: any, index: any, fileProgressCopy: any, setFileProgress: Function) => {
         let obj = {
             "attachment": {
                 original_name: file.name,
@@ -264,6 +267,10 @@ const FileUploadComponent = () => {
                 await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
                 tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: file.type, size: file.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
                 setAttachments(tempFilesStorage)
+            }
+            else {
+                fileProgressCopy[index] = "fail";
+                setFileProgress([...fileProgressCopy]);
             }
         }
         catch (err) {
@@ -484,6 +491,9 @@ const FileUploadComponent = () => {
                 router.back()
 
             }
+            else if (responseData.status == 422) {
+                setValidations(responseData?.errors)
+            }
             setLoading(false)
 
         }
@@ -543,20 +553,28 @@ const FileUploadComponent = () => {
     }
 
     const captureFarmName = (selectedObject: any) => {
+        setValidations({})
         if (selectedObject) {
             setFormId(selectedObject?._id);
             getCropsDetails(selectedObject?._id)
 
+        }
+        else {
+            setFormId("")
         }
     }
 
     const [cropName, setCropName] = useState<any>()
 
     const captureCropName = (selectedObject: any) => {
+        setValidations({})
         console.log(selectedObject)
         if (selectedObject) {
             setSelectedCrop(selectedObject)
             setCropName(selectedObject.title)
+        }
+        else {
+            setSelectedCrop("")
         }
     }
 
@@ -581,6 +599,7 @@ const FileUploadComponent = () => {
                                     >
                                         <InputLabel color="primary" />
                                         <SelectAutoCompleteForFarms options={formOptions} label={"title"} onSelectValueFromDropDown={captureFarmName} placeholder={"Select Farm"} defaultValue={defaultValue} />
+                                        <ErrorMessagesComponent errorMessage={validations?.farm_id} />
 
                                         <FormHelperText />
                                     </FormControl>
@@ -592,6 +611,8 @@ const FileUploadComponent = () => {
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
                                         <SelectAutoCompleteForCrops options={cropOptions} label={"title"} onSelectValueFromDropDown={captureCropName} placeholder={"Select Crop"} defaultValue={cropName} />
+                                        <ErrorMessagesComponent errorMessage={validations?.crop_id} />
+
                                         <FormHelperText />
                                     </FormControl>
                                 </div>
@@ -633,6 +654,7 @@ const FileUploadComponent = () => {
                                                         <input
                                                             type="file"
                                                             alt="images-upload"
+                                                            accept="image/*,video/*"
                                                             multiple
                                                             onChange={handleFileChange}
                                                             hidden
@@ -648,10 +670,11 @@ const FileUploadComponent = () => {
                                 </div>
                             </div>
                         </div>
+                        <ErrorMessagesComponent errorMessage={validations?.attachments} />
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
-                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : "/nj.jpg"
+                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : item.type == "application/pdf" ? "/pdf-icon.png" : "/doc-icon.webp"
                                     } />
                                     <div className={styles.progressdetails}>
                                         <div className={styles.uploaddetails}>
@@ -659,7 +682,7 @@ const FileUploadComponent = () => {
                                                 <div className={styles.uploadname}>
                                                     <div className={styles.uploadItem}>
                                                         <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{item.name?.slice(0, 7)}...{item.type} </div>
-                                                        {fileProgress[index] == "fail" ? "" : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
+                                                        {fileProgress[index] == "fail" ? <div className={styles.photojpg} style={{ color: "red" }}>Cancelled</div> : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
                                                     </div>
                                                     {fileProgress[index] == 100 && fileProgress[index] !== "fail" ?
                                                         <div className={styles.photojpg}>
@@ -716,9 +739,15 @@ const FileUploadComponent = () => {
                                                 variant="outlined"
                                                 multiline
                                                 value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
+                                                onChange={(e) => {
+                                                    setDescription(e.target.value)
+                                                    setValidations({})
+
+                                                }}
                                                 sx={{ background: "#fff" }}
                                             />
+                                            <ErrorMessagesComponent errorMessage={validations?.description} />
+
                                         </div>
                                     </div>
 
@@ -733,7 +762,7 @@ const FileUploadComponent = () => {
                                             id="back"
                                             size="large"
                                             variant="outlined"
-                                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops`)}
+                                            onClick={() => router.back()}
                                         >
                                             Back
                                         </Button>

@@ -12,6 +12,8 @@ const CardDetails: FunctionComponent = () => {
   const router = useRouter();
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+
 
   const [data, setData] = useState<FarmDataType>();
   const [loading, setLoading] = useState(true);
@@ -19,9 +21,8 @@ const CardDetails: FunctionComponent = () => {
   const getFarmById = async () => {
     setLoading(true);
     const response = await getFarmByIdService(router.query.farm_id as string, accessToken);
-    console.log(response);
     
-    if (response.success) {
+    if (response?.success) {
       setData(response?.data);
     }
     setLoading(false);
@@ -44,13 +45,27 @@ const CardDetails: FunctionComponent = () => {
         </h5>
       </div>
       <div className={styles.cardDetails}>
-        <div className={styles.textwrapper}>
-          <h1 className={styles.farmname}>
-            {data?.title ? data?.title : ''}
-          </h1>
-          <p className={styles.dateandtime}>
-            {timePipe(data?.createdAt,'DD MMM YYYY, hh:mm A')}
-          </p>
+        <div style={{display:"flex", justifyContent:"space-between",width:"100%"}}>
+          <div className={styles.textwrapper}>
+            <h1 className={styles.farmname}>
+              {data?.title ? data?.title : ''}
+            </h1>
+            <p className={styles.dateandtime}>
+              {timePipe(data?.createdAt,'DD MMM YYYY, hh:mm A')}
+            </p>
+          </div>
+          {userType == 'AGRONOMIST' ?
+            <div>
+              <div className={styles.textwrapper}>
+                <h1 className={styles.userDetails} >
+                  User Mobile:
+                </h1>
+                <p className={styles.dateandtime}>
+                  {data?.user_id?.phone}
+                </p>
+              </div>
+            </div>
+            : ""}
         </div>
         <div className={styles.landdetails}>
           <div className={styles.lable}>

@@ -1,23 +1,15 @@
-import type { NextPage } from "next";
-import styles from "./side-bar-menu.module.css";
-import { FC, ReactNode } from 'react'
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import LogoutIcon from '@mui/icons-material/Logout';
+import NorthWestIcon from '@mui/icons-material/NorthWest';
+import { Button, IconButton, Tooltip } from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import LogoutIcon from '@mui/icons-material/Logout';
-import { Button, IconButton, Tooltip } from "@mui/material";
-import { useSelector } from "react-redux";
-import { useDispatch } from 'react-redux';
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import NorthWestIcon from '@mui/icons-material/NorthWest';
-
-interface MyProps {
-    children?: ReactNode;
-}
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./side-bar-menu.module.css";
 
 interface item {
     src: string;
@@ -29,13 +21,13 @@ interface item {
 
 
 const SideBarMenu = ({ children }: any) => {
-    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+
     const userName = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
     const router = useRouter();
     const dispatch = useDispatch();
 
     const menuListItems = [
-        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN', active: router.pathname.includes('/farm'), toolTitle: 'Logs' },
+        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN', active: router.pathname.includes('/farm'), toolTitle: 'Farms' },
         { src: '/support-icon.svg', link: "/support", isVisible: true, active: router.pathname.includes('/support'), toolTitle: 'Support' },
         { src: '/timeline-icon.svg', link: "/timeline", isVisible: userName !== 'ADMIN', active: router.pathname.includes('/timeline'), toolTitle: 'Time Line' },
         // { src: '/settings-icon.svg', link: "/" },

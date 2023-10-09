@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { Box, Drawer, Divider, FormControl, FormHelperText, IconButton, InputLabel, ListItem, Menu, MenuItem, Typography } from "@mui/material";
-import styles from "./crop-card.module.css";
-import CropCard from "./CropCard";
-import AddIcon from '@mui/icons-material/Add';
-import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import AlertComponent from "@/components/Core/AlertComponent";
-import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
 import { removeTheFilesFromStore, setFarmTitleTemp } from "@/Redux/Modules/Farms";
-import SortIcon from '@mui/icons-material/Sort';
-import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
-import DoneIcon from '@mui/icons-material/Done';
+import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
+import AlertComponent from "@/components/Core/AlertComponent";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
+import AddIcon from '@mui/icons-material/Add';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { id } from "date-fns/locale";
+import SortIcon from '@mui/icons-material/Sort';
+import { Box, Divider, Drawer, FormControl, FormHelperText, IconButton, InputLabel, ListItem, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
+import CropCard from "./CropCard";
+import styles from "./crop-card.module.css";
 
 const AllCropsComponent = () => {
 
@@ -42,9 +40,9 @@ const AllCropsComponent = () => {
 
     const getFarmDetails = async (id: any) => {
         setLoading(true)
-        let response = await getAllFarmsService(accessToken);
-
+        
         try {
+            let response = await getAllFarmsService(accessToken);
             if (response?.success == true && response?.data?.length) {
                 setFarmOptions(response?.data);
                 if (id) {
@@ -71,7 +69,7 @@ const AllCropsComponent = () => {
 
     //get all crops name
     const getCropsDetails = async (id: string, orderBy = sortBy, orderType = sortType) => {
-        setLoading(true)
+        setLoading(true);
 
         try {
             let queryParams: any = {};
@@ -146,6 +144,8 @@ const AllCropsComponent = () => {
             setFormId(selectedObject?._id);
             getCropsDetails(selectedObject?._id)
             router.replace(`/farms/${selectedObject?._id}/crops`)
+        } else {
+            setLoading(false);
         }
     }
 

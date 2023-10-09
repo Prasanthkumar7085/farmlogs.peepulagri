@@ -16,10 +16,9 @@ import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 interface PageProps {
   data: any;
   onViewClick: any;
-  loading: boolean;
   getFarmsData: ({ search_string, location, userId, page, limit, sortBy, sortType }: { search_string: string, location: string, userId: string, page: number | string, limit:number|string,sortBy:string,sortType:string }) => void
 }
-const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: PageProps) => {
+const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps) => {
 
   const router = useRouter();
 
@@ -138,7 +137,6 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick, loading }: P
       })}
 
       <AlertDelete deleteFarm={deleteFarm} setDialogOpen={setDeleteDialogOpen} open={deleteDialogOpen} loading={deleteLoading} />
-      <LoadingComponent loading={loading} />
       <AlertComponent alertMessage={alertMessage} setAlertMessage={setAlertMessage} alertType={alertType} />
     </div>
   );

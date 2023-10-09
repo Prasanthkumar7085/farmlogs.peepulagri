@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, Button, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Icon, IconButton, TextField, Typography } from "@mui/material";
 import CommentForm from "./comment-form";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import { deepOrange } from '@mui/material/colors';
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import AlertComponent from "@/components/Core/AlertComponent";
 
 const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply }: any) => {
 
@@ -23,6 +25,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [editComment, setEditComment] = useState<any>();
   const [isReplies, setIsReplies] = useState<any>(false);
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState(false);
 
 
 
@@ -31,6 +35,33 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       setReplyOpen(false)
     }
   }, [afterReply]);
+  const deleteAttachements = async (attachmentID: any) => {
+    setLoading(true)
+    let obj = {
+      "attachment_ids": [attachmentID]
+    }
+    let options = {
+      method: "DELETE",
+      body: JSON.stringify(obj),
+      headers: new Headers({
+        'content-type': 'application/json',
+        'authorization': accessToken
+      })
+    }
+    try {
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/attachments`, options)
+      let responseData = await response.json()
+      if (responseData.success == true) {
+
+      }
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
 
 
 
@@ -61,7 +92,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/attachment/download-url`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
-        window.open(responseData.data.download_url)
+
         fetch(responseData.data.download_url)
           .then((response) => {
             // Get the filename from the response headers
@@ -96,6 +127,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           .catch((error) => {
             console.error("Error downloading file:", error);
           });
+        setAlertMessage("Attachement downloaded successfully")
+        setAlertType(true)
       }
 
     }
@@ -116,10 +149,13 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         if (item.type == "DIRECT") {
           return (
             <div className={styles.inMessage} key={index}>
-              <Avatar sx={{ bgcolor: deepOrange[500] }}>{item?.user?.user_type?.slice(0, 2)}</Avatar>
+              {item?.user?.user_type == "USER" ?
+                <Avatar sx={{ bgcolor: "chocolate" }}>{item?.user?.user_type?.slice(0, 2)}</Avatar> :
+                <Avatar sx={{ bgcolor: "green" }}>{item?.user?.user_type?.slice(0, 2)}</Avatar>
+              }
               <div className={styles.messagebox}>
                 <div className={styles.userdetails}>
-                  <h4 className={styles.jack}>{userDetails?.user_details?.user_type == item?.user?.user_type ? "You" : item.user.user_type + "(" + item?.user?.phone + ")"}</h4>
+                  <h4 className={styles.jack}>{userDetails?.user_details?.user_type == item?.user?.user_type ? "You" : item?.user?.user_type == "USER" ? item.user.user_type + "(" + item?.user?.phone + ")" : item.user.user_type}</h4>
                   <p className={styles.aug20231030am}>{timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}</p>
                 </div>
                 <div className={styles.paragraph}>
@@ -156,13 +192,20 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           </div>
                           <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
                         </div>
-                        <img
-                          className={styles.download11}
-                          alt=""
-                          src="/download-1-1.svg"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => downLoadAttachements(file, item.user._id)}
-                        />
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <img
+                            className={styles.download11}
+                            alt=""
+                            src="/download-1-1.svg"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => downLoadAttachements(file, item.user._id)}
+                          />
+                          {userDetails?.user_details?.user_type == item?.user?.user_type ?
+                            <IconButton
+                              onClick={() => deleteAttachements(file._id)}
+                            ><DeleteForeverIcon /></IconButton>
+                            : ""}
+                        </div>
                       </div>)
                   })
 
@@ -253,11 +296,13 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                 {isReplies == true && index == replyIndex && item.replies.length ? item.replies.map((row: any) => {
                   return (
                     <div className={styles.inMessage1} key={index}>
-                      <Avatar sx={{ bgcolor: deepOrange[500] }}>{row?.user?.user_type?.slice(0, 2)}</Avatar>
-                      <div className={styles.messagebox1}>
+                      {row?.user?.user_type == "USER" ?
+                        <Avatar sx={{ bgcolor: "chocolate" }}>{row?.user?.user_type?.slice(0, 2)}</Avatar> :
+                        <Avatar sx={{ bgcolor: "green" }}>{row?.user?.user_type?.slice(0, 2)}</Avatar>
+                      }                      <div className={styles.messagebox1}>
                         <div className={styles.userName}>
                           <div className={styles.userdetails1}>
-                            <h4 className={styles.jack}>{userDetails?.user_details?.user_type == row?.user?.user_type ? "You" : row?.user?.user_type + "(" + row?.user?.phone + ")"}</h4>
+                            <h4 className={styles.jack}>{userDetails?.user_details?.user_type == row?.user?.user_type ? "You" : row?.user?.user_type == "USER" ? row?.user?.user_type + "(" + row?.user?.phone + ")" : row?.user?.user_type}</h4>
                             <p className={styles.aug20231030am}>{timePipe(row.updatedAt, "DD-MM-YYYY hh:mm a")}</p>
                           </div>
                         </div>
@@ -302,6 +347,10 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   style={{ cursor: "pointer" }}
                                   onClick={() => downLoadAttachements(file, row.user._id)}
                                 />
+                                {userDetails?.user_details?.user_type == row?.user?.user_type ?
+                                  <IconButton
+                                    onClick={() => deleteAttachements(file._id)}
+                                  ><DeleteForeverIcon /></IconButton> : ""}
                               </div>)
                           }) : ""}
 
@@ -359,7 +408,9 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         </div>
       }
       <LoadingComponent loading={loading} />
-    </div>
+      <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+
+    </div >
   );
 };
 

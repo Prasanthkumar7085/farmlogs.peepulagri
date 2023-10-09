@@ -98,7 +98,7 @@ const DashboardPage = () => {
         }
     }
     
-    const getDataOnLocationChange = async (location: string) => {
+    const getDataOnLocationChange = async (location: string) => {        
         await getAllFarms({ page: 1, limit: 100, search_string: searchString as string, location: location });
     }
     
@@ -113,7 +113,7 @@ const DashboardPage = () => {
 
 
     useEffect(() => {
-        if (router.isReady && accessToken && location) {
+        if (router.isReady && accessToken) {
             const delay = 500;
             const debounce = setTimeout(() => {
                 getAllFarms({ page: 1, limit: 100, search_string: searchString, location: location });

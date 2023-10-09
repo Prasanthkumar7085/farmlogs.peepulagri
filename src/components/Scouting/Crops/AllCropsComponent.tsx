@@ -250,6 +250,7 @@ const AllCropsComponent = () => {
             <FormControl
                 variant="outlined"
                 className={styles.filterBox}
+                // style={{border:"1px solid"}}
             >
                 <InputLabel color="primary" />
                 <SelectAutoCompleteForFarms options={formOptions} label={"title"} onSelectValueFromDropDown={captureFarmName} placeholder={"Select Farm"} defaultValue={defaultValue} />

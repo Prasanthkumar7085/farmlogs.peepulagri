@@ -47,24 +47,22 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
   const onChangeSearchString = (event: ChangeEvent<HTMLInputElement>) => {
     captureSearchString(event.target.value);
   }
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
+
 
   useEffect(() => {
     setSearch(searchString);
   }, [searchString]);
 
-  const addInputValue = (event: any, value: string, reason: string) => {
+  const addInputValue = (event: any, value: any) => {
 
-    if (reason == 'clear') {
+    if (value) {
+      setLocation(value?.name);
+      getDataOnLocationChange(value?.name);
+    } else {
+      setLocationValue(null);
       setLocation('');
       getDataOnLocationChange('');
-      setLocationValue(null);
-    }
-    if (value) {
-      setLocation(value);
-      getDataOnLocationChange(value);
+
     }
 
   };
@@ -83,7 +81,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
               getOptionLabel={(option: { name: string, _id: string }) => option.name}
               isOptionEqualToValue={(option, value) => option.name === value.name}
               options={locations}
-              onInputChange={addInputValue}
+              onChange={addInputValue}
               renderInput={(params) => (
                 <TextField
                   {...params}

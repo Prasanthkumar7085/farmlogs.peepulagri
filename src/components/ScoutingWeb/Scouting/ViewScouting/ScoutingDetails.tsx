@@ -12,6 +12,7 @@ import "yet-another-react-lightbox/styles.css";
 import VideoDialog from "@/components/Core/VideoDiloag";
 import { Gallery } from "react-grid-gallery";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
+import CommentsComponent from "@/components/Scouting/Comments/CommentsComponent";
 
 
 const ScoutingDetails: FunctionComponent = () => {
@@ -113,6 +114,7 @@ const ScoutingDetails: FunctionComponent = () => {
             <Gallery images={finalImages} onClick={handleClick} />
           </div> : ""}
       </Card>
+      <CommentsComponent />
       <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
       <LoadingComponent loading={loading} />
     </div>

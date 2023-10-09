@@ -1,5 +1,5 @@
 import styles from "./view-scout-threads.module.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
@@ -15,7 +15,10 @@ import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import AlertImagesDelete from "@/components/Core/DeleteImagesAlert/alert-delete-images";
 import FileUploadEditComponent from "../EditItem/FileUploadEdit";
 import AddIcon from '@mui/icons-material/Add';
-
+import Checkbox from '@mui/material/Checkbox';
+import { relative } from "path";
+import CustomGalleryItem from "@/components/Core/CustomCheckBox";
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 
 
 
@@ -40,6 +43,9 @@ const ViewScoutThreads = () => {
   const [deleteLoading, setDeleteLoading] = useState<any>()
   const [cameraOpen, setCameraOpen] = useState<any>(false)
   const [fileUploadOpen, setFileUploadOpen] = useState<any>(false)
+  const [selectedItems, setSelectedItems] = useState<any>([]);
+
+  let tempImages: any = [...selectedItems];
 
 
   const handleOpenDialog = () => {
@@ -62,9 +68,29 @@ const ViewScoutThreads = () => {
 
         setResponseAttachmentsFormat({ attachmentdetails: response?.data?.attachments });
       }
+      else {
+        setResponseAttachmentsFormat({ attachmentdetails: response?.data?.attachments });
+
+      }
     }
     setLoading(false);
   }
+
+
+
+  const handleChange = (itemId: any) => {
+    const itemIndex = tempImages.indexOf(itemId);
+    if (itemIndex === -1) {
+      tempImages.splice(1, 0, itemId)
+    }
+    else {
+      tempImages.splice(itemIndex, 1);
+    }
+    setSelectedItems(tempImages)
+
+
+
+  };
 
   const setResponseAttachmentsFormat = ({ attachmentdetails }: any) => {
     let details = [];
@@ -74,14 +100,16 @@ const ViewScoutThreads = () => {
         if (item.type.includes('video')) {
           return {
             src: "/videoimg.png", height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url, isSelected: false, id: item._id
+            width: 60, caption: `${index + 1} image`, original: item.url, isSelected: false, id: item._id,
           }
         } else {
           return {
-            src: item.url, height: 80,
+            src: item.url,
+            height: 80,
             width: 60,
             isSelected: false,
-            id: item._id
+            id: item._id,
+
           }
         }
       })
@@ -102,26 +130,12 @@ const ViewScoutThreads = () => {
     setIndexOfseletedOne(index);
   };
 
-  const getSelectedItems = (index: any) => {
 
-    const nextImages = images.map((image: any, i: number) => i === index ? { ...image, isSelected: !image.isSelected } : image);
-    setImages([...nextImages]);
-
-    const filteredImages = nextImages.filter((item: any) => item.isSelected);
-    console.log(filteredImages)
-    // Create a new array of objects by matching urls
-    const newArray = selectedFile.filter((obj1: any) => {
-      return filteredImages.some((obj2: any) => obj1._id === obj2.id);
-    });
-    const attachmentIds = newArray.map((item: any) => item._id)
-    console.log(attachmentIds)
-    setImagesForDelete([...attachmentIds]);
-  }
 
   const deleteImagesEvent = async () => {
     setDeleteLoading(true)
     let obj = {
-      "attachment_ids": imagesForDelete
+      "attachment_ids": tempImages
     }
     let options = {
       method: "DELETE",
@@ -138,6 +152,8 @@ const ViewScoutThreads = () => {
         getSingleScout()
         setDeleteOpen(false)
         setImagesForDelete([])
+        tempImages = []
+        setSelectedItems([])
       }
     }
     catch (err) {
@@ -184,9 +200,44 @@ const ViewScoutThreads = () => {
               <h3 className={styles.heading}>Attachments</h3>
               <Button variant="contained" color="primary" size="small" startIcon={<AddIcon />} onClick={() => setFileUploadOpen(true)}>Add</Button>
             </div>
-            {images.length ? <Card sx={{ width: "100%", minHeight: "100px", padding: "0.25rem" }}>
-              <Gallery images={images} onClick={handleClick} onSelect={getSelectedItems} enableImageSelection={true} />
-            </Card> : ""}
+            <Card sx={{
+              width: "100%", minHeight: "100px",
+            }}>
+
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)", /* Four columns with a width of 60px each */
+                gridGap: "0.5rem",
+                margin: "0.5rem"
+              }}>
+                {images.length !== 0 ? images.map((image: any, index: any) => (
+
+                  <div style={{ position: "relative", height: "100px", }} key={index}>
+                    <img src={image.src} alt={image.alt} width={'100%'} height={"100%"} onClick={() => handleClick(index, image)} style={{ cursor: "pointer", borderRadius: "5px", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", bottom: 0, right: 0 }}>
+                      <Checkbox
+
+                        sx={{
+                          color: "#7f7f7f",
+                          '& .MuiSvgIcon-root': {
+                            color: "#7f7f7f"
+                          }
+                        }}
+                        size="small"
+                        checked={(tempImages.find((ite: any) => ite == image.id)) ? true : false}
+                        onChange={() => handleChange(image.id)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                        color="secondary"
+                        title={image.id}
+                      />
+                    </div>
+                  </div>
+
+                )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
+              </div>
+            </Card>
+
+
 
             {fileUploadOpen == false ?
               <CommentsComponent /> : ""}
@@ -202,18 +253,24 @@ const ViewScoutThreads = () => {
 
       <LoadingComponent loading={loading} />
       <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={indexOfSeletedOne} />
-      {imagesForDelete?.length !== 0 ?
+      {tempImages?.length !== 0 ?
         <div style={{
           position: "sticky",
-          bottom: 0,
-          backgroundColor: "black",
+          bottom: "1rem",
+          // backgroundColor: "black",
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
           color: "white",
           cursor: "pointer"
         }} onClick={() => setDeleteOpen(true)}>
-          <DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete
+          <div style={{ background: "#2B53BE", padding: "1rem 2rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", borderRadius: "30px" }}>
+            <DeleteOutlineRoundedIcon sx={{ fontSize: "18px" }} />
+            <p style={{ margin: "0 ", fontWeight: "500" }}>
+
+              Delete
+            </p>
+          </div>
         </div> : ""}
       {deleteOpen ? <AlertImagesDelete open={deleteOpen} deleteImagesEvent={deleteImagesEvent} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
 

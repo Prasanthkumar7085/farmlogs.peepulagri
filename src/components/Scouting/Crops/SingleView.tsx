@@ -13,20 +13,21 @@ import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import Image from "next/image";
 
 const SingleViewScoutComponent = () => {
 
     const router = useRouter();
     const dispatch = useDispatch()
-    const [data, setData] = useState<any>()
+
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
+
+    const [data, setData] = useState<any>()
     const [selectedFile, setSelectedFile] = useState<any>([])
     const [index, setIndex] = useState<any>()
     const [image, setImage] = useState();
     const [sildeShowImages, setSlideShowImages] = useState<any>()
-    const [id, setID] = useState<any>()
-
     const [loading, setLoading] = useState(true);
 
 
@@ -80,11 +81,12 @@ const SingleViewScoutComponent = () => {
                     type: imageObj.type,
                     id: imageObj._id,
                     scout_id: item._id,
-                    // customOverlay: <div style={{color:"white"}}>Yes</div>
-
                     alt: "u",
-                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: "View More", title: "view_more" }] : [],
-
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{
+                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
+                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                            +{item.attachments?.length - 2}</div>, title: "view_more"
+                    }] : []
                 }
             }
             else
@@ -97,7 +99,11 @@ const SingleViewScoutComponent = () => {
                     scout_id: item._id,
                     width: 60,
                     alt: "u",
-                    tags: (item.attachments?.length > 3 && index == 2) ? [{ value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}>+{item.attachments?.length - 2}</div>, title: "view_more" }] : []
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{
+                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
+                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                            +{item.attachments?.length - 2}</div>, title: "view_more"
+                    }] : []
                 }
         });
         return obj;
@@ -135,6 +141,8 @@ const SingleViewScoutComponent = () => {
         setImage(item);
         getSingleScout(item.scout_id)
     };
+
+
     return (
         <div className={styles.scoutingView}>
 
@@ -170,16 +178,16 @@ const SingleViewScoutComponent = () => {
                             </div>}
 
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
-                            <Typography variant="caption" sx={{ cursor: "pointer" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
-                            >View more</Typography>
+                            <Typography variant="caption" sx={{ cursor: "pointer", color: "blue", fontSize: "12px" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
+                            >View Scout</Typography>
                         </div>
                     </Card>
                 )
             }) :
                 (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem" }}>
-                        {/* <ImageComponent src='/no-crops-data.svg' height={200} width={200} alt={'no-crops'} /> */}
-                        <Typography variant="h4">No Scouts</Typography>
+                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
+                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
+                        <Typography variant="h4">No Scoutings for this crop</Typography>
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />

@@ -178,6 +178,13 @@
   gap: 8px;
 }
 
+.mobile {
+  font-size: 12px;
+}
+.mobile p{
+  font-size: 12px !important;
+}
+
 .farmdetailscard {
   flex: 1;
   border-radius: 10px;

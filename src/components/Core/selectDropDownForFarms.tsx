@@ -8,7 +8,6 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
 
     const [defaultValueSet, setDefaultValueSet] = useState<any>();
     const router = useRouter();
-    console.log(router)
     const dispatch = useDispatch();
 
     useEffect(() => {

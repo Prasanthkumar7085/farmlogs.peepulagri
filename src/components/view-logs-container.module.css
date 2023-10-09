@@ -30,11 +30,21 @@
 .positionLeftImg {
   position: absolute;
   top: 50%;
-  left: 0;
+  left: 40px;
+  background: #000 !important;
+}
+
+.positionLeftImg:hover {
+  background: #000 !important;
 }
 
 .positionRightImg {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 40px;
+  background: #000;
+}
+
+.positionRightImg:hover {
+  background: #000 !important;
 }

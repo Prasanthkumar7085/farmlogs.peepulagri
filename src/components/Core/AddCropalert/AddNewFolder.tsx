@@ -29,17 +29,18 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
   };
 
   const callData = () => {
+    
     let obj = {
       title: title ? title : "",
-      crop_area: (area && +area) ? +area : null
-    }
+      crop_area: area ? +area : null,
+    };
     captureResponseDilog(obj)
   }
 
   return (
     <Dialog open={open} PaperProps={{
       sx: {
-        borderRadius: "16px", width: "90%", margin: "0"
+        borderRadius: "16px", width: "90%", margin: "0", maxWidth: "370px !important"
       }
     }}>
 
@@ -48,7 +49,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
           <h3 className={styles.newFolder}>{defaultTitle ? `Rename Crop` : `New Crop`}</h3>
 
           <div style={{ textAlign: "left", width: "100%" }}>
-            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Title'}</h4>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Title'}<strong style={{ color: "rgb(228 12 15)" }}>*</strong></h4>
           </div>
           <TextField
             className={styles.input}
@@ -73,7 +74,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
         <div className={styles.frame}>
           <div style={{ textAlign: "left", width: "100%" }}>
 
-            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Crop Area'}</h4>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Crop Area'}<strong style={{ color: "rgb(228 12 15)" }}>*</strong></h4>
           </div>
           <TextField
             sx={{

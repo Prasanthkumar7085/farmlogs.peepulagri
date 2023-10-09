@@ -1,10 +1,16 @@
 import React from "react";
 import ImageComponent from "./ImageComponent";
+import { Typography } from "@mui/material";
 
 const NoFarmDataComponent = ({ noData }: { noData: Boolean }) => {
     return (
         <React.Fragment>
-            {noData ? <ImageComponent src="/no-support-data.svg" height={400} width={200} alt="nodata" /> : ""}
+            {noData ?
+                <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: "3rem" }}>
+                    <ImageComponent src="/no-farms-image.svg" height={150} width={250} alt="nodata" />
+                    <Typography >No Farms </Typography>
+                </div> : ""}
+
         </React.Fragment>
     )
 }

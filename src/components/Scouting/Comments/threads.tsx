@@ -1,40 +1,52 @@
-import type { NextPage } from "next";
 import styles from "./threads.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Button, TextField } from "@mui/material";
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { Avatar, Button, TextField, Typography } from "@mui/material";
 import CommentForm from "./comment-form";
-import CommentFormReply from "./comment-formReply";
+import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import { deepOrange } from '@mui/material/colors';
+import LoadingComponent from "@/components/Core/LoadingComponent";
+
 const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-  const router = useRouter()
-  const [replyOpen, setReplyOpen] = useState<any>(false)
-  const [replyIndex, setReplyIndex] = useState<any>()
-  const [editMode, setEditMode] = useState<any>([])
-  const [comment, setComment] = useState<any>()
-  const [editComment, setEditComment] = useState<any>()
-  const [loading, setLoading] = useState<any>()
-  const [isReplies, setIsReplies] = useState<any>(false)
+  const userDetails = useSelector((state: any) => state.auth.userDetails);
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [replyOpen, setReplyOpen] = useState<any>(false);
+  const [replyIndex, setReplyIndex] = useState<any>();
+  const [editMode, setEditMode] = useState<any>([]);
+  const [editComment, setEditComment] = useState<any>();
+  const [isReplies, setIsReplies] = useState<any>(false);
+  const [loading, setLoading] = useState(false);
+
+
 
   useEffect(() => {
     if (afterReply) {
       setReplyOpen(false)
     }
-  }, [afterReply])
+  }, [afterReply]);
 
-  const downLoadAttachements = async (file: any) => {
+
+
+  const downLoadAttachements = async (file: any, userId: any) => {
+
+    setLoading(true);
     let body = {
 
       "attachment":
       {
 
-        "original_name": file.name,
+        "name": file.name,
         "type": file.type,
-        "source": "scouting"
+        "crop_slug": file.crop_slug,
+        "source": "scouting",
+        "user_id": userId
       }
     }
     let options = {
@@ -50,10 +62,48 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       let responseData = await response.json()
       if (responseData.success == true) {
         window.open(responseData.data.download_url)
+        fetch(responseData.data.download_url)
+          .then((response) => {
+            // Get the filename from the response headers
+            const contentDisposition = response.headers.get("content-disposition");
+            let filename = "downloaded_file"; // Default filename if not found in headers
+
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (filenameMatch && filenameMatch.length > 1) {
+                filename = filenameMatch[1];
+              }
+            }
+
+            // Create a URL for the blob
+            return response.blob()
+              .then((blob) => ({ blob, filename }));
+          })
+          .then(({ blob, filename }) => {
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            // Clean up the blob URL
+            window.URL.revokeObjectURL(blobUrl);
+          })
+          .catch((error) => {
+            console.error("Error downloading file:", error);
+          });
       }
+
     }
+
     catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false);
     }
 
   }
@@ -66,10 +116,10 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         if (item.type == "DIRECT") {
           return (
             <div className={styles.inMessage} key={index}>
-              <img className={styles.avatarIcon} alt="" src="/avatar@2x.png" />
+              <Avatar sx={{ bgcolor: deepOrange[500] }}>{item?.user?.user_type?.slice(0, 2)}</Avatar>
               <div className={styles.messagebox}>
                 <div className={styles.userdetails}>
-                  <h4 className={styles.jack}>Jack</h4>
+                  <h4 className={styles.jack}>{userDetails?.user_details?.user_type == item?.user?.user_type ? "You" : item.user.user_type + "(" + item?.user?.phone + ")"}</h4>
                   <p className={styles.aug20231030am}>{timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}</p>
                 </div>
                 <div className={styles.paragraph}>
@@ -84,12 +134,15 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         variant="outlined"
                         multiline
                         value={editComment}
-                        onChange={(e) => setEditComment(e.target.value)}
+                        onChange={(e) => {
+                          const newValue = e.target.value.replace(/^\s+/, "");
+                          setEditComment(newValue)
+                        }}
                       />
                     </div> :
 
-                    <p className={styles.theProblemIm}>
-                      {item.content}
+                    <p className={styles.theProblemIm} >
+                      {item.content}{"                     "}<Typography variant="caption" sx={{ wordBreak: "break-word" }}>{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
                     </p>}
 
                   {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {
@@ -97,7 +150,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       <div className={styles.attachment} key={indexfile}>
                         <div className={styles.row}>
                           <div className={styles.icon}>
-                            <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : ""} />
+                            <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : file.type.includes("application") ? "/pdf-icon.png" : file.type.includes("video") ? "/videoimg.png" : "/doc-icon.webp"
+                            } />
                             <img className={styles.groupIcon1} alt="" src="/group3.svg" />
                           </div>
                           <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
@@ -107,7 +161,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           alt=""
                           src="/download-1-1.svg"
                           style={{ cursor: "pointer" }}
-                          onClick={() => downLoadAttachements(file)}
+                          onClick={() => downLoadAttachements(file, item.user._id)}
                         />
                       </div>)
                   })
@@ -115,6 +169,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     : ""}
 
                 </div>
+
                 <div className={styles.actionButton}>
                   <div className={styles.reply}>
 
@@ -122,12 +177,14 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       <div className={styles.reply1} onClick={() => {
                         setReplyOpen(true)
                         setReplyIndex(index)
+                        dispatch(removeTheAttachementsFilesFromStore([]))
                       }}>Reply</div> :
 
                       index == replyIndex ?
-                        <div className={styles.reply1} onClick={() => {
+                        <div className={styles.reply1} style={{ color: "red" }} onClick={() => {
                           setReplyOpen(false)
                           setReplyIndex(index)
+
                         }}>Close</div> :
 
                         <div className={styles.reply1} onClick={() => {
@@ -149,28 +206,39 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
                   </div>
 
-                  <div className={styles.react}>
-                    <div className={styles.edit}>
-                      <div className={styles.editChild} />
+                  {userDetails?.user_details?.user_type == item?.user?.user_type ?
+                    <div className={styles.react}>
+                      <div className={styles.edit}>
+                        <div className={styles.editChild} />
 
+                        {editMode[0] == true && editMode[1] == item._id ?
+
+                          <Button className={styles.edit1}
+                            disabled={editComment ? false : true}
+                            onClick={() => {
+                              setEditMode([false, item._id])
+                              afterUpdateComment(item._id, editComment)
+                            }}>Update</Button> :
+
+                          <p className={styles.edit1} onClick={() => {
+                            setEditMode([true, item._id])
+                            setEditComment(item.content)
+                          }}>Edit</p>}
+
+                      </div>
                       {editMode[0] == true && editMode[1] == item._id ?
-
-                        <p className={styles.edit1} onClick={() => {
-                          setEditMode([false, item._id])
-                          afterUpdateComment(item._id, editComment)
-                        }}>Update</p> :
-
-                        <p className={styles.edit1} onClick={() => {
-                          setEditMode([true, item._id])
-                          setEditComment(item.content)
-                        }}>Edit</p>}
-
-                    </div>
-                    <div className={styles.edit}>
-                      <div className={styles.editChild} />
-                      <p className={styles.edit1} onClick={() => afterDeleteComment(item._id)}>Delete</p>
-                    </div>
-                  </div>
+                        <div className={styles.edit}>
+                          <div className={styles.editChild} />
+                          <Button className={styles.edit1} onClick={() => {
+                            setEditMode([false, item._id])
+                            setEditComment("")
+                          }}>Close</Button>
+                        </div> :
+                        <div className={styles.edit}>
+                          <div className={styles.editChild} />
+                          <p className={styles.edit1} onClick={() => afterDeleteComment(item._id)}>Delete</p>
+                        </div>}
+                    </div> : ""}
 
                 </div>
                 {replyOpen == true && index == replyIndex ?
@@ -185,27 +253,38 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                 {isReplies == true && index == replyIndex && item.replies.length ? item.replies.map((row: any) => {
                   return (
                     <div className={styles.inMessage1} key={index}>
-                      <img className={styles.avatarIcon} alt="" src="/avatar@2x.png" />
+                      <Avatar sx={{ bgcolor: deepOrange[500] }}>{row?.user?.user_type?.slice(0, 2)}</Avatar>
                       <div className={styles.messagebox1}>
                         <div className={styles.userName}>
-                          <div className={styles.repliedcontainer}>
-                            <img
-                              className={styles.repliedcontainerChild}
-                              alt=""
-                              src="/frame-40556.svg"
-                            />
-                            <h4 className={styles.repliedToJack}>Replied to jack</h4>
-                          </div>
                           <div className={styles.userdetails1}>
-                            <h4 className={styles.jack}>Jack</h4>
+                            <h4 className={styles.jack}>{userDetails?.user_details?.user_type == row?.user?.user_type ? "You" : row?.user?.user_type + "(" + row?.user?.phone + ")"}</h4>
                             <p className={styles.aug20231030am}>{timePipe(row.updatedAt, "DD-MM-YYYY hh:mm a")}</p>
                           </div>
                         </div>
 
                         <div className={styles.paragraph1}>
-                          <p className={styles.theProblemIm}>
-                            {row.content}
-                          </p>
+                          {editMode[0] == true && editMode[1] == row._id ?
+                            <div style={{ width: "100%" }}>
+                              <TextField
+                                className={styles.chatBox}
+                                color="primary"
+                                rows={2}
+                                placeholder="Enter your reply message... "
+                                fullWidth={true}
+                                variant="outlined"
+                                multiline
+                                value={editComment}
+                                onChange={(e) => {
+                                  const newValue = e.target.value.replace(/^\s+/, "");
+                                  setEditComment(newValue)
+                                }}
+                              />
+                            </div> :
+
+                            <p className={styles.theProblemIm}>
+                              {row.content}{"                     "}<Typography variant="caption">{row.createdAt == row.updatedAt ? "" : "(edited)"}</Typography>
+                            </p>}
+
                           {row.attachments.length ? row.attachments.map((file: any, fileIndex: any) => {
                             return (
                               <div className={styles.attachment1} key={fileIndex}>
@@ -220,33 +299,55 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   className={styles.download11}
                                   alt=""
                                   src="/download-1-1.svg"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => downLoadAttachements(file, row.user._id)}
                                 />
                               </div>)
                           }) : ""}
 
                         </div>
-                        <div className={styles.actionButton1}>
-                          <div className={styles.reply}>
-                          </div>
-                          <div className={styles.react}>
-                            <div className={styles.edit}>
-                              <div className={styles.editChild} />
+
+                        {userDetails?.user_details?.user_type == row?.user?.user_type ?
+
+                          <div className={styles.actionButton1}>
+                            <div className={styles.react}>
+                              <div className={styles.edit}>
+                                <div className={styles.editChild} />
+                                {editMode[0] == true && editMode[1] == row._id ?
+                                  <Button className={styles.edit1}
+                                    disabled={editComment ? false : true}
+                                    onClick={() => {
+                                      setEditMode([false, row._id])
+                                      afterUpdateComment(row._id, editComment)
+                                    }}>Update</Button> :
+
+                                  <p className={styles.edit1} onClick={() => {
+                                    setEditMode([true, row._id])
+                                    setEditComment(row.content)
+                                  }}>Edit</p>}
+
+
+                                <div className={styles.editChild} />
+                                {editMode[0] == true && editMode[1] == row._id ?
+                                  <div className={styles.edit}>
+                                    <Button className={styles.edit1} onClick={() => {
+                                      setEditMode([false, row._id])
+                                      setEditComment("")
+                                    }}>Close</Button>
+                                  </div> :
+                                  <div className={styles.edit}>
+                                    <p className={styles.edit1} onClick={() => afterDeleteComment(row._id)}>Delete</p>
+                                  </div>}
+
+                              </div>
+
                             </div>
-                            <div className={styles.edit}>
-                              <div className={styles.editChild} />
-                              <p className={styles.edit1} onClick={() => afterDeleteComment(row._id)}>Delete</p>
-                            </div>
-                          </div>
-                        </div>
+                          </div> : ""}
+
                       </div>
                     </div>
                   )
                 }) : ""}
-
-
-
-
-
               </div>
             </div>
           )
@@ -257,10 +358,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           No Threads
         </div>
       }
-
-
-
-
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

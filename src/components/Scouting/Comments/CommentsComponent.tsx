@@ -52,6 +52,15 @@ const CommentsComponent = () => {
                     }
                 });
 
+                // Sort the replies array within each comment by createdAt
+                for (const commentId in commentsById) {
+                    if (commentsById.hasOwnProperty(commentId)) {
+                        commentsById[commentId].replies.sort((a: any, b: any) => {
+                            // Assuming updated_date is in ISO8601 format, you can compare them as strings
+                            return a.createdAt.localeCompare(b.createdAt);
+                        });
+                    }
+                }
                 // Convert the commentsById object to an array of comments
                 const formattedData = Object.values(commentsById);
 

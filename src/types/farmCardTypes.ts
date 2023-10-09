@@ -29,7 +29,14 @@ export interface FarmDataType {
     status: string;
     title: string;
     updatedAt: string;
-    user_id: string;
+    user_id: {
+        _id:string;
+        full_name:string;
+        user_type:string;
+        email:string;
+        phone:string;
+    };
+    
     __v: number;
     _id: string;
 }

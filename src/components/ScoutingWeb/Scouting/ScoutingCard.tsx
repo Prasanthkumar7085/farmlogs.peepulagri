@@ -6,9 +6,9 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
 
-interface pageProps{
+interface pageProps {
   item: SingleScoutResponse;
-  
+
 }
 
 const ScoutingCardWeb = ({ item }: pageProps) => {
@@ -22,13 +22,13 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
     router.push(`/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`);
   }, []);
 
-  const viewImagePreview = (index:number) => {
+  const viewImagePreview = (index: number) => {
     setOpenDialog(true);
     setIndex(index);
   }
-  
+
   const handleCloseDialog = () => {
-      setOpenDialog(false);
+    setOpenDialog(false);
   };
 
   // const handleClick = (index: number, item: any) => {
@@ -38,7 +38,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
 
   const [state, setState] = useState(false);
 
-  const  handleImageLoad = () => {
+  const handleImageLoad = () => {
     setState(true);
   };
   return (
@@ -46,8 +46,8 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
       <div className={styles.imgFlexContainer}>
         {item.attachments.length ? item.attachments.slice(0, 6).map((itemObj: ScoutAttachmentDetails, index: number) => {
           return (
-            <div  key={index} className={item.attachments.length > 3 ? styles.eachImgBox : styles.eachImgBoxLessThan3} onClick={() => viewImagePreview(index)}>
-            {itemObj.type.slice(0, 5) == 'video' ?
+            <div key={index} className={item.attachments.length > 3 ? styles.eachImgBox : styles.eachImgBoxLessThan3} onClick={() => viewImagePreview(index)}>
+              {itemObj.type.slice(0, 5) == 'video' ?
                 <img
                   className={styles.imageIcon}
                   src={'/videoimg.png'}
@@ -55,24 +55,22 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                   onLoad={handleImageLoad}
                   style={{ display: state ? "block" : "none" }}
                 />
-                
-              :
-              <img
-                className={styles.imageIcon}
-                src={itemObj.url}
-                alt={itemObj.name}
-                onLoad={handleImageLoad}
+
+                :
+                <img
+                  className={styles.imageIcon}
+                  src={itemObj.url}
+                  alt={itemObj.name}
+                  onLoad={handleImageLoad}
                   style={{ display: state ? "block" : "none" }}
-              />
-            }
-          </div>
+                />
+              }
+            </div>
           )
-        }):"No Attachments"}
-
-
+        }) : <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>No Attachments</div>}
       </div>
       <div className={styles.carddetails}>
-        <p className={styles.date}>{timePipe(item.createdAt,'DD MMM YYYY, hh:mm A')}</p>
+        <p className={styles.date}>{timePipe(item.createdAt, 'DD MMM YYYY, hh:mm A')}</p>
         <div className={styles.buttons}>
           <div className={styles.view} onClick={onViewClick}>
             <img
@@ -97,7 +95,6 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           </div> */}
         </div>
       </div>
-
       <ViewSingleImagePreview open={openDialog} onClose={handleCloseDialog} media={item.attachments[index]} index={index} />
     </div>
   );

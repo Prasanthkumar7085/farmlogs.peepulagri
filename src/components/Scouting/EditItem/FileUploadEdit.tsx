@@ -23,6 +23,8 @@ import getSingleScoutService from "../../../../lib/services/ScoutServices/getSin
 import { SingleScoutResponse } from "@/types/scoutTypes";
 import updateDescritionService from "../../../../lib/services/ScoutServices/updateDescription";
 import updateDescriptionService from "../../../../lib/services/ScoutServices/updateDescription";
+import ErrorMessages from "@/components/Core/ErrorMessages";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 
 
 const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) => {
@@ -54,6 +56,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
     const [alertType, setAlertType] = useState(false);
     const [previewImages, setPreviewImages] = useState<any>([]);
     const [data, setData] = useState<SingleScoutResponse>();
+    const [validations, setValidations] = useState<any>()
 
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
@@ -80,11 +83,15 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
         try {
             await updateAttachements()
-            const response = await updateDescriptionService(router.query?.scout_id as string, accessToken, description)
-            if (response?.success) {
-                setAlertMessage(response.message)
+            const response = await updateDescriptionService(router.query?.scout_id as string, accessToken, data, tempFilesStorage, description)
+            console.log(response)
+            if (response?.success == true) {
+                setAlertMessage(response?.message)
                 setAlertType(true)
                 captureFileUploadOptions("success")
+            }
+            else if (response.status == 422) {
+                setValidations(response?.errors)
             }
         }
         catch (err) {
@@ -236,6 +243,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
     //select the when input select 
     const handleFileChange = async (e: any) => {
+        setValidations({})
         let copy = [...e.target.files, ...filesFromStore]
         dispatch(storeFilesArray(e.target.files))
 
@@ -594,7 +602,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
                                     <div className={styles.farmselection} id="images">
                                         <div className={styles.inputField}>
-                                            <div className={styles.label1}>Images</div>
+                                            <div className={styles.label1}>Images<strong style={{ color: "rgb(228 12 15)" }}>*</strong></div>
                                         </div>
                                         <div className={styles.imagesupload} id="images-upload">
                                             <div
@@ -643,6 +651,8 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                 </div>
                             </div>
                         </div>
+                        <ErrorMessagesComponent errorMessage={validations?.attachments} />
+
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
@@ -698,7 +708,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                 <div className={styles.addscoutdetails}>
                                     <div className={styles.inputField}>
                                         <div className={styles.farmselection} id="input-description">
-                                            <div className={styles.label1}>Description</div>
+                                            <div className={styles.label1}>Description<strong style={{ color: "rgb(228 12 15)" }}>*</strong></div>
                                             <TextField
                                                 className={styles.input}
                                                 color="primary"
@@ -711,9 +721,14 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                                 variant="outlined"
                                                 multiline
                                                 value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
+                                                onChange={(e) => {
+                                                    setDescription(e.target.value)
+                                                    setValidations({})
+
+                                                }}
                                                 sx={{ background: "#fff" }}
                                             />
+                                            <ErrorMessagesComponent errorMessage={validations?.description} />
                                         </div>
                                     </div>
 

@@ -56,6 +56,7 @@ export default function ForgotPasswordPage() {
         }
     };
 
+
     const VerifyOtp = async (e: any) => {
         setOtpInvalid(false);
         // setLoading(true);
@@ -79,10 +80,12 @@ export default function ForgotPasswordPage() {
                     query: { email: email }
                 });
             }
-            if (response.status == 422) {
-                setOtpErrorMesseges(res.errors);
+            if (response.status == 422 || response.status == 400) {
+                setOtpErrorMesseges(res);
                 // setLoading(false);
                 throw res;
+
+
             }
             else if (response.status === 401) {
                 setOtpInvalid(res.message);
@@ -96,6 +99,7 @@ export default function ForgotPasswordPage() {
             setLoading(false);
         }
     };
+
     return (
         <div id={styles.loginPage}>
             <div className={styles.bgImage}>
@@ -104,30 +108,25 @@ export default function ForgotPasswordPage() {
 
             <form noValidate className={styles.formCard}>
                 <div className={styles.innerWrap}>
-
                     <div>
-                        <TextField
-                            className={styles.phoneNo}
-                            placeholder='Email'
-                            sx={{ width: "100%" }}
-                            size='small'
-                            name="email"
-                            type={"text"}
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value)
-                                // setErrorMessages(null)
-                            }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton >
-                                            <EditIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                            <TextField
+                                className={styles.phoneNo}
+                                placeholder='Email'
+                                sx={{ width: "100%" }}
+                                size='small'
+                                name="email"
+                                type={"text"}
+                                value={email}
+                                onChange={(e) => {
+                                    setEmail(e.target.value)
+                                }}
+
+                            />
+                            <IconButton >
+                                <EditIcon />
+                            </IconButton>
+                        </div>
                         <ErrorMessagesComponent errorMessage={errorMessages?.email} />
                         <Button
                             className={styles.cta_button}
@@ -141,7 +140,6 @@ export default function ForgotPasswordPage() {
                     </div>
                     {otpvisible ?
                         <div>
-
                             <OtpInput
                                 value={otpvalue}
                                 onChange={(e: string) => setOtpValue(e)}
@@ -149,11 +147,10 @@ export default function ForgotPasswordPage() {
                                 isInputNum
                                 shouldAutoFocus
                                 inputStyle="otpInputs"
-                            // errorStyle={Boolean(errorMessages.otp)}
                             />
+                            <ErrorMessagesComponent errorMessage={otperrormesseges?.message} />
                             <Button
                                 className={styles.cta_button}
-
                                 variant="contained"
                                 color="primary"
                                 onClick={VerifyOtp}

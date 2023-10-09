@@ -39,12 +39,16 @@ export default function UpdatePasswordPage() {
             }
             if (response.status == 422) {
                 setErrorMessages(res.errors);
+                console.log(res);
+
                 setLoading(false);
                 throw res;
             }
             else if (response.status === 401) {
                 setInvalid(res.message);
-
+            }
+            if (response.status == 400) {
+                setInvalid(res.message)
             }
 
         } catch (err) {
@@ -64,13 +68,13 @@ export default function UpdatePasswordPage() {
                 <div className={styles.innerWrap}>
                     <div className={styles.header}>
                         <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
-                            Update Password
+                            Reset Password
                         </Typography>
                     </div>
                     <div>
                         <TextField
                             className={styles.phoneNo}
-                            placeholder='New Password'
+                            placeholder='Password'
                             sx={{ width: "100%" }}
                             size='small'
                             name="email"
@@ -90,7 +94,7 @@ export default function UpdatePasswordPage() {
                                 ),
                             }}
                         />
-                        {/* <ErrorMessagesComponent errorMessage={errorMessages?.email} /> */}
+                        <ErrorMessagesComponent errorMessage={errorMessages?.password} />
 
                     </div>
                     <div>
@@ -119,7 +123,12 @@ export default function UpdatePasswordPage() {
                                 ),
                             }}
                         />
+                        <ErrorMessagesComponent errorMessage={errorMessages?.confirmPassword
+                        } />
                     </div>
+                    {invalid ?
+                        <p>{invalid}</p>
+                        : ""}
                     <Button variant='contained' fullWidth onClick={Updatepassword}>Update Password</Button>
                 </div>
             </form>

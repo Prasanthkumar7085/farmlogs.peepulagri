@@ -29,7 +29,7 @@
 .farms {
   font-size: clamp(18px, 1.25vw, 24px);
   color: #d94841;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   margin: 0;
 }
@@ -57,7 +57,7 @@
   border-radius: 3px !important;
   background: #05A155 !important;
   color: #FFF !important;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(12px, 0.833vw, 18px) !important;
   font-weight: 500 !important;
   text-transform: capitalize !important;
@@ -144,7 +144,7 @@
 
 .filterBlock p {
   color: #6A7185;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(13px, 0.72vw, 18px);
   font-weight: 500;
   line-height: 100%;
@@ -177,7 +177,7 @@
 .formDetails h6 {
   margin: 0;
   color: #35353D;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(16px, 0.833vw, 18px);
   font-weight: 500;
 }
@@ -185,7 +185,7 @@
 .formDetails p {
   margin: 0;
   color: #6A7185;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(11px, 0.62vw, 14px);
   font-weight: 500;
   padding-top: 5px;

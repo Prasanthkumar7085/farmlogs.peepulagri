@@ -591,7 +591,7 @@ const FileUploadComponent = () => {
                             <div className={styles.addscoutdetails} id="add-scout-details">
                                 <div className={styles.farmselection} id="farm-selection">
                                     <h5 className={styles.label} id="label-select-farm">
-                                        Select Farm
+                                        Select Farm<strong style={{ color: "rgb(228 12 15)" }}>*</strong>
                                     </h5>
                                     <FormControl
                                         className={styles.selectfarm}
@@ -606,7 +606,7 @@ const FileUploadComponent = () => {
                                 </div>
                                 <div className={styles.inputField}>
                                     <h5 className={styles.label} id="label-select-farm">
-                                        Select Crop
+                                        Select Crop<strong style={{ color: "rgb(228 12 15)" }}>*</strong>
                                     </h5>
                                     <FormControl className={styles.dropdown} variant="outlined">
                                         <InputLabel color="primary" />
@@ -623,7 +623,7 @@ const FileUploadComponent = () => {
 
                                     <div className={styles.farmselection} id="images">
                                         <div className={styles.inputField}>
-                                            <div className={styles.label1}>Images</div>
+                                            <div className={styles.label1}>Images<strong style={{ color: "rgb(228 12 15)" }}>*</strong></div>
                                         </div>
                                         <div className={styles.imagesupload} id="images-upload">
                                             <div
@@ -726,7 +726,7 @@ const FileUploadComponent = () => {
                                 <div className={styles.addscoutdetails}>
                                     <div className={styles.inputField}>
                                         <div className={styles.farmselection} id="input-description">
-                                            <div className={styles.label1}>Description</div>
+                                            <div className={styles.label1}>Description<strong style={{ color: "rgb(228 12 15)" }}>*</strong></div>
                                             <TextField
                                                 className={styles.input}
                                                 color="primary"

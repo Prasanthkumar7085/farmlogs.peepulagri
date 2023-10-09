@@ -32,9 +32,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   const [user, setUser] = useState<string|null>(null);
   const [users, setUsers] = useState([]);
 
-  const [page, setPage] = useState<number | string>(1);
-  const [limit, setLimit] = useState<number|string>(1);
-
   const onChangeSearchString = (e: ChangeEvent<HTMLInputElement>) => {
     setChanged(true);
     setSearch(e.target.value);
@@ -52,7 +49,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         search_string: search,
         location: location?.name as string,
         userId: user as string,
-        page: router.query.page as string,
+        page: 1,
         limit: router.query.limit as string,
         sortBy: router.query.order_by as string,
         sortType: router.query.sort_type as string,
@@ -169,7 +166,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         search_string: search,
         location: location?.name as string,
         userId: value._id as string,
-        page: router.query.page as string,
+        page: 1,
         limit: router.query.limit as string,
         sortBy: router.query.order_by as string,
         sortType: router.query.sort_type as string,
@@ -180,7 +177,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         search_string: search,
         location: location?.name as string,
         userId: '',
-        page: router.query.page as string,
+        page: 1,
         limit: router.query.limit as string,
         sortBy: router.query.order_by as string,
         sortType: router.query.sort_type as string,

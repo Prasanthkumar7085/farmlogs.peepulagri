@@ -1,12 +1,11 @@
-import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
-import { TextField, Button, Icon, IconButton, LinearProgress, Box } from "@mui/material";
-import styles from "./comment-form.module.css";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
 import { removeOneAttachmentElement, removeTheAttachementsFilesFromStore, storeAttachementsFilesArray } from "@/Redux/Modules/Conversations";
-import DoneIcon from '@mui/icons-material/Done';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DoneIcon from '@mui/icons-material/Done';
+import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./comment-form.module.css";
 
 const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
@@ -275,9 +274,10 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
         }}
         onKeyDown={(e: any) => {
-          if (e.key == 'Enter') {
-            replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
-          }
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            comment&&(replyThreadEvent ? replyThreads(replyThreadEvent) : addComment())
+        }
         }}
 
       />

@@ -15,7 +15,7 @@ const getAllFarmsService = async (token: string) => {
 
     } catch (err: any) {
         console.error(err);
-
+        return
     }
 }
 

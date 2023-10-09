@@ -12,6 +12,7 @@ import TablePaginationComponent from "@/components/Core/TablePaginationComponent
 import TablePaginationForFarms from "@/components/Core/TablePaginationForFarms";
 import { List, ListItem, Menu, Typography } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort"
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 
 interface callFarmsProps {
@@ -197,7 +198,7 @@ const AllFarmsPage = () => {
       <div className={styles.allFarms}>
         {data.length ?
           <div style={{ display:"flex",flexDirection:"column",gap:"10px" }}>
-            <ScoutingFarmDetailsCard getFarmsData={getFarmsData} data={data} onViewClick={onViewClick} loading={loading} />
+            <ScoutingFarmDetailsCard getFarmsData={getFarmsData} data={data} onViewClick={onViewClick} />
             <TablePaginationForFarms paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Farms' />
           </div>
           : (!loading ? <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
@@ -207,6 +208,7 @@ const AllFarmsPage = () => {
       </div>
 
       
+      <LoadingComponent loading={loading}/>
     </div>
   );
 }

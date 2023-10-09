@@ -1,7 +1,9 @@
 .chatBox {
   background-color: #fff;
 }
-
+.chatBox *{
+  border-radius: 8px;
+}
 .chatBox textarea {
   height: 60px !important;
 }
@@ -35,10 +37,10 @@
 }
 
 .attachments {
-  align-self: stretch;
-  width: 59.98px;
   display: flex;
   flex-direction: row;
+  align-self: center;
+  width: 59.98px;
   align-items: center;
   justify-content: flex-start;
   gap: var(--gap-base);
@@ -74,8 +76,9 @@
 .commentform {
   flex-direction: column;
   justify-content: flex-start;
-  width: 100%;
+  width: calc(100% - 2rem);
   gap: var(--gap-13xl);
+  padding: 1rem;
 }
 
 .uploadprogress {

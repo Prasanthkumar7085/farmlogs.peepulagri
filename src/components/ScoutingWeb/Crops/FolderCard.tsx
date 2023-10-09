@@ -31,7 +31,7 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
                     className={styles.folderStructure}
                     onClick={() => onFolderStructureContainerClick(item)}
                   >
-                    <div className={styles.foder}>
+                    <div className={styles.folder}>
                       <img
                         className={styles.folderIcon}
                         alt=""
@@ -62,9 +62,9 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
                               : ""}
                           </h6>
                         </Tooltip>
-                        <div className={styles.date}>
+                        {/* <div className={styles.date}>
                           {timePipe(item.createdAt, "DD, MMM YYYY")}
-                        </div>
+                        </div> */}
                       </div>
                       <div
                         style={{

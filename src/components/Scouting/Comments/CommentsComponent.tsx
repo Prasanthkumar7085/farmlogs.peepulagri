@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
+import styles from "./CommentsComponent.module.css";
 
 const CommentsComponent = () => {
 
@@ -184,7 +185,7 @@ const CommentsComponent = () => {
 
 
     return (
-        <div style={{ width: "100%", marginTop: "1rem" }}>
+        <div className={styles.CommentsBlock}>
             <CommentForm afterCommentAdd={afterCommentAdd} />
             <div style={{ marginTop: "30px" }}>
                 <Threads

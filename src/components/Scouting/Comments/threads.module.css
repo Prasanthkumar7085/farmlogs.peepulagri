@@ -93,7 +93,12 @@
   width: 20px;
   height: 20px;
 }
-
+.attachmentContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  width: 100%;
+  gap: 0.75rem;
+}
 .attachment {
   border-radius: var(--br-9xs);
   background-color: var(--background);
@@ -105,6 +110,10 @@
   padding: var(--padding-5xs);
   box-sizing: border-box;
   color: var(--high-emphasis);
+  border: 1px solid var(--background);
+}
+.attachment:hover {
+  border: 1px solid #efefef
 }
 
 .paragraph {
@@ -164,7 +173,7 @@
 
 .react {
   justify-content: center;
-  gap: 8px;
+  gap: 1rem;
   font-size: var(--text-sm-medium-size);
   color: var(--body);
 }
@@ -233,7 +242,7 @@
 
 .userdetails1 {
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-start;
   font-size: var(--font-size-base);
   color: var(--title);
@@ -310,10 +319,11 @@
   background-color: var(--background);
   flex-direction: row;
   align-items: flex-start;
-  padding: var(--padding-5xs);
+  padding: var(--padding-xs);
   gap: var(--gap-5xs);
   font-size: var(--text-sm-medium-size);
   color: var(--primary-blue);
+  border-radius: 6px;
 }
 
 .threads {

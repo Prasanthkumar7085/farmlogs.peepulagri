@@ -349,6 +349,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                 type="file"
                 alt="images-upload"
                 multiple
+                accept=".pdf, image/*, video/*"
                 onChange={handleFileChange}
                 hidden
               />

@@ -645,6 +645,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                                         <input
                                                             type="file"
                                                             alt="images-upload"
+                                                            accept=".pdf, image/*, video/*"
                                                             multiple
                                                             onChange={handleFileChange}
                                                             hidden
@@ -665,7 +666,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                         {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
                             <div className={styles.uploadprogress} id="upload-progress" key={index}>
                                 <div className={styles.progress} id="progress">
-                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : "/nj.jpg"
+                                    <img className={styles.image21} alt="" src={previewImages.find((e: any) => e.fileIndex == item.name)?.prieviewUrl ? previewImages.find((e: any) => e.fileIndex == item.name).prieviewUrl : item.type == "application/pdf" ? "/pdf-icon.png" : "/doc-icon.webp"
                                     } />
                                     <div className={styles.progressdetails}>
                                         <div className={styles.uploaddetails}>

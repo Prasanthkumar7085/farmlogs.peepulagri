@@ -31,38 +31,35 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [user, setUser] = useState<string|null>(null);
   const [users, setUsers] = useState([]);
+  const [settingUserLoading, setSettingUserLoading] = useState(false);
 
   const onChangeSearchString = (e: ChangeEvent<HTMLInputElement>) => {
     setChanged(true);
     setSearch(e.target.value);
-  }
+  };
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
-      setLocation({ name: 'All', _id: '1' });
+      setLocation({ name: "All", _id: "1" });
     }
     if (value) {
-      
       setChanged(true);
       setLocation(value);
       getFarmsData({
         search_string: search,
-        location: location?.name as string,
+        location: value?.name as string,
         userId: user as string,
         page: 1,
         limit: router.query.limit as string,
         sortBy: router.query.order_by as string,
         sortType: router.query.sort_type as string,
-      })
-
+      });
     }
-  }
+  };
 
   useEffect(() => {
     setSearch(router.query?.search_string as string);
   }, [router.query?.search_string]);
-
-
 
   const callData = async () => {
     if (router.query.location) {
@@ -70,19 +67,19 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     } else {
       getLocations();
     }
-    if (router.query.user_id) {
-      getAllUsers(router.query.user_id as string);
-    } else {
-      getAllUsers();
+    if (userType == "AGRONOMIST") {
+      if (router.query.user_id) {
+        getAllUsers(router.query.user_id as string);
+      } else {
+        getAllUsers();
+      }
     }
-
-    
-  }
+  };
   useEffect(() => {
-    if (router.isReady&&accessToken) {
+    if (router.isReady && accessToken && userType) {
       callData();
     }
-  }, [router.isReady,accessToken]);
+  }, [router.isReady, accessToken, userType]);
 
   useEffect(() => {
     if (changed) {
@@ -102,7 +99,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     }
   }, [search, location]);
 
-  const [settingUserLoading, setSettingUserLoading] = useState(false);
   const getAllUsers = async (userId = '') => {
     
     const response = await getAllUsersService({ token: accessToken });
@@ -110,7 +106,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       setUsers(response?.data);
       if (userId) {
         let userObj = response?.data?.find((item: any) => item._id == userId);
-        console.log(userObj,'pkpk');
         setUser(userObj);
         setSettingUserLoading(true);
           setTimeout(() => {

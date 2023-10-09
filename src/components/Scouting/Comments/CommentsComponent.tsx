@@ -4,6 +4,7 @@ import Threads from "./threads"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import AlertComponent from "@/components/Core/AlertComponent";
 
 const CommentsComponent = () => {
 
@@ -12,7 +13,8 @@ const CommentsComponent = () => {
     const [data, setData] = useState<any>()
     const [loading, setLoading] = useState<any>()
     const [afterReply, setAfterReply] = useState<any>()
-
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState(false);
 
     useEffect(() => {
         if (router.isReady) {
@@ -150,16 +152,53 @@ const CommentsComponent = () => {
         }
     }
 
+    const afterDeleteAttachements = async (attachmentID: any, commentId: any) => {
+        setLoading(true)
+        let obj = {
+            "attachment_ids": [attachmentID]
+        }
+        let options = {
+            method: "DELETE",
+            body: JSON.stringify(obj),
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': accessToken
+            })
+        }
+        try {
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/${commentId}/attachments`, options)
+            let responseData = await response.json()
+            if (responseData.success == true) {
+                setAlertMessage("Attachement deleted successfully")
+                setAlertType(true)
+                getAllScoutComments()
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
 
 
     return (
         <div style={{ width: "100%", marginTop: "1rem" }}>
             <CommentForm afterCommentAdd={afterCommentAdd} />
             <div style={{ marginTop: "30px" }}>
-                <Threads details={data} afterCommentAdd={afterCommentAdd} afterDeleteComment={afterDeleteComment} afterUpdateComment={afterUpdateComment} afterReply={afterReply} />
+                <Threads
+                    details={data}
+                    afterCommentAdd={afterCommentAdd}
+                    afterDeleteComment={afterDeleteComment}
+                    afterUpdateComment={afterUpdateComment}
+                    afterReply={afterReply}
+                    afterDeleteAttachements={afterDeleteAttachements}
+                />
             </div>
 
             <LoadingComponent loading={loading} />
+            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
 
         </div>
     )

@@ -116,12 +116,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                                     <source src={mediaArray[currentIndex]?.url} type={mediaArray[currentIndex]?.type} />
                                     Your browser does not support the video tag.
                                 </video>
-                            ) : (
-                                <img
-                                    src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
-                                    alt={`Image ${currentIndex + 1}`}
-                                />
-                            )}
+                            ) : mediaArray[currentIndex]?.type?.includes('application') ?
+                                <iframe src={mediaArray[currentIndex]?.url} width="100%" height="100%"></iframe>
+
+                                : (
+                                    <img
+                                        src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
+                                        alt={`Image ${currentIndex + 1}`}
+                                    />
+                                )}
 
                         </div>
                     )}

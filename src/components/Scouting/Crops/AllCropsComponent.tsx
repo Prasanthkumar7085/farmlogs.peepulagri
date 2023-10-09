@@ -158,11 +158,12 @@ const AllCropsComponent = () => {
         }
         else {
             const { title, crop_area } = value;
-
+            
             let obj = {
-                title: title ? title?.trim() : "",
-                crop_area: (crop_area && +crop_area) ? crop_area : null
-            }
+              title: title ? title?.trim() : "",
+              crop_area: crop_area,
+            };
+            
             setErrorMessages([]);
             createCrop(obj)
         }

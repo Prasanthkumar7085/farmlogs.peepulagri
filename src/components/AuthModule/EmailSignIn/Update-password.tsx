@@ -8,7 +8,7 @@ import styles from "../SignUp/SignUp.module.css";
 import EditIcon from '@mui/icons-material/Edit';
 import OtpInput from 'react18-input-otp';
 
-export default function VerifyOtpPage() {
+export default function UpdatePasswordPage() {
 
     const router = useRouter();
 

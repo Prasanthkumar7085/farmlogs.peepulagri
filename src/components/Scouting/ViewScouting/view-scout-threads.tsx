@@ -201,7 +201,7 @@ const ViewScoutThreads = () => {
               <Button variant="contained" color="primary" size="small" startIcon={<AddIcon />} onClick={() => setFileUploadOpen(true)}>Add</Button>
             </div>
             <Card sx={{
-              width: "100%", minHeight: "100px", padding: "0.25rem",
+              width: "100%", minHeight: "100px",
             }}>
 
               <div style={{

@@ -141,8 +141,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       />
                     </div> :
 
-                    <p className={styles.theProblemIm}>
-                      {item.content}{"                     "}<Typography variant="caption">{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
+                    <p className={styles.theProblemIm} >
+                      {item.content}{"                     "}<Typography variant="caption" sx={{ wordBreak: "break-word" }}>{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
                     </p>}
 
                   {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {

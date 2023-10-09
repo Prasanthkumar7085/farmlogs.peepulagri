@@ -21,40 +21,40 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const [locationValue, setLocationValue] = useState<{ name: string, _id: string }|null>();
+  const [locationValue, setLocationValue] = useState<{ name: string, _id: string } | null>();
   const [dataSetting, setDataSetting] = useState(false);
 
   useEffect(() => {
-    
+
     console.log(location);
-    
+
     if (locations?.length) {
       let obj: any = locations?.find((item: { name: string, _id: string }) => item.name == location);
       console.log(obj);
-      
+
       if (obj) {
         setDataSetting(true);
         setLocationValue(obj);
         setTimeout(() => {
           setDataSetting(false);
-        },1)
+        }, 1)
       } else {
         setLocation('');
       }
     }
-  },[locations,location])
+  }, [locations, location])
 
   const onChangeSearchString = (event: ChangeEvent<HTMLInputElement>) => {
     captureSearchString(event.target.value);
   }
-  
+
 
   useEffect(() => {
     setSearch(searchString);
   }, [searchString]);
 
   const addInputValue = (event: any, value: any) => {
-    
+
     if (value) {
       setLocation(value?.name);
       getDataOnLocationChange(value?.name);
@@ -73,9 +73,7 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
         <Typography className={styles.dashboard}>Dashboard</Typography>
         <div className={styles.selectlocation} id="select-location" >
           <div className={styles.srisailam}>
-            
-
-          {!dataSetting?<Autocomplete
+            {!dataSetting ? <Autocomplete
               id="asynchronous-demo"
               fullWidth
               noOptionsText={<div>{'No such location!'}</div>}
@@ -85,23 +83,23 @@ const DashBoardHeader = ({ captureSearchString, searchString, locations, locatio
               options={locations}
               onChange={addInputValue}
               renderInput={(params) => (
-                  <TextField
-                      {...params}
-                      className={styles.inputfarmname}
-                      name="location"
-                      size="small"
-                      placeholder="Enter location here"
-                      fullWidth
-                      variant="outlined"
-                      sx={{
-                          '& .MuiInputBase-root': {
-                              background: "#fff"
-                          }
-                      }}
+                <TextField
+                  {...params}
+                  className={styles.inputfarmname}
+                  name="location"
+                  size="small"
+                  placeholder="Enter location here"
+                  fullWidth
+                  variant="outlined"
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      background: "#fff"
+                    }
+                  }}
 
-                  />
+                />
               )}
-          />:""}
+            /> : ""}
 
 
 

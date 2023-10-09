@@ -86,7 +86,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                 },
                 '& .MuiDialogContent-root': {
 
-                    position: "relative !important",
+                    // position: "relative !important",
                     padding: "0rem",
                     display: "flex",
                     alignItems: "center",
@@ -103,7 +103,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <div {...handlers} >
+                <div {...handlers} style={{ width: "100%" }}>
 
                     <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray?.length <= 1}>
                         <NavigateBeforeIcon sx={{ color: "#fff" }} />

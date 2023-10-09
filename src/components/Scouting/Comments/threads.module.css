@@ -36,9 +36,9 @@
 
 .theProblemIm {
   margin: 0;
-  align-self: stretch;
-  position: relative;
-  line-height: 130%;
+  word-wrap: break-word;
+  word-break: break-all;
+
 }
 
 .groupIcon {
@@ -146,7 +146,7 @@
   position: relative;
   line-height: 100%;
   cursor: pointer;
-  
+
 }
 
 .edit {

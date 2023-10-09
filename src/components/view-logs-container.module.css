@@ -25,17 +25,18 @@
   width: 85%;
   height: 100%;
   margin: 0 auto;
-  position: relative;
 }
 
 .positionLeftImg {
   position: absolute;
   top: 50%;
-  left: 0;
+  left: 40px;
+  background: #fff;
 }
 
 .positionRightImg {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 40px;
+  background: #000;
 }

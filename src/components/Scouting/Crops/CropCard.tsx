@@ -70,7 +70,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
             
             let obj = {
                 title: title ? title?.trim() : "",
-                crop_area: (crop_area && +crop_area) ? crop_area : null
+                crop_area: crop_area
             }
             renameCrop(obj);
         }
@@ -144,13 +144,13 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
               style={{
                 display: "flex",
                 width: "100%",
-                            justifyContent: "space-between",
+                justifyContent: "space-between",
                 alignItems:"center"
               }}
             >
               <h2 className={styles.FieldCrop}>
-                {itemDetails?.title.length > 15
-                  ? itemDetails?.title.slice(0, 12) + "..."
+                {itemDetails?.title.length > 12
+                  ? itemDetails?.title.slice(0, 9) + "..."
                   : itemDetails?.title}
               </h2>
               <p className={styles.aug2023} >

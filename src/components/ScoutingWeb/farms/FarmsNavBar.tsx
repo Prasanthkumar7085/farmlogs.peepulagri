@@ -110,7 +110,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       setUsers(response?.data);
       if (userId) {
         let userObj = response?.data?.find((item: any) => item._id == userId);
-        console.log(userObj,'pkpk');
         setUser(userObj);
         setSettingUserLoading(true);
           setTimeout(() => {

@@ -40,12 +40,6 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
     }
   }
 
-  const deleteAMessage = async () => {
-    console.log(data?._id);
-
-
-  }
-
 
   const getSrc = (item: any) => {
     if (item.file_name.includes('.wav'))

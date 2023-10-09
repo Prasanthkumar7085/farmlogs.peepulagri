@@ -74,7 +74,10 @@ export default function ForgotPasswordPage() {
             const response = await fetch(`https://peepul-agri-production.up.railway.app/v1.0/users/forgot-password/verify-otp`, requestOptions)
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
-                router.push('/forgot-password/update-password')
+                router.push({
+                    pathname: "/forgot-password/update-password",
+                    query: { email: email }
+                });
             }
             if (response.status == 422) {
                 setOtpErrorMesseges(res.errors);
@@ -110,6 +113,7 @@ export default function ForgotPasswordPage() {
                             size='small'
                             name="email"
                             type={"text"}
+                            value={email}
                             onChange={(e) => {
                                 setEmail(e.target.value)
                                 // setErrorMessages(null)

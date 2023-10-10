@@ -8,7 +8,7 @@ import OtpInput from 'react18-input-otp';
 import ClearIcon from '@mui/icons-material/Clear';
 import MuiAlert from '@mui/material/Alert';
 import LoadingComponent from '@/components/Core/LoadingComponent';
-
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 
 export default function ForgotPasswordPage() {
@@ -93,14 +93,14 @@ export default function ForgotPasswordPage() {
                     query: { email: email }
                 });
             }
-            if (response.status == 422 || response.status == 400) {
-                setOtpErrorMesseges(res);
+            if (response.status == 422) {
+                setOtpErrorMesseges(res.errors);
                 setLoading(false);
                 throw res;
 
 
             }
-            else if (response.status === 401) {
+            else if (response.status === 401 || response.status == 400) {
                 setOtpInvalid(res.message);
 
             }
@@ -140,12 +140,15 @@ export default function ForgotPasswordPage() {
 
             <form noValidate className={styles.formCard} onSubmit={RequestOtp}>
                 <div className={styles.innerWrap}>
+                    <Button sx={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
+                        <KeyboardBackspaceIcon />
+                    </Button>
                     <div>
                         <div style={{ display: "flex", alignItems: "flex-start" }}>
                             <TextField
                                 className={styles.phoneNo}
                                 placeholder='Email'
-                                sx={{ width: "100%" }}
+                                sx={{ width: "100%", marginBottom: "0 !important" }}
                                 disabled={!editEmail}
                                 size='small'
                                 name="email"
@@ -155,17 +158,14 @@ export default function ForgotPasswordPage() {
                                     setEmail(e.target.value)
                                     setErrorMessages(null)
                                 }}
-                            // onKeyDown={(e) => {
-                            //     if (e.key == 'Enter') {
-                            //         RequestOtp()
-                            //     }
-                            // }}
                             />
-                            <IconButton onClick={() => {
-                                setEditEmail(true)
-                            }}>
-                                < EditIcon />
-                            </IconButton>
+                            {!editEmail ?
+                                <IconButton onClick={() => {
+                                    setEditEmail(true)
+                                }}>
+                                    < EditIcon />
+                                </IconButton>
+                                : ""}
 
                         </div>
                         <ErrorMessagesComponent errorMessage={errorMessages?.email} />
@@ -173,12 +173,12 @@ export default function ForgotPasswordPage() {
                             <p style={{ margin: "0", color: "red" }}>{invalid}</p> : ""}
 
                         {otpvisible && !editEmail ?
-                            <Typography>{"Didn't you receive the OTP?"}
+                            <Typography>{"Didn't you receive the OTP? "}
                                 {timeRemaining > 0
                                     ? ` Resend  in: ${timeRemaining} seconds`
                                     : (
                                         <span
-                                            style={{ color: "#06A3AD", cursor: "pointer" }}
+                                            style={{ color: "#3462cf", cursor: "pointer" }}
                                             onClick={RequestOtp}
                                         >
                                             Resend OTP
@@ -202,14 +202,20 @@ export default function ForgotPasswordPage() {
                         <div>
                             <OtpInput
                                 value={otpvalue}
-                                onChange={(e: string) => setOtpValue(e)}
+                                onChange={(e: string) => {
+                                    setOtpValue(e);
+                                    setOtpErrorMesseges(null)
+                                }}
                                 numInputs={4}
                                 isInputNum
                                 shouldAutoFocus
                                 inputStyle="otpInputs"
 
                             />
-                            <ErrorMessagesComponent errorMessage={otperrormesseges?.message} />
+                            <ErrorMessagesComponent errorMessage={otperrormesseges?.otp} />
+                            {otpinvalid ?
+                                <p style={{ margin: "0", color: "red" }}>{otpinvalid}</p>
+                                : ""}
                             <Button
                                 className={styles.cta_button}
                                 variant="contained"

@@ -12,7 +12,6 @@ export default function SigninEmail() {
     const [email, setEmail] = useState<any>();
     const [password, setPassword] = useState<any>();
     const [loading, setLoading] = React.useState(false);
-    const [buttonLoading, setButtonLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessages, setErrorMessages] = useState<any>();
     const [invalid, setInvalid] = useState<any>();
@@ -88,9 +87,14 @@ export default function SigninEmail() {
                     </div>
                     <div>
                         <TextField
-                            className={styles.phoneNo}
+                            // className={styles.phoneNo}
                             placeholder='Email'
-                            sx={{ width: "100%" }}
+                            sx={{
+                                width: "100%",
+                                '& .MuiInputBase-root': {
+                                    background: "#fff"
+                                }
+                            }}
                             size='small'
                             name="email"
                             type={"text"}
@@ -104,9 +108,20 @@ export default function SigninEmail() {
                     </div>
                     <div>
                         <TextField
-                            sx={{ width: "100%" }}
+                            sx={{
+                                width: "100%",
+                                // '& .MuiOutlinedInput-notchedOutline': {
+                                //     background: "#fff !important"
+                                // },
+                                // '& .MuiButtonBase-root': {
+                                //     zIndex: "1 !important"
+                                // }
+                                '& .MuiInputBase-root': {
+                                    background: "#fff"
+                                }
+                            }}
                             size='small'
-                            className={styles.phoneNo}
+                            // className={styles.phoneNo}
                             placeholder='Password'
                             name="password"
                             type={showPassword ? "text" : "password"}
@@ -129,7 +144,7 @@ export default function SigninEmail() {
 
                     </div>
                     {invalid ?
-                        <p style={{ color: "red" }}>
+                        <p style={{ color: "red", margin: "0" }}>
                             {invalid}
                         </p>
                         : ""

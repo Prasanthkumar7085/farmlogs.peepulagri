@@ -1,10 +1,11 @@
 import { Button, Card, CircularProgress, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { Password, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorMessagesComponent from '@/components/Core/ErrorMessagesComponent';
 import styles from "../SignUp/SignUp.module.css";
 import LoadingComponent from '@/components/Core/LoadingComponent';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 export default function UpdatePasswordPage() {
 
@@ -88,6 +89,9 @@ export default function UpdatePasswordPage() {
                 :
                 <form noValidate className={styles.formCard} onSubmit={Updatepassword}>
                     <div className={styles.innerWrap}>
+                        <Button sx={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
+                            <KeyboardBackspaceIcon />
+                        </Button>
                         <div className={styles.header}>
                             <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
                                 Reset Password
@@ -95,9 +99,13 @@ export default function UpdatePasswordPage() {
                         </div>
                         <div>
                             <TextField
-                                className={styles.phoneNo}
                                 placeholder='Password'
-                                sx={{ width: "100%" }}
+                                sx={{
+                                    width: "100%",
+                                    '& .MuiInputBase-root': {
+                                        background: "#fff"
+                                    }
+                                }}
                                 size='small'
                                 name="email"
                                 type={showPassword ? "text" : "password"}
@@ -122,9 +130,13 @@ export default function UpdatePasswordPage() {
                         </div>
                         <div>
                             <TextField
-                                className={styles.phoneNo}
                                 placeholder='Conform Password'
-                                sx={{ width: "100%" }}
+                                sx={{
+                                    width: "100%",
+                                    '& .MuiInputBase-root': {
+                                        background: "#fff"
+                                    }
+                                }}
                                 size='small'
                                 name="email"
                                 type={showConfirmPassword ? "text" : "password"}

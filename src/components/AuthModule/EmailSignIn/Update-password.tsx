@@ -29,7 +29,6 @@ export default function UpdatePasswordPage() {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwiaWQiOiI2NGYxM2YzMzE0ZWNiYjg1NmQyZjEyNDQiLCJwaG9uZSI6Iis5MTgxNDIyMTE1MjkiLCJ1c2VyX3R5cGUiOiJVU0VSIiwiaWF0IjoxNjk2MzEyNjI4LCJleHAiOjE3MDE0OTY2Mjh9.aq2B4CR33q6GwWFj7Dqn3k7-M7cpQBO5ai97KJBudWs'
                 },
                 body: JSON.stringify({
                     email: email,

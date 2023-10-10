@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 
 
 interface PageProps {
@@ -107,10 +108,15 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
             </div>
             <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }} >
               <div
-                className={styles.mobile}
                 onClick={() => router.push(`/farm/${item?._id}/crops`)}
               >
-                {userType=='AGRONOMIST'?<p className={styles.mobile}>User Mobile: {item?.user_id?.phone}</p>:""}
+                {userType=='AGRONOMIST'?
+                  <p className={styles.mobile}>
+                   <PhoneIphoneIcon /> 
+                    <span>
+                      {item?.user_id?.phone}
+                    </span> 
+                  </p>:""}
               </div>
               <div className={styles.actionbuttons} >
                 <IconButton className={styles.view} onClick={() => onViewClick(item._id)}>

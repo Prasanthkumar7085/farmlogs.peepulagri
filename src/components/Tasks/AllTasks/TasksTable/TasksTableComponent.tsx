@@ -18,6 +18,7 @@ interface pageProps {
     sortBy = "",
     sortType = "",
     selectedFarmId = "",
+    status = "",
   }: ApiCallProps) => void;
   paginationDetails: any;
 }
@@ -53,6 +54,7 @@ const TasksTableComponent = ({
         sortBy: router.query.order_by as string,
         sortType: router.query.order_type as string,
         selectedFarmId: router.query.farm_id as string,
+        status: router.query.status as string,
       });
     } else {
       toast.error(response?.message);

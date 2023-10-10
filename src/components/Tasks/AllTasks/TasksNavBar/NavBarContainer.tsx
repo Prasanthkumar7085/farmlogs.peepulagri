@@ -1,17 +1,19 @@
+import { FarmInTaskType } from "@/types/tasksTypes";
 import { Button, Icon, InputAdornment, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
-import styles from "./NavBarContainer.module.css";
-import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInAddTask";
 import { useSelector } from "react-redux";
 import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsService";
-import { FarmInTaskType } from "@/types/tasksTypes";
+import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInAddTask";
+import styles from "./NavBarContainer.module.css";
+import SelectComponent from "@/components/Core/SelectComponent";
 
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
   onSelectValueFromDropDown: (value: FarmInTaskType, reason: string) => void;
   selectedFarm: FarmInTaskType | null | undefined;
+  onStatusChange: (value: string) => void;
 }
 
 const NavBarContainer: React.FC<PropTypes> = ({
@@ -19,6 +21,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
   searchString,
   onSelectValueFromDropDown,
   selectedFarm,
+  onStatusChange,
 }) => {
   const router = useRouter();
 
@@ -27,26 +30,33 @@ const NavBarContainer: React.FC<PropTypes> = ({
   );
 
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
   const [farmOptions, setFarmOptions] = useState<Array<FarmInTaskType>>();
   const [selectedFarmOption, setSelectedFarmOption] = useState<
     FarmInTaskType | null | undefined
   >();
+  const [status, setStatus] = useState("");
+  const [statusOptions] = useState<Array<{ value: string; title: string }>>([
+    { value: "TODO", title: "Todo" },
+    { value: "IN-PROGRESS", title: "In-Progress" },
+    { value: "COMPLETED", title: "Completed" },
+  ]);
+
+  const setStatusValue = (e: any) => {
+    onStatusChange(e.target.value);
+    setStatus(e.target.value);
+  };
 
   useEffect(() => {
     setSearch(searchString);
-  }, [searchString]);
-
-  useEffect(() => {
     setSelectedFarmOption(selectedFarm);
-  }, [selectedFarm]);
+    setStatus(router.query.status as string);
+  }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
     router.push("/tasks/add");
   }, []);
 
   const getAllFarms = async () => {
-    setLoading(true);
     const response = await getAllFarmsService(accessToken);
     if (response?.success) {
       setFarmOptions(response?.data);
@@ -57,7 +67,6 @@ const NavBarContainer: React.FC<PropTypes> = ({
         setSelectedFarmOption(obj);
       }
     }
-    setLoading(false);
   };
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -80,7 +89,14 @@ const NavBarContainer: React.FC<PropTypes> = ({
             placeholder={"Select Farm here"}
             defaultValue={selectedFarmOption}
           />
-
+          <div style={{ maxWidth: "15%", minWidth: "15%" }}>
+            <SelectComponent
+              options={statusOptions}
+              size="small"
+              onChange={setStatusValue}
+              value={status ? status : ""}
+            />
+          </div>
           <TextField
             value={search}
             onChange={(e) => {

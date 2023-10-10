@@ -1,3 +1,4 @@
+import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
 import {
   SortingState,
   flexRender,
@@ -56,12 +57,37 @@ const TanStackTableComponent = ({
     }
 
     getData({
-      limit: paginationDetails?.limit,
+      limit: router.query.limit as string,
       page: 1,
       sortBy: orderBy,
       sortType: orderType,
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
+      status: router.query.status as string,
+    });
+  };
+
+  const capturePageNum = (value: number) => {
+    getData({
+      limit: router.query.limit as string,
+      page: value,
+      sortBy: router.query.order_by as string,
+      sortType: router.query.order_type as string,
+      search_string: router.query.search_string as string,
+      selectedFarmId: router.query.farm_id as string,
+      status: router.query.status as string,
+    });
+  };
+
+  const captureRowPerItems = (value: number) => {
+    getData({
+      limit: value,
+      page: 1,
+      sortBy: router.query.order_by as string,
+      sortType: router.query.order_type as string,
+      search_string: router.query.search_string as string,
+      selectedFarmId: router.query.farm_id as string,
+      status: router.query.status as string,
     });
   };
   return (
@@ -134,82 +160,13 @@ const TanStackTableComponent = ({
           </table>
         </div>
         <div className="h-2" />
-        <div className="flex items-center gap-2">
-          <button
-            className="border rounded p-1"
-            // onClick={() => table.previousPage()}
-            onClick={() =>
-              getData({
-                page: paginationDetails?.page - 1,
-                limit: paginationDetails?.limit,
-                search_string: router.query.search_string as string,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
-                selectedFarmId: router.query.farm_id as string,
-              })
-            }
-            disabled={paginationDetails?.page == 1 ? true : false}
-            // disabled={!table.getCanPreviousPage()}
-          >
-            {"<"}
-          </button>
-          <button
-            className="border rounded p-1"
-            // onClick={() => table.nextPage()}
-            onClick={() =>
-              getData({
-                page: paginationDetails?.page + 1,
-                limit: paginationDetails?.limit,
-                search_string: router.query.search_string as string,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
-                selectedFarmId: router.query.farm_id as string,
-              })
-            }
-            disabled={!paginationDetails?.has_more}
-            // disabled={!table.getCanNextPage()}
-          >
-            {">"}
-          </button>
-          <span className="flex items-center gap-1">
-            <strong>
-              {`Page ${paginationDetails?.page} of ${paginationDetails?.total_pages}`}
-            </strong>
-          </span>
 
-          {/* <span className="flex items-center gap-1">
-                        | Go to page:
-                        <input
-                            type="number"
-                            defaultValue={table.getState().pagination.pageIndex + 1}
-                            onChange={e => {
-                                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                                table.setPageIndex(page)
-                            }}
-                            className="border p-1 rounded w-16"
-                        />
-                    </span> */}
-          <select
-            value={paginationDetails?.limit}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value));
-              getData({
-                page: 1,
-                limit: Number(e.target.value),
-                search_string: router.query.search_string as string,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
-                selectedFarmId: router.query.farm_id as string,
-              });
-            }}
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
+        <TablePaginationComponent
+          paginationDetails={paginationDetails}
+          capturePageNum={capturePageNum}
+          captureRowPerItems={captureRowPerItems}
+          values="Tasks"
+        />
       </div>
     </div>
   );

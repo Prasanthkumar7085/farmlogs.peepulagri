@@ -1,0 +1,139 @@
+.label,
+.landPreparation {
+  align-self: stretch;
+  position: relative;
+  font-weight: 500;
+}
+.label {
+  cursor: pointer;
+  line-height: 20px;
+}
+.landPreparation {
+  margin: 0;
+  font-size: 24px;
+  line-height: 100%;
+  font-family: inherit;
+  color: #a05148;
+}
+.title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+}
+.label1 {
+  cursor: pointer;
+  position: relative;
+  line-height: 20px;
+  font-weight: 500;
+}
+.indicatorIcon {
+  position: relative;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  object-fit: cover;
+}
+.status2 {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.status1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 16px;
+  color: #f2a84c;
+}
+.idandStatus,
+.status {
+  align-self: stretch;
+  display: flex;
+}
+.status {
+  width: 365.5px;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+}
+.idandStatus {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.responseDate {
+  cursor: pointer;
+  position: relative;
+  line-height: 130%;
+  font-weight: 500;
+}
+.text {
+  margin: 0;
+  position: relative;
+}
+.responseDate1 {
+  background-color: #f5f7fa;
+  width: 123px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 4px 10px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 16px;
+  color: #35353d;
+}
+.response {
+  gap: 4px;
+}
+.date,
+.response {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.farmersPrepareThe,
+.lable {
+  align-self: stretch;
+  position: relative;
+}
+.lable {
+  cursor: pointer;
+  line-height: 18px;
+  font-weight: 500;
+}
+.farmersPrepareThe {
+  margin: 0;
+  font-size: 14px;
+  line-height: 150%;
+  color: #35353d;
+}
+.cardDetails,
+.description {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  font-size: 18px;
+  color: #101828;
+}
+.cardDetails {
+  padding: 16px 16px 0;
+  gap: 24px;
+  text-align: left;
+  font-size: 14px;
+  color: #344054;
+  font-family: Inter;
+}

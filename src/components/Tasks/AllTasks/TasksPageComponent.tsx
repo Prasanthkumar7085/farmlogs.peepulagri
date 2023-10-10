@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
-import NavBarContainer from "./TasksNavBar/NavBarContainer";
-import TasksTableComponent from "./TasksTable/TasksTableComponent";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import { useRouter } from "next/router";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import getAllTasksService from "../../../../lib/services/TasksService/getAllTasksService";
-import LoadingComponent from "@/components/Core/LoadingComponent";
+import NavBarContainer from "./TasksNavBar/NavBarContainer";
+import TasksTableComponent from "./TasksTable/TasksTableComponent";
+import { FarmInTaskType } from "@/types/tasksTypes";
 
-
-interface ApiCallProps{
-    page : string|number;
-    limit : string|number;
-    search_string:string;
-    sortBy :string;
-    sortType :string
+interface ApiCallProps {
+  page: string | number;
+  limit: string | number;
+  search_string: string;
+  sortBy: string;
+  sortType: string;
+  selectedFarmId: string;
 }
 const TasksPageComponent = () => {
   const router = useRouter();
@@ -25,6 +26,8 @@ const TasksPageComponent = () => {
   const [data, setData] = useState([]);
   const [paginationDetails, setPaginationDetails] = useState();
   const [loading, setLoading] = useState(true);
+  const [searchString, setSearchString] = useState("");
+  const [selectedFarm, setSelectedFarm] = useState<FarmInTaskType | null>();
 
   const getAllTasks = async ({
     page = 1,
@@ -32,6 +35,7 @@ const TasksPageComponent = () => {
     search_string = "",
     sortBy = "",
     sortType = "",
+    selectedFarmId = "",
   }: Partial<ApiCallProps>) => {
     setLoading(true);
     let queryParams: any = {};
@@ -49,6 +53,9 @@ const TasksPageComponent = () => {
     }
     if (sortType) {
       queryParams["order_type"] = sortType;
+    }
+    if (selectedFarmId) {
+      queryParams["farm_id"] = selectedFarmId;
     }
 
     const {
@@ -74,8 +81,6 @@ const TasksPageComponent = () => {
     setLoading(false);
   };
 
-  const [searchString, setSearchString] = useState("");
-
   useEffect(() => {
     if (router.isReady && accessToken) {
       let delay = 500;
@@ -86,6 +91,7 @@ const TasksPageComponent = () => {
           search_string: searchString,
           sortBy: router.query.order_by as string,
           sortType: router.query.order_type as string,
+          selectedFarmId: router.query.farm_id as string,
         });
       }, delay);
       return () => clearTimeout(debounce);
@@ -99,12 +105,38 @@ const TasksPageComponent = () => {
   const onChangeSearch = (search: string) => {
     setSearchString(search);
   };
+  const onSelectValueFromDropDown = async (value: FarmInTaskType) => {
+    if (value) {
+      setSelectedFarm(value);
+
+      getAllTasks({
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        search_string: searchString,
+        sortBy: router.query.order_by as string,
+        sortType: router.query.order_type as string,
+        selectedFarmId: value?._id,
+      });
+    } else {
+      setSelectedFarm(null);
+      getAllTasks({
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        search_string: searchString,
+        sortBy: router.query.order_by as string,
+        sortType: router.query.order_type as string,
+        selectedFarmId: "",
+      });
+    }
+  };
 
   return (
     <div>
       <NavBarContainer
         onChangeSearch={onChangeSearch}
         searchString={searchString}
+        onSelectValueFromDropDown={onSelectValueFromDropDown}
+        selectedFarm={selectedFarm}
       />
       {data.length ? (
         <TasksTableComponent

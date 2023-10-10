@@ -1,39 +1,69 @@
-import { FunctionComponent, memo, useState, useCallback, useEffect } from "react";
-import {
-  Button,
-  Icon,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
-import SelectBox from "./SelectBox";
-import PortalPopup from "./PortalPopup";
-import styles from "./NavBarContainer.module.css";
+import { Button, Icon, InputAdornment, TextField } from "@mui/material";
 import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useState } from "react";
+import styles from "./NavBarContainer.module.css";
+import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInAddTask";
+import { useSelector } from "react-redux";
+import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsService";
+import { FarmInTaskType } from "@/types/tasksTypes";
 
-interface pageProps {
+interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
+  onSelectValueFromDropDown: (value: FarmInTaskType, reason: string) => void;
+  selectedFarm: FarmInTaskType | null | undefined;
 }
-const NavBarContainer = ({ onChangeSearch, searchString }: pageProps) => {
+
+const NavBarContainer: React.FC<PropTypes> = ({
+  onChangeSearch,
+  searchString,
+  onSelectValueFromDropDown,
+  selectedFarm,
+}) => {
   const router = useRouter();
-  const [isSelectBoxOpen, setSelectBoxOpen] = useState(false);
+
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
+
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [farmOptions, setFarmOptions] = useState<Array<FarmInTaskType>>();
+  const [selectedFarmOption, setSelectedFarmOption] = useState<
+    FarmInTaskType | null | undefined
+  >();
 
   useEffect(() => {
     setSearch(searchString);
   }, [searchString]);
 
-  const openSelectBox = useCallback(() => {
-    setSelectBoxOpen(true);
-  }, []);
-
-  const closeSelectBox = useCallback(() => {
-    setSelectBoxOpen(false);
-  }, []);
+  useEffect(() => {
+    setSelectedFarmOption(selectedFarm);
+  }, [selectedFarm]);
 
   const onButtonAddTaskClick = useCallback(() => {
     router.push("/tasks/add");
   }, []);
+
+  const getAllFarms = async () => {
+    setLoading(true);
+    const response = await getAllFarmsService(accessToken);
+    if (response?.success) {
+      setFarmOptions(response?.data);
+      if (router.query.farm_id) {
+        let obj = response?.data?.find(
+          (item: FarmInTaskType) => item?._id == router.query?.farm_id
+        );
+        setSelectedFarmOption(obj);
+      }
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      getAllFarms();
+    }
+  }, [router.isReady, accessToken]);
 
   return (
     <>
@@ -43,14 +73,14 @@ const NavBarContainer = ({ onChangeSearch, searchString }: pageProps) => {
           <h1 className={styles.taskManagement}>{`Task Management`}</h1>
         </div>
         <div className={styles.headeractions}>
-          <Button
-            className={styles.filter}
-            color="primary"
-            variant="outlined"
-            onClick={openSelectBox}
-          >
-            Filter
-          </Button>
+          <FarmAutoCompleteInAddTask
+            options={farmOptions}
+            onSelectValueFromDropDown={onSelectValueFromDropDown}
+            label={"title"}
+            placeholder={"Select Farm here"}
+            defaultValue={selectedFarmOption}
+          />
+
           <TextField
             value={search}
             onChange={(e) => {
@@ -84,15 +114,6 @@ const NavBarContainer = ({ onChangeSearch, searchString }: pageProps) => {
           </Button>
         </div>
       </div>
-      {isSelectBoxOpen && (
-        <PortalPopup
-          overlayColor="rgba(113, 113, 113, 0.3)"
-          placement="Centered"
-          onOutsideClick={closeSelectBox}
-        >
-          <SelectBox onClose={closeSelectBox} />
-        </PortalPopup>
-      )}
     </>
   );
 };

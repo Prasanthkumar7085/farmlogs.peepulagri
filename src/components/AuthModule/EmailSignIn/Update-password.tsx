@@ -92,7 +92,7 @@ export default function UpdatePasswordPage() {
                             value={newpassword}
                             onChange={(e) => {
                                 setNewPassword(e.target.value)
-                                // setErrorMessages(null)
+                                setErrorMessages(null)
                             }}
                             InputProps={{
                                 endAdornment: (
@@ -118,7 +118,7 @@ export default function UpdatePasswordPage() {
                             value={conformpassword}
                             onChange={(e) => {
                                 setConformPassword(e.target.value)
-                                // setErrorMessages(null)
+                                setErrorMessages(null)
                             }}
                             InputProps={{
                                 endAdornment: (

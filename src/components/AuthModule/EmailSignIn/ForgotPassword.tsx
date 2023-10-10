@@ -14,14 +14,13 @@ import LoadingComponent from '@/components/Core/LoadingComponent';
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState<any>();
     const [loading, setLoading] = React.useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+    const [buttonLoading, setButtonLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<any>();
     const [invalid, setInvalid] = useState<any>();
     const [otpvisible, setOtpVisible] = useState(false);
     const [otpvalue, setOtpValue] = useState("");
     const [otpinvalid, setOtpInvalid] = useState<any>();
     const [otperrormesseges, setOtpErrorMesseges] = useState<any>();
-    const [otpsentsuccess, setOtpSentSuccess] = useState();
     const [timeRemaining, setTimeRemaining] = useState(30);
     const router = useRouter();
     const [editEmail, setEditEmail] = useState(true);
@@ -31,7 +30,7 @@ export default function ForgotPasswordPage() {
 
     const RequestOtp = async () => {
         setInvalid(false);
-        setLoading(true);
+        setButtonLoading(true);
 
         try {
             var requestOptions: any = {
@@ -55,7 +54,7 @@ export default function ForgotPasswordPage() {
             }
             if (response.status == 422) {
                 setErrorMessages(res.errors);
-                setLoading(false);
+                setButtonLoading(false);
                 throw res;
             }
             else if (response.status === 401) {
@@ -67,15 +66,13 @@ export default function ForgotPasswordPage() {
             console.error(err);
         }
         finally {
-            setLoading(false);
+            setButtonLoading(false);
         }
     };
-    console.log(otpsentsuccess);
-
 
     const VerifyOtp = async (e: any) => {
         setOtpInvalid(false);
-        // setLoading(true);
+        setLoading(true);
         try {
             var requestOptions: any = {
                 method: 'POST',
@@ -98,7 +95,7 @@ export default function ForgotPasswordPage() {
             }
             if (response.status == 422 || response.status == 400) {
                 setOtpErrorMesseges(res);
-                // setLoading(false);
+                setLoading(false);
                 throw res;
 
 
@@ -191,7 +188,9 @@ export default function ForgotPasswordPage() {
                                 color="primary"
                                 onClick={RequestOtp}
                             >
-                                Request OTP
+                                {buttonLoading ?
+                                    <CircularProgress color="inherit" size={'2rem'} />
+                                    : "Request OTP"}
                             </Button>
                         }
                     </div>

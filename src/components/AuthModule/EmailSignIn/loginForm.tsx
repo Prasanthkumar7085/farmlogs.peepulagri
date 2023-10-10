@@ -12,6 +12,7 @@ export default function SigninEmail() {
     const [email, setEmail] = useState<any>();
     const [password, setPassword] = useState<any>();
     const [loading, setLoading] = React.useState(false);
+    const [buttonLoading, setButtonLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessages, setErrorMessages] = useState<any>();
     const [invalid, setInvalid] = useState<any>();
@@ -67,7 +68,9 @@ export default function SigninEmail() {
     const togglePasswordVisibility = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
     };
-
+    const forgotButton = () => {
+        router.push('/forgot-password');
+    }
     return (
         <div id={styles.loginPage}>
             <div className={styles.bgImage}>
@@ -120,7 +123,9 @@ export default function SigninEmail() {
                             }}
                         />
                         <ErrorMessagesComponent errorMessage={errorMessages?.password} />
-                        <Button onClick={() => router.push('/forgot-password')}>Forgot Password</Button>
+                        <Button onClick={forgotButton} >
+                            Forgot Password
+                        </Button>
 
                     </div>
                     {invalid ?

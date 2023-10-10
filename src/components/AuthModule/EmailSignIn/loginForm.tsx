@@ -23,6 +23,7 @@ export default function SigninEmail() {
     const router = useRouter();
 
     const signInForm = async (e: any) => {
+        e.preventDefault();
         setInvalid(false);
         setLoading(true);
         try {
@@ -73,14 +74,6 @@ export default function SigninEmail() {
         }
     };
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        signInForm({
-            email,
-            password
-        });
-    }
-
     const togglePasswordVisibility = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
     };
@@ -95,7 +88,7 @@ export default function SigninEmail() {
 
 
 
-            <form noValidate className={styles.formCard}>
+            <form noValidate className={styles.formCard} onSubmit={signInForm}  >
                 <div className={styles.innerWrap}>
                     <div className={styles.header}>
                         <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
@@ -104,7 +97,6 @@ export default function SigninEmail() {
                     </div>
                     <div>
                         <TextField
-                            // className={styles.phoneNo}
                             placeholder='Email'
                             sx={{
                                 width: "100%",
@@ -127,18 +119,11 @@ export default function SigninEmail() {
                         <TextField
                             sx={{
                                 width: "100%",
-                                // '& .MuiOutlinedInput-notchedOutline': {
-                                //     background: "#fff !important"
-                                // },
-                                // '& .MuiButtonBase-root': {
-                                //     zIndex: "1 !important"
-                                // }
                                 '& .MuiInputBase-root': {
                                     background: "#fff"
                                 }
                             }}
                             size='small'
-                            // className={styles.phoneNo}
                             placeholder='Password'
                             name="password"
                             type={showPassword ? "text" : "password"}
@@ -171,7 +156,7 @@ export default function SigninEmail() {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        onClick={handleSubmit}
+                        type='submit'
                     >
                         {loading ?
                             <CircularProgress /> : "Sign In"}

@@ -86,7 +86,7 @@ const SideBarMenu = ({ children }: any) => {
                         </Tooltip>
 
 
-                        <button className={styles.profile}>
+                        <button className={styles.profile} onClick={() => router.push('/profile')}>
                             <div className={styles.profile1}>
                                 <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />
                             </div>

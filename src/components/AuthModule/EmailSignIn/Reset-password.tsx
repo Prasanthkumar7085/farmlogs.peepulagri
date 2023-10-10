@@ -19,7 +19,6 @@ export default function ResetPasswordPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [resetSuccess, setResetSuccess] = useState(false);
     const { email } = router.query
-    const [timeout, setTimeOut] = useState();
     const Updatepassword = async (e: any) => {
         setInvalid(false);
         setLoading(true);
@@ -43,7 +42,7 @@ export default function ResetPasswordPage() {
                 setResetSuccess(true)
                 setTimeout(() => {
                     router.push('/')
-                }, 3000);
+                }, 5000);
             }
             if (response.status == 422) {
                 setErrorMessages(res.errors);

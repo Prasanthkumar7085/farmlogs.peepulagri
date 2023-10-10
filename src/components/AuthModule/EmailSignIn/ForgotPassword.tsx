@@ -43,7 +43,7 @@ export default function ForgotPasswordPage() {
                 }),
             };
 
-            const response = await fetch(`https://peepul-agri-production.up.railway.app/v1.0/users/forgot-password`, requestOptions)
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/forgot-password`, requestOptions)
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
                 setTimeRemaining(30)
@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
                 }),
             };
 
-            const response = await fetch(`https://peepul-agri-production.up.railway.app/v1.0/users/forgot-password/verify-otp`, requestOptions)
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/forgot-password/verify-otp`, requestOptions)
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
                 router.push({

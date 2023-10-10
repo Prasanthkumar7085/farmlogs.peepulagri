@@ -409,8 +409,17 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         }
 
       }) :
-        <div style={{ margin: "auto" }}>
-          No Threads
+        <div className={styles.noThreadFound}>
+          <Image
+            alt="Delete"
+            height={35}
+            width={35}
+            src="/live-chat.svg"
+          />
+          <span>
+            No Threads
+          </span>
+
         </div>
       }
       <LoadingComponent loading={loading} />

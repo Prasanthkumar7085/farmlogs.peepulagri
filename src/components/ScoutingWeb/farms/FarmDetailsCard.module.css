@@ -209,7 +209,7 @@
 .farmdetailscard:hover {
   transition: all 0.2s ease-out;
   box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.1);
-  top: -4px;
+  top: -3px;
   border: 1px solid rgba(38, 38, 38, 0.1);
   background-color: white;
 }

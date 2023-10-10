@@ -128,18 +128,32 @@
 }
 
 .reply1 {
+  display: flex;
+  align-items: center;
   flex: 1;
   position: relative;
   line-height: 100%;
   font-weight: 500;
   cursor: pointer;
+  color: var(--gray-500);
+  column-gap: 0.45rem;
 }
-
+.threadReplies {
+  display: flex;
+  column-gap: 0.25rem;
+  align-items: baseline;
+  color: var(--gray-500);
+  cursor: pointer;
+}
+.reply1:hover,
+.threadReplies:hover {
+  color: var(--gray-700);
+}
 .reply {
   flex: 1;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-start;
 }
 
@@ -160,7 +174,7 @@
 
 .edit {
   justify-content: flex-start;
-  gap: var(--gap-9xs);
+  gap: var(--gap-5xs);
 }
 
 .actionButton,
@@ -274,7 +288,7 @@
   align-items: flex-start;
   justify-content: center;
   gap: var(--gap-5xs);
-  color: var(--color-gray-300);
+  color: var(--gray-700);
 }
 
 .reply3 {

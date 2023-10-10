@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, Button, Icon, IconButton, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Icon, IconButton, TextField, Typography, Chip } from "@mui/material";
 import Image from "@/components/Core/ImageComponent";
 import CommentForm from "./comment-form";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
@@ -207,31 +207,51 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         setReplyOpen(true)
                         setReplyIndex(index)
                         dispatch(removeTheAttachementsFilesFromStore([]))
-                      }}>Reply</div> :
+                      }}>
+                        <Image
+                          alt="Delete"
+                          height={20}
+                          width={20}
+                          src="/comments.svg"
+                          style={{ borderRadius: "5%" }}
+                        />
+                        <span>
+                          Reply in thread
+                        </span>
+                      </div> :
 
                       index == replyIndex ?
                         <div className={styles.reply1} style={{ color: "red" }} onClick={() => {
                           setReplyOpen(false)
                           setReplyIndex(index)
-
                         }}>Close</div> :
 
                         <div className={styles.reply1} onClick={() => {
                           setReplyOpen(true)
                           setReplyIndex(index)
-                        }}>Reply</div>}
+                        }}>Reply in thread</div>}
 
 
-                    {isReplies == false && item.replies.length !== 0 ?
-                      <div className={styles.reply1} onClick={() => {
-                        setIsReplies(true)
-                        setReplyIndex(index)
-                      }}>{item.replies.length}{item.replies.length == 1 ? "Reply" : "replies"}</div> :
-                      item.replies.length !== 0 ?
-                        <div className={styles.reply1} onClick={() => {
-                          setIsReplies(false)
-                          setReplyIndex(index)
-                        }}>{item.replies.length}{item.replies.length == 1 ? "Reply" : "replies"}</div> : ""}
+                        {isReplies == false && item.replies.length !== 0 ?
+                          <div className={styles.threadReplies} onClick={() => {
+                            setIsReplies(true)
+                            setReplyIndex(index)
+                          }}>
+                            <Chip variant="outlined" label={item.replies.length} size="small" /> 
+                            <span>
+                              {item.replies.length == 1 ? "reply" : "replies"}
+                            </span>
+                          </div> :
+                          item.replies.length !== 0 ?
+                            <div className={styles.threadReplies} onClick={() => {
+                              setIsReplies(false)
+                              setReplyIndex(index)
+                            }}>
+                              <Chip variant="outlined" label={item.replies.length} size="small" /> 
+                              <span>
+                                {item.replies.length == 1 ? "reply" : "replies"}
+                              </span>
+                            </div> : ""}
 
                   </div>
 

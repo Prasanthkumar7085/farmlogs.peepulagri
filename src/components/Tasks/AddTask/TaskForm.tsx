@@ -1,102 +1,107 @@
-import { FunctionComponent, useState, useCallback, useEffect } from "react";
-import {
-  Button,
-  Icon,
-  TextField
-} from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import styles from "./TaskForm.module.css";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
-import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInAddTask";
-import FooterActionButtons from "./footer-action-buttons";
-import addTaskService from "../../../../lib/services/TasksService/addTaskService";
 import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import { Button, Icon, TextField } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
+import addTaskService from "../../../../lib/services/TasksService/addTaskService";
+import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInAddTask";
+import styles from "./TaskForm.module.css";
+import FooterActionButtons from "./footer-action-buttons";
+import { FarmInTaskType } from "@/types/tasksTypes";
 
-
-const TaskForm = ({data}:any) => {
-
-  console.log(data);
-
-  
+const TaskForm = ({ data }: any) => {
   const router = useRouter();
-  
-  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-  
-  const [farmData, setFarmData] = useState([]);
-  const [defaultValue, setDefaultValue] = useState<any>('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [deadline, setDeadline] = useState<any>(null);
-  const [alertMessage, setAlertMessage] = useState('');
+
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
+
+  const [farmData, setFarmData] = useState<Array<FarmInTaskType>>([]);
+  const [defaultValue, setDefaultValue] = useState<FarmInTaskType | null>();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState<Date>();
+  const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [loading, setLoading] = useState(false);
-  
-  const getAllFarms = async () => {
+
+  const getAllFarms = async (id = "") => {
+    setLoading(true);
     const response = await getAllFarmsService(accessToken);
+
     if (response?.success) {
       setFarmData(response?.data);
+
+      if (id) {
+        let obj = response?.data?.find((item: any) => item._id == id);
+        setDefaultValue(obj);
+      }
     }
-  }
-  
-  
+    setLoading(false);
+  };
+
   const captureFarmName = (selectedObject: any) => {
     if (selectedObject && Object.keys(selectedObject).length) {
-      setDefaultValue(selectedObject?._id);
+      setDefaultValue(selectedObject);
+    } else {
+      setDefaultValue(null);
     }
-  }
-  
-  
+  };
+
   const addTask = async () => {
     setErrorMessages({});
     setLoading(true);
     let body = {
-      farm_id: defaultValue,
+      farm_id: defaultValue?._id,
       categories: [],
-      deadline: deadline?.toISOString(),
-      description:description,
-      title: title,
-    }
-    
-    let response = await addTaskService({body:body, token:accessToken});
+      deadline: deadline ? deadline?.toISOString() : "",
+      description: description ? description : "",
+      title: title ? title : "",
+    };
+
+    let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
       setAlertMessage(response?.message);
       setAlertType(true);
-    } else if(response?.status==422){
+      setTimeout(() => {
+        router.push("/tasks");
+      }, 500);
+    } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
     setLoading(false);
-    
-  }
-  
-  useEffect(() => {
-    getAllFarms()    
-  }, [router.isReady, accessToken]);
-  
-  
-  const setDataInEdit = () => {
-    setTitle(data?.title);
-    setDescription(data?.description);
-    setDefaultValue(data?.farm_id);
-    // setDeadline(data?.deadline);
   };
 
   useEffect(() => {
-    setDataInEdit();
-  }, [data]);
-  
+    if (router.isReady && accessToken) {
+      if (router.query.task_id && data) {
+        setDataInEdit();
+        getAllFarms(data?.farm_id);
+      } else {
+        getAllFarms();
+      }
+    }
+  }, [router.isReady, accessToken, data]);
+
+  const setDataInEdit = () => {
+    setTitle(data?.title);
+    setDescription(data?.description);
+    setDeadline(new Date(data?.deadline));
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <>
         <div className={styles.form}>
           <div className={styles.header}>
             <Button
-              onClick={()=>router.back()}
+              onClick={() => router.back()}
               className={styles.backbutton}
               sx={{ width: 40 }}
               color="primary"
@@ -112,18 +117,28 @@ const TaskForm = ({data}:any) => {
           <div className={styles.container}>
             <form className={styles.formfields}>
               <div className={styles.selectfarm}>
-                <label className={styles.lable}>{`Select Farm`}<span style={{color:"red"}}>*</span></label>
+                <label className={styles.lable}>
+                  {`Select Farm`}
+                  <span style={{ color: "red" }}>*</span>
+                </label>
+
                 <FarmAutoCompleteInAddTask
-                options={farmData}
-                label={"title"}
-                onSelectValueFromDropDown={captureFarmName}
-                placeholder={"Select Farm"}
-                defaultValue={defaultValue}
+                  options={farmData}
+                  label={"title"}
+                  onSelectValueFromDropDown={captureFarmName}
+                  placeholder={"Select Farm"}
+                  defaultValue={defaultValue}
                 />
-                <ErrorMessages errorMessages={errorMessages} keyname='farm_id' />
+
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname="farm_id"
+                />
               </div>
               <div className={styles.selectfarm}>
-                <h4 className={styles.title}>Title<span style={{color:"red"}}>*</span></h4>
+                <h4 className={styles.title}>
+                  Title<span style={{ color: "red" }}>*</span>
+                </h4>
                 <TextField
                   className={styles.inoutbox}
                   color="primary"
@@ -132,12 +147,14 @@ const TaskForm = ({data}:any) => {
                   fullWidth={true}
                   variant="outlined"
                   value={title}
-                  onChange={(e)=>setTitle(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
-                <ErrorMessages errorMessages={errorMessages} keyname='title' />
+                <ErrorMessages errorMessages={errorMessages} keyname="title" />
               </div>
               <div className={styles.selectfarm}>
-                <label className={styles.lable}>Deadline<span style={{color:"red"}}>*</span></label>
+                <label className={styles.lable}>
+                  Deadline<span style={{ color: "red" }}>*</span>
+                </label>
                 <div className={styles.backbutton}>
                   <DatePicker
                     value={deadline}
@@ -152,7 +169,10 @@ const TaskForm = ({data}:any) => {
                       },
                     }}
                   />
-                  <ErrorMessages errorMessages={errorMessages} keyname='deadline' />
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname="deadline"
+                  />
                 </div>
               </div>
               <div className={styles.selectfarm}>
@@ -164,17 +184,20 @@ const TaskForm = ({data}:any) => {
                   fullWidth={true}
                   variant="outlined"
                   value={description}
-                  onChange={(e)=>setDescription(e.target.value)}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
-                
               </div>
             </form>
           </div>
         </div>
         <FooterActionButtons addTask={addTask} />
       </>
-      <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
-      <LoadingComponent loading={loading}/>
+      <AlertComponent
+        alertMessage={alertMessage}
+        alertType={alertType}
+        setAlertMessage={setAlertMessage}
+      />
+      <LoadingComponent loading={loading} />
     </LocalizationProvider>
   );
 };

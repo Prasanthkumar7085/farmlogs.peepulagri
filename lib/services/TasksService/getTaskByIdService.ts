@@ -17,7 +17,7 @@ const getTaskByIdService = async ({taskId,token}:{taskId:string,token:string}) =
 
     } catch (err: any) {
         console.error(err);
-
+        return;
     }
 }
 export default getTaskByIdService;

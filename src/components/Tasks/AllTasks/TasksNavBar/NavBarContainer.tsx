@@ -10,16 +10,18 @@ import PortalPopup from "./PortalPopup";
 import styles from "./NavBarContainer.module.css";
 import { useRouter } from "next/router";
 
-interface pageProps{
+interface pageProps {
   onChangeSearch: (search: string) => void;
+  searchString: string;
 }
-const NavBarContainer = ({ onChangeSearch }: pageProps) => {
-  
+const NavBarContainer = ({ onChangeSearch, searchString }: pageProps) => {
   const router = useRouter();
   const [isSelectBoxOpen, setSelectBoxOpen] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
-
+  useEffect(() => {
+    setSearch(searchString);
+  }, [searchString]);
 
   const openSelectBox = useCallback(() => {
     setSelectBoxOpen(true);
@@ -30,7 +32,7 @@ const NavBarContainer = ({ onChangeSearch }: pageProps) => {
   }, []);
 
   const onButtonAddTaskClick = useCallback(() => {
-    router.push('/tasks/add');
+    router.push("/tasks/add");
   }, []);
 
   return (
@@ -51,7 +53,10 @@ const NavBarContainer = ({ onChangeSearch }: pageProps) => {
           </Button>
           <TextField
             value={search}
-            onChange={(e) => { setSearch(e.target.value); onChangeSearch(e.target.value)}}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              onChangeSearch(e.target.value);
+            }}
             className={styles.searchbar}
             color="primary"
             size="small"

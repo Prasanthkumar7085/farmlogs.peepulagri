@@ -9,55 +9,63 @@ const FarmAutoCompleteInAddTask = ({ options, value, onSelectValueFromDropDown, 
     const router = useRouter();
     const dispatch = useDispatch();
     
-    const [defaultValueSet, setDefaultValueSet] = useState<any>();
+    const [defaultValueSet, setDefaultValueSet] = useState(defaultValue);
+    const [autoCompleteLoading, setAutoCompleteLoading] = useState(false);
 
     useEffect(() => {
-        if (router.isReady && router.query.farm_id) {
-            setDefaultValueSet(options && options.find((item: any) => item._id == router.query.farm_id))
-        }
-
-    }, [router.isReady, options, router.query]);
+      setDefaultValueSet(defaultValue);
+      setAutoCompleteLoading(true);
+      setTimeout(() => {
+        setAutoCompleteLoading(false);
+      }, 1);
+    }, [defaultValue]);
 
     return (
-        <div>
-            <Autocomplete
-                value={defaultValueSet ? defaultValueSet : null}
-                disablePortal
-                size='small'
-                id="combo-box-demo"
-                options={(options && options?.length) ? options : []}
-                disabled={router.pathname == "/farms/[farm_id]/crops/[crop_id]/scouting/[scout_id]/edit" ? true : false}
-                getOptionLabel={(option: any) => option[label] ? option[label]?.toUpperCase() : ""}
-                onChange={(e: any, value: any, reason: any) => {
-                    if (value) {
-                        onSelectValueFromDropDown(value, reason);
-                        setDefaultValueSet(value);
-                        dispatch(setFarmTitleTemp(value?.title));
-                    }
-                    else {
-                        onSelectValueFromDropDown("", reason);
-                        setDefaultValueSet(value)
+      <div>
+        {!autoCompleteLoading ? (
+          <Autocomplete
+            value={defaultValueSet}
+            disablePortal
+            size="small"
+            id="combo-box-demo"
+            options={options && options?.length ? options : []}
+            getOptionLabel={(option: any) =>
+              option[label] ? option[label]?.toUpperCase() : ""
+            }
+            onChange={(e: any, value: any, reason: any) => {
+              if (value) {
+                onSelectValueFromDropDown(value, reason);
+                setDefaultValueSet(value);
+                dispatch(setFarmTitleTemp(value?.title));
+              } else {
+                onSelectValueFromDropDown("", reason);
+                setDefaultValueSet(null);
+              }
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder={placeholder}
+                sx={{ width: "500px" }}
+              />
+            )}
 
-                    }
+            // sx={{
+            //     width: '1000%',
+            //     background: "#fff",
+            //     "& .MuiInputBase-input ": {
+            //         fontSize: "13px",
+            //         fontWeight: "400",
+            //         fontFamily: "'inter', sans-serif ",
+            //         color: "#000",
 
-                }}
-                renderInput={(params) => <TextField {...params} placeholder={placeholder} sx={{width:"500px"}} />
-                }
-                
-                // sx={{
-                //     width: '1000%',
-                //     background: "#fff",
-                //     "& .MuiInputBase-input ": {
-                //         fontSize: "13px",
-                //         fontWeight: "400",
-                //         fontFamily: "'inter', sans-serif ",
-                //         color: "#000",
-
-                //     }
-                // }}
-            />
-
-        </div>
+            //     }
+            // }}
+          />
+        ) : (
+          ""
+        )}
+      </div>
     );
 }
 

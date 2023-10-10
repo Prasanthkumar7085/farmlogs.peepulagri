@@ -8,7 +8,7 @@ import NavBarContainer from "./TasksNavBar/NavBarContainer";
 import TasksTableComponent from "./TasksTable/TasksTableComponent";
 import { FarmInTaskType } from "@/types/tasksTypes";
 
-interface ApiCallProps {
+export interface ApiCallProps {
   page: string | number;
   limit: string | number;
   search_string: string;

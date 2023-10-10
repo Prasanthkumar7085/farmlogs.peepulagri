@@ -70,7 +70,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
             
             let obj = {
                 title: title ? title?.trim() : "",
-                crop_area: (crop_area && +crop_area) ? crop_area : null
+                crop_area: crop_area
             }
             renameCrop(obj);
         }
@@ -121,33 +121,92 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
     }
 
     return (
-        <div className={styles.folder}>
-            <div className={styles.cropcard} >
-                <div className={styles.icons}>
-                    <img className={styles.folderIcon} alt="" src="/folder.svg" onClick={() => setToStorage(itemDetails?.title)} />
-                    <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.5rem" }} onClick={(event: any) => setAnchorEl(event.currentTarget)} />
-                    <MenuItemsForFolder />
-                </div>
-                <div className={styles.textWrapper} onClick={() => setToStorage(itemDetails?.title)} >
-                    <h2 className={styles.FieldCrop}>{itemDetails?.title.length > 15 ? itemDetails?.title.slice(0, 12) + '...' : itemDetails?.title}</h2>
-                    <div style={{display:"flex", width:"95%", justifyContent:"space-between"}}>
-                        <p className={styles.aug2023}>Crop Area</p>
-                        <p className={styles.aug2023}>{itemDetails.crop_area ? itemDetails.crop_area+(itemDetails.crop_area < 2 ? ' acre' : ' acres') : (0 +' acres')}</p>
-                    </div>
-                </div>
+      <div className={styles.folder}>
+        <div className={styles.cropcard}>
+          <div className={styles.icons}>
+            <img
+              className={styles.folderIcon}
+              alt=""
+              src="/folder.svg"
+              onClick={() => setToStorage(itemDetails?.title)}
+            />
+            <MoreVertIcon
+              sx={{ color: "#FFB110", fontSize: "1.5rem" }}
+              onClick={(event: any) => setAnchorEl(event.currentTarget)}
+            />
+            <MenuItemsForFolder />
+          </div>
+          <div
+            className={styles.textWrapper}
+            onClick={() => setToStorage(itemDetails?.title)}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                alignItems:"center"
+              }}
+            >
+              <h2 className={styles.FieldCrop}>
+                {itemDetails?.title.length > 12
+                  ? itemDetails?.title.slice(0, 9) + "..."
+                  : itemDetails?.title}
+              </h2>
+              <p className={styles.aug2023} >
+                {timePipe(itemDetails.createdAt,'DD, MMM YYYY')}
+              </p>
             </div>
-            {renameOpen ?
-                <NewFolderDiloag
-                    open={renameOpen}
-                    captureResponseDilog={captureResponseDilog}
-                    loading={loadingForAdd}
-                    defaultTitle={itemDetails?.title}
-                    defaultArea={itemDetails?.crop_area}
-                    errorMessages={errorMessages}
-                /> : ""}
-            {deleteOpen ? <AlertDelete open={deleteOpen} deleteFarm={deleteCrop} setDialogOpen={setDeleteOpen} loading={deleteLoading} /> : ''}
-            {alertMessage ? <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} /> : ""}
+            <div
+              style={{
+                display: "flex",
+                width: "95%",
+                justifyContent: "space-between",
+              }}
+            >
+              <p className={styles.aug2023}>Crop Area</p>
+              <p className={styles.aug2023}>
+                {itemDetails.crop_area
+                  ? itemDetails.crop_area +
+                    (itemDetails.crop_area < 2 ? " acre" : " acres")
+                  : 0 + " acres"}
+              </p>
+            </div>
+          </div>
         </div>
+        {renameOpen ? (
+          <NewFolderDiloag
+            open={renameOpen}
+            captureResponseDilog={captureResponseDilog}
+            loading={loadingForAdd}
+            defaultTitle={itemDetails?.title}
+            defaultArea={itemDetails?.crop_area}
+            errorMessages={errorMessages}
+          />
+        ) : (
+          ""
+        )}
+        {deleteOpen ? (
+          <AlertDelete
+            open={deleteOpen}
+            deleteFarm={deleteCrop}
+            setDialogOpen={setDeleteOpen}
+            loading={deleteLoading}
+          />
+        ) : (
+          ""
+        )}
+        {alertMessage ? (
+          <AlertComponent
+            alertMessage={alertMessage}
+            alertType={alertType}
+            setAlertMessage={setAlertMessage}
+            mobile={true}
+          />
+        ) : (
+          ""
+        )}
+      </div>
     );
 };
 

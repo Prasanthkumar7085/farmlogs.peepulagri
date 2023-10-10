@@ -13,7 +13,7 @@ const updateCropService =async (farmId:string,cropId:string,body:any,accessToken
         return responseData
     }
     catch (err) {
-        console.log(err)
+        console.error(err);
     }
 }
 

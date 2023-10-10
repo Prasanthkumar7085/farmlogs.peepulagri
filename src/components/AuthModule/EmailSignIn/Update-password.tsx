@@ -13,6 +13,9 @@ export default function UpdatePasswordPage() {
     const [loading, setLoading] = useState(false);
     const [invalid, setInvalid] = useState<any>();
     const [errorMessages, setErrorMessages] = useState<any>();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const { email } = router.query
 
     const Updatepassword = async (e: any) => {
@@ -58,6 +61,13 @@ export default function UpdatePasswordPage() {
             setLoading(false);
         }
     };
+    const togglePasswordVisibility = () => {
+        setShowPassword((prevShowPassword) => !prevShowPassword);
+    };
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword((prevShowPassword) => !prevShowPassword);
+    };
+
     return (
         <div id={styles.loginPage}>
             <div className={styles.bgImage}>
@@ -78,7 +88,7 @@ export default function UpdatePasswordPage() {
                             sx={{ width: "100%" }}
                             size='small'
                             name="email"
-                            type={"text"}
+                            type={showPassword ? "text" : "password"}
                             value={newpassword}
                             onChange={(e) => {
                                 setNewPassword(e.target.value)
@@ -87,8 +97,8 @@ export default function UpdatePasswordPage() {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton edge="end">
-                                            <Visibility />
+                                        <IconButton onClick={togglePasswordVisibility} edge="end">
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 ),
@@ -104,7 +114,7 @@ export default function UpdatePasswordPage() {
                             sx={{ width: "100%" }}
                             size='small'
                             name="email"
-                            type={"text"}
+                            type={showConfirmPassword ? "text" : "password"}
                             value={conformpassword}
                             onChange={(e) => {
                                 setConformPassword(e.target.value)
@@ -113,11 +123,9 @@ export default function UpdatePasswordPage() {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        {/* <IconButton onClick={togglePasswordVisibility} edge="end">
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton> */}
-                                        <IconButton edge="end">
-                                            <Visibility />
+                                        <IconButton onClick={toggleConfirmPasswordVisibility
+                                        } edge="end">
+                                            {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 ),
@@ -127,7 +135,7 @@ export default function UpdatePasswordPage() {
                         } />
                     </div>
                     {invalid ?
-                        <p>{invalid}</p>
+                        <p style={{ margin: "0", color: "red" }}>{invalid}</p>
                         : ""}
                     <Button variant='contained' fullWidth onClick={Updatepassword}>Update Password</Button>
                 </div>

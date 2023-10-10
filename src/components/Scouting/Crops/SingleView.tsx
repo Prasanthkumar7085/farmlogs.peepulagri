@@ -89,6 +89,24 @@ const SingleViewScoutComponent = () => {
                     }] : []
                 }
             }
+            else if (imageObj.type.includes("application")) {
+                return {
+                    src: "/pdf-icon.png",
+                    original: imageObj.url,
+                    url: imageObj.url,
+                    height: 80,
+                    width: 60,
+                    type: imageObj.type,
+                    id: imageObj._id,
+                    scout_id: item._id,
+                    alt: "u",
+                    tags: (item.attachments?.length > 3 && index == 2) ? [{
+                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
+                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                            +{item.attachments?.length - 2}</div>, title: "view_more"
+                    }] : []
+                }
+            }
             else
                 return {
                     src: imageObj.url,

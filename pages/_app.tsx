@@ -1,52 +1,39 @@
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '@/themes/themes';
-import SideBarMenu from "@/components/SideBar/SideBarMenu";
-import './global.css';
-import { useRouter } from 'next/router';
 import { wrapper } from "@/Redux";
+import ScoutingHeader from "@/components/Scouting/NavBar/NavbarComponent";
+import SideBarMenu from "@/components/SideBar/SideBarMenu";
+import theme from "@/themes/themes";
+import { ThemeProvider } from "@mui/material/styles";
+import { useRouter } from "next/router";
 import { Provider } from "react-redux";
-import ScoutingHeader from '@/components/Scouting/NavBar/NavbarComponent';
+import "./global.css";
 
-function MyApp({
-    Component,
-    pageProps,
-    ...rest
-}: any) {
+function MyApp({ Component, pageProps, ...rest }: any) {
+  const { store, props } = wrapper.useWrappedStore(rest);
 
-    const { store, props } = wrapper.useWrappedStore(rest);
+  const router = useRouter();
 
-    const router = useRouter();
-
-    const sideBarList = [
-        '/',
-        '/signup',
-        '/signup-verify',
-        '/forgot-password',
-        '/forgot-password/verify-otp'
-    ]
-    return (
-        <ThemeProvider theme={theme}>
-            <Provider store={store}>
-                {router.pathname.includes("farms") ?
-
-
-                    <ScoutingHeader>
-                        <Component {...pageProps} />
-                    </ScoutingHeader>
-                    :
-
-                    sideBarList.includes(router.pathname) ?
-                        <Component {...pageProps} />
-                        :
-                        <SideBarMenu>
-                            <Component {...pageProps} />
-                        </SideBarMenu>
-
-                }
-            </Provider>
-        </ThemeProvider>
-    )
+  const sideBarList = ["/", "/signup", "/signup-verify",
+    "/forgot-password",
+    "/forgot-password/verify-otp"];
+  return (
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        {router.pathname.includes("farms") ? (
+          <ScoutingHeader>
+            <Component {...pageProps} />
+          </ScoutingHeader>
+        ) : sideBarList.includes(router.pathname) ? (
+          <Component {...pageProps} />
+        ) : router.pathname == "/mobile-redirect" ? (
+          <Component {...pageProps} />
+        ) : (
+          <SideBarMenu>
+            <Component {...pageProps} />
+          </SideBarMenu>
+        )}
+      </Provider>
+    </ThemeProvider>
+  );
 }
-
 
 export default MyApp;

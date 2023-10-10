@@ -32,12 +32,12 @@ export default function UpdatePasswordPage() {
                 },
                 body: JSON.stringify({
                     email: email,
-                    password: newpassword,
-                    confirmPassword: conformpassword
+                    new_password: newpassword,
+                    confirm_password: conformpassword
                 }),
             };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/update-password`, requestOptions)
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/reset-password`, requestOptions)
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
                 setResetSuccess(true)
@@ -124,7 +124,7 @@ export default function UpdatePasswordPage() {
                                     ),
                                 }}
                             />
-                            <ErrorMessagesComponent errorMessage={errorMessages?.password} />
+                            <ErrorMessagesComponent errorMessage={errorMessages?.new_password} />
 
                         </div>
                         <div>
@@ -156,7 +156,7 @@ export default function UpdatePasswordPage() {
                                     ),
                                 }}
                             />
-                            <ErrorMessagesComponent errorMessage={errorMessages?.confirmPassword
+                            <ErrorMessagesComponent errorMessage={errorMessages?.confirm_password
                             } />
                         </div>
                         {invalid ?

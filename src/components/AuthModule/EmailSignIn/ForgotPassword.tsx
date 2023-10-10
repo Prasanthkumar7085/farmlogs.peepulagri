@@ -1,13 +1,15 @@
-import { Button, Card, CircularProgress, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Button, Card, CircularProgress, IconButton, InputAdornment, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorMessagesComponent from '@/components/Core/ErrorMessagesComponent';
-import setCookie from '../../../../lib/CookieHandler/setCookie';
 import styles from "../SignUp/SignUp.module.css";
 import EditIcon from '@mui/icons-material/Edit';
 import OtpInput from 'react18-input-otp';
-import { useDispatch, useSelector } from 'react-redux';
+import ClearIcon from '@mui/icons-material/Clear';
+import MuiAlert from '@mui/material/Alert';
+import LoadingComponent from '@/components/Core/LoadingComponent';
+
+
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState<any>();
@@ -22,7 +24,9 @@ export default function ForgotPasswordPage() {
     const [otpsentsuccess, setOtpSentSuccess] = useState();
     const [timeRemaining, setTimeRemaining] = useState(30);
     const router = useRouter();
-    const [editEmail, setEditEmail] = useState(false);
+    const [editEmail, setEditEmail] = useState(true);
+    const [alertMessage, setAlertMessage] = useState<string>('');
+    const [alertType, setAlertType] = useState<boolean>(false);
 
 
     const RequestOtp = async () => {
@@ -44,8 +48,10 @@ export default function ForgotPasswordPage() {
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
                 setTimeRemaining(30)
-                setOtpSentSuccess(res.message)
                 setOtpVisible(true)
+                setEditEmail(false)
+                setAlertMessage(res.message)
+                setAlertType(true)
             }
             if (response.status == 422) {
                 setErrorMessages(res.errors);
@@ -143,24 +149,29 @@ export default function ForgotPasswordPage() {
                                 className={styles.phoneNo}
                                 placeholder='Email'
                                 sx={{ width: "100%" }}
+                                disabled={!editEmail}
                                 size='small'
                                 name="email"
                                 type={"text"}
                                 value={email}
                                 onChange={(e) => {
                                     setEmail(e.target.value)
+                                    setErrorMessages(null)
                                 }}
                             />
-                            <IconButton >
-                                <EditIcon />
+                            <IconButton onClick={() => {
+                                setEditEmail(true)
+                            }}>
+                                < EditIcon />
                             </IconButton>
+
                         </div>
                         <ErrorMessagesComponent errorMessage={errorMessages?.email} />
                         {invalid ?
                             <p style={{ margin: "0", color: "red" }}>{invalid}</p> : ""}
                         {/* {otpsentsuccess ?
                             <p style={{ margin: "0", color: "green" }}>{otpsentsuccess}</p> : ""} */}
-                        {otpvisible ?
+                        {otpvisible && !editEmail ?
                             <Typography>{"Didn't you receive the OTP?"}
                                 {timeRemaining > 0
                                     ? ` Resend  in: ${timeRemaining} seconds`
@@ -183,9 +194,8 @@ export default function ForgotPasswordPage() {
                                 Request OTP
                             </Button>
                         }
-                        {/* {seconds ? <p style={{ margin: "0", width: "100%", textAlign: "end" }}>Resend in {otpCountDown}s</p> : ""} */}
                     </div>
-                    {otpvisible ?
+                    {otpvisible && !editEmail ?
                         <div>
                             <OtpInput
                                 value={otpvalue}
@@ -208,33 +218,14 @@ export default function ForgotPasswordPage() {
                         : ""}
                 </div>
             </form>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={Boolean(alertMessage)} autoHideDuration={3000} onClose={() => setAlertMessage('')}>
+                <MuiAlert variant='filled' onClose={() => setAlertMessage('')} severity={`${alertType ? "success" : "error"}`} sx={{ width: '100%' }}>
+                    {alertMessage}
+                </MuiAlert>
+            </Snackbar>
+            <LoadingComponent loading={loading} />
+
         </div>
     );
 }
 
-// ye chota vunnana nee venta lena
-// samudramanta na kannullo kaneeti alalavootoonte
-// yedari anta na gundello nitturpu segaloutunte
-// repu leni choopu nenai shwasa leni aasha nenai migalana
-// nuvve nuvve kaavaalantundi pade pade naa praanam
-// ninne ninne ventaduthu undi prati kshanam na mounam
-
-// nela vaipu choose neram chesavani
-// neeli mabbu nindistunda vaana chinukuni
-// gali venta velle maram manukomani
-// talli teega bhandistunda malle poovuni
-// emanta papam prema preminchadam
-// ikanaina chalinchamma vedhinchadam
-// chelimai kurise sirivennelava kshanamai karige kalava
-
-// nuvve nuvve kaavaalantundi pade pade naa praanam
-// ninne ninne ventaduthu undi prati kshanam na mounam
-// ye chota vunnana nee venta lena
-
-// velu patti nadipisthunte chanti papala
-// na adugulu adige teeram cheredela
-// verevaro choopisthunte naa prati kala
-// kanti papa kore swapnam choosedela
-// naakkuda choteleni na manasulo
-// ninnunchagalana prema yee janmalo
-// vetike majili dorike varaku nadipe velugai rava

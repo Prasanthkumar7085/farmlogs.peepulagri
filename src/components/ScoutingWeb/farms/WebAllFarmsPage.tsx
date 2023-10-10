@@ -34,7 +34,7 @@ const AllFarmsPage = () => {
 
   const [data, setData] = useState<Array<FarmDataType>>([]);
   const [paginationDetails, setPaginationDetails] = useState<any>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>();
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const AllFarmsPage = () => {
     router.push(`/farm/${farmId}`);
   }, []);
 
-  const capturePageNum = (value:string|number) => {
+  const capturePageNum = (value: string | number) => {
     getFarmsData({
       search_string: router.query.search_string as string,
       location: router.query.location as string,
@@ -68,7 +68,7 @@ const AllFarmsPage = () => {
     });
   }
 
-  const captureRowPerItems = (value:string|number) => {
+  const captureRowPerItems = (value: string | number) => {
     getFarmsData({
       search_string: router.query.search_string as string,
       location: router.query.location as string,
@@ -79,7 +79,7 @@ const AllFarmsPage = () => {
       sortType: router.query.sort_type as string,
     });
   }
-  const getFarmsData = async ({ search_string = '', location = 'All',userId,page=1,limit=20,sortBy,sortType }: callFarmsProps) => {
+  const getFarmsData = async ({ search_string = '', location = 'All', userId, page = 1, limit = 20, sortBy, sortType }: callFarmsProps) => {
     setLoading(true);
     try {
       let url = `farm/${page}/${limit}`;
@@ -118,7 +118,7 @@ const AllFarmsPage = () => {
       const response = await getAllFarmsService(url, accessToken);
 
       if (response?.success) {
-        const { data,...rest } = response;
+        const { data, ...rest } = response;
         setData(data);
         setPaginationDetails(rest);
         dispatch(setAllFarms(data));
@@ -133,12 +133,12 @@ const AllFarmsPage = () => {
 
   const getColor = (orderBy: string, orderType: string) => {
     if (orderBy == router.query.order_by && orderType == router.query.order_type) {
-        return '#dedede';
+      return '#dedede';
     } return '#ffffff';
   }
 
 
-  
+
   const sortByMethod = (sortBy: string, sortType: string) => {
     setAnchorEl(null);
     // getCropsByFarmId(router.query.farm_id as string, sortBy, sortType);
@@ -151,53 +151,53 @@ const AllFarmsPage = () => {
       sortBy: sortBy,
       sortType: sortType,
     });
-}
+  }
 
 
   const MenuOptions = () => {
     return (
-        <List>
-            <ListItem sx={{ cursor: "pointer", background: getColor('createdAt', 'desc') }} onClick={() => sortByMethod('createdAt', 'desc')}>{'Recent First'}</ListItem>
-            <ListItem sx={{ cursor: "pointer", background: getColor('createdAt', 'asc'), borderBottom: "1px solid #B4C1D6" }} onClick={() => sortByMethod('createdAt', 'asc')}>{'Oldest First'}</ListItem>
-            <ListItem sx={{ cursor: "pointer", background: getColor('title', 'asc') }} onClick={() => sortByMethod('title', 'asc')}>{'Title (A-Z)'}</ListItem>
-            <ListItem sx={{ cursor: "pointer", background: getColor('title', 'desc'), borderBottom: "1px solid #B4C1D6" }} onClick={() => sortByMethod('title', 'desc')}>{'Title (Z-A)'}</ListItem>
-            <ListItem sx={{ cursor: "pointer", background: getColor('area', 'desc') }} onClick={() => sortByMethod('area', 'desc')}>{'Area Highest first'}</ListItem>
-            <ListItem sx={{ cursor: "pointer", background: getColor('area', 'asc') }} onClick={() => sortByMethod('area', 'asc')}>{'Area Lowest first'}</ListItem>
-        </List>
+      <List>
+        <ListItem sx={{ cursor: "pointer", background: getColor('createdAt', 'desc') }} onClick={() => sortByMethod('createdAt', 'desc')}>{'Recent First'}</ListItem>
+        <ListItem sx={{ cursor: "pointer", background: getColor('createdAt', 'asc'), borderBottom: "1px solid #B4C1D6" }} onClick={() => sortByMethod('createdAt', 'asc')}>{'Oldest First'}</ListItem>
+        <ListItem sx={{ cursor: "pointer", background: getColor('title', 'asc') }} onClick={() => sortByMethod('title', 'asc')}>{'Title (A-Z)'}</ListItem>
+        <ListItem sx={{ cursor: "pointer", background: getColor('title', 'desc'), borderBottom: "1px solid #B4C1D6" }} onClick={() => sortByMethod('title', 'desc')}>{'Title (Z-A)'}</ListItem>
+        <ListItem sx={{ cursor: "pointer", background: getColor('area', 'desc') }} onClick={() => sortByMethod('area', 'desc')}>{'Area Highest first'}</ListItem>
+        <ListItem sx={{ cursor: "pointer", background: getColor('area', 'asc') }} onClick={() => sortByMethod('area', 'asc')}>{'Area Lowest first'}</ListItem>
+      </List>
     )
   }
 
-  
+
   return (
     <div className={styles.AllFarmsPageWeb}>
       <FarmsNavBarWeb getFarmsData={getFarmsData} />
       <div className={styles.filterBlock}>
-        <div style={{display:"flex", alignItems:"center", cursor:"pointer"}} onClick={(event: any) => setAnchorEl(event.currentTarget)}>
-            <SortIcon /><Typography>Sort By</Typography>
+        <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={(event: any) => setAnchorEl(event.currentTarget)}>
+          <SortIcon /><Typography>Sort By</Typography>
         </div>
         <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={() => setAnchorEl(null)}
-            MenuListProps={{
-                'aria-labelledby': 'basic-button',
-            }}
-            sx={{
-                '& .MuiMenuItem-root': {
-                    display: "flex", alignItems: "center", gap: "0.5rem",
-                    minHeight: "inherit",
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          sx={{
+            '& .MuiMenuItem-root': {
+              display: "flex", alignItems: "center", gap: "0.5rem",
+              minHeight: "inherit",
 
-                }
-            }}
+            }
+          }}
         >
-            <MenuOptions />
+          <MenuOptions />
         </Menu>
-        
+
       </div>
       <div className={styles.allFarms}>
         {data.length ?
-          <div style={{ display:"flex",flexDirection:"column",gap:"10px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             <ScoutingFarmDetailsCard getFarmsData={getFarmsData} data={data} onViewClick={onViewClick} />
             <TablePaginationForFarms paginationDetails={paginationDetails} capturePageNum={capturePageNum} captureRowPerItems={captureRowPerItems} values='Farms' />
           </div>
@@ -207,8 +207,8 @@ const AllFarmsPage = () => {
           </div> : "")}
       </div>
 
-      
-      <LoadingComponent loading={loading}/>
+
+      <LoadingComponent loading={loading} />
     </div>
   );
 }

@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
                 router.push({
-                    pathname: "/forgot-password/update-password",
+                    pathname: "/forgot-password/reset-password",
                     query: { email: email }
                 });
             }

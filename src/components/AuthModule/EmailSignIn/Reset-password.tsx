@@ -7,7 +7,7 @@ import styles from "../SignUp/SignUp.module.css";
 import LoadingComponent from '@/components/Core/LoadingComponent';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-export default function UpdatePasswordPage() {
+export default function ResetPasswordPage() {
 
     const router = useRouter();
     const [newpassword, setNewPassword] = useState<any>();

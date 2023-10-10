@@ -19,9 +19,10 @@ export default function UpdatePasswordPage() {
     const [resetSuccess, setResetSuccess] = useState(false);
     const { email } = router.query
     const [timeout, setTimeOut] = useState();
-    const Updatepassword = async () => {
+    const Updatepassword = async (e: any) => {
         setInvalid(false);
         setLoading(true);
+        e.preventDefault();
         try {
             var requestOptions: any = {
                 method: 'PATCH',
@@ -85,7 +86,7 @@ export default function UpdatePasswordPage() {
                     </div>
                 </div>
                 :
-                <form noValidate className={styles.formCard}>
+                <form noValidate className={styles.formCard} onSubmit={Updatepassword}>
                     <div className={styles.innerWrap}>
                         <div className={styles.header}>
                             <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
@@ -105,6 +106,7 @@ export default function UpdatePasswordPage() {
                                     setNewPassword(e.target.value)
                                     setErrorMessages(null)
                                 }}
+
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
@@ -131,6 +133,7 @@ export default function UpdatePasswordPage() {
                                     setConformPassword(e.target.value)
                                     setErrorMessages(null)
                                 }}
+
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
@@ -148,7 +151,7 @@ export default function UpdatePasswordPage() {
                         {invalid ?
                             <p style={{ margin: "0", color: "red" }}>{invalid}</p>
                             : ""}
-                        <Button variant='contained' fullWidth onClick={Updatepassword}>Update Password</Button>
+                        <Button variant='contained' fullWidth type='submit'>Update Password</Button>
                     </div>
                 </form>
             }

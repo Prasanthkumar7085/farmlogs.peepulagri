@@ -28,10 +28,10 @@ export default function ForgotPasswordPage() {
     const [alertType, setAlertType] = useState<boolean>(false);
 
 
-    const RequestOtp = async () => {
+    const RequestOtp = async (e: any) => {
         setInvalid(false);
         setButtonLoading(true);
-
+        e.preventDefault();
         try {
             var requestOptions: any = {
                 method: 'POST',
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
                 <img src="/login-bg.webp" alt="Bg Image" />
             </div>
 
-            <form noValidate className={styles.formCard}>
+            <form noValidate className={styles.formCard} onSubmit={RequestOtp}>
                 <div className={styles.innerWrap}>
                     <div>
                         <div style={{ display: "flex", alignItems: "flex-start" }}>
@@ -155,6 +155,11 @@ export default function ForgotPasswordPage() {
                                     setEmail(e.target.value)
                                     setErrorMessages(null)
                                 }}
+                            // onKeyDown={(e) => {
+                            //     if (e.key == 'Enter') {
+                            //         RequestOtp()
+                            //     }
+                            // }}
                             />
                             <IconButton onClick={() => {
                                 setEditEmail(true)
@@ -166,8 +171,7 @@ export default function ForgotPasswordPage() {
                         <ErrorMessagesComponent errorMessage={errorMessages?.email} />
                         {invalid ?
                             <p style={{ margin: "0", color: "red" }}>{invalid}</p> : ""}
-                        {/* {otpsentsuccess ?
-                            <p style={{ margin: "0", color: "green" }}>{otpsentsuccess}</p> : ""} */}
+
                         {otpvisible && !editEmail ?
                             <Typography>{"Didn't you receive the OTP?"}
                                 {timeRemaining > 0
@@ -186,7 +190,7 @@ export default function ForgotPasswordPage() {
                                 className={styles.cta_button}
                                 variant="contained"
                                 color="primary"
-                                onClick={RequestOtp}
+                                type='submit'
                             >
                                 {buttonLoading ?
                                     <CircularProgress color="inherit" size={'2rem'} />
@@ -203,6 +207,7 @@ export default function ForgotPasswordPage() {
                                 isInputNum
                                 shouldAutoFocus
                                 inputStyle="otpInputs"
+
                             />
                             <ErrorMessagesComponent errorMessage={otperrormesseges?.message} />
                             <Button

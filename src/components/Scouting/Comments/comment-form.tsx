@@ -344,7 +344,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         <div className={styles.attachments}>
           <div className={styles.link}>
             <label >
-              <img className={styles.groupIcon} alt="" src="/group.svg" />
+              <img className={styles.groupIcon} alt="Attachment" src="/attachment-icon.svg" />
               <input
                 type="file"
                 alt="images-upload"
@@ -356,7 +356,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
             </label>
           </div>
           <label >
-            <img className={styles.imageIcon} alt="" src="/image7@2x.png" />
+            <img className={styles.imageIcon} alt="Images" src="/image-icon.svg" />
             <input
               type="file"
               alt="images-upload"

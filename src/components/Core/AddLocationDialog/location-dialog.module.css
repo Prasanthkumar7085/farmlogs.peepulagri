@@ -1,6 +1,6 @@
 .newFolder {
   color: #000;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(16px, 3.5vw, 20px);
   font-weight: 500;
   line-height: 100%;

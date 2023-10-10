@@ -6,6 +6,7 @@ import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByI
 import { FarmDataType } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import FarmDetailsMiniCard from "@/components/AddLogs/farm-details-mini-card";
 
 const CardDetails: FunctionComponent = () => {
 
@@ -21,7 +22,7 @@ const CardDetails: FunctionComponent = () => {
   const getFarmById = async () => {
     setLoading(true);
     const response = await getFarmByIdService(router.query.farm_id as string, accessToken);
-    
+
     if (response?.success) {
       setData(response?.data);
     }
@@ -34,10 +35,12 @@ const CardDetails: FunctionComponent = () => {
   }, [router.isReady, accessToken]);
 
   return (
-    
+
     <div style={{ maxWidth: "100%", padding: "5% 20% 5% 20%" }}>
-       <div className={styles.viewScoutingHeader}>
-        <div className={styles.iconDiv} style={{ cursor:"pointer" }} onClick={()=>router.back()}>
+      <FarmDetailsMiniCard />
+
+      <div className={styles.viewScoutingHeader}>
+        <div className={styles.iconDiv} style={{ cursor: "pointer" }} onClick={() => router.back()}>
           <img src="/arrow-left-back.svg" alt="" width={'18px'} />
         </div>
         <h5>
@@ -45,13 +48,13 @@ const CardDetails: FunctionComponent = () => {
         </h5>
       </div>
       <div className={styles.cardDetails}>
-        <div style={{display:"flex", justifyContent:"space-between",width:"100%"}}>
+        <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
           <div className={styles.textwrapper}>
             <h1 className={styles.farmname}>
               {data?.title ? data?.title : ''}
             </h1>
             <p className={styles.dateandtime}>
-              {timePipe(data?.createdAt,'DD MMM YYYY, hh:mm A')}
+              {timePipe(data?.createdAt, 'DD MMM YYYY, hh:mm A')}
             </p>
           </div>
           {userType == 'AGRONOMIST' ?
@@ -81,7 +84,7 @@ const CardDetails: FunctionComponent = () => {
           </div>
         </div>
       </div>
-      <LoadingComponent loading={loading}/>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

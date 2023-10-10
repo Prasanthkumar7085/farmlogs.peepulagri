@@ -1,7 +1,9 @@
 .chatBox {
   background-color: #fff;
 }
-
+.chatBox *{
+  border-radius: 8px;
+}
 .chatBox textarea {
   height: 60px !important;
 }
@@ -35,10 +37,10 @@
 }
 
 .attachments {
-  align-self: stretch;
-  width: 59.98px;
   display: flex;
   flex-direction: row;
+  align-self: center;
+  width: 59.98px;
   align-items: center;
   justify-content: flex-start;
   gap: var(--gap-base);
@@ -49,7 +51,7 @@
   border-radius: 6px;
   box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15) !important;
   color: #FFF !important;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(14px, 0.72vw, 16px);
   font-weight: 500;
   line-height: 24px;
@@ -74,8 +76,9 @@
 .commentform {
   flex-direction: column;
   justify-content: flex-start;
-  width: 100%;
+  width: calc(100% - 2rem);
   gap: var(--gap-13xl);
+  padding: 1rem;
 }
 
 .uploadprogress {

@@ -5,6 +5,8 @@
     padding: 0.625rem 0.625rem 0.625rem 0.9375rem;
     color: #000000;
     margin-right: 5px;
+    border: 1px solid #efefef;
+    box-shadow: none;
 }
 .tablePagination *{
     font-size: clamp(0.8125rem, 0.72vw, 1.25rem);

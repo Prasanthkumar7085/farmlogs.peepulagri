@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, Button, Icon, IconButton, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Icon, IconButton, TextField, Typography, Chip } from "@mui/material";
+import Image from "@/components/Core/ImageComponent";
 import CommentForm from "./comment-form";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import { deepOrange } from '@mui/material/colors';
@@ -154,37 +155,48 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     <p className={styles.theProblemIm} >
                       {item.content}{"                     "}<Typography variant="caption" sx={{ wordBreak: "break-word" }}>{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
                     </p>}
-
-                  {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {
-                    return (
-                      <div className={styles.attachment} key={indexfile}>
-                        <div className={styles.row}>
-                          <div className={styles.icon}>
-                            <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : file.type.includes("application") ? "/pdf-icon.png" : file.type.includes("video") ? "/videoimg.png" : "/doc-icon.webp"
-                            } />
-                            <img className={styles.groupIcon1} alt="" src="/group3.svg" />
-                          </div>
-                          <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <img
-                            className={styles.download11}
-                            alt=""
-                            src="/download-1-1.svg"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => downLoadAttachements(file, item.user._id)}
-                          />
-                          {userDetails?.user_details?.user_type == item?.user?.user_type ?
-                            <IconButton
-                              onClick={() => afterDeleteAttachements(file._id, item._id)}
-                            ><DeleteForeverIcon /></IconButton>
-                            : ""}
-                        </div>
-                      </div>)
-                  })
+                    <div className={styles.attachmentContainer}>
+                      {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {
+                        return (
+                          <div className={styles.attachment} key={indexfile}>
+                            <div className={styles.row}>
+                              <div className={styles.icon}>
+                                <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : file.type.includes("application") ? "/pdf-icon.png" : file.type.includes("video") ? "/videoimg.png" : "/doc-icon.webp"
+                                } />
+                                <img className={styles.groupIcon1} alt="" src="/group3.svg" />
+                              </div>
+                              <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                              <IconButton
+                                onClick={() => downLoadAttachements(file, item.user._id)}
+                              >
+                                <img
+                                  className={styles.download11}
+                                  alt=""
+                                  src="/download-1-1.svg"
+                                  style={{ cursor: "pointer" }}
+                                />
+                              </IconButton>
+                              {userDetails?.user_details?.user_type == item?.user?.user_type ?
+                                <IconButton
+                                  onClick={() => afterDeleteAttachements(file._id, item._id)}
+                                >
+                                  <Image
+                                    alt="Delete"
+                                    height={20}
+                                    width={20}
+                                    src="/farm-delete-icon.svg"
+                                    style={{ borderRadius: "5%" }}
+                                  />
+                                </IconButton>
+                                : ""}
+                            </div>
+                          </div>)
+                      })
 
                     : ""}
-
+                    </div>
                 </div>
 
                 <div className={styles.actionButton}>
@@ -195,31 +207,51 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         setReplyOpen(true)
                         setReplyIndex(index)
                         dispatch(removeTheAttachementsFilesFromStore([]))
-                      }}>Reply</div> :
+                      }}>
+                        <Image
+                          alt="Delete"
+                          height={20}
+                          width={20}
+                          src="/comments.svg"
+                          style={{ borderRadius: "5%" }}
+                        />
+                        <span>
+                          Reply in thread
+                        </span>
+                      </div> :
 
                       index == replyIndex ?
                         <div className={styles.reply1} style={{ color: "red" }} onClick={() => {
                           setReplyOpen(false)
                           setReplyIndex(index)
-
                         }}>Close</div> :
 
                         <div className={styles.reply1} onClick={() => {
                           setReplyOpen(true)
                           setReplyIndex(index)
-                        }}>Reply</div>}
+                        }}>Reply in thread</div>}
 
 
-                    {isReplies == false && item.replies.length !== 0 ?
-                      <div className={styles.reply1} onClick={() => {
-                        setIsReplies(true)
-                        setReplyIndex(index)
-                      }}>{item.replies.length}{item.replies.length == 1 ? "Reply" : "replies"}</div> :
-                      item.replies.length !== 0 ?
-                        <div className={styles.reply1} onClick={() => {
-                          setIsReplies(false)
-                          setReplyIndex(index)
-                        }}>{item.replies.length}{item.replies.length == 1 ? "Reply" : "replies"}</div> : ""}
+                        {isReplies == false && item.replies.length !== 0 ?
+                          <div className={styles.threadReplies} onClick={() => {
+                            setIsReplies(true)
+                            setReplyIndex(index)
+                          }}>
+                            <Chip variant="outlined" label={item.replies.length} size="small" /> 
+                            <span>
+                              {item.replies.length == 1 ? "reply" : "replies"}
+                            </span>
+                          </div> :
+                          item.replies.length !== 0 ?
+                            <div className={styles.threadReplies} onClick={() => {
+                              setIsReplies(false)
+                              setReplyIndex(index)
+                            }}>
+                              <Chip variant="outlined" label={item.replies.length} size="small" /> 
+                              <span>
+                                {item.replies.length == 1 ? "reply" : "replies"}
+                              </span>
+                            </div> : ""}
 
                   </div>
 

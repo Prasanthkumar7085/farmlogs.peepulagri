@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import AlertComponent from "@/components/Core/AlertComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 
 
 interface PageProps {
@@ -73,7 +74,7 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
             <div className={styles.container} onClick={() => setToStorage(item)}>
               <div className={styles.farmdetailscontainer}>
                 <div className={styles.farmName}>
-                  <img className={styles.farmsIcon} alt="" src="/farmshape2.svg" />
+                  <img className={styles.farmsIcon} alt="Farm Shape" src="/farmshape2.svg" />
                   <h2 className={styles.farm1}>
                     {item.title.length > 16 ?
                       (item.title.slice(0, 1).toUpperCase() +
@@ -107,14 +108,19 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
             </div>
             <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }} >
               <div
-                className={styles.mobile}
                 onClick={() => router.push(`/farm/${item?._id}/crops`)}
               >
-                {userType=='AGRONOMIST'?<p className={styles.mobile}>User Mobile: {item?.user_id?.phone}</p>:""}
+                {userType=='AGRONOMIST'?
+                  <p className={styles.mobile}>
+                   <PhoneIphoneIcon /> 
+                    <span>
+                      {item?.user_id?.phone}
+                    </span> 
+                  </p>:""}
               </div>
               <div className={styles.actionbuttons} >
                 <IconButton className={styles.view} onClick={() => onViewClick(item._id)}>
-                  <SettingsIcon sx={{ color: "#c1c1c1" }} />
+                  <SettingsIcon sx={{ color: "#6A7185" }} />
                 </IconButton>
                 {/* <IconButton className={styles.edit}>
                   <img

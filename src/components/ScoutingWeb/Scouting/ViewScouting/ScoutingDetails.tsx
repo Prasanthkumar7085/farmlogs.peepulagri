@@ -52,7 +52,15 @@ const ScoutingDetails: FunctionComponent = () => {
             src: "/videoimg.png", height: 80,
             width: 60, caption: `${index + 1} image`, original: item.url
           }
-        } else {
+        }
+        else if (item.type.includes('application')) {
+          return {
+            src: "/pdf-icon.png",
+            height: 80,
+            width: 60, caption: `${index + 1} image`, original: item.url
+          }
+        }
+        else {
           return {
             src: item.url, height: 80,
             width: 60,

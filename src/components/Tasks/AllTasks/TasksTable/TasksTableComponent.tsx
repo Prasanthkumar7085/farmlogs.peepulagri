@@ -1,6 +1,6 @@
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import { TaskResponseTypes } from "@/types/tasksTypes";
-import { Button } from "@mui/material";
+import { Button, ClickAwayListener } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import TanStackTableComponent from "./TanStackTable";
@@ -8,6 +8,7 @@ import { Toaster, toast } from "sonner";
 import deleteTaskByIdService from "../../../../../lib/services/TasksService/deleteTaskByIdService";
 import { useSelector } from "react-redux";
 import { ApiCallProps } from "../TasksPageComponent";
+import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -36,6 +37,9 @@ const TasksTableComponent = ({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string>("");
+  const [drawerOpen, setDrawerOpen] = useState<any>(false)
+  console.log(drawerOpen)
+  const [rowDetails, setRowDetails] = useState<any>()
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -165,6 +169,14 @@ const TasksTableComponent = ({
               >
                 Delete
               </Button>
+              <Button
+                onClick={() => {
+                  setRowDetails(info.row.original)
+                  setDrawerOpen(true)
+                }}
+              >
+                Comments
+              </Button>
             </div>
           }
         </span>
@@ -174,6 +186,14 @@ const TasksTableComponent = ({
       width: "200px",
     },
   ];
+
+
+  const drawerClose = (value: any) => {
+    console.log(value)
+    if (value == false) {
+      setDrawerOpen(false)
+    }
+  }
   return (
     <div>
       <TanStackTableComponent
@@ -189,7 +209,11 @@ const TasksTableComponent = ({
         deleteFarm={deleteTask}
         loading={deleteLoading}
       />
-
+      {drawerOpen == true ?
+        <ClickAwayListener onClickAway={() => setDrawerOpen(false)}>
+          <DrawerBoxComponent drawerClose={drawerClose} rowDetails={rowDetails} />
+        </ClickAwayListener>
+        : ""}
       <Toaster richColors position="top-right" closeButton />
     </div>
   );

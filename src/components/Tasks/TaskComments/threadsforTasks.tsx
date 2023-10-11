@@ -1,15 +1,15 @@
-import styles from "./threads.module.css";
+import styles from "src/components/Scouting/Comments/threads.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
 import { Avatar, Button, TextField, Typography } from "@mui/material";
-import CommentForm from "./comment-form";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import { deepOrange } from '@mui/material/colors';
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import CommentFormForTasks from "./comment-formForTasks";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, taskId, farmID }: any) => {
+const ThreadsForTasks = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, taskId, farmID }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
@@ -244,7 +244,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                 {replyOpen == true && index == replyIndex ?
                   <div style={{ width: "100%" }}>
 
-                    <CommentForm replyThreadEvent={item._id} afterCommentAdd={afterCommentAdd} />
+                    <CommentFormForTasks replyThreadEvent={item._id} afterCommentAdd={afterCommentAdd} />
 
 
                   </div>
@@ -363,4 +363,4 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   );
 };
 
-export default Threads;
+export default ThreadsForTasks;

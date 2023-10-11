@@ -5,9 +5,9 @@ import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/materia
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./comment-form.module.css";
+import styles from "src/components/Scouting/Comments/comment-form.module.css";
 
-const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
+const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID }: any) => {
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -26,7 +26,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   let tempFilesStorage: any = [...attachments]
 
   useEffect(() => {
-    getCropsDetails()
     dispatch(removeTheAttachementsFilesFromStore([]))
   }, [])
 
@@ -82,33 +81,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   };
 
 
-
-  //get all crops name
-  const getCropsDetails = async () => {
-
-    try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/crops/list`, { method: "GET" });
-      let responseData: any = await response.json();
-
-      if (responseData.success == true) {
-
-        if (router.query.crop_id) {
-
-          let cropObj = responseData?.data?.find((item: any) => item._id == router.query.crop_id);
-          setSelectedCrop(cropObj);
-
-        }
-
-      }
-    } catch (err) {
-      console.error(err);
-
-    }
-  }
-
-
-
-
   const addComment = async () => {
     setLoading(true)
     let body = {
@@ -125,7 +97,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/add-comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
         setComment("")
@@ -160,7 +132,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${comment_id}/reply`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/comments/${comment_id}/reply`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
 
@@ -209,9 +181,8 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         "original_name": item.name,
         "type": item.type,
         "size": item.size,
-        "source": "scouting",
-        "crop_slug": selectedCrop?.slug,
-        "farm_id": router.query.farm_id
+        "source": "tasks",
+        "farm_id": farmID
       }
 
     }
@@ -372,4 +343,4 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   );
 };
 
-export default CommentForm;
+export default CommentFormForTasks;

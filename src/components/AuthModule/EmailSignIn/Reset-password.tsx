@@ -21,7 +21,7 @@ export default function ResetPasswordPage() {
     const [resetSuccess, setResetSuccess] = useState(false);
     const { email } = router.query
 
-    const Updatepassword = async (e: any) => {
+    const Resetpassword = async (e: any) => {
         setInvalid(false);
         setLoading(true);
         e.preventDefault();
@@ -97,7 +97,7 @@ export default function ResetPasswordPage() {
                     </div>
                 </div>
                 :
-                <form noValidate className={styles.formCard} onSubmit={Updatepassword}>
+                <form noValidate className={styles.formCard} onSubmit={Resetpassword}>
                     <div className={styles.innerWrap}>
                         <div className={styles.header}>
                             <ImageComponent src="/Logo-color.svg" width="90" height="70" />
@@ -189,3 +189,4 @@ export default function ResetPasswordPage() {
         </div>
     );
 }
+

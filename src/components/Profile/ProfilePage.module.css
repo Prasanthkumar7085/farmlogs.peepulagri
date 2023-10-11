@@ -1,12 +1,48 @@
 .profilePage {
-    width: 80%;
+    width: 50%;
     margin: 0 auto;
     padding-top: 3rem;
+    max-width: 650px;
+
 
 }
 
 .updatePasswordPage {
-    width: 80%;
+    width: 35%;
     margin: 0 auto;
-    padding-top: 3rem;
+    max-width: 650px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formCard {
+    padding: 2rem;
+    width: 100%;
+}
+
+.formCard .cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.formCard .cardHeader button {
+    padding: 0 !important;
+    min-width: inherit !important;
+}
+
+.formCard .inputfield {
+    margin-bottom: 1.5rem;
+}
+
+.formCard .update_Btn {
+    text-transform: capitalize !important;
+    font-size: clamp(16px, 0.83vw, 20px);
+    font-family: 'Inter', sans-serif;
+    margin-top: 1rem;
+
 }

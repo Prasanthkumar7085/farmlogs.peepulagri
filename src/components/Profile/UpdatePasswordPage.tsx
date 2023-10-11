@@ -8,10 +8,9 @@ import LoadingComponent from '@/components/Core/LoadingComponent';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { removeUserDetails } from '@/Redux/Modules/Auth';
 import { deleteAllMessages } from '@/Redux/Modules/Conversations';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from "./ProfilePage.module.css";
 export default function UpdatePasswordPage() {
-
     const router = useRouter();
     const [password, setPassword] = useState<any>();
     const [confirmpassword, setConfirmPassword] = useState<any>();
@@ -20,7 +19,9 @@ export default function UpdatePasswordPage() {
     const [errorMessages, setErrorMessages] = useState<any>();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const dispatch = useDispatch();
+
     const Updatepassword = async (e: any) => {
         setInvalid(false);
         setLoading(true);
@@ -87,17 +88,17 @@ export default function UpdatePasswordPage() {
 
     return (
         <div className={styles.updatePasswordPage}>
-            <form noValidate onSubmit={Updatepassword}>
-                <div >
+            <Card className={styles.formCard}>
+                <div className={styles.cardHeader}>
                     <Button sx={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
                         <KeyboardBackspaceIcon />
                     </Button>
-                    <div >
-                        <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
-                            Update Password
-                        </Typography>
-                    </div>
-                    <div>
+                    <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
+                        Update Password
+                    </Typography>
+                </div>
+                <form noValidate onSubmit={Updatepassword}>
+                    <div className={styles.inputfield}>
                         <TextField
                             placeholder='Password'
                             sx={{
@@ -107,7 +108,6 @@ export default function UpdatePasswordPage() {
                                 }
                             }}
                             size='small'
-                            name="email"
                             type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => {
@@ -127,7 +127,7 @@ export default function UpdatePasswordPage() {
                         />
                         <ErrorMessagesComponent errorMessage={errorMessages?.password} />
                     </div>
-                    <div>
+                    <div className={styles.inputfield}>
                         <TextField
                             placeholder='Conform Password'
                             sx={{
@@ -137,7 +137,6 @@ export default function UpdatePasswordPage() {
                                 }
                             }}
                             size='small'
-                            name="email"
                             type={showConfirmPassword ? "text" : "password"}
                             value={confirmpassword}
                             onChange={(e) => {
@@ -158,14 +157,15 @@ export default function UpdatePasswordPage() {
                         />
                         <ErrorMessagesComponent errorMessage={errorMessages?.confirmPassword
                         } />
+                        {invalid ?
+                            <div style={{ marginTop: "0.5rem" }}>
+                                <p style={{ margin: "0", color: "red" }}>{invalid}</p>
+                            </div>
+                            : ""}
                     </div>
-                    {invalid ?
-                        <p style={{ margin: "0", color: "red" }}>{invalid}</p>
-                        : ""}
-                    <Button variant='contained' fullWidth type='submit'>Update Password</Button>
-                </div>
-            </form>
-
+                    <Button className={styles.update_Btn} variant='contained' fullWidth type='submit'>Save</Button>
+                </form>
+            </Card>
             <LoadingComponent loading={loading} />
 
         </div>

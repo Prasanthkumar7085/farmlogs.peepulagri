@@ -163,7 +163,7 @@ export default function UpdatePasswordPage() {
                             </div>
                             : ""}
                     </div>
-                    <Button className={styles.update_Btn} variant='contained' fullWidth type='submit'>Save</Button>
+                    <Button className={styles.update_Btn} variant='contained' fullWidth type='submit'>Update</Button>
                 </form>
             </Card>
             <LoadingComponent loading={loading} />

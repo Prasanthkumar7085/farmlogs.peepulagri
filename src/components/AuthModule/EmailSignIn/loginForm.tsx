@@ -153,18 +153,20 @@ export default function SigninEmail() {
                             }}
                         />
                         <ErrorMessagesComponent errorMessage={errorMessages?.password} />
+
+                        {invalid ?
+                            <p style={{ color: "red", margin: "0" }}>
+                                {invalid}
+                            </p>
+                            : ""
+                        }
                         <div style={{ textAlign: "end" }}>
-                            <Button onClick={forgotButton} className={styles.forgotBtn}>
+                            <div onClick={forgotButton} className={styles.forgotBtn}>
                                 Forgot Password?
-                            </Button>
+                            </div>
                         </div>
                     </div>
-                    {invalid ?
-                        <p style={{ color: "red", margin: "0" }}>
-                            {invalid}
-                        </p>
-                        : ""
-                    }
+
                     <Button
                         className={styles.signin_button}
                         fullWidth

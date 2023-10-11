@@ -113,6 +113,8 @@
   text-transform: capitalize !important;
   font-size: clamp(12px, 0.62vw, 14px);
   font-weight: 500;
+  cursor: pointer;
+  color: blue;
 }
 
 .signin_button {

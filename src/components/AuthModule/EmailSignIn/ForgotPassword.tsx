@@ -10,9 +10,12 @@ import MuiAlert from '@mui/material/Alert';
 import LoadingComponent from '@/components/Core/LoadingComponent';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ImageComponent from '@/components/Core/ImageComponent';
+import { useSelector } from 'react-redux';
 
 
 export default function ForgotPasswordPage() {
+
+
     const [email, setEmail] = useState<any>();
     const [loading, setLoading] = React.useState(false);
     const [buttonLoading, setButtonLoading] = useState(false);
@@ -27,8 +30,7 @@ export default function ForgotPasswordPage() {
     const [editEmail, setEditEmail] = useState(true);
     const [alertMessage, setAlertMessage] = useState<string>('');
     const [alertType, setAlertType] = useState<boolean>(false);
-    const [isVerify, setIsVerify] = useState(false);
-
+    const [seconds, setSeconds] = useState(30);
 
     const RequestOtp = async (e: any) => {
         setInvalid(false);
@@ -100,12 +102,9 @@ export default function ForgotPasswordPage() {
                 setOtpErrorMesseges(res.errors);
                 setLoading(false);
                 throw res;
-
-
             }
             else if (response.status === 401 || response.status == 400) {
                 setOtpInvalid(res.message);
-
             }
 
         } catch (err) {
@@ -116,25 +115,23 @@ export default function ForgotPasswordPage() {
         }
     };
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (seconds > 0) {
+                setSeconds(seconds - 1);
+            }
 
-    const timer = () => {
-        let timerInterval: any;
-
-        if (timeRemaining > 0) {
-            timerInterval = setInterval(() => {
-                setTimeRemaining(prevTime => prevTime - 1);
-            }, 1000);
-        } else {
-            clearInterval(timerInterval); // Clear the interval when timer reaches zero
-        }
+            if (seconds === 0) {
+                clearInterval(interval);
+            }
+        }, 1000);
 
         return () => {
-            clearInterval(timerInterval); // Clear the interval when component unmounts
+            clearInterval(interval);
         };
-    }
-    useEffect(() => {
-        timer();
-    }, []);
+
+    }, [seconds]);
+
     return (
         <div id={styles.loginPage}>
             <div className={styles.bgImage}>
@@ -192,8 +189,8 @@ export default function ForgotPasswordPage() {
 
                         {otpvisible && !editEmail ?
                             <Typography className={styles.resendContent}>{"Didn't you receive the OTP? "}
-                                {timeRemaining > 0
-                                    ? ` Resend  in: ${timeRemaining} seconds`
+                                {seconds > 0
+                                    ? ` Resend  in: ${seconds} seconds`
                                     : (
                                         <span
                                             style={{ color: "#3462cf", cursor: "pointer" }}
@@ -216,6 +213,7 @@ export default function ForgotPasswordPage() {
                             </Button>
                         }
                     </div>
+
                     {otpvisible && !editEmail ?
                         <div style={{ marginTop: "0.5rem" }}>
                             <OtpInput

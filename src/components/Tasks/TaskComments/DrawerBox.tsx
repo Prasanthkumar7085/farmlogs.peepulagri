@@ -88,6 +88,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
                 }
                 // Convert the commentsById object to an array of comments
                 const formattedData = Object.values(commentsById);
+                console.log(formattedData, "p")
                 setData(formattedData)
 
             }
@@ -107,7 +108,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
             }),
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${commnet_id}`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/comments/${commnet_id}`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 getAllScoutComments()
@@ -120,6 +121,35 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
             setLoading(false)
         }
 
+    }
+
+    //update any commnet api event
+    const updateComment = async (commnet_id: any, updatedContent: any) => {
+        setLoading(true)
+        let options = {
+            method: "PATCH",
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': accessToken
+            }),
+            body: JSON.stringify({
+                "content": updatedContent
+            })
+        }
+        try {
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/comments/${commnet_id}`, options)
+            let responseData = await response.json()
+            if (responseData.success == true) {
+                getAllScoutComments()
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setLoading(false)
+
+        }
     }
 
     //adding comment then call the get all api
@@ -140,7 +170,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
     // //edit commnet function call (after update any commnet)
     const afterUpdateComment = (id: any, value: any) => {
         if (value) {
-            // updateComment(id, value)
+            updateComment(id, value)
         }
     }
 

@@ -1,3 +1,4 @@
+import ImageComponent from "@/components/Core/ImageComponent";
 import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
 import {
   SortingState,
@@ -116,16 +117,41 @@ const TanStackTableComponent = ({
                         }}
                       >
                         {header.isPlaceholder ? null : (
-                          <div onClick={() => sortAndGetData(header)}>
+                          <div
+                            onClick={() => sortAndGetData(header)}
+                            style={{
+                              display: "flex",
+                              gap: "10px",
+                            }}
+                          >
                             {flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                            {router.query.order_by == header.id
-                              ? router.query.order_type == "asc"
-                                ? " 🔼"
-                                : " 🔽"
-                              : ""}
+                            {router.query.order_by == header.id ? (
+                              router.query.order_type == "asc" ? (
+                                <ImageComponent
+                                  src="/sort-asc.svg"
+                                  height={15}
+                                  width={15}
+                                  alt="image"
+                                />
+                              ) : (
+                                <ImageComponent
+                                  src="/sort-desc.svg"
+                                  height={15}
+                                  width={15}
+                                  alt="image"
+                                />
+                              )
+                            ) : (
+                              <ImageComponent
+                                src="/unsort.svg"
+                                height={15}
+                                width={15}
+                                alt="image"
+                              />
+                            )}
                           </div>
                         )}
                       </th>

@@ -35,69 +35,44 @@ const ThreadsForTasks = ({ details, afterCommentAdd, afterDeleteComment, afterUp
 
 
   const downLoadAttachements = async (file: any, userId: any) => {
-
+    console.log(file)
     setLoading(true);
-    let body = {
 
-      "attachment":
-      {
-
-        "name": file.name,
-        "type": file.type,
-        "crop_slug": file.crop_slug,
-        "source": "scouting",
-        "user_id": userId
-      }
-    }
-    let options = {
-      method: "POST",
-      headers: new Headers({
-        'content-type': 'application/json',
-        'authorization': accessToken
-      }),
-      body: JSON.stringify(body)
-    }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/attachment/download-url`, options)
-      let responseData = await response.json()
-      if (responseData.success == true) {
-        window.open(responseData.data.download_url)
-        fetch(responseData.data.download_url)
-          .then((response) => {
-            // Get the filename from the response headers
-            const contentDisposition = response.headers.get("content-disposition");
-            let filename = "downloaded_file"; // Default filename if not found in headers
+      fetch(file)
+        .then((response) => {
+          // Get the filename from the response headers
+          const contentDisposition = response.headers.get("content-disposition");
+          let filename = "downloaded_file"; // Default filename if not found in headers
 
-            if (contentDisposition) {
-              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-              if (filenameMatch && filenameMatch.length > 1) {
-                filename = filenameMatch[1];
-              }
+          if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (filenameMatch && filenameMatch.length > 1) {
+              filename = filenameMatch[1];
             }
+          }
 
-            // Create a URL for the blob
-            return response.blob()
-              .then((blob) => ({ blob, filename }));
-          })
-          .then(({ blob, filename }) => {
-            const blobUrl = window.URL.createObjectURL(blob);
+          // Create a URL for the blob
+          return response.blob()
+            .then((blob) => ({ blob, filename }));
+        })
+        .then(({ blob, filename }) => {
+          const blobUrl = window.URL.createObjectURL(blob);
 
-            const downloadLink = document.createElement("a");
-            downloadLink.href = blobUrl;
-            downloadLink.download = filename; // Use the obtained filename
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+          const downloadLink = document.createElement("a");
+          downloadLink.href = blobUrl;
+          downloadLink.download = filename; // Use the obtained filename
+          downloadLink.style.display = "none";
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
 
-            // Clean up the blob URL
-            window.URL.revokeObjectURL(blobUrl);
-          })
-          .catch((error) => {
-            console.error("Error downloading file:", error);
-          });
-      }
-
+          // Clean up the blob URL
+          window.URL.revokeObjectURL(blobUrl);
+        })
+        .catch((error) => {
+          console.error("Error downloading file:", error);
+        });
     }
 
     catch (err) {
@@ -161,7 +136,7 @@ const ThreadsForTasks = ({ details, afterCommentAdd, afterDeleteComment, afterUp
                           alt=""
                           src="/download-1-1.svg"
                           style={{ cursor: "pointer" }}
-                          onClick={() => downLoadAttachements(file, item.user._id)}
+                          onClick={() => downLoadAttachements(file.url, item.user._id)}
                         />
                       </div>)
                   })
@@ -244,7 +219,7 @@ const ThreadsForTasks = ({ details, afterCommentAdd, afterDeleteComment, afterUp
                 {replyOpen == true && index == replyIndex ?
                   <div style={{ width: "100%" }}>
 
-                    <CommentFormForTasks replyThreadEvent={item._id} afterCommentAdd={afterCommentAdd} />
+                    <CommentFormForTasks replyThreadEvent={item._id} afterCommentAdd={afterCommentAdd} taskId={taskId} />
 
 
                   </div>
@@ -300,7 +275,7 @@ const ThreadsForTasks = ({ details, afterCommentAdd, afterDeleteComment, afterUp
                                   alt=""
                                   src="/download-1-1.svg"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => downLoadAttachements(file, row.user._id)}
+                                  onClick={() => downLoadAttachements(file.url, row.user._id)}
                                 />
                               </div>)
                           }) : ""}

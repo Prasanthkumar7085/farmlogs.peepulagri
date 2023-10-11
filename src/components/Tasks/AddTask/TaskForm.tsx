@@ -1,7 +1,7 @@
 import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { Button, Icon, TextField } from "@mui/material";
+import { Button, Icon, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useRouter } from "next/router";
@@ -13,6 +13,9 @@ import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInAddTask";
 import styles from "./TaskForm.module.css";
 import FooterActionButtons from "./footer-action-buttons";
 import { FarmInTaskType } from "@/types/tasksTypes";
+import { Toaster, toast } from "sonner";
+import TasksAttachments from "./TasksAttachments";
+import moment from "moment";
 
 const TaskForm = ({ data }: any) => {
   const router = useRouter();
@@ -26,10 +29,13 @@ const TaskForm = ({ data }: any) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState<Date>();
+  const [status, setStatus] = useState("TODO");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
 
   const getAllFarms = async (id = "") => {
     setLoading(true);
@@ -60,18 +66,21 @@ const TaskForm = ({ data }: any) => {
     let body = {
       farm_id: defaultValue?._id,
       categories: [],
-      deadline: deadline ? deadline?.toISOString() : "",
+      deadline: deadline
+        ? moment(deadline)
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+        : "",
       description: description ? description : "",
       title: title ? title : "",
+      attachments: files,
+      status: status,
     };
 
     let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
-      setAlertMessage(response?.message);
-      setAlertType(true);
-      setTimeout(() => {
-        router.push("/tasks");
-      }, 500);
+      toast.success(response?.message);
+      router.push("/tasks");
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
@@ -93,6 +102,10 @@ const TaskForm = ({ data }: any) => {
     setTitle(data?.title);
     setDescription(data?.description);
     setDeadline(new Date(data?.deadline));
+  };
+
+  const setUploadedFiles = (filesUploaded: any) => {
+    setFiles(filesUploaded);
   };
 
   return (
@@ -152,12 +165,36 @@ const TaskForm = ({ data }: any) => {
                 <ErrorMessages errorMessages={errorMessages} keyname="title" />
               </div>
               <div className={styles.selectfarm}>
+                <h4 className={styles.title}>
+                  Status<span style={{ color: "red" }}></span>
+                </h4>
+                <Select
+                  className={styles.inoutbox}
+                  color="primary"
+                  placeholder="Enter your Task title here"
+                  variant="outlined"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  sx={{ width: "200px" }}
+                  defaultValue="TODO"
+                >
+                  {statusOptions.map((item: string, index: number) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <ErrorMessages errorMessages={errorMessages} keyname="title" />
+              </div>
+
+              <div className={styles.selectfarm}>
                 <label className={styles.lable}>
                   Deadline<span style={{ color: "red" }}>*</span>
                 </label>
                 <div className={styles.backbutton}>
                   <DatePicker
                     value={deadline}
+                    disablePast
                     onChange={(newValue: any) => {
                       setDeadline(newValue);
                     }}
@@ -178,6 +215,9 @@ const TaskForm = ({ data }: any) => {
               <div className={styles.selectfarm}>
                 <label className={styles.lable}>Description</label>
                 <TextField
+                  multiline
+                  minRows={4}
+                  maxRows={4}
                   className={styles.inoutbox}
                   color="primary"
                   placeholder="Enter your Task title here"
@@ -187,6 +227,10 @@ const TaskForm = ({ data }: any) => {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
+              {/* <TasksAttachments
+                farmId={defaultValue?._id}
+                setUploadedFiles={setUploadedFiles}
+              /> */}
             </form>
           </div>
         </div>
@@ -198,6 +242,7 @@ const TaskForm = ({ data }: any) => {
         setAlertMessage={setAlertMessage}
       />
       <LoadingComponent loading={loading} />
+      <Toaster richColors position="top-right" closeButton />
     </LocalizationProvider>
   );
 };

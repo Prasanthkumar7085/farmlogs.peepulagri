@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getTaskByIdService from "../../../../lib/services/TasksService/getTaskByIdService";
 import TaskDetails from "./TaskDetails";
+import updateTaskService from "../../../../lib/services/TasksService/updateTaskService";
 
 const ViewTaskComponent = () => {
   const router = useRouter();
@@ -22,10 +23,26 @@ const ViewTaskComponent = () => {
       taskId: id,
       token: accessToken,
     });
+
     if (response?.success) {
       setData(response?.data);
     }
     setLoading(false);
+  };
+
+  const updateTask = async (body: any) => {
+    setLoading(true);
+    const response = await updateTaskService({
+      taskId: data?._id as string,
+      body: body,
+      token: accessToken,
+    });
+    if (response?.success) {
+      getTaskById(router.query.task_id as string);
+      setLoading(false);
+    }
+    setLoading(false);
+    return response;
   };
 
   useEffect(() => {
@@ -81,7 +98,7 @@ const ViewTaskComponent = () => {
             borderRadius: "10px",
           }}
         >
-          <TaskDetails data={data} />
+          <TaskDetails data={data} updateTask={updateTask} />
         </Card>
       </div>
       <LoadingComponent loading={loading} />

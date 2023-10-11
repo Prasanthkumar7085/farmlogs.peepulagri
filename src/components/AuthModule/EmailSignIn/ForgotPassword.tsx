@@ -9,6 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import MuiAlert from '@mui/material/Alert';
 import LoadingComponent from '@/components/Core/LoadingComponent';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ImageComponent from '@/components/Core/ImageComponent';
 
 
 export default function ForgotPasswordPage() {
@@ -140,15 +141,30 @@ export default function ForgotPasswordPage() {
 
             <form noValidate className={styles.formCard} onSubmit={RequestOtp}>
                 <div className={styles.innerWrap}>
-                    <Button sx={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
-                        <KeyboardBackspaceIcon />
-                    </Button>
+                    <div className={styles.header}>
+                        <ImageComponent src="./Logo-color.svg" width="80" height="60" />
+                        <span className={styles.content}>
+                            <Typography variant="h5">
+                                Forgot Password
+                            </Typography>
+                            <Typography component="p">
+                                Verify your email to reset password
+                            </Typography>
+                        </span>
+                    </div>
                     <div>
                         <div style={{ display: "flex", alignItems: "flex-start" }}>
                             <TextField
-                                className={styles.phoneNo}
                                 placeholder='Email'
-                                sx={{ width: "100%", marginBottom: "0 !important" }}
+                                sx={{
+                                    width: "100%",
+                                    '& .MuiInputBase-root': {
+                                        background: "#fff"
+                                    },
+                                    '& .MuiOutlinedInput-notchedOutline': {
+                                        border: "0 !important"
+                                    }
+                                }}
                                 disabled={!editEmail}
                                 size='small'
                                 name="email"
@@ -170,10 +186,10 @@ export default function ForgotPasswordPage() {
                         </div>
                         <ErrorMessagesComponent errorMessage={errorMessages?.email} />
                         {invalid ?
-                            <p style={{ margin: "0", color: "red" }}>{invalid}</p> : ""}
+                            <p style={{ margin: "0 !important", color: "red", fontSize: "12px" }}>{invalid}</p> : ""}
 
                         {otpvisible && !editEmail ?
-                            <Typography>{"Didn't you receive the OTP? "}
+                            <Typography className={styles.resendContent}>{"Didn't you receive the OTP? "}
                                 {timeRemaining > 0
                                     ? ` Resend  in: ${timeRemaining} seconds`
                                     : (
@@ -187,19 +203,19 @@ export default function ForgotPasswordPage() {
                             </Typography>
                             :
                             <Button
-                                className={styles.cta_button}
+                                className={styles.otp_Btn}
                                 variant="contained"
                                 color="primary"
                                 type='submit'
                             >
                                 {buttonLoading ?
-                                    <CircularProgress color="inherit" size={'2rem'} />
+                                    <CircularProgress color="inherit" size={'1.5rem'} />
                                     : "Request OTP"}
                             </Button>
                         }
                     </div>
                     {otpvisible && !editEmail ?
-                        <div>
+                        <div style={{ marginTop: "0.5rem" }}>
                             <OtpInput
                                 value={otpvalue}
                                 onChange={(e: string) => {
@@ -214,10 +230,10 @@ export default function ForgotPasswordPage() {
                             />
                             <ErrorMessagesComponent errorMessage={otperrormesseges?.otp} />
                             {otpinvalid ?
-                                <p style={{ margin: "0", color: "red" }}>{otpinvalid}</p>
+                                <p style={{ margin: "0", color: "red", fontSize: "clamp(12px, 0.62vw, 14px)", marginBottom: "8px" }}>{otpinvalid}</p>
                                 : ""}
                             <Button
-                                className={styles.cta_button}
+                                className={styles.otp_Btn}
                                 variant="contained"
                                 color="primary"
                                 onClick={VerifyOtp}
@@ -226,8 +242,15 @@ export default function ForgotPasswordPage() {
                             </Button>
                         </div>
                         : ""}
+                    <div className={styles.backToLogin}>
+                        <Button className={styles.backToLogin_btn} sx={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
+                            <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
+                            Back To Login
+                        </Button>
+                    </div>
                 </div>
             </form>
+
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={Boolean(alertMessage)} autoHideDuration={3000} onClose={() => setAlertMessage('')}>
                 <MuiAlert variant='filled' onClose={() => setAlertMessage('')} severity={`${alertType ? "success" : "error"}`} sx={{ width: '100%' }}>
                     {alertMessage}

@@ -8,6 +8,7 @@ import styles from "../SignUp/SignUp.module.css";
 import { setUserDetails } from '@/Redux/Modules/Auth';
 import { useDispatch } from 'react-redux';
 import serUserTypeCookie from '../../../../lib/CookieHandler/serUserTypeCookie';
+import ImageComponent from '@/components/Core/ImageComponent';
 
 
 export default function SigninEmail() {
@@ -85,15 +86,18 @@ export default function SigninEmail() {
             <div className={styles.bgImage}>
                 <img src="/login-bg.webp" alt="Bg Image" />
             </div>
-
-
-
             <form noValidate className={styles.formCard} onSubmit={signInForm}  >
                 <div className={styles.innerWrap}>
                     <div className={styles.header}>
-                        <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
-                            Sign in
-                        </Typography>
+                        <ImageComponent src="./Logo-color.svg" width="90" height="70" />
+                        <span className={styles.content}>
+                            <Typography variant="h5">
+                                Sign in
+                            </Typography>
+                            <Typography component="p">
+                                Please enter your details
+                            </Typography>
+                        </span>
                     </div>
                     <div>
                         <TextField
@@ -102,6 +106,9 @@ export default function SigninEmail() {
                                 width: "100%",
                                 '& .MuiInputBase-root': {
                                     background: "#fff"
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: "0 !important"
                                 }
                             }}
                             size='small'
@@ -121,6 +128,9 @@ export default function SigninEmail() {
                                 width: "100%",
                                 '& .MuiInputBase-root': {
                                     background: "#fff"
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: "0 !important"
                                 }
                             }}
                             size='small'
@@ -128,7 +138,10 @@ export default function SigninEmail() {
                             name="password"
                             type={showPassword ? "text" : "password"}
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value)
+                                setErrorMessages(null)
+                            }}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -140,10 +153,11 @@ export default function SigninEmail() {
                             }}
                         />
                         <ErrorMessagesComponent errorMessage={errorMessages?.password} />
-                        <Button onClick={forgotButton} >
-                            Forgot Password
-                        </Button>
-
+                        <div style={{ textAlign: "end" }}>
+                            <Button onClick={forgotButton} className={styles.forgotBtn}>
+                                Forgot Password?
+                            </Button>
+                        </div>
                     </div>
                     {invalid ?
                         <p style={{ color: "red", margin: "0" }}>
@@ -152,14 +166,14 @@ export default function SigninEmail() {
                         : ""
                     }
                     <Button
-                        className={styles.cta_button}
+                        className={styles.signin_button}
                         fullWidth
                         variant="contained"
                         color="primary"
                         type='submit'
                     >
                         {loading ?
-                            <CircularProgress /> : "Sign In"}
+                            <CircularProgress color="inherit" size={'1.8rem'} /> : "Sign In"}
                     </Button>
                 </div>
             </form>

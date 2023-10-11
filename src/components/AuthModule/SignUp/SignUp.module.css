@@ -36,6 +36,7 @@
   padding: 3rem;
   background: linear-gradient(140deg, rgba(255, 255, 255, 0.75) 2.86%, rgba(255, 255, 255, 0.4) 95.96%);
   backdrop-filter: blur(10.802083015441895px);
+  min-height: 230px;
 }
 
 .formCard .label {
@@ -78,8 +79,14 @@
 
 .header h5 {
   font-family: 'Inter', sans-serif;
-  font-size: 2rem;
+  font-size: clamp(24px, 1.5vw, 32px) !important;
   font-weight: 500;
+}
+
+.header p {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13px, 0.62vw, 16px);
+  font-weight: 400;
 }
 
 .cta_button {
@@ -100,4 +107,40 @@
 
 .innerWrap input:-webkit-autofill:active {
   transition: background-color 9999s ease-in-out 0s;
+}
+
+.forgotBtn {
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 0.62vw, 14px);
+  font-weight: 500;
+}
+
+.signin_button {
+  text-transform: capitalize !important;
+  font-size: clamp(14px, 0.72vw, 18px);
+}
+
+.backToLogin {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.5rem;
+  width: 100%;
+  text-align: end;
+}
+
+.backToLogin_btn {
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 0.62vw, 14px);
+  font-weight: 500;
+}
+
+.otp_Btn {
+  text-transform: capitalize !important;
+  margin-top: 0.5rem;
+  min-width: 110px;
+  font-size: clamp(12px, 0.62vw, 14px);
+}
+
+.resendContent {
+  font-size: clamp(12px, 0.62vw, 14px);
 }

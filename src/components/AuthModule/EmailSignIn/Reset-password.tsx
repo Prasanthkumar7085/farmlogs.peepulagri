@@ -6,6 +6,7 @@ import ErrorMessagesComponent from '@/components/Core/ErrorMessagesComponent';
 import styles from "../SignUp/SignUp.module.css";
 import LoadingComponent from '@/components/Core/LoadingComponent';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ImageComponent from '@/components/Core/ImageComponent';
 
 export default function ResetPasswordPage() {
 
@@ -87,13 +88,16 @@ export default function ResetPasswordPage() {
                 :
                 <form noValidate className={styles.formCard} onSubmit={Updatepassword}>
                     <div className={styles.innerWrap}>
-                        <Button sx={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
-                            <KeyboardBackspaceIcon />
-                        </Button>
                         <div className={styles.header}>
-                            <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
-                                Reset Password
-                            </Typography>
+                            <ImageComponent src="./Logo-color.svg" width="80" height="60" />
+                            <span className={styles.content}>
+                                <Typography variant="h5">
+                                    Reset Password
+                                </Typography>
+                                <Typography component="p">
+                                    Create new password
+                                </Typography>
+                            </span>
                         </div>
                         <div>
                             <TextField

@@ -8,6 +8,7 @@ import { Toaster, toast } from "sonner";
 import deleteTaskByIdService from "../../../../../lib/services/TasksService/deleteTaskByIdService";
 import { useSelector } from "react-redux";
 import { ApiCallProps } from "../TasksPageComponent";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -143,35 +144,60 @@ const TasksTableComponent = ({
       id: "actions",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
+          {/* "/view-icon.svg" "/pencil-icon.svg" "/trast-icon.svg" */}
           {
-            <div>
-              <Button
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <div
+                style={{ cursor: "pointer" }}
                 onClick={() => router.push(`/tasks/${info.row.original?._id}`)}
               >
-                View
-              </Button>
-              <Button
+                <ImageComponent
+                  src="/view-icon.svg"
+                  height={17}
+                  width={17}
+                  alt="view"
+                />
+              </div>
+              {/* <div
+                style={{ cursor: "pointer" }}
                 onClick={() =>
                   router.push(`/tasks/${info.row.original?._id}/edit`)
                 }
               >
-                Edit
-              </Button>
-              <Button
+                <ImageComponent
+                  src="/pencil-icon.svg"
+                  height={17}
+                  width={17}
+                  alt="view"
+                />
+              </div> */}
+              <div
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   setDeleteTaskId(info.row.original?._id);
                   setDialogOpen(true);
                 }}
               >
-                Delete
-              </Button>
+                <ImageComponent
+                  src="/trast-icon.svg"
+                  height={17}
+                  width={17}
+                  alt="view"
+                />
+              </div>
             </div>
           }
         </span>
       ),
       header: () => <span>Actions</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "100px",
     },
   ];
   return (

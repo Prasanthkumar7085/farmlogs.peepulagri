@@ -318,7 +318,6 @@ body {
     height: 100% !important;
     margin-left: 0 !important;
     margin-top: 0px;
-    object-fit: cover !important;
 }
 
 .ReactGridGallery_tile {

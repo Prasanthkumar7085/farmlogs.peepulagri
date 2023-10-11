@@ -14,21 +14,31 @@ import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
 import { useSwipeable } from 'react-swipeable';
 
-const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
+const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
+    const [description, setDescription] = useState<any>()
+
 
     useEffect(() => {
         setCurrentIndex(index);
+
     }, [index])
 
 
     const playNext = () => {
+        document
+            .getElementById(`${currentIndex - 1}`)
+            ?.scrollIntoView({ behavior: "smooth" });
         const nextIndex = (currentIndex + 1) % mediaArray?.length;
         setCurrentIndex(nextIndex);
     };
 
     const playPrevious = () => {
+        document
+            .getElementById(`${currentIndex - 1}`)
+            ?.scrollIntoView({ behavior: "smooth" });
         const prevIndex = currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
         setCurrentIndex(prevIndex);
     };
@@ -64,6 +74,32 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
         onSwipedRight: playPrevious,
     });
 
+
+    const handleZoomIn = () => {
+        setZoomLevel(zoomLevel + 0.1); // Increase the zoom level
+    };
+
+    const handleZoomOut = () => {
+        setZoomLevel(Math.max(1, zoomLevel - 0.1)); // Decrease the zoom level, with a minimum of 1
+    };
+
+    const zoomIn = () => {
+        const img: any = document.querySelector('.zoom-image');
+        if (img) {
+            img.style.transform = `scale(${zoomLevel + 0.1})`;
+            setZoomLevel(zoomLevel + 0.1);
+        }
+    };
+
+    const zoomOut = () => {
+        if (zoomLevel > 0.1) {
+            const img: any = document.querySelector('.zoom-image');
+            if (img) {
+                img.style.transform = `scale(${zoomLevel - 0.1})`;
+                setZoomLevel(zoomLevel - 0.1);
+            }
+        }
+    };
 
     return (
         <Dialog
@@ -102,12 +138,18 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                 <IconButton onClick={handleClose} sx={{ padding: "0" }}>
                     <CloseIcon sx={{ color: "#fff" }} />
                 </IconButton>
+                {mediaArray?.length && mediaArray[currentIndex]?.type?.includes('image') ?
+                    <div className="zoom-controls">
+                        <button onClick={zoomIn}>Zoom In (+)</button>
+                        <button onClick={zoomOut}>Zoom Out (-)</button>
+                    </div> : ""}
             </DialogTitle>
             <DialogContent>
                 <div {...handlers} style={{ width: "100%" }}>
 
                     <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray?.length <= 1}>
                         <NavigateBeforeIcon sx={{ color: "#fff" }} />
+
                     </IconButton>
                     {mediaArray?.length > 0 && (
                         <div className={styles.scoutDailogImg}>
@@ -120,10 +162,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                                 <iframe src={mediaArray[currentIndex]?.url} width="100%" height="100%"></iframe>
 
                                 : (
-                                    <img
-                                        src={mediaArray[currentIndex]?.url} // Change this to use the mediaArray
-                                        alt={`Image ${currentIndex + 1}`}
-                                    />
+                                    <>
+
+                                        <img
+                                            className="zoom-image"
+                                            src={mediaArray[currentIndex]?.url}
+                                            alt={`Image ${currentIndex + 1}`}
+                                            style={{ transform: `scale(${zoomLevel})` }}
+                                        />
+                                    </>
                                 )}
 
                         </div>
@@ -131,13 +178,77 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index }: any) => {
                     <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray?.length <= 1}>
                         <NavigateNextIcon sx={{ color: "#fff" }} />
                     </IconButton>
+
                 </div>
+
             </DialogContent>
+            <div
+                style={{
+                    width: "100%",
+                    justifyContent: "center",
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "10px",
+                        width: "100%",
+                        overflow: "auto",
+                    }}
+                >
+                    {mediaArray?.length
+                        ? mediaArray?.map((item: any, index: any) => {
+                            return (
+                                <div
+                                    key={index}
+                                    id={`${index}`}
+                                    autoFocus={index == currentIndex}
+                                    onClick={() => setCurrentIndex(index)}
+                                    style={{ cursor: "pointer" }}
+                                    className={
+                                        index == currentIndex
+                                            ? styles.activeImage
+                                            : styles.inactiveImage
+                                    }
+                                >
+                                    {item.type.includes("video") ?
+                                        <img
+                                            src="/videoimg.png"
+                                            alt={`Image ${index + 1}`}
+                                            height={"100px"}
+                                            width={"100px"}
+                                        />
+                                        :
+                                        item.type.includes("image") ?
+                                            <img
+                                                src={item?.url} // Change this to use the mediaArray
+                                                alt={`Image ${index + 1}`}
+                                                height={"100px"}
+                                                width={"100px"}
+                                            />
+                                            : <img
+                                                src="/pdf-icon.png"
+                                                alt={`Image ${index + 1}`}
+                                                height={"80px"}
+                                                width={"100px"}
+                                            />}
+                                </div>
+                            );
+                        })
+                        : ""}
+                </div>
+            </div>
             <DialogActions>
+
                 <Typography variant="caption" display="block" align="center">
                     {currentIndex + 1} of {mediaArray?.length}
                 </Typography>
+
             </DialogActions>
+            {mediaArray?.length && mediaArray[currentIndex]?.description ?
+                <div style={{ display: "block" }}>
+                    <Typography variant='caption'><span style={{ color: "red" }}>Description:-</span>{mediaArray?.length && mediaArray[currentIndex]?.description}</Typography>
+                </div> : ""}
         </Dialog>
     );
 };

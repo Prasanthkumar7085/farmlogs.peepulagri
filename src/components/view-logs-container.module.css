@@ -48,3 +48,10 @@
 .positionRightImg:hover {
   background: #000 !important;
 }
+.activeImage {
+  padding-top: 0px
+}
+
+.inactiveImage {
+  padding-top: 10px
+}

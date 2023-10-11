@@ -55,6 +55,7 @@ const SingleViewScoutComponent = () => {
             let responseData = await response.json()
 
             if (responseData.success) {
+
                 setData(responseData.data);
                 setSelectedFile(responseData.data)
             }
@@ -69,7 +70,7 @@ const SingleViewScoutComponent = () => {
 
     const getModifiedImage = (item: any) => {
 
-        let obj = item?.attachments?.slice(0, 3)?.map((imageObj: any, index: number) => {
+        let obj = item?.attachments?.map((imageObj: any, index: number) => {
 
             if (imageObj.type.includes("video")) {
                 return {
@@ -82,11 +83,11 @@ const SingleViewScoutComponent = () => {
                     id: imageObj._id,
                     scout_id: item._id,
                     alt: "u",
-                    tags: (item.attachments?.length > 3 && index == 2) ? [{
-                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
-                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
-                            +{item.attachments?.length - 2}</div>, title: "view_more"
-                    }] : []
+                    // tags: (item.attachments?.length > 3 && index == 2) ? [{
+                    //     value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
+                    //         onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                    //         +{item.attachments?.length - 2}</div>, title: "view_more"
+                    // }] : []
                 }
             }
             else if (imageObj.type.includes("application")) {
@@ -100,11 +101,11 @@ const SingleViewScoutComponent = () => {
                     id: imageObj._id,
                     scout_id: item._id,
                     alt: "u",
-                    tags: (item.attachments?.length > 3 && index == 2) ? [{
-                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
-                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
-                            +{item.attachments?.length - 2}</div>, title: "view_more"
-                    }] : []
+                    // tags: (item.attachments?.length > 3 && index == 2) ? [{
+                    //     value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
+                    //         onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
+                    //         +{item.attachments?.length - 2}</div>, title: "view_more"
+                    // }] : []
                 }
             }
             else
@@ -117,11 +118,7 @@ const SingleViewScoutComponent = () => {
                     scout_id: item._id,
                     width: 60,
                     alt: "u",
-                    tags: (item.attachments?.length > 3 && index == 2) ? [{
-                        value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
-                            onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
-                            +{item.attachments?.length - 2}</div>, title: "view_more"
-                    }] : []
+
                 }
         });
         return obj;
@@ -209,7 +206,7 @@ const SingleViewScoutComponent = () => {
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />
-            <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} />
+            <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={data} />
 
 
             <div className="addFormPositionIcon">

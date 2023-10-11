@@ -138,6 +138,8 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
 
         setComment("")
         afterCommentAdd(true)
+        setMultipleFiles([])
+        setAttachments([])
         dispatch(removeTheAttachementsFilesFromStore([]))
 
       }

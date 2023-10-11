@@ -70,15 +70,23 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   };
 
 
-  const removeFileAfterAdding = (index: number) => {
+  const removeFileAfterAdding = (index: number, file: any) => {
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
 
     const fileProgressCopy = [...fileProgress];
     fileProgressCopy.splice(index, 1);
 
+
+    const tempFilesStorageCopy = [...tempFilesStorage]
+    const newArray = tempFilesStorageCopy.filter((item: any) => item.original_name !== file.name);
+    tempFilesStorage = newArray
+    setAttachments(newArray)
+
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
+    dispatch(removeOneAttachmentElement(index))
+
   };
 
 
@@ -300,7 +308,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                         <IconButton>
                           <DoneIcon sx={{ color: "#05A155" }} />
                         </IconButton>
-                        <IconButton onClick={() => removeFileAfterAdding(index)}>
+                        <IconButton onClick={() => removeFileAfterAdding(index, item)}>
                           <DeleteForeverIcon sx={{ color: "#820707" }} />
                         </IconButton>
                       </div> : ""}
@@ -310,7 +318,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                       className={styles.close41}
                       alt=""
                       src="/close-icon.svg"
-                      onClick={() => removeFile(index)}
+                      onClick={() => removeFileAfterAdding(index, item)}
                     /> : ""}
 
                 </div>
@@ -335,18 +343,19 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         <div className={styles.attachments}>
           <div className={styles.link}>
             <label >
-              <img className={styles.groupIcon} alt="" src="/group.svg" />
+              <img className={styles.groupIcon} alt="Attachment" src="/attachment-icon.svg" />
               <input
                 type="file"
                 alt="images-upload"
                 multiple
+                accept=".pdf, image/*, video/*"
                 onChange={handleFileChange}
                 hidden
               />
             </label>
           </div>
           <label >
-            <img className={styles.imageIcon} alt="" src="/image7@2x.png" />
+            <img className={styles.imageIcon} alt="Images" src="/image-icon.svg" />
             <input
               type="file"
               alt="images-upload"

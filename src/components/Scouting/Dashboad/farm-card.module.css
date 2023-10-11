@@ -32,7 +32,7 @@
 
 .farm1 {
   color: #A05148;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(14px, 3.5vw, 18px);
   font-weight: 500;
   line-height: 100%;

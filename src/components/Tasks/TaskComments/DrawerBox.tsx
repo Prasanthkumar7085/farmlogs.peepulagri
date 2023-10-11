@@ -4,21 +4,22 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Drawer from '@mui/material/Drawer';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AlertComponent from "@/components/Core/AlertComponent";
 import CommentForm from "@/components/Scouting/Comments/comment-form";
 import Threads from "@/components/Scouting/Comments/threads";
 import CommentFormForTasks from "./comment-formForTasks";
 import CloseIcon from '@mui/icons-material/Close';
 import ThreadsForTasks from "./threadsforTasks";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 
 
 const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
     const router = useRouter();
+    const dispatch = useDispatch()
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
-
 
     const [importButton, setImportButton] = useState<any>(false)
     const [fileDetails, setFileDetails] = useState<any>(null)
@@ -46,7 +47,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
 
 
     const getAllScoutComments = async () => {
-
+        setLoading(true)
         let options = {
             method: "GET",
             headers: new Headers({
@@ -88,12 +89,16 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
                 }
                 // Convert the commentsById object to an array of comments
                 const formattedData = Object.values(commentsById);
-                console.log(formattedData, "p")
-                setData(formattedData)
+                let reverse = formattedData.slice().reverse()
+                setData(reverse)
 
             }
         } catch (err) {
             console.log(err)
+        }
+        finally {
+            setLoading(false)
+
         }
     }
 
@@ -151,6 +156,35 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
 
         }
     }
+    const afterDeleteAttachements = async (attachmentID: any, commentId: any) => {
+        setLoading(true)
+        let obj = {
+            "attachment_ids": [attachmentID]
+        }
+        let options = {
+            method: "DELETE",
+            body: JSON.stringify(obj),
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': accessToken
+            })
+        }
+        try {
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/${commentId}/attachments`, options)
+            let responseData = await response.json()
+            if (responseData.success == true) {
+                setAlertMessage("Attachement deleted successfully")
+                setAlertType(true)
+                getAllScoutComments()
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
 
     //adding comment then call the get all api
     const afterCommentAdd = (value: any) => {
@@ -185,13 +219,30 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
             open={isDrawerOpen}
             onClose={() => setIsDrawerOpen(false)}
         >
-            <IconButton onClick={() => drawerClose(false)} sx={{ display: "flex", justifyContent: "flex-end" }}><CloseIcon /></IconButton>
-
-            <div style={{ display: "flex", flexDirection: "column", width: 600, marginTop: "86%", padding: "1rem" }}>
-                <ThreadsForTasks farmID={rowDetails.farm_id._id} taskId={rowDetails._id} details={data} afterCommentAdd={afterCommentAdd} afterDeleteComment={afterDeleteComment} afterUpdateComment={afterUpdateComment} afterReply={afterReply} />
-                <CommentFormForTasks farmID={rowDetails.farm_id._id} taskId={rowDetails._id} afterCommentAdd={afterCommentAdd} />
-
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h6">Comments</Typography>
+                <IconButton onClick={() => {
+                    drawerClose(false)
+                    dispatch(removeTheAttachementsFilesFromStore([]))
+                }} ><CloseIcon /></IconButton>
             </div>
+
+            <div style={{ display: "flex", flexDirection: "column", width: 600, padding: "1rem", maxHeight: "500px", overflow: "auto" }}>
+                <ThreadsForTasks
+                    farmID={rowDetails.farm_id._id}
+                    taskId={rowDetails._id}
+                    details={data}
+                    afterCommentAdd={afterCommentAdd}
+                    afterDeleteComment={afterDeleteComment}
+                    afterUpdateComment={afterUpdateComment}
+                    afterReply={afterReply}
+                    afterDeleteAttachements={afterDeleteAttachements}
+                />
+            </div>
+
+            <CommentFormForTasks farmID={rowDetails.farm_id._id} taskId={rowDetails._id} afterCommentAdd={afterCommentAdd} />
+
+            <LoadingComponent loading={loading} />
 
         </Drawer>
 

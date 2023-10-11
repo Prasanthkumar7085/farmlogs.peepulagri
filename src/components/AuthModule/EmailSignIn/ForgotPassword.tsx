@@ -27,6 +27,7 @@ export default function ForgotPasswordPage() {
     const [editEmail, setEditEmail] = useState(true);
     const [alertMessage, setAlertMessage] = useState<string>('');
     const [alertType, setAlertType] = useState<boolean>(false);
+    const [isVerify, setIsVerify] = useState(false);
 
 
     const RequestOtp = async (e: any) => {
@@ -89,9 +90,10 @@ export default function ForgotPasswordPage() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/forgot-password/verify-otp`, requestOptions)
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
+                // setIsVerify(true);
                 router.push({
                     pathname: "/forgot-password/reset-password",
-                    query: { email: email }
+                    query: { email: email, isVerify: true },
                 });
             }
             if (response.status == 422) {
@@ -142,7 +144,7 @@ export default function ForgotPasswordPage() {
             <form noValidate className={styles.formCard} onSubmit={RequestOtp}>
                 <div className={styles.innerWrap}>
                     <div className={styles.header}>
-                        <ImageComponent src="./Logo-color.svg" width="80" height="60" />
+                        <ImageComponent src="/Logo-color.svg" width="80" height="60" />
                         <span className={styles.content}>
                             <Typography variant="h5">
                                 Forgot Password

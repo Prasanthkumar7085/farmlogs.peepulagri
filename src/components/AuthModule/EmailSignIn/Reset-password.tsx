@@ -20,6 +20,7 @@ export default function ResetPasswordPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [resetSuccess, setResetSuccess] = useState(false);
     const { email } = router.query
+
     const Updatepassword = async (e: any) => {
         setInvalid(false);
         setLoading(true);
@@ -81,15 +82,25 @@ export default function ResetPasswordPage() {
             {resetSuccess ?
                 <div>
                     <div className={styles.formCard}>
-                        <Typography sx={{ color: "white" }}>Password updated  successfully</Typography>
-                        <Button onClick={() => router.push('/')}>Back to login</Button>
+                        <div className={styles.innerWrap}>
+                            <div style={{ textAlign: "center" }}>
+                                <ImageComponent src="/Logo-color.svg" width="100" height="80" />
+                                <Typography className={styles.passwordSuccessmg}>Password updated  successfully</Typography>
+                            </div>
+                            <div className={styles.backToLogin}>
+                                <Button className={styles.backToLogin_btn} sx={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
+                                    <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
+                                    Back To Login
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 :
                 <form noValidate className={styles.formCard} onSubmit={Updatepassword}>
                     <div className={styles.innerWrap}>
                         <div className={styles.header}>
-                            <ImageComponent src="./Logo-color.svg" width="80" height="60" />
+                            <ImageComponent src="/Logo-color.svg" width="90" height="70" />
                             <span className={styles.content}>
                                 <Typography variant="h5">
                                     Reset Password
@@ -101,7 +112,7 @@ export default function ResetPasswordPage() {
                         </div>
                         <div>
                             <TextField
-                                placeholder='Password'
+                                placeholder='New password'
                                 sx={{
                                     width: "100%",
                                     '& .MuiInputBase-root': {
@@ -109,7 +120,6 @@ export default function ResetPasswordPage() {
                                     }
                                 }}
                                 size='small'
-                                name="email"
                                 type={showPassword ? "text" : "password"}
                                 value={newpassword}
                                 onChange={(e) => {
@@ -132,7 +142,7 @@ export default function ResetPasswordPage() {
                         </div>
                         <div>
                             <TextField
-                                placeholder='Conform Password'
+                                placeholder='Conform password'
                                 sx={{
                                     width: "100%",
                                     '& .MuiInputBase-root': {
@@ -140,7 +150,6 @@ export default function ResetPasswordPage() {
                                     }
                                 }}
                                 size='small'
-                                name="email"
                                 type={showConfirmPassword ? "text" : "password"}
                                 value={conformpassword}
                                 onChange={(e) => {
@@ -161,11 +170,17 @@ export default function ResetPasswordPage() {
                             />
                             <ErrorMessagesComponent errorMessage={errorMessages?.confirm_password
                             } />
+                            {invalid ?
+                                <p style={{ margin: "0", color: "red", fontSize: "12px" }}>{invalid}</p>
+                                : ""}
                         </div>
-                        {invalid ?
-                            <p style={{ margin: "0", color: "red" }}>{invalid}</p>
-                            : ""}
-                        <Button variant='contained' fullWidth type='submit'>Update Password</Button>
+                        <Button className={styles.reset_Btn} variant='contained' fullWidth type='submit'>Save</Button>
+                        <div className={styles.backToLogin}>
+                            <Button className={styles.backToLogin_btn} sx={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
+                                <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
+                                Back To Login
+                            </Button>
+                        </div>
                     </div>
                 </form>
             }

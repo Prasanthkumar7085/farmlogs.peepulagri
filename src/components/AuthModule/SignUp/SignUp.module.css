@@ -144,3 +144,18 @@
 .resendContent {
   font-size: clamp(12px, 0.62vw, 14px);
 }
+
+.reset_Btn {
+  text-transform: capitalize !important;
+  font-size: clamp(14px, 0.62vw, 16px);
+  font-weight: 500;
+  margin-block: 0.5rem 2rem;
+}
+
+.passwordSuccessmg {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(24px, 1.5vw, 32px) !important;
+  font-weight: 500;
+  line-height: 120%;
+  margin-top: 1rem;
+}

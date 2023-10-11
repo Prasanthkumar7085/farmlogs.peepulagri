@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps, ...rest }: any) {
 
   const sideBarList = ["/", "/signup", "/signup-verify",
     "/forgot-password",
-    "/forgot-password/verify-otp"];
+    "/forgot-password/reset-password"];
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>

@@ -22,11 +22,8 @@ const HomePage = () => {
 export default HomePage;
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-
-
     const { req } = context;
     const { cookies } = req;
-
 
     if (cookies.loggedIn == 'true') {
         return {

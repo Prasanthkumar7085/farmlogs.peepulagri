@@ -1,0 +1,12 @@
+.footerActionButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-self: stretch;
+  align-items: flex-start;
+  gap: var(--gap-xs);
+}
+.footerActionButtons button{
+  font-size: var(--font-size-base);
+  gap: var(--gap-7xs);
+}

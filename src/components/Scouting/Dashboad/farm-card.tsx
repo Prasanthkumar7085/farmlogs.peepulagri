@@ -10,11 +10,20 @@ interface pagePropsType {
 const FarmCard = ({ farmsData }: pagePropsType) => {
   const router = useRouter();
 
+
+  let colorsArray = ["#C71585", "#7B68EE", "#FF8C00", " #008080", "#2E8B57", "#4682B4", "#000080", "#3D3D5B", " #CC0044", "#BA55D3"
+    , "#663399", "#8B0000", "#FF4500", "#DA0E0E", "#00CED1", "#4169E1", " #A52A2A", "#2D1E2F", "#714E47", "#C65B7C"
+    , "#A04662", "#FE654F", " #5F6A89", "#067BBD"]
+
+
+
   return (
     <div className={styles.allForms}>
 
       <div className={styles.allFormsBlock}>
         {farmsData.length ? farmsData.map((item: FarmDataType, index: number) => {
+          const colorIndex = index % colorsArray.length;
+
           return (
             <div className={styles.farmcard} id="farm-card" key={item._id} >
               <div className={styles.farm} id="farm">
@@ -22,7 +31,7 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
                   <div className={styles.duration} id="duration">
                     <div className={styles.aug2023}>{timePipe(item.createdAt, 'DD, MMM YYYY')} - Current</div>
                   </div>
-                  <div className={styles.farm1}>
+                  <div className={styles.farm1} style={{ color: colorsArray[colorIndex] }}>
                     {item.title.length > 16 ?
 
                       (item.title.slice(0, 1).toUpperCase() +

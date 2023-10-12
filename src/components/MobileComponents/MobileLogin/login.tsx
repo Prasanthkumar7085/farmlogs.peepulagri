@@ -1,28 +1,26 @@
-import type { NextPage } from "next";
-import { ChangeEvent, useState } from "react";
+import { setOtpCountDown } from "@/Redux/Modules/Otp";
+import ImageComponent from "@/components/Core/ImageComponent";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 import {
-  TextField,
   Button,
-  Typography,
   CircularProgress,
   InputAdornment,
-  IconButton,
+  TextField,
+  Typography
 } from "@mui/material";
-import styles from "./login.module.css";
-import ImageComponent from "@/components/Core/ImageComponent";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
+import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setOtpCountDown } from "@/Redux/Modules/Otp";
-import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
+import getOtpService from "../../../../lib/services/AuthServices/getOtpService";
+import styles from "./login.module.css";
 
 const MobileLogin: NextPage = () => {
-
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [mobile, setMobile] = useState('');
+  const [mobile, setMobile] = useState("");
   const [loadingWhileGettingOtp, setLoadingWhileGettingOtp] = useState(false);
   const [responseErrorMesaages, setResponseErrorMessages] = useState<any>();
 
@@ -31,8 +29,8 @@ const MobileLogin: NextPage = () => {
     setResponseErrorMessages({});
 
     const body = {
-      phone: mobile
-    }
+      phone: mobile,
+    };
 
     const response = await getOtpService(body);
 
@@ -40,17 +38,28 @@ const MobileLogin: NextPage = () => {
       dispatch(setOtpCountDown(30));
       router.push({
         pathname: "/signup-verify",
-        query: { mobile: mobile }
+        query: { mobile: mobile },
       });
     } else if (response?.status == 422) {
-      setResponseErrorMessages(response?.errors)
+      setResponseErrorMessages(response?.errors);
     }
     setLoadingWhileGettingOtp(false);
   };
 
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
-    const allowedCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const allowedCharacters = [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+    ];
 
     if (!allowedCharacters.includes(keyPressed)) {
       event.preventDefault();
@@ -58,23 +67,30 @@ const MobileLogin: NextPage = () => {
   };
   const setMobileNumber = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-    value = value.trim();;
+    value = value.trim();
     if (value.length <= 10) {
-      setMobile(value)
+      setMobile(value);
     }
-  }
+  };
 
 
   return (
     <div id={styles.mobileLoginPage}>
       <div className={styles.login}>
         <div className={styles.logo} id="login-logo">
-          <ImageComponent src="/Logo-color.svg" width="150" height="110" alt={'logo'} />
+          <ImageComponent
+            src="/Logo-color.svg"
+            width="150"
+            height="110"
+            alt={"logo"}
+          />
         </div>
         <div className={styles.loginform}>
           <div className={styles.loginfield}>
             <div className={styles.loginheader}>
-              <Typography variant="h5" className={styles.welcomeBack1}>Welcome Back</Typography>
+              <Typography variant="h5" className={styles.welcomeBack1}>
+                Welcome Back
+              </Typography>
               <Typography className={styles.enterPhoneNumber}>
                 Enter Mobile Number to Access Your Account
               </Typography>
@@ -93,7 +109,6 @@ const MobileLogin: NextPage = () => {
               error={Boolean(responseErrorMesaages?.phone)}
               helperText={responseErrorMesaages?.phone}
               InputProps={{
-
                 startAdornment: (
                   <InputAdornment position="start" sx={{ paddingLeft: "10px" }}>
                     <PhoneAndroidOutlinedIcon sx={{ color: "#05A155" }} /> +91
@@ -101,20 +116,20 @@ const MobileLogin: NextPage = () => {
                 ),
               }}
               sx={{
-                '& .MuiOutlinedInput-notchedOutline': {
+                "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: "8px !important",
                 },
-                '& .MuiInputBase-root': {
-                  background: "#fff"
+                "& .MuiInputBase-root": {
+                  background: "#fff",
                 },
-                '& .MuiOutlinedInput-root': {
-                  paddingLeft: "0"
-                }
+                "& .MuiOutlinedInput-root": {
+                  paddingLeft: "0",
+                },
               }}
               onChange={setMobileNumber}
               onKeyDown={(e) => {
-                if (e.key == 'Enter') {
-                  onButtonClick()
+                if (e.key == "Enter") {
+                  onButtonClick();
                 }
               }}
             />
@@ -128,12 +143,13 @@ const MobileLogin: NextPage = () => {
             size="large"
             variant="contained"
             onClick={onButtonClick}
-
           >
             Continue
-            {loadingWhileGettingOtp ?
-              <CircularProgress size="1.5rem" sx={{ color: "white" }} /> :
-              <ArrowForwardIcon sx={{ marginTop: "5px" }} />}
+            {loadingWhileGettingOtp ? (
+              <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+            ) : (
+              <ArrowForwardIcon sx={{ marginTop: "5px" }} />
+            )}
           </Button>
         </div>
       </div>

@@ -1,0 +1,49 @@
+.note1Icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.taskManagement {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: inherit;
+  font-weight: 400;
+  font-family: inherit;
+}
+.pagetitle {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+.filter {
+  cursor: pointer;
+}
+.searchbar {
+  border: 0;
+  background-color: transparent;
+}
+.headeractions,
+.navbarcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2rem
+}
+.headeractions {
+  justify-content: flex-start;
+  gap: 16px;
+}
+.navbarcontainer {
+  align-self: stretch;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 24px;
+  color: #333;
+  font-family: Inter;
+}

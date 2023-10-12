@@ -1,18 +1,18 @@
-import styles from "./threads.module.css";
+import styles from "src/components/Scouting/Comments/threads.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, Button, Icon, IconButton, TextField, Typography, Chip } from "@mui/material";
-import Image from "@/components/Core/ImageComponent";
-import CommentForm from "./comment-form";
+import { Avatar, Button, Chip, IconButton, TextField, Typography } from "@mui/material";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import { deepOrange } from '@mui/material/colors';
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import CommentFormForTasks from "./comment-formForTasks";
+import Image from "next/image";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AlertComponent from "@/components/Core/AlertComponent";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements }: any) => {
+const ThreadsForTasks = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, taskId, farmID }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
@@ -26,8 +26,6 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [editComment, setEditComment] = useState<any>();
   const [isReplies, setIsReplies] = useState<any>(false);
   const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertType, setAlertType] = useState(false);
 
 
 
@@ -39,73 +37,46 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
 
 
-
   const downLoadAttachements = async (file: any, userId: any) => {
-
+    console.log(file)
     setLoading(true);
-    let body = {
 
-      "attachment":
-      {
-
-        "name": file.name,
-        "type": file.type,
-        "crop_slug": file.crop_slug,
-        "source": "scouting",
-        "user_id": userId
-      }
-    }
-    let options = {
-      method: "POST",
-      headers: new Headers({
-        'content-type': 'application/json',
-        'authorization': accessToken
-      }),
-      body: JSON.stringify(body)
-    }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/attachment/download-url`, options)
-      let responseData = await response.json()
-      if (responseData.success == true) {
+      fetch(file)
+        .then((response) => {
+          // Get the filename from the response headers
+          const contentDisposition = response.headers.get("content-disposition");
+          let filename = "downloaded_file"; // Default filename if not found in headers
 
-        fetch(responseData.data.download_url)
-          .then((response) => {
-            // Get the filename from the response headers
-            const contentDisposition = response.headers.get("content-disposition");
-            let filename = "downloaded_file"; // Default filename if not found in headers
-
-            if (contentDisposition) {
-              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-              if (filenameMatch && filenameMatch.length > 1) {
-                filename = filenameMatch[1];
-              }
+          if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (filenameMatch
+              && filenameMatch.length > 1) {
+              filename = filenameMatch[1];
             }
+          }
 
-            // Create a URL for the blob
-            return response.blob()
-              .then((blob) => ({ blob, filename }));
-          })
-          .then(({ blob, filename }) => {
-            const blobUrl = window.URL.createObjectURL(blob);
+          // Create a URL for the blob
+          return response.blob()
+            .then((blob) => ({ blob, filename }));
+        })
+        .then(({ blob, filename }) => {
+          const blobUrl = window.URL.createObjectURL(blob);
 
-            const downloadLink = document.createElement("a");
-            downloadLink.href = blobUrl;
-            downloadLink.download = filename; // Use the obtained filename
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+          const downloadLink = document.createElement("a");
+          downloadLink.href = blobUrl;
+          downloadLink.download = filename; // Use the obtained filename
+          downloadLink.style.display = "none";
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
 
-            // Clean up the blob URL
-            window.URL.revokeObjectURL(blobUrl);
-          })
-          .catch((error) => {
-            console.error("Error downloading file:", error);
-          });
-        setAlertMessage("Attachement downloaded successfully")
-        setAlertType(true)
-      }
-
+          // Clean up the blob URL
+          window.URL.revokeObjectURL(blobUrl);
+        })
+        .catch((error) => {
+          console.error("Error downloading file:", error);
+        });
     }
 
     catch (err) {
@@ -169,7 +140,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           </div>
                           <div style={{ display: "flex", alignItems: "center" }}>
                             <IconButton
-                              onClick={() => downLoadAttachements(file, item.user._id)}
+                              onClick={() => downLoadAttachements(file.url, item.user._id)}
                             >
                               <img
                                 className={styles.download11}
@@ -293,7 +264,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                 {replyOpen == true && index == replyIndex ?
                   <div style={{ width: "100%" }}>
 
-                    <CommentForm replyThreadEvent={item._id} afterCommentAdd={afterCommentAdd} />
+                    <CommentFormForTasks replyThreadEvent={item._id} afterCommentAdd={afterCommentAdd} taskId={taskId} farmID={farmID} />
 
 
                   </div>
@@ -351,12 +322,20 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   alt=""
                                   src="/download-1-1.svg"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => downLoadAttachements(file, row.user._id)}
+                                  onClick={() => downLoadAttachements(file.url, row.user._id)}
                                 />
                                 {userDetails?.user_details?.user_type == row?.user?.user_type ?
                                   <IconButton
                                     onClick={() => afterDeleteAttachements(file._id, row._id)}
-                                  ><DeleteForeverIcon /></IconButton> : ""}
+                                  >
+                                    <Image
+                                      alt="Delete"
+                                      height={20}
+                                      width={20}
+                                      src="/farm-delete-icon.svg"
+                                      style={{ borderRadius: "5%" }}
+                                    />
+                                  </IconButton> : ""}
                               </div>)
                           }) : ""}
 
@@ -414,10 +393,10 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         </div>
       }
       <LoadingComponent loading={loading} />
-      <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+      {/* <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} /> */}
 
     </div >
   );
 };
 
-export default Threads;
+export default ThreadsForTasks;

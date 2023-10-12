@@ -13,7 +13,7 @@
 .farmname {
   margin: 0;
   color: #344054;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(18px, 1vw, 20px);
   font-weight: 500;
   line-height: 20px;
@@ -21,7 +21,7 @@
 
 .startdate {
   color: #6A7185;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(13px, 0.72vw, 16px);
   font-weight: 400;
   margin: 0;
@@ -38,7 +38,7 @@
 .text {
   margin: 0;
   color: #101828;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(15px, 0.83vw, 18px);
   font-weight: 500;
 }
@@ -73,7 +73,7 @@
   gap: 30px;
   font-size: 24px;
   color: #344054;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   padding: 1.5rem;
 }
 
@@ -101,7 +101,7 @@
 .viewScoutingHeader h5 {
   margin: 0;
   color: #170F49;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(16px, 1vw, 20px);
   font-weight: 400;
 }
@@ -136,7 +136,7 @@
 .formDetails h6 {
   margin: 0;
   color: #35353D;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(16px, 0.833vw, 18px);
   font-weight: 500;
 }
@@ -144,7 +144,7 @@
 .formDetails p {
   margin: 0;
   color: #6A7185;
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-size: clamp(11px, 0.62vw, 14px);
   font-weight: 500;
   padding-top: 5px;

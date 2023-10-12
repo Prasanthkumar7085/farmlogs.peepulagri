@@ -245,7 +245,7 @@
     box-shadow: 4px 4px 10px 0px #0202460a;
     padding: 8px 20px;
     color: #344054;
-    font-family: Inter;
+    font-family: "Inter", sans-serif;
     font-size: clamp(14px, 3.5vw, 16px);
     font-weight: 400;
     text-transform: capitalize;
@@ -258,7 +258,7 @@
     background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
     box-shadow: 4px 4px 10px 0px #0202460d;
     color: #FFF;
-    font-family: Inter;
+    font-family: "Inter", sans-serif;
     font-size: clamp(14px, 3.5vw, 16px);
     font-weight: 400;
     text-transform: capitalize;
@@ -313,6 +313,6 @@
     text-align: left;
     font-size: 14px;
     color: #344054;
-    font-family: Inter;
+    font-family: "Inter", sans-serif;
     padding: 1rem;
 }

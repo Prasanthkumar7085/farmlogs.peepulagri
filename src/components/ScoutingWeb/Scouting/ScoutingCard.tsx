@@ -5,6 +5,7 @@ import { ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes"
 import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
+import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 
 interface pageProps {
   item: SingleScoutResponse;
@@ -31,10 +32,6 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
     setOpenDialog(false);
   };
 
-  // const handleClick = (index: number, item: any) => {
-  //   handleOpenDialog();
-  //   setIndex(index);
-  // };
 
   const [state, setState] = useState(false);
 
@@ -57,13 +54,21 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                 />
 
                 :
-                <img
-                  className={styles.imageIcon}
-                  src={itemObj.url}
-                  alt={itemObj.name}
-                  onLoad={handleImageLoad}
-                  style={{ display: state ? "block" : "none" }}
-                />
+                itemObj.type.includes('application') ?
+                  <img
+                    className={styles.imageIcon}
+                    src={"/pdf-icon.png"}
+                    alt={itemObj.name}
+                    onLoad={handleImageLoad}
+                    style={{ display: state ? "block" : "none" }}
+                  /> :
+                  <img
+                    className={styles.imageIcon}
+                    src={itemObj.url}
+                    alt={itemObj.name}
+                    onLoad={handleImageLoad}
+                    style={{ display: state ? "block" : "none" }}
+                  />
               }
             </div>
           )
@@ -95,7 +100,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           </div> */}
         </div>
       </div>
-      <ViewSingleImagePreview open={openDialog} onClose={handleCloseDialog} media={item.attachments[index]} index={index} />
+      <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={item.attachments} index={index} />
     </div>
   );
 };

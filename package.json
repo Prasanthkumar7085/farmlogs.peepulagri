@@ -39,6 +39,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-media-recorder": "^1.6.6",
     "react-modal": "^3.16.1",
+    "react-pdf": "^7.5.0",
     "react-redux": "^8.1.2",
     "react-swipeable": "^7.0.1",
     "react-table": "^7.8.0",

@@ -5,9 +5,9 @@ import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/materia
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./comment-form.module.css";
+import styles from "src/components/Scouting/Comments/comment-form.module.css";
 
-const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
+const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID }: any) => {
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -26,7 +26,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   let tempFilesStorage: any = [...attachments]
 
   useEffect(() => {
-    getCropsDetails()
     dispatch(removeTheAttachementsFilesFromStore([]))
   }, [])
 
@@ -70,51 +69,16 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   };
 
 
-  const removeFileAfterAdding = (index: number, file: any) => {
+  const removeFileAfterAdding = (index: number) => {
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
 
     const fileProgressCopy = [...fileProgress];
     fileProgressCopy.splice(index, 1);
 
-
-    const tempFilesStorageCopy = [...tempFilesStorage]
-    const newArray = tempFilesStorageCopy.filter((item: any) => item.original_name !== file.name);
-    tempFilesStorage = newArray
-    setAttachments(newArray)
-
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
-    dispatch(removeOneAttachmentElement(index))
-
   };
-
-
-
-  //get all crops name
-  const getCropsDetails = async () => {
-
-    try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/crops/list`, { method: "GET" });
-      let responseData: any = await response.json();
-
-      if (responseData.success == true) {
-
-        if (router.query.crop_id) {
-
-          let cropObj = responseData?.data?.find((item: any) => item._id == router.query.crop_id);
-          setSelectedCrop(cropObj);
-
-        }
-
-      }
-    } catch (err) {
-      console.error(err);
-
-    }
-  }
-
-
 
 
   const addComment = async () => {
@@ -133,7 +97,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/add-comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
         setComment("")
@@ -168,12 +132,14 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${comment_id}/reply`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/comments/${comment_id}/reply`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
 
         setComment("")
         afterCommentAdd(true)
+        setMultipleFiles([])
+        setAttachments([])
         dispatch(removeTheAttachementsFilesFromStore([]))
 
       }
@@ -217,9 +183,8 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         "original_name": item.name,
         "type": item.type,
         "size": item.size,
-        "source": "scouting",
-        "crop_slug": selectedCrop?.slug,
-        "farm_id": router.query.farm_id
+        "source": "tasks",
+        "farm_id": farmID
       }
 
     }
@@ -308,7 +273,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                         <IconButton>
                           <DoneIcon sx={{ color: "#05A155" }} />
                         </IconButton>
-                        <IconButton onClick={() => removeFileAfterAdding(index, item)}>
+                        <IconButton onClick={() => removeFileAfterAdding(index)}>
                           <DeleteForeverIcon sx={{ color: "#820707" }} />
                         </IconButton>
                       </div> : ""}
@@ -318,7 +283,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                       className={styles.close41}
                       alt=""
                       src="/close-icon.svg"
-                      onClick={() => removeFileAfterAdding(index, item)}
+                      onClick={() => removeFile(index)}
                     /> : ""}
 
                 </div>
@@ -343,19 +308,18 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         <div className={styles.attachments}>
           <div className={styles.link}>
             <label >
-              <img className={styles.groupIcon} alt="Attachment" src="/attachment-icon.svg" />
+              <img className={styles.groupIcon} alt="" src="/group.svg" />
               <input
                 type="file"
                 alt="images-upload"
                 multiple
-                accept=".pdf, image/*, video/*"
                 onChange={handleFileChange}
                 hidden
               />
             </label>
           </div>
           <label >
-            <img className={styles.imageIcon} alt="Images" src="/image-icon.svg" />
+            <img className={styles.imageIcon} alt="" src="/image7@2x.png" />
             <input
               type="file"
               alt="images-upload"
@@ -381,4 +345,4 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   );
 };
 
-export default CommentForm;
+export default CommentFormForTasks;

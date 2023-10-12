@@ -21,7 +21,7 @@ import {
   IconButton,
   InputLabel,
   LinearProgress,
-  TextField,
+  TextField
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -73,7 +73,7 @@ const FileUploadComponent = () => {
     return bytes / (1024 * 1024);
   };
 
-  const removeFile = (index: number) => {
+  const removeFileAfterAdding = (index: number, file: any) => {
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
 
@@ -81,18 +81,11 @@ const FileUploadComponent = () => {
     fileProgressCopy.splice(index, 1);
 
     const tempFilesStorageCopy = [...tempFilesStorage];
-    tempFilesStorageCopy.splice(index, 1);
-    dispatch(removeOneElement(index));
-
-    setMultipleFiles(selectedFilesCopy);
-    setFileProgress(fileProgressCopy);
-  };
-  const removeFileAfterAdding = (index: number) => {
-    const selectedFilesCopy = [...multipleFiles];
-    selectedFilesCopy.splice(index, 1);
-
-    const fileProgressCopy = [...fileProgress];
-    fileProgressCopy.splice(index, 1);
+    const newArray = tempFilesStorageCopy.filter(
+      (item: any) => item.original_name !== file.name
+    );
+    tempFilesStorage = newArray;
+    setAttachments(newArray);
 
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
@@ -490,8 +483,6 @@ const FileUploadComponent = () => {
   }, []);
 
   const addScoutDetails = async () => {
-    console.log(tempFilesStorage, "opop");
-
     setLoading(true);
     let obj = {
       farm_id: formId,
@@ -631,6 +622,7 @@ const FileUploadComponent = () => {
                 <div className={styles.farmselection} id="farm-selection">
                   <h5 className={styles.label} id="label-select-farm">
                     Select Farm
+                    <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
                   </h5>
                   <FormControl className={styles.selectfarm} variant="outlined">
                     <InputLabel color="primary" />
@@ -651,6 +643,7 @@ const FileUploadComponent = () => {
                 <div className={styles.inputField}>
                   <h5 className={styles.label} id="label-select-farm">
                     Select Crop
+                    <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
                   </h5>
                   <FormControl className={styles.dropdown} variant="outlined">
                     <InputLabel color="primary" />
@@ -675,7 +668,10 @@ const FileUploadComponent = () => {
 
                   <div className={styles.farmselection} id="images">
                     <div className={styles.inputField}>
-                      <div className={styles.label1}>Images</div>
+                      <div className={styles.label1}>
+                        Images
+                        <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
+                      </div>
                     </div>
                     <div className={styles.imagesupload} id="images-upload">
                       <div className={styles.captureimage} id="capture-image">
@@ -697,7 +693,7 @@ const FileUploadComponent = () => {
                             <input
                               type="file"
                               alt="images-upload"
-                              accept="image/*,video/*"
+                              accept=".pdf, image/*, video/*"
                               multiple
                               onChange={handleFileChange}
                               hidden
@@ -728,11 +724,11 @@ const FileUploadComponent = () => {
                         previewImages.find((e: any) => e.fileIndex == item.name)
                           ?.prieviewUrl
                           ? previewImages.find(
-                              (e: any) => e.fileIndex == item.name
-                            ).prieviewUrl
+                            (e: any) => e.fileIndex == item.name
+                          ).prieviewUrl
                           : item.type == "application/pdf"
-                          ? "/pdf-icon.png"
-                          : "/doc-icon.webp"
+                            ? "/pdf-icon.png"
+                            : "/doc-icon.webp"
                       }
                     />
                     <div className={styles.progressdetails}>
@@ -747,8 +743,7 @@ const FileUploadComponent = () => {
                                     fileProgress[index] == "fail" ? "red" : "",
                                 }}
                               >
-                                {item.name?.slice(0, 15)}...
-                                {item.type?.slice(-15)}{" "}
+                                {item.name?.slice(0, 7)}...{item.type}{" "}
                               </div>
                               {fileProgress[index] == "fail" ? (
                                 <div
@@ -764,13 +759,15 @@ const FileUploadComponent = () => {
                               )}
                             </div>
                             {fileProgress[index] == 100 &&
-                            fileProgress[index] !== "fail" ? (
+                              fileProgress[index] !== "fail" ? (
                               <div className={styles.photojpg}>
                                 <IconButton>
                                   <DoneIcon sx={{ color: "#05A155" }} />
                                 </IconButton>
                                 <IconButton
-                                  onClick={() => removeFileAfterAdding(index)}
+                                  onClick={() =>
+                                    removeFileAfterAdding(index, item)
+                                  }
                                 >
                                   <DeleteForeverIcon
                                     sx={{ color: "#820707" }}
@@ -780,22 +777,22 @@ const FileUploadComponent = () => {
                             ) : (
                               ""
                             )}
-                            {fileProgress[index] !== 100 ||
-                            fileProgress[index] == "fail" ? (
-                              <img
-                                className={styles.close41}
-                                alt=""
-                                src="/close-icon.svg"
-                                onClick={() => removeFile(index)}
-                              />
-                            ) : (
-                              ""
-                            )}
                           </div>
+                          {fileProgress[index] !== 100 ||
+                            fileProgress[index] == "fail" ? (
+                            <img
+                              className={styles.close41}
+                              alt=""
+                              src="/close-icon.svg"
+                              onClick={() => removeFileAfterAdding(index, item)}
+                            />
+                          ) : (
+                            ""
+                          )}
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
-                          fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                             <LinearProgress />
                           ) : fileProgress[index] !== 100 &&
                             fileProgress[index] !== "fail" ? (
@@ -809,7 +806,7 @@ const FileUploadComponent = () => {
                         </Box>
                       </div>
                       {fileProgress[index] == 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         ""
                       ) : (
                         <div className={styles.uploadstatus}>
@@ -830,7 +827,10 @@ const FileUploadComponent = () => {
                       className={styles.farmselection}
                       id="input-description"
                     >
-                      <div className={styles.label1}>Description</div>
+                      <div className={styles.label1}>
+                        Description
+                        <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
+                      </div>
                       <TextField
                         className={styles.input}
                         color="primary"

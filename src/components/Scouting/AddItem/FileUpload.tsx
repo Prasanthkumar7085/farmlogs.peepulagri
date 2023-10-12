@@ -484,16 +484,17 @@ const FileUploadComponent = () => {
 
   const addScoutDetails = async () => {
 
-    const newArray = tempFilesStorage.map((obj: any) => ({
-      ...obj,
-      description: description
-    }));
+    // const newArray = tempFilesStorage.map((obj: any) => ({
+    //   ...obj,
+    //   description: description
+    // }));
 
     setLoading(true);
     let obj = {
       farm_id: formId,
-      attachments: newArray,
+      attachments: tempFilesStorage,
       crop_id: selectedCrop?._id,
+      description: description
     };
 
     let options: any = {

@@ -39,7 +39,6 @@ const TasksTableComponent = ({
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string>("");
   const [drawerOpen, setDrawerOpen] = useState<any>(false)
-  console.log(drawerOpen)
   const [rowDetails, setRowDetails] = useState<any>()
 
   const deleteTask = async () => {

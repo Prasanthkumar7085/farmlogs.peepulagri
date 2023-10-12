@@ -1,4 +1,4 @@
-import { Breadcrumbs, Card, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Card, IconButton, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import styles from "./crop-card.module.css";
@@ -14,7 +14,9 @@ import getSingleScoutService from "../../../../lib/services/ScoutServices/getSin
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import Image from "next/image";
-
+import moment from "moment";
+import CommentIcon from '@mui/icons-material/Comment';
+import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 
 
 
@@ -31,10 +33,11 @@ const SingleViewScoutComponent = () => {
     const [data, setData] = useState<any>()
     const [selectedFile, setSelectedFile] = useState<any>([])
     const [index, setIndex] = useState<any>()
-    const [image, setImage] = useState();
+    const [scoutData, setScoutData] = useState();
     const [sildeShowImages, setSlideShowImages] = useState<any>()
     const [loading, setLoading] = useState(true);
-
+    const [drawerOpen, setDrawerOpen] = useState<any>(false)
+    const [scoutId, setScoutId] = useState<any>()
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -60,9 +63,31 @@ const SingleViewScoutComponent = () => {
             let responseData = await response.json()
 
             if (responseData.success) {
-
-                setData(responseData.data);
                 setSelectedFile(responseData.data)
+                // Create an object to store grouped data
+                const groupedData: any = {};
+
+                // Iterate through yourData and group objects by createdAt date
+                responseData.data.forEach((item: any) => {
+                    const createdAt = timePipe(item.createdAt, "DD-MM-YYYY")
+
+                    if (!groupedData[createdAt]) {
+                        groupedData[createdAt] = [item];
+                    } else {
+                        groupedData[createdAt].push(item);
+                    }
+                });
+
+                // Convert the groupedData object into an array
+                const groupedArray = Object.values(groupedData);
+                setData(groupedArray);
+                console.log(groupedArray)
+
+
+
+
+
+
             }
         }
         catch (err) {
@@ -71,6 +96,7 @@ const SingleViewScoutComponent = () => {
             setLoading(false);
         }
     };
+
 
 
     const getModifiedImage = (item: any) => {
@@ -88,11 +114,6 @@ const SingleViewScoutComponent = () => {
                     id: imageObj._id,
                     scout_id: item._id,
                     alt: "u",
-                    // tags: (item.attachments?.length > 3 && index == 2) ? [{
-                    //     value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
-                    //         onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
-                    //         +{item.attachments?.length - 2}</div>, title: "view_more"
-                    // }] : []
                 }
             }
             else if (imageObj.type.includes("application")) {
@@ -105,12 +126,7 @@ const SingleViewScoutComponent = () => {
                     type: imageObj.type,
                     id: imageObj._id,
                     scout_id: item._id,
-                    alt: "u",
-                    // tags: (item.attachments?.length > 3 && index == 2) ? [{
-                    //     value: <div id="layer" style={{ width: "100%", backgroundColor: "#0000008f !important" }}
-                    //         onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}>
-                    //         +{item.attachments?.length - 2}</div>, title: "view_more"
-                    // }] : []
+                    alt: "u"
                 }
             }
             else
@@ -135,6 +151,8 @@ const SingleViewScoutComponent = () => {
         if (response?.success) {
             if (response?.data?.attachments?.length) {
                 setSlideShowImages(response?.data?.attachments)
+                setScoutData(response?.data);
+
             }
         }
         setLoading(false);
@@ -158,10 +176,15 @@ const SingleViewScoutComponent = () => {
     const handleClick = (index: number, item: any) => {
         handleOpenDialog();
         setIndex(index);
-        setImage(item);
         getSingleScout(item.scout_id)
     };
 
+    const drawerClose = (value: any) => {
+        console.log(value)
+        if (value == false) {
+            setDrawerOpen(false)
+        }
+    }
 
     return (
         <div className={styles.scoutingView}>
@@ -184,22 +207,29 @@ const SingleViewScoutComponent = () => {
             {data?.length ? data.map((item: any, index: any) => {
                 return (
                     <Card key={index} className={styles.galleryCard} >
-                        <Typography>{timePipe(item.createdAt, "DD-MM-YYYY hh.mm a")}</Typography>
-                        {item?.attachments?.length ?
-                            <>
-                                <Gallery images={getModifiedImage(item)} onClick={handleClick} enableImageSelection={false}
-                                />
+                        <Typography>{timePipe(item[0].createdAt, "DD-MM-YYYY")}</Typography>
+                        <div style={{ marginTop: "20px" }}>
+                            {item.map((row: any, rowIndex: any) => {
 
-                            </>
-                            :
-                            // getModifiedImage(item)
-                            <div style={{ color: "#c1c1c1", padding: "10px 0px 10px 10px", display: "flex", justifyContent: "center" }}>
-                                {"No Attachments"}
-                            </div>}
+                                return (
+                                    <div key={rowIndex} style={{ marginTop: "20px" }}>
+                                        <Typography>{timePipe(row.createdAt, "hh.mm a")}</Typography>
+                                        <Typography variant="caption">{row.description?.length > 50 ? row.description.slice(0, 100) + "... read more" : row.description}</Typography>
 
-                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
-                            <Typography variant="caption" sx={{ cursor: "pointer", color: "blue", fontSize: "12px" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
-                            >View Scout</Typography>
+                                        <Gallery images={getModifiedImage(row)} onClick={handleClick} enableImageSelection={false}
+                                        />
+                                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
+                                            <IconButton onClick={() => {
+                                                setDrawerOpen(true)
+                                                setScoutId(row._id)
+                                            }}><CommentIcon /></IconButton>
+                                            <Typography variant="caption" sx={{ cursor: "pointer", color: "blue", fontSize: "12px" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${row._id}`)}
+                                            >View Scout</Typography>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+
                         </div>
                     </Card>
                 )
@@ -211,8 +241,10 @@ const SingleViewScoutComponent = () => {
                     </div>
                     : "")}
             <LoadingComponent loading={loading} />
-            <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={data} />
-
+            <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={scoutData} />
+            {drawerOpen == true ?
+                <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} />
+                : ""}
 
             <div className="addFormPositionIcon">
                 <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)} />

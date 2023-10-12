@@ -22,23 +22,27 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             {data?.attachments?.length
               ? data?.attachments?.map((item: any, index: number) => {
-                  return (
-                    <div
-                      key={index}
-                      style={{
-                        height: "100px",
-                        width: "100px",
-                        objectFit: "cover",
-                        position: "relative",
-                      }}
-                      onClick={() => {
-                        setImagePreviewIndex(index);
-                        setOpenDialog(true);
-                      }}
-                    >
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      height: "100px",
+                      width: "100px",
+                      objectFit: "cover",
+                      position: "relative",
+                    }}
+                    onClick={() => {
+                      setImagePreviewIndex(index);
+                      setOpenDialog(true);
+                    }}
+                  >
+                    {item?.type?.includes("video") ? (
                       <img src={item?.url} className={styles.imageIcon} />
-                    </div>
-                  );
+                    ) : (
+                      <img src={"/videoimg.png"} className={styles.imageIcon} />
+                    )}
+                  </div>
+                );
                 })
               : "No Attachements"}
           </div>

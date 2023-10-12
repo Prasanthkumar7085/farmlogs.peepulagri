@@ -99,8 +99,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     <div className={styles.cardDetails}>
       <div className={styles.idandStatus}>
         <div className={styles.title}>
-          <label className={styles.label}>Farm</label>
-          {editField == "farm" && editFieldOrNot ? (
+          <label className={styles.label}>Assigned User</label>
+          {editField == "user" && editFieldOrNot ? (
             <div>
               <div style={{ display: "flex" }}>
                 <FarmOptionsInViewTasks
@@ -130,16 +130,15 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   <DoneIcon />
                 </IconButton>
               </div>
-              <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
             </div>
           ) : (
             <h1 className={styles.landPreparation}>
-              {data?.farm_id ? data?.farm_id?.title : "-"}
+              {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
               {userType !== "USER" ? (
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
-                    setEditField("farm");
+                    setEditField("user");
                   }}
                 >
                   <ModeEditOutlinedIcon />
@@ -189,6 +188,58 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
             )}
           </div>
         </div>
+      </div>
+      <div className={styles.title}>
+        <label className={styles.label}>Farm</label>
+        {editField == "farm" && editFieldOrNot ? (
+          <div>
+            <div style={{ display: "flex" }}>
+              <FarmOptionsInViewTasks
+                farmId={data?.farm_id?._id as string}
+                onChange={(farm_id: any) => {
+                  console.log(farm_id);
+                  setFarmId(farm_id?._id);
+                  setFarmName(farm_id?.title);
+                  setErrorMessages({});
+                }}
+              />
+              <IconButton
+                onClick={() => {
+                  setEditFieldOrNot(false);
+                  setEditField("");
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  onUpdateField();
+                  // setEditFieldOrNot(false);
+                  // setEditField("");
+                }}
+              >
+                <DoneIcon />
+              </IconButton>
+            </div>
+            <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
+          </div>
+        ) : (
+          <h1 className={styles.landPreparation}>
+            {data?.farm_id ? data?.farm_id?.title : "-"}
+            {userType !== "USER" ? (
+              <IconButton
+                onClick={() => {
+                  setEditFieldOrNot(true);
+                  setEditField("farm");
+                }}
+              >
+                <ModeEditOutlinedIcon />
+              </IconButton>
+            ) : (
+              ""
+            )}
+          </h1>
+        )}
       </div>
       <div className={styles.idandStatus}>
         <div className={styles.title}>

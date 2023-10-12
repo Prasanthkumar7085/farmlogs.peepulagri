@@ -1,21 +1,29 @@
 import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { Button, Icon, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Icon,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import addTaskService from "../../../../lib/services/TasksService/addTaskService";
 import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInAddTask";
 import styles from "./TaskForm.module.css";
 import FooterActionButtons from "./footer-action-buttons";
-import { FarmInTaskType } from "@/types/tasksTypes";
+import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
 import { Toaster, toast } from "sonner";
 import TasksAttachments from "./TasksAttachments";
 import moment from "moment";
+import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 
 const TaskForm = ({ data }: any) => {
   const router = useRouter();
@@ -36,10 +44,17 @@ const TaskForm = ({ data }: any) => {
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
+  const [user, setUser] = useState<userTaskType>();
+  const [users, setUsers] = useState<Array<userTaskType>>([]);
 
-  const getAllFarms = async (id = "") => {
+  const getAllFarms = async (id = "", userId = "") => {
     setLoading(true);
-    const response = await getAllFarmsService(accessToken);
+    let url = "farm/1/1000";
+
+    if (userId) {
+      url += `?user_id=${userId}&order_by=title&order_type=asc`;
+    }
+    const response = await getAllFarmsService(url, accessToken);
 
     if (response?.success) {
       setFarmData(response?.data);
@@ -59,11 +74,11 @@ const TaskForm = ({ data }: any) => {
       setDefaultValue(null);
     }
   };
-
   const addTask = async () => {
     setErrorMessages({});
     setLoading(true);
     let body = {
+      assigned_to: user?._id,
       farm_id: defaultValue?._id,
       categories: [],
       deadline: deadline
@@ -76,6 +91,7 @@ const TaskForm = ({ data }: any) => {
       attachments: files,
       status: status,
     };
+    console.log(body);
 
     let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
@@ -87,14 +103,21 @@ const TaskForm = ({ data }: any) => {
     setLoading(false);
   };
 
+  const getAllUsers = async () => {
+    const response = await getAllUsersService({ token: accessToken });
+    if (response.success) {
+      setUsers(response?.data);
+    }
+  };
   useEffect(() => {
     if (router.isReady && accessToken) {
-      if (router.query.task_id && data) {
-        setDataInEdit();
-        getAllFarms(data?.farm_id);
-      } else {
-        getAllFarms();
-      }
+      getAllUsers();
+      // if (router.query.task_id && data) {
+      //   setDataInEdit();
+      //   // getAllFarms(data?.farm_id);
+      // } else {
+      //   getAllFarms();
+      // }
     }
   }, [router.isReady, accessToken, data]);
 
@@ -117,11 +140,16 @@ const TaskForm = ({ data }: any) => {
 
   const gotoBackAfterAdd = async () => {
     router.push("/tasks");
-    setTimeout(() => {
-      router.reload();
-    }, 200);
+    // setTimeout(() => {
+    //   router.reload();
+    // }, 1000);
   };
 
+  const onChangeUser = async (e: any, value: any) => {
+    setUser(value);
+    if (value) await getAllFarms("", value?._id);
+    else setFarmData([]);
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <>
@@ -143,24 +171,78 @@ const TaskForm = ({ data }: any) => {
           </div>
           <div className={styles.container}>
             <form className={styles.formfields}>
-              <div className={styles.selectfarm}>
-                <label className={styles.lable}>
-                  {`Select Farm`}
-                  <span style={{ color: "red" }}>*</span>
-                </label>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <label className={styles.lable}>
+                    {`Select Farm`}
+                    <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <Autocomplete
+                    sx={{
+                      width: "250px",
+                      maxWidth: "250px",
+                      borderRadius: "4px",
+                    }}
+                    id="size-small-outlined-multi"
+                    size="small"
+                    fullWidth
+                    noOptionsText={"No such User"}
+                    value={user}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option._id === value._id
+                    }
+                    renderOption={(props, option) => {
+                      return (
+                        <li {...props} key={option._id}>
+                          {option.phone}
+                        </li>
+                      );
+                    }}
+                    getOptionLabel={(option: any) => option.phone}
+                    options={users}
+                    onChange={onChangeUser}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="Search by User Mobile"
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          "& .MuiInputBase-root": {
+                            fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                            backgroundColor: "#fff",
+                            border: "none",
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+                <div className={styles.selectfarm}>
+                  <label className={styles.lable}>
+                    {`Select Farm`}
+                    <span style={{ color: "red" }}>*</span>
+                  </label>
 
-                <FarmAutoCompleteInAddTask
-                  options={farmData}
-                  label={"title"}
-                  onSelectValueFromDropDown={captureFarmName}
-                  placeholder={"Select Farm"}
-                  defaultValue={defaultValue}
-                />
+                  <FarmAutoCompleteInAddTask
+                    options={farmData}
+                    label={"title"}
+                    onSelectValueFromDropDown={captureFarmName}
+                    placeholder={"Select Farm"}
+                    defaultValue={defaultValue}
+                  />
 
-                <ErrorMessages
-                  errorMessages={errorMessages}
-                  keyname="farm_id"
-                />
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname="farm_id"
+                  />
+                </div>
               </div>
               <div className={styles.selectfarm}>
                 <h4 className={styles.title}>
@@ -198,7 +280,6 @@ const TaskForm = ({ data }: any) => {
                     </MenuItem>
                   ))}
                 </Select>
-                <ErrorMessages errorMessages={errorMessages} keyname="title" />
               </div>
 
               <div className={styles.selectfarm}>

@@ -1,6 +1,16 @@
 import { AttachmentsForPreview } from "./scoutTypes";
 
 
+export interface userTaskType {
+  _id: string;
+  user_type: string;
+  phone: string;
+  phone_verified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: 0;
+}
+
 export interface TaskAttachmentsType {
   name: string;
   original_name: string;
@@ -31,6 +41,11 @@ export interface TaskResponseTypes {
   createdAt: string;
   updatedAt: string;
   attachments: Array<AttachmentsForPreview>;
+  assigned_to: {
+    _id: string;
+    full_name: string;
+    email: string;
+  };
 }
 
 export interface FarmInTaskType {

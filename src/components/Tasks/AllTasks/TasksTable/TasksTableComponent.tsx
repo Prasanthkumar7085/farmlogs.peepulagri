@@ -202,6 +202,20 @@ const TasksTableComponent = ({
               ) : (
                 ""
               )}
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setRowDetails(info.row.original);
+                  setDrawerOpen(true);
+                }}
+              >
+                <ImageComponent
+                  src="/task-comments.svg"
+                  height={17}
+                  width={17}
+                  alt="comments"
+                />
+              </div>
             </div>
           }
         </span>
@@ -212,13 +226,9 @@ const TasksTableComponent = ({
     },
   ];
 
-
-  const drawerClose = (value: any) => {
-    console.log(value)
-    if (value == false) {
-      setDrawerOpen(false)
-    }
-  }
+  const drawerClose = () => {
+    setDrawerOpen(false);
+  };
   return (
     <div>
       <TanStackTableComponent
@@ -234,11 +244,18 @@ const TasksTableComponent = ({
         deleteFarm={deleteTask}
         loading={deleteLoading}
       />
-      {drawerOpen == true ?
-        <ClickAwayListener onClickAway={() => setDrawerOpen(true)}>
-          <DrawerBoxComponent drawerClose={drawerClose} rowDetails={rowDetails} />
-        </ClickAwayListener>
-        : ""}
+      {drawerOpen ? (
+        // <ClickAwayListener onClickAway={() => setDrawerOpen(false)}>
+        <DrawerBoxComponent
+          drawerClose={drawerClose}
+          rowDetails={rowDetails}
+          setDrawerOpen={setDrawerOpen}
+          drawerOpen={drawerOpen}
+        />
+      ) : (
+        // </ClickAwayListener>
+        ""
+      )}
       <Toaster richColors position="top-right" closeButton />
     </div>
   );

@@ -169,6 +169,7 @@ const ImagePreviewDialog = ({
             gap: "10px",
             width: "100%",
             overflow: "scroll",
+            justifyContent: "center",
           }}
         >
           {mediaArray?.length
@@ -188,12 +189,21 @@ const ImagePreviewDialog = ({
                         : styles.inactiveImage
                     }
                   >
-                    <img
-                      src={item?.url} // Change this to use the mediaArray
-                      alt={`Image ${index + 1}`}
-                      height={"100px"}
-                      width={"100px"}
-                    />
+                    {item?.type?.includes("video") ? (
+                      <img
+                        src={item?.url} // Change this to use the mediaArray
+                        alt={`Image ${index + 1}`}
+                        height={"100px"}
+                        width={"100px"}
+                      />
+                    ) : (
+                      <img
+                        src={"/videoimg.png"} // Change this to use the mediaArray
+                        alt={`Image ${index + 1}`}
+                        height={"100px"}
+                        width={"100px"}
+                      />
+                    )}
                   </div>
                 );
               })

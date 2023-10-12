@@ -80,7 +80,7 @@ const TaskForm = ({ data }: any) => {
     let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
       toast.success(response?.message);
-      router.push("/tasks");
+      gotoBackAfterAdd();
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
@@ -108,13 +108,27 @@ const TaskForm = ({ data }: any) => {
     setFiles(filesUploaded);
   };
 
+  const gotoBack = async () => {
+    await router.back();
+    setTimeout(() => {
+      router.reload();
+    }, 200);
+  };
+
+  const gotoBackAfterAdd = async () => {
+    router.push("/tasks");
+    setTimeout(() => {
+      router.reload();
+    }, 200);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <>
         <div className={styles.form}>
           <div className={styles.header}>
             <Button
-              onClick={() => router.back()}
+              onClick={gotoBack}
               className={styles.backbutton}
               sx={{ width: 40 }}
               color="primary"
@@ -227,10 +241,10 @@ const TaskForm = ({ data }: any) => {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
-              {/* <TasksAttachments
+              <TasksAttachments
                 farmId={defaultValue?._id}
                 setUploadedFiles={setUploadedFiles}
-              /> */}
+              />
             </form>
           </div>
         </div>

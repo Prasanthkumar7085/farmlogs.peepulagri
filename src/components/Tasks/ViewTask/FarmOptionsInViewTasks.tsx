@@ -23,7 +23,7 @@ const FarmOptionsInViewTasks: React.FC<PropsType> = ({ farmId, onChange }) => {
   const captureFarmName = (selectedObject: any) => {
     if (selectedObject && Object.keys(selectedObject).length) {
       setDefaultValue(selectedObject);
-      onChange(selectedObject?._id);
+      onChange(selectedObject);
     } else {
       setDefaultValue(null);
       onChange("");

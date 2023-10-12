@@ -11,11 +11,25 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import FarmOptionsInViewTasks from "./FarmOptionsInViewTasks";
 import ErrorMessages from "@/components/Core/ErrorMessages";
+import { useSelector } from "react-redux";
+import updateSupportStatusService from "../../../../lib/services/SupportService/updateSupportStatusService";
+import updateTaskStatusService from "../../../../lib/services/TasksService/updateTaskStatusService";
+import { Toaster, toast } from "sonner";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
   updateTask: (body: any) => any;
 }
+
 const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
+  const userType = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?.user_type
+  );
+
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
   const [editField, setEditField] = useState("");
   const [title, setTitle] = useState("");
@@ -25,6 +39,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
   const [farmId, setFarmId] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
+  const [farmName, setFarmName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setErrorMessages({});
@@ -32,12 +48,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     setDeadline(data?.deadline ? new Date(data?.deadline) : "");
     setDescription(data?.description ? data?.description : "");
     setStatus(data?.status ? data?.status : "");
-    setFarmId(data?.farm_id ? data?.farm_id : "");
+    setFarmId(data?.farm_id ? data?.farm_id?._id : "");
+    setFarmName(data?.farm_id?.title ? data?.farm_id?.title : "");
   }, [data, editFieldOrNot]);
 
   const onUpdateField = async () => {
     let body = {
       ...data,
+      assigned_to: undefined,
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
@@ -48,6 +66,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       title: title ? title : "",
       status: status,
     };
+    console.log(body);
+
     const response = await updateTask(body);
 
     if (response?.success) {
@@ -60,6 +80,21 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     }
   };
 
+  const onChangeStatus = async (status: string) => {
+    setLoading(true);
+    const response = await updateTaskStatusService({
+      token: accessToken,
+      taskId: data?._id as string,
+      body: { status: status },
+    });
+    if (response?.success) {
+      toast.success(response?.message);
+    } else {
+      toast.error(response?.message);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className={styles.cardDetails}>
       <div className={styles.idandStatus}>
@@ -69,9 +104,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
             <div>
               <div style={{ display: "flex" }}>
                 <FarmOptionsInViewTasks
-                  farmId={data?.farm_id as string}
-                  onChange={(id: string) => {
-                    setFarmId(id), setErrorMessages({});
+                  farmId={data?.farm_id?._id as string}
+                  onChange={(farm_id: any) => {
+                    console.log(farm_id);
+                    setFarmId(farm_id?._id);
+                    setFarmName(farm_id?.title);
+                    setErrorMessages({});
                   }}
                 />
                 <IconButton
@@ -96,15 +134,19 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
             </div>
           ) : (
             <h1 className={styles.landPreparation}>
-              {data?.farm_id ? data?.farm_id : "-"}
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("farm");
-                }}
-              >
-                <ModeEditOutlinedIcon />
-              </IconButton>
+              {data?.farm_id ? data?.farm_id?.title : "-"}
+              {userType !== "USER" ? (
+                <IconButton
+                  onClick={() => {
+                    setEditFieldOrNot(true);
+                    setEditField("farm");
+                  }}
+                >
+                  <ModeEditOutlinedIcon />
+                </IconButton>
+              ) : (
+                ""
+              )}
             </h1>
           )}
         </div>
@@ -117,7 +159,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               alt=""
               src="/indicator@2x.png"
             /> */}
-            {editField == "status" && editFieldOrNot ? (
+            {userType !== "USER" ? (
               <div>
                 <Select
                   className={styles.inoutbox}
@@ -125,7 +167,10 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   placeholder="Enter your Task title here"
                   variant="outlined"
                   value={status}
-                  onChange={(e) => setStatus(e.target.value)}
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                    onChangeStatus(e.target.value);
+                  }}
                   sx={{ width: "200px" }}
                 >
                   {statusOptions.map((item: string, index: number) => (
@@ -134,37 +179,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     </MenuItem>
                   ))}
                 </Select>
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(false);
-                    setEditField("");
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    onUpdateField();
-                    // setEditFieldOrNot(false);
-                    // setEditField("");
-                  }}
-                >
-                  <DoneIcon />
-                </IconButton>
               </div>
             ) : (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p className={styles.status2}>
                   {data?.status ? data?.status : "-"}
                 </p>
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("status");
-                  }}
-                >
-                  <ModeEditOutlinedIcon />
-                </IconButton>
               </div>
             )}
           </div>
@@ -200,14 +220,18 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           ) : (
             <h1 className={styles.landPreparation}>
               {data?.title ? data?.title : "-"}
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("title");
-                }}
-              >
-                <ModeEditOutlinedIcon />
-              </IconButton>
+              {userType !== "USER" ? (
+                <IconButton
+                  onClick={() => {
+                    setEditFieldOrNot(true);
+                    setEditField("title");
+                  }}
+                >
+                  <ModeEditOutlinedIcon />
+                </IconButton>
+              ) : (
+                ""
+              )}
             </h1>
           )}
         </div>
@@ -261,20 +285,24 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   ? timePipe(data?.deadline, "DD, MMM YYYY")
                   : "-"}
               </p>
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("deadline");
-                }}
-              >
-                <ModeEditOutlinedIcon />
-              </IconButton>
+              {userType !== "USER" ? (
+                <IconButton
+                  onClick={() => {
+                    setEditFieldOrNot(true);
+                    setEditField("deadline");
+                  }}
+                >
+                  <ModeEditOutlinedIcon />
+                </IconButton>
+              ) : (
+                ""
+              )}
             </div>
           )}
         </div>
       </div>
       <div className={styles.description}>
-        <label className={styles.lable}>Description</label>
+        <label className={styles.label}>Description</label>
         {editField == "description" && editFieldOrNot ? (
           <div>
             <TextField
@@ -306,17 +334,23 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
         ) : (
           <p className={styles.farmersPrepareThe}>
             {data?.description ? data?.description : "-"}
-            <IconButton
-              onClick={() => {
-                setEditFieldOrNot(true);
-                setEditField("description");
-              }}
-            >
-              <ModeEditOutlinedIcon />
-            </IconButton>
+            {userType !== "USER" ? (
+              <IconButton
+                onClick={() => {
+                  setEditFieldOrNot(true);
+                  setEditField("description");
+                }}
+              >
+                <ModeEditOutlinedIcon />
+              </IconButton>
+            ) : (
+              ""
+            )}
           </p>
         )}
       </div>
+      <LoadingComponent loading={loading} />
+      <Toaster closeButton richColors position="top-right" />
     </div>
   );
 };

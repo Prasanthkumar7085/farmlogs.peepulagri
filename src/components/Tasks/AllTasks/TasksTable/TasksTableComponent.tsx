@@ -30,6 +30,9 @@ const TasksTableComponent = ({
 }: pageProps) => {
   const router = useRouter();
 
+   const userType = useSelector(
+     (state: any) => state.auth.userDetails?.user_details?.user_type
+   );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -177,20 +180,24 @@ const TasksTableComponent = ({
                   alt="view"
                 />
               </div> */}
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setDeleteTaskId(info.row.original?._id);
-                  setDialogOpen(true);
-                }}
-              >
-                <ImageComponent
-                  src="/trast-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </div>
+              {userType !== "USER" ? (
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setDeleteTaskId(info.row.original?._id);
+                    setDialogOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src="/trast-icon.svg"
+                    height={17}
+                    width={17}
+                    alt="view"
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           }
         </span>

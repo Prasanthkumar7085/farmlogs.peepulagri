@@ -1,8 +1,21 @@
 import { AttachmentsForPreview } from "./scoutTypes";
 
+
+export interface TaskAttachmentsType {
+  name: string;
+  original_name: string;
+  type: string;
+  size: number;
+  path: string;
+  url: string;
+  _id: string;
+}
 export interface TaskResponseTypes {
   _id: string;
-  farm_id: string;
+  farm_id: {
+    title: string;
+    _id: string;
+  };
   title: string;
   description: string;
   categories: Array<string>;
@@ -14,7 +27,7 @@ export interface TaskResponseTypes {
     email: string;
     full_name: string;
   };
-  attchments: string;
+  attchments: Array<TaskAttachmentsType>;
   createdAt: string;
   updatedAt: string;
   attachments: Array<AttachmentsForPreview>;

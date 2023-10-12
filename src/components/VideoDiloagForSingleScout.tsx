@@ -13,12 +13,14 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
 import { useSwipeable } from 'react-swipeable';
+import ReactPanZoom from "react-image-pan-zoom-rotate";
 
 const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
     const [description, setDescription] = useState<any>()
+    const [isZoom, setISZoom] = useState<any>()
 
 
     useEffect(() => {
@@ -84,11 +86,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
     };
 
     const zoomIn = () => {
-        const img: any = document.querySelector('.zoom-image');
-        if (img) {
-            img.style.transform = `scale(${zoomLevel + 0.1})`;
-            setZoomLevel(zoomLevel + 0.1);
-        }
+        setISZoom(true)
+
     };
 
     const zoomOut = () => {
@@ -134,15 +133,10 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                     justifyContent: "center !important"
                 }
             }}>
+            <IconButton onClick={handleClose} sx={{ padding: "0" }}>
+                <CloseIcon sx={{ color: "#fff" }} />
+            </IconButton>
             <DialogTitle>
-                <IconButton onClick={handleClose} sx={{ padding: "0" }}>
-                    <CloseIcon sx={{ color: "#fff" }} />
-                </IconButton>
-                {mediaArray?.length && mediaArray[currentIndex]?.type?.includes('image') ?
-                    <div className="zoom-controls">
-                        <button onClick={zoomIn}>Zoom In (+)</button>
-                        <button onClick={zoomOut}>Zoom Out (-)</button>
-                    </div> : ""}
             </DialogTitle>
             <DialogContent>
                 <div {...handlers} style={{ width: "100%" }}>
@@ -164,12 +158,18 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                                 : (
                                     <>
 
-                                        <img
-                                            className="zoom-image"
-                                            src={mediaArray[currentIndex]?.url}
-                                            alt={`Image ${currentIndex + 1}`}
-                                            style={{ transform: `scale(${zoomLevel})` }}
-                                        />
+                                        {isZoom ?
+                                            <ReactPanZoom
+                                                image={mediaArray[currentIndex]?.url}
+                                                alt="Image alt text"
+                                            /> :
+                                            <img
+                                                className="zoom-image"
+                                                src={mediaArray[currentIndex]?.url}
+                                                alt={`Image ${currentIndex + 1}`}
+                                                style={{ transform: `scale(${zoomLevel})` }}
+                                                onClick={zoomIn}
+                                            />}
                                     </>
                                 )}
 

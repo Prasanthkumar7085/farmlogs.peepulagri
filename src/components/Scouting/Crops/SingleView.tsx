@@ -15,6 +15,11 @@ import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import Image from "next/image";
 
+
+
+
+
+
 const SingleViewScoutComponent = () => {
 
     const router = useRouter();

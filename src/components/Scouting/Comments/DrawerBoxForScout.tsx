@@ -70,9 +70,9 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
                 }
                 // Convert the commentsById object to an array of comments
                 const formattedData = Object.values(commentsById);
+                let reverse = formattedData.slice().reverse()
 
-                console.log(formattedData, "lk");
-                setData(formattedData)
+                setData(reverse)
 
             }
         } catch (err) {
@@ -211,7 +211,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
                         afterDeleteAttachements={afterDeleteAttachements}
                     />
                 </div>
-                <CommentForm afterCommentAdd={afterCommentAdd} />
+                <CommentForm afterCommentAdd={afterCommentAdd} scoutId={scoutId} />
 
                 <LoadingComponent loading={loading} />
                 <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />

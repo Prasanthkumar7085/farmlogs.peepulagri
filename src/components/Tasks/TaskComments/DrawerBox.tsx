@@ -170,7 +170,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/${commentId}/attachments`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/comments/${commentId}/attachments`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 setAlertMessage("Attachement deleted successfully")
@@ -217,7 +217,6 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails }: any) => {
         <Drawer
             anchor="right"
             open={isDrawerOpen}
-            onClose={() => setIsDrawerOpen(false)}
         >
             <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant="h6">Comments</Typography>

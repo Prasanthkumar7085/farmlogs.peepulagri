@@ -222,6 +222,10 @@ const SingleViewScoutComponent = () => {
                                             <IconButton onClick={() => {
                                                 setDrawerOpen(true)
                                                 setScoutId(row._id)
+                                                router.push({
+                                                    pathname: `/farms/${router.query.farm_id}/crops/${router.query.crop_id}`,
+                                                    query: { "scout_id": row._id }
+                                                })
                                             }}><CommentIcon /></IconButton>
                                             <Typography variant="caption" sx={{ cursor: "pointer", color: "blue", fontSize: "12px" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${row._id}`)}
                                             >View Scout</Typography>

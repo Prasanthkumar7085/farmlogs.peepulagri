@@ -111,7 +111,7 @@
 
 .forgotBtn {
   text-transform: capitalize !important;
-  font-size: clamp(12px, 0.62vw, 14px);
+  font-size: clamp(12px, 0.62vw, 14px) !important;
   font-weight: 500;
   cursor: pointer;
   color: blue;
@@ -119,7 +119,7 @@
 
 .signin_button {
   text-transform: capitalize !important;
-  font-size: clamp(14px, 0.72vw, 18px);
+  font-size: clamp(14px, 0.72vw, 18px) !important;
 }
 
 .backToLogin {
@@ -131,33 +131,48 @@
 }
 
 .backToLogin_btn {
+
+  cursor: pointer;
+  color: blue;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.backToLogin_btn p {
   text-transform: capitalize !important;
-  font-size: clamp(12px, 0.62vw, 14px);
-  font-weight: 500;
+  font-size: clamp(12px, 0.62vw, 14px) !important;
+  font-weight: 500 !important;
 }
 
 .otp_Btn {
   text-transform: capitalize !important;
-  margin-top: 0.5rem;
-  min-width: 110px;
-  font-size: clamp(12px, 0.62vw, 14px);
+  margin-top: 0.5rem !important;
+  min-width: 110px !important;
+  font-size: clamp(12px, 0.62vw, 14px) !important;
 }
 
 .resendContent {
-  font-size: clamp(12px, 0.62vw, 14px);
+  font-size: clamp(12px, 0.62vw, 14px) !important;
 }
 
 .reset_Btn {
   text-transform: capitalize !important;
-  font-size: clamp(14px, 0.62vw, 16px);
-  font-weight: 500;
-  margin-block: 0.5rem 2rem;
+  font-size: clamp(14px, 0.62vw, 16px) !important;
+  font-weight: 500 !important;
+  margin-block: 0.5rem 2rem !important;
 }
 
 .passwordSuccessmg {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif !important;
   font-size: clamp(24px, 1.5vw, 32px) !important;
-  font-weight: 500;
-  line-height: 120%;
-  margin-top: 1rem;
+  font-weight: 500 !important;
+  line-height: 120% !important;
+  margin-top: 1rem !important;
+}
+
+.invalid {
+  color: red !important;
+  font-size: 12px !important;
+  margin: 0 !important;
 }

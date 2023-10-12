@@ -88,10 +88,12 @@ export default function ResetPasswordPage() {
                                 <Typography className={styles.passwordSuccessmg}>Password updated  successfully</Typography>
                             </div>
                             <div className={styles.backToLogin}>
-                                <Button className={styles.backToLogin_btn} sx={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
+                                <div className={styles.backToLogin_btn} style={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
                                     <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
-                                    Back To Login
-                                </Button>
+                                    <Typography>
+                                        Back To Login
+                                    </Typography>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -176,10 +178,13 @@ export default function ResetPasswordPage() {
                         </div>
                         <Button className={styles.reset_Btn} variant='contained' fullWidth type='submit'>Save</Button>
                         <div className={styles.backToLogin}>
-                            <Button className={styles.backToLogin_btn} sx={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
+                            <div className={styles.backToLogin_btn} style={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
                                 <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
-                                Back To Login
-                            </Button>
+                                <Typography>
+
+                                    Back To Login
+                                </Typography>
+                            </div>
                         </div>
                     </div>
                 </form>

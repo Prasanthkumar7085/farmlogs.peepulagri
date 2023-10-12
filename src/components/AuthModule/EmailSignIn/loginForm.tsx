@@ -154,7 +154,7 @@ export default function SigninEmail() {
                         <ErrorMessagesComponent errorMessage={errorMessages?.password} />
 
                         {invalid ?
-                            <p style={{ color: "red", margin: "0" }}>
+                            <p style={{ color: "red", margin: "0 !important", fontSize: "12px !important" }}>
                                 {invalid}
                             </p>
                             : ""

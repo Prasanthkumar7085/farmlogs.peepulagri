@@ -11,6 +11,7 @@ import LoadingComponent from '@/components/Core/LoadingComponent';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ImageComponent from '@/components/Core/ImageComponent';
 import { useSelector } from 'react-redux';
+import AlertComponent from '@/components/Core/AlertComponent';
 
 
 export default function ForgotPasswordPage() {
@@ -185,7 +186,7 @@ export default function ForgotPasswordPage() {
                         </div>
                         <ErrorMessagesComponent errorMessage={errorMessages?.email} />
                         {invalid ?
-                            <p style={{ margin: "0 !important", color: "red", fontSize: "12px" }}>{invalid}</p> : ""}
+                            <p className={styles.invalid}>{invalid}</p> : ""}
 
                         {otpvisible && !editEmail ?
                             <Typography className={styles.resendContent}>{"Didn't you receive the OTP? "}
@@ -243,15 +244,17 @@ export default function ForgotPasswordPage() {
                         </div>
                         : ""}
                     <div className={styles.backToLogin}>
-                        <Button className={styles.backToLogin_btn} sx={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
+                        <div className={styles.backToLogin_btn} style={{ justifyContent: "flex-start !important" }} onClick={() => router.back()}>
                             <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
-                            Back To Login
-                        </Button>
+                            <Typography>
+                                Back To Login
+                            </Typography>
+                        </div>
                     </div>
                 </div>
             </form>
 
-            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={Boolean(alertMessage)} autoHideDuration={3000} onClose={() => setAlertMessage('')}>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={Boolean(alertMessage)} autoHideDuration={3000} onClose={() => setAlertMessage('')}>
                 <MuiAlert variant='filled' onClose={() => setAlertMessage('')} severity={`${alertType ? "success" : "error"}`} sx={{ width: '100%' }}>
                     {alertMessage}
                 </MuiAlert>

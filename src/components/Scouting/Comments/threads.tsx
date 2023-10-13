@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, Button, Icon, IconButton, TextField, Typography, Chip } from "@mui/material";
+import { Avatar, Button, Icon, IconButton, TextField, Typography, Chip, Box, Skeleton } from "@mui/material";
 import Image from "@/components/Core/ImageComponent";
 import CommentForm from "./comment-form";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
@@ -12,7 +12,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AlertComponent from "@/components/Core/AlertComponent";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements }: any) => {
+const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
@@ -28,16 +28,6 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState(false);
-
-
-
-  useEffect(() => {
-    if (afterReply) {
-      setReplyOpen(false)
-    }
-  }, [afterReply]);
-
-
 
 
   const downLoadAttachements = async (file: any, userId: any) => {
@@ -155,48 +145,48 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     <p className={styles.theProblemIm} >
                       {item.content}{"                     "}<Typography variant="caption" sx={{ wordBreak: "break-word" }}>{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
                     </p>}
-                    <div className={styles.attachmentContainer}>
-                      {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {
-                        return (
-                          <div className={styles.attachment} key={indexfile}>
-                            <div className={styles.row}>
-                              <div className={styles.icon}>
-                                <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : file.type.includes("application") ? "/pdf-icon.png" : file.type.includes("video") ? "/videoimg.png" : "/doc-icon.webp"
-                                } />
-                                <img className={styles.groupIcon1} alt="" src="/group3.svg" />
-                              </div>
-                              <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
+                  <div className={styles.attachmentContainer}>
+                    {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {
+                      return (
+                        <div className={styles.attachment} key={indexfile}>
+                          <div className={styles.row}>
+                            <div className={styles.icon}>
+                              <img className={styles.groupIcon} alt="" src={file.type.includes("image") ? "/group2.svg" : file.type.includes("application") ? "/pdf-icon.png" : file.type.includes("video") ? "/videoimg.png" : "/doc-icon.webp"
+                              } />
+                              <img className={styles.groupIcon1} alt="" src="/group3.svg" />
                             </div>
-                            <div style={{ display: "flex", alignItems: "center" }}>
+                            <div className={styles.imageName}>{file?.original_name?.slice(0, 9)}...</div>
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <IconButton
+                              onClick={() => downLoadAttachements(file, item.user._id)}
+                            >
+                              <img
+                                className={styles.download11}
+                                alt=""
+                                src="/download-1-1.svg"
+                                style={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                            {userDetails?.user_details?.user_type == item?.user?.user_type ?
                               <IconButton
-                                onClick={() => downLoadAttachements(file, item.user._id)}
+                                onClick={() => afterDeleteAttachements(file._id, item._id)}
                               >
-                                <img
-                                  className={styles.download11}
-                                  alt=""
-                                  src="/download-1-1.svg"
-                                  style={{ cursor: "pointer" }}
+                                <Image
+                                  alt="Delete"
+                                  height={20}
+                                  width={20}
+                                  src="/farm-delete-icon.svg"
+                                  style={{ borderRadius: "5%" }}
                                 />
                               </IconButton>
-                              {userDetails?.user_details?.user_type == item?.user?.user_type ?
-                                <IconButton
-                                  onClick={() => afterDeleteAttachements(file._id, item._id)}
-                                >
-                                  <Image
-                                    alt="Delete"
-                                    height={20}
-                                    width={20}
-                                    src="/farm-delete-icon.svg"
-                                    style={{ borderRadius: "5%" }}
-                                  />
-                                </IconButton>
-                                : ""}
-                            </div>
-                          </div>)
-                      })
+                              : ""}
+                          </div>
+                        </div>)
+                    })
 
-                    : ""}
-                    </div>
+                      : ""}
+                  </div>
                 </div>
 
                 <div className={styles.actionButton}>
@@ -232,26 +222,26 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         }}>Reply in thread</div>}
 
 
-                        {isReplies == false && item.replies.length !== 0 ?
-                          <div className={styles.threadReplies} onClick={() => {
-                            setIsReplies(true)
-                            setReplyIndex(index)
-                          }}>
-                            <Chip variant="outlined" label={item.replies.length} size="small" /> 
-                            <span>
-                              {item.replies.length == 1 ? "reply" : "replies"}
-                            </span>
-                          </div> :
-                          item.replies.length !== 0 ?
-                            <div className={styles.threadReplies} onClick={() => {
-                              setIsReplies(false)
-                              setReplyIndex(index)
-                            }}>
-                              <Chip variant="outlined" label={item.replies.length} size="small" /> 
-                              <span>
-                                {item.replies.length == 1 ? "reply" : "replies"}
-                              </span>
-                            </div> : ""}
+                    {isReplies == false && item.replies.length !== 0 ?
+                      <div className={styles.threadReplies} onClick={() => {
+                        setIsReplies(true)
+                        setReplyIndex(index)
+                      }}>
+                        <Chip variant="outlined" label={item.replies.length} size="small" />
+                        <span>
+                          {item.replies.length == 1 ? "reply" : "replies"}
+                        </span>
+                      </div> :
+                      item.replies.length !== 0 ?
+                        <div className={styles.threadReplies} onClick={() => {
+                          setIsReplies(false)
+                          setReplyIndex(index)
+                        }}>
+                          <Chip variant="outlined" label={item.replies.length} size="small" />
+                          <span>
+                            {item.replies.length == 1 ? "reply" : "replies"}
+                          </span>
+                        </div> : ""}
 
                   </div>
 
@@ -299,7 +289,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                   </div>
 
                   : ""}
-                {isReplies == true && index == replyIndex && item.replies.length ? item.replies.map((row: any) => {
+                {(replyOpen == true && index == replyIndex) || (isReplies == true && index == replyIndex && item.replies.length) ? item.replies.map((row: any) => {
                   return (
                     <div className={styles.inMessage1} key={index}>
                       {row?.user?.user_type == "USER" ?
@@ -409,19 +399,37 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         }
 
       }) :
-        <div className={styles.noThreadFound}>
-          <Image
-            alt="Delete"
-            height={35}
-            width={35}
-            src="/live-chat.svg"
-          />
-          <span>
-            No Threads
-          </span>
+        loadingThreads ?
+          <div style={{ marginRight: "120px" }}>
+            <Box sx={{ width: 300 }}>
+              <div style={{ display: "flex" }}>
+                <Skeleton variant="circular" width={40} height={40} />
+                <div style={{ display: "block", }}>
+                  <Skeleton width={150} height={20} />
+                  <Skeleton animation="wave" width={250} height={20} />
+                </div>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Skeleton animation="wave" width={100} height={20} />
+                <Skeleton animation="wave" width={100} height={20} />
+              </div>
+            </Box>
+            <Box sx={{ width: 300, marginTop: "30px" }}>
+              <div style={{ display: "flex" }}>
+                <Skeleton variant="circular" width={40} height={40} />
+                <div style={{ display: "block", }}>
+                  <Skeleton width={150} height={20} />
+                  <Skeleton animation="wave" width={250} height={20} />
+                </div>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Skeleton animation="wave" width={100} height={20} />
+                <Skeleton animation="wave" width={100} height={20} />
+              </div>
+            </Box>
 
-        </div>
-      }
+          </div> : <div style={{ margin: "auto" }}>no threads</div>}
+
       <LoadingComponent loading={loading} />
       <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
 

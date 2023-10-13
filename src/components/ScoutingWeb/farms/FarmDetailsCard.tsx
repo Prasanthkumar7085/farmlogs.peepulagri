@@ -17,7 +17,7 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 interface PageProps {
   data: any;
   onViewClick: any;
-  getFarmsData: ({ search_string, location, userId, page, limit, sortBy, sortType }: { search_string: string, location: string, userId: string, page: number | string, limit:number|string,sortBy:string,sortType:string }) => void
+  getFarmsData: ({ search_string, location, userId, page, limit, sortBy, sortType }: { search_string: string, location: string, userId: string, page: number | string, limit: number | string, sortBy: string, sortType: string }) => void
 }
 const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps) => {
 
@@ -25,7 +25,7 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
-  
+
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
@@ -66,16 +66,26 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
     router.push(`/farm/${item?._id}/crops`)
   }
 
+
+  let colorsArray = ["#C71585", "#7B68EE", "#FF8C00", " #008080", "#2E8B57", "#4682B4", "#000080", "#3D3D5B", " #CC0044", "#BA55D3"
+    , "#663399", "#8B0000", "#FF4500", "#DA0E0E", "#00CED1", "#4169E1", " #A52A2A", "#2D1E2F", "#714E47", "#C65B7C"
+    , "#A04662", "#FE654F", " #5F6A89", "#067BBD"]
+
+
+
+
   return (
     <div className={styles.farmCardGridContainer}>
       {data.map((item: FarmDataType, index: number) => {
+        const colorIndex = index % colorsArray.length;
+
         return (
           <div className={styles.farmdetailscard} key={index} style={{ cursor: "pointer" }}>
             <div className={styles.container} onClick={() => setToStorage(item)}>
               <div className={styles.farmdetailscontainer}>
                 <div className={styles.farmName}>
                   <img className={styles.farmsIcon} alt="Farm Shape" src="/farmshape2.svg" />
-                  <h2 className={styles.farm1}>
+                  <h2 className={styles.farm1} style={{ color: colorsArray[colorIndex] }}>
                     {item.title.length > 16 ?
                       (item.title.slice(0, 1).toUpperCase() +
                         item.title.slice(1, 12) + '...') :
@@ -110,13 +120,13 @@ const ScoutingFarmDetailsCard = ({ getFarmsData, data, onViewClick }: PageProps)
               <div
                 onClick={() => router.push(`/farm/${item?._id}/crops`)}
               >
-                {userType=='AGRONOMIST'?
+                {userType == 'AGRONOMIST' ?
                   <p className={styles.mobile}>
-                   <PhoneIphoneIcon /> 
+                    <PhoneIphoneIcon />
                     <span>
                       {item?.user_id?.phone}
-                    </span> 
-                  </p>:""}
+                    </span>
+                  </p> : ""}
               </div>
               <div className={styles.actionbuttons} >
                 <IconButton className={styles.view} onClick={() => onViewClick(item._id)}>

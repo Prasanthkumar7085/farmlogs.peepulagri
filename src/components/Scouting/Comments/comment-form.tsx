@@ -328,7 +328,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
                     fileProgress[index] !== 100 && fileProgress[index] !== "fail" ? <LinearProgress variant="determinate" value={fileProgress[index]} /> : ""
                   }
 
-
                 </Box>
               </div>
               {fileProgress[index] == 100 || fileProgress[index] == "fail" ? "" :

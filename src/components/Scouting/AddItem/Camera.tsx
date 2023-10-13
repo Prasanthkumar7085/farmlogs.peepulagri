@@ -59,7 +59,7 @@ function Camera({ openCamera, captureCloseCamera, captureCameraVedio }: any) {
             const constraints = {
                 video: { facingMode: { exact: 'environment' } }, // Specify the back camera
             };
-            const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
             // constraints
 
             setStream(mediaStream);

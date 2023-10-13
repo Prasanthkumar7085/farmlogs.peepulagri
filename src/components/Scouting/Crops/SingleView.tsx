@@ -279,7 +279,7 @@ const SingleViewScoutComponent = () => {
             <LoadingComponent loading={loading} />
             <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={scoutData} />
             {drawerOpen == true ?
-                <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} />
+                <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
 
             <div className="addFormPositionIcon">

@@ -12,6 +12,7 @@ import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
 import { Button } from "@mui/material";
+import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
 
 interface ApiMethodProps {
   page: string | number;
@@ -208,7 +209,7 @@ const ListScouts: FunctionComponent = () => {
       className={styles.AllFarmsPageWeb}
       style={{ paddingTop: "1rem !important" }}
     >
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+      <div>
         <UserDropDownForScouts
           user={user}
           onChangeUser={onChangeUser}
@@ -219,6 +220,13 @@ const ListScouts: FunctionComponent = () => {
           onSelectFarmFromDropDown={onSelectFarmFromDropDown}
           label={"title"}
           placeholder={"Select Farm here"}
+          defaultValue={farm}
+        />
+        <CropAutoCompleteFoScouts
+          options={farmOptions}
+          onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+          label={"title"}
+          placeholder={"Select Crop here"}
           defaultValue={farm}
         />
         <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />

@@ -1,4 +1,4 @@
-import { Breadcrumbs, Card, IconButton, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Card, Chip, IconButton, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import styles from "./crop-card.module.css";
@@ -17,7 +17,7 @@ import Image from "next/image";
 import moment from "moment";
 import CommentIcon from '@mui/icons-material/Comment';
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
 
@@ -38,6 +38,8 @@ const SingleViewScoutComponent = () => {
     const [loading, setLoading] = useState(true);
     const [drawerOpen, setDrawerOpen] = useState<any>(false)
     const [scoutId, setScoutId] = useState<any>()
+    const [readMore, setReadMore] = useState<any>()
+    const [descriptionID, setDescriptionID] = useState<any>()
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -81,13 +83,6 @@ const SingleViewScoutComponent = () => {
                 // Convert the groupedData object into an array
                 const groupedArray = Object.values(groupedData);
                 setData(groupedArray);
-                console.log(groupedArray)
-
-
-
-
-
-
             }
         }
         catch (err) {
@@ -214,21 +209,58 @@ const SingleViewScoutComponent = () => {
                                 return (
                                     <div key={rowIndex} style={{ marginTop: "20px" }}>
                                         <Typography>{timePipe(row.createdAt, "hh.mm a")}</Typography>
-                                        <Typography variant="caption">{row.description?.length > 50 ? row.description.slice(0, 100) + "... read more" : row.description}</Typography>
+                                        {readMore == true && row._id == descriptionID ?
+                                            <Typography variant="caption">{row.description}  <span style={{ cursor: 'pointer' }} onClick={() => {
+                                                setReadMore(false)
+                                                setDescriptionID(row._id)
+                                            }}>Show Less</span></Typography> :
+
+                                            <Typography variant="caption">{row.description?.length > 50 ? row.description.slice(0, 100) + "...." : row.description}
+                                                {row.description?.length > 50 ?
+                                                    <span style={{ cursor: 'pointer' }} onClick={() => {
+                                                        setReadMore(true)
+                                                        setDescriptionID(row._id)
+                                                    }}>Show More</span>
+                                                    : ""}</Typography>}
+
 
                                         <Gallery images={getModifiedImage(row)} onClick={handleClick} enableImageSelection={false}
                                         />
                                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
-                                            <IconButton onClick={() => {
+                                            <Chip
+                                                onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${row._id}`)}
+                                                label={
+                                                    <div style={{ display: "flex", alignItems: "center", alignContent: "center" }}>
+                                                        < VisibilityIcon />
+                                                        <Typography style={{ marginLeft: "5px" }}>View</Typography>
+                                                    </div>
+                                                }
+
+                                            />
+
+
+                                            <Chip onClick={() => {
                                                 setDrawerOpen(true)
                                                 setScoutId(row._id)
                                                 router.push({
                                                     pathname: `/farms/${router.query.farm_id}/crops/${router.query.crop_id}`,
                                                     query: { "scout_id": row._id }
                                                 })
-                                            }}><CommentIcon /></IconButton>
-                                            <Typography variant="caption" sx={{ cursor: "pointer", color: "blue", fontSize: "12px" }} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${row._id}`)}
-                                            >View Scout</Typography>
+                                            }}
+                                                label=
+                                                {<div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", alignContent: "center" }}><Image
+                                                    alt="Delete"
+                                                    height={15}
+                                                    width={15}
+                                                    src="/comments-icon.svg"
+                                                    style={{ borderRadius: "5%" }}
+                                                /><Typography style={{ marginLeft: "5px" }}>2</Typography>
+                                                </div>}
+
+                                            />
+
+
+
                                         </div>
                                     </div>
                                 )

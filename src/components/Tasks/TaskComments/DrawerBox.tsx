@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CommentFormForTasks from "./comment-formForTasks";
 import ThreadsForTasks from "./threadsforTasks";
 import { Toaster, toast } from "sonner";
+import SkeletonLoadingForAttachments from "@/components/Core/LoadingComponents/SkeletonLoadingForAttachments";
 
 const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const dispatch = useDispatch();
@@ -139,105 +140,105 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       setLoading(false);
     }
   };
- 
-    const afterDeleteAttachements = async (attachmentID: any, commentId: any) => {
-      setLoading(true)
-      let obj = {
-        "attachment_ids": [attachmentID]
-      }
-      let options = {
-        method: "DELETE",
-        body: JSON.stringify(obj),
-        headers: new Headers({
-          'content-type': 'application/json',
-          'authorization': accessToken
-        })
-      }
-      try {
-        let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/comments/${commentId}/attachments`, options)
-        let responseData = await response.json()
-        if (responseData.success == true) {
-          toast.success(responseData?.message);
-          getAllScoutComments()
-        }
-      }
-      catch (err) {
-        console.log(err)
-      }
-      finally {
-        setLoading(false)
-      }
-    };
 
-    //adding comment then call the get all api
-    const afterCommentAdd = (value: any) => {
-      if (value == true) {
+  const afterDeleteAttachements = async (attachmentID: any, commentId: any) => {
+    setLoading(true);
+    let obj = {
+      attachment_ids: [attachmentID],
+    };
+    let options = {
+      method: "DELETE",
+      body: JSON.stringify(obj),
+      headers: new Headers({
+        "content-type": "application/json",
+        authorization: accessToken,
+      }),
+    };
+    try {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/comments/${commentId}/attachments`,
+        options
+      );
+      let responseData = await response.json();
+      if (responseData.success == true) {
+        toast.success(responseData?.message);
         getAllScoutComments();
-        setAfterReply(true);
       }
-    };
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    //delete comment
-    const afterDeleteComment = (value: any) => {
-      if (value) {
-        deleteComment(value);
-      }
-    };
+  //adding comment then call the get all api
+  const afterCommentAdd = (value: any) => {
+    if (value == true) {
+      getAllScoutComments();
+      setAfterReply(true);
+    }
+  };
 
-    // //edit commnet function call (after update any commnet)
-    const afterUpdateComment = (id: any, value: any) => {
-      if (value) {
-        updateComment(id, value);
-      }
-    };
-    
-  
-    return (
-      <Drawer anchor="right" open={drawerOpen}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6">Comments</Typography>
-          <IconButton
-            onClick={() => {
-              drawerClose();
-              dispatch(removeTheAttachementsFilesFromStore([]));
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </div>
+  //delete comment
+  const afterDeleteComment = (value: any) => {
+    if (value) {
+      deleteComment(value);
+    }
+  };
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: 600,
-            padding: "1rem",
-            maxHeight: "500px",
-            overflow: "auto",
+  // //edit commnet function call (after update any commnet)
+  const afterUpdateComment = (id: any, value: any) => {
+    if (value) {
+      updateComment(id, value);
+    }
+  };
+
+  return (
+    <Drawer anchor="right" open={drawerOpen}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography variant="h6">Comments</Typography>
+        <IconButton
+          onClick={() => {
+            drawerClose();
+            dispatch(removeTheAttachementsFilesFromStore([]));
           }}
         >
-          {loading ? <CircularProgress /> : ""}
-          <ThreadsForTasks
-            farmID={rowDetails.farm_id._id}
-            taskId={rowDetails._id}
-            details={data}
-            afterCommentAdd={afterCommentAdd}
-            afterDeleteComment={afterDeleteComment}
-            afterUpdateComment={afterUpdateComment}
-            afterReply={afterReply}
-            afterDeleteAttachements={afterDeleteAttachements}
-          />
-        </div>
+          <CloseIcon />
+        </IconButton>
+      </div>
 
-        <CommentFormForTasks
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: 600,
+          padding: "1rem",
+          maxHeight: "500px",
+          overflow: "auto",
+        }}
+      >
+        {loading ? <SkeletonLoadingForAttachments /> : ""}
+        <ThreadsForTasks
           farmID={rowDetails.farm_id._id}
           taskId={rowDetails._id}
+          details={data}
           afterCommentAdd={afterCommentAdd}
+          afterDeleteComment={afterDeleteComment}
+          afterUpdateComment={afterUpdateComment}
+          afterReply={afterReply}
+          afterDeleteAttachements={afterDeleteAttachements}
         />
+      </div>
 
-        {/* <LoadingComponent loading={loading} /> */}
-        <Toaster position="top-right" closeButton richColors />
-      </Drawer>
-    );
-  };
+      <CommentFormForTasks
+        farmID={rowDetails.farm_id._id}
+        taskId={rowDetails._id}
+        afterCommentAdd={afterCommentAdd}
+      />
+
+      {/* <LoadingComponent loading={loading} /> */}
+      <Toaster position="top-right" closeButton richColors />
+    </Drawer>
+  );
+};
 export default DrawerBoxComponent

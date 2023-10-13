@@ -140,9 +140,9 @@ const TaskForm = ({ data }: any) => {
 
   const gotoBackAfterAdd = async () => {
     router.push("/tasks");
-    // setTimeout(() => {
-    //   router.reload();
-    // }, 1000);
+    setTimeout(() => {
+      router.reload();
+    }, 1000);
   };
 
   const onChangeUser = async (e: any, value: any) => {

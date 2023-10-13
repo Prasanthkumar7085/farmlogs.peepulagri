@@ -8,6 +8,7 @@ import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInAddTask";
 import styles from "./NavBarContainer.module.css";
 import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from '@mui/icons-material/Add';
+import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -60,7 +61,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
   }, []);
 
   const getAllFarms = async () => {
-    const response = await getAllFarmsService(accessToken);
+    const response = await ListAllFarmForDropDownService(accessToken);
     if (response?.success) {
       setFarmOptions(response?.data);
       if (router.query.farm_id) {

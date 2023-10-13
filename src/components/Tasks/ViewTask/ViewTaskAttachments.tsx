@@ -57,7 +57,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
                           setOpenDialog(true);
                         }}
                       >
-                        {item?.type?.includes("video") ? (
+                        {!item?.type?.includes("video") ? (
                           <img src={item?.url} className={styles.imageIcon} />
                         ) : (
                           <img

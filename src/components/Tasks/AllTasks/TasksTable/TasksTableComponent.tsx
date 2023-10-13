@@ -1,6 +1,6 @@
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import { TaskResponseTypes } from "@/types/tasksTypes";
-import { Button, ClickAwayListener } from "@mui/material";
+import { Button, ClickAwayListener, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import TanStackTableComponent from "./TanStackTable";
@@ -41,8 +41,8 @@ const TasksTableComponent = ({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string>("");
-  const [drawerOpen, setDrawerOpen] = useState<any>(false)
-  const [rowDetails, setRowDetails] = useState<any>()
+  const [drawerOpen, setDrawerOpen] = useState<any>(false);
+  const [rowDetails, setRowDetails] = useState<any>();
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -126,7 +126,23 @@ const TasksTableComponent = ({
       id: "description",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          <Tooltip
+            title={
+              info.getValue()?.length > 50 ? (
+                <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
+              ) : (
+                ""
+              )
+            }
+          >
+            <span>
+              {info.getValue()
+                ? info.getValue()?.length > 50
+                  ? info.getValue().slice(0, 46) + "....."
+                  : info.getValue()
+                : "-"}
+            </span>
+          </Tooltip>
         </span>
       ),
       header: () => <span>Description</span>,

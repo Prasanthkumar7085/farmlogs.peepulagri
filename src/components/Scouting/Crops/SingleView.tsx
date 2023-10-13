@@ -210,14 +210,17 @@ const SingleViewScoutComponent = () => {
                                     <div key={rowIndex} style={{ marginTop: "20px" }}>
                                         <Typography>{timePipe(row.createdAt, "hh.mm a")}</Typography>
                                         {readMore == true && row._id == descriptionID ?
-                                            <Typography variant="caption">{row.description}</Typography> :
+                                            <Typography variant="caption">{row.description}  <span style={{ cursor: 'pointer' }} onClick={() => {
+                                                setReadMore(false)
+                                                setDescriptionID(row._id)
+                                            }}>Show Less</span></Typography> :
 
                                             <Typography variant="caption">{row.description?.length > 50 ? row.description.slice(0, 100) + "...." : row.description}
                                                 {row.description?.length > 50 ?
                                                     <span style={{ cursor: 'pointer' }} onClick={() => {
                                                         setReadMore(true)
                                                         setDescriptionID(row._id)
-                                                    }}>Read More</span>
+                                                    }}>Show More</span>
                                                     : ""}</Typography>}
 
 

@@ -1,0 +1,58 @@
+.viewLogsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--gap-5xl);
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--neutral-800);
+  font-family: var(--text-sm-medium);
+  max-width: 800px;
+  padding: 2rem 0;
+  margin-inline: auto;
+  min-height: auto;
+}
+
+.scoutDailogImg img {
+  height: 500px;
+  width: 100%;
+  object-fit: contain;
+
+}
+.activeImage{
+  scale:1.3;
+  z-index: 9;
+}
+.inactiveImage{
+  padding-top:10px;
+  opacity: 0.5; 
+}
+
+.scoutDailogImg {
+  width: 85%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.positionLeftImg {
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  background: #000 !important;
+}
+
+.positionLeftImg:hover {
+  background: #000 !important;
+}
+
+.positionRightImg {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  background: #000;
+}
+
+.positionRightImg:hover {
+  background: #000 !important;
+}

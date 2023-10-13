@@ -12,7 +12,9 @@ function MyApp({ Component, pageProps, ...rest }: any) {
 
   const router = useRouter();
 
-  const sideBarList = ["/", "/signup", "/signup-verify"];
+  const sideBarList = ["/", "/signup", "/signup-verify",
+    "/forgot-password",
+    "/forgot-password/reset-password"];
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>

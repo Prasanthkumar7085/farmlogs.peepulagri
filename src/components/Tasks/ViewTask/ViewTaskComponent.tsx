@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import getTaskByIdService from "../../../../lib/services/TasksService/getTaskByIdService";
 import TaskDetails from "./TaskDetails";
 import updateTaskService from "../../../../lib/services/TasksService/updateTaskService";
+import ViewTaskAttachments from "./ViewTaskAttachments";
 
 const ViewTaskComponent = () => {
   const router = useRouter();
@@ -99,6 +100,7 @@ const ViewTaskComponent = () => {
           }}
         >
           <TaskDetails data={data} updateTask={updateTask} />
+          <ViewTaskAttachments data={data} />
         </Card>
       </div>
       <LoadingComponent loading={loading} />

@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .bgImage {
   position: fixed;
   top: 0;
@@ -14,17 +15,20 @@
   height: 100vh;
   width: 100vw;
 }
+
 .bgImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
 }
+
 .logo {
   margin: -2rem 0 2rem;
   height: 100px;
   width: 150px;
 }
+
 .formCard {
   position: relative;
   z-index: 10;
@@ -32,31 +36,38 @@
   padding: 3rem;
   background: linear-gradient(140deg, rgba(255, 255, 255, 0.75) 2.86%, rgba(255, 255, 255, 0.4) 95.96%);
   backdrop-filter: blur(10.802083015441895px);
+  min-height: 230px;
 }
+
 .formCard .label {
   display: block;
   margin-bottom: 0.5rem;
 }
+
 .formCard .phoneNo {
   margin-bottom: 1.5em;
 }
-.formCard .phoneNo input{
+
+.formCard .phoneNo input {
   border-radius: 10px;
   border: 1px solid #FFF;
   background: rgba(255, 255, 255, 0.75);
 }
+
 .formCard .phoneNo fieldset {
   border-radius: 10px;
   border-color: rgba(255, 255, 255, 0.75);
 }
+
 .innerWrap {
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border-radius: 10px;
   gap: 10px;
   width: 350px;
 }
+
 .header {
   display: grid;
   grid-template-columns: 80px 1fr;
@@ -65,11 +76,103 @@
   justify-content: center;
   margin-bottom: 1rem;
 }
+
 .header h5 {
-  font-family: 'Inter',sans-serif;
-  font-size: 2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(24px, 1.5vw, 32px) !important;
   font-weight: 500;
 }
+
+.header p {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13px, 0.62vw, 16px);
+  font-weight: 400;
+}
+
 .cta_button {
   border-radius: 10px;
+}
+
+.innerWrap input:-webkit-autofill {
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.innerWrap input:-webkit-autofill:hover {
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.innerWrap input:-webkit-autofill:focus {
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.innerWrap input:-webkit-autofill:active {
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.forgotBtn {
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 0.62vw, 14px) !important;
+  font-weight: 500;
+  cursor: pointer;
+  color: blue;
+}
+
+.signin_button {
+  text-transform: capitalize !important;
+  font-size: clamp(14px, 0.72vw, 18px) !important;
+}
+
+.backToLogin {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.5rem;
+  width: 100%;
+  text-align: end;
+}
+
+.backToLogin_btn {
+
+  cursor: pointer;
+  color: blue;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.backToLogin_btn p {
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 0.62vw, 14px) !important;
+  font-weight: 500 !important;
+}
+
+.otp_Btn {
+  text-transform: capitalize !important;
+  margin-top: 0.5rem !important;
+  min-width: 110px !important;
+  font-size: clamp(12px, 0.62vw, 14px) !important;
+}
+
+.resendContent {
+  font-size: clamp(12px, 0.62vw, 14px) !important;
+}
+
+.reset_Btn {
+  text-transform: capitalize !important;
+  font-size: clamp(14px, 0.62vw, 16px) !important;
+  font-weight: 500 !important;
+  margin-block: 0.5rem 2rem !important;
+}
+
+.passwordSuccessmg {
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(24px, 1.5vw, 32px) !important;
+  font-weight: 500 !important;
+  line-height: 120% !important;
+  margin-top: 1rem !important;
+}
+
+.invalid {
+  color: red !important;
+  font-size: 12px !important;
+  margin: 0 !important;
 }

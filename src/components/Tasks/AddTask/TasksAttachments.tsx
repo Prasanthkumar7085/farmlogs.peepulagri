@@ -1,4 +1,8 @@
-import { removeOneElement, storeFilesArray } from "@/Redux/Modules/Farms";
+import {
+  removeOneElement,
+  removeTheFilesFromStore,
+  storeFilesArray,
+} from "@/Redux/Modules/Farms";
 import styles from "@/components/AddLogs/attachments.module.css";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -8,6 +12,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles1 from "./../../Scouting/AddItem/add-scout.module.css";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 
 interface PropTypes {
   farmId: string | undefined;
@@ -30,6 +35,9 @@ const TasksAttachments: React.FC<PropTypes> = ({
 
   const [attachments, setAttachments] = useState<any>([]);
   const [previewImages, setPreviewImages] = useState<any>([]);
+  const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
+  const [validations, setValidations] = useState<any>();
+
   let tempFilesStorage: any = [...attachments];
 
   let previewStorage = [...previewImages];
@@ -92,8 +100,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
       setPreviewImages(null);
     }
   };
-
-  const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
 
   const handleFileChange = async (e: any) => {
     if (!farmId) {
@@ -370,11 +376,11 @@ const TasksAttachments: React.FC<PropTypes> = ({
     dispatch(removeOneElement(index));
   };
 
-  //   useEffect(() => {
-  //     if (accessToken) {
-  //       dispatch(removeTheFilesFromStore([]));
-  //     }
-  //   }, [accessToken]);
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(removeTheFilesFromStore([]));
+    }
+  }, [accessToken]);
 
   //   useEffect(() => {
   //     const confirmationMessage =
@@ -416,6 +422,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         />
         <p style={{ color: "red", fontSize: "12px" }}>{noFarmIdMessage}</p>
       </label>
+      <ErrorMessagesComponent errorMessage={validations?.attachments} />
       {multipleFiles &&
         Array?.from(multipleFiles).map((item: any, index: any) => (
           <div

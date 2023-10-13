@@ -80,7 +80,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Created On</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "120px",
     },
     {
       accessorFn: (row: any) => row.farm_id.title,
@@ -119,7 +119,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
       footer: (props: any) => props.column.id,
-      width: "400px",
+      width: "250px",
     },
     {
       accessorFn: (row: any) => row.description,
@@ -131,7 +131,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Description</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "400px",
     },
     {
       accessorFn: (row: any) => row.deadline,
@@ -143,7 +143,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Due Date</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "120px",
     },
     {
       accessorFn: (row: any) => row.status,
@@ -155,7 +155,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Status</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "120px",
     },
     {
       // accessorFn: (row: any) => row.description,

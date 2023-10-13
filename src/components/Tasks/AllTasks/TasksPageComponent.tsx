@@ -155,7 +155,7 @@ const TasksPageComponent = () => {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
+    <div style={{ padding: "1rem 2rem" }}>
       <NavBarContainer
         onChangeSearch={onChangeSearch}
         searchString={searchString}

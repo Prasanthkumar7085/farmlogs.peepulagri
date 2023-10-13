@@ -128,7 +128,6 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    overflow: "hidden"
                 },
                 '& .MuiDialogActions-root ': {
                     justifyContent: "center !important"
@@ -137,8 +136,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
             <IconButton onClick={handleClose} sx={{ padding: "0" }}>
                 <CloseIcon sx={{ color: "#fff" }} />
             </IconButton>
-            <DialogTitle>
-            </DialogTitle>
+
             <DialogContent>
                 <div style={{ width: "100%" }}>
                     <Carousel selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)} swipeable={true}>

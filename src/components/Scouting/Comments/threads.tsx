@@ -30,16 +30,6 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [alertType, setAlertType] = useState(false);
 
 
-
-  useEffect(() => {
-    if (afterReply) {
-      setReplyOpen(false)
-    }
-  }, [afterReply]);
-
-
-
-
   const downLoadAttachements = async (file: any, userId: any) => {
 
     setLoading(true);
@@ -299,7 +289,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                   </div>
 
                   : ""}
-                {isReplies == true && index == replyIndex && item.replies.length ? item.replies.map((row: any) => {
+                {(replyOpen == true && index == replyIndex) || (isReplies == true && index == replyIndex && item.replies.length) ? item.replies.map((row: any) => {
                   return (
                     <div className={styles.inMessage1} key={index}>
                       {row?.user?.user_type == "USER" ?

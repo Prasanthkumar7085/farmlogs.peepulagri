@@ -133,6 +133,7 @@ const ViewScoutThreads = () => {
 
 
   const handleClick = (index: number, item: any) => {
+
     handleOpenDialog();
     setIndexOfseletedOne(index);
   };
@@ -259,7 +260,7 @@ const ViewScoutThreads = () => {
 
 
       <LoadingComponent loading={loading} />
-      <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={indexOfSeletedOne} />
+      <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={indexOfSeletedOne} data={data} />
       {tempImages?.length !== 0 ?
         <div style={{
           position: "sticky",

@@ -19,6 +19,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+    const [loadingThreads, setLoadingThreads] = useState<any>()
 
 
     useEffect(() => {
@@ -28,7 +29,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
     }, [router.isReady, accessToken])
 
     const getAllScoutComments = async () => {
-
+        setLoadingThreads(true)
         let options = {
             method: "GET",
             headers: new Headers({
@@ -77,6 +78,10 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
             }
         } catch (err) {
             console.log(err)
+        }
+        finally {
+            setLoadingThreads(false)
+
         }
     }
 
@@ -209,6 +214,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
                         afterUpdateComment={afterUpdateComment}
                         afterReply={afterReply}
                         afterDeleteAttachements={afterDeleteAttachements}
+                        loadingThreads={loadingThreads}
                     />
                 </div>
                 <CommentForm afterCommentAdd={afterCommentAdd} scoutId={scoutId} />

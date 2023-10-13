@@ -14,7 +14,8 @@ import styles from "./view-logs-container.module.css"
 import CloseIcon from '@mui/icons-material/Close';
 import { useSwipeable } from 'react-swipeable';
 import ReactPanZoom from "react-image-pan-zoom-rotate";
-
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Carousel } from 'react-responsive-carousel';
 const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -139,45 +140,37 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
             <DialogTitle>
             </DialogTitle>
             <DialogContent>
-                <div {...handlers} style={{ width: "100%" }}>
+                <div style={{ width: "100%" }}>
+                    <Carousel selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)} swipeable={true}>
+                        {mediaArray?.length > 0 &&
+                            mediaArray.map((item: any, index: any) => (
+                                <div className={styles.scoutDailogImg} key={index}>
+                                    {item.type?.includes('video') ? (
+                                        <video controls width="100%" height="auto" autoPlay key={index}>
+                                            <source src={item.url} type={item.type} />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    ) : item.type?.includes('application') ? (
+                                        <iframe src={item.url} width="100%" height="100%" title={`iframe-${index}`} />
+                                    ) : (
+                                        <>
+                                            {isZoom ? (
+                                                <ReactPanZoom image={item.url} alt={`Image alt text ${index}`} />
+                                            ) : (
+                                                <img
+                                                    className="zoom-image"
+                                                    src={item.url}
+                                                    alt={`Image ${index + 1}`}
+                                                    style={{ transform: `scale(${zoomLevel})` }}
+                                                    onClick={zoomIn}
+                                                />
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                            ))}
 
-                    <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray?.length <= 1}>
-                        <NavigateBeforeIcon sx={{ color: "#fff" }} />
-
-                    </IconButton>
-                    {mediaArray?.length > 0 && (
-                        <div className={styles.scoutDailogImg}>
-                            {mediaArray[currentIndex]?.type?.includes('video') ? (
-                                <video controls width="100%" height="auto" autoPlay key={currentIndex}>
-                                    <source src={mediaArray[currentIndex]?.url} type={mediaArray[currentIndex]?.type} />
-                                    Your browser does not support the video tag.
-                                </video>
-                            ) : mediaArray[currentIndex]?.type?.includes('application') ?
-                                <iframe src={mediaArray[currentIndex]?.url} width="100%" height="100%"></iframe>
-
-                                : (
-                                    <>
-
-                                        {isZoom ?
-                                            <ReactPanZoom
-                                                image={mediaArray[currentIndex]?.url}
-                                                alt="Image alt text"
-                                            /> :
-                                            <img
-                                                className="zoom-image"
-                                                src={mediaArray[currentIndex]?.url}
-                                                alt={`Image ${currentIndex + 1}`}
-                                                style={{ transform: `scale(${zoomLevel})` }}
-                                                onClick={zoomIn}
-                                            />}
-                                    </>
-                                )}
-
-                        </div>
-                    )}
-                    <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray?.length <= 1}>
-                        <NavigateNextIcon sx={{ color: "#fff" }} />
-                    </IconButton>
+                    </Carousel>
 
                 </div>
 
@@ -238,6 +231,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                         : ""}
                 </div>
             </div>
+
             <DialogActions>
 
                 <Typography variant="caption" display="block" align="center">

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import timePipe from "@/pipes/timePipe";
-import { Avatar, Button, Icon, IconButton, TextField, Typography, Chip } from "@mui/material";
+import { Avatar, Button, Icon, IconButton, TextField, Typography, Chip, Box, Skeleton } from "@mui/material";
 import Image from "@/components/Core/ImageComponent";
 import CommentForm from "./comment-form";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
@@ -12,7 +12,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AlertComponent from "@/components/Core/AlertComponent";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements }: any) => {
+const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
@@ -409,10 +409,37 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
         }
 
       }) :
-        <div style={{ margin: "auto" }}>
-          No Threads
-        </div>
-      }
+        loadingThreads ?
+          <div style={{ marginRight: "120px" }}>
+            <Box sx={{ width: 300 }}>
+              <div style={{ display: "flex" }}>
+                <Skeleton variant="circular" width={40} height={40} />
+                <div style={{ display: "block", }}>
+                  <Skeleton width={150} height={20} />
+                  <Skeleton animation="wave" width={250} height={20} />
+                </div>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Skeleton animation="wave" width={100} height={20} />
+                <Skeleton animation="wave" width={100} height={20} />
+              </div>
+            </Box>
+            <Box sx={{ width: 300, marginTop: "30px" }}>
+              <div style={{ display: "flex" }}>
+                <Skeleton variant="circular" width={40} height={40} />
+                <div style={{ display: "block", }}>
+                  <Skeleton width={150} height={20} />
+                  <Skeleton animation="wave" width={250} height={20} />
+                </div>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Skeleton animation="wave" width={100} height={20} />
+                <Skeleton animation="wave" width={100} height={20} />
+              </div>
+            </Box>
+
+          </div> : <div style={{ margin: "auto" }}>no threads</div>}
+
       <LoadingComponent loading={loading} />
       <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
 

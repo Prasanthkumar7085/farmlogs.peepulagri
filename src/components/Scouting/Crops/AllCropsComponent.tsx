@@ -41,7 +41,7 @@ const AllCropsComponent = () => {
 
     const getFarmDetails = async (id: any) => {
         setLoading(true)
-        
+
         try {
             let response = await getAllFarmsService(accessToken);
             if (response?.success == true && response?.data?.length) {
@@ -158,12 +158,12 @@ const AllCropsComponent = () => {
         }
         else {
             const { title, crop_area } = value;
-            
+
             let obj = {
-              title: title ? title?.trim() : "",
-              crop_area: crop_area,
+                title: title ? title?.trim() : "",
+                crop_area: crop_area,
             };
-            
+
             setErrorMessages([]);
             createCrop(obj)
         }
@@ -251,7 +251,7 @@ const AllCropsComponent = () => {
             <FormControl
                 variant="outlined"
                 className={styles.filterBox}
-                // style={{border:"1px solid"}}
+            // style={{border:"1px solid"}}
             >
                 <InputLabel color="primary" />
                 <SelectAutoCompleteForFarms options={formOptions} label={"title"} onSelectValueFromDropDown={captureFarmName} placeholder={"Select Farm"} defaultValue={defaultValue} />
@@ -272,9 +272,9 @@ const AllCropsComponent = () => {
                         </Box>
                     </Drawer>
                 </React.Fragment>
-                <IconButton onClick={() => setDilogOpen(true)}>
+                {/* <IconButton onClick={() => setDilogOpen(true)}>
                     <AddIcon /><Typography variant="caption">New Crop</Typography>
-                </IconButton>
+                </IconButton> */}
             </div>
 
             <div className={styles.allCrops}>
@@ -294,7 +294,7 @@ const AllCropsComponent = () => {
             </div>
 
             {cropOptions?.length && !loading ? <div className="addFormPositionIcon" >
-                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${formId}/crops/add-item`)} />
+                <img src="/add-plus-icon.svg" alt="" onClick={() => setDilogOpen(true)} />
             </div> : ""}
 
             {dilogOpen ? <NewFolderDiloag

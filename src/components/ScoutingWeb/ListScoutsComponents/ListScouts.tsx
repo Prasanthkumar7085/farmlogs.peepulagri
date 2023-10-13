@@ -130,7 +130,6 @@ const ListScouts: FunctionComponent = () => {
       queryParams["from_date"] = fromDate;
       queryParams["to_date"] = toDate;
     }
-    console.log(queryParams, "testing");
 
     url = prepareURLEncodedParams(url, queryParams);
     router.push({ query: queryParams });
@@ -156,7 +155,6 @@ const ListScouts: FunctionComponent = () => {
           response?.data?.find(
             (item: any, index: number) => item._id == userId
           );
-        console.log(obj, "testing");
 
         setUser(obj);
       }
@@ -210,7 +208,7 @@ const ListScouts: FunctionComponent = () => {
       className={styles.AllFarmsPageWeb}
       style={{ paddingTop: "1rem !important" }}
     >
-      <div>
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
         <UserDropDownForScouts
           user={user}
           onChangeUser={onChangeUser}
@@ -224,7 +222,12 @@ const ListScouts: FunctionComponent = () => {
           defaultValue={farm}
         />
         <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />
-        <Button onClick={clearAllFilterAndGetData}>Clear Filters</Button>
+        <Button
+          onClick={clearAllFilterAndGetData}
+          disabled={Object.keys(router.query)?.length <= 1}
+        >
+          Clear Filters
+        </Button>
       </div>
       <div className={styles.allFarms}>
         <div className={styles.allScoutingCards}>

@@ -244,7 +244,6 @@ const TasksTableComponent = ({
         loading={deleteLoading}
       />
       {drawerOpen ? (
-        // <ClickAwayListener onClickAway={() => setDrawerOpen(false)}>
         <DrawerBoxComponent
           drawerClose={drawerClose}
           rowDetails={rowDetails}

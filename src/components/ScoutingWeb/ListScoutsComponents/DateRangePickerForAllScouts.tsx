@@ -37,8 +37,6 @@ const DateRangePickerForAllScouts = ({ onDateFilterChange }: pageProps) => {
           format="dd-MM-yyyy"
           placeholder={"dd-mm-yyyy ~ dd-mm-yyyy"}
           size="lg"
-          //   className={styles.dateRangePickerField}
-          //   value={fromDate}
           onChange={(newDate: any) => {
             if (newDate) {
               let date1 = new Date(

@@ -1,21 +1,21 @@
-import { TaskResponseTypes } from "@/types/tasksTypes";
-import styles from "./TaskDetails.module.css";
+import ErrorMessages from "@/components/Core/ErrorMessages";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import timePipe from "@/pipes/timePipe";
-import { useEffect, useState } from "react";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
+import { TaskResponseTypes } from "@/types/tasksTypes";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, MenuItem, Select, TextField } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
+import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
+import { IconButton, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
-import FarmOptionsInViewTasks from "./FarmOptionsInViewTasks";
-import ErrorMessages from "@/components/Core/ErrorMessages";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import updateSupportStatusService from "../../../../lib/services/SupportService/updateSupportStatusService";
-import updateTaskStatusService from "../../../../lib/services/TasksService/updateTaskStatusService";
 import { Toaster, toast } from "sonner";
-import LoadingComponent from "@/components/Core/LoadingComponent";
+import updateTaskStatusService from "../../../../lib/services/TasksService/updateTaskStatusService";
+import FarmOptionsInViewTasks from "./FarmOptionsInViewTasks";
+import styles from "./TaskDetails.module.css";
+import UserOptionsinViewTasks from "./UserOptionsinViewTasks";
 
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
@@ -41,6 +41,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [errorMessages, setErrorMessages] = useState({});
   const [farmName, setFarmName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     setErrorMessages({});
@@ -50,12 +51,13 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     setStatus(data?.status ? data?.status : "");
     setFarmId(data?.farm_id ? data?.farm_id?._id : "");
     setFarmName(data?.farm_id?.title ? data?.farm_id?.title : "");
+    setUserId(data?.assigned_to?._id as string);
   }, [data, editFieldOrNot]);
 
   const onUpdateField = async () => {
     let body = {
       ...data,
-      assigned_to: undefined,
+      assigned_to: userId,
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
@@ -66,7 +68,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       title: title ? title : "",
       status: status,
     };
-    console.log(body);
 
     const response = await updateTask(body);
 
@@ -100,13 +101,34 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       <div className={styles.idandStatus}>
         <div className={styles.title}>
           <label className={styles.label}>Assigned User</label>
-          {editField == "user" && editFieldOrNot ? (
+          {editField == "farm" && editFieldOrNot ? (
+            <div>
+              <div style={{ display: "flex" }}>
+                <UserOptionsinViewTasks
+                  userId={userId}
+                  onChange={(assigned_to: any) => {
+                    setFarmId("");
+                    setUserId(assigned_to?._id);
+                    setErrorMessages({});
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <h1 className={styles.landPreparation}>
+              {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
+            </h1>
+          )}
+        </div>
+        <div className={styles.title}>
+          <label className={styles.label}>Farm</label>
+          {editField == "farm" && editFieldOrNot ? (
             <div>
               <div style={{ display: "flex" }}>
                 <FarmOptionsInViewTasks
-                  farmId={data?.farm_id?._id as string}
+                  userId={userId}
+                  farmId={farmId}
                   onChange={(farm_id: any) => {
-                    console.log(farm_id);
                     setFarmId(farm_id?._id);
                     setFarmName(farm_id?.title);
                     setErrorMessages({});
@@ -123,22 +145,21 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 <IconButton
                   onClick={() => {
                     onUpdateField();
-                    // setEditFieldOrNot(false);
-                    // setEditField("");
                   }}
                 >
                   <DoneIcon />
                 </IconButton>
               </div>
+              <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
             </div>
           ) : (
             <h1 className={styles.landPreparation}>
-              {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
+              {data?.farm_id ? data?.farm_id?.title : "-"}
               {userType !== "USER" ? (
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
-                    setEditField("user");
+                    setEditField("farm");
                   }}
                 >
                   <ModeEditOutlinedIcon />
@@ -149,97 +170,45 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
             </h1>
           )}
         </div>
+      </div>
 
-        <div className={styles.status}>
-          <label className={styles.label1}>Status</label>
-          <div className={styles.status1}>
-            {/* <img
+      <div className={styles.status}>
+        <label className={styles.label1}>Status</label>
+        <div className={styles.status1}>
+          {/* <img
               className={styles.indicatorIcon}
               alt=""
               src="/indicator@2x.png"
             /> */}
-            {userType !== "USER" ? (
-              <div>
-                <Select
-                  className={styles.inoutbox}
-                  color="primary"
-                  placeholder="Enter your Task title here"
-                  variant="outlined"
-                  value={status}
-                  onChange={(e) => {
-                    setStatus(e.target.value);
-                    onChangeStatus(e.target.value);
-                  }}
-                  sx={{ width: "200px" }}
-                >
-                  {statusOptions.map((item: string, index: number) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </div>
-            ) : (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <p className={styles.status2}>
-                  {data?.status ? data?.status : "-"}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className={styles.title}>
-        <label className={styles.label}>Farm</label>
-        {editField == "farm" && editFieldOrNot ? (
-          <div>
-            <div style={{ display: "flex" }}>
-              <FarmOptionsInViewTasks
-                farmId={data?.farm_id?._id as string}
-                onChange={(farm_id: any) => {
-                  console.log(farm_id);
-                  setFarmId(farm_id?._id);
-                  setFarmName(farm_id?.title);
-                  setErrorMessages({});
+          {userType !== "USER" ? (
+            <div>
+              <Select
+                className={styles.inoutbox}
+                color="primary"
+                placeholder="Enter your Task title here"
+                variant="outlined"
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                  onChangeStatus(e.target.value);
                 }}
-              />
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(false);
-                  setEditField("");
-                }}
+                sx={{ width: "200px" }}
               >
-                <CloseIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  onUpdateField();
-                  // setEditFieldOrNot(false);
-                  // setEditField("");
-                }}
-              >
-                <DoneIcon />
-              </IconButton>
+                {statusOptions.map((item: string, index: number) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
             </div>
-            <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
-          </div>
-        ) : (
-          <h1 className={styles.landPreparation}>
-            {data?.farm_id ? data?.farm_id?.title : "-"}
-            {userType !== "USER" ? (
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("farm");
-                }}
-              >
-                <ModeEditOutlinedIcon />
-              </IconButton>
-            ) : (
-              ""
-            )}
-          </h1>
-        )}
+          ) : (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <p className={styles.status2}>
+                {data?.status ? data?.status : "-"}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
       <div className={styles.idandStatus}>
         <div className={styles.title}>

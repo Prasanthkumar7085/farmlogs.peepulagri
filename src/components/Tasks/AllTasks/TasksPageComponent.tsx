@@ -141,8 +141,6 @@ const TasksPageComponent = () => {
   };
 
   const onStatusChange = async (value: any) => {
-    console.log(value);
-
     getAllTasks({
       page: router.query.page as string,
       limit: router.query.limit as string,

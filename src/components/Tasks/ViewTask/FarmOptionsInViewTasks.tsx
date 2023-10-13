@@ -3,14 +3,19 @@ import FarmAutoCompleteInAddTask from "../AddTask/FarmAutoCompleteInAddTask";
 import { FarmInTaskType } from "@/types/tasksTypes";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import { CircularProgress } from "@mui/material";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 
 interface PropsType {
+  userId: string;
   farmId: string;
   onChange: (id: string) => void;
 }
-const FarmOptionsInViewTasks: React.FC<PropsType> = ({ farmId, onChange }) => {
+const FarmOptionsInViewTasks: React.FC<PropsType> = ({
+  userId,
+  farmId,
+  onChange,
+}) => {
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -30,9 +35,17 @@ const FarmOptionsInViewTasks: React.FC<PropsType> = ({ farmId, onChange }) => {
     }
   };
 
-  const getAllFarms = async (id = "") => {
+  const getAllFarms = async (id = "", user = "") => {
     setLoading(true);
-    const response = await getAllFarmsService(accessToken);
+    let url = "farm/1/1000";
+    if (user) {
+      url += `?user_id=${user}`;
+    } else {
+      setFarmData([]);
+      setLoading(false);
+      return;
+    }
+    const response = await getAllFarmsService(url, accessToken);
 
     if (response?.success) {
       setFarmData(response?.data);
@@ -44,13 +57,19 @@ const FarmOptionsInViewTasks: React.FC<PropsType> = ({ farmId, onChange }) => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (!farmId) {
+      setDefaultValue(null);
+    }
+  }, [farmId]);
   useEffect(() => {
     if (router.isReady && accessToken) {
       if (router.query.task_id) {
-        getAllFarms(farmId);
+        getAllFarms(farmId, userId);
       }
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken, userId]);
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>

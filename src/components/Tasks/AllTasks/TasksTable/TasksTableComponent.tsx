@@ -31,9 +31,9 @@ const TasksTableComponent = ({
 }: pageProps) => {
   const router = useRouter();
 
-   const userType = useSelector(
-     (state: any) => state.auth.userDetails?.user_details?.user_type
-   );
+  const userType = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?.user_type
+  );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -91,6 +91,18 @@ const TasksTableComponent = ({
         </span>
       ),
       header: () => <span>Farm Name</span>,
+      footer: (props: any) => props.column.id,
+      width: "200px",
+    },
+    {
+      accessorFn: (row: any) => row.assigned_to.phone,
+      id: "assigned_to",
+      cell: (info: any) => (
+        <span style={{ padding: "40px 10px 40px 10px" }}>
+          {info.getValue()}
+        </span>
+      ),
+      header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
       width: "200px",
     },

@@ -94,21 +94,22 @@ const TanStackTableComponent = ({
   return (
     <div>
       <div>
-        <div style={{ overflow: "scroll" }}>
-          <table border={1}>
+        <div style={{ overflow: "scroll" }} className="dataTable-container scrollbar">
+          <table className="table" border={0} style={{ borderSpacing: "0 !important" }}>
             <thead
+              className="thead"
               style={{
-                height: "40px",
+                height: "32px",
                 position: "sticky",
                 top: "0px",
-                background: "#b1d9ff",
               }}
             >
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
+                <tr className="table-row" key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
                       <th
+                        className="cell"
                         key={header.id}
                         colSpan={header.colSpan}
                         style={{
@@ -160,10 +161,10 @@ const TanStackTableComponent = ({
                 </tr>
               ))}
             </thead>
-            <tbody>
+            <tbody className="tbody">
               {table.getRowModel().rows.map((row) => {
                 return (
-                  <tr key={row.id}>
+                  <tr className="table-row" key={row.id}>
                     {row.getVisibleCells().map((cell) => {
                       // console.log(flexRender(
                       //     cell.column.columnDef.cell,
@@ -171,7 +172,7 @@ const TanStackTableComponent = ({
                       // ));
 
                       return (
-                        <td key={cell.id}>
+                        <td className="cell" key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

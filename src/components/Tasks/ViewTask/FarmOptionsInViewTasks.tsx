@@ -72,7 +72,7 @@ const FarmOptionsInViewTasks: React.FC<PropsType> = ({
   }, [router.isReady, accessToken, userId]);
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
       <FarmAutoCompleteInAddTask
         options={farmData}
         label={"title"}

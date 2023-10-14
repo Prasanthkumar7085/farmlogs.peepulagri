@@ -15,7 +15,9 @@ import updateTaskStatusService from "../../../../lib/services/TasksService/updat
 import FarmOptionsInViewTasks from "./FarmOptionsInViewTasks";
 import styles from "./TaskDetails.module.css";
 import UserOptionsinViewTasks from "./UserOptionsinViewTasks";
-
+import Image from "next/image";
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
   updateTask: (body: any) => any;
@@ -164,7 +166,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 <div style={{ display: "flex", width: "100%" }}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        '& .MuiButtonBase-root': {
+                          paddingRight: "10px !important"
+                        }
+                      }}
                       disablePast
                       value={deadline}
                       onChange={(newValue: any) => {
@@ -185,6 +192,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
             ) : (
               <div style={{ display: "flex" }}>
                 <p className={styles.text}>
+                  <CalendarMonthOutlinedIcon sx={{ fontSize: "1rem" }} />
                   {data?.deadline
                     ? timePipe(data?.deadline, "DD, MMM YYYY")
                     : "-"}
@@ -267,7 +275,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           </div>
           <div className={styles.userDetails}>
             <div className={styles.singleDetailsBox} style={{ flexDirection: "column", alignItems: "flex-start !important" }}>
-              <label className={styles.userLabel}>Assignee</label>
+              <label className={styles.userLabel}><PersonOutlineOutlinedIcon sx={{ fontSize: "1rem", marginRight: "5px" }} /> Assignee</label>
               {editField == "farm" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
@@ -286,7 +294,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               )}
             </div>
             <div className={styles.singleDetailsBox} style={{ flexDirection: "column", alignItems: "flex-start !important" }}>
-              <label className={styles.userLabel}>Farm</label>
+              <label className={styles.userLabel}> <Image src="/farmshape2.svg" alt="" height={12} width={12} style={{ marginRight: "4px" }} />Farm</label>
               {editField == "farm" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <FarmOptionsInViewTasks

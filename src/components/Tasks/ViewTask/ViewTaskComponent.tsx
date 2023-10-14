@@ -8,7 +8,7 @@ import getTaskByIdService from "../../../../lib/services/TasksService/getTaskByI
 import TaskDetails from "./TaskDetails";
 import updateTaskService from "../../../../lib/services/TasksService/updateTaskService";
 import ViewTaskAttachments from "./ViewTaskAttachments";
-
+import styles from "./ViewTaskPage.module.css";
 const ViewTaskComponent = () => {
   const router = useRouter();
 
@@ -53,49 +53,19 @@ const ViewTaskComponent = () => {
   }, [router.isReady, accessToken, router.query.task_id]);
 
   return (
-    <div
-      style={{
-        alignItems: "center",
-        display: "flex",
-        justifyContent: "center",
-        padding: "3% 0 0 0",
-      }}
-    >
-      <div
-        style={{
-          width: "60%",
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <div style={{ width: "100%" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <div
-              style={{
-                cursor: "pointer",
-                border: "1.5px solid #a05148",
-                borderRadius: "3px",
-                padding: "3px 5px 3px 5px",
-              }}
-              onClick={() => router.back()}
-            >
-              <img src="/arrow-left-back.svg" alt="" width={"18px"} />
-            </div>
-            <h5>View Task</h5>
+    <div className={styles.viewTaskPage}>
+      <div className={styles.viewTaskContainer}>
+        <div className={styles.viewPageHeader}>
+          <div className={styles.backButton} onClick={() => router.back()}>
+            <img src="/arrow-left-back.svg" alt="" width={"18px"} />
           </div>
+          <h5>View Task</h5>
         </div>
         <Card
           sx={{
             width: "100%",
             borderRadius: "10px",
+            marginBottom: "1rem"
           }}
         >
           <TaskDetails data={data} updateTask={updateTask} />

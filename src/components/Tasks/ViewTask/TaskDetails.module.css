@@ -52,15 +52,20 @@
   font-size: clamp(13px, 0.72vw, 16px);
   font-weight: 500;
   width: 30%;
+  display: flex;
+  align-items: center;
 }
 
 .text {
   margin: 0;
-  position: relative;
   color: var(--Title, #35353D);
   font-family: "Inter", sans-serif;
   font-size: clamp(12px, 0.62vw, 18px);
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
 }
 
 .responseDate2 {

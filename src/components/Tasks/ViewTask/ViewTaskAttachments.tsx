@@ -16,7 +16,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
   const deleteTaskAttachment = (id: string) => { };
 
   return (
-    <div className={styles.cardDetails}>
+    <div className={styles.cardDetails} style={{ paddingBottom: "1rem" }}>
       <div className={styles.idandStatus}>
         <div className={styles.title}>
           <div

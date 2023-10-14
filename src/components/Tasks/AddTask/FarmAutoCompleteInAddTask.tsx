@@ -34,7 +34,7 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
   }, [defaultValue]);
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       {!autoCompleteLoading ? (
         <Autocomplete
           value={defaultValueSet}

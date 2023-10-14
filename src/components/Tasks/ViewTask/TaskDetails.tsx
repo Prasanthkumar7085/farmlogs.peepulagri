@@ -61,8 +61,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          .utcOffset("+05:30")
+          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -98,43 +98,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
 
   return (
     <div className={styles.cardDetails}>
-      <div className={styles.idandStatus}>
-        <div className={styles.title}>
-          <label className={styles.label}>Assigned User</label>
-          {editField == "farm" && editFieldOrNot ? (
-            <div>
-              <div style={{ display: "flex" }}>
-                <UserOptionsinViewTasks
-                  userId={userId}
-                  onChange={(assigned_to: any) => {
-                    setFarmId("");
-                    setUserId(assigned_to?._id);
-                    setErrorMessages({});
-                  }}
-                />
-              </div>
-            </div>
-          ) : (
-            <h1 className={styles.landPreparation}>
-              {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
-            </h1>
-          )}
-        </div>
-        <div className={styles.title}>
-          <label className={styles.label}>Farm</label>
-          {editField == "farm" && editFieldOrNot ? (
-            <div>
-              <div style={{ display: "flex" }}>
-                <FarmOptionsInViewTasks
-                  userId={userId}
-                  farmId={farmId}
-                  onChange={(farm_id: any) => {
-                    setFarmId(farm_id?._id);
-                    setFarmName(farm_id?.title);
-                    setErrorMessages({});
-                  }}
-                />
-                <IconButton
+      <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className={styles.userBlock}>
+          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+            {userType !== "USER" ? (
+              editField == "farm" && editFieldOrNot ?
+                <div> <IconButton
                   onClick={() => {
                     setEditFieldOrNot(false);
                     setEditField("");
@@ -142,20 +111,16 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 >
                   <CloseIcon />
                 </IconButton>
-                <IconButton
-                  onClick={() => {
-                    onUpdateField();
-                  }}
-                >
-                  <DoneIcon />
-                </IconButton>
-              </div>
-              <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
-            </div>
-          ) : (
-            <h1 className={styles.landPreparation}>
-              {data?.farm_id ? data?.farm_id?.title : "-"}
-              {userType !== "USER" ? (
+                  <IconButton
+                    onClick={() => {
+                      onUpdateField();
+                    }}
+                  >
+                    <DoneIcon />
+                  </IconButton></div> :
+
+
+
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
@@ -164,50 +129,94 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 >
                   <ModeEditOutlinedIcon />
                 </IconButton>
+            ) : (
+              ""
+            )}
+          </div>
+          <div className={styles.userDetails}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "0.5rem" }}>
+              <label className={styles.userLabel}>Assigned User</label>
+              <p style={{ margin: "0", fontWeight: "600" }}>:</p>
+              {editField == "farm" && editFieldOrNot ? (
+                <div style={{ width: "65%" }}>
+                  <UserOptionsinViewTasks
+                    userId={userId}
+                    onChange={(assigned_to: any) => {
+                      setFarmId("");
+                      setUserId(assigned_to?._id);
+                      setErrorMessages({});
+                    }}
+                  />
+                </div>
               ) : (
-                ""
+                <h1 >
+                  {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
+                </h1>
               )}
-            </h1>
-          )}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "0.5rem" }}>
+              <label className={styles.userLabel}>Farm</label>
+              <p style={{ margin: "0", fontWeight: "600" }}>:</p>
+              {editField == "farm" && editFieldOrNot ? (
+                <div style={{ width: "65%" }}>
+                  <FarmOptionsInViewTasks
+                    userId={userId}
+                    farmId={farmId}
+                    onChange={(farm_id: any) => {
+                      setFarmId(farm_id?._id);
+                      setFarmName(farm_id?.title);
+                      setErrorMessages({});
+                    }}
+                  />
+                  <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
+                </div>
+              ) : (
+                <h1 >
+                  {data?.farm_id ? data?.farm_id?.title : "-"}
+                </h1>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+        <div className={styles.status}>
+          <label className={styles.label1}>Status</label>
 
-      <div className={styles.status}>
-        <label className={styles.label1}>Status</label>
-        <div className={styles.status1}>
-          {/* <img
+          <div className={styles.status1}>
+            {/* <img
               className={styles.indicatorIcon}
               alt=""
               src="/indicator@2x.png"
             /> */}
-          {userType !== "USER" ? (
-            <div>
-              <Select
-                className={styles.inoutbox}
-                color="primary"
-                placeholder="Enter your Task title here"
-                variant="outlined"
-                value={status}
-                onChange={(e) => {
-                  setStatus(e.target.value);
-                  onChangeStatus(e.target.value);
-                }}
-                sx={{ width: "200px" }}
-              >
-                {statusOptions.map((item: string, index: number) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </div>
-          ) : (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <p className={styles.status2}>
-                {data?.status ? data?.status : "-"}
-              </p>
-            </div>
-          )}
+            {userType !== "USER" ? (
+              <div>
+                <Select
+                  className={styles.inoutbox}
+                  color="primary"
+                  size="small"
+                  placeholder="Enter your Task title here"
+                  variant="outlined"
+                  value={status}
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                    onChangeStatus(e.target.value);
+                  }}
+                  sx={{ width: "100px" }}
+                >
+                  {statusOptions.map((item: string, index: number) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+            ) : (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <p className={styles.status2}>
+                  {data?.status ? data?.status : "-"}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className={styles.idandStatus}>

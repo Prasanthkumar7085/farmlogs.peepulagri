@@ -197,9 +197,9 @@ const ViewScoutThreads = () => {
             <p className={styles.createdAt}>{data?.createdAt ? timePipe(data?.createdAt, 'DD, MMM YYYY hh:mm a') : ""}</p>
           </div>
           <div className={styles.description}>
-            <h3 className={styles.heading1}>Description</h3>
+            <h3 className={styles.heading1}>Findings</h3>
             <p className={styles.descriptiontext}>
-              {data?.description ? data?.description : "-"}
+              {data?.findings ? data?.findings : "-"}
             </p>
           </div>
 

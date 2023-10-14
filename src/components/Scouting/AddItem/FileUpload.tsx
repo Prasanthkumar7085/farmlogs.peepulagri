@@ -655,7 +655,7 @@ const FileUploadComponent = () => {
     const response = await getSingleScoutService(router.query?.scout_id as string, accessToken);
     if (response?.success) {
       setData(response?.data);
-      setDescription(response?.data?.description)
+      setDescription(response?.data?.findings)
 
     }
   }

@@ -71,7 +71,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
         if (response?.success) {
             setData(response?.data);
-            setDescription(response?.data?.description)
+            setDescription(response?.data?.findings)
 
         }
         setLoading(false);

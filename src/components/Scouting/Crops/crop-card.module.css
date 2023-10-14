@@ -63,13 +63,9 @@
 }
 
 #allCropCardBlock {
-
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
-}
-
-.myCropsPage {
 }
 .filterBox {
   padding: 0.65rem 0.65rem 0rem 0.65rem !important;
@@ -96,43 +92,53 @@
 
 .galleryCard {
   padding: 0.5rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
+  border-radius: 0;
   background: #FFF;
   box-shadow: 4px 4px 20px 0px rgba(211, 211, 211, 0.50);
 }
 
-.galleryCard p {
+.galleryCard .postDate {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 4vw, 24px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: #2B53BE;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.findingsText {
   color: #35353D;
   font-family: "Inter", sans-serif;
   font-size: clamp(10px, 3vw, 12px);
   font-weight: 400;
-  line-height: 100%;
-  margin-bottom: 5px;
+  line-height: 1.5;
+  margin: 10px 0;
 }
 
 .scoutingView {
-  padding: 1rem;
-  padding-top: 0.5rem;
   height: calc(100vh - 190px);
 }
 .scoutingView nav {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1px;
 }
 
 .scoutingView a {
   color: #6A7185;
   font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 3.5rem, 16px);
+  font-size: clamp(12px, 1.75vw, 16px);
   font-weight: 500;
 }
 
 .scoutingView li p {
-  color: #4A86F7;
+  color: #35353D;
   font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 3.5rem, 16px);
-  font-weight: 500;
-  text-decoration-line: underline;
+  font-size: clamp(12px, 1.75vw, 16px);
+  font-weight: 600;
 }
 
 .sortOptions .subTitle{
@@ -164,4 +170,29 @@
 #noData h4 {
   font-size: clamp(16px, 3.25rem, 18px);
   font-weight: 500;
+}
+/* .breadcrumbs a{
+  font-size: clamp(12px, 1.75vw, 16px);
+} */
+.breadcrumbs {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--stroke);
+}
+.actionButtons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.5rem;
+  column-gap: 0.5rem;
+}
+.ctaButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+  font-weight: 500;
+  border-radius: 2.5rem;
 }

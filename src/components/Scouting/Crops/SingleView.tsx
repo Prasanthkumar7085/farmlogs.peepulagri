@@ -1,4 +1,4 @@
-import { Breadcrumbs, Card, Chip, IconButton, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Card, Chip, IconButton, Link, Typography, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import styles from "./crop-card.module.css";
@@ -18,6 +18,8 @@ import moment from "moment";
 import CommentIcon from '@mui/icons-material/Comment';
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 
 
@@ -170,7 +172,7 @@ const SingleViewScoutComponent = () => {
         <div className={styles.scoutingView}>
 
             <div role="presentation">
-                <Breadcrumbs aria-label="breadcrumb" >
+                <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs} >
                     <Link underline="hover" color="inherit" href="/farms">
                         Dashboard
                     </Link>
@@ -187,17 +189,22 @@ const SingleViewScoutComponent = () => {
             {data?.length ? data.map((item: any, index: any) => {
                 return (
                     <Card key={index} className={styles.galleryCard} >
-                        <Typography>{timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}</Typography>
-                        <div key={index} style={{ marginTop: "20px" }}>
+                        <Typography className={styles.postDate}> 
+                            <InsertInvitationIcon  />
+                           <span>{timePipe(item.updatedAt, "DD-MM-YYYY")}</span>
+                        </Typography>
+                        <div key={index}>
                             {readMore == true && item._id == descriptionID ?
-                                <Typography variant="caption">{item.findings}  <span style={{ cursor: 'pointer' }} onClick={() => {
-                                    setReadMore(false)
-                                    setDescriptionID(item._id)
-                                }}>Show Less</span></Typography> :
+                                <Typography className={styles.findingsText}>{item.findings}  
+                                    <span style={{ cursor: 'pointer' }} onClick={() => {
+                                        setReadMore(false)
+                                        setDescriptionID(item._id)
+                                    }}>Show Less</span>
+                                </Typography> :
 
-                                <Typography variant="caption">{item.findings?.length > 50 ? item.findings.slice(0, 100) + "...." : item.findings}
+                                <Typography className={styles.findingsText}>{item.findings?.length > 50 ? item.findings.slice(0, 100) + "...." : item.findings}
                                     {item.findings?.length > 50 ?
-                                        <span style={{ cursor: 'pointer' }} onClick={() => {
+                                        <span style={{ fontWeight: '600', cursor: 'pointer' }} onClick={() => {
                                             setReadMore(true)
                                             setDescriptionID(item._id)
                                         }}>Show More</span>
@@ -206,41 +213,32 @@ const SingleViewScoutComponent = () => {
 
                             <Gallery images={getModifiedImage(item)} onClick={handleClick} enableImageSelection={false}
                             />
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
-                                <Chip
+                            <div className={styles.actionButtons}>
+                                <Button 
                                     onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
-                                    label={
-                                        <div style={{ display: "flex", alignItems: "center", alignContent: "center" }}>
-                                            < VisibilityIcon />
-                                            <Typography style={{ marginLeft: "5px" }}>View</Typography>
-                                        </div>
-                                    }
-
-                                />
-
-
-                                <Chip onClick={() => {
-                                    setDrawerOpen(true)
-                                    setScoutId(item._id)
-                                    router.push({
-                                        pathname: `/farms/${router.query.farm_id}/crops/${router.query.crop_id}`,
-                                        query: { "scout_id": item._id }
-                                    })
-                                }}
-                                    label=
-                                    {<div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", alignContent: "center" }}><Image
-                                        alt="Delete"
-                                        height={15}
-                                        width={15}
-                                        src="/comments-icon.svg"
-                                        style={{ borderRadius: "5%" }}
-                                    /><Typography style={{ marginLeft: "5px" }}>2</Typography>
-                                    </div>}
-
-                                />
-
-
-
+                                    className={styles.ctaButton} 
+                                    variant="outlined"
+                                    size="small"
+                                    color="success">
+                                    <VisibilityIcon />
+                                    <span>View</span>
+                                </Button>
+                                <Button 
+                                    className={styles.ctaButton} 
+                                    onClick={() => {
+                                        setDrawerOpen(true)
+                                        setScoutId(item._id)
+                                        router.push({
+                                            pathname: `/farms/${router.query.farm_id}/crops/${router.query.crop_id}`,
+                                            query: { "scout_id": item._id }
+                                        })
+                                    }}
+                                    color="primary"
+                                    variant="outlined"
+                                    size="small">
+                                    <ChatBubbleOutlineIcon />
+                                    <span>02</span>
+                                </Button>
                             </div>
                         </div>
 

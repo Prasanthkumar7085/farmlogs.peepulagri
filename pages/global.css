@@ -342,6 +342,7 @@ body {
 }
 
 .ReactGridGallery_tile-viewport img {
+    object-fit: cover;  
     cursor: pointer;
     max-width: none;
     width: 100% !important;

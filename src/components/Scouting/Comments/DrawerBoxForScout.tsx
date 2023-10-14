@@ -205,21 +205,21 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
             anchor={anchor}
             open={isDrawerOpen}
         >
-            <div style={{ display: "flex", justifyContent: "space-between", width: anchor == "right" ? 600 : "" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem", borderBottom: "1px solid #dddddd", width: anchor == "right" ? 600 : "" }}>
 
                 {anchor == "right" ?
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <Typography variant="h6">{item?.farm_id?.title}</Typography>
                         {timePipe(item?.createdAt, "DD MMM YYYY, hh:mm A")}
                     </div> : ""}
-                <Typography>{anchor == "right" ? cropTitle : "Comments"}</Typography>
+                <Typography className={styles.CommentsTitle}>{anchor == "right" ? cropTitle : "Comments"}</Typography>
                 <IconButton onClick={() => {
                     drawerClose(false)
                 }} ><CloseIcon /></IconButton>
             </div>
 
             <div className={styles.CommentsBlock}>
-                <div style={{ marginTop: "30px" }}>
+                <div className={styles.CommentsContainer}>
                     <Threads
                         details={data}
                         afterCommentAdd={afterCommentAdd}

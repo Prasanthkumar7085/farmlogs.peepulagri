@@ -94,7 +94,8 @@
   padding: 0.5rem;
   border-radius: 0;
   background: #FFF;
-  box-shadow: 4px 4px 20px 0px rgba(211, 211, 211, 0.50);
+  margin-bottom: 2px;
+  box-shadow: 0 0 2px 0 #e7e7e7;
 }
 
 .galleryCard .postDate {
@@ -192,7 +193,7 @@
   justify-content: center;
   gap: 0.35rem;
   font-family: 'Inter', sans-serif;
-  font-size: clamp(14px, 2vw, 18px);
+  font-size: clamp(13px, 2vw, 18px);
   font-weight: 500;
   border-radius: 2.5rem;
 }

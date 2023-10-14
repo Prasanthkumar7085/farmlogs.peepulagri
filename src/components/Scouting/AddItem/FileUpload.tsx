@@ -494,7 +494,7 @@ const FileUploadComponent = () => {
       farm_id: formId,
       attachments: tempFilesStorage,
       crop_id: selectedCrop?._id,
-      description: description
+      findings: description
     };
 
     let options: any = {
@@ -835,8 +835,8 @@ const FileUploadComponent = () => {
                       id="input-description"
                     >
                       <div className={styles.label1}>
-                        Description
-                        <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
+                        Findings
+                        {/* <strong style={{ color: "rgb(228 12 15)" }}>*</strong> */}
                       </div>
                       <TextField
                         className={styles.input}
@@ -845,7 +845,7 @@ const FileUploadComponent = () => {
                         id="description"
                         rows={4}
                         maxRows={4}
-                        placeholder="Enter your description here"
+                        placeholder="Enter your findings here"
                         fullWidth={true}
                         variant="outlined"
                         multiline

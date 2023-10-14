@@ -718,7 +718,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                 <div className={styles.addscoutdetails}>
                                     <div className={styles.inputField}>
                                         <div className={styles.farmselection} id="input-description">
-                                            <div className={styles.label1}>Description<strong style={{ color: "rgb(228 12 15)" }}>*</strong></div>
+                                            <div className={styles.label1}>Description</div>
                                             <TextField
                                                 className={styles.input}
                                                 color="primary"

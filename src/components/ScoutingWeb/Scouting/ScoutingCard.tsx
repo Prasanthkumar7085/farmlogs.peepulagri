@@ -190,7 +190,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
               onClick={() => {
                 setScoutingDetailsDrawer(true)
                 router.push({
-                  pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+
                   query: { "scout_id": item._id }
                 })
               }}
@@ -206,7 +206,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
             <Chip onClick={() => {
               onViewClick()
               router.push({
-                pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+
                 query: { "scout_id": item._id }
               })
             }}
@@ -241,7 +241,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
         </div>
       </div>
       {scoutingDetailsDrawer == true ?
-        <ScoutingDetails drawerClose={drawerClose} /> : ""}
+        <ScoutingDetails drawerClose={drawerClose} item={item} /> : ""}
       {drawerOpen == true ?
         <DrawerComponentForScout drawerClose={drawerClose} scoutId={item._id} anchor={"right"} item={item} />
         : ""}

@@ -39,6 +39,18 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
     <div style={{ width: "100%" }}>
       {!autoCompleteLoading ? (
         <Autocomplete
+          sx={{
+            width: "100%",
+            borderRadius: "4px",
+
+            '& .MuiInputBase-root': {
+              paddingBlock: "5px !important",
+              background: "#f5f7fa",
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: "0"
+            }
+          }}
           value={defaultValueSet}
           disablePortal
           size="small"

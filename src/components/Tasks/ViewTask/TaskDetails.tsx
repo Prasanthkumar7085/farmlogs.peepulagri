@@ -98,8 +98,31 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   return (
     <div className={styles.cardDetails}>
       <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div >
-          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div className={styles.singleDetailsBox}>
+            {editField == "title" && editFieldOrNot ? (
+              <div style={{ width: "100%" }}>
+                <TextField
+                  sx={{
+                    width: "100%", background: "#f5f7fa",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: "0 !important"
+                    }
+                  }}
+                  size="small"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+
+              </div>
+            ) : (
+              <h1 className={styles.landPreparation}>
+                {data?.title ? data?.title : "-"}
+
+              </h1>
+            )}
+          </div>
+          <div>
             {editField == "title" && editFieldOrNot ?
               <div className={styles.iconBlock}>
                 <IconButton
@@ -133,29 +156,44 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 ""
               )}
           </div>
-          <div className={styles.userDetails}>
-            <div className={styles.singleDetailsBox}>
-              {editField == "title" && editFieldOrNot ? (
-                <div style={{ width: "65%" }}>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    size="small"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-
-                </div>
-              ) : (
-                <h1 className={styles.landPreparation}>
-                  {data?.title ? data?.title : "-"}
-
-                </h1>
-              )}
-            </div>
-          </div>
         </div>
-        <div >
-          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div className={styles.singleDetailsBox}>
+            {editField == "deadline" && editFieldOrNot ? (
+              <div className={styles.responseDate2} style={{ width: "100%" }}>
+                <div style={{ display: "flex", width: "100%" }}>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      sx={{ width: "100%" }}
+                      disablePast
+                      value={deadline}
+                      onChange={(newValue: any) => {
+                        setDeadline(newValue);
+                      }}
+                      format="dd/MM/yyyy"
+                      slotProps={{
+                        textField: {
+                          variant: "standard",
+                          size: "medium",
+                          color: "primary",
+                        },
+                      }}
+                    />
+                  </LocalizationProvider>
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: "flex" }}>
+                <p className={styles.text}>
+                  {data?.deadline
+                    ? timePipe(data?.deadline, "DD, MMM YYYY")
+                    : "-"}
+                </p>
+
+              </div>
+            )}
+          </div>
+          <div >
             {editField == "deadline" && editFieldOrNot ?
               <div className={styles.iconBlock}>
                 <IconButton
@@ -188,49 +226,10 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 ""
               )}
           </div>
-          <div className={styles.userDetails}>
-            <div className={styles.singleDetailsBox}>
-              <label className={styles.userLabel}>Due :</label>
-              {editField == "deadline" && editFieldOrNot ? (
-                <div className={styles.responseDate2} style={{ width: "65%" }}>
-                  <div style={{ display: "flex", width: "100%" }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DatePicker
-                        sx={{ width: "100%" }}
-                        disablePast
-                        value={deadline}
-                        onChange={(newValue: any) => {
-                          setDeadline(newValue);
-                        }}
-                        format="dd/MM/yyyy"
-                        slotProps={{
-                          textField: {
-                            variant: "standard",
-                            size: "medium",
-                            color: "primary",
-                          },
-                        }}
-                      />
-                    </LocalizationProvider>
-
-                  </div>
-                </div>
-              ) : (
-                <div style={{ display: "flex" }}>
-                  <p className={styles.text}>
-                    {data?.deadline
-                      ? timePipe(data?.deadline, "DD, MMM YYYY")
-                      : "-"}
-                  </p>
-
-                </div>
-              )}
-            </div>
-          </div>
         </div>
 
       </div>
-      <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+      <div className={styles.viewHeader} >
         <div className={styles.userBlock}>
           <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
             {userType !== "USER" ? (
@@ -268,7 +267,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           </div>
           <div className={styles.userDetails}>
             <div className={styles.singleDetailsBox} style={{ flexDirection: "column", alignItems: "flex-start !important" }}>
-              <label className={styles.userLabel}>Assigny</label>
+              <label className={styles.userLabel}>Assignee</label>
               {editField == "farm" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
@@ -384,7 +383,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   setEditFieldOrNot(true);
                   setEditField("description");
                 }}
+                sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
               >
+                <p style={{ margin: "0" }}>Edit Description</p>
                 <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
               </IconButton>
             ) : (

@@ -48,7 +48,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
                     {!item?.type?.includes("video") ? (
                       <div>
                         <Checkbox />
-
                         <div>
 
                         </div>

@@ -4,7 +4,6 @@
   width: 100%;
 }
 
-
 .landPreparation {
   color: var(--Brown, #A05148);
 }
@@ -18,9 +17,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
 }
-
 
 .status {
   display: flex;
@@ -33,27 +30,21 @@
   width: 50%;
 }
 
-
-
 .userDetails {
   display: flex;
-  /* flex-direction: column; */
   align-items: flex-start;
   gap: 0.5rem;
-  /* background-color: #f5f7fa; */
-  /* box-shadow: 1px 0 4px 1px #f5f7fa; */
-  /* padding: 0.5rem; */
 }
 
-.userDetails h1 {
+.cardDetails h1 {
   margin: 0;
   font-size: clamp(14px, 0.83vw, 18px);
 }
 
-.userDetails input {
+.cardDetails input {
   font-size: 11px;
   font-weight: 600;
-
+  padding-block: 6px;
 }
 
 .userLabel {
@@ -72,13 +63,18 @@
   font-weight: 500;
 }
 
-
-
 .responseDate2 {
   background-color: #f5f7fa;
   padding: 4px 10px;
 }
 
+.viewHeader {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
 
 .cardDetails,
 .description {
@@ -87,8 +83,6 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  font-size: 18px;
-  color: #101828;
 }
 
 .descriptionText {
@@ -96,12 +90,24 @@
   align-items: center;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-  justify-content: flex-start;
-  gap: 0.5rem;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 2rem;
 }
 
-.descriptionText button {
-  padding: 0;
+.descriptionText p {
+  color: #000;
+  font-size: clamp(13px, 0.72vw, 16px);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.cardDetails button {
+  padding: 0 !important;
+}
+
+.cardDetails button:hover {
+  background: none !important;
 }
 
 .label {

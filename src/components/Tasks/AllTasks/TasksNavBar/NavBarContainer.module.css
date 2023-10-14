@@ -5,45 +5,51 @@
   overflow: hidden;
   flex-shrink: 0;
 }
+
 .taskManagement {
-  margin: 0;
-  flex: 1;
-  position: relative;
-  font-size: inherit;
+  color: var(--Gray-1, #333);
+  font-family: "Inter", sans-serif;
+  font-size: clamp(20px, 1.2vw, 24px);
   font-weight: 400;
-  font-family: inherit;
 }
+
 .pagetitle {
-  flex: 1;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
 }
+
 .filter {
-  cursor: pointer;
+  border-radius: 4px;
+  background: var(--Green-Gradient, #05A155);
+  color: #FFF;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(14px, 0.72vw, 16px);
+  font-weight: 500;
+  padding-block: 5px;
 }
+
 .searchbar {
   border: 0;
   background-color: transparent;
 }
+
 .headeractions,
 .navbarcontainer {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  padding: 2rem
 }
+
 .headeractions {
-  justify-content: flex-start;
+  justify-content: flex-end;
   gap: 16px;
+  width: 75%;
 }
+
 .navbarcontainer {
-  align-self: stretch;
   justify-content: space-between;
-  text-align: left;
-  font-size: 24px;
-  color: #333;
   font-family: Inter;
+  padding-block: 1.5rem;
+  width: 100%;
 }

@@ -11,10 +11,12 @@
   height: 100%;
   object-fit: cover;
 }
+
 .label {
   cursor: pointer;
   line-height: 20px;
 }
+
 .landPreparation {
   margin: 0;
   font-size: 24px;
@@ -22,6 +24,7 @@
   font-family: inherit;
   color: #a05148;
 }
+
 .title {
   flex: 1;
   display: flex;
@@ -30,12 +33,14 @@
   justify-content: flex-start;
   gap: 4px;
 }
+
 .label1 {
   cursor: pointer;
   position: relative;
   line-height: 20px;
   font-weight: 500;
 }
+
 .indicatorIcon {
   position: relative;
   border-radius: 50%;
@@ -43,12 +48,14 @@
   height: 8px;
   object-fit: cover;
 }
+
 .status2 {
   margin: 0;
   position: relative;
   line-height: 100%;
   font-weight: 500;
 }
+
 .status1 {
   display: flex;
   flex-direction: row;
@@ -58,11 +65,13 @@
   font-size: 16px;
   color: #f2a84c;
 }
+
 .idandStatus,
 .status {
   align-self: stretch;
   display: flex;
 }
+
 .status {
   width: 365.5px;
   flex-direction: column;
@@ -70,21 +79,56 @@
   justify-content: center;
   gap: 4px;
 }
+
 .idandStatus {
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
 }
+
+.userBlock {
+  width: 50%;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  box-shadow: 1px 0 4px 1px lightgreen;
+  padding: 0.5rem;
+}
+
+.userDetails h1 {
+  margin: 0;
+  font-size: clamp(14px, 0.83vw, 18px);
+}
+
+.userDetails input {
+
+  font-size: 11px;
+  font-weight: 600;
+
+}
+
+.userDetails .userLabel {
+  color: #000;
+  font-size: clamp(13px, 0.72vw, 16px);
+  font-weight: 500;
+  width: 30%;
+}
+
 .responseDate {
   cursor: pointer;
   position: relative;
   line-height: 130%;
   font-weight: 500;
 }
+
 .text {
   margin: 0;
   position: relative;
 }
+
 .responseDate1 {
   background-color: #f5f7fa;
   width: 200px;
@@ -98,6 +142,7 @@
   font-size: 16px;
   color: #35353d;
 }
+
 .responseDate2 {
   background-color: #f5f7fa;
   width: 20rem;
@@ -111,9 +156,11 @@
   font-size: 16px;
   color: #35353d;
 }
+
 .response {
   gap: 4px;
 }
+
 .date,
 .response {
   align-self: stretch;
@@ -122,22 +169,26 @@
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .farmersPrepareThe,
 .label {
   align-self: stretch;
   position: relative;
 }
+
 .label {
   cursor: pointer;
   line-height: 18px;
   font-weight: 500;
 }
+
 .farmersPrepareThe {
   margin: 0;
   font-size: 14px;
   line-height: 150%;
   color: #35353d;
 }
+
 .cardDetails,
 .description,
 .title {
@@ -150,6 +201,7 @@
   font-size: 18px;
   color: #101828;
 }
+
 .cardDetails {
   padding: 16px 16px 0;
   gap: 24px;

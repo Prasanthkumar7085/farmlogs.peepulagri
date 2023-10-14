@@ -1,6 +1,6 @@
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import { TaskResponseTypes } from "@/types/tasksTypes";
-import { Button, ClickAwayListener } from "@mui/material";
+import { Button, ClickAwayListener, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import TanStackTableComponent from "./TanStackTable";
@@ -31,9 +31,9 @@ const TasksTableComponent = ({
 }: pageProps) => {
   const router = useRouter();
 
-   const userType = useSelector(
-     (state: any) => state.auth.userDetails?.user_details?.user_type
-   );
+  const userType = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?.user_type
+  );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -41,8 +41,8 @@ const TasksTableComponent = ({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string>("");
-  const [drawerOpen, setDrawerOpen] = useState<any>(false)
-  const [rowDetails, setRowDetails] = useState<any>()
+  const [drawerOpen, setDrawerOpen] = useState<any>(false);
+  const [rowDetails, setRowDetails] = useState<any>();
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -80,7 +80,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Created On</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "120px",
     },
     {
       accessorFn: (row: any) => row.farm_id.title,
@@ -91,6 +91,18 @@ const TasksTableComponent = ({
         </span>
       ),
       header: () => <span>Farm Name</span>,
+      footer: (props: any) => props.column.id,
+      width: "200px",
+    },
+    {
+      accessorFn: (row: any) => row.assigned_to?.phone,
+      id: "assigned_to",
+      cell: (info: any) => (
+        <span style={{ padding: "40px 10px 40px 10px" }}>
+          {info.getValue()}
+        </span>
+      ),
+      header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
       width: "200px",
     },
@@ -107,19 +119,35 @@ const TasksTableComponent = ({
       ),
       header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
       footer: (props: any) => props.column.id,
-      width: "400px",
+      width: "250px",
     },
     {
       accessorFn: (row: any) => row.description,
       id: "description",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          <Tooltip
+            title={
+              info.getValue()?.length > 50 ? (
+                <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
+              ) : (
+                ""
+              )
+            }
+          >
+            <span>
+              {info.getValue()
+                ? info.getValue()?.length > 50
+                  ? info.getValue().slice(0, 46) + "....."
+                  : info.getValue()
+                : "-"}
+            </span>
+          </Tooltip>
         </span>
       ),
       header: () => <span>Description</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "400px",
     },
     {
       accessorFn: (row: any) => row.deadline,
@@ -131,7 +159,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Due Date</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "120px",
     },
     {
       accessorFn: (row: any) => row.status,
@@ -143,7 +171,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Status</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "120px",
     },
     {
       // accessorFn: (row: any) => row.description,

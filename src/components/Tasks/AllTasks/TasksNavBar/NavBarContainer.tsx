@@ -61,7 +61,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
   }, []);
 
   const getAllFarms = async () => {
-    const response = await ListAllFarmForDropDownService(accessToken);
+    const response = await ListAllFarmForDropDownService("", accessToken);
     if (response?.success) {
       setFarmOptions(response?.data);
       if (router.query.farm_id) {

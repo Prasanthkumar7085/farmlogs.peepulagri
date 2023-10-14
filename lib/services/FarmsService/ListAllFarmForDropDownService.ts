@@ -1,4 +1,7 @@
-const ListAllFarmForDropDownService = async (token: string) => {
+const ListAllFarmForDropDownService = async (
+  queryString: string,
+  token: string
+) => {
   try {
     let options = {
       method: "GET",
@@ -7,7 +10,7 @@ const ListAllFarmForDropDownService = async (token: string) => {
       }),
     };
     let response: any = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/farm/list?order_by=title&order_type=asc`,
+      `${process.env.NEXT_PUBLIC_API_URL}/farm/list${queryString}`,
       options
     );
     const responseData = await response.json();

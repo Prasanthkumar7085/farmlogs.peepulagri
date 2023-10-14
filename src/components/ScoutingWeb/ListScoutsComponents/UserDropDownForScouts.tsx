@@ -49,6 +49,7 @@ const UserDropDownForScouts = ({
               </li>
             );
           }}
+
           getOptionLabel={(option: any) => option.phone}
           options={usersOptions}
           onChange={onChangeUser}

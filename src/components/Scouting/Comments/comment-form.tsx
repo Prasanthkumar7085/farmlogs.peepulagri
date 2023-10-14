@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./comment-form.module.css";
+import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 
 const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
@@ -16,7 +17,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
 
 
   const [comment, setComment] = useState<any>()
-  const [multipleFiles, setMultipleFiles] = useState<any>()
+  const [multipleFiles, setMultipleFiles] = useState<any>([])
   const [fileProgress, setFileProgress] = useState<number[] | any>([]);
   const [attachments, setAttachments] = useState<any>([])
   const [selectedCrop, setSelectedCrop] = useState<any>()
@@ -171,9 +172,11 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${comment_id}/reply`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
-
         setComment("")
         afterCommentAdd(true)
+        setMultipleFiles([])
+        setAttachments([])
+        dispatch(removeTheAttachementsFilesFromStore([]))
         dispatch(removeTheAttachementsFilesFromStore([]))
 
       }

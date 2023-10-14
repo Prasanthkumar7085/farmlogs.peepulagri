@@ -1,8 +1,31 @@
 import { AttachmentsForPreview } from "./scoutTypes";
 
+
+export interface userTaskType {
+  _id: string;
+  user_type: string;
+  phone: string;
+  phone_verified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: 0;
+}
+
+export interface TaskAttachmentsType {
+  name: string;
+  original_name: string;
+  type: string;
+  size: number;
+  path: string;
+  url: string;
+  _id: string;
+}
 export interface TaskResponseTypes {
   _id: string;
-  farm_id: string;
+  farm_id: {
+    title: string;
+    _id: string;
+  };
   title: string;
   description: string;
   categories: Array<string>;
@@ -14,10 +37,15 @@ export interface TaskResponseTypes {
     email: string;
     full_name: string;
   };
-  attchments: string;
+  attchments: Array<TaskAttachmentsType>;
   createdAt: string;
   updatedAt: string;
   attachments: Array<AttachmentsForPreview>;
+  assigned_to: {
+    _id: string;
+    full_name: string;
+    email: string;
+  };
 }
 
 export interface FarmInTaskType {

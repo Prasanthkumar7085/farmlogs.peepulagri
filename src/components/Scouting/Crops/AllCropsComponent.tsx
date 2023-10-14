@@ -112,7 +112,7 @@ const AllCropsComponent = () => {
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${formId}/crops`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${formId ? formId : router.query.farm_id}/crops`, options)
             let responseData = await response.json()
             if (responseData.success) {
                 await getCropsDetails(formId)
@@ -293,7 +293,7 @@ const AllCropsComponent = () => {
                         : "")}
             </div>
 
-            {cropOptions?.length && !loading ? <div className="addFormPositionIcon" >
+            {!loading ? <div className="addFormPositionIcon" >
                 <img src="/add-plus-icon.svg" alt="" onClick={() => setDilogOpen(true)} />
             </div> : ""}
 

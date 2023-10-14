@@ -63,14 +63,24 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   };
 
   const drawerClose = (value: any) => {
-    console.log(value)
+    
     if (value == false) {
-      setDrawerOpen(false)
-      setScoutingDetailsDrawer(false)
+      setDrawerOpen(false);
+      setScoutingDetailsDrawer(false);
+      if (router.pathname == "/scouts") {
+        router.push({
+          pathname: `/scouts`,
+          query: {},
+        });
+      } else {
+        router.push({
+          pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+          query: {},
+        });
+      }
     }
   }
   return (
-
     <div className={styles.scoutingCard}>
       <div className={styles.carddetails}>
         <div>
@@ -182,77 +192,105 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
       <div className={styles.carddetails}>
         {/* <p className={styles.date}>{timePipe(item.createdAt, 'DD MMM YYYY, hh:mm A')}</p> */}
         <div className={styles.buttons}>
-
-
-
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
             <Chip
               onClick={() => {
-                setScoutingDetailsDrawer(true)
-                router.push({
-                  pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
-                  query: { "scout_id": item._id }
-                })
+                setScoutingDetailsDrawer(true);
+                if (router.pathname == "/scouts") {
+                  router.push({
+                    pathname: `/scouts`,
+                    query: { scout_id: item._id },
+                  });
+                } else {
+                  router.push({
+                    pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+                    query: { scout_id: item._id },
+                  });
+                }
               }}
               label={
-                <div style={{ display: "flex", alignItems: "center", alignContent: "center" }}>
-                  < VisibilityIcon />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <VisibilityIcon />
                   <Typography style={{ marginLeft: "5px" }}>View</Typography>
                 </div>
               }
-
             />
 
-            <Chip onClick={() => {
-              onViewClick()
-              router.push({
-                pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
-                query: { "scout_id": item._id }
-              })
-            }}
-              label=
-              {<div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", alignContent: "center" }}>
-                <Image
-                  alt="Delete"
-                  height={15}
-                  width={15}
-                  src="/comments-icon.svg"
-                  style={{ borderRadius: "5%" }}
-                /><Typography style={{ marginLeft: "5px" }}>2</Typography>
-              </div>}
-
+            <Chip
+              onClick={() => {
+                onViewClick();
+                if (router.pathname == "/scouts") {
+                  router.push({
+                    pathname: `/scouts`,
+                    query: { scout_id: item._id },
+                  });
+                } else {
+                  router.push({
+                    pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+                    query: { scout_id: item._id },
+                  });
+                }
+              }}
+              label={
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    alignContent: "center",
+                  }}
+                >
+                  <Image
+                    alt="Delete"
+                    height={15}
+                    width={15}
+                    src="/comments-icon.svg"
+                    style={{ borderRadius: "5%" }}
+                  />
+                  <Typography style={{ marginLeft: "5px" }}>2</Typography>
+                </div>
+              }
             />
-
           </div>
-
-          {/* <div className={styles.view} onClick={() => {
-            onViewClick()
-            router.push({
-              pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
-              query: { "scout_id": item._id }
-            })
-          }}>
-            <img
-              className={styles.trashXmark1Icon}
-              alt=""
-              src="/farm-view-icon.svg"
-            />
-          </div> */}
         </div>
       </div>
-      {scoutingDetailsDrawer == true ?
-        <ScoutingDetails drawerClose={drawerClose} /> : ""}
-      {drawerOpen == true ?
-        <DrawerComponentForScout drawerClose={drawerClose} scoutId={item._id} anchor={"right"} item={item} />
-        : ""}
-      <VideoDialogForScout
-        open={openDialog}
-        onClose={handleCloseDialog}
-        mediaArray={item.attachments}
-        index={index}
-      />
+      {scoutingDetailsDrawer == true ? (
+        <ScoutingDetails drawerClose={drawerClose} />
+      ) : (
+        ""
+      )}
+      {drawerOpen == true ? (
+        <DrawerComponentForScout
+          drawerClose={drawerClose}
+          scoutId={item._id}
+          anchor={"right"}
+          item={item}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
 
 export default ScoutingCardWeb;
+
+// {/* <VideoDialogForScout
+//   open={openDialog}
+//   onClose={handleCloseDialog}
+//   mediaArray={item.attachments}
+//   index={index}
+// /> */}

@@ -4,7 +4,6 @@ import timePipe from "@/pipes/timePipe";
 import { TaskResponseTypes } from "@/types/tasksTypes";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { IconButton, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -109,14 +108,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     setEditField("");
                   }}
                 >
-                  <CloseIcon />
+                  <CloseIcon sx={{ color: "red" }} />
                 </IconButton>
                   <IconButton
                     onClick={() => {
                       onUpdateField();
                     }}
                   >
-                    <DoneIcon />
+                    <DoneIcon sx={{ color: "green" }} />
                   </IconButton></div> :
 
 
@@ -127,7 +126,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     setEditField("farm");
                   }}
                 >
-                  <ModeEditOutlinedIcon />
+                  <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
                 </IconButton>
             ) : (
               ""
@@ -182,7 +181,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           <label className={styles.label1}>Status</label>
 
           <div className={styles.status1}>
-            {/* <img
+            {/* <img classsname={styles.editicon} 
               className={styles.indicatorIcon}
               alt=""
               src="/indicator@2x.png"
@@ -234,7 +233,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   setEditField("");
                 }}
               >
-                <CloseIcon />
+                <CloseIcon sx={{ color: "red" }} />
               </IconButton>
               <IconButton
                 onClick={() => {
@@ -243,7 +242,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   // setEditField("");
                 }}
               >
-                <DoneIcon />
+                <DoneIcon sx={{ color: "green" }} />
               </IconButton>
             </div>
           ) : (
@@ -256,7 +255,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     setEditField("title");
                   }}
                 >
-                  <ModeEditOutlinedIcon />
+                  <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
                 </IconButton>
               ) : (
                 ""
@@ -294,7 +293,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     setEditField("");
                   }}
                 >
-                  <CloseIcon />
+                  <CloseIcon sx={{ color: "red" }} />
                 </IconButton>
                 <IconButton
                   onClick={() => {
@@ -303,7 +302,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     // setEditField("");
                   }}
                 >
-                  <DoneIcon />
+                  <DoneIcon sx={{ color: "green" }} />
                 </IconButton>
               </div>
             </div>
@@ -321,7 +320,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     setEditField("deadline");
                   }}
                 >
-                  <ModeEditOutlinedIcon />
+                  <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
                 </IconButton>
               ) : (
                 ""
@@ -348,7 +347,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 setEditField("");
               }}
             >
-              <CloseIcon />
+              <CloseIcon sx={{ color: "red" }} />
             </IconButton>
             <IconButton
               onClick={() => {
@@ -357,7 +356,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 // setEditField("");
               }}
             >
-              <DoneIcon />
+              <DoneIcon sx={{ color: "green" }} />
             </IconButton>
           </div>
         ) : (
@@ -370,7 +369,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   setEditField("description");
                 }}
               >
-                <ModeEditOutlinedIcon />
+                <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
               </IconButton>
             ) : (
               ""

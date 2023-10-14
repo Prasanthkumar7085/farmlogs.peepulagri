@@ -1,6 +1,6 @@
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 import { FarmInTaskType } from "@/types/tasksTypes";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, CircularProgress, InputAdornment, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ interface PropsTypes {
   label: string;
   placeholder: string;
   defaultValue: FarmInTaskType | null | undefined;
+  loading: boolean
 }
 const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
   options,
@@ -18,6 +19,7 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
   label,
   placeholder,
   defaultValue,
+  loading
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -60,6 +62,11 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
               {...params}
               placeholder={placeholder}
               sx={{ width: "100%", background: "#fff" }}
+              InputProps={{
+                endAdornment: <InputAdornment position="start">
+                  {loading ? <CircularProgress size="1.5rem" sx={{ color: "blue" }} /> : ""}
+                </InputAdornment>,
+              }}
             />
           )}
 
@@ -78,6 +85,7 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
       ) : (
         ""
       )}
+
     </div>
   );
 };

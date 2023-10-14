@@ -111,6 +111,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   return (
     <div className={styles.threads}>
       {details?.length ? details.map((item: any, index: any) => {
+        const lines = item.content.split('\n');
+
         if (item.type == "DIRECT") {
           return (
             <div className={styles.inMessage} key={index}>
@@ -143,10 +145,13 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     </div> :
 
                     <p className={styles.theProblemIm} >
-                      {item.content}{"                     "}<Typography variant="caption" sx={{ wordBreak: "break-word" }}>{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
+                      {lines.map((line: any, index: any) => (
+                        <div key={index}>{line}</div>
+                      ))}{"                     "}<Typography variant="caption" sx={{ wordBreak: "break-word" }}>{item.createdAt == item.updatedAt ? "" : "(edited)"}</Typography>
                     </p>}
                   <div className={styles.attachmentContainer}>
                     {item.attachments.length !== 0 ? item.attachments.map((file: any, indexfile: any) => {
+
                       return (
                         <div className={styles.attachment} key={indexfile}>
                           <div className={styles.row}>
@@ -290,6 +295,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
                   : ""}
                 {(replyOpen == true && index == replyIndex) || (isReplies == true && index == replyIndex && item.replies.length) ? item.replies.map((row: any) => {
+                  const lines = row.content.split('\n');
+
                   return (
                     <div className={styles.inMessage1} key={index}>
                       {row?.user?.user_type == "USER" ?
@@ -323,7 +330,9 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                             </div> :
 
                             <p className={styles.theProblemIm}>
-                              {row.content}{"                     "}<Typography variant="caption">{row.createdAt == row.updatedAt ? "" : "(edited)"}</Typography>
+                              {lines.map((line: any, index: any) => (
+                                <div key={index}>{line}</div>
+                              ))}{"                     "}<Typography variant="caption">{row.createdAt == row.updatedAt ? "" : "(edited)"}</Typography>
                             </p>}
 
                           {row.attachments.length ? row.attachments.map((file: any, fileIndex: any) => {

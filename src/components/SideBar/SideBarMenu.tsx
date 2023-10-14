@@ -27,13 +27,44 @@ const SideBarMenu = ({ children }: any) => {
     const dispatch = useDispatch();
 
     const menuListItems = [
-        { src: '/dashboard-icon.svg', link: `/farm`, isVisible: userName !== 'ADMIN', active: router.pathname.includes('/farm'), toolTitle: 'Farms' },
-        { src: '/support-icon.svg', link: "/support", isVisible: true, active: router.pathname.includes('/support'), toolTitle: 'Support' },
-        { src: '/timeline-icon.svg', link: "/timeline", isVisible: userName !== 'ADMIN', active: router.pathname.includes('/timeline'), toolTitle: 'Time Line' },
-        { src: '/graph-icon.svg', link: "/tasks" , isVisible: userName !== 'ADMIN', active: router.pathname.includes('/tasks'), toolTitle: 'Tasks' },
-        // { src: '/settings-icon.svg', link: "/" },
-        // { src: '/calendaricon.svg', link: "/" },
-    ]
+      {
+        src: "/dashboard-icon.svg",
+        link: `/farm`,
+        isVisible: userName !== "ADMIN",
+        active: router.pathname.includes("/farm"),
+        toolTitle: "Farms",
+      },
+      {
+        src: "/support-icon.svg",
+        link: "/support",
+        isVisible: true,
+        active: router.pathname.includes("/support"),
+        toolTitle: "Support",
+      },
+      {
+        src: "/timeline-icon.svg",
+        link: "/timeline",
+        isVisible: userName !== "ADMIN",
+        active: router.pathname.includes("/timeline"),
+        toolTitle: "Time Line",
+      },
+      {
+        src: "/scout-menu-icon.svg",
+        link: "/scouts",
+        isVisible: userName !== "ADMIN",
+        active: router.pathname.includes("/scouts"),
+        toolTitle: "Scouts",
+      },
+      {
+        src: "/graph-icon.svg",
+        link: "/tasks",
+        isVisible: userName !== "ADMIN",
+        active: router.pathname.includes("/tasks"),
+        toolTitle: "Tasks",
+      },
+      // { src: '/calendaricon.svg', link: "/" },
+      // { src: '/graph-icon.svg', link: "/" },
+    ];
 
 
     const logout = async () => {

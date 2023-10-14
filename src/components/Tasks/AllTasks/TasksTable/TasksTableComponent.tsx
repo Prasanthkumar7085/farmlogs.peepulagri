@@ -31,6 +31,9 @@ const TasksTableComponent = ({
 }: pageProps) => {
   const router = useRouter();
 
+   const userType = useSelector(
+     (state: any) => state.auth.userDetails?.user_details?.user_type
+   );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -180,23 +183,38 @@ const TasksTableComponent = ({
                   alt="view"
                 />
               </div> */}
+              {userType !== "USER" ? (
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setDeleteTaskId(info.row.original?._id);
+                    setDialogOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src="/trast-icon.svg"
+                    height={17}
+                    width={17}
+                    alt="view"
+                  />
+                </div>
+              ) : (
+                ""
+              )}
               <div
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  setDeleteTaskId(info.row.original?._id);
-                  setDialogOpen(true);
+                  setRowDetails(info.row.original);
+                  setDrawerOpen(true);
                 }}
               >
-                Delete
+                <ImageComponent
+                  src="/task-comments.svg"
+                  height={17}
+                  width={17}
+                  alt="comments"
+                />
               </div>
-              <Button
-                onClick={() => {
-                  setRowDetails(info.row.original)
-                  setDrawerOpen(true)
-                }}
-              >
-                Comments
-              </Button>
             </div>
           }
         </span>
@@ -207,13 +225,9 @@ const TasksTableComponent = ({
     },
   ];
 
-
-  const drawerClose = (value: any) => {
-    console.log(value)
-    if (value == false) {
-      setDrawerOpen(false)
-    }
-  }
+  const drawerClose = () => {
+    setDrawerOpen(false);
+  };
   return (
     <div>
       <TanStackTableComponent
@@ -229,11 +243,17 @@ const TasksTableComponent = ({
         deleteFarm={deleteTask}
         loading={deleteLoading}
       />
-      {drawerOpen == true ?
-        <ClickAwayListener onClickAway={() => setDrawerOpen(true)}>
-          <DrawerBoxComponent drawerClose={drawerClose} rowDetails={rowDetails} />
-        </ClickAwayListener>
-        : ""}
+      {drawerOpen ? (
+        <DrawerBoxComponent
+          drawerClose={drawerClose}
+          rowDetails={rowDetails}
+          setDrawerOpen={setDrawerOpen}
+          drawerOpen={drawerOpen}
+        />
+      ) : (
+        // </ClickAwayListener>
+        ""
+      )}
       <Toaster richColors position="top-right" closeButton />
     </div>
   );

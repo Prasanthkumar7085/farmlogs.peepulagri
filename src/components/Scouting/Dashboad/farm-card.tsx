@@ -58,7 +58,8 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
                     </div>
                   </div>
                   <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}`)}>
-                    <SettingsIcon sx={{ color: "#c1c1c1" }} />
+                    {/* <SettingsIcon sx={{ color: "#c1c1c1" }} /> */}
+                    <ImageComponent src='/setting.svg' height={18} width={18} alt='image' />
                   </div>
                 </div>
               </div>

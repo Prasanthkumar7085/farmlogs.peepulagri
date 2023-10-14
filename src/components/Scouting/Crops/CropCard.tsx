@@ -3,7 +3,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
 import { CropTypeResponse } from "@/types/cropTypes";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Chip, Avatar } from "@mui/material";
 import { useState } from "react";
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
@@ -14,6 +14,8 @@ import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteCropService from "../../../../lib/services/CropServices/deleteCropService";
 import AlertComponent from "@/components/Core/AlertComponent";
 import { setCropTitleTemp } from "@/Redux/Modules/Farms";
+import SpaIcon from '@mui/icons-material/Spa';
+import Image from "next/image";
 
 interface pagePropsType {
   itemDetails: CropTypeResponse;
@@ -123,17 +125,28 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
   return (
     <div className={styles.folder}>
       <div className={styles.cropcard}>
-        <div className={styles.icons}>
-          <img
+        <div className={styles.icons}>          
+          <Image 
             className={styles.folderIcon}
-            alt=""
-            src="/folder.svg"
+            src="/crops-folder.svg" 
+            alt="Folder" 
+            width={80} 
+            height={80} 
             onClick={() => setToStorage(itemDetails?.title)}
           />
-          <MoreVertIcon
-            sx={{ color: "#FFB110", fontSize: "1.5rem" }}
-            onClick={(event: any) => setAnchorEl(event.currentTarget)}
-          />
+          <div className={styles.actions}>
+            {/* <Chip label="02" className={styles.count} icon={<SpaIcon fontSize="small" />} /> */}
+            <Chip
+              className={styles.count}
+              avatar={<Avatar alt="crop" src="/crop-icon.svg" className={styles.icon} variant="square"  />}
+              label="02"
+            />
+
+            <MoreVertIcon
+              sx={{ color: "#6A7185", fontSize: "1.5rem" }}
+              onClick={(event: any) => setAnchorEl(event.currentTarget)}
+            />
+          </div>
           <MenuItemsForFolder />
         </div>
         <div

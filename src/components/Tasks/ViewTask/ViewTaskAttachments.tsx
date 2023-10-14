@@ -3,7 +3,7 @@ import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
 import { FC, useState } from "react";
 import ImagePreviewDialog from "./ImagePreviewDialog";
 import styles from "./TaskDetails.module.css";
-import { Button, IconButton } from "@mui/material";
+import { Button, Checkbox, IconButton } from "@mui/material";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -13,7 +13,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
   const [openDialog, setOpenDialog] = useState(false);
   // const [selectedAttachmentIds, setSelectedAttachments] = useState([]);
 
-  const deleteTaskAttachment = (id: string) => {};
+  const deleteTaskAttachment = (id: string) => { };
 
   return (
     <div className={styles.cardDetails}>
@@ -40,45 +40,26 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
             {/* <Button>Delete Selected</Button> */}
           </div>
 
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
             {data?.attachments?.length
               ? data?.attachments?.map((item: any, index: number) => {
-                  return (
-                    <div key={index}>
-                      <div
-                        style={{
-                          height: "100px",
-                          width: "100px",
-                          objectFit: "cover",
-                          position: "relative",
-                        }}
-                        onClick={() => {
-                          setImagePreviewIndex(index);
-                          setOpenDialog(true);
-                        }}
-                      >
-                        {!item?.type?.includes("video") ? (
-                          <img src={item?.url} className={styles.imageIcon} />
-                        ) : (
-                          <img
-                            src={"/videoimg.png"}
-                            className={styles.imageIcon}
-                          />
-                        )}
+                return (
+                  <div key={index}>
+                    {!item?.type?.includes("video") ? (
+                      <div>
+                        <Checkbox />
+
+                        <div>
+
+                        </div>
                       </div>
-                      {/* <IconButton
-                        onClick={() => deleteTaskAttachment(item?._id)}
-                      >
-                        <ImageComponent
-                          src="/trast-icon.svg"
-                          height={17}
-                          width={17}
-                          alt="view"
-                        />
-                      </IconButton> */}
-                    </div>
-                  );
-                })
+                    ) : (
+
+                      ""
+                    )}
+                  </div>
+                );
+              })
               : "No Attachements"}
           </div>
         </div>

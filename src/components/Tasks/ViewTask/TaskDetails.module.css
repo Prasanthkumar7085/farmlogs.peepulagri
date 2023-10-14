@@ -1,28 +1,12 @@
-.label,
-.landPreparation {
-  align-self: stretch;
-  position: relative;
-  font-weight: 500;
-}
-
-.imageIcon {
-  flex: 1;
+.singleDetailsBox {
+  display: flex;
+  gap: 0.5rem;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-.label {
-  cursor: pointer;
-  line-height: 20px;
-}
 
 .landPreparation {
-  margin: 0;
   color: var(--Brown, #A05148);
-  font-family: "Inter", sans-serif;
-  font-size: clamp(15px, 0.833vw, 20px);
-  font-weight: 500;
 }
 
 .editicon {
@@ -30,77 +14,35 @@
   height: 12px;
 }
 
-.title {
-  flex: 1;
+.iconBlock {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 4px;
-}
-
-.label1 {
-  cursor: pointer;
-  position: relative;
-  line-height: 20px;
-  font-weight: 500;
-}
-
-.indicatorIcon {
-  position: relative;
-  border-radius: 50%;
-  width: 8px;
-  height: 8px;
-  object-fit: cover;
-}
-
-.status2 {
-  margin: 0;
-  position: relative;
-  line-height: 100%;
-  font-weight: 500;
-}
-
-.status1 {
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-  font-size: 16px;
-  color: #f2a84c;
+  gap: 0.5rem;
+
 }
 
-.idandStatus,
-.status {
-  align-self: stretch;
-  display: flex;
-}
 
 .status {
-  width: 365.5px;
+  display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
   gap: 4px;
-}
-
-.idandStatus {
-  align-items: center;
-  gap: 1rem;
+  width: 15%;
 }
 
 .userBlock {
   width: 50%;
 }
 
+
+
 .userDetails {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   align-items: flex-start;
   gap: 0.5rem;
-  box-shadow: 1px 0 4px 1px lightgreen;
-  padding: 0.5rem;
+  /* background-color: #f5f7fa; */
+  /* box-shadow: 1px 0 4px 1px #f5f7fa; */
+  /* padding: 0.5rem; */
 }
 
 .userDetails h1 {
@@ -109,106 +51,110 @@
 }
 
 .userDetails input {
-
   font-size: 11px;
   font-weight: 600;
 
 }
 
-.userDetails .userLabel {
+.userLabel {
   color: #000;
   font-size: clamp(13px, 0.72vw, 16px);
   font-weight: 500;
   width: 30%;
 }
 
-.responseDate {
-  cursor: pointer;
-  position: relative;
-  line-height: 130%;
-  font-weight: 500;
-}
-
 .text {
   margin: 0;
   position: relative;
+  color: var(--Title, #35353D);
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 0.62vw, 18px);
+  font-weight: 500;
 }
 
-.responseDate1 {
-  background-color: #f5f7fa;
-  width: 200px;
-  display: flex;
-  flex-direction: row;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 4px 10px;
-  box-sizing: border-box;
-  text-align: center;
-  font-size: 16px;
-  color: #35353d;
-}
+
 
 .responseDate2 {
   background-color: #f5f7fa;
-  width: 20rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center !important;
-  justify-content: space-between !important;
   padding: 4px 10px;
-  box-sizing: border-box;
-  text-align: center;
-  font-size: 16px;
-  color: #35353d;
 }
 
-.response {
-  gap: 4px;
-}
 
-.date,
-.response {
+.cardDetails,
+.description {
   align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  font-size: 18px;
+  color: #101828;
 }
 
+.descriptionText {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.descriptionText button {
+  padding: 0;
+}
 
 .label {
-  color: var(--gray-700, #344054);
+  color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(12px, 0.72vw, 16px);
+  font-size: clamp(15px, 0.83vw, 20px);
   font-weight: 500;
   line-height: 20px;
 }
 
 .farmersPrepareThe {
   margin: 0;
-  font-size: 14px;
+  font-size: clamp(13px, 0.72vw, 16px);
   line-height: 150%;
   color: #35353d;
 }
 
-.cardDetails,
-.description,
-.title {
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 12px;
-  font-size: 18px;
-  color: #101828;
-}
-
 .cardDetails {
   padding: 16px 16px 0;
-  gap: 24px;
+  gap: 0.5rem;
   text-align: left;
   font-size: 14px;
   color: #344054;
   font-family: Inter;
+}
+
+.imageIcon {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/*This is a scroll bar customized styles*/
+.descriptionPara textarea::-webkit-scrollbar {
+  width: 4px;
+  height: 0px;
+
+}
+
+
+/* Track */
+.descriptionPara textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+.descriptionPara textarea::-webkit-scrollbar-thumb {
+  background: #c4c2c2;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.descriptionPara textarea::-webkit-scrollbar-thumb:hover {
+  background: #5a5959;
 }

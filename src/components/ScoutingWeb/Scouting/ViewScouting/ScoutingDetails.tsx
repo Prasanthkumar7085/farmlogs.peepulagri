@@ -34,48 +34,54 @@ const ScoutingDetails = ({ drawerClose }: any) => {
 
   const getSingleScout = async () => {
     setLoading(true);
-    const response = await getSingleScoutService(router.query.scout_id as string, accessToken);
+    const response = await getSingleScoutService(
+      router.query.scout_id as string,
+      accessToken
+    );
     if (response?.success) {
+      console.log(response?.data, "testing");
+
       setData(response?.data);
-      setSelectedFile(response?.data.attachments)
+      setSelectedFile(response?.data.attachments);
 
       getModifiedImages({ attachmentdetails: response.data.attachments });
-
     }
     setLoading(false);
   };
 
-
   const getModifiedImages = ({ attachmentdetails }: any) => {
     let details = [];
     if (attachmentdetails.length) {
-      details = attachmentdetails.map((item: ScoutAttachmentDetails, index: number) => {
-
-        if (item.type.includes('video')) {
-          return {
-            src: "/videoimg.png", height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url
+      details = attachmentdetails.map(
+        (item: ScoutAttachmentDetails, index: number) => {
+          if (item.type.includes("video")) {
+            return {
+              src: "/videoimg.png",
+              height: 80,
+              width: 60,
+              caption: `${index + 1} image`,
+              original: item.url,
+            };
+          } else if (item.type.includes("application")) {
+            return {
+              src: "/pdf-icon.png",
+              height: 80,
+              width: 60,
+              caption: `${index + 1} image`,
+              original: item.url,
+            };
+          } else {
+            return {
+              src: item.url,
+              height: 80,
+              width: 60,
+            };
           }
         }
-        else if (item.type.includes('application')) {
-          return {
-            src: "/pdf-icon.png",
-            height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url
-          }
-        }
-        else {
-          return {
-            src: item.url, height: 80,
-            width: 60,
-          }
-        }
-      })
+      );
     }
     setFinalImages(details);
-  }
-
-
+  };
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -91,10 +97,10 @@ const ScoutingDetails = ({ drawerClose }: any) => {
   };
 
   useEffect(() => {
-    if (router.isReady && accessToken) {
+    if (router.isReady && accessToken && router.query.scout_id) {
       getSingleScout();
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken, router.query.scout_id]);
 
   return (
     <Drawer

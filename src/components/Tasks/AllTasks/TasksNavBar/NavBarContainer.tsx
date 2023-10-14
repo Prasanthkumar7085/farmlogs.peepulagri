@@ -91,7 +91,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
               options={farmOptions}
               onSelectValueFromDropDown={onSelectValueFromDropDown}
               label={"title"}
-              placeholder={"Select Farm here"}
+              placeholder={"Select Farm"}
               defaultValue={selectedFarmOption}
             />
           </div>
@@ -113,7 +113,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
               className={styles.searchbar}
               color="primary"
               size="small"
-              placeholder="Search Here"
+              placeholder="Search By Title"
               sx={{ width: "100%", background: "#fff !important" }}
               variant="outlined"
               type="search"

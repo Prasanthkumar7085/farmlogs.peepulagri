@@ -40,17 +40,16 @@ const UserDropDownForScouts = ({
           noOptionsText={"No such User"}
           value={defaultValueSet}
           isOptionEqualToValue={(option: any, value: any) =>
-            option.phone === value.phone
+            option.full_name === value.full_name
           }
           renderOption={(props, option) => {
             return (
               <li {...props} key={option?._id}>
-                {option?.phone}
+                {option?.full_name}
               </li>
             );
           }}
-
-          getOptionLabel={(option: any) => option.phone}
+          getOptionLabel={(option: any) => option.full_name}
           options={usersOptions}
           onChange={onChangeUser}
           renderInput={(params) => (

@@ -78,11 +78,11 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
           renderOption={(props, option) => {
             return (
               <li {...props} key={option._id}>
-                {option.phone}
+                {option.full_name}
               </li>
             );
           }}
-          getOptionLabel={(option: any) => option.phone}
+          getOptionLabel={(option: any) => option.full_name}
           options={userData}
           onChange={captureUser}
           renderInput={(params) => (

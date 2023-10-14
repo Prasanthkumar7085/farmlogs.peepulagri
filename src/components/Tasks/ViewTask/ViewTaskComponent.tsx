@@ -95,7 +95,6 @@ const ViewTaskComponent = () => {
         <Card
           sx={{
             width: "100%",
-            padding: "20px",
             borderRadius: "10px",
           }}
         >

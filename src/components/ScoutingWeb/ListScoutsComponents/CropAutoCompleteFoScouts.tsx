@@ -36,11 +36,18 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
     <div>
       {!autoCompleteLoading ? (
         <Autocomplete
+          groupBy={(option) => option.farm_title}
           value={defaultValueSet}
           disablePortal
           size="small"
-          id="combo-box-demo"
-          options={options && options?.length ? options : []}
+          id="grouped-demo"
+          options={
+            options && options?.length
+              ? options.sort(
+                  (a, b) => -b.farm_title?.localeCompare(a.farm_title)
+                )
+              : []
+          }
           getOptionLabel={(option: any) =>
             option[label] ? option[label]?.toUpperCase() : ""
           }

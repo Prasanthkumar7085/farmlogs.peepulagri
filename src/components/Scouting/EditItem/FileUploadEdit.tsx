@@ -71,7 +71,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
         if (response?.success) {
             setData(response?.data);
-            setDescription(response?.data?.description)
+            setDescription(response?.data?.findings)
 
         }
         setLoading(false);
@@ -80,7 +80,6 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
     const updateScoutDetails = async () => {
         setLoading(true);
-        console.log(tempFilesStorage, "after")
         try {
 
             await updateAttachements()
@@ -416,10 +415,8 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
     const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
 
         let obj = {
-
             "attachment":
             {
-
                 "original_name": item.name,
                 "type": item.type,
                 "size": item.size,
@@ -718,7 +715,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                 <div className={styles.addscoutdetails}>
                                     <div className={styles.inputField}>
                                         <div className={styles.farmselection} id="input-description">
-                                            <div className={styles.label1}>Description<strong style={{ color: "rgb(228 12 15)" }}>*</strong></div>
+                                            <div className={styles.label1}>Findings</div>
                                             <TextField
                                                 className={styles.input}
                                                 color="primary"
@@ -726,7 +723,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
                                                 id="description"
                                                 rows={4}
                                                 maxRows={4}
-                                                placeholder="Enter your description here"
+                                                placeholder="Enter your findings here"
                                                 fullWidth={true}
                                                 variant="outlined"
                                                 multiline

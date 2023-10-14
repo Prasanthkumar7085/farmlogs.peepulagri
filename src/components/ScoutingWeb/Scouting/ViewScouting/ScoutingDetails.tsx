@@ -17,7 +17,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import CloseIcon from '@mui/icons-material/Close';
 
-const ScoutingDetails = ({ drawerClose }: any) => {
+const ScoutingDetails = ({ drawerClose, item }: any) => {
 
   const router = useRouter();
 
@@ -34,7 +34,7 @@ const ScoutingDetails = ({ drawerClose }: any) => {
 
   const getSingleScout = async () => {
     setLoading(true);
-    const response = await getSingleScoutService(router.query.scout_id as string, accessToken);
+    const response = await getSingleScoutService(item._id as string, accessToken);
     if (response?.success) {
       setData(response?.data);
       setSelectedFile(response?.data.attachments)
@@ -107,13 +107,14 @@ const ScoutingDetails = ({ drawerClose }: any) => {
 
           <IconButton onClick={() => {
             drawerClose(false)
+            router.push({ pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`, query: "" });
           }} ><CloseIcon /></IconButton>
         </div>
         <Card className={styles.scoutingdetails}>
           <div className={styles.textwrapper}>
             <h1 className={styles.farmname}>{data?.farm_id.title}</h1>
             <p className={styles.startdate}>{timePipe(data?.createdAt, 'DD MMM YYYY hh:mm A')}</p>
-          </div>
+          </div>4
           <div className={styles.textwrapper}>
             <h1 className={styles.farmname}>Description</h1>
             <p className={styles.startdate}>{data?.description ? data?.description : "-"}</p>
@@ -123,7 +124,7 @@ const ScoutingDetails = ({ drawerClose }: any) => {
             <Carousel autoPlay swipeable={true} selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)}>
               {selectedFile?.length > 0 &&
                 selectedFile.map((item: any, index: any) => (
-                  <div key={index} style={{ height: 300 }}>
+                  <div key={index} style={{ height: 300, objectFit: "fill" }}>
                     {item.type?.includes('video') ? (
                       <video controls width="100%" height="300" autoPlay key={index}>
                         <source src={item.url} type={item.type} />

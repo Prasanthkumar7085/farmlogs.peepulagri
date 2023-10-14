@@ -3,7 +3,7 @@ import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
 import { FC, useState } from "react";
 import ImagePreviewDialog from "./ImagePreviewDialog";
 import styles from "./TaskDetails.module.css";
-import { Button, IconButton } from "@mui/material";
+import { Button, Checkbox, IconButton } from "@mui/material";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -13,75 +13,51 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
   const [openDialog, setOpenDialog] = useState(false);
   // const [selectedAttachmentIds, setSelectedAttachments] = useState([]);
 
-  const deleteTaskAttachment = (id: string) => {};
+  const deleteTaskAttachment = (id: string) => { };
 
   return (
-    <div className={styles.cardDetails}>
-      <div className={styles.idandStatus}>
-        <div className={styles.title}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
-            <label
-              className={styles.label}
-              style={{
-                justifyContent: "center",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              Attachments
-            </label>
-            {/* <Button>Delete Selected</Button> */}
-          </div>
+    <div className={styles.cardDetails} style={{ paddingBottom: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          alignItems: "center",
+        }}
+      >
+        <label
+          className={styles.label}
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          Attachments
+        </label>
+        {/* <Button>Delete Selected</Button> */}
+      </div>
 
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            {data?.attachments?.length
-              ? data?.attachments?.map((item: any, index: number) => {
-                  return (
-                    <div key={index}>
-                      <div
-                        style={{
-                          height: "100px",
-                          width: "100px",
-                          objectFit: "cover",
-                          position: "relative",
-                        }}
-                        onClick={() => {
-                          setImagePreviewIndex(index);
-                          setOpenDialog(true);
-                        }}
-                      >
-                        {!item?.type?.includes("video") ? (
-                          <img src={item?.url} className={styles.imageIcon} />
-                        ) : (
-                          <img
-                            src={"/videoimg.png"}
-                            className={styles.imageIcon}
-                          />
-                        )}
-                      </div>
-                      {/* <IconButton
-                        onClick={() => deleteTaskAttachment(item?._id)}
-                      >
-                        <ImageComponent
-                          src="/trast-icon.svg"
-                          height={17}
-                          width={17}
-                          alt="view"
-                        />
-                      </IconButton> */}
+      <div className={styles.allAttachments}>
+        {data?.attachments?.length
+          ? data?.attachments?.map((item: any, index: number) => {
+            return (
+              <div key={index}>
+                <div className={styles.singleAttachment}>
+                  <div className={styles.attachmentDetails}>
+                    <div className={styles.checkGrp}>
+                      <Checkbox size="small" sx={{ padding: "0" }} />
+                      <p>Scouting image</p>
                     </div>
-                  );
-                })
-              : "No Attachements"}
-          </div>
-        </div>
+                    <IconButton>
+                      <img src="/download-1-1.svg" alt="" />
+                    </IconButton>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+          : "No Attachements"}
       </div>
       <ImagePreviewDialog
         open={openDialog}

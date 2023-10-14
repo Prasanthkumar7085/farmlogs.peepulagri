@@ -83,8 +83,8 @@ const TaskForm = ({ data }: any) => {
       categories: [],
       deadline: deadline
         ? moment(deadline)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          .utcOffset("+05:30")
+          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -236,6 +236,7 @@ const TaskForm = ({ data }: any) => {
                     onSelectValueFromDropDown={captureFarmName}
                     placeholder={"Select Farm"}
                     defaultValue={defaultValue}
+                    loading={false}
                   />
 
                   <ErrorMessages

@@ -79,8 +79,8 @@ const FarmOptionsInViewTasks: React.FC<PropsType> = ({
         onSelectValueFromDropDown={captureFarmName}
         placeholder={"Select Farm"}
         defaultValue={defaultValue}
+        loading={loading}
       />
-      {loading ? <CircularProgress size="1.5rem" sx={{ color: "blue" }} /> : ""}
     </div>
   );
 };

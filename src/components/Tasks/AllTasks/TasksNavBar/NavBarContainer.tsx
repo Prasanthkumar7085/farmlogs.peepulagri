@@ -91,7 +91,8 @@ const NavBarContainer: React.FC<PropTypes> = ({
               options={farmOptions}
               onSelectValueFromDropDown={onSelectValueFromDropDown}
               label={"title"}
-              placeholder={"Select Farm"}
+              placeholder={"Select Farm here"}
+              loading={false}
               defaultValue={selectedFarmOption}
             />
           </div>

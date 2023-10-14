@@ -30,6 +30,8 @@ import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarm
 import Header1 from "../Header/HeaderComponent";
 import Camera from "./Camera";
 import styles from "./add-scout.module.css";
+import updateDescriptionService from "../../../../lib/services/ScoutServices/updateDescription";
+import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 
 const FileUploadComponent = () => {
   const router = useRouter();
@@ -59,6 +61,7 @@ const FileUploadComponent = () => {
   const [alertType, setAlertType] = useState(false);
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [validations, setValidations] = useState<any>();
+  const [data, setData] = useState<any>()
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -115,6 +118,7 @@ const FileUploadComponent = () => {
 
   //get all crops name
   const getCropsDetails = async (id: string) => {
+    console.log(router.query.crop_id)
     try {
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`,
@@ -130,7 +134,7 @@ const FileUploadComponent = () => {
             (item: any) => item._id == router.query.crop_id
           );
           setSelectedCrop(cropObj);
-          setCropName(cropObj.title);
+          setCropName(cropObj?.title);
         } else {
           if (responseData.data.length == 1) {
             setCropName(responseData?.data[0].title);
@@ -306,8 +310,7 @@ const FileUploadComponent = () => {
     setFileProgress: Function,
     key: any
   ) => {
-    console.log(key);
-    console.log(uploadid);
+
     const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
     const totalChunks = Math.ceil(file.size / chunkSize);
 
@@ -462,6 +465,7 @@ const FileUploadComponent = () => {
   useEffect(() => {
     if (router.query.farm_id && accessToken) {
       getFormDetails(router.query.farm_id);
+      getSingleScout()
       dispatch(removeTheFilesFromStore([]));
     }
   }, [accessToken, router.query.farm_id]);
@@ -609,6 +613,87 @@ const FileUploadComponent = () => {
     }
   };
 
+  const updateAttachements = async () => {
+
+    setLoading(true)
+    let obj = {
+      "attachments": tempFilesStorage,
+    }
+
+    let options: any = {
+      method: "PATCH",
+      body: JSON.stringify(obj),
+      headers: new Headers({
+        'content-type': 'application/json',
+        'authorization': accessToken
+      }),
+    }
+
+    try {
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/attachments`, options);
+      let responseData = await response.json();
+      if (responseData.success == true) {
+        dispatch(removeTheFilesFromStore([]));
+        setAlertMessage(responseData.message);
+        setAlertType(true);
+        router.back();
+      } else if (responseData.status == 422) {
+        setValidations(responseData?.errors);
+      }
+      setLoading(false);
+
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+  //get details of single scout
+  const getSingleScout = async () => {
+    const response = await getSingleScoutService(router.query?.scout_id as string, accessToken);
+    if (response?.success) {
+      setData(response?.data);
+      setDescription(response?.data?.description)
+
+    }
+  }
+
+  const updateScoutDetails = async () => {
+    await updateAttachements()
+    setLoading(true);
+    try {
+      let options = {
+        method: "PATCH",
+        headers: new Headers({
+          'content-type': 'application/json',
+          'authorization': accessToken
+        }),
+        body: JSON.stringify({
+          farm_id: formId,
+          attachments: [...tempFilesStorage, ...data.attachments],
+          crop_id: selectedCrop?._id,
+          findings: description,
+        })
+      }
+      let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}`, options);
+      const responseData = await response.json();
+      return responseData;
+
+    } catch (err: any) {
+      console.error(err);
+
+    }
+
+
+    finally {
+      setLoading(false);
+
+    }
+  }
+
+
   return (
     <div>
       {openCamera == true ? (
@@ -620,7 +705,7 @@ const FileUploadComponent = () => {
       ) : (
         <div>
           <Header1
-            name={"Add item"}
+            name={"Add Scout"}
             router={`/farms/${router.query.farm_id}/crops`}
           />
           <div className={styles.addscout} id="add-scout">
@@ -883,7 +968,7 @@ const FileUploadComponent = () => {
                       id="submit"
                       size="large"
                       variant="contained"
-                      onClick={addScoutDetails}
+                      onClick={() => router.query.new == "true" ? addScoutDetails() : updateScoutDetails()}
                       endIcon={<Icon>arrow_forward_sharp</Icon>}
                     >
                       Submit

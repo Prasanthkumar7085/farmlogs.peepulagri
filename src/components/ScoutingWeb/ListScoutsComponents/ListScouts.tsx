@@ -1,18 +1,20 @@
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import LoadingComponent from "@/components/Core/LoadingComponent";
+import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
+import ListAllCropsForDropDownServices from "../../../../lib/services/CropServices/ListAllCropsForDropDownServices";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
+import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import ScoutingCardWeb from "../Scouting/ScoutingCard";
 import styles from "../farms/FarmsNavBar.module.css";
-import UserDropDownForScouts from "./UserDropDownForScouts";
-import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
-import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
-import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
-import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
-import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
-import { Button } from "@mui/material";
 import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
+import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
+import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
+import UserDropDownForScouts from "./UserDropDownForScouts";
+import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
+import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
 
 interface ApiMethodProps {
   page: string | number;
@@ -20,6 +22,7 @@ interface ApiMethodProps {
   userId: string;
   fromDate: string;
   toDate: string;
+  cropId: string;
 }
 const ListScouts: FunctionComponent = () => {
   const router = useRouter();
@@ -36,6 +39,8 @@ const ListScouts: FunctionComponent = () => {
   const [user, setUser] = useState<any>();
   const [farmOptions, setFarmOptions] = useState([]);
   const [farm, setFarm] = useState<any>();
+  const [cropOptions, setCropOptions] = useState([]);
+  const [crop, setCrop] = useState<any>();
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -43,17 +48,20 @@ const ListScouts: FunctionComponent = () => {
   const onChangeUser = async (e: any, value: any) => {
     if (value) {
       setUser(value);
+      setFarm(null);
+      setCrop(null);
       await getAllScoutsList({
         page: page,
         farmId: router.query.farm_id as string,
         userId: value?._id,
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
+        cropId: router.query.crop_id as string,
       });
       await getAllFarms(value?._id);
+      await getAllCrops("", "", value?._id);
     } else {
       setUser(null);
-      setFarm(null);
       await getAllFarms();
       await getAllScoutsList({
         page: page,
@@ -61,20 +69,25 @@ const ListScouts: FunctionComponent = () => {
         userId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
+        cropId: router.query.crop_id as string,
       });
+      await getAllCrops("", router.query.farm_id as string, "");
     }
   };
 
-  const onSelectFarmFromDropDown = (value: any, reason: string) => {
+  const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     if (value) {
       setFarm(value);
+      setCrop(null);
       getAllScoutsList({
         page: page,
-        farmId: value._id,
         userId: router.query.created_by as string,
+        farmId: value._id,
+        cropId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
       });
+      await getAllCrops("", value?._id, router.query.created_by as string);
     } else {
       setFarm(null);
       getAllScoutsList({
@@ -83,6 +96,32 @@ const ListScouts: FunctionComponent = () => {
         userId: router.query.created_by as string,
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
+        cropId: router.query.crop_id as string,
+      });
+      await getAllCrops("", "", router.query.created_by as string);
+    }
+  };
+
+  const onSelectCropFromDropDown = (value: any, reason: string) => {
+    if (value) {
+      setCrop(value);
+      getAllScoutsList({
+        page: page,
+        farmId: router.query.farm_id as string,
+        userId: router.query.created_by as string,
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
+        cropId: value?._id,
+      });
+    } else {
+      setCrop(null);
+      getAllScoutsList({
+        page: page,
+        farmId: router.query.farm_id as string,
+        userId: router.query.created_by as string,
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
+        cropId: "",
       });
     }
   };
@@ -97,6 +136,7 @@ const ListScouts: FunctionComponent = () => {
         userId: router.query.created_by as string,
         fromDate: date1,
         toDate: date2,
+        cropId: router.query.crop_id as string,
       });
     } else {
       setFromDate("");
@@ -105,6 +145,7 @@ const ListScouts: FunctionComponent = () => {
         page: page,
         farmId: router.query.farm_id as string,
         userId: router.query.created_by as string,
+        cropId: router.query.crop_id as string,
         fromDate: "",
         toDate: "",
       });
@@ -117,6 +158,7 @@ const ListScouts: FunctionComponent = () => {
     userId,
     fromDate,
     toDate,
+    cropId,
   }: Partial<ApiMethodProps>) => {
     setLoading(true);
     let url = `/scouts/${page}/${limit}`;
@@ -130,6 +172,9 @@ const ListScouts: FunctionComponent = () => {
     if (fromDate && toDate) {
       queryParams["from_date"] = fromDate;
       queryParams["to_date"] = toDate;
+    }
+    if (cropId) {
+      queryParams["crop_id"] = cropId;
     }
 
     url = prepareURLEncodedParams(url, queryParams);
@@ -163,11 +208,16 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const getAllFarms = async (userId = "", farmId = "") => {
-    let url = "farm/1/1000";
+    let queryParams: any = {
+      order_by: "title",
+      order_type: "asc",
+    };
     if (userId) {
-      url += `?created_by=${userId}`;
+      queryParams["user_id"] = userId;
     }
-    const response = await getAllFarmsService(url, accessToken);
+    let url = prepareURLEncodedParams("", queryParams);
+
+    const response = await ListAllFarmForDropDownService(url, accessToken);
     if (response?.success) {
       setFarmOptions(response?.data);
       if (farmId) {
@@ -175,6 +225,51 @@ const ListScouts: FunctionComponent = () => {
           response?.data?.length &&
           response?.data?.find((item: any) => item._id == farmId);
         setFarm(obj);
+      }
+    }
+  };
+
+  const modifyDataToGroup = (data: any) => {
+    if (Array.isArray(data)) {
+      const outputArray: any = [];
+
+      data.forEach((item) => {
+        const farmId = item._id;
+        const farmTitle = item.title;
+
+        item.crops.forEach((crop: any) => {
+          const modifiedCrop = {
+            farm_id: farmId,
+            farm_title: farmTitle,
+            ...crop,
+          };
+
+          outputArray.push(modifiedCrop);
+        });
+      });
+
+      return outputArray;
+    } else return [];
+  };
+  const getAllCrops = async (cropId = "", farmId = "", userId = "") => {
+    let queryParams: any = {};
+
+    if (farmId) {
+      queryParams["farm_id"] = farmId;
+    }
+    if (userId) {
+      queryParams["user_id"] = userId;
+    }
+    let url = prepareURLEncodedParams("", queryParams);
+    const response = await ListAllCropsForDropDownServices(url);
+    if (response?.success) {
+      let data = response?.data;
+      data = modifyDataToGroup(data);
+
+      setCropOptions(data);
+      if (cropId) {
+        let obj = data?.length && data?.find((item: any) => item._id == cropId);
+        setCrop(obj);
       }
     }
   };
@@ -194,12 +289,19 @@ const ListScouts: FunctionComponent = () => {
         router.query.created_by as string,
         router.query.farm_id as string
       );
+      getAllCrops(
+        router.query.crop_id as string,
+        router.query.farm_id as string,
+        router.query.created_by as string
+      );
+
       getAllScoutsList({
         page: 1,
         farmId: router.query?.farm_id as string,
         userId: router.query?.created_by as string,
         fromDate: router.query?.from_date as string,
         toDate: router.query?.to_date as string,
+        cropId: router.query?.crop_id as string,
       });
     }
   }, [router.isReady, accessToken]);
@@ -223,11 +325,11 @@ const ListScouts: FunctionComponent = () => {
           defaultValue={farm}
         />
         <CropAutoCompleteFoScouts
-          options={farmOptions}
-          onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+          options={cropOptions}
+          onSelectFarmFromDropDown={onSelectCropFromDropDown}
           label={"title"}
           placeholder={"Select Crop here"}
-          defaultValue={farm}
+          defaultValue={crop}
         />
         <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />
         <Button

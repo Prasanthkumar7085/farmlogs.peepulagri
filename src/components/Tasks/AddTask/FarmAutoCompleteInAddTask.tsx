@@ -34,7 +34,7 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
   }, [defaultValue]);
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       {!autoCompleteLoading ? (
         <Autocomplete
           value={defaultValueSet}
@@ -59,21 +59,21 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
             <TextField
               {...params}
               placeholder={placeholder}
-              sx={{ width: "500px" }}
+              sx={{ width: "100%", background: "#fff" }}
             />
           )}
 
-          // sx={{
-          //     width: '1000%',
-          //     background: "#fff",
-          //     "& .MuiInputBase-input ": {
-          //         fontSize: "13px",
-          //         fontWeight: "400",
-          //         fontFamily: "'inter', sans-serif ",
-          //         color: "#000",
+        // sx={{
+        //     width: '1000%',
+        //     background: "#fff",
+        //     "& .MuiInputBase-input ": {
+        //         fontSize: "13px",
+        //         fontWeight: "400",
+        //         fontFamily: "'inter', sans-serif ",
+        //         color: "#000",
 
-          //     }
-          // }}
+        //     }
+        // }}
         />
       ) : (
         ""

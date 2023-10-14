@@ -189,7 +189,7 @@ const ImagePreviewDialog = ({
                         : styles.inactiveImage
                     }
                   >
-                    {item?.type?.includes("video") ? (
+                    {!item?.type?.includes("video") ? (
                       <img
                         src={item?.url} // Change this to use the mediaArray
                         alt={`Image ${index + 1}`}

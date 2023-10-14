@@ -12,7 +12,6 @@ import {
 } from "@tanstack/react-table";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
 const TanStackTableComponent = ({
   data,
   columns,
@@ -20,9 +19,7 @@ const TanStackTableComponent = ({
   getData,
 }: any) => {
   const router = useRouter();
-
   const [sorting, setSorting] = useState<SortingState>([]);
-
   const table = useReactTable({
     data,
     columns,
@@ -36,7 +33,6 @@ const TanStackTableComponent = ({
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
   });
-
   const getWidth = (id: string) => {
     const widthObj = columns.find((item: any) => item.id == id);
     const width = widthObj?.width;
@@ -56,7 +52,6 @@ const TanStackTableComponent = ({
         orderType = "";
       }
     }
-
     getData({
       limit: router.query.limit as string,
       page: 1,
@@ -67,7 +62,6 @@ const TanStackTableComponent = ({
       status: router.query.status as string,
     });
   };
-
   const capturePageNum = (value: number) => {
     getData({
       limit: router.query.limit as string,
@@ -79,7 +73,6 @@ const TanStackTableComponent = ({
       status: router.query.status as string,
     });
   };
-
   const captureRowPerItems = (value: number) => {
     getData({
       limit: value,
@@ -94,21 +87,29 @@ const TanStackTableComponent = ({
   return (
     <div>
       <div>
-        <div style={{ overflow: "scroll" }}>
-          <table border={1}>
+        <div
+          style={{ overflow: "scroll", height: "75vh" }}
+          className="dataTable-container scrollbar"
+        >
+          <table
+            className="table"
+            border={0}
+            style={{ borderSpacing: "0 !important" }}
+          >
             <thead
+              className="thead"
               style={{
-                height: "40px",
+                height: "32px",
                 position: "sticky",
                 top: "0px",
-                background: "#b1d9ff",
               }}
             >
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
+                <tr className="table-row" key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
                       <th
+                        className="cell"
                         key={header.id}
                         colSpan={header.colSpan}
                         style={{
@@ -160,18 +161,18 @@ const TanStackTableComponent = ({
                 </tr>
               ))}
             </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => {
+            <tbody className="tbody">
+              {table.getFilteredRowModel().rows.map((row) => {
+
                 return (
-                  <tr key={row.id}>
+                  <tr className="table-row" key={row.id}>
                     {row.getVisibleCells().map((cell) => {
                       // console.log(flexRender(
                       //     cell.column.columnDef.cell,
                       //     cell.getContext()
                       // ));
-
                       return (
-                        <td key={cell.id}>
+                        <td className="cell" key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -186,7 +187,6 @@ const TanStackTableComponent = ({
           </table>
         </div>
         <div className="h-2" />
-
         <TablePaginationComponent
           paginationDetails={paginationDetails}
           capturePageNum={capturePageNum}
@@ -197,5 +197,4 @@ const TanStackTableComponent = ({
     </div>
   );
 };
-
 export default TanStackTableComponent;

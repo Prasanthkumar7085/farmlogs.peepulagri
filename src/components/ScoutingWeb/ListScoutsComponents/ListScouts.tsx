@@ -279,6 +279,7 @@ const ListScouts: FunctionComponent = () => {
     setFarm("");
     setFromDate("");
     setToDate("");
+    setCrop("");
     await getAllScoutsList({});
   };
 

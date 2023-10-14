@@ -275,7 +275,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           </div>
           <div className={styles.userDetails}>
             <div className={styles.singleDetailsBox} style={{ flexDirection: "column", alignItems: "flex-start !important" }}>
-              <label className={styles.userLabel}><PersonOutlineOutlinedIcon sx={{ fontSize: "1rem", marginRight: "5px" }} /> Assignee</label>
+              <label className={styles.userLabel}><PersonOutlineOutlinedIcon sx={{ fontSize: "1rem", marginRight: "5px" }} /> User</label>
               {editField == "farm" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
@@ -386,16 +386,15 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               </IconButton>
             </div> :
             userType !== "USER" ? (
-              <IconButton
+              <div
                 onClick={() => {
                   setEditFieldOrNot(true);
                   setEditField("description");
                 }}
-                sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+                className={styles.editDesc}
               >
-                <p style={{ margin: "0" }}>Edit Description</p>
-                <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
-              </IconButton>
+                <p style={{ margin: "0" }}>Edit</p>
+              </div>
             ) : (
               ""
             )}

@@ -100,8 +100,14 @@
   margin-top: 2rem;
 }
 
+.editDesc {
+  cursor: pointer;
+  text-decoration: underline;
+
+}
+
 .descriptionText p {
-  color: #000;
+  color: #2240ff;
   font-size: clamp(13px, 0.72vw, 16px);
   font-weight: 500;
   font-family: 'Inter', sans-serif;
@@ -168,4 +174,42 @@
 /* Handle on hover */
 .descriptionPara textarea::-webkit-scrollbar-thumb:hover {
   background: #5a5959;
+}
+
+/* attachment styles */
+.allAttachments {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 4rem;
+  grid-row-gap: 1rem;
+  width: 90%;
+  margin: 0.5rem auto 0;
+
+}
+
+.singleAttachment {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.attachmentDetails {
+  display: flex;
+  align-items: center;
+  background-color: #f5f7fa;
+  width: 100%;
+  max-width: 350px;
+  padding: 8px;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+.attachmentDetails p {
+  margin: 0;
+}
+
+.checkGrp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

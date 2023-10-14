@@ -17,51 +17,47 @@ const ViewTaskAttachments: FC<pageProps> = ({ data }) => {
 
   return (
     <div className={styles.cardDetails} style={{ paddingBottom: "1rem" }}>
-      <div className={styles.idandStatus}>
-        <div className={styles.title}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
-            <label
-              className={styles.label}
-              style={{
-                justifyContent: "center",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              Attachments
-            </label>
-            {/* <Button>Delete Selected</Button> */}
-          </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          alignItems: "center",
+        }}
+      >
+        <label
+          className={styles.label}
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          Attachments
+        </label>
+        {/* <Button>Delete Selected</Button> */}
+      </div>
 
-          <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
-            {data?.attachments?.length
-              ? data?.attachments?.map((item: any, index: number) => {
-                return (
-                  <div key={index}>
-                    {!item?.type?.includes("video") ? (
-                      <div>
-                        <Checkbox />
-                        <div>
-
-                        </div>
-                      </div>
-                    ) : (
-
-                      ""
-                    )}
+      <div className={styles.allAttachments}>
+        {data?.attachments?.length
+          ? data?.attachments?.map((item: any, index: number) => {
+            return (
+              <div key={index}>
+                <div className={styles.singleAttachment}>
+                  <div className={styles.attachmentDetails}>
+                    <div className={styles.checkGrp}>
+                      <Checkbox size="small" sx={{ padding: "0" }} />
+                      <p>Scouting image</p>
+                    </div>
+                    <IconButton>
+                      <img src="/download-1-1.svg" alt="" />
+                    </IconButton>
                   </div>
-                );
-              })
-              : "No Attachements"}
-          </div>
-        </div>
+                </div>
+              </div>
+            );
+          })
+          : "No Attachements"}
       </div>
       <ImagePreviewDialog
         open={openDialog}

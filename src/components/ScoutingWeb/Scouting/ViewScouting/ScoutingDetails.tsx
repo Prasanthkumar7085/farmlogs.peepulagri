@@ -34,48 +34,54 @@ const ScoutingDetails = ({ drawerClose, item }: any) => {
 
   const getSingleScout = async () => {
     setLoading(true);
-    const response = await getSingleScoutService(item._id as string, accessToken);
+    const response = await getSingleScoutService(
+      router.query.scout_id as string,
+      accessToken
+    );
     if (response?.success) {
+      console.log(response?.data, "testing");
+
       setData(response?.data);
-      setSelectedFile(response?.data.attachments)
+      setSelectedFile(response?.data.attachments);
 
       getModifiedImages({ attachmentdetails: response.data.attachments });
-
     }
     setLoading(false);
   };
 
-
   const getModifiedImages = ({ attachmentdetails }: any) => {
     let details = [];
     if (attachmentdetails.length) {
-      details = attachmentdetails.map((item: ScoutAttachmentDetails, index: number) => {
-
-        if (item.type.includes('video')) {
-          return {
-            src: "/videoimg.png", height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url
+      details = attachmentdetails.map(
+        (item: ScoutAttachmentDetails, index: number) => {
+          if (item.type.includes("video")) {
+            return {
+              src: "/videoimg.png",
+              height: 80,
+              width: 60,
+              caption: `${index + 1} image`,
+              original: item.url,
+            };
+          } else if (item.type.includes("application")) {
+            return {
+              src: "/pdf-icon.png",
+              height: 80,
+              width: 60,
+              caption: `${index + 1} image`,
+              original: item.url,
+            };
+          } else {
+            return {
+              src: item.url,
+              height: 80,
+              width: 60,
+            };
           }
         }
-        else if (item.type.includes('application')) {
-          return {
-            src: "/pdf-icon.png",
-            height: 80,
-            width: 60, caption: `${index + 1} image`, original: item.url
-          }
-        }
-        else {
-          return {
-            src: item.url, height: 80,
-            width: 60,
-          }
-        }
-      })
+      );
     }
     setFinalImages(details);
-  }
-
-
+  };
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -91,10 +97,10 @@ const ScoutingDetails = ({ drawerClose, item }: any) => {
   };
 
   useEffect(() => {
-    if (router.isReady && accessToken) {
+    if (router.isReady && accessToken && router.query.scout_id) {
       getSingleScout();
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken, router.query.scout_id]);
 
   return (
     <Drawer
@@ -107,14 +113,13 @@ const ScoutingDetails = ({ drawerClose, item }: any) => {
 
           <IconButton onClick={() => {
             drawerClose(false)
-            router.push({ pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`, query: "" });
           }} ><CloseIcon /></IconButton>
         </div>
         <Card className={styles.scoutingdetails}>
           <div className={styles.textwrapper}>
             <h1 className={styles.farmname}>{data?.farm_id.title}</h1>
             <p className={styles.startdate}>{timePipe(data?.createdAt, 'DD MMM YYYY hh:mm A')}</p>
-          </div>4
+          </div>
           <div className={styles.textwrapper}>
             <h1 className={styles.farmname}>Description</h1>
             <p className={styles.startdate}>{data?.description ? data?.description : "-"}</p>

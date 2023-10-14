@@ -180,7 +180,7 @@ const TaskForm = ({ data }: any) => {
               >
                 <div>
                   <label className={styles.lable}>
-                    {`Select Farm`}
+                    {`Select User`}
                     <span style={{ color: "red" }}>*</span>
                   </label>
                   <Autocomplete
@@ -197,14 +197,14 @@ const TaskForm = ({ data }: any) => {
                     isOptionEqualToValue={(option: any, value: any) =>
                       option._id === value._id
                     }
-                    renderOption={(props, option) => {
+                    renderOption={(props, option: any) => {
                       return (
                         <li {...props} key={option._id}>
-                          {option.phone}
+                          {option.full_name}
                         </li>
                       );
                     }}
-                    getOptionLabel={(option: any) => option.phone}
+                    getOptionLabel={(option: any) => option.full_name}
                     options={users}
                     onChange={onChangeUser}
                     renderInput={(params) => (

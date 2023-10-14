@@ -32,7 +32,7 @@ const TasksPageComponent = () => {
 
   const getAllTasks = async ({
     page = 1,
-    limit = 10,
+    limit = 15,
     search_string = "",
     sortBy = "",
     sortType = "",

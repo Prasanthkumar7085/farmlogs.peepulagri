@@ -95,7 +95,7 @@ const TasksTableComponent = ({
       width: "200px",
     },
     {
-      accessorFn: (row: any) => row.assigned_to?.phone,
+      accessorFn: (row: any) => row.assigned_to?.full_name,
       id: "assigned_to",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>

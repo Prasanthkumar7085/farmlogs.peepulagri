@@ -12,6 +12,7 @@
   height: 24px;
   border-radius: 4px;
 } 
+
 .actions .icon {
   height: 16px;
   width: 16px;
@@ -113,6 +114,7 @@
 .scoutingView {
   padding: 1rem;
   padding-top: 0.5rem;
+  height: calc(100vh - 190px);
 }
 .scoutingView nav {
   margin-bottom: 0.5rem;
@@ -149,4 +151,17 @@
 }
 .sortOptions .divider {
   margin: 0.5rem 1rem;
+}
+
+#noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+#noData h4 {
+  font-size: clamp(16px, 3.25rem, 18px);
+  font-weight: 500;
 }

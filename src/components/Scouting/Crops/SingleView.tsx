@@ -271,8 +271,8 @@ const SingleViewScoutComponent = () => {
                 )
             }) :
                 (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
-                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
+                    <div id={styles.noData}>
+                        <Image src="/emty-folder-image.svg" alt="empty folder" width={120} height={150} />
                         <Typography variant="h4">No Scoutings for this crop</Typography>
                     </div>
                     : "")}

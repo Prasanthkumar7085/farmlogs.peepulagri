@@ -1,7 +1,7 @@
-.aug2023 {
+.dates {
   flex: 1;
   position: relative;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.5px;
   line-height: 100%;
   opacity: 0.6;
 }
@@ -27,16 +27,21 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
+}
+.count {
+  display: flex;
+  align-items: center;
+  column-gap: var(--gap-9xs);
 }
 
 .farm1 {
   color: #A05148;
   font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 3.5vw, 18px);
+  font-size: clamp(15px, 3.5vw, 18px);
   font-weight: 500;
   line-height: 100%;
-  letter-spacing: -0.48px;
+  letter-spacing: -0.25px;
 }
 
 .farmdetails {
@@ -45,7 +50,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-  gap: var(--gap-5xs);
+  gap: var(--br-9xs);
 }
 
 .acres {
@@ -114,7 +119,7 @@
 
 .farm {
   justify-content: flex-end;
-  gap: var(--gap-base);
+  gap: var(--gap-lg);
 }
 
 .farmcard {
@@ -122,7 +127,7 @@
   border: 1px solid rgba(180, 193, 214, 0.50);
   background: #FFF;
   justify-content: flex-start;
-  padding: var(--padding-base);
+  padding: var(--padding-xs);
   text-align: left;
   font-size: var(--font-size-xs);
   color: var(--title);

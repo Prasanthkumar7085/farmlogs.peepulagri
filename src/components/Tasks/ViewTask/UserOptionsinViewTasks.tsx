@@ -63,8 +63,7 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
       {!userLoaded ? (
         <Autocomplete
           sx={{
-            width: "250px",
-            maxWidth: "250px",
+            width: "100%",
             borderRadius: "4px",
           }}
           id="size-small-outlined-multi"

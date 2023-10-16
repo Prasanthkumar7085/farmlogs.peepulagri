@@ -157,7 +157,7 @@ body {
 .dataTable-container .tbody .table-row .cell:first-child {
     position: sticky;
     left: 0;
-    box-shadow: var(--shadow-button);
+    box-shadow: -20px 0 20px -35px #000000b3 inset;
     background: #fff;
 }
 
@@ -166,6 +166,7 @@ body {
     right: 0;
     background: #fff;
     border-left: 1px solid #d8d7d6;
+    box-shadow: 20px 0 20px -35px #000000b3 inset;
 }
 
 .dataTable-container .tbody .cell {

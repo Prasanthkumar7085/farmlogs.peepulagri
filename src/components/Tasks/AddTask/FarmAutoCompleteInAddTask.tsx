@@ -74,25 +74,9 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
               {...params}
               placeholder={placeholder}
               sx={{ width: "100%", background: "#fff" }}
-              InputProps={{
-                endAdornment: <InputAdornment position="start">
-                  {loading ? <CircularProgress size="1.5rem" sx={{ color: "blue" }} /> : ""}
-                </InputAdornment>,
-              }}
+
             />
           )}
-
-        // sx={{
-        //     width: '1000%',
-        //     background: "#fff",
-        //     "& .MuiInputBase-input ": {
-        //         fontSize: "13px",
-        //         fontWeight: "400",
-        //         fontFamily: "'inter', sans-serif ",
-        //         color: "#000",
-
-        //     }
-        // }}
         />
       ) : (
         ""

@@ -1,35 +1,42 @@
-.backbutton {
-  align-self: stretch;
-}
-.largetext,
-.smalltext {
+.header,
+.caption {
   margin: 0;
-  align-self: stretch;
-  position: relative;
   line-height: 100%;
 }
-.largetext {
-  font-size: 24px;
+
+.caption {
+  color: #000;
+  font-family: "Inter";
+  font-size: clamp(10px, 0.62vw, 14px);
   font-weight: 400;
-  font-family: inherit;
-  color: #05a155;
 }
+
+.header {
+  font-size: clamp(20px, 1.2vw, 24px);
+  color: #05a155;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
+
 .header,
 .textwrapper {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .textwrapper {
   flex: 1;
   flex-direction: column;
   gap: 4px;
 }
+
 .header {
   align-self: stretch;
   flex-direction: row;
   gap: 16px;
 }
+
 .lable {
   position: relative;
   font-size: 14px;
@@ -39,23 +46,27 @@
   color: #344054;
   text-align: left;
 }
-.dropdown,
+
+/* .dropdown,
 .lable {
   align-self: stretch;
   cursor: pointer;
-}
+} */
+
 .selectfarm {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 8px;
+  /* gap: 8px; */
 }
+
 .inoutbox,
 .selectfarm,
 .title {
   align-self: stretch;
 }
+
 .title {
   margin: 0;
   position: relative;
@@ -66,34 +77,45 @@
   color: #344054;
   text-align: left;
 }
+
 .inoutbox {
   border: 0;
   background-color: transparent;
 }
-.container,
-.form,
-.formfields {
+
+.form {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
-.formfields {
-  flex: 1;
-  flex-direction: column;
-  gap: 24px;
+
+.form form {
+  width: 100%;
 }
-.container,
-.form {
-  align-self: stretch;
-  flex-direction: row;
-}
+
 .form {
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
-  gap: 40px;
+  gap: 2rem;
   text-align: left;
   font-size: 12px;
   color: #000;
   font-family: Inter;
+}
+
+/* Add Task Page */
+.addTaskPage {
+  width: 40%;
+  margin: 0 auto;
+  padding-top: 4rem;
+}
+
+.backButton {
+  background-color: #fff;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #E9EDF1;
+  background: #FFF;
 }

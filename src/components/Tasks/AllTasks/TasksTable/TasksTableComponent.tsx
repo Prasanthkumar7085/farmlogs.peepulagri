@@ -105,7 +105,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "150px",
     },
 
     {
@@ -148,7 +148,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Description</span>,
       footer: (props: any) => props.column.id,
-      width: "400px",
+      width: "350px",
     },
     {
       accessorFn: (row: any) => row.deadline,

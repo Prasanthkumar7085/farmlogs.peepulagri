@@ -51,11 +51,11 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
 
             "& .MuiInputBase-root": {
               paddingBlock: "5px !important",
-              background: "#f5f7fa",
+              // background: "#f5f7fa",
             },
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "0",
-            },
+            // '& .MuiOutlinedInput-notchedOutline': {
+            //   border: "0"
+            // }
           }}
           value={defaultValueSet}
           disablePortal

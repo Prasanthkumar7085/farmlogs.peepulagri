@@ -93,12 +93,11 @@ const TaskForm = ({ data }: any) => {
       attachments: files,
       status: status,
     };
-    console.log(body);
 
     let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
       toast.success(response?.message);
-      gotoBackAfterAdd();
+      router.push("/tasks");
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
@@ -114,12 +113,6 @@ const TaskForm = ({ data }: any) => {
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllUsers();
-      // if (router.query.task_id && data) {
-      //   setDataInEdit();
-      //   // getAllFarms(data?.farm_id);
-      // } else {
-      //   getAllFarms();
-      // }
     }
   }, [router.isReady, accessToken, data]);
 
@@ -131,20 +124,6 @@ const TaskForm = ({ data }: any) => {
 
   const setUploadedFiles = (filesUploaded: any) => {
     setFiles(filesUploaded);
-  };
-
-  const gotoBack = async () => {
-    await router.back();
-    setTimeout(() => {
-      router.reload();
-    }, 200);
-  };
-
-  const gotoBackAfterAdd = async () => {
-    router.push("/tasks");
-    setTimeout(() => {
-      router.reload();
-    }, 1000);
   };
 
   const onChangeUser = async (e: any, value: any) => {
@@ -159,7 +138,7 @@ const TaskForm = ({ data }: any) => {
       <>
         <div className={styles.form}>
           <div className={styles.header}>
-            <div className={styles.backButton} onClick={gotoBack} >
+            <div className={styles.backButton} onClick={() => router.back()}>
               <img src="/arrow-left-back.svg" alt="" width={"18px"} />
             </div>
             <div className={styles.textwrapper}>

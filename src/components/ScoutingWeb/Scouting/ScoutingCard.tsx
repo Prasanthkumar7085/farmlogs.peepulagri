@@ -1,51 +1,36 @@
-import { useCallback, useState } from "react";
-import styles from "./ScoutingCard.module.css";
-import { useRouter } from "next/router";
-import { ScoutAttachmentDetails, SingleScoutResponse } from "@/types/scoutTypes";
-import ImageComponent from "@/components/Core/ImageComponent";
-import timePipe from "@/pipes/timePipe";
-import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
-import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import DrawerComponentForScout from "@/components/Scouting/Comments/DrawerBoxForScout";
+import timePipe from "@/pipes/timePipe";
+import {
+  ScoutAttachmentDetails,
+  SingleScoutResponse,
+} from "@/types/scoutTypes";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Chip, Typography } from "@mui/material";
 import Image from "next/image";
-import { Chip, Drawer, Typography } from "@mui/material";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import styles from "./ScoutingCard.module.css";
 import ScoutingDetails from "./ViewScouting/ScoutingDetails";
-
 
 interface pageProps {
   item: SingleScoutResponse;
-
 }
 
 const ScoutingCardWeb = ({ item }: pageProps) => {
-
   const router = useRouter();
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [index, setIndex] = useState(-1);
   const [isReadMore, setIsReadMore] = useState(false);
   const [readMoreIndex, setReadMoreIndex] = useState("");
-  const [drawerOpen, setDrawerOpen] = useState<any>(false)
-  const [scoutingDetailsDrawer, setScoutingDetailsDrawer] = useState<any>()
-
+  const [drawerOpen, setDrawerOpen] = useState<any>(false);
+  const [scoutingDetailsDrawer, setScoutingDetailsDrawer] = useState<any>();
 
   const onViewClick = useCallback(() => {
-    setDrawerOpen(true)
+    setDrawerOpen(true);
 
     // router.push(
     //   `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`
     // );
   }, []);
-
-  const viewImagePreview = (index: number) => {
-    setOpenDialog(true);
-    setIndex(index);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
 
   const [state, setState] = useState(false);
 
@@ -63,7 +48,6 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   };
 
   const drawerClose = (value: any) => {
-    
     if (value == false) {
       setDrawerOpen(false);
       setScoutingDetailsDrawer(false);
@@ -79,12 +63,28 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
         });
       }
     }
-  }
+  };
+
+  const getCropTitle = () => {
+    if (item?.farm_id?.crops?.length) {
+      let cropId = item?.crop_id;
+      let crops = item?.farm_id?.crops;
+
+      let crop = crops.find(
+        (item: { title: string; _id: string }) => item._id == cropId
+      );
+      return crop?.title;
+    }
+    return "";
+  };
+
   return (
     <div className={styles.scoutingCard}>
       <div className={styles.carddetails}>
         <div>
-          <div>{item.created_by.phone ? item.created_by.phone : "-"}</div>
+          <div>
+            {item.created_by.full_name ? item.created_by.full_name : "-"}
+          </div>
           <p className={styles.date}>
             {timePipe(item.createdAt, "DD MMM YYYY, hh:mm A")}
           </p>
@@ -98,7 +98,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
         <div>
           <div>{item.farm_id.title ? item.farm_id.title : "-"}</div>
         </div>
-        {/* <div className={styles.buttons}>Crop Name</div> */}
+        <div className={styles.buttons}>{getCropTitle()}</div>
       </div>
 
       <div className={styles.carddetails}>
@@ -109,7 +109,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                 ? item.description?.length > 100
                   ? item?.description.slice(0, 97) + "..."
                   : item.description
-                : "-"}
+                : ""}
               {item.description?.length > 100 ? (
                 <span onClick={() => setReadMore(item?._id)}>
                   {" Read More"}
@@ -133,7 +133,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
         </div>
         {/* <div className={styles.buttons}>Crop Name</div> */}
       </div>
-      <div className={styles.imgFlexContainer}>
+      {/* <div className={styles.imgFlexContainer}>
         {item.attachments.length ? (
           item.attachments
             .slice(0, 6)
@@ -146,7 +146,6 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                       ? styles.eachImgBox
                       : styles.eachImgBoxLessThan3
                   }
-                  onClick={() => viewImagePreview(index)}
                 >
                   {itemObj.type.slice(0, 5) == "video" ? (
                     <img
@@ -188,7 +187,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
             No Attachments
           </div>
         )}
-      </div>
+      </div> */}
       <div className={styles.carddetails}>
         {/* <p className={styles.date}>{timePipe(item.createdAt, 'DD MMM YYYY, hh:mm A')}</p> */}
         <div className={styles.buttons}>
@@ -264,9 +263,9 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                 </div>
               }
             />
-          </div>
-        </div>
-      </div>
+          </div >
+        </div >
+      </div >
       {scoutingDetailsDrawer == true ? (
         <ScoutingDetails drawerClose={drawerClose} />
       ) : (
@@ -282,7 +281,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
       ) : (
         ""
       )}
-    </div>
+    </div >
   );
 };
 

@@ -10,27 +10,39 @@ export interface ScoutAttachmentDetails{
 
 
 
-export interface CreatedByDetails{
-    _id:string;
-    full_name:string;
-    email:string;
-    phone:string;
+export interface CreatedByDetails {
+  _id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  user_type: string;
 }
 
-export interface SingleScoutResponse{
-    _id: string;
-    farm_id: { _id: string; title: string}
-    crop_id:string;
-    description:string;
-    attachments: Array<ScoutAttachmentDetails>;
-    created_by:CreatedByDetails;
-    comments:string;
-    createdAt:string;
-    updatedAt:string;
+interface FarmInScoutsResponseType {
+  _id: string;
+  title: string;
+  location: string;
+  crops: Array<{ title: string; _id: string }>;
+}
+export interface SingleScoutResponse {
+  _id: string;
+  farm_id: FarmInScoutsResponseType;
+  crop_id: string;
+  description: string;
+  attachments: Array<ScoutAttachmentDetails>;
+  created_by: CreatedByDetails;
+  comments: string;
+  createdAt: string;
+  updatedAt: string;
+  findings: string;
 }
 
 
-export interface AttachmentsForPreview{
+
+
+
+
+export interface AttachmentsForPreview {
     src: string;
     width: number;
     height: number;

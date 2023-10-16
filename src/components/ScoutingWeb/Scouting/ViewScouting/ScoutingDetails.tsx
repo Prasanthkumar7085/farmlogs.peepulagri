@@ -16,8 +16,9 @@ import CommentsComponent from "@/components/Scouting/Comments/CommentsComponent"
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import CloseIcon from '@mui/icons-material/Close';
+import CommentsComponentForWeb from "@/components/Scouting/Comments/CommentsComponentForweb";
 
-const ScoutingDetails = ({ drawerClose }: any) => {
+const ScoutingDetails = ({ drawerClose, item }: any) => {
 
   const router = useRouter();
 
@@ -121,102 +122,15 @@ const ScoutingDetails = ({ drawerClose }: any) => {
             <p className={styles.startdate}>{timePipe(data?.createdAt, 'DD MMM YYYY hh:mm A')}</p>
           </div>
           <div className={styles.textwrapper}>
-            <h1 className={styles.farmname}>Description</h1>
-            <p className={styles.startdate}>{data?.description ? data?.description : "-"}</p>
+            <h1 className={styles.farmname}>Findings</h1>
+            <p className={styles.startdate}>{data?.findings ? data?.findings : "-"}</p>
           </div>
-          <div style={{ width: "100%" }}>
 
-            <Carousel autoPlay swipeable={true} selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)}>
-              {selectedFile?.length > 0 &&
-                selectedFile.map((item: any, index: any) => (
-                  <div key={index} style={{ height: 300 }}>
-                    {item.type?.includes('video') ? (
-                      <video controls width="100%" height="300" autoPlay key={index}>
-                        <source src={item.url} type={item.type} />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : item.type?.includes('application') ? (
-                      <iframe src={item.url} width="100%" height="100%" title={`iframe-${index}`} />
-                    ) : (
-                      <>
-                        <img
-                          className="zoom-image"
-                          src={item.url}
-                          alt={`Image ${index + 1}`}
-                        />
-                      </>
-                    )}
-                  </div>
-                ))}
-            </Carousel>
-            <div
-              style={{
-                width: "100%",
-                justifyContent: "center",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  width: "100%",
-                  overflow: "auto",
-                  justifyContent: "center",
-
-                }}
-              >
-                {selectedFile?.length
-                  ? selectedFile?.map((item: any, index: any) => {
-                    return (
-                      <div
-                        key={index}
-                        id={`${index}`}
-                        autoFocus={index == currentIndex}
-                        onClick={() => setCurrentIndex(index)}
-                        style={{ cursor: "pointer" }}
-                        className={
-                          index == currentIndex
-                            ? styles.activeImage
-                            : styles.inactiveImage
-                        }
-                      >
-                        {item.type.includes("video") ?
-                          <img
-                            src="/videoimg.png"
-                            alt={`Image ${index + 1}`}
-                            height={"100px"}
-                            width={"100px"}
-                          />
-                          :
-                          item.type.includes("image") ?
-                            <img
-                              src={item?.url} // Change this to use the mediaArray
-                              alt={`Image ${index + 1}`}
-                              height={"100px"}
-                              width={"100px"}
-                            />
-                            : <img
-                              src="/pdf-icon.png"
-                              alt={`Image ${index + 1}`}
-                              height={"80px"}
-                              width={"100px"}
-                            />}
-                      </div>
-                    );
-                  })
-                  : ""}
-              </div>
-            </div>
-          </div>
-          {/* {finalImages.length ?
-            <div style={{ width: "100%" }}>
-              <div className={styles.attachments}>
-                <p className={styles.text}>Attachments</p>
-              </div>
-              <Gallery images={finalImages} onClick={handleClick} />
-            </div> : ""} */}
         </Card>
-        <CommentsComponent />
+        <div style={{ position: "sticky", bottom: 0, marginTop: "70%" }}>
+          <Typography variant="h6">Recommedations</Typography>
+          <CommentsComponentForWeb />
+        </div>
         <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={selectedFile} index={index} />
         <LoadingComponent loading={loading} />
       </div >

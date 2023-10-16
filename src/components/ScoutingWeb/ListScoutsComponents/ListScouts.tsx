@@ -1,5 +1,5 @@
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -15,6 +15,7 @@ import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import UserDropDownForScouts from "./UserDropDownForScouts";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 interface ApiMethodProps {
   page: string | number;
@@ -52,11 +53,11 @@ const ListScouts: FunctionComponent = () => {
       setCrop(null);
       await getAllScoutsList({
         page: page,
-        farmId: router.query.farm_id as string,
         userId: value?._id,
+        farmId: "",
+        cropId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
-        cropId: router.query.crop_id as string,
       });
       await getAllFarms(value?._id);
       await getAllCrops("", "", value?._id);
@@ -65,11 +66,11 @@ const ListScouts: FunctionComponent = () => {
       await getAllFarms();
       await getAllScoutsList({
         page: page,
-        farmId: "",
         userId: "",
+        farmId: router.query.farm_id as string,
+        cropId: router.query.crop_id as string,
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
-        cropId: router.query.crop_id as string,
       });
       await getAllCrops("", router.query.farm_id as string, "");
     }
@@ -342,11 +343,32 @@ const ListScouts: FunctionComponent = () => {
       </div>
       <div className={styles.allFarms}>
         <div className={styles.allScoutingCards}>
-          {data?.length
-            ? data.map((item, index: number) => {
-                return <ScoutingCardWeb item={item} key={index} />;
-              })
-            : "No Scouts"}
+          {data?.length ? (
+            data.map((item, index: number) => {
+              return <ScoutingCardWeb item={item} key={index} />;
+            })
+          ) : !loading ? (
+            <div
+              id={styles.noData}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "4rem",
+              }}
+            >
+              <ImageComponent
+                src="/emty-folder-image.svg"
+                alt="empty folder"
+                width={250}
+                height={150}
+              />
+              <Typography variant="h4">No Scoutings</Typography>
+            </div>
+          ) : (
+            ""
+          )}
           <LoadingComponent loading={loading} />
         </div>
       </div>

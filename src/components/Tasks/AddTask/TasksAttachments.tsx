@@ -38,12 +38,27 @@ const TasksAttachments: React.FC<PropTypes> = ({
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
 
-  let tempFilesStorage: any = [...attachments];
+  // let tempFilesStorage: any = [...attachments];
 
-  let previewStorage = [...previewImages];
+  // let previewStorage = [...previewImages];
+
+  const [tempFilesStorage, setTempFileStorage] = useState<any>([]);
+  const [previewStorage, setPreviewStorage] = useState<any>([]);
 
   useEffect(() => {
-    setUploadedFiles(tempFilesStorage);
+    if (attachments?.length) {
+      setTempFileStorage(attachments);
+    }
+
+    if (previewImages?.length) {
+      setPreviewStorage(previewImages);
+    }
+  }, [attachments, previewImages]);
+
+  useEffect(() => {
+    if (tempFilesStorage) {
+      setUploadedFiles(tempFilesStorage);
+    }
   }, [tempFilesStorage]);
 
   const generateThumbnail = (file: any, index: any) => {

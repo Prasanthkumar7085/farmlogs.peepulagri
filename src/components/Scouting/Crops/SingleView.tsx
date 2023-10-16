@@ -18,6 +18,7 @@ import moment from "moment";
 import CommentIcon from '@mui/icons-material/Comment';
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import InfiniteScroll from "react-infinite-scroll-component"
 
 
 
@@ -30,7 +31,7 @@ const SingleViewScoutComponent = () => {
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const farmTitle = useSelector((state: any) => state?.farms?.cropName);
 
-    const [data, setData] = useState<any>()
+    const [data, setData] = useState<any>([])
     const [selectedFile, setSelectedFile] = useState<any>([])
     const [index, setIndex] = useState<any>()
     const [scoutData, setScoutData] = useState();
@@ -40,6 +41,8 @@ const SingleViewScoutComponent = () => {
     const [scoutId, setScoutId] = useState<any>()
     const [readMore, setReadMore] = useState<any>()
     const [descriptionID, setDescriptionID] = useState<any>()
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [pageNumber, setPageNumber] = useState(1);
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -49,6 +52,10 @@ const SingleViewScoutComponent = () => {
 
         }
     }, [accessToken, router.isReady,])
+
+    useEffect(() => {
+        getPresingedURls()
+    }, [pageNumber]);
 
     const getPresingedURls = async () => {
         setLoading(true);
@@ -61,28 +68,17 @@ const SingleViewScoutComponent = () => {
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/scouts/1/100?crop_id=${router.query?.crop_id}`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/scouts/${pageNumber}/10?crop_id=${router.query?.crop_id}`, options)
             let responseData = await response.json()
 
             if (responseData.success) {
                 setSelectedFile(responseData.data)
-                // Create an object to store grouped data
-                const groupedData: any = {};
-
-                // Iterate through yourData and group objects by createdAt date
-                responseData.data.forEach((item: any) => {
-                    const createdAt = timePipe(item.createdAt, "DD-MM-YYYY")
-
-                    if (!groupedData[createdAt]) {
-                        groupedData[createdAt] = [item];
-                    } else {
-                        groupedData[createdAt].push(item);
-                    }
-                });
-
-                // Convert the groupedData object into an array
-                const groupedArray = Object.values(groupedData);
-                setData(groupedArray);
+                if (responseData?.has_more || responseData?.has_more == false) {
+                    setHasMore(responseData?.has_more);
+                }
+                let temp: any;
+                temp = [...data, ...responseData?.data];
+                setData(temp);
             }
         }
         catch (err) {
@@ -199,83 +195,86 @@ const SingleViewScoutComponent = () => {
                     <Typography color="text.primary">{farmTitle}</Typography>
                 </Breadcrumbs>
             </div>
-            {data?.length ? data.map((item: any, index: any) => {
-                return (
-                    <Card key={index} className={styles.galleryCard} >
-                        <Typography>{timePipe(item[0].createdAt, "DD-MM-YYYY")}</Typography>
-                        <div style={{ marginTop: "20px" }}>
-                            {item.map((row: any, rowIndex: any) => {
+            < InfiniteScroll
+                className={styles.infiniteScrollComponent}
+                dataLength={data.length}
+                next={() => setPageNumber(prev => prev + 1)}
+                hasMore={hasMore}
+                loader={<div className={styles.pageLoader}>Loading</div>}
+                endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : 'Scroll to Top'}</a>}
+            >
+                {data?.length ? data.map((item: any, index: any) => {
+                    return (
+                        <Card key={index} className={styles.galleryCard} >
+                            <Typography>{timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}</Typography>
+                            <div key={index} style={{ marginTop: "20px" }}>
+                                {readMore == true && item._id == descriptionID ?
+                                    <Typography variant="caption">{item.findings}  <span style={{ cursor: 'pointer' }} onClick={() => {
+                                        setReadMore(false)
+                                        setDescriptionID(item._id)
+                                    }}>Show Less</span></Typography> :
 
-                                return (
-                                    <div key={rowIndex} style={{ marginTop: "20px" }}>
-                                        <Typography>{timePipe(row.createdAt, "hh.mm a")}</Typography>
-                                        {readMore == true && row._id == descriptionID ?
-                                            <Typography variant="caption">{row.description}  <span style={{ cursor: 'pointer' }} onClick={() => {
-                                                setReadMore(false)
-                                                setDescriptionID(row._id)
-                                            }}>Show Less</span></Typography> :
-
-                                            <Typography variant="caption">{row.description?.length > 50 ? row.description.slice(0, 100) + "...." : row.description}
-                                                {row.description?.length > 50 ?
-                                                    <span style={{ cursor: 'pointer' }} onClick={() => {
-                                                        setReadMore(true)
-                                                        setDescriptionID(row._id)
-                                                    }}>Show More</span>
-                                                    : ""}</Typography>}
-
-
-                                        <Gallery images={getModifiedImage(row)} onClick={handleClick} enableImageSelection={false}
-                                        />
-                                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
-                                            <Chip
-                                                onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${row._id}`)}
-                                                label={
-                                                    <div style={{ display: "flex", alignItems: "center", alignContent: "center" }}>
-                                                        < VisibilityIcon />
-                                                        <Typography style={{ marginLeft: "5px" }}>View</Typography>
-                                                    </div>
-                                                }
-
-                                            />
+                                    <Typography variant="caption">{item.findings?.length > 50 ? item.findings.slice(0, 100) + "...." : item.findings}
+                                        {item.findings?.length > 50 ?
+                                            <span style={{ cursor: 'pointer' }} onClick={() => {
+                                                setReadMore(true)
+                                                setDescriptionID(item._id)
+                                            }}>Show More</span>
+                                            : ""}</Typography>}
 
 
-                                            <Chip onClick={() => {
-                                                setDrawerOpen(true)
-                                                setScoutId(row._id)
-                                                router.push({
-                                                    pathname: `/farms/${router.query.farm_id}/crops/${router.query.crop_id}`,
-                                                    query: { "scout_id": row._id }
-                                                })
-                                            }}
-                                                label=
-                                                {<div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", alignContent: "center" }}><Image
-                                                    alt="Delete"
-                                                    height={15}
-                                                    width={15}
-                                                    src="/comments-icon.svg"
-                                                    style={{ borderRadius: "5%" }}
-                                                /><Typography style={{ marginLeft: "5px" }}>2</Typography>
-                                                </div>}
+                                <Gallery images={getModifiedImage(item)} onClick={handleClick} enableImageSelection={false}
+                                />
+                                <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
+                                    <Chip
+                                        onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
+                                        label={
+                                            <div style={{ display: "flex", alignItems: "center", alignContent: "center" }}>
+                                                < VisibilityIcon />
+                                                <Typography style={{ marginLeft: "5px" }}>View</Typography>
+                                            </div>
+                                        }
 
-                                            />
+                                    />
 
 
+                                    <Chip onClick={() => {
+                                        setDrawerOpen(true)
+                                        setScoutId(item._id)
+                                        router.push({
+                                            pathname: `/farms/${router.query.farm_id}/crops/${router.query.crop_id}`,
+                                            query: { "scout_id": item._id }
+                                        })
+                                    }}
+                                        label=
+                                        {<div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", alignContent: "center" }}><Image
+                                            alt="Delete"
+                                            height={15}
+                                            width={15}
+                                            src="/comments-icon.svg"
+                                            style={{ borderRadius: "5%" }}
+                                        /><Typography style={{ marginLeft: "5px" }}>2</Typography>
+                                        </div>}
 
-                                        </div>
-                                    </div>
-                                )
-                            })}
+                                    />
 
+
+
+                                </div>
+                            </div>
+
+                        </Card>
+                    )
+                })
+                    :
+                    (!loading ?
+                        <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
+                            <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
+                            <Typography variant="h4">No Scoutings for this crop</Typography>
                         </div>
-                    </Card>
-                )
-            }) :
-                (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
-                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
-                        <Typography variant="h4">No Scoutings for this crop</Typography>
-                    </div>
-                    : "")}
+                        : "")}
+            </InfiniteScroll>
+
             <LoadingComponent loading={loading} />
             <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={scoutData} />
             {drawerOpen == true ?
@@ -283,7 +282,15 @@ const SingleViewScoutComponent = () => {
                 : ""}
 
             <div className="addFormPositionIcon">
-                <img src="/add-plus-icon.svg" alt="" onClick={() => router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)} />
+                <img src="/add-plus-icon.svg" alt="" onClick={() => {
+                    if (timePipe(data[0]?.createdAt, "DD-MM-YYYY") == timePipe(new Date(), "DD-MM-YYYY")) {
+                        router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}&scout_id=${data[0]?._id}&new=false`)
+
+                    } else {
+                        router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}&new=true`)
+
+                    }
+                }} />
             </div>
         </div>
 

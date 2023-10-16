@@ -124,6 +124,7 @@ const TanStackTableComponent = ({
                             style={{
                               display: "flex",
                               gap: "10px",
+                              cursor: "pointer",
                             }}
                           >
                             {flexRender(

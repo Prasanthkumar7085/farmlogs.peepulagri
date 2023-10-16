@@ -237,9 +237,9 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                 </Typography>
 
             </DialogActions>
-            {data?.description ?
+            {data?.findings ?
                 <div style={{ display: "block" }}>
-                    <Typography variant='caption'><span style={{ color: "red" }}>Description:-</span>{data?.description}</Typography>
+                    <Typography variant='caption'><span style={{ color: "red" }}>Findings:-</span>{data?.findings}</Typography>
                 </div> : ""}
         </Dialog>
     );

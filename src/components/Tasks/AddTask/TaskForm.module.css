@@ -47,25 +47,13 @@
   text-align: left;
 }
 
-/* .dropdown,
-.lable {
-  align-self: stretch;
-  cursor: pointer;
-} */
-
 .selectfarm {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  /* gap: 8px; */
 }
 
-.inoutbox,
-.selectfarm,
-.title {
-  align-self: stretch;
-}
 
 .title {
   margin: 0;
@@ -80,7 +68,7 @@
 
 .inoutbox {
   border: 0;
-  background-color: transparent;
+  background-color: #fff;
 }
 
 .form {
@@ -109,6 +97,7 @@
   width: 40%;
   margin: 0 auto;
   padding-top: 4rem;
+  padding-bottom: 1rem;
 }
 
 .backButton {
@@ -118,4 +107,29 @@
   border-radius: 4px;
   border: 1px solid #E9EDF1;
   background: #FFF;
+}
+
+/*This is a scroll bar customized styles*/
+.selectfarm textarea::-webkit-scrollbar {
+  width: 4px;
+  height: 0px;
+
+}
+
+
+/* Track */
+.selectfarm textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+.selectfarm textarea::-webkit-scrollbar-thumb {
+  background: #c4c2c2;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.selectfarm textarea::-webkit-scrollbar-thumb:hover {
+  background: #5a5959;
 }

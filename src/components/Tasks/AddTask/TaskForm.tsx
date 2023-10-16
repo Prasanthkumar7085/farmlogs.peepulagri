@@ -234,14 +234,14 @@ const TaskForm = ({ data }: any) => {
                       isOptionEqualToValue={(option: any, value: any) =>
                         option._id === value._id
                       }
-                      renderOption={(props, option) => {
+                      renderOption={(props, option: any) => {
                         return (
                           <li {...props} key={option._id}>
-                            {option.phone}
+                            {option.full_name}
                           </li>
                         );
                       }}
-                      getOptionLabel={(option: any) => option.phone}
+                      getOptionLabel={(option: any) => option.full_name}
                       options={users}
                       onChange={onChangeUser}
                       renderInput={(params) => (
@@ -332,7 +332,6 @@ const TaskForm = ({ data }: any) => {
                     </div>
                   </Grid>
                 </Grid>
-
               </Grid>
               <Grid item xs={12}>
                 <div className={styles.selectfarm}>

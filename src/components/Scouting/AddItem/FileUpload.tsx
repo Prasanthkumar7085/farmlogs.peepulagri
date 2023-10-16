@@ -558,6 +558,7 @@ const FileUploadComponent = () => {
   };
   //capture vedio
   const captureCameraVedio = (value: any, videofile: any) => {
+    console.log(videofile, "kk")
     setOpenCamera(false);
     const type = "video/webm";
     const file = new File([videofile], `my video.webm`, { type });

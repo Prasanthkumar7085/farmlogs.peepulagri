@@ -143,11 +143,16 @@ body {
     background: var(--color-sienna);
     border-left: 1px solid #d8d7d6;
 }
+.dataTable-container .thead .table-row .cell:last-child img{
+display: none;
+box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+}
 
 .dataTable-container .thead .table-row .cell:first-child {
     position: sticky;
     left: 0;
     background: var(--color-sienna);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
 }
 
 .dataTable-container .tbody .table-row:hover {
@@ -159,6 +164,7 @@ body {
     left: 0;
     box-shadow: -20px 0 20px -35px #000000b3 inset;
     background: #fff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
 }
 
 .dataTable-container .tbody .table-row .cell:last-child {
@@ -166,7 +172,11 @@ body {
     right: 0;
     background: #fff;
     border-left: 1px solid #d8d7d6;
+<<<<<<< HEAD
     box-shadow: 20px 0 20px -35px #000000b3 inset;
+=======
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+>>>>>>> 83d65bff66b339bda9fca7962c73fad65aad1f27
 }
 
 .dataTable-container .tbody .cell {

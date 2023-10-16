@@ -7,6 +7,7 @@ import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder
 import getAllTasksService from "../../../../lib/services/TasksService/getAllTasksService";
 import NavBarContainer from "./TasksNavBar/NavBarContainer";
 import TasksTableComponent from "./TasksTable/TasksTableComponent";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 export interface ApiCallProps {
   page: string | number;
@@ -32,7 +33,7 @@ const TasksPageComponent = () => {
 
   const getAllTasks = async ({
     page = 1,
-    limit = 10,
+    limit = 15,
     search_string = "",
     sortBy = "",
     sortType = "",
@@ -168,7 +169,30 @@ const TasksPageComponent = () => {
           paginationDetails={paginationDetails}
         />
       ) : !loading ? (
-        "No Data"
+        <div
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <ImageComponent
+            src="/no-tasks-data.svg"
+            height={500}
+            width={500}
+            alt="no-tasks"
+          />
+          <div
+            style={{
+              fontSize: "20px",
+              fontWeight: "bold",
+              color: "#a05148",
+            }}
+          >
+            No Tasks
+          </div>
+        </div>
       ) : (
         ""
       )}

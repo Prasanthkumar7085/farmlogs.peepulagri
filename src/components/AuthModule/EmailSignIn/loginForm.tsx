@@ -9,6 +9,7 @@ import { setUserDetails } from '@/Redux/Modules/Auth';
 import { useDispatch } from 'react-redux';
 import serUserTypeCookie from '../../../../lib/CookieHandler/serUserTypeCookie';
 import ImageComponent from '@/components/Core/ImageComponent';
+import { id } from "date-fns/locale";
 
 
 export default function SigninEmail() {
@@ -42,19 +43,20 @@ export default function SigninEmail() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/signin`, requestOptions)
             const res = await response.json();
             if (response.status == 200 || response.status == 201) {
-                await setCookie();
-                if ("data" in res) {
-                    dispatch(setUserDetails(res?.data));
-                }
-                let accessToken = res.data.access_token;
-                await serUserTypeCookie(res?.data?.user_details?.user_type);
+              await setCookie();
+              if ("data" in res) {
+                dispatch(setUserDetails(res?.data));
+              }
+              let accessToken = res.data.access_token;
+              await serUserTypeCookie(res?.data?.user_details?.user_type);
 
-                if (res?.data?.user_details?.user_type == "ADMIN") {
-                    router.push("/support");
-                }
-                else if ((res?.data?.user_details?.user_type == "USER" || res?.data?.user_details?.user_type == "AGRONOMIST")) {
-                    router.push("/farm");
-                }
+              if (res?.data?.user_details?.user_type == "ADMIN") {
+                router.push("/support");
+              } else if (res?.data?.user_details?.user_type == "USER") {
+                router.push("/farm");
+              } else if (res?.data?.user_details?.user_type == "AGRONOMIST") {
+                router.push("/scouts");
+              }
             }
             if (response.status == 422) {
                 setErrorMessages(res.errors);

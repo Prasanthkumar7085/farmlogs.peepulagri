@@ -6,6 +6,12 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
+import DrawerComponentForScout from "@/components/Scouting/Comments/DrawerBoxForScout";
+import Image from "next/image";
+import { Chip, Drawer, Typography } from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import ScoutingDetails from "./ViewScouting/ScoutingDetails";
+
 
 interface pageProps {
   item: SingleScoutResponse;
@@ -20,11 +26,16 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   const [index, setIndex] = useState(-1);
   const [isReadMore, setIsReadMore] = useState(false);
   const [readMoreIndex, setReadMoreIndex] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState<any>(false)
+  const [scoutingDetailsDrawer, setScoutingDetailsDrawer] = useState<any>()
+
 
   const onViewClick = useCallback(() => {
-    router.push(
-      `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`
-    );
+    setDrawerOpen(true)
+
+    // router.push(
+    //   `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`
+    // );
   }, []);
 
   const viewImagePreview = (index: number) => {
@@ -50,6 +61,25 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
     setReadMoreIndex("");
     setIsReadMore(false);
   };
+
+  const drawerClose = (value: any) => {
+    
+    if (value == false) {
+      setDrawerOpen(false);
+      setScoutingDetailsDrawer(false);
+      if (router.pathname == "/scouts") {
+        router.push({
+          pathname: `/scouts`,
+          query: {},
+        });
+      } else {
+        router.push({
+          pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+          query: {},
+        });
+      }
+    }
+  }
   return (
     <div className={styles.scoutingCard}>
       <div className={styles.carddetails}>
@@ -162,37 +192,105 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
       <div className={styles.carddetails}>
         {/* <p className={styles.date}>{timePipe(item.createdAt, 'DD MMM YYYY, hh:mm A')}</p> */}
         <div className={styles.buttons}>
-          <div className={styles.view} onClick={onViewClick}>
-            <img
-              className={styles.trashXmark1Icon}
-              alt=""
-              src="/farm-view-icon.svg"
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <Chip
+              onClick={() => {
+                setScoutingDetailsDrawer(true);
+                if (router.pathname == "/scouts") {
+                  router.push({
+                    pathname: `/scouts`,
+                    query: { scout_id: item._id },
+                  });
+                } else {
+                  router.push({
+                    pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+                    query: { scout_id: item._id },
+                  });
+                }
+              }}
+              label={
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <VisibilityIcon />
+                  <Typography style={{ marginLeft: "5px" }}>View</Typography>
+                </div>
+              }
+            />
+
+            <Chip
+              onClick={() => {
+                onViewClick();
+                if (router.pathname == "/scouts") {
+                  router.push({
+                    pathname: `/scouts`,
+                    query: { scout_id: item._id },
+                  });
+                } else {
+                  router.push({
+                    pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
+                    query: { scout_id: item._id },
+                  });
+                }
+              }}
+              label={
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    alignContent: "center",
+                  }}
+                >
+                  <Image
+                    alt="Delete"
+                    height={15}
+                    width={15}
+                    src="/comments-icon.svg"
+                    style={{ borderRadius: "5%" }}
+                  />
+                  <Typography style={{ marginLeft: "5px" }}>2</Typography>
+                </div>
+              }
             />
           </div>
-          {/* <div className={styles.edit}>
-            <img
-              className={styles.trashXmark1Icon}
-              alt=""
-              src="/edit-farm-icon.svg"
-            />
-          </div>
-          <div className={styles.delete}>
-            <img
-              className={styles.trashXmark1Icon}
-              alt=""
-              src="/farm-delete-icon.svg"
-            />
-          </div> */}
         </div>
       </div>
-      <VideoDialogForScout
-        open={openDialog}
-        onClose={handleCloseDialog}
-        mediaArray={item.attachments}
-        index={index}
-      />
+      {scoutingDetailsDrawer == true ? (
+        <ScoutingDetails drawerClose={drawerClose} />
+      ) : (
+        ""
+      )}
+      {drawerOpen == true ? (
+        <DrawerComponentForScout
+          drawerClose={drawerClose}
+          scoutId={item._id}
+          anchor={"right"}
+          item={item}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
 
 export default ScoutingCardWeb;
+
+// {/* <VideoDialogForScout
+//   open={openDialog}
+//   onClose={handleCloseDialog}
+//   mediaArray={item.attachments}
+//   index={index}
+// /> */}

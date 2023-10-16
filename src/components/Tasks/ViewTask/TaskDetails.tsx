@@ -99,33 +99,40 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
 
   return (
     <div className={styles.cardDetails}>
-      <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <div className={styles.singleDetailsBox}>
             {editField == "title" && editFieldOrNot ? (
               <div style={{ width: "100%" }}>
                 <TextField
+                  placeholder="Enter Title here"
                   sx={{
-                    width: "100%", background: "#f5f7fa",
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      border: "0 !important"
-                    }
+                    width: "100%",
+                    background: "#f5f7fa",
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "0 !important",
+                    },
                   }}
                   size="small"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
-
               </div>
             ) : (
               <h1 className={styles.landPreparation}>
                 {data?.title ? data?.title : "-"}
-
               </h1>
             )}
           </div>
           <div>
-            {editField == "title" && editFieldOrNot ?
+            {editField == "title" && editFieldOrNot ? (
               <div className={styles.iconBlock}>
                 <IconButton
                   onClick={() => {
@@ -144,19 +151,23 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 >
                   <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                 </IconButton>
-              </div> :
-              userType !== "USER" ? (
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("title");
-                  }}
-                >
-                  <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
-                </IconButton>
-              ) : (
-                ""
-              )}
+              </div>
+            ) : userType !== "USER" ? (
+              <IconButton
+                onClick={() => {
+                  setEditFieldOrNot(true);
+                  setEditField("title");
+                }}
+              >
+                <img
+                  className={styles.editicon}
+                  src="/task-edit-icon.svg"
+                  alt=""
+                />
+              </IconButton>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -168,9 +179,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     <DatePicker
                       sx={{
                         width: "100%",
-                        '& .MuiButtonBase-root': {
-                          paddingRight: "10px !important"
-                        }
+                        "& .MuiButtonBase-root": {
+                          paddingRight: "10px !important",
+                        },
                       }}
                       disablePast
                       value={deadline}
@@ -197,12 +208,11 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     ? timePipe(data?.deadline, "DD, MMM YYYY")
                     : "-"}
                 </p>
-
               </div>
             )}
           </div>
-          <div >
-            {editField == "deadline" && editFieldOrNot ?
+          <div>
+            {editField == "deadline" && editFieldOrNot ? (
               <div className={styles.iconBlock}>
                 <IconButton
                   onClick={() => {
@@ -221,35 +231,47 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 >
                   <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                 </IconButton>
-              </div> : userType !== "USER" ? (
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("deadline");
-                  }}
-                >
-                  <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
-                </IconButton>
-              ) : (
-                ""
-              )}
+              </div>
+            ) : userType !== "USER" ? (
+              <IconButton
+                onClick={() => {
+                  setEditFieldOrNot(true);
+                  setEditField("deadline");
+                }}
+              >
+                <img
+                  className={styles.editicon}
+                  src="/task-edit-icon.svg"
+                  alt=""
+                />
+              </IconButton>
+            ) : (
+              ""
+            )}
           </div>
         </div>
-
       </div>
-      <div className={styles.viewHeader} >
+      <div className={styles.viewHeader}>
         <div className={styles.userBlock}>
-          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
             {userType !== "USER" ? (
-              editField == "farm" && editFieldOrNot ?
-                <div className={styles.iconBlock}> <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(false);
-                    setEditField("");
-                  }}
-                >
-                  <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
-                </IconButton>
+              editField == "farm" && editFieldOrNot ? (
+                <div className={styles.iconBlock}>
+                  {" "}
+                  <IconButton
+                    onClick={() => {
+                      setEditFieldOrNot(false);
+                      setEditField("");
+                    }}
+                  >
+                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                  </IconButton>
                   <IconButton
                     onClick={() => {
                       onUpdateField();
@@ -257,25 +279,39 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   >
                     <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                   </IconButton>
-                </div> :
-
-
-
+                </div>
+              ) : (
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
                     setEditField("farm");
                   }}
                 >
-                  <img className={styles.editicon} src="/task-edit-icon.svg" alt="" />
+                  <img
+                    className={styles.editicon}
+                    src="/task-edit-icon.svg"
+                    alt=""
+                  />
                 </IconButton>
+              )
             ) : (
               ""
             )}
           </div>
           <div className={styles.userDetails}>
-            <div className={styles.singleDetailsBox} style={{ flexDirection: "column", alignItems: "flex-start !important" }}>
-              <label className={styles.userLabel}><PersonOutlineOutlinedIcon sx={{ fontSize: "1rem", marginRight: "5px" }} /> User</label>
+            <div
+              className={styles.singleDetailsBox}
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-start !important",
+              }}
+            >
+              <label className={styles.userLabel}>
+                <PersonOutlineOutlinedIcon
+                  sx={{ fontSize: "1rem", marginRight: "5px" }}
+                />{" "}
+                User
+              </label>
               {editField == "farm" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
@@ -288,13 +324,29 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   />
                 </div>
               ) : (
-                <h1 >
+                <h1>
                   {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
                 </h1>
               )}
             </div>
-            <div className={styles.singleDetailsBox} style={{ flexDirection: "column", alignItems: "flex-start !important" }}>
-              <label className={styles.userLabel}> <Image src="/farmshape2.svg" alt="" height={12} width={12} style={{ marginRight: "4px" }} />Farm</label>
+            <div
+              className={styles.singleDetailsBox}
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-start !important",
+              }}
+            >
+              <label className={styles.userLabel}>
+                {" "}
+                <Image
+                  src="/farmshape2.svg"
+                  alt=""
+                  height={12}
+                  width={12}
+                  style={{ marginRight: "4px" }}
+                />
+                Farm
+              </label>
               {editField == "farm" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <FarmOptionsInViewTasks
@@ -306,12 +358,13 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                       setErrorMessages({});
                     }}
                   />
-                  <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname="farm_id"
+                  />
                 </div>
               ) : (
-                <h1 >
-                  {data?.farm_id ? data?.farm_id?.title : "-"}
-                </h1>
+                <h1>{data?.farm_id ? data?.farm_id?.title : "-"}</h1>
               )}
             </div>
           </div>
@@ -334,14 +387,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 sx={{
                   width: "100%",
                   background: "#f5f7fa",
-                  '& .MuiSelect-select': {
+                  "& .MuiSelect-select": {
                     fontSize: "11px",
                     fontFamily: "'Inter',sans-serif",
-                    fontWeight: "600"
+                    fontWeight: "600",
                   },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    border: "0 !important"
-                  }
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "0 !important",
+                  },
                 }}
               >
                 {statusOptions.map((item: string, index: number) => (
@@ -350,7 +403,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   </MenuItem>
                 ))}
               </Select>
-
             ) : (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p className={styles.status2}>
@@ -365,8 +417,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       <div className={styles.description}>
         <div className={styles.descriptionText}>
           <label className={styles.label}>Description</label>
-          {editField == "description" && editFieldOrNot ?
-            <div className={styles.iconBlock} >
+          {editField == "description" && editFieldOrNot ? (
+            <div className={styles.iconBlock}>
               <IconButton
                 onClick={() => {
                   setEditFieldOrNot(false);
@@ -384,20 +436,20 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               >
                 <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
               </IconButton>
-            </div> :
-            userType !== "USER" ? (
-              <div
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("description");
-                }}
-                className={styles.editDesc}
-              >
-                <p style={{ margin: "0" }}>Edit</p>
-              </div>
-            ) : (
-              ""
-            )}
+            </div>
+          ) : userType !== "USER" ? (
+            <div
+              onClick={() => {
+                setEditFieldOrNot(true);
+                setEditField("description");
+              }}
+              className={styles.editDesc}
+            >
+              <p style={{ margin: "0" }}>Edit</p>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         {editField == "description" && editFieldOrNot ? (
           <div style={{ width: "100%" }}>
@@ -409,11 +461,11 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               sx={{ width: "100%", background: "#f5f7fa" }}
+              placeholder="Enter description here"
             />
           </div>
         ) : (
           <p className={styles.farmersPrepareThe}>
-
             {data?.description ? data?.description : "-"}
           </p>
         )}

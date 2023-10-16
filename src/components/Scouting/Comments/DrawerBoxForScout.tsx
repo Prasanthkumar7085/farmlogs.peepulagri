@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./comment-form"
 import Threads from "./threads"
 import { useRouter } from "next/router";
@@ -8,10 +8,15 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import styles from "./CommentsComponent.module.css";
 import { Drawer, IconButton, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import timePipe from "@/pipes/timePipe";
+import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 
-const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
+const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) => {
 
+    const dispatch = useDispatch()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+    const cropTitle = useSelector((state: any) => state?.farms?.cropName);
+
     const router = useRouter()
     const [data, setData] = useState<any>()
     const [loading, setLoading] = useState<any>()
@@ -74,6 +79,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
                 let reverse = formattedData.slice().reverse()
 
                 setData(reverse)
+                dispatch(removeTheAttachementsFilesFromStore([]))
 
             }
         } catch (err) {
@@ -196,15 +202,22 @@ const DrawerComponentForScout = ({ drawerClose, scoutId }: any) => {
     return (
 
         <Drawer
-            anchor="bottom"
+            anchor={anchor}
             open={isDrawerOpen}
         >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h6">Comments</Typography>
+            <div style={{ display: "flex", justifyContent: "space-between", width: anchor == "right" ? 600 : "" }}>
+
+                {anchor == "right" ?
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <Typography variant="h6">{item?.farm_id?.title}</Typography>
+                        {timePipe(item?.createdAt, "DD MMM YYYY, hh:mm A")}
+                    </div> : ""}
+                <Typography>{anchor == "right" ? cropTitle : "Comments"}</Typography>
                 <IconButton onClick={() => {
                     drawerClose(false)
                 }} ><CloseIcon /></IconButton>
             </div>
+
             <div className={styles.CommentsBlock}>
                 <div style={{ marginTop: "30px" }}>
                     <Threads

@@ -115,7 +115,10 @@ const TasksTableComponent = ({
         <span
           style={{ wordWrap: "break-word", padding: "40px 10px 40px 10px" }}
         >
-          {info.getValue()}
+          {info.getValue()
+            ? info.getValue().slice(0, 1).toUpperCase() +
+              info.getValue().slice(1)
+            : ""}
         </span>
       ),
       header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
@@ -139,9 +142,15 @@ const TasksTableComponent = ({
             <span>
               {info.getValue()
                 ? info.getValue()?.length > 50
-                  ? info.getValue().slice(0, 46) + "....."
+                  ? (info.getValue()
+                      ? info.getValue().slice(0, 1).toUpperCase() +
+                        info.getValue().slice(1, 46)
+                      : "") + "....."
                   : info.getValue()
-                : "-"}
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1)
+                  : ""
+                : ""}
             </span>
           </Tooltip>
         </span>

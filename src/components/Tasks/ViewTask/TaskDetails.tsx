@@ -456,8 +456,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
             <TextField
               className={styles.descriptionPara}
               multiline
-              minRows={3}
-              maxRows={3}
+              minRows={4}
+              maxRows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               sx={{ width: "100%", background: "#f5f7fa" }}

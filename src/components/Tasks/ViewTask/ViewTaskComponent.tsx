@@ -40,8 +40,7 @@ const ViewTaskComponent = () => {
       token: accessToken,
     });
     if (response?.success) {
-      getTaskById(router.query.task_id as string);
-      setLoading(false);
+      await getTaskById(router.query.task_id as string);
     }
     setLoading(false);
     return response;

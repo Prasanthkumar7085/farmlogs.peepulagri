@@ -83,20 +83,19 @@ const TaskForm = ({ data }: any) => {
       categories: [],
       deadline: deadline
         ? moment(deadline)
-          .utcOffset("+05:30")
-          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
       attachments: files,
       status: status,
     };
-    console.log(body);
 
     let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
       toast.success(response?.message);
-      gotoBackAfterAdd();
+      router.push("/tasks");
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
@@ -112,12 +111,6 @@ const TaskForm = ({ data }: any) => {
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllUsers();
-      // if (router.query.task_id && data) {
-      //   setDataInEdit();
-      //   // getAllFarms(data?.farm_id);
-      // } else {
-      //   getAllFarms();
-      // }
     }
   }, [router.isReady, accessToken, data]);
 
@@ -131,20 +124,6 @@ const TaskForm = ({ data }: any) => {
     setFiles(filesUploaded);
   };
 
-  const gotoBack = async () => {
-    await router.back();
-    setTimeout(() => {
-      router.reload();
-    }, 200);
-  };
-
-  const gotoBackAfterAdd = async () => {
-    router.push("/tasks");
-    setTimeout(() => {
-      router.reload();
-    }, 1000);
-  };
-
   const onChangeUser = async (e: any, value: any) => {
     setUser(value);
     if (value) await getAllFarms("", value?._id);
@@ -156,7 +135,7 @@ const TaskForm = ({ data }: any) => {
         <div className={styles.form}>
           <div className={styles.header}>
             <Button
-              onClick={gotoBack}
+              onClick={() => router.back()}
               className={styles.backbutton}
               sx={{ width: 40 }}
               color="primary"

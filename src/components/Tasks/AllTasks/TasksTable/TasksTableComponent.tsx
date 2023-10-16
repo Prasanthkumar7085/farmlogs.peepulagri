@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { ApiCallProps } from "../TasksPageComponent";
 import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 import ImageComponent from "@/components/Core/ImageComponent";
+import timePipe from "@/pipes/timePipe";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -75,7 +76,7 @@ const TasksTableComponent = ({
       id: "createdAt",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue().slice(0, 10)}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Created On</span>,
@@ -154,7 +155,7 @@ const TasksTableComponent = ({
       id: "deadline",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()?.slice(0, 10)}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Due Date</span>,

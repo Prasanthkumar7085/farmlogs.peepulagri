@@ -1,4 +1,10 @@
-import { Autocomplete, CircularProgress, InputAdornment, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  CircularProgress,
+  InputAdornment,
+  LinearProgress,
+  TextField,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -59,20 +65,19 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
   }, [router.isReady, accessToken]);
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div>
       {!userLoaded ? (
         <Autocomplete
           sx={{
             width: "100%",
             borderRadius: "4px",
-            '& .MuiInputBase-root': {
+            "& .MuiInputBase-root": {
               paddingBlock: "5px !important",
               background: "#f5f7fa",
-
             },
-            '& .MuiOutlinedInput-notchedOutline': {
-              border: "0"
-            }
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "0",
+            },
           }}
           id="size-small-outlined-multi"
           size="small"
@@ -95,14 +100,9 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder="Search by User Mobile"
+              placeholder="Select user mobile"
               variant="outlined"
               size="small"
-              InputProps={{
-                endAdornment: <InputAdornment position="start">
-                  {loading ? <CircularProgress size="1.5rem" sx={{ color: "blue" }} /> : ""}
-                </InputAdornment>,
-              }}
               sx={{
                 "& .MuiInputBase-root": {
                   fontSize: "clamp(.875rem, 1vw, 1.125rem)",
@@ -116,7 +116,7 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
       ) : (
         ""
       )}
-
+      {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
     </div>
   );
 };

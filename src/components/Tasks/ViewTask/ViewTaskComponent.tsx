@@ -20,6 +20,7 @@ const ViewTaskComponent = () => {
   const [loading, setLoading] = useState(true);
 
   const getTaskById = async (id: string) => {
+    setLoading(true);
     const response = await getTaskByIdService({
       taskId: id,
       token: accessToken,
@@ -65,11 +66,15 @@ const ViewTaskComponent = () => {
           sx={{
             width: "100%",
             borderRadius: "10px",
-            marginBottom: "1rem"
+            marginBottom: "1rem",
           }}
         >
           <TaskDetails data={data} updateTask={updateTask} />
-          <ViewTaskAttachments data={data} />
+          {data?.attachments?.length ? (
+            <ViewTaskAttachments data={data} getTaskById={getTaskById} />
+          ) : (
+            ""
+          )}
         </Card>
       </div>
       <LoadingComponent loading={loading} />

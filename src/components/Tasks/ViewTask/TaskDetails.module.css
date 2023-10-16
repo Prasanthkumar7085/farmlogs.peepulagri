@@ -39,6 +39,7 @@
 .cardDetails h1 {
   margin: 0;
   font-size: clamp(14px, 0.83vw, 18px);
+  line-height: 100%;
 }
 
 .cardDetails input {
@@ -137,7 +138,7 @@
 }
 
 .cardDetails {
-  padding: 16px 16px 0;
+  padding: 16px 16px 10px;
   gap: 0.5rem;
   text-align: left;
   font-size: 14px;

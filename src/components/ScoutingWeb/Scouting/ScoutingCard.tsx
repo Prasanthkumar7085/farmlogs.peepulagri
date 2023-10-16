@@ -267,6 +267,12 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           </div >
         </div >
       </div >
+      <VideoDialogForScout
+        open={openDialog}
+        onClose={handleCloseDialog}
+        mediaArray={item.attachments}
+        index={index}
+      />
       {scoutingDetailsDrawer == true ? (
         <ScoutingDetails drawerClose={drawerClose} />
       ) : (
@@ -288,9 +294,3 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
 
 export default ScoutingCardWeb;
 
-// {/* <VideoDialogForScout
-//   open={openDialog}
-//   onClose={handleCloseDialog}
-//   mediaArray={item.attachments}
-//   index={index}
-// /> */}

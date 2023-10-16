@@ -32,6 +32,8 @@ const ScoutingDetails = ({ drawerClose, item }: any) => {
   const [selectedFile, setSelectedFile] = useState<any>([])
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [content, setContent] = useState<any>()
+
 
   const getSingleScout = async () => {
     setLoading(true);
@@ -43,6 +45,9 @@ const ScoutingDetails = ({ drawerClose, item }: any) => {
       console.log(response?.data, "testing");
 
       setData(response?.data);
+      const lines = response?.data?.findings?.split('\n');
+      setContent(lines)
+
       setSelectedFile(response?.data.attachments);
 
       getModifiedImages({ attachmentdetails: response.data.attachments });
@@ -123,7 +128,10 @@ const ScoutingDetails = ({ drawerClose, item }: any) => {
           </div>
           <div className={styles.textwrapper}>
             <h1 className={styles.farmname}>Findings</h1>
-            <p className={styles.startdate}>{data?.findings ? data?.findings : "-"}</p>
+            {content ? content?.map((line: any, index: any) => (
+              <p className={styles.startdate}>
+                {content ? line : "-"}
+              </p>)) : "-"}
           </div>
 
         </Card>

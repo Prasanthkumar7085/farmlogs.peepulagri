@@ -70,8 +70,10 @@
 }
 
 .responseDate2 {
-  background-color: #f5f7fa;
-  padding: 4px 10px;
+  background-color: #fff;
+  padding: 2px 10px;
+  border: 1px solid #B4C1D6;
+  border-radius: 4px;
 }
 
 .viewHeader {

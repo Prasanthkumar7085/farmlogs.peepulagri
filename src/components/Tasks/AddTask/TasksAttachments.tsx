@@ -456,7 +456,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
                           }}
                         >
                           {item.name?.slice(0, 15)}...
-                          {item.type?.slice(-15)}{" "}
                         </div>
                         {fileProgress[index] == "fail" ? (
                           <div

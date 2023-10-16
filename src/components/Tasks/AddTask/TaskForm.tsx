@@ -180,6 +180,7 @@ const TaskForm = ({ data }: any) => {
                     <DatePicker
                       value={deadline}
                       disablePast
+                      format="dd/MM/yyyy"
                       sx={{
                         width: "100%", '& .MuiInputBase-root': {
                           padding: "5px 10px",

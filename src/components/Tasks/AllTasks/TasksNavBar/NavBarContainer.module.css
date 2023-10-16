@@ -21,13 +21,17 @@
 }
 
 .filter {
-  border-radius: 4px;
-  background: var(--Green-Gradient, #05A155);
-  color: #FFF;
-  font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 0.72vw, 16px);
+  border-radius: 4px !important;
+  background: #05A155 !important;
+  color: #FFF !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(14px, 0.72vw, 16px) !important;
   font-weight: 500;
-  padding-block: 5px;
+  padding-block: 5px !important;
+}
+
+.filter:hover {
+  background: #05A155 !important;
 }
 
 .searchbar {

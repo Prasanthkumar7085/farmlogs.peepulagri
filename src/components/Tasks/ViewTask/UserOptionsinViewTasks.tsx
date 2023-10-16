@@ -73,11 +73,9 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
             borderRadius: "4px",
             "& .MuiInputBase-root": {
               paddingBlock: "5px !important",
-              background: "#f5f7fa",
+              background: "#fff",
             },
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "0",
-            },
+
           }}
           id="size-small-outlined-multi"
           size="small"

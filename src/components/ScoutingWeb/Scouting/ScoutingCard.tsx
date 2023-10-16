@@ -105,12 +105,12 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
         <div>
           {readMoreIndex !== item?._id && !isReadMore ? (
             <div>
-              {item.description
-                ? item.description?.length > 100
-                  ? item?.description.slice(0, 97) + "..."
-                  : item.description
+              {item.findings
+                ? item.findings?.length > 100
+                  ? item?.findings.slice(0, 97) + "..."
+                  : item.findings
                 : "-"}
-              {item.description?.length > 100 ? (
+              {item.findings?.length > 100 ? (
                 <span onClick={() => setReadMore(item?._id)}>
                   {" Read More"}
                 </span>
@@ -120,8 +120,8 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
             </div>
           ) : (
             <div>
-              {item.description ? item.description : "-"}
-              {item.description?.length > 100 ? (
+              {item.findings ? item.findings : "-"}
+              {item.findings?.length > 100 ? (
                 <span onClick={() => setReadLess(item?._id)}>
                   {" Read Less"}
                 </span>
@@ -204,10 +204,9 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
               onClick={() => {
                 setScoutingDetailsDrawer(true);
                 if (router.pathname == "/scouts") {
-                  router.push({
-                    pathname: `/scouts`,
-                    query: { scout_id: item._id },
-                  });
+                  router.push(
+                    `/scouts/${item._id}`,
+                  );
                 } else {
                   router.push(
                     `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,

@@ -7,6 +7,7 @@ import getSingleScoutService from "../../../../../lib/services/ScoutServices/get
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import CloseIcon from '@mui/icons-material/Close';
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const SingleScoutViewDetails = () => {
 
@@ -20,6 +21,7 @@ const SingleScoutViewDetails = () => {
     const [finalImages, setFinalImages] = useState([]);
     const [curoselOpen, setCuroselOpen] = useState<any>(false)
     const [selectedImage, setSelectedImage] = useState<any>()
+    const [content, setContent] = useState<any>()
 
 
 
@@ -33,6 +35,8 @@ const SingleScoutViewDetails = () => {
             );
             if (response?.success) {
                 setData(response?.data);
+                const lines = response?.data?.findings?.split('\n');
+                setContent(lines)
                 getModifiedImages({ attachmentdetails: response.data.attachments });
 
             }
@@ -149,10 +153,12 @@ const SingleScoutViewDetails = () => {
                 </Grid>
                 <Grid xs={4} sx={{ height: 800 }}>
                     <Card sx={{ zIndex: 100 }}>
-                        <ScoutingDetails data={data} />
+                        <ScoutingDetails data={data} content={content} />
                     </Card>
                 </Grid>
             </Grid>
+            <LoadingComponent loading={loading} />
+
         </div>
     )
 }

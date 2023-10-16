@@ -18,7 +18,7 @@ import { Carousel } from 'react-responsive-carousel';
 import CloseIcon from '@mui/icons-material/Close';
 import CommentsComponentForWeb from "@/components/Scouting/Comments/CommentsComponentForweb";
 
-const ScoutingDetails = ({ data }: any) => {
+const ScoutingDetails = ({ data, content }: any) => {
 
   const router = useRouter();
 
@@ -27,7 +27,6 @@ const ScoutingDetails = ({ data }: any) => {
   const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
   const [index, setIndex] = useState<number>(-1);
-  const [content, setContent] = useState<any>()
 
 
 
@@ -61,10 +60,11 @@ const ScoutingDetails = ({ data }: any) => {
         </div>
 
       </Card>
-      <div style={{ position: "sticky", marginTop: "48%" }}>
+      <div style={{ position: "sticky", marginTop: "48%", }}>
         <Typography variant="h6">Recommedations</Typography>
         <CommentsComponentForWeb />
       </div>
+
     </div >
   );
 };

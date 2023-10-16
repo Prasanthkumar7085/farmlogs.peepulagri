@@ -9,7 +9,7 @@ import CommentFormForTasks from "./comment-formForTasks";
 import ThreadsForTasks from "./threadsforTasks";
 import { Toaster, toast } from "sonner";
 import SkeletonLoadingForAttachments from "@/components/Core/LoadingComponents/SkeletonLoadingForAttachments";
-
+import styles from "./Comments.module.css";
 const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const dispatch = useDispatch();
 
@@ -194,8 +194,12 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   };
 
   return (
-    <Drawer anchor="right" open={drawerOpen}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <Drawer anchor="right" open={drawerOpen} sx={{
+      '& .MuiPaper-root': {
+        padding: "1rem"
+      }
+    }}>
+      <div className={styles.drawerHeader}>
         <Typography variant="h6">Comments</Typography>
         <IconButton
           onClick={() => {
@@ -203,7 +207,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
             dispatch(removeTheAttachementsFilesFromStore([]));
           }}
         >
-          <CloseIcon />
+          <CloseIcon sx={{ color: "#000" }} />
         </IconButton>
       </div>
 

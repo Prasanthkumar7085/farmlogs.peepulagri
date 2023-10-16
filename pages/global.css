@@ -105,10 +105,11 @@ body {
     font-weight: 500;
 }
 
+/* box-shadow: 0px 0px 0px 1px #d1cdcc; */
 .dataTable-container {
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
 }
 
 .dataTable-container .table {
@@ -156,6 +157,7 @@ body {
 .dataTable-container .tbody .table-row .cell:first-child {
     position: sticky;
     left: 0;
+    box-shadow: var(--shadow-button);
     background: #fff;
 }
 
@@ -170,6 +172,7 @@ body {
     padding: 10px;
     border-right: 1px solid #d8d7d6;
     border-bottom: 1px solid #d8d7d6;
+    background-color: #fff;
 }
 
 .dataTable-container .tbody .cell span {
@@ -185,6 +188,7 @@ body {
 .scrollbar::-webkit-scrollbar {
     background: transparent;
     width: 5px;
+    height: 3px;
 }
 
 .scrollbar::-webkit-scrollbar:hover {

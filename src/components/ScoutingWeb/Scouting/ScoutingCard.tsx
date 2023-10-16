@@ -63,7 +63,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
   };
 
   const drawerClose = (value: any) => {
-    
+
     if (value == false) {
       setDrawerOpen(false);
       setScoutingDetailsDrawer(false);
@@ -264,9 +264,9 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                 </div>
               }
             />
-          </div>
-        </div>
-      </div>
+          </div >
+        </div >
+      </div >
       {scoutingDetailsDrawer == true ? (
         <ScoutingDetails drawerClose={drawerClose} />
       ) : (
@@ -282,7 +282,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
       ) : (
         ""
       )}
-    </div>
+    </div >
   );
 };
 

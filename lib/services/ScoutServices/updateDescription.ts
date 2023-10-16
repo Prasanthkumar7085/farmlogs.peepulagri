@@ -9,7 +9,7 @@ const updateDescriptionService = async (scoutId: string, token: string, data: an
             }),
             body: JSON.stringify({
                 "farm_id": data.farm_id._id,
-                "description": description,
+                "findings": description,
                 "crop_id": data.crop_id,
                 "attachments": [...attachements, ...data.attachments]
             })

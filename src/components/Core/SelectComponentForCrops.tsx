@@ -24,7 +24,7 @@ const SelectAutoCompleteForCrops = ({ options, value, onSelectValueFromDropDown,
                 size='small'
                 id="combo-box-demo"
                 options={(options && options?.length) ? options : []}
-                disabled={router.pathname == "/farms/[farm_id]/crops/[crop_id]/scouting/[scout_id]/edit" ? true : false}
+                disabled={router.query.new == "false" ? true : false}
                 getOptionLabel={(option: any) => option[label] ? option[label]?.toUpperCase() : ""}
                 onChange={(e: any, value: any, reason: any) => {
                     if (value) {

@@ -209,10 +209,9 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                     query: { scout_id: item._id },
                   });
                 } else {
-                  router.push({
-                    pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
-                    query: { scout_id: item._id },
-                  });
+                  router.push(
+                    `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,
+                  );
                 }
               }}
               label={
@@ -238,10 +237,9 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
                     query: { scout_id: item._id },
                   });
                 } else {
-                  router.push({
-                    pathname: `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting`,
-                    query: { scout_id: item._id },
-                  });
+                  router.push(
+                    `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,
+                  );
                 }
               }}
               label={

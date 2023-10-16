@@ -2,7 +2,7 @@ import styles from "./farm-card.module.css";
 import { FarmDataType } from "@/types/farmCardTypes";
 import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
-// import ImageComponent from "../../../components/Core/ImageComponent";
+import ImageComponent from "../../../components/Core/ImageComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
 interface pagePropsType {
   farmsData: Array<FarmDataType>;
@@ -29,7 +29,12 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
               <div className={styles.farm} id="farm">
                 <div className={styles.farmdetails} id="farm-detalis" onClick={() => router.push(`farms/${item._id}/crops`)}>
                   <div className={styles.duration} id="duration">
-                    <div className={styles.aug2023}>{timePipe(item.createdAt, 'DD, MMM YYYY')} - Current</div>
+                    <div className={styles.dates}>{timePipe(item.createdAt, 'DD, MMM YYYY')}</div>
+                    <div className={styles.count}>
+                      <ImageComponent src='/folder2-open.svg' height={12} width={12} alt='image' />
+                      <span>02</span>
+                    </div>
+                    {/* - Current  */}
                   </div>
                   <div className={styles.farm1} style={{ color: colorsArray[colorIndex] }}>
                     {item.title.length > 16 ?
@@ -53,7 +58,8 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
                     </div>
                   </div>
                   <div className={styles.viewfarm} id="icon-button-view-farm" onClick={() => router.push(`farms/${item._id}`)}>
-                    <SettingsIcon sx={{ color: "#c1c1c1" }} />
+                    {/* <SettingsIcon sx={{ color: "#c1c1c1" }} /> */}
+                    <ImageComponent src='/setting.svg' height={18} width={18} alt='image' />
                   </div>
                 </div>
               </div>

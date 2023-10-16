@@ -55,7 +55,7 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
                             {item?.title
                               ? item?.title?.length > 10
                                 ? item?.title?.slice(0, 1).toUpperCase() +
-                                  item?.title?.slice(1, 7) +
+                                  item?.title?.slice(1, 14) +
                                   "..."
                                 : item?.title[0].toUpperCase() +
                                   item?.title?.slice(1)

@@ -1,0 +1,38 @@
+.viewTaskPage {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 3% 0 0 0;
+}
+
+.viewTaskContainer {
+    width: 60%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.viewPageHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+
+}
+
+.viewPageHeader h5 {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(18px, 0.833vw, 20px);
+    font-weight: 500;
+}
+
+.backButton {
+    cursor: pointer;
+    border: 1px solid #E9EDF1;
+    border-radius: 3px;
+    padding: 4px 5px 4px 5px;
+    background-color: #fff;
+}

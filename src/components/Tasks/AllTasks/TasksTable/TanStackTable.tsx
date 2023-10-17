@@ -102,6 +102,7 @@ const TanStackTableComponent = ({
                 height: "32px",
                 position: "sticky",
                 top: "0px",
+                zIndex: "2"
               }}
             >
               {table.getHeaderGroups().map((headerGroup) => (
@@ -123,6 +124,7 @@ const TanStackTableComponent = ({
                             style={{
                               display: "flex",
                               gap: "10px",
+                              cursor: "pointer",
                             }}
                           >
                             {flexRender(

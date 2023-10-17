@@ -319,7 +319,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
             </label>
           </div>
           <label >
-            <img className={styles.imageIcon} alt="" src="/image7@2x.png" />
+            <img className={styles.imageIcon} alt="" src="/image7@2x.svg" />
             <input
               type="file"
               alt="images-upload"

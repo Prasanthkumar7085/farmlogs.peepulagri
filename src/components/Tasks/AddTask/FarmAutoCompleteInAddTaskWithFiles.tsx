@@ -1,6 +1,12 @@
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 import { FarmInTaskType } from "@/types/tasksTypes";
-import { Autocomplete, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  CircularProgress,
+  InputAdornment,
+  LinearProgress,
+  TextField,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -11,13 +17,15 @@ interface PropsTypes {
   label: string;
   placeholder: string;
   defaultValue: FarmInTaskType | null | undefined;
+  loading: boolean;
 }
-const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
+const FarmAutoCompleteInAddTaskWithFiles: React.FC<PropsTypes> = ({
   options,
   onSelectValueFromDropDown,
   label,
   placeholder,
   defaultValue,
+  loading,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -37,6 +45,18 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
     <div style={{ width: "100%" }}>
       {!autoCompleteLoading ? (
         <Autocomplete
+          sx={{
+            width: "100%",
+            borderRadius: "4px",
+
+            "& .MuiInputBase-root": {
+              // paddingBlock: "5px !important",
+              // background: "#f5f7fa",
+            },
+            // '& .MuiOutlinedInput-notchedOutline': {
+            //   border: "0"
+            // }
+          }}
           value={defaultValueSet}
           disablePortal
           size="small"
@@ -62,24 +82,13 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
               sx={{ width: "100%", background: "#fff" }}
             />
           )}
-
-        // sx={{
-        //     width: '1000%',
-        //     background: "#fff",
-        //     "& .MuiInputBase-input ": {
-        //         fontSize: "13px",
-        //         fontWeight: "400",
-        //         fontFamily: "'inter', sans-serif ",
-        //         color: "#000",
-
-        //     }
-        // }}
         />
       ) : (
         ""
       )}
+      {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
     </div>
   );
 };
 
-export default FarmAutoCompleteInAddTask;
+export default FarmAutoCompleteInAddTaskWithFiles;

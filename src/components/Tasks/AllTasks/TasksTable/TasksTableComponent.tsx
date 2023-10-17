@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { ApiCallProps } from "../TasksPageComponent";
 import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 import ImageComponent from "@/components/Core/ImageComponent";
+import timePipe from "@/pipes/timePipe";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -75,7 +76,7 @@ const TasksTableComponent = ({
       id: "createdAt",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue().slice(0, 10)}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Created On</span>,
@@ -104,7 +105,7 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "150px",
     },
 
     {
@@ -114,7 +115,10 @@ const TasksTableComponent = ({
         <span
           style={{ wordWrap: "break-word", padding: "40px 10px 40px 10px" }}
         >
-          {info.getValue()}
+          {info.getValue()
+            ? info.getValue().slice(0, 1).toUpperCase() +
+              info.getValue().slice(1)
+            : ""}
         </span>
       ),
       header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
@@ -138,23 +142,29 @@ const TasksTableComponent = ({
             <span>
               {info.getValue()
                 ? info.getValue()?.length > 50
-                  ? info.getValue().slice(0, 46) + "....."
+                  ? (info.getValue()
+                      ? info.getValue().slice(0, 1).toUpperCase() +
+                        info.getValue().slice(1, 46)
+                      : "") + "....."
                   : info.getValue()
-                : "-"}
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1)
+                  : ""
+                : ""}
             </span>
           </Tooltip>
         </span>
       ),
       header: () => <span>Description</span>,
       footer: (props: any) => props.column.id,
-      width: "400px",
+      width: "350px",
     },
     {
       accessorFn: (row: any) => row.deadline,
       id: "deadline",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()?.slice(0, 10)}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Due Date</span>,

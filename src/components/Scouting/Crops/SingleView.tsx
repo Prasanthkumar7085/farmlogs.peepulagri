@@ -221,8 +221,8 @@ const SingleViewScoutComponent = () => {
                                         }}>Show Less</span>
                                     </Typography> :
 
-                                    <Typography className={styles.findingsText}>{item.findings?.length > 50 ? item.findings.slice(0, 100) + "...." : item.findings}
-                                        {item.findings?.length > 50 ?
+                                    <Typography className={styles.findingsText}>{item.findings?.length > 100 ? item.findings.slice(0, 100) + "...." : item.findings}
+                                        {item.findings?.length > 100 ?
                                             <span style={{ fontWeight: '600', cursor: 'pointer' }} onClick={() => {
                                                 setReadMore(true)
                                                 setDescriptionID(item._id)

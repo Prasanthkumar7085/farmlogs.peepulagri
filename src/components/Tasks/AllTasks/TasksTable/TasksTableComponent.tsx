@@ -117,7 +117,7 @@ const TasksTableComponent = ({
         >
           {info.getValue()
             ? info.getValue().slice(0, 1).toUpperCase() +
-              info.getValue().slice(1)
+            info.getValue().slice(1)
             : ""}
         </span>
       ),
@@ -132,7 +132,7 @@ const TasksTableComponent = ({
         <span style={{ padding: "40px 10px 40px 10px" }}>
           <Tooltip
             title={
-              info.getValue()?.length > 50 ? (
+              info.getValue()?.length > 45 ? (
                 <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
               ) : (
                 ""
@@ -141,25 +141,13 @@ const TasksTableComponent = ({
           >
             <span>
               {info.getValue()
-                ? info.getValue()?.length > 50
-<<<<<<< Updated upstream
-                  ? (info.getValue()
-                      ? info.getValue().slice(0, 1).toUpperCase() +
-                        info.getValue().slice(1, 46)
-                      : "") + "....."
-                  : info.getValue()
+                ? info.getValue()?.length > 45
                   ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1)
-                  : ""
-                : ""}
-=======
-                  ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1, 46) +
-                    "....."
+                  info.getValue().slice(1, 41) +
+                  "....."
                   : info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1)
+                  info.getValue().slice(1)
                 : "-"}
->>>>>>> Stashed changes
             </span>
           </Tooltip>
         </span>

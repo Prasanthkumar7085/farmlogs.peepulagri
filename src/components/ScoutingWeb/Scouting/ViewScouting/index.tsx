@@ -1,4 +1,4 @@
-import { Card, Dialog, Grid, IconButton } from "@mui/material";
+import { Card, Dialog, Grid, IconButton, Typography } from "@mui/material";
 import ScoutingDetails from "./ScoutingDetails";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -116,12 +116,12 @@ const SingleScoutViewDetails = () => {
                                 }}
                             >
                                 <div style={{ display: "flex", alignItems: "flex-end", flexDirection: "column", justifyContent: "center", background: "#06060687" }}>
-                                    <IconButton onClick={() => setCuroselOpen(false)} sx={{ backgroundColor: "red", cursor: "pointer", }}>
+                                    <IconButton onClick={() => setCuroselOpen(false)} sx={{ cursor: "pointer", }}>
                                         <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
                                     </IconButton>
                                     <Carousel selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)} swipeable={true}>
                                         {finalImages.map((item: any, index: any) => (
-                                            <div key={index} style={{ width: "60%", margin: "0 auto", height: "80vh" }}>
+                                            <div key={index} style={{ width: "85%", margin: "0 auto", height: "80vh", marginTop: "2rem" }}>
 
                                                 {item.type?.includes('video') ? (
                                                     <video controls width="100%" autoPlay key={index}>
@@ -139,12 +139,12 @@ const SingleScoutViewDetails = () => {
                                                             alt={`Image ${index + 1}`}
                                                             style={{ height: "100%", width: "100%", objectFit: "contain" }}
                                                         />
-
                                                     </>
                                                 )}
                                             </div>
                                         ))
                                         }
+
                                     </Carousel>
                                 </div>
                             </div>}

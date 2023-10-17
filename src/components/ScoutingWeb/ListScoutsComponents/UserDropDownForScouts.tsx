@@ -30,9 +30,8 @@ const UserDropDownForScouts = ({
       {!autoCompleteLoading ? (
         <Autocomplete
           sx={{
-            width: "250px",
-            maxWidth: "250px",
             borderRadius: "4px",
+            background: "#fff"
           }}
           id="size-small-outlined-multi"
           size="small"
@@ -55,10 +54,11 @@ const UserDropDownForScouts = ({
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder="Search by User Mobile"
+              placeholder="Search by User "
               variant="outlined"
               size="small"
               sx={{
+                background: "#fff",
                 "& .MuiInputBase-root": {
                   fontSize: "clamp(.875rem, 1vw, 1.125rem)",
                   backgroundColor: "#fff",

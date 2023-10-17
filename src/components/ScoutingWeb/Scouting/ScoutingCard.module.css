@@ -5,12 +5,14 @@
   overflow: hidden;
   flex-shrink: 0;
 }
+
 .date,
 .username1 {
   margin: 0;
   position: relative;
   line-height: 100%;
 }
+
 .username1 {
   font-size: inherit;
   font-weight: 500;
@@ -19,28 +21,33 @@
   width: 151px;
   flex-shrink: 0;
 }
+
 .date {
   flex: 1;
   font-size: 12px;
   color: #60606b;
   text-align: right;
 }
+
 .header,
 .userdetails {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
 }
+
 .userdetails {
   flex: 1;
   align-items: center;
   gap: 8px;
 }
+
 .header {
   align-self: stretch;
   align-items: flex-end;
   padding: 16px 16px 4px;
 }
+
 .farmname,
 .location {
   margin: 0;
@@ -48,15 +55,18 @@
   position: relative;
   line-height: 100%;
 }
+
 .farmname {
   font-size: inherit;
   font-weight: 500;
   font-family: inherit;
 }
+
 .location {
   font-size: 12px;
   color: #60606b;
 }
+
 .textwrapper {
   flex: 1;
   display: flex;
@@ -65,6 +75,7 @@
   justify-content: center;
   gap: 4px;
 }
+
 .cropname {
   margin: 0;
   position: relative;
@@ -73,12 +84,14 @@
   font-weight: 500;
   font-family: inherit;
 }
+
 .crop,
 .farminfo {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .crop {
   justify-content: flex-end;
   gap: 8px;
@@ -86,6 +99,7 @@
   font-size: 14px;
   color: #05a155;
 }
+
 .farminfo {
   align-self: stretch;
   background-color: #f8ffea;
@@ -94,6 +108,7 @@
   justify-content: space-between;
   padding: 8px 16px;
 }
+
 .imageIcon {
   align-self: stretch;
   border-radius: 2px;
@@ -103,6 +118,7 @@
   flex-shrink: 0;
   object-fit: cover;
 }
+
 .container {
   display: flex;
   flex-direction: column;
@@ -110,6 +126,7 @@
   justify-content: flex-start;
   position: relative;
 }
+
 .grid {
   flex: 1;
   height: 126px;
@@ -119,6 +136,7 @@
   grid-row-gap: px;
   grid-column-gap: 8px;
 }
+
 .imagegallery {
   align-self: stretch;
   display: flex;
@@ -127,12 +145,15 @@
   justify-content: flex-start;
   padding: 4px 6px 8px;
 }
+
 .view {
   cursor: pointer;
 }
+
 .comments {
   align-self: stretch;
 }
+
 .actions,
 .actionscontainer {
   display: flex;
@@ -140,14 +161,17 @@
   align-items: center;
   justify-content: flex-end;
 }
+
 .actions {
   flex: 1;
   gap: 8px;
 }
+
 .actionscontainer {
   align-self: stretch;
   padding: 4px 16px 12px;
 }
+
 .scoutingcardupdated {
   align-self: stretch;
   border-radius: 8px;
@@ -159,8 +183,5 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 8px;
-  text-align: left;
-  font-size: 16px;
-  color: #35353d;
-  font-family: Inter;
+
 }

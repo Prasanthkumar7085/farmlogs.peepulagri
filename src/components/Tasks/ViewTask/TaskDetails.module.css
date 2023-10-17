@@ -23,7 +23,8 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  width: 15%;
+  width: 20%;
+  max-width: 150px;
 }
 
 .userBlock {

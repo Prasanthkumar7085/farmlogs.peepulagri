@@ -37,31 +37,32 @@ const ScoutingDetails = ({ data, content }: any) => {
   return (
 
     <div className={styles.viewScoutingPage}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className={styles.viewHeader}>
         <div>
           <p className={styles.startdate}>{timePipe(data?.createdAt, 'DD MMM YYYY hh:mm A')}</p>
-          <h1 className={styles.farmname}>{data?.farm_id.title}</h1>
-
+          <h1 className={styles.cropName}>
+            <img src="/cropName-icon.svg" alt="" />
+            Red Cillis</h1>
+          <h2 className={styles.farmname}>{data?.farm_id.title}</h2>
         </div>
-        <IconButton onClick={() => {
+        <IconButton className={styles.iconDiv} onClick={() => {
           router.back()
+
         }} ><CloseIcon /></IconButton>
       </div>
-      <hr></hr>
-      <Card className={styles.scoutingdetails}>
+
+      <div className={styles.scoutingdetails}>
         <div className={styles.textwrapper}>
-        </div>
-        <div className={styles.textwrapper}>
-          <h1 className={styles.farmname}>Findings</h1>
+          <h1 className={styles.finding}>Findings</h1>
           {content?.length ? content?.map((line: any, index: any) => (
-            <p className={styles.startdate}>
+            <p className={styles.findingText}>
               {content ? line : "-"}
             </p>)) : "-"}
         </div>
 
-      </Card>
-      <div style={{ position: "sticky", marginTop: "48%", }}>
-        <Typography variant="h6">Recommedations</Typography>
+      </div>
+      <div className={styles.RecommedationBlock}>
+        <Typography variant="h6" className={styles.RecommedationHeading}>Recommedations</Typography>
         <CommentsComponentForWeb />
       </div>
 

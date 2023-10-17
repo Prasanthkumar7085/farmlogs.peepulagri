@@ -1,18 +1,39 @@
 .CommentsBlock {
     width: 100%;
     background-color: #ffffff;
-    box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.05);
+    /* box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.05); */
     border-radius: 16px;
 }
+
 .CommentsTitle {
     font-family: "Inter", sans-serif;
     font-size: clamp(10px, 4.5vw, 24px);
     font-weight: 600;
     line-height: 1.5;
 }
-.CommentsBlock {
-}
-.CommentsContainer{
+
+
+.CommentsContainer {
     max-height: 60vh;
     overflow: auto;
+}
+
+.allThreads {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+/* scrollbar styles */
+.allThreads::-webkit-scrollbar {
+    background: transparent;
+    width: 5px;
+    height: 3px;
+}
+
+.allThreads::-webkit-scrollbar:hover {
+    opacity: 1;
+}
+
+.allThreads:hover::-webkit-scrollbar-thumb {
+    background: rgb(198, 198, 198);
 }

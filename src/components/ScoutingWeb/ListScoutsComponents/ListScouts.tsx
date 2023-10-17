@@ -438,13 +438,13 @@ const ListScouts: FunctionComponent = () => {
             ""
           )}
         </div>
-        <TablePaginationComponent
-          paginationDetails={paginationDetails}
-          capturePageNum={capturePageNum}
-          captureRowPerItems={captureRowPerItems}
-          values="Scouts"
-        />
       </div>
+      <TablePaginationComponent
+        paginationDetails={paginationDetails}
+        capturePageNum={capturePageNum}
+        captureRowPerItems={captureRowPerItems}
+        values="Scouts"
+      />
       <LoadingComponent loading={loading} />
     </div>
   );

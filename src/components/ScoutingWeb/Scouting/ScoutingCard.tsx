@@ -75,7 +75,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
               </h4>
             </div>
             <p className={styles.date}>
-              {timePipe(item.createdAt, "MMM DD YYYY, hh:mm A")}
+              {timePipe(item.createdAt, "MMM DD, YYYY hh:mm A")}
             </p>
           </div>
         </div>
@@ -110,23 +110,21 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           </div>
         </div>
         <div className={styles.actionscontainer}>
-          <div className={styles.actions}>
-            <Button className={styles.view} color="primary" variant="contained" onClick={() => {
-              setScoutingDetailsDrawer(true);
-              if (router.pathname == "/scouts") {
-                router.push(
-                  `/scouts/${item._id}`,
-                );
-              } else {
-                router.push(
-                  `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,
-                );
-              }
+          <Button className={styles.viewBtn} color="primary" variant="contained" onClick={() => {
+            setScoutingDetailsDrawer(true);
+            if (router.pathname == "/scouts") {
+              router.push(
+                `/scouts/${item._id}`,
+              );
+            } else {
+              router.push(
+                `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,
+              );
+            }
 
-            }}>
-              View
-            </Button>
-          </div>
+          }}>
+            <img src="/view-icon-scout.svg" alt="" height={"15px"} width={"15px"} />  View
+          </Button>
         </div>
       </div>
     </>

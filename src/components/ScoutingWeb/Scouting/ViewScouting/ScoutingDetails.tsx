@@ -63,7 +63,7 @@ const ScoutingDetails = ({ data, content }: any) => {
       </div>
       <div className={styles.RecommedationBlock}>
         <Typography variant="h6" className={styles.RecommedationHeading}>Recommedations</Typography>
-        <CommentsComponentForWeb />
+        <CommentsComponentForWeb scoutDetails={data} />
       </div>
 
     </div >

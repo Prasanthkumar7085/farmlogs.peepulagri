@@ -1,11 +1,16 @@
+import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
+import { SingleScoutResponse } from "@/types/scoutTypes";
+import { Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import ListAllCropsForDropDownServices from "../../../../lib/services/CropServices/ListAllCropsForDropDownServices";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
+import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
+import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import ScoutingCardWeb from "../Scouting/ScoutingCard";
 import styles from "../farms/FarmsNavBar.module.css";
@@ -13,14 +18,10 @@ import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
 import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import UserDropDownForScouts from "./UserDropDownForScouts";
-import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
-import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
-import ImageComponent from "@/components/Core/ImageComponent";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { SingleScoutResponse } from "@/types/scoutTypes";
 
 interface ApiMethodProps {
   page: string | number;
+  limit: string | number;
   farmId: string;
   userId: string;
   fromDate: string;
@@ -37,7 +38,7 @@ const ListScouts: FunctionComponent = () => {
   const [data, setData] = useState<Array<SingleScoutResponse>>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit, setLimit] = useState(12);
   const [usersOptions, setUserOptions] = useState();
   const [user, setUser] = useState<any>();
   const [farmOptions, setFarmOptions] = useState([]);
@@ -45,19 +46,20 @@ const ListScouts: FunctionComponent = () => {
   const [cropOptions, setCropOptions] = useState([]);
   const [crop, setCrop] = useState<any>();
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [paginationDetails, setPaginationDetails] = useState<any>();
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  console.log(data);
 
   const onChangeUser = async (e: any, value: any) => {
     if (value) {
       setUser(value);
       setFarm(null);
       setCrop(null);
+      setPage(1);
       await getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         userId: value?._id,
         farmId: "",
         cropId: "",
@@ -68,9 +70,11 @@ const ListScouts: FunctionComponent = () => {
       await getAllCrops("", "", value?._id);
     } else {
       setUser(null);
+      setPage(1);
       await getAllFarms();
       await getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         userId: "",
         farmId: router.query.farm_id as string,
         cropId: router.query.crop_id as string,
@@ -85,8 +89,10 @@ const ListScouts: FunctionComponent = () => {
     if (value) {
       setFarm(value);
       setCrop(null);
+      setPage(1);
       getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         userId: router.query.created_by as string,
         farmId: value._id,
         cropId: "",
@@ -96,8 +102,10 @@ const ListScouts: FunctionComponent = () => {
       await getAllCrops("", value?._id, router.query.created_by as string);
     } else {
       setFarm(null);
+      setPage(1);
       getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         farmId: "",
         userId: router.query.created_by as string,
         fromDate: router.query.from_date as string,
@@ -111,8 +119,10 @@ const ListScouts: FunctionComponent = () => {
   const onSelectCropFromDropDown = (value: any, reason: string) => {
     if (value) {
       setCrop(value);
+      setPage(1);
       getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
         userId: router.query.created_by as string,
         fromDate: router.query.from_date as string,
@@ -121,8 +131,10 @@ const ListScouts: FunctionComponent = () => {
       });
     } else {
       setCrop(null);
+      setPage(1);
       getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
         userId: router.query.created_by as string,
         fromDate: router.query.from_date as string,
@@ -136,8 +148,10 @@ const ListScouts: FunctionComponent = () => {
     if (date1 && date2) {
       setFromDate(date1);
       setToDate(date2);
+      setPage(1);
       getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
         userId: router.query.created_by as string,
         fromDate: date1,
@@ -147,8 +161,10 @@ const ListScouts: FunctionComponent = () => {
     } else {
       setFromDate("");
       setToDate("");
+      setPage(1);
       getAllScoutsList({
-        page: page,
+        page: 1,
+        limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
         userId: router.query.created_by as string,
         cropId: router.query.crop_id as string,
@@ -158,7 +174,35 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
+  const captureRowPerItems = (value: number) => {
+    setPage(1);
+    setLimit(value);
+    getAllScoutsList({
+      page: 1,
+      limit: value,
+      farmId: router.query.farm_id as string,
+      userId: router.query.created_by as string,
+      cropId: router.query.crop_id as string,
+      fromDate: router.query.from_date as string,
+      toDate: router.query.to_date as string,
+    });
+  };
+  const capturePageNum = (value: number) => {
+    setPage(value);
+    getAllScoutsList({
+      page: value,
+      limit: router.query.limit as string,
+      farmId: router.query.farm_id as string,
+      userId: router.query.created_by as string,
+      cropId: router.query.crop_id as string,
+      fromDate: router.query.from_date as string,
+      toDate: router.query.to_date as string,
+    });
+  };
+
   const getAllScoutsList = async ({
+    page = 1,
+    limit = 12,
     farmId,
     userId,
     fromDate,
@@ -167,9 +211,12 @@ const ListScouts: FunctionComponent = () => {
   }: Partial<ApiMethodProps>) => {
     setLoading(true);
     let url = `/scouts/${page}/${limit}`;
-    let queryParams: any = { page: 1 };
+    let queryParams: any = {};
     if (page) {
       queryParams["page"] = page;
+    }
+    if (limit) {
+      queryParams["limit"] = limit;
     }
     if (farmId) {
       queryParams["farm_id"] = farmId;
@@ -193,12 +240,11 @@ const ListScouts: FunctionComponent = () => {
     });
 
     if (response?.success) {
-      if (response?.has_more || response?.has_more == false) {
-        setHasMore(response?.has_more);
-      }
-
-      let tempData = [...data, ...response?.data];
-      setData(tempData);
+      const { data, ...rest } = response;
+      setPaginationDetails(rest);
+      setData(data);
+    } else {
+      toast.error("Failed to fetch");
     }
     setLoading(false);
   };
@@ -293,6 +339,8 @@ const ListScouts: FunctionComponent = () => {
     setFromDate("");
     setToDate("");
     setCrop("");
+    setPage(1);
+    setLimit(12);
     await getAllScoutsList({});
   };
 
@@ -311,6 +359,7 @@ const ListScouts: FunctionComponent = () => {
 
       getAllScoutsList({
         page: 1,
+        limit: 12,
         farmId: router.query?.farm_id as string,
         userId: router.query?.created_by as string,
         fromDate: router.query?.from_date as string,
@@ -320,20 +369,6 @@ const ListScouts: FunctionComponent = () => {
     }
   }, [router.isReady, accessToken]);
 
-  const getNextData = () => {
-    setPage((prev) => prev + 1);
-
-  };
-
-  useEffect(() => {
-    getAllScoutsList({
-      farmId: router.query?.farm_id as string,
-      userId: router.query?.created_by as string,
-      fromDate: router.query?.from_date as string,
-      toDate: router.query?.to_date as string,
-      cropId: router.query?.crop_id as string,
-    });
-  }, [page]);
   return (
     <div
       className={styles.AllFarmsPageWeb}
@@ -368,53 +403,42 @@ const ListScouts: FunctionComponent = () => {
         </Button>
       </div>
       <div className={styles.allFarms}>
-        <div>
-          <InfiniteScroll
-            className={styles.allScoutingCards}
-            dataLength={data.length}
-            next={() => setPage(prev => prev + 1)}
-            hasMore={hasMore}
-            loader={
-              <div className={styles.pageLoader}>
-                <CircularProgress />
-              </div>
-            }
-            endMessage={
-              <a href="#" className={styles.endOfLogs}>
-                {hasMore ? "" : "Scroll to Top"}
-              </a>
-            }
-          >
-            {data?.length ? (
-              data.map((item: SingleScoutResponse, index: number) => {
-                return <ScoutingCardWeb item={item} key={index} />;
-              })
-            ) : !loading ? (
-              <div
-                id={styles.noData}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: "4rem",
-                }}
-              >
-                <ImageComponent
-                  src="/emty-folder-image.svg"
-                  alt="empty folder"
-                  width={250}
-                  height={150}
-                />
-                <Typography variant="h4">No Scoutings</Typography>
-              </div>
-            ) : (
-              ""
-            )}
-          </InfiniteScroll>
-          <LoadingComponent loading={loading} />
+        <div className={styles.allScoutingCards}>
+          {data?.length ? (
+            data.map((item: SingleScoutResponse, index: number) => {
+              return <ScoutingCardWeb item={item} key={index} />;
+            })
+          ) : !loading ? (
+            <div
+              id={styles.noData}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "4rem",
+              }}
+            >
+              <ImageComponent
+                src="/emty-folder-image.svg"
+                alt="empty folder"
+                width={250}
+                height={150}
+              />
+              <Typography variant="h4">No Scoutings</Typography>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
+        <TablePaginationComponent
+          paginationDetails={paginationDetails}
+          capturePageNum={capturePageNum}
+          captureRowPerItems={captureRowPerItems}
+          values="Scouts"
+        />
       </div>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

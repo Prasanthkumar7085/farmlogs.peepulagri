@@ -7,7 +7,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import styles from "./CommentsComponent.module.css";
 
-const CommentsComponentForWeb = () => {
+const CommentsComponentForWeb = ({ scoutDetails }: any) => {
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const router = useRouter()
@@ -66,9 +66,9 @@ const CommentsComponentForWeb = () => {
                 }
                 // Convert the commentsById object to an array of comments
                 const formattedData = Object.values(commentsById);
+                let reverse = formattedData.slice().reverse()
 
-                console.log(formattedData, "lk");
-                setData(formattedData)
+                setData(reverse)
 
             }
         } catch (err) {
@@ -189,6 +189,7 @@ const CommentsComponentForWeb = () => {
             <div className={styles.allThreads}>
                 <Threads
                     details={data}
+                    scoutDetails={scoutDetails}
                     afterCommentAdd={afterCommentAdd}
                     afterDeleteComment={afterDeleteComment}
                     afterUpdateComment={afterUpdateComment}
@@ -196,7 +197,8 @@ const CommentsComponentForWeb = () => {
                     afterDeleteAttachements={afterDeleteAttachements}
                 />
             </div>
-            <CommentForm afterCommentAdd={afterCommentAdd} />
+            <CommentForm afterCommentAdd={afterCommentAdd} scoutDetails={scoutDetails}
+            />
 
             <LoadingComponent loading={loading} />
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />

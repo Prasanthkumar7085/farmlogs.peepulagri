@@ -3,15 +3,13 @@ import styles from "./alert-delete.module.css";
 
 interface pagePropsType {
   open: boolean;
-  deleteFarm: () => void;
+  deleteFiles: () => void;
   setDialogOpen: (newValue: boolean) => void;
-  loading: boolean;
 }
-const AlertDelete = ({
+const AlertDeleteFilesOnFarmChangeInTasks = ({
   open,
-  deleteFarm,
+  deleteFiles,
   setDialogOpen,
-  loading,
 }: pagePropsType) => {
   return (
     <Dialog
@@ -23,7 +21,7 @@ const AlertDelete = ({
         <div>
           <div
             className={styles.areYouSure}
-          >{`Are you sure  Want To Delete `}</div>
+          >{`Are you sure  Want To Delete Files`}</div>
           <div className={styles.thisWillBe}>
             This Will Be deleted Permanently
           </div>
@@ -39,15 +37,9 @@ const AlertDelete = ({
             className={styles.buttongotit}
             variant="contained"
             color="error"
-            onClick={() => deleteFarm()}
+            onClick={() => deleteFiles()}
           >
-            <div className={styles.text}>
-              {loading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-              ) : (
-                "Delete"
-              )}
-            </div>
+            <div className={styles.text}>{"Delete"}</div>
           </Button>
         </div>
       </div>
@@ -55,4 +47,4 @@ const AlertDelete = ({
   );
 };
 
-export default AlertDelete;
+export default AlertDeleteFilesOnFarmChangeInTasks;

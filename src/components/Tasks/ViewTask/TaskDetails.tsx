@@ -18,6 +18,8 @@ import UserOptionsinViewTasks from "./UserOptionsinViewTasks";
 import Image from "next/image";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import { Markup } from "interweave";
+
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
   updateTask: (body: any) => any;
@@ -62,8 +64,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
-          .utcOffset("+05:30")
-          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -97,6 +99,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     setLoading(false);
   };
 
+  const getDescriptionData = (description: string) => {
+    let temp = description.slice(0, 1).toUpperCase() + description.slice(1);
+    let stringWithActualNewLine = temp.replace(/\n/g, "<br/>");
+    return stringWithActualNewLine;
+  };
+
   return (
     <div className={styles.cardDetails}>
       <div
@@ -115,10 +123,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   placeholder="Enter Title here"
                   sx={{
                     width: "100%",
+<<<<<<< Updated upstream
                     background: "#f5f7fa",
                     "& .MuiOutlinedInput-notchedOutline": {
                       border: "0 !important",
                     },
+=======
+                    background: "#ffff",
+>>>>>>> Stashed changes
                   }}
                   size="small"
                   value={title}
@@ -127,7 +139,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               </div>
             ) : (
               <h1 className={styles.landPreparation}>
-                {data?.title ? data?.title : "-"}
+                {data?.title
+                  ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
+                  : "-"}
               </h1>
             )}
           </div>
@@ -182,6 +196,15 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                         "& .MuiButtonBase-root": {
                           paddingRight: "10px !important",
                         },
+<<<<<<< Updated upstream
+=======
+                        "& .MuiInputBase-root::before": {
+                          borderBottom: "0 !important",
+                        },
+                        "& .MuiInputBase-root::after": {
+                          borderBottom: "0 !important",
+                        },
+>>>>>>> Stashed changes
                       }}
                       disablePast
                       value={deadline}
@@ -466,7 +489,11 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           </div>
         ) : (
           <p className={styles.farmersPrepareThe}>
-            {data?.description ? data?.description : "-"}
+            {data?.description ? (
+              <Markup content={getDescriptionData(data?.description)} />
+            ) : (
+              "-"
+            )}
           </p>
         )}
       </div>

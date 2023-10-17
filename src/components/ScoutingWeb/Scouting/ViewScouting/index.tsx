@@ -162,7 +162,8 @@ const SingleScoutViewDetails = () => {
                                                 height: '100%',
                                                 top: 0,
                                                 left: 0,
-                                                border: '1px solid #a2a5a9',
+                                                // border: '1px solid #a2a5a9',
+                                                boxShadow: "0px 0px 2px 0px #ffffff5c",
                                                 zIndex: 0,
                                                 borderRadius: "8px"
                                             }}

@@ -27,7 +27,6 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
   defaultValue,
   loading,
 }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const [defaultValueSet, setDefaultValueSet] = useState(defaultValue);

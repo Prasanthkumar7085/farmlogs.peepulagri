@@ -274,7 +274,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Search by User Mobile"
+                placeholder="Search by User"
                 variant="outlined"
                 size="small"
                 sx={{

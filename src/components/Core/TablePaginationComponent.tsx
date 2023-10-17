@@ -21,19 +21,9 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
         setPageNum(1);
     };
 
-  const [limitOptions, setLimitOptions] = useState<Array<number>>([]);
-
-  useEffect(() => {
-    if (router.isReady) {
-      if (router.pathname == "/tasks") {
-        setLimitOptions([15, 30, 50, 100]);
-      } else if (router.pathname == "/scouts") {
-        setLimitOptions([12, 20, 40, 80, 100]);
-      } else {
-        setLimitOptions([10, 25, 50, 100]);
-      }
-    }
-  }, [router.isReady]);
+    const [limitOptions] = useState(
+      router.pathname == "/tasks" ? [15, 30, 50, 100] : [10, 25, 50, 100]
+    );
 
     return (
       <Card className={styles.tablePagination}>

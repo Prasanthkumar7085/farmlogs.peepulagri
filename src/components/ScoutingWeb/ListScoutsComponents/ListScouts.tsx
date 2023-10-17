@@ -18,6 +18,7 @@ import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
 import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import UserDropDownForScouts from "./UserDropDownForScouts";
+import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 
 interface ApiMethodProps {
   page: string | number;
@@ -358,8 +359,8 @@ const ListScouts: FunctionComponent = () => {
       );
 
       getAllScoutsList({
-        page: 1,
-        limit: 12,
+        page: router.query?.page as string,
+        limit: router.query?.limit as string,
         farmId: router.query?.farm_id as string,
         userId: router.query?.created_by as string,
         fromDate: router.query?.from_date as string,
@@ -397,7 +398,7 @@ const ListScouts: FunctionComponent = () => {
         <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />
         <Button
           onClick={clearAllFilterAndGetData}
-          disabled={Object.keys(router.query)?.length <= 1}
+          disabled={Object.keys(router.query)?.length <= 2}
         >
           Clear Filters
         </Button>
@@ -431,12 +432,16 @@ const ListScouts: FunctionComponent = () => {
             ""
           )}
         </div>
-        <TablePaginationComponent
-          paginationDetails={paginationDetails}
-          capturePageNum={capturePageNum}
-          captureRowPerItems={captureRowPerItems}
-          values="Scouts"
-        />
+        {!loading ? (
+          <TablePaginationComponentForScouts
+            paginationDetails={paginationDetails}
+            capturePageNum={capturePageNum}
+            captureRowPerItems={captureRowPerItems}
+            values="Scouts"
+          />
+        ) : (
+          ""
+        )}
       </div>
       <LoadingComponent loading={loading} />
     </div>

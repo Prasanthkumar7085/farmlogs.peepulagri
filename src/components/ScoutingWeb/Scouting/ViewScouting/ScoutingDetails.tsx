@@ -42,7 +42,7 @@ const ScoutingDetails = ({ data, content }: any) => {
           <p className={styles.startdate}>{timePipe(data?.createdAt, 'DD MMM YYYY hh:mm A')}</p>
           <h1 className={styles.cropName}>
             <img src="/cropName-icon.svg" alt="" />
-            Red Cillis</h1>
+            Crop </h1>
           <h2 className={styles.farmname}>{data?.farm_id.title}</h2>
         </div>
         <IconButton className={styles.iconDiv} onClick={() => {

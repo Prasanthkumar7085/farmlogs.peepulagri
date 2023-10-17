@@ -37,7 +37,7 @@ const ListScouts: FunctionComponent = () => {
   );
 
   const [data, setData] = useState<Array<SingleScoutResponse>>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(12);
   const [usersOptions, setUserOptions] = useState();
@@ -343,6 +343,9 @@ const ListScouts: FunctionComponent = () => {
     setPage(1);
     setLimit(12);
     await getAllScoutsList({});
+    // getAllUsers();
+    getAllFarms();
+    getAllCrops();
   };
 
   useEffect(() => {
@@ -372,36 +375,40 @@ const ListScouts: FunctionComponent = () => {
 
   return (
     <div
-      className={styles.AllFarmsPageWeb}
-      style={{ paddingTop: "1rem !important" }}
+      className={styles.AllScoutsPageWeb}
     >
-      <div>
-        <UserDropDownForScouts
-          user={user}
-          onChangeUser={onChangeUser}
-          usersOptions={usersOptions}
-        />
-        <FarmAutoCompleteInAllScouting
-          options={farmOptions}
-          onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-          label={"title"}
-          placeholder={"Select Farm here"}
-          defaultValue={farm}
-        />
-        <CropAutoCompleteFoScouts
-          options={cropOptions}
-          onSelectFarmFromDropDown={onSelectCropFromDropDown}
-          label={"title"}
-          placeholder={"Select Crop here"}
-          defaultValue={crop}
-        />
-        <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />
-        <Button
-          onClick={clearAllFilterAndGetData}
-          disabled={Object.keys(router.query)?.length <= 2}
-        >
-          Clear Filters
-        </Button>
+      <div className={styles.scoutPageHeader}>
+        <Typography variant="h4">
+          <img src="/scouting-header-icon.svg" alt="" height="20px" width={"20px"} />
+          Scouting</Typography>
+        <div className={styles.allScoutsFilterBlock}>
+          <UserDropDownForScouts
+            user={user}
+            onChangeUser={onChangeUser}
+            usersOptions={usersOptions}
+          />
+          <FarmAutoCompleteInAllScouting
+            options={farmOptions}
+            onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+            label={"title"}
+            placeholder={"Select Farm here"}
+            defaultValue={farm}
+          />
+          <CropAutoCompleteFoScouts
+            options={cropOptions}
+            onSelectFarmFromDropDown={onSelectCropFromDropDown}
+            label={"title"}
+            placeholder={"Select Crop here"}
+            defaultValue={crop}
+          />
+          <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />
+          <Button
+            onClick={clearAllFilterAndGetData}
+            disabled={Object.keys(router.query)?.length <= 2}
+          >
+            Clear
+          </Button>
+        </div>
       </div>
       <div className={styles.allFarms}>
         <div className={styles.allScoutingCards}>
@@ -432,17 +439,18 @@ const ListScouts: FunctionComponent = () => {
             ""
           )}
         </div>
-        {!loading ? (
-          <TablePaginationComponentForScouts
-            paginationDetails={paginationDetails}
-            capturePageNum={capturePageNum}
-            captureRowPerItems={captureRowPerItems}
-            values="Scouts"
-          />
-        ) : (
-          ""
-        )}
       </div>
+
+      {!loading ? (
+        <TablePaginationComponentForScouts
+          paginationDetails={paginationDetails}
+          capturePageNum={capturePageNum}
+          captureRowPerItems={captureRowPerItems}
+          values="Scouts"
+        />
+      ) : (
+        ""
+      )}
       <LoadingComponent loading={loading} />
     </div>
   );

@@ -19,8 +19,8 @@ const AllScoutsWebPage = () => {
     const getAllScouts = async () => {
         setLoading(true)
         const response = await getAllScoutsService(router.query.farm_id as string, router.query.crop_id as string, accessToken);
-        if (response.success) {
-          setData(response?.data);
+        if (response?.success) {
+            setData(response?.data);
         }
         setLoading(false);
     };

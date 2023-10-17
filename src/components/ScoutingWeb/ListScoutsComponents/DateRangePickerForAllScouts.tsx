@@ -26,9 +26,10 @@ const DateRangePickerForAllScouts = ({ onDateFilterChange }: pageProps) => {
     }
   }, [router.isReady, router.query.from_date, router.query.to_date]);
   return (
-    <div>
-      <Stack>
+    <div >
+      <Stack style={{ width: "100%" }}>
         <DateRangePicker
+          style={{ width: "100%" }}
           disabledDate={(date: any) => {
             return date.getTime() > new Date().getTime();
           }}

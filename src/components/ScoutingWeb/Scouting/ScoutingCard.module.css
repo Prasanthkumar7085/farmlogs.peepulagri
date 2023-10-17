@@ -1,124 +1,134 @@
 .usericon {
-  position: relative;
-  width: 24px;
-  height: 24px;
-  overflow: hidden;
-  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
 }
+
 .date,
 .username1 {
   margin: 0;
-  position: relative;
+}
+
+.username1 {
+  color: #35353D;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(13px, 0.83vw, 16px);
+  font-weight: 500;
   line-height: 100%;
 }
-.username1 {
-  font-size: inherit;
-  font-weight: 500;
-  font-family: inherit;
-  display: inline-block;
-  width: 151px;
-  flex-shrink: 0;
-}
+
 .date {
-  flex: 1;
-  font-size: 12px;
-  color: #60606b;
-  text-align: right;
+  color: #60606B;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 0.5vw, 12px);
+  font-weight: 400;
+  line-height: 100%;
 }
+
 .header,
 .userdetails {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
 }
+
 .userdetails {
   flex: 1;
   align-items: center;
   gap: 8px;
 }
+
 .header {
   align-self: stretch;
   align-items: flex-end;
   padding: 16px 16px 4px;
 }
+
 .farmname,
 .location {
   margin: 0;
-  align-self: stretch;
-  position: relative;
   line-height: 100%;
 }
+
 .farmname {
-  font-size: inherit;
+  color: var(--Title, #35353D);
+  font-family: "Inter", sans-serif;
+  font-size: clamp(13px, 0.83vw, 16px);
   font-weight: 500;
-  font-family: inherit;
+  line-height: 100%;
 }
+
 .location {
-  font-size: 12px;
-  color: #60606b;
+  color: #60606B;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 0.5vw, 12px);
+  font-weight: 400;
+  line-height: 150%;
+
 }
+
 .textwrapper {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   gap: 4px;
 }
+
 .cropname {
   margin: 0;
-  position: relative;
-  font-size: inherit;
-  line-height: 100%;
+  color: #05A155;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 0.72vw, 14px);
   font-weight: 500;
-  font-family: inherit;
+  line-height: 100%;
 }
+
 .crop,
 .farminfo {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .crop {
   justify-content: flex-end;
-  gap: 8px;
-  text-align: right;
-  font-size: 14px;
-  color: #05a155;
+  gap: 5px;
 }
+
 .farminfo {
   align-self: stretch;
   background-color: #f8ffea;
   border-top: 1px solid #e2ead3;
   border-bottom: 1px solid #e2ead3;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 5px 16px;
 }
+
 .imageIcon {
-  align-self: stretch;
-  border-radius: 2px;
-  max-width: 100%;
-  overflow: hidden;
-  height: 126px;
-  flex-shrink: 0;
+  height: 100%;
+  width: 100%;
   object-fit: cover;
+  box-shadow: 0px 0px 2px 0px #0000005c;
 }
+
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  position: relative;
+  height: 100px;
+  width: 100%;
+  flex-basis: 33%;
+  flex-grow: 1;
 }
+
 .grid {
   flex: 1;
-  height: 126px;
-  gap: 4px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-row-gap: px;
-  grid-column-gap: 8px;
+  gap: 5px;
+  /* display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 8px; */
+  display: flex;
+  justify-content: space-between;
+
 }
+
 .imagegallery {
   align-self: stretch;
   display: flex;
@@ -127,40 +137,51 @@
   justify-content: flex-start;
   padding: 4px 6px 8px;
 }
-.view {
+
+.viewBtn {
   cursor: pointer;
+  border-radius: 24px !important;
+  border: 1px solid #D7EFE4 !important;
+  background: #F4FFFA !important;
+  color: #35353D !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(12px, 0.72vw, 14px) !important;
+  font-weight: 600 !important;
+  line-height: 100% !important;
+  text-transform: capitalize !important;
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px !important;
 }
-.comments {
-  align-self: stretch;
+
+.viewBtn:hover {
+  background: #F4FFFA !important;
 }
-.actions,
+
 .actionscontainer {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 }
-.actions {
-  flex: 1;
-  gap: 8px;
-}
+
+
 .actionscontainer {
   align-self: stretch;
   padding: 4px 16px 12px;
 }
+
 .scoutingcardupdated {
   align-self: stretch;
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 4px 4px 20px rgba(236, 236, 236, 0.5);
-  height: 306px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 8px;
-  text-align: left;
-  font-size: 16px;
-  color: #35353d;
-  font-family: Inter;
+  gap: 5px;
+
 }

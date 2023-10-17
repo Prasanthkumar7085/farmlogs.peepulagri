@@ -3,7 +3,7 @@ import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
 } from "@/types/scoutTypes";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styles from "./ScoutingCard.module.css";
@@ -75,7 +75,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
               </h4>
             </div>
             <p className={styles.date}>
-              {timePipe(item.createdAt, "MMM DD YYYY, hh:mm A")}
+              {timePipe(item.createdAt, "MMM DD, YYYY hh:mm A")}
             </p>
           </div>
         </div>
@@ -83,8 +83,14 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           <div className={styles.userdetails}>
             <img className={styles.usericon} alt="" src="/fieldicon.svg" />
             <div className={styles.textwrapper}>
-              <h3 className={styles.farmname}>{item?.farm_id?.title}</h3>
-              <p className={styles.location}>{item?.farm_id?.location}</p>
+              <h3 className={styles.farmname}><Tooltip title={item?.farm_id?.title?.length > 20 ? item?.farm_id?.title : ""}>
+                <span>
+                  {item?.farm_id?.title ?
+                    item?.farm_id?.title?.length > 20 ? (item?.farm_id?.title?.slice(0, 17)) + '...' : item?.farm_id?.title
+                    : ""}
+                </span>
+              </Tooltip></h3>
+              <p className={styles.location}>{item?.farm_id?.location ? item?.farm_id?.location.slice(0, 1) + item?.farm_id?.location?.slice(1).toLowerCase() : ""}</p>
             </div>
           </div>
           <div className={styles.crop}>
@@ -110,23 +116,21 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           </div>
         </div>
         <div className={styles.actionscontainer}>
-          <div className={styles.actions}>
-            <Button className={styles.view} color="primary" variant="contained" onClick={() => {
-              setScoutingDetailsDrawer(true);
-              if (router.pathname == "/scouts") {
-                router.push(
-                  `/scouts/${item._id}`,
-                );
-              } else {
-                router.push(
-                  `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,
-                );
-              }
+          <Button className={styles.viewBtn} color="primary" variant="contained" onClick={() => {
+            setScoutingDetailsDrawer(true);
+            if (router.pathname == "/scouts") {
+              router.push(
+                `/scouts/${item._id}`,
+              );
+            } else {
+              router.push(
+                `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,
+              );
+            }
 
-            }}>
-              View
-            </Button>
-          </div>
+          }}>
+            <img src="/view-icon-scout.svg" alt="" height={"15px"} width={"15px"} />  View
+          </Button>
         </div>
       </div>
     </>

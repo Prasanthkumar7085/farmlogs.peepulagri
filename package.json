@@ -49,6 +49,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-swipeable": "^7.0.1",
     "react-table": "^7.8.0",
+    "react-touch-drag-slider": "^2.2.5",
     "react-webcam": "^7.1.1",
     "react18-input-otp": "^1.1.4",
     "redux-persist": "^6.0.0",

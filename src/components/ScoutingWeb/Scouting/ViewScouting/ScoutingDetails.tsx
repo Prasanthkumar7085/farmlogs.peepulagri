@@ -55,7 +55,7 @@ const ScoutingDetails = ({ data, content }: any) => {
         <div className={styles.textwrapper}>
           <h1 className={styles.finding}>Findings</h1>
           {content?.length ? content?.map((line: any, index: any) => (
-            <p className={styles.findingText}>
+            <p className={styles.findingText} key={index}>
               {content ? line : "-"}
             </p>)) : "-"}
         </div>

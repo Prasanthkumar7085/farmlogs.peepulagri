@@ -1,7 +1,7 @@
 import SingleScoutViewDetails from "@/components/ScoutingWeb/Scouting/ViewScouting";
 import ScoutingDetails from "@/components/ScoutingWeb/Scouting/ViewScouting/ScoutingDetails";
 
-const ViewSingleScout = () => {
+const ViewSingleScoutPage = () => {
     return (
         <div>
             <SingleScoutViewDetails />
@@ -9,4 +9,4 @@ const ViewSingleScout = () => {
     )
 }
 
-export default ViewSingleScout;
+export default ViewSingleScoutPage;

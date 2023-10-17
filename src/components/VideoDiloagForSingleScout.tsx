@@ -118,7 +118,6 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                     maxWidth: "400px !important"
                 },
                 '& .MuiTypography-root': {
-                    textAlign: "right",
                     color: "#fff"
                 },
                 '& .MuiDialogContent-root': {
@@ -133,8 +132,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                     justifyContent: "center !important"
                 }
             }}>
-            <IconButton onClick={handleClose} sx={{ padding: "0" }}>
-                <CloseIcon sx={{ color: "#fff" }} />
+            <IconButton onClick={handleClose} sx={{ position: "absolute", top: "1rem", right: "1rem", padding: "0" }}>
+                <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
             </IconButton>
 
             <DialogContent>
@@ -239,7 +238,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
             </DialogActions>
             {data?.findings ?
                 <div style={{ display: "block" }}>
-                    <Typography variant='caption'><span style={{ color: "red" }}>Findings:-</span>{data?.findings}</Typography>
+                    <Typography className={styles.description}><span className={styles.label}>Findings:</span> <span>{data?.findings}</span></Typography>
                 </div> : ""}
         </Dialog>
     );

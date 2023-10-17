@@ -39,7 +39,8 @@ const ViewFarmPage = () => {
       {!loading?<div className={styles.viewfarm} id="view-farm">
       <div className={styles.farmdetailsblock}>
         <div className={styles.farm1}>{data?.title}</div>
-        <div className={styles.aug2023}>{timePipe(data?.createdAt as string,'DD, MMM YYYY')} - Current</div>
+        <div className={styles.aug2023}>{timePipe(data?.createdAt as string,'DD, MMM YYYY')}</div>
+        {/* - Current */}
       </div>
       <div className={styles.farmareaheading} id="area">
         <div className={styles.text}>Land (acres)</div>

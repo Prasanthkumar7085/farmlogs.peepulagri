@@ -186,7 +186,7 @@ const CommentsComponentForWeb = () => {
 
     return (
         <div className={styles.CommentsBlock}>
-            <div style={{ marginTop: "30px" }}>
+            <div >
                 <Threads
                     details={data}
                     afterCommentAdd={afterCommentAdd}

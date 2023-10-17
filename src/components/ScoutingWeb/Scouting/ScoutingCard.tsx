@@ -1,8 +1,11 @@
 import timePipe from "@/pipes/timePipe";
-import { SingleScoutResponse } from "@/types/scoutTypes";
+import {
+  ScoutAttachmentDetails,
+  SingleScoutResponse,
+} from "@/types/scoutTypes";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import styles from "./ScoutingCard.module.css";
 
 interface pageProps {
@@ -46,9 +49,23 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
     return "";
   };
 
+  const getSrc = (attachment: ScoutAttachmentDetails) => {
+    if (attachment?.type?.includes("video")) {
+      return "/videoimg.png";
+    }
+    if (attachment?.type?.includes("image")) {
+      return attachment.url;
+    } else {
+      return "/pdf.svg";
+    }
+  };
   return (
     <>
-      <div className={styles.scoutingcardupdated}>
+      <div
+        className={styles.scoutingcardupdated}
+        onClick={() => setDrawerOpen(true)}
+        style={{ cursor: "pointer" }}
+      >
         <div className={styles.header}>
           <div className={styles.userdetails}>
             <div className={styles.userdetails}>
@@ -78,17 +95,13 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
         <div className={styles.imagegallery}>
           <div className={styles.grid}>
             {item?.attachments?.length
-              ? item?.attachments?.slice(0, 3)?.map((item) => {
+              ? item?.attachments?.slice(0, 3)?.map((attachment) => {
                   return (
-                    <div className={styles.container} key={item?._id}>
+                    <div className={styles.container} key={attachment?._id}>
                       <img
                         className={styles.imageIcon}
-                        alt={item?.original_name}
-                        src={
-                          item?.type?.includes("video")
-                            ? "/videoimg.png"
-                            : item.url
-                        }
+                        alt={attachment?.original_name}
+                        src={getSrc(attachment)}
                       />
                     </div>
                   );
@@ -100,13 +113,6 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           <div className={styles.actions}>
             <Button className={styles.view} color="primary" variant="contained">
               View
-            </Button>
-            <Button
-              className={styles.comments}
-              color="primary"
-              variant="contained"
-            >
-              02
             </Button>
           </div>
         </div>

@@ -413,3 +413,30 @@ left: 10px !important;
 #layer {
     background-color: #0000008f !important;
 }
+
+/* Agronamist single scouting view gallary carousal */
+.control-dots {
+    display: none !important;
+}
+
+.carousel-status {
+    top: inherit !important;
+    bottom: 0 !important;
+    right: 50% !important;
+    font-size: 16px !important;
+}
+
+.carousel.carousel-slider .control-arrow:hover {
+    background: none !important;
+}
+
+.carousel.control-arrow:before,
+.carousel.carousel-slider .control-arrow:before {
+    border-top: 12px solid transparent !important;
+    border-bottom: 12px solid transparent !important;
+
+}
+
+.control-arrow {
+    opacity: 1 !important;
+}

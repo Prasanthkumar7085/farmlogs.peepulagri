@@ -205,3 +205,16 @@
 .viewScoutingPage:hover::-webkit-scrollbar-thumb {
   background: rgb(198, 198, 198);
 }
+
+/* Single scouting view images block */
+.AllImagesBlock {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 0.5rem;
+}
+
+.RightImageContainer {
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #000;
+}

@@ -98,7 +98,19 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
         </div>
         <div className={styles.actionscontainer}>
           <div className={styles.actions}>
-            <Button className={styles.view} color="primary" variant="contained">
+            <Button className={styles.view} color="primary" variant="contained" onClick={() => {
+              setScoutingDetailsDrawer(true);
+              if (router.pathname == "/scouts") {
+                router.push(
+                  `/scouts/${item._id}`,
+                );
+              } else {
+                router.push(
+                  `/farm/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`,
+                );
+              }
+
+            }}>
               View
             </Button>
             <Button

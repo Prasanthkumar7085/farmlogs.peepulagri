@@ -142,6 +142,7 @@ const TasksTableComponent = ({
             <span>
               {info.getValue()
                 ? info.getValue()?.length > 50
+<<<<<<< Updated upstream
                   ? (info.getValue()
                       ? info.getValue().slice(0, 1).toUpperCase() +
                         info.getValue().slice(1, 46)
@@ -151,6 +152,14 @@ const TasksTableComponent = ({
                     info.getValue().slice(1)
                   : ""
                 : ""}
+=======
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1, 46) +
+                    "....."
+                  : info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1)
+                : "-"}
+>>>>>>> Stashed changes
             </span>
           </Tooltip>
         </span>

@@ -117,11 +117,11 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
                     <div className={styles.singleAttachment}>
                       <div className={styles.attachmentDetails}>
                         <div className={styles.checkGrp}>
-                          <Checkbox
+                          {/* <Checkbox
                             size="small"
                             sx={{ padding: "0" }}
                             onChange={(e) => selectImagesForDelete(e, item)}
-                          />
+                          /> */}
                           <ImageComponent
                             src={getSourceForThumnail(item.type)}
                             height={20}

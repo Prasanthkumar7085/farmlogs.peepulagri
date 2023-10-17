@@ -9,6 +9,7 @@ import TaskDetails from "./TaskDetails";
 import updateTaskService from "../../../../lib/services/TasksService/updateTaskService";
 import ViewTaskAttachments from "./ViewTaskAttachments";
 import styles from "./ViewTaskPage.module.css";
+import { toast } from "sonner";
 const ViewTaskComponent = () => {
   const router = useRouter();
 
@@ -40,6 +41,10 @@ const ViewTaskComponent = () => {
       token: accessToken,
     });
     if (response?.success) {
+<<<<<<< Updated upstream
+=======
+      toast.success(response?.message);
+>>>>>>> Stashed changes
       await getTaskById(router.query.task_id as string);
     }
     setLoading(false);

@@ -38,7 +38,6 @@ const ThreadsForTasks = ({ details, afterCommentAdd, afterDeleteComment, afterUp
 
 
   const downLoadAttachements = async (file: any, userId: any) => {
-    console.log(file)
     setLoading(true);
 
     try {

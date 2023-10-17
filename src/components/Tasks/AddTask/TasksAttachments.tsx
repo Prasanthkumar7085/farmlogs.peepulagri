@@ -414,7 +414,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   //   }, []);
 
   return (
-    <div className={styles.attachments}>
+    <div className={styles.attachments} style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}>
       <div className={styles.header}>
         <h4 className={styles.title}>Attachments (or) Images</h4>
         <p className={styles.description}>
@@ -423,7 +423,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
       </div>
 
       <label className={styles.UpdateFiles}>
-        <div className={styles.link}>
+        <div className={styles.link} style={{ background: "#fff !important" }}>
           <AttachmentIcon className={styles.icon} />
           <span>Select Files</span>
         </div>
@@ -453,10 +453,10 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                        .prieviewUrl
+                      .prieviewUrl
                     : item.type == "application/pdf"
-                    ? "/pdf-icon.png"
-                    : "/doc-icon.webp"
+                      ? "/pdf-icon.png"
+                      : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -471,7 +471,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
                           }}
                         >
                           {item.name?.slice(0, 15)}...
-                          {item.type?.slice(-15)}{" "}
                         </div>
                         {fileProgress[index] == "fail" ? (
                           <div
@@ -487,7 +486,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                      fileProgress[index] !== "fail" ? (
+                        fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
                           <IconButton>
                             <DoneIcon sx={{ color: "#05A155" }} />
@@ -502,7 +501,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -516,7 +515,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                    fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (

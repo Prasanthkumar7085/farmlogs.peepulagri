@@ -4,7 +4,9 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import {
   Autocomplete,
   Button,
+  Grid,
   Icon,
+  IconButton,
   MenuItem,
   Select,
   TextField,
@@ -104,7 +106,7 @@ const TaskForm = ({ data }: any) => {
 
   const getAllUsers = async () => {
     const response = await getAllUsersService({ token: accessToken });
-    if (response.success) {
+    if (response?.success) {
       setUsers(response?.data);
     }
   };
@@ -129,185 +131,213 @@ const TaskForm = ({ data }: any) => {
     if (value) await getAllFarms("", value?._id);
     else setFarmData([]);
   };
+
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <>
         <div className={styles.form}>
           <div className={styles.header}>
-            <Button
-              onClick={() => router.back()}
-              className={styles.backbutton}
-              sx={{ width: 40 }}
-              color="primary"
-              name="Back"
-              variant="contained"
-              startIcon={<Icon>arrow_back_sharp</Icon>}
-            />
+            <div className={styles.backButton} onClick={()=>router.back()} >
+              <img src="/arrow-left-back.svg" alt="" width={"18px"} />
+            </div>
             <div className={styles.textwrapper}>
-              <p className={styles.smalltext}>{`Back to List `}</p>
-              <h1 className={styles.largetext}>Add Task</h1>
+              <p className={styles.caption}>Back to List</p>
+              <h1 className={styles.header}>Add Task</h1>
             </div>
           </div>
-          <div className={styles.container}>
-            <form className={styles.formfields}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <label className={styles.lable}>
-                    {`Select User`}
-                    <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <Autocomplete
-                    sx={{
-                      width: "250px",
-                      maxWidth: "250px",
-                      borderRadius: "4px",
-                    }}
-                    id="size-small-outlined-multi"
-                    size="small"
-                    fullWidth
-                    noOptionsText={"No such User"}
-                    value={user}
-                    isOptionEqualToValue={(option: any, value: any) =>
-                      option._id === value._id
-                    }
-                    renderOption={(props, option: any) => {
-                      return (
-                        <li {...props} key={option._id}>
-                          {option.full_name}
-                        </li>
-                      );
-                    }}
-                    getOptionLabel={(option: any) => option.full_name}
-                    options={users}
-                    onChange={onChangeUser}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="Search by User Mobile"
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                            backgroundColor: "#fff",
-                            border: "none",
-                          },
-                        }}
+          <form className={styles.formfields}>
+            <Grid container rowSpacing={2}>
+              <Grid item xs={12} >
+                <Grid container >
+                  <Grid item xs={8}>
+                  </Grid>
+                  <Grid item xs={4} className={styles.selectfarm}>
+                    <label className={styles.lable}>
+                      Deadline<span style={{ color: "red" }}>*</span>
+                    </label>
+                    <DatePicker
+                      value={deadline}
+                      disablePast
+                      format="dd/MM/yyyy"
+                      sx={{
+                        width: "100%", '& .MuiInputBase-root': {
+                          padding: "5px 10px",
+                          borderRadius: "4px",
+                          border: "1px solid #B4C1D6 ",
+                          background: "#fff"
+                        },
+                        '& .MuiInputBase-root::before': {
+                          borderBottom: "0 !important"
+                        },
+                        '& .MuiInputBase-root::after': {
+                          borderBottom: "0 !important"
+                        },
+
+                      }}
+                      onChange={(newValue: any) => {
+                        setDeadline(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          variant: "standard",
+                          size: "small",
+                          color: "primary",
+                        },
+                      }}
+                    />
+                    <ErrorMessages
+                      errorMessages={errorMessages}
+                      keyname="deadline"
+                    />
+                  </Grid>
+                </Grid>
+
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container columnSpacing={2}>
+                  <Grid item xs={6} className={styles.selectfarm}>
+                    <label className={styles.lable}>
+                      {`Select User `}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Autocomplete
+                      sx={{
+                        width: "100%",
+                        borderRadius: "4px",
+                      }}
+                      id="size-small-outlined-multi"
+                      size="small"
+                      fullWidth
+                      noOptionsText={"No such User"}
+                      value={user}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        option._id === value._id
+                      }
+                      renderOption={(props, option: any) => {
+                        return (
+                          <li {...props} key={option._id}>
+                            {option.full_name}
+                          </li>
+                        );
+                      }}
+                      getOptionLabel={(option: any) => option.full_name}
+                      options={users}
+                      onChange={onChangeUser}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Search by User Mobile"
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            "& .MuiInputBase-root": {
+                              fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                              backgroundColor: "#fff",
+                              border: "none",
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <div className={styles.selectfarm}>
+                      <label className={styles.lable}>
+                        {`Select Farm`}
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+
+                      <FarmAutoCompleteInAddTask
+                        options={farmData}
+                        label={"title"}
+                        onSelectValueFromDropDown={captureFarmName}
+                        placeholder={"Select Farm"}
+                        defaultValue={defaultValue}
+                        loading={false}
                       />
-                    )}
-                  />
-                </div>
+
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="farm_id"
+                      />
+                    </div>
+                  </Grid>
+                </Grid>
+
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container columnSpacing={2}>
+                  <Grid item xs={8}>
+                    <div className={styles.selectfarm}>
+                      <h4 className={styles.title}>
+                        Title<span style={{ color: "red" }}>*</span>
+                      </h4>
+                      <TextField
+                        className={styles.inoutbox}
+                        color="primary"
+                        placeholder="Enter your Task title here"
+                        required={true}
+                        fullWidth={true}
+                        size="small"
+                        variant="outlined"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                      <ErrorMessages errorMessages={errorMessages} keyname="title" />
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <div className={styles.selectfarm}>
+                      <h4 className={styles.title}>
+                        Status<span style={{ color: "red" }}></span>
+                      </h4>
+                      <Select
+                        className={styles.inoutbox}
+                        color="primary"
+                        size="small"
+                        placeholder="Enter your Task title here"
+                        variant="outlined"
+                        fullWidth
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        defaultValue="TODO"
+                      >
+                        {statusOptions.map((item: string, index: number) => (
+                          <MenuItem key={index} value={item}>
+                            {item}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </div>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
                 <div className={styles.selectfarm}>
-                  <label className={styles.lable}>
-                    {`Select Farm`}
-                    <span style={{ color: "red" }}>*</span>
-                  </label>
-
-                  <FarmAutoCompleteInAddTask
-                    options={farmData}
-                    label={"title"}
-                    onSelectValueFromDropDown={captureFarmName}
-                    placeholder={"Select Farm"}
-                    defaultValue={defaultValue}
-                    loading={false}
-                  />
-
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname="farm_id"
+                  <label className={styles.lable}>Description</label>
+                  <TextField
+                    multiline
+                    minRows={4}
+                    maxRows={4}
+                    className={styles.inoutbox}
+                    color="primary"
+                    placeholder="Enter your Task title here"
+                    fullWidth={true}
+                    variant="outlined"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
-              </div>
-              <div className={styles.selectfarm}>
-                <h4 className={styles.title}>
-                  Title<span style={{ color: "red" }}>*</span>
-                </h4>
-                <TextField
-                  className={styles.inoutbox}
-                  color="primary"
-                  placeholder="Enter your Task title here"
-                  required={true}
-                  fullWidth={true}
-                  variant="outlined"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+              </Grid>
+              <Grid item xs={12}>
+                <TasksAttachments
+                  farmId={defaultValue?._id}
+                  setUploadedFiles={setUploadedFiles}
                 />
-                <ErrorMessages errorMessages={errorMessages} keyname="title" />
-              </div>
-              <div className={styles.selectfarm}>
-                <h4 className={styles.title}>
-                  Status<span style={{ color: "red" }}></span>
-                </h4>
-                <Select
-                  className={styles.inoutbox}
-                  color="primary"
-                  placeholder="Enter your Task title here"
-                  variant="outlined"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  sx={{ width: "200px" }}
-                  defaultValue="TODO"
-                >
-                  {statusOptions.map((item: string, index: number) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </div>
-
-              <div className={styles.selectfarm}>
-                <label className={styles.lable}>
-                  Deadline<span style={{ color: "red" }}>*</span>
-                </label>
-                <div className={styles.backbutton}>
-                  <DatePicker
-                    value={deadline}
-                    disablePast
-                    onChange={(newValue: any) => {
-                      setDeadline(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        variant: "standard",
-                        size: "medium",
-                        color: "primary",
-                      },
-                    }}
-                  />
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname="deadline"
-                  />
-                </div>
-              </div>
-              <div className={styles.selectfarm}>
-                <label className={styles.lable}>Description</label>
-                <TextField
-                  multiline
-                  minRows={4}
-                  maxRows={4}
-                  className={styles.inoutbox}
-                  color="primary"
-                  placeholder="Enter your Task title here"
-                  fullWidth={true}
-                  variant="outlined"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-              <TasksAttachments
-                farmId={defaultValue?._id}
-                setUploadedFiles={setUploadedFiles}
-              />
-            </form>
-          </div>
+              </Grid>
+            </Grid>
+          </form>
         </div>
         <FooterActionButtons addTask={addTask} />
       </>

@@ -1,4 +1,4 @@
-import { Icon } from "@mui/material";
+import { Button, Icon } from "@mui/material";
 import styles from "./footer-action-buttons.module.css";
 import { useRouter } from "next/router";
 import ButtonComponent from "@/components/Core/ButtonComponent";
@@ -9,24 +9,25 @@ const FooterActionButtons = ({ addTask, editTask }: any) => {
 
   return (
     <div className={styles.footerActionButtons}>
-      <ButtonComponent
-            direction={false}
+      <Button
+        className={styles.cancelBtn}
+        // direction={false}
         onClick={() => router.back()}
-            variant="outlined"
-            color="primary"
-            size="medium"
-        title={'Cancel'}
-      // endIcon={<Icon>arrow_back_sharp</Icon>}
-      />
-          <ButtonComponent
-            direction={true}
-            onClick={addTask}
-            variant="contained"
-            color="primary"
-            size="medium"
-            title={'Submit'}
-            endIcon={<Icon>arrow_forward_sharp</Icon>}
-          />
+        variant="contained"
+        size="medium"
+      >
+        Cancel
+      </Button>
+      <Button
+        className={styles.submitBtn}
+        // direction={true}
+        onClick={addTask}
+        variant="contained"
+        size="medium"
+        endIcon={<Icon>arrow_forward_sharp</Icon>}
+      >
+        Submit
+      </Button>
     </div>
   );
 };

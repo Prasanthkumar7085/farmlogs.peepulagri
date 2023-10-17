@@ -123,14 +123,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   placeholder="Enter Title here"
                   sx={{
                     width: "100%",
-<<<<<<< Updated upstream
-                    background: "#f5f7fa",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      border: "0 !important",
-                    },
-=======
                     background: "#ffff",
->>>>>>> Stashed changes
                   }}
                   size="small"
                   value={title}
@@ -196,15 +189,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                         "& .MuiButtonBase-root": {
                           paddingRight: "10px !important",
                         },
-<<<<<<< Updated upstream
-=======
                         "& .MuiInputBase-root::before": {
                           borderBottom: "0 !important",
                         },
                         "& .MuiInputBase-root::after": {
                           borderBottom: "0 !important",
-                        },
->>>>>>> Stashed changes
+                        }
                       }}
                       disablePast
                       value={deadline}

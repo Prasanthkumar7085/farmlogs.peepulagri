@@ -50,7 +50,7 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
             borderRadius: "4px",
 
             "& .MuiInputBase-root": {
-              paddingBlock: "5px !important",
+              // paddingBlock: "5px !important",
               // background: "#f5f7fa",
             },
             // '& .MuiOutlinedInput-notchedOutline': {

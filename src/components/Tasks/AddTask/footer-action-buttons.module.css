@@ -1,12 +1,31 @@
 .footerActionButtons {
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
-  align-self: stretch;
   align-items: flex-start;
   gap: var(--gap-xs);
+  width: 100%;
 }
-.footerActionButtons button{
-  font-size: var(--font-size-base);
-  gap: var(--gap-7xs);
+
+.footerActionButtons button {
+  font-size: var(--font-size-base) !important;
+  gap: var(--gap-7xs) !important;
+  text-transform: capitalize !important;
+  font-size: clamp(14px, .83vw, 16px);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  border-radius: 8px;
+}
+
+.footerActionButtons .cancelBtn {
+  border: 1px solid var(--gray-300, #D0D5DD);
+  background: var(--White, #FFF);
+  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
+  color: #000;
+}
+
+.submitBtn {
+  color: #fff;
+  border: 1px solid var(--Blue-Gradient, #3462CF);
+  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
+  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
 }

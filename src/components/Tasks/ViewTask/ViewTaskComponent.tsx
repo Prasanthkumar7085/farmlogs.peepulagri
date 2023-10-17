@@ -41,10 +41,7 @@ const ViewTaskComponent = () => {
       token: accessToken,
     });
     if (response?.success) {
-<<<<<<< Updated upstream
-=======
       toast.success(response?.message);
->>>>>>> Stashed changes
       await getTaskById(router.query.task_id as string);
     }
     setLoading(false);

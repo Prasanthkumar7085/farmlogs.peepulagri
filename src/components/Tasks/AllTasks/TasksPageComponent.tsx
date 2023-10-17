@@ -1,5 +1,5 @@
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { FarmInTaskType } from "@/types/tasksTypes";
+import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -17,6 +17,7 @@ export interface ApiCallProps {
   sortType: string;
   selectedFarmId: string;
   status: string;
+  userId: string;
 }
 const TasksPageComponent = () => {
   const router = useRouter();
@@ -39,6 +40,7 @@ const TasksPageComponent = () => {
     sortType = "",
     selectedFarmId = "",
     status = "ALL",
+    userId = "",
   }: Partial<ApiCallProps>) => {
     setLoading(true);
     let queryParams: any = {};
@@ -64,6 +66,9 @@ const TasksPageComponent = () => {
       if (status !== "ALL") {
         queryParams["status"] = status;
       }
+    }
+    if (userId) {
+      queryParams["assigned_to"] = userId;
     }
 
     const {
@@ -101,6 +106,7 @@ const TasksPageComponent = () => {
           sortType: router.query.order_type as string,
           selectedFarmId: router.query.farm_id as string,
           status: router.query.status as string,
+          userId: router.query.assigned_to as string,
         });
       }, delay);
       return () => clearTimeout(debounce);
@@ -126,6 +132,7 @@ const TasksPageComponent = () => {
         sortType: router.query.order_type as string,
         selectedFarmId: value?._id,
         status: router.query.status as string,
+        userId: router.query.assigned_to as string,
       });
     } else {
       setSelectedFarm(null);
@@ -137,6 +144,7 @@ const TasksPageComponent = () => {
         sortType: router.query.order_type as string,
         selectedFarmId: "",
         status: router.query.status as string,
+        userId: router.query.assigned_to as string,
       });
     }
   };
@@ -150,6 +158,20 @@ const TasksPageComponent = () => {
       sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
       status: value,
+      userId: router.query.assigned_to as string,
+    });
+  };
+
+  const onUserChange = async (e: any, value: userTaskType) => {
+    getAllTasks({
+      page: router.query.page as string,
+      limit: router.query.limit as string,
+      search_string: searchString,
+      sortBy: router.query.order_by as string,
+      sortType: router.query.order_type as string,
+      selectedFarmId: router.query.farm_id as string,
+      status: router.query.status as string,
+      userId: value?._id as string,
     });
   };
 
@@ -161,6 +183,7 @@ const TasksPageComponent = () => {
         onSelectValueFromDropDown={onSelectValueFromDropDown}
         selectedFarm={selectedFarm}
         onStatusChange={onStatusChange}
+        onUserChange={onUserChange}
       />
       {data.length ? (
         <TasksTableComponent

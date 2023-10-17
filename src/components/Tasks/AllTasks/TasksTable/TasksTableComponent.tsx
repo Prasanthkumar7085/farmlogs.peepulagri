@@ -63,11 +63,25 @@ const TasksTableComponent = ({
         sortType: router.query.order_type as string,
         selectedFarmId: router.query.farm_id as string,
         status: router.query.status as string,
+        userId: router.query.assigned_to as string,
       });
     } else {
       toast.error(response?.message);
     }
     setDeleteLoading(false);
+  };
+
+  const getStatusLabel = (label: string) => {
+    if (!label) return "";
+    if (label == "IN-PROGRESS") {
+      return "In-Progress";
+    }
+    if (label == "TODO") {
+      return "Todo";
+    }
+    if (label == "COMPLETED") {
+      return "Completed";
+    }
   };
 
   const columns = [
@@ -112,14 +126,29 @@ const TasksTableComponent = ({
       accessorFn: (row: any) => row.title,
       id: "title",
       cell: (info: any) => (
-        <span
-          style={{ wordWrap: "break-word", padding: "40px 10px 40px 10px" }}
+        <Tooltip
+          title={
+            info.getValue()?.length > 34 ? (
+              <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
+            ) : (
+              ""
+            )
+          }
         >
-          {info.getValue()
-            ? info.getValue().slice(0, 1).toUpperCase() +
-            info.getValue().slice(1)
-            : ""}
-        </span>
+          <span>
+            {info.getValue()
+              ? info.getValue()?.length > 34
+                ? (info.getValue()
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                  info.getValue().slice(1, 30)
+                  : "") + "....."
+                : info.getValue()
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                  info.getValue().slice(1)
+                  : ""
+              : ""}
+          </span>
+        </Tooltip>
       ),
       header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
       footer: (props: any) => props.column.id,
@@ -176,7 +205,7 @@ const TasksTableComponent = ({
       id: "status",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {getStatusLabel(info.getValue())}
         </span>
       ),
       header: () => <span>Status</span>,

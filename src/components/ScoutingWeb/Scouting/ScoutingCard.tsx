@@ -96,16 +96,16 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
           <div className={styles.grid}>
             {item?.attachments?.length
               ? item?.attachments?.slice(0, 3)?.map((attachment) => {
-                  return (
-                    <div className={styles.container} key={attachment?._id}>
-                      <img
-                        className={styles.imageIcon}
-                        alt={attachment?.original_name}
-                        src={getSrc(attachment)}
-                      />
-                    </div>
-                  );
-                })
+                return (
+                  <div className={styles.container} key={attachment?._id}>
+                    <img
+                      className={styles.imageIcon}
+                      alt={attachment?.original_name}
+                      src={getSrc(attachment)}
+                    />
+                  </div>
+                );
+              })
               : "No Attachments"}
           </div>
         </div>

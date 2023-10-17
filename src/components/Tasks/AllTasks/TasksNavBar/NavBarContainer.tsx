@@ -1,5 +1,11 @@
-import { FarmInTaskType } from "@/types/tasksTypes";
-import { Button, Icon, InputAdornment, TextField } from "@mui/material";
+import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
+import {
+  Autocomplete,
+  Button,
+  Icon,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,14 +13,16 @@ import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllF
 import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInTasks";
 import styles from "./NavBarContainer.module.css";
 import SelectComponent from "@/components/Core/SelectComponent";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
+import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
   onSelectValueFromDropDown: (value: FarmInTaskType, reason: string) => void;
   selectedFarm: FarmInTaskType | null | undefined;
   onStatusChange: (value: string) => void;
+  onUserChange: (e: any, value: userTaskType) => void;
 }
 
 const NavBarContainer: React.FC<PropTypes> = ({
@@ -23,6 +31,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
   onSelectValueFromDropDown,
   selectedFarm,
   onStatusChange,
+  onUserChange,
 }) => {
   const router = useRouter();
 
@@ -35,6 +44,8 @@ const NavBarContainer: React.FC<PropTypes> = ({
 
   const [search, setSearch] = useState("");
   const [farmOptions, setFarmOptions] = useState<Array<FarmInTaskType>>();
+  const [users, setUsers] = useState<Array<userTaskType>>([]);
+  const [user, setUser] = useState<userTaskType | null>();
   const [selectedFarmOption, setSelectedFarmOption] = useState<
     FarmInTaskType | null | undefined
   >();
@@ -72,9 +83,17 @@ const NavBarContainer: React.FC<PropTypes> = ({
       }
     }
   };
+  const getAllUsers = async () => {
+    const response = await getAllUsersService({ token: accessToken });
+    if (response?.success) {
+      setUsers(response?.data);
+    }
+  };
+
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllFarms();
+      getAllUsers();
     }
   }, [router.isReady, accessToken]);
 
@@ -86,6 +105,41 @@ const NavBarContainer: React.FC<PropTypes> = ({
           <h1 className={styles.taskManagement}>{`Task Management`}</h1>
         </div>
         <div className={styles.headeractions}>
+          {/* <div>
+            <Autocomplete
+              sx={{
+                width: "250px",
+                maxWidth: "250px",
+                borderRadius: "4px",
+              }}
+              id="size-small-outlined-multi"
+              size="small"
+              fullWidth
+              noOptionsText={"No such User"}
+              value={user ? user : ""}
+              isOptionEqualToValue={(option: any, value: any) =>
+                option.full_name === value.full_name
+              }
+              getOptionLabel={(option: any) => option.full_name}
+              options={users?.length ? users : []}
+              onChange={onUserChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search by User"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                      backgroundColor: "#fff",
+                      border: "none",
+                    },
+                  }}
+                />
+              )}
+            />
+          </div> */}
           <div style={{ width: "25%" }}>
             <FarmAutoCompleteInAddTask
               options={farmOptions}

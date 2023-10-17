@@ -1,5 +1,5 @@
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { Button, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -16,6 +16,8 @@ import UserDropDownForScouts from "./UserDropDownForScouts";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
 import ImageComponent from "@/components/Core/ImageComponent";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { SingleScoutResponse } from "@/types/scoutTypes";
 
 interface ApiMethodProps {
   page: string | number;
@@ -32,7 +34,7 @@ const ListScouts: FunctionComponent = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Array<SingleScoutResponse>>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -42,9 +44,12 @@ const ListScouts: FunctionComponent = () => {
   const [farm, setFarm] = useState<any>();
   const [cropOptions, setCropOptions] = useState([]);
   const [crop, setCrop] = useState<any>();
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  console.log(data);
 
   const onChangeUser = async (e: any, value: any) => {
     if (value) {
@@ -154,7 +159,6 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const getAllScoutsList = async ({
-    page,
     farmId,
     userId,
     fromDate,
@@ -164,6 +168,9 @@ const ListScouts: FunctionComponent = () => {
     setLoading(true);
     let url = `/scouts/${page}/${limit}`;
     let queryParams: any = { page: 1 };
+    if (page) {
+      queryParams["page"] = page;
+    }
     if (farmId) {
       queryParams["farm_id"] = farmId;
     }
@@ -186,7 +193,12 @@ const ListScouts: FunctionComponent = () => {
     });
 
     if (response?.success) {
-      setData(response?.data);
+      if (response?.has_more || response?.has_more == false) {
+        setHasMore(response?.has_more);
+      }
+
+      let tempData = [...data, ...response?.data];
+      setData(tempData);
     }
     setLoading(false);
   };
@@ -308,6 +320,20 @@ const ListScouts: FunctionComponent = () => {
     }
   }, [router.isReady, accessToken]);
 
+  const getNextData = () => {
+    setPage((prev) => prev + 1);
+
+  };
+
+  useEffect(() => {
+    getAllScoutsList({
+      farmId: router.query?.farm_id as string,
+      userId: router.query?.created_by as string,
+      fromDate: router.query?.from_date as string,
+      toDate: router.query?.to_date as string,
+      cropId: router.query?.crop_id as string,
+    });
+  }, [page]);
   return (
     <div
       className={styles.AllFarmsPageWeb}
@@ -342,33 +368,50 @@ const ListScouts: FunctionComponent = () => {
         </Button>
       </div>
       <div className={styles.allFarms}>
-        <div className={styles.allScoutingCards}>
-          {data?.length ? (
-            data.map((item, index: number) => {
-              return <ScoutingCardWeb item={item} key={index} />;
-            })
-          ) : !loading ? (
-            <div
-              id={styles.noData}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "4rem",
-              }}
-            >
-              <ImageComponent
-                src="/emty-folder-image.svg"
-                alt="empty folder"
-                width={250}
-                height={150}
-              />
-              <Typography variant="h4">No Scoutings</Typography>
-            </div>
-          ) : (
-            ""
-          )}
+        <div>
+          <InfiniteScroll
+            className={styles.allScoutingCards}
+            dataLength={data.length}
+            next={() => setPage(prev => prev + 1)}
+            hasMore={hasMore}
+            loader={
+              <div className={styles.pageLoader}>
+                <CircularProgress />
+              </div>
+            }
+            endMessage={
+              <a href="#" className={styles.endOfLogs}>
+                {hasMore ? "" : "Scroll to Top"}
+              </a>
+            }
+          >
+            {data?.length ? (
+              data.map((item: SingleScoutResponse, index: number) => {
+                return <ScoutingCardWeb item={item} key={index} />;
+              })
+            ) : !loading ? (
+              <div
+                id={styles.noData}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "4rem",
+                }}
+              >
+                <ImageComponent
+                  src="/emty-folder-image.svg"
+                  alt="empty folder"
+                  width={250}
+                  height={150}
+                />
+                <Typography variant="h4">No Scoutings</Typography>
+              </div>
+            ) : (
+              ""
+            )}
+          </InfiniteScroll>
           <LoadingComponent loading={loading} />
         </div>
       </div>

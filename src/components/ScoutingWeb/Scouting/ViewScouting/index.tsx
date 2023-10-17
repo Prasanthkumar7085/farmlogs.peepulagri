@@ -8,7 +8,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import CloseIcon from '@mui/icons-material/Close';
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import styles from "./ScoutingDetails.module.css";
 const SingleScoutViewDetails = () => {
 
     const router = useRouter();
@@ -100,97 +100,88 @@ const SingleScoutViewDetails = () => {
     }, [accessToken, router.isReady])
 
     return (
-        <div style={{ height: "100%" }}>
+        <div>
             <Grid container>
-                <Grid xs={8}>
-                    <Card sx={{ height: "100vh" }}>
-                        <div style={{ position: 'relative' }}>
-                            {curoselOpen &&
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: 9,
-                                        width: '100%',
-                                        height: '100%',
-                                        zIndex: 5,
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        marginTop: "30%"
-                                    }}
-                                >
-
+                <Grid xs={8} className={styles.RightImageContainer} >
+                    <div style={{ position: 'relative', padding: "1rem" }}>
+                        {curoselOpen &&
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 9,
+                                    width: '100%',
+                                    height: '100%',
+                                    zIndex: 5,
+                                }}
+                            >
+                                <div style={{ display: "flex", alignItems: "flex-end", flexDirection: "column", justifyContent: "center", background: "#06060687" }}>
                                     <IconButton onClick={() => setCuroselOpen(false)} sx={{ backgroundColor: "red", cursor: "pointer", }}>
                                         <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
                                     </IconButton>
                                     <Carousel selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)} swipeable={true}>
-                                        {finalImages?.length > 0 &&
-                                            finalImages.map((item: any, index: any) => (
-                                                <div key={index} style={{ width: "45%", marginLeft: "30%" }}>
+                                        {finalImages.map((item: any, index: any) => (
+                                            <div key={index} style={{ width: "60%", margin: "0 auto", height: "80vh" }}>
 
-                                                    {item.type?.includes('video') ? (
-                                                        <video controls width="100%" autoPlay key={index}>
-                                                            <source src={item.original} type={item.type} />
-                                                            Your browser does not support the video tag.
-                                                        </video>
-                                                    ) : item.type?.includes('application') ? (
-                                                        <iframe src={item.original} width="100%" height="100%" title={`iframe-${index}`} />
-                                                    ) : (
-                                                        <>
+                                                {item.type?.includes('video') ? (
+                                                    <video controls width="100%" autoPlay key={index}>
+                                                        <source src={item.original} type={item.type} />
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                ) : item.type?.includes('application') ? (
+                                                    <iframe src={item.original} width="100%" height="100%" title={`iframe-${index}`} />
+                                                ) : (
+                                                    <>
 
-                                                            <img
-                                                                className="zoom-image"
-                                                                src={item.src}
-                                                                alt={`Image ${index + 1}`}
-                                                            />
+                                                        <img
+                                                            className="zoom-image"
+                                                            src={item.src}
+                                                            alt={`Image ${index + 1}`}
+                                                            style={{ height: "100%", width: "100%", objectFit: "contain" }}
+                                                        />
 
-                                                        </>
-                                                    )}
-                                                </div>
-                                            ))}
-
+                                                    </>
+                                                )}
+                                            </div>
+                                        ))
+                                        }
                                     </Carousel>
-                                </div>}
-                            <div style={{
-                                display: 'flex', flexWrap: 'wrap', justifyContent: 'center', zIndex: 0 // Adjust the opacity as needed
-                            }}>
-                                {finalImages.map((image: any, index: number) => (
-                                    <div key={index} style={{ width: '20%', margin: '10px', display: 'flex', justifyContent: 'center' }}>
-                                        <div style={{ width: '100%', paddingTop: '100%', position: 'relative' }}>
-                                            <img
-                                                src={image.src}
-                                                alt="Gallery Image"
-                                                style={{
-                                                    position: 'absolute',
-                                                    objectFit: 'cover',
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    top: 0,
-                                                    left: 0,
-                                                    border: '1px black solid',
-                                                    zIndex: 0,
-                                                }}
-                                                onClick={() => openCarousel(image, index)}
-                                            />
-                                        </div>
+                                </div>
+                            </div>}
+                        <div className={styles.AllImagesBlock}>
+                            {finalImages.map((image: any, index: number) => (
+                                <div key={index} >
+                                    <div style={{ width: '100%', paddingTop: '100%', position: 'relative' }}>
+                                        <img
+                                            src={image.src}
+                                            alt="Gallery Image"
+                                            style={{
+                                                position: 'absolute',
+                                                objectFit: 'cover',
+                                                width: '100%',
+                                                height: '100%',
+                                                top: 0,
+                                                left: 0,
+                                                border: '1px solid #a2a5a9',
+                                                zIndex: 0,
+                                                borderRadius: "8px"
+                                            }}
+                                            onClick={() => openCarousel(image, index)}
+                                        />
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
-
-
-                    </Card>
+                    </div>
                 </Grid>
-                <Grid xs={4} sx={{ height: 800 }}>
+                <Grid xs={4}>
                     <Card sx={{ zIndex: 100 }}>
                         <ScoutingDetails data={data} content={content} />
                     </Card>
                 </Grid>
             </Grid>
             <LoadingComponent loading={loading} />
-
-        </div>
+        </div >
     )
 }
 export default SingleScoutViewDetails;

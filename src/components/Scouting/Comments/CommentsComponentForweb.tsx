@@ -186,7 +186,7 @@ const CommentsComponentForWeb = () => {
 
     return (
         <div className={styles.CommentsBlock}>
-            <div >
+            <div className={styles.allThreads}>
                 <Threads
                     details={data}
                     afterCommentAdd={afterCommentAdd}

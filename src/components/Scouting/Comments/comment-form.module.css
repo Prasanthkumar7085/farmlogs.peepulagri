@@ -1,9 +1,11 @@
 .chatBox {
   background-color: #fff;
 }
-.chatBox *{
+
+.chatBox * {
   border-radius: 8px;
 }
+
 .chatBox textarea {
   height: 60px !important;
 }

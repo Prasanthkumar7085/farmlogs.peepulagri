@@ -122,7 +122,7 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
             </Button>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 };

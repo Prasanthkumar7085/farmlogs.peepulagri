@@ -92,8 +92,8 @@ const TaskForm = () => {
       categories: [],
       deadline: deadline
         ? moment(deadline)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          .utcOffset("+05:30")
+          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",

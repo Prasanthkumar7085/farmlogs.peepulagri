@@ -64,8 +64,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          .utcOffset("+05:30")
+          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -124,6 +124,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   sx={{
                     width: "100%",
                     background: "#ffff",
+                    // background: "#f5f7fa",
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "0 !important",
+                    },
+                    // background: "#ffff",
+
                   }}
                   size="small"
                   value={title}
@@ -189,12 +195,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                         "& .MuiButtonBase-root": {
                           paddingRight: "10px !important",
                         },
-                        "& .MuiInputBase-root::before": {
-                          borderBottom: "0 !important",
+
+                        '& .MuiInputBase-root::before': {
+                          borderBottom: "0 !important"
                         },
-                        "& .MuiInputBase-root::after": {
-                          borderBottom: "0 !important",
-                        }
+                        '& .MuiInputBase-root::after': {
+                          borderBottom: "0 !important"
+                        },
+
                       }}
                       disablePast
                       value={deadline}

@@ -17,10 +17,14 @@ import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 interface PropTypes {
   farmId: string | undefined;
   setUploadedFiles: (filesUploaded: any) => void;
+  multipleFiles: any;
+  setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
 }
 const TasksAttachments: React.FC<PropTypes> = ({
   farmId,
   setUploadedFiles,
+  multipleFiles,
+  setMultipleFiles,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -30,7 +34,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [multipleFiles, setMultipleFiles] = useState<any>();
   const [fileProgress, setFileProgress] = useState<number[] | any>([]);
 
   const [attachments, setAttachments] = useState<any>([]);
@@ -414,7 +417,10 @@ const TasksAttachments: React.FC<PropTypes> = ({
   //   }, []);
 
   return (
-    <div className={styles.attachments} style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}>
+    <div
+      className={styles.attachments}
+      style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}
+    >
       <div className={styles.header}>
         <h4 className={styles.title}>Attachments (or) Images</h4>
         <p className={styles.description}>
@@ -453,10 +459,10 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                      .prieviewUrl
+                        .prieviewUrl
                     : item.type == "application/pdf"
-                      ? "/pdf-icon.png"
-                      : "/doc-icon.webp"
+                    ? "/pdf-icon.png"
+                    : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -486,11 +492,9 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                        fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
-                          <IconButton>
-                            <DoneIcon sx={{ color: "#05A155" }} />
-                          </IconButton>
+                          <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
                             onClick={() => removeFileAfterAdding(index)}
                           >
@@ -501,7 +505,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                        fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -515,7 +519,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                      fileProgress[index] !== "fail" ? (
+                    fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (

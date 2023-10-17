@@ -15,9 +15,9 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import addTaskService from "../../../../lib/services/TasksService/addTaskService";
-import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInAddTask";
+import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInTasks";
 import styles from "./TaskForm.module.css";
 import FooterActionButtons from "./footer-action-buttons";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
@@ -26,9 +26,13 @@ import TasksAttachments from "./TasksAttachments";
 import moment from "moment";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import AlertDeleteFilesOnFarmChangeInTasks from "@/components/Core/DeleteAlert/AlertDeleteFilesOnFarmChangeInTasks";
+import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 
-const TaskForm = ({ data }: any) => {
+const TaskForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -48,6 +52,9 @@ const TaskForm = ({ data }: any) => {
   const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
   const [user, setUser] = useState<userTaskType>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
+  const [deleteFilesDialogOpen, setDeleteFilesDialogOpen] = useState(false);
+
+  const [multipleFiles, setMultipleFiles] = useState<any>([]);
 
   const getAllFarms = async (id = "", userId = "") => {
     setLoading(true);
@@ -114,13 +121,7 @@ const TaskForm = ({ data }: any) => {
     if (router.isReady && accessToken) {
       getAllUsers();
     }
-  }, [router.isReady, accessToken, data]);
-
-  const setDataInEdit = () => {
-    setTitle(data?.title);
-    setDescription(data?.description);
-    setDeadline(new Date(data?.deadline));
-  };
+  }, [router.isReady, accessToken]);
 
   const setUploadedFiles = (filesUploaded: any) => {
     setFiles(filesUploaded);
@@ -132,7 +133,19 @@ const TaskForm = ({ data }: any) => {
     else setFarmData([]);
   };
 
+  const [filestoNullOnFarmChange, setFilestoNullOnFarmChange] = useState(false);
 
+  console.log(files);
+
+  // const removeFiles = () => {
+  //   setFiles([]);
+  //   setFilestoNullOnFarmChange(true);
+  //   setDeleteFilesDialogOpen(false);
+  //   dispatch(removeTheFilesFromStore([]));
+  //   setTimeout(() => {
+  //     setFilestoNullOnFarmChange(false);
+  //   }, 100);
+  // };
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <>
@@ -148,10 +161,9 @@ const TaskForm = ({ data }: any) => {
           </div>
           <form className={styles.formfields}>
             <Grid container rowSpacing={2}>
-              <Grid item xs={12} >
-                <Grid container >
-                  <Grid item xs={8}>
-                  </Grid>
+              <Grid item xs={12}>
+                <Grid container>
+                  <Grid item xs={8}></Grid>
                   <Grid item xs={4} className={styles.selectfarm}>
                     <label className={styles.lable}>
                       Deadline<span style={{ color: "red" }}>*</span>
@@ -161,19 +173,19 @@ const TaskForm = ({ data }: any) => {
                       disablePast
                       format="dd/MM/yyyy"
                       sx={{
-                        width: "100%", '& .MuiInputBase-root': {
+                        width: "100%",
+                        "& .MuiInputBase-root": {
                           padding: "5px 10px",
                           borderRadius: "4px",
                           border: "1px solid #B4C1D6 ",
-                          background: "#fff"
+                          background: "#fff",
                         },
-                        '& .MuiInputBase-root::before': {
-                          borderBottom: "0 !important"
+                        "& .MuiInputBase-root::before": {
+                          borderBottom: "0 !important",
                         },
-                        '& .MuiInputBase-root::after': {
-                          borderBottom: "0 !important"
+                        "& .MuiInputBase-root::after": {
+                          borderBottom: "0 !important",
                         },
-
                       }}
                       onChange={(newValue: any) => {
                         setDeadline(newValue);
@@ -192,7 +204,6 @@ const TaskForm = ({ data }: any) => {
                     />
                   </Grid>
                 </Grid>
-
               </Grid>
               <Grid item xs={12}>
                 <Grid container columnSpacing={2}>
@@ -240,6 +251,10 @@ const TaskForm = ({ data }: any) => {
                         />
                       )}
                     />
+                    <ErrorMessages
+                      errorMessages={errorMessages}
+                      keyname="assigned_to"
+                    />
                   </Grid>
                   <Grid item xs={6}>
                     <div className={styles.selectfarm}>
@@ -264,7 +279,6 @@ const TaskForm = ({ data }: any) => {
                     </div>
                   </Grid>
                 </Grid>
-
               </Grid>
               <Grid item xs={12}>
                 <Grid container columnSpacing={2}>
@@ -284,7 +298,10 @@ const TaskForm = ({ data }: any) => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                       />
-                      <ErrorMessages errorMessages={errorMessages} keyname="title" />
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="title"
+                      />
                     </div>
                   </Grid>
                   <Grid item xs={4}>
@@ -334,6 +351,8 @@ const TaskForm = ({ data }: any) => {
                 <TasksAttachments
                   farmId={defaultValue?._id}
                   setUploadedFiles={setUploadedFiles}
+                  multipleFiles={multipleFiles}
+                  setMultipleFiles={setMultipleFiles}
                 />
               </Grid>
             </Grid>
@@ -348,6 +367,11 @@ const TaskForm = ({ data }: any) => {
       />
       <LoadingComponent loading={loading} />
       <Toaster richColors position="top-right" closeButton />
+      {/* <AlertDeleteFilesOnFarmChangeInTasks
+        open={deleteFilesDialogOpen}
+        deleteFiles={removeFiles}
+        setDialogOpen={setDeleteFilesDialogOpen}
+      /> */}
     </LocalizationProvider>
   );
 };

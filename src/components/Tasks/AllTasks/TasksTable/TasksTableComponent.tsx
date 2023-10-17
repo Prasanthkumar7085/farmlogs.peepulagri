@@ -142,12 +142,15 @@ const TasksTableComponent = ({
             <span>
               {info.getValue()
                 ? info.getValue()?.length > 45
-                  ? info.getValue().slice(0, 1).toUpperCase() +
-                  info.getValue().slice(1, 41) +
-                  "....."
-                  : info.getValue().slice(0, 1).toUpperCase() +
-                  info.getValue().slice(1)
-                : "-"}
+                  ? (info.getValue()
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1, 41)
+                    : "") + "....."
+                  : info.getValue()
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1)
+                    : ""
+                : ""}
             </span>
           </Tooltip>
         </span>

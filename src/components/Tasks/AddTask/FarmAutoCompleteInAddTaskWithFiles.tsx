@@ -19,7 +19,7 @@ interface PropsTypes {
   defaultValue: FarmInTaskType | null | undefined;
   loading: boolean;
 }
-const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
+const FarmAutoCompleteInAddTaskWithFiles: React.FC<PropsTypes> = ({
   options,
   onSelectValueFromDropDown,
   label,
@@ -91,4 +91,4 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
   );
 };
 
-export default FarmAutoCompleteInAddTask;
+export default FarmAutoCompleteInAddTaskWithFiles;

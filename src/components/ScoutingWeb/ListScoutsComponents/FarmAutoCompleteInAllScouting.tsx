@@ -36,6 +36,7 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
     <div>
       {!autoCompleteLoading ? (
         <Autocomplete
+          groupBy={(option) => option?.user_id?.full_name}
           value={defaultValueSet}
           disablePortal
           size="small"

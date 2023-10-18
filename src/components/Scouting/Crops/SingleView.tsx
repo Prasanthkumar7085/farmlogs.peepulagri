@@ -21,6 +21,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfiniteScroll from "react-infinite-scroll-component"
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
+import TagsDrawer from "@/components/Core/TagsDrawer";
 
 
 
@@ -45,6 +47,9 @@ const SingleViewScoutComponent = () => {
     const [descriptionID, setDescriptionID] = useState<any>()
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [pageNumber, setPageNumber] = useState(1);
+    const [SummaryDrawerOpen, setSummaryDrawerOpen] = useState<boolean>(false)
+    const [tagsDrawerOpen, setTagsDrawerOpen] = useState<boolean>(false)
+
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -172,10 +177,24 @@ const SingleViewScoutComponent = () => {
         getSingleScout(item.scout_id)
     };
 
+    //for comments drawer open/close
     const drawerClose = (value: any) => {
-        console.log(value)
         if (value == false) {
             setDrawerOpen(false)
+        }
+    }
+
+    //for summary drawer open/close
+    const summaryDrawerClose = (value: any) => {
+        if (value == false) {
+            setSummaryDrawerOpen(false)
+        }
+    }
+
+    //for tags drawer open/close
+    const tagsDrawerClose = (value: any) => {
+        if (value == false) {
+            setTagsDrawerOpen(false)
         }
     }
 
@@ -202,16 +221,28 @@ const SingleViewScoutComponent = () => {
                 dataLength={data.length}
                 next={() => setPageNumber(prev => prev + 1)}
                 hasMore={hasMore}
-                loader={<div className={styles.pageLoader}>Loading</div>}
-                endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : 'Scroll to Top'}</a>}
+                loader={<div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>}
+                endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : data.length > 11 ? 'Scroll to Top' : ""}</a>}
             >
                 {data?.length ? data.map((item: any, index: any) => {
                     return (
                         <Card key={index} className={styles.galleryCard} >
-                            <Typography className={styles.postDate}>
-                                <InsertInvitationIcon />
-                                <span>{timePipe(item.updatedAt, "DD-MM-YYYY")}</span>
-                            </Typography>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <Typography className={styles.postDate}>
+
+                                    <InsertInvitationIcon />
+                                    <span>{timePipe(item.updatedAt, "DD-MM-YYYY")}</span>
+                                </Typography>
+
+                                <Typography className={styles.postDate}>
+                                    <IconButton onClick={() => setTagsDrawerOpen(true)}>
+                                        <InsertInvitationIcon />
+                                    </IconButton>
+
+                                    <InsertInvitationIcon />
+                                    <span onClick={() => setSummaryDrawerOpen(true)}>Summary</span>
+                                </Typography>
+                            </div>
                             <div key={index}>
                                 {readMore == true && item._id == descriptionID ?
                                     <Typography className={styles.findingsText}>{item.findings}
@@ -275,9 +306,13 @@ const SingleViewScoutComponent = () => {
 
             <LoadingComponent loading={loading} />
             <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={scoutData} />
+
+            {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} /> : ""}
             {drawerOpen == true ?
                 <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
+            {tagsDrawerOpen ?
+                <TagsDrawer tagsDrawerClose={tagsDrawerClose} /> : ""}
 
             <div className="addFormPositionIcon">
                 <img src="/add-plus-icon.svg" alt="" onClick={() => {

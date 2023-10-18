@@ -14,8 +14,8 @@ export interface FarmCardTypes {
 
 interface Geometrytype {
     type: string;
-    coordinates: Array<Array<Array<Array<number>>>>; 
-    _id:string
+    coordinates: Array<Array<Array<Array<number>>>>;
+    _id: string
 }
 
 export interface FarmDataType {
@@ -29,14 +29,15 @@ export interface FarmDataType {
     status: string;
     title: string;
     updatedAt: string;
+    crops_count: number;
     user_id: {
-        _id:string;
-        full_name:string;
-        user_type:string;
-        email:string;
-        phone:string;
+        _id: string;
+        full_name: string;
+        user_type: string;
+        email: string;
+        phone: string;
     };
-    
+
     __v: number;
     _id: string;
 }
@@ -66,8 +67,8 @@ export interface PaginationInFarmResponse {
     total_pages: number;
     success: boolean;
     message: string;
-    search_string: string|null,
-    
+    search_string: string | null,
+
 
 }
 

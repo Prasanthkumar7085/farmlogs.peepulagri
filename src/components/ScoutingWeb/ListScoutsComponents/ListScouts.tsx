@@ -232,9 +232,10 @@ const ListScouts: FunctionComponent = () => {
     if (cropId) {
       queryParams["crop_id"] = cropId;
     }
+    const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
 
-    url = prepareURLEncodedParams(url, queryParams);
     router.push({ query: queryParams });
+    url = prepareURLEncodedParams(url, restParams);
     const response = await getAllExistedScoutsService({
       url: url,
       token: accessToken,
@@ -405,6 +406,8 @@ const ListScouts: FunctionComponent = () => {
           <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
+            variant="outlined"
+            sx={{ border: "1px solid red", color: "red" }}
           >
             Clear
           </Button>

@@ -33,7 +33,7 @@ const DateRangePickerForAllScouts = ({ onDateFilterChange }: pageProps) => {
           disabledDate={(date: any) => {
             return date.getTime() > new Date().getTime();
           }}
-          value={[fromDefaultDate, toDefaultDate]}
+          value={(fromDefaultDate && toDefaultDate) ? [fromDefaultDate, toDefaultDate] : null}
           showOneCalendar
           format="dd-MM-yyyy"
           placeholder={"dd-mm-yyyy ~ dd-mm-yyyy"}

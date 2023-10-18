@@ -32,7 +32,7 @@ const FarmCard = ({ farmsData }: pagePropsType) => {
                     <div className={styles.dates}>{timePipe(item.createdAt, 'DD, MMM YYYY')}</div>
                     <div className={styles.count}>
                       <ImageComponent src='/folder2-open.svg' height={12} width={12} alt='image' />
-                      <span>02</span>
+                      <span>{item?.crops_count}</span>
                     </div>
                     {/* - Current  */}
                   </div>

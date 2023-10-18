@@ -22,7 +22,7 @@ const TablePaginationForFarms = ({ paginationDetails, capturePageNum, captureRow
     };
 
     return (
-        <Card className={styles.tablePagination} sx={{ position: 'sticky', bottom: "0px", width:"100%"}}>
+        <Card className={styles.tablePagination} sx={{ position: 'sticky', bottom: "0px", width: "100%" }}>
             <div>
                 <Typography variant="caption" className={styles.label}>{values} Per Page</Typography>
 
@@ -66,7 +66,7 @@ const TablePaginationForFarms = ({ paginationDetails, capturePageNum, captureRow
 
                     },
                 }}
-                page={paginationDetails?.page}
+                page={+paginationDetails?.page}
                 count={paginationDetails?.total_pages}
                 onChange={(event: any, value: any) => {
                     capturePageNum(value)

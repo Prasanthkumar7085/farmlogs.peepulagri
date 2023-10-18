@@ -125,22 +125,22 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
   return (
     <div className={styles.folder}>
       <div className={styles.cropcard}>
-        <div className={styles.icons}>          
-          <Image 
+        <div className={styles.icons}>
+          <Image
             className={styles.folderIcon}
-            src="/crops-folder.svg" 
-            alt="Folder" 
-            width={80} 
-            height={80} 
+            src="/crops-folder.svg"
+            alt="Folder"
+            width={80}
+            height={80}
             onClick={() => setToStorage(itemDetails?.title)}
           />
           <div className={styles.actions}>
             {/* <Chip label="02" className={styles.count} icon={<SpaIcon fontSize="small" />} /> */}
-            <Chip
+            {/* <Chip
               className={styles.count}
               avatar={<Avatar alt="crop" src="/crop-icon.svg" className={styles.icon} variant="square"  />}
               label="02"
-            />
+            /> */}
 
             <MoreVertIcon
               sx={{ color: "#6A7185", fontSize: "1.5rem" }}

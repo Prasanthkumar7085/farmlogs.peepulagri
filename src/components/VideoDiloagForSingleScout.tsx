@@ -132,12 +132,14 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                     justifyContent: "center !important"
                 }
             }}>
-            <IconButton onClick={handleClose} sx={{ position: "absolute", top: "1rem", right: "1rem", padding: "0" }}>
+            <IconButton onClick={handleClose} sx={{}}>
                 <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
             </IconButton>
 
             <DialogContent>
+
                 <div style={{ width: "100%" }}>
+
                     <Carousel selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)} swipeable={true}>
                         {mediaArray?.length > 0 &&
                             mediaArray.map((item: any, index: any) => (

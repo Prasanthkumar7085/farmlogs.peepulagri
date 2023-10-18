@@ -39,7 +39,7 @@ const TanStackTableComponent = ({
     return width;
   };
   const sortAndGetData = (header: any) => {
-    if (header.id == "actions") {
+    if (header.id == "actions" || header.id == "farm_id.title" || header.id == 'assigned_to') {
       return;
     }
     let orderBy = header.id;

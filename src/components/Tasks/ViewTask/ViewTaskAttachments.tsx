@@ -26,8 +26,63 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const [selectedAttachmentIds, setSelectedAttachments] = useState<
     Array<string>
   >([]);
-
+  const [loading, setLoading] = useState<boolean>(false)
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const downLoadAttachements = async (file: any) => {
+    setLoading(true);
+    try {
+      if (file) {
+        fetch(file)
+          .then((response) => {
+            // Get the filename from the response headers
+            const contentDisposition = response.headers.get("content-disposition");
+            let filename = "downloaded_file"; // Default filename if not found in headers
+
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (filenameMatch && filenameMatch.length > 1) {
+                filename = filenameMatch[1];
+              }
+            }
+
+            // Create a URL for the blob
+            return response.blob()
+              .then((blob) => ({ blob, filename }));
+          })
+          .then(({ blob, filename }) => {
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            // Clean up the blob URL
+            window.URL.revokeObjectURL(blobUrl);
+            toast.success("Attachement downloaded successfully");
+
+          })
+          .catch((error) => {
+            console.error("Error downloading file:", error);
+          });
+        // setAlertMessage("Attachement downloaded successfully")
+        // setAlertType(true)
+      }
+
+    }
+
+    catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false);
+    }
+
+  }
+
 
   const getSourceForThumnail = (type = "") => {
     if (type && type.includes("pdf")) {
@@ -50,8 +105,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     } else {
       ids.push(item?._id);
     }
-    console.log(ids);
-
     setSelectedAttachments(ids);
   };
 
@@ -111,43 +164,48 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       <div className={styles.allAttachments}>
         {data?.attachments?.length
           ? data?.attachments?.map(
-              (item: TaskAttachmentsType | any, index: number) => {
-                return (
-                  <div key={index}>
-                    <div className={styles.singleAttachment}>
-                      <div className={styles.attachmentDetails}>
-                        <div className={styles.checkGrp}>
-                          {/* <Checkbox
+            (item: TaskAttachmentsType | any, index: number) => {
+              return (
+                <div key={index}>
+                  <div className={styles.singleAttachment}>
+                    <div className={styles.attachmentDetails}>
+                      <div className={styles.checkGrp}>
+                        {/* <Checkbox
                             size="small"
                             sx={{ padding: "0" }}
                             onChange={(e) => selectImagesForDelete(e, item)}
                           /> */}
-                          <ImageComponent
-                            src={getSourceForThumnail(item.type)}
-                            height={20}
-                            width={20}
-                            alt={"image"}
-                          />
-                          <p
-                            onClick={() => window.open(item.url)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            {item?.original_name?.length > 25
-                              ? item?.original_name.slice(0, 22) + "..."
-                              : item?.original_name}
-                          </p>
-                        </div>
-                        <IconButton onClick={() => window.open(item.url)}>
-                          <OpenInNewIcon />
-                        </IconButton>
+                        <ImageComponent
+                          src={getSourceForThumnail(item.type)}
+                          height={20}
+                          width={20}
+                          alt={"image"}
+                        />
+                        <p
+                          onClick={() => window.open(item.url)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {item?.original_name?.length > 25
+                            ? item?.original_name.slice(0, 22) + "..."
+                            : item?.original_name}
+                        </p>
                       </div>
+                      <IconButton onClick={() => {
+                        downLoadAttachements(item.url)
+                        window.open(item.url)
+                      }}>
+                        <OpenInNewIcon />
+                      </IconButton>
                     </div>
                   </div>
-                );
-              }
-            )
+                </div>
+              );
+            }
+          )
           : "No Attachements"}
       </div>
+      <Toaster richColors position="top-right" closeButton />
+
       {/* <Toaster closeButton richColors dir="ltr" /> */}
     </div>
   );

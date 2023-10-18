@@ -202,8 +202,6 @@ const ViewScoutThreads = () => {
           </div>
           <div className={styles.description}>
             <h3 className={styles.heading1}>Findings</h3>
-
-
             {content?.map((line: any, index: any) => (
               <p className={styles.descriptiontext} key={index}>
                 {content ? line : "-"}

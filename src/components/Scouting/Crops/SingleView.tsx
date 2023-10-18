@@ -215,7 +215,7 @@ const SingleViewScoutComponent = () => {
                             <div key={index}>
                                 {readMore == true && item._id == descriptionID ?
                                     <Typography className={styles.findingsText}>{item.findings}
-                                        <span style={{ cursor: 'pointer' }} onClick={() => {
+                                        <span style={{ cursor: 'pointer', fontWeight: '600', }} onClick={() => {
                                             setReadMore(false)
                                             setDescriptionID(item._id)
                                         }}>Show Less</span>

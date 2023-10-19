@@ -44,6 +44,8 @@ export interface FarmInScoutsResponseType {
   crops: Array<CropType>;
 }
 export interface SingleScoutResponse {
+  suggestions: string;
+  summary: string;
   _id: string;
   farm_id: FarmInScoutsResponseType;
   crop_id: string;

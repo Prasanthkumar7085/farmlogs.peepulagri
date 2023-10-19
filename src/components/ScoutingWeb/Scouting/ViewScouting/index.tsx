@@ -128,14 +128,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   }
                 }}
               >
-                <IconButton
-                  onClick={() => setCuroselOpen(false)}
-                  sx={{ cursor: "pointer" }}
-                >
-                  <CloseIcon
-                    sx={{ color: "#fff", height: "32px", width: "32px" }}
-                  />
-                </IconButton>
                 <Carousel
                   selectedItem={currentIndex}
                   onChange={(index) => changeImage(index)}

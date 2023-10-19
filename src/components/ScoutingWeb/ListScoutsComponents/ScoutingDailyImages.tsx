@@ -23,12 +23,12 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
                 key={index}
                 onClick={() => onClickAttachment(imageItem._id)}
               >
-                {/* <img
+                <img
                   src={imageItem?.url}
                   height={100}
                   width={100}
                   alt={imageItem.original_name}
-                /> */}
+                />
               </div>
             );
           }

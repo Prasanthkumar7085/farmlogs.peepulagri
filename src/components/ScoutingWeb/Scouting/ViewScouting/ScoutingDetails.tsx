@@ -5,6 +5,7 @@ import { IconButton, Skeleton, Typography } from "@mui/material";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "yet-another-react-lightbox/styles.css";
 import styles from "./ScoutingDetails.module.css";
+import { useEffect, useState } from "react";
 
 const ScoutingDetails = ({
   loading,
@@ -12,6 +13,17 @@ const ScoutingDetails = ({
   content,
   setPreviewImageDialogOpen,
 }: any) => {
+  const [crop, setCrop] = useState<any>();
+
+  const getCropName = (cropId: string, crops: any) => {
+    let temp = crops?.find((item: any) => item._id == cropId);
+    setCrop(temp);
+  };
+  useEffect(() => {
+    if (data) {
+      getCropName(data?.crop_id, data?.farm_id?.crops);
+    }
+  }, [data]);
   return (
     <div className={styles.viewScoutingPage}>
       <div className={styles.viewHeader}>
@@ -23,10 +35,14 @@ const ScoutingDetails = ({
               {timePipe(data?.createdAt, "DD MMM YYYY hh:mm A")}
             </p>
           )}
-          <h1 className={styles.cropName}>
-            <img src="/cropName-icon.svg" alt="" />
-            Crop{" "}
-          </h1>
+          {loading ? (
+            <Skeleton width="200px" height="30px" />
+          ) : (
+            <h1 className={styles.cropName}>
+              <img src="/cropName-icon.svg" alt="" />
+              {crop?.title}{" "}
+            </h1>
+          )}
           <h2 className={styles.farmname}>
             {loading ? (
               <Skeleton width="300px" height="30px" />
@@ -66,7 +82,7 @@ const ScoutingDetails = ({
       </div>
       <div className={styles.RecommedationBlock}>
         <Typography variant="h6" className={styles.RecommedationHeading}>
-          Recommedations
+          Comments
         </Typography>
         <CommentsComponentForWeb scoutDetails={data} />
       </div>

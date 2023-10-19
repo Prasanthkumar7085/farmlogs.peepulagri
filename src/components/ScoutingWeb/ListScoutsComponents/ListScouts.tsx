@@ -419,29 +419,30 @@ const ListScouts: FunctionComponent = () => {
             data.map((item: SingleScoutResponse, index: number) => {
               return <ScoutingCardWeb item={item} key={index} />;
             })
-          ) : !loading ? (
-            <div
-              id={styles.noData}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "4rem",
-              }}
-            >
-              <ImageComponent
-                src="/emty-folder-image.svg"
-                alt="empty folder"
-                width={250}
-                height={150}
-              />
-              <Typography variant="h4">No Scoutings</Typography>
-            </div>
-          ) : (
-            ""
-          )}
+          ) : ''}
         </div>
+        {(!data?.length && !loading) ? (
+          <div
+            id={styles.noData}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "4rem",
+            }}
+          >
+            <ImageComponent
+              src="/emty-folder-image.svg"
+              alt="empty folder"
+              width={250}
+              height={150}
+            />
+            <Typography variant="h4">No Scoutings</Typography>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       {!loading ? (

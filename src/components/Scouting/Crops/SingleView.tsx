@@ -266,9 +266,9 @@ const SingleViewScoutComponent = () => {
                 })
                     :
                     (!loading ?
-                        <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
-                            <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
-                            <Typography variant="h4">No Scoutings for this crop</Typography>
+                        <div className={styles.NoDataBlockImage}>
+                            <Image src="/emty-folder-image.svg" alt="empty folder" height={150} width={180} />
+                            <Typography className={styles.title}>No Scoutings for this crop</Typography>
                         </div>
                         : "")}
             </InfiniteScroll>

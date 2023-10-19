@@ -253,7 +253,7 @@ body {
 }
 
 [class*="progressSteps"] .Mui-completed .MuiSvgIcon-root {
-    fill: #05a155;
+    fill: var(--color-mediumseagreen-100);
     box-shadow: 0 0 0 4px #f0ffea;
 }
 

@@ -9,6 +9,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item }: any) => {
+
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [summaryContent, setSummaryContent] = useState('');
     const [editorHtml, setEditorHtml] = useState('');
@@ -29,12 +30,7 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item }: any) =>
                     width: anchor === 'right' ? 600 : '',
                 }}
             >
-                {anchor === 'right' ? (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant="h6">{item?.farm_id?.title}</Typography>
-                        {timePipe(item?.createdAt, 'DD MMM YYYY, hh:mm A')}
-                    </div>
-                ) : null}
+
                 <Typography>Day Summary</Typography>
                 <IconButton
                     onClick={() => {

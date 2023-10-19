@@ -255,7 +255,6 @@ const ViewScoutThreads = () => {
             {fileUploadOpen == false ?
               <CommentsComponent /> : ""}
 
-
           </div>
 
         </div> : ""}

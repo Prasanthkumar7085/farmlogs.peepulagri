@@ -1,4 +1,4 @@
-import { Breadcrumbs, Card, Chip, IconButton, Link, Typography, Button } from "@mui/material";
+import { Breadcrumbs, Card, Chip, IconButton, Link, Typography, Button, Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import styles from "./crop-card.module.css";
@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import timePipe from "@/pipes/timePipe";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import "yet-another-react-lightbox/styles.css";
 import VideoDialog from "@/components/Core/VideoDiloag";
 import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
@@ -20,10 +19,8 @@ import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfiniteScroll from "react-infinite-scroll-component"
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
-
+import SellIcon from '@mui/icons-material/Sell';
 
 
 
@@ -49,7 +46,12 @@ const SingleViewScoutComponent = () => {
     const [pageNumber, setPageNumber] = useState(1);
     const [SummaryDrawerOpen, setSummaryDrawerOpen] = useState<boolean>(false)
     const [tagsDrawerOpen, setTagsDrawerOpen] = useState<boolean>(false)
+    const [openDialog, setOpenDialog] = useState(false);
+    const [indexOfSeletedOne, setIndexOfseletedOne] = useState<any>();
+    const [selectedItems, setSelectedItems] = useState<any>([]);
+    const [tagsCheckBoxOpen, setTagsCheckBoxOpen] = useState<any>()
 
+    let tempImages: any = [...selectedItems];
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -60,9 +62,9 @@ const SingleViewScoutComponent = () => {
         }
     }, [accessToken, router.isReady,])
 
-    useEffect(() => {
-        getPresingedURls()
-    }, [pageNumber]);
+    // useEffect(() => {
+    //     getPresingedURls()
+    // }, [pageNumber]);
 
     const getPresingedURls = async () => {
         setLoading(true);
@@ -112,6 +114,7 @@ const SingleViewScoutComponent = () => {
                     id: imageObj._id,
                     scout_id: item._id,
                     alt: "u",
+                    tags: imageObj.tags
                 }
             }
             else if (imageObj.type.includes("application")) {
@@ -124,7 +127,9 @@ const SingleViewScoutComponent = () => {
                     type: imageObj.type,
                     id: imageObj._id,
                     scout_id: item._id,
-                    alt: "u"
+                    alt: "u",
+                    tags: imageObj.tags
+
                 }
             }
             else
@@ -137,6 +142,7 @@ const SingleViewScoutComponent = () => {
                     scout_id: item._id,
                     width: 60,
                     alt: "u",
+                    tags: imageObj.tags
 
                 }
         });
@@ -150,14 +156,12 @@ const SingleViewScoutComponent = () => {
             if (response?.data?.attachments?.length) {
                 setSlideShowImages(response?.data?.attachments)
                 setScoutData(response?.data);
-
             }
         }
         setLoading(false);
     }
 
 
-    const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenDialog = () => {
         setOpenDialog(true);
@@ -168,13 +172,10 @@ const SingleViewScoutComponent = () => {
         setIndex(-1);
     };
 
-
-
-
     const handleClick = (index: number, item: any) => {
+
         handleOpenDialog();
-        setIndex(index);
-        getSingleScout(item.scout_id)
+        setIndexOfseletedOne(index);
     };
 
     //for comments drawer open/close
@@ -197,6 +198,25 @@ const SingleViewScoutComponent = () => {
             setTagsDrawerOpen(false)
         }
     }
+
+    //capture the tags details
+    const captureTagsDetails = (tags: any, findingsvalue: any) => {
+        if (tags) {
+            console.log(tags, findingsvalue)
+        }
+    }
+
+    const handleChange = (itemId: any) => {
+        const itemIndex = tempImages.indexOf(itemId);
+        if (itemIndex === -1) {
+            tempImages.splice(1, 0, itemId)
+        }
+        else {
+            tempImages.splice(itemIndex, 1);
+        }
+        setSelectedItems(tempImages)
+
+    };
 
     return (
         <div className={styles.scoutingView}>
@@ -235,62 +255,73 @@ const SingleViewScoutComponent = () => {
                                 </Typography>
 
                                 <Typography className={styles.postDate}>
-                                    <IconButton onClick={() => setTagsDrawerOpen(true)}>
-                                        <InsertInvitationIcon />
-                                    </IconButton>
+                                    {tagsCheckBoxOpen ?
+                                        <IconButton onClick={() => setTagsCheckBoxOpen(false)}>
+                                            <Image
+                                                src={"/scouting-img-clear.svg"}
+                                                width={20}
+                                                height={20}
+                                                alt="tag"
+                                            />
+                                        </IconButton> :
+                                        <IconButton onClick={() => setTagsCheckBoxOpen(true)}>
+                                            <Image
+                                                src={"/scouting-img-add.svg"}
+                                                width={20}
+                                                height={20}
+                                                alt="tag"
+                                            />
+                                        </IconButton>}
 
-                                    <InsertInvitationIcon />
+                                    <Image
+                                        src={"/Summary.svg"}
+                                        width={20}
+                                        height={20}
+                                        alt="tag"
+                                    />
                                     <span onClick={() => setSummaryDrawerOpen(true)}>Summary</span>
                                 </Typography>
                             </div>
-                            <div key={index}>
-                                {readMore == true && item._id == descriptionID ?
-                                    <Typography className={styles.findingsText}>{item.findings}
-                                        <span style={{ cursor: 'pointer', fontWeight: '600', }} onClick={() => {
-                                            setReadMore(false)
-                                            setDescriptionID(item._id)
-                                        }}>Show Less</span>
-                                    </Typography> :
 
-                                    <Typography className={styles.findingsText}>{item.findings?.length > 100 ? item.findings.slice(0, 100) + "...." : item.findings}
-                                        {item.findings?.length > 100 ?
-                                            <span style={{ fontWeight: '600', cursor: 'pointer' }} onClick={() => {
-                                                setReadMore(true)
-                                                setDescriptionID(item._id)
-                                            }}>Show More</span>
-                                            : ""}</Typography>}
+                            <Card sx={{
+                                width: "100%", minHeight: "100px",
+                            }}>
 
+                                <div style={{
+                                    display: "grid",
+                                    gridTemplateColumns: '50% 50%', /* Two columns with a width of 60px each */
+                                    gap: '10px', /* Adjust the gap between the columns if necessary */
+                                    margin: "0.5rem",
+                                    objectFit: "cover"
+                                }}>
+                                    {getModifiedImage(item)?.length !== 0 ? getModifiedImage(item).map((image: any, index: any) => (
 
-                                <Gallery images={getModifiedImage(item)} onClick={handleClick} enableImageSelection={false}
-                                />
-                                <div className={styles.actionButtons}>
-                                    <Button
-                                        onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/scouting/${item._id}`)}
-                                        className={styles.ctaButton}
-                                        variant="outlined"
-                                        size="small"
-                                        color="success">
-                                        <VisibilityIcon />
-                                        <span>View</span>
-                                    </Button>
-                                    <Button
-                                        className={styles.ctaButton}
-                                        onClick={() => {
-                                            setDrawerOpen(true)
-                                            setScoutId(item._id)
-                                            router.push({
-                                                pathname: `/farms/${router.query.farm_id}/crops/${router.query.crop_id}`,
-                                                query: { "scout_id": item._id }
-                                            })
-                                        }}
-                                        color="primary"
-                                        variant="outlined"
-                                        size="small">
-                                        <ChatBubbleOutlineIcon />
-                                        <span>02</span>
-                                    </Button>
+                                        <div style={{ position: "relative", height: "100px", }} key={index}>
+                                            <img src={image.src} alt={image.alt} width={'100%'} height={"100%"} onClick={() => handleClick(index, image)} style={{ cursor: "pointer", borderRadius: "5px" }} />
+
+                                            <div style={{ position: "absolute", top: 0, left: 0 }}>
+                                                {tagsCheckBoxOpen && image?.tags?.length == 0 ?
+                                                    <Checkbox
+
+                                                        sx={{
+                                                            color: "#7f7f7f",
+                                                            '& .MuiSvgIcon-root': {
+                                                                color: "#7f7f7f"
+                                                            }
+                                                        }}
+                                                        size="small"
+                                                        checked={(tempImages.find((ite: any) => ite == image.id)) ? true : false}
+                                                        onChange={() => handleChange(image.id)}
+                                                        inputProps={{ 'aria-label': 'controlled' }}
+                                                        color="secondary"
+                                                        title={image.id}
+                                                    /> : tagsCheckBoxOpen == true ? <Image src={"/scout-img-select.svg"} width={10} height={10} alt="tags" /> : ""}
+                                            </div>
+                                        </div>
+
+                                    )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
                                 </div>
-                            </div>
+                            </Card>
 
                         </Card>
                     )
@@ -307,23 +338,21 @@ const SingleViewScoutComponent = () => {
             <LoadingComponent loading={loading} />
             <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={scoutData} />
 
-            {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} /> : ""}
+            {/* {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} /> : ""} */}
             {drawerOpen == true ?
                 <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
             {tagsDrawerOpen ?
-                <TagsDrawer tagsDrawerClose={tagsDrawerClose} /> : ""}
+                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} /> : ""}
 
             <div className="addFormPositionIcon">
-                <img src="/add-plus-icon.svg" alt="" onClick={() => {
-                    if (timePipe(data[0]?.createdAt, "DD-MM-YYYY") == timePipe(new Date(), "DD-MM-YYYY")) {
-                        router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}&scout_id=${data[0]?._id}&new=false`)
-
-                    } else {
-                        router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}&new=true`)
-
-                    }
-                }} />
+                {tagsCheckBoxOpen == false ?
+                    <img src="/add-plus-icon.svg" alt="" onClick={() => {
+                        router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
+                    }} /> :
+                    <img src="/scout-add-floating-icon.svg" alt="tags icon" onClick={() => {
+                        setTagsDrawerOpen(true)
+                    }} />}
             </div>
         </div>
 

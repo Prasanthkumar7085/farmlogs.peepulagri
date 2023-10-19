@@ -104,11 +104,11 @@ const ScoutingCardWeb = ({ item }: pageProps) => {
               ? item?.attachments?.slice(0, 3)?.map((attachment) => {
                 return (
                   <div className={styles.container} key={attachment?._id}>
-                    {/* <img
+                    <img
                       className={styles.imageIcon}
                       alt={attachment?.original_name}
                       src={getSrc(attachment)}
-                    /> */}
+                    />
                   </div>
                 );
               })

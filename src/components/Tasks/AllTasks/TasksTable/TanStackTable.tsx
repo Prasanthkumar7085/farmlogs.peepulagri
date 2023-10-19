@@ -150,7 +150,7 @@ const TanStackTableComponent = ({
                                   alt="image"
                                 />
                               )
-                            ) : (
+                            ) : (header.id == "farm_id.title" || header.id == "assigned_to") ? "" : (
                               <ImageComponent
                                 src="/unsort.svg"
                                 height={15}

@@ -8,6 +8,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSummary }: any) => {
+    console.log(item, "lllll")
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [summaryContent, setSummaryContent] = useState('');
@@ -16,7 +17,7 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSu
     const handleChange = (html: any) => {
         setEditorHtml(html);
     };
-    const [data, setData] = useState('');
+    const [data, setData] = useState(item?.summary ? item.summary : "");
 
 
     return (
@@ -69,6 +70,8 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSu
             </div>
             <Button variant="contained" onClick={() => {
                 captureSummary(data)
+                setData("");
+
 
             }}>Submit</Button>
 

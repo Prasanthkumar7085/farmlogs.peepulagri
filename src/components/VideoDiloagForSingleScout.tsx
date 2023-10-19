@@ -24,6 +24,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
     const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
     const [description, setDescription] = useState<any>()
     const [isZoom, setISZoom] = useState<any>()
+    const [showMore, setShowMore] = useState<any>(false)
+
 
 
     useEffect(() => {
@@ -198,9 +200,14 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                             </Typography>
                         )
                     })}
-                    <Typography variant="caption" display="block" align="left">
-                        {mediaArray[currentIndex]?.description}
-                    </Typography>
+                    {showMore == false ?
+                        <Typography variant="caption" display="block" align="left">
+                            {mediaArray[currentIndex]?.description.length > 100 && showMore == false ? mediaArray[currentIndex]?.description.slice(1, 100) + "...." : mediaArray[currentIndex]?.description}<span onClick={() => setShowMore(true)}>Show More</span>
+                        </Typography> :
+                        <Typography variant="caption" display="block" align="left">
+                            {mediaArray[currentIndex]?.description}<span onClick={() => setShowMore(false)}>Show less</span>
+                        </Typography>
+                    }
                     <div style={{ display: "flex", flexDirection: 'row', justifyContent: "flex-end" }}>
                         <IconButton onClick={() => {
                             captureImageDilogOptions("tag")

@@ -69,7 +69,11 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
                     sx={{ background: "#fff" }}
                 />
             </div>
-            <Button variant="contained" onClick={() => captureTagsDetails(tags, description)}>Submit</Button>
+            <Button variant="contained" onClick={() => {
+                captureTagsDetails(tags, description)
+                setTags([])
+                setDescription("")
+            }}>Submit</Button>
 
         </Drawer>
     );

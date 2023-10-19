@@ -47,7 +47,6 @@ const SingleViewScoutComponent = () => {
     const [scoutFindings, setScoutFindings] = useState<any>()
 
     let tempImages: any = [...selectedItems];
-    console.log(tempImages)
 
 
     useEffect(() => {
@@ -78,7 +77,6 @@ const SingleViewScoutComponent = () => {
             let responseData = await response.json()
 
             if (responseData.success) {
-                setSelectedFile(responseData.data)
                 if (responseData?.has_more || responseData?.has_more == false) {
                     setHasMore(responseData?.has_more);
                 }
@@ -114,10 +112,12 @@ const SingleViewScoutComponent = () => {
 
     const handleOpenDialog = (item: any) => {
         setOpenDialog(true);
+        setSelectedItems([])
     }
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setSelectedItems([])
     };
 
     const handleClick = (index: number, item: any) => {
@@ -156,7 +156,7 @@ const SingleViewScoutComponent = () => {
         console.log(value)
         if (value) {
             setSummaryContent(value)
-            await updateDescriptionService([])
+            await updateDescriptionService([], value)
 
         }
 
@@ -173,15 +173,15 @@ const SingleViewScoutComponent = () => {
     const captureTagsDetails = async (tags: any, findingsvalue: any) => {
         setScoutFindings(findingsvalue)
         if (tags.length) {
-            tempImages.forEach((obj: any) => {
+            await tempImages.forEach((obj: any) => {
                 obj.tags = tags
             })
-            const newArray = tempImages.map((obj: any) => ({
+            const newArray = await tempImages.map((obj: any) => ({
                 ...obj,
                 description: findingsvalue
             }))
             setSelectedItems(newArray)
-            await updateDescriptionService(newArray)
+            await updateDescriptionService(newArray, summaryContent)
         }
 
     }
@@ -199,14 +199,15 @@ const SingleViewScoutComponent = () => {
 
     //capture the slideimages index
     const captureSlideImagesIndex = (value: any) => {
-        console.log(value)
         if (value) {
             setIndex(value)
+            setSelectedItems([sildeShowImages[index]])
+
         }
     }
 
     //update the details of the scouting
-    const updateDescriptionService = async (imagesArray: any) => {
+    const updateDescriptionService = async (imagesArray: any, summaryValue: any) => {
         setLoading(true)
         let updatedArray = scoutAttachmentDetails?.map((obj: any) => {
             let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
@@ -224,7 +225,7 @@ const SingleViewScoutComponent = () => {
                     "farm_id": router.query.farm_id,
                     "crop_id": router.query.crop_id,
                     "attachments": tempImages?.length ? updatedArray : scoutAttachmentDetails,
-                    "summary": summaryContent
+                    "summary": summaryValue
                 })
             }
             let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}`, options);
@@ -239,6 +240,8 @@ const SingleViewScoutComponent = () => {
                 setSummaryDrawerOpen(false)
                 setSelectedItems([])
                 setScoutAttachementsDetails([])
+                setSummaryContent("")
+
             }
 
         } catch (err: any) {
@@ -318,6 +321,7 @@ const SingleViewScoutComponent = () => {
                                 <span onClick={() => {
                                     setSummaryDrawerOpen(true)
                                     setScoutId(item._id)
+                                    setSelectedFile(item)
                                     setScoutAttachementsDetails(item.attachments)
                                 }}>Summary</span>
                             </Typography>
@@ -388,7 +392,7 @@ const SingleViewScoutComponent = () => {
                 captureSlideImagesIndex={captureSlideImagesIndex}
                 captureImageDilogOptions={captureImageDilogOptions} />
 
-            {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} captureSummary={captureSummary} /> : ""}
+            {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} captureSummary={captureSummary} item={selectedFile} /> : ""}
             {drawerOpen == true ?
                 <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
@@ -396,11 +400,11 @@ const SingleViewScoutComponent = () => {
                 <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={sildeShowImages[index]} /> : ""}
 
             <div className="addFormPositionIcon">
-                {tagsCheckBoxOpen == false && tempImages?.length == 0 ?
+                {tagsCheckBoxOpen == false && selectedItems?.length == 0 ?
                     <img src="/add-plus-icon.svg" alt="" onClick={() => {
                         router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
                     }} /> :
-                    tempImages?.length ?
+                    selectedItems?.length ?
                         <img src="/scout-add-floating-icon.svg" alt="tags icon" onClick={() => {
                             setTagsDrawerOpen(true)
                         }} /> : ""}

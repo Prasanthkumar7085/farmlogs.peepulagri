@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { CKEditor } from 'ckeditor4-react';
 import { Button, Drawer, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import timePipe from '@/pipes/timePipe';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSummary }: any) => {
 
@@ -17,6 +18,8 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSu
     const handleChange = (html: any) => {
         setEditorHtml(html);
     };
+    const [data, setData] = useState('');
+
 
     return (
         <Drawer anchor={'bottom'} open={isDrawerOpen}>
@@ -40,11 +43,17 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSu
                     <CloseIcon />
                 </IconButton>
             </div>
-            <div style={{ width: '100%', height: '200px' }}>
-                <CKEditor />
-            </div>
+            <div style={{ width: '100%', height: '200px', border: "1px solid red" }}>
+                <CKEditor
+                    editor={ClassicEditor}
+                    data={data}
+                    onChange={(event, editor) => {
+                        const content = editor.getData();
+                        setData(content);
+                    }}
+                />            </div>
             <Button variant="contained" onClick={() => {
-                captureSummary(editorHtml)
+                captureSummary(data)
 
             }}>Submit</Button>
 

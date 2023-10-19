@@ -120,9 +120,9 @@ const SingleViewScoutComponent = () => {
 
 
 
-    const handleOpenDialog = () => {
+    const handleOpenDialog = (item: any) => {
         setOpenDialog(true);
-    };
+    }
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
@@ -130,10 +130,15 @@ const SingleViewScoutComponent = () => {
     };
 
     const handleClick = (index: number, item: any) => {
-
-        handleOpenDialog();
+        handleOpenDialog(item);
         setIndexOfseletedOne(index);
+        setSlideShowImages(item)
+        setIndex(index)
+        setScoutId(item._id)
+        setScoutAttachementsDetails(item.attachments)
     };
+
+
 
     //for comments drawer open/close
     const drawerClose = (value: any) => {
@@ -157,12 +162,21 @@ const SingleViewScoutComponent = () => {
     }
     //capture the summary content
     const captureSummary = async (value: any) => {
+        console.log(value)
         if (value) {
             setSummaryContent(value)
             await updateDescriptionService()
 
         }
 
+    }
+
+    //capture thecurosel options
+    const captureImageDilogOptions = (value: any) => {
+        console.log(value)
+        if (value == "tag") {
+            setTagsDrawerOpen(true)
+        }
     }
     //capture the tags details
     const captureTagsDetails = async (tags: any, findingsvalue: any) => {
@@ -316,7 +330,7 @@ const SingleViewScoutComponent = () => {
                                 {item?.attachments?.length !== 0 ? item.attachments.map((image: any, index: any) => (
 
                                     <div style={{ position: "relative", height: "100px", }} key={index}>
-                                        <img src={image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => handleClick(index, image)} style={{ cursor: "pointer", borderRadius: "5px" }} />
+                                        <img src={image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => handleClick(index, item.attachments)} style={{ cursor: "pointer", borderRadius: "5px" }} />
 
                                         <div style={{ position: "absolute", top: 0, left: 0 }}>
                                             {tagsCheckBoxOpen && image?.tags?.length == 0 && scoutId == item._id ?
@@ -355,7 +369,13 @@ const SingleViewScoutComponent = () => {
             {/* </InfiniteScroll> */}
 
             <LoadingComponent loading={loading} />
-            <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={scoutData} />
+            <VideoDialogForScout
+                open={openDialog}
+                onClose={handleCloseDialog}
+                mediaArray={sildeShowImages}
+                index={index}
+                data={scoutData}
+                captureImageDilogOptions={captureImageDilogOptions} />
 
             {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} captureSummary={captureSummary} /> : ""}
             {drawerOpen == true ?

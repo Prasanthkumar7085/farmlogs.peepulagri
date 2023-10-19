@@ -25,7 +25,11 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
     }
 
     return (
-        <Drawer anchor={'bottom'} open={isDrawerOpen}>
+        <Drawer
+            anchor={'bottom'}
+            open={isDrawerOpen}
+            sx={{ zIndex: "1300 !important" }}
+        >
             <div
                 style={{
                     display: 'flex',

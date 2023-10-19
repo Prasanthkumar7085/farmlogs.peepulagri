@@ -495,7 +495,9 @@ const FileUploadComponent = () => {
 
     const newArray = tempFilesStorage.map((obj: any) => ({
       ...obj,
-      tags: tags
+      tags: tags,
+      time: new Date(),
+      description: description
     }));
 
     setLoading(true);
@@ -503,7 +505,6 @@ const FileUploadComponent = () => {
       farm_id: formId,
       attachments: newArray,
       crop_id: selectedCrop?._id,
-      findings: description,
     };
 
     let options: any = {

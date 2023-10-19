@@ -193,7 +193,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                     </Typography>
                     {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
                         return (
-                            <Typography variant="caption" align="left">
+                            <Typography variant="caption" align="left" key={index}>
                                 {tag}
                             </Typography>
                         )

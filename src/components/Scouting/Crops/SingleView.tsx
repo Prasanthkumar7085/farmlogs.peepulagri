@@ -1,29 +1,20 @@
-import { Breadcrumbs, Card, Chip, IconButton, Link, Typography, Button, Checkbox } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Gallery } from "react-grid-gallery";
-import styles from "./crop-card.module.css";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import timePipe from "@/pipes/timePipe";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import VideoDialog from "@/components/Core/VideoDiloag";
-import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
-import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
-import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
-import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
-import Image from "next/image";
-import moment from "moment";
-import CommentIcon from '@mui/icons-material/Comment';
-import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import InfiniteScroll from "react-infinite-scroll-component"
-import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
-import TagsDrawer from "@/components/Core/TagsDrawer";
-import SellIcon from '@mui/icons-material/Sell';
-import { assert } from "console";
+import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
+import TagsDrawer from "@/components/Core/TagsDrawer";
+import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
+import timePipe from "@/pipes/timePipe";
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import { Breadcrumbs, Card, Checkbox, IconButton, Link, Typography } from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
+import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
+import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
+import styles from "./crop-card.module.css";
 
 
 
@@ -246,6 +237,8 @@ const SingleViewScoutComponent = () => {
                 setSelectedItems([])
                 setTagsCheckBoxOpen(false)
                 setSummaryDrawerOpen(false)
+                setSelectedItems([])
+                setScoutAttachementsDetails([])
             }
 
         } catch (err: any) {

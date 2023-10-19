@@ -1,11 +1,11 @@
-import SingleScoutViewDetails from "@/components/ScoutingWeb/Scouting/ViewScouting";
+import SingleScoutView from "@/components/ScoutingWeb/CropScouts/SingleScoutView";
 
 const ViewSingleScoutPage = () => {
-    return (
-        <div>
-            <SingleScoutViewDetails />
-        </div>
-    )
-}
+  return (
+    <div>
+      <SingleScoutView />
+    </div>
+  );
+};
 
 export default ViewSingleScoutPage;

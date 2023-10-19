@@ -1,7 +1,10 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
-import { SingleScoutResponse } from "@/types/scoutTypes";
+import {
+  ScoutAttachmentDetails,
+  SingleScoutResponse,
+} from "@/types/scoutTypes";
 import { Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
@@ -20,6 +23,7 @@ import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import UserDropDownForScouts from "./UserDropDownForScouts";
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import ScoutingDailyImages from "./ScoutingDailyImages";
+import SingleScoutViewDetails from "../Scouting/ViewScouting";
 
 interface ApiMethodProps {
   page: string | number;
@@ -51,6 +55,9 @@ const ListScouts: FunctionComponent = () => {
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [viewAttachmentId, setViewAttachmentId] = useState("");
+  const [previewImageDialogOpen, setPreviewImageDialogOpen] = useState(false);
+  const [onlyImages, setOnlyImages] = useState([]);
 
   const onChangeUser = async (e: any, value: any) => {
     if (value) {
@@ -245,12 +252,62 @@ const ListScouts: FunctionComponent = () => {
       const { data, ...rest } = response;
       setPaginationDetails(rest);
       setData(data);
+      let onlyImagesData = unWindImages(data);
+      setOnlyImages(onlyImagesData);
     } else {
       toast.error("Failed to fetch");
     }
     setLoading(false);
   };
 
+  const unWindImages = (data: Array<SingleScoutResponse>) => {
+    let array: any = [];
+    data.length &&
+      data.filter((item: SingleScoutResponse) => {
+        let scoutId = item._id;
+        let updatedAttachments: any =
+          item.attachments?.length &&
+          item.attachments.map((attachemntItem: ScoutAttachmentDetails) => {
+            return { ...attachemntItem, scout_id: scoutId };
+          });
+        array = [...array, ...updatedAttachments];
+      });
+    let details = [];
+    if (array.length) {
+      details = array.map((item: any, index: number) => {
+        if (item.type.includes("video")) {
+          return {
+            ...item,
+            src: "/videoimg.png",
+            height: 80,
+            width: 60,
+            type: item.type,
+            caption: `${index + 1} image`,
+            original: item?.url,
+          };
+        } else if (item.type.includes("application")) {
+          return {
+            ...item,
+            src: "/pdf-icon.png",
+            height: 80,
+            width: 60,
+            type: item.type,
+            caption: `${index + 1} image`,
+            original: item.url,
+          };
+        } else {
+          return {
+            ...item,
+            src: item.url,
+            height: 80,
+            width: 60,
+            type: item.type,
+          };
+        }
+      });
+    }
+    return details;
+  };
   const getAllUsers = async (userId = "") => {
     const response = await getAllUsersService({ token: accessToken });
 
@@ -374,7 +431,10 @@ const ListScouts: FunctionComponent = () => {
     }
   }, [router.isReady, accessToken]);
 
-  console.log(data);
+  const onClickAttachment = (attachmentId: string) => {
+    setViewAttachmentId(attachmentId);
+    setPreviewImageDialogOpen(true);
+  };
 
   return (
     <div className={styles.AllScoutsPageWeb}>
@@ -426,8 +486,12 @@ const ListScouts: FunctionComponent = () => {
           {data?.length ? (
             data.map((item: SingleScoutResponse, index: number) => {
               return (
-                <div style={{ border: "1px solid" }}>
-                  <ScoutingDailyImages item={item} key={index} />
+                <div style={{ border: "1px solid" }} key={index}>
+                  <ScoutingDailyImages
+                    item={item}
+                    key={index}
+                    onClickAttachment={onClickAttachment}
+                  />
                 </div>
               );
             })
@@ -455,7 +519,12 @@ const ListScouts: FunctionComponent = () => {
           )}
         </div>
       </div>
-
+      <SingleScoutViewDetails
+        viewAttachmentId={viewAttachmentId}
+        onlyImages={onlyImages}
+        previewImageDialogOpen={previewImageDialogOpen}
+        setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+      />
       {/* {!loading ? (
         <TablePaginationComponentForScouts
           paginationDetails={paginationDetails}

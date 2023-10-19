@@ -61,7 +61,7 @@
 
 .resendContainer button {
   font-weight: 500 !important;
-  color: #05a155 !important;
+  color: var(--color-mediumseagreen-100) !important;
 }
 
 .otpfield,

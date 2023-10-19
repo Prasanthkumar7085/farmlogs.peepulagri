@@ -35,7 +35,7 @@
 
 .activeMenuItem {
   border-radius: 5px;
-  background-color: #05a155 !important;
+  background-color: var(--color-mediumseagreen-100)05a155 !important;
 }
 .activeMenuItem:hover {
   border-radius: 5px;

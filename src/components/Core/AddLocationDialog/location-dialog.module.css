@@ -1,10 +1,15 @@
 .newFolder {
   color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(16px, 3.5vw, 20px);
+  font-size: clamp(16px, 4vw, 20px);
   font-weight: 500;
   line-height: 100%;
   margin: 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #05A155;
 }
 
 .input {
@@ -16,7 +21,6 @@
 .frame {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
   gap: var(--gap-base);
 }
@@ -55,12 +59,12 @@
 .buttons {
   align-self: stretch;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
   gap: 1rem;
-  margin-top: 2rem;
-
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+.buttons > *{
+  flex-grow: 1;
 }
 
 .newfolder {
@@ -68,5 +72,4 @@
   background-color: #fff;
   align-items: center;
   padding: 1.5rem 1rem 2rem;
-  text-align: center;
 }

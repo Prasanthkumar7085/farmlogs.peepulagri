@@ -41,6 +41,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: var(--padding-base);
+  padding-left: 0;
   gap: 2rem;
 }
 
@@ -55,7 +56,6 @@
 
 .menuitems {
   align-self: stretch;
-  justify-content: center;
   gap: 0.5rem;
   padding: 0;
   padding-top: 2rem;
@@ -84,7 +84,8 @@
 }
 
 #sideMenu {
-  padding: 1rem 2rem;
+  padding: 1rem;
+  width: 200px;
 }
 
 .sideMenu {

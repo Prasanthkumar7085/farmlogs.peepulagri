@@ -30,7 +30,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
   };
 
   const callData = () => {
-    
+
     let obj = {
       title: title ? title : "",
       crop_area: area ? +area : null,

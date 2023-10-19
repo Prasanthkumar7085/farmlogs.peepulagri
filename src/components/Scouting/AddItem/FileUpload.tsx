@@ -32,6 +32,7 @@ import Camera from "./Camera";
 import styles from "./add-scout.module.css";
 import updateDescriptionService from "../../../../lib/services/ScoutServices/updateDescription";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
+import TagsTextFeild from "@/components/Core/TagsTextFeild";
 
 const FileUploadComponent = () => {
   const router = useRouter();
@@ -62,6 +63,9 @@ const FileUploadComponent = () => {
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [validations, setValidations] = useState<any>();
   const [data, setData] = useState<any>()
+  const [cropName, setCropName] = useState<any>();
+  const [tags, setTags] = useState<any>([])
+
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -106,7 +110,8 @@ const FileUploadComponent = () => {
             response?.data?.length &&
             response?.data.find((item: any) => item._id == id);
           setDefaultValue(selectedObject.title);
-          captureFarmName(selectedObject);
+          setFormId(selectedObject?._id);
+
         }
       } else {
         setFarmOptions([]);
@@ -117,7 +122,7 @@ const FileUploadComponent = () => {
   };
 
   //get all crops name
-  const getCropsDetails = async (id: string) => {
+  const getCropsDetails = async (id: any) => {
     console.log(router.query.crop_id)
     try {
       let response = await fetch(
@@ -465,10 +470,8 @@ const FileUploadComponent = () => {
   useEffect(() => {
     if (router.query.farm_id && accessToken) {
       getFormDetails(router.query.farm_id);
+      getCropsDetails(router.query.farm_id)
       dispatch(removeTheFilesFromStore([]));
-    }
-    if (router.query.scout_id) {
-      getSingleScout()
     }
   }, [accessToken, router.query.farm_id]);
 
@@ -490,17 +493,18 @@ const FileUploadComponent = () => {
 
   const addScoutDetails = async () => {
 
-    // const newArray = tempFilesStorage.map((obj: any) => ({
-    //   ...obj,
-    //   description: description
-    // }));
+    const newArray = tempFilesStorage.map((obj: any) => ({
+      ...obj,
+      tags: tags,
+      time: new Date(),
+      description: description
+    }));
 
     setLoading(true);
     let obj = {
       farm_id: formId,
-      attachments: tempFilesStorage,
+      attachments: newArray,
       crop_id: selectedCrop?._id,
-      findings: description
     };
 
     let options: any = {
@@ -592,108 +596,12 @@ const FileUploadComponent = () => {
     }
   };
 
-  const captureFarmName = (selectedObject: any) => {
-    setValidations({});
-    if (selectedObject) {
-      setFormId(selectedObject?._id);
-      getCropsDetails(selectedObject?._id);
-    } else {
-      setFormId("");
-    }
-  };
-
-  const [cropName, setCropName] = useState<any>();
-
-  const captureCropName = (selectedObject: any) => {
-    setValidations({});
-    console.log(selectedObject);
-    if (selectedObject) {
-      setSelectedCrop(selectedObject);
-      setCropName(selectedObject.title);
-    } else {
-      setSelectedCrop("");
-    }
-  };
-
-  const updateAttachements = async () => {
-
-    setLoading(true)
-    let obj = {
-      "attachments": tempFilesStorage,
-    }
-
-    let options: any = {
-      method: "PATCH",
-      body: JSON.stringify(obj),
-      headers: new Headers({
-        'content-type': 'application/json',
-        'authorization': accessToken
-      }),
-    }
-
-    try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/attachments`, options);
-      let responseData = await response.json();
-      if (responseData.success == true) {
-        dispatch(removeTheFilesFromStore([]));
-        setAlertMessage(responseData.message);
-        setAlertType(true);
-        router.back();
-      } else if (responseData.status == 422) {
-        setValidations(responseData?.errors);
-      }
-      setLoading(false);
-
-    }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
+  //capture the tags 
+  const captureTags = (array: any) => {
+    if (array) {
+      setTags(array)
     }
   }
-  //get details of single scout
-  const getSingleScout = async () => {
-    const response = await getSingleScoutService(router.query?.scout_id as string, accessToken);
-    if (response?.success) {
-      setData(response?.data);
-      setDescription(response?.data?.findings)
-    }
-  }
-
-  const updateScoutDetails = async () => {
-    await updateAttachements()
-    setLoading(true);
-    try {
-      let options = {
-        method: "PATCH",
-        headers: new Headers({
-          'content-type': 'application/json',
-          'authorization': accessToken
-        }),
-        body: JSON.stringify({
-          farm_id: formId,
-          attachments: [...tempFilesStorage, ...data.attachments],
-          crop_id: selectedCrop?._id,
-          findings: description,
-        })
-      }
-      let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}`, options);
-      const responseData = await response.json();
-      return responseData;
-
-    } catch (err: any) {
-      console.error(err);
-
-    }
-
-
-    finally {
-      setLoading(false);
-
-    }
-  }
-
 
   return (
     <div>
@@ -712,48 +620,6 @@ const FileUploadComponent = () => {
           <div className={styles.addscout} id="add-scout">
             <div className={styles.scoutdetails} id="scout-details">
               <div className={styles.addscoutdetails} id="add-scout-details">
-                <div className={styles.farmselection} id="farm-selection">
-                  <h5 className={styles.label} id="label-select-farm">
-                    Select Farm
-                    <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
-                  </h5>
-                  <FormControl className={styles.selectfarm} variant="outlined">
-                    <InputLabel color="primary" />
-                    <SelectAutoCompleteForFarms
-                      options={formOptions}
-                      label={"title"}
-                      onSelectValueFromDropDown={captureFarmName}
-                      placeholder={"Select Farm"}
-                      defaultValue={defaultValue}
-                    />
-                    <ErrorMessagesComponent
-                      errorMessage={validations?.farm_id}
-                    />
-
-                    <FormHelperText />
-                  </FormControl>
-                </div>
-                <div className={styles.inputField}>
-                  <h5 className={styles.label} id="label-select-farm">
-                    Select Crop
-                    <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
-                  </h5>
-                  <FormControl className={styles.dropdown} variant="outlined">
-                    <InputLabel color="primary" />
-                    <SelectAutoCompleteForCrops
-                      options={cropOptions}
-                      label={"title"}
-                      onSelectValueFromDropDown={captureCropName}
-                      placeholder={"Select Crop"}
-                      defaultValue={cropName}
-                    />
-                    <ErrorMessagesComponent
-                      errorMessage={validations?.crop_id}
-                    />
-
-                    <FormHelperText />
-                  </FormControl>
-                </div>
                 <div className={styles.farmselection} id="images">
                   <div className={styles.inputField}>
                     <div className={styles.label1}></div>
@@ -836,7 +702,7 @@ const FileUploadComponent = () => {
                                     fileProgress[index] == "fail" ? "red" : "",
                                 }}
                               >
-                                {item.name?.slice(0, 7)}...{item.type}{" "}
+                                {item.name?.slice(0, 13)}...{" "}
                               </div>
                               {fileProgress[index] == "fail" ? (
                                 <div
@@ -946,6 +812,16 @@ const FileUploadComponent = () => {
                         errorMessage={validations?.description}
                       />
                     </div>
+                    <div
+                      style={{ width: "100%" }}
+                      className={styles.input}
+
+                    >
+                      <div className={styles.label1}>
+                        Tags
+                      </div>
+                      <TagsTextFeild captureTags={captureTags} />
+                    </div>
                   </div>
                 </div>
                 <div className={styles.footeractionbuttons} id="footer-buttons">
@@ -969,7 +845,7 @@ const FileUploadComponent = () => {
                       id="submit"
                       size="large"
                       variant="contained"
-                      onClick={() => router.query.new == "true" ? addScoutDetails() : updateScoutDetails()}
+                      onClick={() => addScoutDetails()}
                       endIcon={<Icon>arrow_forward_sharp</Icon>}
                     >
                       Submit

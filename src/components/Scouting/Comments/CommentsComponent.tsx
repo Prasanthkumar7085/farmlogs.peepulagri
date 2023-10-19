@@ -66,8 +66,6 @@ const CommentsComponent = () => {
                 }
                 // Convert the commentsById object to an array of comments
                 const formattedData = Object.values(commentsById);
-
-                console.log(formattedData, "lk");
                 setData(formattedData)
 
             }

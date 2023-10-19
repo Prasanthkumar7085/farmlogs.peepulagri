@@ -85,6 +85,11 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       open={previewImageDialogOpen}
       fullScreen
       onClose={() => setPreviewImageDialogOpen(false)}
+      sx={{
+        '& .MuiPaper-root': {
+          background: "#00000063"
+        }
+      }}
     >
       <Grid container>
         <Grid xs={8} className={styles.RightImageContainer}>
@@ -105,17 +110,16 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   alignItems: "flex-end",
                   flexDirection: "column",
                   justifyContent: "center",
-                  background: "#06060687",
                 }}
               >
-                <IconButton
+                {/* <IconButton
                   onClick={() => setCuroselOpen(false)}
                   sx={{ cursor: "pointer" }}
                 >
                   <CloseIcon
                     sx={{ color: "#fff", height: "32px", width: "32px" }}
                   />
-                </IconButton>
+                </IconButton> */}
                 <Carousel
                   selectedItem={currentIndex}
                   onChange={(index) => changeImage(index)}
@@ -195,15 +199,13 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             </div>
           </div>
         </Grid>
-        <Grid xs={4}>
-          <Card sx={{ zIndex: 100 }}>
-            <ScoutingDetails
-              loading={loading}
-              data={data}
-              content={content}
-              setPreviewImageDialogOpen={setPreviewImageDialogOpen}
-            />
-          </Card>
+        <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
+          <ScoutingDetails
+            loading={loading}
+            data={data}
+            content={content}
+            setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+          />
         </Grid>
       </Grid>
     </Dialog>

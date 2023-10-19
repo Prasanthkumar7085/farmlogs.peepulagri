@@ -195,6 +195,10 @@
   margin-bottom: 4rem;
 }
 
+/* .allScoutingCards {
+  background-color: red;
+} */
+
 .scoutDay {
   display: flex;
   align-items: center;

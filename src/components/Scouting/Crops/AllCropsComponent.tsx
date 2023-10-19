@@ -247,6 +247,10 @@ const AllCropsComponent = () => {
         )
     }
 
+    let colorsArray = ["#C71585", "#7B68EE", "#FF8C00", " #008080", "#2E8B57", "#4682B4", "#000080", "#3D3D5B", " #CC0044", "#BA55D3"
+        , "#663399", "#8B0000", "#FF4500", "#DA0E0E", "#00CED1", "#4169E1", " #A52A2A", "#2D1E2F", "#714E47", "#C65B7C"
+        , "#A04662", "#FE654F", " #5F6A89", "#067BBD"]
+
     return (
         <div className={styles.myCropsPage}>
             <FormControl
@@ -281,10 +285,14 @@ const AllCropsComponent = () => {
             <div className={styles.allCrops}>
                 {cropOptions?.length ?
                     <div id={styles.allCropCardBlock}>
-                        {cropOptions?.map((item: any, index: any) => (
-                            <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} />
+                        {cropOptions?.map((item: any, index: any) => {
+                            const colorIndex = index % colorsArray.length;
 
-                        ))}
+                            return (
+                                <CropCard itemDetails={item} key={index} getCropsDetails={getCropsDetails} colorIndex={colorIndex} />
+                            )
+
+                        })}
                     </div>
                     : (!loading ?
                         <div id={styles.noData}>

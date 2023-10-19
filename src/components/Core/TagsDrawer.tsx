@@ -21,9 +21,7 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
     const captureTags = (array: any) => {
         if (array) {
             setTags(array)
-            captureTagsDetails(array, description)
         }
-
     }
 
     return (
@@ -64,12 +62,11 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
                     value={description}
                     onChange={(e) => {
                         setDescription(e.target.value);
-                        captureTagsDetails(tags, e.target.value)
                     }}
                     sx={{ background: "#fff" }}
                 />
             </div>
-            <Button variant="contained">Submit</Button>
+            <Button variant="contained" onClick={() => captureTagsDetails(tags, description)}>Submit</Button>
 
         </Drawer>
     );

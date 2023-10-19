@@ -21,6 +21,8 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import TagsDrawer from "@/components/Core/TagsDrawer";
 import SellIcon from '@mui/icons-material/Sell';
+import { assert } from "console";
+import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 
 
 
@@ -40,8 +42,6 @@ const SingleViewScoutComponent = () => {
     const [loading, setLoading] = useState(true);
     const [drawerOpen, setDrawerOpen] = useState<any>(false)
     const [scoutId, setScoutId] = useState<any>()
-    const [readMore, setReadMore] = useState<any>()
-    const [descriptionID, setDescriptionID] = useState<any>()
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [pageNumber, setPageNumber] = useState(1);
     const [SummaryDrawerOpen, setSummaryDrawerOpen] = useState<boolean>(false)
@@ -49,9 +49,14 @@ const SingleViewScoutComponent = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [indexOfSeletedOne, setIndexOfseletedOne] = useState<any>();
     const [selectedItems, setSelectedItems] = useState<any>([]);
-    const [tagsCheckBoxOpen, setTagsCheckBoxOpen] = useState<any>()
+    const [tagsCheckBoxOpen, setTagsCheckBoxOpen] = useState<any>(false)
+    const [scoutAttachmentDetails, setScoutAttachementsDetails] = useState<any>()
+    const [summaryContent, setSummaryContent] = useState<any>()
+    const [scoutFindings, setScoutFindings] = useState<any>()
 
     let tempImages: any = [...selectedItems];
+    console.log(tempImages)
+
 
     useEffect(() => {
         if (router.query.farm_id && router.isReady && router.query?.crop_id && accessToken) {
@@ -86,8 +91,8 @@ const SingleViewScoutComponent = () => {
                     setHasMore(responseData?.has_more);
                 }
                 let temp: any;
-                temp = [...data, ...responseData?.data];
-                setData(temp);
+                // temp = [...data, ...responseData?.data];
+                setData(responseData?.data);
             }
         }
         catch (err) {
@@ -99,55 +104,7 @@ const SingleViewScoutComponent = () => {
 
 
 
-    const getModifiedImage = (item: any) => {
 
-        let obj = item?.attachments?.map((imageObj: any, index: number) => {
-
-            if (imageObj.type.includes("video")) {
-                return {
-                    src: "/videoimg.png",
-                    original: imageObj.url,
-                    url: imageObj.url,
-                    height: 80,
-                    width: 60,
-                    type: imageObj.type,
-                    id: imageObj._id,
-                    scout_id: item._id,
-                    alt: "u",
-                    tags: imageObj.tags
-                }
-            }
-            else if (imageObj.type.includes("application")) {
-                return {
-                    src: "/pdf-icon.png",
-                    original: imageObj.url,
-                    url: imageObj.url,
-                    height: 80,
-                    width: 60,
-                    type: imageObj.type,
-                    id: imageObj._id,
-                    scout_id: item._id,
-                    alt: "u",
-                    tags: imageObj.tags
-
-                }
-            }
-            else
-                return {
-                    src: imageObj.url,
-                    url: imageObj.url,
-                    height: 80,
-                    type: imageObj.type,
-                    id: imageObj._id,
-                    scout_id: item._id,
-                    width: 60,
-                    alt: "u",
-                    tags: imageObj.tags
-
-                }
-        });
-        return obj;
-    }
 
     const getSingleScout = async (scoutId: any) => {
         const response = await getSingleScoutService(scoutId, accessToken);
@@ -198,25 +155,79 @@ const SingleViewScoutComponent = () => {
             setTagsDrawerOpen(false)
         }
     }
+    //capture the summary content
+    const captureSummary = async (value: any) => {
+        if (value) {
+            setSummaryContent(value)
+            await updateDescriptionService()
 
+        }
+
+    }
     //capture the tags details
-    const captureTagsDetails = (tags: any, findingsvalue: any) => {
+    const captureTagsDetails = async (tags: any, findingsvalue: any) => {
+        setScoutFindings(findingsvalue)
         if (tags) {
-            console.log(tags, findingsvalue)
+            tempImages.forEach((obj: any) => {
+                obj.tags = tags
+            });
+            await updateDescriptionService()
         }
     }
-
+    //checkbox handlechange event
     const handleChange = (itemId: any) => {
-        const itemIndex = tempImages.indexOf(itemId);
-        if (itemIndex === -1) {
-            tempImages.splice(1, 0, itemId)
-        }
-        else {
-            tempImages.splice(itemIndex, 1);
-        }
-        setSelectedItems(tempImages)
+        const itemIndex = tempImages.findIndex((ite: any) => ite._id === itemId._id);
 
+        if (itemIndex === -1) {
+            setSelectedItems([...tempImages, itemId]);
+        } else {
+            const updatedItems = tempImages.filter((item: any) => item._id !== itemId._id);
+            setSelectedItems(updatedItems);
+        }
     };
+
+    //update the details of the scouting
+    const updateDescriptionService = async () => {
+        setLoading(true)
+        let updatedArray = scoutAttachmentDetails?.map((obj: any) => {
+            let matchingObj = tempImages?.find((item: any) => item._id === obj._id);
+            return matchingObj ? matchingObj : obj;
+        });
+
+        try {
+            let options = {
+                method: "PATCH",
+                headers: new Headers({
+                    'content-type': 'application/json',
+                    'authorization': accessToken
+                }),
+                body: JSON.stringify({
+                    "farm_id": router.query.farm_id,
+                    "findings": scoutFindings,
+                    "crop_id": router.query.crop_id,
+                    "attachments": tempImages.length ? updatedArray : scoutAttachmentDetails,
+                    "summary": summaryContent
+                })
+            }
+            let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}`, options);
+            const responseData = await response.json();
+            if (responseData?.success == true) {
+                setTagsDrawerOpen(false)
+                getPresingedURls()
+                setSelectedFile([])
+                setSelectedItems([])
+                setTagsCheckBoxOpen(false)
+                setSummaryDrawerOpen(false)
+            }
+
+        } catch (err: any) {
+            console.error(err);
+
+        }
+        finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <div className={styles.scoutingView}>
@@ -236,109 +247,117 @@ const SingleViewScoutComponent = () => {
                     <Typography color="text.primary">{farmTitle}</Typography>
                 </Breadcrumbs>
             </div>
-            < InfiniteScroll
+            {/* < InfiniteScroll
                 className={styles.infiniteScrollComponent}
                 dataLength={data.length}
                 next={() => setPageNumber(prev => prev + 1)}
                 hasMore={hasMore}
                 loader={<div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>}
                 endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : data.length > 11 ? 'Scroll to Top' : ""}</a>}
-            >
-                {data?.length ? data.map((item: any, index: any) => {
-                    return (
-                        <Card key={index} className={styles.galleryCard} >
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <Typography className={styles.postDate}>
+            > */}
+            {data?.length ? data.map((item: any, index: any) => {
+                return (
+                    <Card key={index} className={styles.galleryCard} >
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Typography className={styles.postDate}>
 
-                                    <InsertInvitationIcon />
-                                    <span>{timePipe(item.updatedAt, "DD-MM-YYYY")}</span>
-                                </Typography>
+                                <InsertInvitationIcon />
+                                <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
+                            </Typography>
 
-                                <Typography className={styles.postDate}>
-                                    {tagsCheckBoxOpen ?
-                                        <IconButton onClick={() => setTagsCheckBoxOpen(false)}>
-                                            <Image
-                                                src={"/scouting-img-clear.svg"}
-                                                width={20}
-                                                height={20}
-                                                alt="tag"
-                                            />
-                                        </IconButton> :
-                                        <IconButton onClick={() => setTagsCheckBoxOpen(true)}>
-                                            <Image
-                                                src={"/scouting-img-add.svg"}
-                                                width={20}
-                                                height={20}
-                                                alt="tag"
-                                            />
-                                        </IconButton>}
+                            <Typography className={styles.postDate}>
+                                {tagsCheckBoxOpen && scoutId == item._id ?
+                                    <IconButton onClick={() => setTagsCheckBoxOpen(false)}>
+                                        <Image
+                                            src={"/scouting-img-clear.svg"}
+                                            width={20}
+                                            height={20}
+                                            alt="tag"
+                                        />
+                                    </IconButton> :
+                                    <IconButton onClick={() => {
+                                        setTagsCheckBoxOpen(true)
+                                        setScoutId(item._id)
+                                        setScoutAttachementsDetails(item.attachments)
+                                    }}>
+                                        <Image
+                                            src={"/scouting-img-add.svg"}
+                                            width={20}
+                                            height={20}
+                                            alt="tag"
+                                        />
+                                    </IconButton>}
 
-                                    <Image
-                                        src={"/Summary.svg"}
-                                        width={20}
-                                        height={20}
-                                        alt="tag"
-                                    />
-                                    <span onClick={() => setSummaryDrawerOpen(true)}>Summary</span>
-                                </Typography>
-                            </div>
-
-                            <Card sx={{
-                                width: "100%", minHeight: "100px",
-                            }}>
-
-                                <div style={{
-                                    display: "grid",
-                                    gridTemplateColumns: '50% 50%', /* Two columns with a width of 60px each */
-                                    gap: '10px', /* Adjust the gap between the columns if necessary */
-                                    margin: "0.5rem",
-                                    objectFit: "cover"
-                                }}>
-                                    {getModifiedImage(item)?.length !== 0 ? getModifiedImage(item).map((image: any, index: any) => (
-
-                                        <div style={{ position: "relative", height: "100px", }} key={index}>
-                                            <img src={image.src} alt={image.alt} width={'100%'} height={"100%"} onClick={() => handleClick(index, image)} style={{ cursor: "pointer", borderRadius: "5px" }} />
-
-                                            <div style={{ position: "absolute", top: 0, left: 0 }}>
-                                                {tagsCheckBoxOpen && image?.tags?.length == 0 ?
-                                                    <Checkbox
-
-                                                        sx={{
-                                                            color: "#7f7f7f",
-                                                            '& .MuiSvgIcon-root': {
-                                                                color: "#7f7f7f"
-                                                            }
-                                                        }}
-                                                        size="small"
-                                                        checked={(tempImages.find((ite: any) => ite == image.id)) ? true : false}
-                                                        onChange={() => handleChange(image.id)}
-                                                        inputProps={{ 'aria-label': 'controlled' }}
-                                                        color="secondary"
-                                                        title={image.id}
-                                                    /> : tagsCheckBoxOpen == true ? <Image src={"/scout-img-select.svg"} width={10} height={10} alt="tags" /> : ""}
-                                            </div>
-                                        </div>
-
-                                    )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
-                                </div>
-                            </Card>
-
-                        </Card>
-                    )
-                })
-                    :
-                    (!loading ?
-                        <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
-                            <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
-                            <Typography variant="h4">No Scoutings for this crop</Typography>
+                                <Image
+                                    src={"/Summary.svg"}
+                                    width={20}
+                                    height={20}
+                                    alt="tag"
+                                />
+                                <span onClick={() => {
+                                    setSummaryDrawerOpen(true)
+                                    setScoutId(item._id)
+                                    setScoutAttachementsDetails(item.attachments)
+                                }}>Summary</span>
+                            </Typography>
                         </div>
-                        : "")}
-            </InfiniteScroll>
+
+                        <Card sx={{
+                            width: "100%", minHeight: "100px",
+                        }}>
+
+                            <div style={{
+                                display: "grid",
+                                gridTemplateColumns: '50% 50%', /* Two columns with a width of 60px each */
+                                gap: '10px', /* Adjust the gap between the columns if necessary */
+                                margin: "0.5rem",
+                                objectFit: "cover"
+                            }}>
+                                {item?.attachments?.length !== 0 ? item.attachments.map((image: any, index: any) => (
+
+                                    <div style={{ position: "relative", height: "100px", }} key={index}>
+                                        <img src={image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => handleClick(index, image)} style={{ cursor: "pointer", borderRadius: "5px" }} />
+
+                                        <div style={{ position: "absolute", top: 0, left: 0 }}>
+                                            {tagsCheckBoxOpen && image?.tags?.length == 0 && scoutId == item._id ?
+                                                <Checkbox
+
+                                                    sx={{
+                                                        color: "#7f7f7f",
+                                                        '& .MuiSvgIcon-root': {
+                                                            color: "#7f7f7f"
+                                                        }
+                                                    }}
+                                                    size="small"
+                                                    checked={tempImages.some((ite: any) => ite._id === image._id)}
+                                                    onChange={() => handleChange(image)}
+                                                    inputProps={{ 'aria-label': 'controlled' }}
+                                                    color="secondary"
+                                                    title={image.id}
+                                                /> : tagsCheckBoxOpen == true && scoutId == item._id ? <Image src={"/scout-img-select.svg"} width={10} height={10} alt="tags" /> : ""}
+                                        </div>
+                                    </div>
+
+                                )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
+                            </div>
+                        </Card>
+
+                    </Card>
+                )
+            })
+                :
+                (!loading ?
+                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
+                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
+                        <Typography variant="h4">No Scoutings for this crop</Typography>
+                    </div>
+                    : "")}
+            {/* </InfiniteScroll> */}
 
             <LoadingComponent loading={loading} />
             <VideoDialogForScout open={openDialog} onClose={handleCloseDialog} mediaArray={sildeShowImages} index={index} data={scoutData} />
 
-            {/* {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} /> : ""} */}
+            {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} captureSummary={captureSummary} /> : ""}
             {drawerOpen == true ?
                 <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
@@ -346,13 +365,14 @@ const SingleViewScoutComponent = () => {
                 <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} /> : ""}
 
             <div className="addFormPositionIcon">
-                {tagsCheckBoxOpen == false ?
+                {tagsCheckBoxOpen == false && tempImages?.length == 0 ?
                     <img src="/add-plus-icon.svg" alt="" onClick={() => {
                         router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
                     }} /> :
-                    <img src="/scout-add-floating-icon.svg" alt="tags icon" onClick={() => {
-                        setTagsDrawerOpen(true)
-                    }} />}
+                    tempImages?.length ?
+                        <img src="/scout-add-floating-icon.svg" alt="tags icon" onClick={() => {
+                            setTagsDrawerOpen(true)
+                        }} /> : ""}
             </div>
         </div>
 

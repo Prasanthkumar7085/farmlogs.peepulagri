@@ -8,7 +8,7 @@ import timePipe from '@/pipes/timePipe';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item }: any) => {
+const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSummary }: any) => {
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [summaryContent, setSummaryContent] = useState('');
@@ -41,9 +41,12 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item }: any) =>
                 </IconButton>
             </div>
             <div style={{ width: '100%', height: '200px' }}>
-                <ReactQuill theme="snow" value={editorHtml} onChange={handleChange} />
+                <CKEditor />
             </div>
-            <Button variant="contained">Submit</Button>
+            <Button variant="contained" onClick={() => {
+                captureSummary(editorHtml)
+
+            }}>Submit</Button>
 
         </Drawer>
     );

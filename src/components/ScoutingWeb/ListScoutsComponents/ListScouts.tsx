@@ -19,6 +19,7 @@ import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import UserDropDownForScouts from "./UserDropDownForScouts";
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
+import ScoutingDailyImages from "./ScoutingDailyImages";
 
 interface ApiMethodProps {
   page: string | number;
@@ -46,7 +47,6 @@ const ListScouts: FunctionComponent = () => {
   const [farm, setFarm] = useState<any>();
   const [cropOptions, setCropOptions] = useState([]);
   const [crop, setCrop] = useState<any>();
-  const [hasMore, setHasMore] = useState<boolean>(true);
   const [paginationDetails, setPaginationDetails] = useState<any>();
 
   const [fromDate, setFromDate] = useState("");
@@ -374,14 +374,20 @@ const ListScouts: FunctionComponent = () => {
     }
   }, [router.isReady, accessToken]);
 
+  console.log(data);
+
   return (
-    <div
-      className={styles.AllScoutsPageWeb}
-    >
+    <div className={styles.AllScoutsPageWeb}>
       <div className={styles.scoutPageHeader}>
         <Typography variant="h4">
-          <img src="/scouting-header-icon.svg" alt="" height="20px" width={"20px"} />
-          Scouting</Typography>
+          <img
+            src="/scouting-header-icon.svg"
+            alt=""
+            height="20px"
+            width={"20px"}
+          />
+          Scouting
+        </Typography>
         <div className={styles.allScoutsFilterBlock}>
           <UserDropDownForScouts
             user={user}
@@ -402,7 +408,9 @@ const ListScouts: FunctionComponent = () => {
             placeholder={"Select Crop here"}
             defaultValue={crop}
           />
-          <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />
+          <DateRangePickerForAllScouts
+            onDateFilterChange={onDateFilterChange}
+          />
           <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
@@ -417,7 +425,11 @@ const ListScouts: FunctionComponent = () => {
         <div className={styles.allScoutingCards}>
           {data?.length ? (
             data.map((item: SingleScoutResponse, index: number) => {
-              return <ScoutingCardWeb item={item} key={index} />;
+              return (
+                <div style={{ border: "1px solid" }}>
+                  <ScoutingDailyImages item={item} key={index} />
+                </div>
+              );
             })
           ) : ''}
         </div>
@@ -445,7 +457,7 @@ const ListScouts: FunctionComponent = () => {
         )}
       </div>
 
-      {!loading ? (
+      {/* {!loading ? (
         <TablePaginationComponentForScouts
           paginationDetails={paginationDetails}
           capturePageNum={capturePageNum}
@@ -454,7 +466,7 @@ const ListScouts: FunctionComponent = () => {
         />
       ) : (
         ""
-      )}
+      )} */}
       <LoadingComponent loading={loading} />
     </div>
   );

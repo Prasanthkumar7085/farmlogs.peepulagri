@@ -115,161 +115,176 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           justifyContent: "space-between",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <div className={styles.singleDetailsBox}>
-            {editField == "title" && editFieldOrNot ? (
-              <div style={{ width: "100%" }}>
-                <TextField
-                  placeholder="Enter Title here"
-                  sx={{
-                    width: "100%",
-                    background: "#ffff",
-                    // background: "#f5f7fa",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      border: "0 !important",
-                    },
-                    // background: "#ffff",
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div className={styles.singleDetailsBox}>
+              {editField == "title" && editFieldOrNot ? (
+                <div style={{ width: "100%" }}>
+                  <TextField
+                    placeholder="Enter Title here"
+                    sx={{
+                      width: "100%",
+                      background: "#ffff",
+                      // background: "#f5f7fa",
+                      // "& .MuiOutlinedInput-notchedOutline": {
+                      //   border: "0 !important",
+                      // },
+                      // background: "#ffff",
 
-                  }}
-                  size="small"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
-            ) : (
-              <h1 className={styles.landPreparation}>
-                {data?.title
-                  ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
-                  : "-"}
-              </h1>
-            )}
-          </div>
-          <div>
-            {editField == "title" && editFieldOrNot ? (
-              <div className={styles.iconBlock}>
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(false);
-                    setEditField("");
-                  }}
-                >
-                  <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    onUpdateField();
-                    // setEditFieldOrNot(false);
-                    // setEditField("");
-                  }}
-                >
-                  <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
-                </IconButton>
-              </div>
-            ) : userType !== "USER" ? (
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("title");
-                }}
-              >
-                <img
-                  className={styles.editicon}
-                  src="/task-edit-icon.svg"
-                  alt=""
-                />
-              </IconButton>
-            ) : (
-              ""
-            )}
-          </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <div className={styles.singleDetailsBox}>
-            {editField == "deadline" && editFieldOrNot ? (
-              <div className={styles.responseDate2} style={{ width: "100%" }}>
-                <div style={{ display: "flex", width: "100%" }}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      sx={{
-                        width: "100%",
-                        "& .MuiButtonBase-root": {
-                          paddingRight: "10px !important",
-                        },
+                    }}
+                    size="small"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
 
-                        '& .MuiInputBase-root::before': {
-                          borderBottom: "0 !important"
-                        },
-                        '& .MuiInputBase-root::after': {
-                          borderBottom: "0 !important"
-                        },
-
-                      }}
-                      disablePast
-                      value={deadline}
-                      onChange={(newValue: any) => {
-                        setDeadline(newValue);
-                      }}
-                      format="dd/MM/yyyy"
-                      slotProps={{
-                        textField: {
-                          variant: "standard",
-                          size: "medium",
-                          color: "primary",
-                        },
-                      }}
-                    />
-                  </LocalizationProvider>
                 </div>
-              </div>
-            ) : (
-              <div style={{ display: "flex" }}>
-                <p className={styles.text}>
-                  <CalendarMonthOutlinedIcon sx={{ fontSize: "1rem" }} />
-                  {data?.deadline
-                    ? timePipe(data?.deadline, "DD, MMM YYYY")
+              ) : (
+                <h1 className={styles.landPreparation}>
+                  {data?.title
+                    ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
                     : "-"}
-                </p>
-              </div>
-            )}
-          </div>
-          <div>
-            {editField == "deadline" && editFieldOrNot ? (
-              <div className={styles.iconBlock}>
+                </h1>
+              )}
+            </div>
+            <div>
+              {editField == "title" && editFieldOrNot ? (
+                <div className={styles.iconBlock}>
+                  <IconButton
+                    onClick={() => {
+                      setEditFieldOrNot(false);
+                      setEditField("");
+                    }}
+                  >
+                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      onUpdateField();
+                      // setEditFieldOrNot(false);
+                      // setEditField("");
+                    }}
+                  >
+                    <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                  </IconButton>
+                </div>
+              ) : userType !== "USER" ? (
                 <IconButton
                   onClick={() => {
-                    setEditFieldOrNot(false);
-                    setEditField("");
+                    setEditFieldOrNot(true);
+                    setEditField("title");
                   }}
                 >
-                  <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                  <img
+                    className={styles.editicon}
+                    src="/task-edit-icon.svg"
+                    alt=""
+                  />
                 </IconButton>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+          <ErrorMessages
+            errorMessages={errorMessages}
+            keyname="title"
+          />
+        </div>
+        <div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div className={styles.singleDetailsBox}>
+              {editField == "deadline" && editFieldOrNot ? (
+                <div className={styles.responseDate2} style={{ width: "100%" }}>
+                  <div style={{ display: "flex", width: "100%" }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DatePicker
+                        sx={{
+                          width: "100%",
+                          "& .MuiButtonBase-root": {
+                            paddingRight: "10px !important",
+                          },
+
+                          '& .MuiInputBase-root::before': {
+                            borderBottom: "0 !important"
+                          },
+                          '& .MuiInputBase-root::after': {
+                            borderBottom: "0 !important"
+                          },
+
+                        }}
+                        disablePast
+                        value={deadline}
+                        onChange={(newValue: any) => {
+                          setDeadline(newValue);
+                        }}
+                        format="dd/MM/yyyy"
+                        slotProps={{
+                          textField: {
+                            variant: "standard",
+                            size: "medium",
+                            color: "primary",
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </div>
+
+                </div>
+              ) : (
+                <div style={{ display: "flex" }}>
+                  <p className={styles.text}>
+                    <CalendarMonthOutlinedIcon sx={{ fontSize: "1rem" }} />
+                    {data?.deadline
+                      ? timePipe(data?.deadline, "DD, MMM YYYY")
+                      : "-"}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div>
+              {editField == "deadline" && editFieldOrNot ? (
+                <div className={styles.iconBlock}>
+                  <IconButton
+                    onClick={() => {
+                      setEditFieldOrNot(false);
+                      setEditField("");
+                    }}
+                  >
+                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      onUpdateField();
+                      // setEditFieldOrNot(false);
+                      // setEditField("");
+                    }}
+                  >
+                    <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                  </IconButton>
+                </div>
+              ) : userType !== "USER" ? (
                 <IconButton
                   onClick={() => {
-                    onUpdateField();
-                    // setEditFieldOrNot(false);
-                    // setEditField("");
+                    setEditFieldOrNot(true);
+                    setEditField("deadline");
                   }}
                 >
-                  <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                  <img
+                    className={styles.editicon}
+                    src="/task-edit-icon.svg"
+                    alt=""
+                  />
                 </IconButton>
-              </div>
-            ) : userType !== "USER" ? (
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("deadline");
-                }}
-              >
-                <img
-                  className={styles.editicon}
-                  src="/task-edit-icon.svg"
-                  alt=""
-                />
-              </IconButton>
-            ) : (
-              ""
-            )}
+              ) : (
+                ""
+              )}
+            </div>
           </div>
+          <ErrorMessages
+            errorMessages={errorMessages}
+            keyname="deadline"
+          />
         </div>
       </div>
       <div className={styles.viewHeader}>
@@ -331,7 +346,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 <PersonOutlineOutlinedIcon
                   sx={{ fontSize: "1rem", marginRight: "5px" }}
                 />{" "}
-                User
+                Assignee
               </label>
               {editField == "farm" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
@@ -342,6 +357,10 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                       setUserId(assigned_to?._id);
                       setErrorMessages({});
                     }}
+                  />
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname="assigned_to"
                   />
                 </div>
               ) : (

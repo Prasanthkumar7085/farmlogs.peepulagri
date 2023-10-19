@@ -1,6 +1,6 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
@@ -15,15 +15,13 @@ import ListAllCropsForDropDownServices from "../../../../lib/services/CropServic
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
-import ScoutingCardWeb from "../Scouting/ScoutingCard";
+import SingleScoutViewDetails from "../Scouting/ViewScouting";
 import styles from "../farms/FarmsNavBar.module.css";
 import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
 import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
-import UserDropDownForScouts from "./UserDropDownForScouts";
-import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import ScoutingDailyImages from "./ScoutingDailyImages";
-import SingleScoutViewDetails from "../Scouting/ViewScouting";
+import UserDropDownForScouts from "./UserDropDownForScouts";
 
 interface ApiMethodProps {
   page: string | number;
@@ -486,38 +484,40 @@ const ListScouts: FunctionComponent = () => {
           {data?.length ? (
             data.map((item: SingleScoutResponse, index: number) => {
               return (
-                <div style={{ border: "1px solid" }} key={index}>
-                  <ScoutingDailyImages
-                    item={item}
-                    key={index}
-                    onClickAttachment={onClickAttachment}
-                  />
+                <div className={styles.eachDayScouting} key={index}>
+                  <div className={styles.scoutDay} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <Typography>Today</Typography>
+                    <div className={styles.summaryBtn}><SummaryIcon /> Summary</div>
+
+                  </div>
+                  <ScoutingDailyImages item={item} key={index} onClickAttachment={onClickAttachment}/>
                 </div>
               );
             })
-          ) : !loading ? (
-            <div
-              id={styles.noData}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "4rem",
-              }}
-            >
-              <ImageComponent
-                src="/emty-folder-image.svg"
-                alt="empty folder"
-                width={250}
-                height={150}
-              />
-              <Typography variant="h4">No Scoutings</Typography>
-            </div>
-          ) : (
-            ""
-          )}
+          ) : ''}
         </div>
+        {(!data?.length && !loading) ? (
+          <div
+            id={styles.noData}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "4rem",
+            }}
+          >
+            <ImageComponent
+              src="/emty-folder-image.svg"
+              alt="empty folder"
+              width={250}
+              height={150}
+            />
+            <Typography variant="h4">No Scoutings</Typography>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <SingleScoutViewDetails
         viewAttachmentId={viewAttachmentId}

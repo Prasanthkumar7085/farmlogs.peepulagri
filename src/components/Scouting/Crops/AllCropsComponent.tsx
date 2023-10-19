@@ -16,6 +16,7 @@ import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import CropCard from "./CropCard";
 import styles from "./crop-card.module.css";
+import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 
 const AllCropsComponent = () => {
 
@@ -43,7 +44,7 @@ const AllCropsComponent = () => {
         setLoading(true)
 
         try {
-            let response = await getAllFarmsService(accessToken);
+            let response = await ListAllFarmForDropDownService("", accessToken);
             if (response?.success == true && response?.data?.length) {
                 setFarmOptions(response?.data);
                 if (id) {

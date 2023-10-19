@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./comment-form.module.css";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 
-const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
+const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails }: any) => {
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -96,14 +96,14 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
   const getCropsDetails = async () => {
 
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/crops/list`, { method: "GET" });
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id ? router.query.farm_id : scoutDetails.farm_id?._id}/crops/list`, { method: "GET" });
       let responseData: any = await response.json();
 
       if (responseData.success == true) {
 
         if (router.query.crop_id) {
 
-          let cropObj = responseData?.data?.find((item: any) => item._id == router.query.crop_id);
+          let cropObj = responseData?.data?.find((item: any) => item._id == router.query.crop_id ? router.query.crop_id : scoutDetails.crop_id);
           setSelectedCrop(cropObj);
 
         }
@@ -222,7 +222,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent }: any) => {
         "size": item.size,
         "source": "scouting",
         "crop_slug": selectedCrop?.slug,
-        "farm_id": router.query.farm_id
+        "farm_id": router.query.farm_id ? router.query.farm_id : scoutDetails.farm_id?._id
       }
 
     }

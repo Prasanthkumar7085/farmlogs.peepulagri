@@ -82,6 +82,9 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
 
 
   const addComment = async () => {
+    if (loading) {
+      return;
+    }
     setLoading(true)
     let body = {
       "content": comment,
@@ -172,62 +175,69 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
 
 
   //file upload normal smaller than 5 mb
-  const fileUploadEvent = async (item: any, index: any, fileProgressCopy: any, setFileProgress: any) => {
+  const fileUploadEvent = async (
+    item: any,
+    index: any,
+    fileProgressCopy: any,
+    setFileProgress: any
+  ) => {
     fileProgressCopy[index] = 0;
 
     let obj = {
+      attachment: {
+        original_name: item.name,
+        type: item.type,
+        size: item.size,
+        source: "tasks",
+        farm_id: farmID,
+      },
+    };
+    console.log(obj);
 
-      "attachment":
-      {
-
-        "original_name": item.name,
-        "type": item.type,
-        "size": item.size,
-        "source": "tasks",
-        "farm_id": farmID
-      }
-
-    }
     fileProgressCopy[index] = 25;
 
     let options: any = {
       method: "POST",
       body: JSON.stringify(obj),
       headers: new Headers({
-        'content-type': 'application/json',
-        'authorization': accessToken
-
+        "content-type": "application/json",
+        authorization: accessToken,
       }),
-
-    }
+    };
     fileProgressCopy[index] = 50;
 
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`, options);
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`,
+        options
+      );
       let responseData = await response.json();
       fileProgressCopy[index] = 75;
 
       if (responseData.success == true) {
-        let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT", body: item });
+        let preSignedResponse = await fetch(responseData.data.target_url, {
+          method: "PUT",
+          body: item,
+        });
         fileProgressCopy[index] = 100;
         setFileProgress([...fileProgressCopy]);
-        tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: item.type, size: item.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
-        setAttachments(tempFilesStorage)
-      }
-
-      else {
+        tempFilesStorage.splice(1, 0, {
+          original_name: responseData.data.original_name,
+          type: item.type,
+          size: item.size,
+          name: responseData.data.name,
+          crop_slug: responseData.data.crop_slug,
+          path: responseData.data.path,
+        });
+        setAttachments(tempFilesStorage);
+      } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
       }
-
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
     }
-
-  }
-
-
+  };
 
   return (
     <div className={styles.commentform}>
@@ -243,71 +253,126 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
         value={comment ? comment : ""}
         onChange={(e) => {
           const newValue = e.target.value.replace(/^\s+/, "");
-          setComment(newValue)
-
+          setComment(newValue);
         }}
         onKeyDown={(e: any) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
+          if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            comment && (replyThreadEvent ? replyThreads(replyThreadEvent) : addComment())
+            comment &&
+              (replyThreadEvent
+                ? replyThreads(replyThreadEvent)
+                : addComment());
           }
         }}
-
       />
 
-      {multipleFiles && Array?.from(multipleFiles).map((item: any, index: any) => (
-        <div className={styles.uploadprogress} id="upload-progress" key={index}>
-          <div className={styles.progress} id="progress" style={{ width: "100%" }}>
-            <img className={styles.image21} alt="" src={"/nj.jpg"} />
+      {multipleFiles &&
+        Array?.from(multipleFiles).map((item: any, index: any) => (
+          <div
+            className={styles.uploadprogress}
+            id="upload-progress"
+            key={index}
+          >
+            <div
+              className={styles.progress}
+              id="progress"
+              style={{ width: "100%" }}
+            >
+              <img className={styles.image21} alt="" src={"/nj.jpg"} />
 
-            <div className={styles.progressdetails} >
-              <div className={styles.uploaddetails} style={{ width: "100%" }}>
-                <div className={styles.uploadcontroller}  >
-                  <div className={styles.uploadname} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div className={styles.uploadItem}>
-                      <div className={styles.photojpg} style={{ color: fileProgress[index] == "fail" ? "red" : "" }}>{index + 1}.    {item.name?.slice(0, 7)}...{item.type} </div>
-                      {fileProgress[index] == "fail" ? <div className={styles.photojpg} style={{ color: "red" }}>Cancelled</div> : <div className={styles.photojpg}>{bytesToMB(item.size).toFixed(2)}MB</div>}
+              <div className={styles.progressdetails}>
+                <div className={styles.uploaddetails} style={{ width: "100%" }}>
+                  <div className={styles.uploadcontroller}>
+                    <div
+                      className={styles.uploadname}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div className={styles.uploadItem}>
+                        <div
+                          className={styles.photojpg}
+                          style={{
+                            color: fileProgress[index] == "fail" ? "red" : "",
+                          }}
+                        >
+                          {index + 1}. {item.name?.slice(0, 7)}...{item.type}{" "}
+                        </div>
+                        {fileProgress[index] == "fail" ? (
+                          <div
+                            className={styles.photojpg}
+                            style={{ color: "red" }}
+                          >
+                            Cancelled
+                          </div>
+                        ) : (
+                          <div className={styles.photojpg}>
+                            {bytesToMB(item.size).toFixed(2)}MB
+                          </div>
+                        )}
+                      </div>
+                      {fileProgress[index] == 100 &&
+                      fileProgress[index] !== "fail" ? (
+                        <div className={styles.photojpg}>
+                          <IconButton>
+                            <DoneIcon sx={{ color: "#05A155" }} />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => removeFileAfterAdding(index)}
+                          >
+                            <DeleteForeverIcon sx={{ color: "#820707" }} />
+                          </IconButton>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                    {fileProgress[index] == 100 && fileProgress[index] !== "fail" ?
-                      <div className={styles.photojpg}>
-                        <IconButton>
-                          <DoneIcon sx={{ color: "#05A155" }} />
-                        </IconButton>
-                        <IconButton onClick={() => removeFileAfterAdding(index)}>
-                          <DeleteForeverIcon sx={{ color: "#820707" }} />
-                        </IconButton>
-                      </div> : ""}
+                    {fileProgress[index] !== 100 ||
+                    fileProgress[index] == "fail" ? (
+                      <img
+                        className={styles.close41}
+                        alt=""
+                        src="/close-icon.svg"
+                        onClick={() => removeFile(index)}
+                      />
+                    ) : (
+                      ""
+                    )}
                   </div>
-                  {fileProgress[index] !== 100 || fileProgress[index] == "fail" ?
-                    <img
-                      className={styles.close41}
-                      alt=""
-                      src="/close-icon.svg"
-                      onClick={() => removeFile(index)}
-                    /> : ""}
-
+                  <Box sx={{ width: "100%" }}>
+                    {fileProgress[index] == 0 &&
+                    fileProgress[index] !== "fail" ? (
+                      <LinearProgress />
+                    ) : fileProgress[index] !== 100 &&
+                      fileProgress[index] !== "fail" ? (
+                      <LinearProgress
+                        variant="determinate"
+                        value={fileProgress[index]}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </Box>
                 </div>
-                <Box sx={{ width: '100%' }}>
-                  {fileProgress[index] == 0 && fileProgress[index] !== "fail" ?
-                    <LinearProgress /> :
-                    fileProgress[index] !== 100 && fileProgress[index] !== "fail" ? <LinearProgress variant="determinate" value={fileProgress[index]} /> : ""
-                  }
-
-                </Box>
+                {fileProgress[index] == 100 || fileProgress[index] == "fail" ? (
+                  ""
+                ) : (
+                  <div className={styles.uploadstatus}>
+                    <div className={styles.completed}>
+                      {fileProgress[index]?.toFixed(2) + "%"}
+                    </div>
+                  </div>
+                )}
               </div>
-              {fileProgress[index] == 100 || fileProgress[index] == "fail" ? "" :
-                <div className={styles.uploadstatus}>
-                  <div className={styles.completed}>{fileProgress[index]?.toFixed(2) + "%"}</div>
-
-                </div>}
             </div>
           </div>
-        </div>
-      ))}
+        ))}
       <div className={styles.actions}>
         <div className={styles.attachments}>
           <div className={styles.link}>
-            <label >
+            <label>
               <img className={styles.groupIcon} alt="" src="/group.svg" />
               <input
                 type="file"
@@ -318,8 +383,8 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
               />
             </label>
           </div>
-          <label >
-            <img className={styles.imageIcon} alt="" src="/image7@2x.png" />
+          <label>
+            <img className={styles.imageIcon} alt="" src="/image7@2x.svg" />
             <input
               type="file"
               alt="images-upload"
@@ -335,8 +400,10 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
           className={styles.sendbutton}
           size="medium"
           variant="contained"
-          disabled={comment ? false : true}
-          onClick={() => replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()}
+          disabled={comment || !loading ? false : true}
+          onClick={() =>
+            replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
+          }
         >
           {loading ? "Sending..." : "Send"}
         </Button>

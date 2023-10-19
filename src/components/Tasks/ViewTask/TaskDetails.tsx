@@ -4,7 +4,6 @@ import timePipe from "@/pipes/timePipe";
 import { TaskResponseTypes } from "@/types/tasksTypes";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { IconButton, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -16,6 +15,10 @@ import updateTaskStatusService from "../../../../lib/services/TasksService/updat
 import FarmOptionsInViewTasks from "./FarmOptionsInViewTasks";
 import styles from "./TaskDetails.module.css";
 import UserOptionsinViewTasks from "./UserOptionsinViewTasks";
+import Image from "next/image";
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import { Markup } from "interweave";
 
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
@@ -96,49 +99,242 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     setLoading(false);
   };
 
+  const getDescriptionData = (description: string) => {
+    let temp = description.slice(0, 1).toUpperCase() + description.slice(1);
+    let stringWithActualNewLine = temp.replace(/\n/g, "<br/>");
+    return stringWithActualNewLine;
+  };
+
   return (
     <div className={styles.cardDetails}>
-      <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div className={styles.userBlock}>
-          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-            {userType !== "USER" ? (
-              editField == "farm" && editFieldOrNot ?
-                <div> <IconButton
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div className={styles.singleDetailsBox}>
+            {editField == "title" && editFieldOrNot ? (
+              <div style={{ width: "100%" }}>
+                <TextField
+                  placeholder="Enter Title here"
+                  sx={{
+                    width: "100%",
+                    background: "#ffff",
+                    // background: "#f5f7fa",
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "0 !important",
+                    },
+                    // background: "#ffff",
+
+                  }}
+                  size="small"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
+            ) : (
+              <h1 className={styles.landPreparation}>
+                {data?.title
+                  ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
+                  : "-"}
+              </h1>
+            )}
+          </div>
+          <div>
+            {editField == "title" && editFieldOrNot ? (
+              <div className={styles.iconBlock}>
+                <IconButton
                   onClick={() => {
                     setEditFieldOrNot(false);
                     setEditField("");
                   }}
                 >
-                  <CloseIcon />
+                  <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                 </IconButton>
+                <IconButton
+                  onClick={() => {
+                    onUpdateField();
+                    // setEditFieldOrNot(false);
+                    // setEditField("");
+                  }}
+                >
+                  <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                </IconButton>
+              </div>
+            ) : userType !== "USER" ? (
+              <IconButton
+                onClick={() => {
+                  setEditFieldOrNot(true);
+                  setEditField("title");
+                }}
+              >
+                <img
+                  className={styles.editicon}
+                  src="/task-edit-icon.svg"
+                  alt=""
+                />
+              </IconButton>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div className={styles.singleDetailsBox}>
+            {editField == "deadline" && editFieldOrNot ? (
+              <div className={styles.responseDate2} style={{ width: "100%" }}>
+                <div style={{ display: "flex", width: "100%" }}>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      sx={{
+                        width: "100%",
+                        "& .MuiButtonBase-root": {
+                          paddingRight: "10px !important",
+                        },
+
+                        '& .MuiInputBase-root::before': {
+                          borderBottom: "0 !important"
+                        },
+                        '& .MuiInputBase-root::after': {
+                          borderBottom: "0 !important"
+                        },
+
+                      }}
+                      disablePast
+                      value={deadline}
+                      onChange={(newValue: any) => {
+                        setDeadline(newValue);
+                      }}
+                      format="dd/MM/yyyy"
+                      slotProps={{
+                        textField: {
+                          variant: "standard",
+                          size: "medium",
+                          color: "primary",
+                        },
+                      }}
+                    />
+                  </LocalizationProvider>
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: "flex" }}>
+                <p className={styles.text}>
+                  <CalendarMonthOutlinedIcon sx={{ fontSize: "1rem" }} />
+                  {data?.deadline
+                    ? timePipe(data?.deadline, "DD, MMM YYYY")
+                    : "-"}
+                </p>
+              </div>
+            )}
+          </div>
+          <div>
+            {editField == "deadline" && editFieldOrNot ? (
+              <div className={styles.iconBlock}>
+                <IconButton
+                  onClick={() => {
+                    setEditFieldOrNot(false);
+                    setEditField("");
+                  }}
+                >
+                  <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                </IconButton>
+                <IconButton
+                  onClick={() => {
+                    onUpdateField();
+                    // setEditFieldOrNot(false);
+                    // setEditField("");
+                  }}
+                >
+                  <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                </IconButton>
+              </div>
+            ) : userType !== "USER" ? (
+              <IconButton
+                onClick={() => {
+                  setEditFieldOrNot(true);
+                  setEditField("deadline");
+                }}
+              >
+                <img
+                  className={styles.editicon}
+                  src="/task-edit-icon.svg"
+                  alt=""
+                />
+              </IconButton>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+      </div>
+      <div className={styles.viewHeader}>
+        <div className={styles.userBlock}>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            {userType !== "USER" ? (
+              editField == "farm" && editFieldOrNot ? (
+                <div className={styles.iconBlock}>
+                  {" "}
+                  <IconButton
+                    onClick={() => {
+                      setEditFieldOrNot(false);
+                      setEditField("");
+                    }}
+                  >
+                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                  </IconButton>
                   <IconButton
                     onClick={() => {
                       onUpdateField();
                     }}
                   >
-                    <DoneIcon />
-                  </IconButton></div> :
-
-
-
+                    <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                  </IconButton>
+                </div>
+              ) : (
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
                     setEditField("farm");
                   }}
                 >
-                  <ModeEditOutlinedIcon />
+                  <img
+                    className={styles.editicon}
+                    src="/task-edit-icon.svg"
+                    alt=""
+                  />
                 </IconButton>
+              )
             ) : (
               ""
             )}
           </div>
           <div className={styles.userDetails}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "0.5rem" }}>
-              <label className={styles.userLabel}>Assigned User</label>
-              <p style={{ margin: "0", fontWeight: "600" }}>:</p>
+            <div
+              className={styles.singleDetailsBox}
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-start !important",
+              }}
+            >
+              <label className={styles.userLabel}>
+                <PersonOutlineOutlinedIcon
+                  sx={{ fontSize: "1rem", marginRight: "5px" }}
+                />{" "}
+                User
+              </label>
               {editField == "farm" && editFieldOrNot ? (
-                <div style={{ width: "65%" }}>
+                <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
                     userId={userId}
                     onChange={(assigned_to: any) => {
@@ -149,16 +345,31 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   />
                 </div>
               ) : (
-                <h1 >
+                <h1>
                   {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
                 </h1>
               )}
             </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "0.5rem" }}>
-              <label className={styles.userLabel}>Farm</label>
-              <p style={{ margin: "0", fontWeight: "600" }}>:</p>
+            <div
+              className={styles.singleDetailsBox}
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-start !important",
+              }}
+            >
+              <label className={styles.userLabel}>
+                {" "}
+                <Image
+                  src="/farmshape2.svg"
+                  alt=""
+                  height={12}
+                  width={12}
+                  style={{ marginRight: "4px" }}
+                />
+                Farm
+              </label>
               {editField == "farm" && editFieldOrNot ? (
-                <div style={{ width: "65%" }}>
+                <div style={{ width: "100%" }}>
                   <FarmOptionsInViewTasks
                     userId={userId}
                     farmId={farmId}
@@ -168,47 +379,51 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                       setErrorMessages({});
                     }}
                   />
-                  <ErrorMessages errorMessages={errorMessages} keyname="farm_id" />
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname="farm_id"
+                  />
                 </div>
               ) : (
-                <h1 >
-                  {data?.farm_id ? data?.farm_id?.title : "-"}
-                </h1>
+                <h1>{data?.farm_id ? data?.farm_id?.title : "-"}</h1>
               )}
             </div>
           </div>
         </div>
         <div className={styles.status}>
-          <label className={styles.label1}>Status</label>
-
-          <div className={styles.status1}>
-            {/* <img
-              className={styles.indicatorIcon}
-              alt=""
-              src="/indicator@2x.png"
-            /> */}
+          <label className={styles.userLabel}>Status</label>
+          <div style={{ width: "100%" }}>
             {userType !== "USER" ? (
-              <div>
-                <Select
-                  className={styles.inoutbox}
-                  color="primary"
-                  size="small"
-                  placeholder="Enter your Task title here"
-                  variant="outlined"
-                  value={status}
-                  onChange={(e) => {
-                    setStatus(e.target.value);
-                    onChangeStatus(e.target.value);
-                  }}
-                  sx={{ width: "100px" }}
-                >
-                  {statusOptions.map((item: string, index: number) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </div>
+              <Select
+                className={styles.inoutbox}
+                color="primary"
+                size="small"
+                placeholder="Enter your Task title here"
+                variant="outlined"
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                  onChangeStatus(e.target.value);
+                }}
+                sx={{
+                  width: "100%",
+                  background: "#f5f7fa",
+                  "& .MuiSelect-select": {
+                    fontSize: "11px",
+                    fontFamily: "'Inter',sans-serif",
+                    fontWeight: "600",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "0 !important",
+                  },
+                }}
+              >
+                {statusOptions.map((item: string, index: number) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
             ) : (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p className={styles.status2}>
@@ -219,22 +434,19 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           </div>
         </div>
       </div>
-      <div className={styles.idandStatus}>
-        <div className={styles.title}>
-          <label className={styles.label}>Title</label>
-          {editField == "title" && editFieldOrNot ? (
-            <div>
-              <TextField
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
+
+      <div className={styles.description}>
+        <div className={styles.descriptionText}>
+          <label className={styles.label}>Description</label>
+          {editField == "description" && editFieldOrNot ? (
+            <div className={styles.iconBlock}>
               <IconButton
                 onClick={() => {
                   setEditFieldOrNot(false);
                   setEditField("");
                 }}
               >
-                <CloseIcon />
+                <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
               </IconButton>
               <IconButton
                 onClick={() => {
@@ -243,137 +455,42 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   // setEditField("");
                 }}
               >
-                <DoneIcon />
+                <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
               </IconButton>
             </div>
-          ) : (
-            <h1 className={styles.landPreparation}>
-              {data?.title ? data?.title : "-"}
-              {userType !== "USER" ? (
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("title");
-                  }}
-                >
-                  <ModeEditOutlinedIcon />
-                </IconButton>
-              ) : (
-                ""
-              )}
-            </h1>
-          )}
-        </div>
-      </div>
-      <div className={styles.date}>
-        <div className={styles.response}>
-          <label className={styles.responseDate}>Due Date</label>
-          {editField == "deadline" && editFieldOrNot ? (
-            <div className={styles.responseDate2}>
-              <div style={{ display: "flex" }}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    disablePast
-                    value={deadline}
-                    onChange={(newValue: any) => {
-                      setDeadline(newValue);
-                    }}
-                    format="dd/MM/yyyy"
-                    slotProps={{
-                      textField: {
-                        variant: "standard",
-                        size: "medium",
-                        color: "primary",
-                      },
-                    }}
-                  />
-                </LocalizationProvider>
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(false);
-                    setEditField("");
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    onUpdateField();
-                    // setEditFieldOrNot(false);
-                    // setEditField("");
-                  }}
-                >
-                  <DoneIcon />
-                </IconButton>
-              </div>
+          ) : userType !== "USER" ? (
+            <div
+              onClick={() => {
+                setEditFieldOrNot(true);
+                setEditField("description");
+              }}
+              className={styles.editDesc}
+            >
+              <p style={{ margin: "0" }}>Edit</p>
             </div>
           ) : (
-            <div className={styles.responseDate1} style={{ display: "flex" }}>
-              <p className={styles.text}>
-                {data?.deadline
-                  ? timePipe(data?.deadline, "DD, MMM YYYY")
-                  : "-"}
-              </p>
-              {userType !== "USER" ? (
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("deadline");
-                  }}
-                >
-                  <ModeEditOutlinedIcon />
-                </IconButton>
-              ) : (
-                ""
-              )}
-            </div>
+            ""
           )}
         </div>
-      </div>
-      <div className={styles.description}>
-        <label className={styles.label}>Description</label>
         {editField == "description" && editFieldOrNot ? (
-          <div>
+          <div style={{ width: "100%" }}>
             <TextField
+              className={styles.descriptionPara}
               multiline
-              minRows={3}
-              maxRows={3}
+              minRows={4}
+              maxRows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              sx={{ width: "300px" }}
+              sx={{ width: "100%", background: "#f5f7fa" }}
+              placeholder="Enter description here"
             />
-            <IconButton
-              onClick={() => {
-                setEditFieldOrNot(false);
-                setEditField("");
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                onUpdateField();
-                // setEditFieldOrNot(false);
-                // setEditField("");
-              }}
-            >
-              <DoneIcon />
-            </IconButton>
           </div>
         ) : (
           <p className={styles.farmersPrepareThe}>
-            {data?.description ? data?.description : "-"}
-            {userType !== "USER" ? (
-              <IconButton
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("description");
-                }}
-              >
-                <ModeEditOutlinedIcon />
-              </IconButton>
+            {data?.description ? (
+              <Markup content={getDescriptionData(data?.description)} />
             ) : (
-              ""
+              "-"
             )}
           </p>
         )}

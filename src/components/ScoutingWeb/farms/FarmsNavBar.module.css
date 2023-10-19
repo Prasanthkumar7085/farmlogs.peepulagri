@@ -102,7 +102,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
-  padding-right: 0.5rem;
+  padding-right: 5px;
 }
 
 .allFarms::-webkit-scrollbar {
@@ -195,4 +195,41 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* AllScoutspage agrologin */
+.AllScoutsPageWeb {
+  width: 92%;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+.scoutPageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scoutPageHeader h4 {
+  color: #05A155;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(20px, 1.25vw, 24px);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.allScoutsFilterBlock {
+  width: 80%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 100px;
+  grid-column-gap: 1rem;
+}
+
+.allScoutsFilterBlock input {
+  color: #000 !important;
+  font-size: clamp(13px, 0.62vw, 15px) !important;
+  font-family: 'Inter', sans-serif !important;
 }

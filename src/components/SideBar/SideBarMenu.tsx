@@ -56,7 +56,7 @@ const SideBarMenu = ({ children }: any) => {
         toolTitle: "Scouts",
       },
       {
-        src: "/graph-icon.svg",
+        src: "/tasks-menu-icon.svg",
         link: "/tasks",
         isVisible: userName !== "ADMIN",
         active: router.pathname.includes("/tasks"),

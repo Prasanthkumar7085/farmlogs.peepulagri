@@ -1,4 +1,10 @@
-import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  CircularProgress,
+  InputAdornment,
+  LinearProgress,
+  TextField,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -59,13 +65,17 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
   }, [router.isReady, accessToken]);
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div>
       {!userLoaded ? (
         <Autocomplete
           sx={{
-            width: "250px",
-            maxWidth: "250px",
+            width: "100%",
             borderRadius: "4px",
+            "& .MuiInputBase-root": {
+              paddingBlock: "5px !important",
+              background: "#fff",
+            },
+
           }}
           id="size-small-outlined-multi"
           size="small"
@@ -78,17 +88,17 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
           renderOption={(props, option) => {
             return (
               <li {...props} key={option._id}>
-                {option.phone}
+                {option.full_name}
               </li>
             );
           }}
-          getOptionLabel={(option: any) => option.phone}
+          getOptionLabel={(option: any) => option.full_name}
           options={userData}
           onChange={captureUser}
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder="Search by User Mobile"
+              placeholder="Select user mobile"
               variant="outlined"
               size="small"
               sx={{
@@ -104,7 +114,7 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
       ) : (
         ""
       )}
-      {loading ? <CircularProgress size="1.5rem" sx={{ color: "blue" }} /> : ""}
+      {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
     </div>
   );
 };

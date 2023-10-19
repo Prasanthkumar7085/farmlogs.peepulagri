@@ -44,8 +44,8 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
           options={
             options && options?.length
               ? options.sort(
-                  (a, b) => -b.farm_title?.localeCompare(a.farm_title)
-                )
+                (a, b) => -b.farm_title?.localeCompare(a.farm_title)
+              )
               : []
           }
           getOptionLabel={(option: any) =>
@@ -71,21 +71,21 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
             <TextField
               {...params}
               placeholder={placeholder}
-              sx={{ width: "500px" }}
+              sx={{ width: "100%", background: "#fff" }}
             />
           )}
 
-          // sx={{
-          //     width: '1000%',
-          //     background: "#fff",
-          //     "& .MuiInputBase-input ": {
-          //         fontSize: "13px",
-          //         fontWeight: "400",
-          //         fontFamily: "'inter', sans-serif ",
-          //         color: "#000",
+        // sx={{
+        //     width: '1000%',
+        //     background: "#fff",
+        //     "& .MuiInputBase-input ": {
+        //         fontSize: "13px",
+        //         fontWeight: "400",
+        //         fontFamily: "'inter', sans-serif ",
+        //         color: "#000",
 
-          //     }
-          // }}
+        //     }
+        // }}
         />
       ) : (
         ""

@@ -39,7 +39,7 @@ const TanStackTableComponent = ({
     return width;
   };
   const sortAndGetData = (header: any) => {
-    if (header.id == "actions") {
+    if (header.id == "actions" || header.id == "farm_id.title" || header.id == 'assigned_to') {
       return;
     }
     let orderBy = header.id;
@@ -60,6 +60,7 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
+      userId: router.query.assigned_to as string,
     });
   };
   const capturePageNum = (value: number) => {
@@ -71,6 +72,7 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
+      userId: router.query.assigned_to as string,
     });
   };
   const captureRowPerItems = (value: number) => {
@@ -82,6 +84,7 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
+      userId: router.query.assigned_to as string,
     });
   };
   return (
@@ -102,6 +105,7 @@ const TanStackTableComponent = ({
                 height: "32px",
                 position: "sticky",
                 top: "0px",
+                zIndex: "2"
               }}
             >
               {table.getHeaderGroups().map((headerGroup) => (
@@ -123,6 +127,7 @@ const TanStackTableComponent = ({
                             style={{
                               display: "flex",
                               gap: "10px",
+                              cursor: "pointer",
                             }}
                           >
                             {flexRender(
@@ -145,7 +150,7 @@ const TanStackTableComponent = ({
                                   alt="image"
                                 />
                               )
-                            ) : (
+                            ) : (header.id == "farm_id.title" || header.id == "assigned_to") ? "" : (
                               <ImageComponent
                                 src="/unsort.svg"
                                 height={15}

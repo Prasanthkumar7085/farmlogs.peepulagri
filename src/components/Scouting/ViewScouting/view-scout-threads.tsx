@@ -1,5 +1,5 @@
 import styles from "./view-scout-threads.module.css";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
@@ -44,6 +44,7 @@ const ViewScoutThreads = () => {
   const [cameraOpen, setCameraOpen] = useState<any>(false)
   const [fileUploadOpen, setFileUploadOpen] = useState<any>(false)
   const [selectedItems, setSelectedItems] = useState<any>([]);
+  const [content, setContent] = useState<any>()
 
   let tempImages: any = [...selectedItems];
 
@@ -62,7 +63,10 @@ const ViewScoutThreads = () => {
 
     if (response?.success) {
       setData(response?.data);
+      const lines = response?.data?.findings?.split('\n');
+      setContent(lines)
       if (response?.data?.attachments?.length) {
+
         setDownloadUrls(response?.data?.attachments);
         setSelectedFile(response?.data?.attachments)
 
@@ -198,9 +202,10 @@ const ViewScoutThreads = () => {
           </div>
           <div className={styles.description}>
             <h3 className={styles.heading1}>Findings</h3>
-            <p className={styles.descriptiontext}>
-              {data?.findings ? data?.findings : "-"}
-            </p>
+            {content?.map((line: any, index: any) => (
+              <p className={styles.descriptiontext} key={index}>
+                {content ? line : "-"}
+              </p>))}
           </div>
 
           <div className={styles.attachmentscontainer}>

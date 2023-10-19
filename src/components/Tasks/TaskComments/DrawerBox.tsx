@@ -9,7 +9,7 @@ import CommentFormForTasks from "./comment-formForTasks";
 import ThreadsForTasks from "./threadsforTasks";
 import { Toaster, toast } from "sonner";
 import SkeletonLoadingForAttachments from "@/components/Core/LoadingComponents/SkeletonLoadingForAttachments";
-
+import styles from "./Comments.module.css";
 const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const dispatch = useDispatch();
 
@@ -21,6 +21,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [loading, setLoading] = useState<any>();
   const [data, setData] = useState<any>();
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -88,7 +89,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
 
   //delete comment api
   const deleteComment = async (commnet_id: any) => {
-    setLoading(true);
+    setDeleteLoading(true);
     let options = {
       method: "DELETE",
       headers: new Headers({
@@ -108,7 +109,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
+      setDeleteLoading(false);
     }
   };
 
@@ -194,8 +195,16 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   };
 
   return (
-    <Drawer anchor="right" open={drawerOpen}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <Drawer
+      anchor="right"
+      open={drawerOpen}
+      sx={{
+        "& .MuiPaper-root": {
+          padding: "1rem",
+        },
+      }}
+    >
+      <div className={styles.drawerHeader}>
         <Typography variant="h6">Comments</Typography>
         <IconButton
           onClick={() => {
@@ -203,7 +212,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
             dispatch(removeTheAttachementsFilesFromStore([]));
           }}
         >
-          <CloseIcon />
+          <CloseIcon sx={{ color: "#000" }} />
         </IconButton>
       </div>
 
@@ -217,7 +226,6 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
           overflow: "auto",
         }}
       >
-        {loading ? <SkeletonLoadingForAttachments /> : ""}
         <ThreadsForTasks
           farmID={rowDetails.farm_id._id}
           taskId={rowDetails._id}
@@ -226,7 +234,9 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
           afterDeleteComment={afterDeleteComment}
           afterUpdateComment={afterUpdateComment}
           afterReply={afterReply}
+          loading={loading}
           afterDeleteAttachements={afterDeleteAttachements}
+          deleteLoading={deleteLoading}
         />
       </div>
 

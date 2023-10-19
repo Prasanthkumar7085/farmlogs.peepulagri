@@ -12,7 +12,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AlertComponent from "@/components/Core/AlertComponent";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads }: any) => {
+const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads, scoutDetails }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
@@ -54,7 +54,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/attachment/download-url`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id ? router.query.farm_id : scoutDetails?.farm_id?._id}/attachment/download-url`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
 

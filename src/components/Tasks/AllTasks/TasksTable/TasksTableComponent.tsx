@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { ApiCallProps } from "../TasksPageComponent";
 import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 import ImageComponent from "@/components/Core/ImageComponent";
+import timePipe from "@/pipes/timePipe";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -62,11 +63,25 @@ const TasksTableComponent = ({
         sortType: router.query.order_type as string,
         selectedFarmId: router.query.farm_id as string,
         status: router.query.status as string,
+        userId: router.query.assigned_to as string,
       });
     } else {
       toast.error(response?.message);
     }
     setDeleteLoading(false);
+  };
+
+  const getStatusLabel = (label: string) => {
+    if (!label) return "";
+    if (label == "IN-PROGRESS") {
+      return "In-Progress";
+    }
+    if (label == "TODO") {
+      return "Todo";
+    }
+    if (label == "COMPLETED") {
+      return "Completed";
+    }
   };
 
   const columns = [
@@ -75,7 +90,7 @@ const TasksTableComponent = ({
       id: "createdAt",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue().slice(0, 10)}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Created On</span>,
@@ -95,7 +110,7 @@ const TasksTableComponent = ({
       width: "200px",
     },
     {
-      accessorFn: (row: any) => row.assigned_to?.phone,
+      accessorFn: (row: any) => row.assigned_to?.full_name,
       id: "assigned_to",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
@@ -104,18 +119,36 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "150px",
     },
 
     {
       accessorFn: (row: any) => row.title,
       id: "title",
       cell: (info: any) => (
-        <span
-          style={{ wordWrap: "break-word", padding: "40px 10px 40px 10px" }}
+        <Tooltip
+          title={
+            info.getValue()?.length > 34 ? (
+              <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
+            ) : (
+              ""
+            )
+          }
         >
-          {info.getValue()}
-        </span>
+          <span>
+            {info.getValue()
+              ? info.getValue()?.length > 34
+                ? (info.getValue()
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                  info.getValue().slice(1, 30)
+                  : "") + "....."
+                : info.getValue()
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                  info.getValue().slice(1)
+                  : ""
+              : ""}
+          </span>
+        </Tooltip>
       ),
       header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
       footer: (props: any) => props.column.id,
@@ -128,7 +161,7 @@ const TasksTableComponent = ({
         <span style={{ padding: "40px 10px 40px 10px" }}>
           <Tooltip
             title={
-              info.getValue()?.length > 50 ? (
+              info.getValue()?.length > 45 ? (
                 <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
               ) : (
                 ""
@@ -137,24 +170,30 @@ const TasksTableComponent = ({
           >
             <span>
               {info.getValue()
-                ? info.getValue()?.length > 50
-                  ? info.getValue().slice(0, 46) + "....."
+                ? info.getValue()?.length > 45
+                  ? (info.getValue()
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1, 41)
+                    : "") + "....."
                   : info.getValue()
-                : "-"}
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1)
+                    : ""
+                : ""}
             </span>
           </Tooltip>
         </span>
       ),
       header: () => <span>Description</span>,
       footer: (props: any) => props.column.id,
-      width: "400px",
+      width: "350px",
     },
     {
       accessorFn: (row: any) => row.deadline,
       id: "deadline",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()?.slice(0, 10)}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Due Date</span>,
@@ -166,7 +205,7 @@ const TasksTableComponent = ({
       id: "status",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {getStatusLabel(info.getValue())}
         </span>
       ),
       header: () => <span>Status</span>,

@@ -105,10 +105,11 @@ body {
     font-weight: 500;
 }
 
+/* box-shadow: 0px 0px 0px 1px #d1cdcc; */
 .dataTable-container {
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
 }
 
 .dataTable-container .table {
@@ -143,6 +144,11 @@ body {
     border-left: 1px solid #d8d7d6;
 }
 
+.dataTable-container .thead .table-row .cell:last-child img {
+    display: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+}
+
 .dataTable-container .thead .table-row .cell:first-child {
     position: sticky;
     left: 0;
@@ -156,6 +162,7 @@ body {
 .dataTable-container .tbody .table-row .cell:first-child {
     position: sticky;
     left: 0;
+    box-shadow: -20px 0 20px -35px #000000b3 inset;
     background: #fff;
 }
 
@@ -164,12 +171,14 @@ body {
     right: 0;
     background: #fff;
     border-left: 1px solid #d8d7d6;
+    box-shadow: 20px 0 20px -35px #000000b3 inset;
 }
 
 .dataTable-container .tbody .cell {
     padding: 10px;
     border-right: 1px solid #d8d7d6;
     border-bottom: 1px solid #d8d7d6;
+    background-color: #fff;
 }
 
 .dataTable-container .tbody .cell span {
@@ -185,6 +194,7 @@ body {
 .scrollbar::-webkit-scrollbar {
     background: transparent;
     width: 5px;
+    height: 3px;
 }
 
 .scrollbar::-webkit-scrollbar:hover {
@@ -342,7 +352,7 @@ body {
 }
 
 .ReactGridGallery_tile-viewport img {
-    object-fit: cover;  
+    object-fit: cover;
     cursor: pointer;
     max-width: none;
     width: 100% !important;
@@ -402,4 +412,41 @@ left: 10px !important;
 
 #layer {
     background-color: #0000008f !important;
+}
+
+/* Agronamist single scouting view gallary carousal */
+.control-dots {
+    display: none !important;
+}
+
+.carousel-root {
+    width: 100% !important;
+}
+
+.carousel-status {
+    top: inherit !important;
+    bottom: 0 !important;
+    right: 50% !important;
+    font-size: 16px !important;
+}
+
+.carousel.carousel-slider .control-arrow:hover {
+    background: none !important;
+}
+
+.carousel.control-arrow:before,
+.carousel.carousel-slider .control-arrow:before {
+    border-top: 12px solid transparent !important;
+    border-bottom: 12px solid transparent !important;
+
+}
+
+.control-arrow {
+    opacity: 1 !important;
+}
+
+/* datepicker styles  */
+.rs-stack-item {
+    width: 100%;
+    font-size: clamp(12px, 0.62vw, 15px) !important;
 }

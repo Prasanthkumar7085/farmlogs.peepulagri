@@ -189,11 +189,10 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       </div>
       <div className={styles.actionsbar}>
         <TextField
-           InputProps={{
-           
+          InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                  <SearchIcon />
+                <SearchIcon />
               </InputAdornment>
             ),
           }}
@@ -208,15 +207,14 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
             width: "250px",
             maxWidth: "250px",
             borderRadius: "4px",
-            '& .MuiInputBase-root': {
+            "& .MuiInputBase-root": {
               fontSize: "clamp(.875rem, 1vw, 1.125rem)",
               backgroundColor: "#fff",
               border: "none",
-
             },
           }}
         />
-        {!settingLocationLoading ?
+        {!settingLocationLoading ? (
           <Autocomplete
             sx={{
               width: "250px",
@@ -226,10 +224,12 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
             id="size-small-outlined-multi"
             size="small"
             fullWidth
-            noOptionsText={'No such location'}
+            noOptionsText={"No such location"}
             value={location}
             isOptionEqualToValue={(option, value) => option.name === value.name}
-            getOptionLabel={(option: { name: string, _id: string }) => option.name}
+            getOptionLabel={(option: { name: string; _id: string }) =>
+              option.name
+            }
             options={locations}
             loading={optionsLoading}
             onChange={onChangeLocation}
@@ -240,51 +240,56 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
                 variant="outlined"
                 size="small"
                 sx={{
-                  '& .MuiInputBase-root': {
+                  "& .MuiInputBase-root": {
                     fontSize: "clamp(.875rem, 1vw, 1.125rem)",
                     backgroundColor: "#fff",
                     border: "none",
-                  }
+                  },
                 }}
-
               />
             )}
-          /> : ""}
-        
-        {userType == 'AGRONOMIST' && !settingUserLoading ?
-          <Autocomplete
-          sx={{
-            width: "250px",
-            maxWidth: "250px",
-            borderRadius: "4px",
-          }}
-          id="size-small-outlined-multi"
-          size="small"
-          fullWidth
-          noOptionsText={'No such User'}
-          value={user}
-          isOptionEqualToValue={(option:any, value:any) => option.phone === value.phone}
-          getOptionLabel={(option:any) => option.phone}
-          options={users}
-          onChange={onChangeUser}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              placeholder="Search by User Mobile"
-              variant="outlined"
-              size="small"
-              sx={{
-                '& .MuiInputBase-root': {
-                  fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                  backgroundColor: "#fff",
-                  border: "none",
-                }
-              }}
+          />
+        ) : (
+          ""
+        )}
 
-            />
-          )}
-        />
-        : ""}
+        {userType == "AGRONOMIST" && !settingUserLoading ? (
+          <Autocomplete
+            sx={{
+              width: "250px",
+              maxWidth: "250px",
+              borderRadius: "4px",
+            }}
+            id="size-small-outlined-multi"
+            size="small"
+            fullWidth
+            noOptionsText={"No such User"}
+            value={user}
+            isOptionEqualToValue={(option: any, value: any) =>
+              option.full_name === value.full_name
+            }
+            getOptionLabel={(option: any) => option.full_name}
+            options={users}
+            onChange={onChangeUser}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Search by User"
+                variant="outlined"
+                size="small"
+                sx={{
+                  "& .MuiInputBase-root": {
+                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                    backgroundColor: "#fff",
+                    border: "none",
+                  },
+                }}
+              />
+            )}
+          />
+        ) : (
+          ""
+        )}
         {/* <Button
           className={styles.button}
           variant="contained"
@@ -293,7 +298,6 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           <AddIcon sx={{ fontSize: "1rem" }} />Add
         </Button> */}
       </div>
-      
     </div>
   );
 };

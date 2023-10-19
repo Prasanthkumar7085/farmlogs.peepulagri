@@ -1,9 +1,10 @@
 import TaskForm from "./TaskForm";
+import styles from "./TaskForm.module.css";
 
 const AddTaskPageComponent = () => {
     return (
-        <div style={{padding:"4rem"}}>
-            <TaskForm/>
+        <div className={styles.addTaskPage}>
+            <TaskForm />
         </div>
     )
 }

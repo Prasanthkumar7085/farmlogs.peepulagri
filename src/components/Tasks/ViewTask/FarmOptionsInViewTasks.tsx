@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import FarmAutoCompleteInAddTask from "../AddTask/FarmAutoCompleteInAddTask";
+import FarmAutoCompleteInAddTask from "../AddTask/FarmAutoCompleteInTasks";
 import { FarmInTaskType } from "@/types/tasksTypes";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
@@ -79,8 +79,8 @@ const FarmOptionsInViewTasks: React.FC<PropsType> = ({
         onSelectValueFromDropDown={captureFarmName}
         placeholder={"Select Farm"}
         defaultValue={defaultValue}
+        loading={loading}
       />
-      {loading ? <CircularProgress size="1.5rem" sx={{ color: "blue" }} /> : ""}
     </div>
   );
 };

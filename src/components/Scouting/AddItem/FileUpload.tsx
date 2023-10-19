@@ -465,8 +465,10 @@ const FileUploadComponent = () => {
   useEffect(() => {
     if (router.query.farm_id && accessToken) {
       getFormDetails(router.query.farm_id);
-      getSingleScout()
       dispatch(removeTheFilesFromStore([]));
+    }
+    if (router.query.scout_id) {
+      getSingleScout()
     }
   }, [accessToken, router.query.farm_id]);
 
@@ -656,7 +658,6 @@ const FileUploadComponent = () => {
     if (response?.success) {
       setData(response?.data);
       setDescription(response?.data?.findings)
-
     }
   }
 

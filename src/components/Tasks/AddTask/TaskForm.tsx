@@ -4,7 +4,9 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import {
   Autocomplete,
   Button,
+  Grid,
   Icon,
+  IconButton,
   MenuItem,
   Select,
   TextField,
@@ -13,9 +15,9 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import addTaskService from "../../../../lib/services/TasksService/addTaskService";
-import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInAddTask";
+import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInTasks";
 import styles from "./TaskForm.module.css";
 import FooterActionButtons from "./footer-action-buttons";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
@@ -24,9 +26,13 @@ import TasksAttachments from "./TasksAttachments";
 import moment from "moment";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import AlertDeleteFilesOnFarmChangeInTasks from "@/components/Core/DeleteAlert/AlertDeleteFilesOnFarmChangeInTasks";
+import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 
-const TaskForm = ({ data }: any) => {
+const TaskForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -46,6 +52,9 @@ const TaskForm = ({ data }: any) => {
   const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
   const [user, setUser] = useState<userTaskType>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
+  const [deleteFilesDialogOpen, setDeleteFilesDialogOpen] = useState(false);
+
+  const [multipleFiles, setMultipleFiles] = useState<any>([]);
 
   const getAllFarms = async (id = "", userId = "") => {
     setLoading(true);
@@ -83,20 +92,19 @@ const TaskForm = ({ data }: any) => {
       categories: [],
       deadline: deadline
         ? moment(deadline)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          .utcOffset("+05:30")
+          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
       attachments: files,
       status: status,
     };
-    console.log(body);
 
     let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
       toast.success(response?.message);
-      gotoBackAfterAdd();
+      router.push("/tasks");
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
@@ -105,44 +113,18 @@ const TaskForm = ({ data }: any) => {
 
   const getAllUsers = async () => {
     const response = await getAllUsersService({ token: accessToken });
-    if (response.success) {
+    if (response?.success) {
       setUsers(response?.data);
     }
   };
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllUsers();
-      // if (router.query.task_id && data) {
-      //   setDataInEdit();
-      //   // getAllFarms(data?.farm_id);
-      // } else {
-      //   getAllFarms();
-      // }
     }
-  }, [router.isReady, accessToken, data]);
-
-  const setDataInEdit = () => {
-    setTitle(data?.title);
-    setDescription(data?.description);
-    setDeadline(new Date(data?.deadline));
-  };
+  }, [router.isReady, accessToken]);
 
   const setUploadedFiles = (filesUploaded: any) => {
     setFiles(filesUploaded);
-  };
-
-  const gotoBack = async () => {
-    await router.back();
-    setTimeout(() => {
-      router.reload();
-    }, 200);
-  };
-
-  const gotoBackAfterAdd = async () => {
-    router.push("/tasks");
-    setTimeout(() => {
-      router.reload();
-    }, 1000);
   };
 
   const onChangeUser = async (e: any, value: any) => {
@@ -150,184 +132,231 @@ const TaskForm = ({ data }: any) => {
     if (value) await getAllFarms("", value?._id);
     else setFarmData([]);
   };
+
+  const [filestoNullOnFarmChange, setFilestoNullOnFarmChange] = useState(false);
+
+  console.log(files);
+
+  // const removeFiles = () => {
+  //   setFiles([]);
+  //   setFilestoNullOnFarmChange(true);
+  //   setDeleteFilesDialogOpen(false);
+  //   dispatch(removeTheFilesFromStore([]));
+  //   setTimeout(() => {
+  //     setFilestoNullOnFarmChange(false);
+  //   }, 100);
+  // };
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <>
         <div className={styles.form}>
           <div className={styles.header}>
-            <Button
-              onClick={gotoBack}
-              className={styles.backbutton}
-              sx={{ width: 40 }}
-              color="primary"
-              name="Back"
-              variant="contained"
-              startIcon={<Icon>arrow_back_sharp</Icon>}
-            />
+            <div className={styles.backButton} onClick={() => router.back()}>
+              <img src="/arrow-left-back.svg" alt="" width={"18px"} />
+            </div>
             <div className={styles.textwrapper}>
-              <p className={styles.smalltext}>{`Back to List `}</p>
-              <h1 className={styles.largetext}>Add Task</h1>
+              <p className={styles.caption}>Back to List</p>
+              <h1 className={styles.header}>Add Task</h1>
             </div>
           </div>
-          <div className={styles.container}>
-            <form className={styles.formfields}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <label className={styles.lable}>
-                    {`Select Farm`}
-                    <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <Autocomplete
-                    sx={{
-                      width: "250px",
-                      maxWidth: "250px",
-                      borderRadius: "4px",
-                    }}
-                    id="size-small-outlined-multi"
-                    size="small"
-                    fullWidth
-                    noOptionsText={"No such User"}
-                    value={user}
-                    isOptionEqualToValue={(option: any, value: any) =>
-                      option._id === value._id
-                    }
-                    renderOption={(props, option) => {
-                      return (
-                        <li {...props} key={option._id}>
-                          {option.phone}
-                        </li>
-                      );
-                    }}
-                    getOptionLabel={(option: any) => option.phone}
-                    options={users}
-                    onChange={onChangeUser}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="Search by User Mobile"
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                            backgroundColor: "#fff",
-                            border: "none",
-                          },
-                        }}
+          <form className={styles.formfields}>
+            <Grid container rowSpacing={2}>
+              <Grid item xs={12}>
+                <Grid container>
+                  <Grid item xs={8}></Grid>
+                  <Grid item xs={4} className={styles.selectfarm}>
+                    <label className={styles.lable}>
+                      Deadline<span style={{ color: "red" }}>*</span>
+                    </label>
+                    <DatePicker
+                      value={deadline}
+                      disablePast
+                      format="dd/MM/yyyy"
+                      sx={{
+                        width: "100%",
+                        "& .MuiInputBase-root": {
+                          padding: "5px 10px",
+                          borderRadius: "4px",
+                          border: "1px solid #B4C1D6 ",
+                          background: "#fff",
+                        },
+                        "& .MuiInputBase-root::before": {
+                          borderBottom: "0 !important",
+                        },
+                        "& .MuiInputBase-root::after": {
+                          borderBottom: "0 !important",
+                        },
+                      }}
+                      onChange={(newValue: any) => {
+                        setDeadline(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          variant: "standard",
+                          size: "small",
+                          color: "primary",
+                        },
+                      }}
+                    />
+                    <ErrorMessages
+                      errorMessages={errorMessages}
+                      keyname="deadline"
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container columnSpacing={2}>
+                  <Grid item xs={6} className={styles.selectfarm}>
+                    <label className={styles.lable}>
+                      {`Select User `}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Autocomplete
+                      sx={{
+                        width: "100%",
+                        borderRadius: "4px",
+                      }}
+                      id="size-small-outlined-multi"
+                      size="small"
+                      fullWidth
+                      noOptionsText={"No such User"}
+                      value={user}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        option._id === value._id
+                      }
+                      renderOption={(props, option: any) => {
+                        return (
+                          <li {...props} key={option._id}>
+                            {option.full_name}
+                          </li>
+                        );
+                      }}
+                      getOptionLabel={(option: any) => option.full_name}
+                      options={users}
+                      onChange={onChangeUser}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Search by user"
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            "& .MuiInputBase-root": {
+                              fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                              backgroundColor: "#fff",
+                              border: "none",
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                    <ErrorMessages
+                      errorMessages={errorMessages}
+                      keyname="assigned_to"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <div className={styles.selectfarm}>
+                      <label className={styles.lable}>
+                        {`Select Farm`}
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+
+                      <FarmAutoCompleteInAddTask
+                        options={farmData}
+                        label={"title"}
+                        onSelectValueFromDropDown={captureFarmName}
+                        placeholder={"Select Farm"}
+                        defaultValue={defaultValue}
+                        loading={false}
                       />
-                    )}
-                  />
-                </div>
+
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="farm_id"
+                      />
+                    </div>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container columnSpacing={2}>
+                  <Grid item xs={8}>
+                    <div className={styles.selectfarm}>
+                      <h4 className={styles.title}>
+                        Title<span style={{ color: "red" }}>*</span>
+                      </h4>
+                      <TextField
+                        className={styles.inoutbox}
+                        color="primary"
+                        placeholder="Enter your Task title here"
+                        required={true}
+                        fullWidth={true}
+                        size="small"
+                        variant="outlined"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="title"
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <div className={styles.selectfarm}>
+                      <h4 className={styles.title}>
+                        Status<span style={{ color: "red" }}></span>
+                      </h4>
+                      <Select
+                        className={styles.inoutbox}
+                        color="primary"
+                        size="small"
+                        placeholder="Enter your Task title here"
+                        variant="outlined"
+                        fullWidth
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        defaultValue="TODO"
+                      >
+                        {statusOptions.map((item: string, index: number) => (
+                          <MenuItem key={index} value={item}>
+                            {item}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </div>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
                 <div className={styles.selectfarm}>
-                  <label className={styles.lable}>
-                    {`Select Farm`}
-                    <span style={{ color: "red" }}>*</span>
-                  </label>
-
-                  <FarmAutoCompleteInAddTask
-                    options={farmData}
-                    label={"title"}
-                    onSelectValueFromDropDown={captureFarmName}
-                    placeholder={"Select Farm"}
-                    defaultValue={defaultValue}
-                  />
-
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname="farm_id"
+                  <label className={styles.lable}>Description</label>
+                  <TextField
+                    multiline
+                    minRows={4}
+                    maxRows={4}
+                    className={styles.inoutbox}
+                    color="primary"
+                    placeholder="Enter your Task title here"
+                    fullWidth={true}
+                    variant="outlined"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
-              </div>
-              <div className={styles.selectfarm}>
-                <h4 className={styles.title}>
-                  Title<span style={{ color: "red" }}>*</span>
-                </h4>
-                <TextField
-                  className={styles.inoutbox}
-                  color="primary"
-                  placeholder="Enter your Task title here"
-                  required={true}
-                  fullWidth={true}
-                  variant="outlined"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+              </Grid>
+              <Grid item xs={12}>
+                <TasksAttachments
+                  farmId={defaultValue?._id}
+                  setUploadedFiles={setUploadedFiles}
+                  multipleFiles={multipleFiles}
+                  setMultipleFiles={setMultipleFiles}
                 />
-                <ErrorMessages errorMessages={errorMessages} keyname="title" />
-              </div>
-              <div className={styles.selectfarm}>
-                <h4 className={styles.title}>
-                  Status<span style={{ color: "red" }}></span>
-                </h4>
-                <Select
-                  className={styles.inoutbox}
-                  color="primary"
-                  placeholder="Enter your Task title here"
-                  variant="outlined"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  sx={{ width: "200px" }}
-                  defaultValue="TODO"
-                >
-                  {statusOptions.map((item: string, index: number) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </div>
-
-              <div className={styles.selectfarm}>
-                <label className={styles.lable}>
-                  Deadline<span style={{ color: "red" }}>*</span>
-                </label>
-                <div className={styles.backbutton}>
-                  <DatePicker
-                    value={deadline}
-                    disablePast
-                    onChange={(newValue: any) => {
-                      setDeadline(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        variant: "standard",
-                        size: "medium",
-                        color: "primary",
-                      },
-                    }}
-                  />
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname="deadline"
-                  />
-                </div>
-              </div>
-              <div className={styles.selectfarm}>
-                <label className={styles.lable}>Description</label>
-                <TextField
-                  multiline
-                  minRows={4}
-                  maxRows={4}
-                  className={styles.inoutbox}
-                  color="primary"
-                  placeholder="Enter your Task title here"
-                  fullWidth={true}
-                  variant="outlined"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-              <TasksAttachments
-                farmId={defaultValue?._id}
-                setUploadedFiles={setUploadedFiles}
-              />
-            </form>
-          </div>
+              </Grid>
+            </Grid>
+          </form>
         </div>
         <FooterActionButtons addTask={addTask} />
       </>
@@ -338,6 +367,11 @@ const TaskForm = ({ data }: any) => {
       />
       <LoadingComponent loading={loading} />
       <Toaster richColors position="top-right" closeButton />
+      {/* <AlertDeleteFilesOnFarmChangeInTasks
+        open={deleteFilesDialogOpen}
+        deleteFiles={removeFiles}
+        setDialogOpen={setDeleteFilesDialogOpen}
+      /> */}
     </LocalizationProvider>
   );
 };

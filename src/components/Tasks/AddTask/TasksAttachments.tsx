@@ -17,10 +17,14 @@ import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 interface PropTypes {
   farmId: string | undefined;
   setUploadedFiles: (filesUploaded: any) => void;
+  multipleFiles: any;
+  setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
 }
 const TasksAttachments: React.FC<PropTypes> = ({
   farmId,
   setUploadedFiles,
+  multipleFiles,
+  setMultipleFiles,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -30,7 +34,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [multipleFiles, setMultipleFiles] = useState<any>();
   const [fileProgress, setFileProgress] = useState<number[] | any>([]);
 
   const [attachments, setAttachments] = useState<any>([]);
@@ -38,12 +41,27 @@ const TasksAttachments: React.FC<PropTypes> = ({
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
 
-  let tempFilesStorage: any = [...attachments];
+  // let tempFilesStorage: any = [...attachments];
 
-  let previewStorage = [...previewImages];
+  // let previewStorage = [...previewImages];
+
+  const [tempFilesStorage, setTempFileStorage] = useState<any>([]);
+  const [previewStorage, setPreviewStorage] = useState<any>([]);
 
   useEffect(() => {
-    setUploadedFiles(tempFilesStorage);
+    if (attachments?.length) {
+      setTempFileStorage(attachments);
+    }
+
+    if (previewImages?.length) {
+      setPreviewStorage(previewImages);
+    }
+  }, [attachments, previewImages]);
+
+  useEffect(() => {
+    if (tempFilesStorage) {
+      setUploadedFiles(tempFilesStorage);
+    }
   }, [tempFilesStorage]);
 
   const generateThumbnail = (file: any, index: any) => {
@@ -399,7 +417,10 @@ const TasksAttachments: React.FC<PropTypes> = ({
   //   }, []);
 
   return (
-    <div className={styles.attachments}>
+    <div
+      className={styles.attachments}
+      style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}
+    >
       <div className={styles.header}>
         <h4 className={styles.title}>Attachments (or) Images</h4>
         <p className={styles.description}>
@@ -408,7 +429,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
       </div>
 
       <label className={styles.UpdateFiles}>
-        <div className={styles.link}>
+        <div className={styles.link} style={{ background: "#fff !important" }}>
           <AttachmentIcon className={styles.icon} />
           <span>Select Files</span>
         </div>
@@ -456,7 +477,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
                           }}
                         >
                           {item.name?.slice(0, 15)}...
-                          {item.type?.slice(-15)}{" "}
                         </div>
                         {fileProgress[index] == "fail" ? (
                           <div
@@ -474,9 +494,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                       {fileProgress[index] == 100 &&
                       fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
-                          <IconButton>
-                            <DoneIcon sx={{ color: "#05A155" }} />
-                          </IconButton>
+                          <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
                             onClick={() => removeFileAfterAdding(index)}
                           >

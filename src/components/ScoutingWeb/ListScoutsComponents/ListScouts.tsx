@@ -20,6 +20,7 @@ import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import UserDropDownForScouts from "./UserDropDownForScouts";
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import ScoutingDailyImages from "./ScoutingDailyImages";
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 
 interface ApiMethodProps {
   page: string | number;
@@ -426,7 +427,12 @@ const ListScouts: FunctionComponent = () => {
           {data?.length ? (
             data.map((item: SingleScoutResponse, index: number) => {
               return (
-                <div style={{ border: "1px solid" }}>
+                <div className={styles.eachDayScouting} >
+                  <div className={styles.scoutDay} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <Typography>Today</Typography>
+                    <div className={styles.summaryBtn}><SummaryIcon /> Summary</div>
+
+                  </div>
                   <ScoutingDailyImages item={item} key={index} />
                 </div>
               );

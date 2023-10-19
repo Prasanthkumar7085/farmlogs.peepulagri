@@ -11,12 +11,11 @@ import TagsTextFeild from './TagsTextFeild';
 
 const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
 
-
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [summaryContent, setSummaryContent] = useState('');
     const [editorHtml, setEditorHtml] = useState('');
     const [description, setDescription] = useState<any>();
-    const [tags, setTags] = useState<any>([])
+    const [tags, setTags] = useState<any>(item.tags.length ? item.tags : [])
 
     const captureTags = (array: any) => {
         if (array) {
@@ -51,7 +50,7 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
             </div>
             <div style={{ width: '100%', height: "300px " }}>
                 <Typography>Tags</Typography>
-                <TagsTextFeild captureTags={captureTags} />
+                <TagsTextFeild captureTags={captureTags} tags={tags} />
                 <Typography>Findings</Typography>
                 <TextField
                     color="primary"

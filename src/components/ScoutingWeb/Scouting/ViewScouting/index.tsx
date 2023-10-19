@@ -67,8 +67,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       const response = await getSingleScoutService(id, accessToken);
       if (response?.success) {
         setData(response?.data);
-        const lines = response?.data?.findings?.split("\n");
-        setContent(lines);
       }
     } catch (err) {
       console.error(err);
@@ -76,9 +74,22 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       setLoading(false);
     }
   };
+
+  const changeDescription = () => {
+    if (onlyImages?.length) {
+      const lines = onlyImages[currentIndex]?.description?.split("\n");
+
+      setContent(lines);
+    }
+  };
   useEffect(() => {
-    getSingleScoutDetails(scoutId);
+    if (scoutId) {
+      getSingleScoutDetails(scoutId);
+    }
   }, [scoutId]);
+  useEffect(() => {
+    changeDescription();
+  }, [currentIndex]);
 
   return (
     <Dialog
@@ -107,6 +118,15 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   justifyContent: "center",
                   background: "#06060687",
                 }}
+                onWheel={(e: any) => {
+                  if (e.deltaY > 0 && e.deltaY % 20 == 0) {
+                    setCurrentIndex((prev) => prev + 1);
+                  } else {
+                    if (e.deltaY % 20 == 0) {
+                      setCurrentIndex((prev) => prev - 1);
+                    }
+                  }
+                }}
               >
                 <IconButton
                   onClick={() => setCuroselOpen(false)}
@@ -120,6 +140,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   selectedItem={currentIndex}
                   onChange={(index) => changeImage(index)}
                   swipeable={true}
+                  autoFocus
                 >
                   {onlyImages.map((item: any, index: any) => (
                     <div
@@ -201,6 +222,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
               loading={loading}
               data={data}
               content={content}
+              imageData={onlyImages[currentIndex]}
               setPreviewImageDialogOpen={setPreviewImageDialogOpen}
             />
           </Card>

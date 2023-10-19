@@ -18,13 +18,17 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
         ? item?.attachments?.map(
           (imageItem: ScoutAttachmentDetails, index: number) => {
             return (
-              <div className={styles.singleScoutImg}   key={index} onClick={() => onClickAttachment(imageItem._id)}>
-                <img
+              <div
+                className={styles.singleScoutImg}
+                key={index}
+                onClick={() => onClickAttachment(imageItem._id)}
+              >
+                {/* <img
                   src={imageItem?.url}
                   height={100}
                   width={100}
                   alt={imageItem.original_name}
-                />
+                /> */}
               </div>
             );
           }

@@ -18,8 +18,8 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
     const [alertType, setAlertType] = useState(false);
 
     useEffect(() => {
-        if (router.isReady) {
-            getAllScoutComments()
+        if (router.isReady && scoutDetails?._id) {
+          getAllScoutComments();
         }
     }, [router.isReady, accessToken])
 
@@ -33,7 +33,10 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
             }),
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/all`, options)
+            let response = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/comments/all`,
+              options
+            );
             let responseData = await response.json()
             if (responseData.success == true) {
                 const commentsById: any = {};

@@ -200,14 +200,20 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                             </Typography>
                         )
                     })}
-                    {showMore == false ?
-                        <Typography variant="caption" display="block" align="left">
-                            {mediaArray[currentIndex]?.description.length > 100 && showMore == false ? mediaArray[currentIndex]?.description.slice(1, 100) + "...." : mediaArray[currentIndex]?.description}<span onClick={() => setShowMore(true)}>Show More</span>
+                    {showMore == true ?
+                        <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description}
+                            <span style={{ cursor: 'pointer', fontWeight: '600', }} onClick={() => {
+                                setShowMore(false)
+                            }}>Show Less</span>
                         </Typography> :
-                        <Typography variant="caption" display="block" align="left">
-                            {mediaArray[currentIndex]?.description}<span onClick={() => setShowMore(false)}>Show less</span>
-                        </Typography>
-                    }
+
+                        <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description?.length > 100 ? mediaArray[currentIndex]?.description.slice(0, 100) + "...." : mediaArray[currentIndex]?.description}
+                            {mediaArray[currentIndex]?.description?.length > 100 ?
+                                <span style={{ fontWeight: '600', cursor: 'pointer' }} onClick={() => {
+                                    setShowMore(true)
+                                }}>Show More</span>
+                                : ""}</Typography>}
+
                     <div style={{ display: "flex", flexDirection: 'row', justifyContent: "flex-end" }}>
                         <IconButton onClick={() => {
                             captureImageDilogOptions("tag")

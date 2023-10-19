@@ -181,7 +181,7 @@ const SingleViewScoutComponent = () => {
                 description: findingsvalue
             }))
             setSelectedItems(newArray)
-            await updateDescriptionService(newArray, summaryContent)
+            await updateDescriptionService(newArray, selectedFile.summary)
         }
 
     }
@@ -303,6 +303,7 @@ const SingleViewScoutComponent = () => {
                                         setTagsCheckBoxOpen(true)
                                         setScoutId(item._id)
                                         setScoutAttachementsDetails(item.attachments)
+                                        setSlideShowImages(item.attachments)
                                     }}>
                                         <Image
                                             src={"/scouting-img-add.svg"}

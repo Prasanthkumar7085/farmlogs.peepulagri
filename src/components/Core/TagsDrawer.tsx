@@ -15,7 +15,7 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
     const [summaryContent, setSummaryContent] = useState('');
     const [editorHtml, setEditorHtml] = useState('');
     const [description, setDescription] = useState<any>(item?.description ? item.description : "");
-    const [tags, setTags] = useState<any>(item.tags.length ? item.tags : [])
+    const [tags, setTags] = useState<any>(item?.tags?.length ? item?.tags : [])
 
     const captureTags = (array: any) => {
         if (array) {

@@ -1,8 +1,8 @@
 import { TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-const TagsTextFeild = ({ captureTags }: any) => {
-    const [chips, setChips] = useState<any>([]);
+const TagsTextFeild = ({ captureTags, tags }: any) => {
+    const [chips, setChips] = useState<any>(tags?.length ? tags : []);
     const [inputValue, setInputValue] = useState<any>();
 
     const handleKeyDown = (e: any) => {

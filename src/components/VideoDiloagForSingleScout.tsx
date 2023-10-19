@@ -18,7 +18,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import timePipe from '@/pipes/timePipe';
 import Image from 'next/image';
-const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions }: any) => {
+const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions, captureSlideImagesIndex }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
@@ -38,6 +38,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             ?.scrollIntoView({ behavior: "smooth" });
         const nextIndex = (currentIndex + 1) % mediaArray?.length;
         setCurrentIndex(nextIndex);
+        captureSlideImagesIndex(nextIndex)
     };
 
     const playPrevious = () => {
@@ -46,6 +47,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             ?.scrollIntoView({ behavior: "smooth" });
         const prevIndex = currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
         setCurrentIndex(prevIndex);
+        captureSlideImagesIndex(prevIndex)
+
     };
 
     const handleClose = () => {
@@ -142,7 +145,10 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
 
                 <div style={{ width: "100%" }}>
 
-                    <Carousel selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)} swipeable={true}>
+                    <Carousel selectedItem={currentIndex} onChange={(index) => {
+                        setCurrentIndex(index)
+                        captureSlideImagesIndex(index)
+                    }} swipeable={true}>
                         {mediaArray?.length > 0 &&
                             mediaArray.map((item: any, index: any) => (
                                 <div className={styles.scoutDailogImg} key={index}>
@@ -187,7 +193,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                     </Typography>
                     {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
                         return (
-                            <Typography variant="caption" align="left">
+                            <Typography variant="caption" align="left" key={index}>
                                 {tag}
                             </Typography>
                         )

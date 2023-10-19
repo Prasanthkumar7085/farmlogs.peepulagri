@@ -1,28 +1,20 @@
-import { Breadcrumbs, Card, Chip, IconButton, Link, Typography, Button, Checkbox } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Gallery } from "react-grid-gallery";
-import styles from "./crop-card.module.css";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import timePipe from "@/pipes/timePipe";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import VideoDialog from "@/components/Core/VideoDiloag";
-import ViewSingleImagePreview from "@/components/ViewSingleImagePreview";
-import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
-import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
-import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
-import Image from "next/image";
-import moment from "moment";
-import CommentIcon from '@mui/icons-material/Comment';
-import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import InfiniteScroll from "react-infinite-scroll-component"
-import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
-import TagsDrawer from "@/components/Core/TagsDrawer";
-import SellIcon from '@mui/icons-material/Sell';
-import { assert } from "console";
+import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
+import TagsDrawer from "@/components/Core/TagsDrawer";
+import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
+import timePipe from "@/pipes/timePipe";
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import { Breadcrumbs, Card, Checkbox, IconButton, Link, Typography } from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
+import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
+import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
+import styles from "./crop-card.module.css";
 
 
 
@@ -126,7 +118,6 @@ const SingleViewScoutComponent = () => {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        setIndex(-1);
     };
 
     const handleClick = (index: number, item: any) => {
@@ -134,8 +125,8 @@ const SingleViewScoutComponent = () => {
         setIndexOfseletedOne(index);
         setSlideShowImages(item)
         setIndex(index)
-        setScoutId(item._id)
-        setScoutAttachementsDetails(item.attachments)
+        setSelectedItems([item[index]])
+        setScoutAttachementsDetails(item)
     };
 
 
@@ -165,7 +156,7 @@ const SingleViewScoutComponent = () => {
         console.log(value)
         if (value) {
             setSummaryContent(value)
-            await updateDescriptionService()
+            await updateDescriptionService([])
 
         }
 
@@ -181,12 +172,18 @@ const SingleViewScoutComponent = () => {
     //capture the tags details
     const captureTagsDetails = async (tags: any, findingsvalue: any) => {
         setScoutFindings(findingsvalue)
-        if (tags) {
+        if (tags.length) {
             tempImages.forEach((obj: any) => {
                 obj.tags = tags
-            });
-            await updateDescriptionService()
+            })
+            const newArray = tempImages.map((obj: any) => ({
+                ...obj,
+                description: findingsvalue
+            }))
+            setSelectedItems(newArray)
+            await updateDescriptionService(newArray)
         }
+
     }
     //checkbox handlechange event
     const handleChange = (itemId: any) => {
@@ -200,11 +197,19 @@ const SingleViewScoutComponent = () => {
         }
     };
 
+    //capture the slideimages index
+    const captureSlideImagesIndex = (value: any) => {
+        console.log(value)
+        if (value) {
+            setIndex(value)
+        }
+    }
+
     //update the details of the scouting
-    const updateDescriptionService = async () => {
+    const updateDescriptionService = async (imagesArray: any) => {
         setLoading(true)
         let updatedArray = scoutAttachmentDetails?.map((obj: any) => {
-            let matchingObj = tempImages?.find((item: any) => item._id === obj._id);
+            let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
             return matchingObj ? matchingObj : obj;
         });
 
@@ -217,21 +222,23 @@ const SingleViewScoutComponent = () => {
                 }),
                 body: JSON.stringify({
                     "farm_id": router.query.farm_id,
-                    "findings": scoutFindings,
                     "crop_id": router.query.crop_id,
-                    "attachments": tempImages.length ? updatedArray : scoutAttachmentDetails,
+                    "attachments": tempImages?.length ? updatedArray : scoutAttachmentDetails,
                     "summary": summaryContent
                 })
             }
             let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}`, options);
             const responseData = await response.json();
             if (responseData?.success == true) {
+                toast.success("Scout updated successfully");
                 setTagsDrawerOpen(false)
                 getPresingedURls()
                 setSelectedFile([])
                 setSelectedItems([])
                 setTagsCheckBoxOpen(false)
                 setSummaryDrawerOpen(false)
+                setSelectedItems([])
+                setScoutAttachementsDetails([])
             }
 
         } catch (err: any) {
@@ -330,7 +337,10 @@ const SingleViewScoutComponent = () => {
                                 {item?.attachments?.length !== 0 ? item.attachments.map((image: any, index: any) => (
 
                                     <div style={{ position: "relative", height: "100px", }} key={index}>
-                                        <img src={image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => handleClick(index, item.attachments)} style={{ cursor: "pointer", borderRadius: "5px" }} />
+                                        <img src={image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => {
+                                            handleClick(index, item.attachments)
+                                            setScoutId(item._id)
+                                        }} style={{ cursor: "pointer", borderRadius: "5px" }} />
 
                                         <div style={{ position: "absolute", top: 0, left: 0 }}>
                                             {tagsCheckBoxOpen && image?.tags?.length == 0 && scoutId == item._id ?
@@ -375,6 +385,7 @@ const SingleViewScoutComponent = () => {
                 mediaArray={sildeShowImages}
                 index={index}
                 data={scoutData}
+                captureSlideImagesIndex={captureSlideImagesIndex}
                 captureImageDilogOptions={captureImageDilogOptions} />
 
             {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} captureSummary={captureSummary} /> : ""}
@@ -382,7 +393,7 @@ const SingleViewScoutComponent = () => {
                 <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
             {tagsDrawerOpen ?
-                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} /> : ""}
+                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={sildeShowImages[index]} /> : ""}
 
             <div className="addFormPositionIcon">
                 {tagsCheckBoxOpen == false && tempImages?.length == 0 ?
@@ -394,6 +405,8 @@ const SingleViewScoutComponent = () => {
                             setTagsDrawerOpen(true)
                         }} /> : ""}
             </div>
+            <Toaster richColors position="top-right" closeButton />
+
         </div>
 
     )

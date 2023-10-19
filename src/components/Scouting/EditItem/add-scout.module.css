@@ -149,7 +149,7 @@
     align-self: stretch;
     position: relative;
     border-radius: 1px;
-    background-color: #05a155;
+    background-color: var(--color-mediumseagreen-100);
     height: 3px;
     overflow: hidden;
     flex-shrink: 0;

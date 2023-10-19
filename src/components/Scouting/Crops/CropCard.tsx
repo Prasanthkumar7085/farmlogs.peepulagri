@@ -135,7 +135,7 @@ const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) =
         <div className={styles.icons}>
           {/* <Image
             className={styles.folderIcon}
-            src="/crops-folder.svg"
+            src="/crop.svg"
             alt="Folder"
             width={80}
             height={80}

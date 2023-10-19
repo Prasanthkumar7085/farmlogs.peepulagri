@@ -1,14 +1,15 @@
 import React from "react";
 import ImageComponent from "./ImageComponent";
 import { Typography } from "@mui/material";
+import styles from "./NoFarmDataComponent.module.css"
 
 const NoFarmDataComponent = ({ noData }: { noData: Boolean }) => {
     return (
         <React.Fragment>
             {noData ?
-                <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: "3rem" }}>
-                    <ImageComponent src="/no-farms-image.svg" height={150} width={250} alt="nodata" />
-                    <Typography >No Farms </Typography>
+                <div className={styles.NoDataBlockImage}>
+                    <ImageComponent src="/no-farms-image.svg" height={150} width={180} alt="nodata" />
+                    <Typography className={styles.title}>No Farms </Typography>
                 </div> : ""}
 
         </React.Fragment>

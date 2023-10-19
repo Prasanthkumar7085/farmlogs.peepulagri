@@ -13,7 +13,7 @@
 
 .header {
   font-size: clamp(20px, 1.2vw, 24px);
-  color: #05a155;
+  color: var(--color-mediumseagreen-100);
   font-family: "Inter", sans-serif;
   font-weight: 400;
 }

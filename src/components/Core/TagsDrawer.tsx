@@ -14,8 +14,8 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [summaryContent, setSummaryContent] = useState('');
     const [editorHtml, setEditorHtml] = useState('');
-    const [description, setDescription] = useState<any>();
-    const [tags, setTags] = useState<any>(item.tags.length ? item.tags : [])
+    const [description, setDescription] = useState<any>(item?.description ? item.description : "");
+    const [tags, setTags] = useState<any>(item?.tags?.length ? item?.tags : [])
 
     const captureTags = (array: any) => {
         if (array) {
@@ -69,7 +69,11 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
                     sx={{ background: "#fff" }}
                 />
             </div>
-            <Button variant="contained" onClick={() => captureTagsDetails(tags, description)}>Submit</Button>
+            <Button variant="contained" onClick={() => {
+                captureTagsDetails(tags, description)
+                setTags([])
+                setDescription("")
+            }}>Submit</Button>
 
         </Drawer>
     );

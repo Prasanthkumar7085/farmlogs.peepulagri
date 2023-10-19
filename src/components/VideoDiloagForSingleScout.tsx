@@ -24,6 +24,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
     const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
     const [description, setDescription] = useState<any>()
     const [isZoom, setISZoom] = useState<any>()
+    const [showMore, setShowMore] = useState<any>(false)
+
 
 
     useEffect(() => {
@@ -193,18 +195,25 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                     </Typography>
                     {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
                         return (
-                          <Typography
-                            variant="caption"
-                            align="left"
-                            key={index}
-                          >
-                            {tag}
-                          </Typography>
-                        );
+                            <Typography variant="caption" align="left" key={index}>
+                                {tag}
+                            </Typography>
+                        )
                     })}
-                    <Typography variant="caption" display="block" align="left">
-                        {mediaArray[currentIndex]?.description}
-                    </Typography>
+                    {showMore == true ?
+                        <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description}
+                            <span style={{ cursor: 'pointer', fontWeight: '600', }} onClick={() => {
+                                setShowMore(false)
+                            }}>Show Less</span>
+                        </Typography> :
+
+                        <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description?.length > 100 ? mediaArray[currentIndex]?.description.slice(0, 100) + "...." : mediaArray[currentIndex]?.description}
+                            {mediaArray[currentIndex]?.description?.length > 100 ?
+                                <span style={{ fontWeight: '600', cursor: 'pointer' }} onClick={() => {
+                                    setShowMore(true)
+                                }}>Show More</span>
+                                : ""}</Typography>}
+
                     <div style={{ display: "flex", flexDirection: 'row', justifyContent: "flex-end" }}>
                         <IconButton onClick={() => {
                             captureImageDilogOptions("tag")

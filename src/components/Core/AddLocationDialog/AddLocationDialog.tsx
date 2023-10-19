@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import styles from "./location-dialog.module.css";
 import { useEffect, useState } from "react";
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 
 
 const AddLocationDialog = ({ open, captureResponseDilog, loading, defaultTitle, errorMessages }: any) => {
@@ -20,14 +21,13 @@ const AddLocationDialog = ({ open, captureResponseDilog, loading, defaultTitle, 
   return (
     <Dialog open={open} PaperProps={{
       sx: {
-        borderRadius: "16px", width: "90%", margin: "0",
-
+        borderRadius: "8px", width: "90%", margin: "0",
       }
     }}>
 
       <div className={styles.newfolder}>
         <div className={styles.frame}>
-          <h3 className={styles.newFolder}>{`Add Location`}</h3>
+          <h3 className={styles.newFolder}><AddLocationAltIcon /> <span>{`Add Location`}</span></h3>
           <TextField
             className={styles.input}
             color="primary"

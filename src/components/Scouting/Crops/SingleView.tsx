@@ -151,7 +151,6 @@ const SingleViewScoutComponent = () => {
     const tagsDrawerClose = (value: any) => {
         if (value == false) {
             setTagsDrawerOpen(false)
-            setSelectedFile([])
         }
     }
     //capture the summary content
@@ -205,8 +204,7 @@ const SingleViewScoutComponent = () => {
 
     //capture the slideimages index
     const captureSlideImagesIndex = (value: any) => {
-        console.log(value)
-        console.log(sildeShowImages[value])
+
         if (value) {
             setIndex(value)
             setSelectedItems([sildeShowImages[value]])

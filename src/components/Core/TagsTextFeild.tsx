@@ -6,7 +6,7 @@ const TagsTextFeild = ({ captureTags, tags }: any) => {
     const [inputValue, setInputValue] = useState<any>();
 
     const handleKeyDown = (e: any) => {
-        if (e.key === 'Enter' && inputValue) {
+        if (e.key === 'Enter' && inputValue && !chips.includes(inputValue)) {
             setChips([...chips, inputValue]);
             captureTags([...chips, inputValue])
             setInputValue('');

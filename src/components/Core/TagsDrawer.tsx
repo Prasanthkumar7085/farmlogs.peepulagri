@@ -1,4 +1,7 @@
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { CKEditor } from "ckeditor4-react";
 import {
   Button,
   Drawer,
@@ -6,21 +9,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import timePipe from "@/pipes/timePipe";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import TagsTextFeild from "./TagsTextFeild";
 
 const TagsDrawer = ({
-  tagsDrawerOpen,
   tagsDrawerClose,
   item,
   captureTagsDetails,
+  selectedItems,
 }: any) => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-  const [description, setDescription] = useState<any>(
-    item?.description ? item.description : ""
+  console.log(selectedItems);
+  console.log(
+    selectedItems.some((obj: any) => obj.hasOwnProperty("description") == false)
   );
-  const [tags, setTags] = useState<any>(item?.tags?.length ? item?.tags : []);
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [description, setDescription] = useState<any>();
+  const [tags, setTags] = useState<any>();
 
   const captureTags = (array: any) => {
     if (array) {
@@ -31,7 +39,7 @@ const TagsDrawer = ({
   return (
     <Drawer
       anchor={"bottom"}
-      open={tagsDrawerOpen}
+      open={isDrawerOpen}
       sx={{ zIndex: "1300 !important" }}
     >
       <div
@@ -55,24 +63,32 @@ const TagsDrawer = ({
       <div style={{ width: "100%", height: "300px " }}>
         <Typography>Tags</Typography>
         <TagsTextFeild captureTags={captureTags} tags={tags} />
-        <Typography>Findings</Typography>
-        <TextField
-          color="primary"
-          name="desciption"
-          id="description"
-          minRows={4}
-          maxRows={4}
-          placeholder="Enter your findings here"
-          fullWidth={true}
-          variant="outlined"
-          multiline
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-          sx={{ background: "#fff" }}
-        />
+        {selectedItems.some((obj: any) => obj.hasOwnProperty("description")) ==
+        false ? (
+          <>
+            <Typography>Findings</Typography>
+            <TextField
+              color="primary"
+              name="description"
+              id="description"
+              rows={4}
+              maxRows={4}
+              placeholder="Enter your findings here"
+              fullWidth={true}
+              variant="outlined"
+              multiline
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              sx={{ background: "#fff" }}
+            />
+          </>
+        ) : // What you want to render if the condition is not met
+        // For example, you can render some default component or nothing at all
+        null}
       </div>
+
       <Button
         variant="contained"
         onClick={() => {

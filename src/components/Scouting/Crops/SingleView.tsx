@@ -15,6 +15,8 @@ import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import AddIcon from '@mui/icons-material/Add';
 
 
 
@@ -329,8 +331,8 @@ const SingleViewScoutComponent = () => {
                             </div>
                         </div>
 
-                        <Card sx={{
-                            width: "100%", minHeight: "100px",
+                        <Card  variant="outlined" sx={{
+                            width: "100%", minHeight: "100px", marginBottom: "5.5rem",
                         }}>
 
                             <div style={{
@@ -353,9 +355,9 @@ const SingleViewScoutComponent = () => {
                                                 <Checkbox
 
                                                     sx={{
-                                                        color: "#7f7f7f",
+                                                        color: "#ffffff",
                                                         '& .MuiSvgIcon-root': {
-                                                            color: "#7f7f7f"
+                                                            color: "#ffffff"
                                                         }
                                                     }}
                                                     size="small"
@@ -402,17 +404,21 @@ const SingleViewScoutComponent = () => {
                 <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={sildeShowImages[index]} /> : ""}
 
             <div className="addFormPositionIcon">
+                
                 {tagsCheckBoxOpen == false && selectedItems?.length == 0 ?
-                    <img src="/add-plus-icon.svg" alt="" onClick={() => {
+                    <IconButton size="large" className={styles.AddScoutingbtn} aria-label="add to shopping cart" onClick={() => {
                         router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
-                    }} /> :
+                    }}>
+                        <AddIcon />
+                    </IconButton> :
                     selectedItems?.length ?
-                        <img src="/scout-add-floating-icon.svg" alt="tags icon" onClick={() => {
-                            setTagsDrawerOpen(true)
-                        }} /> : ""}
+                    <IconButton size="large" className={styles.AddTagsbtn} aria-label="add to shopping cart" onClick={() => {
+                        setTagsDrawerOpen(true)
+                    }}>
+                        <LocalOfferIcon />
+                    </IconButton> : ""}
             </div>
             <Toaster richColors position="top-right" closeButton />
-
         </div>
 
     )

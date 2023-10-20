@@ -232,3 +232,13 @@
 .actionButtons button{
   min-width: auto;
 }
+.AddTagsbtn {
+  background: var(--Dark-Green, #5E9765);
+  /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */
+  color: #ffffff;
+}
+.AddScoutingbtn {
+  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
+  /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */
+  color: #ffffff;
+}

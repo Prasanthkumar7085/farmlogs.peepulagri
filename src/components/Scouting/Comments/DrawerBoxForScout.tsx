@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import timePipe from "@/pipes/timePipe";
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 
-const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) => {
+const DrawerComponentForScout = ({ drawerClose, attachement, scoutDetails }: any) => {
 
     const dispatch = useDispatch()
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
@@ -43,12 +43,12 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
             }),
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}/comments/all`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 const commentsById: any = {};
 
-                responseData.data.forEach((comment: any) => {
+                responseData.data[0]?.comments.forEach((comment: any) => {
                     commentsById[comment._id] = {
                         ...comment,
                         replies: [] // Initialize an empty array for replies
@@ -56,7 +56,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
                 });
 
                 // Populate the replies for each comment
-                responseData.data.forEach((comment: any) => {
+                responseData.data[0]?.comments.forEach((comment: any) => {
                     if (comment.type === "REPLY" && comment.reply_to_comment_id) {
                         const parentId = comment.reply_to_comment_id;
                         if (commentsById[parentId]) {
@@ -102,7 +102,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
             }),
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}/comments/${commnet_id}`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 getAllScoutComments()
@@ -131,7 +131,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}/comments/${commnet_id}`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 getAllScoutComments()
@@ -182,7 +182,7 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}/${commentId}/attachments`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/${commentId}/attachments`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 setAlertMessage("Attachement deleted successfully")
@@ -202,17 +202,15 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
     return (
 
         <Drawer
-            anchor={anchor}
+            anchor={"bottom"}
             open={isDrawerOpen}
-        >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem", borderBottom: "1px solid #dddddd", width: anchor == "right" ? 600 : "" }}>
+            sx={{ zIndex: "1300 !important" }}
 
-                {anchor == "right" ?
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                        <Typography variant="h6">{item?.farm_id?.title}</Typography>
-                        {timePipe(item?.createdAt, "DD MMM YYYY, hh:mm A")}
-                    </div> : ""}
-                <Typography className={styles.CommentsTitle}>{anchor == "right" ? cropTitle : "Comments"}</Typography>
+        >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem", borderBottom: "1px solid #dddddd" }}>
+
+
+                <Typography className={styles.CommentsTitle}>{"Comments"}</Typography>
                 <IconButton onClick={() => {
                     drawerClose(false)
                 }} ><CloseIcon /></IconButton>
@@ -228,9 +226,11 @@ const DrawerComponentForScout = ({ drawerClose, scoutId, anchor, item }: any) =>
                         afterReply={afterReply}
                         afterDeleteAttachements={afterDeleteAttachements}
                         loadingThreads={loadingThreads}
+                        attachement={attachement}
+                        scoutDetails={scoutDetails}
                     />
                 </div>
-                <CommentForm afterCommentAdd={afterCommentAdd} scoutId={scoutId} />
+                <CommentForm afterCommentAdd={afterCommentAdd} scoutDetails={scoutDetails} attachement={attachement} />
 
                 <LoadingComponent loading={loading} />
                 <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />

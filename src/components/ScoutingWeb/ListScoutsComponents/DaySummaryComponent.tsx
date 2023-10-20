@@ -1,6 +1,6 @@
 import timePipe from "@/pipes/timePipe";
 import { CropType, SingleScoutResponse } from "@/types/scoutTypes";
-import { EditOutlined } from "@mui/icons-material";
+import { AddOutlined, EditOutlined } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -91,8 +91,9 @@ const DaySummaryComponent: FC<pageProps> = ({
   useEffect(() => {
     if (!openDaySummary) {
       setRecomendations("");
+      setEditRecomendation(false);
     }
-  }, [editRecomendation]);
+  }, [openDaySummary]);
 
   useEffect(() => {
     if (singleScoutData) {
@@ -101,25 +102,41 @@ const DaySummaryComponent: FC<pageProps> = ({
     }
   }, [singleScoutData]);
   return (
-    <Drawer
-      anchor={"right"}
-      open={openDaySummary}
-      onClose={() => setOpenDaySummary(false)}
-    >
+    <Drawer anchor={"right"} open={openDaySummary}>
       <div
         className={styles.viewHeader}
         style={{ minWidth: "400px", maxWidth: "400px" }}
       >
         <div>
           <p className={styles.startdate}>
-            {timePipe(singleScoutData?.createdAt, "DD MMM YYYY hh:mm A")}
+            {loading ? (
+              <div>
+                <Skeleton width="150px" height="10px" />
+              </div>
+            ) : (
+              timePipe(singleScoutData?.createdAt, "DD MMM YYYY hh:mm A")
+            )}
           </p>
 
           <h1 className={styles.cropName}>
             <img src="/cropName-icon.svg" alt="" />
-            {cropName?.title + " "}
+            {loading ? (
+              <div>
+                <Skeleton width="130px" height="25px" />
+              </div>
+            ) : (
+              cropName?.title + " "
+            )}
           </h1>
-          <h2 className={styles.farmname}>{singleScoutData?.farm_id.title}</h2>
+          <h2 className={styles.farmname}>
+            {loading ? (
+              <div>
+                <Skeleton width="130px" height="15px" />
+              </div>
+            ) : (
+              singleScoutData?.farm_id.title
+            )}
+          </h2>
         </div>
         <IconButton
           className={styles.iconDiv}
@@ -133,83 +150,39 @@ const DaySummaryComponent: FC<pageProps> = ({
           <h1 className={styles.finding}>Day Summary</h1>
           <p className={styles.findingText}>
             {loading ? (
-              <div style={{ paddingLeft: "30px" }}>
-                <Skeleton width="300px" height="150px" />
+              <div style={{ paddingLeft: "10px" }}>
+                <Skeleton width="300px" height="20px" />
+
+                <Skeleton width="300px" height="20px" />
+                <Skeleton width="300px" height="20px" />
+                <Skeleton width="300px" height="20px" />
               </div>
             ) : (
               <div style={{ maxWidth: "300px" }}>
-                <Markup content={singleScoutData?.summary} />
+                {singleScoutData?.summary ? (
+                  <Markup content={singleScoutData?.summary} />
+                ) : (
+                  "-"
+                )}
               </div>
             )}
           </p>
         </div>
       </div>
-
-      {!singleScoutData?.suggestions || editRecomendation ? (
-        <div className={styles.scoutingdetails}>
-          <div className={styles.textwrapper}>
+      <div className={styles.scoutingdetails}>
+        <div className={styles.textwrapper}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
             <h1 className={styles.finding}>Recomendations</h1>
-
-            {loading ? (
-              <div style={{ paddingLeft: "30px" }}>
-                <Skeleton width="300px" height="150px" />
-              </div>
-            ) : (
-              <TextField
-                value={recomendations}
-                onChange={(e) => setRecomendations(e.target.value)}
-                multiline
-                placeholder={"Your recomendations here..."}
-                minRows={4}
-                maxRows={4}
-                sx={{
-                  width: "100%",
-                }}
-              />
-            )}
-          </div>
-          {loading ? (
-            ""
-          ) : (
-            <div className={styles.sendButtonDiv}>
-              {singleScoutData?.suggestions ? (
-                <Button
-                  className={styles.cancelButton}
-                  variant="outlined"
-                  onClick={() => setEditRecomendation(false)}
-                >
-                  Cancel
-                </Button>
-              ) : (
-                ""
-              )}
-              <Button
-                className={styles.sendButton}
-                variant="contained"
-                onClick={sendRecomendations}
-              >
-                Send
-                {updateLoading ? (
-                  <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                ) : (
-                  <SendIcon />
-                )}
-              </Button>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className={styles.scoutingdetails}>
-          <div className={styles.textwrapper}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-                alignItems: "center",
-              }}
-            >
-              <h1 className={styles.finding}>Recomendations</h1>
+            {loading || editRecomendation ? (
+              ""
+            ) : singleScoutData?.suggestions ? (
               <IconButton
                 onClick={() => {
                   setEditRecomendation(true);
@@ -217,13 +190,73 @@ const DaySummaryComponent: FC<pageProps> = ({
               >
                 <EditOutlined />
               </IconButton>
-            </div>
-            <div style={{ maxWidth: "300px" }}>
-              <Markup content={singleScoutData?.suggestions} />
-            </div>
+            ) : (
+              <IconButton
+                onClick={() => {
+                  setEditRecomendation(true);
+                }}
+              >
+                <AddOutlined />
+              </IconButton>
+            )}
           </div>
+
+          {!loading && editRecomendation ? (
+            <div style={{ width: "100%" }}>
+              <TextField
+                value={recomendations}
+                onChange={(e) => setRecomendations(e.target.value)}
+                multiline
+                placeholder={"Your recomendations here..."}
+                minRows={4}
+                maxRows={8}
+                sx={{
+                  width: "100%",
+                }}
+              />
+              <div className={styles.sendButtonDiv}>
+                <Button
+                  className={styles.cancelButton}
+                  variant="outlined"
+                  onClick={() => setEditRecomendation(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className={styles.sendButton}
+                  variant="contained"
+                  onClick={sendRecomendations}
+                >
+                  Send
+                  {updateLoading ? (
+                    <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                  ) : (
+                    <SendIcon />
+                  )}
+                </Button>
+              </div>
+            </div>
+          ) : loading ? (
+            <div style={{ paddingLeft: "10px" }}>
+              <Skeleton width="300px" height="20px" />
+              <Skeleton width="300px" height="20px" />
+              <Skeleton width="300px" height="20px" />
+              <Skeleton width="300px" height="20px" />
+            </div>
+          ) : (
+            <div style={{ maxWidth: "300px" }}>
+              <Markup
+                content={
+                  singleScoutData?.suggestions
+                    ? singleScoutData?.suggestions
+                    : "<i>*No Recomendations were added*</i>"
+                }
+              />
+            </div>
+          )}
         </div>
-      )}
+      </div>
+
       <Toaster richColors position="top-right" closeButton />
     </Drawer>
   );

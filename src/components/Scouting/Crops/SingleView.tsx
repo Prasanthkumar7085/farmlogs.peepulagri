@@ -9,12 +9,13 @@ import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import { Breadcrumbs, Card, Checkbox, IconButton, Link, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
+import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 
 
 
@@ -45,6 +46,7 @@ const SingleViewScoutComponent = () => {
     const [scoutAttachmentDetails, setScoutAttachementsDetails] = useState<any>()
     const [summaryContent, setSummaryContent] = useState<any>()
     const [scoutFindings, setScoutFindings] = useState<any>()
+    const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>()
 
     let tempImages: any = [...selectedItems];
 
@@ -112,8 +114,6 @@ const SingleViewScoutComponent = () => {
 
     const handleOpenDialog = (item: any) => {
         setOpenDialog(true);
-
-        setSelectedItems([])
     }
 
     const handleCloseDialog = () => {
@@ -151,6 +151,7 @@ const SingleViewScoutComponent = () => {
     const tagsDrawerClose = (value: any) => {
         if (value == false) {
             setTagsDrawerOpen(false)
+            setTagsDrawerEditOpen(false)
         }
     }
     //capture the summary content
@@ -165,26 +166,38 @@ const SingleViewScoutComponent = () => {
 
     //capture thecurosel options
     const captureImageDilogOptions = (value: any) => {
-        console.log(value)
         if (value == "tag") {
-            setTagsDrawerOpen(true)
+            setTagsDrawerEditOpen(true)
         }
     }
     //capture the tags details
     const captureTagsDetails = async (tags: any, findingsvalue: any) => {
+        console.log(tags, findingsvalue)
         setScoutFindings(findingsvalue)
-        if (tags.length) {
+        if (tags?.length && findingsvalue?.length !== 0) {
             await tempImages.forEach((obj: any) => {
-                obj.tags = tags
+                obj.tags = [...obj.tags, ...tags]
+                obj.description = findingsvalue
             })
-            const newArray = await tempImages.map((obj: any) => ({
-                ...obj,
-                description: findingsvalue
-            }))
-            setSelectedItems(newArray)
-            await updateDescriptionService(newArray, selectedFile.summary)
+            setSelectedItems(tempImages)
+            await updateDescriptionService(tempImages, selectedFile.summary)
         }
-
+        if (tags?.length !== 0 && findingsvalue?.length == 0 && tempImages.some((obj: any) => obj.hasOwnProperty('description')) == true) {
+            await tempImages.forEach((obj: any) => {
+                obj.tags = [...obj.tags, ...tags]
+                obj.description = obj.description
+            })
+            setSelectedItems(tempImages)
+            await updateDescriptionService(tempImages, selectedFile.summary)
+        }
+        if (tags?.length == 0 && findingsvalue?.length !== 0) {
+            console.log("o")
+            await tempImages.forEach((obj: any) => {
+                obj.description = findingsvalue
+            })
+            setSelectedItems(tempImages)
+            await updateDescriptionService(tempImages, selectedFile.summary)
+        }
     }
     //checkbox handlechange event
     const handleChange = (itemId: any) => {
@@ -316,6 +329,7 @@ const SingleViewScoutComponent = () => {
                                         setScoutId(item._id)
                                         setScoutAttachementsDetails(item.attachments)
                                         setSlideShowImages(item.attachments)
+                                        setSelectedFile("")
                                     }}>
                                         <Image
                                             src={"/scouting-img-add.svg"}
@@ -360,7 +374,7 @@ const SingleViewScoutComponent = () => {
                                         }} style={{ cursor: "pointer", borderRadius: "5px" }} />
 
                                         <div style={{ position: "absolute", top: 0, left: 0 }}>
-                                            {tagsCheckBoxOpen && image?.tags?.length == 0 && scoutId == item._id ?
+                                            {tagsCheckBoxOpen && scoutId == item._id ?
                                                 <Checkbox
 
                                                     sx={{
@@ -375,7 +389,16 @@ const SingleViewScoutComponent = () => {
                                                     inputProps={{ 'aria-label': 'controlled' }}
                                                     color="secondary"
                                                     title={image.id}
-                                                /> : tagsCheckBoxOpen == true && scoutId == item._id ? <Image src={"/scout-img-select.svg"} width={10} height={10} alt="tags" /> : ""}
+                                                /> : ""}
+                                        </div>
+                                        <div style={{ position: "absolute", top: 0, right: 0 }}>
+                                            {tagsCheckBoxOpen == true && scoutId == item._id && image?.description ?
+                                                <Image src={"/findings.png"} width={10} height={10} alt="tags" />
+                                                : ""}
+                                            {tagsCheckBoxOpen == true && scoutId == item._id && image?.tags?.length ?
+                                                <Image src={"/scout-img-select.svg"} width={10} height={10} alt="tags" />
+                                                : ""}
+
                                         </div>
                                     </div>
 
@@ -410,7 +433,10 @@ const SingleViewScoutComponent = () => {
                 <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
             {tagsDrawerOpen ?
-                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={selectedFile} /> : ""}
+                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={selectedFile} selectedItems={selectedItems} /> : ""}
+
+            {TagsDrawerEditOpen ?
+                <TagsDrawerEdit tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={selectedFile} selectedItems={selectedItems} /> : ""}
 
             <div className="addFormPositionIcon">
                 {tagsCheckBoxOpen == false && selectedItems?.length == 0 ?

@@ -9,12 +9,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import TagsTextFeild from './TagsTextFeild';
 
-const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails, selectedItems }: any) => {
-    console.log(selectedItems)
-    console.log(selectedItems.some((obj: any) => obj.hasOwnProperty('description') == false))
+const TagsDrawerEdit = ({ tagsDrawerClose, item, captureTagsDetails, selectedItems }: any) => {
+
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-    const [description, setDescription] = useState<any>();
+    const [summaryContent, setSummaryContent] = useState('');
+    const [editorHtml, setEditorHtml] = useState('');
+    const [description, setDescription] = useState<any>(item?.description ? item.description : "");
     const [tags, setTags] = useState<any>()
 
     const captureTags = (array: any) => {
@@ -51,31 +52,24 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails, selectedItems }
             < div style={{ width: '100%', height: "300px " }}>
                 <Typography>Tags</Typography>
                 <TagsTextFeild captureTags={captureTags} tags={tags} />
-                {selectedItems.some((obj: any) => obj.hasOwnProperty('description')) == false ? (
-                    <>
-                        <Typography>Findings</Typography>
-                        <TextField
-                            color="primary"
-                            name="description"
-                            id="description"
-                            rows={4}
-                            maxRows={4}
-                            placeholder="Enter your findings here"
-                            fullWidth={true}
-                            variant="outlined"
-                            multiline
-                            value={description}
-                            onChange={(e) => {
-                                setDescription(e.target.value);
-                            }}
-                            sx={{ background: "#fff" }}
-                        />
-                    </>
-                ) : (
-                    // What you want to render if the condition is not met
-                    // For example, you can render some default component or nothing at all
-                    null
-                )}
+
+                <Typography>Findings</Typography>
+                <TextField
+                    color="primary"
+                    name="description"
+                    id="description"
+                    rows={4}
+                    maxRows={4}
+                    placeholder="Enter your findings here"
+                    fullWidth={true}
+                    variant="outlined"
+                    multiline
+                    value={description}
+                    onChange={(e) => {
+                        setDescription(e.target.value);
+                    }}
+                    sx={{ background: "#fff" }}
+                />
 
             </div>
 
@@ -90,4 +84,4 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails, selectedItems }
     );
 };
 
-export default TagsDrawer;
+export default TagsDrawerEdit;

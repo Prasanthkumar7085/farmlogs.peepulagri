@@ -1,7 +1,10 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
-import { SingleScoutResponse } from "@/types/scoutTypes";
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import {
+  ScoutAttachmentDetails,
+  SingleScoutResponse,
+} from "@/types/scoutTypes";
 import { Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
@@ -12,13 +15,15 @@ import ListAllCropsForDropDownServices from "../../../../lib/services/CropServic
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
-import ScoutingCardWeb from "../Scouting/ScoutingCard";
+import SingleScoutViewDetails from "../Scouting/ViewScouting";
 import styles from "../farms/FarmsNavBar.module.css";
 import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
 import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
+import ScoutingDailyImages from "./ScoutingDailyImages";
 import UserDropDownForScouts from "./UserDropDownForScouts";
-import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
+import timePipe from "@/pipes/timePipe";
+import DaySummaryComponent from "./DaySummaryComponent";
 
 interface ApiMethodProps {
   page: string | number;
@@ -39,18 +44,23 @@ const ListScouts: FunctionComponent = () => {
   const [data, setData] = useState<Array<SingleScoutResponse>>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(10);
   const [usersOptions, setUserOptions] = useState();
   const [user, setUser] = useState<any>();
   const [farmOptions, setFarmOptions] = useState([]);
   const [farm, setFarm] = useState<any>();
   const [cropOptions, setCropOptions] = useState([]);
   const [crop, setCrop] = useState<any>();
-  const [hasMore, setHasMore] = useState<boolean>(true);
   const [paginationDetails, setPaginationDetails] = useState<any>();
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [viewAttachmentId, setViewAttachmentId] = useState("");
+  const [previewImageDialogOpen, setPreviewImageDialogOpen] = useState(false);
+  const [onlyImages, setOnlyImages] = useState([]);
+  const [openDaySummary, setOpenDaySummary] = useState(false);
+  const [seletectedItemDetails, setSelectedItemDetails] =
+    useState<SingleScoutResponse>();
 
   const onChangeUser = async (e: any, value: any) => {
     if (value) {
@@ -203,7 +213,7 @@ const ListScouts: FunctionComponent = () => {
 
   const getAllScoutsList = async ({
     page = 1,
-    limit = 12,
+    limit = 10,
     farmId,
     userId,
     fromDate,
@@ -245,12 +255,62 @@ const ListScouts: FunctionComponent = () => {
       const { data, ...rest } = response;
       setPaginationDetails(rest);
       setData(data);
+      let onlyImagesData = unWindImages(data);
+      setOnlyImages(onlyImagesData);
     } else {
       toast.error("Failed to fetch");
     }
     setLoading(false);
   };
 
+  const unWindImages = (data: Array<SingleScoutResponse>) => {
+    let array: any = [];
+    data.length &&
+      data.filter((item: SingleScoutResponse) => {
+        let scoutId = item._id;
+        let updatedAttachments: any =
+          item.attachments?.length &&
+          item.attachments.map((attachemntItem: ScoutAttachmentDetails) => {
+            return { ...attachemntItem, scout_id: scoutId };
+          });
+        array = [...array, ...updatedAttachments];
+      });
+    let details = [];
+    if (array.length) {
+      details = array.map((item: any, index: number) => {
+        if (item.type.includes("video")) {
+          return {
+            ...item,
+            src: "/videoimg.png",
+            height: 80,
+            width: 60,
+            type: item.type,
+            caption: `${index + 1} image`,
+            original: item?.url,
+          };
+        } else if (item.type.includes("application")) {
+          return {
+            ...item,
+            src: "/pdf-icon.png",
+            height: 80,
+            width: 60,
+            type: item.type,
+            caption: `${index + 1} image`,
+            original: item.url,
+          };
+        } else {
+          return {
+            ...item,
+            src: item.url,
+            height: 80,
+            width: 60,
+            type: item.type,
+          };
+        }
+      });
+    }
+    return details;
+  };
   const getAllUsers = async (userId = "") => {
     const response = await getAllUsersService({ token: accessToken });
 
@@ -273,9 +333,7 @@ const ListScouts: FunctionComponent = () => {
       order_by: "title",
       order_type: "asc",
     };
-    if (userId) {
-      queryParams["user_id"] = userId;
-    }
+
     let url = prepareURLEncodedParams("", queryParams);
 
     const response = await ListAllFarmForDropDownService(url, accessToken);
@@ -342,7 +400,7 @@ const ListScouts: FunctionComponent = () => {
     setToDate("");
     setCrop("");
     setPage(1);
-    setLimit(12);
+    setLimit(10);
     await getAllScoutsList({});
     // getAllUsers();
     getAllFarms();
@@ -374,20 +432,29 @@ const ListScouts: FunctionComponent = () => {
     }
   }, [router.isReady, accessToken]);
 
+  const onClickAttachment = (attachmentId: string) => {
+    setViewAttachmentId(attachmentId);
+    setPreviewImageDialogOpen(true);
+  };
+
   return (
-    <div
-      className={styles.AllScoutsPageWeb}
-    >
+    <div className={styles.AllScoutsPageWeb}>
       <div className={styles.scoutPageHeader}>
         <Typography variant="h4">
-          <img src="/scouting-header-icon.svg" alt="" height="20px" width={"20px"} />
-          Scouting</Typography>
+          <img
+            src="/scouting-header-icon.svg"
+            alt=""
+            height="20px"
+            width={"20px"}
+          />
+          Scouting
+        </Typography>
         <div className={styles.allScoutsFilterBlock}>
-          <UserDropDownForScouts
+          {/* <UserDropDownForScouts
             user={user}
             onChangeUser={onChangeUser}
             usersOptions={usersOptions}
-          />
+          /> */}
           <FarmAutoCompleteInAllScouting
             options={farmOptions}
             onSelectFarmFromDropDown={onSelectFarmFromDropDown}
@@ -402,7 +469,9 @@ const ListScouts: FunctionComponent = () => {
             placeholder={"Select Crop here"}
             defaultValue={crop}
           />
-          <DateRangePickerForAllScouts onDateFilterChange={onDateFilterChange} />
+          <DateRangePickerForAllScouts
+            onDateFilterChange={onDateFilterChange}
+          />
           <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
@@ -415,36 +484,76 @@ const ListScouts: FunctionComponent = () => {
       </div>
       <div className={styles.allFarms}>
         <div className={styles.allScoutingCards}>
-          {data?.length ? (
-            data.map((item: SingleScoutResponse, index: number) => {
-              return <ScoutingCardWeb item={item} key={index} />;
-            })
-          ) : !loading ? (
-            <div
-              id={styles.noData}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "4rem",
-              }}
-            >
-              <ImageComponent
-                src="/emty-folder-image.svg"
-                alt="empty folder"
-                width={250}
-                height={150}
-              />
-              <Typography variant="h4">No Scoutings</Typography>
-            </div>
-          ) : (
-            ""
-          )}
+          {data?.length
+            ? data.map((item: SingleScoutResponse, index: number) => {
+                return (
+                  <div className={styles.eachDayScouting} key={index}>
+                    <div
+                      className={styles.scoutDay}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography>
+                        {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
+                      </Typography>
+                      <div
+                        className={styles.summaryBtn}
+                        onClick={() => {
+                          setOpenDaySummary(true);
+                          setSelectedItemDetails(item);
+                        }}
+                      >
+                        <SummaryIcon /> Summary
+                      </div>
+                    </div>
+                    <ScoutingDailyImages
+                      item={item}
+                      key={index}
+                      onClickAttachment={onClickAttachment}
+                    />
+                  </div>
+                );
+              })
+            : ""}
         </div>
+        {!data?.length && !loading ? (
+          <div
+            id={styles.noData}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "4rem",
+            }}
+          >
+            <ImageComponent
+              src="/emty-folder-image.svg"
+              alt="empty folder"
+              width={250}
+              height={150}
+            />
+            <Typography variant="h4">No Scoutings</Typography>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
-
-      {!loading ? (
+      <SingleScoutViewDetails
+        viewAttachmentId={viewAttachmentId}
+        onlyImages={onlyImages}
+        previewImageDialogOpen={previewImageDialogOpen}
+        setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+      />
+      <DaySummaryComponent
+        openDaySummary={openDaySummary}
+        setOpenDaySummary={setOpenDaySummary}
+        seletectedItemDetails={seletectedItemDetails}
+      />
+      {/* {!loading ? (
         <TablePaginationComponentForScouts
           paginationDetails={paginationDetails}
           capturePageNum={capturePageNum}
@@ -453,7 +562,7 @@ const ListScouts: FunctionComponent = () => {
         />
       ) : (
         ""
-      )}
+      )} */}
       <LoadingComponent loading={loading} />
     </div>
   );

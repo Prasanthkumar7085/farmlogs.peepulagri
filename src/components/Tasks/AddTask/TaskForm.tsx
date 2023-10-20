@@ -339,7 +339,7 @@ const TaskForm = () => {
                     maxRows={4}
                     className={styles.inoutbox}
                     color="primary"
-                    placeholder="Enter your Task title here"
+                    placeholder="Enter your Task description here"
                     fullWidth={true}
                     variant="outlined"
                     value={description}

@@ -1,6 +1,7 @@
 import timePipe from '@/pipes/timePipe';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Chip,
     Dialog,
     DialogContent,
     IconButton,
@@ -13,6 +14,8 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useSwipeable } from 'react-swipeable';
 import styles from "./view-logs-container.module.css";
+import SellIcon from '@mui/icons-material/Sell';
+
 const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions, captureSlideImagesIndex }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -113,11 +116,13 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
           background: "#0000008f",
           "& .MuiPaper-root": {
             margin: "0 !important",
-            width: "95%",
+            width: "100%",
             background: "#ffffff00",
             boxShadow: "none !important",
             height: "calc(100% - 140px)",
-            maxWidth: "400px !important",
+              maxWidth: "400px !important",
+             maxHeight: "100vh",
+alignContent: "flex-end",
           },
           "& .MuiTypography-root": {
             color: "#fff",
@@ -127,14 +132,14 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             padding: "0rem",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "space-between",
           },
           "& .MuiDialogActions-root ": {
             justifyContent: "center !important",
           },
         }}
       >
-        <IconButton onClick={handleClose} sx={{}}>
+        <IconButton onClick={handleClose} sx={{textAlign: "right"}}>
           <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
         </IconButton>
         <DialogContent>
@@ -192,22 +197,25 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             </Carousel>
           </div>
         </DialogContent>
-        ;
+        
         {/* <Typography variant="caption" display="block" align="center">
                     {currentIndex + 1} of {mediaArray?.length}
                 </Typography> */}
         {mediaArray?.length && (
-          <div>
+          <div className={styles.cropDetailsBlock}>
             <Typography variant="caption" display="block" align="left">
               {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh-mm a")}
             </Typography>
-            {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
+             <div className={styles.tagNames}>
+                        <Chip className={styles.tagsLabel} icon={<SellIcon sx={{ fontSize: 15 }}/>} label="Tags" variant="outlined" />
+                    {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
               return (
-                <Typography variant="caption" align="left" key={index}>
-                  {" #" + tag}
+                <Typography  align="left" key={index}>
+                  {"#" + tag}
                 </Typography>
               );
-            })}
+                    })}
+                        </div>
             {showMore == true ? (
               <Typography className={styles.findingsText}>
                 {mediaArray[currentIndex]?.description}

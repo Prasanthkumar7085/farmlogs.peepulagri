@@ -1,14 +1,16 @@
-import CloseIcon from "@mui/icons-material/Close";
-import {
-  Button,
-  Drawer,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import "react-quill/dist/quill.snow.css";
-import TagsTextFeild from "./TagsTextFeild";
+
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { CKEditor } from 'ckeditor4-react';
+import { Button, Drawer, IconButton, TextField, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import timePipe from '@/pipes/timePipe';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import TagsTextFeild from './TagsTextFeild';
+import styles from './TagsDrawer.module.css';
+import { ClassNames } from '@emotion/react';
 
 const TagsDrawer = ({
   tagsDrawerClose,
@@ -35,18 +37,12 @@ const TagsDrawer = ({
     <Drawer
       anchor={"bottom"}
       open={isDrawerOpen}
-      sx={{ zIndex: "1300 !important" }}
+      className={styles.AddTagsDrawer}
     >
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "0.5rem",
-          borderBottom: "1px solid #dddddd",
-        }}
+        className={styles.drawerHeading}
       >
-        <Typography>Tag Images</Typography>
+        <Typography variant='h6'>Tag Images</Typography>
         <IconButton
           onClick={() => {
             tagsDrawerClose(false);
@@ -55,13 +51,16 @@ const TagsDrawer = ({
           <CloseIcon />
         </IconButton>
       </div>
-      <div style={{ width: "100%", height: "300px " }}>
-        <Typography>Tags</Typography>
-        <TagsTextFeild captureTags={captureTags} tags={tags} />
+      <div className={styles.drawerBody}>
+        <Typography className={styles.label}>Tags</Typography>
+         <div className={styles.inputBox}>
+          <TagsTextFeild captureTags={captureTags} tags={tags} />
+          </div>
         {selectedItems.some((obj: any) => obj.hasOwnProperty("description")) ==
         false ? (
           <>
-            <Typography>Findings</Typography>
+              <Typography className={styles.label}>Findings</Typography>
+              <div className={styles.inputBox}>
             <TextField
               color="primary"
               name="description"
@@ -77,14 +76,16 @@ const TagsDrawer = ({
                 setDescription(e.target.value);
               }}
               sx={{ background: "#fff" }}
-            />
+                />
+                </div>
           </>
         ) : // What you want to render if the condition is not met
         // For example, you can render some default component or nothing at all
         null}
       </div>
-
+<div className={styles.drawerFooter}>
       <Button
+         className={styles.submitBtn}
         disabled={!(tags || description)}
         variant="contained"
         onClick={() => {
@@ -94,7 +95,8 @@ const TagsDrawer = ({
         }}
       >
         Submit
-      </Button>
+        </Button>
+        </div>
     </Drawer>
   );
 };

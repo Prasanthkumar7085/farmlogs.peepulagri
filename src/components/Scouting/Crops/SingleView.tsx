@@ -9,6 +9,7 @@ import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import {
   Breadcrumbs,
+  Button,
   Card,
   Checkbox,
   IconButton,
@@ -23,6 +24,8 @@ import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import AddIcon from '@mui/icons-material/Add';
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -329,9 +332,10 @@ const SingleViewScoutComponent = () => {
                   <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
                 </Typography>
 
-                <Typography className={styles.postDate}>
+                <div className={styles.actionButtonsTop}>
                   {tagsCheckBoxOpen && scoutId == item._id ? (
                     <IconButton
+                      size="small"
                       onClick={() => {
                         setTagsCheckBoxOpen(false);
                         setScoutId("");
@@ -349,6 +353,7 @@ const SingleViewScoutComponent = () => {
                     </IconButton>
                   ) : (
                     <IconButton
+                      size="small"
                       onClick={() => {
                         setTagsCheckBoxOpen(true);
                         setScoutId(item._id);
@@ -372,7 +377,7 @@ const SingleViewScoutComponent = () => {
                     height={20}
                     alt="tag"
                   />
-                  <span
+                  <Button
                     onClick={() => {
                       setSummaryDrawerOpen(true);
                       setScoutId(item._id);
@@ -381,8 +386,8 @@ const SingleViewScoutComponent = () => {
                     }}
                   >
                     Summary
-                  </span>
-                </Typography>
+                  </Button>
+                </div>
               </div>
 
               <Card

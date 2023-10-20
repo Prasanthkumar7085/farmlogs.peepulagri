@@ -8,10 +8,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+import Image from "next/image";
+import styles from './TagsDrawer.module.css';
+
 const SummaryTextDilog = ({
   summaryDrawerClose,
-  scoutId,
-  anchor,
   item,
   captureSummary,
 }: any) => {
@@ -19,24 +20,21 @@ const SummaryTextDilog = ({
 
   const [editorHtml, setEditorHtml] = useState("");
 
-  const handleChange = (html: any) => {
-    setEditorHtml(html);
-  };
+
   const [data, setData] = useState(item?.summary ? item.summary : "");
 
   return (
     <Drawer anchor={"bottom"} open={true}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "0.5rem",
-          borderBottom: "1px solid #dddddd",
-          width: anchor === "right" ? 600 : "",
-        }}
+      <div className={styles.drawerHeading}
       >
-        <Typography>Day Summary</Typography>
+        <Typography variant='h6'><Image
+                        alt={`image`}
+                        height={24}
+                        width={24}
+                        src="/summary-icon.svg"
+                        style={{ borderRadius: "5%" }}
+                    />
+                    <span>Day Summary</span></Typography>
         <IconButton
           onClick={() => {
             summaryDrawerClose(false);
@@ -45,7 +43,7 @@ const SummaryTextDilog = ({
           <CloseIcon />
         </IconButton>
       </div>
-      <div style={{ width: "100%", height: "200px" }}>
+      <div className={styles.drawerBody}>
         <TextField
           color="primary"
           name="desciption"
@@ -63,7 +61,9 @@ const SummaryTextDilog = ({
           sx={{ background: "#fff" }}
         />
       </div>
+      <div className={styles.drawerFooter}>
       <Button
+       className={styles.submitBtnSuccess}
         sx={{}}
         variant="contained"
         onClick={() => {
@@ -72,7 +72,8 @@ const SummaryTextDilog = ({
         }}
       >
         Submit
-      </Button>
+        </Button>
+        </div>
     </Drawer>
   );
 };

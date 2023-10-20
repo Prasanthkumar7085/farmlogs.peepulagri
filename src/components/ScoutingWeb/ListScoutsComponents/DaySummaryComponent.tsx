@@ -18,7 +18,10 @@ import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import postrecomendationsService from "../../../../lib/services/ScoutServices/postrecomendationsService";
 import styles from "../Scouting/ViewScouting/ScoutingDetails.module.css";
-
+import style from "./DaySummary.module.css";
+import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import EditIconComponent from "@/components/Core/SvgIcons/EditIcon";
 interface pageProps {
   openDaySummary: boolean;
   setOpenDaySummary: Dispatch<SetStateAction<boolean>>;
@@ -102,10 +105,13 @@ const DaySummaryComponent: FC<pageProps> = ({
     }
   }, [singleScoutData]);
   return (
-    <Drawer anchor={"right"} open={openDaySummary}>
+    <Drawer anchor={"right"} open={openDaySummary} sx={{
+      '& .MuiPaper-root': {
+        minWidth: "450px", maxWidth: "450px"
+      }
+    }}>
       <div
         className={styles.viewHeader}
-        style={{ minWidth: "400px", maxWidth: "400px" }}
       >
         <div>
           <p className={styles.startdate}>
@@ -145,20 +151,19 @@ const DaySummaryComponent: FC<pageProps> = ({
           <CloseIcon />
         </IconButton>
       </div>
-      <div className={styles.scoutingdetails}>
-        <div className={styles.textwrapper}>
-          <h1 className={styles.finding}>Day Summary</h1>
-          <p className={styles.findingText}>
+      <div className={style.scoutingdetails}>
+        <div className={style.textwrapper}>
+          <h1 className={style.summary}><SummaryIcon />Day Summary</h1>
+          <p className={style.findingText}>
             {loading ? (
               <div style={{ paddingLeft: "10px" }}>
                 <Skeleton width="300px" height="20px" />
-
                 <Skeleton width="300px" height="20px" />
                 <Skeleton width="300px" height="20px" />
                 <Skeleton width="300px" height="20px" />
               </div>
             ) : (
-              <div style={{ maxWidth: "300px" }}>
+              <div >
                 {singleScoutData?.summary ? (
                   <Markup content={singleScoutData?.summary} />
                 ) : (
@@ -169,8 +174,8 @@ const DaySummaryComponent: FC<pageProps> = ({
           </p>
         </div>
       </div>
-      <div className={styles.scoutingdetails}>
-        <div className={styles.textwrapper}>
+      <div className={style.scoutingdetails}>
+        <div className={style.textwrapper}>
           <div
             style={{
               display: "flex",
@@ -179,16 +184,17 @@ const DaySummaryComponent: FC<pageProps> = ({
               alignItems: "center",
             }}
           >
-            <h1 className={styles.finding}>Recomendations</h1>
+            <h1 className={style.recomendation}><SuggestionsIcon />Recomendations</h1>
             {loading || editRecomendation ? (
               ""
             ) : singleScoutData?.suggestions ? (
               <IconButton
+                className={style.editIcon}
                 onClick={() => {
                   setEditRecomendation(true);
                 }}
               >
-                <EditOutlined />
+                <EditIconComponent />
               </IconButton>
             ) : (
               <IconButton
@@ -204,6 +210,7 @@ const DaySummaryComponent: FC<pageProps> = ({
           {!loading && editRecomendation ? (
             <div style={{ width: "100%" }}>
               <TextField
+                className={style.textAria}
                 value={recomendations}
                 onChange={(e) => setRecomendations(e.target.value)}
                 multiline
@@ -214,16 +221,16 @@ const DaySummaryComponent: FC<pageProps> = ({
                   width: "100%",
                 }}
               />
-              <div className={styles.sendButtonDiv}>
+              <div className={style.sendButtonDiv}>
                 <Button
-                  className={styles.cancelButton}
+                  className={style.cancelButton}
                   variant="outlined"
                   onClick={() => setEditRecomendation(false)}
                 >
                   Cancel
                 </Button>
                 <Button
-                  className={styles.sendButton}
+                  className={style.sendButton}
                   variant="contained"
                   onClick={sendRecomendations}
                 >
@@ -244,7 +251,7 @@ const DaySummaryComponent: FC<pageProps> = ({
               <Skeleton width="300px" height="20px" />
             </div>
           ) : (
-            <div style={{ maxWidth: "300px" }}>
+            <div className={style.recomdationContent} >
               <Markup
                 content={
                   singleScoutData?.suggestions

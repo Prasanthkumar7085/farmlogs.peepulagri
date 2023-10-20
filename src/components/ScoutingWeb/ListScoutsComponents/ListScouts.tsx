@@ -5,7 +5,7 @@ import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
 } from "@/types/scoutTypes";
-import { Button, Typography } from "@mui/material";
+import { Button, Toolbar, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -24,6 +24,7 @@ import ScoutingDailyImages from "./ScoutingDailyImages";
 import UserDropDownForScouts from "./UserDropDownForScouts";
 import timePipe from "@/pipes/timePipe";
 import DaySummaryComponent from "./DaySummaryComponent";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 interface ApiMethodProps {
   page: string | number;
@@ -475,10 +476,10 @@ const ListScouts: FunctionComponent = () => {
           <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
-            variant="outlined"
-            sx={{ border: "1px solid red", color: "red" }}
-          >
-            Clear
+            sx={{ color: "#000", minWidth: "inherit", padding: "0" }}>
+            <Tooltip title={"Clear Filter"}>
+              <FilterAltIcon sx={{ fontSize: "1.7rem" }} />
+            </Tooltip>
           </Button>
         </div>
       </div>
@@ -486,37 +487,37 @@ const ListScouts: FunctionComponent = () => {
         <div className={styles.allScoutingCards}>
           {data?.length
             ? data.map((item: SingleScoutResponse, index: number) => {
-                return (
-                  <div className={styles.eachDayScouting} key={index}>
+              return (
+                <div className={styles.eachDayScouting} key={index}>
+                  <div
+                    className={styles.scoutDay}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography>
+                      {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
+                    </Typography>
                     <div
-                      className={styles.scoutDay}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                      className={styles.summaryBtn}
+                      onClick={() => {
+                        setOpenDaySummary(true);
+                        setSelectedItemDetails(item);
                       }}
                     >
-                      <Typography>
-                        {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
-                      </Typography>
-                      <div
-                        className={styles.summaryBtn}
-                        onClick={() => {
-                          setOpenDaySummary(true);
-                          setSelectedItemDetails(item);
-                        }}
-                      >
-                        <SummaryIcon /> Summary
-                      </div>
+                      <SummaryIcon /> Summary
                     </div>
-                    <ScoutingDailyImages
-                      item={item}
-                      key={index}
-                      onClickAttachment={onClickAttachment}
-                    />
                   </div>
-                );
-              })
+                  <ScoutingDailyImages
+                    item={item}
+                    key={index}
+                    onClickAttachment={onClickAttachment}
+                  />
+                </div>
+              );
+            })
             : ""}
         </div>
         {!data?.length && !loading ? (

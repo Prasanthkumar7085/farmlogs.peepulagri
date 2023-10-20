@@ -149,7 +149,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                       }}
                     >
                       {item.type?.includes("video") ? (
-                        <video controls width="100%" autoPlay key={index}>
+                        <video controls width="100%" height={"100%"} autoPlay key={index} >
                           <source src={item.original} type={item.type} />
                           Your browser does not support the video tag.
                         </video>
@@ -199,7 +199,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                         height: "100%",
                         top: 0,
                         left: 0,
-                        // border: '1px solid #a2a5a9',
                         boxShadow: "0px 0px 2px 0px #ffffff5c",
                         zIndex: 0,
                         borderRadius: "8px",
@@ -221,8 +220,9 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             setPreviewImageDialogOpen={setPreviewImageDialogOpen}
           />
         </Grid>
+
       </Grid>
-    </Dialog>
+    </Dialog >
   );
 };
 export default SingleScoutViewDetails;

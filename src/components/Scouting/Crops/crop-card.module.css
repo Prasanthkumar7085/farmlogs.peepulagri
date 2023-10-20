@@ -12,7 +12,11 @@
   height: 24px;
   border-radius: 4px;
 } 
-
+.avatarImage {
+  color: #000000c3;
+  font-family: 'Inter',sans-serif;
+  font-weight: 400;
+}
 .actions .icon {
   height: 16px;
   width: 16px;
@@ -20,8 +24,8 @@
 .icons {
   width: 100%;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
 .aug2023,
@@ -47,7 +51,6 @@
 
 .cropcard,
 .textWrapper {
-  align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -192,13 +195,7 @@
   background-color: var(--background);
   border-bottom: 1px solid var(--stroke);
 }
-.actionButtons {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0.5rem;
-  column-gap: 0.5rem;
-}
+
 .ctaButton {
   display: flex;
   align-items: center;
@@ -208,4 +205,15 @@
   font-size: clamp(13px, 2vw, 18px);
   font-weight: 500;
   border-radius: 2.5rem;
+}
+.actionButtons {
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: 1fr 25px 25px;
+  column-gap: 0.5rem;
+  width: 100%;
+}
+.actionButtons button{
+  min-width: auto;
 }

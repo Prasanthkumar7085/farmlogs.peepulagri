@@ -12,7 +12,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AlertComponent from "@/components/Core/AlertComponent";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads, scoutDetails }: any) => {
+const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads, scoutDetails, attachement }: any) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
@@ -112,29 +112,28 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
     <div className={styles.threads}>
       {details?.length ? (
         details.map((item: any, index: any) => {
-          const lines = item.content.split("\n");
 
           if (item.type == "DIRECT") {
             return (
               <div className={styles.inMessage} key={index}>
-                {item?.user?.user_type == "USER" ? (
+                {item?.user[0]?.user_type == "USER" ? (
                   <Avatar sx={{ bgcolor: "chocolate" }}>
-                    {item?.user?.user_type?.slice(0, 2)}
+                    {item?.user[0]?.user_type?.slice(0, 2)}
                   </Avatar>
                 ) : (
                   <Avatar sx={{ bgcolor: "green" }}>
-                    {item?.user?.user_type?.slice(0, 2)}
+                    {item?.user[0]?.user_type?.slice(0, 2)}
                   </Avatar>
                 )}
                 <div className={styles.messagebox}>
                   <div className={styles.userdetails}>
                     <h4 className={styles.jack}>
                       {userDetails?.user_details?.user_type ==
-                      item?.user?.user_type
+                        item?.user[0]?.user_type
                         ? "You"
-                        : item?.user?.user_type == "USER"
-                        ? item.user.user_type + "(" + item?.user?.phone + ")"
-                        : item.user.user_type}
+                        : item?.user[0]?.user_type == "USER"
+                          ? item.user[0].user_type + "(" + item?.user[0]?.phone + ")"
+                          : item.user[0].user_type}
                     </h4>
                     <p className={styles.aug20231030am}>
                       {timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}
@@ -160,10 +159,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       </div>
                     ) : (
                       <p className={styles.theProblemIm}>
-                        {lines.map((line: any, index: any) => (
-                          <div key={index}>{line}</div>
-                        ))}
-                        {"                     "}
+                        {item.content}
                         <Typography
                           variant="caption"
                           sx={{ wordBreak: "break-word" }}
@@ -175,79 +171,79 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     <div className={styles.attachmentContainer}>
                       {item.attachments.length !== 0
                         ? item.attachments.map((file: any, indexfile: any) => {
-                            return (
-                              <div
-                                className={styles.attachment}
-                                key={indexfile}
-                              >
-                                <div className={styles.row}>
-                                  <div className={styles.icon}>
-                                    <img
-                                      className={styles.groupIcon}
-                                      alt=""
-                                      src={
-                                        file.type.includes("image")
-                                          ? "/group2.svg"
-                                          : file.type.includes("application")
+                          return (
+                            <div
+                              className={styles.attachment}
+                              key={indexfile}
+                            >
+                              <div className={styles.row}>
+                                <div className={styles.icon}>
+                                  <img
+                                    className={styles.groupIcon}
+                                    alt=""
+                                    src={
+                                      file.type.includes("image")
+                                        ? "/group2.svg"
+                                        : file.type.includes("application")
                                           ? "/pdf-icon.png"
                                           : file.type.includes("video")
-                                          ? "/videoimg.png"
-                                          : "/doc-icon.webp"
-                                      }
-                                    />
-                                    <img
-                                      className={styles.groupIcon1}
-                                      alt=""
-                                      src="/group3.svg"
-                                    />
-                                  </div>
-                                  <div className={styles.imageName}>
-                                    {file?.original_name?.slice(0, 9)}...
-                                  </div>
-                                </div>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <IconButton
-                                    onClick={() =>
-                                      downLoadAttachements(file, item.user._id)
+                                            ? "/videoimg.png"
+                                            : "/doc-icon.webp"
                                     }
-                                  >
-                                    <img
-                                      className={styles.download11}
-                                      alt=""
-                                      src="/download-1-1.svg"
-                                      style={{ cursor: "pointer" }}
-                                    />
-                                  </IconButton>
-                                  {userDetails?.user_details?.user_type ==
-                                  item?.user?.user_type ? (
-                                    <IconButton
-                                      onClick={() =>
-                                        afterDeleteAttachements(
-                                          file._id,
-                                          item._id
-                                        )
-                                      }
-                                    >
-                                      <Image
-                                        alt="Delete"
-                                        height={20}
-                                        width={20}
-                                        src="/farm-delete-icon.svg"
-                                        style={{ borderRadius: "5%" }}
-                                      />
-                                    </IconButton>
-                                  ) : (
-                                    ""
-                                  )}
+                                  />
+                                  <img
+                                    className={styles.groupIcon1}
+                                    alt=""
+                                    src="/group3.svg"
+                                  />
+                                </div>
+                                <div className={styles.imageName}>
+                                  {file?.original_name?.slice(0, 9)}...
                                 </div>
                               </div>
-                            );
-                          })
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <IconButton
+                                  onClick={() =>
+                                    downLoadAttachements(file, item.user[0]._id)
+                                  }
+                                >
+                                  <img
+                                    className={styles.download11}
+                                    alt=""
+                                    src="/download-1-1.svg"
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                </IconButton>
+                                {userDetails?.user_details?.user_type ==
+                                  item?.user?.user_type ? (
+                                  <IconButton
+                                    onClick={() =>
+                                      afterDeleteAttachements(
+                                        file._id,
+                                        item._id
+                                      )
+                                    }
+                                  >
+                                    <Image
+                                      alt="Delete"
+                                      height={20}
+                                      width={20}
+                                      src="/farm-delete-icon.svg"
+                                      style={{ borderRadius: "5%" }}
+                                    />
+                                  </IconButton>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            </div>
+                          )
+                        })
                         : ""}
                     </div>
                   </div>
@@ -334,7 +330,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     </div>
 
                     {userDetails?.user_details?.user_type ==
-                    item?.user?.user_type ? (
+                      item?.user[0]?.user_type ? (
                       <div className={styles.react}>
                         <div className={styles.edit}>
                           <div className={styles.editChild} />
@@ -391,227 +387,229 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       ""
                     )}
                   </div>
-                  ;
+
                   {replyOpen == true && index == replyIndex ? (
                     <div style={{ width: "100%" }}>
                       <CommentForm
                         replyThreadEvent={item._id}
                         afterCommentAdd={afterCommentAdd}
+                        scoutDetails={scoutDetails}
+                        attachement={attachement}
                       />
                     </div>
                   ) : (
                     ""
                   )}
                   {(replyOpen == true && index == replyIndex) ||
-                  (isReplies == true &&
-                    index == replyIndex &&
-                    item.replies.length)
+                    (isReplies == true &&
+                      index == replyIndex &&
+                      item.replies.length)
                     ? item.replies.map((row: any) => {
-                        const lines = row.content.split("\n");
+                      const lines = row.content.split("\n");
 
-                        return (
-                          <div className={styles.inMessage1} key={index}>
-                            {row?.user?.user_type == "USER" ? (
-                              <Avatar sx={{ bgcolor: "chocolate" }}>
-                                {row?.user?.user_type?.slice(0, 2)}
-                              </Avatar>
-                            ) : (
-                              <Avatar sx={{ bgcolor: "green" }}>
-                                {row?.user?.user_type?.slice(0, 2)}
-                              </Avatar>
-                            )}{" "}
-                            <div className={styles.messagebox1}>
-                              <div className={styles.userName}>
-                                <div className={styles.userdetails1}>
-                                  <h4 className={styles.jack}>
-                                    {userDetails?.user_details?.user_type ==
-                                    row?.user?.user_type
-                                      ? "You"
-                                      : row?.user?.user_type == "USER"
-                                      ? row?.user?.user_type +
-                                        "(" +
-                                        row?.user?.phone +
-                                        ")"
-                                      : row?.user?.user_type}
-                                  </h4>
-                                  <p className={styles.aug20231030am}>
-                                    {timePipe(
-                                      row.updatedAt,
-                                      "DD-MM-YYYY hh:mm a"
-                                    )}
-                                  </p>
-                                </div>
+                      return (
+                        <div className={styles.inMessage1} key={index}>
+                          {row?.user[0]?.user_type == "USER" ? (
+                            <Avatar sx={{ bgcolor: "chocolate" }}>
+                              {row?.user[0]?.user_type?.slice(0, 2)}
+                            </Avatar>
+                          ) : (
+                            <Avatar sx={{ bgcolor: "green" }}>
+                              {row?.user[0]?.user_type?.slice(0, 2)}
+                            </Avatar>
+                          )}{" "}
+                          <div className={styles.messagebox1}>
+                            <div className={styles.userName}>
+                              <div className={styles.userdetails1}>
+                                <h4 className={styles.jack}>
+                                  {userDetails?.user_details?.user_type ==
+                                    row?.user[0]?.user_type
+                                    ? "You"
+                                    : row?.user[0]?.user_type == "USER"
+                                      ? row?.user[0]?.user_type +
+                                      "(" +
+                                      row?.user[0]?.phone +
+                                      ")"
+                                      : row?.user[0]?.user_type}
+                                </h4>
+                                <p className={styles.aug20231030am}>
+                                  {timePipe(
+                                    row.updatedAt,
+                                    "DD-MM-YYYY hh:mm a"
+                                  )}
+                                </p>
                               </div>
+                            </div>
 
-                              <div className={styles.paragraph1}>
-                                {editMode[0] == true &&
+                            <div className={styles.paragraph1}>
+                              {editMode[0] == true &&
                                 editMode[1] == row._id ? (
-                                  <div style={{ width: "100%" }}>
-                                    <TextField
-                                      className={styles.chatBox}
-                                      color="primary"
-                                      rows={2}
-                                      placeholder="Enter your reply message... "
-                                      fullWidth={true}
-                                      variant="outlined"
-                                      multiline
-                                      value={editComment}
-                                      onChange={(e) => {
-                                        const newValue = e.target.value.replace(
-                                          /^\s+/,
-                                          ""
-                                        );
-                                        setEditComment(newValue);
-                                      }}
-                                    />
-                                  </div>
-                                ) : (
-                                  <p className={styles.theProblemIm}>
-                                    {lines.map((line: any, index: any) => (
-                                      <div key={index}>{line}</div>
-                                    ))}
-                                    {"                     "}
-                                    <Typography variant="caption">
-                                      {row.createdAt == row.updatedAt
-                                        ? ""
-                                        : "(edited)"}
-                                    </Typography>
-                                  </p>
-                                )}
-
-                                {row.attachments.length
-                                  ? row.attachments.map(
-                                      (file: any, fileIndex: any) => {
-                                        return (
-                                          <div
-                                            className={styles.attachment1}
-                                            key={fileIndex}
-                                          >
-                                            <div className={styles.row}>
-                                              <div className={styles.icon}>
-                                                <img
-                                                  className={styles.groupIcon}
-                                                  alt=""
-                                                  src="/group2.svg"
-                                                />
-                                                <img
-                                                  className={styles.groupIcon1}
-                                                  alt=""
-                                                  src="/group3.svg"
-                                                />
-                                              </div>
-                                              <div className={styles.imageName}>
-                                                {file?.original_name?.slice(
-                                                  0,
-                                                  9
-                                                )}
-                                                ...
-                                              </div>
-                                            </div>
-                                            <img
-                                              className={styles.download11}
-                                              alt=""
-                                              src="/download-1-1.svg"
-                                              style={{ cursor: "pointer" }}
-                                              onClick={() =>
-                                                downLoadAttachements(
-                                                  file,
-                                                  row.user._id
-                                                )
-                                              }
-                                            />
-                                            {userDetails?.user_details
-                                              ?.user_type ==
-                                            row?.user?.user_type ? (
-                                              <IconButton
-                                                onClick={() =>
-                                                  afterDeleteAttachements(
-                                                    file._id,
-                                                    row._id
-                                                  )
-                                                }
-                                              >
-                                                <DeleteForeverIcon />
-                                              </IconButton>
-                                            ) : (
-                                              ""
-                                            )}
-                                          </div>
-                                        );
-                                      }
-                                    )
-                                  : ""}
-                              </div>
-
-                              {userDetails?.user_details?.user_type ==
-                              row?.user?.user_type ? (
-                                <div className={styles.actionButton1}>
-                                  <div className={styles.react}>
-                                    <div className={styles.edit}>
-                                      <div className={styles.editChild} />
-                                      {editMode[0] == true &&
-                                      editMode[1] == row._id ? (
-                                        <Button
-                                          className={styles.edit1}
-                                          disabled={editComment ? false : true}
-                                          onClick={() => {
-                                            setEditMode([false, row._id]);
-                                            afterUpdateComment(
-                                              row._id,
-                                              editComment
-                                            );
-                                          }}
-                                        >
-                                          Update
-                                        </Button>
-                                      ) : (
-                                        <p
-                                          className={styles.edit1}
-                                          onClick={() => {
-                                            setEditMode([true, row._id]);
-                                            setEditComment(row.content);
-                                          }}
-                                        >
-                                          Edit
-                                        </p>
-                                      )}
-
-                                      <div className={styles.editChild} />
-                                      {editMode[0] == true &&
-                                      editMode[1] == row._id ? (
-                                        <div className={styles.edit}>
-                                          <Button
-                                            className={styles.edit1}
-                                            onClick={() => {
-                                              setEditMode([false, row._id]);
-                                              setEditComment("");
-                                            }}
-                                          >
-                                            Close
-                                          </Button>
-                                        </div>
-                                      ) : (
-                                        <div className={styles.edit}>
-                                          <p
-                                            className={styles.edit1}
-                                            onClick={() =>
-                                              afterDeleteComment(row._id)
-                                            }
-                                          >
-                                            Delete
-                                          </p>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
+                                <div style={{ width: "100%" }}>
+                                  <TextField
+                                    className={styles.chatBox}
+                                    color="primary"
+                                    rows={2}
+                                    placeholder="Enter your reply message... "
+                                    fullWidth={true}
+                                    variant="outlined"
+                                    multiline
+                                    value={editComment}
+                                    onChange={(e) => {
+                                      const newValue = e.target.value.replace(
+                                        /^\s+/,
+                                        ""
+                                      );
+                                      setEditComment(newValue);
+                                    }}
+                                  />
                                 </div>
                               ) : (
-                                ""
+                                <p className={styles.theProblemIm}>
+                                  {lines.map((line: any, index: any) => (
+                                    <div key={index}>{line}</div>
+                                  ))}
+                                  {"                     "}
+                                  <Typography variant="caption">
+                                    {row.createdAt == row.updatedAt
+                                      ? ""
+                                      : "(edited)"}
+                                  </Typography>
+                                </p>
                               )}
+
+                              {row.attachments.length
+                                ? row.attachments.map(
+                                  (file: any, fileIndex: any) => {
+                                    return (
+                                      <div
+                                        className={styles.attachment1}
+                                        key={fileIndex}
+                                      >
+                                        <div className={styles.row}>
+                                          <div className={styles.icon}>
+                                            <img
+                                              className={styles.groupIcon}
+                                              alt=""
+                                              src="/group2.svg"
+                                            />
+                                            <img
+                                              className={styles.groupIcon1}
+                                              alt=""
+                                              src="/group3.svg"
+                                            />
+                                          </div>
+                                          <div className={styles.imageName}>
+                                            {file?.original_name?.slice(
+                                              0,
+                                              9
+                                            )}
+                                            ...
+                                          </div>
+                                        </div>
+                                        <img
+                                          className={styles.download11}
+                                          alt=""
+                                          src="/download-1-1.svg"
+                                          style={{ cursor: "pointer" }}
+                                          onClick={() =>
+                                            downLoadAttachements(
+                                              file,
+                                              row.user[0]._id
+                                            )
+                                          }
+                                        />
+                                        {userDetails?.user_details
+                                          ?.user_type ==
+                                          row?.user?.user_type ? (
+                                          <IconButton
+                                            onClick={() =>
+                                              afterDeleteAttachements(
+                                                file._id,
+                                                row._id
+                                              )
+                                            }
+                                          >
+                                            <DeleteForeverIcon />
+                                          </IconButton>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+                                    );
+                                  }
+                                )
+                                : ""}
                             </div>
+
+                            {userDetails?.user_details?.user_type ==
+                              row?.user[0]?.user_type ? (
+                              <div className={styles.actionButton1}>
+                                <div className={styles.react}>
+                                  <div className={styles.edit}>
+                                    <div className={styles.editChild} />
+                                    {editMode[0] == true &&
+                                      editMode[1] == row._id ? (
+                                      <Button
+                                        className={styles.edit1}
+                                        disabled={editComment ? false : true}
+                                        onClick={() => {
+                                          setEditMode([false, row._id]);
+                                          afterUpdateComment(
+                                            row._id,
+                                            editComment
+                                          );
+                                        }}
+                                      >
+                                        Update
+                                      </Button>
+                                    ) : (
+                                      <p
+                                        className={styles.edit1}
+                                        onClick={() => {
+                                          setEditMode([true, row._id]);
+                                          setEditComment(row.content);
+                                        }}
+                                      >
+                                        Edit
+                                      </p>
+                                    )}
+
+                                    <div className={styles.editChild} />
+                                    {editMode[0] == true &&
+                                      editMode[1] == row._id ? (
+                                      <div className={styles.edit}>
+                                        <Button
+                                          className={styles.edit1}
+                                          onClick={() => {
+                                            setEditMode([false, row._id]);
+                                            setEditComment("");
+                                          }}
+                                        >
+                                          Close
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      <div className={styles.edit}>
+                                        <p
+                                          className={styles.edit1}
+                                          onClick={() =>
+                                            afterDeleteComment(row._id)
+                                          }
+                                        >
+                                          Delete
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              ""
+                            )}
                           </div>
-                        );
-                      })
+                        </div>
+                      );
+                    })
                     : ""}
                 </div>
               </div>

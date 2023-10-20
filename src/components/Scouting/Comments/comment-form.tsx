@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./comment-form.module.css";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 
-const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails }: any) => {
+const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails, attachement }: any) => {
+  console.log(scoutDetails?._id)
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -121,9 +122,16 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails }: any) =
   const addComment = async () => {
     setLoading(true)
     let body = {
-      "content": comment,
-      "type": "DIRECT",
-      "attachments": tempFilesStorage
+
+      "comments": [
+        {
+          "content": comment,
+          "attachments": tempFilesStorage
+
+        }
+      ]
+
+
     }
     let options = {
       method: "POST",
@@ -134,7 +142,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails }: any) =
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
         setComment("")
@@ -156,7 +164,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails }: any) =
     setLoading(true)
     let body = {
       "content": comment,
-      "type": "REPLY",
       "attachments": tempFilesStorage
 
     }
@@ -169,7 +176,7 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails }: any) =
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${comment_id}/reply`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comment/${comment_id}/reply`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
         setComment("")

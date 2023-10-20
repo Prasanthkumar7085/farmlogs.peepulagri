@@ -47,6 +47,8 @@ const SingleViewScoutComponent = () => {
     const [summaryContent, setSummaryContent] = useState<any>()
     const [scoutFindings, setScoutFindings] = useState<any>()
     const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>()
+    const [openCommentsBox, setOpenCommentsBox] = useState<any>()
+    const [singleScoutDetails, setSingleScoutDetails] = useState<any>()
 
     let tempImages: any = [...selectedItems];
 
@@ -136,7 +138,8 @@ const SingleViewScoutComponent = () => {
     //for comments drawer open/close
     const drawerClose = (value: any) => {
         if (value == false) {
-            setDrawerOpen(false)
+            setOpenCommentsBox(false)
+
         }
     }
 
@@ -169,10 +172,12 @@ const SingleViewScoutComponent = () => {
         if (value == "tag") {
             setTagsDrawerEditOpen(true)
         }
+        if (value == "comments") {
+            setOpenCommentsBox(true)
+        }
     }
     //capture the tags details
     const captureTagsDetails = async (tags: any, findingsvalue: any) => {
-        console.log(tags, findingsvalue)
         setScoutFindings(findingsvalue)
         if (tags?.length && findingsvalue?.length !== 0) {
             await tempImages.forEach((obj: any) => {
@@ -371,6 +376,7 @@ const SingleViewScoutComponent = () => {
                                         <img src={image.type?.slice(0, 2) == "vi" ? "/Play-button.svg" : image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => {
                                             handleClick(index, item.attachments)
                                             setScoutId(item._id)
+                                            setSingleScoutDetails(item)
                                         }} style={{ cursor: "pointer", borderRadius: "5px" }} />
 
                                         <div style={{ position: "absolute", top: 0, left: 0 }}>
@@ -437,6 +443,8 @@ const SingleViewScoutComponent = () => {
 
             {TagsDrawerEditOpen ?
                 <TagsDrawerEdit tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={selectedFile} selectedItems={selectedItems} /> : ""}
+            {openCommentsBox ?
+                <DrawerComponentForScout drawerClose={drawerClose} scoutDetails={singleScoutDetails} attachement={selectedFile} /> : ""}
 
             <div className="addFormPositionIcon">
                 {tagsCheckBoxOpen == false && selectedItems?.length == 0 ?

@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./comment-form"
 import Threads from "./threads"
 import { useRouter } from "next/router";
@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import styles from "./CommentsComponent.module.css";
+import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 
-const CommentsComponentForWeb = ({ scoutDetails }: any) => {
+const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
 
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
     const router = useRouter()
+    const dispatch = useDispatch()
     const [data, setData] = useState<any>()
     const [loading, setLoading] = useState<any>()
     const [afterReply, setAfterReply] = useState<any>()
@@ -19,12 +21,12 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
 
     useEffect(() => {
         if (router.isReady && scoutDetails?._id) {
-          getAllScoutComments();
+            getAllScoutComments();
         }
     }, [router.isReady, accessToken])
 
     const getAllScoutComments = async () => {
-
+        setLoading(true)
         let options = {
             method: "GET",
             headers: new Headers({
@@ -33,15 +35,12 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
             }),
         }
         try {
-            let response = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/comments/all`,
-              options
-            );
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 const commentsById: any = {};
 
-                responseData.data.forEach((comment: any) => {
+                responseData.data[0]?.comments.forEach((comment: any) => {
                     commentsById[comment._id] = {
                         ...comment,
                         replies: [] // Initialize an empty array for replies
@@ -49,7 +48,7 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
                 });
 
                 // Populate the replies for each comment
-                responseData.data.forEach((comment: any) => {
+                responseData.data[0]?.comments.forEach((comment: any) => {
                     if (comment.type === "REPLY" && comment.reply_to_comment_id) {
                         const parentId = comment.reply_to_comment_id;
                         if (commentsById[parentId]) {
@@ -72,10 +71,15 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
                 let reverse = formattedData.slice().reverse()
 
                 setData(reverse)
+                dispatch(removeTheAttachementsFilesFromStore([]))
 
             }
         } catch (err) {
             console.log(err)
+        }
+        finally {
+            setLoading(false)
+
         }
     }
 
@@ -90,7 +94,7 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
             }),
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${commnet_id}`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 getAllScoutComments()
@@ -119,7 +123,7 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/comments/${commnet_id}`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 getAllScoutComments()
@@ -170,7 +174,7 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${router.query.scout_id}/${commentId}/attachments`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/${commentId}/attachments`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 setAlertMessage("Attachement deleted successfully")
@@ -187,21 +191,23 @@ const CommentsComponentForWeb = ({ scoutDetails }: any) => {
     }
 
 
+
     return (
         <div className={styles.CommentsBlock}>
             <div className={styles.allThreads}>
                 <Threads
                     details={data}
-                    scoutDetails={scoutDetails}
                     afterCommentAdd={afterCommentAdd}
                     afterDeleteComment={afterDeleteComment}
                     afterUpdateComment={afterUpdateComment}
                     afterReply={afterReply}
                     afterDeleteAttachements={afterDeleteAttachements}
+                    attachement={attachement}
+                    scoutDetails={scoutDetails}
                 />
             </div>
-            <CommentForm afterCommentAdd={afterCommentAdd} scoutDetails={scoutDetails}
-            />
+            <CommentForm afterCommentAdd={afterCommentAdd} scoutDetails={scoutDetails} attachement={attachement} />
+
 
             <LoadingComponent loading={loading} />
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />

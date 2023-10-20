@@ -84,6 +84,18 @@
   flex-direction: column;
   height: 100%;
 }
+.NoDataBlockImage {
+  height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.title {
+  font-family: 'Inter',sans-serif;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
 
 #noData h4 {
   font-size: clamp(16px, 3.25rem, 18px);

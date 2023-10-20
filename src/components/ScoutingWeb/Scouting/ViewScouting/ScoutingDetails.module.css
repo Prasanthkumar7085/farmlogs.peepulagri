@@ -15,7 +15,35 @@
   border-bottom: 1px solid #E9EDF1;
   min-height: 100px;
 }
+.suggestions{
+  padding: 20px;
+  display: flex;
+  word-wrap: break-word !important;
+  word-break: break-all !important;
+  max-width: 400px !important;
+}
+.sendButtonDiv{
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap:10px !important;
+  padding-top: 10px !important;
 
+}.sendButton{
+display: flex !important;
+gap: 10px !important;
+background-color: #05a155 !important;
+}
+.sendButton:hover{
+  background-color: #02733c !important;
+}
+.cancelButton{
+  color:#05a155;
+  border-color: #05a155;
+}
+.cancelButton:hover{
+  color:#05a155;
+  border-color: #05a155;
+}
 .viewHeader {
   display: flex;
   align-items: flex-start;

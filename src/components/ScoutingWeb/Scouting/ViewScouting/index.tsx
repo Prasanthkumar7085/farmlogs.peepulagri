@@ -67,8 +67,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       const response = await getSingleScoutService(id, accessToken);
       if (response?.success) {
         setData(response?.data);
-        const lines = response?.data?.findings?.split("\n");
-        setContent(lines);
       }
     } catch (err) {
       console.error(err);
@@ -76,9 +74,22 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       setLoading(false);
     }
   };
+
+  const changeDescription = () => {
+    if (onlyImages?.length) {
+      const lines = onlyImages[currentIndex]?.description?.split("\n");
+
+      setContent(lines);
+    }
+  };
   useEffect(() => {
-    getSingleScoutDetails(scoutId);
+    if (scoutId) {
+      getSingleScoutDetails(scoutId);
+    }
   }, [scoutId]);
+  useEffect(() => {
+    changeDescription();
+  }, [currentIndex]);
 
   return (
     <Dialog
@@ -111,19 +122,21 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   flexDirection: "column",
                   justifyContent: "center",
                 }}
+                onWheel={(e: any) => {
+                  if (e.deltaY > 0 && e.deltaY % 20 == 0) {
+                    setCurrentIndex((prev) => prev + 1);
+                  } else {
+                    if (e.deltaY % 20 == 0) {
+                      setCurrentIndex((prev) => prev - 1);
+                    }
+                  }
+                }}
               >
-                {/* <IconButton
-                  onClick={() => setCuroselOpen(false)}
-                  sx={{ cursor: "pointer" }}
-                >
-                  <CloseIcon
-                    sx={{ color: "#fff", height: "32px", width: "32px" }}
-                  />
-                </IconButton> */}
                 <Carousel
                   selectedItem={currentIndex}
                   onChange={(index) => changeImage(index)}
                   swipeable={true}
+                  autoFocus
                 >
                   {onlyImages.map((item: any, index: any) => (
                     <div
@@ -198,17 +211,30 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             </div>
           </div>
         </Grid>
-        <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
-          <ScoutingDetails
-            loading={loading}
-            data={data}
-            content={content}
-            setPreviewImageDialogOpen={setPreviewImageDialogOpen}
-          />
-        </Grid>
+<<<<<<< HEAD
+  <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
+    <ScoutingDetails
+      loading={loading}
+      data={data}
+      content={content}
+      setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+    />
+=======
+        <Grid xs={4}>
+      <Card sx={{ zIndex: 100 }}>
+        <ScoutingDetails
+          loading={loading}
+          data={data}
+          content={content}
+          imageData={onlyImages[currentIndex]}
+          setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+        />
+      </Card>
+>>>>>>> 37a4b4fe122d83c9b8c4a922f92efbae360edc9d
+    </Grid>
 
-      </Grid>
-    </Dialog>
+  </Grid>
+    </Dialog >
   );
 };
 export default SingleScoutViewDetails;

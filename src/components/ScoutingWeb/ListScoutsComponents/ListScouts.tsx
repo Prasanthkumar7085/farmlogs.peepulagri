@@ -22,6 +22,8 @@ import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import ScoutingDailyImages from "./ScoutingDailyImages";
 import UserDropDownForScouts from "./UserDropDownForScouts";
+import timePipe from "@/pipes/timePipe";
+import DaySummaryComponent from "./DaySummaryComponent";
 
 interface ApiMethodProps {
   page: string | number;
@@ -56,6 +58,9 @@ const ListScouts: FunctionComponent = () => {
   const [viewAttachmentId, setViewAttachmentId] = useState("");
   const [previewImageDialogOpen, setPreviewImageDialogOpen] = useState(false);
   const [onlyImages, setOnlyImages] = useState([]);
+  const [openDaySummary, setOpenDaySummary] = useState(false);
+  const [seletectedItemDetails, setSelectedItemDetails] =
+    useState<SingleScoutResponse>();
 
   const onChangeUser = async (e: any, value: any) => {
     if (value) {
@@ -328,9 +333,7 @@ const ListScouts: FunctionComponent = () => {
       order_by: "title",
       order_type: "asc",
     };
-    if (userId) {
-      queryParams["user_id"] = userId;
-    }
+
     let url = prepareURLEncodedParams("", queryParams);
 
     const response = await ListAllFarmForDropDownService(url, accessToken);
@@ -447,11 +450,11 @@ const ListScouts: FunctionComponent = () => {
           Scouting
         </Typography>
         <div className={styles.allScoutsFilterBlock}>
-          <UserDropDownForScouts
+          {/* <UserDropDownForScouts
             user={user}
             onChangeUser={onChangeUser}
             usersOptions={usersOptions}
-          />
+          /> */}
           <FarmAutoCompleteInAllScouting
             options={farmOptions}
             onSelectFarmFromDropDown={onSelectFarmFromDropDown}
@@ -481,22 +484,42 @@ const ListScouts: FunctionComponent = () => {
       </div>
       <div className={styles.allFarms}>
         <div className={styles.allScoutingCards}>
-          {data?.length ? (
-            data.map((item: SingleScoutResponse, index: number) => {
-              return (
-                <div className={styles.eachDayScouting} key={index}>
-                  <div className={styles.scoutDay} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Typography>Today</Typography>
-                    <div className={styles.summaryBtn}><SummaryIcon /> Summary</div>
-
+          {data?.length
+            ? data.map((item: SingleScoutResponse, index: number) => {
+                return (
+                  <div className={styles.eachDayScouting} key={index}>
+                    <div
+                      className={styles.scoutDay}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography>
+                        {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
+                      </Typography>
+                      <div
+                        className={styles.summaryBtn}
+                        onClick={() => {
+                          setOpenDaySummary(true);
+                          setSelectedItemDetails(item);
+                        }}
+                      >
+                        <SummaryIcon /> Summary
+                      </div>
+                    </div>
+                    <ScoutingDailyImages
+                      item={item}
+                      key={index}
+                      onClickAttachment={onClickAttachment}
+                    />
                   </div>
-                  <ScoutingDailyImages item={item} key={index} onClickAttachment={onClickAttachment}/>
-                </div>
-              );
-            })
-          ) : ''}
+                );
+              })
+            : ""}
         </div>
-        {(!data?.length && !loading) ? (
+        {!data?.length && !loading ? (
           <div
             id={styles.noData}
             style={{
@@ -524,6 +547,11 @@ const ListScouts: FunctionComponent = () => {
         onlyImages={onlyImages}
         previewImageDialogOpen={previewImageDialogOpen}
         setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+      />
+      <DaySummaryComponent
+        openDaySummary={openDaySummary}
+        setOpenDaySummary={setOpenDaySummary}
+        seletectedItemDetails={seletectedItemDetails}
       />
       {/* {!loading ? (
         <TablePaginationComponentForScouts

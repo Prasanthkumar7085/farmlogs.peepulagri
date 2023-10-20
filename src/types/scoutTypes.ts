@@ -1,4 +1,5 @@
 export interface OnlyImagesType {
+  description: string;
   name: string;
   original_name: string;
   type: string;
@@ -32,13 +33,19 @@ export interface CreatedByDetails {
   user_type: string;
 }
 
-interface FarmInScoutsResponseType {
+export interface CropType {
+  title: string;
+  _id: string;
+}
+export interface FarmInScoutsResponseType {
   _id: string;
   title: string;
   location: string;
-  crops: Array<{ title: string; _id: string }>;
+  crops: Array<CropType>;
 }
 export interface SingleScoutResponse {
+  suggestions: string;
+  summary: string;
   _id: string;
   farm_id: FarmInScoutsResponseType;
   crop_id: string;

@@ -213,6 +213,7 @@ const ViewScoutThreads = () => {
               <h3 className={styles.heading}>Attachments</h3>
               <Button variant="contained" color="primary" size="small" startIcon={<AddIcon />} onClick={() => setFileUploadOpen(true)}>Add</Button>
             </div>
+
             <Card sx={{
               width: "100%", minHeight: "100px",
             }}>
@@ -254,7 +255,6 @@ const ViewScoutThreads = () => {
 
             {fileUploadOpen == false ?
               <CommentsComponent /> : ""}
-
 
           </div>
 

@@ -1,10 +1,14 @@
 .newFolder {
   color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(16px, 3.65vw, 24px);
+  font-size: clamp(16px, 4vw, 28px);
   font-weight: 500;
   line-height: 100%;
-  margin: 0;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-mediumseagreen-100);
 }
 
 .input {
@@ -27,7 +31,6 @@
 .frame {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
   margin-top: 0.6rem;
 }

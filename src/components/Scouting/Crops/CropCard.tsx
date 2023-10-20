@@ -16,12 +16,14 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import { setCropTitleTemp } from "@/Redux/Modules/Farms";
 import SpaIcon from '@mui/icons-material/Spa';
 import Image from "next/image";
+import { deepOrange } from "@mui/material/colors";
 
 interface pagePropsType {
   itemDetails: CropTypeResponse;
   getCropsDetails: (farmId: string) => void;
+  colorIndex: number;
 }
-const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
+const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) => {
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -62,7 +64,7 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
     )
   }
 
-  const captureResponseDilog = (value: any) => {
+  const captureResponseDilog = (value: any, index: number) => {
     setErrorMessages([]);
     if (!value) {
       setRenameOpen(false)
@@ -122,18 +124,56 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
     router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)
   }
 
+
+  let colorsArray = ["#C71585", "#7B68EE", "#FF8C00", " #008080", "#2E8B57", "#4682B4", "#000080", "#3D3D5B", " #CC0044", "#BA55D3"
+    , "#663399", "#8B0000", "#FF4500", "#DA0E0E", "#00CED1", "#4169E1", " #A52A2A", "#2D1E2F", "#714E47", "#C65B7C"
+    , "#A04662", "#FE654F", " #5F6A89", "#067BBD"]
+
   return (
     <div className={styles.folder}>
       <div className={styles.cropcard}>
         <div className={styles.icons}>
-          <Image
+          {/* <Image
             className={styles.folderIcon}
-            src="/crops-folder.svg"
+            src="/crop.svg"
             alt="Folder"
             width={80}
             height={80}
             onClick={() => setToStorage(itemDetails?.title)}
-          />
+          /> */}
+          <Avatar sx={{ bgcolor: colorsArray[colorIndex] }}>{itemDetails?.title.toUpperCase().slice(0, 2)}</Avatar>
+          <div
+            className={styles.textWrapper}
+            onClick={() => setToStorage(itemDetails?.title)}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}
+            >
+              <h2 className={styles.FieldCrop}>
+                {itemDetails?.title.length > 12
+                  ? itemDetails?.title.slice(0, 9) + "..."
+                  : itemDetails?.title}
+              </h2>
+
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <p className={styles.aug2023} >
+                {timePipe(itemDetails.createdAt, 'DD, MMM YYYY')}
+              </p>
+
+            </div>
+          </div>
+
           <div className={styles.actions}>
             {/* <Chip label="02" className={styles.count} icon={<SpaIcon fontSize="small" />} /> */}
             {/* <Chip
@@ -149,43 +189,12 @@ const CropCard = ({ itemDetails, getCropsDetails }: pagePropsType) => {
           </div>
           <MenuItemsForFolder />
         </div>
-        <div
-          className={styles.textWrapper}
-          onClick={() => setToStorage(itemDetails?.title)}
-        >
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
-            <h2 className={styles.FieldCrop}>
-              {itemDetails?.title.length > 12
-                ? itemDetails?.title.slice(0, 9) + "..."
-                : itemDetails?.title}
-            </h2>
-
-          </div>
-          <div
-            style={{
-              display: "flex",
-              width: "95%",
-              justifyContent: "space-between",
-            }}
-          >
-            <p className={styles.aug2023} >
-              {timePipe(itemDetails.createdAt, 'DD, MMM YYYY')}
-            </p>
-            <p className={styles.aug2023}>
-              {itemDetails.crop_area
-                ? itemDetails.crop_area +
-                (itemDetails.crop_area < 2 ? " acre" : " acres")
-                : 0 + " acres"}
-            </p>
-          </div>
-        </div>
+        <p className={styles.aug2023}>
+          {itemDetails.crop_area
+            ? itemDetails.crop_area +
+            (itemDetails.crop_area < 2 ? " acre" : " acres")
+            : 0 + " acres"}
+        </p>
       </div>
       {renameOpen ? (
         <NewFolderDiloag

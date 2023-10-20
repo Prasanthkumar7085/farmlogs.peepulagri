@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
+import SpaIcon from '@mui/icons-material/Spa';
 
 
 const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, errorMessages, defaultArea }: any) => {
@@ -29,7 +30,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
   };
 
   const callData = () => {
-    
+
     let obj = {
       title: title ? title : "",
       crop_area: area ? +area : null,
@@ -46,7 +47,12 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
 
       <div className={styles.newfolder}>
         <div className={styles.frame}>
-          <h3 className={styles.newFolder}>{defaultTitle ? `Rename Crop` : `New Crop`}</h3>
+          <h3 className={styles.newFolder}>
+            <SpaIcon />
+            <span>
+              {defaultTitle ? `Rename Crop` : `New Crop`}
+            </span>
+          </h3>
 
           <div style={{ textAlign: "left", width: "100%" }}>
             <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Title'}<strong style={{ color: "rgb(228 12 15)" }}>*</strong></h4>

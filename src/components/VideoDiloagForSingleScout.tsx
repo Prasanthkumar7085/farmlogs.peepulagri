@@ -16,12 +16,16 @@ import { useSwipeable } from 'react-swipeable';
 import ReactPanZoom from "react-image-pan-zoom-rotate";
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) => {
+import timePipe from '@/pipes/timePipe';
+import Image from 'next/image';
+const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions, captureSlideImagesIndex }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
     const [description, setDescription] = useState<any>()
     const [isZoom, setISZoom] = useState<any>()
+    const [showMore, setShowMore] = useState<any>(false)
+
 
 
     useEffect(() => {
@@ -36,6 +40,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
             ?.scrollIntoView({ behavior: "smooth" });
         const nextIndex = (currentIndex + 1) % mediaArray?.length;
         setCurrentIndex(nextIndex);
+        captureSlideImagesIndex(nextIndex)
     };
 
     const playPrevious = () => {
@@ -44,6 +49,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
             ?.scrollIntoView({ behavior: "smooth" });
         const prevIndex = currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
         setCurrentIndex(prevIndex);
+        captureSlideImagesIndex(prevIndex)
+
     };
 
     const handleClose = () => {
@@ -140,7 +147,10 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
 
                 <div style={{ width: "100%" }}>
 
-                    <Carousel selectedItem={currentIndex} onChange={(index) => setCurrentIndex(index)} swipeable={true}>
+                    <Carousel selectedItem={currentIndex} onChange={(index) => {
+                        setCurrentIndex(index)
+                        captureSlideImagesIndex(index)
+                    }} swipeable={true}>
                         {mediaArray?.length > 0 &&
                             mediaArray.map((item: any, index: any) => (
                                 <div className={styles.scoutDailogImg} key={index}>
@@ -174,74 +184,62 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data }: any) =>
                 </div>
 
             </DialogContent>
-            <div
-                style={{
-                    width: "100%",
-                    justifyContent: "center",
-                }}
-            >
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "10px",
-                        width: "100%",
-                        overflow: "auto",
-                    }}
-                >
-                    {mediaArray?.length
-                        ? mediaArray?.map((item: any, index: any) => {
-                            return (
-                                <div
-                                    key={index}
-                                    id={`${index}`}
-                                    autoFocus={index == currentIndex}
-                                    onClick={() => setCurrentIndex(index)}
-                                    style={{ cursor: "pointer" }}
-                                    className={
-                                        index == currentIndex
-                                            ? styles.activeImage
-                                            : styles.inactiveImage
-                                    }
-                                >
-                                    {item.type.includes("video") ?
-                                        <img
-                                            src="/videoimg.png"
-                                            alt={`Image ${index + 1}`}
-                                            height={"100px"}
-                                            width={"100px"}
-                                        />
-                                        :
-                                        item.type.includes("image") ?
-                                            <img
-                                                src={item?.url} // Change this to use the mediaArray
-                                                alt={`Image ${index + 1}`}
-                                                height={"100px"}
-                                                width={"100px"}
-                                            />
-                                            : <img
-                                                src="/pdf-icon.png"
-                                                alt={`Image ${index + 1}`}
-                                                height={"80px"}
-                                                width={"100px"}
-                                            />}
-                                </div>
-                            );
-                        })
-                        : ""}
-                </div>
-            </div>
 
-            <DialogActions>
-
-                <Typography variant="caption" display="block" align="center">
+            {/* <Typography variant="caption" display="block" align="center">
                     {currentIndex + 1} of {mediaArray?.length}
-                </Typography>
+                </Typography> */}
+            {mediaArray?.length &&
+                <div >
+                    <Typography variant="caption" display="block" align="left">
+                        {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh-mm a")}
+                    </Typography>
+                    {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
+                        return (
+                            <Typography variant="caption" align="left" key={index}>
+                                {tag}
+                            </Typography>
+                        )
+                    })}
+                    {showMore == true ?
+                        <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description}
+                            <span style={{ cursor: 'pointer', fontWeight: '600', }} onClick={() => {
+                                setShowMore(false)
+                            }}>Show Less</span>
+                        </Typography> :
 
-            </DialogActions>
-            {data?.findings ?
-                <div style={{ display: "block" }}>
-                    <Typography className={styles.description}><span className={styles.label}>Findings:</span> <span>{data?.findings}</span></Typography>
-                </div> : ""}
+                        <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description?.length > 100 ? mediaArray[currentIndex]?.description.slice(0, 100) + "...." : mediaArray[currentIndex]?.description}
+                            {mediaArray[currentIndex]?.description?.length > 100 ?
+                                <span style={{ fontWeight: '600', cursor: 'pointer' }} onClick={() => {
+                                    setShowMore(true)
+                                }}>Show More</span>
+                                : ""}</Typography>}
+
+                    <div style={{ display: "flex", flexDirection: 'row', justifyContent: "flex-end" }}>
+                        <IconButton onClick={() => {
+                            captureImageDilogOptions("tag")
+                        }}>
+                            <Image
+                                src={"/add-tag-icon.svg"}
+                                width={20}
+                                height={20}
+                                alt="pp"
+                            />
+                        </IconButton>
+                        <IconButton>
+                            <Image
+                                src={"/comment-white-icon.svg"}
+                                width={20}
+                                height={20}
+                                alt="pp"
+                            />
+                        </IconButton>
+
+                    </div>
+                </div>
+
+            }
+
+
         </Dialog>
     );
 };

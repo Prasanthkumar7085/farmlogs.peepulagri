@@ -331,16 +331,14 @@ const SingleViewScoutComponent = () => {
                             </div>
                         </div>
 
-                        <Card  variant="outlined" sx={{
-                            width: "100%", minHeight: "100px", marginBottom: "5.5rem",
+                        <div style={{
+                            width: "100%", minHeight: "100px", margin: "0.5rem 0 5.5rem",
                         }}>
 
                             <div style={{
                                 display: "grid",
-                                gridTemplateColumns: '50% 50%', /* Two columns with a width of 60px each */
-                                gap: '10px', /* Adjust the gap between the columns if necessary */
-                                margin: "0.5rem",
-                                objectFit: "cover"
+                                gridTemplateColumns: '  1fr 1fr',
+                                gap: '10px',
                             }}>
                                 {item?.attachments?.length !== 0 ? item.attachments.map((image: any, index: any) => (
 
@@ -372,7 +370,7 @@ const SingleViewScoutComponent = () => {
 
                                 )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
                             </div>
-                        </Card>
+                        </div>
 
                     </Card>
                 )

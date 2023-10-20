@@ -1,18 +1,19 @@
-import { useSelector } from "react-redux";
-import CommentForm from "./comment-form"
-import Threads from "./threads"
+import { useDispatch, useSelector } from "react-redux";
+import CommentForm from "./comment-form";
+import Threads from "./threads";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import styles from "./CommentsComponent.module.css";
-import CommentFormComponentForListScouts from "./CommentFormComponentForListScouts";
+import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 
-const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
+const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
   const router = useRouter();
+  const dispatch = useDispatch();
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState<any>();
   const [afterReply, setAfterReply] = useState<any>();
@@ -20,12 +21,13 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
   const [alertType, setAlertType] = useState(false);
 
   useEffect(() => {
-    if (router.isReady && accessToken && attachmentDetails?._id) {
+    if (router.isReady && scoutDetails?._id) {
       getAllScoutComments();
     }
-  }, [router.isReady, accessToken, attachmentDetails?._id]);
+  }, [router.isReady, accessToken]);
 
   const getAllScoutComments = async () => {
+    setLoading(true);
     let options = {
       method: "GET",
       headers: new Headers({
@@ -35,16 +37,14 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${attachmentDetails?.scout_id}/attachments/${attachmentDetails?._id}/comments/all`,
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
         options
       );
       let responseData = await response.json();
-      console.log(responseData);
-
       if (responseData.success == true) {
         const commentsById: any = {};
 
-        responseData.data.forEach((comment: any) => {
+        responseData.data[0]?.comments.forEach((comment: any) => {
           commentsById[comment._id] = {
             ...comment,
             replies: [], // Initialize an empty array for replies
@@ -52,7 +52,7 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
         });
 
         // Populate the replies for each comment
-        responseData.data.forEach((comment: any) => {
+        responseData.data[0]?.comments.forEach((comment: any) => {
           if (comment.type === "REPLY" && comment.reply_to_comment_id) {
             const parentId = comment.reply_to_comment_id;
             if (commentsById[parentId]) {
@@ -75,9 +75,12 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
         let reverse = formattedData.slice().reverse();
 
         setData(reverse);
+        dispatch(removeTheAttachementsFilesFromStore([]));
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,7 +96,7 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${attachmentDetails?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
         options
       );
       let responseData = await response.json();
@@ -122,7 +125,7 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${attachmentDetails?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
         options
       );
       let responseData = await response.json();
@@ -173,7 +176,7 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${attachmentDetails?._id}/${commentId}/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/${commentId}/attachments`,
         options
       );
       let responseData = await response.json();
@@ -194,17 +197,19 @@ const CommentsComponentForWeb = ({ attachmentDetails }: any) => {
       <div className={styles.allThreads}>
         <Threads
           details={data}
-          attachmentDetails={attachmentDetails}
           afterCommentAdd={afterCommentAdd}
           afterDeleteComment={afterDeleteComment}
           afterUpdateComment={afterUpdateComment}
           afterReply={afterReply}
           afterDeleteAttachements={afterDeleteAttachements}
+          attachement={attachement}
+          scoutDetails={scoutDetails}
         />
       </div>
-      <CommentFormComponentForListScouts
+      <CommentForm
         afterCommentAdd={afterCommentAdd}
-        attachmentDetails={attachmentDetails}
+        scoutDetails={scoutDetails}
+        attachement={attachement}
       />
 
       <LoadingComponent loading={loading} />

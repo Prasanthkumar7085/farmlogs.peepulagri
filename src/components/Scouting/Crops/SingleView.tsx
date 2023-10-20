@@ -3,6 +3,7 @@ import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
+import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
@@ -16,13 +17,12 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
-import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -169,36 +169,48 @@ const SingleViewScoutComponent = () => {
   const captureImageDilogOptions = (value: any) => {
     if (value == "tag") {
       setTagsDrawerEditOpen(true);
+    } else {
+      setScoutId(value._id);
+      setScoutAttachementsDetails(value.attachments);
+      setSlideShowImages(value.attachments);
     }
   };
   //capture the tags details
   const captureTagsDetails = async (tags: any, findingsvalue: any) => {
     setScoutFindings(findingsvalue);
-    if (tags?.length && findingsvalue?.length !== 0) {
+    if (tags?.length && !findingsvalue?.length) {
       await tempImages.forEach((obj: any) => {
-        obj.tags = [...obj.tags, ...tags];
-        obj.description = findingsvalue;
+        obj.tags = [...tags];
       });
       setSelectedItems(tempImages);
       await updateDescriptionService(tempImages, selectedFile.summary);
     }
     if (
-      tags?.length !== 0 &&
+      tags?.length &&
       findingsvalue?.length == 0 &&
       tempImages.some((obj: any) => obj.hasOwnProperty("description")) == true
     ) {
       await tempImages.forEach((obj: any) => {
-        obj.tags = [...obj.tags, ...tags];
+        obj.tags = [...tags];
         obj.description = obj.description;
       });
       setSelectedItems(tempImages);
       await updateDescriptionService(tempImages, selectedFile.summary);
     }
-    if (tags?.length == 0 && findingsvalue?.length !== 0) {
-      console.log("o");
+    if (!tags?.length && findingsvalue?.length) {
       await tempImages.forEach((obj: any) => {
         obj.description = findingsvalue;
       });
+      setSelectedItems(tempImages);
+      await updateDescriptionService(tempImages, selectedFile.summary);
+    }
+    if (tags?.length && findingsvalue?.length) {
+      await tempImages.forEach((obj: any) => {
+        obj.description = findingsvalue;
+        obj.tags = [...tags];
+      });
+      console.log(tempImages);
+
       setSelectedItems(tempImages);
       await updateDescriptionService(tempImages, selectedFile.summary);
     }
@@ -264,6 +276,7 @@ const SingleViewScoutComponent = () => {
       const responseData = await response.json();
       if (responseData?.success == true) {
         toast.success("Scout updated successfully");
+        setTagsDrawerEditOpen(false);
         setTagsDrawerOpen(false);
         getPresingedURls();
         setSelectedFile([]);
@@ -389,10 +402,10 @@ const SingleViewScoutComponent = () => {
                   }}
                 >
                   {item?.attachments?.length !== 0 ? (
-                    item.attachments.map((image: any, index: any) => (
+                    item.attachments.map((image: any, indexAttachment: any) => (
                       <div
                         style={{ position: "relative", height: "100px" }}
-                        key={index}
+                        key={indexAttachment}
                       >
                         <img
                           src={
@@ -400,11 +413,11 @@ const SingleViewScoutComponent = () => {
                               ? "/Play-button.svg"
                               : image.url
                           }
-                          alt={`images${index}`}
+                          alt={`images${indexAttachment}`}
                           width={"100%"}
                           height={"100%"}
                           onClick={() => {
-                            handleClick(index, item.attachments);
+                            handleClick(indexAttachment, item.attachments);
                             setScoutId(item._id);
                           }}
                           style={{ cursor: "pointer", borderRadius: "5px" }}
@@ -534,16 +547,13 @@ const SingleViewScoutComponent = () => {
         ""
       )}
 
-      {TagsDrawerEditOpen ? (
-        <TagsDrawerEdit
-          tagsDrawerClose={tagsDrawerClose}
-          captureTagsDetails={captureTagsDetails}
-          item={selectedFile}
-          selectedItems={selectedItems}
-        />
-      ) : (
-        ""
-      )}
+      <TagsDrawerEdit
+        tagsDrawerClose={tagsDrawerClose}
+        captureTagsDetails={captureTagsDetails}
+        item={selectedFile}
+        selectedItems={selectedItems}
+        TagsDrawerEditOpen={TagsDrawerEditOpen}
+      />
 
       <div className="addFormPositionIcon">
         {tagsCheckBoxOpen == false && selectedItems?.length == 0 ? (

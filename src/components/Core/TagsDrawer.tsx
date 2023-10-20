@@ -1,7 +1,4 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { CKEditor } from "ckeditor4-react";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
   Drawer,
@@ -9,9 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import timePipe from "@/pipes/timePipe";
-import ReactQuill from "react-quill";
+import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import TagsTextFeild from "./TagsTextFeild";
 
@@ -90,11 +85,12 @@ const TagsDrawer = ({
       </div>
 
       <Button
+        disabled={!(tags || description)}
         variant="contained"
         onClick={() => {
           captureTagsDetails(tags, description);
-          setTags([]);
-          setDescription("");
+          // setTags([]);
+          // setDescription("");
         }}
       >
         Submit

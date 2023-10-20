@@ -211,29 +211,16 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             </div>
           </div>
         </Grid>
-<<<<<<< HEAD
-  <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
-    <ScoutingDetails
-      loading={loading}
-      data={data}
-      content={content}
-      setPreviewImageDialogOpen={setPreviewImageDialogOpen}
-    />
-=======
-        <Grid xs={4}>
-      <Card sx={{ zIndex: 100 }}>
-        <ScoutingDetails
-          loading={loading}
-          data={data}
-          content={content}
-          imageData={onlyImages[currentIndex]}
-          setPreviewImageDialogOpen={setPreviewImageDialogOpen}
-        />
-      </Card>
->>>>>>> 37a4b4fe122d83c9b8c4a922f92efbae360edc9d
-    </Grid>
+        <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
+          <ScoutingDetails
+            loading={loading}
+            data={data}
+            content={content}
+            setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+          />
+        </Grid>
 
-  </Grid>
+      </Grid>
     </Dialog >
   );
 };

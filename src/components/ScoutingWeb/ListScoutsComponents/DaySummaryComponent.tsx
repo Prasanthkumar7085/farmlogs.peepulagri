@@ -251,7 +251,7 @@ const DaySummaryComponent: FC<pageProps> = ({
               <Skeleton width="300px" height="20px" />
             </div>
           ) : (
-            <div style={{ maxWidth: "300px" }}>
+            <div className={style.recomdationContent} >
               <Markup
                 content={
                   singleScoutData?.suggestions

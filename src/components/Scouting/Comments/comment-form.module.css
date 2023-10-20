@@ -78,7 +78,7 @@
 .commentform {
   flex-direction: column;
   justify-content: flex-start;
-  width: calc(100% - 2rem);
+  width: calc(100%);
   gap: var(--gap-13xl);
   padding: 1rem;
 }

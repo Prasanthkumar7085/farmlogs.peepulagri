@@ -23,12 +23,16 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
                 key={index}
                 onClick={() => onClickAttachment(imageItem._id)}
               >
-                <img
-                  src={imageItem?.url}
+                {/* <img
+                  src={
+                    imageItem.type?.includes("video")
+                      ? "/Play-button.svg"
+                      : imageItem?.url
+                  }
                   height={100}
                   width={100}
                   alt={imageItem.original_name}
-                />
+                /> */}
               </div>
             );
           }

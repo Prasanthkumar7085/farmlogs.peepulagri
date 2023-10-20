@@ -262,24 +262,23 @@ const SingleViewScoutComponent = () => {
     }
 
     return (
-        <div className={styles.scoutingView}>
-
-            <div role="presentation">
-                <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs} >
-                    <Link underline="hover" color="inherit" href="/farms">
-                        Dashboard
-                    </Link>
-                    <Link
-                        underline="hover"
-                        color="inherit"
-                        href={`/farms/${router.query.farm_id}/crops`}
-                    >
-                        My Crops
-                    </Link>
-                    <Typography color="text.primary">{farmTitle}</Typography>
-                </Breadcrumbs>
-            </div>
-            {/* < InfiniteScroll
+      <div className={styles.scoutingView}>
+        <div role="presentation">
+          <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
+            <Link underline="hover" color="inherit" href="/farms">
+              Dashboard
+            </Link>
+            <Link
+              underline="hover"
+              color="inherit"
+              href={`/farms/${router.query.farm_id}/crops`}
+            >
+              My Crops
+            </Link>
+            <Typography color="text.primary">{farmTitle}</Typography>
+          </Breadcrumbs>
+        </div>
+        {/* < InfiniteScroll
                 className={styles.infiniteScrollComponent}
                 dataLength={data.length}
                 next={() => setPageNumber(prev => prev + 1)}
@@ -287,147 +286,242 @@ const SingleViewScoutComponent = () => {
                 loader={<div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>}
                 endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : data.length > 11 ? 'Scroll to Top' : ""}</a>}
             > */}
-            {data?.length ? data.map((item: any, index: any) => {
-                return (
-                    <Card key={index} className={styles.galleryCard} >
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                            <Typography className={styles.postDate}>
+        {data?.length ? (
+          data.map((item: any, index: any) => {
+            return (
+              <Card key={index} className={styles.galleryCard}>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Typography className={styles.postDate}>
+                    <InsertInvitationIcon />
+                    <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
+                  </Typography>
 
-                                <InsertInvitationIcon />
-                                <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
-                            </Typography>
+                  <Typography className={styles.postDate}>
+                    {tagsCheckBoxOpen && scoutId == item._id ? (
+                      <IconButton
+                        onClick={() => {
+                          setTagsCheckBoxOpen(false);
+                          setScoutId("");
+                          setScoutAttachementsDetails([]);
+                          setSlideShowImages([]);
+                          setSelectedItems([]);
+                        }}
+                      >
+                        <Image
+                          src={"/scouting-img-clear.svg"}
+                          width={20}
+                          height={20}
+                          alt="tag"
+                        />
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        onClick={() => {
+                          setTagsCheckBoxOpen(true);
+                          setScoutId(item._id);
+                          setScoutAttachementsDetails(item.attachments);
+                          setSlideShowImages(item.attachments);
+                        }}
+                      >
+                        <Image
+                          src={"/scouting-img-add.svg"}
+                          width={20}
+                          height={20}
+                          alt="tag"
+                        />
+                      </IconButton>
+                    )}
 
-                            <Typography className={styles.postDate}>
-                                {tagsCheckBoxOpen && scoutId == item._id ?
-                                    <IconButton onClick={() => {
-                                        setTagsCheckBoxOpen(false)
-                                        setScoutId("")
-                                        setScoutAttachementsDetails([])
-                                        setSlideShowImages([])
-                                        setSelectedItems([])
-                                    }}>
-                                        <Image
-                                            src={"/scouting-img-clear.svg"}
-                                            width={20}
-                                            height={20}
-                                            alt="tag"
-                                        />
-                                    </IconButton> :
-                                    <IconButton onClick={() => {
-                                        setTagsCheckBoxOpen(true)
-                                        setScoutId(item._id)
-                                        setScoutAttachementsDetails(item.attachments)
-                                        setSlideShowImages(item.attachments)
-                                    }}>
-                                        <Image
-                                            src={"/scouting-img-add.svg"}
-                                            width={20}
-                                            height={20}
-                                            alt="tag"
-                                        />
-                                    </IconButton>}
+                    <Image
+                      src={"/Summary.svg"}
+                      width={20}
+                      height={20}
+                      alt="tag"
+                    />
+                    <span
+                      onClick={() => {
+                        setSummaryDrawerOpen(true);
+                        setScoutId(item._id);
+                        setSelectedFile(item);
+                        setScoutAttachementsDetails(item.attachments);
+                      }}
+                    >
+                      Summary
+                    </span>
+                  </Typography>
+                </div>
 
-                                <Image
-                                    src={"/Summary.svg"}
-                                    width={20}
-                                    height={20}
-                                    alt="tag"
-                                />
-                                <span onClick={() => {
-                                    setSummaryDrawerOpen(true)
-                                    setScoutId(item._id)
-                                    setSelectedFile(item)
-                                    setScoutAttachementsDetails(item.attachments)
-                                }}>Summary</span>
-                            </Typography>
+                <Card
+                  sx={{
+                    width: "100%",
+                    minHeight: "100px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns:
+                        "50% 50%" /* Two columns with a width of 60px each */,
+                      gap: "10px" /* Adjust the gap between the columns if necessary */,
+                      margin: "0.5rem",
+                      objectFit: "cover",
+                    }}
+                  >
+                    {item?.attachments?.length !== 0 ? (
+                      item.attachments.map((image: any, index: any) => (
+                        <div
+                          style={{ position: "relative", height: "100px" }}
+                          key={index}
+                        >
+                          <img
+                            src={
+                              image.type?.slice(0, 2) == "vi"
+                                ? "/Play-button.svg"
+                                : image.url
+                            }
+                            alt={`images${index}`}
+                            width={"100%"}
+                            height={"100%"}
+                            onClick={() => {
+                              handleClick(index, item.attachments);
+                              setScoutId(item._id);
+                            }}
+                            style={{ cursor: "pointer", borderRadius: "5px" }}
+                          />
+
+                          <div
+                            style={{ position: "absolute", top: 0, left: 0 }}
+                          >
+                            {tagsCheckBoxOpen &&
+                            image?.tags?.length == 0 &&
+                            scoutId == item._id ? (
+                              <Checkbox
+                                sx={{
+                                  color: "#7f7f7f",
+                                  "& .MuiSvgIcon-root": {
+                                    color: "#7f7f7f",
+                                  },
+                                }}
+                                size="small"
+                                checked={tempImages.some(
+                                  (ite: any) => ite._id === image._id
+                                )}
+                                onChange={() => handleChange(image)}
+                                inputProps={{ "aria-label": "controlled" }}
+                                color="secondary"
+                                title={image.id}
+                              />
+                            ) : tagsCheckBoxOpen == true &&
+                              scoutId == item._id ? (
+                              <Image
+                                src={"/scout-img-select.svg"}
+                                width={10}
+                                height={10}
+                                alt="tags"
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
+                      ))
+                    ) : (
+                      <div style={{ width: "100%", marginLeft: "100%" }}>
+                        No Attachements
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </Card>
+            );
+          })
+        ) : !loading ? (
+          <div
+            id={styles.noData}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "4rem",
+            }}
+          >
+            <Image
+              src="/emty-folder-image.svg"
+              alt="empty folder"
+              width={250}
+              height={150}
+            />
+            <Typography variant="h4">No Scoutings for this crop</Typography>
+          </div>
+        ) : (
+          ""
+        )}
+        {/* </InfiniteScroll> */}
 
-                        <Card sx={{
-                            width: "100%", minHeight: "100px",
-                        }}>
+        <LoadingComponent loading={loading} />
+        <VideoDialogForScout
+          open={openDialog}
+          onClose={handleCloseDialog}
+          mediaArray={sildeShowImages}
+          index={index}
+          data={scoutData}
+          captureSlideImagesIndex={captureSlideImagesIndex}
+          captureImageDilogOptions={captureImageDilogOptions}
+        />
 
-                            <div style={{
-                                display: "grid",
-                                gridTemplateColumns: '50% 50%', /* Two columns with a width of 60px each */
-                                gap: '10px', /* Adjust the gap between the columns if necessary */
-                                margin: "0.5rem",
-                                objectFit: "cover"
-                            }}>
-                                {item?.attachments?.length !== 0 ? item.attachments.map((image: any, index: any) => (
+        {SummaryDrawerOpen ? (
+          <SummaryTextDilog
+            summaryDrawerClose={summaryDrawerClose}
+            captureSummary={captureSummary}
+            item={selectedFile}
+          />
+        ) : (
+          ""
+        )}
+        {drawerOpen == true ? (
+          <DrawerComponentForScout
+            drawerClose={drawerClose}
+            scoutId={scoutId}
+            anchor={"bottom"}
+          />
+        ) : (
+          ""
+        )}
+        <TagsDrawer
+          tagsDrawerOpen={tagsDrawerOpen}
+          tagsDrawerClose={tagsDrawerClose}
+          captureTagsDetails={captureTagsDetails}
+          item={selectedFile}
+        />
 
-                                    <div style={{ position: "relative", height: "100px", }} key={index}>
-                                        <img src={image.type?.slice(0, 2) == "vi" ? "/Play-button.svg" : image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => {
-                                            handleClick(index, item.attachments)
-                                            setScoutId(item._id)
-                                        }} style={{ cursor: "pointer", borderRadius: "5px" }} />
-
-                                        <div style={{ position: "absolute", top: 0, left: 0 }}>
-                                            {tagsCheckBoxOpen && image?.tags?.length == 0 && scoutId == item._id ?
-                                                <Checkbox
-
-                                                    sx={{
-                                                        color: "#7f7f7f",
-                                                        '& .MuiSvgIcon-root': {
-                                                            color: "#7f7f7f"
-                                                        }
-                                                    }}
-                                                    size="small"
-                                                    checked={tempImages.some((ite: any) => ite._id === image._id)}
-                                                    onChange={() => handleChange(image)}
-                                                    inputProps={{ 'aria-label': 'controlled' }}
-                                                    color="secondary"
-                                                    title={image.id}
-                                                /> : tagsCheckBoxOpen == true && scoutId == item._id ? <Image src={"/scout-img-select.svg"} width={10} height={10} alt="tags" /> : ""}
-                                        </div>
-                                    </div>
-
-                                )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
-                            </div>
-                        </Card>
-
-                    </Card>
-                )
-            })
-                :
-                (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
-                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
-                        <Typography variant="h4">No Scoutings for this crop</Typography>
-                    </div>
-                    : "")}
-            {/* </InfiniteScroll> */}
-
-            <LoadingComponent loading={loading} />
-            <VideoDialogForScout
-                open={openDialog}
-                onClose={handleCloseDialog}
-                mediaArray={sildeShowImages}
-                index={index}
-                data={scoutData}
-                captureSlideImagesIndex={captureSlideImagesIndex}
-                captureImageDilogOptions={captureImageDilogOptions} />
-
-            {SummaryDrawerOpen ? <SummaryTextDilog summaryDrawerClose={summaryDrawerClose} captureSummary={captureSummary} item={selectedFile} /> : ""}
-            {drawerOpen == true ?
-                <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
-                : ""}
-            {tagsDrawerOpen ?
-                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={selectedFile} /> : ""}
-
-            <div className="addFormPositionIcon">
-                {tagsCheckBoxOpen == false && selectedItems?.length == 0 ?
-                    <img src="/add-plus-icon.svg" alt="" onClick={() => {
-                        router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
-                    }} /> :
-                    selectedItems?.length ?
-                        <img src="/scout-add-floating-icon.svg" alt="tags icon" onClick={() => {
-                            setTagsDrawerOpen(true)
-                        }} /> : ""}
-            </div>
-            <Toaster richColors position="top-right" closeButton />
-
+        <div className="addFormPositionIcon">
+          {tagsCheckBoxOpen == false && selectedItems?.length == 0 ? (
+            <img
+              src="/add-plus-icon.svg"
+              alt=""
+              onClick={() => {
+                router.push(
+                  `/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`
+                );
+              }}
+            />
+          ) : selectedItems?.length ? (
+            <img
+              src="/scout-add-floating-icon.svg"
+              alt="tags icon"
+              onClick={() => {
+                setTagsDrawerOpen(true);
+              }}
+            />
+          ) : (
+            ""
+          )}
         </div>
-
-    )
+        <Toaster richColors position="top-right" closeButton />
+      </div>
+    );
 }
 export default SingleViewScoutComponent;

@@ -34,12 +34,12 @@
 }
 
 .activeMenuItem {
-  border-radius: 5px;
-  background-color: var(--color-mediumseagreen-100)05a155 !important;
+  border-radius: 5px !important;
+  background-color: #219654 !important;
 }
 .activeMenuItem:hover {
-  border-radius: 5px;
-  background-color: #219654 !important;
+  border-radius: 5px !important;
+  background-color: #1c7f47 !important;
 }
 .menuItem.active {
   background-color: #2A51AE;

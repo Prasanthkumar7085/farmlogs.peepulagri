@@ -65,3 +65,34 @@
 .label {
   font-weight: 600;
 }
+
+.findingsText {
+  padding: 0.5rem 0;
+}
+.findingsText span {
+  text-transform: capitalize;
+  font-family: 'Inter',sans-serif;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: block;
+  text-decoration: underline;
+}
+
+.tagNames {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+.tagNames p{
+  margin: 0.24rem;
+}
+.cropDetailsBlock {
+  padding: 0.5rem;
+}
+.tagsLabel {
+  height: 25px;
+  padding-left: 4px;
+  background-color: var(--white);
+  margin-right: 10px;
+  font-size: 13px;
+}

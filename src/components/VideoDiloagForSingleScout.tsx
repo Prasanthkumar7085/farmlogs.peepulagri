@@ -7,6 +7,7 @@ import {
     DialogTitle,
     Typography,
     IconButton,
+    Chip
 } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
@@ -18,6 +19,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import timePipe from '@/pipes/timePipe';
 import Image from 'next/image';
+import SellIcon from '@mui/icons-material/Sell';
 const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions, captureSlideImagesIndex }: any) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -118,11 +120,13 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                 background: "#0000008f",
                 '& .MuiPaper-root': {
                     margin: "0 !important",
-                    width: "95%",
+                    width: "100%",
                     background: "#ffffff00",
                     boxShadow: "none !important",
-                    height: "calc(100% - 140px)",
-                    maxWidth: "400px !important"
+                    height: "100vh",
+                    maxHeight: "100vh",
+                    maxWidth: "100vw !important",
+                    alignContent: "flex-end",
                 },
                 '& .MuiTypography-root': {
                     color: "#fff"
@@ -133,13 +137,13 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                     padding: "0rem",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent: "space-between",
                 },
                 '& .MuiDialogActions-root ': {
                     justifyContent: "center !important"
                 }
             }}>
-            <IconButton onClick={handleClose} sx={{}}>
+            <IconButton onClick={handleClose} sx={{ textAlign: "right" }}>
                 <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
             </IconButton>
 
@@ -189,32 +193,35 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                     {currentIndex + 1} of {mediaArray?.length}
                 </Typography> */}
             {mediaArray?.length &&
-                <div >
+                <div className={styles.cropDetailsBlock}>
                     <Typography variant="caption" display="block" align="left">
                         {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh-mm a")}
                     </Typography>
-                    {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
-                        return (
-                            <Typography variant="caption" align="left" key={index}>
-                                {tag}
-                            </Typography>
-                        )
-                    })}
+                    <div className={styles.tagNames}>
+                        <Chip className={styles.tagsLabel} icon={<SellIcon sx={{ fontSize: 15 }}/>} label="Tags" variant="outlined" />
+                        {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
+                            return (
+                                <Typography  align="left" key={index}>
+                                    #{tag}
+                                </Typography>
+                            )
+                        })}
+                    </div>
                     {showMore == true ?
                         <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description}
-                            <span style={{ cursor: 'pointer', fontWeight: '600', }} onClick={() => {
+                            <span onClick={() => {
                                 setShowMore(false)
                             }}>Show Less</span>
                         </Typography> :
 
                         <Typography className={styles.findingsText}>{mediaArray[currentIndex]?.description?.length > 100 ? mediaArray[currentIndex]?.description.slice(0, 100) + "...." : mediaArray[currentIndex]?.description}
                             {mediaArray[currentIndex]?.description?.length > 100 ?
-                                <span style={{ fontWeight: '600', cursor: 'pointer' }} onClick={() => {
+                                <span onClick={() => {
                                     setShowMore(true)
                                 }}>Show More</span>
                                 : ""}</Typography>}
 
-                    <div style={{ display: "flex", flexDirection: 'row', justifyContent: "flex-end" }}>
+                    <div style={{ display: "flex", flexDirection: 'row', justifyContent: "flex-end", padding: "1rem 0 0" }}>
                         <IconButton onClick={() => {
                             captureImageDilogOptions("tag")
                         }}>

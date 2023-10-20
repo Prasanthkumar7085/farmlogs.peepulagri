@@ -8,6 +8,8 @@ import timePipe from '@/pipes/timePipe';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import TagsTextFeild from './TagsTextFeild';
+import styles from './TagsDrawer.module.css';
+import { ClassNames } from '@emotion/react';
 
 const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
 
@@ -27,19 +29,10 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
         <Drawer
             anchor={'bottom'}
             open={isDrawerOpen}
-            sx={{ zIndex: "1300 !important" }}
+            className={styles.AddTagsDrawer}
         >
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '0.5rem',
-                    borderBottom: '1px solid #dddddd',
-                }}
-            >
-
-                <Typography>Tag Images</Typography>
+            <div className={styles.drawerHeading}>
+                <Typography variant='h6'>Tag Images</Typography>
                 <IconButton
                     onClick={() => {
                         tagsDrawerClose(false);
@@ -48,33 +41,43 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
                     <CloseIcon />
                 </IconButton>
             </div>
-            <div style={{ width: '100%', height: "300px " }}>
-                <Typography>Tags</Typography>
-                <TagsTextFeild captureTags={captureTags} tags={tags} />
-                <Typography>Findings</Typography>
-                <TextField
-                    color="primary"
-                    name="desciption"
-                    id="description"
-                    rows={4}
-                    maxRows={4}
-                    placeholder="Enter your findings here"
-                    fullWidth={true}
-                    variant="outlined"
-                    multiline
-                    value={description}
-                    onChange={(e) => {
-                        setDescription(e.target.value);
-                    }}
-                    sx={{ background: "#fff" }}
-                />
+            <div className={styles.drawerBody}>
+                <Typography className={styles.label}>Tags</Typography>
+                <div className={styles.inputBox}>
+                    <TagsTextFeild size="small" captureTags={captureTags} tags={tags} />
+                </div>
+                <Typography className={styles.label}>Findings</Typography>
+                <div className={styles.inputBox}>
+                    <TextField
+                        color="primary"
+                        name="desciption"
+                        id="description"
+                        rows={4}
+                        maxRows={4}
+                        placeholder="Enter your findings here"
+                        fullWidth={true}
+                        variant="outlined"
+                        multiline
+                        value={description}
+                        onChange={(e) => {
+                            setDescription(e.target.value);
+                        }}
+                        sx={{ background: "#fff" }}
+                        size='small'
+                    />
+                </div>
             </div>
-            <Button variant="contained" onClick={() => {
-                captureTagsDetails(tags, description)
-                setTags([])
-                setDescription("")
-            }}>Submit</Button>
-
+            <div className={styles.drawerFooter}>
+                <Button
+                    className={styles.submitBtn}
+                    variant="contained" 
+                    onClick={() => {
+                        captureTagsDetails(tags, description)
+                        setTags([])
+                        setDescription("")
+                    }} 
+                >Submit</Button>
+            </div>
         </Drawer>
     );
 };

@@ -295,7 +295,7 @@ const AllCropsComponent = () => {
                         })}
                     </div>
                     : (!loading ?
-                        <div id={styles.noData}>
+                        <div className={styles.noData}>
                             <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
                             <Typography variant="h4">This farm has no crops</Typography>
                         </div>

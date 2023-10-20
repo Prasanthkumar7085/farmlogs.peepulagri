@@ -6,6 +6,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import timePipe from '@/pipes/timePipe';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import styles from './TagsDrawer.module.css';
+import Image from "next/image";
 
 const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSummary }: any) => {
     console.log(item, "lllll")
@@ -22,18 +24,21 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSu
 
     return (
         <Drawer anchor={'bottom'} open={isDrawerOpen}>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '0.5rem',
-                    borderBottom: '1px solid #dddddd',
-                    width: anchor === 'right' ? 600 : '',
-                }}
-            >
+            
+            <div className={styles.drawerHeading}>
 
-                <Typography>Day Summary</Typography>
+                <Typography variant='h6'>
+                    <Image
+                        alt={`image`}
+                        height={24}
+                        width={24}
+                        src="/summary-icon.svg"
+                        style={{ borderRadius: "5%" }}
+                    />
+                    <span>
+                        Day Summary
+                    </span>
+                </Typography>
                 <IconButton
                     onClick={() => {
                         summaryDrawerClose(false);
@@ -42,7 +47,7 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSu
                     <CloseIcon />
                 </IconButton>
             </div>
-            <div style={{ width: '100%', height: '200px', border: "1px solid red" }}>
+            <div className={styles.drawerBody}>
                 {/* <CKEditor
                     editor={ClassicEditor}
                     data={data}
@@ -68,12 +73,14 @@ const SummaryTextDilog = ({ summaryDrawerClose, scoutId, anchor, item, captureSu
                     sx={{ background: "#fff" }}
                 />
             </div>
-            <Button variant="contained" onClick={() => {
-                captureSummary(data)
-                setData("");
-
-
-            }}>Submit</Button>
+            
+            <div className={styles.drawerFooter}>
+                <Button 
+                    className={styles.submitBtnSuccess} variant="contained" onClick={() => {
+                    captureSummary(data)
+                    setData("");
+                }} fullWidth>Submit</Button>
+            </div>
 
         </Drawer>
     );

@@ -126,6 +126,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  flex-grow: 1;
 }
 .findingsText {
   color: #35353D;
@@ -135,7 +136,22 @@
   line-height: 1.5;
   margin: 10px 0;
 }
-
+.galleryCard .actionButtonsTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.galleryCard .summaryBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 4vw, 24px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: #42B77F;
+  text-transform: capitalize;
+}
 .scoutingView {
   height: calc(100vh - 190px);
 }
@@ -175,15 +191,14 @@
   margin: 0.5rem 1rem;
 }
 
-#noData {
+.noData {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 100%;
 }
-
-#noData h4 {
+.noData h4 {
   font-size: clamp(16px, 3.25rem, 18px);
   font-weight: 500;
 }

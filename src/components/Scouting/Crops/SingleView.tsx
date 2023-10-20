@@ -6,7 +6,7 @@ import TagsDrawer from "@/components/Core/TagsDrawer";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
-import { Breadcrumbs, Card, Checkbox, IconButton, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Card, Checkbox, IconButton, Link, Typography, Button } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -289,9 +289,9 @@ const SingleViewScoutComponent = () => {
                                 <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
                             </Typography>
 
-                            <Typography className={styles.postDate}>
+                            <div className={styles.actionButtonsTop}>
                                 {tagsCheckBoxOpen && scoutId == item._id ?
-                                    <IconButton onClick={() => setTagsCheckBoxOpen(false)}>
+                                    <IconButton size="small" onClick={() => setTagsCheckBoxOpen(false)}>
                                         <Image
                                             src={"/scouting-img-clear.svg"}
                                             width={20}
@@ -299,7 +299,7 @@ const SingleViewScoutComponent = () => {
                                             alt="tag"
                                         />
                                     </IconButton> :
-                                    <IconButton onClick={() => {
+                                    <IconButton size="small" onClick={() => {
                                         setTagsCheckBoxOpen(true)
                                         setScoutId(item._id)
                                         setScoutAttachementsDetails(item.attachments)
@@ -312,20 +312,21 @@ const SingleViewScoutComponent = () => {
                                             alt="tag"
                                         />
                                     </IconButton>}
-
-                                <Image
-                                    src={"/Summary.svg"}
-                                    width={20}
-                                    height={20}
-                                    alt="tag"
-                                />
-                                <span onClick={() => {
-                                    setSummaryDrawerOpen(true)
-                                    setScoutId(item._id)
-                                    setSelectedFile(item)
-                                    setScoutAttachementsDetails(item.attachments)
-                                }}>Summary</span>
-                            </Typography>
+                                <Button className={styles.summaryBtn} size="small" variant="text" onClick={() => {
+                                        setSummaryDrawerOpen(true)
+                                        setScoutId(item._id)
+                                        setSelectedFile(item)
+                                        setScoutAttachementsDetails(item.attachments)
+                                    }}>
+                                    <Image
+                                        src={"/summary-icon.svg"}
+                                        width={24}
+                                        height={24}
+                                        alt="tag"
+                                    />
+                                    <span>Summary</span>
+                                </Button>
+                            </div>
                         </div>
 
                         <Card sx={{
@@ -376,8 +377,8 @@ const SingleViewScoutComponent = () => {
             })
                 :
                 (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
-                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
+                    <div className={styles.noData}>
+                        <Image src="/emty-folder-image.svg" alt="" width={120} height={120} />
                         <Typography variant="h4">No Scoutings for this crop</Typography>
                     </div>
                     : "")}

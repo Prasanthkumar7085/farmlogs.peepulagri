@@ -16,7 +16,7 @@ const AlertDelete = ({
   return (
     <Dialog
       open={open}
-      PaperProps={{ sx: { borderRadius: "16px", minWidth: "350px" } }}
+      PaperProps={{ sx: { borderRadius: "16px", minWidth: "290px", maxWidth: "320px" } }}
     >
       <div className={styles.alertdelete}>
         <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
@@ -32,6 +32,7 @@ const AlertDelete = ({
           <Button
             className={styles.buttoncancel}
             onClick={() => setDialogOpen(false)}
+            size="small"
           >
             <div className={styles.text}>Cancel</div>
           </Button>
@@ -39,6 +40,7 @@ const AlertDelete = ({
             className={styles.buttongotit}
             variant="contained"
             color="error"
+            size="small"
             onClick={() => deleteFarm()}
           >
             <div className={styles.text}>

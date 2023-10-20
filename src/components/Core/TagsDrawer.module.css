@@ -1,3 +1,11 @@
+.AddTagsDrawer {
+  border-radius: 10px 0 0;
+  overflow: hidden;
+  z-index: 1500;
+}
+.AddTagsDrawer .MuiDialog-paper {
+  background-color: var(--background);
+}
 .drawerHeading {
   display: flex;
   justify-content: space-between;
@@ -33,13 +41,7 @@
 .inputBox {
   margin-bottom: 1rem;
 }
-.AddTagsDrawer {
-  border-radius: 10px 0 0;
-  overflow: hidden;
-}
-.AddTagsDrawer .MuiDialog-paper {
-  background-color: var(--background);
-}
+
 .submitBtn {
     font-family: 'Inter',sans-serif;
     font-size: 1rem;

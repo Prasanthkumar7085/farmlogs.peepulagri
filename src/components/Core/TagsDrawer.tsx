@@ -12,6 +12,7 @@ import styles from './TagsDrawer.module.css';
 import { ClassNames } from '@emotion/react';
 
 const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
+    console.log(item, "in compo")
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [summaryContent, setSummaryContent] = useState('');

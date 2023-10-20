@@ -1,14 +1,29 @@
-export interface ScoutAttachmentDetails{
-    name:string;
-    original_name:string;
-    type:string;
-    size:number;
-    _id:string;
-    url:string;
+export interface OnlyImagesType {
+  description: string;
+  name: string;
+  original_name: string;
+  type: string;
+  size: 5068;
+  path: string;
+  time: string;
+  tags: Array<string>;
+  _id: string;
+  comments: any;
+  url: string;
+  scout_id: string;
+  src: string;
+  height: number;
+  width: number;
 }
 
-
-
+export interface ScoutAttachmentDetails {
+  name: string;
+  original_name: string;
+  type: string;
+  size: number;
+  _id: string;
+  url: string;
+}
 
 export interface CreatedByDetails {
   _id: string;
@@ -18,13 +33,19 @@ export interface CreatedByDetails {
   user_type: string;
 }
 
-interface FarmInScoutsResponseType {
+export interface CropType {
+  title: string;
+  _id: string;
+}
+export interface FarmInScoutsResponseType {
   _id: string;
   title: string;
   location: string;
-  crops: Array<{ title: string; _id: string }>;
+  crops: Array<CropType>;
 }
 export interface SingleScoutResponse {
+  suggestions: string;
+  summary: string;
   _id: string;
   farm_id: FarmInScoutsResponseType;
   crop_id: string;
@@ -37,13 +58,8 @@ export interface SingleScoutResponse {
   findings: string;
 }
 
-
-
-
-
-
 export interface AttachmentsForPreview {
-    src: string;
-    width: number;
-    height: number;
+  src: string;
+  width: number;
+  height: number;
 }

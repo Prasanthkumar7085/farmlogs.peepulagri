@@ -96,6 +96,11 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       open={previewImageDialogOpen}
       fullScreen
       onClose={() => setPreviewImageDialogOpen(false)}
+      sx={{
+        '& .MuiPaper-root': {
+          background: "#00000063"
+        }
+      }}
     >
       <Grid container>
         <Grid xs={8} className={styles.RightImageContainer}>
@@ -116,7 +121,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   alignItems: "flex-end",
                   flexDirection: "column",
                   justifyContent: "center",
-                  background: "#06060687",
                 }}
                 onWheel={(e: any) => {
                   if (e.deltaY > 0 && e.deltaY % 20 == 0) {
@@ -208,16 +212,14 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             </div>
           </div>
         </Grid>
-        <Grid xs={4}>
-          <Card sx={{ zIndex: 100 }}>
-            <ScoutingDetails
-              loading={loading}
-              data={data}
+        <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
+          <ScoutingDetails
+            loading={loading}
+            data={data}
               content={content}
               imageData={onlyImages[currentIndex]}
-              setPreviewImageDialogOpen={setPreviewImageDialogOpen}
-            />
-          </Card>
+            setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+          />
         </Grid>
       </Grid>
     </Dialog>

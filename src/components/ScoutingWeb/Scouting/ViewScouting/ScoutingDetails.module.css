@@ -244,5 +244,5 @@ background-color: #05a155 !important;
 .RightImageContainer {
   height: 100vh;
   overflow-y: auto;
-  background-color: #000;
+  /* background-color: #000; */
 }

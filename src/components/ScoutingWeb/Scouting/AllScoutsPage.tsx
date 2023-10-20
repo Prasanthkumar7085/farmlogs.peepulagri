@@ -13,6 +13,8 @@ import {
   SingleScoutResponse,
 } from "@/types/scoutTypes";
 import SingleScoutViewDetails from "./ViewScouting";
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import { Typography } from "@mui/material";
 const AllScoutsWebPage = () => {
   const router = useRouter();
 
@@ -112,11 +114,18 @@ const AllScoutsWebPage = () => {
           <div className={styles.allScoutingCards}>
             {data.map((item: any, index: number) => {
               return (
-                <ScoutingDailyImages
-                  item={item}
-                  key={index}
-                  onClickAttachment={onClickAttachment}
-                />
+                <div className={styles.eachDayScouting} key={index}>
+                  <div className={styles.scoutDay} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <Typography>Today</Typography>
+                    <div className={styles.summaryBtn}><SummaryIcon /> Summary</div>
+
+                  </div>
+                  <ScoutingDailyImages
+                    item={item}
+                    key={index}
+                    onClickAttachment={onClickAttachment}
+                  />                </div>
+
               );
             })}
           </div>

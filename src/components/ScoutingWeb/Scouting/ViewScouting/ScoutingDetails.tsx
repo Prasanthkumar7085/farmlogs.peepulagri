@@ -13,7 +13,6 @@ const ScoutingDetails = ({
   content,
   setPreviewImageDialogOpen,
   imageData,
-  attachement
 }: any) => {
   const [crop, setCrop] = useState<any>();
 
@@ -86,7 +85,7 @@ const ScoutingDetails = ({
         <Typography variant="h6" className={styles.RecommedationHeading}>
           Comments
         </Typography>
-        <CommentsComponentForWeb scoutDetails={data} attachement={attachement} />
+        <CommentsComponentForWeb scoutDetails={data} attachement={imageData} />
       </div>
     </div>
   );

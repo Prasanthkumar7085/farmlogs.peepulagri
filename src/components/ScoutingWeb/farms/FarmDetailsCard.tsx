@@ -12,6 +12,8 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 interface PageProps {
   data: any;
@@ -55,6 +57,22 @@ const ScoutingFarmDetailsCard = ({
   const [alertType, setAlertType] = useState(false);
   const dispatch = useDispatch();
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
+
   const deleteFarm = async () => {
     setDeleteLoading(true);
 
@@ -73,6 +91,8 @@ const ScoutingFarmDetailsCard = ({
         sortBy: router.query.order_by as string,
         sortType: router.query.sort_type as string,
       });
+    } else if (response?.statusCode == 403) {
+      await logout();
     } else {
       setAlertMessage(response?.message);
       setAlertType(false);

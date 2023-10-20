@@ -10,6 +10,7 @@ import 'react-quill/dist/quill.snow.css';
 import TagsTextFeild from './TagsTextFeild';
 
 const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
+    console.log(item, "in compo")
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [summaryContent, setSummaryContent] = useState('');

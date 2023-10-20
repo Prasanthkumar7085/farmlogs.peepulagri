@@ -44,7 +44,7 @@ const ListScouts: FunctionComponent = () => {
   const [data, setData] = useState<Array<SingleScoutResponse>>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(10);
   const [usersOptions, setUserOptions] = useState();
   const [user, setUser] = useState<any>();
   const [farmOptions, setFarmOptions] = useState([]);
@@ -213,7 +213,7 @@ const ListScouts: FunctionComponent = () => {
 
   const getAllScoutsList = async ({
     page = 1,
-    limit = 12,
+    limit = 10,
     farmId,
     userId,
     fromDate,
@@ -400,7 +400,7 @@ const ListScouts: FunctionComponent = () => {
     setToDate("");
     setCrop("");
     setPage(1);
-    setLimit(12);
+    setLimit(10);
     await getAllScoutsList({});
     // getAllUsers();
     getAllFarms();

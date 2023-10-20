@@ -112,6 +112,7 @@ const SingleViewScoutComponent = () => {
 
     const handleOpenDialog = (item: any) => {
         setOpenDialog(true);
+
         setSelectedItems([])
     }
 
@@ -125,6 +126,7 @@ const SingleViewScoutComponent = () => {
         setIndexOfseletedOne(index);
         setSlideShowImages(item)
         setIndex(index)
+        setSelectedFile(item[index])
         setSelectedItems([item[index]])
         setScoutAttachementsDetails(item)
     };
@@ -149,11 +151,11 @@ const SingleViewScoutComponent = () => {
     const tagsDrawerClose = (value: any) => {
         if (value == false) {
             setTagsDrawerOpen(false)
+            setSelectedFile([])
         }
     }
     //capture the summary content
     const captureSummary = async (value: any) => {
-        console.log(value)
         if (value) {
             setSummaryContent(value)
             await updateDescriptionService([], value)
@@ -197,12 +199,18 @@ const SingleViewScoutComponent = () => {
         }
     };
 
+    useEffect(() => {
+
+    }, [selectedFile])
+
     //capture the slideimages index
     const captureSlideImagesIndex = (value: any) => {
+        console.log(value)
+        console.log(sildeShowImages[value])
         if (value) {
             setIndex(value)
-            setSelectedItems([sildeShowImages[index]])
-
+            setSelectedItems([sildeShowImages[value]])
+            setSelectedFile(sildeShowImages[value])
         }
     }
 
@@ -291,7 +299,13 @@ const SingleViewScoutComponent = () => {
 
                             <Typography className={styles.postDate}>
                                 {tagsCheckBoxOpen && scoutId == item._id ?
-                                    <IconButton onClick={() => setTagsCheckBoxOpen(false)}>
+                                    <IconButton onClick={() => {
+                                        setTagsCheckBoxOpen(false)
+                                        setScoutId("")
+                                        setScoutAttachementsDetails([])
+                                        setSlideShowImages([])
+                                        setSelectedItems([])
+                                    }}>
                                         <Image
                                             src={"/scouting-img-clear.svg"}
                                             width={20}
@@ -342,7 +356,7 @@ const SingleViewScoutComponent = () => {
                                 {item?.attachments?.length !== 0 ? item.attachments.map((image: any, index: any) => (
 
                                     <div style={{ position: "relative", height: "100px", }} key={index}>
-                                        <img src={image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => {
+                                        <img src={image.type?.slice(0, 2) == "vi" ? "/Play-button.svg" : image.url} alt={`images${index}`} width={'100%'} height={"100%"} onClick={() => {
                                             handleClick(index, item.attachments)
                                             setScoutId(item._id)
                                         }} style={{ cursor: "pointer", borderRadius: "5px" }} />
@@ -398,7 +412,7 @@ const SingleViewScoutComponent = () => {
                 <DrawerComponentForScout drawerClose={drawerClose} scoutId={scoutId} anchor={"bottom"} />
                 : ""}
             {tagsDrawerOpen ?
-                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={sildeShowImages[index]} /> : ""}
+                <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={selectedFile} /> : ""}
 
             <div className="addFormPositionIcon">
                 {tagsCheckBoxOpen == false && selectedItems?.length == 0 ?

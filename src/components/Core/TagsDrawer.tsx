@@ -11,14 +11,13 @@ import TagsTextFeild from './TagsTextFeild';
 import styles from './TagsDrawer.module.css';
 import { ClassNames } from '@emotion/react';
 
-const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
-    console.log(item, "in compo")
+const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails, selectedItems }: any) => {
+    console.log(selectedItems)
+    console.log(selectedItems.some((obj: any) => obj.hasOwnProperty('description') == false))
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-    const [summaryContent, setSummaryContent] = useState('');
-    const [editorHtml, setEditorHtml] = useState('');
-    const [description, setDescription] = useState<any>(item?.description ? item.description : "");
-    const [tags, setTags] = useState<any>(item?.tags?.length ? item?.tags : [])
+    const [description, setDescription] = useState<any>();
+    const [tags, setTags] = useState<any>()
 
     const captureTags = (array: any) => {
         if (array) {
@@ -42,44 +41,45 @@ const TagsDrawer = ({ tagsDrawerClose, item, captureTagsDetails }: any) => {
                     <CloseIcon />
                 </IconButton>
             </div>
-            <div className={styles.drawerBody}>
-                <Typography className={styles.label}>Tags</Typography>
-                <div className={styles.inputBox}>
-                    <TagsTextFeild size="small" captureTags={captureTags} tags={tags} />
-                </div>
-                <Typography className={styles.label}>Findings</Typography>
-                <div className={styles.inputBox}>
-                    <TextField
-                        color="primary"
-                        name="desciption"
-                        id="description"
-                        rows={4}
-                        maxRows={4}
-                        placeholder="Enter your findings here"
-                        fullWidth={true}
-                        variant="outlined"
-                        multiline
-                        value={description}
-                        onChange={(e) => {
-                            setDescription(e.target.value);
-                        }}
-                        sx={{ background: "#fff" }}
-                        size='small'
-                    />
-                </div>
+            < div style={{ width: '100%', height: "300px " }}>
+                <Typography>Tags</Typography>
+                <TagsTextFeild captureTags={captureTags} tags={tags} />
+                {selectedItems.some((obj: any) => obj.hasOwnProperty('description')) == false ? (
+                    <>
+                        <Typography>Findings</Typography>
+                        <TextField
+                            color="primary"
+                            name="description"
+                            id="description"
+                            rows={4}
+                            maxRows={4}
+                            placeholder="Enter your findings here"
+                            fullWidth={true}
+                            variant="outlined"
+                            multiline
+                            value={description}
+                            onChange={(e) => {
+                                setDescription(e.target.value);
+                            }}
+                            sx={{ background: "#fff" }}
+                        />
+                    </>
+                ) : (
+                    // What you want to render if the condition is not met
+                    // For example, you can render some default component or nothing at all
+                    null
+                )}
+
             </div>
-            <div className={styles.drawerFooter}>
-                <Button
-                    className={styles.submitBtn}
-                    variant="contained" 
-                    onClick={() => {
-                        captureTagsDetails(tags, description)
-                        setTags([])
-                        setDescription("")
-                    }} 
-                >Submit</Button>
-            </div>
-        </Drawer>
+
+
+            <Button variant="contained" onClick={() => {
+                captureTagsDetails(tags, description)
+                setTags([])
+                setDescription("")
+            }}>Submit</Button>
+
+        </Drawer >
     );
 };
 

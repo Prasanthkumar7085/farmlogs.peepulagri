@@ -232,7 +232,9 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                                 alt="pp"
                             />
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={() => {
+                            captureImageDilogOptions("comments")
+                        }}>
                             <Image
                                 src={"/comment-white-icon.svg"}
                                 width={20}

@@ -166,7 +166,7 @@
   font-size: clamp(10px, 4vw, 13px);
   font-weight: 500;
   line-height: 1.5;
-  color: #42B77F;
+  /* color: #42B77F; */
   text-transform: capitalize;
 }
 

@@ -389,6 +389,7 @@ const SingleViewScoutComponent = () => {
                                             setSelectedFile(item);
                                             setScoutAttachementsDetails(item.attachments);
                                         }}
+                                        sx={{ color: item.summary?.length == 0 && item.summary ? "#42B77F" : "red" }}
                                     >
                                         <SummaryIcon /> Summary
                                     </Button>

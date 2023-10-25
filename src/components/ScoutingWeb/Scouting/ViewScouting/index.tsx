@@ -97,9 +97,9 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       fullScreen
       onClose={() => setPreviewImageDialogOpen(false)}
       sx={{
-        '& .MuiPaper-root': {
-          background: "#00000063"
-        }
+        "& .MuiPaper-root": {
+          background: "#00000063",
+        },
       }}
     >
       <Grid container>
@@ -162,7 +162,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                         />
                       ) : (
                         <>
-                          <img
+                          {/* <img
                             className="zoom-image"
                             src={item.src}
                             alt={`Image ${index + 1}`}
@@ -171,7 +171,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                               width: "100%",
                               objectFit: "contain",
                             }}
-                          />
+                          /> */}
                         </>
                       )}
                     </div>
@@ -216,6 +216,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             loading={loading}
             data={data}
             content={content}
+            imageData={onlyImages[currentIndex]}
             setPreviewImageDialogOpen={setPreviewImageDialogOpen}
           />
         </Grid>

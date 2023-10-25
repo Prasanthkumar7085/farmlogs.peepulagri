@@ -12,7 +12,7 @@ const ScoutingDetails = ({
   data,
   content,
   setPreviewImageDialogOpen,
-  attachement
+  imageData,
 }: any) => {
   const [crop, setCrop] = useState<any>();
 
@@ -73,7 +73,7 @@ const ScoutingDetails = ({
           ) : content?.length ? (
             content?.map((line: any, index: any) => (
               <p className={styles.findingText} key={index}>
-                {content ? line : "-"}
+                {line ? line : "-"}
               </p>
             ))
           ) : (
@@ -85,7 +85,7 @@ const ScoutingDetails = ({
         <Typography variant="h6" className={styles.RecommedationHeading}>
           Comments
         </Typography>
-        <CommentsComponentForWeb scoutDetails={data} attachement={attachement} />
+        <CommentsComponentForWeb scoutDetails={data} attachement={imageData} />
       </div>
     </div>
   );

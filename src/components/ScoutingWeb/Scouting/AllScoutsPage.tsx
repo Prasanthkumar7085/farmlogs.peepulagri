@@ -15,6 +15,8 @@ import {
 import SingleScoutViewDetails from "./ViewScouting";
 import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import { Typography } from "@mui/material";
+import timePipe from "@/pipes/timePipe";
+import DaySummaryComponent from "../ListScoutsComponents/DaySummaryComponent";
 const AllScoutsWebPage = () => {
   const router = useRouter();
 
@@ -27,6 +29,9 @@ const AllScoutsWebPage = () => {
   const [viewAttachmentId, setViewAttachmentId] = useState("");
   const [previewImageDialogOpen, setPreviewImageDialogOpen] = useState(false);
   const [onlyImages, setOnlyImages] = useState([]);
+  const [openDaySummary, setOpenDaySummary] = useState(false);
+  const [seletectedItemDetails, setSelectedItemDetails] =
+    useState<SingleScoutResponse>();
 
   const unWindImages = (data: Array<SingleScoutResponse>) => {
     let array: any = [];
@@ -115,17 +120,33 @@ const AllScoutsWebPage = () => {
             {data.map((item: any, index: number) => {
               return (
                 <div className={styles.eachDayScouting} key={index}>
-                  <div className={styles.scoutDay} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Typography>Today</Typography>
-                    <div className={styles.summaryBtn}><SummaryIcon /> Summary</div>
-
+                  <div
+                    className={styles.scoutDay}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography>
+                      {timePipe(item?.createdAt, "ddd, MMM dd, YYYY")}
+                    </Typography>
+                    <div
+                      className={styles.summaryBtn}
+                      onClick={() => {
+                        setOpenDaySummary(true);
+                        setSelectedItemDetails(item);
+                      }}
+                    >
+                      <SummaryIcon /> Summary
+                    </div>
                   </div>
                   <ScoutingDailyImages
                     item={item}
                     key={index}
                     onClickAttachment={onClickAttachment}
-                  />                </div>
-
+                  />{" "}
+                </div>
               );
             })}
           </div>
@@ -156,6 +177,11 @@ const AllScoutsWebPage = () => {
         onlyImages={onlyImages}
         previewImageDialogOpen={previewImageDialogOpen}
         setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+      />
+      <DaySummaryComponent
+        openDaySummary={openDaySummary}
+        setOpenDaySummary={setOpenDaySummary}
+        seletectedItemDetails={seletectedItemDetails}
       />
       <LoadingComponent loading={loading} />
     </div>

@@ -105,6 +105,8 @@ const ThreadsForTasks = ({
     <div className={styles.threads}>
       {details?.length && !loading ? (
         details.map((item: any, index: any) => {
+          console.log(details);
+          
           if (item.type == "DIRECT") {
             return (
               <div className={styles.inMessage} key={index}>

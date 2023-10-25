@@ -17,6 +17,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
 
+  console.log(details, "plplpl");
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -26,42 +28,44 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [editComment, setEditComment] = useState<any>();
   const [isReplies, setIsReplies] = useState<any>(false);
   const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
 
-
   const downLoadAttachements = async (file: any, userId: any) => {
-
     setLoading(true);
     let body = {
-
-      "attachment":
-      {
-
-        "name": file.name,
-        "type": file.type,
-        "crop_slug": file.crop_slug,
-        "source": "scouting",
-        "user_id": userId
-      }
-    }
+      attachment: {
+        name: file.name,
+        type: file.type,
+        crop_slug: file.crop_slug,
+        source: "scouting",
+        user_id: userId,
+      },
+    };
     let options = {
       method: "POST",
       headers: new Headers({
-        'content-type': 'application/json',
-        'authorization': accessToken
+        "content-type": "application/json",
+        authorization: accessToken,
       }),
-      body: JSON.stringify(body)
-    }
+      body: JSON.stringify(body),
+    };
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id ? router.query.farm_id : scoutDetails?.farm_id?._id}/attachment/download-url`, options)
-      let responseData = await response.json()
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
+          ? router.query.farm_id
+          : scoutDetails?.farm_id?._id
+        }/attachment/download-url`,
+        options
+      );
+      let responseData = await response.json();
       if (responseData.success == true) {
-
         fetch(responseData.data.download_url)
           .then((response) => {
             // Get the filename from the response headers
-            const contentDisposition = response.headers.get("content-disposition");
+            const contentDisposition = response.headers.get(
+              "content-disposition"
+            );
             let filename = "downloaded_file"; // Default filename if not found in headers
 
             if (contentDisposition) {
@@ -72,8 +76,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
             }
 
             // Create a URL for the blob
-            return response.blob()
-              .then((blob) => ({ blob, filename }));
+            return response.blob().then((blob) => ({ blob, filename }));
           })
           .then(({ blob, filename }) => {
             const blobUrl = window.URL.createObjectURL(blob);
@@ -92,21 +95,15 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           .catch((error) => {
             console.error("Error downloading file:", error);
           });
-        setAlertMessage("Attachement downloaded successfully")
-        setAlertType(true)
+        setAlertMessage("Attachement downloaded successfully");
+        setAlertType(true);
       }
-
-    }
-
-    catch (err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     } finally {
       setLoading(false);
     }
-
-  }
-
-
+  };
 
   return (
     <div className={styles.threads}>
@@ -220,7 +217,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   />
                                 </IconButton>
                                 {userDetails?.user_details?.user_type ==
-                                  item?.user?.user_type ? (
+                                  item?.user[0]?.user_type ? (
                                   <IconButton
                                     onClick={() =>
                                       afterDeleteAttachements(
@@ -290,7 +287,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         </div>
                       )}
 
-                      {isReplies == false && item.replies.length !== 0 ? (
+                      {isReplies == false && item.replies?.length !== 0 ? (
                         <div
                           className={styles.threadReplies}
                           onClick={() => {
@@ -300,7 +297,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         >
                           <Chip
                             variant="outlined"
-                            label={item.replies.length}
+                            label={item.replies?.length}
                             size="small"
                           />
                           <span>

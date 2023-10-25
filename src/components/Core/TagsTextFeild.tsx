@@ -1,59 +1,68 @@
-import { TextField, Typography, Button, IconButton } from '@mui/material';
-import React, { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import { IconButton, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
 import styles from './TagsTextFeild.module.css';
 
 const TagsTextFeild = ({ captureTags, tags }: any) => {
-    const [chips, setChips] = useState<any>(tags?.length ? tags : []);
-    const [inputValue, setInputValue] = useState<any>();
+  const [chips, setChips] = useState<any>([]);
+  const [inputValue, setInputValue] = useState<any>();
 
-    const handleKeyDown = (e: any) => {
-        console.log(e.key)
-        if (e.key === ' ' && inputValue && !chips.includes(inputValue)) {
-            setChips([...chips, inputValue]);
-            captureTags([...chips, inputValue])
-            setInputValue('');
-        }
-    };
+  useEffect(() => {
+    setChips(tags);
+  }, [tags]);
 
-    const handleDelete = (index: any) => {
-        const updatedChips = chips.filter((item: any, indexValue: number) => indexValue !== index);
-        setChips(updatedChips);
-        captureTags(updatedChips)
-    };
+  const handleKeyDown = (e: any) => {
+    if (e.key === " " && inputValue && !chips?.includes(inputValue)) {
+      if (chips?.length) {
+        setChips([...chips, inputValue]);
+        captureTags([...chips, inputValue]);
+        setInputValue("");
+      }
+      else {
+        setChips([inputValue]);
+        captureTags([inputValue]);
+        setInputValue("");
+      }
 
-    return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+    }
+  };
 
-            <TextField
-                value={inputValue}
-                onKeyDown={handleKeyDown}
-                onChange={(e) => setInputValue(e.target.value)}
-                fullWidth
-                size='small'
-                placeholder='Enter Tags'
-                className={styles.tagsBox}
-            />
-
-            <div className={styles.tagContainer}>
-                {chips.map((chip: any, index: number) => (
-                    <div
-                        key={index}
-                        className={styles.tag}
-                    >
-                        <div>{chip}</div>
-                        <IconButton 
-                            onClick={() => handleDelete(index)}
-                            className={styles.closeBtn}
-                            aria-label="delete">
-                            <CloseIcon />
-                        </IconButton>
-                    </div>
-                ))}
-            </div>
-        </div>
-
+  const handleDelete = (index: any) => {
+    const updatedChips = chips.filter(
+      (item: any, indexValue: number) => indexValue !== index
     );
+    setChips(updatedChips);
+    captureTags(updatedChips);
+  };
+
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+      <TextField
+        value={inputValue}
+        onKeyDown={handleKeyDown}
+        onChange={(e) => setInputValue(e.target.value)}
+        className={styles.tagsBox}
+        placeholder="Enter Tags"
+      />
+
+      <div className={styles.tagContainer}>
+        {chips && chips?.length ? chips.map((chip: any, index: number) => (
+          <div
+            key={index}
+            className={styles.tag}
+          >
+            <div>{chip}</div>
+            <IconButton
+              onClick={() => handleDelete(index)}
+              className={styles.closeBtn}
+              aria-label="delete">
+              <CloseIcon />
+            </IconButton>
+          </div>
+        )) : ""}
+      </div>
+    </div>
+  );
 };
 
 export default TagsTextFeild;

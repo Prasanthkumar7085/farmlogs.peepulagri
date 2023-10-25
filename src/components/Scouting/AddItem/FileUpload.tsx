@@ -257,7 +257,7 @@ const FileUploadComponent = () => {
     let obj = {
       attachment: {
         original_name: file.name,
-        farm_id: formId,
+        farm_id: router.query.farm_id as string,
         type: file.type,
         crop_slug: selectedCrop?.slug,
         source: "scouting",
@@ -315,7 +315,6 @@ const FileUploadComponent = () => {
     setFileProgress: Function,
     key: any
   ) => {
-
     const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
     const totalChunks = Math.ceil(file.size / chunkSize);
 
@@ -421,7 +420,7 @@ const FileUploadComponent = () => {
         size: item.size,
         source: "scouting",
         crop_slug: selectedCrop?.slug,
-        farm_id: formId,
+        farm_id: router.query.farm_id,
       },
     };
 
@@ -492,17 +491,16 @@ const FileUploadComponent = () => {
   }, []);
 
   const addScoutDetails = async () => {
-
     const newArray = tempFilesStorage.map((obj: any) => ({
       ...obj,
       tags: tags,
       time: new Date(),
-      description: description
+      description: description,
     }));
 
     setLoading(true);
     let obj = {
-      farm_id: formId,
+      farm_id: router.query.farm_id,
       attachments: newArray,
       crop_id: selectedCrop?._id,
     };
@@ -568,7 +566,7 @@ const FileUploadComponent = () => {
   };
   //capture vedio
   const captureCameraVedio = (value: any, videofile: any) => {
-    console.log(videofile, "kk")
+    console.log(videofile, "kk");
     setOpenCamera(false);
     const type = "video/webm";
     const file = new File([videofile], `my video.webm`, { type });
@@ -596,12 +594,12 @@ const FileUploadComponent = () => {
     }
   };
 
-  //capture the tags 
+  //capture the tags
   const captureTags = (array: any) => {
     if (array) {
-      setTags(array)
+      setTags(array);
     }
-  }
+  };
 
   return (
     <div>
@@ -683,11 +681,11 @@ const FileUploadComponent = () => {
                         previewImages.find((e: any) => e.fileIndex == item.name)
                           ?.prieviewUrl
                           ? previewImages.find(
-                            (e: any) => e.fileIndex == item.name
-                          ).prieviewUrl
+                              (e: any) => e.fileIndex == item.name
+                            ).prieviewUrl
                           : item.type == "application/pdf"
-                            ? "/pdf-icon.png"
-                            : "/doc-icon.webp"
+                          ? "/pdf-icon.png"
+                          : "/doc-icon.webp"
                       }
                     />
                     <div className={styles.progressdetails}>
@@ -718,7 +716,7 @@ const FileUploadComponent = () => {
                               )}
                             </div>
                             {fileProgress[index] == 100 &&
-                              fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                               <div className={styles.photojpg}>
                                 <IconButton>
                                   <DoneIcon sx={{ color: "#05A155" }} />
@@ -738,7 +736,7 @@ const FileUploadComponent = () => {
                             )}
                           </div>
                           {fileProgress[index] !== 100 ||
-                            fileProgress[index] == "fail" ? (
+                          fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
                               alt=""
@@ -751,7 +749,7 @@ const FileUploadComponent = () => {
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
-                            fileProgress[index] !== "fail" ? (
+                          fileProgress[index] !== "fail" ? (
                             <LinearProgress />
                           ) : fileProgress[index] !== 100 &&
                             fileProgress[index] !== "fail" ? (
@@ -765,7 +763,7 @@ const FileUploadComponent = () => {
                         </Box>
                       </div>
                       {fileProgress[index] == 100 ||
-                        fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                         ""
                       ) : (
                         <div className={styles.uploadstatus}>
@@ -795,7 +793,7 @@ const FileUploadComponent = () => {
                         color="primary"
                         name="desciption"
                         id="description"
-                        rows={4}
+                        minRows={4}
                         maxRows={4}
                         placeholder="Enter your findings here"
                         fullWidth={true}
@@ -812,14 +810,8 @@ const FileUploadComponent = () => {
                         errorMessage={validations?.description}
                       />
                     </div>
-                    <div
-                      style={{ width: "100%" }}
-                      className={styles.input}
-
-                    >
-                      <div className={styles.label1}>
-                        Tags
-                      </div>
+                    <div style={{ width: "100%" }} className={styles.input}>
+                      <div className={styles.label1}>Tags</div>
                       <TagsTextFeild captureTags={captureTags} />
                     </div>
                   </div>

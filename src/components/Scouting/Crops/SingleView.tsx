@@ -145,6 +145,7 @@ const SingleViewScoutComponent = () => {
     if (value == false) {
       setOpenCommentsBox(false)
       setOpenDialog(false)
+      setSelectedItems([])
     }
   };
 

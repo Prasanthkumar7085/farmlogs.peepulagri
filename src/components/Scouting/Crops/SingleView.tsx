@@ -15,6 +15,8 @@ import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import AddIcon from '@mui/icons-material/Add';
 import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 
 

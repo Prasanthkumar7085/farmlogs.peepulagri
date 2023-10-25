@@ -26,7 +26,8 @@ import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AddIcon from '@mui/icons-material/Add';
-
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 const SingleViewScoutComponent = () => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -338,7 +339,7 @@ const SingleViewScoutComponent = () => {
                         <Card key={index} className={styles.galleryCard}>
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
                                 <Typography className={styles.postDate}>
-                                    <InsertInvitationIcon />
+                                    <InsertInvitationIcon sx={{ fontSize: "1.2rem" }} />
                                     <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
                                 </Typography>
 
@@ -356,8 +357,8 @@ const SingleViewScoutComponent = () => {
                                         >
                                             <Image
                                                 src={"/scouting-img-clear.svg"}
-                                                width={20}
-                                                height={20}
+                                                width={17}
+                                                height={17}
                                                 alt="tag"
                                             />
                                         </IconButton>
@@ -374,20 +375,14 @@ const SingleViewScoutComponent = () => {
                                         >
                                             <Image
                                                 src={"/scouting-img-add.svg"}
-                                                width={20}
-                                                height={20}
+                                                width={17}
+                                                height={17}
                                                 alt="tag"
                                             />
                                         </IconButton>
                                     )}
-
-                                    <Image
-                                        src={"/Summary.svg"}
-                                        width={20}
-                                        height={20}
-                                        alt="tag"
-                                    />
                                     <Button
+                                        className={styles.summaryBtn}
                                         onClick={() => {
                                             setSummaryDrawerOpen(true);
                                             setScoutId(item._id);
@@ -395,108 +390,81 @@ const SingleViewScoutComponent = () => {
                                             setScoutAttachementsDetails(item.attachments);
                                         }}
                                     >
-                                        Summary
+                                        <SummaryIcon /> Summary
                                     </Button>
                                 </div>
                             </div>
 
-                            <Card
-                                sx={{
-                                    width: "100%",
-                                    minHeight: "100px",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: "grid",
-                                        gridTemplateColumns:
-                                            "50% 50%" /* Two columns with a width of 60px each */,
-                                        gap: "10px" /* Adjust the gap between the columns if necessary */,
-                                        margin: "0.5rem",
-                                        objectFit: "cover",
-                                    }}
-                                >
-                                    {item?.attachments?.length !== 0 ? (
-                                        item.attachments.map((image: any, indexAttachment: any) => (
-                                            <div
-                                                style={{ position: "relative", height: "100px" }}
-                                                key={indexAttachment}
-                                            >
-                                                <img
-                                                    src={
-                                                        image.type?.slice(0, 2) == "vi"
-                                                            ? "/Play-button.svg"
-                                                            : image.url
-                                                    }
-                                                    alt={`images${indexAttachment}`}
-                                                    width={"100%"}
-                                                    height={"100%"}
-                                                    onClick={() => {
-                                                        handleClick(indexAttachment, item.attachments);
-                                                        setScoutId(item._id);
-                                                        setSingleScoutDetails(item)
+                            <div className={styles.mobileScoutGridGallary}                           >
+                                {item?.attachments?.length !== 0 ? (
+                                    item.attachments.map((image: any, indexAttachment: any) => (
+                                        <div
+                                            style={{ position: "relative", height: "100px" }}
+                                            key={indexAttachment}
+                                        >
+                                            <img
+                                                src={
+                                                    image.type?.slice(0, 2) == "vi"
+                                                        ? "/Play-button.svg"
+                                                        : image.url
+                                                }
+                                                alt={`images${indexAttachment}`}
+                                                width={"100%"}
+                                                height={"100%"}
+                                                onClick={() => {
+                                                    handleClick(indexAttachment, item.attachments);
+                                                    setScoutId(item._id);
+                                                    setSingleScoutDetails(item)
 
-                                                    }}
-                                                    style={{ cursor: "pointer", borderRadius: "5px" }}
-                                                />
+                                                }}
+                                                style={{ cursor: "pointer", borderRadius: "5px" }}
+                                            />
 
-                                                <div style={{ position: "absolute", top: 0, left: 0 }}>
-                                                    {tagsCheckBoxOpen && scoutId == item._id ? (
-                                                        <Checkbox
-                                                            sx={{
-                                                                color: "#7f7f7f",
-                                                                "& .MuiSvgIcon-root": {
-                                                                    color: "#7f7f7f",
-                                                                },
-                                                            }}
-                                                            size="small"
-                                                            checked={tempImages.some(
-                                                                (ite: any) => ite._id === image._id
-                                                            )}
-                                                            onChange={() => handleChange(image)}
-                                                            inputProps={{ "aria-label": "controlled" }}
-                                                            color="secondary"
-                                                            title={image.id}
-                                                        />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </div>
-                                                <div style={{ position: "absolute", top: 0, right: 0 }}>
-                                                    {tagsCheckBoxOpen == true &&
-                                                        scoutId == item._id &&
-                                                        image?.description ? (
-                                                        <Image
-                                                            src={"/findings.png"}
-                                                            width={10}
-                                                            height={10}
-                                                            alt="tags"
-                                                        />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                    {tagsCheckBoxOpen == true &&
-                                                        scoutId == item._id &&
-                                                        image?.tags?.length ? (
-                                                        <Image
-                                                            src={"/scout-img-select.svg"}
-                                                            width={10}
-                                                            height={10}
-                                                            alt="tags"
-                                                        />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </div>
+                                            <div style={{ position: "absolute", top: "5px", left: "5px", }}>
+                                                {tagsCheckBoxOpen && scoutId == item._id ? (
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={tempImages.some(
+                                                            (ite: any) => ite._id === image._id
+                                                        )}
+                                                        onChange={() => handleChange(image)}
+                                                        title={image.id}
+                                                    />
+                                                ) : (
+                                                    ""
+                                                )}
                                             </div>
-                                        ))
-                                    ) : (
-                                        <div style={{ width: "100%", marginLeft: "100%" }}>
-                                            No Attachements
+                                            <div style={{ position: "absolute", bottom: "5px", right: "5px", display: "flex", alignItems: "center", gap: "5px" }}>
+                                                {tagsCheckBoxOpen == true &&
+                                                    scoutId == item._id &&
+                                                    image?.description ? (
+                                                    < SearchOutlinedIcon
+                                                    />
+                                                ) : (
+                                                    ""
+                                                )}
+                                                {tagsCheckBoxOpen == true &&
+                                                    scoutId == item._id &&
+                                                    image?.tags?.length ? (
+                                                    <Image
+                                                        src={"/scout-img-select.svg"}
+                                                        width={17}
+                                                        height={17}
+                                                        alt="tags"
+                                                    />
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </div>
                                         </div>
-                                    )}
-                                </div>
-                            </Card>
+                                    ))
+                                ) : (
+                                    <div style={{ width: "100%", marginLeft: "100%" }}>
+                                        No Attachements
+                                    </div>
+                                )}
+                            </div>
+                            {/* </Card> */}
                         </Card>
                     );
                 })

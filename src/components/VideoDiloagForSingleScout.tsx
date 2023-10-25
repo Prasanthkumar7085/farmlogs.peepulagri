@@ -119,10 +119,9 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
           width: "100%",
           background: "#ffffff00",
           boxShadow: "none !important",
-          height: "calc(100% - 140px)",
+          height: "calc(100% - 100px)",
           maxWidth: "400px !important",
           maxHeight: "100vh",
-          alignContent: "flex-end",
         },
         "& .MuiTypography-root": {
           color: "#fff",
@@ -139,7 +138,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
         },
       }}
     >
-      <IconButton onClick={handleClose} sx={{ textAlign: "right" }}>
+      <IconButton onClick={handleClose} sx={{ width: "100%", display: "flex", justifyContent: "flex-end !important" }}>
         <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
       </IconButton>
       <DialogContent>

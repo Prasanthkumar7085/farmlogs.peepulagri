@@ -36,8 +36,10 @@ const TagsTextFeild = ({ captureTags, tags }: any) => {
   };
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+    <div className={styles.addTagContainer}>
       <TextField
+        size='small'
+        fullWidth
         value={inputValue}
         onKeyDown={handleKeyDown}
         onChange={(e) => setInputValue(e.target.value)}
@@ -56,7 +58,7 @@ const TagsTextFeild = ({ captureTags, tags }: any) => {
               onClick={() => handleDelete(index)}
               className={styles.closeBtn}
               aria-label="delete">
-              <CloseIcon />
+              <CloseIcon sx={{ fontSize: "1.2rem" }} />
             </IconButton>
           </div>
         )) : ""}

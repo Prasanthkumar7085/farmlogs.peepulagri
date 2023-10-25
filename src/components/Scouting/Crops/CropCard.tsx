@@ -3,7 +3,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
 import { CropTypeResponse } from "@/types/cropTypes";
-import { Menu, MenuItem, Chip, Avatar } from "@mui/material";
+import { Menu, MenuItem, Chip, Avatar, Button } from "@mui/material";
 import { useState } from "react";
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
@@ -125,9 +125,9 @@ const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) =
   }
 
 
-  let colorsArray = ["#C71585", "#7B68EE", "#FF8C00", " #008080", "#2E8B57", "#4682B4", "#000080", "#3D3D5B", " #CC0044", "#BA55D3"
-    , "#663399", "#8B0000", "#FF4500", "#DA0E0E", "#00CED1", "#4169E1", " #A52A2A", "#2D1E2F", "#714E47", "#C65B7C"
-    , "#A04662", "#FE654F", " #5F6A89", "#067BBD"]
+  let colorsArray = ["#ffcc99", "#ffccff", "#ffcccc", "#ccffff", "#ccffcc", "#ccccff", "#99ffff", "#99ffcc", "#99ccff", "#c0c0ff"
+    , "#f6cff1", "#d5dae9", "#e9e9e9", "#e1dbde", "#fac2d9", "#fac2d9", "#cae9f6", "#d3d3f4", "#dbdfee", "#e8f3d0"
+    , "#f9e8c6", "#d0ffff", "#d0ffff", "#d5ebed"]
 
   return (
     <div className={styles.folder}>
@@ -141,60 +141,46 @@ const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) =
             height={80}
             onClick={() => setToStorage(itemDetails?.title)}
           /> */}
-          <Avatar sx={{ bgcolor: colorsArray[colorIndex] }}>{itemDetails?.title.toUpperCase().slice(0, 2)}</Avatar>
+          <Avatar sx={{ bgcolor: colorsArray[colorIndex] }} className={styles.avatarImage}>{itemDetails?.title.toUpperCase().slice(0, 2)}</Avatar>
           <div
             className={styles.textWrapper}
             onClick={() => setToStorage(itemDetails?.title)}
           >
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-              <h2 className={styles.FieldCrop}>
-                {itemDetails?.title.length > 12
-                  ? itemDetails?.title.slice(0, 9) + "..."
-                  : itemDetails?.title}
-              </h2>
-
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <p className={styles.aug2023} >
-                {timePipe(itemDetails.createdAt, 'DD, MMM YYYY')}
-              </p>
-
-            </div>
+            <h2 className={styles.FieldCrop}>
+              {itemDetails?.title.length > 12
+                ? itemDetails?.title.slice(0, 9) + "..."
+                : itemDetails?.title}
+            </h2>
+            <p className={styles.aug2023} >
+              {timePipe(itemDetails.createdAt, 'DD, MMM YYYY')}
+            </p>
           </div>
 
-          <div className={styles.actions}>
-            {/* <Chip label="02" className={styles.count} icon={<SpaIcon fontSize="small" />} /> */}
-            {/* <Chip
+          {/* <div className={styles.actions}>
+            <Chip label="02" className={styles.count} icon={<SpaIcon fontSize="small" />} />
+            <Chip
               className={styles.count}
               avatar={<Avatar alt="crop" src="/crop-icon.svg" className={styles.icon} variant="square"  />}
               label="02"
-            /> */}
-
-            <MoreVertIcon
-              sx={{ color: "#6A7185", fontSize: "1.5rem" }}
-              onClick={(event: any) => setAnchorEl(event.currentTarget)}
             />
-          </div>
+
+          </div> */}
           <MenuItemsForFolder />
         </div>
-        <p className={styles.aug2023}>
-          {itemDetails.crop_area
-            ? itemDetails.crop_area +
-            (itemDetails.crop_area < 2 ? " acre" : " acres")
-            : 0 + " acres"}
-        </p>
+        <div className={styles.actionButtons}>
+          {/* <MoreVertIcon
+            sx={{ color: "#6A7185", fontSize: "1.5rem" }}
+            onClick={(event: any) => setAnchorEl(event.currentTarget)}
+          /> */}
+          <p className={styles.aug2023}>
+            {itemDetails.crop_area
+              ? itemDetails.crop_area +
+              (itemDetails.crop_area < 2 ? " acre" : " acres")
+              : 0 + " acres"}
+          </p>
+          <Button className={styles.button} onClick={() => { handleClose(); setRenameOpen(true) }}><ModeEditOutlinedIcon sx={{ fontSize: "16px", color: "#ff4444" }} /></Button>
+          <Button className={styles.button} onClick={() => { setDeleteOpen(true); handleClose() }}><DeleteOutlinedIcon sx={{ fontSize: "16px", color: "#555555" }} /></Button>
+        </div>
       </div>
       {renameOpen ? (
         <NewFolderDiloag

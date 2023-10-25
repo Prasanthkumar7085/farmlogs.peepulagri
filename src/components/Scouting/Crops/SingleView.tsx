@@ -6,7 +6,7 @@ import TagsDrawer from "@/components/Core/TagsDrawer";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
-import { Breadcrumbs, Card, Checkbox, IconButton, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Card, Checkbox, IconButton, Link, Typography, Button } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -15,6 +15,8 @@ import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import AddIcon from '@mui/icons-material/Add';
 
 
 
@@ -151,7 +153,6 @@ const SingleViewScoutComponent = () => {
     const tagsDrawerClose = (value: any) => {
         if (value == false) {
             setTagsDrawerOpen(false)
-            setSelectedFile([])
         }
     }
     //capture the summary content
@@ -205,8 +206,7 @@ const SingleViewScoutComponent = () => {
 
     //capture the slideimages index
     const captureSlideImagesIndex = (value: any) => {
-        console.log(value)
-        console.log(sildeShowImages[value])
+
         if (value) {
             setIndex(value)
             setSelectedItems([sildeShowImages[value]])
@@ -297,15 +297,9 @@ const SingleViewScoutComponent = () => {
                                 <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
                             </Typography>
 
-                            <Typography className={styles.postDate}>
+                            <div className={styles.actionButtonsTop}>
                                 {tagsCheckBoxOpen && scoutId == item._id ?
-                                    <IconButton onClick={() => {
-                                        setTagsCheckBoxOpen(false)
-                                        setScoutId("")
-                                        setScoutAttachementsDetails([])
-                                        setSlideShowImages([])
-                                        setSelectedItems([])
-                                    }}>
+                                    <IconButton size="small" onClick={() => setTagsCheckBoxOpen(false)}>
                                         <Image
                                             src={"/scouting-img-clear.svg"}
                                             width={20}
@@ -313,7 +307,7 @@ const SingleViewScoutComponent = () => {
                                             alt="tag"
                                         />
                                     </IconButton> :
-                                    <IconButton onClick={() => {
+                                    <IconButton size="small" onClick={() => {
                                         setTagsCheckBoxOpen(true)
                                         setScoutId(item._id)
                                         setScoutAttachementsDetails(item.attachments)
@@ -326,32 +320,31 @@ const SingleViewScoutComponent = () => {
                                             alt="tag"
                                         />
                                     </IconButton>}
-
-                                <Image
-                                    src={"/Summary.svg"}
-                                    width={20}
-                                    height={20}
-                                    alt="tag"
-                                />
-                                <span onClick={() => {
-                                    setSummaryDrawerOpen(true)
-                                    setScoutId(item._id)
-                                    setSelectedFile(item)
-                                    setScoutAttachementsDetails(item.attachments)
-                                }}>Summary</span>
-                            </Typography>
+                                <Button className={styles.summaryBtn} size="small" variant="text" onClick={() => {
+                                        setSummaryDrawerOpen(true)
+                                        setScoutId(item._id)
+                                        setSelectedFile(item)
+                                        setScoutAttachementsDetails(item.attachments)
+                                    }}>
+                                    <Image
+                                        src={"/summary-icon.svg"}
+                                        width={24}
+                                        height={24}
+                                        alt="tag"
+                                    />
+                                    <span>Summary</span>
+                                </Button>
+                            </div>
                         </div>
 
-                        <Card sx={{
-                            width: "100%", minHeight: "100px",
+                        <div style={{
+                            width: "100%", minHeight: "100px", margin: "0.5rem 0 5.5rem",
                         }}>
 
                             <div style={{
                                 display: "grid",
-                                gridTemplateColumns: '50% 50%', /* Two columns with a width of 60px each */
-                                gap: '10px', /* Adjust the gap between the columns if necessary */
-                                margin: "0.5rem",
-                                objectFit: "cover"
+                                gridTemplateColumns: '  1fr 1fr',
+                                gap: '10px',
                             }}>
                                 {item?.attachments?.length !== 0 ? item.attachments.map((image: any, index: any) => (
 
@@ -366,9 +359,9 @@ const SingleViewScoutComponent = () => {
                                                 <Checkbox
 
                                                     sx={{
-                                                        color: "#7f7f7f",
+                                                        color: "#ffffff",
                                                         '& .MuiSvgIcon-root': {
-                                                            color: "#7f7f7f"
+                                                            color: "#ffffff"
                                                         }
                                                     }}
                                                     size="small"
@@ -383,15 +376,15 @@ const SingleViewScoutComponent = () => {
 
                                 )) : <div style={{ width: "100%", marginLeft: "100%" }}>No Attachements</div>}
                             </div>
-                        </Card>
+                        </div>
 
                     </Card>
                 )
             })
                 :
                 (!loading ?
-                    <div id={styles.noData} style={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "4rem" }}>
-                        <Image src="/emty-folder-image.svg" alt="empty folder" width={250} height={150} />
+                    <div className={styles.noData}>
+                        <Image src="/emty-folder-image.svg" alt="" width={120} height={120} />
                         <Typography variant="h4">No Scoutings for this crop</Typography>
                     </div>
                     : "")}
@@ -415,17 +408,21 @@ const SingleViewScoutComponent = () => {
                 <TagsDrawer tagsDrawerClose={tagsDrawerClose} captureTagsDetails={captureTagsDetails} item={selectedFile} /> : ""}
 
             <div className="addFormPositionIcon">
+                
                 {tagsCheckBoxOpen == false && selectedItems?.length == 0 ?
-                    <img src="/add-plus-icon.svg" alt="" onClick={() => {
+                    <IconButton size="large" className={styles.AddScoutingbtn} aria-label="add to shopping cart" onClick={() => {
                         router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
-                    }} /> :
+                    }}>
+                        <AddIcon />
+                    </IconButton> :
                     selectedItems?.length ?
-                        <img src="/scout-add-floating-icon.svg" alt="tags icon" onClick={() => {
-                            setTagsDrawerOpen(true)
-                        }} /> : ""}
+                    <IconButton size="large" className={styles.AddTagsbtn} aria-label="add to shopping cart" onClick={() => {
+                        setTagsDrawerOpen(true)
+                    }}>
+                        <LocalOfferIcon />
+                    </IconButton> : ""}
             </div>
             <Toaster richColors position="top-right" closeButton />
-
         </div>
 
     )

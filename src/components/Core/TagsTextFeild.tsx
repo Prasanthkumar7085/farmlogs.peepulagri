@@ -1,12 +1,14 @@
-import { TextField, Typography } from '@mui/material';
+import { TextField, Typography, Button, IconButton } from '@mui/material';
 import React, { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import styles from './TagsTextFeild.module.css';
 
 const TagsTextFeild = ({ captureTags, tags }: any) => {
     const [chips, setChips] = useState<any>(tags?.length ? tags : []);
     const [inputValue, setInputValue] = useState<any>();
 
     const handleKeyDown = (e: any) => {
-        if (e.key === 'Enter' && inputValue) {
+        if (e.key === 'Enter' && inputValue && !chips.includes(inputValue)) {
             setChips([...chips, inputValue]);
             captureTags([...chips, inputValue])
             setInputValue('');
@@ -26,38 +28,25 @@ const TagsTextFeild = ({ captureTags, tags }: any) => {
                 value={inputValue}
                 onKeyDown={handleKeyDown}
                 onChange={(e) => setInputValue(e.target.value)}
-                sx={{
-                    fontSize: '16px',
-                    margin: '5px',
-                    width: "100%"
-                }}
+                fullWidth
+                size='small'
                 placeholder='Enter Tags'
+                className={styles.tagsBox}
             />
 
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className={styles.tagContainer}>
                 {chips.map((chip: any, index: number) => (
                     <div
                         key={index}
-                        style={{
-                            backgroundColor: '#f0f0f0',
-                            padding: '5px',
-                            borderRadius: '5px',
-                            margin: '5px',
-                            display: 'flex',
-                            alignItems: 'center',
-                        }}
+                        className={styles.tag}
                     >
-                        <div style={{ marginRight: '5px' }}>{chip}</div>
-                        <button
+                        <div>{chip}</div>
+                        <IconButton 
                             onClick={() => handleDelete(index)}
-                            style={{
-                                backgroundColor: 'transparent',
-                                border: 'none',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            <span style={{ color: 'red', fontWeight: 'bold' }}>X</span>
-                        </button>
+                            className={styles.closeBtn}
+                            aria-label="delete">
+                            <CloseIcon />
+                        </IconButton>
                     </div>
                 ))}
             </div>

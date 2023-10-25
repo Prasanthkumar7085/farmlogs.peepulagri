@@ -1,0 +1,25 @@
+.closeBtn {
+    padding: 0;
+    color: #ff4128;
+}
+.tagContainer {
+    display: flex;
+    gap: 5px;
+    margin: 5px 0;
+    flex-wrap: wrap;
+}
+.tag {
+    display: flex;
+    padding: 6px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-radius: 60px;
+    border: 1px solid #DCE6F0;
+    background: var(--Stroke, #E9EDF1);
+    padding: 2px 4px 2px 6px;
+}
+.tagsBox input{
+    background-color: var(--white);
+    font-size: 1rem;
+}

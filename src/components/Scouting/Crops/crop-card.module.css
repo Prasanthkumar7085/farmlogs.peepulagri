@@ -12,7 +12,11 @@
   height: 24px;
   border-radius: 4px;
 } 
-
+.avatarImage {
+  color: #000000c3;
+  font-family: 'Inter',sans-serif;
+  font-weight: 400;
+}
 .actions .icon {
   height: 16px;
   width: 16px;
@@ -20,8 +24,8 @@
 .icons {
   width: 100%;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
 .aug2023,
@@ -47,7 +51,6 @@
 
 .cropcard,
 .textWrapper {
-  align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -123,6 +126,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  flex-grow: 1;
 }
 .findingsText {
   color: #35353D;
@@ -132,7 +136,22 @@
   line-height: 1.5;
   margin: 10px 0;
 }
-
+.galleryCard .actionButtonsTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.galleryCard .summaryBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 4vw, 24px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: #42B77F;
+  text-transform: capitalize;
+}
 .scoutingView {
   height: calc(100vh - 190px);
 }
@@ -172,15 +191,14 @@
   margin: 0.5rem 1rem;
 }
 
-#noData {
+.noData {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 100%;
 }
-
-#noData h4 {
+.noData h4 {
   font-size: clamp(16px, 3.25rem, 18px);
   font-weight: 500;
 }
@@ -192,13 +210,7 @@
   background-color: var(--background);
   border-bottom: 1px solid var(--stroke);
 }
-.actionButtons {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0.5rem;
-  column-gap: 0.5rem;
-}
+
 .ctaButton {
   display: flex;
   align-items: center;
@@ -208,4 +220,25 @@
   font-size: clamp(13px, 2vw, 18px);
   font-weight: 500;
   border-radius: 2.5rem;
+}
+.actionButtons {
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: 1fr 25px 25px;
+  column-gap: 0.5rem;
+  width: 100%;
+}
+.actionButtons button{
+  min-width: auto;
+}
+.AddTagsbtn {
+  background: var(--Dark-Green, #5E9765);
+  /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */
+  color: #ffffff;
+}
+.AddScoutingbtn {
+  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
+  /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */
+  color: #ffffff;
 }

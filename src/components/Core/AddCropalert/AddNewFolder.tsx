@@ -41,7 +41,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
   return (
     <Dialog open={open} PaperProps={{
       sx: {
-        borderRadius: "16px", width: "90%", margin: "0", maxWidth: "370px !important"
+        borderRadius: "16px", width: "90%", margin: "0", minWidth: "280px", maxWidth: "320px"
       }
     }}>
 

@@ -1,0 +1,68 @@
+.AddTagsDrawer {
+  border-radius: 10px 0 0;
+  overflow: hidden;
+  z-index: 1500;
+}
+.AddTagsDrawer .MuiDialog-paper {
+  background-color: var(--background);
+}
+.drawerHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--background);
+}
+.drawerHeading h6{
+    color: var(--title);
+    font-family: "Inter", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+.drawerFooter,
+.drawerBody {
+  padding: 0 1rem 1rem;
+  background-color: var(--background);
+}
+.drawerFooter{
+    text-align:right;
+}
+.label {
+  margin-bottom: 0.24rem;
+  font-size: 1rem;
+  color: var(--gray-700);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  line-height: 1.42;
+}
+.inputBox {
+  margin-bottom: 1rem;
+}
+
+.submitBtn {
+    font-family: 'Inter',sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5; /* 150% */
+    border-radius: 8px;
+    border: 1px solid var(--Blue-Gradient, #3462cf);
+    background: var( --Blue-Gradient, linear-gradient(142deg, #3462cf 0%, #2b53be 97.71%));
+    text-transform: capitalize;
+    color: var(--white);
+    min-width: 120px;
+}
+.submitBtnSuccess {
+  font-family: 'Inter',sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5; /* 150% */
+  border-radius: 8px;
+  border: 1px solid var(--Green-Gradient, #05A155);
+  background: var(--Green-Gradient, #05A155);
+  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05);
+  text-transform: capitalize;
+  color: var(--white);
+}

@@ -2,25 +2,30 @@
   width: 45px;
   height: 45px;
 }
+
 .actions {
   display: flex;
   align-items: center;
   gap: var(--gap-9xs);
 }
-.actions .count{
+
+.actions .count {
   padding: 0;
   height: 24px;
   border-radius: 4px;
-} 
+}
+
 .avatarImage {
   color: #000000c3;
-  font-family: 'Inter',sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 400;
 }
+
 .actions .icon {
   height: 16px;
   width: 16px;
 }
+
 .icons {
   width: 100%;
   display: flex;
@@ -70,10 +75,12 @@
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
 }
+
 .filterBox {
   padding: 0.65rem 0.65rem 0rem 0.65rem !important;
   width: calc(100% - 1.3rem);
 }
+
 .allCrops {
   height: calc(100vh - 224px);
   overflow: scroll;
@@ -87,6 +94,7 @@
   flex-direction: column;
   height: 100%;
 }
+
 .NoDataBlockImage {
   height: calc(100vh - 200px);
   display: flex;
@@ -94,8 +102,9 @@
   justify-content: center;
   flex-direction: column;
 }
+
 .title {
-  font-family: 'Inter',sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 500;
   font-size: 1.25rem;
 }
@@ -106,16 +115,16 @@
 }
 
 .galleryCard {
-  padding: 0.5rem;
+  padding: .5rem;
   border-radius: 0;
   background: #FFF;
-  margin-bottom: 2px;
+  margin-bottom: 5px;
   box-shadow: 0 0 2px 0 #e7e7e7;
 }
 
 .galleryCard .postDate {
   font-family: "Inter", sans-serif;
-  font-size: clamp(10px, 4vw, 24px);
+  font-size: clamp(10px, 3vw, 14px);
   font-weight: 600;
   line-height: 1.5;
   color: #2B53BE;
@@ -128,6 +137,7 @@
   gap: 0.25rem;
   flex-grow: 1;
 }
+
 .findingsText {
   color: #35353D;
   font-family: "Inter", sans-serif;
@@ -136,25 +146,54 @@
   line-height: 1.5;
   margin: 10px 0;
 }
+
 .galleryCard .actionButtonsTop {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
+
+.mobileScoutGridGallary svg {
+  font-size: 1.5rem;
+  color: #fff;
+  filter: drop-shadow(3px 3px 2px #000000);
+}
+
 .galleryCard .summaryBtn {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   font-family: "Inter", sans-serif;
-  font-size: clamp(10px, 4vw, 24px);
-  font-weight: 600;
+  font-size: clamp(10px, 4vw, 13px);
+  font-weight: 500;
   line-height: 1.5;
   color: #42B77F;
   text-transform: capitalize;
 }
+
+.galleryCard .summaryBtn svg {
+  height: 20px;
+  width: 20px;
+
+}
+
+.galleryCard .summaryBtn svg path {
+  fill: #42B77F;
+}
+
+.mobileScoutGridGallary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  min-height: 100px;
+  margin-top: 5px;
+  padding-top: 8px;
+  border-top: 1px solid #E9EDF1;
+}
+
 .scoutingView {
   height: calc(100vh - 190px);
 }
+
 .scoutingView nav {
   margin-bottom: 1px;
 }
@@ -173,20 +212,23 @@
   font-weight: 600;
 }
 
-.sortOptions .subTitle{
-  font-family: 'Inter',sans-serif;
+.sortOptions .subTitle {
+  font-family: 'Inter', sans-serif;
   font-size: clamp(14px, 3.5rem, 16px);
-  font-weight: 600; 
+  font-weight: 600;
   column-gap: 0.65rem;
   margin-bottom: 0.5rem;
 }
+
 .sortOptions {
   padding: 1rem 0;
 }
+
 .sortOptions li {
   display: flex;
   column-gap: 0.5rem;
 }
+
 .sortOptions .divider {
   margin: 0.5rem 1rem;
 }
@@ -198,10 +240,12 @@
   flex-direction: column;
   height: 100%;
 }
+
 .noData h4 {
   font-size: clamp(16px, 3.25rem, 18px);
   font-weight: 500;
 }
+
 /* .breadcrumbs a{
   font-size: clamp(12px, 1.75vw, 16px);
 } */
@@ -221,6 +265,7 @@
   font-weight: 500;
   border-radius: 2.5rem;
 }
+
 .actionButtons {
   display: grid;
   align-items: center;
@@ -229,14 +274,17 @@
   column-gap: 0.5rem;
   width: 100%;
 }
-.actionButtons button{
+
+.actionButtons button {
   min-width: auto;
 }
+
 .AddTagsbtn {
   background: var(--Dark-Green, #5E9765);
   /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */
   color: #ffffff;
 }
+
 .AddScoutingbtn {
   background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
   /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */

@@ -10,6 +10,7 @@ import { useState } from "react";
 
 import Image from "next/image";
 import styles from './TagsDrawer.module.css';
+import { SummaryIcon } from "./SvgIcons/summaryIcon";
 
 const SummaryTextDilog = ({
   summaryDrawerClose,
@@ -27,13 +28,9 @@ const SummaryTextDilog = ({
     <Drawer anchor={"bottom"} open={true}>
       <div className={styles.drawerHeading}
       >
-        <Typography variant='h6'><Image
-          alt={`image`}
-          height={24}
-          width={24}
-          src="/summary-icon.svg"
-          style={{ borderRadius: "5%" }}
-        />
+        <Typography variant='h6'>
+          <SummaryIcon
+          />
           <span>Day Summary</span></Typography>
         <IconButton
           onClick={() => {

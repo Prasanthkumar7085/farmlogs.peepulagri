@@ -12,7 +12,7 @@
 
 .groupIcon {
   position: relative;
-  width: 19.98px;
+  width: 20px;
   height: 20px;
 }
 
@@ -94,7 +94,6 @@
   width: 100%;
   font-size: clamp(12px, 3vw, 14px);
   color: #000;
-  /* margin-bottom: 0.5rem; */
 }
 
 .uploadItem {
@@ -107,7 +106,6 @@
 .progress {
   align-items: center;
   gap: 16px;
-  /* margin-bottom: 0.5rem; */
   align-self: stretch;
 }
 
@@ -134,7 +132,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  /* gap: 8px; */
 }
 
 .uploadcontroller {

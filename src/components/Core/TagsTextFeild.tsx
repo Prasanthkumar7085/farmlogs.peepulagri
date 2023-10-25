@@ -3,19 +3,19 @@ import { IconButton, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import styles from './TagsTextFeild.module.css';
 
-const TagsTextFeild = ({ captureTags, tags }: any) => {
+const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [chips, setChips] = useState<any>([]);
   const [inputValue, setInputValue] = useState<any>();
 
   useEffect(() => {
-    setChips(tags);
-  }, [tags]);
+    setChips(beforeTags);
+  }, [beforeTags]);
 
   const handleKeyDown = (e: any) => {
     if (e.key === " " && inputValue && !chips?.includes(inputValue)) {
       if (chips?.length) {
         setChips([...chips, inputValue]);
-        captureTags([...chips, inputValue]);
+        captureTags([inputValue]);
         setInputValue("");
       }
       else {

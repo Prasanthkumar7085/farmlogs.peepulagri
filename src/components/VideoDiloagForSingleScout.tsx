@@ -38,7 +38,6 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
       ?.scrollIntoView({ behavior: "smooth" });
     const nextIndex = (currentIndex + 1) % mediaArray?.length;
     setCurrentIndex(nextIndex);
-    captureSlideImagesIndex(nextIndex)
   };
 
   const playPrevious = () => {
@@ -47,7 +46,6 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
       ?.scrollIntoView({ behavior: "smooth" });
     const prevIndex = currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
     setCurrentIndex(prevIndex);
-    captureSlideImagesIndex(prevIndex)
 
   };
 
@@ -147,6 +145,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
           <Carousel
             selectedItem={currentIndex}
             onChange={(index) => {
+              console.log("llkjlhgffdzxc")
               // captureImageDilogOptions(mediaArray[index]);
               setCurrentIndex(index);
               captureSlideImagesIndex(index);

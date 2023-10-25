@@ -18,7 +18,6 @@ const TagsDrawer = ({
   captureTagsDetails,
   selectedItems,
 }: any) => {
-  console.log(selectedItems);
   console.log(
     selectedItems.some((obj: any) => obj.hasOwnProperty("description") == false)
   );
@@ -53,50 +52,50 @@ const TagsDrawer = ({
       </div>
       <div className={styles.drawerBody}>
         <Typography className={styles.label}>Tags</Typography>
-         <div className={styles.inputBox}>
+        <div className={styles.inputBox}>
           <TagsTextFeild captureTags={captureTags} tags={tags} />
-          </div>
+        </div>
         {selectedItems.some((obj: any) => obj.hasOwnProperty("description")) ==
-        false ? (
+          false ? (
           <>
-              <Typography className={styles.label}>Findings</Typography>
-              <div className={styles.inputBox}>
-            <TextField
-              color="primary"
-              name="description"
-              id="description"
-              rows={4}
-              maxRows={4}
-              placeholder="Enter your findings here"
-              fullWidth={true}
-              variant="outlined"
-              multiline
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-              sx={{ background: "#fff" }}
-                />
-                </div>
+            <Typography className={styles.label}>Findings</Typography>
+            <div className={styles.inputBox}>
+              <TextField
+                color="primary"
+                name="description"
+                id="description"
+                rows={4}
+                maxRows={4}
+                placeholder="Enter your findings here"
+                fullWidth={true}
+                variant="outlined"
+                multiline
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+                sx={{ background: "#fff" }}
+              />
+            </div>
           </>
         ) : // What you want to render if the condition is not met
-        // For example, you can render some default component or nothing at all
-        null}
+          // For example, you can render some default component or nothing at all
+          null}
       </div>
-<div className={styles.drawerFooter}>
-      <Button
-         className={styles.submitBtn}
-        disabled={!(tags || description)}
-        variant="contained"
-        onClick={() => {
-          captureTagsDetails(tags, description);
-          // setTags([]);
-          // setDescription("");
-        }}
-      >
-        Submit
+      <div className={styles.drawerFooter}>
+        <Button
+          className={styles.submitBtn}
+          disabled={!(tags || description)}
+          variant="contained"
+          onClick={() => {
+            captureTagsDetails(tags, description);
+            // setTags([]);
+            // setDescription("");
+          }}
+        >
+          Submit
         </Button>
-        </div>
+      </div>
     </Drawer>
   );
 };

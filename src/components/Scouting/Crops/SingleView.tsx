@@ -135,9 +135,7 @@ const SingleViewScoutComponent = () => {
   const handleClick = (index: number, item: any) => {
     handleOpenDialog(item);
     setIndexOfseletedOne(index);
-    setSlideShowImages(item);
     setIndex(index);
-    setSelectedFile(item[index]);
     setSelectedItems([item[index]]);
     setScoutAttachementsDetails(item);
   };
@@ -146,6 +144,7 @@ const SingleViewScoutComponent = () => {
   const drawerClose = (value: any) => {
     if (value == false) {
       setOpenCommentsBox(false)
+      setOpenDialog(false)
     }
   };
 
@@ -193,7 +192,7 @@ const SingleViewScoutComponent = () => {
     setScoutFindings(findingsvalue);
     if (tags?.length && !findingsvalue?.length) {
       await tempImages.forEach((obj: any) => {
-        obj.tags = [...tags];
+        obj.tags = [...obj.tags, ...tags];
       });
       setSelectedItems(tempImages);
       await updateDescriptionService(tempImages, selectedFile.summary);
@@ -211,6 +210,7 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempImages, selectedFile.summary);
     }
     if (!tags?.length && findingsvalue?.length) {
+
       await tempImages.forEach((obj: any) => {
         obj.description = findingsvalue;
       });
@@ -218,11 +218,11 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempImages, selectedFile.summary);
     }
     if (tags?.length && findingsvalue?.length) {
+
       await tempImages.forEach((obj: any) => {
         obj.description = findingsvalue;
-        obj.tags = [...tags];
+        obj.tags = [...obj.tags, ...tags];
       });
-      console.log(tempImages);
 
       setSelectedItems(tempImages);
       await updateDescriptionService(tempImages, selectedFile.summary);
@@ -299,6 +299,7 @@ const SingleViewScoutComponent = () => {
         setSelectedItems([]);
         setScoutAttachementsDetails([]);
         setSummaryContent("");
+        setOpenDialog(false)
       }
     } catch (err: any) {
       console.error(err);
@@ -435,6 +436,10 @@ const SingleViewScoutComponent = () => {
                             handleClick(indexAttachment, item.attachments);
                             setScoutId(item._id);
                             setSingleScoutDetails(item)
+                            setSelectedFile(image);
+                            setSlideShowImages(item?.attachments);
+
+
 
                           }}
                           style={{ cursor: "pointer", borderRadius: "5px" }}

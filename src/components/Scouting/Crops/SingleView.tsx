@@ -56,6 +56,9 @@ const SingleViewScoutComponent = () => {
   const [summaryContent, setSummaryContent] = useState<any>();
   const [scoutFindings, setScoutFindings] = useState<any>();
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>();
+  const [openCommentsBox, setOpenCommentsBox] = useState<any>()
+  const [singleScoutDetails, setSingleScoutDetails] = useState<any>()
+
 
   let tempImages: any = [...selectedItems];
 
@@ -142,7 +145,7 @@ const SingleViewScoutComponent = () => {
   //for comments drawer open/close
   const drawerClose = (value: any) => {
     if (value == false) {
-      setDrawerOpen(false);
+      setOpenCommentsBox(false)
     }
   };
 
@@ -150,6 +153,7 @@ const SingleViewScoutComponent = () => {
   const summaryDrawerClose = (value: any) => {
     if (value == false) {
       setSummaryDrawerOpen(false);
+      setSelectedFile([])
     }
   };
 
@@ -172,7 +176,13 @@ const SingleViewScoutComponent = () => {
   const captureImageDilogOptions = (value: any) => {
     if (value == "tag") {
       setTagsDrawerEditOpen(true);
-    } else {
+    }
+    else if (value == "comments") {
+      setOpenCommentsBox(true)
+
+
+    }
+    else {
       setScoutId(value._id);
       setScoutAttachementsDetails(value.attachments);
       setSlideShowImages(value.attachments);
@@ -234,7 +244,7 @@ const SingleViewScoutComponent = () => {
     }
   };
 
-  useEffect(() => {}, [selectedFile]);
+  useEffect(() => { }, [selectedFile]);
 
   //capture the slideimages index
   const captureSlideImagesIndex = (value: any) => {
@@ -424,6 +434,8 @@ const SingleViewScoutComponent = () => {
                           onClick={() => {
                             handleClick(indexAttachment, item.attachments);
                             setScoutId(item._id);
+                            setSingleScoutDetails(item)
+
                           }}
                           style={{ cursor: "pointer", borderRadius: "5px" }}
                         />
@@ -452,8 +464,8 @@ const SingleViewScoutComponent = () => {
                         </div>
                         <div style={{ position: "absolute", top: 0, right: 0 }}>
                           {tagsCheckBoxOpen == true &&
-                          scoutId == item._id &&
-                          image?.description ? (
+                            scoutId == item._id &&
+                            image?.description ? (
                             <Image
                               src={"/findings.png"}
                               width={10}
@@ -464,8 +476,8 @@ const SingleViewScoutComponent = () => {
                             ""
                           )}
                           {tagsCheckBoxOpen == true &&
-                          scoutId == item._id &&
-                          image?.tags?.length ? (
+                            scoutId == item._id &&
+                            image?.tags?.length ? (
                             <Image
                               src={"/scout-img-select.svg"}
                               width={10}
@@ -551,6 +563,9 @@ const SingleViewScoutComponent = () => {
       ) : (
         ""
       )}
+      {openCommentsBox ?
+        <DrawerComponentForScout drawerClose={drawerClose} scoutDetails={singleScoutDetails} attachement={selectedFile} /> : ""}
+
 
       <TagsDrawerEdit
         tagsDrawerClose={tagsDrawerClose}

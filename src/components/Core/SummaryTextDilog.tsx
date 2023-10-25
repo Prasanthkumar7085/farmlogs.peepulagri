@@ -28,13 +28,13 @@ const SummaryTextDilog = ({
       <div className={styles.drawerHeading}
       >
         <Typography variant='h6'><Image
-                        alt={`image`}
-                        height={24}
-                        width={24}
-                        src="/summary-icon.svg"
-                        style={{ borderRadius: "5%" }}
-                    />
-                    <span>Day Summary</span></Typography>
+          alt={`image`}
+          height={24}
+          width={24}
+          src="/summary-icon.svg"
+          style={{ borderRadius: "5%" }}
+        />
+          <span>Day Summary</span></Typography>
         <IconButton
           onClick={() => {
             summaryDrawerClose(false);
@@ -62,18 +62,19 @@ const SummaryTextDilog = ({
         />
       </div>
       <div className={styles.drawerFooter}>
-      <Button
-       className={styles.submitBtnSuccess}
-        sx={{}}
-        variant="contained"
-        onClick={() => {
-          captureSummary(data);
-          setData("");
-        }}
-      >
-        Submit
+        <Button
+          className={styles.submitBtnSuccess}
+          sx={{}}
+          variant="contained"
+          onClick={() => {
+            captureSummary(data);
+            setData("");
+          }}
+          disabled={data ? false : true}
+        >
+          Submit
         </Button>
-        </div>
+      </div>
     </Drawer>
   );
 };

@@ -12,10 +12,18 @@ const TagsTextFeild = ({ captureTags, tags }: any) => {
   }, [tags]);
 
   const handleKeyDown = (e: any) => {
-    if (e.key === " " && inputValue && !chips.includes(inputValue)) {
-      setChips([...chips, inputValue]);
-      captureTags([...chips, inputValue]);
-      setInputValue("");
+    if (e.key === " " && inputValue && !chips?.includes(inputValue)) {
+      if (chips?.length) {
+        setChips([...chips, inputValue]);
+        captureTags([...chips, inputValue]);
+        setInputValue("");
+      }
+      else {
+        setChips([inputValue]);
+        captureTags([inputValue]);
+        setInputValue("");
+      }
+
     }
   };
 
@@ -38,21 +46,21 @@ const TagsTextFeild = ({ captureTags, tags }: any) => {
       />
 
       <div className={styles.tagContainer}>
-                {chips&&chips?.length?chips.map((chip: any, index: number) => (
-                    <div
-                        key={index}
-                        className={styles.tag}
-                    >
-                        <div>{chip}</div>
-                        <IconButton 
-                            onClick={() => handleDelete(index)}
-                            className={styles.closeBtn}
-                            aria-label="delete">
-                            <CloseIcon />
-                        </IconButton>
-                    </div>
-                )):""}
-            </div>
+        {chips && chips?.length ? chips.map((chip: any, index: number) => (
+          <div
+            key={index}
+            className={styles.tag}
+          >
+            <div>{chip}</div>
+            <IconButton
+              onClick={() => handleDelete(index)}
+              className={styles.closeBtn}
+              aria-label="delete">
+              <CloseIcon />
+            </IconButton>
+          </div>
+        )) : ""}
+      </div>
     </div>
   );
 };

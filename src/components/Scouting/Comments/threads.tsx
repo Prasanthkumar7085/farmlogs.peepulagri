@@ -52,10 +52,9 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
-          router.query.farm_id
-            ? router.query.farm_id
-            : scoutDetails?.farm_id?._id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
+          ? router.query.farm_id
+          : scoutDetails?.farm_id?._id
         }/attachment/download-url`,
         options
       );
@@ -218,7 +217,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   />
                                 </IconButton>
                                 {userDetails?.user_details?.user_type ==
-                                  item?.user?.user_type ? (
+                                  item?.user[0]?.user_type ? (
                                   <IconButton
                                     onClick={() =>
                                       afterDeleteAttachements(

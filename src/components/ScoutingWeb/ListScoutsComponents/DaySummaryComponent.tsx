@@ -102,8 +102,15 @@ const DaySummaryComponent: FC<pageProps> = ({
     if (singleScoutData) {
       getCropName(singleScoutData.crop_id, singleScoutData.farm_id.crops);
       setRecomendations(singleScoutData?.suggestions);
+      if (singleScoutData.suggestions) {
+        setEditRecomendation(false);
+      }
+      else {
+        setEditRecomendation(true);
+
+      }
     }
-  }, [singleScoutData]);
+  }, [singleScoutData, openDaySummary]);
   return (
     <Drawer anchor={"right"} open={openDaySummary} sx={{
       '& .MuiPaper-root': {
@@ -234,7 +241,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                   variant="contained"
                   onClick={sendRecomendations}
                 >
-                  Send
+                  {singleScoutData?.suggestions ? "Update" : " Submit"}
                   {updateLoading ? (
                     <CircularProgress size="1.5rem" sx={{ color: "white" }} />
                   ) : (

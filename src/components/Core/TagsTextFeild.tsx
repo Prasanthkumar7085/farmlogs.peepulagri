@@ -15,7 +15,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
     if (inputValue && !chips?.includes(inputValue)) {
       if (chips?.length) {
         setChips([...chips, inputValue]);
-        captureTags([inputValue]);
+        captureTags([...chips, inputValue]);
         setInputValue("");
       }
       else {

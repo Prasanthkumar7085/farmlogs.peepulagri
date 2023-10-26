@@ -35,6 +35,32 @@
   fill: #3462cf;
 }
 
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.drawerBody .findingDec {
+  display: flex;
+  flex-direction: column;
+}
+
+.findingDec .bodyHeading {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(14px, 3vw, 16px);
+  font-weight: 500;
+  line-height: 130%;
+}
+
+.bodyDescrpiction {
+  color: #6A7185;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 400;
+  line-height: 150%;
+}
+
 .drawerFooter,
 .drawerBody {
   padding: 0 1rem 1rem;
@@ -44,6 +70,7 @@
 .drawerFooter {
   text-align: right;
 }
+
 
 .label {
   margin-bottom: 0.24rem;

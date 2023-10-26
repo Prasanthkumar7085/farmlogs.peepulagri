@@ -149,7 +149,13 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                       }}
                     >
                       {item.type?.includes("video") ? (
-                        <video controls width="100%" height={"100%"} autoPlay key={index} >
+                        <video
+                          controls
+                          width="100%"
+                          height={"100%"}
+                          autoPlay
+                          key={index}
+                        >
                           <source src={item.original} type={item.type} />
                           Your browser does not support the video tag.
                         </video>
@@ -162,7 +168,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                         />
                       ) : (
                         <>
-                          {/* <img
+                          <img
                             className="zoom-image"
                             src={item.src}
                             alt={`Image ${index + 1}`}
@@ -171,7 +177,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                               width: "100%",
                               objectFit: "contain",
                             }}
-                          /> */}
+                          />
                         </>
                       )}
                     </div>
@@ -220,9 +226,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             setPreviewImageDialogOpen={setPreviewImageDialogOpen}
           />
         </Grid>
-
       </Grid>
-    </Dialog >
+    </Dialog>
   );
 };
 export default SingleScoutViewDetails;

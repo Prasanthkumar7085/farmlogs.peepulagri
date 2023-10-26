@@ -25,7 +25,7 @@ const TablePaginationComponentForScouts = ({
     setPageNum(1);
   };
 
-  const [limitOptions] = useState([12, 20, 40, 80, 100]);
+  const [limitOptions] = useState([10, 20, 40, 80, 100]);
 
   return (
     <Card className={styles.tablePagination}>

@@ -11,6 +11,7 @@ import { useState } from "react";
 import Image from "next/image";
 import styles from './TagsDrawer.module.css';
 import { SummaryIcon } from "./SvgIcons/summaryIcon";
+import { Markup } from "interweave";
 
 const SummaryTextDilog = ({
   summaryDrawerClose,
@@ -51,11 +52,16 @@ const SummaryTextDilog = ({
         <div className={styles.drawerBody}>
           <div className={styles.findingDec}>
             <span className={styles.bodyHeading} style={{ color: "#3462CF" }}>Findings</span>
-            <Typography variant="caption" className={styles.bodyDescrpiction}>{data}</Typography>
+            <Typography variant="caption" className={styles.bodyDescrpiction}>
+              <Markup content={data} />
+
+            </Typography>
           </div>
           <div className={styles.findingDec}>
             <span className={styles.bodyHeading} style={{ color: "#F2A84C", fontWeight: "600 !important" }}>Recommandations</span>
-            <Typography variant="caption" className={styles.bodyDescrpiction}>{item?.suggestions}</Typography>
+            <Typography variant="caption" className={styles.bodyDescrpiction}>
+              <Markup content={item?.suggestions} />
+            </Typography>
           </div>
         </div>
 

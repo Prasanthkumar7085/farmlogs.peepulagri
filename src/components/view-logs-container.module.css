@@ -71,6 +71,22 @@
 
 .findingsText {
   padding: 0.5rem 0;
+  height: 150px;
+  overflow-y: auto;
+}
+
+.findingsText::-webkit-scrollbar {
+  background: transparent;
+  width: 3px;
+  height: 3px;
+}
+
+.findingsText::-webkit-scrollbar:hover {
+  opacity: 1;
+}
+
+.findingsText:hover::-webkit-scrollbar-thumb {
+  background: rgb(198, 198, 198);
 }
 
 .findingsText span {
@@ -94,8 +110,7 @@
 
 .cropDetailsBlock {
   padding: 0.5rem;
-  height: 350px;
-  overflow-y: auto;
+
 }
 
 .cropDetailsBlock p {

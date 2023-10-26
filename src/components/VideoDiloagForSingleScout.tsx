@@ -117,7 +117,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
           width: "100%",
           background: "#ffffff00",
           boxShadow: "none !important",
-          height: "calc(100% - 100px)",
+          height: "calc(100% - 10px)",
           maxWidth: "400px !important",
           maxHeight: "100vh",
         },

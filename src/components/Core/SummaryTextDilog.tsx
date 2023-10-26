@@ -30,6 +30,7 @@ const SummaryTextDilog = ({
         width: "100%",
         maxWidth: "500px",
         marginInline: "auto",
+        minHeight: "300px"
       }
     }}>
       <div className={styles.drawerHeading}
@@ -49,12 +50,12 @@ const SummaryTextDilog = ({
       {item?.suggestions ?
         <div className={styles.drawerBody}>
           <div className={styles.findingDec}>
-            <span>Findings</span>
-            <Typography variant="caption">{data}</Typography>
+            <span className={styles.bodyHeading} style={{ color: "#3462CF" }}>Findings</span>
+            <Typography variant="caption" className={styles.bodyDescrpiction}>{data}</Typography>
           </div>
           <div className={styles.findingDec}>
-            <span>Recommandations</span>
-            <Typography variant="caption">{item?.suggestions}</Typography>
+            <span className={styles.bodyHeading} style={{ color: "#F2A84C", fontWeight: "600 !important" }}>Recommandations</span>
+            <Typography variant="caption" className={styles.bodyDescrpiction}>{item?.suggestions}</Typography>
           </div>
         </div>
 

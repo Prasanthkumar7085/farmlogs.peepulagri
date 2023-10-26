@@ -44,6 +44,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   const [content, setContent] = useState<any>();
   const [scoutId, setScoutId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [editRecomendationOpen, setEditRecomendationOpen] = useState(false);
 
   useEffect(() => {
     if (onlyImages?.length && viewAttachmentId) {
@@ -99,11 +100,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     changeDescription();
   }, [currentIndex]);
 
-
-  const updateDescriptionService = async (
-    imagesArray: any,
-    cropId: any
-  ) => {
+  const updateDescriptionService = async (imagesArray: any, cropId: any) => {
     let updatedArray = data?.attachments?.map((obj: any) => {
       let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
       return matchingObj ? matchingObj : obj;
@@ -119,7 +116,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
         body: JSON.stringify({
           farm_id: data?.farm_id?._id,
           crop_id: cropId,
-          attachments: updatedArray
+          attachments: updatedArray,
         }),
       };
       let response: any = await fetch(
@@ -128,6 +125,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       );
       const responseData = await response.json();
       if (responseData?.success == true) {
+        setEditRecomendationOpen(false);
         getSingleScoutDetails(scoutId);
       }
     } catch (err: any) {
@@ -136,12 +134,11 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     }
   };
 
-
   const afterUpdateRecommandations = async (value: any, cropID: any) => {
     if (value.length) {
-      await updateDescriptionService(value, cropID)
+      await updateDescriptionService(value, cropID);
     }
-  }
+  };
   return (
     <Dialog
       open={previewImageDialogOpen}
@@ -182,6 +179,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   onChange={(index) => changeImage(index)}
                   swipeable={true}
                   autoFocus
+                  showThumbs={false}
                 >
                   {onlyImages.map((item: any, index: any) => (
                     <div
@@ -297,6 +295,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
         </Grid>
         <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
           <ScoutingDetails
+            setEditRecomendationOpen={setEditRecomendationOpen}
+            editRecomendationOpen={editRecomendationOpen}
             loading={loading}
             data={data}
             content={content}

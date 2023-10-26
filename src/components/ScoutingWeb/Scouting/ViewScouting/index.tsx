@@ -1,4 +1,11 @@
-import { Card, Dialog, Grid, IconButton, Typography } from "@mui/material";
+import {
+  Card,
+  Chip,
+  Dialog,
+  Grid,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import ScoutingDetails from "./ScoutingDetails";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -10,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./ScoutingDetails.module.css";
 import { OnlyImagesType, ScoutAttachmentDetails } from "@/types/scoutTypes";
+import SellIcon from "@mui/icons-material/Sell";
 
 interface pageProps {
   onlyImages: Array<OnlyImagesType>;
@@ -116,12 +124,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
               }}
             >
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
                 onWheel={(e: any) => {
                   if (e.deltaY > 0 && e.deltaY % 20 == 0) {
                     setCurrentIndex((prev) => prev + 1);
@@ -144,7 +146,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                       style={{
                         width: "85%",
                         margin: "0 auto",
-                        height: "90vh",
+                        height: "80vh",
                       }}
                     >
                       {item.type?.includes("video") ? (
@@ -182,6 +184,40 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                     </div>
                   ))}
                 </Carousel>
+                {onlyImages[currentIndex]?.tags?.length ? (
+                  <div
+                    style={{
+                      color: "white",
+                      alignItems: "flex-start",
+                      padding: "4px 20px 4px 20px",
+                      justifyContent: "flex-start",
+                      margin: "0 auto",
+                      display: "flex",
+                      width: "85%",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Chip
+                      className={styles.tagsLabel}
+                      icon={<SellIcon sx={{ fontSize: 15 }} />}
+                      label="Tags"
+                      variant="outlined"
+                    />
+                    <p
+                      style={{
+                        color: "white",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      {onlyImages[currentIndex].tags.join(", ")}
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className={styles.AllImagesBlock}>

@@ -201,7 +201,10 @@
   justify-content: space-between;
   margin-bottom: 0.8rem;
 }
-
+.farmsIcon {
+  width: 30px;
+  height: 30px;
+}
 .scoutDay p {
   color: #000000cc !important;
   font-family: "Inter", sans-serif !important;

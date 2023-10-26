@@ -65,7 +65,7 @@
   line-height: 1.5;
   /* 150% */
   border-radius: 6px !important;
-  background: var(--Blue-Gradient, linear-gradient(142deg, #3462cf 0%, #2b53be 97.71%)) !important;
+  /* background: var(--Blue-Gradient, linear-gradient(142deg, #3462cf 0%, #2b53be 97.71%)) !important; */
   text-transform: capitalize;
   color: var(--white) !important;
   min-width: 120px !important;

@@ -51,7 +51,6 @@ const TagsDrawer = ({
         </IconButton>
       </div>
       <div className={styles.drawerBody}>
-        <Typography className={styles.label}>Tags</Typography>
         <div className={styles.inputBox}>
           <TagsTextFeild captureTags={captureTags} tags={tags} />
         </div>

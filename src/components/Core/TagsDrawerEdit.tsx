@@ -61,7 +61,6 @@ const TagsDrawerEdit = ({
         </IconButton>
       </div>
       <div style={{ width: "100%" }}>
-        <Typography>Tags</Typography>
         <TagsTextFeild captureTags={captureTags} tags={tags} beforeTags={item?.tags} />
 
         <Typography>Findings</Typography>

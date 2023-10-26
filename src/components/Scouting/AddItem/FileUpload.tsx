@@ -681,11 +681,11 @@ const FileUploadComponent = () => {
                         previewImages.find((e: any) => e.fileIndex == item.name)
                           ?.prieviewUrl
                           ? previewImages.find(
-                              (e: any) => e.fileIndex == item.name
-                            ).prieviewUrl
+                            (e: any) => e.fileIndex == item.name
+                          ).prieviewUrl
                           : item.type == "application/pdf"
-                          ? "/pdf-icon.png"
-                          : "/doc-icon.webp"
+                            ? "/pdf-icon.png"
+                            : "/doc-icon.webp"
                       }
                     />
                     <div className={styles.progressdetails}>
@@ -716,7 +716,7 @@ const FileUploadComponent = () => {
                               )}
                             </div>
                             {fileProgress[index] == 100 &&
-                            fileProgress[index] !== "fail" ? (
+                              fileProgress[index] !== "fail" ? (
                               <div className={styles.photojpg}>
                                 <IconButton>
                                   <DoneIcon sx={{ color: "#05A155" }} />
@@ -736,7 +736,7 @@ const FileUploadComponent = () => {
                             )}
                           </div>
                           {fileProgress[index] !== 100 ||
-                          fileProgress[index] == "fail" ? (
+                            fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
                               alt=""
@@ -749,7 +749,7 @@ const FileUploadComponent = () => {
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
-                          fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                             <LinearProgress />
                           ) : fileProgress[index] !== 100 &&
                             fileProgress[index] !== "fail" ? (
@@ -763,7 +763,7 @@ const FileUploadComponent = () => {
                         </Box>
                       </div>
                       {fileProgress[index] == 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         ""
                       ) : (
                         <div className={styles.uploadstatus}>
@@ -811,7 +811,6 @@ const FileUploadComponent = () => {
                       />
                     </div>
                     <div style={{ width: "100%" }} className={styles.input}>
-                      <div className={styles.label1}>Tags</div>
                       <TagsTextFeild captureTags={captureTags} />
                     </div>
                   </div>

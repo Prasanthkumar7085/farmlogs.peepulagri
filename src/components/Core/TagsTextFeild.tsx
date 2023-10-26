@@ -1,8 +1,8 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import styles from './TagsTextFeild.module.css';
-
+import AddIcon from '@mui/icons-material/Add';
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [chips, setChips] = useState<any>([]);
   const [inputValue, setInputValue] = useState<any>();
@@ -12,7 +12,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   }, [beforeTags]);
 
   const handleKeyDown = (e: any) => {
-    if (e.key === " " && inputValue && !chips?.includes(inputValue)) {
+    if (inputValue && !chips?.includes(inputValue)) {
       if (chips?.length) {
         setChips([...chips, inputValue]);
         captureTags([inputValue]);
@@ -37,11 +37,19 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
 
   return (
     <div className={styles.addTagContainer}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Typography>Tags</Typography>
+        <IconButton
+          onClick={(e) => handleKeyDown(e)}
+          disabled={inputValue ? false : true}
+        >
+          <AddIcon />
+        </IconButton>
+      </div>
       <TextField
         size='small'
         fullWidth
         value={inputValue}
-        onKeyDown={handleKeyDown}
         onChange={(e) => setInputValue(e.target.value)}
         className={styles.tagsBox}
         placeholder="Enter Tags"

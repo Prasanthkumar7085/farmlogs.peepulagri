@@ -15,6 +15,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useSwipeable } from 'react-swipeable';
 import styles from "./view-logs-container.module.css";
 import SellIcon from '@mui/icons-material/Sell';
+import { Markup } from "interweave";
 
 const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions, captureSlideImagesIndex }: any) => {
 
@@ -217,7 +218,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
           </div>
           {showMore == true ? (
             <Typography className={styles.findingsText}>
-              {mediaArray[currentIndex]?.description}
+              <Markup content={mediaArray[currentIndex]?.description} />
               <span
                 style={{ cursor: "pointer", fontWeight: "600" }}
                 onClick={() => {
@@ -230,8 +231,8 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
           ) : (
             <Typography className={styles.findingsText}>
               {mediaArray[currentIndex]?.description?.length > 100
-                ? mediaArray[currentIndex]?.description.slice(0, 100) + "...."
-                : mediaArray[currentIndex]?.description}
+                ? <Markup content={mediaArray[currentIndex]?.description.slice(0, 100) + "...."} />
+                : <Markup content={mediaArray[currentIndex]?.description} />}
               {mediaArray[currentIndex]?.description?.length > 100 ? (
                 <span
                   style={{ fontWeight: "600", cursor: "pointer" }}

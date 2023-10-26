@@ -25,6 +25,7 @@ import UserDropDownForScouts from "./UserDropDownForScouts";
 import timePipe from "@/pipes/timePipe";
 import DaySummaryComponent from "./DaySummaryComponent";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 
 interface ApiMethodProps {
   page: string | number;
@@ -476,7 +477,8 @@ const ListScouts: FunctionComponent = () => {
           <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
-            sx={{ color: "#000", minWidth: "inherit", padding: "0" }}>
+            sx={{ color: "#000", minWidth: "inherit", padding: "0" }}
+          >
             <Tooltip title={"Clear Filter"}>
               <FilterAltIcon sx={{ fontSize: "1.7rem" }} />
             </Tooltip>
@@ -487,37 +489,37 @@ const ListScouts: FunctionComponent = () => {
         <div className={styles.allScoutingCards}>
           {data?.length
             ? data.map((item: SingleScoutResponse, index: number) => {
-              return (
-                <div className={styles.eachDayScouting} key={index}>
-                  <div
-                    className={styles.scoutDay}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography>
-                      {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
-                    </Typography>
+                return (
+                  <div className={styles.eachDayScouting} key={index}>
                     <div
-                      className={styles.summaryBtn}
-                      onClick={() => {
-                        setOpenDaySummary(true);
-                        setSelectedItemDetails(item);
+                      className={styles.scoutDay}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <SummaryIcon /> Summary
+                      <Typography>
+                        {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
+                      </Typography>
+                      <div
+                        className={styles.summaryBtn}
+                        onClick={() => {
+                          setOpenDaySummary(true);
+                          setSelectedItemDetails(item);
+                        }}
+                      >
+                        <SummaryIcon /> Summary
+                      </div>
                     </div>
+                    <ScoutingDailyImages
+                      item={item}
+                      key={index}
+                      onClickAttachment={onClickAttachment}
+                    />
                   </div>
-                  <ScoutingDailyImages
-                    item={item}
-                    key={index}
-                    onClickAttachment={onClickAttachment}
-                  />
-                </div>
-              );
-            })
+                );
+              })
             : ""}
         </div>
         {!data?.length && !loading ? (
@@ -554,7 +556,7 @@ const ListScouts: FunctionComponent = () => {
         setOpenDaySummary={setOpenDaySummary}
         seletectedItemDetails={seletectedItemDetails}
       />
-      {/* {!loading ? (
+      {!loading ? (
         <TablePaginationComponentForScouts
           paginationDetails={paginationDetails}
           capturePageNum={capturePageNum}
@@ -563,7 +565,7 @@ const ListScouts: FunctionComponent = () => {
         />
       ) : (
         ""
-      )} */}
+      )}
       <LoadingComponent loading={loading} />
     </div>
   );

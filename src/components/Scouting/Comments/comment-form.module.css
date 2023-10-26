@@ -80,7 +80,7 @@
   justify-content: flex-start;
   width: calc(100%);
   gap: var(--gap-13xl);
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .uploadprogress {

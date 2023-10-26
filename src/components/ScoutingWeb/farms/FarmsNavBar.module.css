@@ -98,11 +98,11 @@
 }
 
 .allFarms {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 95px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
-  padding-right: 5px;
+  padding-inline: 1.5rem;
 }
 
 .allFarms::-webkit-scrollbar {
@@ -259,7 +259,7 @@
 
 /* AllScoutspage agrologin */
 .AllScoutsPageWeb {
-  width: 92%;
+  width: 100%;
   margin: 0 auto;
   padding-top: 2rem;
 }
@@ -269,6 +269,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
+  padding: 0 1.5rem;
 }
 
 .scoutPageHeader h4 {

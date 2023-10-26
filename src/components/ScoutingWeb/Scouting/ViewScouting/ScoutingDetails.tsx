@@ -21,29 +21,47 @@ const ScoutingDetails = ({
   content,
   setPreviewImageDialogOpen,
   imageData,
-  afterUpdateRecommandations
+  afterUpdateRecommandations,
+  editRecomendationOpen,
+  setEditRecomendationOpen,
 }: any) => {
-  console.log(imageData, "llop")
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
 
   const [crop, setCrop] = useState<any>();
-  const [editRecomendation, setEditRecomendation] = useState(false);
-  const [recomendations, setRecomendations] = useState(imageData?.suggestions);
+  const [recomendations, setRecomendations] = useState<any>();
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [mainImageData, setMainImageData] = useState<any>();
 
+  useEffect(() => {
+    if (imageData && data) {
+      let obj = data.attachments?.find(
+        (item: any) => item._id == imageData._id
+      );
+      setMainImageData(obj);
+      setRecomendations(obj?.suggestions);
+      if (obj?.suggestions) {
+        setEditRecomendationOpen(false);
+        setRecomendations(obj?.suggestions);
+      } else {
+        setEditRecomendationOpen(true);
+        setRecomendations("");
+      }
+    }
+  }, [imageData, data]);
 
   const getCropName = (cropId: string, crops: any) => {
     let temp = crops?.find((item: any) => item._id == cropId);
     setCrop(temp);
   };
+
   useEffect(() => {
     if (data) {
       getCropName(data?.crop_id, data?.farm_id?.crops);
     }
   }, [data]);
+
   return (
     <div className={styles.viewScoutingPage}>
       <div className={styles.viewHeader}>
@@ -101,7 +119,7 @@ const ScoutingDetails = ({
         </div>
       </div>
 
-      <div >
+      <div>
         <div className={styles.textwrapper}>
           <div
             style={{
@@ -111,14 +129,17 @@ const ScoutingDetails = ({
               alignItems: "center",
             }}
           >
-            <h6 ><SuggestionsIcon />Recomendations</h6>
-            {loading || editRecomendation ? (
+            <h6>
+              <SuggestionsIcon />
+              Recomendations
+            </h6>
+            {loading || editRecomendationOpen ? (
               ""
-            ) : imageData?.suggestions ? (
+            ) : mainImageData?.suggestions ? (
               <IconButton
                 className={styles.editIcon}
                 onClick={() => {
-                  setEditRecomendation(true);
+                  setEditRecomendationOpen(true);
                 }}
               >
                 <EditIconComponent />
@@ -126,7 +147,7 @@ const ScoutingDetails = ({
             ) : (
               <IconButton
                 onClick={() => {
-                  setEditRecomendation(true);
+                  setEditRecomendationOpen(true);
                 }}
               >
                 <AddOutlined />
@@ -134,7 +155,7 @@ const ScoutingDetails = ({
             )}
           </div>
 
-          {!loading && editRecomendation ? (
+          {!loading && editRecomendationOpen ? (
             <div style={{ width: "100%" }}>
               <TextField
                 className={styles.textAria}
@@ -152,7 +173,7 @@ const ScoutingDetails = ({
                 <Button
                   className={styles.cancelButton}
                   variant="outlined"
-                  onClick={() => setEditRecomendation(false)}
+                  onClick={() => setEditRecomendationOpen(false)}
                 >
                   Cancel
                 </Button>
@@ -160,12 +181,12 @@ const ScoutingDetails = ({
                   className={styles.sendButton}
                   variant="contained"
                   onClick={() => {
-                    let temp = { ...imageData }
-                    temp.suggestions = recomendations
-                    afterUpdateRecommandations([temp], crop?._id)
+                    let temp = { ...mainImageData };
+                    temp.suggestions = recomendations;
+                    afterUpdateRecommandations([temp], crop?._id);
                   }}
                 >
-                  {imageData?.suggestions ? "Update" : " Submit"}
+                  {mainImageData?.suggestions ? "Update" : " Submit"}
                   {updateLoading ? (
                     <CircularProgress size="1.5rem" sx={{ color: "white" }} />
                   ) : (
@@ -182,11 +203,11 @@ const ScoutingDetails = ({
               <Skeleton width="300px" height="20px" />
             </div>
           ) : (
-            <div className={styles.recomdationContent} >
+            <div className={styles.recomdationContent}>
               <Markup
                 content={
-                  imageData?.suggestions
-                    ? imageData?.suggestions
+                  mainImageData?.suggestions
+                    ? mainImageData?.suggestions
                     : "<i>*No Recomendations were added*</i>"
                 }
               />
@@ -198,10 +219,12 @@ const ScoutingDetails = ({
         <Typography variant="h6" className={styles.RecommedationHeading}>
           Comments
         </Typography>
-        <CommentsComponentForWeb scoutDetails={data} attachement={imageData} />
+        <CommentsComponentForWeb
+          scoutDetails={data}
+          attachement={mainImageData}
+        />
       </div>
       <Toaster richColors position="top-right" closeButton />
-
     </div>
   );
 };

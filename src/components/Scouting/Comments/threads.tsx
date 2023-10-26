@@ -17,7 +17,6 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userDetails = useSelector((state: any) => state.auth.userDetails);
 
-  console.log(details, "plplpl");
 
   const router = useRouter();
   const dispatch = useDispatch();

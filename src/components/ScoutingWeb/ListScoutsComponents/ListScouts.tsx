@@ -26,6 +26,7 @@ import timePipe from "@/pipes/timePipe";
 import DaySummaryComponent from "./DaySummaryComponent";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 interface ApiMethodProps {
   page: string | number;
@@ -489,6 +490,10 @@ const ListScouts: FunctionComponent = () => {
         <div className={styles.allScoutingCards}>
           {data?.length
             ? data.map((item: SingleScoutResponse, index: number) => {
+                let cropObj = item.farm_id.crops.find(
+                  (ite) => ite._id == item.crop_id
+                );
+                let cropName = cropObj?.title;
                 return (
                   <div className={styles.eachDayScouting} key={index}>
                     <div
@@ -499,9 +504,62 @@ const ListScouts: FunctionComponent = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography>
-                        {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
-                      </Typography>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: "30px",
+                        }}
+                      >
+                        <Typography>
+                          {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
+                        </Typography>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: "20px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <AccountCircleIcon />
+                            {item.created_by.full_name}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              className={styles.farmsIcon}
+                              alt="Farm Shape"
+                              src="/farmshape2.svg"
+                            />
+                            {item.farm_id.title}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img src="/cropName-icon.svg" alt="" />
+                            {cropName}
+                          </div>
+                        </div>
+                      </div>
                       <div
                         className={styles.summaryBtn}
                         onClick={() => {

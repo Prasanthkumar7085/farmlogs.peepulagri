@@ -24,8 +24,10 @@ import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import styles from "./crop-card.module.css";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import AddIcon from '@mui/icons-material/Add';
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -358,8 +360,8 @@ const SingleViewScoutComponent = () => {
                     >
                       <Image
                         src={"/scouting-img-clear.svg"}
-                        width={20}
-                        height={20}
+                        width={17}
+                        height={17}
                         alt="tag"
                       />
                     </IconButton>
@@ -376,20 +378,16 @@ const SingleViewScoutComponent = () => {
                     >
                       <Image
                         src={"/scouting-img-add.svg"}
-                        width={20}
-                        height={20}
+                        width={17}
+                        height={17}
                         alt="tag"
                       />
                     </IconButton>
                   )}
 
-                  <Image
-                    src={"/Summary.svg"}
-                    width={20}
-                    height={20}
-                    alt="tag"
-                  />
+
                   <Button
+                    className={styles.summaryBtn}
                     onClick={() => {
                       setSummaryDrawerOpen(true);
                       setScoutId(item._id);
@@ -398,115 +396,93 @@ const SingleViewScoutComponent = () => {
                     }}
                   >
                     {item?.suggestions ?
-                      <Typography variant="caption" sx={{ color: "orange" }}>Recommandations</Typography>
+                      <Typography variant="caption" className={styles.recommandation} sx={{ color: "#F2A84C", display: "flex", alignItems: "center", gap: "4px" }}><SuggestionsIcon /> Recommandations</Typography>
                       :
-                      <Typography variant="caption" sx={{ color: item?.summary ? "green" : "red" }}>Summary</Typography>}
+                      <Typography variant="caption" className={styles.summary} sx={{ color: item?.summary ? "#05A155" : "red", display: "flex", alignItems: "center", gap: "4px" }}>                                        <SummaryIcon />
+
+                        Summary</Typography>}
 
                   </Button>
                 </div>
               </div>
 
-              <Card
-                sx={{
-                  width: "100%",
-                  minHeight: "100px",
-                }}
+              <div
+                className={styles.mobileScoutGridGallary}
               >
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                      "50% 50%" /* Two columns with a width of 60px each */,
-                    gap: "10px" /* Adjust the gap between the columns if necessary */,
-                    margin: "0.5rem",
-                    objectFit: "cover",
-                  }}
-                >
-                  {item?.attachments?.length !== 0 ? (
-                    item.attachments.map((image: any, indexAttachment: any) => (
-                      <div
-                        style={{ position: "relative", height: "100px" }}
-                        key={indexAttachment}
-                      >
-                        <img
-                          src={
-                            image.type?.slice(0, 2) == "vi"
-                              ? "/Play-button.svg"
-                              : image.url
-                          }
-                          alt={`images${indexAttachment}`}
-                          width={"100%"}
-                          height={"100%"}
-                          onClick={() => {
-                            handleClick(indexAttachment, item.attachments);
-                            setScoutId(item._id);
-                            setSingleScoutDetails(item)
-                            setSelectedFile(image);
-                            setSlideShowImages(item?.attachments);
+                {item?.attachments?.length !== 0 ? (
+                  item.attachments.map((image: any, indexAttachment: any) => (
+                    <div
+                      style={{ position: "relative", height: "100px" }}
+                      key={indexAttachment}
+                    >
+                      <img
+                        src={
+                          image.type?.slice(0, 2) == "vi"
+                            ? "/Play-button.svg"
+                            : image.url
+                        }
+                        alt={`images${indexAttachment}`}
+                        width={"100%"}
+                        height={"100%"}
+                        onClick={() => {
+                          handleClick(indexAttachment, item.attachments);
+                          setScoutId(item._id);
+                          setSingleScoutDetails(item)
+                          setSelectedFile(image);
+                          setSlideShowImages(item?.attachments);
 
 
 
-                          }}
-                          style={{ cursor: "pointer", borderRadius: "5px" }}
-                        />
+                        }}
+                        style={{ cursor: "pointer", borderRadius: "5px" }}
+                      />
 
-                        <div style={{ position: "absolute", top: 0, left: 0 }}>
-                          {tagsCheckBoxOpen && scoutId == item._id ? (
-                            <Checkbox
-                              sx={{
-                                color: "#7f7f7f",
-                                "& .MuiSvgIcon-root": {
-                                  color: "#7f7f7f",
-                                },
-                              }}
-                              size="small"
-                              checked={tempImages.some(
-                                (ite: any) => ite._id === image._id
-                              )}
-                              onChange={() => handleChange(image)}
-                              inputProps={{ "aria-label": "controlled" }}
-                              color="secondary"
-                              title={image.id}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                        <div style={{ position: "absolute", top: 0, right: 0 }}>
-                          {tagsCheckBoxOpen == true &&
-                            scoutId == item._id &&
-                            image?.description ? (
-                            <Image
-                              src={"/findings.png"}
-                              width={10}
-                              height={10}
-                              alt="tags"
-                            />
-                          ) : (
-                            ""
-                          )}
-                          {tagsCheckBoxOpen == true &&
-                            scoutId == item._id &&
-                            image?.tags?.length ? (
-                            <Image
-                              src={"/scout-img-select.svg"}
-                              width={10}
-                              height={10}
-                              alt="tags"
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
+                      <div style={{ position: "absolute", top: "5px", left: "5px", }}>
+                        {tagsCheckBoxOpen && scoutId == item._id ? (
+                          <input
+                            type="checkbox"
+                            checked={tempImages.some(
+                              (ite: any) => ite._id === image._id
+                            )}
+                            onChange={() => handleChange(image)}
+                            title={image.id}
+                          />
+
+                        ) : (
+                          ""
+                        )}
                       </div>
-                    ))
-                  ) : (
-                    <div style={{ width: "100%", marginLeft: "100%" }}>
-                      No Attachements
+                      <div style={{ position: "absolute", bottom: "5px", right: "5px", display: "flex", alignItems: "center", gap: "5px" }}>
+
+                        {tagsCheckBoxOpen == true &&
+                          scoutId == item._id &&
+                          image?.description ? (
+                          < SearchOutlinedIcon
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {tagsCheckBoxOpen == true &&
+                          scoutId == item._id &&
+                          image?.tags?.length ? (
+                          <Image
+                            src={"/scout-img-select.svg"}
+                            width={17}
+                            height={17}
+                            alt="tags"
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
-              </Card>
+                  ))
+                ) : (
+                  <div style={{ width: "100%", marginLeft: "100%" }}>
+                    No Attachements
+                  </div>
+                )}
+              </div>
             </Card>
           );
         })

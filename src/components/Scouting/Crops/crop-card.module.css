@@ -158,26 +158,27 @@
   filter: drop-shadow(3px 3px 2px #000000);
 }
 
-.galleryCard .summaryBtn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: "Inter", sans-serif;
-  font-size: clamp(10px, 4vw, 13px);
-  font-weight: 500;
+.galleryCard .summaryBtn span {
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(11px, 3vw, 13px) !important;
+  font-weight: 500 !important;
   line-height: 1.5;
-  /* color: #42B77F; */
   text-transform: capitalize;
 }
 
-.galleryCard .summaryBtn svg {
+.summary svg {
   height: 20px;
   width: 20px;
 
 }
 
-.galleryCard .summaryBtn svg path {
-  fill: #42B77F;
+.summaryBtn .recommandation svg {
+  height: 20px;
+  width: 20px;
+}
+
+.summaryBtn .summary svg path {
+  fill: #05A155;
 }
 
 .mobileScoutGridGallary {

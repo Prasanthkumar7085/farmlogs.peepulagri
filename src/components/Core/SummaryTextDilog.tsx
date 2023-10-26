@@ -25,7 +25,13 @@ const SummaryTextDilog = ({
   const [data, setData] = useState(item?.summary ? item.summary : "");
 
   return (
-    <Drawer anchor={"bottom"} open={true}>
+    <Drawer anchor={"bottom"} open={true} sx={{
+      '& .MuiPaper-root': {
+        width: "100%",
+        maxWidth: "500px",
+        marginInline: "auto",
+      }
+    }}>
       <div className={styles.drawerHeading}
       >
         <Typography variant='h6'>
@@ -43,7 +49,7 @@ const SummaryTextDilog = ({
       {item?.suggestions ?
         <div className={styles.drawerBody}>
           <div>
-            <span>Day Summary</span>
+            <span>Findings</span>
             <br></br>
             <Typography variant="caption">{data}</Typography>
 

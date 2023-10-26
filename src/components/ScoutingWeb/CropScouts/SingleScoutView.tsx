@@ -134,8 +134,7 @@ const SingleScoutView = () => {
                         style={{
                           width: "85%",
                           margin: "0 auto",
-                          height: "80vh",
-                          marginTop: "2rem",
+                          height: "90vh",
                         }}
                       >
                         {item.type?.includes("video") ? (

@@ -27,6 +27,8 @@ import DaySummaryComponent from "./DaySummaryComponent";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { log } from "util";
+import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 
 interface ApiMethodProps {
   page: string | number;
@@ -44,7 +46,7 @@ const ListScouts: FunctionComponent = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [data, setData] = useState<Array<SingleScoutResponse>>([]);
+  const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -257,7 +259,23 @@ const ListScouts: FunctionComponent = () => {
     if (response?.success) {
       const { data, ...rest } = response;
       setPaginationDetails(rest);
-      setData(data);
+
+      const groupedData: any = {};
+      // Iterate through yourData and group objects by createdAt date
+      data.forEach((item: any) => {
+        const createdAt = timePipe(item.createdAt, "DD-MM-YYYY")
+        if (!groupedData[createdAt]) {
+          groupedData[createdAt] = [item];
+        } else {
+          groupedData[createdAt].push(item);
+        }
+      });
+      // Convert the groupedData object into an array
+      const groupedArray = Object.values(groupedData);
+      console.log(groupedArray)
+      setData(groupedArray)
+
+
       let onlyImagesData = unWindImages(data);
       setOnlyImages(onlyImagesData);
     } else {
@@ -487,15 +505,121 @@ const ListScouts: FunctionComponent = () => {
         </div>
       </div>
       <div className={styles.allFarms}>
-        <div className={styles.allScoutingCards}>
+        {/* <div className={styles.allScoutingCards}>
           {data?.length
-            ? data.map((item: SingleScoutResponse, index: number) => {
-                let cropObj = item.farm_id.crops.find(
-                  (ite) => ite._id == item.crop_id
+            ? data.map((item: any, index: number) => {
+              let cropObj = item.farm_id.crops.find(
+                (ite: any) => ite._id == item.crop_id
+              );
+              let cropName = cropObj?.title;
+
+              return (
+                <div className={styles.eachDayScouting} key={index}>
+                  <div
+                    className={styles.scoutDay}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "30px",
+                      }}
+                    >
+                      <Typography>
+                        {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
+                      </Typography>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: "20px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <AccountCircleIcon />
+                          {item.created_by.full_name}
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img
+                            className={styles.farmsIcon}
+                            alt="Farm Shape"
+                            src="/farmshape2.svg"
+                          />
+                          {item.farm_id.title}
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src="/cropName-icon.svg" alt="" />
+                          {cropName}
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={styles.summaryBtn}
+                      onClick={() => {
+                        setOpenDaySummary(true);
+                        setSelectedItemDetails(item);
+                      }}
+                    >
+                      <SummaryIcon /> Summary
+                    </div>
+                  </div>
+                  <ScoutingDailyImages
+                    item={item}
+                    key={index}
+                    onClickAttachment={onClickAttachment}
+                  />
+                </div>
+              );
+            })
+            : ""}
+        </div> */}
+
+        {data?.length ? data.map((item: any, index: any) => {
+
+
+          return (
+            <div key={index}>
+              <Typography style={{ fontWeight: "bold", position: "sticky", top: "0px" }}>
+                {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
+              </Typography>
+              {item.map((row: any, rowIndex: any) => {
+                let cropObj = row.farm_id.crops.find(
+                  (ite: any) => ite._id == row.crop_id
                 );
                 let cropName = cropObj?.title;
+
+
+
                 return (
-                  <div className={styles.eachDayScouting} key={index}>
+                  <div className={styles.eachDayScouting} key={rowIndex}>
+
+
                     <div
                       className={styles.scoutDay}
                       style={{
@@ -512,9 +636,6 @@ const ListScouts: FunctionComponent = () => {
                           gap: "30px",
                         }}
                       >
-                        <Typography>
-                          {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
-                        </Typography>
 
                         <div
                           style={{
@@ -522,6 +643,7 @@ const ListScouts: FunctionComponent = () => {
                             justifyContent: "center",
                             alignItems: "center",
                             gap: "20px",
+                            position: "sticky",
                           }}
                         >
                           <div
@@ -532,7 +654,7 @@ const ListScouts: FunctionComponent = () => {
                             }}
                           >
                             <AccountCircleIcon />
-                            {item.created_by.full_name}
+                            {row.created_by.full_name}
                           </div>
                           <div
                             style={{
@@ -546,7 +668,7 @@ const ListScouts: FunctionComponent = () => {
                               alt="Farm Shape"
                               src="/farmshape2.svg"
                             />
-                            {item.farm_id.title}
+                            {row.farm_id.title}
                           </div>
                           <div
                             style={{
@@ -560,26 +682,45 @@ const ListScouts: FunctionComponent = () => {
                           </div>
                         </div>
                       </div>
-                      <div
-                        className={styles.summaryBtn}
-                        onClick={() => {
-                          setOpenDaySummary(true);
-                          setSelectedItemDetails(item);
-                        }}
-                      >
-                        <SummaryIcon /> Summary
-                      </div>
+
+                      {row?.suggestions ?
+                        <div
+                          className={styles.summaryBtn}
+                          style={{
+                            color: "#F2A84C",
+                          }}
+                          onClick={() => {
+                            setOpenDaySummary(true);
+                            setSelectedItemDetails(row);
+                          }}
+                        >
+                          <SuggestionsIcon /> Recommandations
+                        </div>
+                        :
+                        <div
+                          className={styles.summaryBtn}
+                          onClick={() => {
+                            setOpenDaySummary(true);
+                            setSelectedItemDetails(row);
+                          }}
+                        >
+                          <SummaryIcon /> <span style={{ color: row?.summary ? "#05A155" : "red" }}
+                          >Summary</span>
+                        </div>}
+
+
                     </div>
                     <ScoutingDailyImages
-                      item={item}
-                      key={index}
+                      item={row}
+                      key={rowIndex}
                       onClickAttachment={onClickAttachment}
                     />
                   </div>
-                );
-              })
-            : ""}
-        </div>
+                )
+              })}
+            </div>
+          )
+        }) : ""}
         {!data?.length && !loading ? (
           <div
             id={styles.noData}

@@ -58,8 +58,9 @@ const SingleViewScoutComponent = () => {
   const [summaryContent, setSummaryContent] = useState<any>();
   const [scoutFindings, setScoutFindings] = useState<any>();
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>();
-  const [openCommentsBox, setOpenCommentsBox] = useState<any>();
-  const [singleScoutDetails, setSingleScoutDetails] = useState<any>();
+  const [openCommentsBox, setOpenCommentsBox] = useState<any>()
+  const [singleScoutDetails, setSingleScoutDetails] = useState<any>()
+
 
   let tempImages: any = [...selectedItems];
 
@@ -144,9 +145,9 @@ const SingleViewScoutComponent = () => {
   //for comments drawer open/close
   const drawerClose = (value: any) => {
     if (value == false) {
-      setOpenCommentsBox(false);
-      // setOpenDialog(false)
-      setSelectedItems([]);
+      setOpenCommentsBox(false)
+      setOpenDialog(false)
+      setSelectedItems([])
     }
   };
 
@@ -154,7 +155,7 @@ const SingleViewScoutComponent = () => {
   const summaryDrawerClose = (value: any) => {
     if (value == false) {
       setSummaryDrawerOpen(false);
-      setSelectedFile([]);
+      setSelectedFile([])
     }
   };
 
@@ -177,9 +178,13 @@ const SingleViewScoutComponent = () => {
   const captureImageDilogOptions = (value: any) => {
     if (value == "tag") {
       setTagsDrawerEditOpen(true);
-    } else if (value == "comments") {
-      setOpenCommentsBox(true);
-    } else {
+    }
+    else if (value == "comments") {
+      setOpenCommentsBox(true)
+
+
+    }
+    else {
       setScoutId(value._id);
       setScoutAttachementsDetails(value.attachments);
       setSlideShowImages(value.attachments);
@@ -190,10 +195,7 @@ const SingleViewScoutComponent = () => {
     setScoutFindings(findingsvalue);
     if (tags?.length && !findingsvalue?.length) {
       await tempImages.forEach((obj: any) => {
-        let array: any[] = [...obj.tags, ...tags];
-        obj.tags = array.filter(
-          (value, index, self) => self.indexOf(value) === index
-        );
+        obj.tags = [...obj.tags, ...tags];
       });
       setSelectedItems(tempImages);
       await updateDescriptionService(tempImages, selectedFile.summary);
@@ -211,6 +213,7 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempImages, selectedFile.summary);
     }
     if (!tags?.length && findingsvalue?.length) {
+
       await tempImages.forEach((obj: any) => {
         obj.description = findingsvalue;
       });
@@ -218,6 +221,7 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempImages, selectedFile.summary);
     }
     if (tags?.length && findingsvalue?.length) {
+
       await tempImages.forEach((obj: any) => {
         obj.description = findingsvalue;
         obj.tags = [...obj.tags, ...tags];
@@ -243,11 +247,15 @@ const SingleViewScoutComponent = () => {
     }
   };
 
+  useEffect(() => { }, [selectedFile]);
+
   //capture the slideimages index
   const captureSlideImagesIndex = (value: any) => {
-    setIndex(value);
-    setSelectedItems([sildeShowImages[value]]);
-    setSelectedFile(sildeShowImages[value]);
+    if (value) {
+      setIndex(value);
+      setSelectedItems([sildeShowImages[value]]);
+      setSelectedFile(sildeShowImages[value]);
+    }
   };
 
   //update the details of the scouting
@@ -294,7 +302,7 @@ const SingleViewScoutComponent = () => {
         setSelectedItems([]);
         setScoutAttachementsDetails([]);
         setSummaryContent("");
-        setOpenDialog(false);
+        setOpenDialog(false)
       }
     } catch (err: any) {
       console.error(err);
@@ -377,6 +385,7 @@ const SingleViewScoutComponent = () => {
                     </IconButton>
                   )}
 
+
                   <Button
                     className={styles.summaryBtn}
                     onClick={() => {
@@ -386,40 +395,20 @@ const SingleViewScoutComponent = () => {
                       setScoutAttachementsDetails(item.attachments);
                     }}
                   >
-                    {item?.suggestions ? (
-                      <Typography
-                        variant="caption"
-                        className={styles.recommandation}
-                        sx={{
-                          color: "#F2A84C",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                        }}
-                      >
-                        <SuggestionsIcon /> Recommandations
-                      </Typography>
-                    ) : (
-                      <Typography
-                        variant="caption"
-                        className={styles.summary}
-                        sx={{
-                          color: item?.summary ? "#05A155" : "red",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                        }}
-                      >
-                        {" "}
-                        <SummaryIcon />
-                        Summary
-                      </Typography>
-                    )}
+                    {item?.suggestions ?
+                      <Typography variant="caption" className={styles.recommandation} sx={{ color: "#F2A84C", display: "flex", alignItems: "center", gap: "4px" }}><SuggestionsIcon /> Recommandations</Typography>
+                      :
+                      <Typography variant="caption" className={styles.summary} sx={{ color: item?.summary ? "#05A155" : "red", display: "flex", alignItems: "center", gap: "4px" }}>                                        <SummaryIcon />
+
+                        Summary</Typography>}
+
                   </Button>
                 </div>
               </div>
 
-              <div className={styles.mobileScoutGridGallary}>
+              <div
+                className={styles.mobileScoutGridGallary}
+              >
                 {item?.attachments?.length !== 0 ? (
                   item.attachments.map((image: any, indexAttachment: any) => (
                     <div
@@ -438,20 +427,17 @@ const SingleViewScoutComponent = () => {
                         onClick={() => {
                           handleClick(indexAttachment, item.attachments);
                           setScoutId(item._id);
-                          setSingleScoutDetails(item);
+                          setSingleScoutDetails(item)
                           setSelectedFile(image);
                           setSlideShowImages(item?.attachments);
+
+
+
                         }}
                         style={{ cursor: "pointer", borderRadius: "5px" }}
                       />
 
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "5px",
-                          left: "5px",
-                        }}
-                      >
+                      <div style={{ position: "absolute", top: "5px", left: "5px", }}>
                         {tagsCheckBoxOpen && scoutId == item._id ? (
                           <input
                             type="checkbox"
@@ -461,30 +447,24 @@ const SingleViewScoutComponent = () => {
                             onChange={() => handleChange(image)}
                             title={image.id}
                           />
+
                         ) : (
                           ""
                         )}
                       </div>
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: "5px",
-                          right: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
+                      <div style={{ position: "absolute", bottom: "5px", right: "5px", display: "flex", alignItems: "center", gap: "5px" }}>
+
                         {tagsCheckBoxOpen == true &&
-                        scoutId == item._id &&
-                        image?.description ? (
-                          <SearchOutlinedIcon />
+                          scoutId == item._id &&
+                          image?.description ? (
+                          < SearchOutlinedIcon
+                          />
                         ) : (
                           ""
                         )}
                         {tagsCheckBoxOpen == true &&
-                        scoutId == item._id &&
-                        image?.tags?.length ? (
+                          scoutId == item._id &&
+                          image?.tags?.length ? (
                           <Image
                             src={"/scout-img-select.svg"}
                             width={17}
@@ -569,13 +549,9 @@ const SingleViewScoutComponent = () => {
       ) : (
         ""
       )}
+      {openCommentsBox ?
+        <DrawerComponentForScout drawerClose={drawerClose} scoutDetails={singleScoutDetails} attachement={selectedFile} /> : ""}
 
-      <DrawerComponentForScout
-        drawerClose={drawerClose}
-        openCommentsBox={openCommentsBox}
-        scoutDetails={singleScoutDetails}
-        attachement={selectedFile}
-      />
 
       <TagsDrawerEdit
         tagsDrawerClose={tagsDrawerClose}

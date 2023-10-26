@@ -108,13 +108,13 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
     <div className={styles.threads}>
       {details?.length ? (
         details.map((item: any, index: any) => {
-
+          console.log(item)
           if (item.type == "DIRECT") {
             return (
               <div className={styles.inMessage} key={index}>
                 {item?.user[0]?.user_type == "USER" ? (
                   <Avatar sx={{ bgcolor: "chocolate" }}>
-                    {item?.user[0]?.user_type?.slice(0, 2)}
+                    {item?.user[0]?.full_name?.slice(0, 2)}
                   </Avatar>
                 ) : (
                   <Avatar sx={{ bgcolor: "green" }}>
@@ -128,7 +128,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         item?.user[0]?.user_type
                         ? "You"
                         : item?.user[0]?.user_type == "USER"
-                          ? item.user[0].user_type + "(" + item?.user[0]?.phone + ")"
+                          ? item.user[0].full_name
                           : item.user[0].user_type}
                     </h4>
                     <p className={styles.aug20231030am}>

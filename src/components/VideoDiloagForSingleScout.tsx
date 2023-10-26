@@ -24,6 +24,9 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
   const [description, setDescription] = useState<any>()
   const [isZoom, setISZoom] = useState<any>()
   const [showMore, setShowMore] = useState<any>(false)
+  const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false)
+
+
 
 
 
@@ -232,7 +235,10 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
               {mediaArray[currentIndex]?.tags.join(", ")}
             </p>
           </div>
+          {mediaArray[currentIndex]?.description ?
+            <Typography variant='h6' style={{ color: "orange" }}>Findings</Typography> : ""}
           {showMore == true ? (
+
             <Typography className={styles.findingsText}>
               <Markup content={mediaArray[currentIndex]?.description} />
               <span
@@ -270,6 +276,48 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             </Typography>
           )}
 
+          {mediaArray[currentIndex]?.suggestions ?
+            <Typography variant='h6' style={{ color: "orange" }}>Suggestions</Typography>
+            : ""}
+
+          {showMoreSuggestions == true ? (
+
+            <Typography className={styles.findingsText}>
+              <Markup content={mediaArray[currentIndex]?.suggestions} />
+              <span
+                style={{ cursor: "pointer", fontWeight: "600" }}
+                onClick={() => {
+                  setShowMoreSuggestions(false);
+                }}
+              >
+                Show Less
+              </span>
+            </Typography>
+          ) : (
+            <Typography className={styles.findingsText}>
+              {mediaArray[currentIndex]?.suggestions?.length > 100 ? (
+                <Markup
+                  content={
+                    mediaArray[currentIndex]?.suggestions.slice(0, 100) + "...."
+                  }
+                />
+              ) : (
+                <Markup content={mediaArray[currentIndex]?.suggestions} />
+              )}
+              {mediaArray[currentIndex]?.suggestions?.length > 100 ? (
+                <span
+                  style={{ fontWeight: "600", cursor: "pointer" }}
+                  onClick={() => {
+                    setShowMoreSuggestions(true);
+                  }}
+                >
+                  Show More
+                </span>
+              ) : (
+                ""
+              )}
+            </Typography>
+          )}
           <div
             style={{
               display: "flex",

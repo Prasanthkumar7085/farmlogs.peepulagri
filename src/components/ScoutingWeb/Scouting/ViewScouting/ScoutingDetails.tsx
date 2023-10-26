@@ -85,7 +85,7 @@ const ScoutingDetails = ({
             {loading ? (
               <Skeleton width="300px" height="30px" />
             ) : (
-              data?.farm_id.title
+              data?.farm_id.title + "     " + "(" + data?.farm_id?.location + ")"
             )}
           </h2>
         </div>
@@ -180,6 +180,7 @@ const ScoutingDetails = ({
                 <Button
                   className={styles.sendButton}
                   variant="contained"
+                  disabled={recomendations ? false : true}
                   onClick={() => {
                     let temp = { ...mainImageData };
                     temp.suggestions = recomendations;

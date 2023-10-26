@@ -18,6 +18,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./ScoutingDetails.module.css";
 import { OnlyImagesType, ScoutAttachmentDetails } from "@/types/scoutTypes";
 import SellIcon from "@mui/icons-material/Sell";
+import timePipe from "@/pipes/timePipe";
 
 interface pageProps {
   onlyImages: Array<OnlyImagesType>;
@@ -105,6 +106,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
       return matchingObj ? matchingObj : obj;
     });
+    setLoading(true)
 
     try {
       let options = {
@@ -131,6 +133,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     } catch (err: any) {
       console.error(err);
     } finally {
+      setLoading(false)
     }
   };
 
@@ -225,6 +228,20 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                     </div>
                   ))}
                 </Carousel>
+                <div
+                  style={{
+                    color: "white",
+                    alignItems: "flex-start",
+                    padding: "4px 20px 4px 20px",
+                    justifyContent: "flex-start",
+                    margin: "0 auto",
+                    display: "flex",
+                    width: "85%",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography variant="caption">{timePipe(onlyImages[currentIndex]?.time, "DD-MM-YYYY hh.mm a")}</Typography>
+                </div>
                 {onlyImages[currentIndex]?.tags?.length ? (
                   <div
                     style={{
@@ -260,6 +277,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   ""
                 )}
               </div>
+
             </div>
             <div className={styles.AllImagesBlock}>
               {finalImages.map((image: any, index: number) => (

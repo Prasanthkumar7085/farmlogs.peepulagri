@@ -52,6 +52,8 @@ const DaySummaryComponent: FC<pageProps> = ({
   const getCropName = (cropId: string, crops: Array<CropType>) => {
     if (crops.length) {
       let cropObj = crops.find((item: CropType) => item._id == cropId);
+      console.log(cropObj);
+
       setCrop(cropObj);
     }
   };

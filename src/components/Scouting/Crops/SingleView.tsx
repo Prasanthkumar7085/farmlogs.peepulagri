@@ -397,7 +397,11 @@ const SingleViewScoutComponent = () => {
                       setScoutAttachementsDetails(item.attachments);
                     }}
                   >
-                    Summary
+                    {item?.suggestions ?
+                      <Typography variant="caption" sx={{ color: "orange" }}>Recommandations</Typography>
+                      :
+                      <Typography variant="caption" sx={{ color: item?.summary ? "green" : "red" }}>Summary</Typography>}
+
                   </Button>
                 </div>
               </div>

@@ -182,7 +182,7 @@ const DrawerComponentForScout = ({ drawerClose, attachement, scoutDetails }: any
             })
         }
         try {
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/${commentId}/attachments`, options)
+            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/comments/${commentId}/attachments`, options)
             let responseData = await response.json()
             if (responseData.success == true) {
                 setAlertMessage("Attachement deleted successfully")

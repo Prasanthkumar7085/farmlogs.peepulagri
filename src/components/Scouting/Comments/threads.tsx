@@ -517,7 +517,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                         />
                                         {userDetails?.user_details
                                           ?.user_type ==
-                                          row?.user?.user_type ? (
+                                          row?.user[0]?.user_type ? (
                                           <IconButton
                                             onClick={() =>
                                               afterDeleteAttachements(

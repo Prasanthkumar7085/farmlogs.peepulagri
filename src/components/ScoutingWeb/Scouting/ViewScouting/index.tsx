@@ -162,7 +162,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                         />
                       ) : (
                         <>
-                          {/* <img
+                          <img
                             className="zoom-image"
                             src={item.src}
                             alt={`Image ${index + 1}`}
@@ -171,7 +171,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                               width: "100%",
                               objectFit: "contain",
                             }}
-                          /> */}
+                          />
                         </>
                       )}
                     </div>

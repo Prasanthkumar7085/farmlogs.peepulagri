@@ -19,15 +19,16 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const [afterReply, setAfterReply] = useState<any>();
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
+  const [getCommentsLoading, setGetCommentsLoading] = useState(false);
 
   useEffect(() => {
-    if (router.isReady && scoutDetails?._id) {
+    if (router.isReady && scoutDetails?._id && accessToken) {
       getAllScoutComments();
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken, scoutDetails, attachement]);
 
   const getAllScoutComments = async () => {
-    setLoading(true);
+    setGetCommentsLoading(true);
     let options = {
       method: "GET",
       headers: new Headers({
@@ -80,7 +81,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
+      setGetCommentsLoading(false);
     }
   };
 
@@ -203,6 +204,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
           afterReply={afterReply}
           afterDeleteAttachements={afterDeleteAttachements}
           attachement={attachement}
+          loadingThreads={getCommentsLoading}
           scoutDetails={scoutDetails}
         />
       </div>

@@ -26,7 +26,6 @@ const TagsDrawerEdit = ({
   };
   useEffect(() => {
     if (TagsDrawerEditOpen) {
-      setTags(item?.tags);
       setDescription(item?.description);
     } else {
       setTags([]);
@@ -34,7 +33,6 @@ const TagsDrawerEdit = ({
     }
   }, [TagsDrawerEditOpen, item?.tags, item?.description]);
 
-  console.log(tags, description);
 
   return (
     <Drawer
@@ -64,7 +62,7 @@ const TagsDrawerEdit = ({
       </div>
       <div style={{ width: "100%" }}>
         <Typography>Tags</Typography>
-        <TagsTextFeild captureTags={captureTags} tags={tags} />
+        <TagsTextFeild captureTags={captureTags} tags={tags} beforeTags={item?.tags} />
 
         <Typography>Findings</Typography>
         <TextField

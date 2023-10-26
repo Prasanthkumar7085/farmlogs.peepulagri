@@ -137,6 +137,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   onChange={(index) => changeImage(index)}
                   swipeable={true}
                   autoFocus
+                  className={styles.galleryView}
                 >
                   {onlyImages.map((item: any, index: any) => (
                     <div

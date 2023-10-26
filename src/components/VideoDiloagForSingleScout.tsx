@@ -137,15 +137,22 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
         },
       }}
     >
-      <IconButton onClick={handleClose} sx={{ width: "100%", display: "flex", justifyContent: "flex-end !important" }}>
+      <IconButton
+        onClick={handleClose}
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-end !important",
+        }}
+      >
         <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
       </IconButton>
       <DialogContent>
         <div style={{ width: "100%" }}>
           <Carousel
+            showThumbs={false}
             selectedItem={currentIndex}
             onChange={(index) => {
-              console.log("llkjlhgffdzxc")
               // captureImageDilogOptions(mediaArray[index]);
               setCurrentIndex(index);
               captureSlideImagesIndex(index);
@@ -206,15 +213,24 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh-mm a")}
           </Typography>
           <div className={styles.tagNames}>
-            {mediaArray[currentIndex]?.tags.length &&
-              <Chip className={styles.tagsLabel} icon={<SellIcon sx={{ fontSize: 15 }} />} label="Tags" variant="outlined" />}
-            {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
+            {mediaArray[currentIndex]?.tags.length && (
+              <Chip
+                className={styles.tagsLabel}
+                icon={<SellIcon sx={{ fontSize: 15 }} />}
+                label="Tags"
+                variant="outlined"
+              />
+            )}
+            {/* map((tag: any, index: number) => {
               return (
                 <Typography align="left" key={index}>
-                  {"#" + tag}
+                  {"" + tag}
                 </Typography>
               );
-            })}
+            }) */}
+            <p style={{ color: "white" }}>
+              {mediaArray[currentIndex]?.tags.join(", ")}
+            </p>
           </div>
           {showMore == true ? (
             <Typography className={styles.findingsText}>
@@ -230,9 +246,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             </Typography>
           ) : (
             <Typography className={styles.findingsText}>
-              {mediaArray[currentIndex]?.description?.length > 100
-                ? <Markup content={mediaArray[currentIndex]?.description.slice(0, 100) + "...."} />
-                : <Markup content={mediaArray[currentIndex]?.description} />}
+              {mediaArray[currentIndex]?.description?.length > 100 ? (
+                <Markup
+                  content={
+                    mediaArray[currentIndex]?.description.slice(0, 100) + "...."
+                  }
+                />
+              ) : (
+                <Markup content={mediaArray[currentIndex]?.description} />
+              )}
               {mediaArray[currentIndex]?.description?.length > 100 ? (
                 <span
                   style={{ fontWeight: "600", cursor: "pointer" }}
@@ -267,9 +289,11 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                 alt="pp"
               />
             </IconButton>
-            <IconButton onClick={() => {
-              captureImageDilogOptions("comments")
-            }}>
+            <IconButton
+              onClick={() => {
+                captureImageDilogOptions("comments");
+              }}
+            >
               <Image
                 src={"/comment-white-icon.svg"}
                 width={20}
@@ -277,7 +301,6 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                 alt="pp"
               />
             </IconButton>
-
           </div>
         </div>
       )}

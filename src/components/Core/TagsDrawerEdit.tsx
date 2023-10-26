@@ -39,18 +39,17 @@ const TagsDrawerEdit = ({
       anchor={"bottom"}
       open={TagsDrawerEditOpen}
       sx={{
-        zIndex: "1300 !important", '& .MuiPaper-root': {
+        zIndex: "1300 !important",
+        "& .MuiPaper-root": {
           height: "400px",
           overflowY: "auto",
           padding: "0 1rem 1rem",
           borderRadius: "20px 20px 0 0",
-          background: "#F5F7FA"
-        }
+          background: "#F5F7FA",
+        },
       }}
     >
-      <div
-        className={styles.updateTagDrawerHeading}
-      >
+      <div className={styles.updateTagDrawerHeading}>
         <Typography>Tag Images</Typography>
         <IconButton
           onClick={() => {
@@ -61,14 +60,18 @@ const TagsDrawerEdit = ({
         </IconButton>
       </div>
       <div style={{ width: "100%" }}>
-        <TagsTextFeild captureTags={captureTags} tags={tags} beforeTags={item?.tags} />
+        <TagsTextFeild
+          captureTags={captureTags}
+          tags={tags}
+          beforeTags={item?.tags}
+        />
 
         <Typography>Findings</Typography>
         <TextField
           color="primary"
           name="description"
           id="description"
-          rows={4}
+          minRows={4}
           maxRows={4}
           placeholder="Enter your findings here"
           fullWidth={true}

@@ -48,17 +48,13 @@ const SummaryTextDilog = ({
       </div>
       {item?.suggestions ?
         <div className={styles.drawerBody}>
-          <div>
+          <div className={styles.findingDec}>
             <span>Findings</span>
-            <br></br>
             <Typography variant="caption">{data}</Typography>
-
           </div>
-          <div>
+          <div className={styles.findingDec}>
             <span>Recommandations</span>
-            <br></br>
             <Typography variant="caption">{item?.suggestions}</Typography>
-
           </div>
         </div>
 

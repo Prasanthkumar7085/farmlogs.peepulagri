@@ -91,6 +91,49 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     changeDescription();
   }, [currentIndex]);
 
+
+  const updateDescriptionService = async (
+    imagesArray: any,
+    cropId: any
+  ) => {
+    let updatedArray = data?.attachments?.map((obj: any) => {
+      let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
+      return matchingObj ? matchingObj : obj;
+    });
+
+    try {
+      let options = {
+        method: "PATCH",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify({
+          farm_id: data?.farm_id?._id,
+          crop_id: cropId,
+          attachments: updatedArray
+        }),
+      };
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${data?._id}`,
+        options
+      );
+      const responseData = await response.json();
+      if (responseData?.success == true) {
+        getSingleScoutDetails(scoutId);
+      }
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+    }
+  };
+
+
+  const afterUpdateRecommandations = async (value: any, cropID: any) => {
+    if (value.length) {
+      await updateDescriptionService(value, cropID)
+    }
+  }
   return (
     <Dialog
       open={previewImageDialogOpen}
@@ -223,6 +266,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             content={content}
             imageData={onlyImages[currentIndex]}
             setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+            afterUpdateRecommandations={afterUpdateRecommandations}
           />
         </Grid>
       </Grid>

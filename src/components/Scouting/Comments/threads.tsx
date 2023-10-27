@@ -108,7 +108,15 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
     <div className={styles.threads}>
       {details?.length && !loadingThreads ? (
         details.map((item: any, index: any) => {
+
+
+
           if (item.type == "DIRECT") {
+            const itemCreatedAt: any = new Date(item.createdAt);
+            const currentDate: any = new Date();
+            const timeDifferenceInMilliseconds = currentDate - itemCreatedAt;
+            const timeDifferenceInMinutes = timeDifferenceInMilliseconds / (1000 * 60);
+            console.log(timeDifferenceInMinutes)
             return (
               <div className={styles.inMessage} key={index}>
                 {item?.user[0]?.user_type == "USER" ? (
@@ -166,6 +174,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     <div className={styles.attachmentContainer}>
                       {item.attachments.length !== 0
                         ? item.attachments.map((file: any, indexfile: any) => {
+
                           return (
                             <div
                               className={styles.attachment}
@@ -330,32 +339,38 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     {userDetails?.user_details?.user_type ==
                       item?.user[0]?.user_type ? (
                       <div className={styles.react}>
-                        <div className={styles.edit}>
-                          <div className={styles.editChild} />
+                        {(currentDate - itemCreatedAt) / (1000 * 60) > 15 ? "" :
 
-                          {editMode[0] == true && editMode[1] == item._id ? (
-                            <Button
-                              className={styles.edit1}
-                              disabled={editComment ? false : true}
-                              onClick={() => {
-                                setEditMode([false, item._id]);
-                                afterUpdateComment(item._id, editComment);
-                              }}
-                            >
-                              Update
-                            </Button>
-                          ) : (
-                            <p
-                              className={styles.edit1}
-                              onClick={() => {
-                                setEditMode([true, item._id]);
-                                setEditComment(item.content);
-                              }}
-                            >
-                              Edit
-                            </p>
-                          )}
-                        </div>
+                          <div className={styles.edit}>
+
+                            <div className={styles.editChild} />
+                            <div>
+                              {editMode[0] == true && editMode[1] == item._id ? (
+                                <Button
+                                  className={styles.edit1}
+                                  disabled={editComment ? false : true}
+                                  onClick={() => {
+                                    setEditMode([false, item._id]);
+                                    afterUpdateComment(item._id, editComment);
+                                  }}
+                                >
+                                  Update
+                                </Button>
+                              ) : (
+                                <p
+                                  className={styles.edit1}
+                                  onClick={() => {
+                                    setEditMode([true, item._id]);
+                                    setEditComment(item.content);
+                                  }}
+                                >
+                                  Edit
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        }
+
                         {editMode[0] == true && editMode[1] == item._id ? (
                           <div className={styles.edit}>
                             <div className={styles.editChild} />
@@ -404,12 +419,16 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       item.replies.length)
                     ? item.replies.map((row: any) => {
                       const lines = row.content.split("\n");
+                      const rowCreatedAt: any = new Date(item.createdAt);
+                      const currentDate: any = new Date();
+                      const timeDifferenceInMillisecondsRow = currentDate - itemCreatedAt;
+                      const timeDifferenceInMinutesRow = timeDifferenceInMilliseconds / (1000 * 60);
 
                       return (
                         <div className={styles.inMessage1} key={index}>
                           {row?.user[0]?.user_type == "USER" ? (
                             <Avatar sx={{ bgcolor: "chocolate" }}>
-                              {row?.user[0]?.user_type?.slice(0, 2)}
+                              {row?.user[0]?.full_name?.slice(0, 2)}
                             </Avatar>
                           ) : (
                             <Avatar sx={{ bgcolor: "green" }}>
@@ -544,33 +563,37 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                               <div className={styles.actionButton1}>
                                 <div className={styles.react}>
                                   <div className={styles.edit}>
-                                    <div className={styles.editChild} />
-                                    {editMode[0] == true &&
-                                      editMode[1] == row._id ? (
-                                      <Button
-                                        className={styles.edit1}
-                                        disabled={editComment ? false : true}
-                                        onClick={() => {
-                                          setEditMode([false, row._id]);
-                                          afterUpdateComment(
-                                            row._id,
-                                            editComment
-                                          );
-                                        }}
-                                      >
-                                        Update
-                                      </Button>
-                                    ) : (
-                                      <p
-                                        className={styles.edit1}
-                                        onClick={() => {
-                                          setEditMode([true, row._id]);
-                                          setEditComment(row.content);
-                                        }}
-                                      >
-                                        Edit
-                                      </p>
-                                    )}
+                                    {(currentDate - rowCreatedAt) / (1000 * 60) > 15 ? "" :
+                                      <>
+                                        <div className={styles.editChild} />
+
+                                        {editMode[0] == true &&
+                                          editMode[1] == row._id ? (
+                                          <Button
+                                            className={styles.edit1}
+                                            disabled={editComment ? false : true}
+                                            onClick={() => {
+                                              setEditMode([false, row._id]);
+                                              afterUpdateComment(
+                                                row._id,
+                                                editComment
+                                              );
+                                            }}
+                                          >
+                                            Update
+                                          </Button>
+                                        ) : (
+                                          <p
+                                            className={styles.edit1}
+                                            onClick={() => {
+                                              setEditMode([true, row._id]);
+                                              setEditComment(row.content);
+                                            }}
+                                          >
+                                            Edit
+                                          </p>
+                                        )}
+                                      </>}
 
                                     <div className={styles.editChild} />
                                     {editMode[0] == true &&

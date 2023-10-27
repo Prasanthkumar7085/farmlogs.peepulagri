@@ -1,6 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
+  CircularProgress,
   Drawer,
   IconButton,
   TextField,
@@ -14,7 +15,8 @@ const TagsDrawerEdit = ({
   TagsDrawerEditOpen,
   tagsDrawerClose,
   item,
-  captureTagsDetails,
+  captureTagsDetailsEdit,
+  loading
 }: any) => {
   const [description, setDescription] = useState<any>("");
   const [tags, setTags] = useState<any>([]);
@@ -90,11 +92,14 @@ const TagsDrawerEdit = ({
       <Button
         variant="contained"
         onClick={() => {
-          captureTagsDetails(tags, description);
+          captureTagsDetailsEdit(tags, description);
         }}
         className={styles.updateSubmitBtn}
       >
-        Submit
+        {loading ?
+          <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+          : "Submit"}
+
       </Button>
     </Drawer>
   );

@@ -36,7 +36,9 @@ const SingleViewScoutComponent = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const farmTitle = useSelector((state: any) => state?.farms?.cropName);
+  const cropTitle = useSelector((state: any) => state?.farms?.cropName);
+  const farmTitle = useSelector((state: any) => state?.farms?.farmName)
+
 
   const [data, setData] = useState<any>([]);
   const [selectedFile, setSelectedFile] = useState<any>([]);
@@ -227,7 +229,7 @@ const SingleViewScoutComponent = () => {
     if (!tags?.length && findingsvalue?.length) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
-        obj.description = findingsvalue;
+        obj.description = obj.description + "\n" + findingsvalue
       });
       setTempImages(tempArray);
       setSelectedItems(tempArray);
@@ -235,19 +237,90 @@ const SingleViewScoutComponent = () => {
     }
     if (tags?.length && findingsvalue?.length) {
       let tempArray = [...tempImages];
-      console.log(tempArray);
 
       await tempArray.forEach((obj: any) => {
-        obj.description = findingsvalue;
-        obj.tags = [...tags];
+        (obj.description = obj.description + "\n" + findingsvalue),
+          (obj.tags = obj.tags.reduce(
+            (acc: any, tag: any) => {
+              if (!tags.includes(tag)) {
+                acc.push(tag);
+              }
+              return acc;
+            },
+            [...tags]
+          ));
       });
       setTempImages(tempArray);
-      console.log(tempArray);
-
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
     }
   };
+
+  const captureTagsDetailsEdit = async (tags: any, findingsvalue: any) => {
+    setScoutFindings(findingsvalue);
+    if (tags?.length && !findingsvalue?.length) {
+      let tempArray = [...tempImages];
+      await tempArray.forEach((obj: any) => {
+        (obj.description = ""),
+          (obj.tags = obj.tags.reduce(
+            (acc: any, tag: any) => {
+              if (!tags.includes(tag)) {
+                acc.push(tag);
+              }
+              return acc;
+            },
+            [...tags]
+          ));
+      });
+      setTempImages(tempArray);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
+    }
+    if (
+      tags?.length &&
+      findingsvalue?.length == 0
+    ) {
+      let tempArray = [...tempImages];
+      await tempArray.forEach((obj: any) => {
+        obj.tags = [...tags];
+        obj.description = obj.description;
+      });
+      setTempImages(tempArray);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
+    }
+    if (!tags?.length && findingsvalue?.length) {
+      let tempArray = [...tempImages];
+      await tempArray.forEach((obj: any) => {
+        obj.description = findingsvalue;
+      });
+      setTempImages(tempArray);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
+    }
+    if (tags?.length && findingsvalue?.length) {
+      console.log("qwert")
+      let tempArray = [...tempImages];
+
+      await tempArray.forEach((obj: any) => {
+        (obj.description = findingsvalue),
+          (obj.tags = obj.tags.reduce(
+            (acc: any, tag: any) => {
+              if (!tags.includes(tag)) {
+                acc.push(tag);
+              }
+              return acc;
+            },
+            [...tags]
+          ));
+      });
+      setTempImages(tempArray);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
+    }
+  };
+
+
   //checkbox handlechange event
   const handleChange = (itemId: any) => {
     const itemIndex = tempImages.findIndex(
@@ -337,9 +410,9 @@ const SingleViewScoutComponent = () => {
             color="inherit"
             href={`/farms/${router.query.farm_id}/crops`}
           >
-            My Crops
+            {farmTitle}
           </Link>
-          <Typography color="text.primary">{farmTitle}</Typography>
+          <Typography color="text.primary">{cropTitle}</Typography>
         </Breadcrumbs>
       </div>
       {/* < InfiniteScroll
@@ -464,7 +537,7 @@ const SingleViewScoutComponent = () => {
                           setSelectedFile(image);
                           setSlideShowImages(item?.attachments);
                         }}
-                        style={{ position: "absolute", top: "0", left: "0", width: "100%", height:"100%", cursor: "pointer", borderRadius: "5px", objectFit: "cover" }}
+                        style={{ position: "absolute", top: "0", left: "0", width: "100%", height: "100%", cursor: "pointer", borderRadius: "5px", objectFit: "cover" }}
                       />
 
                       <div
@@ -601,10 +674,11 @@ const SingleViewScoutComponent = () => {
 
       <TagsDrawerEdit
         tagsDrawerClose={tagsDrawerClose}
-        captureTagsDetails={captureTagsDetails}
+        captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={selectedFile}
         selectedItems={selectedItems}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
+        loading={loading}
       />
 
       <div className="addFormPositionIcon">

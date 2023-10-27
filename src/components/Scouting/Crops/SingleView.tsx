@@ -445,7 +445,7 @@ const SingleViewScoutComponent = () => {
                 {item?.attachments?.length !== 0 ? (
                   item.attachments.map((image: any, indexAttachment: any) => (
                     <div
-                      style={{ position: "relative", height: "100px", paddingTop: "75%" }}
+                      style={{ position: "relative", paddingTop: "100%" }}
                       key={indexAttachment}
                     >
                       <img

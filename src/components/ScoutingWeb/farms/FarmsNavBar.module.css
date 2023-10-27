@@ -87,22 +87,21 @@
 
 .farmsnavbar {
   justify-content: space-between;
-  padding-top: 1.5rem;
+  padding-top: 0;
   padding-bottom: 0.5rem;
 }
 
 .AllFarmsPageWeb {
-  padding-top: 1rem;
-  width: 90%;
+  padding: 1rem 1rem 0;
+  width: calc(100% - 2rem);
   margin: 0 auto;
 }
 
 .allFarms {
-  height: calc(100vh - 138px);
+  height: calc(100vh - 126px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
-  padding-inline: 1.5rem;
 }
 
 .allFarms::-webkit-scrollbar {
@@ -132,6 +131,10 @@
 /* Handle on hover */
 .allFarms::-webkit-scrollbar-thumb:hover {
   background: #00435d;
+}
+
+.allFarms .allScoutingCards {
+  padding: 0 1.5rem;
 }
 
 .filterBlock {
@@ -272,7 +275,7 @@
 .AllScoutsPageWeb {
   width: 100%;
   margin: 0 auto;
-  padding-top: 2rem;
+  padding-top: 1rem;
 }
 
 .scoutPageHeader {

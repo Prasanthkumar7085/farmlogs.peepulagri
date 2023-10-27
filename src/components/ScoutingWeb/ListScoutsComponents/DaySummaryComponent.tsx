@@ -172,12 +172,17 @@ const DaySummaryComponent: FC<pageProps> = ({
                 <Skeleton width="300px" height="20px" />
               </div>
             ) : (
-              <div >
+              <div>
                 {singleScoutData?.summary ? (
-                  <Markup content={singleScoutData?.summary} />
-                ) : (
-                  "-"
-                )}
+                    <div className={style.content}>
+                      <Markup content={singleScoutData?.summary} />
+                    </div>
+                  ) : (
+                    
+                    <div className={style.content}>
+                      "Summary not available!"
+                    </div>
+                  )}
               </div>
             )}
           </p>

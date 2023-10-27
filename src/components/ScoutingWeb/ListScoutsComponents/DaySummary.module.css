@@ -129,6 +129,9 @@
     font-weight: 400;
     line-height: 130%;
 }
+.textwrapper .findingText .content {
+    margin-top: 1rem;
+}
 
 .RecommedationBlock {
     padding: 1rem 1.5rem;

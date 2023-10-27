@@ -216,8 +216,7 @@
   line-height: 100% !important;
 }
 
-.scoutDay .summaryBtn {
-  color: var(--primary-blue) !important;
+.hasSummaryBtn {
   font-family: "Inter", sans-serif !important;
   font-size: clamp(13px, 0.83vw, 18px) !important;
   font-weight: 500 !important;
@@ -227,11 +226,41 @@
   gap: 5px;
   cursor: pointer;
   background-color: #ffffff;
-  padding: 3px 9px 3px 6px;
+  padding: 3px 9px 3px 9px;
   border-radius: 15px;
+  color : var(--primary-blue);
 }
 
-.scoutDay .summaryBtn svg {
+.noSummaryBtn {
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(13px, 0.83vw, 18px) !important;
+  font-weight: 500 !important;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  background-color: #ffffff;
+  padding: 3px 9px 3px 9px;
+  border-radius: 15px;
+  color: var(--color-firebrick);
+}
+.hasSuggestions {
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(13px, 0.83vw, 18px) !important;
+  font-weight: 500 !important;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  background-color: #ffffff;
+  padding: 3px 9px 3px 9px;
+  border-radius: 15px;
+  color: #F2A84C;
+}
+ .hasSuggestions svg,
+ .summaryBtn svg {
   height: 20px;
   width: 20px;
 }
@@ -239,15 +268,16 @@
   fill: var(--primary-blue)!important;
 }
 
-.scoutDay .summaryBtn:hover {
-  color: #05A155 !important;
+.noSummaryBtn:hover,
+.hasSuggestions:hover,
+.hasSummaryBtn:hover {
+  color: var(--title);
   box-shadow: 0 0 10px 0 #dddddd;
 }
 
-.scoutDay .summaryBtn:hover svg path {
+.summaryBtn:hover svg path {
   fill: #05a155 !important;
 }
-
 .allScoutImgContainer {
   display: grid;
   grid-template-columns: repeat(6, 1fr);

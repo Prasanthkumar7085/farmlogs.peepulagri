@@ -735,16 +735,16 @@ const ListScouts: FunctionComponent = () => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              marginTop: "4rem",
+              height:"calc(100vh - 150px)"
             }}
           >
             <ImageComponent
               src="/emty-folder-image.svg"
               alt="empty folder"
-              width={250}
+              width={200}
               height={150}
             />
-            <Typography variant="h4">No Scoutings</Typography>
+            <Typography className={styles.subTitle}>No Scoutings</Typography>
           </div>
         ) : (
           ""

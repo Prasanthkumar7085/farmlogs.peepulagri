@@ -95,7 +95,7 @@
   font-weight: 500;
   margin-top: 0.25rem;
   display: block;
-  text-decoration: underline;
+  
 }
 
 .tagNames {
@@ -123,4 +123,12 @@
   background-color: #fff !important;
   margin-right: 10px !important;
   font-size: 13px !important;
+}
+.tagsName{
+  height: 25px !important;
+  padding-left: 4px !important;
+  color:#fff !important;
+  margin-right: 10px !important;
+  font-size: 13px !important;
+  margin-bottom: 5px !important;
 }

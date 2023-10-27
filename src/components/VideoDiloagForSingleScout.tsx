@@ -252,16 +252,21 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             ) : (
               ""
             )}
-            {/* map((tag: any, index: number) => {
-              return (
-                <Typography align="left" key={index}>
-                  {"" + tag}
-                </Typography>
-              );
-            }) */}
-            <p style={{ color: "white" }}>
-              {mediaArray[currentIndex]?.tags.join(", ")}
-            </p>
+
+            {mediaArray?.length && mediaArray[currentIndex]?.tags?.length
+              ? mediaArray[currentIndex]?.tags?.map(
+                  (item: string, index: number) => {
+                    return (
+                      <Chip
+                        key={index}
+                        label={item}
+                        className={styles.tagsName}
+                        variant="outlined"
+                      />
+                    );
+                  }
+                )
+              : ""}
           </div>
           {mediaArray[currentIndex]?.description ? (
             <Typography variant="h6" style={{ color: "orange" }}>
@@ -280,8 +285,9 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
 
           {showMore == true ? (
             <Typography className={styles.findingsText}>
-              <Markup content={formatText(mediaArray[currentIndex]?.description)
-              } />
+              <Markup
+                content={formatText(mediaArray[currentIndex]?.description)}
+              />
               <span
                 style={{ cursor: "pointer", fontWeight: "600" }}
                 onClick={() => {
@@ -296,12 +302,16 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
               {mediaArray[currentIndex]?.description?.length > 100 ? (
                 <Markup
                   content={
-                    formatText(mediaArray[currentIndex]?.description)
-                      .slice(0, 100) + "...."
+                    formatText(mediaArray[currentIndex]?.description).slice(
+                      0,
+                      100
+                    ) + "...."
                   }
                 />
               ) : (
-                <Markup content={formatText(mediaArray[currentIndex]?.description)} />
+                <Markup
+                  content={formatText(mediaArray[currentIndex]?.description)}
+                />
               )}
               {mediaArray[currentIndex]?.description?.length > 100 ? (
                 <span

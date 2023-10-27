@@ -267,17 +267,22 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                       label="Tags"
                       variant="outlined"
                     />
-                    <p
-                      style={{
-                        color: "white",
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      {onlyImages[currentIndex].tags.join(", ")}
-                    </p>
+
+                    {onlyImages?.length &&
+                    onlyImages[currentIndex]?.tags?.length
+                      ? onlyImages[currentIndex]?.tags?.map(
+                          (item: string, index: number) => {
+                            return (
+                              <Chip
+                                key={index}
+                                label={item}
+                                className={styles.tagsName}
+                                variant="outlined"
+                              />
+                            );
+                          }
+                        )
+                      : ""}
                   </div>
                 ) : (
                   ""

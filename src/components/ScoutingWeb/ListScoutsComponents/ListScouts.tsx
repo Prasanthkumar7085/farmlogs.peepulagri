@@ -648,7 +648,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              gap: "0.325rem"
+                              gap: "0.325rem",
                             }}
                           >
                             <AccountCircleIcon />
@@ -659,7 +659,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              gap: "0.325rem"
+                              gap: "0.325rem",
                             }}
                           >
                             <img
@@ -674,7 +674,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              gap: "0.325rem"
+                              gap: "0.325rem",
                             }}
                           >
                             <img src="/cropName-icon.svg" alt="" />
@@ -691,26 +691,37 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SuggestionsIcon />
+                          {/* <SuggestionsIcon /> */}
                           <span>Recomendations</span>
                         </div>
                       ) : (
                         <div
-                          className={row?.summary ? styles.hasSummaryBtn : styles.noSummaryBtn}
+                          className={
+                            row?.summary
+                              ? styles.hasSummaryBtn
+                              : styles.noSummaryBtn
+                          }
                           onClick={() => {
                             setOpenDaySummary(true);
                             setSelectedItemDetails(row);
                           }}
                         >
-                          {
-                            row?.summary ?
-                              <ImageComponent src='/no-summary-icon.svg' height={10} width={10} alt="no-summary" />
-                              :
-                              <ImageComponent src='/no-summary-icon.svg' height={10} width={10} alt="no-summary" />
-                          }
-                          <span>
-                            Summary
-                          </span>
+                          {row?.summary ? (
+                            <ImageComponent
+                              src="/no-summary-icon.svg"
+                              height={10}
+                              width={10}
+                              alt="no-summary"
+                            />
+                          ) : (
+                            <ImageComponent
+                              src="/no-summary-icon.svg"
+                              height={10}
+                              width={10}
+                              alt="no-summary"
+                            />
+                          )}
+                          <span>Summary</span>
                         </div>
                       )}
                     </div>

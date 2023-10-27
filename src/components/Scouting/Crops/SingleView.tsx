@@ -275,11 +275,9 @@ const SingleViewScoutComponent = () => {
       setTempImages(tempArray);
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
+      return;
     }
-    if (
-      tags?.length &&
-      findingsvalue?.length == 0
-    ) {
+    if (tags?.length && findingsvalue?.length == 0) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
         obj.tags = [...tags];
@@ -288,6 +286,7 @@ const SingleViewScoutComponent = () => {
       setTempImages(tempArray);
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
+      return;
     }
     if (!tags?.length && findingsvalue?.length) {
       let tempArray = [...tempImages];
@@ -297,26 +296,18 @@ const SingleViewScoutComponent = () => {
       setTempImages(tempArray);
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
+      return;
     }
     if (tags?.length && findingsvalue?.length) {
-      console.log("qwert")
       let tempArray = [...tempImages];
 
       await tempArray.forEach((obj: any) => {
-        (obj.description = findingsvalue),
-          (obj.tags = obj.tags.reduce(
-            (acc: any, tag: any) => {
-              if (!tags.includes(tag)) {
-                acc.push(tag);
-              }
-              return acc;
-            },
-            [...tags]
-          ));
+        (obj.description = findingsvalue), (obj.tags = [...tags]);
       });
       setTempImages(tempArray);
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
+      return;
     }
   };
 
@@ -536,7 +527,16 @@ const SingleViewScoutComponent = () => {
                           setSelectedFile(image);
                           setSlideShowImages(item?.attachments);
                         }}
-                        style={{ position: "absolute", top: "0", left: "0", width: "100%", height: "100%", cursor: "pointer", borderRadius: "5px", objectFit: "cover" }}
+                        style={{
+                          position: "absolute",
+                          top: "0",
+                          left: "0",
+                          width: "100%",
+                          height: "100%",
+                          cursor: "pointer",
+                          borderRadius: "5px",
+                          objectFit: "cover",
+                        }}
                       />
 
                       <div
@@ -570,15 +570,15 @@ const SingleViewScoutComponent = () => {
                         }}
                       >
                         {tagsCheckBoxOpen == true &&
-                          scoutId == item._id &&
-                          image?.description ? (
+                        scoutId == item._id &&
+                        image?.description ? (
                           <SearchOutlinedIcon />
                         ) : (
                           ""
                         )}
                         {tagsCheckBoxOpen == true &&
-                          scoutId == item._id &&
-                          image?.tags?.length ? (
+                        scoutId == item._id &&
+                        image?.tags?.length ? (
                           <Image
                             src={"/scout-img-select.svg"}
                             width={17}
@@ -655,6 +655,7 @@ const SingleViewScoutComponent = () => {
       )}
       {tagsDrawerOpen ? (
         <TagsDrawer
+          loading={loading}
           tagsDrawerClose={tagsDrawerClose}
           captureTagsDetails={captureTagsDetails}
           item={selectedFile}

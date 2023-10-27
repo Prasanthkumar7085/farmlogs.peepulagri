@@ -95,10 +95,9 @@ const CommentForm = ({
   const getCropsDetails = async () => {
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
-          router.query.farm_id
-            ? router.query.farm_id
-            : scoutDetails.farm_id?._id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
+          ? router.query.farm_id
+          : scoutDetails.farm_id?._id
         }/crops/list`,
         { method: "GET" }
       );
@@ -348,7 +347,7 @@ const CommentForm = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                      fileProgress[index] !== "fail" ? (
+                        fileProgress[index] !== "fail" ? (
                         <div className={styles.photojpg}>
                           <IconButton>
                             <DoneIcon sx={{ color: "#05A155" }} />
@@ -364,7 +363,7 @@ const CommentForm = ({
                       )}
                     </div>
                     {fileProgress[index] !== 100 ||
-                    fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                       <img
                         className={styles.close41}
                         alt=""
@@ -377,7 +376,7 @@ const CommentForm = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                    fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (

@@ -183,6 +183,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   swipeable={true}
                   autoFocus
                   showThumbs={false}
+                  className={styles.galleryView}
                 >
                   {onlyImages.map((item: any, index: any) => (
                     <div

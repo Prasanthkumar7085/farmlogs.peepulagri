@@ -98,7 +98,7 @@
 }
 
 .allFarms {
-  height: calc(100vh - 95px);
+  height: calc(100vh - 138px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
@@ -214,7 +214,7 @@
 }
 
 .scoutDay .summaryBtn {
-  color: #828282 !important;
+  color: var(--primary-blue) !important;
   font-family: "Inter", sans-serif !important;
   font-size: clamp(13px, 0.83vw, 18px) !important;
   font-weight: 500 !important;
@@ -223,15 +223,22 @@
   align-items: center;
   gap: 5px;
   cursor: pointer;
+  background-color: #ffffff;
+  padding: 3px 9px 3px 6px;
+  border-radius: 15px;
 }
 
 .scoutDay .summaryBtn svg {
   height: 20px;
   width: 20px;
 }
+.scoutDay .summaryBtn svg path {
+  fill: var(--primary-blue)!important;
+}
 
 .scoutDay .summaryBtn:hover {
   color: #05A155 !important;
+  box-shadow: 0 0 10px 0 #dddddd;
 }
 
 .scoutDay .summaryBtn:hover svg path {
@@ -251,6 +258,7 @@
   border-radius: 10px;
   box-shadow: 0px 0px 12px 0px #0000001c;
   background-color: #fff;
+  cursor: pointer;
 }
 
 .singleScoutImg img {
@@ -286,9 +294,9 @@
 }
 
 .allScoutsFilterBlock {
-  width: 60%;
+  width: auto;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 50px;
+  grid-template-columns: 250px 250px 250px 35px;
   grid-column-gap: 1rem;
 }
 

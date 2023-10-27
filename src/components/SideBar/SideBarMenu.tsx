@@ -85,55 +85,98 @@ const SideBarMenu = ({ children }: any) => {
         }
     }
     return (
-        <div>
-            <div id={'web-dashboard'}>
-                <aside className={styles.sidebarmenu}>
-                    <nav className={styles.menubar}>
-                        <Image className={styles.logoIcon} alt="" src="/logo.svg" width={20} height={20} onClick={() => router.push('/farm')} />
-                        <List>
-                            {menuListItems.map((item: item, index: number) => {
-                                if (item.isVisible) {
-                                    return (
-                                        <ListItem className={styles.menuItem} key={index}>
-                                            <Tooltip title={item.toolTitle} placement='right'>
-                                                <ListItemButton
-                                                    onClick={() => router.push(item.link)}
-                                                    className={item.active ? styles.activeMenuItem : styles.inactiveMenuItem}
-                                                >
-                                                    <Image className={styles.apps1Icon} alt="" src={item.src} width={20} height={20} />
-                                                </ListItemButton>
-                                            </Tooltip>
-                                        </ListItem>
-                                    )
-                                }
-                            })}
-                        </List>
-                    </nav>
-                    <div className={styles.profileBtnGroup}>
-                        <Tooltip title='Logout'>
-                            <IconButton onClick={logout}>
-                                <LogoutIcon sx={{ color: "white" }} />
-                            </IconButton>
+      <div>
+        <div id={"web-dashboard"}>
+          <aside className={styles.sidebarmenu}>
+            <nav className={styles.menubar}>
+              <Image
+                className={styles.logoIcon}
+                alt=""
+                src="/logo.svg"
+                width={20}
+                height={20}
+                onClick={() => router.push("/farm")}
+              />
+              <List>
+                {menuListItems.map((item: item, index: number) => {
+                  if (item.isVisible) {
+                    return (
+                      <ListItem className={styles.menuItem} key={index}>
+                        <Tooltip title={item.toolTitle} placement="right">
+                          <ListItemButton
+                            onClick={() => router.push(item.link)}
+                            className={
+                              item.active
+                                ? styles.activeMenuItem
+                                : styles.inactiveMenuItem
+                            }
+                          >
+                            <Image
+                              className={styles.apps1Icon}
+                              alt=""
+                              src={item.src}
+                              width={20}
+                              height={20}
+                            />
+                          </ListItemButton>
                         </Tooltip>
+                      </ListItem>
+                    );
+                  }
+                })}
+              </List>
+            </nav>
+            <div className={styles.profileBtnGroup}>
+              <Tooltip title="Logout">
+                <IconButton onClick={logout}>
+                  <LogoutIcon sx={{ color: "white" }} />
+                </IconButton>
+              </Tooltip>
 
-
-                        <button className={styles.profile} onClick={() => router.push('/profile')}>
-                            <div className={styles.profile1}>
-                                <Image src={'/user-avatar.svg'} className={styles.profileChild} alt="" width={20} height={20} />
-                            </div>
-                        </button>
-                    </div>
-                </aside>
-                <div className={styles.main}>
-                    {children}
+              <button
+                className={styles.profile}
+                onClick={() => router.push("/profile")}
+              >
+                <div className={styles.profile1}>
+                  <Image
+                    src={"/user-avatar.svg"}
+                    className={styles.profileChild}
+                    alt=""
+                    width={20}
+                    height={20}
+                  />
                 </div>
+              </button>
             </div>
-            <div id='mobile-view'>
-                <div style={{ width: "100%", textAlign: "center" }}>
-                    <Button sx={{ marginTop: "3rem", textTransform: "capitalize", background: "green" }} variant={'contained'} onClick={() => router.push('/farms')}> <NorthWestIcon sx={{ color: "#fff", fontSize: "1.5rem" }} /> Go To Mobile View Page</Button>
-                </div>
-            </div>
+          </aside>
+          <div className={styles.main}>{children}</div>
         </div>
+        <div id="mobile-view">
+          {userName == "USER" ? (
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <Button
+                sx={{
+                  marginTop: "3rem",
+                  textTransform: "capitalize",
+                  background: "green",
+                }}
+                variant={"contained"}
+                onClick={() => router.push("/farms")}
+              >
+                {" "}
+                <NorthWestIcon sx={{ color: "#fff", fontSize: "1.5rem" }} /> Go
+                To Mobile View Page
+              </Button>
+            </div>
+          ) : (
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <Button className={styles.noScreen} variant={"contained"}>
+                Please! unable desktop view
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
     );
 };
 

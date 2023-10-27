@@ -197,7 +197,7 @@ const SingleViewScoutComponent = () => {
     if (tags?.length && !findingsvalue?.length) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
-        (obj.description = ""),
+        (obj.description = obj?.description),
           (obj.tags = obj.tags.reduce(
             (acc: any, tag: any) => {
               if (!tags.includes(tag)) {

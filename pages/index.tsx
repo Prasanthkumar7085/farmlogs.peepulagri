@@ -6,14 +6,8 @@ const HomePage = () => {
 
     return (
         <div>
-            {/* <Login /> */}
-            <div id="webLogin">
-                {/* <SignUp /> */}
                 <SigninEmail />
-            </div>
-            <div id="mobileLogin">
-                <MobileLogin />
-            </div>
+            
 
         </div>
     )

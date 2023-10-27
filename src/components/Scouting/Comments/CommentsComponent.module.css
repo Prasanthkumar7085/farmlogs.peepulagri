@@ -3,6 +3,7 @@
     background-color: #ffffff;
     /* box-shadow: 8px 8px 24px rgba(2, 2, 70, 0.05); */
     border-radius: 16px;
+    padding: 1rem 1rem 0; 
 }
 
 .CommentsTitle {
@@ -12,14 +13,13 @@
     line-height: 1.5;
 }
 
-
 .CommentsContainer {
     max-height: 60vh;
     overflow: auto;
 }
 
 .allThreads {
-    height: 300px;
+    height: calc(100vh - 416px);
     overflow-y: scroll;
 }
 

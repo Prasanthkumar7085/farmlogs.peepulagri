@@ -381,7 +381,6 @@ const CommentForm = ({ afterCommentAdd, replyThreadEvent, scoutDetails, attachem
           className={styles.sendbutton}
           size="medium"
           variant="contained"
-          disabled={comment ? false : true}
           onClick={() => replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()}
         >
           {loading ? "Sending..." : "Send"}

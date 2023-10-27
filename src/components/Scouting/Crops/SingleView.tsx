@@ -412,7 +412,7 @@ const SingleViewScoutComponent = () => {
                 {item?.attachments?.length !== 0 ? (
                   item.attachments.map((image: any, indexAttachment: any) => (
                     <div
-                      style={{ position: "relative", height: "100px" }}
+                      style={{ position: "relative", height: "100px", paddingTop: "75%" }}
                       key={indexAttachment}
                     >
                       <img
@@ -430,11 +430,8 @@ const SingleViewScoutComponent = () => {
                           setSingleScoutDetails(item)
                           setSelectedFile(image);
                           setSlideShowImages(item?.attachments);
-
-
-
                         }}
-                        style={{ cursor: "pointer", borderRadius: "5px" }}
+                        style={{ position: "absolute", top: "0", left: "0", width: "100%", height:"100%", cursor: "pointer", borderRadius: "5px", objectFit: "cover" }}
                       />
 
                       <div style={{ position: "absolute", top: "5px", left: "5px", }}>

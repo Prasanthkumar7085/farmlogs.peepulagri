@@ -11,6 +11,7 @@ import { deepOrange } from '@mui/material/colors';
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AlertComponent from "@/components/Core/AlertComponent";
+import ChatIcon from '@mui/icons-material/Chat';
 
 const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads, scoutDetails, attachement }: any) => {
 
@@ -643,9 +644,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           </Box>
         </div>
       ) : (
-        <div style={{ margin: "auto" }}>No Comments</div>
+        <div className={styles.noThreadFound}><ChatIcon /> No Comments</div>
       )}
-
       <LoadingComponent loading={loading} />
       <AlertComponent
         alertMessage={alertMessage}

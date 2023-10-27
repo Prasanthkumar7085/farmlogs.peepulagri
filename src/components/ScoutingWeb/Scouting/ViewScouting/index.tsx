@@ -99,14 +99,14 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   }, [scoutId]);
   useEffect(() => {
     changeDescription();
-  }, [currentIndex]);
+  }, [currentIndex, previewImageDialogOpen]);
 
   const updateDescriptionService = async (imagesArray: any, cropId: any) => {
     let updatedArray = data?.attachments?.map((obj: any) => {
       let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
       return matchingObj ? matchingObj : obj;
     });
-    setLoading(true)
+    setLoading(true);
 
     try {
       let options = {
@@ -133,7 +133,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     } catch (err: any) {
       console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -175,6 +175,13 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                       setCurrentIndex((prev) => prev - 1);
                     }
                   }
+                  // if (e.deltaX > 0 && e.deltaX % 10 == 0) {
+                  //   setCurrentIndex((prev) => prev + 1);
+                  // } else {
+                  //   if (e.deltaX % 10 == 0) {
+                  //     setCurrentIndex((prev) => prev - 1);
+                  //   }
+                  // }
                 }}
               >
                 <Carousel
@@ -183,6 +190,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   swipeable={true}
                   autoFocus
                   showThumbs={false}
+                  className={styles.galleryView}
                 >
                   {onlyImages.map((item: any, index: any) => (
                     <div
@@ -213,7 +221,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                         />
                       ) : (
                         <>
-                          {/* <img
+                          <img
                             className="zoom-image"
                             src={item.src}
                             alt={`Image ${index + 1}`}
@@ -222,7 +230,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                               width: "100%",
                               objectFit: "contain",
                             }}
-                          /> */}
+                          />
                         </>
                       )}
                     </div>

@@ -85,7 +85,11 @@ const ScoutingDetails = ({
             {loading ? (
               <Skeleton width="300px" height="30px" />
             ) : (
-              data?.farm_id.title + "     " + "(" + data?.farm_id?.location + ")"
+              data?.farm_id.title +
+              "     " +
+              "(" +
+              data?.farm_id?.location +
+              ")"
             )}
           </h2>
         </div>

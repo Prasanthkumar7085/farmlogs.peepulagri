@@ -95,10 +95,9 @@ const CommentForm = ({
   const getCropsDetails = async () => {
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
-          router.query.farm_id
-            ? router.query.farm_id
-            : scoutDetails.farm_id?._id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
+          ? router.query.farm_id
+          : scoutDetails.farm_id?._id
         }/crops/list`,
         { method: "GET" }
       );
@@ -120,6 +119,9 @@ const CommentForm = ({
   };
 
   const addComment = async () => {
+    if (loading) {
+      return;
+    }
     setLoading(true);
     let body = {
       comments: [
@@ -158,6 +160,9 @@ const CommentForm = ({
   };
 
   const replyThreads = async (comment_id: any) => {
+    if (loading) {
+      return;
+    }
     setLoading(true);
     let body = {
       content: comment,
@@ -443,7 +448,7 @@ const CommentForm = ({
           className={styles.sendbutton}
           size="medium"
           variant="contained"
-          disabled={comment ? false : true}
+          disabled={comment && !loading ? false : true}
           onClick={() =>
             replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
           }

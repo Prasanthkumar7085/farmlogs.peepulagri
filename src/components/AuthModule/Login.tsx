@@ -7,6 +7,7 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import loginService from "../../../lib/services/AuthServices/loginService";
@@ -27,6 +28,7 @@ import {
   AuthResponseErrorDataType,
 } from "@/types/AuthTypes";
 import { setAllFarms } from "@/Redux/Modules/Farms";
+import serUserTypeCookie from "../../../lib/CookieHandler/serUserTypeCookie";
 type ResponseData = AuthResponseDataType | AuthResponseErrorDataType;
 
 const Login = () => {
@@ -42,6 +44,7 @@ const Login = () => {
 
   const login = async (e: any) => {
     e.preventDefault();
+    setErrorMessages({});
     setLoading(true);
     try {
       let response: AuthResponseDataType | AuthResponseErrorDataType | any;
@@ -51,13 +54,9 @@ const Login = () => {
         setCookie();
         if ("data" in response) {
           dispatch(setUserDetails(response?.data));
-        }
-        let accessToken = response.data.access_token;
-        let farmResponse = await getAllFarmsService(accessToken);
-        if (farmResponse.success) {
-          dispatch(setAllFarms(farmResponse?.data))
-          const id = farmResponse.data[0]._id;
-          router.push(`/farm/${id}/logs`);
+          await serUserTypeCookie(response?.data?.user_details?.user_type);
+
+          router.push("/farms");
         }
       } else if (response.status == 422) {
         if ("errors" in response) {
@@ -97,7 +96,6 @@ const Login = () => {
           <form onSubmit={login} className={styles.innerForm}>
             <div style={{ marginBottom: "20px" }}>
               <TextField
-                label="Email Id"
                 variant="outlined"
                 value={email}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -116,7 +114,6 @@ const Login = () => {
             </div>
             <div style={{ marginBottom: "0px" }}>
               <TextField
-                label="Password"
                 variant="outlined"
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -165,7 +162,15 @@ const Login = () => {
               className={styles.submitButton}
               fullWidth
             >
-              Login <ArrowForwardIcon />
+              Login{" "}
+              {!loading ? (
+                <ArrowForwardIcon />
+              ) : (
+                <CircularProgress
+                  size="1.5rem"
+                  sx={{ color: "white", marginLeft: "10px" }}
+                />
+              )}
             </Button>
           </form>
         </CardContent>
@@ -174,7 +179,6 @@ const Login = () => {
         </CardActions> */}
       </Card>
 
-      <LoadingComponent loading={loading} />
       <Typography
         color="text.secondary"
         gutterBottom

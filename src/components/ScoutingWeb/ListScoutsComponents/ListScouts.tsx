@@ -618,8 +618,6 @@ const ListScouts: FunctionComponent = () => {
 
                 return (
                   <div className={styles.eachDayScouting} key={rowIndex}>
-
-
                     <div
                       className={styles.scoutDay}
                       style={{
@@ -636,7 +634,6 @@ const ListScouts: FunctionComponent = () => {
                           gap: "30px",
                         }}
                       >
-
                         <div
                           style={{
                             display: "flex",
@@ -646,7 +643,7 @@ const ListScouts: FunctionComponent = () => {
                             position: "sticky",
                           }}
                         >
-                          <div
+                          {/* <div
                             style={{
                               display: "flex",
                               justifyContent: "center",
@@ -655,7 +652,7 @@ const ListScouts: FunctionComponent = () => {
                           >
                             <AccountCircleIcon />
                             {row.created_by.full_name}
-                          </div>
+                          </div> */}
                           <div
                             style={{
                               display: "flex",
@@ -683,7 +680,7 @@ const ListScouts: FunctionComponent = () => {
                         </div>
                       </div>
 
-                      {row?.suggestions ?
+                      {row?.suggestions ? (
                         <div
                           className={styles.summaryBtn}
                           style={{
@@ -694,9 +691,9 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SuggestionsIcon /> Recommandations
+                          <SuggestionsIcon /> Recomendations
                         </div>
-                        :
+                      ) : (
                         <div
                           className={styles.summaryBtn}
                           onClick={() => {
@@ -704,11 +701,14 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SummaryIcon /> <span style={{ color: row?.summary ? "#05A155" : "red" }}
-                          >Summary</span>
-                        </div>}
-
-
+                          <SummaryIcon />{" "}
+                          <span
+                            style={{ color: row?.summary ? "#05A155" : "red" }}
+                          >
+                            Summary
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <ScoutingDailyImages
                       item={row}
@@ -716,7 +716,7 @@ const ListScouts: FunctionComponent = () => {
                       onClickAttachment={onClickAttachment}
                     />
                   </div>
-                )
+                );
               })}
             </div>
           )

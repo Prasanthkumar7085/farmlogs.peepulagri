@@ -125,7 +125,7 @@
 }
 
 .RecommedationBlock {
-  padding: 1rem 1.5rem;
+  padding: 1rem 0;
 }
 
 .RecommedationBlock .RecommedationHeading {
@@ -134,7 +134,7 @@
   font-size: clamp(17px, 1vw, 24px);
   font-weight: 500;
   line-height: 18px;
-  padding-bottom: 0.5rem;
+  padding: 0 0 0.5rem 1rem;
 }
 
 .imageIcon {
@@ -164,7 +164,6 @@
 .viewScoutingPage {
   height: 100vh;
   overflow-y: scroll;
-
 }
 
 .gallaryContainer {
@@ -260,4 +259,12 @@
   height: 100vh;
   overflow-y: auto;
   /* background-color: #000; */
+}
+.galleryView [class^= "carousel-status"]{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.75);
+  padding: 3px 10px;
+  border-radius: 4px 0 0 4px;
 }

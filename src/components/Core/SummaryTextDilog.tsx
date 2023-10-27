@@ -58,7 +58,7 @@ const SummaryTextDilog = ({
             </Typography>
           </div>
           <div className={styles.findingDec}>
-            <span className={styles.bodyHeading} style={{ color: "#F2A84C", fontWeight: "600 !important" }}>Recommandations</span>
+            <span className={styles.bodyHeading} style={{ color: "#F2A84C", fontWeight: "600 !important" }}>Recommendation</span>
             <Typography variant="caption" className={styles.bodyDescrpiction}>
               <Markup content={item?.suggestions} />
             </Typography>

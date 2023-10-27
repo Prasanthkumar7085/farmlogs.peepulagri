@@ -118,9 +118,9 @@
 }
 
 .tagsLabel {
-  height: 25px;
-  padding-left: 4px;
-  background-color: var(--white);
-  margin-right: 10px;
-  font-size: 13px;
+  height: 25px !important;
+  padding-left: 4px !important;
+  background-color: #fff !important;
+  margin-right: 10px !important;
+  font-size: 13px !important;
 }

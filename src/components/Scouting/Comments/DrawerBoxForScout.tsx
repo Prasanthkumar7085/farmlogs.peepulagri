@@ -186,7 +186,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/comments/${commentId}/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commentId}/attachments`,
         options
       );
       let responseData = await response.json();

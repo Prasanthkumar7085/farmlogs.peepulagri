@@ -132,8 +132,6 @@
   font-size: var(--font-size-xs);
   color: var(--title);
   font-family: var(--text-sm-normal);
-  min-height: 80px;
-  max-height: 80px;
 }
 
 .allFormsBlock {

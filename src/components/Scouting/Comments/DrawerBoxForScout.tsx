@@ -28,7 +28,10 @@ const DrawerComponentForScout = ({
   const [loadingThreads, setLoadingThreads] = useState(true);
 
   useEffect(() => {
-    getAllScoutComments();
+    if (attachement) {
+      getAllScoutComments();
+      setLoadingThreads(true);
+    }
   }, [attachement]);
 
   const getAllScoutComments = async () => {
@@ -200,7 +203,7 @@ const DrawerComponentForScout = ({
   return (
     <Drawer
       anchor={"bottom"}
-      open={true}
+      open={openCommentsBox}
       sx={{ zIndex: "1300 !important" }}
     >
       <div

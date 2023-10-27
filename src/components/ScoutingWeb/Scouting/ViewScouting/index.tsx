@@ -213,7 +213,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                         />
                       ) : (
                         <>
-                          <img
+                          {/* <img
                             className="zoom-image"
                             src={item.src}
                             alt={`Image ${index + 1}`}
@@ -222,7 +222,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                               width: "100%",
                               objectFit: "contain",
                             }}
-                          />
+                          /> */}
                         </>
                       )}
                     </div>
@@ -240,7 +240,12 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                     flexDirection: "row",
                   }}
                 >
-                  <Typography variant="caption">{timePipe(onlyImages[currentIndex]?.time, "DD-MM-YYYY hh.mm a")}</Typography>
+                  <Typography variant="caption">
+                    {timePipe(
+                      onlyImages[currentIndex]?.time,
+                      "DD-MM-YYYY hh.mm a"
+                    )}
+                  </Typography>
                 </div>
                 {onlyImages[currentIndex]?.tags?.length ? (
                   <div
@@ -277,7 +282,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   ""
                 )}
               </div>
-
             </div>
             <div className={styles.AllImagesBlock}>
               {finalImages.map((image: any, index: number) => (

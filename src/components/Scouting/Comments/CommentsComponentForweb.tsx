@@ -22,10 +22,10 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const [getCommentsLoading, setGetCommentsLoading] = useState(false);
 
   useEffect(() => {
-    if (router.isReady && scoutDetails?._id && accessToken) {
+    if (scoutDetails && attachement) {
       getAllScoutComments();
     }
-  }, [router.isReady, accessToken, scoutDetails, attachement]);
+  }, [scoutDetails, attachement]);
 
   const getAllScoutComments = async () => {
     setGetCommentsLoading(true);

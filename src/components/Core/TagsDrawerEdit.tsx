@@ -27,11 +27,12 @@ const TagsDrawerEdit = ({
   useEffect(() => {
     if (TagsDrawerEditOpen) {
       setDescription(item?.description);
+      setTags(item?.tags);
     } else {
       setTags([]);
       setDescription("");
     }
-  }, [TagsDrawerEditOpen, item?.tags, item?.description]);
+  }, [TagsDrawerEditOpen]);
 
 
   return (

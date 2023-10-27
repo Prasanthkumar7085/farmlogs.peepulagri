@@ -189,7 +189,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                 ) : (
 
                   <div className={style.content}>
-                    "Summary not available!"
+                    Summary not available!
                   </div>
                 )}
               </div>

@@ -240,7 +240,7 @@ const SingleViewScoutComponent = () => {
     }
   };
 
-  useEffect(() => {}, [selectedFile]);
+  useEffect(() => { }, [selectedFile]);
 
   //capture the slideimages index
   const captureSlideImagesIndex = (value: any) => {
@@ -475,15 +475,15 @@ const SingleViewScoutComponent = () => {
                         }}
                       >
                         {tagsCheckBoxOpen == true &&
-                        scoutId == item._id &&
-                        image?.description ? (
+                          scoutId == item._id &&
+                          image?.description ? (
                           <SearchOutlinedIcon />
                         ) : (
                           ""
                         )}
                         {tagsCheckBoxOpen == true &&
-                        scoutId == item._id &&
-                        image?.tags?.length ? (
+                          scoutId == item._id &&
+                          image?.tags?.length ? (
                           <Image
                             src={"/scout-img-select.svg"}
                             width={17}

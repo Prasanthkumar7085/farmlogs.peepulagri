@@ -5,12 +5,15 @@ import { Button, CircularProgress, IconButton, Skeleton, TextField, Typography }
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "yet-another-react-lightbox/styles.css";
 import styles from "./ScoutingDetails.module.css";
+
+import style from "../../ListScoutsComponents/DaySummary.module.css";
 import { useEffect, useState } from "react";
 import { Markup } from "interweave";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import EditIconComponent from "@/components/Core/SvgIcons/EditIcon";
 import SendIcon from "@mui/icons-material/Send";
 import { AddOutlined, EditOutlined } from "@mui/icons-material";
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
@@ -97,9 +100,9 @@ const ScoutingDetails = ({
         </IconButton>
       </div>
 
-      <div className={styles.scoutingdetails}>
-        <div className={styles.textwrapper}>
-          <h1 className={styles.finding}>Findings</h1>
+      <div className={style.scoutingdetails}>
+        <div className={style.textwrapper}>
+          <h6 className={style.summary}><SummaryIcon /> Findings</h6>
           {loading ? (
             <div>
               <Skeleton width="400px" height="20px" />
@@ -109,7 +112,7 @@ const ScoutingDetails = ({
             </div>
           ) : content?.length ? (
             content?.map((line: any, index: any) => (
-              <p className={styles.findingText} key={index}>
+              <p className={style.findingText} key={index}>
                 {line ? line : "-"}
               </p>
             ))
@@ -119,17 +122,17 @@ const ScoutingDetails = ({
         </div>
       </div>
 
-      <div>
-        <div className={styles.textwrapper}>
+      <div className={style.scoutingdetails}>
+        <div className={style.textwrapper}>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
-              width: "80%",
+              width: "100%",
               alignItems: "center",
             }}
           >
-            <h6>
+            <h6 className={style.recomendation}>
               <SuggestionsIcon />
               Recomendations
             </h6>
@@ -137,7 +140,7 @@ const ScoutingDetails = ({
               ""
             ) : mainImageData?.suggestions ? (
               <IconButton
-                className={styles.editIcon}
+                className={style.editIcon}
                 onClick={() => {
                   setEditRecomendationOpen(true);
                 }}
@@ -158,7 +161,7 @@ const ScoutingDetails = ({
           {!loading && editRecomendationOpen ? (
             <div style={{ width: "100%" }}>
               <TextField
-                className={styles.textAria}
+                className={style.textAria}
                 value={recomendations}
                 onChange={(e) => setRecomendations(e.target.value)}
                 multiline
@@ -169,16 +172,16 @@ const ScoutingDetails = ({
                   width: "100%",
                 }}
               />
-              <div className={styles.sendButtonDiv}>
+              <div className={style.sendButtonDiv}>
                 <Button
-                  className={styles.cancelButton}
+                  className={style.cancelButton}
                   variant="outlined"
                   onClick={() => setEditRecomendationOpen(false)}
                 >
                   Cancel
                 </Button>
                 <Button
-                  className={styles.sendButton}
+                  className={style.sendButton}
                   variant="contained"
                   disabled={recomendations ? false : true}
                   onClick={() => {
@@ -204,7 +207,7 @@ const ScoutingDetails = ({
               <Skeleton width="300px" height="20px" />
             </div>
           ) : (
-            <div className={styles.recomdationContent}>
+            <div className={style.recomdationContent}>
               <Markup
                 content={
                   mainImageData?.suggestions

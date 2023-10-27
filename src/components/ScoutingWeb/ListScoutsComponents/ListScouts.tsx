@@ -1,6 +1,7 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import HasSummaryIcon from "@/components/Core/SvgIcons/HasSummaryIcon";
+import NoSummaryIcon from "@/components/Core/SvgIcons/NoSummaryIcon";
 import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
@@ -29,6 +30,7 @@ import TablePaginationComponentForScouts from "@/components/Core/TablePagination
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { log } from "util";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 
 interface ApiMethodProps {
   page: string | number;
@@ -604,9 +606,10 @@ const ListScouts: FunctionComponent = () => {
 
 
           return (
-            <div key={index}>
-              <Typography style={{ fontWeight: "bold", position: "sticky", top: "0px" }}>
-                {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
+            <div key={index} className={styles.allScoutingCards}>
+              <Typography className={styles.postedDate}>
+                <InsertInvitationIcon />
+                <span>{timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}</span>
               </Typography>
               {item.map((row: any, rowIndex: any) => {
                 let cropObj = row.farm_id.crops.find(
@@ -640,7 +643,6 @@ const ListScouts: FunctionComponent = () => {
                             justifyContent: "center",
                             alignItems: "center",
                             gap: "20px",
-                            position: "sticky",
                           }}
                         >
                           <div
@@ -648,6 +650,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
+                              gap: "0.325rem"
                             }}
                           >
                             <AccountCircleIcon />
@@ -658,6 +661,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
+                              gap: "0.325rem"
                             }}
                           >
                             <img
@@ -672,6 +676,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
+                              gap: "0.325rem"
                             }}
                           >
                             <img src="/cropName-icon.svg" alt="" />
@@ -682,29 +687,30 @@ const ListScouts: FunctionComponent = () => {
 
                       {row?.suggestions ? (
                         <div
-                          className={styles.summaryBtn}
-                          style={{
-                            color: "#F2A84C",
-                          }}
+                          className={styles.hasSuggestions}
                           onClick={() => {
                             setOpenDaySummary(true);
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SuggestionsIcon /> Recomendations
+                          <SuggestionsIcon /> 
+                          <span>Recomendations</span>
                         </div>
                       ) : (
-                        <div
-                          className={styles.summaryBtn}
+                        <div 
+                          className={ row?.summary ? styles.hasSummaryBtn : styles.noSummaryBtn}
                           onClick={() => {
                             setOpenDaySummary(true);
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SummaryIcon />{" "}
-                          <span
-                            style={{ color: row?.summary ? "#05A155" : "red" }}
-                          >
+                          {
+                            row?.summary ? 
+                            <HasSummaryIcon />
+                            :
+                            <NoSummaryIcon />
+                          }
+                          <span>
                             Summary
                           </span>
                         </div>

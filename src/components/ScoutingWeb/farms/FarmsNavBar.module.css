@@ -87,22 +87,21 @@
 
 .farmsnavbar {
   justify-content: space-between;
-  padding-top: 1.5rem;
+  padding-top: 0;
   padding-bottom: 0.5rem;
 }
 
 .AllFarmsPageWeb {
-  padding-top: 1rem;
-  width: 90%;
+  padding: 1rem 1rem 0;
+  width: calc(100% - 2rem);
   margin: 0 auto;
 }
 
 .allFarms {
-  height: calc(100vh - 138px);
+  height: calc(100vh - 110px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
-  padding-inline: 1.5rem;
 }
 
 .allFarms::-webkit-scrollbar {
@@ -132,6 +131,10 @@
 /* Handle on hover */
 .allFarms::-webkit-scrollbar-thumb:hover {
   background: #00435d;
+}
+
+.allFarms .allScoutingCards {
+  padding: 0 1.5rem;
 }
 
 .filterBlock {
@@ -192,7 +195,7 @@
 }
 
 .eachDayScouting {
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .scoutDay {
@@ -213,8 +216,9 @@
   line-height: 100% !important;
 }
 
-.scoutDay .summaryBtn {
-  color: var(--primary-blue) !important;
+.noSummaryBtn,
+.hasSuggestions,
+.hasSummaryBtn {
   font-family: "Inter", sans-serif !important;
   font-size: clamp(13px, 0.83vw, 18px) !important;
   font-weight: 500 !important;
@@ -224,27 +228,44 @@
   gap: 5px;
   cursor: pointer;
   background-color: #ffffff;
-  padding: 3px 9px 3px 6px;
+  padding: 3px 9px 3px 9px;
   border-radius: 15px;
+  box-shadow: 0 0 10px 0 #eaeaea;
 }
 
-.scoutDay .summaryBtn svg {
-  height: 20px;
-  width: 20px;
+.hasSummaryBtn {
+  color: var(--primary-blue);
+}
+
+.noSummaryBtn {
+  color: var(--color-firebrick);
+}
+.hasSuggestions {
+  color: #FF8329;
+}
+.noSummaryBtn svg,
+.hasSuggestions svg,
+.hasSummaryBtn svg{
+  height: 18px;
+  width: 18px;
 }
 .scoutDay .summaryBtn svg path {
   fill: var(--primary-blue)!important;
 }
 
-.scoutDay .summaryBtn:hover {
-  color: #05A155 !important;
+.noSummaryBtn:hover,
+.hasSuggestions:hover,
+.hasSummaryBtn:hover {
+  color: var(--title);
   box-shadow: 0 0 10px 0 #dddddd;
 }
 
-.scoutDay .summaryBtn:hover svg path {
-  fill: #05a155 !important;
+.noSummaryBtn:hover svg path,
+.hasSuggestions:hover svg path,
+.hasSummaryBtn:hover svg path, 
+.summaryBtn:hover svg path {
+  fill: var(--title);
 }
-
 .allScoutImgContainer {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -272,14 +293,14 @@
 .AllScoutsPageWeb {
   width: 100%;
   margin: 0 auto;
-  padding-top: 2rem;
+  padding-top: 1rem;
 }
 
 .scoutPageHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 0 1.5rem;
 }
 
@@ -304,4 +325,23 @@
   color: #000 !important;
   font-size: clamp(13px, 0.62vw, 15px) !important;
   font-family: 'Inter', sans-serif !important;
+}
+
+.postedDate {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600;
+  color: #313132;
+  font-size: 1.125rem;
+  position: sticky; 
+  top: 0px;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: #ffffff;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+  z-index: 100;
+  padding: 0.65rem 1.5rem;
+  margin: 0 -1.5rem 1rem;
 }

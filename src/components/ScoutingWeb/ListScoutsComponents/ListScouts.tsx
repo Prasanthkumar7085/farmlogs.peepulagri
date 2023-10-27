@@ -689,7 +689,8 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SuggestionsIcon /> Recomendations
+                          <SuggestionsIcon /> 
+                          <span>Recomendations</span>
                         </div>
                       ) : (
                         <div 

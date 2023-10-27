@@ -216,6 +216,8 @@
   line-height: 100% !important;
 }
 
+.noSummaryBtn,
+.hasSuggestions,
 .hasSummaryBtn {
   font-family: "Inter", sans-serif !important;
   font-size: clamp(13px, 0.83vw, 18px) !important;
@@ -228,41 +230,24 @@
   background-color: #ffffff;
   padding: 3px 9px 3px 9px;
   border-radius: 15px;
-  color : var(--primary-blue);
+  box-shadow: 0 0 10px 0 #eaeaea;
+}
+
+.hasSummaryBtn {
+  color: var(--primary-blue);
 }
 
 .noSummaryBtn {
-  font-family: "Inter", sans-serif !important;
-  font-size: clamp(13px, 0.83vw, 18px) !important;
-  font-weight: 500 !important;
-  line-height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  background-color: #ffffff;
-  padding: 3px 9px 3px 9px;
-  border-radius: 15px;
   color: var(--color-firebrick);
 }
 .hasSuggestions {
-  font-family: "Inter", sans-serif !important;
-  font-size: clamp(13px, 0.83vw, 18px) !important;
-  font-weight: 500 !important;
-  line-height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  background-color: #ffffff;
-  padding: 3px 9px 3px 9px;
-  border-radius: 15px;
-  color: #F2A84C;
+  color: #FF8329;
 }
- .hasSuggestions svg,
- .summaryBtn svg {
-  height: 20px;
-  width: 20px;
+.noSummaryBtn svg,
+.hasSuggestions svg,
+.hasSummaryBtn svg{
+  height: 18px;
+  width: 18px;
 }
 .scoutDay .summaryBtn svg path {
   fill: var(--primary-blue)!important;
@@ -275,8 +260,11 @@
   box-shadow: 0 0 10px 0 #dddddd;
 }
 
+.noSummaryBtn:hover svg path,
+.hasSuggestions:hover svg path,
+.hasSummaryBtn:hover svg path, 
 .summaryBtn:hover svg path {
-  fill: #05a155 !important;
+  fill: var(--title);
 }
 .allScoutImgContainer {
   display: grid;

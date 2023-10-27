@@ -276,10 +276,7 @@ const SingleViewScoutComponent = () => {
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
     }
-    if (
-      tags?.length &&
-      findingsvalue?.length == 0
-    ) {
+    if (tags?.length && findingsvalue?.length == 0) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
         obj.tags = [...tags];
@@ -299,21 +296,13 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempArray, selectedFile.summary);
     }
     if (tags?.length && findingsvalue?.length) {
-      console.log("qwert")
+      console.log("qwert");
       let tempArray = [...tempImages];
 
       await tempArray.forEach((obj: any) => {
-        (obj.description = findingsvalue),
-          (obj.tags = obj.tags.reduce(
-            (acc: any, tag: any) => {
-              if (!tags.includes(tag)) {
-                acc.push(tag);
-              }
-              return acc;
-            },
-            [...tags]
-          ));
+        (obj.description = findingsvalue), (obj.tags = [...tags]);
       });
+      console.log(tempArray, "lmm");
       setTempImages(tempArray);
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);

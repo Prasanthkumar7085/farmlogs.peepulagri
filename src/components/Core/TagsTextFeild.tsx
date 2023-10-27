@@ -17,15 +17,13 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         setChips([...chips, inputValue]);
         captureTags([...chips, inputValue]);
         setInputValue("");
-      }
-      else {
+      } else {
         setChips([inputValue]);
         captureTags([inputValue]);
         setInputValue("");
       }
-
     }
-  };
+  }; 
 
   const handleDelete = (index: any) => {
     const updatedChips = chips.filter(

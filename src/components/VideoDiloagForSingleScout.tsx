@@ -252,7 +252,13 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             ) : (
               ""
             )}
-
+            {/* map((tag: any, index: number) => {
+              return (
+                <Typography align="left" key={index}>
+                  {"" + tag}
+                </Typography>
+              );
+            }) */}
             {mediaArray?.length && mediaArray[currentIndex]?.tags?.length
               ? mediaArray[currentIndex]?.tags?.map(
                   (item: string, index: number) => {
@@ -283,58 +289,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             />
           </Typography> */}
 
-          {showMore == true ? (
-            <Typography className={styles.findingsText}>
+          <Typography className={styles.findingsText}>
+            {mediaArray[currentIndex]?.description?.length ? (
               <Markup
                 content={formatText(mediaArray[currentIndex]?.description)}
               />
-              <span
-                style={{ cursor: "pointer", fontWeight: "600" }}
-                onClick={() => {
-                  setShowMore(false);
-                }}
-              >
-                Show Less
-              </span>
-            </Typography>
-          ) : (
-            <Typography className={styles.findingsText}>
-              {mediaArray[currentIndex]?.description?.length > 100 ? (
-                <Markup
-                  content={
-                    formatText(mediaArray[currentIndex]?.description).slice(
-                      0,
-                      100
-                    ) + "...."
-                  }
-                />
-              ) : (
-                <Markup
-                  content={formatText(mediaArray[currentIndex]?.description)}
-                />
-              )}
-              {mediaArray[currentIndex]?.description?.length > 100 ? (
-                <span
-                  style={{ fontWeight: "600", cursor: "pointer" }}
-                  onClick={() => {
-                    setShowMore(true);
-                  }}
-                >
-                  Show More
-                </span>
-              ) : (
-                ""
-              )}
-            </Typography>
-          )}
-
-          {mediaArray[currentIndex]?.suggestions ? (
-            <Typography variant="h6" style={{ color: "orange" }}>
-              Suggestions
-            </Typography>
-          ) : (
-            ""
-          )}
+            ) : (
+              ""
+            )}
+          </Typography>
 
           {showMoreSuggestions == true ? (
             <Typography className={styles.findingsText}>

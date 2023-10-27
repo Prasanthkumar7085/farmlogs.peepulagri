@@ -152,7 +152,7 @@ const SingleViewScoutComponent = () => {
   const drawerClose = (value: any) => {
     if (value == false) {
       setOpenCommentsBox(false);
-      setSelectedItems([]);
+      // setSelectedItems([]);
     }
   };
 

@@ -187,6 +187,7 @@ const SingleViewScoutComponent = () => {
   };
   //capture the tags details
   const captureTagsDetails = async (tags: any, findingsvalue: any) => {
+
     setScoutFindings(findingsvalue);
     if (tags?.length && !findingsvalue?.length) {
       await tempImages.forEach((obj: any) => {
@@ -217,7 +218,7 @@ const SingleViewScoutComponent = () => {
     if (tags?.length && findingsvalue?.length) {
       await tempImages.forEach((obj: any) => {
         obj.description = findingsvalue;
-        obj.tags = [...obj.tags, ...tags];
+        obj.tags = [...tags];
       });
 
       setSelectedItems(tempImages);

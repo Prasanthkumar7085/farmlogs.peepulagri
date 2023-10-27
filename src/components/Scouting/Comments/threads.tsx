@@ -121,7 +121,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
               <div className={styles.inMessage} key={index}>
                 {item?.user[0]?.user_type == "USER" ? (
                   <Avatar sx={{ bgcolor: "chocolate" }}>
-                    {item?.user[0]?.full_name?.slice(0, 2)}
+                    {item?.user[0]?.full_name?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 ) : (
                   <Avatar sx={{ bgcolor: "green" }}>
@@ -428,7 +428,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                         <div className={styles.inMessage1} key={index}>
                           {row?.user[0]?.user_type == "USER" ? (
                             <Avatar sx={{ bgcolor: "chocolate" }}>
-                              {row?.user[0]?.full_name?.slice(0, 2)}
+                              {row?.user[0]?.full_name?.slice(0, 2).toUpperCase()}
                             </Avatar>
                           ) : (
                             <Avatar sx={{ bgcolor: "green" }}>
@@ -443,10 +443,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                     row?.user[0]?.user_type
                                     ? "You"
                                     : row?.user[0]?.user_type == "USER"
-                                      ? row?.user[0]?.user_type +
-                                      "(" +
-                                      row?.user[0]?.phone +
-                                      ")"
+                                      ? row?.user[0]?.full_name
+
                                       : row?.user[0]?.user_type}
                                 </h4>
                                 <p className={styles.aug20231030am}>
@@ -563,37 +561,36 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                               <div className={styles.actionButton1}>
                                 <div className={styles.react}>
                                   <div className={styles.edit}>
-                                    {(currentDate - rowCreatedAt) / (1000 * 60) > 15 ? "" :
-                                      <>
-                                        <div className={styles.editChild} />
+                                    <>
+                                      <div className={styles.editChild} />
 
-                                        {editMode[0] == true &&
-                                          editMode[1] == row._id ? (
-                                          <Button
-                                            className={styles.edit1}
-                                            disabled={editComment ? false : true}
-                                            onClick={() => {
-                                              setEditMode([false, row._id]);
-                                              afterUpdateComment(
-                                                row._id,
-                                                editComment
-                                              );
-                                            }}
-                                          >
-                                            Update
-                                          </Button>
-                                        ) : (
-                                          <p
-                                            className={styles.edit1}
-                                            onClick={() => {
-                                              setEditMode([true, row._id]);
-                                              setEditComment(row.content);
-                                            }}
-                                          >
-                                            Edit
-                                          </p>
-                                        )}
-                                      </>}
+                                      {editMode[0] == true &&
+                                        editMode[1] == row._id ? (
+                                        <Button
+                                          className={styles.edit1}
+                                          disabled={editComment ? false : true}
+                                          onClick={() => {
+                                            setEditMode([false, row._id]);
+                                            afterUpdateComment(
+                                              row._id,
+                                              editComment
+                                            );
+                                          }}
+                                        >
+                                          Update
+                                        </Button>
+                                      ) : (
+                                        <p
+                                          className={styles.edit1}
+                                          onClick={() => {
+                                            setEditMode([true, row._id]);
+                                            setEditComment(row.content);
+                                          }}
+                                        >
+                                          Edit
+                                        </p>
+                                      )}
+                                    </>
 
                                     <div className={styles.editChild} />
                                     {editMode[0] == true &&

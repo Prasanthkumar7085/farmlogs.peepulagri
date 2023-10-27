@@ -58,11 +58,15 @@ const SingleViewScoutComponent = () => {
   const [summaryContent, setSummaryContent] = useState<any>();
   const [scoutFindings, setScoutFindings] = useState<any>();
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>();
-  const [openCommentsBox, setOpenCommentsBox] = useState<any>()
-  const [singleScoutDetails, setSingleScoutDetails] = useState<any>()
+  const [openCommentsBox, setOpenCommentsBox] = useState<any>();
+  const [singleScoutDetails, setSingleScoutDetails] = useState<any>();
 
+  // let tempImages: any = [...selectedItems];
+  const [tempImages, setTempImages] = useState(selectedItems);
 
-  let tempImages: any = [...selectedItems];
+  useEffect(() => {
+    setTempImages(selectedItems);
+  }, [selectedItems]);
 
   useEffect(() => {
     if (
@@ -187,42 +191,61 @@ const SingleViewScoutComponent = () => {
   };
   //capture the tags details
   const captureTagsDetails = async (tags: any, findingsvalue: any) => {
-
     setScoutFindings(findingsvalue);
     if (tags?.length && !findingsvalue?.length) {
-      await tempImages.forEach((obj: any) => {
-        obj.tags = [...obj.tags, ...tags];
+      let tempArray = [...tempImages];
+      await tempArray.forEach((obj: any) => {
+        (obj.description = ""),
+          (obj.tags = obj.tags.reduce(
+            (acc: any, tag: any) => {
+              if (!tags.includes(tag)) {
+                acc.push(tag);
+              }
+              return acc;
+            },
+            [...tags]
+          ));
       });
-      setSelectedItems(tempImages);
-      await updateDescriptionService(tempImages, selectedFile.summary);
+      setTempImages(tempArray);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
     }
     if (
       tags?.length &&
       findingsvalue?.length == 0 &&
       tempImages.some((obj: any) => obj.hasOwnProperty("description")) == true
     ) {
-      await tempImages.forEach((obj: any) => {
+      let tempArray = [...tempImages];
+      await tempArray.forEach((obj: any) => {
         obj.tags = [...tags];
         obj.description = obj.description;
       });
-      setSelectedItems(tempImages);
-      await updateDescriptionService(tempImages, selectedFile.summary);
+      setTempImages(tempArray);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
     }
     if (!tags?.length && findingsvalue?.length) {
-      await tempImages.forEach((obj: any) => {
+      let tempArray = [...tempImages];
+      await tempArray.forEach((obj: any) => {
         obj.description = findingsvalue;
       });
-      setSelectedItems(tempImages);
-      await updateDescriptionService(tempImages, selectedFile.summary);
+      setTempImages(tempArray);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
     }
     if (tags?.length && findingsvalue?.length) {
-      await tempImages.forEach((obj: any) => {
+      let tempArray = [...tempImages];
+      console.log(tempArray);
+
+      await tempArray.forEach((obj: any) => {
         obj.description = findingsvalue;
         obj.tags = [...tags];
       });
+      setTempImages(tempArray);
+      console.log(tempArray);
 
-      setSelectedItems(tempImages);
-      await updateDescriptionService(tempImages, selectedFile.summary);
+      setSelectedItems(tempArray);
+      await updateDescriptionService(tempArray, selectedFile.summary);
     }
   };
   //checkbox handlechange event
@@ -287,10 +310,9 @@ const SingleViewScoutComponent = () => {
         setTagsDrawerEditOpen(false);
         setTagsDrawerOpen(false);
         // setSelectedFile([]);
-        setSelectedItems([]);
         setTagsCheckBoxOpen(false);
         setSummaryDrawerOpen(false);
-        setSelectedItems([]);
+        // setSelectedItems([]);
         // setScoutAttachementsDetails([]);
         setSummaryContent("");
         // setOpenDialog(false);
@@ -397,7 +419,7 @@ const SingleViewScoutComponent = () => {
                           gap: "4px",
                         }}
                       >
-                        <SuggestionsIcon /> Recommandations
+                        <SuggestionsIcon /> Recomendations
                       </Typography>
                     ) : (
                       <Typography

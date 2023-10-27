@@ -216,13 +216,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh-mm a")}
           </Typography>
           <div className={styles.tagNames}>
-            {mediaArray[currentIndex]?.tags.length && (
+            {mediaArray[currentIndex]?.tags.length ? (
               <Chip
                 className={styles.tagsLabel}
                 icon={<SellIcon sx={{ fontSize: 15 }} />}
                 label="Tags"
                 variant="outlined"
               />
+            ) : (
+              ""
             )}
             {/* map((tag: any, index: number) => {
               return (
@@ -235,10 +237,14 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
               {mediaArray[currentIndex]?.tags.join(", ")}
             </p>
           </div>
-          {mediaArray[currentIndex]?.description ?
-            <Typography variant='h6' style={{ color: "orange" }}>Findings</Typography> : ""}
+          {mediaArray[currentIndex]?.description ? (
+            <Typography variant="h6" style={{ color: "orange" }}>
+              Findings
+            </Typography>
+          ) : (
+            ""
+          )}
           {showMore == true ? (
-
             <Typography className={styles.findingsText}>
               <Markup content={mediaArray[currentIndex]?.description} />
               <span
@@ -276,12 +282,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
             </Typography>
           )}
 
-          {mediaArray[currentIndex]?.suggestions ?
-            <Typography variant='h6' style={{ color: "orange" }}>Suggestions</Typography>
-            : ""}
+          {mediaArray[currentIndex]?.suggestions ? (
+            <Typography variant="h6" style={{ color: "orange" }}>
+              Suggestions
+            </Typography>
+          ) : (
+            ""
+          )}
 
           {showMoreSuggestions == true ? (
-
             <Typography className={styles.findingsText}>
               <Markup content={mediaArray[currentIndex]?.suggestions} />
               <span

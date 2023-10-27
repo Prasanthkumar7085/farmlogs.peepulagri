@@ -176,6 +176,7 @@ const ScoutingDetails = ({
                 <Button
                   className={style.cancelButton}
                   variant="outlined"
+                  size="small"
                   onClick={() => setEditRecomendationOpen(false)}
                 >
                   Cancel
@@ -183,6 +184,7 @@ const ScoutingDetails = ({
                 <Button
                   className={style.sendButton}
                   variant="contained"
+                  size="small"
                   disabled={recomendations ? false : true}
                   onClick={() => {
                     let temp = { ...mainImageData };

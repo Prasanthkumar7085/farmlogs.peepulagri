@@ -239,6 +239,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                 <Button
                   className={style.cancelButton}
                   variant="outlined"
+                  size="small"
                   onClick={() => setEditRecomendation(false)}
                 >
                   Cancel
@@ -246,6 +247,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                 <Button
                   className={style.sendButton}
                   variant="contained"
+                  size="small"
                   onClick={sendRecomendations}
                 >
                   {singleScoutData?.suggestions ? "Update" : " Submit"}

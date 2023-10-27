@@ -181,8 +181,6 @@ const SingleViewScoutComponent = () => {
     }
     else if (value == "comments") {
       setOpenCommentsBox(true)
-
-
     }
     else {
       setScoutId(value._id);

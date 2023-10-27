@@ -200,7 +200,7 @@ const DrawerComponentForScout = ({
   return (
     <Drawer
       anchor={"bottom"}
-      open={openCommentsBox}
+      open={true}
       sx={{ zIndex: "1300 !important" }}
     >
       <div

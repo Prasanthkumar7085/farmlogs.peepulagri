@@ -16,7 +16,7 @@
 }
 
 .avatarImage {
-  color: #000000c3;
+  color: #000000c3 !important;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
 }

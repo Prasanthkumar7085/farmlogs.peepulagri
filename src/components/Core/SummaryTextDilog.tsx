@@ -97,7 +97,7 @@ const SummaryTextDilog = ({
             }}
             disabled={data ? false : true}
           >
-            Submit
+            {item.summary ? "Update" : "Submit"}
           </Button>}
       </div>
     </Drawer>

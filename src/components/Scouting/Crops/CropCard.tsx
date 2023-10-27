@@ -141,7 +141,7 @@ const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) =
             height={80}
             onClick={() => setToStorage(itemDetails?.title)}
           /> */}
-          <Avatar sx={{ bgcolor: colorsArray[colorIndex] }} className={styles.avatarImage}>{itemDetails?.title.toUpperCase().slice(0, 2)}</Avatar>
+          <Avatar sx={{ bgcolor: colorsArray[colorIndex], color: "black !important" }} className={styles.avatarImage}>{itemDetails?.title.toUpperCase().slice(0, 2)}</Avatar>
           <div
             className={styles.textWrapper}
             onClick={() => setToStorage(itemDetails?.title)}

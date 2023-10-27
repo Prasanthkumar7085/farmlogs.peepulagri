@@ -17,10 +17,10 @@ const TagsDrawer = ({
   item,
   captureTagsDetails,
   selectedItems,
+  tagsDrawerOpen
 }: any) => {
-  console.log(
-    selectedItems.some((obj: any) => obj.hasOwnProperty("description") == false)
-  );
+
+  console.log(item, "ty")
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [description, setDescription] = useState<any>();
@@ -54,32 +54,27 @@ const TagsDrawer = ({
         <div className={styles.inputBox}>
           <TagsTextFeild captureTags={captureTags} tags={tags} />
         </div>
-        {selectedItems.some((obj: any) => obj.hasOwnProperty("description")) ==
-          false ? (
-          <>
-            <Typography className={styles.label}>Findings</Typography>
-            <div className={styles.inputBox}>
-              <TextField
-                color="primary"
-                name="description"
-                id="description"
-                rows={4}
-                maxRows={4}
-                placeholder="Enter your findings here"
-                fullWidth={true}
-                variant="outlined"
-                multiline
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-                sx={{ background: "#fff" }}
-              />
-            </div>
-          </>
-        ) : // What you want to render if the condition is not met
-          // For example, you can render some default component or nothing at all
-          null}
+
+        <Typography className={styles.label}>Findings</Typography>
+        <div className={styles.inputBox}>
+          <TextField
+            color="primary"
+            name="description"
+            id="description"
+            rows={4}
+            maxRows={4}
+            placeholder="Enter your findings here"
+            fullWidth={true}
+            variant="outlined"
+            multiline
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+            sx={{ background: "#fff" }}
+          />
+        </div>
+
       </div>
       <div className={styles.drawerFooter}>
         <Button

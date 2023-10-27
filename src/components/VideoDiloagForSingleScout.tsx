@@ -108,6 +108,32 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
     }
   };
 
+  //function to formatext
+  function formatText(input: any) {
+    // Check if the text has numbered points
+    input = input?.replace(/\/n/g, "\n");
+
+    if (/\d+\./.test(input) || /[a-z]\./i.test(input)) {
+      let lines = input.split("\n");
+      let output = "";
+      lines.forEach((line: any) => {
+        if (/\d+\./.test(line) || /[a-z]\./i.test(line)) {
+          let parts = line.split(".");
+          if (parts.length > 1) {
+            output += `\u2022 ${parts.slice(1).join(".").trim()}\n`;
+          }
+        } else {
+          output += `\u2022 ${line.trim()}\n`;
+        }
+      });
+      return output;
+    } else {
+      // If the text does not have numbered points, return the text as is
+      return input;
+    }
+  }
+
+
   return (
     <Dialog
       autoFocus
@@ -244,9 +270,18 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
           ) : (
             ""
           )}
+          {/* <Typography className={styles.findingsText}>
+            <Markup
+              content={
+                formatText(mediaArray[currentIndex]?.description)
+              }
+            />
+          </Typography> */}
+
           {showMore == true ? (
             <Typography className={styles.findingsText}>
-              <Markup content={mediaArray[currentIndex]?.description} />
+              <Markup content={formatText(mediaArray[currentIndex]?.description)
+              } />
               <span
                 style={{ cursor: "pointer", fontWeight: "600" }}
                 onClick={() => {
@@ -261,11 +296,12 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
               {mediaArray[currentIndex]?.description?.length > 100 ? (
                 <Markup
                   content={
-                    mediaArray[currentIndex]?.description.slice(0, 100) + "...."
+                    formatText(mediaArray[currentIndex]?.description)
+                      .slice(0, 100) + "...."
                   }
                 />
               ) : (
-                <Markup content={mediaArray[currentIndex]?.description} />
+                <Markup content={formatText(mediaArray[currentIndex]?.description)} />
               )}
               {mediaArray[currentIndex]?.description?.length > 100 ? (
                 <span

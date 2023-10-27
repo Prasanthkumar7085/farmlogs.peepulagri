@@ -645,7 +645,7 @@ const ListScouts: FunctionComponent = () => {
                             gap: "20px",
                           }}
                         >
-                          <div
+                          {/* <div
                             style={{
                               display: "flex",
                               justifyContent: "center",
@@ -655,7 +655,7 @@ const ListScouts: FunctionComponent = () => {
                           >
                             <AccountCircleIcon />
                             {row.created_by.full_name}
-                          </div>
+                          </div> */}
                           <div
                             style={{
                               display: "flex",

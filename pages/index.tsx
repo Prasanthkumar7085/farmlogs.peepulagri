@@ -1,39 +1,48 @@
-import { GetServerSideProps } from 'next';
-import SignUp from '@/components/AuthModule/SignUp/SignUp';
-import MobileLogin from '@/components/MobileComponents/MobileLogin/login';
-import SigninEmail from '@/components/AuthModule/EmailSignIn/loginForm';
+import SigninEmail from "@/components/AuthModule/EmailSignIn/loginForm";
+import { GetServerSideProps } from "next";
 const HomePage = () => {
-
-    return (
-        <div>
-            {/* <Login /> */}
-            <div id="webLogin">
-                {/* <SignUp /> */}
-                <SigninEmail />
-            </div>
-            <div id="mobileLogin">
-                <MobileLogin />
-            </div>
-
-        </div>
-    )
-}
+  return (
+    <div>
+      <SigninEmail />
+    </div>
+  );
+};
 
 export default HomePage;
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    const { req } = context;
-    const { cookies } = req;
+  const { req } = context;
+  const { cookies } = req;
 
-    if (cookies.loggedIn == 'true') {
-        return {
-            redirect: {
-                destination: `/farm`,
-                permanent: false,
-            },
-        };
+  if (cookies.loggedIn == "true") {
+    if (cookies.userType == "USER") {
+      return {
+        redirect: {
+          destination: `/farms`,
+          permanent: false,
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination: `/scouts`,
+          permanent: false,
+        },
+      };
     }
-    return {
-        props: {},
-    };
+  }
+  return {
+    props: {},
+  };
 };
+
+{
+  /* <div id="webLogin">
+          <SigninEmail />
+        </div>
+        <div id="mobileLogin">
+          <Login />
+          <SignUp />
+          <MobileLogin />
+        </div> */
+}

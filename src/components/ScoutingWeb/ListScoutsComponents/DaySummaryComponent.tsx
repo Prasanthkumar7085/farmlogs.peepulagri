@@ -149,7 +149,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                 <Skeleton width="130px" height="15px" />
               </div>
             ) : (
-              singleScoutData?.farm_id.title
+              singleScoutData?.farm_id.title + "(" + singleScoutData?.farm_id.location + ")"
             )}
           </h2>
         </div>

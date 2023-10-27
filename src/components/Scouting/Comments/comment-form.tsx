@@ -119,6 +119,9 @@ const CommentForm = ({
   };
 
   const addComment = async () => {
+    if (loading) {
+      return;
+    }
     setLoading(true);
     let body = {
       comments: [
@@ -157,6 +160,9 @@ const CommentForm = ({
   };
 
   const replyThreads = async (comment_id: any) => {
+    if (loading) {
+      return;
+    }
     setLoading(true);
     let body = {
       content: comment,
@@ -347,7 +353,7 @@ const CommentForm = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                        fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                         <div className={styles.photojpg}>
                           <IconButton>
                             <DoneIcon sx={{ color: "#05A155" }} />
@@ -363,7 +369,7 @@ const CommentForm = ({
                       )}
                     </div>
                     {fileProgress[index] !== 100 ||
-                      fileProgress[index] == "fail" ? (
+                    fileProgress[index] == "fail" ? (
                       <img
                         className={styles.close41}
                         alt=""
@@ -376,7 +382,7 @@ const CommentForm = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                      fileProgress[index] !== "fail" ? (
+                    fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -442,7 +448,7 @@ const CommentForm = ({
           className={styles.sendbutton}
           size="medium"
           variant="contained"
-          disabled={comment ? false : true}
+          disabled={comment && !loading ? false : true}
           onClick={() =>
             replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
           }

@@ -419,7 +419,7 @@ const SingleViewScoutComponent = () => {
                           gap: "4px",
                         }}
                       >
-                        <SuggestionsIcon /> Recomendations
+                        <SuggestionsIcon /> Recommendations
                       </Typography>
                     ) : (
                       <Typography

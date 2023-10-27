@@ -39,7 +39,7 @@ const SummaryTextDilog = ({
         <Typography variant='h6'>
           <SummaryIcon
           />
-          <span>Day Summary</span></Typography>
+          <span>Summary</span></Typography>
         <IconButton
           onClick={() => {
             summaryDrawerClose(false);

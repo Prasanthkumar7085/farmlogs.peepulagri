@@ -30,6 +30,7 @@ import TablePaginationComponentForScouts from "@/components/Core/TablePagination
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { log } from "util";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 
 interface ApiMethodProps {
   page: string | number;
@@ -606,8 +607,9 @@ const ListScouts: FunctionComponent = () => {
 
           return (
             <div key={index} className={styles.allScoutingCards}>
-              <Typography style={{ fontWeight: "bold", position: "sticky", top: "0px" }}>
-                {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
+              <Typography className={styles.postedDate}>
+                <InsertInvitationIcon />
+                <span>{timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}</span>
               </Typography>
               {item.map((row: any, rowIndex: any) => {
                 let cropObj = row.farm_id.crops.find(
@@ -641,7 +643,6 @@ const ListScouts: FunctionComponent = () => {
                             justifyContent: "center",
                             alignItems: "center",
                             gap: "20px",
-                            position: "sticky",
                           }}
                         >
                           <div
@@ -649,6 +650,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
+                              gap: "0.325rem"
                             }}
                           >
                             <AccountCircleIcon />
@@ -659,6 +661,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
+                              gap: "0.325rem"
                             }}
                           >
                             <img
@@ -673,6 +676,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
+                              gap: "0.325rem"
                             }}
                           >
                             <img src="/cropName-icon.svg" alt="" />

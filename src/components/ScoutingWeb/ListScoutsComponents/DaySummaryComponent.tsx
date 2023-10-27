@@ -162,7 +162,7 @@ const DaySummaryComponent: FC<pageProps> = ({
       </div>
       <div className={style.scoutingdetails}>
         <div className={style.textwrapper}>
-          <h1 className={style.summary}><SummaryIcon />Day Summary</h1>
+          <h1 className={style.summary}><SummaryIcon />Summary</h1>
           <p className={style.findingText}>
             {loading ? (
               <div style={{ paddingLeft: "10px" }}>

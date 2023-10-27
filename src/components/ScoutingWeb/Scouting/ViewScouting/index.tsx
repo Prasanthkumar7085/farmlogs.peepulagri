@@ -191,7 +191,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                       style={{
                         width: "85%",
                         margin: "0 auto",
-                        height: "80vh",
+                        height: "90vh",
                       }}
                     >
                       {item.type?.includes("video") ? (

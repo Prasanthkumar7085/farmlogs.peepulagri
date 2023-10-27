@@ -264,7 +264,7 @@ const SingleViewScoutComponent = () => {
     }
   };
 
-  useEffect(() => { }, [selectedFile]);
+
 
   //capture the slideimages index
   const captureSlideImagesIndex = (value: any) => {

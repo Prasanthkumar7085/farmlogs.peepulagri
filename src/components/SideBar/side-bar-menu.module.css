@@ -3,6 +3,16 @@
   width: 100%;
   text-align: center;
 }
+.viewButton{
+  margin-top: 3rem;
+  background: green;
+  color: white !important;
+}
+.viewButton:hover{
+  margin-top: 3rem;
+  background: green;
+  color: white !important;
+}
 .apps1Icon,
 .logoIcon {
   position: relative;

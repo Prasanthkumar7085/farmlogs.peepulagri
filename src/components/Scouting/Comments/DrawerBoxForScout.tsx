@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
+import { useRouter } from "next/router";
 
 const DrawerComponentForScout = ({
   drawerClose,
@@ -16,6 +17,7 @@ const DrawerComponentForScout = ({
   scoutDetails,
 }: any) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -28,11 +30,11 @@ const DrawerComponentForScout = ({
   const [loadingThreads, setLoadingThreads] = useState(true);
 
   useEffect(() => {
-    if (attachement) {
+    if ((router.isReady, accessToken, scoutDetails && attachement)) {
       getAllScoutComments();
       setLoadingThreads(true);
     }
-  }, [attachement]);
+  }, [router.isReady, accessToken, scoutDetails, attachement]);
 
   const getAllScoutComments = async () => {
     setLoadingThreads(true);

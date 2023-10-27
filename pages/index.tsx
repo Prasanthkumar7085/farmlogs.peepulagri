@@ -35,14 +35,3 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     props: {},
   };
 };
-
-{
-  /* <div id="webLogin">
-          <SigninEmail />
-        </div>
-        <div id="mobileLogin">
-          <Login />
-          <SignUp />
-          <MobileLogin />
-        </div> */
-}

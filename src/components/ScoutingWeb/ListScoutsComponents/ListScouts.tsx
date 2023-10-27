@@ -1,7 +1,5 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import HasSummaryIcon from "@/components/Core/SvgIcons/HasSummaryIcon";
-import NoSummaryIcon from "@/components/Core/SvgIcons/NoSummaryIcon";
 import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
@@ -693,22 +691,22 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SuggestionsIcon /> 
+                          <SuggestionsIcon />
                           <span>Recomendations</span>
                         </div>
                       ) : (
-                        <div 
-                          className={ row?.summary ? styles.hasSummaryBtn : styles.noSummaryBtn}
+                        <div
+                          className={row?.summary ? styles.hasSummaryBtn : styles.noSummaryBtn}
                           onClick={() => {
                             setOpenDaySummary(true);
                             setSelectedItemDetails(row);
                           }}
                         >
                           {
-                            row?.summary ? 
-                            <HasSummaryIcon />
-                            :
-                            <NoSummaryIcon />
+                            row?.summary ?
+                              <ImageComponent src='/no-summary-icon.svg' height={10} width={10} alt="no-summary" />
+                              :
+                              <ImageComponent src='/no-summary-icon.svg' height={10} width={10} alt="no-summary" />
                           }
                           <span>
                             Summary

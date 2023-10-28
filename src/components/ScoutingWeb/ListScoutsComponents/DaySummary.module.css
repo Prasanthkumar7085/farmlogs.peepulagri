@@ -114,7 +114,7 @@
     background-color: var(--color-firebrick);
 }
 .editIcon:hover{
-    background-color: var(--primary-blue);
+    background-color: var(--gray-700);
 }
 
 .editIcon svg {
@@ -128,7 +128,7 @@
     font-family: "Inter", sans-serif;
     font-size: clamp(13px, 0.83vw, 16px);
     font-weight: 400;
-    line-height: 130%;
+    line-height: 140%;
 }
 .textwrapper .findingText .content {
     margin-top: 1rem;
@@ -150,15 +150,16 @@
 .recomdationContent {
     width: 100%;
     min-height: 100px;
-    border: 1px solid #D0D5DD !important;
     border-radius: 5px;
-    padding: 0.5rem;
     margin-top: 0.5rem;
 }
 
 .recomdationContent span {
-    font-size: clamp(13px, 0.72vw, 15px);
+    color: #6A7185;
     font-family: "Inter", sans-serif;
+    font-size: clamp(13px, 0.83vw, 16px);
+    font-weight: 400;
+    line-height: 140%;
 }
 
 .attachments {
@@ -270,4 +271,13 @@
 .RightImageContainer {
     height: 100vh;
     overflow-y: auto;
+}
+
+.addRecomm {
+    background-color: #eefbf3;
+    color: #148752;
+}
+.addRecomm:hover {
+    background-color: #afebc6;
+    color: #0f5637;
 }

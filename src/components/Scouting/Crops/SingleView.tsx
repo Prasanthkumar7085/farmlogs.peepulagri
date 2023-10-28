@@ -392,9 +392,6 @@ const SingleViewScoutComponent = () => {
     <div className={styles.scoutingView}>
       <div role="presentation">
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
-          <Link underline="hover" color="inherit" href="/farms">
-            Dashboard
-          </Link>
           <Link
             underline="hover"
             color="inherit"

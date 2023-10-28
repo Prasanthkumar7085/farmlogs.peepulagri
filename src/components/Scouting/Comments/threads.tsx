@@ -382,16 +382,16 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                             </Button>
                           </div>
                         ) : (
-                          (currentDate - itemCreatedAt) / (1000 * 60) > 15 ? "" :
-                            <div className={styles.edit}>
-                              <div className={styles.editChild} />
-                              <p
-                                className={styles.edit1}
-                                onClick={() => afterDeleteComment(item._id)}
-                              >
 
-                              </p>
-                            </div>
+                          <div className={styles.edit} style={{ display: ((currentDate - itemCreatedAt) / (1000 * 60) > 15) || item.replies.some((reply: any) => reply.user[0].user_type !== userDetails?.user_details?.user_type) ? "none" : "flex" }}>
+                            <div className={styles.editChild} />
+                            <p
+                              className={styles.edit1}
+                              onClick={() => afterDeleteComment(item._id)}
+                            >
+                              Delete
+                            </p>
+                          </div>
                         )}
                       </div>
                     ) : (
@@ -591,7 +591,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                         )}
                                       </>}
 
-                                    <div className={styles.editChild} />
+                                    <div className={styles.editChild} style={{ display: (currentDate - rowCreatedAt) / (1000 * 60) > 15 ? "none" : "flex" }} />
                                     {editMode[0] == true &&
                                       editMode[1] == row._id ? (
                                       <div className={styles.edit}>
@@ -606,7 +606,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                         </Button>
                                       </div>
                                     ) : (
-                                      <div className={styles.edit}>
+                                      <div className={styles.edit} style={{ display: (currentDate - rowCreatedAt) / (1000 * 60) > 15 ? "none" : "flex" }}>
                                         <p
                                           className={styles.edit1}
                                           onClick={() =>

@@ -18,6 +18,7 @@ import styles from "./view-logs-container.module.css";
 import SellIcon from "@mui/icons-material/Sell";
 import { Markup } from "interweave";
 import ShowMoreInViewAttachmentDetails from "./Core/ShowMoreInViewAttachmentDetails";
+import ImageComponent from "./Core/ImageComponent";
 
 const VideoDialogForScout = ({
   open,
@@ -92,16 +93,6 @@ const VideoDialogForScout = ({
 
   const zoomIn = () => {
     setISZoom(true);
-  };
-
-  const zoomOut = () => {
-    if (zoomLevel > 0.1) {
-      const img: any = document.querySelector(".zoom-image");
-      if (img) {
-        img.style.transform = `scale(${zoomLevel - 0.1})`;
-        setZoomLevel(zoomLevel - 0.1);
-      }
-    }
   };
 
   function processString(inputString: string) {
@@ -331,7 +322,12 @@ const VideoDialogForScout = ({
                   className={styles.recomendations}
                   variant="outlined"
                 >
-                  Show Recommendations
+                  <ImageComponent
+                    src={"/scouting/recommendations-icon.svg"}
+                    height={16}
+                    width={16}
+                  />{" "}
+                  Recommendations
                 </Button>
               ) : (
                 ""

@@ -3,11 +3,13 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Divider,
   Drawer,
   IconButton,
   TextField,
   Typography,
 } from "@mui/material";
+import { SummaryIcon } from "./SvgIcons/summaryIcon";
 import { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import TagsTextFeild from "./TagsTextFeild";
@@ -16,6 +18,7 @@ import Image from "next/image";
 import { Markup } from "interweave";
 import timePipe from "@/pipes/timePipe";
 import SellIcon from "@mui/icons-material/Sell";
+import ImageComponent from "./ImageComponent";
 const ShowMoreInViewAttachmentDetails = ({
   showMoreSuggestions,
   setShowMoreSuggestions,
@@ -70,17 +73,17 @@ const ShowMoreInViewAttachmentDetails = ({
       anchor={"bottom"}
       open={showMoreSuggestions}
       sx={{
-        zIndex: "1300 !important",
         "& .MuiPaper-root": {
-          height: "400px",
-          overflowY: "auto",
-          padding: "0 1rem 1rem",
-          borderRadius: "20px 20px 0 0",
-          background: "#F5F7FA",
+          width: "100%",
+          maxWidth: "500px",
+          marginInline: "auto",
+          minHeight: "300px",
+          maxHeight: "400px",
+          zIndex: "1300",
         },
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div className={styles.drawerHeading}>
         <div
           style={{
             display: "flex",
@@ -128,7 +131,7 @@ const ShowMoreInViewAttachmentDetails = ({
                     })
                   : ""}
               </div>
-              {item?.description ? (
+              {/* {item?.description ? (
                 <Typography variant="h6" style={{ color: "orange" }}>
                   Findings
                 </Typography>
@@ -142,16 +145,56 @@ const ShowMoreInViewAttachmentDetails = ({
                 ) : (
                   ""
                 )}
-              </Typography>
+              </Typography> */}
+              <div className={styles.drawerHeading}>
+                <Typography variant="h6">
+                  <SummaryIcon />
+                  <span>Summary</span>
+                </Typography>
+              </div>
 
               {item?.suggestions ? (
-                <div>
-                  <Typography variant="h6" style={{ color: "orange" }}>
-                    Recomendations
-                  </Typography>
-                  <Typography className={styles.findingsText}>
-                    <Markup content={item?.suggestions} />
-                  </Typography>
+                <div className={styles.drawerBody}>
+                  <div className={styles.findingDec}>
+                    <span
+                      className={styles.bodyHeading}
+                      style={{ color: "#3462CF" }}
+                    >
+                      <ImageComponent
+                        src={"/scouting/HasSummary.svg"}
+                        height={19}
+                        width={19}
+                        alt="no-summary"
+                      />
+                      <span>Findings</span>
+                    </span>
+                    <Typography
+                      variant="caption"
+                      className={styles.bodyDescrpiction}
+                    >
+                      <Markup content={item?.desciption} />
+                    </Typography>
+                  </div>
+                  <Divider />
+                  <div className={styles.findingDec}>
+                    <span
+                      className={styles.bodyHeading}
+                      style={{ color: "#05A155", fontWeight: "600 !important" }}
+                    >
+                      <ImageComponent
+                        src={"/scouting/recommendations-icon.svg"}
+                        height={16}
+                        width={16}
+                      />
+                      <span>Recommendation</span>
+                    </span>
+                    <Typography
+                      variant="caption"
+                      className={styles.bodyDescrpiction}
+                    >
+                      <Markup content={item?.suggestions} />
+                    </Typography>
+                  </div>
                 </div>
               ) : (
                 ""
@@ -192,3 +235,151 @@ const ShowMoreInViewAttachmentDetails = ({
 };
 
 export default ShowMoreInViewAttachmentDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import CloseIcon from "@mui/icons-material/Close";
+// import {
+//   Button,
+//   Drawer,
+//   IconButton,
+//   TextField,
+//   Typography,
+//   Divider,
+// } from "@mui/material";
+// import { useState } from "react";
+
+// import { Markup } from "interweave";
+// import { SummaryIcon } from "./SvgIcons/summaryIcon";
+// import styles from "./TagsDrawer.module.css";
+// import ImageComponent from "@/components/Core/ImageComponent";
+
+// const ShowMoreInViewAttachmentDetails = ({
+//   summaryDrawerClose,
+//   item,
+//   captureSummary,
+// }: any) => {
+//   const [data, setData] = useState(item?.summary ? item.summary : "");
+
+//   return (
+//     <Drawer
+//       anchor={"bottom"}
+//       open={true}
+//       sx={{
+//         "& .MuiPaper-root": {
+//           width: "100%",
+//           maxWidth: "500px",
+//           marginInline: "auto",
+//           minHeight: "300px",
+//           maxHeight: "400px",
+//         },
+//       }}
+//     >
+//       <div className={styles.drawerHeading}>
+//         <Typography variant="h6">
+//           <SummaryIcon />
+//           <span>Summary</span>
+//         </Typography>
+//         <IconButton
+//           onClick={() => {
+//             summaryDrawerClose(false);
+//           }}
+//         >
+//           <CloseIcon />
+//         </IconButton>
+//       </div>
+//       {item?.suggestions ? (
+//         <div className={styles.drawerBody}>
+//           <div className={styles.findingDec}>
+//             <span className={styles.bodyHeading} style={{ color: "#3462CF" }}>
+//               <ImageComponent
+//                 src={"/scouting/HasSummary.svg"}
+//                 height={19}
+//                 width={19}
+//                 alt="no-summary"
+//               />
+//               <span>Findings</span>
+//             </span>
+//             <Typography variant="caption" className={styles.bodyDescrpiction}>
+//               <Markup content={data} />
+//             </Typography>
+//           </div>
+//           <Divider />
+//           <div className={styles.findingDec}>
+//             <span
+//               className={styles.bodyHeading}
+//               style={{ color: "#05A155", fontWeight: "600 !important" }}
+//             >
+//               <ImageComponent
+//                 src={"/scouting/recommendations-icon.svg"}
+//                 height={16}
+//                 width={16}
+//               />
+//               <span>Recommendation</span>
+//             </span>
+//             <Typography variant="caption" className={styles.bodyDescrpiction}>
+//               <Markup content={item?.suggestions} />
+//             </Typography>
+//           </div>
+//         </div>
+//       ) : (
+//         <div className={styles.drawerBody}>
+//           <TextField
+//             color="primary"
+//             name="desciption"
+//             id="description"
+//             maxRows={4}
+//             minRows={4}
+//             placeholder="Enter your findings here"
+//             fullWidth={true}
+//             variant="outlined"
+//             multiline
+//             value={data}
+//             onChange={(e) => {
+//               setData(e.target.value);
+//             }}
+//             sx={{ background: "#fff" }}
+//           />
+//         </div>
+//       )}
+//       <div className={styles.drawerFooter}>
+//         {!item?.suggestions && (
+//           <Button
+//             className={styles.submitBtnSuccess}
+//             sx={{}}
+//             variant="contained"
+//             onClick={() => {
+//               captureSummary(data);
+//               setData("");
+//             }}
+//             disabled={data ? false : true}
+//           >
+//             {item.summary ? "Update" : "Submit"}
+//           </Button>
+//         )}
+//       </div>
+//     </Drawer>
+//   );
+// };
+
+// export default ShowMoreInViewAttachmentDetails;
+ 

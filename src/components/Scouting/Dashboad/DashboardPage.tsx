@@ -2,77 +2,108 @@ import { useRouter } from "next/router";
 import DashBoardHeader from "./dash-board-header";
 import FarmCard from "./farm-card";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FarmDataType, PaginationInFarmResponse } from "@/types/farmCardTypes";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
-import AddIcon from '@mui/icons-material/Add';
-import styles from './DashboardPage.module.css';
-import {
-    IconButton
-  } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import styles from "./DashboardPage.module.css";
+import { IconButton } from "@mui/material";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 
 const DashboardPage = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
-    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+    const accessToken = useSelector(
+      (state: any) => state.auth.userDetails?.access_token
+    );
 
     const [farmsData, setFarmsData] = useState<Array<FarmDataType>>([]);
-    const [paginationDetails, setPaginationDetails] = useState<PaginationInFarmResponse>();
+    const [paginationDetails, setPaginationDetails] =
+      useState<PaginationInFarmResponse>();
     const [loading, setLoading] = useState(true);
-    const [searchString, setSearchString] = useState('');
-    const [locations, setLocations] = useState<Array<{ name: string, _id: string }>>([]);
-    const [location, setLocation] = useState('');
-    const [routerLocation, setRouterLocation] = useState('');
+    const [searchString, setSearchString] = useState("");
+    const [locations, setLocations] = useState<
+      Array<{ name: string; _id: string }>
+    >([]);
+    const [location, setLocation] = useState("");
+    const [routerLocation, setRouterLocation] = useState("");
 
-    const getAllFarms = async ({ page = 1, limit = 100, search_string = '', location }: Partial<{ page: number, limit: number, search_string: string, location: string }>) => {
+    const getAllFarms = async ({
+      page = 1,
+      limit = 100,
+      search_string = "",
+      location,
+    }: Partial<{
+      page: number;
+      limit: number;
+      search_string: string;
+      location: string;
+    }>) => {
+      setLoading(true);
+      try {
+        let url = `farm/${page}/${limit}`;
+        let queryParam: any = {
+          order_by: "createdAt",
+          order_type: "desc",
+        };
 
-        setLoading(true);
-        try {
-            let url = `farm/${page}/${limit}`
-            let queryParam: any = {
-                order_by: "createdAt",
-                order_type: "desc"
-            };
-
-            if (search_string) {
-                queryParam['search_string'] = search_string;
-            }
-            if (location) {
-                if (location !== 'All') {
-                    queryParam['location'] = location;
-                }
-            }
-            router.push({ pathname: '/farms', query: queryParam })
-            url = prepareURLEncodedParams(url, queryParam);
-
-
-            const response = await getAllFarmsService(url, accessToken);
-
-            if (response?.success) {
-                const { data, ...rest } = response;
-                setFarmsData(data);
-                setPaginationDetails(rest)
-            }
-        } catch (err: any) {
-            console.error(err)
-        } finally {
-            setLoading(false);
+        if (search_string) {
+          queryParam["search_string"] = search_string;
         }
+        if (location) {
+          if (location !== "All") {
+            queryParam["location"] = location;
+          }
+        }
+        router.push({ pathname: "/farms", query: queryParam });
+        url = prepareURLEncodedParams(url, queryParam);
 
+        const response = await getAllFarmsService(url, accessToken);
+
+        if (response?.success) {
+          const { data, ...rest } = response;
+          setFarmsData(data);
+          setPaginationDetails(rest);
+        }
+      } catch (err: any) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     const captureSearchString = (search: string) => {
-        setSearchString(search);
+      setSearchString(search);
     };
 
+    const logout = async () => {
+      try {
+        const responseUserType = await fetch("/api/remove-cookie");
+        if (responseUserType) {
+          const responseLogin = await fetch("/api/remove-cookie");
+          if (responseLogin.status) {
+            router.push("/");
+          } else throw responseLogin;
+        }
+        await dispatch(removeUserDetails());
+        await dispatch(deleteAllMessages());
+      } catch (err: any) {
+        console.error(err);
+      }
+    };
     const getAllLocations = async () => {
         const response = await getAllLocationsService(accessToken);
+        if (response?.statusCode == 403) {
+          await logout();
+        }
         if (response?.data?.length) {
             setLocations([{name:'All',_id:'1'}, ...response?.data]);
         } else {
@@ -109,7 +140,9 @@ const DashboardPage = () => {
     
 
     useEffect(() => {
-        getData();
+        if (router.isReady && accessToken) {
+          getData();
+        }
     }, [router.isReady, accessToken]);
 
     useEffect(() => {

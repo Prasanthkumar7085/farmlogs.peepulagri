@@ -15,9 +15,12 @@
 }
 .recomendations,
 .recomendations:hover{
-  border: none;
-  color:#ffa500;
-  border-radius: 10px;
+  border: none !important;
+  color:#05A155 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 5px;
+  
 }
 .scoutDailogImg img {
   height: 100%;

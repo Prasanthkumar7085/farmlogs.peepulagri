@@ -7,7 +7,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <Head>Peepul Agri</Head>
+          {/* <Head>Peepul Agri</Head> */}
           {/* Add your favicon link tag here */}
           <link rel="shortcut icon" href="/favicon.ico" />
           <link rel="icon" href="/favicon.ico" />

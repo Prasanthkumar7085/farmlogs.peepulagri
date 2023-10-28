@@ -241,7 +241,7 @@
   color: var(--color-firebrick);
 }
 .hasSuggestions {
-  color: #FF8329;
+  color: var(--color-mediumseagreen-100);
 }
 .noSummaryBtn svg,
 .hasSuggestions svg,

@@ -85,12 +85,13 @@ export default function SigninEmail() {
     return (
         <div id={styles.loginPage}>
             <div className={styles.bgImage}>
-                <img src="/login-bg.webp" alt="Bg Image" />
+                <ImageComponent src="./auth/clouds.svg" className={styles.vectorTop} width="400" height="100" />
+                <ImageComponent src="./auth/bottom-cart.svg" className={styles.vectorBottom} width="400" height="150" />
             </div>
             <form noValidate className={styles.formCard} onSubmit={signInForm}  >
                 <div className={styles.innerWrap}>
                     <div className={styles.header}>
-                        <ImageComponent src="./Logo-color.svg" width="90" height="70" />
+                        <ImageComponent src="./logo-p0.svg" className={styles.logo} width="90" height="70" />
                         <span className={styles.content}>
                             <Typography variant="h5">
                                 Sign in
@@ -109,7 +110,7 @@ export default function SigninEmail() {
                                     background: "#fff"
                                 },
                                 '& .MuiOutlinedInput-notchedOutline': {
-                                    border: "0 !important"
+                                    borderWidth: "1px !important"
                                 }
                             }}
                             size='small'
@@ -131,7 +132,7 @@ export default function SigninEmail() {
                                     background: "#fff"
                                 },
                                 '& .MuiOutlinedInput-notchedOutline': {
-                                    border: "0 !important"
+                                    borderWidth: "1px !important"
                                 }
                             }}
                             size='small'
@@ -172,7 +173,6 @@ export default function SigninEmail() {
                         className={styles.signin_button}
                         fullWidth
                         variant="contained"
-                        color="primary"
                         type='submit'
                     >
                         {loading ?

@@ -476,7 +476,7 @@ const SingleViewScoutComponent = () => {
                         variant="caption"
                         className={styles.recommandation}
                         sx={{
-                          color: "#F2A84C",
+                          color: "#05A155",
                           display: "flex",
                           alignItems: "center",
                           gap: "4px",

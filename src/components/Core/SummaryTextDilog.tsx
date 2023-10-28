@@ -5,12 +5,14 @@ import {
   IconButton,
   TextField,
   Typography,
+  Divider
 } from "@mui/material";
 import { useState } from "react";
 
 import { Markup } from "interweave";
 import { SummaryIcon } from "./SvgIcons/summaryIcon";
 import styles from "./TagsDrawer.module.css";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 const SummaryTextDilog = ({
   summaryDrawerClose,
@@ -29,6 +31,7 @@ const SummaryTextDilog = ({
           maxWidth: "500px",
           marginInline: "auto",
           minHeight: "300px",
+          maxHeight: "400px",
         },
       }}
     >
@@ -49,18 +52,31 @@ const SummaryTextDilog = ({
         <div className={styles.drawerBody}>
           <div className={styles.findingDec}>
             <span className={styles.bodyHeading} style={{ color: "#3462CF" }}>
-              Findings
+              <ImageComponent                            
+                src={'/scouting/HasSummary.svg'}
+                height={19}
+                width={19}
+                alt="no-summary"
+              />
+              <span>Findings</span>            
             </span>
             <Typography variant="caption" className={styles.bodyDescrpiction}>
               <Markup content={data} />
             </Typography>
           </div>
+          <Divider />
           <div className={styles.findingDec}>
+            
             <span
               className={styles.bodyHeading}
-              style={{ color: "#F2A84C", fontWeight: "600 !important" }}
+              style={{ color: "#05A155", fontWeight: "600 !important" }}
             >
-              Recommendation
+              <ImageComponent                            
+                src={'/scouting/recommendations-icon.svg'}
+                height={16}
+                width={16}
+              />
+              <span>Recommendation</span>
             </span>
             <Typography variant="caption" className={styles.bodyDescrpiction}>
               <Markup content={item?.suggestions} />

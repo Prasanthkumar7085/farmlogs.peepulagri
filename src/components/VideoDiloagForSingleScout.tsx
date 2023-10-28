@@ -18,6 +18,7 @@ import styles from "./view-logs-container.module.css";
 import SellIcon from "@mui/icons-material/Sell";
 import { Markup } from "interweave";
 import ShowMoreInViewAttachmentDetails from "./Core/ShowMoreInViewAttachmentDetails";
+import ImageComponent from "./Core/ImageComponent";
 
 const VideoDialogForScout = ({
   open,
@@ -94,16 +95,6 @@ const VideoDialogForScout = ({
     setISZoom(true);
   };
 
-  const zoomOut = () => {
-    if (zoomLevel > 0.1) {
-      const img: any = document.querySelector(".zoom-image");
-      if (img) {
-        img.style.transform = `scale(${zoomLevel - 0.1})`;
-        setZoomLevel(zoomLevel - 0.1);
-      }
-    }
-  };
-
   function processString(inputString: string) {
     // let trimmedString = inputString.trim();
     // let regex = /^\d+\.\s*/;
@@ -155,6 +146,7 @@ const VideoDialogForScout = ({
       fullWidth
       sx={{
         background: "#0000008f",
+        zIndex: 1000,
         "& .MuiPaper-root": {
           margin: "0 !important",
           width: "100%",
@@ -288,7 +280,7 @@ const VideoDialogForScout = ({
               : ""}
           </div>
           {mediaArray[currentIndex]?.description ? (
-            <Typography variant="h6" style={{ color: "orange" }}>
+            <Typography variant="h6" style={{ color: "#57b6f0" }}>
               Findings
             </Typography>
           ) : (
@@ -307,14 +299,14 @@ const VideoDialogForScout = ({
                         ) + "....."
                   }
                 />
-                <span
-                  style={{ fontWeight: "600", cursor: "pointer" }}
+                <a
+                  style={{ cursor: "pointer", color: "#f2a84c" }}
                   onClick={() => {
                     setShowMoreSuggestions(true);
                   }}
                 >
                   Show More
-                </span>
+                </a>
               </div>
             ) : (
               ""
@@ -331,7 +323,12 @@ const VideoDialogForScout = ({
                   className={styles.recomendations}
                   variant="outlined"
                 >
-                  Show Recommendations
+                  <ImageComponent
+                    src={"/scouting/recommendations-icon.svg"}
+                    height={16}
+                    width={16}
+                  />{" "}
+                  Recommendations
                 </Button>
               ) : (
                 ""

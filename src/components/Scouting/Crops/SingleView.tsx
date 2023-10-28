@@ -1,4 +1,7 @@
-import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import {
+  deleteAllMessages,
+  removeTheAttachementsFilesFromStore,
+} from "@/Redux/Modules/Conversations";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
@@ -8,6 +11,7 @@ import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import ImageComponent from "@/components/Core/ImageComponent";
+
 import {
   Breadcrumbs,
   Button,
@@ -26,12 +30,12 @@ import getSingleScoutService from "../../../../lib/services/ScoutServices/getSin
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
-import AddIcon from '@mui/icons-material/Add';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import styles from "./crop-card.module.css";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
+import AddIcon from "@mui/icons-material/Add";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import styles from "./crop-card.module.css";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -41,8 +45,7 @@ const SingleViewScoutComponent = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
   const cropTitle = useSelector((state: any) => state?.farms?.cropName);
-  const farmTitle = useSelector((state: any) => state?.farms?.farmName)
-
+  const farmTitle = useSelector((state: any) => state?.farms?.farmName);
 
   const [data, setData] = useState<any>([]);
   const [selectedFile, setSelectedFile] = useState<any>([]);
@@ -91,6 +94,21 @@ const SingleViewScoutComponent = () => {
   //     getPresingedURls()
   // }, [pageNumber]);
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   const getPresingedURls = async () => {
     setLoading(true);
     let options = {
@@ -115,6 +133,8 @@ const SingleViewScoutComponent = () => {
         let temp: any;
         // temp = [...data, ...responseData?.data];
         setData(responseData?.data);
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
@@ -233,7 +253,7 @@ const SingleViewScoutComponent = () => {
     if (!tags?.length && findingsvalue?.length) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
-        obj.description = obj.description + "\n" + findingsvalue
+        obj.description = obj.description + "\n" + findingsvalue;
       });
       setTempImages(tempArray);
       setSelectedItems(tempArray);
@@ -315,7 +335,6 @@ const SingleViewScoutComponent = () => {
     }
   };
 
-
   //checkbox handlechange event
   const handleChange = (itemId: any) => {
     const itemIndex = tempImages.findIndex(
@@ -331,7 +350,6 @@ const SingleViewScoutComponent = () => {
       setSelectedItems(updatedItems);
     }
   };
-
 
   //capture the slideimages index
   const captureSlideImagesIndex = (value: any) => {
@@ -418,203 +436,202 @@ const SingleViewScoutComponent = () => {
         data.map((item: any, index: any) => {
           return (
             <Card key={index} className={styles.galleryCard}>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography className={styles.postDate}>
-                  <InsertInvitationIcon />
-                  <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
-                </Typography>
+              <div>
+                <div className={styles.dateHeader }>
+                  <Typography className={styles.postDate}>
+                    <InsertInvitationIcon />
+                    <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
+                  </Typography>
 
-                <div className={styles.actionButtonsTop}>
-                  {tagsCheckBoxOpen && scoutId == item._id ? (
-                    <IconButton
-                      size="small"
-                      onClick={() => {
-                        setTagsCheckBoxOpen(false);
-                        setScoutId("");
-                        setScoutAttachementsDetails([]);
-                        setSlideShowImages([]);
-                        setSelectedItems([]);
-                      }}
-                    >
-                      <Image
-                        src={"/scouting-img-clear.svg"}
-                        width={17}
-                        height={17}
-                        alt="tag"
-                      />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      size="small"
-                      onClick={() => {
-                        setTagsCheckBoxOpen(true);
-                        setScoutId(item._id);
-                        setScoutAttachementsDetails(item.attachments);
-                        setSlideShowImages(item.attachments);
-                        setSelectedFile("");
-                      }}
-                    >
-                      <Image
-                        src={"/scouting-img-add.svg"}
-                        width={17}
-                        height={17}
-                        alt="tag"
-                      />
-                    </IconButton>
-                  )}
-
-                  <Button
-                    className={styles.summaryBtn}
-                    onClick={() => {
-                      setSummaryDrawerOpen(true);
-                      setScoutId(item._id);
-                      setSelectedFile(item);
-                      setScoutAttachementsDetails(item.attachments);
-                    }}
-                  >
-                    {item?.suggestions ? (
-                      <Typography
-                        variant="caption"
-                        className={styles.recommandation}
-                        sx={{
-                          color: "#05A155",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                        }}
-                      >
-                        <ImageComponent                            
-                            src={'/scouting/recommendations-icon.svg'}
-                            height={20}
-                            width={20}
-                          />
-                          <span>Recommendations</span>
-                      </Typography>
-                    ) : (
-                      <Typography
-                        variant="caption"
-                        className={styles.summary}
-                        sx={{
-                          color: item?.summary ?  "#3462CF" : "#d94841",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                        }}
-                      >
-                        {
-                          item?.summary ? 
-                          <ImageComponent                            
-                            src={'/scouting/HasSummary.svg'}
-                            height={19}
-                            width={19}
-                          /> :
-                          <ImageComponent
-                            src="/no-summary-icon.svg"
-                            height={19}
-                            width={19}
-                          />
-                        }
-                        <span>
-                          Summary
-                        </span>
-                      </Typography>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className={styles.mobileScoutGridGallary}>
-                {item?.attachments?.length !== 0 ? (
-                  item.attachments.map((image: any, indexAttachment: any) => (
-                    <div
-                      style={{ position: "relative", paddingTop: "100%" }}
-                      key={indexAttachment}
-                    >
-                      <img
-                        src={
-                          image.type?.slice(0, 2) == "vi"
-                            ? "/Play-button.svg"
-                            : image.url
-                        }
-                        alt={`images${indexAttachment}`}
-                        width={"100%"}
-                        height={"100%"}
+                  <div className={styles.actionButtonsTop}>
+                    {tagsCheckBoxOpen && scoutId == item._id ? (
+                      <IconButton
+                        size="small"
                         onClick={() => {
-                          handleClick(indexAttachment, item.attachments);
+                          setTagsCheckBoxOpen(false);
+                          setScoutId("");
+                          setScoutAttachementsDetails([]);
+                          setSlideShowImages([]);
+                          setSelectedItems([]);
+                        }}
+                      >
+                        <Image
+                          src={"/scouting-img-clear.svg"}
+                          width={17}
+                          height={17}
+                          alt="tag"
+                        />
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        size="small"
+                        onClick={() => {
+                          setTagsCheckBoxOpen(true);
                           setScoutId(item._id);
-                          setSingleScoutDetails(item);
-                          setSelectedFile(image);
-                          setSlideShowImages(item?.attachments);
+                          setScoutAttachementsDetails(item.attachments);
+                          setSlideShowImages(item.attachments);
+                          setSelectedFile("");
                         }}
-                        style={{
-                          position: "absolute",
-                          top: "0",
-                          left: "0",
-                          width: "100%",
-                          height: "100%",
-                          cursor: "pointer",
-                          borderRadius: "5px",
-                          objectFit: "cover",
-                        }}
-                      />
+                      >
+                        <Image
+                          src={"/scouting-img-add.svg"}
+                          width={17}
+                          height={17}
+                          alt="tag"
+                        />
+                      </IconButton>
+                    )}
 
+                    <Button
+                      className={styles.summaryBtn}
+                      onClick={() => {
+                        setSummaryDrawerOpen(true);
+                        setScoutId(item._id);
+                        setSelectedFile(item);
+                        setScoutAttachementsDetails(item.attachments);
+                      }}
+                    >
+                      {item?.suggestions ? (
+                        <Typography
+                          variant="caption"
+                          className={styles.recommandation}
+                          sx={{
+                            color: "#05A155",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                          }}
+                        >
+                          <ImageComponent                            
+                              src={'/scouting/recommendations-icon.svg'}
+                              height={20}
+                              width={20}
+                            />
+                            <span>Recommendations</span>
+                        </Typography>
+                      ) : (
+                        <Typography
+                          variant="caption"
+                          className={styles.summary}
+                          sx={{
+                            color: item?.summary ? "#3462CF" : "#d94841",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                          }}
+                        >
+                          {item?.summary ? (
+                            <ImageComponent
+                              src={"/scouting/HasSummary.svg"}
+                              height={19}
+                              width={19}
+                            />
+                          ) : (
+                            <ImageComponent
+                              src="/no-summary-icon.svg"
+                              height={19}
+                              width={19}
+                            />
+                          )}
+                          <span>Summary</span>
+                        </Typography>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                <div className={styles.mobileScoutGridGallary}>
+                  {item?.attachments?.length !== 0 ? (
+                    item.attachments.map((image: any, indexAttachment: any) => (
                       <div
-                        style={{
-                          position: "absolute",
-                          top: "5px",
-                          left: "5px",
-                        }}
+                        style={{ position: "relative", paddingTop: "100%" }}
+                        key={indexAttachment}
                       >
-                        {tagsCheckBoxOpen && scoutId == item._id ? (
-                          <input
-                            type="checkbox"
-                            checked={tempImages.some(
-                              (ite: any) => ite._id === image._id
-                            )}
-                            onChange={() => handleChange(image)}
-                            title={image.id}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: "5px",
-                          right: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
-                        {tagsCheckBoxOpen == true &&
+                        <img
+                          src={
+                            image.type?.slice(0, 2) == "vi"
+                              ? "/Play-button.svg"
+                              : image.url
+                          }
+                          alt={`images${indexAttachment}`}
+                          width={"100%"}
+                          height={"100%"}
+                          onClick={() => {
+                            handleClick(indexAttachment, item.attachments);
+                            setScoutId(item._id);
+                            setSingleScoutDetails(item);
+                            setSelectedFile(image);
+                            setSlideShowImages(item?.attachments);
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                            width: "100%",
+                            height: "100%",
+                            cursor: "pointer",
+                            borderRadius: "5px",
+                            objectFit: "cover",
+                          }}
+                        />
+
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "5px",
+                            left: "5px",
+                          }}
+                        >
+                          {tagsCheckBoxOpen && scoutId == item._id ? (
+                            <input
+                              type="checkbox"
+                              checked={tempImages.some(
+                                (ite: any) => ite._id === image._id
+                              )}
+                              onChange={() => handleChange(image)}
+                              title={image.id}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: "5px",
+                            right: "5px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          {tagsCheckBoxOpen == true &&
                           scoutId == item._id &&
                           image?.description ? (
-                          <SearchOutlinedIcon />
-                        ) : (
-                          ""
-                        )}
-                        {tagsCheckBoxOpen == true &&
+                            <SearchOutlinedIcon />
+                          ) : (
+                            ""
+                          )}
+                          {tagsCheckBoxOpen == true &&
                           scoutId == item._id &&
                           image?.tags?.length ? (
-                          <Image
-                            src={"/scout-img-select.svg"}
-                            width={17}
-                            height={17}
-                            alt="tags"
-                          />
-                        ) : (
-                          ""
-                        )}
+                            <Image
+                              src={"/scout-img-select.svg"}
+                              width={17}
+                              height={17}
+                              alt="tags"
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div style={{ width: "100%", marginLeft: "100%" }}>
+                      No Attachements
                     </div>
-                  ))
-                ) : (
-                  <div style={{ width: "100%", marginLeft: "100%" }}>
-                    No Attachements
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </Card>
           );
@@ -627,8 +644,8 @@ const SingleViewScoutComponent = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height:"calc(100vh - 150px)",
-            gap: "1rem"
+            height: "calc(100vh - 150px)",
+            gap: "1rem",
           }}
         >
           <ImageComponent
@@ -639,7 +656,6 @@ const SingleViewScoutComponent = () => {
           />
           <Typography className={styles.subTitle}>No Scoutings</Typography>
         </div>
-
       ) : (
         ""
       )}
@@ -704,18 +720,29 @@ const SingleViewScoutComponent = () => {
 
       <div className="addFormPositionIcon">
         {tagsCheckBoxOpen == false && selectedItems?.length == 0 ? (
-          <IconButton size="large" className={styles.AddScoutingbtn} aria-label="add to shopping cart" onClick={() => {
-            router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
-          }}>
-              <AddIcon />
+          <IconButton
+            size="large"
+            className={styles.AddScoutingbtn}
+            aria-label="add to shopping cart"
+            onClick={() => {
+              router.push(
+                `/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`
+              );
+            }}
+          >
+            <AddIcon />
           </IconButton>
         ) : selectedItems?.length ? (
-          <IconButton size="large" className={styles.AddTagsbtn} aria-label="add to shopping cart" onClick={() => {
-            setTagsDrawerOpen(true)
-          }}>
-              <LocalOfferIcon />
+          <IconButton
+            size="large"
+            className={styles.AddTagsbtn}
+            aria-label="add to shopping cart"
+            onClick={() => {
+              setTagsDrawerOpen(true);
+            }}
+          >
+            <LocalOfferIcon />
           </IconButton>
-
         ) : (
           ""
         )}

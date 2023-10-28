@@ -3,11 +3,13 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Divider,
   Drawer,
   IconButton,
   TextField,
   Typography,
 } from "@mui/material";
+import { SummaryIcon } from "./SvgIcons/summaryIcon";
 import { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import TagsTextFeild from "./TagsTextFeild";
@@ -16,6 +18,8 @@ import Image from "next/image";
 import { Markup } from "interweave";
 import timePipe from "@/pipes/timePipe";
 import SellIcon from "@mui/icons-material/Sell";
+import ImageComponent from "./ImageComponent";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 const ShowMoreInViewAttachmentDetails = ({
   showMoreSuggestions,
   setShowMoreSuggestions,
@@ -70,125 +74,271 @@ const ShowMoreInViewAttachmentDetails = ({
       anchor={"bottom"}
       open={showMoreSuggestions}
       sx={{
-        zIndex: "1300 !important",
         "& .MuiPaper-root": {
-          height: "400px",
-          overflowY: "auto",
-          padding: "0 1rem 1rem",
-          borderRadius: "20px 20px 0 0",
-          background: "#F5F7FA",
+          width: "100%",
+          maxWidth: "100vw",
+          marginInline: "auto",
+          minHeight: "300px",
+          maxHeight: "700px",
+          zIndex: "1300",
         },
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+
+      <div className={styles.drawerHeading}>
+        <Typography variant="h6"> 
+          <InfoOutlinedIcon />
+          <div>
+            <span className={styles.title}>
+              More Info
+            </span>
+            <Typography variant="caption" display="block" align="left">
+              {timePipe(item?.time, "DD-MM-YYYY hh:mm a")}
+            </Typography>
+          </div>
+        </Typography>
+        <IconButton
+          onClick={() => {
+            setShowMoreSuggestions(false);
           }}
         >
-          <Typography>Details</Typography>
-          <IconButton
-            onClick={() => {
-              setShowMoreSuggestions(false);
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </div>
+          <CloseIcon />
+        </IconButton>
+      </div>
 
-        <div>
-          {item ? (
-            <div className={styles.cropDetailsBlock}>
-              <Typography variant="caption" display="block" align="left">
-                {timePipe(item?.time, "DD-MM-YYYY hh:mm a")}
-              </Typography>
-              <div className={styles.tagNames}>
-                {item?.tags.length ? (
-                  <Chip
-                    className={styles.tagsLabel}
-                    icon={<SellIcon sx={{ fontSize: 15 }} />}
-                    label="Tags"
-                    variant="outlined"
-                  />
-                ) : (
-                  ""
-                )}
-                {item?.tags?.length
-                  ? item?.tags?.map((item: string, index: number) => {
-                      return (
-                        <Chip
-                          key={index}
-                          label={item}
-                          className={styles.tagsName}
-                          variant="outlined"
-                        />
-                      );
-                    })
-                  : ""}
-              </div>
-              {item?.description ? (
-                <Typography variant="h6" style={{ color: "orange" }}>
-                  Findings
-                </Typography>
+      <div className={styles.scoutingdetails}>
+        {item ? (
+          <div className={styles.cropDetailsBlock}>
+            <div className={styles.tagNames}>
+              {item?.tags.length ? (
+                <Chip
+                  className={styles.tagsLabel}
+                  icon={<SellIcon sx={{ width: "12px", paddingInlineStart: "4px"}} />}
+                  label="Tags"
+                  size="small"
+                  color="success"
+                />
               ) : (
                 ""
               )}
+              {item?.tags?.length
+                ? item?.tags?.map((item: string, index: number) => {
+                    return (
+                      <Chip
+                        key={index}
+                        label={item}
+                        className={styles.tagsName}
+                        variant="outlined"                  
+                        size="small"
+                        color="success"
+                      />
+                    );
+                  })
+                : ""}
+            </div>
 
-              <Typography className={styles.findingsText}>
-                {item?.description?.length ? (
-                  <Markup content={formatText(item?.description)} />
-                ) : (
-                  ""
-                )}
-              </Typography>
-
-              {item?.suggestions ? (
+            
+            <div className={styles.drawerBody}> 
+              { item?.description ? 
                 <div>
-                  <Typography variant="h6" style={{ color: "orange" }}>
-                    Recomendations
-                  </Typography>
-                  <Typography className={styles.findingsText}>
-                    <Markup content={item?.suggestions} />
-                  </Typography>
-                </div>
-              ) : (
-                ""
-              )}
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <IconButton>
-                  <Image
-                    src={"/add-tag-icon.svg"}
-                    width={20}
-                    height={20}
-                    alt="pp"
+                    <div className={styles.findingDec}>
+                      <span
+                        className={styles.bodyHeading}
+                        style={{ color: "#3462CF" }}
+                      >
+                        <ImageComponent
+                          src={"/scouting/HasSummary.svg"}
+                          height={19}
+                          width={19}
+                          alt="no-summary"
+                        />
+                        <span>Findings</span>
+                      </span>
+                      <Typography
+                        variant="caption"
+                        className={styles.bodyDescription}
+                      >
+                        <Markup content={item?.description} />
+                      </Typography>
+                    </div>
+                    <Divider />
+                </div> : ""
+              }
+              <div className={styles.findingDec}>
+                <span
+                  className={styles.bodyHeading}
+                  style={{ color: "#05A155", fontWeight: "600 !important" }}
+                >
+                  <ImageComponent
+                    src={"/scouting/recommendations-icon.svg"}
+                    height={16}
+                    width={16}
                   />
-                </IconButton>
-                <IconButton>
-                  <Image
-                    src={"/comment-white-icon.svg"}
-                    width={20}
-                    height={20}
-                    alt="pp"
-                  />
-                </IconButton>
+                  <span>Recommendation</span>
+                </span>
+                <Typography
+                  variant="caption"
+                  className={styles.bodyDescription}
+                >
+                  <Markup content={item?.suggestions} />
+                </Typography>
               </div>
             </div>
-          ) : (
-            ""
-          )}
-        </div>
-      </div>
+          </div>
+        ) : (
+          ""
+        )}
+    </div>
     </Drawer>
   );
 };
 
 export default ShowMoreInViewAttachmentDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import CloseIcon from "@mui/icons-material/Close";
+// import {
+//   Button,
+//   Drawer,
+//   IconButton,
+//   TextField,
+//   Typography,
+//   Divider,
+// } from "@mui/material";
+// import { useState } from "react";
+
+// import { Markup } from "interweave";
+// import { SummaryIcon } from "./SvgIcons/summaryIcon";
+// import styles from "./TagsDrawer.module.css";
+// import ImageComponent from "@/components/Core/ImageComponent";
+
+// const ShowMoreInViewAttachmentDetails = ({
+//   summaryDrawerClose,
+//   item,
+//   captureSummary,
+// }: any) => {
+//   const [data, setData] = useState(item?.summary ? item.summary : "");
+
+//   return (
+//     <Drawer
+//       anchor={"bottom"}
+//       open={true}
+//       sx={{
+//         "& .MuiPaper-root": {
+//           width: "100%",
+//           maxWidth: "500px",
+//           marginInline: "auto",
+//           minHeight: "300px",
+//           maxHeight: "400px",
+//         },
+//       }}
+//     >
+//       <div className={styles.drawerHeading}>
+//         <Typography variant="h6">
+//           <SummaryIcon />
+//           <span>Summary</span>
+//         </Typography>
+//         <IconButton
+//           onClick={() => {
+//             summaryDrawerClose(false);
+//           }}
+//         >
+//           <CloseIcon />
+//         </IconButton>
+//       </div>
+//       {item?.suggestions ? (
+//         <div className={styles.drawerBody}>
+//           <div className={styles.findingDec}>
+//             <span className={styles.bodyHeading} style={{ color: "#3462CF" }}>
+//               <ImageComponent
+//                 src={"/scouting/HasSummary.svg"}
+//                 height={19}
+//                 width={19}
+//                 alt="no-summary"
+//               />
+//               <span>Findings</span>
+//             </span>
+//             <Typography variant="caption" className={styles.bodyDescrpiction}>
+//               <Markup content={data} />
+//             </Typography>
+//           </div>
+//           <Divider />
+//           <div className={styles.findingDec}>
+//             <span
+//               className={styles.bodyHeading}
+//               style={{ color: "#05A155", fontWeight: "600 !important" }}
+//             >
+//               <ImageComponent
+//                 src={"/scouting/recommendations-icon.svg"}
+//                 height={16}
+//                 width={16}
+//               />
+//               <span>Recommendation</span>
+//             </span>
+//             <Typography variant="caption" className={styles.bodyDescrpiction}>
+//               <Markup content={item?.suggestions} />
+//             </Typography>
+//           </div>
+//         </div>
+//       ) : (
+//         <div className={styles.drawerBody}>
+//           <TextField
+//             color="primary"
+//             name="desciption"
+//             id="description"
+//             maxRows={4}
+//             minRows={4}
+//             placeholder="Enter your findings here"
+//             fullWidth={true}
+//             variant="outlined"
+//             multiline
+//             value={data}
+//             onChange={(e) => {
+//               setData(e.target.value);
+//             }}
+//             sx={{ background: "#fff" }}
+//           />
+//         </div>
+//       )}
+//       <div className={styles.drawerFooter}>
+//         {!item?.suggestions && (
+//           <Button
+//             className={styles.submitBtnSuccess}
+//             sx={{}}
+//             variant="contained"
+//             onClick={() => {
+//               captureSummary(data);
+//               setData("");
+//             }}
+//             disabled={data ? false : true}
+//           >
+//             {item.summary ? "Update" : "Submit"}
+//           </Button>
+//         )}
+//       </div>
+//     </Drawer>
+//   );
+// };
+
+// export default ShowMoreInViewAttachmentDetails;
+ 

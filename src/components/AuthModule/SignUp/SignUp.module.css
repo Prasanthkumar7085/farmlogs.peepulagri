@@ -148,7 +148,7 @@
   background-color: var(--color-sienna);
 }
 .signin_button:hover{
-  background-color: var(--gray-900);
+  background-color: var(--color-mediumseagreen-100);
 }
 
 .backToLogin {

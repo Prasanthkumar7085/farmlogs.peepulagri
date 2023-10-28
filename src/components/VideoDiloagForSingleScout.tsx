@@ -135,8 +135,15 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
     if (/\d+\./.test(input) || /[a-z]\./i.test(input)) {
       let lines = input.split("\n");
       let output = "";
+
       lines.forEach((line: any) => {
-        output += `\u2022 ${processString(line)}\n`;
+        let updatedLine = line.trim();
+        let regex = /^(?:\d+\.|\w+\.\s*)/;
+        if (regex.test(updatedLine)) {
+          output += `\u2022 ${processString(line)}\n`;
+        } else {
+          output += `${line}\n`;
+        }
       });
       return output;
     } else {

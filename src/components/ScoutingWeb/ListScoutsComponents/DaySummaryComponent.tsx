@@ -93,13 +93,13 @@ const DaySummaryComponent: FC<pageProps> = ({
       body
     );
     if (response?.success) {
-      toast.success("Recomendations added Successfully");
+      toast.success("Recommendation added Successfully");
       setEditRecomendation(false);
       getSingleScoutData();
     } else if (response?.statusCode == 403) {
       await logout();
     } else {
-      toast.error("Recomendations added Failed!");
+      toast.error("Recommendation added Failed!");
     }
     setUpdateLoading(false);
   };
@@ -218,7 +218,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                       <Markup content={singleScoutData?.summary} />
                     </div>
                   ) : (
-                    <div className={style.content}>Summary not available!</div>
+                    <div className={style.content}>Summary not added!</div>
                   )}
                 </div>
               )}
@@ -243,7 +243,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                     height={24}
                     width={24}
                   />
-                  <span>Recomendations</span>
+                  <span>Recommendation</span>
                 </h1>
                 {loading || editRecomendation || userType == "USER" ? (
                   ""
@@ -276,7 +276,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                       value={recomendations}
                       onChange={(e) => setRecomendations(e.target.value)}
                       multiline
-                      placeholder={"Your recomendations here..."}
+                      placeholder={"Your Recommendation here..."}
                       minRows={4}
                       maxRows={8}
                       sx={{
@@ -286,7 +286,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                   ) : (
                     <div className={style.recomdationContent}>
                       <Markup
-                        content={"<i>*No Recomendations were added*</i>"}
+                        content={"<i>*No Recommendation were added*</i>"}
                       />
                     </div>
                   )}
@@ -332,7 +332,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                     content={
                       singleScoutData?.suggestions
                         ? singleScoutData?.suggestions
-                        : "<i>*No Recomendations were added*</i>"
+                        : "<i>*No Recommendation were added*</i>"
                     }
                   />
                 </div>

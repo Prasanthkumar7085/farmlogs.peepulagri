@@ -7,7 +7,7 @@ import {
   Typography,
   Divider
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Markup } from "interweave";
 import { SummaryIcon } from "./SvgIcons/summaryIcon";
@@ -18,13 +18,17 @@ const SummaryTextDilog = ({
   summaryDrawerClose,
   item,
   captureSummary,
+  SummaryDrawerOpen,
 }: any) => {
-  const [data, setData] = useState(item?.summary ? item.summary : "");
+  const [data, setData] = useState("");
 
+  useEffect(() => {
+    setData(item?.summary);
+  }, [SummaryDrawerOpen]);
   return (
     <Drawer
       anchor={"bottom"}
-      open={true}
+      open={SummaryDrawerOpen}
       sx={{
         "& .MuiPaper-root": {
           width: "100%",
@@ -52,13 +56,13 @@ const SummaryTextDilog = ({
         <div className={styles.drawerBody}>
           <div className={styles.findingDec}>
             <span className={styles.bodyHeading} style={{ color: "#3462CF" }}>
-              <ImageComponent                            
-                src={'/scouting/HasSummary.svg'}
+              <ImageComponent
+                src={"/scouting/HasSummary.svg"}
                 height={19}
                 width={19}
                 alt="no-summary"
               />
-              <span>Findings</span>            
+              <span>Findings</span>
             </span>
             <Typography variant="caption" className={styles.bodyDescrpiction}>
               <Markup content={data} />
@@ -66,13 +70,12 @@ const SummaryTextDilog = ({
           </div>
           <Divider />
           <div className={styles.findingDec}>
-            
             <span
               className={styles.bodyHeading}
               style={{ color: "#05A155", fontWeight: "600 !important" }}
             >
-              <ImageComponent                            
-                src={'/scouting/recommendations-icon.svg'}
+              <ImageComponent
+                src={"/scouting/recommendations-icon.svg"}
                 height={16}
                 width={16}
               />
@@ -111,7 +114,6 @@ const SummaryTextDilog = ({
             variant="contained"
             onClick={() => {
               captureSummary(data);
-              setData("");
             }}
             disabled={data ? false : true}
           >

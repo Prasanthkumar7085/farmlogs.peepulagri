@@ -1,8 +1,5 @@
 
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-import { CKEditor } from 'ckeditor4-react';
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
   CircularProgress,
@@ -11,13 +8,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import timePipe from "@/pipes/timePipe";
-import ReactQuill from "react-quill";
+import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import TagsTextFeild from "./TagsTextFeild";
 import styles from "./TagsDrawer.module.css";
-import { ClassNames } from "@emotion/react";
+import TagsTextFeild from "./TagsTextFeild";
 
 const TagsDrawer = ({
   tagsDrawerClose,
@@ -27,8 +21,6 @@ const TagsDrawer = ({
   selectedItems,
   tagsDrawerOpen,
 }: any) => {
-  console.log(item, "ty");
-
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [description, setDescription] = useState<any>();
   const [tags, setTags] = useState<any>();

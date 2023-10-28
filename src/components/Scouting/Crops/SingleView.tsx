@@ -218,6 +218,7 @@ const SingleViewScoutComponent = () => {
   //capture the tags details
   const captureTagsDetails = async (tags: any, findingsvalue: any) => {
     setScoutFindings(findingsvalue);
+
     if (tags?.length && !findingsvalue?.length) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
@@ -263,16 +264,29 @@ const SingleViewScoutComponent = () => {
       let tempArray = [...tempImages];
 
       await tempArray.forEach((obj: any) => {
-        (obj.description = obj.description + "\n" + findingsvalue),
-          (obj.tags = obj.tags.reduce(
-            (acc: any, tag: any) => {
-              if (!tags.includes(tag)) {
-                acc.push(tag);
-              }
-              return acc;
-            },
-            [...tags]
-          ));
+        if (obj.description) {
+          (obj.description = obj.description + "\n" + findingsvalue),
+            (obj.tags = obj.tags.reduce(
+              (acc: any, tag: any) => {
+                if (!tags.includes(tag)) {
+                  acc.push(tag);
+                }
+                return acc;
+              },
+              [...tags]
+            ));
+        } else {
+          (obj.description = findingsvalue),
+            (obj.tags = obj.tags.reduce(
+              (acc: any, tag: any) => {
+                if (!tags.includes(tag)) {
+                  acc.push(tag);
+                }
+                return acc;
+              },
+              [...tags]
+            ));
+        }
       });
       setTempImages(tempArray);
       setSelectedItems(tempArray);
@@ -301,6 +315,7 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempArray, selectedFile.summary);
       return;
     }
+
     if (tags?.length && findingsvalue?.length == 0) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
@@ -312,9 +327,11 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempArray, selectedFile.summary);
       return;
     }
+
     if (!tags?.length && findingsvalue?.length) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
+        obj.tags = [];
         obj.description = findingsvalue;
       });
       setTempImages(tempArray);
@@ -322,6 +339,7 @@ const SingleViewScoutComponent = () => {
       await updateDescriptionService(tempArray, selectedFile.summary);
       return;
     }
+
     if (tags?.length && findingsvalue?.length) {
       let tempArray = [...tempImages];
 
@@ -439,7 +457,7 @@ const SingleViewScoutComponent = () => {
           return (
             <Card key={index} className={styles.galleryCard}>
               <div>
-                <div className={styles.dateHeader }>
+                <div className={styles.dateHeader}>
                   <Typography className={styles.postDate}>
                     <InsertInvitationIcon />
                     <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
@@ -504,12 +522,12 @@ const SingleViewScoutComponent = () => {
                             gap: "4px",
                           }}
                         >
-                          <ImageComponent                            
-                              src={'/scouting/recommendations-icon.svg'}
-                              height={20}
-                              width={20}
-                            />
-                            <span>Recommendations</span>
+                          <ImageComponent
+                            src={"/scouting/recommendations-icon.svg"}
+                            height={20}
+                            width={20}
+                          />
+                          <span>Recommendations</span>
                         </Typography>
                       ) : (
                         <Typography
@@ -674,15 +692,14 @@ const SingleViewScoutComponent = () => {
         captureImageDilogOptions={captureImageDilogOptions}
       />
 
-      {SummaryDrawerOpen ? (
+     
         <SummaryTextDilog
           summaryDrawerClose={summaryDrawerClose}
           captureSummary={captureSummary}
           item={selectedFile}
+          SummaryDrawerOpen={SummaryDrawerOpen}
         />
-      ) : (
-        ""
-      )}
+     
       {drawerOpen == true ? (
         <DrawerComponentForScout
           drawerClose={drawerClose}

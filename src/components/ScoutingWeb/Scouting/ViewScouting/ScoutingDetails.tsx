@@ -38,6 +38,8 @@ const ScoutingDetails = ({
         (item: any) => item._id == imageData._id
       );
       setMainImageData(obj);
+      console.log(obj, "asdf");
+
       setRecomendations(obj?.suggestions);
       if (obj?.suggestions) {
         setEditRecomendationOpen(false);
@@ -60,6 +62,48 @@ const ScoutingDetails = ({
     }
   }, [data]);
 
+  function processString(inputString: string) {
+    // let trimmedString = inputString.trim();
+    // let regex = /^\d+\.\s*/;
+    // if (regex.test(trimmedString)) {
+    //   trimmedString = trimmedString.replace(regex, "");
+    // }
+
+    // return trimmedString;
+
+    //// dots for i. a. 1.
+    let trimmedString = inputString.trim();
+
+    let regex = /^(?:\d+\.|\w+\.\s*)/;
+    if (regex.test(trimmedString)) {
+      trimmedString = trimmedString.replace(regex, "");
+    }
+
+    return trimmedString;
+  }
+
+  //function to formatext
+  function formatText(input: any) {
+    input = input?.replace(/\/n/g, "\n");
+
+    if (/\d+\./.test(input) || /[a-z]\./i.test(input)) {
+      let lines = input.split("\n");
+      let output = "";
+
+      lines.forEach((line: any) => {
+        let updatedLine = line.trim();
+        let regex = /^(?:\d+\.|\w+\.\s*)/;
+        if (regex.test(updatedLine)) {
+          output += `\u2022 ${processString(line)}\n`;
+        } else {
+          output += `${line}\n`;
+        }
+      });
+      return output;
+    } else {
+      return input;
+    }
+  }
   return (
     <div className={styles.viewScoutingPage}>
       <div className={styles.viewHeader}>
@@ -111,14 +155,14 @@ const ScoutingDetails = ({
               <Skeleton width="400px" height="20px" />
               <Skeleton width="400px" height="20px" />
             </div>
-          ) : content?.length ? (
-            content?.map((line: any, index: any) => (
-              <p className={style.findingText} key={index}>
-                {line ? line : "-"}
-              </p>
-            ))
           ) : (
-            "-"
+            <Markup
+              content={
+                content?.length
+                  ? formatText(content)
+                  : "*<i>No Findings added</i>*"
+              }
+            />
           )}
         </div>
       </div>
@@ -135,7 +179,7 @@ const ScoutingDetails = ({
           >
             <h6 className={style.recomendation}>
               <SuggestionsIcon />
-              Recomendations
+              Recommendation
             </h6>
             {loading || editRecomendationOpen ? (
               ""
@@ -183,7 +227,9 @@ const ScoutingDetails = ({
                   Cancel
                 </Button>
                 <Button
-                  className={style.sendButton}
+                  className={
+                    recomendations ? style.sendButton : style.sendButtonDisabled
+                  }
                   variant="contained"
                   size="small"
                   disabled={recomendations ? false : true}
@@ -214,7 +260,7 @@ const ScoutingDetails = ({
               <Markup
                 content={
                   mainImageData?.suggestions
-                    ? mainImageData?.suggestions
+                    ? formatText(mainImageData?.suggestions)
                     : "<i>*No Recomendations were added*</i>"
                 }
               />

@@ -1,16 +1,16 @@
-import { Card, Dialog, Grid, IconButton, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
-import CloseIcon from "@mui/icons-material/Close";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import styles from "../Scouting/ViewScouting/ScoutingDetails.module.css";
+import CloseIcon from "@mui/icons-material/Close";
+import { Card, Grid, IconButton } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import ScoutingDetails from "../Scouting/ViewScouting/ScoutingDetails";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
+import styles from "../Scouting/ViewScouting/ScoutingDetails.module.css";
 const SingleScoutView = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -50,8 +50,7 @@ const SingleScoutView = () => {
       );
       if (response?.success) {
         setData(response?.data);
-        const lines = response?.data?.findings?.split("\n");
-        setContent(lines);
+        setContent(response?.data?.findings);
         getModifiedImages({ attachmentdetails: response.data.attachments });
       } else if (response?.statusCode == 403) {
         await logout();

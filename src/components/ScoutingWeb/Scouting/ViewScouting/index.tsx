@@ -99,8 +99,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   };
   const changeDescription = () => {
     if (onlyImages?.length) {
-      const lines = onlyImages[currentIndex]?.description?.split("\n");
-      setContent(lines);
+      setContent(onlyImages[currentIndex]?.description);
     }
   };
   useEffect(() => {

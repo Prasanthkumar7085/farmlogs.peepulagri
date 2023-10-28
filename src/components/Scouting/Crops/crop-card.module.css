@@ -286,9 +286,9 @@
 }
 
 .AddTagsbtn {
-  background: var(--Dark-Green, #5E9765);
-  color: #ffffff;
-  padding: 18px;
+  background: var(--Dark-Green, #5E9765) !important;
+  color: #ffffff !important;
+  padding: 18px !important;
 }
 
 .AddScoutingbtn {

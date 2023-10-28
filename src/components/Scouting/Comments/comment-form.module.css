@@ -81,6 +81,7 @@
   gap: var(--gap-13xl);
   padding: 1rem 0 0;
   position: sticky;
+  z-index: 9;
   left: 0;
   right: 0;
   bottom: 0;

@@ -145,10 +145,11 @@
   font-size: clamp(24px, 1.75vw, 32px) !important;
   text-transform: capitalize !important;
   font-size: clamp(14px, 0.72vw, 18px) !important;
-  background-color: var(--color-sienna);
+  background-color: var(--color-sienna) !important;
 }
 .signin_button:hover{
-  background-color: var(--color-mediumseagreen-100);
+  background-color: var(--color-mediumseagreen-100) !important;
+
 }
 
 .backToLogin {

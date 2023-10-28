@@ -296,17 +296,25 @@ const VideoDialogForScout = ({
                       ? formatText(mediaArray[currentIndex]?.description)
                       : formatText(
                           mediaArray[currentIndex]?.description.slice(0, 95)
-                        ) + "....."
+                        ) +
+                        (mediaArray[currentIndex]?.description?.length > 95
+                          ? "....."
+                          : "")
                   }
                 />
-                <a
-                  style={{ cursor: "pointer", color: "#f2a84c" }}
-                  onClick={() => {
-                    setShowMoreSuggestions(true);
-                  }}
-                >
-                  Show More
-                </a>
+                {mediaArray[currentIndex]?.description?.length > 95 ||
+                mediaArray[currentIndex]?.suggestions ? (
+                  <a
+                    style={{ cursor: "pointer", color: "#f2a84c" }}
+                    onClick={() => {
+                      setShowMoreSuggestions(true);
+                    }}
+                  >
+                    Show More
+                  </a>
+                ) : (
+                  ""
+                )}
               </div>
             ) : (
               ""

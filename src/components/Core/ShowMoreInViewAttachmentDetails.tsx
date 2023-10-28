@@ -1,25 +1,12 @@
-import CloseIcon from "@mui/icons-material/Close";
-import {
-  Button,
-  Chip,
-  CircularProgress,
-  Divider,
-  Drawer,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { SummaryIcon } from "./SvgIcons/summaryIcon";
-import { useEffect, useState } from "react";
-import "react-quill/dist/quill.snow.css";
-import TagsTextFeild from "./TagsTextFeild";
-import styles from "./TagsDrawer.module.css";
-import Image from "next/image";
-import { Markup } from "interweave";
 import timePipe from "@/pipes/timePipe";
+import CloseIcon from "@mui/icons-material/Close";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SellIcon from "@mui/icons-material/Sell";
+import { Chip, Divider, Drawer, IconButton, Typography } from "@mui/material";
+import { Markup } from "interweave";
+import "react-quill/dist/quill.snow.css";
 import ImageComponent from "./ImageComponent";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import styles from "./TagsDrawer.module.css";
 const ShowMoreInViewAttachmentDetails = ({
   showMoreSuggestions,
   setShowMoreSuggestions,
@@ -28,15 +15,6 @@ const ShowMoreInViewAttachmentDetails = ({
   loading,
 }: any) => {
   function processString(inputString: string) {
-    // let trimmedString = inputString.trim();
-    // let regex = /^\d+\.\s*/;
-    // if (regex.test(trimmedString)) {
-    //   trimmedString = trimmedString.replace(regex, "");
-    // }
-
-    // return trimmedString;
-
-    //// dots for i. a. 1.
     let trimmedString = inputString.trim();
 
     let regex = /^(?:\d+\.|\w+\.\s*)/;
@@ -69,6 +47,7 @@ const ShowMoreInViewAttachmentDetails = ({
       return input;
     }
   }
+
   return (
     <Drawer
       anchor={"bottom"}
@@ -84,14 +63,11 @@ const ShowMoreInViewAttachmentDetails = ({
         },
       }}
     >
-
       <div className={styles.drawerHeading}>
-        <Typography variant="h6"> 
+        <Typography variant="h6">
           <InfoOutlinedIcon />
           <div>
-            <span className={styles.title}>
-              More Info
-            </span>
+            <span className={styles.title}>More Info</span>
             <Typography variant="caption" display="block" align="left">
               {timePipe(item?.time, "DD-MM-YYYY hh:mm a")}
             </Typography>
@@ -109,61 +85,67 @@ const ShowMoreInViewAttachmentDetails = ({
       <div className={styles.scoutingdetails}>
         {item ? (
           <div className={styles.cropDetailsBlock}>
-            <div className={styles.tagNames}>
-              {item?.tags.length ? (
+            {item?.tags?.length ? (
+              <div className={styles.tagNames}>
                 <Chip
                   className={styles.tagsLabel}
-                  icon={<SellIcon sx={{ width: "12px", paddingInlineStart: "4px"}} />}
+                  icon={
+                    <SellIcon
+                      sx={{ width: "12px", paddingInlineStart: "4px" }}
+                    />
+                  }
                   label="Tags"
                   size="small"
                   color="success"
                 />
+
+                {item?.tags?.length
+                  ? item?.tags?.map((item: string, index: number) => {
+                      return (
+                        <Chip
+                          key={index}
+                          label={item}
+                          className={styles.tagsName}
+                          variant="outlined"
+                          size="small"
+                          color="success"
+                        />
+                      );
+                    })
+                  : ""}
+              </div>
+            ) : (
+              ""
+            )}
+
+            <div className={styles.drawerBody}>
+              {item?.description ? (
+                <div>
+                  <div className={styles.findingDec}>
+                    <span
+                      className={styles.bodyHeading}
+                      style={{ color: "#3462CF" }}
+                    >
+                      <ImageComponent
+                        src={"/scouting/HasSummary.svg"}
+                        height={19}
+                        width={19}
+                        alt="no-summary"
+                      />
+                      <span>Findings</span>
+                    </span>
+                    <Typography
+                      variant="caption"
+                      className={styles.bodyDescription}
+                    >
+                      <Markup content={formatText(item?.description)} />
+                    </Typography>
+                  </div>
+                  <Divider />
+                </div>
               ) : (
                 ""
               )}
-              {item?.tags?.length
-                ? item?.tags?.map((item: string, index: number) => {
-                    return (
-                      <Chip
-                        key={index}
-                        label={item}
-                        className={styles.tagsName}
-                        variant="outlined"                  
-                        size="small"
-                        color="success"
-                      />
-                    );
-                  })
-                : ""}
-            </div>
-
-            
-            <div className={styles.drawerBody}> 
-              { item?.description ? 
-                <div>
-                    <div className={styles.findingDec}>
-                      <span
-                        className={styles.bodyHeading}
-                        style={{ color: "#3462CF" }}
-                      >
-                        <ImageComponent
-                          src={"/scouting/HasSummary.svg"}
-                          height={19}
-                          width={19}
-                          alt="no-summary"
-                        />
-                        <span>Findings</span>
-                      </span>
-                      <Typography
-                        variant="caption"
-                        className={styles.bodyDescription}
-                      >
-                        <Markup content={item?.description} />
-                      </Typography>
-                    </div>
-                    <Divider />
-                </div> : ""
-              }
               <div className={styles.findingDec}>
                 <span
                   className={styles.bodyHeading}
@@ -180,7 +162,13 @@ const ShowMoreInViewAttachmentDetails = ({
                   variant="caption"
                   className={styles.bodyDescription}
                 >
-                  <Markup content={item?.suggestions} />
+                  <Markup
+                    content={
+                      item?.suggestions
+                        ? item?.suggestions
+                        : "*No Recommendation added*"
+                    }
+                  />
                 </Typography>
               </div>
             </div>
@@ -188,33 +176,12 @@ const ShowMoreInViewAttachmentDetails = ({
         ) : (
           ""
         )}
-    </div>
+      </div>
     </Drawer>
   );
 };
 
 export default ShowMoreInViewAttachmentDetails;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import CloseIcon from "@mui/icons-material/Close";
 // import {
@@ -341,4 +308,3 @@ export default ShowMoreInViewAttachmentDetails;
 // };
 
 // export default ShowMoreInViewAttachmentDetails;
- 

@@ -13,7 +13,12 @@
   margin-inline: auto;
   min-height: auto;
 }
-
+.recomendations,
+.recomendations:hover{
+  border: none;
+  color:#ffa500;
+  border-radius: 10px;
+}
 .scoutDailogImg img {
   height: 100%;
   width: 100%;

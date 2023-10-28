@@ -111,10 +111,12 @@
     margin-top: .3125rem;
 }
 .editIcon {
-    background-color: var(--color-firebrick);
+    background-color: var(--color-firebrick)!important;
+    color: #ffffff!important;
 }
 .editIcon:hover{
-    background-color: var(--gray-700);
+    background-color: #ad3933 !important;
+    color: #ffffff!important;
 }
 
 .editIcon svg {
@@ -274,10 +276,10 @@
 }
 
 .addRecomm {
-    background-color: #eefbf3;
-    color: #148752;
+    background-color: #eefbf3!important;
+    color: #148752!important;
 }
 .addRecomm:hover {
-    background-color: #afebc6;
-    color: #0f5637;
+    background-color: #afebc6!important;
+    color: #0f5637!important;
 }

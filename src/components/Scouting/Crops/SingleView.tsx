@@ -484,9 +484,9 @@ const SingleViewScoutComponent = () => {
                         }}
                       >
                         <ImageComponent                            
-                            src={'./scouting/recommendations-icon.svg'}
-                            height={16}
-                            width={16}
+                            src={'/scouting/recommendations-icon.svg'}
+                            height={20}
+                            width={20}
                           />
                           <span>Recommendations</span>
                       </Typography>

@@ -31,7 +31,7 @@ const SummaryTextDilog = ({
           maxWidth: "500px",
           marginInline: "auto",
           minHeight: "300px",
-          maxHeight: "400px",
+          maxHeight: "700px",
         },
       }}
     >
@@ -89,8 +89,8 @@ const SummaryTextDilog = ({
             color="primary"
             name="desciption"
             id="description"
-            maxRows={4}
-            minRows={4}
+            maxRows={15}
+            minRows={10}
             placeholder="Enter your findings here"
             fullWidth={true}
             variant="outlined"

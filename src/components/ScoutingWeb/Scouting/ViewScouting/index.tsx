@@ -77,6 +77,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       const response = await getSingleScoutService(id, accessToken);
       if (response?.success) {
         setData(response?.data);
+        changeDescription();
       }
     } catch (err) {
       console.error(err);
@@ -88,7 +89,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   const changeDescription = () => {
     if (onlyImages?.length) {
       const lines = onlyImages[currentIndex]?.description?.split("\n");
-
       setContent(lines);
     }
   };

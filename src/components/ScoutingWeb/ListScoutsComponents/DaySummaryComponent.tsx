@@ -114,15 +114,18 @@ const DaySummaryComponent: FC<pageProps> = ({
     }
   }, [singleScoutData, openDaySummary]);
   return (
-    <Drawer anchor={"right"} open={openDaySummary} sx={{
-      '& .MuiPaper-root': {
-        minWidth: "450px", maxWidth: "450px"
-      }
-    }}>
+    <Drawer
+      anchor={"right"}
+      open={openDaySummary}
+      sx={{
+        "& .MuiPaper-root": {
+          minWidth: "450px",
+          maxWidth: "450px",
+        },
+      }}
+    >
       <div>
-        <div
-          className={styles.viewHeader}
-        >
+        <div className={styles.viewHeader}>
           <div>
             <p className={styles.startdate}>
               {loading ? (
@@ -150,7 +153,10 @@ const DaySummaryComponent: FC<pageProps> = ({
                   <Skeleton width="130px" height="15px" />
                 </div>
               ) : (
-                singleScoutData?.farm_id.title + "(" + singleScoutData?.farm_id.location + ")"
+                singleScoutData?.farm_id.title +
+                "(" +
+                singleScoutData?.farm_id.location +
+                ")"
               )}
             </h2>
           </div>
@@ -165,8 +171,8 @@ const DaySummaryComponent: FC<pageProps> = ({
         <div className={style.scoutingdetails}>
           <div className={style.textwrapper}>
             <h1 className={style.summary}>
-              <ImageComponent                            
-                src={'./scouting/summary-icon.svg'}
+              <ImageComponent
+                src={"./scouting/summary-icon.svg"}
                 height={24}
                 width={24}
               />
@@ -181,120 +187,124 @@ const DaySummaryComponent: FC<pageProps> = ({
                   <Skeleton width="300px" height="20px" />
                 </div>
               ) : (
-                <div >
+                <div>
                   {singleScoutData?.summary ? (
                     <div className={style.content}>
                       <Markup content={singleScoutData?.summary} />
                     </div>
                   ) : (
-
-                    <div className={style.content}>
-                      Summary not available!
-                    </div>
+                    <div className={style.content}>Summary not available!</div>
                   )}
                 </div>
               )}
             </p>
           </div>
         </div>
-        {/* Recommendations */}
-        <div className={style.scoutingdetails}>
-          <div className={style.textwrapper}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-                alignItems: "center",
-              }}
-            >
-              <h1 className={style.recomendation}>
-              <ImageComponent                            
-                src={'./scouting/recommendations-icon.svg'}
-                height={24}
-                width={24}
-              />
-                <span>Recomendations</span>
-              </h1>
-              {loading || editRecomendation ? (
-                ""
-              ) : singleScoutData?.suggestions ? (
-                <IconButton
-                  className={style.editIcon}
-                  onClick={() => {
-                    setEditRecomendation(true);
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
+
+        {!loading && singleScoutData?.summary ? (
+          <div className={style.scoutingdetails}>
+            <div className={style.textwrapper}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <h1 className={style.recomendation}>
+                  <ImageComponent
+                    src={"./scouting/recommendations-icon.svg"}
+                    height={24}
+                    width={24}
+                  />
+                  <span>Recomendations</span>
+                </h1>
+                {loading || editRecomendation ? (
+                  ""
+                ) : singleScoutData?.suggestions ? (
+                  <IconButton
+                    className={style.editIcon}
+                    onClick={() => {
+                      setEditRecomendation(true);
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    className={style.addRecomm}
+                    onClick={() => {
+                      setEditRecomendation(true);
+                    }}
+                  >
+                    <AddOutlined />
+                  </IconButton>
+                )}
+              </div>
+
+              {!loading && editRecomendation ? (
+                <div style={{ width: "100%" }}>
+                  <TextField
+                    className={style.textAria}
+                    value={recomendations}
+                    onChange={(e) => setRecomendations(e.target.value)}
+                    multiline
+                    placeholder={"Your recomendations here..."}
+                    minRows={4}
+                    maxRows={8}
+                    sx={{
+                      width: "100%",
+                    }}
+                  />
+                  <div className={style.sendButtonDiv}>
+                    <Button
+                      className={style.cancelButton}
+                      variant="outlined"
+                      onClick={() => setEditRecomendation(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className={style.sendButton}
+                      variant="contained"
+                      onClick={sendRecomendations}
+                    >
+                      {singleScoutData?.suggestions ? "Update" : " Submit"}
+                      {updateLoading ? (
+                        <CircularProgress
+                          size="1.5rem"
+                          sx={{ color: "white" }}
+                        />
+                      ) : (
+                        <SendIcon />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              ) : loading ? (
+                <div style={{ paddingLeft: "10px" }}>
+                  <Skeleton width="300px" height="20px" />
+                  <Skeleton width="300px" height="20px" />
+                  <Skeleton width="300px" height="20px" />
+                  <Skeleton width="300px" height="20px" />
+                </div>
               ) : (
-                <IconButton
-                  className={style.addRecomm}
-                  onClick={() => {
-                    setEditRecomendation(true);
-                  }}
-                >
-                  <AddOutlined />
-                </IconButton>
+                <div className={style.recomdationContent}>
+                  <Markup
+                    content={
+                      singleScoutData?.suggestions
+                        ? singleScoutData?.suggestions
+                        : "<i>*No Recomendations were added*</i>"
+                    }
+                  />
+                </div>
               )}
             </div>
-
-            {!loading && editRecomendation ? (
-              <div style={{ width: "100%" }}>
-                <TextField
-                  className={style.textAria}
-                  value={recomendations}
-                  onChange={(e) => setRecomendations(e.target.value)}
-                  multiline
-                  placeholder={"Your recomendations here..."}
-                  minRows={4}
-                  maxRows={8}
-                  sx={{
-                    width: "100%",
-                  }}
-                />
-                <div className={style.sendButtonDiv}>
-                  <Button
-                    className={style.cancelButton}
-                    variant="outlined"
-                    onClick={() => setEditRecomendation(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className={style.sendButton}
-                    variant="contained"
-                    onClick={sendRecomendations}
-                  >
-                    {singleScoutData?.suggestions ? "Update" : " Submit"}
-                    {updateLoading ? (
-                      <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                    ) : (
-                      <SendIcon />
-                    )}
-                  </Button>
-                </div>
-              </div>
-            ) : loading ? (
-              <div style={{ paddingLeft: "10px" }}>
-                <Skeleton width="300px" height="20px" />
-                <Skeleton width="300px" height="20px" />
-                <Skeleton width="300px" height="20px" />
-                <Skeleton width="300px" height="20px" />
-              </div>
-            ) : (
-              <div className={style.recomdationContent} >
-                <Markup
-                  content={
-                    singleScoutData?.suggestions
-                      ? singleScoutData?.suggestions
-                      : "<i>*No Recomendations were added*</i>"
-                  }
-                />
-              </div>
-            )}
           </div>
-        </div>
+        ) : (
+          ""
+        )}
 
         <Toaster richColors position="top-right" closeButton />
       </div>

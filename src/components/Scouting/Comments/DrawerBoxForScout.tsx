@@ -1,4 +1,7 @@
-import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import {
+  deleteAllMessages,
+  removeTheAttachementsFilesFromStore,
+} from "@/Redux/Modules/Conversations";
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,6 +12,7 @@ import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
 import { useRouter } from "next/router";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const DrawerComponentForScout = ({
   drawerClose,
@@ -30,12 +34,31 @@ const DrawerComponentForScout = ({
   const [loadingThreads, setLoadingThreads] = useState(true);
 
   useEffect(() => {
-    if ((router.isReady, accessToken, scoutDetails && attachement && openCommentsBox == true)) {
+    if (
+      (router.isReady,
+      accessToken,
+      scoutDetails && attachement && openCommentsBox == true)
+    ) {
       getAllScoutComments();
       setLoadingThreads(true);
     }
   }, [router.isReady, accessToken, scoutDetails, attachement, openCommentsBox]);
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   const getAllScoutComments = async () => {
     setLoadingThreads(true);
     let options = {
@@ -86,6 +109,8 @@ const DrawerComponentForScout = ({
 
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
@@ -112,6 +137,8 @@ const DrawerComponentForScout = ({
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
@@ -141,6 +168,8 @@ const DrawerComponentForScout = ({
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);

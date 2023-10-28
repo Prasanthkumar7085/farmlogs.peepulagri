@@ -364,6 +364,8 @@ const ListScouts: FunctionComponent = () => {
 
         setUser(obj);
       }
+    } else if (response?.statusCode == 403) {
+      await logout();
     }
   };
 
@@ -384,6 +386,8 @@ const ListScouts: FunctionComponent = () => {
           response?.data?.find((item: any) => item._id == farmId);
         setFarm(obj);
       }
+    } else if (response?.statusCode == 403) {
+      await logout();
     }
   };
 
@@ -448,7 +452,7 @@ const ListScouts: FunctionComponent = () => {
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      getAllUsers(router.query.created_by as string);
+      // getAllUsers(router.query.created_by as string);
       getAllFarms(
         router.query.created_by as string,
         router.query.farm_id as string

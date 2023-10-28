@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import styles from "./CommentsComponent.module.css";
-import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import {
+  deleteAllMessages,
+  removeTheAttachementsFilesFromStore,
+} from "@/Redux/Modules/Conversations";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const accessToken = useSelector(
@@ -21,6 +25,21 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const [alertType, setAlertType] = useState(false);
   const [getCommentsLoading, setGetCommentsLoading] = useState(false);
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
     if (scoutDetails && attachement) {
       getAllScoutComments();
@@ -77,6 +96,8 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
 
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.log(err);
@@ -103,6 +124,8 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.log(err);

@@ -318,7 +318,7 @@ const VideoDialogForScout = ({
               {mediaArray[currentIndex]?.suggestions ? (
                 <Button
                   onClick={() => {
-                    setShowMoreSuggestions(true);
+                    setShowMoreSuggestions((prev: boolean) => !prev);
                   }}
                   className={styles.recomendations}
                   variant="outlined"

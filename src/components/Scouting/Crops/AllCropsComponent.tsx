@@ -117,6 +117,8 @@ const AllCropsComponent = () => {
 
       if (responseData.success == true) {
         setCropOptions(responseData?.data);
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       } else {
         setCropOptions([]);
       }
@@ -153,6 +155,8 @@ const AllCropsComponent = () => {
         setAlertType(true);
       } else if (responseData?.status == 422) {
         setErrorMessages(responseData?.errors);
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
@@ -418,9 +422,6 @@ const AllCropsComponent = () => {
             </Box>
           </Drawer>
         </React.Fragment>
-        {/* <IconButton onClick={() => setDilogOpen(true)}>
-                    <AddIcon /><Typography variant="caption">New Crop</Typography>
-                </IconButton> */}
       </div>
 
       <div className={styles.allCrops}>

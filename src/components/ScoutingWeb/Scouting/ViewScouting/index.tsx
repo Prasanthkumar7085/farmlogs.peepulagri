@@ -1,24 +1,17 @@
-import {
-  Card,
-  Chip,
-  Dialog,
-  Grid,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import ScoutingDetails from "./ScoutingDetails";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import getSingleScoutService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
-import CloseIcon from "@mui/icons-material/Close";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import styles from "./ScoutingDetails.module.css";
-import { OnlyImagesType, ScoutAttachmentDetails } from "@/types/scoutTypes";
-import SellIcon from "@mui/icons-material/Sell";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
+import { OnlyImagesType } from "@/types/scoutTypes";
+import SellIcon from "@mui/icons-material/Sell";
+import { Chip, Dialog, Grid, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import getSingleScoutService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
+import ScoutingDetails from "./ScoutingDetails";
+import styles from "./ScoutingDetails.module.css";
 
 interface pageProps {
   onlyImages: Array<OnlyImagesType>;
@@ -32,6 +25,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   setPreviewImageDialogOpen,
   viewAttachmentId,
 }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -78,6 +72,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       if (response?.success) {
         setData(response?.data);
         changeDescription();
+      } else if (response?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
@@ -86,6 +82,21 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     }
   };
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   const changeDescription = () => {
     if (onlyImages?.length) {
       const lines = onlyImages[currentIndex]?.description?.split("\n");
@@ -106,7 +117,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
       return matchingObj ? matchingObj : obj;
     });
-    setLoading(true)
+    setLoading(true);
 
     try {
       let options = {
@@ -129,11 +140,13 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       if (responseData?.success == true) {
         setEditRecomendationOpen(false);
         getSingleScoutDetails(scoutId);
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err: any) {
       console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 

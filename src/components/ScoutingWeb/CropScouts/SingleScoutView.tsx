@@ -1,7 +1,7 @@
 import { Card, Dialog, Grid, IconButton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,8 +9,11 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "../Scouting/ViewScouting/ScoutingDetails.module.css";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import ScoutingDetails from "../Scouting/ViewScouting/ScoutingDetails";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 const SingleScoutView = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -20,9 +23,24 @@ const SingleScoutView = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [finalImages, setFinalImages] = useState([]);
   const [curoselOpen, setCuroselOpen] = useState<any>(false);
-  const [selectedImage, setSelectedImage] = useState<any>();
+
   const [content, setContent] = useState<any>();
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   const getSingleScout = async () => {
     setLoading(true);
     try {
@@ -35,6 +53,8 @@ const SingleScoutView = () => {
         const lines = response?.data?.findings?.split("\n");
         setContent(lines);
         getModifiedImages({ attachmentdetails: response.data.attachments });
+      } else if (response?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.log(err);

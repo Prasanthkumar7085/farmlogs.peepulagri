@@ -554,17 +554,6 @@ const ListScouts: FunctionComponent = () => {
                               gap: "0.325rem",
                             }}
                           >
-                            <AccountCircleIcon />
-                            {row.created_by.full_name}
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              gap: "0.325rem",
-                            }}
-                          >
                             <img
                               className={styles.farmsIcon}
                               alt="Farm Shape"
@@ -594,8 +583,8 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <ImageComponent                            
-                            src={'./scouting/recommendations-icon.svg'}
+                          <ImageComponent
+                            src={"./scouting/recommendations-icon.svg"}
                             height={16}
                             width={16}
                           />
@@ -614,8 +603,8 @@ const ListScouts: FunctionComponent = () => {
                           }}
                         >
                           {row?.summary ? (
-                            <ImageComponent                            
-                              src={'./scouting/HasSummary.svg'}
+                            <ImageComponent
+                              src={"./scouting/HasSummary.svg"}
                               height={19}
                               width={19}
                             />

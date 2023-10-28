@@ -99,7 +99,9 @@
   box-shadow: none !important;
 }
 
-.submitBtnSuccess {
+.submitBtnSuccess 
+.submitBtnSuccess :hover
+{
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 500;

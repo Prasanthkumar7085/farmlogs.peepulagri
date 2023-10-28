@@ -1,7 +1,5 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import HasSummaryIcon from "@/components/Core/SvgIcons/HasSummaryIcon";
-import NoSummaryIcon from "@/components/Core/SvgIcons/NoSummaryIcon";
 import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
@@ -507,104 +505,7 @@ const ListScouts: FunctionComponent = () => {
         </div>
       </div>
       <div className={styles.allFarms}>
-        {/* <div className={styles.allScoutingCards}>
-          {data?.length
-            ? data.map((item: any, index: number) => {
-              let cropObj = item.farm_id.crops.find(
-                (ite: any) => ite._id == item.crop_id
-              );
-              let cropName = cropObj?.title;
-
-              return (
-                <div className={styles.eachDayScouting} key={index}>
-                  <div
-                    className={styles.scoutDay}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "30px",
-                      }}
-                    >
-                      <Typography>
-                        {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
-                      </Typography>
-
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          gap: "20px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <AccountCircleIcon />
-                          {item.created_by.full_name}
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <img
-                            className={styles.farmsIcon}
-                            alt="Farm Shape"
-                            src="/farmshape2.svg"
-                          />
-                          {item.farm_id.title}
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <img src="/cropName-icon.svg" alt="" />
-                          {cropName}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className={styles.summaryBtn}
-                      onClick={() => {
-                        setOpenDaySummary(true);
-                        setSelectedItemDetails(item);
-                      }}
-                    >
-                      <SummaryIcon /> Summary
-                    </div>
-                  </div>
-                  <ScoutingDailyImages
-                    item={item}
-                    key={index}
-                    onClickAttachment={onClickAttachment}
-                  />
-                </div>
-              );
-            })
-            : ""}
-        </div> */}
-
         {data?.length ? data.map((item: any, index: any) => {
-
-
           return (
             <div key={index} className={styles.allScoutingCards}>
               <Typography className={styles.postedDate}>
@@ -645,23 +546,23 @@ const ListScouts: FunctionComponent = () => {
                             gap: "20px",
                           }}
                         >
-                          {/* <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              gap: "0.325rem"
-                            }}
-                          >
-                            <AccountCircleIcon />
-                            {row.created_by.full_name}
-                          </div> */}
                           <div
                             style={{
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              gap: "0.325rem"
+                              gap: "0.325rem",
+                            }}
+                          >
+                            <AccountCircleIcon />
+                            {row.created_by.full_name}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              gap: "0.325rem",
                             }}
                           >
                             <img
@@ -676,7 +577,7 @@ const ListScouts: FunctionComponent = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              gap: "0.325rem"
+                              gap: "0.325rem",
                             }}
                           >
                             <img src="/cropName-icon.svg" alt="" />
@@ -693,26 +594,37 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          <SuggestionsIcon /> 
+                          {/* <SuggestionsIcon /> */}
                           <span>Recomendations</span>
                         </div>
                       ) : (
-                        <div 
-                          className={ row?.summary ? styles.hasSummaryBtn : styles.noSummaryBtn}
+                        <div
+                          className={
+                            row?.summary
+                              ? styles.hasSummaryBtn
+                              : styles.noSummaryBtn
+                          }
                           onClick={() => {
                             setOpenDaySummary(true);
                             setSelectedItemDetails(row);
                           }}
                         >
-                          {
-                            row?.summary ? 
-                            <HasSummaryIcon />
-                            :
-                            <NoSummaryIcon />
-                          }
-                          <span>
-                            Summary
-                          </span>
+                          {row?.summary ? (
+                            <ImageComponent
+                              src="/no-summary-icon.svg"
+                              height={10}
+                              width={10}
+                              alt="no-summary"
+                            />
+                          ) : (
+                            <ImageComponent
+                              src="/no-summary-icon.svg"
+                              height={10}
+                              width={10}
+                              alt="no-summary"
+                            />
+                          )}
+                          <span>Summary</span>
                         </div>
                       )}
                     </div>

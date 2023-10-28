@@ -3,16 +3,6 @@
   width: 100%;
   text-align: center;
 }
-.viewButton{
-  margin-top: 3rem;
-  background: green;
-  color: white !important;
-}
-.viewButton:hover{
-  margin-top: 3rem;
-  background: green;
-  color: white !important;
-}
 .apps1Icon,
 .logoIcon {
   position: relative;
@@ -20,7 +10,12 @@
   height: 50px;
   cursor: pointer;
 }
-
+.noScreen,
+.noScreen:hover{
+   margin-top: 3rem;
+  text-transform: capitalize;
+  background: green;
+}
 .logoIcon {
   margin-bottom: 2rem;
 }

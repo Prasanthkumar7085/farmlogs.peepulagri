@@ -1,4 +1,4 @@
-export default function NoSummaryIcon() {
+const NoSummaryIcon = () => {
   return (
     <svg
       width="18"
@@ -36,4 +36,5 @@ export default function NoSummaryIcon() {
       </defs>
     </svg>
   );
-}
+};
+export default NoSummaryIcon;

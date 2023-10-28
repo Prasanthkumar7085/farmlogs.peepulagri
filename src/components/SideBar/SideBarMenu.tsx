@@ -22,9 +22,7 @@ interface item {
 
 const SideBarMenu = ({ children }: any) => {
 
-    const userType = useSelector(
-      (state: any) => state.auth.userDetails?.user_details?.user_type
-    );
+    const userName = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -32,7 +30,7 @@ const SideBarMenu = ({ children }: any) => {
       {
         src: "/dashboard-icon.svg",
         link: `/farm`,
-        isVisible: userType !== "ADMIN",
+        isVisible: userName !== "ADMIN",
         active: router.pathname.includes("/farm"),
         toolTitle: "Farms",
       },
@@ -46,21 +44,21 @@ const SideBarMenu = ({ children }: any) => {
       {
         src: "/timeline-icon.svg",
         link: "/timeline",
-        isVisible: userType !== "ADMIN",
+        isVisible: userName !== "ADMIN",
         active: router.pathname.includes("/timeline"),
         toolTitle: "Time Line",
       },
       {
         src: "/scout-menu-icon.svg",
         link: "/scouts",
-        isVisible: userType !== "ADMIN",
+        isVisible: userName !== "ADMIN",
         active: router.pathname.includes("/scouts"),
         toolTitle: "Scouts",
       },
       {
         src: "/tasks-menu-icon.svg",
         link: "/tasks",
-        isVisible: userType !== "ADMIN",
+        isVisible: userName !== "ADMIN",
         active: router.pathname.includes("/tasks"),
         toolTitle: "Tasks",
       },
@@ -68,21 +66,24 @@ const SideBarMenu = ({ children }: any) => {
       // { src: '/graph-icon.svg', link: "/" },
     ];
 
+
     const logout = async () => {
-      try {
-        const responseUserType = await fetch("/api/remove-cookie");
-        if (responseUserType) {
-          const responseLogin = await fetch("/api/remove-cookie");
-          if (responseLogin.status) {
-            router.push("/");
-          } else throw responseLogin;
+        try {
+            const responseUserType = await fetch('/api/remove-cookie');
+            if (responseUserType) {
+                const responseLogin = await fetch('/api/remove-cookie');
+                if (responseLogin.status) {
+                    router.push('/');
+                } else throw responseLogin;
+            }
+            await dispatch(removeUserDetails());
+            await dispatch(deleteAllMessages());
+
+        } catch (err: any) {
+            console.error(err);
+
         }
-        await dispatch(removeUserDetails());
-        await dispatch(deleteAllMessages());
-      } catch (err: any) {
-        console.error(err);
-      }
-    };
+    }
     return (
       <div>
         <div id={"web-dashboard"}>
@@ -151,8 +152,8 @@ const SideBarMenu = ({ children }: any) => {
           <div className={styles.main}>{children}</div>
         </div>
         <div id="mobile-view">
-          <div style={{ width: "100%", textAlign: "center" }}>
-            {userType == "USER" ? (
+          {userName == "USER" ? (
+            <div style={{ width: "100%", textAlign: "center" }}>
               <Button
                 sx={{
                   marginTop: "3rem",
@@ -166,13 +167,14 @@ const SideBarMenu = ({ children }: any) => {
                 <NorthWestIcon sx={{ color: "#fff", fontSize: "1.5rem" }} /> Go
                 To Mobile View Page
               </Button>
-            ) : (
-              <Button className={styles.viewButton} variant={"outlined"}>
-                {" "}
-                Please enable desktop view
+            </div>
+          ) : (
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <Button className={styles.noScreen} variant={"contained"}>
+                Please! unable desktop view
               </Button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     );

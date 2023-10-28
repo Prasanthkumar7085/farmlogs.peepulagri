@@ -89,7 +89,7 @@ const DashBoardHeader = ({
               <Autocomplete
                 id="asynchronous-demo"
                 fullWidth
-                noOptionsText={<div>{"No such location!"}</div>}
+                noOptionsText={"No such location!"}
                 value={locationValue}
                 getOptionLabel={(option: { name: string; _id: string }) =>
                   option.name

@@ -1,4 +1,4 @@
-export default function HasSummaryIcon() {
+const HasSummaryIcon = () => {
   return (
     <svg
       width="18"
@@ -20,4 +20,6 @@ export default function HasSummaryIcon() {
       </defs>
     </svg>
   );
-}
+};
+
+export default HasSummaryIcon;

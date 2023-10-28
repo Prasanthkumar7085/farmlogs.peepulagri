@@ -7,7 +7,7 @@ const nextConfig = {
         NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     },
     images: {
-        remotePatterns: [            
+        remotePatterns: [
             {
                 protocol: 'https',
                 hostname: 'peepul-agri-dev.s3.ap-south-1.amazonaws.com',

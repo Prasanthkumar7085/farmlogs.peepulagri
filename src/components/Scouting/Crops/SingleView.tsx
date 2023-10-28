@@ -27,6 +27,7 @@ import styles from "./crop-card.module.css";
 import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
 
 
 const SingleViewScoutComponent = () => {
@@ -392,9 +393,6 @@ const SingleViewScoutComponent = () => {
     <div className={styles.scoutingView}>
       <div role="presentation">
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
-          <Link underline="hover" color="inherit" href="/farms">
-            Dashboard
-          </Link>
           <Link
             underline="hover"
             color="inherit"

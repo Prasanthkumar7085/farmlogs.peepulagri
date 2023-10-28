@@ -1,11 +1,23 @@
-import { removeOneAttachmentElement, removeTheAttachementsFilesFromStore, storeAttachementsFilesArray } from "@/Redux/Modules/Conversations";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import DoneIcon from '@mui/icons-material/Done';
-import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/material";
+import {
+  deleteAllMessages,
+  removeOneAttachmentElement,
+  removeTheAttachementsFilesFromStore,
+  storeAttachementsFilesArray,
+} from "@/Redux/Modules/Conversations";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import DoneIcon from "@mui/icons-material/Done";
+import {
+  Box,
+  Button,
+  IconButton,
+  LinearProgress,
+  TextField,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./comment-form.module.css";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const CommentForm = ({
   afterCommentAdd,
@@ -95,9 +107,10 @@ const CommentForm = ({
   const getCropsDetails = async () => {
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
-          ? router.query.farm_id
-          : scoutDetails.farm_id?._id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
+          router.query.farm_id
+            ? router.query.farm_id
+            : scoutDetails.farm_id?._id
         }/crops/list`,
         { method: "GET" }
       );
@@ -151,11 +164,29 @@ const CommentForm = ({
         setMultipleFiles([]);
         setAttachments([]);
         dispatch(removeTheAttachementsFilesFromStore([]));
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
     }
   };
 
@@ -189,6 +220,8 @@ const CommentForm = ({
         setAttachments([]);
         dispatch(removeTheAttachementsFilesFromStore([]));
         dispatch(removeTheAttachementsFilesFromStore([]));
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);

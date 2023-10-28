@@ -17,19 +17,25 @@ import { setCropTitleTemp } from "@/Redux/Modules/Farms";
 import SpaIcon from '@mui/icons-material/Spa';
 import Image from "next/image";
 import { deepOrange } from "@mui/material/colors";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 interface pagePropsType {
   itemDetails: CropTypeResponse;
   getCropsDetails: (farmId: string) => void;
   colorIndex: number;
 }
-const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) => {
-
+const CropCard = ({
+  itemDetails,
+  getCropsDetails,
+  colorIndex,
+}: pagePropsType) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -47,87 +53,154 @@ const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) =
         open={Boolean(anchorEl)}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button',
+          "aria-labelledby": "basic-button",
         }}
         sx={{
-          '& .MuiMenuItem-root': {
-            display: "flex", alignItems: "center", gap: "0.5rem",
+          "& .MuiMenuItem-root": {
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
             minHeight: "inherit",
-
-          }
+          },
         }}
       >
-        <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); setRenameOpen(true) }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
-        <MenuItem onClick={() => { setDeleteOpen(true); handleClose() }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
-
+        <MenuItem
+          sx={{ borderBottom: "1px solid #B4C1D6" }}
+          onClick={() => {
+            handleClose();
+            setRenameOpen(true);
+          }}
+        >
+          {" "}
+          <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setDeleteOpen(true);
+            handleClose();
+          }}
+        >
+          <DeleteOutlinedIcon sx={{ fontSize: "16px" }} />
+          Delete
+        </MenuItem>
       </Menu>
-    )
-  }
+    );
+  };
 
   const captureResponseDilog = (value: any, index: number) => {
     setErrorMessages([]);
     if (!value) {
-      setRenameOpen(false)
-    }
-    else {
+      setRenameOpen(false);
+    } else {
       const { title, crop_area } = value;
 
       let obj = {
         title: title ? title?.trim() : "",
-        crop_area: crop_area
-      }
+        crop_area: crop_area,
+      };
       renameCrop(obj);
     }
-  }
-
+  };
 
   const [loadingForAdd, setLoadingForAdd] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
+
   const renameCrop = async (value: any) => {
-    setLoadingForAdd(true)
-    const response = await updateCropService(router.query.farm_id as string, itemDetails?._id, value, accessToken);
+    setLoadingForAdd(true);
+    const response = await updateCropService(
+      router.query.farm_id as string,
+      itemDetails?._id,
+      value,
+      accessToken
+    );
     if (response?.success) {
       getCropsDetails(router.query.farm_id as string);
       setAlertMessage(response?.message);
-      setAlertType(true)
+      setAlertType(true);
       setRenameOpen(false);
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
+    } else if (response?.statusCode == 403) {
+      await logout();
     } else {
       setAlertMessage(response?.message);
-      setAlertType(false)
+      setAlertType(false);
     }
     setLoadingForAdd(false);
-  }
+  };
 
   const deleteCrop = async () => {
-    setDeleteLoading(true)
-    const response = await deleteCropService(router.query.farm_id as string, itemDetails?._id, accessToken);
+    setDeleteLoading(true);
+    const response = await deleteCropService(
+      router.query.farm_id as string,
+      itemDetails?._id,
+      accessToken
+    );
     if (response?.success) {
       getCropsDetails(router.query.farm_id as string);
       setAlertMessage(response?.message);
       setAlertType(true);
       setDeleteOpen(false);
+    } else if (response?.statusCode == 403) {
+      await logout();
     } else {
       setAlertMessage(response?.message);
-      setAlertType(false)
+      setAlertType(false);
     }
 
     setDeleteLoading(false);
-  }
+  };
   const setToStorage = async (title: string) => {
     await dispatch(setCropTitleTemp(title));
-    router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`)
-  }
+    router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`);
+  };
 
-
-  let colorsArray = ["#ffcc99", "#ffccff", "#ffcccc", "#ccffff", "#ccffcc", "#ccccff", "#99ffff", "#99ffcc", "#99ccff", "#c0c0ff"
-    , "#f6cff1", "#d5dae9", "#e9e9e9", "#e1dbde", "#fac2d9", "#fac2d9", "#cae9f6", "#d3d3f4", "#dbdfee", "#e8f3d0"
-    , "#f9e8c6", "#d0ffff", "#d0ffff", "#d5ebed"]
+  let colorsArray = [
+    "#ffcc99",
+    "#ffccff",
+    "#ffcccc",
+    "#ccffff",
+    "#ccffcc",
+    "#ccccff",
+    "#99ffff",
+    "#99ffcc",
+    "#99ccff",
+    "#c0c0ff",
+    "#f6cff1",
+    "#d5dae9",
+    "#e9e9e9",
+    "#e1dbde",
+    "#fac2d9",
+    "#fac2d9",
+    "#cae9f6",
+    "#d3d3f4",
+    "#dbdfee",
+    "#e8f3d0",
+    "#f9e8c6",
+    "#d0ffff",
+    "#d0ffff",
+    "#d5ebed",
+  ];
 
   return (
     <div className={styles.folder}>

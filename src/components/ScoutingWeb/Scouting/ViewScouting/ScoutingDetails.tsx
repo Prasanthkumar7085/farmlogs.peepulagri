@@ -6,17 +6,16 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "yet-another-react-lightbox/styles.css";
 import styles from "./ScoutingDetails.module.css";
 
-import style from "../../ListScoutsComponents/DaySummary.module.css";
-import { useEffect, useState } from "react";
-import { Markup } from "interweave";
-import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import EditIconComponent from "@/components/Core/SvgIcons/EditIcon";
-import SendIcon from "@mui/icons-material/Send";
-import { AddOutlined, EditOutlined } from "@mui/icons-material";
+import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import { AddOutlined } from "@mui/icons-material";
+import SendIcon from "@mui/icons-material/Send";
+import { Markup } from "interweave";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Toaster, toast } from "sonner";
-import getSingleScoutService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
+import { Toaster } from "sonner";
+import style from "../../ListScoutsComponents/DaySummary.module.css";
 
 const ScoutingDetails = ({
   loading,
@@ -28,11 +27,6 @@ const ScoutingDetails = ({
   editRecomendationOpen,
   setEditRecomendationOpen,
 }: any) => {
- 
-    const userType = useSelector(
-      (state: any) => state.auth.userDetails?.user_details?.user_type
-    );
-
   const [crop, setCrop] = useState<any>();
   const [recomendations, setRecomendations] = useState<any>();
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -107,7 +101,9 @@ const ScoutingDetails = ({
 
       <div className={style.scoutingdetails}>
         <div className={style.textwrapper}>
-          <h6 className={style.summary}><SummaryIcon /> Findings</h6>
+          <h6 className={style.summary}>
+            <SummaryIcon /> Findings
+          </h6>
           {loading ? (
             <div>
               <Skeleton width="400px" height="20px" />

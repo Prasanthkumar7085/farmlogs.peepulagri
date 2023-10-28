@@ -72,6 +72,8 @@ const DashboardPage = () => {
           const { data, ...rest } = response;
           setFarmsData(data);
           setPaginationDetails(rest);
+        } else if (response?.statusCode == 403) {
+          await logout();
         }
       } catch (err: any) {
         console.error(err);
@@ -100,29 +102,34 @@ const DashboardPage = () => {
       }
     };
     const getAllLocations = async () => {
-        const response = await getAllLocationsService(accessToken);
-        if (response?.statusCode == 403) {
-          await logout();
-        }
-        if (response?.data?.length) {
-            setLocations([{name:'All',_id:'1'}, ...response?.data]);
-        } else {
-            setLocations([{name:'All',_id:'1'}]);
-        }
-        
-        let searchFromRouter = router.query?.search_string;
-        let locationFromRouter = router.query?.location;
-        await getAllFarms({ page: 1, limit: 100, search_string: searchFromRouter as string, location: locationFromRouter as string });
-        if (searchFromRouter) {
-            setSearchString(searchFromRouter as string);
-        }
-        if (locationFromRouter) {
-            setLocation(locationFromRouter as string);
-        } else {
-            setLocation('All');
-        }
-        
-    }
+      const response = await getAllLocationsService(accessToken);
+      if (response?.statusCode == 403) {
+        await logout();
+        return;
+      }
+      if (response?.data?.length) {
+        setLocations([{ name: "All", _id: "1" }, ...response?.data]);
+      } else {
+        setLocations([{ name: "All", _id: "1" }]);
+      }
+
+      let searchFromRouter = router.query?.search_string;
+      let locationFromRouter = router.query?.location;
+      await getAllFarms({
+        page: 1,
+        limit: 100,
+        search_string: searchFromRouter as string,
+        location: locationFromRouter as string,
+      });
+      if (searchFromRouter) {
+        setSearchString(searchFromRouter as string);
+      }
+      if (locationFromRouter) {
+        setLocation(locationFromRouter as string);
+      } else {
+        setLocation("All");
+      }
+    };
 
 
 
@@ -140,9 +147,7 @@ const DashboardPage = () => {
     
 
     useEffect(() => {
-        if (router.isReady && accessToken) {
-          getData();
-        }
+      getData();
     }, [router.isReady, accessToken]);
 
     useEffect(() => {

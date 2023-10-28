@@ -13,14 +13,17 @@ import {
 } from "@mui/material";
 import { Markup } from "interweave";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import postrecomendationsService from "../../../../lib/services/ScoutServices/postrecomendationsService";
 import styles from "../Scouting/ViewScouting/ScoutingDetails.module.css";
 import style from "./DaySummary.module.css";
 import ImageComponent from "@/components/Core/ImageComponent";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
+import { useRouter } from "next/router";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 interface pageProps {
   openDaySummary: boolean;
@@ -32,6 +35,8 @@ const DaySummaryComponent: FC<pageProps> = ({
   setOpenDaySummary,
   seletectedItemDetails,
 }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [cropName, setCrop] = useState<CropType | undefined>();
   const [recomendations, setRecomendations] = useState("");
   const [editRecomendation, setEditRecomendation] = useState(false);
@@ -68,6 +73,8 @@ const DaySummaryComponent: FC<pageProps> = ({
     );
     if (response?.success) {
       setSingleScoutData(response?.data);
+    } else if (response?.statusCode == 403) {
+      await logout();
     }
     setLoading(false);
   };
@@ -89,6 +96,8 @@ const DaySummaryComponent: FC<pageProps> = ({
       toast.success("Recomendations added Successfully");
       setEditRecomendation(false);
       getSingleScoutData();
+    } else if (response?.statusCode == 403) {
+      await logout();
     } else {
       toast.error("Recomendations added Failed!");
     }
@@ -113,6 +122,22 @@ const DaySummaryComponent: FC<pageProps> = ({
       }
     }
   }, [singleScoutData, openDaySummary]);
+
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   return (
     <Drawer
       anchor={"right"}

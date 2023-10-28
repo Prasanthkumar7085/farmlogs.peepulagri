@@ -402,6 +402,8 @@ const SingleViewScoutComponent = () => {
         setSummaryContent("");
         // setOpenDialog(false);
         getPresingedURls();
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err: any) {
       console.error(err);

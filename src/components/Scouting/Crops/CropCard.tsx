@@ -133,53 +133,56 @@ const CropCard = ({ itemDetails, getCropsDetails, colorIndex }: pagePropsType) =
     <div className={styles.folder}>
       <div className={styles.cropcard}>
         <div className={styles.icons}>
-          {/* <Image
-            className={styles.folderIcon}
-            src="/crop.svg"
-            alt="Folder"
-            width={80}
-            height={80}
-            onClick={() => setToStorage(itemDetails?.title)}
-          /> */}
-          <Avatar sx={{ bgcolor: colorsArray[colorIndex], color: "black !important" }} className={styles.avatarImage}>{itemDetails?.title.toUpperCase().slice(0, 2)}</Avatar>
+          <Avatar
+            sx={{ bgcolor: colorsArray[colorIndex], color: "black !important" }}
+            className={styles.avatarImage}
+          >
+            {itemDetails?.title.toUpperCase().slice(0, 2)}
+          </Avatar>
           <div
             className={styles.textWrapper}
             onClick={() => setToStorage(itemDetails?.title)}
           >
             <h2 className={styles.FieldCrop}>
               {itemDetails?.title.length > 12
-                ? itemDetails?.title.slice(0, 9) + "..."
-                : itemDetails?.title}
+                ? itemDetails?.title.slice(0, 1).toUpperCase() +
+                  itemDetails?.title.slice(1, 9) +
+                  "..."
+                : itemDetails?.title.slice(0, 1).toUpperCase() +
+                  itemDetails?.title.slice(1)}
             </h2>
-            <p className={styles.aug2023} >
-              {timePipe(itemDetails.createdAt, 'DD, MMM YYYY')}
+            <p className={styles.aug2023}>
+              {timePipe(itemDetails.createdAt, "DD, MMM YYYY")}
             </p>
           </div>
 
-          {/* <div className={styles.actions}>
-            <Chip label="02" className={styles.count} icon={<SpaIcon fontSize="small" />} />
-            <Chip
-              className={styles.count}
-              avatar={<Avatar alt="crop" src="/crop-icon.svg" className={styles.icon} variant="square"  />}
-              label="02"
-            />
-
-          </div> */}
           <MenuItemsForFolder />
         </div>
         <div className={styles.actionButtons}>
-          {/* <MoreVertIcon
-            sx={{ color: "#6A7185", fontSize: "1.5rem" }}
-            onClick={(event: any) => setAnchorEl(event.currentTarget)}
-          /> */}
           <p className={styles.aug2023}>
             {itemDetails.crop_area
               ? itemDetails.crop_area +
-              (itemDetails.crop_area < 2 ? " acre" : " acres")
+                (itemDetails.crop_area < 2 ? " acre" : " acres")
               : 0 + " acres"}
           </p>
-          <Button className={styles.button} onClick={() => { handleClose(); setRenameOpen(true) }}><ModeEditOutlinedIcon sx={{ fontSize: "16px", color: "#ff4444" }} /></Button>
-          <Button className={styles.button} onClick={() => { setDeleteOpen(true); handleClose() }}><DeleteOutlinedIcon sx={{ fontSize: "16px", color: "#555555" }} /></Button>
+          <Button
+            className={styles.button}
+            onClick={() => {
+              handleClose();
+              setRenameOpen(true);
+            }}
+          >
+            <ModeEditOutlinedIcon sx={{ fontSize: "16px", color: "#ff4444" }} />
+          </Button>
+          <Button
+            className={styles.button}
+            onClick={() => {
+              setDeleteOpen(true);
+              handleClose();
+            }}
+          >
+            <DeleteOutlinedIcon sx={{ fontSize: "16px", color: "#555555" }} />
+          </Button>
         </div>
       </div>
       {renameOpen ? (

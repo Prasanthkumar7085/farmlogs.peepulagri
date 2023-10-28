@@ -1,40 +1,43 @@
 import timePipe from '@/pipes/timePipe';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Button,
   Chip,
   Dialog,
   DialogContent,
   IconButton,
-  Typography
-} from '@mui/material';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+  Typography,
+} from "@mui/material";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import ReactPanZoom from "react-image-pan-zoom-rotate";
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { useSwipeable } from 'react-swipeable';
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useSwipeable } from "react-swipeable";
 import styles from "./view-logs-container.module.css";
-import SellIcon from '@mui/icons-material/Sell';
+import SellIcon from "@mui/icons-material/Sell";
 import { Markup } from "interweave";
+import ShowMoreInViewAttachmentDetails from "./Core/ShowMoreInViewAttachmentDetails";
 
-const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions, captureSlideImagesIndex }: any) => {
-
+const VideoDialogForScout = ({
+  open,
+  onClose,
+  mediaArray,
+  index,
+  data,
+  captureImageDilogOptions,
+  captureSlideImagesIndex,
+}: any) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
-  const [description, setDescription] = useState<any>()
-  const [isZoom, setISZoom] = useState<any>()
-  const [showMore, setShowMore] = useState<any>(false)
-  const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false)
-
-
-
-
+  const [description, setDescription] = useState<any>();
+  const [isZoom, setISZoom] = useState<any>();
+  const [showMore, setShowMore] = useState<any>(false);
+  const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
 
   useEffect(() => {
     setCurrentIndex(index);
-
-  }, [index])
-
+  }, [index]);
 
   const playNext = () => {
     document
@@ -48,26 +51,22 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
     document
       .getElementById(`${currentIndex - 1}`)
       ?.scrollIntoView({ behavior: "smooth" });
-    const prevIndex = currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
+    const prevIndex =
+      currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
     setCurrentIndex(prevIndex);
-
   };
 
   const handleClose = () => {
     if (index) {
       setCurrentIndex(index);
       onClose();
-
-    }
-    else {
+    } else {
       setCurrentIndex(0);
       onClose();
-
     }
   };
 
   const getKey = (e: any) => {
-
     if (e.keyCode == 37) {
       playPrevious();
     } else if (e.keyCode == 39) {
@@ -75,15 +74,13 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
     } else if (e.keyCode == 27) {
       handleClose();
     }
-
-  }
+  };
 
   // Define swipe handlers
   const handlers = useSwipeable({
     onSwipedLeft: playNext,
     onSwipedRight: playPrevious,
   });
-
 
   const handleZoomIn = () => {
     setZoomLevel(zoomLevel + 0.1); // Increase the zoom level
@@ -94,13 +91,12 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
   };
 
   const zoomIn = () => {
-    setISZoom(true)
-
+    setISZoom(true);
   };
 
   const zoomOut = () => {
     if (zoomLevel > 0.1) {
-      const img: any = document.querySelector('.zoom-image');
+      const img: any = document.querySelector(".zoom-image");
       if (img) {
         img.style.transform = `scale(${zoomLevel - 0.1})`;
         setZoomLevel(zoomLevel - 0.1);
@@ -256,7 +252,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
       {mediaArray?.length && (
         <div className={styles.cropDetailsBlock}>
           <Typography variant="caption" display="block" align="left">
-            {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh-mm a")}
+            {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh:mm a")}
           </Typography>
           <div className={styles.tagNames}>
             {mediaArray[currentIndex]?.tags.length ? (
@@ -301,38 +297,16 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
 
           <Typography className={styles.findingsText}>
             {mediaArray[currentIndex]?.description?.length ? (
-              <Markup
-                content={formatText(mediaArray[currentIndex]?.description)}
-              />
-            ) : (
-              ""
-            )}
-          </Typography>
-
-          {showMoreSuggestions == true ? (
-            <Typography className={styles.findingsText}>
-              <Markup content={mediaArray[currentIndex]?.suggestions} />
-              <span
-                style={{ cursor: "pointer", fontWeight: "600" }}
-                onClick={() => {
-                  setShowMoreSuggestions(false);
-                }}
-              >
-                Show Less
-              </span>
-            </Typography>
-          ) : (
-            <Typography className={styles.findingsText}>
-              {mediaArray[currentIndex]?.suggestions?.length > 100 ? (
+              <div>
                 <Markup
                   content={
-                    mediaArray[currentIndex]?.suggestions.slice(0, 100) + "...."
+                    mediaArray[currentIndex]?.description > 100
+                      ? formatText(mediaArray[currentIndex]?.description)
+                      : formatText(
+                          mediaArray[currentIndex]?.description.slice(0, 95)
+                        ) + "....."
                   }
                 />
-              ) : (
-                <Markup content={mediaArray[currentIndex]?.suggestions} />
-              )}
-              {mediaArray[currentIndex]?.suggestions?.length > 100 ? (
                 <span
                   style={{ fontWeight: "600", cursor: "pointer" }}
                   onClick={() => {
@@ -341,45 +315,68 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                 >
                   Show More
                 </span>
+              </div>
+            ) : (
+              ""
+            )}
+          </Typography>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              {mediaArray[currentIndex]?.suggestions ? (
+                <Button
+                  onClick={() => {
+                    setShowMoreSuggestions(true);
+                  }}
+                  className={styles.recomendations}
+                  variant="outlined"
+                >
+                  Show Recommendations
+                </Button>
               ) : (
                 ""
               )}
-            </Typography>
-          )}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            <IconButton
-              onClick={() => {
-                captureImageDilogOptions("tag");
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
               }}
             >
-              <Image
-                src={"/add-tag-icon.svg"}
-                width={20}
-                height={20}
-                alt="pp"
-              />
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                captureImageDilogOptions("comments");
-              }}
-            >
-              <Image
-                src={"/comment-white-icon.svg"}
-                width={20}
-                height={20}
-                alt="pp"
-              />
-            </IconButton>
+              <IconButton
+                onClick={() => {
+                  captureImageDilogOptions("tag");
+                }}
+              >
+                <Image
+                  src={"/add-tag-icon.svg"}
+                  width={20}
+                  height={20}
+                  alt="pp"
+                />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  captureImageDilogOptions("comments");
+                }}
+              >
+                <Image
+                  src={"/comment-white-icon.svg"}
+                  width={20}
+                  height={20}
+                  alt="pp"
+                />
+              </IconButton>
+            </div>
           </div>
         </div>
       )}
+      <ShowMoreInViewAttachmentDetails
+        showMoreSuggestions={showMoreSuggestions}
+        setShowMoreSuggestions={setShowMoreSuggestions}
+        item={mediaArray ? mediaArray[currentIndex] : ""}
+      />
     </Dialog>
   );
 };

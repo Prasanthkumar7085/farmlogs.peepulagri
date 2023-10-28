@@ -6,8 +6,7 @@ import {
 import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import SelectAutoCompleteForCrops from "@/components/Core/SelectComponentForCrops";
-import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
+import TagsTextFeild from "@/components/Core/TagsTextFeild";
 import base64ToFile from "@/pipes/base64FileConvert";
 import timePipe from "@/pipes/timePipe";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -15,13 +14,10 @@ import DoneIcon from "@mui/icons-material/Done";
 import {
   Box,
   Button,
-  FormControl,
-  FormHelperText,
   Icon,
   IconButton,
-  InputLabel,
   LinearProgress,
-  TextField
+  TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -30,9 +26,6 @@ import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarm
 import Header1 from "../Header/HeaderComponent";
 import Camera from "./Camera";
 import styles from "./add-scout.module.css";
-import updateDescriptionService from "../../../../lib/services/ScoutServices/updateDescription";
-import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
-import TagsTextFeild from "@/components/Core/TagsTextFeild";
 
 const FileUploadComponent = () => {
   const router = useRouter();
@@ -40,32 +33,20 @@ const FileUploadComponent = () => {
 
   const filesFromStore = useSelector((state: any) => state.farms?.filesList);
 
-  const [selectedFile, setSelectedFile] = useState<any>(null);
-  const [fileSize, setFileSize] = useState<any>();
-  const [uploadintoChuncks, setUploadIntoChuncks] = useState<any>();
-  const [uploadId, setUploadId] = useState<any>();
-  const [presignedUrls, sestPresignedUrls] = useState<any>();
-  const [progress, setProgress] = useState<any>(2);
+  
   const [openCamera, setOpenCamera] = useState<any>(false);
   const [loading, setLoading] = useState<any>(false);
   const [multipleFiles, setMultipleFiles] = useState<any>();
-  const [fileIndex, setIndex] = useState<any>();
+
   const [fileProgress, setFileProgress] = useState<number[] | any>([]);
-  const [defaultValue, setDefaultValue] = useState<any>("");
-  const [formId, setFormId] = useState<any>();
-  const [formOptions, setFarmOptions] = useState<any>();
   const [selectedCrop, setSelectedCrop] = useState<any>();
-  const [cropOptions, setCropOptions] = useState<any>();
   const [description, setDescription] = useState<any>();
   const [attachments, setAttachments] = useState<any>([]);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [validations, setValidations] = useState<any>();
-  const [data, setData] = useState<any>()
-  const [cropName, setCropName] = useState<any>();
-  const [tags, setTags] = useState<any>([])
-
+  const [tags, setTags] = useState<any>([]);
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -74,11 +55,6 @@ const FileUploadComponent = () => {
   let tempFilesStorage: any = [...attachments];
 
   let previewStorage = [...previewImages];
-
-  //convert the kb into mb
-  const bytesToMB = (bytes: any) => {
-    return bytes / (1024 * 1024);
-  };
 
   const removeFileAfterAdding = (index: number, file: any) => {
     const selectedFilesCopy = [...multipleFiles];
@@ -104,17 +80,11 @@ const FileUploadComponent = () => {
 
     try {
       if (response?.success && response.data.length) {
-        setFarmOptions(response?.data);
         if (id) {
           let selectedObject =
             response?.data?.length &&
             response?.data.find((item: any) => item._id == id);
-          setDefaultValue(selectedObject.title);
-          setFormId(selectedObject?._id);
-
         }
-      } else {
-        setFarmOptions([]);
       }
     } catch (err) {
       console.error(err);
@@ -123,7 +93,6 @@ const FileUploadComponent = () => {
 
   //get all crops name
   const getCropsDetails = async (id: any) => {
-    console.log(router.query.crop_id)
     try {
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`,
@@ -132,23 +101,17 @@ const FileUploadComponent = () => {
       let responseData: any = await response.json();
 
       if (responseData.success == true) {
-        setCropOptions(responseData?.data);
-
         if (router.query.crop_id) {
           let cropObj = responseData?.data?.find(
             (item: any) => item._id == router.query.crop_id
           );
           setSelectedCrop(cropObj);
-          setCropName(cropObj?.title);
         } else {
           if (responseData.data.length == 1) {
-            setCropName(responseData?.data[0].title);
             setSelectedCrop(responseData?.data[0]);
           } else {
           }
         }
-      } else {
-        setCropOptions([]);
       }
     } catch (err) {
       console.error(err);
@@ -195,7 +158,6 @@ const FileUploadComponent = () => {
             .drawImage(video, 0, 0, canvas.width, canvas.height);
 
           const thumbnailUrl = canvas.toDataURL();
-          console.log(thumbnailUrl);
           previewStorage.splice(1, 0, {
             fileIndex: file.name,
             prieviewUrl: thumbnailUrl,
@@ -231,17 +193,12 @@ const FileUploadComponent = () => {
         previewImagesEvent(item, item.name);
       }
 
-      setIndex(index);
-      setSelectedFile(item);
-      setFileSize(item.size);
       const bytesToMB = (bytes: any) => {
         return bytes / (1024 * 1024);
       };
       if (bytesToMB(item.size) >= 5) {
-        setUploadIntoChuncks(true);
         await startUploadEvent(item, index, temp, setFileProgress);
       } else {
-        setUploadIntoChuncks(false);
         await fileUploadEvent(item, index, temp, setFileProgress);
       }
     });
@@ -279,7 +236,6 @@ const FileUploadComponent = () => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
-        setUploadId(responseData.data.upload_id);
         await uploadFileintoChuncks(
           responseData.data.upload_id,
           file,
@@ -302,7 +258,7 @@ const FileUploadComponent = () => {
         setFileProgress([...fileProgressCopy]);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -341,7 +297,6 @@ const FileUploadComponent = () => {
       );
       let responseData: any = await response.json();
       if (responseData.success == true) {
-        sestPresignedUrls(responseData.url);
         resurls = [...responseData.url];
 
         const promises = [];
@@ -402,7 +357,7 @@ const FileUploadComponent = () => {
       );
       let responseData: any = await response.json();
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -440,7 +395,6 @@ const FileUploadComponent = () => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
-        console.log(responseData, "dd");
         let preSignedResponse = await fetch(responseData.data.target_url, {
           method: "PUT",
           body: item,
@@ -456,7 +410,6 @@ const FileUploadComponent = () => {
           path: responseData.data.path,
         });
         setAttachments(tempFilesStorage);
-        console.log(tempFilesStorage);
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -469,7 +422,7 @@ const FileUploadComponent = () => {
   useEffect(() => {
     if (router.query.farm_id && accessToken) {
       getFormDetails(router.query.farm_id);
-      getCropsDetails(router.query.farm_id)
+      getCropsDetails(router.query.farm_id);
       dispatch(removeTheFilesFromStore([]));
     }
   }, [accessToken, router.query.farm_id]);
@@ -530,7 +483,7 @@ const FileUploadComponent = () => {
       }
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -566,7 +519,6 @@ const FileUploadComponent = () => {
   };
   //capture vedio
   const captureCameraVedio = (value: any, videofile: any) => {
-    console.log(videofile, "kk");
     setOpenCamera(false);
     const type = "video/webm";
     const file = new File([videofile], `my video.webm`, { type });
@@ -586,10 +538,8 @@ const FileUploadComponent = () => {
       return bytes / (1024 * 1024);
     };
     if (bytesToMB(file.size) >= 5) {
-      setUploadIntoChuncks(true);
       startUploadEvent(file, 0, temp, setFileProgress);
     } else {
-      setUploadIntoChuncks(false);
       fileUploadEvent(file, 0, temp, setFileProgress);
     }
   };
@@ -681,11 +631,11 @@ const FileUploadComponent = () => {
                         previewImages.find((e: any) => e.fileIndex == item.name)
                           ?.prieviewUrl
                           ? previewImages.find(
-                            (e: any) => e.fileIndex == item.name
-                          ).prieviewUrl
+                              (e: any) => e.fileIndex == item.name
+                            ).prieviewUrl
                           : item.type == "application/pdf"
-                            ? "/pdf-icon.png"
-                            : "/doc-icon.webp"
+                          ? "/pdf-icon.png"
+                          : "/doc-icon.webp"
                       }
                     />
                     <div className={styles.progressdetails}>
@@ -700,7 +650,9 @@ const FileUploadComponent = () => {
                                     fileProgress[index] == "fail" ? "red" : "",
                                 }}
                               >
-                                {item.name?.slice(0, 13)}...{" "}
+                                {item.name?.length > 25
+                                  ? item.name?.slice(0, 22) + "..."
+                                  : item.name}
                               </div>
                               {fileProgress[index] == "fail" ? (
                                 <div
@@ -710,13 +662,11 @@ const FileUploadComponent = () => {
                                   Cancelled
                                 </div>
                               ) : (
-                                <div className={styles.photojpg}>
-                                  {bytesToMB(item.size).toFixed(2)}MB
-                                </div>
+                                ""
                               )}
                             </div>
                             {fileProgress[index] == 100 &&
-                              fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                               <div className={styles.photojpg}>
                                 <IconButton>
                                   <DoneIcon sx={{ color: "#05A155" }} />
@@ -736,7 +686,7 @@ const FileUploadComponent = () => {
                             )}
                           </div>
                           {fileProgress[index] !== 100 ||
-                            fileProgress[index] == "fail" ? (
+                          fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
                               alt=""
@@ -749,7 +699,7 @@ const FileUploadComponent = () => {
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
-                            fileProgress[index] !== "fail" ? (
+                          fileProgress[index] !== "fail" ? (
                             <LinearProgress />
                           ) : fileProgress[index] !== 100 &&
                             fileProgress[index] !== "fail" ? (
@@ -763,7 +713,7 @@ const FileUploadComponent = () => {
                         </Box>
                       </div>
                       {fileProgress[index] == 100 ||
-                        fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                         ""
                       ) : (
                         <div className={styles.uploadstatus}>

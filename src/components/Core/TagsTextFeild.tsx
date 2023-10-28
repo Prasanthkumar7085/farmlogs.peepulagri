@@ -5,14 +5,14 @@ import styles from './TagsTextFeild.module.css';
 import AddIcon from '@mui/icons-material/Add';
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [chips, setChips] = useState<any>([]);
-  const [inputValue, setInputValue] = useState<any>();
+  const [inputValue, setInputValue] = useState<any>("");
 
   useEffect(() => {
     setChips(beforeTags);
   }, [beforeTags]);
 
-  const handleKeyDown = (e: any) => {
-    if (inputValue && !chips?.includes(inputValue)) {
+  const handleKeyDown = () => {
+    if (inputValue && inputValue.trim() && !chips?.includes(inputValue)) {
       if (chips?.length) {
         setChips([...chips, inputValue]);
         captureTags([...chips, inputValue]);
@@ -23,7 +23,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         setInputValue("");
       }
     }
-  }; 
+  };
 
   const handleDelete = (index: any) => {
     const updatedChips = chips.filter(
@@ -35,17 +35,23 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
 
   return (
     <div className={styles.addTagContainer}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography>Tags</Typography>
         <IconButton
-          onClick={(e) => handleKeyDown(e)}
-          disabled={inputValue ? false : true}
+          onClick={() => handleKeyDown()}
+          disabled={inputValue?.trim() ? false : true}
         >
           <AddIcon />
         </IconButton>
       </div>
       <TextField
-        size='small'
+        size="small"
         fullWidth
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
@@ -54,20 +60,20 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       />
 
       <div className={styles.tagContainer}>
-        {chips && chips?.length ? chips.map((chip: any, index: number) => (
-          <div
-            key={index}
-            className={styles.tag}
-          >
-            <div>{chip}</div>
-            <IconButton
-              onClick={() => handleDelete(index)}
-              className={styles.closeBtn}
-              aria-label="delete">
-              <CloseIcon sx={{ fontSize: "1.2rem" }} />
-            </IconButton>
-          </div>
-        )) : ""}
+        {chips && chips?.length
+          ? chips.map((chip: any, index: number) => (
+              <div key={index} className={styles.tag}>
+                <div>{chip}</div>
+                <IconButton
+                  onClick={() => handleDelete(index)}
+                  className={styles.closeBtn}
+                  aria-label="delete"
+                >
+                  <CloseIcon sx={{ fontSize: "1.2rem" }} />
+                </IconButton>
+              </div>
+            ))
+          : ""}
       </div>
     </div>
   );

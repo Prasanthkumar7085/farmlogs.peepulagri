@@ -28,7 +28,7 @@
   height: 100px;
   width: 150px;
 }
-
+/* Login Form Card */
 .formCard {
   position: relative;
   z-index: 10;
@@ -58,7 +58,7 @@
   border-radius: 10px;
   border-color: rgba(255, 255, 255, 0.75);
 }
-
+/* Fields */
 .innerWrap {
   display: flex;
   flex-direction: column;

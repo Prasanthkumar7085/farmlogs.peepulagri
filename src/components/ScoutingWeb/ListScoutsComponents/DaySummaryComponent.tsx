@@ -48,11 +48,13 @@ const DaySummaryComponent: FC<pageProps> = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const userType = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?.user_type
+  );
 
   const getCropName = (cropId: string, crops: Array<CropType>) => {
     if (crops.length) {
       let cropObj = crops.find((item: CropType) => item._id == cropId);
-      console.log(cropObj);
 
       setCrop(cropObj);
     }
@@ -106,10 +108,8 @@ const DaySummaryComponent: FC<pageProps> = ({
       setRecomendations(singleScoutData?.suggestions);
       if (singleScoutData.suggestions) {
         setEditRecomendation(false);
-      }
-      else {
+      } else {
         setEditRecomendation(true);
-
       }
     }
   }, [singleScoutData, openDaySummary]);
@@ -220,7 +220,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                   />
                   <span>Recomendations</span>
                 </h1>
-                {loading || editRecomendation ? (
+                {loading || editRecomendation || userType == "USER" ? (
                   ""
                 ) : singleScoutData?.suggestions ? (
                   <IconButton
@@ -245,42 +245,54 @@ const DaySummaryComponent: FC<pageProps> = ({
 
               {!loading && editRecomendation ? (
                 <div style={{ width: "100%" }}>
-                  <TextField
-                    className={style.textAria}
-                    value={recomendations}
-                    onChange={(e) => setRecomendations(e.target.value)}
-                    multiline
-                    placeholder={"Your recomendations here..."}
-                    minRows={4}
-                    maxRows={8}
-                    sx={{
-                      width: "100%",
-                    }}
-                  />
-                  <div className={style.sendButtonDiv}>
-                    <Button
-                      className={style.cancelButton}
-                      variant="outlined"
-                      onClick={() => setEditRecomendation(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      className={style.sendButton}
-                      variant="contained"
-                      onClick={sendRecomendations}
-                    >
-                      {singleScoutData?.suggestions ? "Update" : " Submit"}
-                      {updateLoading ? (
-                        <CircularProgress
-                          size="1.5rem"
-                          sx={{ color: "white" }}
-                        />
-                      ) : (
-                        <SendIcon />
-                      )}
-                    </Button>
-                  </div>
+                  {!(userType == "USER") ? (
+                    <TextField
+                      className={style.textAria}
+                      value={recomendations}
+                      onChange={(e) => setRecomendations(e.target.value)}
+                      multiline
+                      placeholder={"Your recomendations here..."}
+                      minRows={4}
+                      maxRows={8}
+                      sx={{
+                        width: "100%",
+                      }}
+                    />
+                  ) : (
+                    <div className={style.recomdationContent}>
+                      <Markup
+                        content={"<i>*No Recomendations were added*</i>"}
+                      />
+                    </div>
+                  )}
+                  {!(userType == "USER") ? (
+                    <div className={style.sendButtonDiv}>
+                      <Button
+                        className={style.cancelButton}
+                        variant="outlined"
+                        onClick={() => setEditRecomendation(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        className={style.sendButton}
+                        variant="contained"
+                        onClick={sendRecomendations}
+                      >
+                        {singleScoutData?.suggestions ? "Update" : " Submit"}
+                        {updateLoading ? (
+                          <CircularProgress
+                            size="1.5rem"
+                            sx={{ color: "white" }}
+                          />
+                        ) : (
+                          <SendIcon />
+                        )}
+                      </Button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               ) : loading ? (
                 <div style={{ paddingLeft: "10px" }}>

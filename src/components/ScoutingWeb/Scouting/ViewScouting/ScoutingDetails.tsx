@@ -28,9 +28,10 @@ const ScoutingDetails = ({
   editRecomendationOpen,
   setEditRecomendationOpen,
 }: any) => {
-  const accessToken = useSelector(
-    (state: any) => state.auth.userDetails?.access_token
-  );
+ 
+    const userType = useSelector(
+      (state: any) => state.auth.userDetails?.user_details?.user_type
+    );
 
   const [crop, setCrop] = useState<any>();
   const [recomendations, setRecomendations] = useState<any>();

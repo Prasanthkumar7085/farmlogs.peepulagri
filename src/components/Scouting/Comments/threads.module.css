@@ -211,7 +211,7 @@
   flex-direction: column;
   justify-content: center;
   padding: var(--padding-6xs) 0 var(--padding-5xs);
-  gap: var(--gap-base);
+  gap: var(--gap-xs);
 }
 
 .inMessage {
@@ -319,7 +319,8 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: 0 0 var(--padding-5xs);
+  padding: 0;
+  row-gap: 0.5rem;
 }
 
 .inMessage1,

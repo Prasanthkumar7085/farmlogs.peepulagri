@@ -267,7 +267,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                             alt="Delete"
                             height={20}
                             width={20}
-                            src="/comments.svg"
+                            src="/icons/comment-reply.svg"
                             style={{ borderRadius: "5%" }}
                           />
                           <span>Reply in thread</span>

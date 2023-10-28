@@ -4,6 +4,7 @@ import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
 } from "@/types/scoutTypes";
+
 import { Button, Toolbar, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
@@ -27,7 +28,6 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { log } from "util";
-import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 
 interface ApiMethodProps {
@@ -594,7 +594,11 @@ const ListScouts: FunctionComponent = () => {
                             setSelectedItemDetails(row);
                           }}
                         >
-                          {/* <SuggestionsIcon /> */}
+                          <ImageComponent                            
+                            src={'./scouting/recommendations-icon.svg'}
+                            height={16}
+                            width={16}
+                          />
                           <span>Recomendations</span>
                         </div>
                       ) : (
@@ -610,17 +614,17 @@ const ListScouts: FunctionComponent = () => {
                           }}
                         >
                           {row?.summary ? (
-                            <ImageComponent
-                              src="/no-summary-icon.svg"
-                              height={10}
-                              width={10}
+                            <ImageComponent                            
+                              src={'./scouting/HasSummary.svg'}
+                              height={19}
+                              width={19}
                               alt="no-summary"
                             />
                           ) : (
                             <ImageComponent
                               src="/no-summary-icon.svg"
-                              height={10}
-                              width={10}
+                              height={16}
+                              width={16}
                               alt="no-summary"
                             />
                           )}

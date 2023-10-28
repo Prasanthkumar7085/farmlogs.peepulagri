@@ -230,7 +230,8 @@
   background-color: #ffffff;
   padding: 3px 9px 3px 9px;
   border-radius: 15px;
-  box-shadow: 0 0 10px 0 #eaeaea;
+  box-shadow: 0 0 0 2px #ffffff,0 5px 15px 0 #eaeaea;
+  transition: 0.2s all ease-in-out;
 }
 
 .hasSummaryBtn {
@@ -256,8 +257,10 @@
 .noSummaryBtn:hover,
 .hasSuggestions:hover,
 .hasSummaryBtn:hover {
-  color: var(--title);
-  box-shadow: 0 0 10px 0 #dddddd;
+  
+  transition: 0.3s all ease-in-out;
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 2px #ffffff,0 5px 15px 0 #d1d1d1;
 }
 
 .noSummaryBtn:hover svg path,

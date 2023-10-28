@@ -9,6 +9,11 @@ import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarm
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
+import AddIcon from '@mui/icons-material/Add';
+import styles from './DashboardPage.module.css';
+import {
+    IconButton
+  } from "@mui/material";
 
 
 const DashboardPage = () => {
@@ -141,13 +146,15 @@ const DashboardPage = () => {
 
                 )}
             <div className="addFormPositionIcon">
-                <img src="/add-plus-icon.svg" alt="" onClick={() => {
+                <IconButton size="large" className={styles.AddFarmBtn} aria-label="add to shopping cart" onClick={() => {
                     if (routerLocation) {
                         router.push(`/farms/add?location=${routerLocation}`);
                     } else {
                         router.push("/farms/add")
                     }
-                }} />
+                }}>
+                    <AddIcon />
+                </IconButton>
             </div>
             <LoadingComponent loading={loading} />
         </div>

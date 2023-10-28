@@ -7,6 +7,7 @@ import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import ImageComponent from "@/components/Core/ImageComponent";
 import {
   Breadcrumbs,
   Button,
@@ -27,6 +28,8 @@ import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
+import AddIcon from '@mui/icons-material/Add';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import styles from "./crop-card.module.css";
 
 
@@ -480,22 +483,40 @@ const SingleViewScoutComponent = () => {
                           gap: "4px",
                         }}
                       >
-                        <SuggestionsIcon /> Recommendations
+                        <ImageComponent                            
+                            src={'./scouting/recommendations-icon.svg'}
+                            height={16}
+                            width={16}
+                          />
+                          <span>Recommendations</span>
                       </Typography>
                     ) : (
                       <Typography
                         variant="caption"
                         className={styles.summary}
                         sx={{
-                          color: item?.summary ? "#05A155" : "red",
+                          color: item?.summary ?  "#3462CF" : "#d94841",
                           display: "flex",
                           alignItems: "center",
                           gap: "4px",
                         }}
                       >
-                        {" "}
-                        <SummaryIcon />
-                        Summary
+                        {
+                          item?.summary ? 
+                          <ImageComponent                            
+                            src={'/scouting/HasSummary.svg'}
+                            height={19}
+                            width={19}
+                          /> :
+                          <ImageComponent
+                            src="/no-summary-icon.svg"
+                            height={19}
+                            width={19}
+                          />
+                        }
+                        <span>
+                          Summary
+                        </span>
                       </Typography>
                     )}
                   </Button>
@@ -606,17 +627,19 @@ const SingleViewScoutComponent = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: "4rem",
+            height:"calc(100vh - 150px)",
+            gap: "1rem"
           }}
         >
-          <Image
+          <ImageComponent
             src="/emty-folder-image.svg"
             alt="empty folder"
-            width={250}
+            width={200}
             height={150}
           />
-          <Typography variant="h4">No Scoutings for this crop</Typography>
+          <Typography className={styles.subTitle}>No Scoutings</Typography>
         </div>
+
       ) : (
         ""
       )}
@@ -681,23 +704,18 @@ const SingleViewScoutComponent = () => {
 
       <div className="addFormPositionIcon">
         {tagsCheckBoxOpen == false && selectedItems?.length == 0 ? (
-          <img
-            src="/add-plus-icon.svg"
-            alt=""
-            onClick={() => {
-              router.push(
-                `/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`
-              );
-            }}
-          />
+          <IconButton size="large" className={styles.AddScoutingbtn} aria-label="add to shopping cart" onClick={() => {
+            router.push(`/farms/${router?.query.farm_id}/crops/add-item?crop_id=${router.query.crop_id}`)
+          }}>
+              <AddIcon />
+          </IconButton>
         ) : selectedItems?.length ? (
-          <img
-            src="/scout-add-floating-icon.svg"
-            alt="tags icon"
-            onClick={() => {
-              setTagsDrawerOpen(true);
-            }}
-          />
+          <IconButton size="large" className={styles.AddTagsbtn} aria-label="add to shopping cart" onClick={() => {
+            setTagsDrawerOpen(true)
+          }}>
+              <LocalOfferIcon />
+          </IconButton>
+
         ) : (
           ""
         )}

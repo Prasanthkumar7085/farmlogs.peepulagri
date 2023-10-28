@@ -303,7 +303,9 @@ const AllCropsComponent = () => {
             </div>
 
             {!loading ? <div className="addFormPositionIcon" >
-                <img src="/add-plus-icon.svg" alt="" onClick={() => setDilogOpen(true)} />
+                <IconButton size="large" className={styles.AddScoutingbtn} aria-label="add to shopping cart" onClick={() => setDilogOpen(true)}>
+                    <AddIcon />
+                </IconButton>
             </div> : ""}
 
             {dilogOpen ? <NewFolderDiloag

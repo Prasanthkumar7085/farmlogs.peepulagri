@@ -599,7 +599,7 @@ const ListScouts: FunctionComponent = () => {
                             height={16}
                             width={16}
                           />
-                          <span>Recomendations</span>
+                          <span>Recommendations</span>
                         </div>
                       ) : (
                         <div
@@ -618,14 +618,12 @@ const ListScouts: FunctionComponent = () => {
                               src={'./scouting/HasSummary.svg'}
                               height={19}
                               width={19}
-                              alt="no-summary"
                             />
                           ) : (
                             <ImageComponent
-                              src="/no-summary-icon.svg"
+                              src="./no-summary-icon.svg"
                               height={16}
                               width={16}
-                              alt="no-summary"
                             />
                           )}
                           <span>Summary</span>

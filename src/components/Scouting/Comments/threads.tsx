@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./comment-form";
 import styles from "./threads.module.css";
 import ChatIcon from '@mui/icons-material/Chat';
+import { Markup } from "interweave";
 
 const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads, scoutDetails, attachement }: any) => {
 
@@ -159,7 +160,9 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       </div>
                     ) : (
                       <p className={styles.theProblemIm}>
-                        {item.content}
+                        <Markup
+                          content={item.content}
+                        />
                         <Typography
                           variant="caption"
                           sx={{ wordBreak: "break-word" }}
@@ -478,9 +481,9 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                 </div>
                               ) : (
                                 <p className={styles.theProblemIm}>
-                                  {lines.map((line: any, index: any) => (
-                                    <div key={index}>{line}</div>
-                                  ))}
+                                  <Markup
+                                    content={row.content}
+                                  />
                                   {"                     "}
                                   <Typography variant="caption">
                                     {row.createdAt == row.updatedAt

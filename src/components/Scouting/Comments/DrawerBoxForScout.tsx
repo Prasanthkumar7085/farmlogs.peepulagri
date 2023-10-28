@@ -30,11 +30,11 @@ const DrawerComponentForScout = ({
   const [loadingThreads, setLoadingThreads] = useState(true);
 
   useEffect(() => {
-    if ((router.isReady, accessToken, scoutDetails && attachement)) {
+    if ((router.isReady, accessToken, scoutDetails && attachement && openCommentsBox == true)) {
       getAllScoutComments();
       setLoadingThreads(true);
     }
-  }, [router.isReady, accessToken, scoutDetails, attachement]);
+  }, [router.isReady, accessToken, scoutDetails, attachement, openCommentsBox]);
 
   const getAllScoutComments = async () => {
     setLoadingThreads(true);

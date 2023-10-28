@@ -12,6 +12,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   }, [beforeTags]);
 
   const handleKeyDown = (e: any) => {
+    console.log(e)
     if (inputValue && !chips?.includes(inputValue)) {
       if (chips?.length) {
         setChips([...chips, inputValue]);
@@ -23,7 +24,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         setInputValue("");
       }
     }
-  }; 
+  };
 
   const handleDelete = (index: any) => {
     const updatedChips = chips.filter(
@@ -48,7 +49,10 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         size='small'
         fullWidth
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) => {
+          setInputValue(e.target.value)
+          console.log(e)
+        }}
         className={styles.tagsBox}
         placeholder="Enter Tags"
       />

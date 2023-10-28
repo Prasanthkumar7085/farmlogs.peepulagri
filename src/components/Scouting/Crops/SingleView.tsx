@@ -304,7 +304,6 @@ const SingleViewScoutComponent = () => {
       await tempArray.forEach((obj: any) => {
         (obj.description = findingsvalue), (obj.tags = [...tags]);
       });
-      console.log(tempArray, "lmm");
       setTempImages(tempArray);
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
@@ -571,15 +570,15 @@ const SingleViewScoutComponent = () => {
                         }}
                       >
                         {tagsCheckBoxOpen == true &&
-                        scoutId == item._id &&
-                        image?.description ? (
+                          scoutId == item._id &&
+                          image?.description ? (
                           <SearchOutlinedIcon />
                         ) : (
                           ""
                         )}
                         {tagsCheckBoxOpen == true &&
-                        scoutId == item._id &&
-                        image?.tags?.length ? (
+                          scoutId == item._id &&
+                          image?.tags?.length ? (
                           <Image
                             src={"/scout-img-select.svg"}
                             width={17}

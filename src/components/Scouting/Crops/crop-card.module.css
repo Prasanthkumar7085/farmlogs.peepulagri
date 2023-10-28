@@ -160,7 +160,7 @@
 
 .galleryCard .summaryBtn span {
   font-family: "Inter", sans-serif !important;
-  font-size: clamp(11px, 3vw, 13px) !important;
+  font-size: clamp(11px, 4vw, 13px) !important;
   font-weight: 500 !important;
   line-height: 100%;
   text-transform: capitalize;

@@ -23,11 +23,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
-import styles from "./crop-card.module.css";
 import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
+import styles from "./crop-card.module.css";
 
 
 const SingleViewScoutComponent = () => {

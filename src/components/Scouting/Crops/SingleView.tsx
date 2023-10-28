@@ -27,6 +27,7 @@ import styles from "./crop-card.module.css";
 import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
 
 
 const SingleViewScoutComponent = () => {

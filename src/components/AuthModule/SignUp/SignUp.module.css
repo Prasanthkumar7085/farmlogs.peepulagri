@@ -33,7 +33,7 @@
   position: relative;
   z-index: 10;
   border-radius: 32.406px;
-  padding: 3rem;
+  padding: 2rem 2.5rem 3rem;
   background: linear-gradient(140deg, rgba(255, 255, 255, 0.75) 2.86%, rgba(255, 255, 255, 0.4) 95.96%);
   backdrop-filter: blur(10.802083015441895px);
   min-height: 230px;
@@ -65,7 +65,7 @@
   justify-content: center;
   border-radius: 10px;
   gap: 10px;
-  width: 350px;
+  min-width: 280px;
 }
 
 .header {

@@ -237,6 +237,7 @@ const SingleViewScoutComponent = () => {
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
     }
+
     if (
       tags?.length &&
       findingsvalue?.length == 0 &&
@@ -254,7 +255,11 @@ const SingleViewScoutComponent = () => {
     if (!tags?.length && findingsvalue?.length) {
       let tempArray = [...tempImages];
       await tempArray.forEach((obj: any) => {
-        obj.description = obj.description + "\n" + findingsvalue;
+        if (obj.description) {
+          obj.description = obj.description + "\n" + findingsvalue;
+        } else {
+          obj.description = findingsvalue;
+        }
       });
       setTempImages(tempArray);
       setSelectedItems(tempArray);
@@ -291,6 +296,10 @@ const SingleViewScoutComponent = () => {
       setTempImages(tempArray);
       setSelectedItems(tempArray);
       await updateDescriptionService(tempArray, selectedFile.summary);
+    }
+
+    if (!tags.length && !findingsvalue?.length) {
+      await updateDescriptionService([], "");
     }
   };
 
@@ -441,7 +450,9 @@ const SingleViewScoutComponent = () => {
           >
             {farmTitle}
           </Link>
-          <Typography color="text.primary">{cropTitle}</Typography>
+          <Typography color="text.primary">
+            {cropTitle?.slice(0, 1)?.toUpperCase() + cropTitle?.slice(1)}
+          </Typography>
         </Breadcrumbs>
       </div>
       {/* < InfiniteScroll
@@ -692,14 +703,13 @@ const SingleViewScoutComponent = () => {
         captureImageDilogOptions={captureImageDilogOptions}
       />
 
-     
-        <SummaryTextDilog
-          summaryDrawerClose={summaryDrawerClose}
-          captureSummary={captureSummary}
-          item={selectedFile}
-          SummaryDrawerOpen={SummaryDrawerOpen}
-        />
-     
+      <SummaryTextDilog
+        summaryDrawerClose={summaryDrawerClose}
+        captureSummary={captureSummary}
+        item={selectedFile}
+        SummaryDrawerOpen={SummaryDrawerOpen}
+      />
+
       {drawerOpen == true ? (
         <DrawerComponentForScout
           drawerClose={drawerClose}

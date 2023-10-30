@@ -24,6 +24,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useRouter } from "next/router";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import formatText from "../../../../lib/requestUtils/formatTextToBullets";
 
 interface pageProps {
   openDaySummary: boolean;
@@ -215,7 +216,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                 <div>
                   {singleScoutData?.summary ? (
                     <div className={style.content}>
-                      <Markup content={singleScoutData?.summary} />
+                      <Markup content={formatText(singleScoutData?.summary)} />
                     </div>
                   ) : (
                     <div className={style.content}>Summary not added!</div>
@@ -331,7 +332,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                   <Markup
                     content={
                       singleScoutData?.suggestions
-                        ? singleScoutData?.suggestions
+                        ? formatText(singleScoutData?.suggestions)
                         : "<i>*No Recommendation were added*</i>"
                     }
                   />

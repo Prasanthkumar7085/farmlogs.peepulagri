@@ -7,6 +7,7 @@ import { Markup } from "interweave";
 import "react-quill/dist/quill.snow.css";
 import ImageComponent from "./ImageComponent";
 import styles from "./TagsDrawer.module.css";
+import formatText from "../../../lib/requestUtils/formatTextToBullets";
 const ShowMoreInViewAttachmentDetails = ({
   showMoreSuggestions,
   setShowMoreSuggestions,
@@ -14,40 +15,6 @@ const ShowMoreInViewAttachmentDetails = ({
   captureTagsDetailsEdit,
   loading,
 }: any) => {
-  function processString(inputString: string) {
-    let trimmedString = inputString.trim();
-
-    let regex = /^(?:\d+\.|\w+\.\s*)/;
-    if (regex.test(trimmedString)) {
-      trimmedString = trimmedString.replace(regex, "");
-    }
-
-    return trimmedString;
-  }
-
-  //function to formatext
-  function formatText(input: any) {
-    input = input?.replace(/\/n/g, "\n");
-
-    if (/\d+\./.test(input) || /[a-z]\./i.test(input)) {
-      let lines = input.split("\n");
-      let output = "";
-
-      lines.forEach((line: any) => {
-        let updatedLine = line.trim();
-        let regex = /^(?:\d+\.|\w+\.\s*)/;
-        if (regex.test(updatedLine)) {
-          output += `\u2022 ${processString(line)}\n`;
-        } else {
-          output += `${line}\n`;
-        }
-      });
-      return output;
-    } else {
-      return input;
-    }
-  }
-
   return (
     <Drawer
       anchor={"bottom"}

@@ -19,6 +19,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import { Markup } from "interweave";
 import ShowMoreInViewAttachmentDetails from "./Core/ShowMoreInViewAttachmentDetails";
 import ImageComponent from "./Core/ImageComponent";
+import formatText from "../../lib/requestUtils/formatTextToBullets";
 
 const VideoDialogForScout = ({
   open,
@@ -76,67 +77,6 @@ const VideoDialogForScout = ({
       handleClose();
     }
   };
-
-  // Define swipe handlers
-  const handlers = useSwipeable({
-    onSwipedLeft: playNext,
-    onSwipedRight: playPrevious,
-  });
-
-  const handleZoomIn = () => {
-    setZoomLevel(zoomLevel + 0.1); // Increase the zoom level
-  };
-
-  const handleZoomOut = () => {
-    setZoomLevel(Math.max(1, zoomLevel - 0.1)); // Decrease the zoom level, with a minimum of 1
-  };
-
-  const zoomIn = () => {
-    setISZoom(true);
-  };
-
-  function processString(inputString: string) {
-    // let trimmedString = inputString.trim();
-    // let regex = /^\d+\.\s*/;
-    // if (regex.test(trimmedString)) {
-    //   trimmedString = trimmedString.replace(regex, "");
-    // }
-
-    // return trimmedString;
-
-    //// dots for i. a. 1.
-    let trimmedString = inputString.trim();
-
-    let regex = /^(?:\d+\.|\w+\.\s*)/;
-    if (regex.test(trimmedString)) {
-      trimmedString = trimmedString.replace(regex, "");
-    }
-
-    return trimmedString;
-  }
-
-  //function to formatext
-  function formatText(input: any) {
-    input = input?.replace(/\/n/g, "\n");
-
-    if (/\d+\./.test(input) || /[a-z]\./i.test(input)) {
-      let lines = input.split("\n");
-      let output = "";
-
-      lines.forEach((line: any) => {
-        let updatedLine = line.trim();
-        let regex = /^(?:\d+\.|\w+\.\s*)/;
-        if (regex.test(updatedLine)) {
-          output += `\u2022 ${processString(line)}\n`;
-        } else {
-          output += `${line}\n`;
-        }
-      });
-      return output;
-    } else {
-      return input;
-    }
-  }
 
   return (
     <Dialog
@@ -227,7 +167,6 @@ const VideoDialogForScout = ({
                           src={item.url}
                           alt={`Image ${index + 1}`}
                           style={{ transform: `scale(${zoomLevel})` }}
-                          onClick={zoomIn}
                         />
                       )}
                     </>

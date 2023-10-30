@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Toaster } from "sonner";
 import style from "../../ListScoutsComponents/DaySummary.module.css";
+import formatText from "../../../../../lib/requestUtils/formatTextToBullets";
 
 const ScoutingDetails = ({
   loading,
@@ -62,48 +63,6 @@ const ScoutingDetails = ({
     }
   }, [data]);
 
-  function processString(inputString: string) {
-    // let trimmedString = inputString.trim();
-    // let regex = /^\d+\.\s*/;
-    // if (regex.test(trimmedString)) {
-    //   trimmedString = trimmedString.replace(regex, "");
-    // }
-
-    // return trimmedString;
-
-    //// dots for i. a. 1.
-    let trimmedString = inputString.trim();
-
-    let regex = /^(?:\d+\.|\w+\.\s*)/;
-    if (regex.test(trimmedString)) {
-      trimmedString = trimmedString.replace(regex, "");
-    }
-
-    return trimmedString;
-  }
-
-  //function to formatext
-  function formatText(input: any) {
-    input = input?.replace(/\/n/g, "\n");
-
-    if (/\d+\./.test(input) || /[a-z]\./i.test(input)) {
-      let lines = input.split("\n");
-      let output = "";
-
-      lines.forEach((line: any) => {
-        let updatedLine = line.trim();
-        let regex = /^(?:\d+\.|\w+\.\s*)/;
-        if (regex.test(updatedLine)) {
-          output += `\u2022 ${processString(line)}\n`;
-        } else {
-          output += `${line}\n`;
-        }
-      });
-      return output;
-    } else {
-      return input;
-    }
-  }
   return (
     <div className={styles.viewScoutingPage}>
       <div className={styles.viewHeader}>

@@ -94,12 +94,18 @@ const TagsDrawerEdit = ({
         onClick={() => {
           captureTagsDetailsEdit(tags, description);
         }}
-        className={styles.updateSubmitBtn}
+        disabled={loading || !(tags?.length || description?.length)}
+        className={
+          loading || !(tags?.length || description?.length)
+            ? styles.updateSubmitBtnDisabled
+            : styles.updateSubmitBtn
+        }
       >
-        {loading ?
+        {loading ? (
           <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-          : "Submit"}
-
+        ) : (
+          "Submit"
+        )}
       </Button>
     </Drawer>
   );

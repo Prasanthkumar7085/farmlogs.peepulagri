@@ -3,20 +3,26 @@ import {
   Button,
   Dialog,
   CircularProgress,
+  Autocomplete,
 } from "@mui/material";
 import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
 import SpaIcon from '@mui/icons-material/Spa';
+import { useRouter } from "next/router";
 
 
 const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, errorMessages, defaultArea }: any) => {
+  const router = useRouter();
+
 
   const [title, setTitle] = useState('');
   const [area, setArea] = useState('');
+  const [crop, setcrop] = useState([]);
 
   useEffect(() => {
     setTitle(defaultTitle);
     setArea(defaultArea);
+    dropDownCrops();
   }, [open]);
 
 
@@ -28,6 +34,29 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
       event.preventDefault();
     }
   };
+
+  const dropDownCrops = async () => {
+
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/pending-crop-names`;
+      const options = {
+        method: "GET",
+
+        headers: new Headers({
+          'content-type': 'application/json',
+        })
+      }
+      const response: any = await fetch(url, options);
+      const responseData = await response.json();
+      setcrop(responseData.data)
+
+
+    } catch (err: any) {
+      console.error(err);
+
+    }
+  };
+
 
   const callData = () => {
 
@@ -57,22 +86,27 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
           <div style={{ textAlign: "left", width: "100%" }}>
             <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{'Title'}<strong style={{ color: "rgb(228 12 15)" }}>*</strong></h4>
           </div>
-          <TextField
-            className={styles.input}
-            color="primary"
-            size="small"
-            placeholder="Enter folder title here"
-            variant="outlined"
-            onChange={(e) => setTitle(e.target.value)}
+          <Autocomplete
+            options={crop?.length ? crop : []}
             value={title}
-            onKeyDown={(e: any) => { if (e.key == 'Enter') callData(); }}
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: "8px !important"
-              }
-            }}
-            error={errorMessages ? errorMessages['title'] : ""}
-            helperText={errorMessages ? errorMessages['title'] : ""}
+            onChange={(_, newValue: any) => setTitle(newValue)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                className={styles.input}
+                color="primary"
+                size="small"
+                placeholder="Enter folder title here"
+                variant="outlined"
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: "8px !important",
+                  },
+                }}
+                error={errorMessages ? errorMessages['title'] : ""}
+                helperText={errorMessages ? errorMessages['title'] : ""}
+              />
+            )}
           />
 
         </div>

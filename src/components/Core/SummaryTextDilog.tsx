@@ -79,7 +79,7 @@ const SummaryTextDilog = ({
                 height={16}
                 width={16}
               />
-              <span>Recommendation</span>
+              <span>Recommendations</span>
             </span>
             <Typography variant="caption" className={styles.bodyDescrpiction}>
               <Markup content={item?.suggestions} />

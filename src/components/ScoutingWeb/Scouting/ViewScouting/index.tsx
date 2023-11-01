@@ -165,8 +165,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
         },
       }}
     >
-      <Grid container>
-        <Grid xs={8} className={styles.RightImageContainer}>
+      <div className={styles.galleryContainer}>
+        <div className={styles.RightImageContainer}>
           <div style={{ position: "relative", padding: "1rem" }}>
             <div
               style={{
@@ -332,8 +332,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
               ))}
             </div>
           </div>
-        </Grid>
-        <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
+        </div>
+        <div className={styles.galleryItemDetails}>
           <ScoutingDetails
             setEditRecomendationOpen={setEditRecomendationOpen}
             editRecomendationOpen={editRecomendationOpen}
@@ -344,8 +344,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
             setPreviewImageDialogOpen={setPreviewImageDialogOpen}
             afterUpdateRecommandations={afterUpdateRecommandations}
           />
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </Dialog>
   );
 };

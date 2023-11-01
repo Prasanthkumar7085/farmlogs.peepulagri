@@ -3,7 +3,7 @@
 }
 
 .chatBox * {
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .chatBox textarea {
@@ -48,11 +48,11 @@
   gap: var(--gap-base);
   cursor: pointer;
 }
-
+.sendbuttonDisable,
 .sendbutton {
   border-radius: 6px;
   box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15) !important;
-  color: #FFF !important;
+  color: #FFF;
   font-family: "Inter", sans-serif;
   font-size: clamp(14px, 0.72vw, 16px);
   font-weight: 500;
@@ -60,6 +60,10 @@
   padding: 6px 35px !important;
   min-width: 150px;
   text-transform: capitalize;
+}
+.sendbuttonDisable {
+  opacity: 0.8;
+  pointer-events:none;
 }
 
 .actions,
@@ -86,7 +90,6 @@
   right: 0;
   bottom: 0;
   background-color: #ffffff;
-  border-top: 1px solid var(--stroke);
   padding-bottom: 10px;
 }
 

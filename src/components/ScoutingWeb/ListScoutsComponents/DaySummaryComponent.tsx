@@ -94,13 +94,13 @@ const DaySummaryComponent: FC<pageProps> = ({
       body
     );
     if (response?.success) {
-      toast.success("Recommendation added Successfully");
+      toast.success("Recommendations added Successfully");
       setEditRecomendation(false);
       getSingleScoutData();
     } else if (response?.statusCode == 403) {
       await logout();
     } else {
-      toast.error("Recommendation added Failed!");
+      toast.error("Recommendations added Failed!");
     }
     setUpdateLoading(false);
   };
@@ -244,7 +244,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                     height={24}
                     width={24}
                   />
-                  <span>Recommendation</span>
+                  <span>Recommendations</span>
                 </h1>
                 {loading || editRecomendation || userType == "USER" ? (
                   ""
@@ -277,7 +277,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                       value={recomendations}
                       onChange={(e) => setRecomendations(e.target.value)}
                       multiline
-                      placeholder={"Your Recommendation here..."}
+                      placeholder={"Your Recommendations here..."}
                       minRows={4}
                       maxRows={8}
                       sx={{
@@ -287,7 +287,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                   ) : (
                     <div className={style.recomdationContent}>
                       <Markup
-                        content={"<i>*No Recommendation were added*</i>"}
+                        content={"<i>*No Recommendations were added*</i>"}
                       />
                     </div>
                   )}

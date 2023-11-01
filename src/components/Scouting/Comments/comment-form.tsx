@@ -478,10 +478,9 @@ const CommentForm = ({
         </div>
 
         <Button
-          className={styles.sendbutton}
+          className={comment && !loading ? styles.sendbutton : styles.sendbuttonDisable}
           size="medium"
           variant="contained"
-          disabled={comment && !loading ? false : true}
           onClick={() =>
             replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
           }

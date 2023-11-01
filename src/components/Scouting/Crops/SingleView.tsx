@@ -676,14 +676,13 @@ const SingleViewScoutComponent = () => {
             justifyContent: "center",
             alignItems: "center",
             height: "calc(100vh - 150px)",
-            gap: "1rem",
           }}
         >
           <ImageComponent
             src="/emty-folder-image.svg"
             alt="empty folder"
-            width={200}
-            height={150}
+            width={150}
+            height={140}
           />
           <Typography className={styles.subTitle}>No Scoutings</Typography>
         </div>

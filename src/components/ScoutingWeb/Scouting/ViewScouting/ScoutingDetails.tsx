@@ -119,7 +119,7 @@ const ScoutingDetails = ({
               content={
                 content?.length
                   ? formatText(content)
-                  : "*<i>No Findings added</i>*"
+                  : "<span class='nocontent'>No findings added yet!</span>"
               }
             />
           )}
@@ -138,7 +138,7 @@ const ScoutingDetails = ({
           >
             <h6 className={style.recomendation}>
               <SuggestionsIcon />
-              Recommendation
+              Recommendations
             </h6>
             {loading || editRecomendationOpen ? (
               ""
@@ -220,7 +220,7 @@ const ScoutingDetails = ({
                 content={
                   mainImageData?.suggestions
                     ? formatText(mainImageData?.suggestions)
-                    : "<i>*No Recomendations were added*</i>"
+                    : "<span class='nocontent'>No recommendations added yet!</span>"
                 }
               />
             </div>

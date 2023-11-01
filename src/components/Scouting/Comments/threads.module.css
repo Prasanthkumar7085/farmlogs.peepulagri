@@ -353,16 +353,15 @@
 
 /* No threads */
 .noThreadFound {
-  padding: 1rem;
-  background-color: #f9f9f9;
+  padding: 0.5rem 0.75rem;
+  background-color: #f1f8fd;
+  border: 1px solid #d7eaf8;
   text-align: center;
-  width: 100%;
-  margin: 0 auto 1rem;
-  border-radius: 10px;
-  border: 1px solid #efefef;
+  margin: 0;
+  border-radius: 3px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 1rem;
-  color: var(--body);
+  max-width: 100%;
+  column-gap: 0.5rem;
+  color: var(--gray-700);
+  align-self: flex-start;
 }

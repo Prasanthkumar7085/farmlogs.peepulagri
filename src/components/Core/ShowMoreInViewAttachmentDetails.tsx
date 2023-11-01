@@ -123,7 +123,7 @@ const ShowMoreInViewAttachmentDetails = ({
                     height={16}
                     width={16}
                   />
-                  <span>Recommendation</span>
+                  <span>Recommendations</span>
                 </span>
                 <Typography
                   variant="caption"
@@ -133,7 +133,7 @@ const ShowMoreInViewAttachmentDetails = ({
                     content={
                       item?.suggestions
                         ? item?.suggestions
-                        : "*No Recommendation added*"
+                        : "*No Recommendations added*"
                     }
                   />
                 </Typography>

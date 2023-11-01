@@ -610,7 +610,7 @@ const ListScouts: FunctionComponent = () => {
                                 height={16}
                                 width={16}
                               />
-                              <span>Recommendation</span>
+                              <span>Recommendations</span>
                             </div>
                           ) : (
                             <div

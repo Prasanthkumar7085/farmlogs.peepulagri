@@ -27,7 +27,7 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
                   src={
                     imageItem.type?.includes("video")
                       ? "/Play-button.svg"
-                      : imageItem?.url
+                      : imageItem?.tn_url
                   }
                   height={100}
                   width={100}

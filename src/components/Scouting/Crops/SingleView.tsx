@@ -581,7 +581,7 @@ const SingleViewScoutComponent = () => {
                           src={
                             image.type?.slice(0, 2) == "vi"
                               ? "/Play-button.svg"
-                              : image.url
+                              : image.tn_url
                           }
                           alt={`images${indexAttachment}`}
                           width={"100%"}
@@ -636,15 +636,15 @@ const SingleViewScoutComponent = () => {
                           }}
                         >
                           {tagsCheckBoxOpen == true &&
-                          scoutId == item._id &&
-                          image?.description ? (
+                            scoutId == item._id &&
+                            image?.description ? (
                             <SearchOutlinedIcon />
                           ) : (
                             ""
                           )}
                           {tagsCheckBoxOpen == true &&
-                          scoutId == item._id &&
-                          image?.tags?.length ? (
+                            scoutId == item._id &&
+                            image?.tags?.length ? (
                             <Image
                               src={"/scout-img-select.svg"}
                               width={17}

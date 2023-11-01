@@ -706,9 +706,10 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           </Box>
         </div>
       ) : (
-        <div className={styles.noThreadFound}>
-          <ChatIcon /> No Comments
-        </div>
+        // <div className={styles.noThreadFound}>
+        //   <ChatIcon /> No Comments
+        // </div>
+        ""
       )}
       <LoadingComponent loading={loading} />
       <AlertComponent

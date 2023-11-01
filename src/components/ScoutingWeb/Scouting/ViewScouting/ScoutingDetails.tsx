@@ -153,6 +153,8 @@ const ScoutingDetails = ({
               </IconButton>
             ) : (
               <IconButton
+                color="success"
+                className={style.addIcon}
                 onClick={() => {
                   setEditRecomendationOpen(true);
                 }}
@@ -202,7 +204,7 @@ const ScoutingDetails = ({
                   {updateLoading ? (
                     <CircularProgress size="1.5rem" sx={{ color: "white" }} />
                   ) : (
-                    <SendIcon />
+                    ""
                   )}
                 </Button>
               </div>

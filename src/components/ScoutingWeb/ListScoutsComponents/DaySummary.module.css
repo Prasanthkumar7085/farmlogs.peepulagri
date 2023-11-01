@@ -21,7 +21,7 @@
 .sendButtonDisabled,
 .sendButton {
     font-family: "Inter", sans-serif;
-    font-size: clamp(12px, 0.83vw, 16px);
+    font-size: clamp(12px, 0.75vw, 16px);
     font-weight: 500;
     text-transform: capitalize;
     color: var(--white)!important;
@@ -52,7 +52,7 @@
     background: var(--white);
     box-shadow: none;
     font-family: "Inter", sans-serif;
-    font-size: clamp(12px, 0.83vw, 16px);
+    font-size: clamp(12px, 0.75vw, 16px);
     font-weight: 500;
     text-transform: capitalize;
     color: #344048;
@@ -77,9 +77,9 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-family: "Inter", sans-serif;
-    font-size: clamp(16px, 1vw, 20px);
-    font-weight: 500;
-    line-height: 18px;
+    font-size: clamp(16px, 1vw, 24px);
+    font-weight: 600;
+    line-height: 100%;
     margin: 0;
     display: flex;
     align-items: center;
@@ -98,9 +98,9 @@
 .textwrapper .recomendation {
     color: #05a155;
     font-family: "Inter", sans-serif;
-    font-size: clamp(16px, 1vw, 20px);
-    font-weight: 400;
-    line-height: 18px;
+    font-size: clamp(16px, 1vw, 24px);
+    font-weight: 600;
+    line-height: 100%;
     margin: 0;
     display: flex;
     align-items: center;
@@ -130,6 +130,9 @@
 .textAria {
     margin-top: .3125rem;
 }
+.addIcon {
+    background-color: #05a1561a;
+}
 .editIcon {
     background-color: var(--color-firebrick)!important;
     color: #ffffff!important;
@@ -155,9 +158,15 @@
 .textwrapper .findingText .content {
     margin-top: 1rem;
 }
-.textwrapper span {
+.textwrapper > span {
     display: block;
     width: 100%;
+    color: #6A7185;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(13px, 0.83vw, 16px);
+    font-weight: 400;
+    line-height: 140%;
+    margin-top: 0.5rem;
 }
 
 .RecommedationBlock {

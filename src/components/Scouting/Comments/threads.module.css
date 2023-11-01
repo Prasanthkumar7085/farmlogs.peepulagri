@@ -352,7 +352,7 @@
 }
 
 /* No threads */
-.noThreadFound {
+/* .noThreadFound {
   padding: 0.5rem 0.75rem;
   background-color: #f1f8fd;
   border: 1px solid #d7eaf8;
@@ -364,4 +364,4 @@
   column-gap: 0.5rem;
   color: var(--gray-700);
   align-self: flex-start;
-}
+} */

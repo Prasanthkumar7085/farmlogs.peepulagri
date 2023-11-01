@@ -5,12 +5,13 @@ import styles from './TagsTextFeild.module.css';
 import AddIcon from '@mui/icons-material/Add';
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [chips, setChips] = useState<any>([]);
-  const [tagValue, setTagValue] = useState<any>();
-  const [tag, setTag] = useState([]);
+  const [tagValue, setTagValue] = useState<any>([]);
+  const [newTagValue, setNewTagValue] = useState<any>();
+  const [tag, setTag] = useState<any[]>([]);
 
 
   useEffect(() => {
-    setChips(beforeTags);
+    setTagValue(beforeTags ? beforeTags : []);
     dropDownTags()
   }, []);
 
@@ -36,27 +37,56 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
     }
   };
 
+  const handleInput = (e: any) => {
+    setNewTagValue(e.target.value)
+  };
+
+  const addNewTag = () => {
+    if (newTagValue) {
+      setTag([...tag, newTagValue]);
+      setTagValue([...tagValue, newTagValue]);
+      setNewTagValue('');
+      captureTags([...tagValue, newTagValue]);
+    }
+  };
+
 
   return (
     <div className={styles.addTagContainer}>
       {tag.length ? (
         <Autocomplete
+          sx={{
+            '& .MuiAutoComplete-popper': {
+              zIndex: '2000 !important',
+            }
+          }}
           multiple
           id="tag-autocomplete"
           options={tag.length ? tag : []}
           getOptionLabel={(option) => option}
-          value={tagValue ? tagValue : chips}
+          inputValue={newTagValue}
+          onInputChange={(e, newInputValue) => {
+            setNewTagValue(newInputValue)
+          }}
+          value={tagValue ? tagValue : []}
           onChange={(e, newValue) => {
             { setTagValue(newValue), captureTags(newValue) }
           }}
           renderInput={(params) => (
-            <TextField
-              {...params}
-              size="small"
-              fullWidth
-              className={styles.tagsBox}
-              placeholder="Enter Tags"
-            />
+            <div>
+              <IconButton onClick={addNewTag}>
+                <AddIcon />
+              </IconButton>
+              <TextField
+                {...params}
+                size="small"
+                fullWidth
+                className={styles.tagsBox}
+                placeholder="Enter Tags"
+              // onInput={handleInput}
+              // value={newTagValue}
+              />
+            </div>
           )}
         />
       ) : ''}

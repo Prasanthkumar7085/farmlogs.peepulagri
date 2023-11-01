@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import styles from './TagsTextFeild.module.css';
 import AddIcon from '@mui/icons-material/Add';
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
-  const [chips, setChips] = useState<any>([]);
   const [tagValue, setTagValue] = useState<any>([]);
   const [newTagValue, setNewTagValue] = useState<any>();
   const [tag, setTag] = useState<any[]>([]);
@@ -37,9 +36,6 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
     }
   };
 
-  const handleInput = (e: any) => {
-    setNewTagValue(e.target.value)
-  };
 
   const addNewTag = () => {
     if (newTagValue) {
@@ -83,8 +79,6 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                 fullWidth
                 className={styles.tagsBox}
                 placeholder="Enter Tags"
-              // onInput={handleInput}
-              // value={newTagValue}
               />
             </div>
           )}

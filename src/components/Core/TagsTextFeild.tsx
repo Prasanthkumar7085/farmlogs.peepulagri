@@ -51,11 +51,6 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
     <div className={styles.addTagContainer}>
       {tag.length ? (
         <Autocomplete
-          sx={{
-            '& .MuiAutoComplete-popper': {
-              zIndex: '2000 !important',
-            }
-          }}
           multiple
           id="tag-autocomplete"
           options={tag.length ? tag : []}

@@ -1,14 +1,14 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
 import {
   ScoutAttachmentDetails,
   SingleScoutResponse,
 } from "@/types/scoutTypes";
+
 import { Button, Toolbar, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import ListAllCropsForDropDownServices from "../../../../lib/services/CropServices/ListAllCropsForDropDownServices";
@@ -24,8 +24,13 @@ import ScoutingDailyImages from "./ScoutingDailyImages";
 import UserDropDownForScouts from "./UserDropDownForScouts";
 import timePipe from "@/pipes/timePipe";
 import DaySummaryComponent from "./DaySummaryComponent";
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { log } from "util";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 interface ApiMethodProps {
   page: string | number;
@@ -38,12 +43,13 @@ interface ApiMethodProps {
 }
 const ListScouts: FunctionComponent = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [data, setData] = useState<Array<SingleScoutResponse>>([]);
+  const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -212,7 +218,21 @@ const ListScouts: FunctionComponent = () => {
       toDate: router.query.to_date as string,
     });
   };
-
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   const getAllScoutsList = async ({
     page = 1,
     limit = 10,
@@ -256,9 +276,26 @@ const ListScouts: FunctionComponent = () => {
     if (response?.success) {
       const { data, ...rest } = response;
       setPaginationDetails(rest);
-      setData(data);
+
+      const groupedData: any = {};
+      // Iterate through yourData and group objects by createdAt date
+      data.forEach((item: any) => {
+        const createdAt = timePipe(item.createdAt, "DD-MM-YYYY");
+        if (!groupedData[createdAt]) {
+          groupedData[createdAt] = [item];
+        } else {
+          groupedData[createdAt].push(item);
+        }
+      });
+      // Convert the groupedData object into an array
+      const groupedArray = Object.values(groupedData);
+      console.log(groupedArray);
+      setData(groupedArray);
+
       let onlyImagesData = unWindImages(data);
       setOnlyImages(onlyImagesData);
+    } else if (response?.statusCode == 403) {
+      await logout();
     } else {
       toast.error("Failed to fetch");
     }
@@ -327,6 +364,8 @@ const ListScouts: FunctionComponent = () => {
 
         setUser(obj);
       }
+    } else if (response?.statusCode == 403) {
+      await logout();
     }
   };
 
@@ -347,6 +386,8 @@ const ListScouts: FunctionComponent = () => {
           response?.data?.find((item: any) => item._id == farmId);
         setFarm(obj);
       }
+    } else if (response?.statusCode == 403) {
+      await logout();
     }
   };
 
@@ -411,7 +452,7 @@ const ListScouts: FunctionComponent = () => {
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      getAllUsers(router.query.created_by as string);
+      // getAllUsers(router.query.created_by as string);
       getAllFarms(
         router.query.created_by as string,
         router.query.farm_id as string
@@ -486,42 +527,134 @@ const ListScouts: FunctionComponent = () => {
         </div>
       </div>
       <div className={styles.allFarms}>
-        <div className={styles.allScoutingCards}>
-          {data?.length
-            ? data.map((item: SingleScoutResponse, index: number) => {
-                return (
-                  <div className={styles.eachDayScouting} key={index}>
-                    <div
-                      className={styles.scoutDay}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography>
-                        {timePipe(item.createdAt, "ddd, MMM D, YYYY")}
-                      </Typography>
-                      <div
-                        className={styles.summaryBtn}
-                        onClick={() => {
-                          setOpenDaySummary(true);
-                          setSelectedItemDetails(item);
-                        }}
-                      >
-                        <SummaryIcon /> Summary
+        {data?.length
+          ? data.map((item: any, index: any) => {
+              return (
+                <div key={index} className={styles.allScoutingCards}>
+                  <Typography className={styles.postedDate}>
+                    <InsertInvitationIcon />
+                    <span>
+                      {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
+                    </span>
+                  </Typography>
+                  {item.map((row: any, rowIndex: any) => {
+                    let cropObj = row.farm_id.crops.find(
+                      (ite: any) => ite._id == row.crop_id
+                    );
+                    let cropName = cropObj?.title;
+                    return (
+                      <div className={styles.eachDayScouting} key={rowIndex}>
+                        <div
+                          className={styles.scoutDay}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              gap: "30px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "20px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  gap: "0.325rem",
+                                }}
+                              >
+                                <img
+                                  className={styles.farmsIcon}
+                                  alt="Farm Shape"
+                                  src="/farmshape2.svg"
+                                />
+                                {row.farm_id.title}
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  gap: "0.325rem",
+                                }}
+                              >
+                                <img src="/cropName-icon.svg" alt="" />
+                                {cropName}
+                              </div>
+                            </div>
+                          </div>
+
+                          {row?.suggestions ? (
+                            <div
+                              className={styles.hasSuggestions}
+                              onClick={() => {
+                                setOpenDaySummary(true);
+                                setSelectedItemDetails(row);
+                              }}
+                            >
+                              <ImageComponent
+                                src={"./scouting/recommendations-icon.svg"}
+                                height={16}
+                                width={16}
+                              />
+                              <span>Recommendations</span>
+                            </div>
+                          ) : (
+                            <div
+                              className={
+                                row?.summary
+                                  ? styles.hasSummaryBtn
+                                  : styles.noSummaryBtn
+                              }
+                              onClick={() => {
+                                setOpenDaySummary(true);
+                                setSelectedItemDetails(row);
+                              }}
+                            >
+                              {row?.summary ? (
+                                <ImageComponent
+                                  src={"./scouting/HasSummary.svg"}
+                                  height={19}
+                                  width={19}
+                                  alt="no-summary"
+                                />
+                              ) : (
+                                <ImageComponent
+                                  src="/no-summary-icon.svg"
+                                  height={16}
+                                  width={16}
+                                  alt="no-summary"
+                                />
+                              )}
+                              <span>Summary</span>
+                            </div>
+                          )}
+                        </div>
+                        <ScoutingDailyImages
+                          item={row}
+                          key={rowIndex}
+                          onClickAttachment={onClickAttachment}
+                        />
                       </div>
-                    </div>
-                    <ScoutingDailyImages
-                      item={item}
-                      key={index}
-                      onClickAttachment={onClickAttachment}
-                    />
-                  </div>
-                );
-              })
-            : ""}
-        </div>
+                    );
+                  })}
+                </div>
+              );
+            })
+          : ""}
         {!data?.length && !loading ? (
           <div
             id={styles.noData}
@@ -530,16 +663,16 @@ const ListScouts: FunctionComponent = () => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              marginTop: "4rem",
+              height: "calc(100vh - 150px)",
             }}
           >
             <ImageComponent
               src="/emty-folder-image.svg"
               alt="empty folder"
-              width={250}
+              width={200}
               height={150}
             />
-            <Typography variant="h4">No Scoutings</Typography>
+            <Typography className={styles.subTitle}>No Scoutings</Typography>
           </div>
         ) : (
           ""

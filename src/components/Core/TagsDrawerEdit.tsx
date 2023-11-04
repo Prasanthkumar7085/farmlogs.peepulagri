@@ -1,6 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
+  CircularProgress,
   Drawer,
   IconButton,
   TextField,
@@ -14,7 +15,8 @@ const TagsDrawerEdit = ({
   TagsDrawerEditOpen,
   tagsDrawerClose,
   item,
-  captureTagsDetails,
+  captureTagsDetailsEdit,
+  loading
 }: any) => {
   const [description, setDescription] = useState<any>("");
   const [tags, setTags] = useState<any>([]);
@@ -27,11 +29,13 @@ const TagsDrawerEdit = ({
   useEffect(() => {
     if (TagsDrawerEditOpen) {
       setDescription(item?.description);
+      setTags(item?.tags);
     } else {
       setTags([]);
       setDescription("");
     }
-  }, [TagsDrawerEditOpen, item?.tags, item?.description]);
+  }, [TagsDrawerEditOpen]);
+
 
 
   return (
@@ -39,18 +43,17 @@ const TagsDrawerEdit = ({
       anchor={"bottom"}
       open={TagsDrawerEditOpen}
       sx={{
-        zIndex: "1300 !important", '& .MuiPaper-root': {
+        zIndex: "1300 !important",
+        "& .MuiPaper-root": {
           height: "400px",
           overflowY: "auto",
           padding: "0 1rem 1rem",
           borderRadius: "20px 20px 0 0",
-          background: "#F5F7FA"
-        }
+          background: "#F5F7FA",
+        },
       }}
     >
-      <div
-        className={styles.updateTagDrawerHeading}
-      >
+      <div className={styles.updateTagDrawerHeading}>
         <Typography>Tag Images</Typography>
         <IconButton
           onClick={() => {
@@ -61,14 +64,18 @@ const TagsDrawerEdit = ({
         </IconButton>
       </div>
       <div style={{ width: "100%" }}>
-        <TagsTextFeild captureTags={captureTags} tags={tags} beforeTags={item?.tags} />
+        <TagsTextFeild
+          captureTags={captureTags}
+          tags={tags}
+          beforeTags={item?.tags}
+        />
 
         <Typography>Findings</Typography>
         <TextField
           color="primary"
           name="description"
           id="description"
-          rows={4}
+          minRows={4}
           maxRows={4}
           placeholder="Enter your findings here"
           fullWidth={true}
@@ -85,11 +92,20 @@ const TagsDrawerEdit = ({
       <Button
         variant="contained"
         onClick={() => {
-          captureTagsDetails(tags, description);
+          captureTagsDetailsEdit(tags, description);
         }}
-        className={styles.updateSubmitBtn}
+        disabled={loading || !(tags?.length || description?.length)}
+        className={
+          loading || !(tags?.length || description?.length)
+            ? styles.updateSubmitBtnDisabled
+            : styles.updateSubmitBtn
+        }
       >
-        Submit
+        {loading ? (
+          <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+        ) : (
+          "Submit"
+        )}
       </Button>
     </Drawer>
   );

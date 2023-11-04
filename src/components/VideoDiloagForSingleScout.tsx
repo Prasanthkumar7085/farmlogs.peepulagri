@@ -1,37 +1,45 @@
 import timePipe from '@/pipes/timePipe';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Button,
   Chip,
   Dialog,
   DialogContent,
   IconButton,
-  Typography
-} from '@mui/material';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+  Typography,
+} from "@mui/material";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import ReactPanZoom from "react-image-pan-zoom-rotate";
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { useSwipeable } from 'react-swipeable';
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useSwipeable } from "react-swipeable";
 import styles from "./view-logs-container.module.css";
-import SellIcon from '@mui/icons-material/Sell';
+import SellIcon from "@mui/icons-material/Sell";
 import { Markup } from "interweave";
+import ShowMoreInViewAttachmentDetails from "./Core/ShowMoreInViewAttachmentDetails";
+import ImageComponent from "./Core/ImageComponent";
+import formatText from "../../lib/requestUtils/formatTextToBullets";
 
-const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureImageDilogOptions, captureSlideImagesIndex }: any) => {
-
+const VideoDialogForScout = ({
+  open,
+  onClose,
+  mediaArray,
+  index,
+  data,
+  captureImageDilogOptions,
+  captureSlideImagesIndex,
+}: any) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
-  const [description, setDescription] = useState<any>()
-  const [isZoom, setISZoom] = useState<any>()
-  const [showMore, setShowMore] = useState<any>(false)
-
-
+  const [description, setDescription] = useState<any>();
+  const [isZoom, setISZoom] = useState<any>();
+  const [showMore, setShowMore] = useState<any>(false);
+  const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
 
   useEffect(() => {
     setCurrentIndex(index);
-
-  }, [index])
-
+  }, [index]);
 
   const playNext = () => {
     document
@@ -45,63 +53,28 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
     document
       .getElementById(`${currentIndex - 1}`)
       ?.scrollIntoView({ behavior: "smooth" });
-    const prevIndex = currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
+    const prevIndex =
+      currentIndex === 0 ? mediaArray.length - 1 : currentIndex - 1;
     setCurrentIndex(prevIndex);
-
   };
 
   const handleClose = () => {
     if (index) {
       setCurrentIndex(index);
       onClose();
-
-    }
-    else {
+    } else {
       setCurrentIndex(0);
       onClose();
-
     }
   };
 
   const getKey = (e: any) => {
-
     if (e.keyCode == 37) {
       playPrevious();
     } else if (e.keyCode == 39) {
       playNext();
     } else if (e.keyCode == 27) {
       handleClose();
-    }
-
-  }
-
-  // Define swipe handlers
-  const handlers = useSwipeable({
-    onSwipedLeft: playNext,
-    onSwipedRight: playPrevious,
-  });
-
-
-  const handleZoomIn = () => {
-    setZoomLevel(zoomLevel + 0.1); // Increase the zoom level
-  };
-
-  const handleZoomOut = () => {
-    setZoomLevel(Math.max(1, zoomLevel - 0.1)); // Decrease the zoom level, with a minimum of 1
-  };
-
-  const zoomIn = () => {
-    setISZoom(true)
-
-  };
-
-  const zoomOut = () => {
-    if (zoomLevel > 0.1) {
-      const img: any = document.querySelector('.zoom-image');
-      if (img) {
-        img.style.transform = `scale(${zoomLevel - 0.1})`;
-        setZoomLevel(zoomLevel - 0.1);
-      }
     }
   };
 
@@ -113,6 +86,7 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
       fullWidth
       sx={{
         background: "#0000008f",
+        zIndex: 1000,
         "& .MuiPaper-root": {
           margin: "0 !important",
           width: "100%",
@@ -137,15 +111,22 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
         },
       }}
     >
-      <IconButton onClick={handleClose} sx={{ width: "100%", display: "flex", justifyContent: "flex-end !important" }}>
+      <IconButton
+        onClick={handleClose}
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-end !important",
+        }}
+      >
         <CloseIcon sx={{ color: "#fff", height: "32px", width: "32px" }} />
       </IconButton>
       <DialogContent>
         <div style={{ width: "100%" }}>
           <Carousel
+            showThumbs={false}
             selectedItem={currentIndex}
             onChange={(index) => {
-              console.log("llkjlhgffdzxc")
               // captureImageDilogOptions(mediaArray[index]);
               setCurrentIndex(index);
               captureSlideImagesIndex(index);
@@ -186,7 +167,6 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
                           src={item.url}
                           alt={`Image ${index + 1}`}
                           style={{ transform: `scale(${zoomLevel})` }}
-                          onClick={zoomIn}
                         />
                       )}
                     </>
@@ -203,84 +183,144 @@ const VideoDialogForScout = ({ open, onClose, mediaArray, index, data, captureIm
       {mediaArray?.length && (
         <div className={styles.cropDetailsBlock}>
           <Typography variant="caption" display="block" align="left">
-            {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh-mm a")}
+            {timePipe(mediaArray[currentIndex]?.time, "DD-MM-YYYY hh:mm a")}
           </Typography>
           <div className={styles.tagNames}>
-            {mediaArray[currentIndex]?.tags.length &&
-              <Chip className={styles.tagsLabel} icon={<SellIcon sx={{ fontSize: 15 }} />} label="Tags" variant="outlined" />}
-            {mediaArray[currentIndex]?.tags.map((tag: any, index: number) => {
+            {mediaArray[currentIndex]?.tags.length ? (
+              <Chip
+                className={styles.tagsLabel}
+                icon={<SellIcon sx={{ fontSize: 15 }} />}
+                label="Tags"
+                variant="outlined"
+              />
+            ) : (
+              ""
+            )}
+            {/* map((tag: any, index: number) => {
               return (
                 <Typography align="left" key={index}>
-                  {"#" + tag}
+                  {"" + tag}
                 </Typography>
               );
-            })}
+            }) */}
+            {mediaArray?.length && mediaArray[currentIndex]?.tags?.length
+              ? mediaArray[currentIndex]?.tags?.map(
+                  (item: string, index: number) => {
+                    return (
+                      <Chip
+                        key={index}
+                        label={item}
+                        className={styles.tagsName}
+                        variant="outlined"
+                      />
+                    );
+                  }
+                )
+              : ""}
           </div>
-          {showMore == true ? (
-            <Typography className={styles.findingsText}>
-              <Markup content={mediaArray[currentIndex]?.description} />
-              <span
-                style={{ cursor: "pointer", fontWeight: "600" }}
-                onClick={() => {
-                  setShowMore(false);
-                }}
-              >
-                Show Less
-              </span>
+          {mediaArray[currentIndex]?.description ? (
+            <Typography variant="h6" style={{ color: "#57b6f0" }}>
+              Findings
             </Typography>
           ) : (
-            <Typography className={styles.findingsText}>
-              {mediaArray[currentIndex]?.description?.length > 100
-                ? <Markup content={mediaArray[currentIndex]?.description.slice(0, 100) + "...."} />
-                : <Markup content={mediaArray[currentIndex]?.description} />}
-              {mediaArray[currentIndex]?.description?.length > 100 ? (
-                <span
-                  style={{ fontWeight: "600", cursor: "pointer" }}
+            ""
+          )}
+
+          <Typography className={styles.findingsText}>
+            {mediaArray[currentIndex]?.description?.length ? (
+              <div>
+                <Markup
+                  content={
+                    mediaArray[currentIndex]?.description > 100
+                      ? formatText(mediaArray[currentIndex]?.description)
+                      : formatText(
+                          mediaArray[currentIndex]?.description.slice(0, 95)
+                        ) +
+                        (mediaArray[currentIndex]?.description?.length > 95
+                          ? "....."
+                          : "")
+                  }
+                />
+                {mediaArray[currentIndex]?.description?.length > 95 ||
+                mediaArray[currentIndex]?.suggestions ? (
+                  <a
+                    style={{ cursor: "pointer", color: "#f2a84c" }}
+                    onClick={() => {
+                      setShowMoreSuggestions(true);
+                    }}
+                  >
+                    Show More
+                  </a>
+                ) : (
+                  ""
+                )}
+              </div>
+            ) : (
+              ""
+            )}
+          </Typography>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              {mediaArray[currentIndex]?.suggestions ? (
+                <Button
                   onClick={() => {
-                    setShowMore(true);
+                    setShowMoreSuggestions((prev: boolean) => !prev);
                   }}
+                  className={styles.recomendations}
+                  variant="outlined"
                 >
-                  Show More
-                </span>
+                  <ImageComponent
+                    src={"/scouting/recommendations-icon.svg"}
+                    height={16}
+                    width={16}
+                  />{" "}
+                  Recommendations
+                </Button>
               ) : (
                 ""
               )}
-            </Typography>
-          )}
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            <IconButton
-              onClick={() => {
-                captureImageDilogOptions("tag");
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
               }}
             >
-              <Image
-                src={"/add-tag-icon.svg"}
-                width={20}
-                height={20}
-                alt="pp"
-              />
-            </IconButton>
-            <IconButton onClick={() => {
-              captureImageDilogOptions("comments")
-            }}>
-              <Image
-                src={"/comment-white-icon.svg"}
-                width={20}
-                height={20}
-                alt="pp"
-              />
-            </IconButton>
-
+              <IconButton
+                onClick={() => {
+                  captureImageDilogOptions("tag");
+                }}
+              >
+                <Image
+                  src={"/add-tag-icon.svg"}
+                  width={20}
+                  height={20}
+                  alt="pp"
+                />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  captureImageDilogOptions("comments");
+                }}
+              >
+                <Image
+                  src={"/comment-white-icon.svg"}
+                  width={20}
+                  height={20}
+                  alt="pp"
+                />
+              </IconButton>
+            </div>
           </div>
         </div>
       )}
+      <ShowMoreInViewAttachmentDetails
+        showMoreSuggestions={showMoreSuggestions}
+        setShowMoreSuggestions={setShowMoreSuggestions}
+        item={mediaArray ? mediaArray[currentIndex] : ""}
+      />
     </Dialog>
   );
 };

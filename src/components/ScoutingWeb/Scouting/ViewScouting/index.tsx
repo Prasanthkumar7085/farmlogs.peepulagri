@@ -1,15 +1,17 @@
-import { Card, Dialog, Grid, IconButton, Typography } from "@mui/material";
-import ScoutingDetails from "./ScoutingDetails";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import timePipe from "@/pipes/timePipe";
+import { OnlyImagesType } from "@/types/scoutTypes";
+import SellIcon from "@mui/icons-material/Sell";
+import { Chip, Dialog, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import getSingleScoutService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
-import CloseIcon from "@mui/icons-material/Close";
-import LoadingComponent from "@/components/Core/LoadingComponent";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import getSingleScoutService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
+import ScoutingDetails from "./ScoutingDetails";
 import styles from "./ScoutingDetails.module.css";
-import { OnlyImagesType, ScoutAttachmentDetails } from "@/types/scoutTypes";
 
 interface pageProps {
   onlyImages: Array<OnlyImagesType>;
@@ -23,6 +25,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   setPreviewImageDialogOpen,
   viewAttachmentId,
 }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -36,6 +39,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   const [content, setContent] = useState<any>();
   const [scoutId, setScoutId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [editRecomendationOpen, setEditRecomendationOpen] = useState(false);
 
   useEffect(() => {
     if (onlyImages?.length && viewAttachmentId) {
@@ -67,6 +71,9 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       const response = await getSingleScoutService(id, accessToken);
       if (response?.success) {
         setData(response?.data);
+        changeDescription();
+      } else if (response?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
@@ -75,11 +82,24 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     }
   };
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   const changeDescription = () => {
     if (onlyImages?.length) {
-      const lines = onlyImages[currentIndex]?.description?.split("\n");
-
-      setContent(lines);
+      setContent(onlyImages[currentIndex]?.description);
     }
   };
   useEffect(() => {
@@ -91,6 +111,49 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     changeDescription();
   }, [currentIndex]);
 
+  const updateDescriptionService = async (imagesArray: any, cropId: any) => {
+    let updatedArray = data?.attachments?.map((obj: any) => {
+      let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
+      return matchingObj ? matchingObj : obj;
+    });
+    setLoading(true);
+
+    try {
+      let options = {
+        method: "PATCH",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify({
+          farm_id: data?.farm_id?._id,
+          crop_id: cropId,
+          attachments: updatedArray,
+        }),
+      };
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${data?._id}`,
+        options
+      );
+      const responseData = await response.json();
+      if (responseData?.success == true) {
+        setEditRecomendationOpen(false);
+        getSingleScoutDetails(scoutId);
+      } else if (responseData?.statusCode == 403) {
+        await logout();
+      }
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const afterUpdateRecommandations = async (value: any, cropID: any) => {
+    if (value.length) {
+      await updateDescriptionService(value, cropID);
+    }
+  };
   return (
     <Dialog
       open={previewImageDialogOpen}
@@ -102,8 +165,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
         },
       }}
     >
-      <Grid container>
-        <Grid xs={8} className={styles.RightImageContainer}>
+      <div className={styles.galleryContainer}>
+        <div className={styles.RightImageContainer}>
           <div style={{ position: "relative", padding: "1rem" }}>
             <div
               style={{
@@ -116,12 +179,6 @@ const SingleScoutViewDetails: FC<pageProps> = ({
               }}
             >
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
                 onWheel={(e: any) => {
                   if (e.deltaY > 0 && e.deltaY % 20 == 0) {
                     setCurrentIndex((prev) => prev + 1);
@@ -137,6 +194,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                   onChange={(index) => changeImage(index)}
                   swipeable={true}
                   autoFocus
+                  showThumbs={false}
+                  className={styles.galleryView}
                 >
                   {onlyImages.map((item: any, index: any) => (
                     <div
@@ -182,6 +241,64 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                     </div>
                   ))}
                 </Carousel>
+                <div
+                  style={{
+                    color: "white",
+                    alignItems: "flex-start",
+                    padding: "4px 20px 4px 20px",
+                    justifyContent: "flex-start",
+                    margin: "0 auto",
+                    display: "flex",
+                    width: "85%",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography variant="caption">
+                    {timePipe(
+                      onlyImages[currentIndex]?.time,
+                      "DD-MM-YYYY hh.mm a"
+                    )}
+                  </Typography>
+                </div>
+                {onlyImages[currentIndex]?.tags?.length ? (
+                  <div
+                    style={{
+                      color: "white",
+                      alignItems: "flex-start",
+                      padding: "4px 20px 4px 20px",
+                      justifyContent: "flex-start",
+                      margin: "0 auto",
+                      display: "flex",
+                      width: "85%",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Chip
+                      className={styles.tagsLabel}
+                      icon={<SellIcon sx={{ fontSize: 15 }} />}
+                      label="Tags"
+                      variant="outlined"
+                    />
+
+                    {onlyImages?.length &&
+                    onlyImages[currentIndex]?.tags?.length
+                      ? onlyImages[currentIndex]?.tags?.map(
+                          (item: string, index: number) => {
+                            return (
+                              <Chip
+                                key={index}
+                                label={item}
+                                className={styles.tagsName}
+                                variant="outlined"
+                              />
+                            );
+                          }
+                        )
+                      : ""}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className={styles.AllImagesBlock}>
@@ -215,17 +332,20 @@ const SingleScoutViewDetails: FC<pageProps> = ({
               ))}
             </div>
           </div>
-        </Grid>
-        <Grid xs={4} sx={{ zIndex: 100, background: "#fff" }}>
+        </div>
+        <div className={styles.galleryItemDetails}>
           <ScoutingDetails
+            setEditRecomendationOpen={setEditRecomendationOpen}
+            editRecomendationOpen={editRecomendationOpen}
             loading={loading}
             data={data}
             content={content}
             imageData={onlyImages[currentIndex]}
             setPreviewImageDialogOpen={setPreviewImageDialogOpen}
+            afterUpdateRecommandations={afterUpdateRecommandations}
           />
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </Dialog>
   );
 };

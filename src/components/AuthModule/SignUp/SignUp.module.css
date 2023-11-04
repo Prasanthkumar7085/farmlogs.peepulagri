@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(180deg, #C7DDFF 0%, #F7F8FB 42.19%, #FAFFC1 85.42%, #FFCA95 95.83%, #CD6E42 100%);
 }
 
 .bgImage {
@@ -15,28 +16,42 @@
   height: 100vh;
   width: 100vw;
 }
-
-.bgImage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+.bgImage .vectorTop {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: calc(320px, 50vw, 1000px)!important;
+  right: 1rem;
+  margin: 0 auto;
 }
-
+.bgImage .vectorBottom {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  margin: 0 auto;
+}
 .logo {
   margin: -2rem 0 2rem;
-  height: 100px;
-  width: 150px;
+  height: auto;
+  max-width: 100%;
 }
-
+@media  (max-width: 576px) {
+  .logo {
+    position: fixed;
+    top: 80px;
+    left: calc(50vw - 50px);
+    max-width: 100px;
+  }
+}
+/* Login Form Card */
 .formCard {
   position: relative;
   z-index: 10;
   border-radius: 32.406px;
-  padding: 3rem;
-  background: linear-gradient(140deg, rgba(255, 255, 255, 0.75) 2.86%, rgba(255, 255, 255, 0.4) 95.96%);
-  backdrop-filter: blur(10.802083015441895px);
-  min-height: 230px;
+  padding: 1rem 0rem;
+  min-height: 280px;
+  width: clamp(280px, 20vw ,320px);
 }
 
 .formCard .label {
@@ -51,35 +66,41 @@
 .formCard .phoneNo input {
   border-radius: 10px;
   border: 1px solid #FFF;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--background);
 }
 
 .formCard .phoneNo fieldset {
   border-radius: 10px;
-  border-color: rgba(255, 255, 255, 0.75);
+  border-color: var(--stroke);
 }
-
+/* Fields */
 .innerWrap {
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-radius: 10px;
   gap: 10px;
-  width: 350px;
 }
 
 .header {
-  display: grid;
+  display: flex;
   grid-template-columns: 80px 1fr;
-  gap: 2rem;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: flex-start;
   margin-bottom: 1rem;
+  max-width: 100%;
+}
+
+.header > div:first-child {
+  max-width: 120px;
+  align-self: center;
 }
 
 .header h5 {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(24px, 1.5vw, 32px) !important;
+  font-size: clamp(24px, 1.25vw, 32px) !important;
   font-weight: 500;
 }
 
@@ -115,11 +136,20 @@
   font-weight: 500;
   cursor: pointer;
   color: blue;
+  padding: 5px 0 15px;
 }
 
 .signin_button {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: clamp(24px, 1.75vw, 32px) !important;
   text-transform: capitalize !important;
   font-size: clamp(14px, 0.72vw, 18px) !important;
+  background-color: var(--color-sienna) !important;
+}
+.signin_button:hover{
+  background-color: var(--color-mediumseagreen-100) !important;
+
 }
 
 .backToLogin {
@@ -131,7 +161,6 @@
 }
 
 .backToLogin_btn {
-
   cursor: pointer;
   color: blue;
   display: flex;

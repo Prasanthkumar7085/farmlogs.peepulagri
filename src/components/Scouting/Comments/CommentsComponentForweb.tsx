@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import AlertComponent from "@/components/Core/AlertComponent";
 import styles from "./CommentsComponent.module.css";
-import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import {
+  deleteAllMessages,
+  removeTheAttachementsFilesFromStore,
+} from "@/Redux/Modules/Conversations";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const accessToken = useSelector(
@@ -19,15 +23,31 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const [afterReply, setAfterReply] = useState<any>();
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
+  const [getCommentsLoading, setGetCommentsLoading] = useState(false);
 
+  const logout = async () => {
+    try {
+      const responseUserType = await fetch("/api/remove-cookie");
+      if (responseUserType) {
+        const responseLogin = await fetch("/api/remove-cookie");
+        if (responseLogin.status) {
+          router.push("/");
+        } else throw responseLogin;
+      }
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
-    if (router.isReady && scoutDetails?._id) {
+    if (scoutDetails && attachement) {
       getAllScoutComments();
     }
-  }, [router.isReady, accessToken]);
+  }, [scoutDetails, attachement]);
 
   const getAllScoutComments = async () => {
-    setLoading(true);
+    setGetCommentsLoading(true);
     let options = {
       method: "GET",
       headers: new Headers({
@@ -76,11 +96,13 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
 
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
+      setGetCommentsLoading(false);
     }
   };
 
@@ -102,6 +124,8 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.log(err);
@@ -203,6 +227,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
           afterReply={afterReply}
           afterDeleteAttachements={afterDeleteAttachements}
           attachement={attachement}
+          loadingThreads={getCommentsLoading}
           scoutDetails={scoutDetails}
         />
       </div>

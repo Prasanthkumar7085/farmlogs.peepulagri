@@ -425,8 +425,8 @@ left: 10px !important;
 
 .carousel-status {
     top: inherit !important;
-    bottom: 0 !important;
-    right: 50% !important;
+    /* bottom: 0 !important;
+    right: 50% !important; */
     font-size: 16px !important;
 }
 
@@ -449,4 +449,7 @@ left: 10px !important;
 .rs-stack-item {
     width: 100%;
     font-size: clamp(12px, 0.62vw, 15px) !important;
+}
+.rs-picker-menu {
+    z-index: 110!important;
 }

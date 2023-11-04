@@ -3,6 +3,7 @@
     min-height: 100px;
 }
 
+
 /* .suggestions {
     padding: 20px;
     display: flex;
@@ -16,21 +17,24 @@
     justify-content: flex-end !important;
     gap: 10px !important;
     padding-top: 10px !important;
-
 }
-
+.sendButtonDisabled,
 .sendButton {
-    display: flex !important;
-    gap: 10px !important;
-    border-radius: 8px !important;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(12px, 0.75vw, 16px);
+    font-weight: 500;
+    text-transform: capitalize;
+    color: var(--white)!important;
+    border-radius: 4px;
     border: 1px solid #3462CF !important;
     background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%)) !important;
-    box-shadow: none !important;
-    color: var(--White, #FFF) !important;
-    font-family: "Inter", sans-serif !important;
-    font-size: clamp(12px, 0.83vw, 16px) !important;
-    font-weight: 500 !important;
-    text-transform: capitalize !important;
+    display: flex;
+    gap: 10px;
+    box-shadow: none;
+}
+.sendButtonDisabled{
+    opacity: 0.8;
+    pointer-events:none;
 }
 
 .sendButton svg {
@@ -43,15 +47,15 @@
 }
 
 .cancelButton {
-    border-radius: 8px !important;
-    border: 1px solid #D0D5DD !important;
-    background: #FFF !important;
-    box-shadow: none !important;
-    font-family: "Inter", sans-serif !important;
-    font-size: clamp(12px, 0.83vw, 16px) !important;
-    font-weight: 500 !important;
-    text-transform: capitalize !important;
-    color: #344048 !important;
+    border-radius: 4px;
+    border: 1px solid var(--gray-300);
+    background: var(--white);
+    box-shadow: none;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(12px, 0.75vw, 16px);
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #344048;
 }
 
 .cancelButton:hover {
@@ -73,9 +77,9 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-family: "Inter", sans-serif;
-    font-size: clamp(16px, 1vw, 20px);
-    font-weight: 500;
-    line-height: 18px;
+    font-size: clamp(16px, 1vw, 24px);
+    font-weight: 600;
+    line-height: 100%;
     margin: 0;
     display: flex;
     align-items: center;
@@ -92,11 +96,11 @@
 }
 
 .textwrapper .recomendation {
-    color: #FF8329;
+    color: #05a155;
     font-family: "Inter", sans-serif;
-    font-size: clamp(16px, 1vw, 20px);
-    font-weight: 500;
-    line-height: 18px;
+    font-size: clamp(16px, 1vw, 24px);
+    font-weight: 600;
+    line-height: 100%;
     margin: 0;
     display: flex;
     align-items: center;
@@ -108,12 +112,34 @@
     height: 25px;
 }
 
+.textwrapper [class^="nocontent"]{
+    display: inline-block;
+    background-color: #f1f8fd;
+    background-position: 5px center;
+    background-size: 30px;
+    border-radius: 5px;
+    background-image: url(/icons/empty-page.svg);
+    background-repeat: no-repeat;
+    width: auto;
+    padding: 10px 10px 10px 45px;
+    margin-top: 5px;
+    color: var(--gray-700);
+    font-size: clamp(13px, 0.83vw, 16px);
+}
+
 .textAria {
     margin-top: .3125rem;
 }
-
-.editIcon:hover svg path {
-    fill: #D94841;
+.addIcon {
+    background-color: #05a1561a;
+}
+.editIcon {
+    background-color: var(--color-firebrick)!important;
+    color: #ffffff!important;
+}
+.editIcon:hover{
+    background-color: #ad3933 !important;
+    color: #ffffff!important;
 }
 
 .editIcon svg {
@@ -127,7 +153,20 @@
     font-family: "Inter", sans-serif;
     font-size: clamp(13px, 0.83vw, 16px);
     font-weight: 400;
-    line-height: 130%;
+    line-height: 140%;
+}
+.textwrapper .findingText .content {
+    margin-top: 1rem;
+}
+.textwrapper > span {
+    display: block;
+    width: 100%;
+    color: #6A7185;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(13px, 0.83vw, 16px);
+    font-weight: 400;
+    line-height: 140%;
+    margin-top: 0.5rem;
 }
 
 .RecommedationBlock {
@@ -140,21 +179,22 @@
     font-size: clamp(17px, 1vw, 24px);
     font-weight: 500;
     line-height: 18px;
-    padding-bottom: .5rem;
+    padding-bottom: 0;
 }
 
 .recomdationContent {
     width: 100%;
     min-height: 100px;
-    border: 1px solid #D0D5DD !important;
     border-radius: 5px;
-    padding: 0.5rem;
     margin-top: 0.5rem;
 }
 
 .recomdationContent span {
-    font-size: clamp(13px, 0.72vw, 15px);
+    color: #6A7185;
     font-family: "Inter", sans-serif;
+    font-size: clamp(13px, 0.83vw, 16px);
+    font-weight: 400;
+    line-height: 140%;
 }
 
 .attachments {
@@ -266,4 +306,13 @@
 .RightImageContainer {
     height: 100vh;
     overflow-y: auto;
+}
+
+.addRecomm {
+    background-color: #eefbf3!important;
+    color: #148752!important;
+}
+.addRecomm:hover {
+    background-color: #afebc6!important;
+    color: #0f5637!important;
 }

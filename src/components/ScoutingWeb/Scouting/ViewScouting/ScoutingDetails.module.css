@@ -10,6 +10,22 @@
   background: var(--Stroke, #E9EDF1);
 }
 
+.tagsLabel {
+  height: 25px !important;
+  padding-left: 4px !important;
+  background-color: #fff !important;
+  margin-right: 10px !important;
+  font-size: 13px !important;
+}
+.tagsName{
+  height: 25px !important;
+  padding-left: 4px !important;
+  color:#fff !important;
+  margin-right: 10px !important;
+  font-size: 13px !important;
+  margin-bottom: 5px !important;
+  
+}
 .scoutingdetails {
   padding: 1rem 1.2rem;
   border-bottom: 1px solid #E9EDF1;
@@ -59,6 +75,10 @@
   padding-bottom: 1rem;
   border-bottom: 1px solid #E9EDF1;
   padding: 1.2rem;
+  background-color: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 120;
 }
 
 .farmname {
@@ -118,16 +138,16 @@
 }
 
 .RecommedationBlock {
-  padding: 1rem 1.5rem;
+  padding: 1rem 0;
 }
 
 .RecommedationBlock .RecommedationHeading {
   color: #101828;
   font-family: "Inter", sans-serif;
   font-size: clamp(17px, 1vw, 24px);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18px;
-  padding-bottom: 0.5rem;
+  padding: 0 0 0 1rem;
 }
 
 .imageIcon {
@@ -155,9 +175,9 @@
 
 
 .viewScoutingPage {
+  position: relative;
   height: 100vh;
   overflow-y: scroll;
-
 }
 
 .gallaryContainer {
@@ -248,9 +268,25 @@
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 0.5rem;
 }
-
+.galleryContainer {
+  display: grid;
+  grid-template-columns: 1fr 450px;
+}
 .RightImageContainer {
   height: 100vh;
   overflow-y: auto;
   /* background-color: #000; */
+  width: calc(100vw - 450px);
+}
+.galleryItemDetails {
+  background-color: #ffffff;
+  z-index: 100;
+}
+.galleryView [class^= "carousel-status"]{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.75);
+  padding: 3px 10px;
+  border-radius: 4px 0 0 4px; 
 }

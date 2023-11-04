@@ -115,11 +115,18 @@
 }
 
 .galleryCard {
+  position: relative;
   padding: .5rem;
   border-radius: 0;
   background: #FFF;
   margin-bottom: 5px;
   box-shadow: 0 0 2px 0 #e7e7e7;
+}
+
+.dateHeader {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
 }
 
 .galleryCard .postDate {
@@ -160,7 +167,7 @@
 
 .galleryCard .summaryBtn span {
   font-family: "Inter", sans-serif !important;
-  font-size: clamp(11px, 3vw, 13px) !important;
+  font-size: clamp(11px, 4vw, 13px) !important;
   font-weight: 500 !important;
   line-height: 100%;
   text-transform: capitalize;
@@ -169,7 +176,6 @@
 .summary svg {
   height: 20px;
   width: 20px;
-
 }
 
 .summaryBtn .recommandation svg {
@@ -185,7 +191,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
-  min-height: 100px;
   margin-top: 5px;
   padding-top: 8px;
   border-top: 1px solid #E9EDF1;
@@ -281,13 +286,21 @@
 }
 
 .AddTagsbtn {
-  background: var(--Dark-Green, #5E9765);
-  /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */
-  color: #ffffff;
+  background: var(--Dark-Green, #5E9765) !important;
+  color: #ffffff !important;
+  padding: 18px !important;
 }
 
 .AddScoutingbtn {
   background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
-  /* box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); */
   color: #ffffff;
+  padding: 18px;
+}
+
+.subTitle{
+  font-family: 'Inter',sans-serif;
+  color: var(--gray-900);
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 1.5rem;
 }

@@ -10,7 +10,28 @@
   height: 50px;
   cursor: pointer;
 }
-
+.enableDesktop{
+  padding: 3rem;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.noScreen{
+   
+  color: #a05148 !important;
+  width: 200px !important;
+  font-weight: bold;
+}
+.logout,
+.logout:hover{
+  width: 200px !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 .logoIcon {
   margin-bottom: 2rem;
 }

@@ -1,33 +1,22 @@
 import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import {
-  Autocomplete,
-  Button,
-  Grid,
-  Icon,
-  IconButton,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
+import { Autocomplete, Grid, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import addTaskService from "../../../../lib/services/TasksService/addTaskService";
+import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInTasks";
 import styles from "./TaskForm.module.css";
-import FooterActionButtons from "./footer-action-buttons";
-import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
-import { Toaster, toast } from "sonner";
 import TasksAttachments from "./TasksAttachments";
-import moment from "moment";
-import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
-import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import AlertDeleteFilesOnFarmChangeInTasks from "@/components/Core/DeleteAlert/AlertDeleteFilesOnFarmChangeInTasks";
+import FooterActionButtons from "./footer-action-buttons";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 
 const TaskForm = () => {
@@ -52,7 +41,6 @@ const TaskForm = () => {
   const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
   const [user, setUser] = useState<userTaskType>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
-  const [deleteFilesDialogOpen, setDeleteFilesDialogOpen] = useState(false);
 
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
 
@@ -76,13 +64,6 @@ const TaskForm = () => {
     setLoading(false);
   };
 
-  const captureFarmName = (selectedObject: any) => {
-    if (selectedObject && Object.keys(selectedObject).length) {
-      setDefaultValue(selectedObject);
-    } else {
-      setDefaultValue(null);
-    }
-  };
   const addTask = async () => {
     setErrorMessages({});
     setLoading(true);
@@ -92,8 +73,8 @@ const TaskForm = () => {
       categories: [],
       deadline: deadline
         ? moment(deadline)
-          .utcOffset("+05:30")
-          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -127,15 +108,29 @@ const TaskForm = () => {
     setFiles(filesUploaded);
   };
 
+  const captureFarmName = (selectedObject: any) => {
+    dispatch(removeTheFilesFromStore([]));
+    setFiles([]);
+
+    setMultipleFiles([]);
+
+    if (selectedObject && Object.keys(selectedObject).length) {
+      setDefaultValue(selectedObject);
+    } else {
+      setDefaultValue(null);
+    }
+  };
   const onChangeUser = async (e: any, value: any) => {
+    dispatch(removeTheFilesFromStore([]));
+    setFiles([]);
+    setMultipleFiles([]);
+    setDefaultValue(null);
     setUser(value);
     if (value) await getAllFarms("", value?._id);
     else setFarmData([]);
   };
 
   const [filestoNullOnFarmChange, setFilestoNullOnFarmChange] = useState(false);
-
-  console.log(files);
 
   // const removeFiles = () => {
   //   setFiles([]);

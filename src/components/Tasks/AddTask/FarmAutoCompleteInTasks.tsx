@@ -1,13 +1,6 @@
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 import { FarmInTaskType } from "@/types/tasksTypes";
-import {
-  Autocomplete,
-  CircularProgress,
-  InputAdornment,
-  LinearProgress,
-  TextField,
-} from "@mui/material";
-import { useRouter } from "next/router";
+import { Autocomplete, LinearProgress, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -65,11 +58,6 @@ const FarmAutoCompleteInAddTask: React.FC<PropsTypes> = ({
             option[label] ? option[label]?.toUpperCase() : ""
           }
           onChange={(e: any, value: any, reason: any) => {
-            // console.log(files);
-
-            // if (files.length) {
-            //   setDeleteFilesDialogOpen(true);
-            // } else {
             if (value) {
               onSelectValueFromDropDown(value, reason);
               setDefaultValueSet(value);

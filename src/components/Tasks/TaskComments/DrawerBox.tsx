@@ -16,13 +16,16 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   );
 
   const [afterReply, setAfterReply] = useState<any>();
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [loading, setLoading] = useState<any>();
   const [data, setData] = useState<any>();
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
-    getAllScoutComments();
+    if (rowDetails && drawerOpen) {
+      getAllScoutComments();
+    } else {
+      setData([]);
+    }
   }, [drawerOpen]);
 
   const getAllScoutComments = async () => {
@@ -75,7 +78,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         setData(reverse);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -101,7 +104,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         getAllScoutComments();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setDeleteLoading(false);
     }
@@ -130,7 +133,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         getAllScoutComments();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -160,7 +163,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         getAllScoutComments();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }

@@ -110,7 +110,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
         dispatch(removeTheAttachementsFilesFromStore([]))
       }
     } catch (err) {
-      console.log(err)
+      console.error(err);
     }
     finally {
       setLoading(false)
@@ -147,7 +147,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
 
       }
     } catch (err) {
-      console.log(err)
+      console.error(err);
     }
     finally {
       setLoading(false)
@@ -192,7 +192,6 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
         farm_id: farmID,
       },
     };
-    console.log(obj);
 
     fileProgressCopy[index] = 25;
 

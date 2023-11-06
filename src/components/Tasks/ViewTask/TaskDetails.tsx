@@ -130,18 +130,17 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                       //   border: "0 !important",
                       // },
                       // background: "#ffff",
-
                     }}
                     size="small"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
-
                 </div>
               ) : (
                 <h1 className={styles.landPreparation}>
                   {data?.title
-                    ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
+                    ? data?.title.slice(0, 1).toUpperCase() +
+                      data?.title.slice(1)
                     : "-"}
                 </h1>
               )}
@@ -185,13 +184,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               )}
             </div>
           </div>
-          <ErrorMessages
-            errorMessages={errorMessages}
-            keyname="title"
-          />
+          <ErrorMessages errorMessages={errorMessages} keyname="title" />
         </div>
         <div>
-
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div className={styles.singleDetailsBox}>
               {editField == "deadline" && editFieldOrNot ? (
@@ -205,13 +200,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                             paddingRight: "10px !important",
                           },
 
-                          '& .MuiInputBase-root::before': {
-                            borderBottom: "0 !important"
+                          "& .MuiInputBase-root::before": {
+                            borderBottom: "0 !important",
                           },
-                          '& .MuiInputBase-root::after': {
-                            borderBottom: "0 !important"
+                          "& .MuiInputBase-root::after": {
+                            borderBottom: "0 !important",
                           },
-
                         }}
                         disablePast
                         value={deadline}
@@ -229,7 +223,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                       />
                     </LocalizationProvider>
                   </div>
-
                 </div>
               ) : (
                 <div style={{ display: "flex" }}>
@@ -281,10 +274,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               )}
             </div>
           </div>
-          <ErrorMessages
-            errorMessages={errorMessages}
-            keyname="deadline"
-          />
+          <ErrorMessages errorMessages={errorMessages} keyname="deadline" />
         </div>
       </div>
       <div className={styles.viewHeader}>
@@ -318,6 +308,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 </div>
               ) : (
                 <IconButton
+                  sx={{ display: "none" }}
                   onClick={() => {
                     setEditFieldOrNot(true);
                     setEditField("farm");

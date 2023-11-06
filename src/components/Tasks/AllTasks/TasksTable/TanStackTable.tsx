@@ -172,10 +172,6 @@ const TanStackTableComponent = ({
                 return (
                   <tr className="table-row" key={row.id}>
                     {row.getVisibleCells().map((cell) => {
-                      // console.log(flexRender(
-                      //     cell.column.columnDef.cell,
-                      //     cell.getContext()
-                      // ));
                       return (
                         <td className="cell" key={cell.id}>
                           {flexRender(

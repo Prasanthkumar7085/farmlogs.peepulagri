@@ -14,6 +14,7 @@ import updateTaskService from "../../../../lib/services/TasksService/updateTaskS
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import appendAttachmentsInTaskService from "../../../../lib/services/TasksService/appendAttachmentsInTaskService";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -82,7 +83,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
         // setAlertType(true)
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -103,6 +104,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     e: ChangeEvent<HTMLInputElement>,
     item: TaskAttachmentsType
   ) => {
+    setUploadAttachmentsOpen(false);
     let ids = [...selectedAttachmentIds];
     if (ids.includes(item?._id)) {
       ids = ids.filter((itemId: string) => itemId !== item?._id);
@@ -120,10 +122,12 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       taskId: data?._id as string,
       body: { attachment_ids: selectedAttachmentIds },
     });
+
     if (response?.success) {
       toast.success(response?.message);
       getTaskById(router.query.task_id as string);
     } else {
+      toast.error(response?.message);
     }
 
     setDeleteLoading(false);
@@ -134,20 +138,13 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const savetheAttachments = async () => {
     setLoading(true);
     try {
-      let modifiedData = { ...data };
-      modifiedData = {
-        ...modifiedData,
-        farm_id: modifiedData?.farm_id?._id as any,
-        assigned_to: modifiedData?.assigned_to?._id as any,
-        attachments: [
-          ...(modifiedData.attachments as Array<TaskAttachmentsType>),
-          ...files,
-        ],
+      let body = {
+        attachments: files,
       };
 
-      const response = await updateTaskService({
+      const response = await appendAttachmentsInTaskService({
         taskId: data?._id as string,
-        body: modifiedData,
+        body: body,
         token: accessToken,
       });
       if (response?.success) {
@@ -171,8 +168,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     setFiles([]);
     setMultipleFiles([]);
   };
-
-  console.log(files);
 
   return (
     <div className={styles.cardDetails} style={{ paddingBottom: "1rem" }}>

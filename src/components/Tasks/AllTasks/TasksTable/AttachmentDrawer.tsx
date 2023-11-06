@@ -107,30 +107,44 @@ const AttachmentDrawerTaskmodule = ({
                 >
                     {(!loading && attachmentData?.length) ? attachmentData?.map((item: any, index: any) => {
                         return (
-                            <div style={{ marginBottom: "1rem" }}>
-                                <p className={styles.AttachmentDate}>{timePipe(item[0]?.time, "DD MMM YYYY, hh:mm A")}</p>
-                                <div className={styles.attachmentDrawer}>
-                                    {item?.map((image: any, index: number) => {
-                                        return (
-                                            <div key={index} className={styles.taskModuleAttachmentBlock}>
-                                                <img src={image?.url} alt="" height={100}
-                                                    width={100} className={styles.attachmentImg} />
-                                                <div className={styles.viewIcon} onClick={() => {
-                                                    setSingleImageView(true)
-                                                    setImageId(image)
-                                                }}>
-                                                    <img src="/view-icon-task.svg"
-                                                        height={30}
-                                                        width={30}
-                                                        alt="view" />
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-
-                                </div>
+                          <div style={{ marginBottom: "1rem" }} key={index}>
+                            <p className={styles.AttachmentDate}>
+                              {timePipe(item[0]?.time, "DD MMM YYYY, hh:mm A")}
+                            </p>
+                            <div className={styles.attachmentDrawer}>
+                              {item?.map((image: any, index: number) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className={styles.taskModuleAttachmentBlock}
+                                  >
+                                    <img
+                                      src={image?.url}
+                                      alt=""
+                                      height={100}
+                                      width={100}
+                                      className={styles.attachmentImg}
+                                    />
+                                    <div
+                                      className={styles.viewIcon}
+                                      onClick={() => {
+                                        setSingleImageView(true);
+                                        setImageId(image);
+                                      }}
+                                    >
+                                      <img
+                                        src="/view-icon-task.svg"
+                                        height={30}
+                                        width={30}
+                                        alt="view"
+                                      />
+                                    </div>
+                                  </div>
+                                );
+                              })}
                             </div>
-                        )
+                          </div>
+                        );
                     }) : (loading ? <CircularProgress /> : "No Attachments")}
                 </div>
             </Drawer >

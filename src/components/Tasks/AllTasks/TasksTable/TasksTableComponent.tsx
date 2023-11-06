@@ -11,6 +11,7 @@ import { ApiCallProps } from "../TasksPageComponent";
 import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
+import AttachmentDrawerTaskmodule from "./AttachmentDrawer";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -44,6 +45,7 @@ const TasksTableComponent = ({
   const [deleteTaskId, setDeleteTaskId] = useState<string>("");
   const [drawerOpen, setDrawerOpen] = useState<any>(false);
   const [rowDetails, setRowDetails] = useState<any>();
+  const [attachmentdrawer, setAttachmentDrawer] = useState<any>(false);
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -282,18 +284,35 @@ const TasksTableComponent = ({
                   alt="comments"
                 />
               </div>
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setRowDetails(info.row.original);
+                  setAttachmentDrawer(true);
+                }}
+              >
+                <ImageComponent
+                  src="/task-table-attachment-icon.svg"
+                  height={17}
+                  width={17}
+                  alt=""
+                />
+              </div>
             </div>
           }
         </span>
       ),
       header: () => <span>Actions</span>,
       footer: (props: any) => props.column.id,
-      width: "100px",
+      width: "150px",
     },
   ];
 
   const drawerClose = () => {
     setDrawerOpen(false);
+  };
+  const attachmentDrawerClose = () => {
+    setAttachmentDrawer(false);
   };
   return (
     <div>
@@ -318,7 +337,16 @@ const TasksTableComponent = ({
           drawerOpen={drawerOpen}
         />
       ) : (
-        // </ClickAwayListener>
+        ""
+      )}
+      {attachmentdrawer ? (
+        <AttachmentDrawerTaskmodule
+          attachmentDrawerClose={attachmentDrawerClose}
+          rowDetails={rowDetails}
+          setAttachmentDrawer={setAttachmentDrawer}
+          attachmentdrawer={attachmentdrawer}
+        />
+      ) : (
         ""
       )}
       <Toaster richColors position="top-right" closeButton />

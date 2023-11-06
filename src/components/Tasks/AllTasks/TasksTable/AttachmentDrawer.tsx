@@ -58,7 +58,8 @@ const AttachmentDrawerTaskmodule = ({ attachmentDrawerClose, rowDetails, attachm
             sx={{
                 "& .MuiPaper-root": {
                     padding: "1rem",
-                    minWidth: "600px"
+                    minWidth: "600px",
+                    maxWidth: "600px"
                 },
             }}
         >
@@ -78,23 +79,28 @@ const AttachmentDrawerTaskmodule = ({ attachmentDrawerClose, rowDetails, attachm
                 style={{
                     display: "flex",
                     flexDirection: "column",
-                    padding: "1rem",
+                    paddingBlock: "1rem",
 
                 }}
             >
-                {/* <div><p>09 Aug 2023 <span>10:30AM</span></p> */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gridColumnGap: "1rem" }}>
+                {attachmentData?.map((item: any, index: any) => {
+                    return (
+                        <div>
+                            <p>09 Aug 2023 <span>10:30AM</span></p>
+                            <div className={styles.attachmentDrawer}>
+                                {attachmentData?.map((image: any, index: number) => {
+                                    return (
+                                        <div key={index} className={styles.taskModuleAttachmentBlock}>
+                                            <img src={image?.url} alt="" height={100}
+                                                width={100} />
+                                        </div>
+                                    )
+                                })}
 
-
-                    {attachmentData?.map((item: any, index: number) => {
-                        return (
-                            <div key={index}>
-                                <Image src={item?.url} alt="" width={100} height={100} />
                             </div>
-                        )
-                    })}
-
-                </div>
+                        </div>
+                    )
+                })}
                 {/* </div> */}
             </div>
 

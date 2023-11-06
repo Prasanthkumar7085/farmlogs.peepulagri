@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./side-bar-menu.module.css";
 import { Logout } from "@mui/icons-material";
+import Link from "next/link";
 
 interface item {
   src: string;
@@ -101,22 +102,24 @@ const SideBarMenu = ({ children }: any) => {
                   return (
                     <ListItem className={styles.menuItem} key={index}>
                       <Tooltip title={item.toolTitle} placement="right">
-                        <ListItemButton
-                          onClick={() => router.push(item.link)}
-                          className={
-                            item.active
-                              ? styles.activeMenuItem
-                              : styles.inactiveMenuItem
-                          }
-                        >
-                          <Image
-                            className={styles.apps1Icon}
-                            alt=""
-                            src={item.src}
-                            width={20}
-                            height={20}
-                          />
-                        </ListItemButton>
+                        <Link href={item.link}>
+                          <ListItemButton
+                            // onClick={() => router.push(item.link)}
+                            className={
+                              item.active
+                                ? styles.activeMenuItem
+                                : styles.inactiveMenuItem
+                            }
+                          >
+                            <Image
+                              className={styles.apps1Icon}
+                              alt=""
+                              src={item.src}
+                              width={20}
+                              height={20}
+                            />
+                          </ListItemButton>
+                        </Link>
                       </Tooltip>
                     </ListItem>
                   );

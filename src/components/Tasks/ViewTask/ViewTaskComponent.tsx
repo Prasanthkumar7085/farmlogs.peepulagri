@@ -71,11 +71,7 @@ const ViewTaskComponent = () => {
           }}
         >
           <TaskDetails data={data} updateTask={updateTask} />
-          {data?.attachments?.length ? (
-            <ViewTaskAttachments data={data} getTaskById={getTaskById} />
-          ) : (
-            ""
-          )}
+          <ViewTaskAttachments data={data} getTaskById={getTaskById} />
         </Card>
       </div>
       <LoadingComponent loading={loading} />

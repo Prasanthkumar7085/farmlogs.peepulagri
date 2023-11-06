@@ -12,6 +12,7 @@ import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import AttachmentDrawerTaskmodule from "./AttachmentDrawer";
+import Link from "next/link";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -76,13 +77,43 @@ const TasksTableComponent = ({
   const getStatusLabel = (label: string) => {
     if (!label) return "";
     if (label == "IN-PROGRESS") {
-      return "In-Progress";
+      return (
+        <div style={{ display: "flex", gap: "5px" }}>
+          <ImageComponent
+            src="/task-inprogress-icon.svg"
+            height={10}
+            width={10}
+            alt="task-inprogress"
+          />
+          <span>In-Progress</span>
+        </div>
+      );
     }
     if (label == "TODO") {
-      return "Todo";
+      return (
+        <div style={{ display: "flex", gap: "5px" }}>
+          <ImageComponent
+            src="/task-todo-icon.svg"
+            height={10}
+            width={10}
+            alt="task-inprogress"
+          />
+          <span>Todo</span>
+        </div>
+      );
     }
     if (label == "COMPLETED") {
-      return "Completed";
+      return (
+        <div style={{ display: "flex", gap: "5px" }}>
+          <ImageComponent
+            src="/task-complete-icon.svg"
+            height={10}
+            width={10}
+            alt="task-inprogress"
+          />
+          <span>Completed</span>
+        </div>
+      );
     }
   };
 
@@ -141,13 +172,13 @@ const TasksTableComponent = ({
             {info.getValue()
               ? info.getValue()?.length > 34
                 ? (info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
-                  info.getValue().slice(1, 30)
-                  : "") + "....."
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                      info.getValue().slice(1, 30)
+                    : "") + "....."
                 : info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
+                ? info.getValue().slice(0, 1).toUpperCase() +
                   info.getValue().slice(1)
-                  : ""
+                : ""
               : ""}
           </span>
         </Tooltip>
@@ -174,13 +205,13 @@ const TasksTableComponent = ({
               {info.getValue()
                 ? info.getValue()?.length > 45
                   ? (info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1, 41)
-                    : "") + "....."
+                      ? info.getValue().slice(0, 1).toUpperCase() +
+                        info.getValue().slice(1, 41)
+                      : "") + "....."
                   : info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
+                  ? info.getValue().slice(0, 1).toUpperCase() +
                     info.getValue().slice(1)
-                    : ""
+                  : ""
                 : ""}
             </span>
           </Tooltip>
@@ -219,7 +250,6 @@ const TasksTableComponent = ({
       id: "actions",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {/* "/view-icon.svg" "/pencil-icon.svg" "/trast-icon.svg" */}
           {
             <div
               style={{
@@ -228,17 +258,14 @@ const TasksTableComponent = ({
                 justifyContent: "space-evenly",
               }}
             >
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => router.push(`/tasks/${info.row.original?._id}`)}
-              >
+              <Link href={`/tasks/${info.row.original?._id}`}>
                 <ImageComponent
                   src="/view-icon.svg"
                   height={17}
                   width={17}
                   alt="view"
                 />
-              </div>
+              </Link>
               {/* <div
                 style={{ cursor: "pointer" }}
                 onClick={() =>

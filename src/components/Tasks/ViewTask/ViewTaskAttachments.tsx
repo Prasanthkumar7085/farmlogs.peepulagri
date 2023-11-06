@@ -1,20 +1,18 @@
 import ImageComponent from "@/components/Core/ImageComponent";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
-import { ChangeEvent, FC, useEffect, useState } from "react";
-import ImagePreviewDialog from "./ImagePreviewDialog";
-import styles from "./TaskDetails.module.css";
-import { Button, Checkbox, CircularProgress, IconButton } from "@mui/material";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import deleteTaskAttachmentService from "../../../../lib/services/TasksService/deleteTaskAttachmentService";
-import { useSelector } from "react-redux";
-import { Toaster, toast } from "sonner";
-import { useRouter } from "next/router";
-import TasksAttachments from "../AddTask/TasksAttachments";
-import updateTaskService from "../../../../lib/services/TasksService/updateTaskService";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
-import LoadingComponent from "@/components/Core/LoadingComponent";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { Button, Checkbox, CircularProgress, IconButton } from "@mui/material";
+import { useRouter } from "next/router";
+import { ChangeEvent, FC, useState } from "react";
+import { useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
 import appendAttachmentsInTaskService from "../../../../lib/services/TasksService/appendAttachmentsInTaskService";
+import deleteTaskAttachmentService from "../../../../lib/services/TasksService/deleteTaskAttachmentService";
+import TasksAttachments from "../AddTask/TasksAttachments";
+import styles from "./TaskDetails.module.css";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -27,7 +25,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const [selectedAttachmentIds, setSelectedAttachments] = useState<
+  const [selectedAttachmentIds, setSelectedAttachmentsIds] = useState<
     Array<string>
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -111,7 +109,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     } else {
       ids.push(item?._id);
     }
-    setSelectedAttachments(ids);
+    setSelectedAttachmentsIds(ids);
   };
 
   const deleteSelectedImages = async () => {
@@ -125,6 +123,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
 
     if (response?.success) {
       toast.success(response?.message);
+      setSelectedAttachmentsIds([]);
       getTaskById(router.query.task_id as string);
     } else {
       toast.error(response?.message);
@@ -223,11 +222,11 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
                     <div className={styles.singleAttachment}>
                       <div className={styles.attachmentDetails}>
                         <div className={styles.checkGrp}>
-                          {/* <Checkbox
+                          <Checkbox
                             size="small"
                             sx={{ padding: "0" }}
                             onChange={(e) => selectImagesForDelete(e, item)}
-                          /> */}
+                          />
                           <ImageComponent
                             src={getSourceForThumnail(item.type)}
                             height={20}

@@ -99,7 +99,7 @@ const TasksPageComponent = () => {
       let delay = 500;
       let debounce = setTimeout(() => {
         getAllTasks({
-          page: router.query.page as string,
+          page: 1,
           limit: router.query.limit as string,
           search_string: searchString,
           sortBy: router.query.order_by as string,
@@ -125,7 +125,7 @@ const TasksPageComponent = () => {
       setSelectedFarm(value);
 
       getAllTasks({
-        page: router.query.page as string,
+        page: 1,
         limit: router.query.limit as string,
         search_string: searchString,
         sortBy: router.query.order_by as string,
@@ -137,7 +137,7 @@ const TasksPageComponent = () => {
     } else {
       setSelectedFarm(null);
       getAllTasks({
-        page: router.query.page as string,
+        page: 1,
         limit: router.query.limit as string,
         search_string: searchString,
         sortBy: router.query.order_by as string,
@@ -151,7 +151,7 @@ const TasksPageComponent = () => {
 
   const onStatusChange = async (value: any) => {
     getAllTasks({
-      page: router.query.page as string,
+      page: 1,
       limit: router.query.limit as string,
       search_string: searchString,
       sortBy: router.query.order_by as string,
@@ -164,7 +164,7 @@ const TasksPageComponent = () => {
 
   const onUserChange = async (e: any, value: userTaskType) => {
     getAllTasks({
-      page: router.query.page as string,
+      page: 1,
       limit: router.query.limit as string,
       search_string: searchString,
       sortBy: router.query.order_by as string,

@@ -6,6 +6,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import "./global.css";
+import NextTopLoader from "nextjs-toploader";
+
 
 function MyApp({ Component, pageProps, ...rest }: any) {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -17,6 +19,7 @@ function MyApp({ Component, pageProps, ...rest }: any) {
     "/forgot-password/reset-password"];
   return (
     <ThemeProvider theme={theme}>
+      <NextTopLoader />
       <Provider store={store}>
         {router.pathname.includes("farms") ? (
           <ScoutingHeader>

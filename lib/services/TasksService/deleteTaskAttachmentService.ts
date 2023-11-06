@@ -14,6 +14,7 @@ const deleteTaskAttachmentService = async ({
       body: JSON.stringify(body),
       headers: new Headers({
         authorization: token,
+        "content-type": "application/json",
       }),
     };
     let response = await fetch(url, options);

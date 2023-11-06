@@ -329,26 +329,21 @@ const TasksTableComponent = ({
         deleteFarm={deleteTask}
         loading={deleteLoading}
       />
-      {drawerOpen ? (
-        <DrawerBoxComponent
-          drawerClose={drawerClose}
-          rowDetails={rowDetails}
-          setDrawerOpen={setDrawerOpen}
-          drawerOpen={drawerOpen}
-        />
-      ) : (
-        ""
-      )}
-      {attachmentdrawer ? (
-        <AttachmentDrawerTaskmodule
-          attachmentDrawerClose={attachmentDrawerClose}
-          rowDetails={rowDetails}
-          setAttachmentDrawer={setAttachmentDrawer}
-          attachmentdrawer={attachmentdrawer}
-        />
-      ) : (
-        ""
-      )}
+
+      <DrawerBoxComponent
+        drawerClose={drawerClose}
+        rowDetails={rowDetails}
+        setDrawerOpen={setDrawerOpen}
+        drawerOpen={drawerOpen}
+      />
+
+      <AttachmentDrawerTaskmodule
+        attachmentDrawerClose={attachmentDrawerClose}
+        rowDetails={rowDetails}
+        setAttachmentDrawer={setAttachmentDrawer}
+        attachmentdrawer={attachmentdrawer}
+      />
+
       <Toaster richColors position="top-right" closeButton />
     </div>
   );

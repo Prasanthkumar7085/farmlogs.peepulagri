@@ -1,15 +1,13 @@
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import CloseIcon from "@mui/icons-material/Close";
-import { CircularProgress, IconButton, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
+import styles from "./Comments.module.css";
 import CommentFormForTasks from "./comment-formForTasks";
 import ThreadsForTasks from "./threadsforTasks";
-import { Toaster, toast } from "sonner";
-import SkeletonLoadingForAttachments from "@/components/Core/LoadingComponents/SkeletonLoadingForAttachments";
-import styles from "./Comments.module.css";
 const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const dispatch = useDispatch();
 
@@ -23,13 +21,9 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const [data, setData] = useState<any>();
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
-
   useEffect(() => {
     getAllScoutComments();
-  }, []);
+  }, [drawerOpen]);
 
   const getAllScoutComments = async () => {
     setLoading(true);
@@ -227,8 +221,8 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         }}
       >
         <ThreadsForTasks
-          farmID={rowDetails.farm_id._id}
-          taskId={rowDetails._id}
+          farmID={rowDetails?.farm_id?._id}
+          taskId={rowDetails?._id}
           details={data}
           afterCommentAdd={afterCommentAdd}
           afterDeleteComment={afterDeleteComment}
@@ -241,8 +235,8 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       </div>
 
       <CommentFormForTasks
-        farmID={rowDetails.farm_id._id}
-        taskId={rowDetails._id}
+        farmID={rowDetails?.farm_id?._id}
+        taskId={rowDetails?._id}
         afterCommentAdd={afterCommentAdd}
       />
 

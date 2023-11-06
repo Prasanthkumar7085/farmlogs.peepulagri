@@ -1,6 +1,3 @@
-import { AttachmentsForPreview } from "./scoutTypes";
-
-
 export interface userTaskType {
   _id: string;
   user_type: string;
@@ -37,10 +34,9 @@ export interface TaskResponseTypes {
     email: string;
     full_name: string;
   };
-  attchments: Array<TaskAttachmentsType>;
   createdAt: string;
   updatedAt: string;
-  attachments: Array<AttachmentsForPreview>;
+  attachments: Array<TaskAttachmentsType>;
   assigned_to: {
     _id: string;
     full_name: string;

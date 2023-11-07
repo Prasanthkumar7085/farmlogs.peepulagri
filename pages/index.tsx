@@ -18,14 +18,23 @@ export default HomePage;
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     const { req } = context;
     const { cookies } = req;
+    console.log(cookies);
 
-    if (cookies.loggedIn == 'true') {
+    if (cookies.loggedIn == "true") {
+      if (cookies.userType == "USER") {
         return {
-            redirect: {
-                destination: `/farm`,
-                permanent: false,
-            },
+          redirect: {
+            destination: `/farms`,
+            permanent: false,
+          },
         };
+      }
+      return {
+        redirect: {
+          destination: `/farm`,
+          permanent: false,
+        },
+      };
     }
     return {
         props: {},

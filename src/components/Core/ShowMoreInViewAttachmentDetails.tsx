@@ -25,7 +25,7 @@ const ShowMoreInViewAttachmentDetails = ({
           maxWidth: "100vw",
           marginInline: "auto",
           minHeight: "300px",
-          maxHeight: "700px",
+          maxHeight: "600px",
           zIndex: "1300",
         },
       }}
@@ -74,7 +74,7 @@ const ShowMoreInViewAttachmentDetails = ({
                           label={item}
                           className={styles.tagsName}
                           variant="outlined"
-                          size="small"
+                          size="medium"
                           color="success"
                         />
                       );

@@ -33,7 +33,7 @@ const AttachmentDrawerTaskmodule = ({
       return result;
     }, {});
 
-    return Object.values(groupedByDate);
+    return Object.values(groupedByDate).reverse();
   }
 
   const getAllAttachments = async () => {

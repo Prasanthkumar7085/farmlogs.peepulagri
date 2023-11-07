@@ -111,7 +111,6 @@ const TaskForm = () => {
   const captureFarmName = (selectedObject: any) => {
     dispatch(removeTheFilesFromStore([]));
     setFiles([]);
-
     setMultipleFiles([]);
 
     if (selectedObject && Object.keys(selectedObject).length) {

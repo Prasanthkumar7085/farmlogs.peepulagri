@@ -49,20 +49,18 @@ const TasksAttachments: React.FC<PropTypes> = ({
   const [previewStorage, setPreviewStorage] = useState<any>([]);
 
   useEffect(() => {
-    if (attachments?.length) {
-      setTempFileStorage(attachments);
-    }
+    setTempFileStorage(attachments);
+    setUploadedFiles(attachments);
 
     if (previewImages?.length) {
       setPreviewStorage(previewImages);
     }
   }, [attachments, previewImages]);
 
-  useEffect(() => {
-    if (tempFilesStorage) {
-      setUploadedFiles(tempFilesStorage);
-    }
-  }, [tempFilesStorage]);
+  // useEffect(() => {
+  //   if (tempFilesStorage) {
+  //   }
+  // }, [tempFilesStorage]);
 
   const generateThumbnail = (file: any, index: any) => {
     if (file) {
@@ -354,6 +352,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
           path: responseData.data.path,
         });
         setAttachments(tempFilesStorage);
+        setUploadedFiles(tempFilesStorage);
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);

@@ -187,6 +187,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           <ErrorMessages errorMessages={errorMessages} keyname="title" />
         </div>
         <div>
+          <label className={styles.userLabel} style={{ width: "100px" }}>
+            Due Date
+          </label>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div className={styles.singleDetailsBox}>
               {editField == "deadline" && editFieldOrNot ? (

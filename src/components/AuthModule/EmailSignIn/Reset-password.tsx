@@ -19,12 +19,12 @@ export default function ResetPasswordPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [resetSuccess, setResetSuccess] = useState(false);
-    const { email } = router.query
 
     const Resetpassword = async (e: any) => {
         setInvalid(false);
         setLoading(true);
         e.preventDefault();
+        const email = localStorage.getItem("email");
         try {
             var requestOptions: any = {
                 method: 'PATCH',

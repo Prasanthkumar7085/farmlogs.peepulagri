@@ -34,86 +34,88 @@ export default function ForgotPasswordPage() {
     const [seconds, setSeconds] = useState(30);
 
     const RequestOtp = async (e: any) => {
-        setInvalid(false);
-        setButtonLoading(true);
-        e.preventDefault();
-        try {
-            var requestOptions: any = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                }),
-            };
+      setInvalid(false);
+      setButtonLoading(true);
+      e.preventDefault();
+      try {
+        var requestOptions: any = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/forgot-password`, requestOptions)
-            const res = await response.json();
-            if (response.status == 200 || response.status == 201) {
-                setTimeRemaining(30)
-                setOtpVisible(true)
-                setEditEmail(false)
-                setAlertMessage(res.message)
-                setAlertType(true)
-            }
-            if (response.status == 422) {
-                setErrorMessages(res.errors);
-                setButtonLoading(false);
-                throw res;
-            }
-            else if (response.status === 401) {
-                setInvalid(res.message);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/forgot-password`,
+          requestOptions
+        );
 
-            }
-
-        } catch (err) {
-            console.error(err);
+        const res = await response.json();
+        if (response.status == 200 || response.status == 201) {
+          setTimeRemaining(30);
+          setOtpVisible(true);
+          setEditEmail(false);
+          setAlertMessage(res.message);
+          setAlertType(true);
         }
-        finally {
-            setButtonLoading(false);
+        if (response.status == 422) {
+          setErrorMessages(res.errors);
+          setButtonLoading(false);
+          throw res;
+        } else if (response.status === 401) {
+          setInvalid(res.message);
         }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setButtonLoading(false);
+      }
     };
 
     const VerifyOtp = async (e: any) => {
-        setOtpInvalid(false);
-        setLoading(true);
-        try {
-            var requestOptions: any = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    otp: otpvalue
-                }),
-            };
+      setOtpInvalid(false);
+      setLoading(true);
+      try {
+        var requestOptions: any = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            otp: otpvalue,
+          }),
+        };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/forgot-password/verify-otp`, requestOptions)
-            const res = await response.json();
-            if (response.status == 200 || response.status == 201) {
-                // setIsVerify(true);
-                router.push({
-                    pathname: "/forgot-password/reset-password",
-                    query: { email: email, isVerify: true },
-                });
-            }
-            if (response.status == 422) {
-                setOtpErrorMesseges(res.errors);
-                setLoading(false);
-                throw res;
-            }
-            else if (response.status === 401 || response.status == 400) {
-                setOtpInvalid(res.message);
-            }
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/forgot-password/verify-otp`,
+          requestOptions
+        );
+        const res = await response.json();
+        console.log(res);
 
-        } catch (err) {
-            console.error(err);
+        if (res.status >= 200 && res.status <= 300) {
+          localStorage.setItem("email", email);
+          router.push({
+            pathname: "/forgot-password/reset-password",
+            query: { isVerify: true },
+          });
         }
-        finally {
-            setLoading(false);
+        if (response.status == 422) {
+          setOtpErrorMesseges(res.errors);
+          setLoading(false);
+          throw res;
+        } else if (response.status === 401 || response.status == 400) {
+          setOtpInvalid(res.message);
         }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     useEffect(() => {

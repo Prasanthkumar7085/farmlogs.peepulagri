@@ -4,7 +4,7 @@ import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
 import { CropTypeResponse } from "@/types/cropTypes";
 import { Menu, MenuItem, Chip, Avatar, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +31,7 @@ const CropCard = ({
   colorIndex,
 }: pagePropsType) => {
   const router = useRouter();
+  // const id = router.query.farm_id
   const dispatch = useDispatch();
 
   const accessToken = useSelector(
@@ -109,6 +110,8 @@ const CropCard = ({
   const [alertType, setAlertType] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
+
+
   const logout = async () => {
     try {
       const responseUserType = await fetch("/api/remove-cookie");
@@ -175,6 +178,7 @@ const CropCard = ({
     router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`);
   };
 
+
   let colorsArray = [
     "#ffcc99",
     "#ffccff",
@@ -219,10 +223,10 @@ const CropCard = ({
             <h2 className={styles.FieldCrop}>
               {itemDetails?.title.length > 12
                 ? itemDetails?.title.slice(0, 1).toUpperCase() +
-                  itemDetails?.title.slice(1, 9) +
-                  "..."
+                itemDetails?.title.slice(1, 9) +
+                "..."
                 : itemDetails?.title.slice(0, 1).toUpperCase() +
-                  itemDetails?.title.slice(1)}
+                itemDetails?.title.slice(1)}
             </h2>
             <p className={styles.aug2023}>
               {timePipe(itemDetails.createdAt, "DD, MMM YYYY")}
@@ -235,7 +239,7 @@ const CropCard = ({
           <p className={styles.aug2023}>
             {itemDetails.crop_area
               ? itemDetails.crop_area +
-                (itemDetails.crop_area < 2 ? " acre" : " acres")
+              (itemDetails.crop_area < 2 ? " acre" : " acres")
               : 0 + " acres"}
           </p>
           <Button

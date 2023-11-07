@@ -10,7 +10,14 @@
     flex-wrap: wrap;
     word-break: break-word;
 }
-
+.listTags {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.listTags h5{
+    margin: 0;
+}
 .addTagContainer {
     display: flex;
     flex-direction: column;

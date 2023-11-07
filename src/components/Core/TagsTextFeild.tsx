@@ -65,9 +65,12 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
           }}
           renderInput={(params) => (
             <div>
-              <IconButton onClick={addNewTag}>
-                <AddIcon />
-              </IconButton>
+              <div className={styles.listTags}>
+                <h5>List your tags below:</h5>
+                <IconButton onClick={addNewTag}>
+                  <AddIcon />
+                </IconButton>
+              </div>
               <TextField
                 {...params}
                 size="small"

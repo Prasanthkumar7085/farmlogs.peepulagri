@@ -6,20 +6,21 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import "./global.css";
-import NextTopLoader from "nextjs-toploader";
-
 
 function MyApp({ Component, pageProps, ...rest }: any) {
   const { store, props } = wrapper.useWrappedStore(rest);
 
   const router = useRouter();
 
-  const sideBarList = ["/", "/signup", "/signup-verify",
+  const sideBarList = [
+    "/",
+    "/signup",
+    "/signup-verify",
     "/forgot-password",
-    "/forgot-password/reset-password"];
+    "/forgot-password/reset-password",
+  ];
   return (
     <ThemeProvider theme={theme}>
-      <NextTopLoader />
       <Provider store={store}>
         {router.pathname.includes("farms") ? (
           <ScoutingHeader>

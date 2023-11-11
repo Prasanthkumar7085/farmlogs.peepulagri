@@ -36,7 +36,7 @@ const SideBarMenu = ({ children }: any) => {
     {
       src: "/dashboard-icon.svg",
       link: `/farm`,
-      isVisible: userName !== "ADMIN",
+      isVisible: true,
       active: router.pathname.includes("/farm"),
       toolTitle: "Farms",
     },
@@ -57,7 +57,7 @@ const SideBarMenu = ({ children }: any) => {
     {
       src: "/scout-menu-icon.svg",
       link: "/scouts",
-      isVisible: userName !== "ADMIN",
+      isVisible: true,
       active: router.pathname.includes("/scouts"),
       toolTitle: "Scouts",
     },

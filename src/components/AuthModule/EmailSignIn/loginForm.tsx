@@ -13,12 +13,13 @@ import {
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import serUserTypeCookie from "../../../../lib/CookieHandler/serUserTypeCookie";
-import setCookie from "../../../../lib/CookieHandler/setCookie";
 import styles from "../SignUp/SignUp.module.css";
+import { useCookies } from "react-cookie";
 
 export default function SigninEmail() {
   const dispatch = useDispatch();
+  const [, userType] = useCookies(["userType"]);
+  const [, loggedIn] = useCookies(["loggedIn"]);
 
   const [email, setEmail] = useState<any>();
   const [password, setPassword] = useState<any>();
@@ -50,15 +51,18 @@ export default function SigninEmail() {
       );
       const res = await response.json();
       if (response.status == 200 || response.status == 201) {
-        await setCookie();
+        // Cookies.set("loggedIn", "true");
+        // Cookies.set("userType", res?.data?.user_details?.user_type);
+
+        loggedIn("loggedIn", "true");
+        userType("userType", res?.data?.user_details?.user_type);
+
         if ("data" in res) {
           dispatch(setUserDetails(res?.data));
         }
-        let accessToken = res.data.access_token;
-        await serUserTypeCookie(res?.data?.user_details?.user_type);
 
         if (res?.data?.user_details?.user_type == "ADMIN") {
-          router.push("/support");
+          router.push("/scouts");
         } else if (res?.data?.user_details?.user_type == "USER") {
           router.push("/farms");
         } else if (res?.data?.user_details?.user_type == "AGRONOMIST") {
@@ -82,9 +86,7 @@ export default function SigninEmail() {
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
-  const forgotButton = () => {
-    router.push("/forgot-password");
-  };
+
   return (
     <div id={styles.loginPage}>
       <div className={styles.bgImage}>

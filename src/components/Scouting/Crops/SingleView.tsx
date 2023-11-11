@@ -67,7 +67,7 @@ const SingleViewScoutComponent = () => {
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>();
   const [openCommentsBox, setOpenCommentsBox] = useState<any>();
   const [singleScoutDetails, setSingleScoutDetails] = useState<any>();
-
+  const [longpressActive, setLongPressActive] = useState<any>(false)
   // let tempImages: any = [...selectedItems];
   const [tempImages, setTempImages] = useState(selectedItems);
 
@@ -423,6 +423,7 @@ const SingleViewScoutComponent = () => {
         setTagsDrawerOpen(false);
         // setSelectedFile([]);
         setTagsCheckBoxOpen(false);
+        setLongPressActive(false)
         setSummaryDrawerOpen(false);
         // setSelectedItems([]);
         // setScoutAttachementsDetails([]);
@@ -439,8 +440,10 @@ const SingleViewScoutComponent = () => {
     }
   };
 
+
+
   return (
-    <div className={styles.scoutingView}>
+    <div className={styles.scoutingView} >
       <div role="presentation">
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
@@ -700,6 +703,7 @@ const SingleViewScoutComponent = () => {
       </InfiniteScroll>
 
       <LoadingComponent loading={loading} />
+
       <VideoDialogForScout
         open={openDialog}
         onClose={handleCloseDialog}
@@ -709,7 +713,6 @@ const SingleViewScoutComponent = () => {
         captureSlideImagesIndex={captureSlideImagesIndex}
         captureImageDilogOptions={captureImageDilogOptions}
       />
-
       <SummaryTextDilog
         summaryDrawerClose={summaryDrawerClose}
         captureSummary={captureSummary}
@@ -717,26 +720,30 @@ const SingleViewScoutComponent = () => {
         SummaryDrawerOpen={SummaryDrawerOpen}
       />
 
-      {drawerOpen == true ? (
-        <DrawerComponentForScout
-          drawerClose={drawerClose}
-          scoutId={scoutId}
-          anchor={"bottom"}
-        />
-      ) : (
-        ""
-      )}
-      {tagsDrawerOpen ? (
-        <TagsDrawer
-          loading={loading}
-          tagsDrawerClose={tagsDrawerClose}
-          captureTagsDetails={captureTagsDetails}
-          item={selectedFile}
-          selectedItems={selectedItems}
-        />
-      ) : (
-        ""
-      )}
+      {
+        drawerOpen == true ? (
+          <DrawerComponentForScout
+            drawerClose={drawerClose}
+            scoutId={scoutId}
+            anchor={"bottom"}
+          />
+        ) : (
+          ""
+        )
+      }
+      {
+        tagsDrawerOpen ? (
+          <TagsDrawer
+            loading={loading}
+            tagsDrawerClose={tagsDrawerClose}
+            captureTagsDetails={captureTagsDetails}
+            item={selectedFile}
+            selectedItems={selectedItems}
+          />
+        ) : (
+          ""
+        )
+      }
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}
@@ -784,7 +791,7 @@ const SingleViewScoutComponent = () => {
         )}
       </div>
       <Toaster richColors position="top-right" closeButton />
-    </div>
+    </div >
   );
 };
 export default SingleViewScoutComponent;

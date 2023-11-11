@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./side-bar-menu.module.css";
 import { Logout } from "@mui/icons-material";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 
 interface item {
   src: string;
@@ -25,6 +26,9 @@ const SideBarMenu = ({ children }: any) => {
   const userName = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -36,20 +40,20 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/farm"),
       toolTitle: "Farms",
     },
-    {
-      src: "/support-icon.svg",
-      link: "/support",
-      isVisible: true,
-      active: router.pathname.includes("/support"),
-      toolTitle: "Support",
-    },
-    {
-      src: "/timeline-icon.svg",
-      link: "/timeline",
-      isVisible: userName !== "ADMIN",
-      active: router.pathname.includes("/timeline"),
-      toolTitle: "Time Line",
-    },
+    // {
+    //   src: "/support-icon.svg",
+    //   link: "/support",
+    //   isVisible: true,
+    //   active: router.pathname.includes("/support"),
+    //   toolTitle: "Support",
+    // },
+    // {
+    //   src: "/timeline-icon.svg",
+    //   link: "/timeline",
+    //   isVisible: userName !== "ADMIN",
+    //   active: router.pathname.includes("/timeline"),
+    //   toolTitle: "Time Line",
+    // },
     {
       src: "/scout-menu-icon.svg",
       link: "/scouts",
@@ -57,26 +61,22 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/scouts"),
       toolTitle: "Scouts",
     },
-    {
-      src: "/tasks-menu-icon.svg",
-      link: "/tasks",
-      isVisible: userName !== "ADMIN",
-      active: router.pathname.includes("/tasks"),
-      toolTitle: "Tasks",
-    },
+    // {
+    //   src: "/tasks-menu-icon.svg",
+    //   link: "/tasks",
+    //   isVisible: userName !== "ADMIN",
+    //   active: router.pathname.includes("/tasks"),
+    //   toolTitle: "Tasks",
+    // },
     // { src: '/calendaricon.svg', link: "/" },
     // { src: '/graph-icon.svg', link: "/" },
   ];
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {

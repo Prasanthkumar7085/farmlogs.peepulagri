@@ -98,7 +98,7 @@ const SupportPage = () => {
 
                 const { page: pageCount, limit: limitCount, ...restParams } = queryParams;
 
-                router.push({ pathname: `/support`, query: queryParams });
+                router.push({ pathname: `/scouts`, query: queryParams });
 
                 let paramString = prepareURLEncodedParams('', restParams);
 

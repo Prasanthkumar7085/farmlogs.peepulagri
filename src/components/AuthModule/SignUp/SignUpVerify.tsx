@@ -109,7 +109,7 @@ const SignUpVerify = () => {
       await serUserTypeCookie(response?.data?.user_details?.user_type);
 
       if (response?.data?.user_details?.user_type == "ADMIN") {
-        router.push("/support");
+        router.push("/scouts");
       } 
       else if ((response?.data?.user_details?.user_type == "USER" || response?.data?.user_details?.user_type == "AGRONOMIST")) {
         router.push("/farm");

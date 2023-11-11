@@ -23,10 +23,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
     } else if (cookies.userType == 'ADMIN') {
         return {
-            redirect: {
-                destination: `/support`,
-                permanent: false,
-            },
+          redirect: {
+            destination: `/scouts`,
+            permanent: false,
+          },
         };
     }
     return {

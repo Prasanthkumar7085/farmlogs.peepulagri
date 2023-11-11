@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./side-bar-menu.module.css";
 import { Logout } from "@mui/icons-material";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 
 interface item {
   src: string;
@@ -25,6 +26,9 @@ const SideBarMenu = ({ children }: any) => {
   const userName = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -70,13 +74,9 @@ const SideBarMenu = ({ children }: any) => {
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {

@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   } else if (cookies.userType == "ADMIN") {
     return {
       redirect: {
-        destination: `/scouts`,
+        destination: `/support`,
         permanent: false,
       },
     };

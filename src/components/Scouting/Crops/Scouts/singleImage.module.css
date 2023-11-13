@@ -1,0 +1,51 @@
+.remondationsdiv{
+    height: 100%;
+    width: 100%;
+    text-align: end;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.recomendations{
+    padding: 1rem;
+}
+
+.overlay{ 
+    position: relative;
+    max-width: 100%;
+}
+.button{
+    background-color: #000000b3 !important;
+    color:rgb(13, 222, 13);
+    border:rgb(13, 222, 13);
+    border-radius: 10px;
+}
+.button :hover{
+    border-color:rgb(13, 222, 13) !important;
+    color:rgb(13, 222, 13);
+
+}
+.btnContent{
+    gap: 10px;
+    display: flex;
+}
+
+
+ .postDate {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 3vw, 14px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: #2B53BE;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-grow: 1;
+}

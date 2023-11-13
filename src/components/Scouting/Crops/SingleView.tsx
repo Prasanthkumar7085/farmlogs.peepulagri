@@ -597,6 +597,9 @@ const SingleViewScoutComponent = () => {
                               width={"100%"}
                               height={"100%"}
                               onClick={() => {
+                                // router.push(
+                                //   `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view?scout_id=${item._id}`
+                                // );
                                 handleClick(indexAttachment, item.attachments);
                                 setScoutId(item._id);
                                 setSingleScoutDetails(item);

@@ -70,6 +70,7 @@ const ScoutView = () => {
                   <SingleImageComponent
                     detailedImage={item}
                     scoutDetails={scoutDetails}
+                    getImageData={getImages}
                   />
                 </div>
               );

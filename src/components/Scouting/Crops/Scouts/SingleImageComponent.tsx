@@ -7,19 +7,31 @@ import { FC, useState } from "react";
 import DrawerComponentForScout from "../../Comments/DrawerBoxForScout";
 import styles from "./singleImage.module.css";
 import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAttachment";
+import { useSelector } from "react-redux";
+import updateAttachmentsService from "../../../../../lib/services/ScoutServices/updateAttachmentsService";
+import { Toaster, toast } from "sonner";
 
 interface componentProps {
   detailedImage: any;
   scoutDetails: any;
+  getImageData: any;
 }
 const SingleImageComponent: FC<componentProps> = ({
   detailedImage,
   scoutDetails,
+  getImageData,
 }) => {
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
+
+  console.log(detailedImage);
+
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>(false);
 
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
+  const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
 
   const tagsDrawerClose = (value: any) => {
     if (value == false) {
@@ -46,12 +58,30 @@ const SingleImageComponent: FC<componentProps> = ({
   };
 
   const captureTagsDetailsEdit = async (tags: any, description: any) => {
-    let body = {
-      attachment_ids: [detailedImage?._id],
-      tags: tags,
-      description: description,
-      suggestions: detailedImage?.suggestions,
-    };
+    try {
+      let body = {
+        attachment_ids: [detailedImage?._id],
+        tags: tags,
+        description: description,
+        suggestions: detailedImage?.suggestions,
+      };
+      let response = await updateAttachmentsService({
+        scoutId: scoutDetails?._id,
+        accessToken: accessToken,
+        body: body,
+      });
+      if (response?.status >= 200 && response?.status <= 200) {
+        toast.success(response?.message);
+        setTagsDrawerEditOpen(false);
+        await getImageData({ page: 1 });
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUpdateAttachmentLoading(false);
+    }
   };
 
   return (
@@ -148,6 +178,7 @@ const SingleImageComponent: FC<componentProps> = ({
         setShowMoreSuggestions={setShowMoreSuggestions}
         item={detailedImage ? detailedImage : ""}
       />
+      <Toaster closeButton richColors />
     </div>
   );
 };

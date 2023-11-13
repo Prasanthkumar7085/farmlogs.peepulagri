@@ -16,6 +16,7 @@
 .overlay{ 
     position: relative;
     max-width: 100%;
+    min-height: 300px;
 }
 .button{
     background-color: #000000b3 !important;

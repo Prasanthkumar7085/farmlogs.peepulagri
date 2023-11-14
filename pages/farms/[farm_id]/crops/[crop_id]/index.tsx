@@ -1,8 +1,10 @@
 import SingleViewScoutComponent from "@/components/Scouting/Crops/SingleView";
 import Header1 from "@/components/Scouting/Header/HeaderComponent";
+import { Button } from "@mui/material";
 import { GetServerSideProps } from "next";
 
 const SingleScoutViewPage = () => {
+
   return (
     <div>
       <Header1 name={"Scouting"} />

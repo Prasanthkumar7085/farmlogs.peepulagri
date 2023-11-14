@@ -37,6 +37,7 @@ import AddIcon from "@mui/icons-material/Add";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import styles from "./crop-card.module.css";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -85,15 +86,14 @@ const SingleViewScoutComponent = () => {
       router.query?.crop_id &&
       accessToken
     ) {
-      getPresingedURls();
       dispatch(removeTheFilesFromStore([]));
       dispatch(removeTheAttachementsFilesFromStore([]));
     }
   }, [accessToken, router.isReady]);
 
-  // useEffect(() => {
-  //     getPresingedURls()
-  // }, [pageNumber]);
+  useEffect(() => {
+    getPresingedURls()
+  }, [pageNumber]);
 
   const logout = async () => {
     try {
@@ -122,20 +122,20 @@ const SingleViewScoutComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_DUMMY}/farms/12212/crops/123/farm-images/next/98/2023-01-12`,
+        `${process.env.NEXT_PUBLIC_API_URL_DUMMY}/farms/12212/crops/123/farm-images/${pageNumber}/50`,
         options
       );
 
       let responseData: any = await response.json();
 
       if (responseData.success) {
-        // if (responseData?.has_more || responseData?.has_more == false) {
-        //   setHasMore(responseData?.has_more);
-        // }
+        if (responseData?.has_more || responseData?.has_more == false) {
+          setHasMore(responseData?.has_more);
+        }
         let temp: any;
-        // temp = [...data, ...responseData?.data];
-        responseData?.data?.data.sort((a: any, b: any) => { (timePipe(b.created_at, "DD-MM-YY") as any) - (timePipe(a.created_at, "DD-MM-YY") as any) })
-        setData(responseData?.data?.data);
+        temp = [...data, ...responseData?.data];
+        temp.sort((a: any, b: any) => { (timePipe(b.created_at, "DD-MM-YY") as any) - (timePipe(a.created_at, "DD-MM-YY") as any) })
+        setData(temp);
 
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -504,95 +504,84 @@ const SingleViewScoutComponent = () => {
       </div>
 
 
-      {/* < InfiniteScroll
-                className={styles.infiniteScrollComponent}
-                dataLength={data.length}
-                next={() => setPageNumber(prev => prev + 1)}
-                hasMore={hasMore}
-                loader={<div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>}
-                endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : data.length > 11 ? 'Scroll to Top' : ""}</a>}
-            > */}
-      <div
-        className={styles.stickyHeader}
+      < InfiniteScroll
+        className={styles.infiniteScrollComponent}
+        dataLength={data.length}
+        next={() => setPageNumber(prev => prev + 1)}
+        hasMore={hasMore}
+        loader={<div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>}
+        endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : data.length > 11 ? 'Scroll to Top' : ""}</a>}
       >
-        {dateRange}
-      </div>
-      <div ref={containerRef}
-        style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(18%, 1fr))', gap: '2px', overflowY: 'auto',
-          maxHeight: '600px'
-        }}>
-
-        {data?.length ?
-          data.map((image: any, indexAttachment: any) => {
-            return (
-
-              <img
-                key={indexAttachment}
-                ref={(ref) => (image.ref = ref)}
-                src={
-                  image.type?.slice(0, 2) == "vi"
-                    ? "/Play-button.svg"
-                    : image.url
-                }
-                alt={`images${indexAttachment}`}
-                style={{ width: '100%', height: 'auto' }}
-
-                onClick={() => {
-                  if (longpressActive == false) {
-                    router.push(
-                      `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view?scout_id=${image._id}`
-                    );
-
-                    // handleClick(indexAttachment, item.attachments);
-                    // setScoutId(item._id);
-                    // setSingleScoutDetails(item);
-                    // setSelectedFile(image);
-                    // setSlideShowImages(item?.attachments);
-                  } else {
-                    handleChange(image); // Call handleLongPress when long press is detected
-                  }
-                }}
-                // style={{
-                //   position: "absolute",
-                //   top: "0",
-                //   left: "0",
-                //   width: "100%",
-                //   height: "100%",
-                //   cursor: "pointer",
-                //   borderRadius: "5px",
-                //   objectFit: "cover",
-                // }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  setTagsCheckBoxOpen(true);
-                  handleChange(image);
-                  setScoutId(image._id); // Adjust the timeout duration as needed
-                  setLongPressActive(true);
-                }} // Prevent right-click context menu
-                onTouchStart={(e) => {
-                  if (e.touches.length > 1) {
-                    e.preventDefault(); // Prevent multi-touch event
-                  }
-                }}
-              />
-
-            )
-          }) : ""}
-      </div>
-      <div
-        className={styles.stickyHeader2}
-      >
-        <div style={{ display: "flex", justifyContent: "center", top: "20px" }}>
-          <Button>Years</Button>
-          <Button>Month</Button>
-          <Button>Days</Button>
-          <Button variant="contained">All Photos</Button>
-
+        <div
+          className={styles.stickyHeader}
+        >
+          {dateRange}
         </div>
-      </div>
+        <div ref={containerRef}
+          style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(18%, 1fr))', gap: '2px', overflowY: 'auto',
+            maxHeight: '500px'
+          }}>
 
-      {/* </InfiniteScroll> */}
+          {data?.length ?
+            data.map((image: any, indexAttachment: any) => {
+              return (
+
+                <img
+                  key={indexAttachment}
+                  ref={(ref) => (image.ref = ref)}
+                  src={
+                    image.type?.slice(0, 2) == "vi"
+                      ? "/Play-button.svg"
+                      : image.url
+                  }
+                  alt={`images${indexAttachment}`}
+                  style={{ width: '100%', height: 'auto' }}
+
+                  onClick={() => {
+                    if (longpressActive == false) {
+                      router.push(
+                        `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view?scout_id=654b7375ee066442f9d1d63a`
+                      );
+
+                      // handleClick(indexAttachment, item.attachments);
+                      // setScoutId(item._id);
+                      // setSingleScoutDetails(item);
+                      // setSelectedFile(image);
+                      // setSlideShowImages(item?.attachments);
+                    } else {
+                      handleChange(image); // Call handleLongPress when long press is detected
+                    }
+                  }}
+                  // style={{
+                  //   position: "absolute",
+                  //   top: "0",
+                  //   left: "0",
+                  //   width: "100%",
+                  //   height: "100%",
+                  //   cursor: "pointer",
+                  //   borderRadius: "5px",
+                  //   objectFit: "cover",
+                  // }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    setTagsCheckBoxOpen(true);
+                    handleChange(image);
+                    setScoutId(image._id); // Adjust the timeout duration as needed
+                    setLongPressActive(true);
+                  }} // Prevent right-click context menu
+                  onTouchStart={(e) => {
+                    if (e.touches.length > 1) {
+                      e.preventDefault(); // Prevent multi-touch event
+                    }
+                  }}
+                />
+
+              )
+            }) : ""}
+        </div>
+
+      </InfiniteScroll>
 
       <LoadingComponent loading={loading} />
 
@@ -612,30 +601,26 @@ const SingleViewScoutComponent = () => {
         SummaryDrawerOpen={SummaryDrawerOpen}
       />
 
-      {
-        drawerOpen == true ? (
-          <DrawerComponentForScout
-            drawerClose={drawerClose}
-            scoutId={scoutId}
-            anchor={"bottom"}
-          />
-        ) : (
-          ""
-        )
-      }
-      {
-        tagsDrawerOpen ? (
-          <TagsDrawer
-            loading={loading}
-            tagsDrawerClose={tagsDrawerClose}
-            captureTagsDetails={captureTagsDetails}
-            item={selectedFile}
-            selectedItems={selectedItems}
-          />
-        ) : (
-          ""
-        )
-      }
+      {drawerOpen == true ? (
+        <DrawerComponentForScout
+          drawerClose={drawerClose}
+          scoutId={scoutId}
+          anchor={"bottom"}
+        />
+      ) : (
+        ""
+      )}
+      {tagsDrawerOpen ? (
+        <TagsDrawer
+          loading={loading}
+          tagsDrawerClose={tagsDrawerClose}
+          captureTagsDetails={captureTagsDetails}
+          item={selectedFile}
+          selectedItems={selectedItems}
+        />
+      ) : (
+        ""
+      )}
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}
@@ -682,8 +667,21 @@ const SingleViewScoutComponent = () => {
           ""
         )}
       </div>
+      {data?.length ?
+        <div
+          className={styles.stickyHeader2}
+        >
+          <div style={{ display: "flex", justifyContent: "center", top: "20px" }}>
+            <Button>Years</Button>
+            <Button>Month</Button>
+            <Button>Days</Button>
+            <Button variant="contained">All Photos</Button>
+
+          </div>
+        </div> : ""}
+
       <Toaster richColors position="top-right" closeButton />
-    </div >
+    </div>
   );
 };
 export default SingleViewScoutComponent;

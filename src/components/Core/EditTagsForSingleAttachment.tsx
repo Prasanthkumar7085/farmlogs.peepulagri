@@ -68,7 +68,7 @@ const EditTagsForSingleAttachment = ({
           beforeTags={item?.tags}
         />
 
-        <Typography>Findings</Typography>
+        {/* <Typography>Findings</Typography>
         <TextField
           color="primary"
           name="description"
@@ -84,7 +84,7 @@ const EditTagsForSingleAttachment = ({
             setDescription(e.target.value);
           }}
           sx={{ background: "#fff" }}
-        />
+        /> */}
       </div>
 
       <Button

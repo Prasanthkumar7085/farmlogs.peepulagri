@@ -36,7 +36,7 @@ const ShowMoreInViewAttachmentDetails = ({
           <div>
             <span className={styles.title}>More Info</span>
             <Typography variant="caption" display="block" align="left">
-              {timePipe(item?.time, "DD-MM-YYYY hh:mm a")}
+              {timePipe(item?.created_at, "DD-MM-YYYY hh:mm a")}
             </Typography>
           </div>
         </Typography>

@@ -3,7 +3,6 @@ import {
   removeTheAttachementsFilesFromStore,
 } from "@/Redux/Modules/Conversations";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
-import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
@@ -11,29 +10,33 @@ import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import ImageComponent from "@/components/Core/ImageComponent";
 
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import {
   Breadcrumbs,
   Button,
   Card,
+  Checkbox,
   IconButton,
   Link,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
+import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
+import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
-import { removeUserDetails } from "@/Redux/Modules/Auth";
 import AddIcon from "@mui/icons-material/Add";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import InfiniteScroll from "react-infinite-scroll-component";
 import styles from "./crop-card.module.css";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import debounce from 'lodash/debounce';
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -82,17 +85,15 @@ const SingleViewScoutComponent = () => {
       router.query?.crop_id &&
       accessToken
     ) {
-      // getPresingedURls();
+      getPresingedURls();
       dispatch(removeTheFilesFromStore([]));
       dispatch(removeTheAttachementsFilesFromStore([]));
     }
   }, [accessToken, router.isReady]);
 
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      getPresingedURls();
-    }
-  }, [pageNumber, accessToken, router.isReady]);
+  // useEffect(() => {
+  //     getPresingedURls()
+  // }, [pageNumber]);
 
   const logout = async () => {
     try {
@@ -121,7 +122,7 @@ const SingleViewScoutComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/scouts/${pageNumber}/5?crop_id=${router.query?.crop_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/scouts/${pageNumber}/10?crop_id=${router.query?.crop_id}`,
         options
       );
       let responseData = await response.json();
@@ -131,8 +132,8 @@ const SingleViewScoutComponent = () => {
           setHasMore(responseData?.has_more);
         }
         let temp: any;
-        temp = [...data, ...responseData?.data];
-        setData(temp);
+        // temp = [...data, ...responseData?.data];
+        setData(responseData?.data);
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -439,9 +440,68 @@ const SingleViewScoutComponent = () => {
       setLoading(false);
     }
   };
+  const [visibleCards, setVisibleCards] = useState([]);
+  const [dateRange, setDateRange] = useState('');
 
+  const containerRef = useRef(null);
 
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      updateVisibleCards();
+    }, 200);
 
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    updateVisibleCards();
+  }, [data]); // Recalculate visible cards when data changes
+
+  const updateVisibleCards = () => {
+    const container: any = containerRef.current;
+    const containerRect = container.getBoundingClientRect();
+    console.log(containerRect, "mkllo")
+    const windowHeight = window.innerHeight;
+    console.log(windowHeight, "p")
+
+    const newVisibleCards: any = [];
+
+    data.forEach((card: any, index: any) => {
+      const cardElement = document.getElementById(`card-${index}`);
+      console.log(cardElement, "loo")
+
+      if (cardElement) {
+        const cardRect = cardElement.getBoundingClientRect();
+        console.log(cardRect, "mki")
+        // Check if the card is at least partially within the viewport
+        // Adjust the condition based on window height
+        if (cardRect.bottom >= 0 && cardRect.top <= windowHeight) {
+          newVisibleCards.push(index);
+        }
+      }
+    });
+
+    setVisibleCards(newVisibleCards);
+    updateDateRange(newVisibleCards);
+  };
+
+  const updateDateRange = (visibleCardIndices: any) => {
+    console.log(visibleCardIndices, "mk")
+    // Logic to determine the start and end dates based on the visible cards
+    if (visibleCardIndices.length > 0) {
+      const startDate = new Date(data[visibleCardIndices[0]]?.createdAt);
+      const endDate = new Date(
+        data[visibleCardIndices[visibleCardIndices.length - 1]]?.createdAt
+      );
+      setDateRange(`${startDate.toDateString()} - ${endDate.toDateString()}`);
+    } else {
+      setDateRange('');
+    }
+  };
   return (
     <div className={styles.scoutingView} >
       <div role="presentation">
@@ -458,26 +518,31 @@ const SingleViewScoutComponent = () => {
           </Typography>
         </Breadcrumbs>
       </div>
-      <InfiniteScroll
-        className={styles.infiniteScrollComponent}
-        dataLength={data.length}
-        next={() => setPageNumber((prev) => prev + 1)}
-        hasMore={hasMore}
-        loader={
-          <div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>
-        }
-        endMessage={
-          <a href="#" className={styles.endOfLogs}>
-            {hasMore ? "" : data.length > 11 ? "Scroll to Top" : ""}
-          </a>
-        }
-      >
-        {data?.length ? (
-          data.map((item: any, index: any) => {
-            return (
-              <Card key={index} className={styles.galleryCard}>
-                <div>
-                  <div className={styles.dateHeader}>
+      {/* < InfiniteScroll
+                className={styles.infiniteScrollComponent}
+                dataLength={data.length}
+                next={() => setPageNumber(prev => prev + 1)}
+                hasMore={hasMore}
+                loader={<div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>}
+                endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : data.length > 11 ? 'Scroll to Top' : ""}</a>}
+            > */}
+      <div style={{ position: "sticky", top: 125, zIndex: 999, backgroundColor: "beige", height: "30px", color: "black" }}>
+        {dateRange}
+      </div>
+      <div ref={containerRef}>
+
+        {
+          data?.length ? (
+            data.map((item: any, index: any) => {
+              return (
+
+                <div
+                  key={index}
+                  id={`card-${index}`}
+                  data-index={index}
+                  className={styles.galleryCard}
+                >                  <div>
+                    {/* <div className={styles.dateHeader}>
                     <Typography className={styles.postDate}>
                       <InsertInvitationIcon />
                       <span>{timePipe(item.createdAt, "DD-MM-YYYY")}</span>
@@ -493,6 +558,8 @@ const SingleViewScoutComponent = () => {
                             setScoutAttachementsDetails([]);
                             setSlideShowImages([]);
                             setSelectedItems([]);
+                            setLongPressActive(false)
+
                           }}
                         >
                           <Image
@@ -578,11 +645,10 @@ const SingleViewScoutComponent = () => {
                         )}
                       </Button>
                     </div>
-                  </div>
-                  <div className={styles.mobileScoutGridGallary}>
-                    {item?.attachments?.length !== 0 ? (
-                      item.attachments.map(
-                        (image: any, indexAttachment: any) => (
+                  </div> */}
+                    <div className={styles.mobileScoutGridGallary}>
+                      {item?.attachments?.length !== 0 ? (
+                        item.attachments.map((image: any, indexAttachment: any) => (
                           <div
                             style={{ position: "relative", paddingTop: "100%" }}
                             key={indexAttachment}
@@ -597,11 +663,16 @@ const SingleViewScoutComponent = () => {
                               width={"100%"}
                               height={"100%"}
                               onClick={() => {
-                                handleClick(indexAttachment, item.attachments);
-                                setScoutId(item._id);
-                                setSingleScoutDetails(item);
-                                setSelectedFile(image);
-                                setSlideShowImages(item?.attachments);
+                                if (longpressActive == false) {
+                                  handleClick(indexAttachment, item.attachments);
+                                  setScoutId(item._id);
+                                  setSingleScoutDetails(item);
+                                  setSelectedFile(image);
+                                  setSlideShowImages(item?.attachments);
+                                } else {
+                                  handleChange(image) // Call handleLongPress when long press is detected
+                                }
+
                               }}
                               style={{
                                 position: "absolute",
@@ -613,6 +684,19 @@ const SingleViewScoutComponent = () => {
                                 borderRadius: "5px",
                                 objectFit: "cover",
                               }}
+                              onContextMenu={(e) => {
+                                e.preventDefault()
+                                setTagsCheckBoxOpen(true);
+                                handleChange(image)
+                                setScoutId(item._id) // Adjust the timeout duration as needed
+                                setLongPressActive(true)
+                              }} // Prevent right-click context menu
+                              onTouchStart={(e) => {
+                                if (e.touches.length > 1) {
+                                  e.preventDefault(); // Prevent multi-touch event
+                                }
+                              }}
+
                             />
 
                             <div
@@ -645,62 +729,62 @@ const SingleViewScoutComponent = () => {
                                 gap: "5px",
                               }}
                             >
-                              {tagsCheckBoxOpen == true &&
-                              scoutId == item._id &&
-                              image?.description ? (
-                                <SearchOutlinedIcon />
-                              ) : (
-                                ""
-                              )}
-                              {tagsCheckBoxOpen == true &&
-                              scoutId == item._id &&
-                              image?.tags?.length ? (
-                                <Image
-                                  src={"/scout-img-select.svg"}
-                                  width={17}
-                                  height={17}
-                                  alt="tags"
-                                />
-                              ) : (
-                                ""
-                              )}
+                              {
+
+                                image?.description ? (
+                                  <SearchOutlinedIcon />
+                                ) : (
+                                  ""
+                                )}
+                              {
+                                image?.tags?.length ? (
+                                  <img
+                                    src={"/scout-img-select.svg"}
+                                    width={17}
+                                    height={17}
+                                    alt="tags"
+                                  />
+                                ) : (
+                                  ""
+                                )}
                             </div>
                           </div>
-                        )
-                      )
-                    ) : (
-                      <div style={{ width: "100%", marginLeft: "100%" }}>
-                        No Attachements
-                      </div>
-                    )}
+                        ))
+                      ) : (
+                        <div style={{ width: "100%", marginLeft: "100%" }}>
+                          No Attachements
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </Card>
-            );
-          })
-        ) : !loading ? (
-          <div
-            id={styles.noData}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "calc(100vh - 150px)",
-            }}
-          >
-            <ImageComponent
-              src="/emty-folder-image.svg"
-              alt="empty folder"
-              width={150}
-              height={140}
-            />
-            <Typography className={styles.subTitle}>No Scoutings</Typography>
-          </div>
-        ) : (
-          ""
-        )}
-      </InfiniteScroll>
+              );
+            })
+          ) : !loading ? (
+            <div
+              id={styles.noData}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "calc(100vh - 150px)",
+              }}
+            >
+              <ImageComponent
+                src="/emty-folder-image.svg"
+                alt="empty folder"
+                width={150}
+                height={140}
+              />
+              <Typography className={styles.subTitle}>No Scoutings</Typography>
+            </div>
+          ) : (
+            ""
+          )
+        }
+      </div>
+      {/* </InfiniteScroll> */}
 
       <LoadingComponent loading={loading} />
 

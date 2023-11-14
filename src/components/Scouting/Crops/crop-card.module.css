@@ -305,3 +305,11 @@
   font-weight: 500;
   margin-top: 1.5rem;
 }
+.stickyHeader2 {
+  position: sticky;
+bottom: 12%;
+  z-index: 999;
+  background-color: darkgrey;
+  height: 40px;
+  color: black;
+}

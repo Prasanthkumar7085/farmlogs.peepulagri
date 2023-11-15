@@ -102,6 +102,42 @@ const ScoutView = () => {
 
   return (
     <div style={{ marginTop: "4rem" }}>
+      {isVisible ? (
+        <a href="#">
+          <div className={styles.scrollToTopLink}>
+            <NorthIcon />
+          </div>
+        </a>
+      ) : (
+        ""
+      )}
+      {/* <InfiniteScroll
+        className={styles.infiniteScrollComponent}
+        dataLength={images.length}
+        next={() => {
+          setPage((prev) => prev + 1);
+          getImages({
+            date: images.length
+              ? images.slice(-1)[0]?.created_at
+              : new Date().toISOString(),
+          });
+        }}
+        hasMore={true}
+        loader={
+          <div className={styles.pageLoader}>
+            {loading ? <CircularProgress /> : ""}
+          </div>
+        }
+        endMessage={
+          hasMore ? (
+            ""
+          ) : (
+            <div className={styles.noMoreImages}>
+              <p>No more Images</p>
+            </div>
+          )
+        }
+      > */}
       {images.length
         ? images.map((item: any, index: number) => {
             return (
@@ -131,6 +167,7 @@ const ScoutView = () => {
         : !loading
         ? "No Data"
         : ""}
+      {/* </InfiniteScroll> */}
     </div>
   );
 };
@@ -140,43 +177,43 @@ export default ScoutView;
 
 
   // <div>
-  //     {isVisible ? (
-  //       <a href="#">
-  //         <div className={styles.scrollToTopLink}>
-  //           <NorthIcon />
-  //         </div>
-  //       </a>
-  //     ) : (
-  //       ""
-  //     )}
+      // {isVisible ? (
+      //   <a href="#">
+      //     <div className={styles.scrollToTopLink}>
+      //       <NorthIcon />
+      //     </div>
+      //   </a>
+      // ) : (
+      //   ""
+      // )}
   //     <div>
-  //       <InfiniteScroll
-  //         className={styles.infiniteScrollComponent}
-  //         dataLength={images.length}
-  //         next={() => {
-  //           setPage((prev) => prev + 1);
-  //           getImages({
-  //             date: images.length
-  //               ? images.slice(-1)[0]?.created_at
-  //               : new Date().toISOString(),
-  //           });
-  //         }}
-  //         hasMore={true}
-  //         loader={
-  //           <div className={styles.pageLoader}>
-  //             {loading ? <CircularProgress /> : ""}
-  //           </div>
-  //         }
-  //         endMessage={
-  //           hasMore ? (
-  //             ""
-  //           ) : (
-  //             <div className={styles.noMoreImages}>
-  //               <p>No more Images</p>
-  //             </div>
-  //           )
-  //         }
-  //       >
+        // <InfiniteScroll
+        //   className={styles.infiniteScrollComponent}
+        //   dataLength={images.length}
+        //   next={() => {
+        //     setPage((prev) => prev + 1);
+        //     getImages({
+        //       date: images.length
+        //         ? images.slice(-1)[0]?.created_at
+        //         : new Date().toISOString(),
+        //     });
+        //   }}
+        //   hasMore={true}
+        //   loader={
+        //     <div className={styles.pageLoader}>
+        //       {loading ? <CircularProgress /> : ""}
+        //     </div>
+        //   }
+        //   endMessage={
+        //     hasMore ? (
+        //       ""
+        //     ) : (
+        //       <div className={styles.noMoreImages}>
+        //         <p>No more Images</p>
+        //       </div>
+        //     )
+        //   }
+        // >
   //         {images.length
   //           ? images.map((item: any, index: number) => {
   //               return (

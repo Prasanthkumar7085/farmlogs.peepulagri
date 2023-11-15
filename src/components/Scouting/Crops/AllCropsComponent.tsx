@@ -107,12 +107,18 @@ const AllCropsComponent = () => {
         queryParams["order_type"] = orderType;
       }
 
+      let options = {
+        method: "GET",
+        headers: new Headers({
+          authorization: accessToken,
+        }),
+      };
       let url = prepareURLEncodedParams(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/${id}/crops/list`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${id}/crops/all`,
         queryParams
       );
 
-      let response = await fetch(url, { method: "GET" });
+      let response = await fetch(url, options);
       let responseData: any = await response.json();
 
       if (responseData.success == true) {
@@ -142,8 +148,8 @@ const AllCropsComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${formId ? formId : router.query.farm_id
-        }/crops`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${formId ? formId : router.query.farm_id
+        }/crops/all`,
         options
       );
       let responseData = await response.json();

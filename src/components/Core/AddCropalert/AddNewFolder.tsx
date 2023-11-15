@@ -9,11 +9,14 @@ import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
 import SpaIcon from '@mui/icons-material/Spa';
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 
 const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, errorMessages, defaultArea }: any) => {
   const router = useRouter();
-
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
 
   const [title, setTitle] = useState('');
   const [area, setArea] = useState('');
@@ -38,16 +41,18 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
   const dropDownCrops = async () => {
 
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id}/pending-crop-names`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/pending-crop-names`;
       const options = {
         method: "GET",
 
         headers: new Headers({
           'content-type': 'application/json',
+          authorization: accessToken,
         })
       }
       const response: any = await fetch(url, options);
       const responseData = await response.json();
+      console.log(responseData?.data, "lopkh")
       setcrop(responseData.data)
 
 
@@ -90,6 +95,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
             options={crop?.length ? crop : []}
             value={title}
             onChange={(_, newValue: any) => setTitle(newValue)}
+            getOptionLabel={(e) => e.title}
             renderInput={(params) => (
               <TextField
                 {...params}

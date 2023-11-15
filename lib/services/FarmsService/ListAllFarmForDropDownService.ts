@@ -10,7 +10,7 @@ const ListAllFarmForDropDownService = async (
       }),
     };
     let response: any = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/farm/list${queryString}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/farms/crops/all${queryString}`,
       options
     );
     const responseData = await response.json();

@@ -229,7 +229,7 @@ const CropCard = ({
                 itemDetails?.title.slice(1)}
             </h2>
             <p className={styles.aug2023}>
-              {timePipe(itemDetails.createdAt, "DD, MMM YYYY")}
+              {timePipe(itemDetails.created_at, "DD, MMM YYYY")}
             </p>
           </div>
 
@@ -237,9 +237,9 @@ const CropCard = ({
         </div>
         <div className={styles.actionButtons}>
           <p className={styles.aug2023}>
-            {itemDetails.crop_area
-              ? itemDetails.crop_area +
-              (itemDetails.crop_area < 2 ? " acre" : " acres")
+            {itemDetails.area
+              ? itemDetails.area +
+              (itemDetails.area < 2 ? " acre" : " acres")
               : 0 + " acres"}
           </p>
           <Button
@@ -268,7 +268,7 @@ const CropCard = ({
           captureResponseDilog={captureResponseDilog}
           loading={loadingForAdd}
           defaultTitle={itemDetails?.title}
-          defaultArea={itemDetails?.crop_area}
+          defaultArea={itemDetails?.area}
           errorMessages={errorMessages}
         />
       ) : (

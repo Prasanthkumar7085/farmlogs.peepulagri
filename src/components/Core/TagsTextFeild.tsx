@@ -55,7 +55,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       <Autocomplete
         multiple
         id="tag-autocomplete"
-        options={tag.length ? tag : []}
+        options={tag?.length ? tag : []}
         getOptionLabel={(option) => option}
         inputValue={newTagValue}
         onInputChange={(e, newInputValue) => {

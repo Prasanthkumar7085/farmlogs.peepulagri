@@ -122,7 +122,7 @@ const SingleViewScoutComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/65520cdb4a54289a080ba082/crops/65523d10c81da3777b7283c7/farm-images/1/1000`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/crops/${router.query.crop_id}/farm-images/${pageNumber}/50`,
         options
       );
 
@@ -578,7 +578,28 @@ const SingleViewScoutComponent = () => {
                 />
 
               )
-            }) : ""}
+            }) : !loading ? (
+              <div
+                id={styles.noData}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "calc(100vh - 150px)",
+                }}
+              >
+                <ImageComponent
+                  src="/emty-folder-image.svg"
+                  alt="empty folder"
+                  width={150}
+                  height={140}
+                />
+                <Typography >No Scoutings</Typography>
+              </div>
+            ) : (
+              ""
+            )}
         </div>
 
       </InfiniteScroll>

@@ -1,12 +1,12 @@
 
 
-const deleteCropService = async (farmId: string,cropId:string,token:string) => {
+const deleteCropService = async (farmId: string, cropId: string, token: string) => {
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}/crops/${cropId}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmId}/crops/${cropId}`;
     const options = {
         method: "DELETE",
         headers: new Headers({
-            'authorization':token
+            'authorization': token
         })
     }
     try {

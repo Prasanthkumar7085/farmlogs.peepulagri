@@ -29,7 +29,7 @@ const EditTagsForSingleAttachment = ({
   useEffect(() => {
     if (TagsDrawerEditOpen) {
       setDescription(item?.description);
-      setTags(item?.tags);
+      setTags(item ? item?.tags : []);
     } else {
       setTags([]);
       setDescription("");

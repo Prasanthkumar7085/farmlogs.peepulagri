@@ -25,7 +25,7 @@ const SingleImageComponent: FC<componentProps> = ({
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  // console.log(detailedImage);
+  console.log(detailedImage);
 
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>(false);
 

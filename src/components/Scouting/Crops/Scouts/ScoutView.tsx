@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import getImagesByPaginationService from "../../../../../lib/services/ScoutServices/getImagesByPaginationService";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { useSelector } from "react-redux";
@@ -10,6 +10,8 @@ import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import styles from "./singleImage.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NorthIcon from "@mui/icons-material/North";
+import useScrollSnap from "react-use-scroll-snap";
+
 interface ApiProps {
   date: string;
 }
@@ -34,7 +36,6 @@ const ScoutView = () => {
     return sortedData;
     // console.log(sortedData);
   };
-  console.log(images);
 
   const getImages = async ({
     date = new Date().toISOString(),
@@ -102,50 +103,92 @@ const ScoutView = () => {
       getImages({});
     }
   }, [router.isReady]);
+
+  const scrollRef = useRef(null);
+  useScrollSnap({ ref: scrollRef, duration: 1 });
+
   return (
-    <div>
-      {isVisible ? (
-        <a href="#">
-          <div className={styles.scrollToTopLink}>
-            <NorthIcon />
-          </div>
-        </a>
-      ) : (
-        ""
-      )}
-      <div>
-        <InfiniteScroll
-          className={styles.infiniteScrollComponent}
-          dataLength={images.length}
-          next={() => {
-            setPage((prev) => prev + 1);
-            getImages({
-              date: images.length
-                ? images.slice(-1)[0]?.created_at
-                : new Date().toISOString(),
-            });
-          }}
-          hasMore={true}
-          loader={
-            <div className={styles.pageLoader}>
-              {loading ? <CircularProgress /> : ""}
-            </div>
-          }
-          endMessage={
-            hasMore ? (
-              ""
-            ) : (
-              <div className={styles.noMoreImages}>
-                <p>No more Images</p>
+    <section className="container" ref={scrollRef}>
+      {images.length
+        ? images.map((item: any, index: number) => {
+            return (
+              <div key={index}>
+                <div
+                  style={{
+                    position: "sticky",
+                    top: "110px",
+                    paddingTop: "20px",
+                    background: "#f5f7fa",
+                    zIndex: 2,
+                  }}
+                >
+                  <Typography className={styles.postDate}>
+                    <InsertInvitationIcon />
+                    <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
+                  </Typography>
+                </div>
+                <SingleImageComponent
+                  detailedImage={item}
+                  scoutDetails={scoutDetails}
+                  getImageData={getImages}
+                />
               </div>
-            )
-          }
-        >
-          {images.length
-            ? images.map((item: any, index: number) => {
-                return (
-                  <div key={index}>
-                    <div
+            );
+          })
+        : !loading
+        ? "No Data"
+        : ""}
+    </section>
+  );
+};
+
+export default ScoutView;
+
+
+
+  // <div>
+  //     {isVisible ? (
+  //       <a href="#">
+  //         <div className={styles.scrollToTopLink}>
+  //           <NorthIcon />
+  //         </div>
+  //       </a>
+  //     ) : (
+  //       ""
+  //     )}
+  //     <div>
+  //       <InfiniteScroll
+  //         className={styles.infiniteScrollComponent}
+  //         dataLength={images.length}
+  //         next={() => {
+  //           setPage((prev) => prev + 1);
+  //           getImages({
+  //             date: images.length
+  //               ? images.slice(-1)[0]?.created_at
+  //               : new Date().toISOString(),
+  //           });
+  //         }}
+  //         hasMore={true}
+  //         loader={
+  //           <div className={styles.pageLoader}>
+  //             {loading ? <CircularProgress /> : ""}
+  //           </div>
+  //         }
+  //         endMessage={
+  //           hasMore ? (
+  //             ""
+  //           ) : (
+  //             <div className={styles.noMoreImages}>
+  //               <p>No more Images</p>
+  //             </div>
+  //           )
+  //         }
+  //       >
+  //         {images.length
+  //           ? images.map((item: any, index: number) => {
+  //               return (
+  //                 <div key={index}>
+  //                   <div
                     // style={{
                     //   position: "sticky",
                     //   top: "110px",
@@ -153,27 +196,23 @@ const ScoutView = () => {
                     //   background: "#f5f7fa",
                     //   zIndex: 2,
                     // }}
-                    >
-                      <Typography className={styles.postDate}>
-                        <InsertInvitationIcon />
-                        <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
-                      </Typography>
-                    </div>
-                    <SingleImageComponent
-                      detailedImage={item}
-                      scoutDetails={scoutDetails}
-                      getImageData={getImages}
-                    />
-                  </div>
-                );
-              })
-            : !loading
-            ? "No Data"
-            : ""}
-        </InfiniteScroll>
-      </div>
-    </div>
-  );
-};
-
-export default ScoutView;
+  //                   >
+  //                     <Typography className={styles.postDate}>
+  //                       <InsertInvitationIcon />
+  //                       <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
+  //                     </Typography>
+  //                   </div>
+  //                   <SingleImageComponent
+  //                     detailedImage={item}
+  //                     scoutDetails={scoutDetails}
+  //                     getImageData={getImages}
+  //                   />
+  //                 </div>
+  //               );
+  //             })
+  //           : !loading
+  //           ? "No Data"
+  //           : ""}
+  //       </InfiniteScroll>
+  //     </div>
+  //   </div>

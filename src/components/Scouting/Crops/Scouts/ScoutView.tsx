@@ -34,14 +34,11 @@ const ScoutView = () => {
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
     return sortedData;
-    // console.log(sortedData);
   };
 
   const getImages = async ({
     date = new Date().toISOString(),
   }: Partial<ApiProps>) => {
-    // console.log(date);
-
     setLoading(true);
     try {
       //dummy Api
@@ -51,7 +48,6 @@ const ScoutView = () => {
 
       let responseData = await response.json();
       if (responseData.status >= 200 && responseData.status <= 300) {
-        // console.log(responseData);
         const { data, ...rest } = responseData?.data;
         let modifiedData = groupBy([...images, ...data]);
         setImages(modifiedData);
@@ -104,15 +100,12 @@ const ScoutView = () => {
     }
   }, [router.isReady]);
 
-  const scrollRef = useRef(null);
-  useScrollSnap({ ref: scrollRef, duration: 1 });
-
   return (
-    <section className="container" ref={scrollRef}>
+    <div style={{ marginTop: "4rem" }}>
       {images.length
         ? images.map((item: any, index: number) => {
             return (
-              <div key={index}>
+              <div key={index} className={styles.snapScroll}>
                 <div
                   style={{
                     position: "sticky",
@@ -138,7 +131,7 @@ const ScoutView = () => {
         : !loading
         ? "No Data"
         : ""}
-    </section>
+    </div>
   );
 };
 

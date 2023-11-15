@@ -1,16 +1,12 @@
+import timePipe from "@/pipes/timePipe";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import NorthIcon from "@mui/icons-material/North";
+import { CircularProgress, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import getImagesByPaginationService from "../../../../../lib/services/ScoutServices/getImagesByPaginationService";
-import LoadingComponent from "@/components/Core/LoadingComponent";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SingleImageComponent from "./SingleImageComponent";
-import timePipe from "@/pipes/timePipe";
-import { CircularProgress, Divider, Typography } from "@mui/material";
-import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import styles from "./singleImage.module.css";
-import InfiniteScroll from "react-infinite-scroll-component";
-import NorthIcon from "@mui/icons-material/North";
-import useScrollSnap from "react-use-scroll-snap";
 
 interface ApiProps {
   date: string;
@@ -26,13 +22,20 @@ const ScoutView = () => {
   const [images, setImages] = useState<any>([]);
   const [scoutDetails, setScoutDetails] = useState({});
   const [hasMore, setHasMore] = useState(true);
+  const [uniqueIndex, setUniqueIndex] = useState(0);
 
   const groupBy = (data: any[]) => {
     let sortedData = [...data];
-    sortedData.sort(
-      (a: any, b: any) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    );
+    // sortedData.sort(
+    //   (a: any, b: any) =>
+    //     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    // );
+
+    sortedData = sortedData.map((item) => {
+      setUniqueIndex((prev) => prev + 1);
+      return { ...item, index: uniqueIndex + 1 };
+    });
+
     return sortedData;
   };
 
@@ -43,13 +46,17 @@ const ScoutView = () => {
     try {
       //dummy Api
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_DUMMY}/farms/12212/crops/123/farm-images/next/50/${date}`
+        `${process.env.NEXT_PUBLIC_API_URL_DUMMY}/farms/12212/crops/123/farm-images/next/10/${date}`
       );
 
       let responseData = await response.json();
       if (responseData.status >= 200 && responseData.status <= 300) {
         const { data, ...rest } = responseData?.data;
-        let modifiedData = groupBy([...images, ...data]);
+        let imagesTemp = [...images];
+        // if (images.length >= 50) {
+        //   imagesTemp.splice(0, 10);
+        // }
+        let modifiedData = groupBy([...imagesTemp, ...data]);
         setImages(modifiedData);
 
         // setHasMore(rest.has_more);
@@ -77,8 +84,8 @@ const ScoutView = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show the button when the user scrolls down 20 pixels or more
       if (window.scrollY > 20) {
+        // Show the button when the user scrolls down 20 pixels or more
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -94,6 +101,22 @@ const ScoutView = () => {
     };
   }, []);
 
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight ||
+      loading
+    ) {
+      return;
+    }
+    getImages({ date: images.slice(-1)[0]?.created_at });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading]);
+
   useEffect(() => {
     if (router.isReady) {
       getImages({});
@@ -102,6 +125,42 @@ const ScoutView = () => {
 
   return (
     <div style={{ marginTop: "4rem" }}>
+      {isVisible ? (
+        <a href="#">
+          <div className={styles.scrollToTopLink}>
+            <NorthIcon />
+          </div>
+        </a>
+      ) : (
+        ""
+      )}
+      {/* <InfiniteScroll
+        className={styles.infiniteScrollComponent}
+        dataLength={images.length}
+        next={() => {
+          setPage((prev) => prev + 1);
+          getImages({
+            date: images.length
+              ? images.slice(-1)[0]?.created_at
+              : new Date().toISOString(),
+          });
+        }}
+        hasMore={true}
+        loader={
+          <div className={styles.pageLoader}>
+            {loading ? <CircularProgress /> : ""}
+          </div>
+        }
+        endMessage={
+          hasMore ? (
+            ""
+          ) : (
+            <div className={styles.noMoreImages}>
+              <p>No more Images</p>
+            </div>
+          )
+        }
+      > */}
       {images.length
         ? images.map((item: any, index: number) => {
             return (
@@ -131,81 +190,81 @@ const ScoutView = () => {
         : !loading
         ? "No Data"
         : ""}
+      {loading ? <CircularProgress /> : ""}
+      {/* </InfiniteScroll> */}
     </div>
   );
 };
 
 export default ScoutView;
 
-
-
-  // <div>
-  //     {isVisible ? (
-  //       <a href="#">
-  //         <div className={styles.scrollToTopLink}>
-  //           <NorthIcon />
-  //         </div>
-  //       </a>
-  //     ) : (
-  //       ""
-  //     )}
-  //     <div>
-  //       <InfiniteScroll
-  //         className={styles.infiniteScrollComponent}
-  //         dataLength={images.length}
-  //         next={() => {
-  //           setPage((prev) => prev + 1);
-  //           getImages({
-  //             date: images.length
-  //               ? images.slice(-1)[0]?.created_at
-  //               : new Date().toISOString(),
-  //           });
-  //         }}
-  //         hasMore={true}
-  //         loader={
-  //           <div className={styles.pageLoader}>
-  //             {loading ? <CircularProgress /> : ""}
-  //           </div>
-  //         }
-  //         endMessage={
-  //           hasMore ? (
-  //             ""
-  //           ) : (
-  //             <div className={styles.noMoreImages}>
-  //               <p>No more Images</p>
-  //             </div>
-  //           )
-  //         }
-  //       >
-  //         {images.length
-  //           ? images.map((item: any, index: number) => {
-  //               return (
-  //                 <div key={index}>
-  //                   <div
-                    // style={{
-                    //   position: "sticky",
-                    //   top: "110px",
-                    //   paddingTop: "20px",
-                    //   background: "#f5f7fa",
-                    //   zIndex: 2,
-                    // }}
-  //                   >
-  //                     <Typography className={styles.postDate}>
-  //                       <InsertInvitationIcon />
-  //                       <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
-  //                     </Typography>
-  //                   </div>
-  //                   <SingleImageComponent
-  //                     detailedImage={item}
-  //                     scoutDetails={scoutDetails}
-  //                     getImageData={getImages}
-  //                   />
-  //                 </div>
-  //               );
-  //             })
-  //           : !loading
-  //           ? "No Data"
-  //           : ""}
-  //       </InfiniteScroll>
-  //     </div>
-  //   </div>
+// <div>
+// {isVisible ? (
+//   <a href="#">
+//     <div className={styles.scrollToTopLink}>
+//       <NorthIcon />
+//     </div>
+//   </a>
+// ) : (
+//   ""
+// )}
+//     <div>
+// <InfiniteScroll
+//   className={styles.infiniteScrollComponent}
+//   dataLength={images.length}
+//   next={() => {
+//     setPage((prev) => prev + 1);
+//     getImages({
+//       date: images.length
+//         ? images.slice(-1)[0]?.created_at
+//         : new Date().toISOString(),
+//     });
+//   }}
+//   hasMore={true}
+//   loader={
+//     <div className={styles.pageLoader}>
+//       {loading ? <CircularProgress /> : ""}
+//     </div>
+//   }
+//   endMessage={
+//     hasMore ? (
+//       ""
+//     ) : (
+//       <div className={styles.noMoreImages}>
+//         <p>No more Images</p>
+//       </div>
+//     )
+//   }
+// >
+//         {images.length
+//           ? images.map((item: any, index: number) => {
+//               return (
+//                 <div key={index}>
+//                   <div
+// style={{
+//   position: "sticky",
+//   top: "110px",
+//   paddingTop: "20px",
+//   background: "#f5f7fa",
+//   zIndex: 2,
+// }}
+//                   >
+//                     <Typography className={styles.postDate}>
+//                       <InsertInvitationIcon />
+//                       <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
+//                     </Typography>
+//                   </div>
+//                   <SingleImageComponent
+//                     detailedImage={item}
+//                     scoutDetails={scoutDetails}
+//                     getImageData={getImages}
+//                   />
+//                 </div>
+//               );
+//             })
+//           : !loading
+//           ? "No Data"
+//           : ""}
+//       </InfiniteScroll>
+//     </div>
+//   </div>

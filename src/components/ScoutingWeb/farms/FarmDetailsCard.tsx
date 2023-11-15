@@ -160,8 +160,8 @@ const ScoutingFarmDetailsCard = ({
                   >
                     {item.title.length > 16
                       ? item.title.slice(0, 1).toUpperCase() +
-                        item.title.slice(1, 12) +
-                        "..."
+                      item.title.slice(1, 12) +
+                      "..."
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
                 </div>
@@ -180,7 +180,7 @@ const ScoutingFarmDetailsCard = ({
                 />
                 <div className={styles.duration}>
                   <p className={styles.from}>
-                    {timePipe(item.createdAt, "DD, MMM YYYY")}
+                    {timePipe(item.created_at, "DD, MMM YYYY")}
                   </p>
                   <p className={styles.divider}>-</p>
                   <p className={styles.from}>Current</p>

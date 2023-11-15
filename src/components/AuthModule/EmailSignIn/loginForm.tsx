@@ -63,7 +63,7 @@ export default function SigninEmail() {
 
         if (res?.data?.user_details?.user_type == "ADMIN") {
           router.push("/scouts");
-        } else if (res?.data?.user_details?.user_type == "USER") {
+        } else if (res?.data?.user_details?.user_type == "JR_AGRONOMIST") {
           router.push("/farms");
         } else if (res?.data?.user_details?.user_type == "AGRONOMIST") {
           router.push("/scouts");

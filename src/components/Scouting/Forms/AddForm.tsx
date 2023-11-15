@@ -83,12 +83,12 @@ const AddFarmForm = () => {
   };
 
   const addFarm = async (data: any) => {
-    const { location, title, area } = data;
+    const { location_id, title, area } = data;
 
     let obj = {
       title: title,
       area: area,
-      location: location ? location.trim() : "",
+      location_id: location_id ? location_id : "",
     };
 
     let response = await addFarmService(obj, accessToken);
@@ -115,10 +115,10 @@ const AddFarmForm = () => {
     setLoading(true);
 
     console.log(area, "1");
-
+    console.log(location?._id, "lo")
     let obj = {
       title: title,
-      location: location?.name,
+      location_id: location?._id,
       area: area ? +area : null,
     };
 
@@ -163,7 +163,7 @@ const AddFarmForm = () => {
 
       setArea(response?.data?.area);
       setTitle(response?.data?.title);
-      const locationFromResponse = response?.data?.location;
+      const locationFromResponse = response?.data?.location_id;
       // const locationObjFromResponse = locationFromResponse.find((item: {name:string,_id:string})=>item.name==locationFromResponse);
       // setLocation(locationObjFromResponse);
       await getLocations(locationFromResponse);
@@ -188,7 +188,7 @@ const AddFarmForm = () => {
     }, 1);
   }, [data]);
 
-  const getLocations = async (newLocation = "") => {
+  const getLocations = async (newLocation: any) => {
     setOptionsLoading(true);
     try {
       const response = await getAllLocationsService(accessToken);
@@ -197,7 +197,7 @@ const AddFarmForm = () => {
         if (newLocation) {
           setSettingLocationLoading(true);
           const newLocationObject = response?.data?.find(
-            (item: any) => item?.name == newLocation
+            (item: any) => item?._id == newLocation?._id
           );
           setLocation(newLocationObject);
           setTimeout(() => {
@@ -320,7 +320,7 @@ const AddFarmForm = () => {
                   open={open}
                   fullWidth
                   onOpen={() => {
-                    getLocations();
+                    getLocations("");
                     setOpen(true);
                   }}
                   onClose={() => {
@@ -369,17 +369,17 @@ const AddFarmForm = () => {
                           </React.Fragment>
                         ),
                       }}
-                      {...register("location")}
+                      {...register("location_id")}
                       className={styles.inputfarmname}
-                      name="location"
+                      name="location_id"
                       size="small"
                       placeholder="Enter location here"
                       fullWidth
                       variant="outlined"
-                      error={Boolean(errorMessages?.["location"])}
+                      error={Boolean(errorMessages?.["location_id"])}
                       helperText={
-                        errorMessages?.["location"]
-                          ? errorMessages?.["location"]
+                        errorMessages?.["location_id"]
+                          ? errorMessages?.["location_id"]
                           : ""
                       }
                       sx={{

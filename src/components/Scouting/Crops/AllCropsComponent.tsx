@@ -108,7 +108,7 @@ const AllCropsComponent = () => {
       }
 
       let url = prepareURLEncodedParams(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${id}/crops/list`,
         queryParams
       );
 
@@ -142,8 +142,7 @@ const AllCropsComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
-          formId ? formId : router.query.farm_id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${formId ? formId : router.query.farm_id
         }/crops`,
         options
       );
@@ -388,7 +387,7 @@ const AllCropsComponent = () => {
       <FormControl
         variant="outlined"
         className={styles.filterBox}
-        // style={{border:"1px solid"}}
+      // style={{border:"1px solid"}}
       >
         <InputLabel color="primary" />
         <SelectAutoCompleteForFarms

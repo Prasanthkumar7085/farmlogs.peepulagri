@@ -1,8 +1,8 @@
 
-const addFarmService = async (body: any,token:string) => {
+const addFarmService = async (body: any, token: string) => {
 
     try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/farm`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/farms`;
         const options = {
             method: "POST",
             body: JSON.stringify(body),

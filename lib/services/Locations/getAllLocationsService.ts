@@ -8,7 +8,7 @@ const getAllLocationsService = async (token: string) => {
                 'authorization': token
             })
         }
-        let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm/locations/all`, options);
+        let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/locations/all`, options);
         const responseData = await response.json();
         return responseData;
 

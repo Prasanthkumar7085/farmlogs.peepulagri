@@ -122,7 +122,7 @@ const SingleViewScoutComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_DUMMY}/farms/12212/crops/123/farm-images/${pageNumber}/50`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/65520cdb4a54289a080ba082/crops/65523d10c81da3777b7283c7/farm-images/1/1000`,
         options
       );
 

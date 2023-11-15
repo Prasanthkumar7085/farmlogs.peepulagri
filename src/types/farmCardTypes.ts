@@ -20,12 +20,15 @@ interface Geometrytype {
 
 export interface FarmDataType {
     area: number;
-    createdAt: string;
+    created_at: string;
     crops: Array<CropTypeInFarms>
     geometry: Geometrytype;
     logCount: number;
     slug: string;
-    location: string;
+    location_id: {
+        name: string;
+        _id: string;
+    };
     status: string;
     title: string;
     updatedAt: string;

@@ -14,14 +14,14 @@ const ViewFarmPage = () => {
 
   const [data, setData] = useState<FarmDataType>();
   const [loading, setLoading] = useState(true);
-    const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
 
   const getFarmDataById = async () => {
     setLoading(true);
-    
-    const response: any = await getFarmByIdService(router.query.farm_id as string,accessToken as string);
-    
+
+    const response: any = await getFarmByIdService(router.query.farm_id as string, accessToken as string);
+
     if (response?.success) {
       setData(response?.data);
     }
@@ -29,28 +29,28 @@ const ViewFarmPage = () => {
   }
 
   useEffect(() => {
-    if (router.isReady&&accessToken) {
+    if (router.isReady && accessToken) {
       getFarmDataById();
     }
-  }, [router.isReady,accessToken]);
-  
+  }, [router.isReady, accessToken]);
+
   return (
     <div>
-      {!loading?<div className={styles.viewfarm} id="view-farm">
-      <div className={styles.farmdetailsblock}>
-        <div className={styles.farm1}>{data?.title}</div>
-        <div className={styles.aug2023}>{timePipe(data?.createdAt as string,'DD, MMM YYYY')}</div>
-        {/* - Current */}
-      </div>
-      <div className={styles.farmareaheading} id="area">
-        <div className={styles.text}>Land (acres)</div>
-        <div className={styles.acres}>{data?.area? Math.floor(data?.area * 100) / 100:""} ACRES</div>
-      </div>
-      <div
-        className={styles.locationdetailsblock}
-        id="location-details-block"
-      >
-        {/* <div className={styles.map} id="map">
+      {!loading ? <div className={styles.viewfarm} id="view-farm">
+        <div className={styles.farmdetailsblock}>
+          <div className={styles.farm1}>{data?.title}</div>
+          <div className={styles.aug2023}>{timePipe(data?.created_at as string, 'DD, MMM YYYY')}</div>
+          {/* - Current */}
+        </div>
+        <div className={styles.farmareaheading} id="area">
+          <div className={styles.text}>Land (acres)</div>
+          <div className={styles.acres}>{data?.area ? Math.floor(data?.area * 100) / 100 : ""} ACRES</div>
+        </div>
+        <div
+          className={styles.locationdetailsblock}
+          id="location-details-block"
+        >
+          {/* <div className={styles.map} id="map">
           <img
             className={styles.mapimage6Icon}
             alt=""
@@ -58,12 +58,12 @@ const ViewFarmPage = () => {
           />
           <img className={styles.locationIcon} alt="" src="/location-blue-icon.svg" />
         </div> */}
-        <p className={styles.locationMarked} id="location-details">
-          <span>
-            Location:
-          </span>{data?.location ? ' '+data?.location :" N/A"}
+          <p className={styles.locationMarked} id="location-details">
+            <span>
+              Location:
+            </span>{data?.location_id?.name ? ' ' + data?.location_id?.name : " N/A"}
           </p>
-        {/* <p className={styles.locationMarked} id="location-details">
+          {/* <p className={styles.locationMarked} id="location-details">
           <span>
             Location Marked at :
           </span>
@@ -71,9 +71,9 @@ const ViewFarmPage = () => {
           Chittore, NY 523113, Andhra Prades.
 
         </p> */}
-      </div>
-    </div>:""}
-    <LoadingComponent loading={loading}/>
+        </div>
+      </div> : ""}
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

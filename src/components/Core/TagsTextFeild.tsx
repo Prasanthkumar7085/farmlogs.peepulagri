@@ -9,26 +9,32 @@ import {
 import { useEffect, useState } from "react";
 import styles from "./TagsTextFeild.module.css";
 import AddIcon from "@mui/icons-material/Add";
+import { useSelector } from 'react-redux';
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [tagValue, setTagValue] = useState<any>([]);
   const [newTagValue, setNewTagValue] = useState<any>();
   const [tag, setTag] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
 
   useEffect(() => {
     setTagValue(beforeTags ? beforeTags : []);
     dropDownTags();
-  }, []);
+  }, [accessToken]);
 
   const dropDownTags = async () => {
     setLoading(true);
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/scouts/list-tags`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/farms/list-farm-images/tags/all`;
       const options = {
         method: "GET",
 
         headers: new Headers({
           "content-type": "application/json",
+          'authorization': accessToken
+
         }),
       };
       const response: any = await fetch(url, options);
@@ -43,10 +49,11 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
 
   const addNewTag = () => {
     if (newTagValue) {
-      setTag([...tag, newTagValue]);
-      setTagValue([...tagValue, newTagValue]);
+      let temp = { _id: Math.round(100), tag: newTagValue }
+      setTag([...tag, temp]);
+      setTagValue([...tagValue, temp]);
       setNewTagValue("");
-      captureTags([...tagValue, newTagValue]);
+      captureTags([...tagValue, temp]);
     }
   };
 
@@ -56,7 +63,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         multiple
         id="tag-autocomplete"
         options={tag?.length ? tag : []}
-        getOptionLabel={(option) => option}
+        getOptionLabel={(option) => option.tag}
         inputValue={newTagValue}
         onInputChange={(e, newInputValue) => {
           setNewTagValue(newInputValue);

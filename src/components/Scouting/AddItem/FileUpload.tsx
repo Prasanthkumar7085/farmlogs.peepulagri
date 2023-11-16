@@ -33,7 +33,7 @@ const FileUploadComponent = () => {
 
   const filesFromStore = useSelector((state: any) => state.farms?.filesList);
 
-  
+
   const [openCamera, setOpenCamera] = useState<any>(false);
   const [loading, setLoading] = useState<any>(false);
   const [multipleFiles, setMultipleFiles] = useState<any>();
@@ -369,14 +369,9 @@ const FileUploadComponent = () => {
     setFileProgress: any
   ) => {
     let obj = {
-      attachment: {
-        original_name: item.name,
-        type: item.type,
-        size: item.size,
-        source: "scouting",
-        crop_slug: selectedCrop?.slug,
-        farm_id: router.query.farm_id,
-      },
+      original_name: item.name,
+      type: item.type,
+
     };
 
     let options: any = {
@@ -390,7 +385,7 @@ const FileUploadComponent = () => {
 
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/crops/${router.query.crop_id}/attachments`,
         options
       );
       let responseData = await response.json();
@@ -469,7 +464,7 @@ const FileUploadComponent = () => {
 
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images`,
         options
       );
       let responseData = await response.json();
@@ -581,7 +576,7 @@ const FileUploadComponent = () => {
                       </div>
                     </div>
                     <div className={styles.imagesupload} id="images-upload">
-                      <div className={styles.captureimage} id="capture-image">
+                      {/* <div className={styles.captureimage} id="capture-image">
                         <div className={styles.camera}>
                           <img
                             className={styles.camera1Icon}
@@ -592,7 +587,7 @@ const FileUploadComponent = () => {
 
                           <div className={styles.capture}> Capture </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div id="capture-image">
                         <div className={styles.uploadimage}>
                           <label>
@@ -631,11 +626,11 @@ const FileUploadComponent = () => {
                         previewImages.find((e: any) => e.fileIndex == item.name)
                           ?.prieviewUrl
                           ? previewImages.find(
-                              (e: any) => e.fileIndex == item.name
-                            ).prieviewUrl
+                            (e: any) => e.fileIndex == item.name
+                          ).prieviewUrl
                           : item.type == "application/pdf"
-                          ? "/pdf-icon.png"
-                          : "/doc-icon.webp"
+                            ? "/pdf-icon.png"
+                            : "/doc-icon.webp"
                       }
                     />
                     <div className={styles.progressdetails}>
@@ -666,7 +661,7 @@ const FileUploadComponent = () => {
                               )}
                             </div>
                             {fileProgress[index] == 100 &&
-                            fileProgress[index] !== "fail" ? (
+                              fileProgress[index] !== "fail" ? (
                               <div className={styles.photojpg}>
                                 <IconButton>
                                   <DoneIcon sx={{ color: "#05A155" }} />
@@ -686,7 +681,7 @@ const FileUploadComponent = () => {
                             )}
                           </div>
                           {fileProgress[index] !== 100 ||
-                          fileProgress[index] == "fail" ? (
+                            fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
                               alt=""
@@ -699,7 +694,7 @@ const FileUploadComponent = () => {
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
-                          fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                             <LinearProgress />
                           ) : fileProgress[index] !== 100 &&
                             fileProgress[index] !== "fail" ? (
@@ -713,7 +708,7 @@ const FileUploadComponent = () => {
                         </Box>
                       </div>
                       {fileProgress[index] == 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         ""
                       ) : (
                         <div className={styles.uploadstatus}>
@@ -735,10 +730,10 @@ const FileUploadComponent = () => {
                       id="input-description"
                     >
                       <div className={styles.label1}>
-                        Findings
+                        {/* Findings */}
                         {/* <strong style={{ color: "rgb(228 12 15)" }}>*</strong> */}
                       </div>
-                      <TextField
+                      {/* <TextField
                         className={styles.input}
                         color="primary"
                         name="desciption"
@@ -758,7 +753,7 @@ const FileUploadComponent = () => {
                       />
                       <ErrorMessagesComponent
                         errorMessage={validations?.description}
-                      />
+                      /> */}
                     </div>
                     <div style={{ width: "100%" }} className={styles.input}>
                       <TagsTextFeild captureTags={captureTags} />

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SingleImageComponent from "./SingleImageComponent";
 import styles from "./singleImage.module.css";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface ApiProps {
   date: string;
@@ -23,42 +24,36 @@ const ScoutView = () => {
   const [scoutDetails, setScoutDetails] = useState({});
   const [hasMore, setHasMore] = useState(true);
   const [uniqueIndex, setUniqueIndex] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
 
-  const groupBy = (data: any[]) => {
-    let sortedData = [...data];
-    // sortedData.sort(
-    //   (a: any, b: any) =>
-    //     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    // );
 
-    sortedData = sortedData.map((item) => {
-      setUniqueIndex((prev) => prev + 1);
-      return { ...item, index: uniqueIndex + 1 };
-    });
-
-    return sortedData;
-  };
 
   const getImages = async ({
     date = new Date().toISOString(),
   }: Partial<ApiProps>) => {
     setLoading(true);
+    let options = {
+      method: "GET",
+
+      headers: new Headers({
+        "content-type": "application/json",
+        authorization: accessToken,
+      }),
+    };
     try {
       //dummy Api
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_DUMMY}/farms/12212/crops/123/farm-images/next/10/${date}`
-      );
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/crops/${router.query.crop_id}/farm-images/${pageNumber}/50`,
+        options);
 
       let responseData = await response.json();
-      if (responseData.status >= 200 && responseData.status <= 300) {
-        const { data, ...rest } = responseData?.data;
-        let imagesTemp = [...images];
-        // if (images.length >= 50) {
-        //   imagesTemp.splice(0, 10);
-        // }
-        let modifiedData = groupBy([...imagesTemp, ...data]);
-        setImages(modifiedData);
-
+      if (responseData.success == true) {
+        if (responseData?.has_more || responseData?.has_more == false) {
+          setHasMore(responseData?.has_more);
+        }
+        let temp: any;
+        temp = [...responseData?.data];
+        setImages(temp);
         // setHasMore(rest.has_more);
       }
 
@@ -82,46 +77,19 @@ const ScoutView = () => {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        // Show the button when the user scrolls down 20 pixels or more
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    // Attach the event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-        document.documentElement.offsetHeight ||
-      loading
-    ) {
-      return;
-    }
-    getImages({ date: images.slice(-1)[0]?.created_at });
-  };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading]);
+    getImages({});
+  }, [pageNumber])
+
+
+
 
   useEffect(() => {
     if (router.isReady) {
       getImages({});
     }
-  }, [router.isReady]);
+  }, [router.isReady, accessToken]);
 
   return (
     <div style={{ marginTop: "4rem" }}>
@@ -134,18 +102,11 @@ const ScoutView = () => {
       ) : (
         ""
       )}
-      {/* <InfiniteScroll
+      <InfiniteScroll
         className={styles.infiniteScrollComponent}
         dataLength={images.length}
-        next={() => {
-          setPage((prev) => prev + 1);
-          getImages({
-            date: images.length
-              ? images.slice(-1)[0]?.created_at
-              : new Date().toISOString(),
-          });
-        }}
-        hasMore={true}
+        next={() => setPageNumber(prev => prev + 1)}
+        hasMore={hasMore}
         loader={
           <div className={styles.pageLoader}>
             {loading ? <CircularProgress /> : ""}
@@ -160,9 +121,9 @@ const ScoutView = () => {
             </div>
           )
         }
-      > */}
-      {images.length
-        ? images.map((item: any, index: number) => {
+      >
+        {images.length
+          ? images.map((item: any, index: number) => {
             return (
               <div key={index} className={styles.snapScroll}>
                 <div
@@ -187,11 +148,11 @@ const ScoutView = () => {
               </div>
             );
           })
-        : !loading
-        ? "No Data"
-        : ""}
-      {loading ? <CircularProgress /> : ""}
-      {/* </InfiniteScroll> */}
+          : !loading
+            ? "No Data"
+            : ""}
+        {loading ? <CircularProgress /> : ""}
+      </InfiniteScroll>
     </div>
   );
 };

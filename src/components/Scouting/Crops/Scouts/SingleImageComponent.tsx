@@ -25,7 +25,6 @@ const SingleImageComponent: FC<componentProps> = ({
     (state: any) => state.auth.userDetails?.access_token
   );
 
-
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>(false);
 
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
@@ -151,7 +150,7 @@ const SingleImageComponent: FC<componentProps> = ({
         {detailedImage?.tags?.length > 3 ? <span>{"... "}</span> : ""}
       </div>
       {detailedImage?.tags?.length > 3 ||
-      detailedImage?.description?.length > 97 ? (
+        detailedImage?.description?.length > 97 ? (
         <span style={{ fontWeight: "bold" }} onClick={openViewMore}>
           Show More
         </span>
@@ -170,7 +169,7 @@ const SingleImageComponent: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={detailedImage}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-        // loading={loading}
+      // loading={loading}
       />
       <ShowMoreInViewAttachmentDetails
         showMoreSuggestions={showMoreSuggestions}

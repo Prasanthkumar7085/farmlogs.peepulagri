@@ -1,7 +1,7 @@
 .snapScroll{
     
-    scroll-snap-align: start !important;
-    scroll-snap-stop: always !important;
+    /* scroll-snap-align: start !important;
+    scroll-snap-stop: always !important; */
 }
 .remondationsdiv{
     height: 100%;

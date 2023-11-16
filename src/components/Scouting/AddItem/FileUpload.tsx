@@ -389,6 +389,7 @@ const FileUploadComponent = () => {
         options
       );
       let responseData = await response.json();
+      console.log(responseData, "file")
       if (responseData.success == true) {
         let preSignedResponse = await fetch(responseData.data.target_url, {
           method: "PUT",
@@ -400,10 +401,9 @@ const FileUploadComponent = () => {
           original_name: responseData.data.original_name,
           type: item.type,
           size: item.size,
-          name: responseData.data.name,
-          crop_slug: responseData.data.crop_slug,
           path: responseData.data.path,
         });
+        console.log(tempFilesStorage, "asdfgh")
         setAttachments(tempFilesStorage);
       } else {
         fileProgressCopy[index] = "fail";
@@ -439,49 +439,55 @@ const FileUploadComponent = () => {
   }, []);
 
   const addScoutDetails = async () => {
-    const newArray = tempFilesStorage.map((obj: any) => ({
-      ...obj,
-      tags: tags,
-      time: new Date(),
-      description: description,
-    }));
-
-    setLoading(true);
-    let obj = {
-      farm_id: router.query.farm_id,
-      attachments: newArray,
-      crop_id: selectedCrop?._id,
-    };
-
-    let options: any = {
-      method: "POST",
-      body: JSON.stringify(obj),
-      headers: new Headers({
-        "content-type": "application/json",
-        authorization: accessToken,
-      }),
-    };
-
+    let imagesIdsArray: any = []
+    setLoading(true)
     try {
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images`,
-        options
+      const responses = await Promise.allSettled(
+        tempFilesStorage.map(async (file: any, index: any) => {
+
+          let obj = {
+            farm_id: router.query.farm_id,
+            crop_id: router?.query?.crop_id,
+            path: file.path,
+            "metadata": {
+              "original_name": file?.original_name,
+              "size": file?.size,
+              "type": file?.type
+            },
+            "tags": [
+            ]
+          };
+
+          let options: any = {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: new Headers({
+              "content-type": "application/json",
+              authorization: accessToken,
+            }),
+          };
+          let response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images`,
+            options
+          );
+          let responseData = await response.json();
+          if (responseData?.success == true) {
+            imagesIdsArray.push(responseData?.data?._id)
+          }
+
+        })
       );
-      let responseData = await response.json();
-      if (responseData.success == true) {
-        dispatch(removeTheFilesFromStore([]));
-        setAlertMessage(responseData.message);
-        setAlertType(true);
-        router.back();
-      } else if (responseData.status == 422) {
-        setValidations(responseData?.errors);
-      }
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
     }
+    catch (err) {
+      console.error(err)
+    }
+    finally {
+      setLoading(false)
+    }
+    await addTagsEvent(imagesIdsArray)
+    dispatch(removeTheFilesFromStore([]));
+    router.back();
+
   };
 
   //onClose camera
@@ -539,10 +545,35 @@ const FileUploadComponent = () => {
     }
   };
 
-  //capture the tags
+  // //capture the tags
   const captureTags = (array: any) => {
     if (array) {
       setTags(array);
+    }
+  };
+
+  //add tags api
+  const addTagsEvent = async (imagesArray: any) => {
+    try {
+      let body =
+      {
+        farm_image_ids: imagesArray,
+        tags: tags
+      }
+      let options = {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body)
+      }
+
+      let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/tag`, options)
+      let responseData = await response.json()
+    } catch (err) {
+      console.error(err);
+    } finally {
     }
   };
 

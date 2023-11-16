@@ -79,17 +79,19 @@ const ScoutView = () => {
 
 
   useEffect(() => {
-    getImages({});
-  }, [pageNumber])
-
-
-
-
-  useEffect(() => {
     if (router.isReady) {
       getImages({});
     }
-  }, [router.isReady, accessToken]);
+  }, [pageNumber, accessToken, router.isReady])
+
+
+
+
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     getImages({});
+  //   }
+  // }, [router.isReady, accessToken]);
 
   return (
     <div style={{ marginTop: "4rem" }}>
@@ -107,11 +109,7 @@ const ScoutView = () => {
         dataLength={images.length}
         next={() => setPageNumber(prev => prev + 1)}
         hasMore={hasMore}
-        loader={
-          <div className={styles.pageLoader}>
-            {loading ? <CircularProgress /> : ""}
-          </div>
-        }
+        loader
         endMessage={
           hasMore ? (
             ""

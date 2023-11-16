@@ -36,8 +36,8 @@ const DrawerComponentForScout = ({
   useEffect(() => {
     if (
       (router.isReady,
-      accessToken,
-      scoutDetails && attachement && openCommentsBox == true)
+        accessToken,
+        scoutDetails && attachement && openCommentsBox == true)
     ) {
       getAllScoutComments();
       setLoadingThreads(true);
@@ -71,14 +71,15 @@ const DrawerComponentForScout = ({
     try {
       let response = await fetch(
         // `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
-        `${process.env.NEXT_PUBLIC_API_URL_DUMMY}/farms/11212/comments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/${attachement?._id}/comments`,
         options
       );
       let responseData = await response.json();
+      console.log(responseData, "lb")
       if (responseData.success == true) {
         const commentsById: any = {};
 
-        responseData.data[0]?.comments.forEach((comment: any) => {
+        responseData.data?.forEach((comment: any) => {
           commentsById[comment._id] = {
             ...comment,
             replies: [], // Initialize an empty array for replies
@@ -86,9 +87,9 @@ const DrawerComponentForScout = ({
         });
 
         // Populate the replies for each comment
-        responseData.data[0]?.comments.forEach((comment: any) => {
-          if (comment.type === "REPLY" && comment.reply_to_comment_id) {
-            const parentId = comment.reply_to_comment_id;
+        responseData.data?.forEach((comment: any) => {
+          if (comment.reply_to) {
+            const parentId = comment.reply_to;
             if (commentsById[parentId]) {
               commentsById[parentId].replies.push(comment);
             }
@@ -100,14 +101,14 @@ const DrawerComponentForScout = ({
           if (commentsById.hasOwnProperty(commentId)) {
             commentsById[commentId].replies.sort((a: any, b: any) => {
               // Assuming updated_date is in ISO8601 format, you can compare them as strings
-              return a.createdAt.localeCompare(b.createdAt);
+              return a.created_at.localeCompare(b.created_at);
             });
           }
         }
         // Convert the commentsById object to an array of comments
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
-
+        console.log(reverse, "mv")
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
       } else if (responseData?.statusCode == 403) {

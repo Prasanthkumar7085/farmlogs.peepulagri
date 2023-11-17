@@ -100,7 +100,7 @@
   overflow: hidden;
 }
 
-.progress{
+.progress {
   display: flex;
   justify-content: flex-start;
   flex: 1;
@@ -110,9 +110,11 @@
   flex-direction: column;
   align-items: flex-start;
 }
-.progressbar{
+
+.progressbar {
   width: 100%;
 }
+
 .statsprogress {
   display: flex;
   justify-content: flex-start;
@@ -123,6 +125,7 @@
   z-index: 2;
   color: var(--color-darkslategray-100);
 }
+
 .activebar {
   position: absolute;
   margin: 0 !important;
@@ -133,9 +136,11 @@
   width: 4px;
   z-index: 3;
 }
+
 .default {
   display: none;
 }
+
 .farmcard {
   position: relative;
   border: 3px solid var(--stroke);

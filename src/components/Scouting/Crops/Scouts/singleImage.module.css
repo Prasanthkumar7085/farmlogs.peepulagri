@@ -1,5 +1,5 @@
 .infiniteScrollComponent {
-    max-height: 80vh;
+    max-height: calc(100vh - 130px);
     overflow-y: scroll !important;
     scroll-snap-type: y mandatory !important;
 }
@@ -35,14 +35,14 @@
 
 .button {
     background-color: #000000b3 !important;
-    color: rgb(13, 222, 13);
-    border: rgb(13, 222, 13);
+    color: #0dde0d;
+    border: #0dde0d;
     border-radius: 10px;
 }
 
 .button :hover {
-    border-color: rgb(13, 222, 13) !important;
-    color: rgb(13, 222, 13);
+    border-color: #0dde0d !important;
+    color: #0dde0d;
 
 }
 

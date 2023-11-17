@@ -500,7 +500,7 @@ const SingleViewScoutComponent = () => {
   };
 
   return (
-    <div className={styles.scoutingView}>
+    <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
       <div className={styles.mobileScoutingViewHeader}      >
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
@@ -556,9 +556,9 @@ const SingleViewScoutComponent = () => {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
-            gap: "2px",
+            gridGap: "1px",
             overflowY: "auto",
-            maxHeight: "500px",
+            maxHeight: "550px",
           }}
         >
           {data?.length ? (
@@ -578,7 +578,7 @@ const SingleViewScoutComponent = () => {
                     }
                     alt={`images${indexAttachment}`}
                     style={{
-                      width: "100%", height: "auto", position: "absolute",
+                      width: "100%", height: "100%", position: "absolute", objectFit: "cover",
                       top: "0",
                       right: "0",
                     }}
@@ -756,12 +756,12 @@ const SingleViewScoutComponent = () => {
       {data?.length ? (
         <div className={styles.stickyHeader2}>
           <div
-            style={{ display: "flex", justifyContent: "center", top: "20px" }}
+            className={styles.stickyBtnGrp}
           >
-            <Button>Years</Button>
-            <Button>Month</Button>
-            <Button>Days</Button>
-            <Button variant="contained">All Photos</Button>
+            <Button sx={{ color: "#454444 !important" }}>Years</Button>
+            <Button sx={{ color: "#454444 !important" }}>Month</Button>
+            <Button sx={{ color: "#454444 !important" }}>Days</Button>
+            <Button sx={{ color: "#fff !important" }}>All Photos</Button>
           </div>
         </div>
       ) : (

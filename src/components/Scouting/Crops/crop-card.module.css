@@ -1,3 +1,41 @@
+.mobileScoutingViewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 1rem;
+  background-color: var(--background);
+  border-bottom: 1px solid #d5d5d5;
+}
+
+.viewingTabs button {
+  padding: 0;
+  min-width: inherit;
+  min-height: inherit;
+}
+
+.viewingTabs {
+  min-height: inherit !important;
+}
+
+.stickyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: absolute;
+  color: #fff;
+}
+
+.dateRange {
+  font-size: 15px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px #000,
+    0 0 1em #000,
+    0 0 0.2em #000;
+
+}
+
 .folderIcon {
   width: 45px;
   height: 45px;
@@ -196,9 +234,9 @@
   border-top: 1px solid #E9EDF1;
 }
 
-.scoutingView {
-  height: calc(100vh - 190px);
-}
+/* .scoutingView {
+  height: calc(100vh - 250px);
+} */
 
 .scoutingView nav {
   margin-bottom: 1px;
@@ -256,11 +294,7 @@
 /* .breadcrumbs a{
   font-size: clamp(12px, 1.75vw, 16px);
 } */
-.breadcrumbs {
-  padding: 0.5rem 0.75rem;
-  background-color: var(--background);
-  border-bottom: 1px solid var(--stroke);
-}
+.breadcrumbs {}
 
 .ctaButton {
   display: flex;
@@ -298,16 +332,19 @@
   padding: 18px;
 }
 
-.subTitle{
-  font-family: 'Inter',sans-serif;
+.subTitle {
+  font-family: 'Inter', sans-serif;
   color: var(--gray-900);
   font-size: 1.5rem;
   font-weight: 500;
   margin-top: 1.5rem;
 }
+
 .stickyHeader2 {
-  position: sticky;
-bottom: 1%;
+  position: fixed;
+  width: 100%;
+  max-width: 500px;
+  bottom: 1%;
   z-index: 999;
   background-color: darkgrey;
   height: 40px;

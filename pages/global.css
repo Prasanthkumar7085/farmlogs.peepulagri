@@ -18,6 +18,17 @@ body {
 
 }
 
+.MuiTabs-indicator {
+    display: none !important;
+}
+
+.MuiTabs-flexContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+}
+
 :root {
     /* fonts */
     --text-md-medium: "Inter", sans-serif !important;
@@ -455,5 +466,5 @@ left: 10px !important;
 }
 
 .MuiPopper-root {
-    z-index: 2000!important;
+    z-index: 2000 !important;
 }

@@ -2,14 +2,12 @@ import {
   deleteAllMessages,
   removeTheAttachementsFilesFromStore,
 } from "@/Redux/Modules/Conversations";
-import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
 import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
-import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import ImageComponent from "@/components/Core/ImageComponent";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
@@ -25,17 +23,12 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
-import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
-import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-
 import AddIcon from "@mui/icons-material/Add";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import styles from "./crop-card.module.css";
@@ -82,21 +75,24 @@ const SingleViewScoutComponent = () => {
     setTempImages(selectedItems);
   }, [selectedItems]);
 
-  useEffect(() => {
-    if (
-      router.query.farm_id &&
-      router.isReady &&
-      router.query?.crop_id &&
-      accessToken
-    ) {
-      dispatch(removeTheFilesFromStore([]));
-      dispatch(removeTheAttachementsFilesFromStore([]));
-    }
-  }, [accessToken, router.isReady]);
+  // useEffect(() => {
+  //   if (
+  //     router.query.farm_id &&
+  //     router.isReady &&
+  //     router.query?.crop_id &&
+  //     accessToken
+  //   ) {
+  //     dispatch(removeTheFilesFromStore([]));
+  //     dispatch(removeTheAttachementsFilesFromStore([]));
+  //   }
+  // }, [accessToken, router.isReady]);
+
 
   useEffect(() => {
-    getPresingedURls();
-  }, [pageNumber]);
+    if (router.isReady) {
+      getPresingedURls();
+    }
+  }, [pageNumber, accessToken, router.isReady]);
 
   const logout = async () => {
     try {
@@ -474,9 +470,9 @@ const SingleViewScoutComponent = () => {
         const endDate =
           visibleImages.length > 0
             ? timePipe(
-                visibleImages[visibleImages.length - 1].created_at,
-                "DD MMM YY"
-              )
+              visibleImages[visibleImages.length - 1].created_at,
+              "DD MMM YY"
+            )
             : "";
 
         // Update the displayed date range
@@ -505,14 +501,7 @@ const SingleViewScoutComponent = () => {
 
   return (
     <div className={styles.scoutingView}>
-      <div
-        role="presentation"
-        style={{
-          border: "2px solid",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+      <div className={styles.mobileScoutingViewHeader}      >
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
             underline="hover"
@@ -525,16 +514,14 @@ const SingleViewScoutComponent = () => {
             {cropTitle?.slice(0, 1)?.toUpperCase() + cropTitle?.slice(1)}
           </Typography>
         </Breadcrumbs>
-        <div className={styles.breadcrumbs}>
-          <Tabs
-            value={value}
-            onChange={handleChangeMenuView}
-            aria-label="icon position tabs example"
-          >
-            <Tab icon={<GridViewRoundedIcon />} aria-label="Grid" />
-            <Tab icon={<FormatListBulletedRoundedIcon />} aria-label="List" />
-          </Tabs>
-        </div>
+        <Tabs
+          className={styles.viewingTabs} value={value}
+          onChange={handleChangeMenuView}
+          aria-label="icon position tabs example"
+        >
+          <Tab icon={<GridViewRoundedIcon />} aria-label="Grid" />
+          <Tab icon={<FormatListBulletedRoundedIcon />} aria-label="List" />
+        </Tabs>
       </div>
 
       <InfiniteScroll
@@ -551,7 +538,14 @@ const SingleViewScoutComponent = () => {
           </a>
         }
       >
-        <div className={styles.stickyHeader}>{dateRange}</div>
+        <div className={styles.stickyHeader}>
+          <div className={styles.dateRange}>
+            {dateRange}
+          </div>
+          <Button>
+            select
+          </Button>
+        </div>
         <div
           ref={containerRef}
           style={{

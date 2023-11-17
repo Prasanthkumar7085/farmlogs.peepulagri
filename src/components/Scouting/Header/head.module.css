@@ -5,10 +5,11 @@
 
 .viewFarm {
     color: #05A155 !important;
-    font-family: Inter !important;
+    font-family: "Inter", sans-serif !important;
     font-size: clamp(20px, 5vw, 24px) !important;
     font-weight: 600 !important;
 }
+
 
 .header {
     display: flex;
@@ -28,7 +29,7 @@
     box-sizing: border-box;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 1rem 1rem 1rem;
+    padding: 0 1rem;
     text-align: left;
     font-size: var(--font-size-5xl);
     color: var(--green-gradient);
@@ -36,6 +37,6 @@
 
     position: sticky;
     top: 0%;
-    z-index:3;
+    z-index: 3;
 
 }

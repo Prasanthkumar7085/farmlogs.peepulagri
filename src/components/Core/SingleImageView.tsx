@@ -1,7 +1,7 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
 import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
-import { Button, Chip, IconButton, Typography } from "@mui/material";
+import { Button, Chip, Divider, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
 import { FC, useEffect, useState } from "react";
 import styles from "../Scouting/Crops/Scouts/singleImage.module.css";
@@ -12,6 +12,10 @@ import { useRouter } from "next/router";
 import DrawerComponentForScout from "../Scouting/Comments/DrawerBoxForScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import ReactPanZoom from "react-image-pan-zoom-rotate";
+import { Markup } from "interweave";
+import SellIcon from "@mui/icons-material/Sell";
+import formatText from "../../../lib/requestUtils/formatTextToBullets";
 
 interface componentProps {
     detailedImage: any;
@@ -34,6 +38,7 @@ const SingleImageView: FC<componentProps> = ({
     const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
     const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
     const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
+    const [isZoom, setISZoom] = useState<any>();
 
     const tagsDrawerClose = (value: any) => {
         if (value == false) {
@@ -63,7 +68,7 @@ const SingleImageView: FC<componentProps> = ({
         try {
             let body =
             {
-                farm_image_ids: [detailedImage._id],
+                farm_image_ids: [data._id],
                 tags: tags
             }
             let options = {
@@ -132,13 +137,44 @@ const SingleImageView: FC<componentProps> = ({
 
 
                 <div style={{ display: "flex", marginTop: "90px" }}>
+                    <img
+                        alt=""
+                        src="/iconsiconarrowleft.svg"
+                        onClick={() => router.back()}
+                    />
                     <Typography className={styles.postDate}>
                         <InsertInvitationIcon />
                         <span>{timePipe(data?.created_at, "DD-MM-YYYY")}</span>
                     </Typography>
                 </div>
-
-                <img src={data?.url} height={"auto"} width={"100%"} />
+                {/* <>
+                    {isZoom ? (
+                        <ReactPanZoom
+                            image={data.url}
+                            alt={`Image alt text ${data?.created_at}`}
+                        />
+                    ) : (
+                        <img
+                            className="zoom-image"
+                            src={data?.url}
+                            alt={`Image ${data?.created_at}`}
+                            height={"auto"} width={"100%"}
+                        />
+                    )}
+                </> */}
+                <div
+                    style={{
+                        height: "auto",
+                        width: "100%",
+                        position: "relative",
+                        overflow: "hidden"
+                    }}
+                >
+                    <ReactPanZoom
+                        alt={`Image ${data?.created_at}`}
+                        image={data?.url}
+                    />
+                </div>
                 {data?.suggestions ? (
                     <div className={styles.remondationsdiv}>
                         <div className={styles.recomendations}>
@@ -196,20 +232,104 @@ const SingleImageView: FC<componentProps> = ({
                         : data?.description
                     : ""}
             </div>
-            <div>
-                {data?.tags?.slice(0, 3).map((item: string) => {
-                    return <Chip label={item} key={item} />;
-                })}
-                {data?.tags?.length > 3 ? <span>{"... "}</span> : ""}
+            <div className={styles.scoutingdetails}>
+                {data ? (
+                    <div className={styles.cropDetailsBlock}>
+                        {data?.tags?.length ? (
+                            <div className={styles.tagNames}>
+                                <Chip
+                                    className={styles.tagsLabel}
+                                    icon={
+                                        <SellIcon
+                                            sx={{ width: "12px", paddingInlineStart: "4px" }}
+                                        />
+                                    }
+                                    label="Tags"
+                                    size="small"
+                                    color="success"
+                                />
+
+                                {data?.tags?.length
+                                    ? data?.tags?.map((item: string, index: number) => {
+                                        return (
+                                            <Chip
+                                                key={index}
+                                                label={item}
+                                                className={styles.tagsName}
+                                                variant="outlined"
+                                                size="medium"
+                                                color="success"
+                                            />
+                                        );
+                                    })
+                                    : ""}
+                            </div>
+                        ) : (
+                            ""
+                        )}
+
+                        <div className={styles.drawerBody}>
+                            {data?.description ? (
+                                <div>
+                                    <div className={styles.findingDec}>
+                                        <span
+                                            className={styles.bodyHeading}
+                                            style={{ color: "#3462CF" }}
+                                        >
+                                            <ImageComponent
+                                                src={"/scouting/HasSummary.svg"}
+                                                height={19}
+                                                width={19}
+                                                alt="no-summary"
+                                            />
+                                            <span>Findings</span>
+                                        </span>
+                                        <Typography
+                                            variant="caption"
+                                            className={styles.bodyDescription}
+                                        >
+                                            <Markup content={formatText(data?.description)} />
+                                        </Typography>
+                                    </div>
+                                    <Divider />
+                                </div>
+                            ) : (
+                                ""
+                            )}
+                            <div className={styles.findingDec}>
+                                <span
+                                    className={styles.bodyHeading}
+                                    style={{ color: "#05A155", fontWeight: "600 !important" }}
+                                >
+                                    <ImageComponent
+                                        src={"/scouting/recommendations-icon.svg"}
+                                        height={16}
+                                        width={16}
+                                    />
+                                    <span>Recommendations</span>
+                                </span>
+                                <Typography
+                                    variant="caption"
+                                    className={styles.bodyDescription}
+                                >
+                                    <Markup
+                                        content={
+                                            data?.suggestions
+                                                ? data?.suggestions
+                                                : "*No Recommendations added*"
+                                        }
+                                    />
+                                </Typography>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    ""
+                )}
             </div>
-            {data?.tags?.length > 3 ||
-                data?.description?.length > 97 ? (
-                <span style={{ fontWeight: "bold" }} onClick={openViewMore}>
-                    Show More
-                </span>
-            ) : (
-                ""
-            )}
+
+
+
             <DrawerComponentForScout
                 openCommentsBox={openCommentsBox}
                 drawerClose={drawerClose}
@@ -224,11 +344,7 @@ const SingleImageView: FC<componentProps> = ({
                 TagsDrawerEditOpen={TagsDrawerEditOpen}
             // loading={loading}
             />
-            <ShowMoreInViewAttachmentDetails
-                showMoreSuggestions={showMoreSuggestions}
-                setShowMoreSuggestions={setShowMoreSuggestions}
-                item={data ? data : ""}
-            />
+
             <Toaster closeButton richColors />
         </div>
     );

@@ -2,47 +2,49 @@ import { Pagination } from '@mui/material';
 import { CropTypeInFarms } from "./cropTypes";
 
 export interface FarmCardTypes {
-    id: number;
-    farmShape: string;
-    acresCount: number;
-    farmName: string;
-    totalLogs: number;
-    barWidth: string;
-    para: string
+  id: number;
+  farmShape: string;
+  acresCount: number;
+  farmName: string;
+  totalLogs: number;
+  barWidth: string;
+  para: string;
 }
 
-
 interface Geometrytype {
-    type: string;
-    coordinates: Array<Array<Array<Array<number>>>>;
-    _id: string
+  type: string;
+  coordinates: Array<Array<Array<Array<number>>>>;
+  _id: string;
 }
 
 export interface FarmDataType {
-    area: number;
-    created_at: string;
-    crops: Array<CropTypeInFarms>
-    geometry: Geometrytype;
-    logCount: number;
-    slug: string;
-    location_id: {
-        name: string;
-        _id: string;
-    };
-    status: string;
-    title: string;
-    updatedAt: string;
-    crops_count: number;
-    user_id: {
-        _id: string;
-        full_name: string;
-        user_type: string;
-        email: string;
-        phone: string;
-    };
+  location: string;
+  createdAt: string;
 
-    __v: number;
+  area: number;
+  created_at: string;
+  crops: Array<CropTypeInFarms>;
+  geometry: Geometrytype;
+  logCount: number;
+  slug: string;
+  location_id: {
+    name: string;
     _id: string;
+  };
+  status: string;
+  title: string;
+  updatedAt: string;
+  crops_count: number;
+  user_id: {
+    _id: string;
+    full_name: string;
+    user_type: string;
+    email: string;
+    phone: string;
+  };
+
+  __v: number;
+  _id: string;
 }
 
 export interface FarmCardPropsType {

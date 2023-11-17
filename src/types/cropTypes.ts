@@ -6,11 +6,13 @@ export interface CropTypeInFarms {
 }
 
 export interface CropTypeResponse {
-    area: number;
-    title: string;
-    active: boolean;
-    slug: string;
-    _id: string;
-    created_at: string;
-    updatedAt: string;
+  createdAt: string;
+  crop_area: number;
+  area: number;
+  title: string;
+  active: boolean;
+  slug: string;
+  _id: string;
+  created_at: string;
+  updatedAt: string;
 }

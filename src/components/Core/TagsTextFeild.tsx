@@ -1,17 +1,16 @@
-import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from "@mui/icons-material/Add";
 import {
   Autocomplete,
   IconButton,
   LinearProgress,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styles from "./TagsTextFeild.module.css";
-import AddIcon from "@mui/icons-material/Add";
-import { useSelector } from 'react-redux';
+
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
-  const [tagValue, setTagValue] = useState<any>([]);
+  const [tagValue, setTagValue] = useState<any>();
   const [newTagValue, setNewTagValue] = useState<any>();
   const [tag, setTag] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,13 +32,18 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
 
         headers: new Headers({
           "content-type": "application/json",
-          'authorization': accessToken
-
+          authorization: accessToken,
         }),
       };
       const response: any = await fetch(url, options);
       const responseData = await response.json();
       setTag(responseData.data);
+
+      if (beforeTags?.length) {
+        let data = [...responseData?.data];
+        data = data.filter((e) => beforeTags.includes(e.tag));
+        setTagValue(data);
+      }
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -49,7 +53,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
 
   const addNewTag = () => {
     if (newTagValue) {
-      let temp = { _id: Math.round(100), tag: newTagValue }
+      let temp = { _id: Math.round(100), tag: newTagValue };
       setTag([...tag, temp]);
       setTagValue([...tagValue, temp]);
       setNewTagValue("");
@@ -70,9 +74,8 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         }}
         value={tagValue ? tagValue : []}
         onChange={(e, newValue) => {
-          {
-            setTagValue(newValue), captureTags(newValue);
-          }
+          setTagValue(newValue);
+          captureTags(newValue);
         }}
         renderInput={(params) => (
           <div>

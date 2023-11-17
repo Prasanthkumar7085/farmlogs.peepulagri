@@ -88,7 +88,7 @@ const ScoutView = () => {
   // }, [router.isReady, accessToken]);
 
   return (
-    <div>
+    <div className={styles.scoutingsView}>
       {isVisible ? (
         <a href="#">
           <div className={styles.scrollToTopLink}>
@@ -119,33 +119,35 @@ const ScoutView = () => {
       >
         {images.length
           ? images.map((item: any, index: number) => {
-              return (
-                <div key={index} className={styles.snapScroll}>
-                  <div
-                    style={{
-                      position: "sticky",
-                      top: "0px",
-                      paddingTop: "20px",
-                      background: "#f5f7fa",
-                      zIndex: 2,
-                    }}
-                  >
-                    <Typography className={styles.postDate}>
-                      <InsertInvitationIcon />
-                      <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
-                    </Typography>
-                  </div>
-                  <SingleImageComponent
-                    detailedImage={item}
-                    scoutDetails={scoutDetails}
-                    getImageData={getImages}
-                  />
+            return (
+              <div key={index} id={styles.snapScroll}>
+                <div
+                  style={{
+                    position: "sticky",
+                    top: "0px",
+                    paddingTop: "20px",
+                    background: "#f5f7fa",
+                    zIndex: 2,
+                  }}
+                >
+                  <Typography className={styles.postDate}>
+                    <InsertInvitationIcon />
+                    <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
+                  </Typography>
                 </div>
-              );
-            })
+                <SingleImageComponent
+                  detailedImage={item}
+                  scoutDetails={scoutDetails}
+                  getImageData={getImages}
+                />
+              </div>
+            );
+          })
           : !loading
-          ? "No Data"
-          : ""}
+            ? "No Data"
+            : ""}
+
+
       </InfiniteScroll>
       {loading ? <CircularProgress /> : ""}
       {/* <LoadingComponent loading={loading}/> */}

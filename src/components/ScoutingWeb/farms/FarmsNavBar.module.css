@@ -204,10 +204,12 @@
   justify-content: space-between;
   margin: 1rem 0;
 }
+
 .farmsIcon {
   width: 30px;
   height: 30px;
 }
+
 .scoutDay p {
   color: #000000cc !important;
   font-family: "Inter", sans-serif !important;
@@ -230,7 +232,7 @@
   background-color: #ffffff;
   padding: 3px 9px 3px 9px;
   border-radius: 15px;
-  box-shadow: 0 0 0 2px #ffffff,0 5px 15px 0 #eaeaea;
+  box-shadow: 0 0 0 2px #ffffff, 0 5px 15px 0 #eaeaea;
   transition: 0.2s all ease-in-out;
 }
 
@@ -241,34 +243,38 @@
 .noSummaryBtn {
   color: var(--color-firebrick);
 }
+
 .hasSuggestions {
   color: var(--color-mediumseagreen-100);
 }
+
 .noSummaryBtn svg,
 .hasSuggestions svg,
-.hasSummaryBtn svg{
+.hasSummaryBtn svg {
   height: 18px;
   width: 18px;
 }
+
 .scoutDay .summaryBtn svg path {
-  fill: var(--primary-blue)!important;
+  fill: var(--primary-blue) !important;
 }
 
 .noSummaryBtn:hover,
 .hasSuggestions:hover,
 .hasSummaryBtn:hover {
-  
+
   transition: 0.3s all ease-in-out;
   transform: translateY(-3px);
-  box-shadow: 0 0 0 2px #ffffff,0 5px 15px 0 #d1d1d1;
+  box-shadow: 0 0 0 2px #ffffff, 0 5px 15px 0 #d1d1d1;
 }
 
 .noSummaryBtn:hover svg path,
 .hasSuggestions:hover svg path,
-.hasSummaryBtn:hover svg path, 
+.hasSummaryBtn:hover svg path,
 .summaryBtn:hover svg path {
   fill: var(--title);
 }
+
 .allScoutImgContainer {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -335,7 +341,7 @@
   font-weight: 600;
   color: #313132;
   font-size: 1.125rem;
-  position: sticky; 
+  position: sticky;
   top: 0px;
   margin-bottom: 0.25rem;
   display: flex;
@@ -349,8 +355,8 @@
   margin: 0 -1.5rem 0;
 }
 
-.subTitle{
-  font-family: 'Inter',sans-serif;
+.subTitle {
+  font-family: 'Inter', sans-serif;
   color: var(--gray-900);
   font-size: 1.5rem;
   font-weight: 500;

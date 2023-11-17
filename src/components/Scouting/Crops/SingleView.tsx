@@ -541,7 +541,7 @@ const SingleViewScoutComponent = () => {
                   onClick={() => {
                     if (longpressActive == false) {
                       router.push(
-                        `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view?scout_id=654b7375ee066442f9d1d63a`
+                        `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
                       );
 
                       // handleClick(indexAttachment, item.attachments);

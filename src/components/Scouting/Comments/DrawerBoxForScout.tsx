@@ -37,7 +37,7 @@ const DrawerComponentForScout = ({
     if (
       (router.isReady,
         accessToken,
-        scoutDetails && attachement && openCommentsBox == true)
+        attachement && openCommentsBox == true)
     ) {
       getAllScoutComments();
       setLoadingThreads(true);

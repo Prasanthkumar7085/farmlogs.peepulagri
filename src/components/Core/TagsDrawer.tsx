@@ -27,6 +27,7 @@ const TagsDrawer = ({
 
   const captureTags = (array: any) => {
     if (array) {
+      console.log(array, "ma")
       setTags(array);
     }
   };
@@ -52,25 +53,7 @@ const TagsDrawer = ({
           <TagsTextFeild captureTags={captureTags} tags={tags} />
         </div>
 
-        <Typography className={styles.label}>Findings</Typography>
-        <div className={styles.inputBox}>
-          <TextField
-            color="primary"
-            name="description"
-            id="description"
-            rows={4}
-            maxRows={4}
-            placeholder="Enter your findings here"
-            fullWidth={true}
-            variant="outlined"
-            multiline
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-            sx={{ background: "#fff" }}
-          />
-        </div>
+
       </div>
       <div className={styles.drawerFooter}>
         <Button

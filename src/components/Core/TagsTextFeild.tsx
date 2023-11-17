@@ -68,6 +68,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         value={tagValue ? tagValue : []}
         onChange={(e, newValue) => {
           setTagValue(newValue);
+          console.log(newValue, "new")
           captureTags(newValue);
         }}
         renderInput={(params) => (

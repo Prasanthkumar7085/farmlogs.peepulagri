@@ -24,6 +24,11 @@
   width: 100%;
   position: absolute;
   color: #fff;
+  z-index: 2;
+}
+
+.stickyHeader .selectBtn {
+  background-color: red;
 }
 
 .dateRange {

@@ -542,9 +542,14 @@ const SingleViewScoutComponent = () => {
           <div className={styles.dateRange}>
             {dateRange}
           </div>
-          <Button>
-            select
-          </Button>
+          {tagsCheckBoxOpen && selectedItems.length ?
+            <Button
+              onClick={() => {
+                setTagsCheckBoxOpen(false)
+                setSelectedItems([])
+              }} className={styles.selectBtn}> Close</Button> :
+            <Button className={styles.selectBtn}
+              onClick={() => setTagsCheckBoxOpen(true)} >Select</Button>}
         </div>
         <div
           ref={containerRef}
@@ -559,55 +564,85 @@ const SingleViewScoutComponent = () => {
           {data?.length ? (
             data.map((image: any, indexAttachment: any) => {
               return (
-                <img
+                <div
+                  style={{ position: "relative", paddingTop: "100%" }}
                   key={indexAttachment}
-                  ref={(ref) => (image.ref = ref)}
-                  src={
-                    image.type?.slice(0, 2) == "vi"
-                      ? "/Play-button.svg"
-                      : image.url
-                  }
-                  alt={`images${indexAttachment}`}
-                  style={{ width: "100%", height: "auto" }}
-                  onClick={() => {
-                    if (longpressActive == false) {
-                      router.push(
-                        `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                      );
+                >
+                  <img
+                    key={indexAttachment}
+                    ref={(ref) => (image.ref = ref)}
+                    src={
+                      image.type?.slice(0, 2) == "vi"
+                        ? "/Play-button.svg"
+                        : image.url
+                    }
+                    alt={`images${indexAttachment}`}
+                    style={{
+                      width: "100%", height: "auto", position: "absolute",
+                      top: "0",
+                      right: "0",
+                    }}
+                    onClick={() => {
+                      if (longpressActive == false) {
+                        router.push(
+                          `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                        );
 
-                      // handleClick(indexAttachment, item.attachments);
-                      // setScoutId(item._id);
-                      // setSingleScoutDetails(item);
-                      // setSelectedFile(image);
-                      // setSlideShowImages(item?.attachments);
-                    } else {
-                      handleChange(image); // Call handleLongPress when long press is detected
-                    }
-                  }}
-                  // style={{
-                  //   position: "absolute",
-                  //   top: "0",
-                  //   left: "0",
-                  //   width: "100%",
-                  //   height: "100%",
-                  //   cursor: "pointer",
-                  //   borderRadius: "5px",
-                  //   objectFit: "cover",
-                  // }}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    setTagsCheckBoxOpen(true);
-                    handleChange(image);
-                    setScoutId(image._id); // Adjust the timeout duration as needed
-                    setLongPressActive(true);
-                  }} // Prevent right-click context menu
-                  onTouchStart={(e) => {
-                    if (e.touches.length > 1) {
-                      e.preventDefault(); // Prevent multi-touch event
-                    }
-                  }}
-                />
+                        handleClick(indexAttachment, image);
+                        setScoutId(image._id);
+                        setSingleScoutDetails(image);
+                        setSelectedFile(image);
+                        setSlideShowImages(image?.attachments);
+                      } else {
+                        handleChange(image); // Call handleLongPress when long press is detected
+                      }
+                    }}
+                    // style={{
+                    //   position: "absolute",
+                    //   top: "0",
+                    //   left: "0",
+                    //   width: "100%",
+                    //   height: "100%",
+                    //   cursor: "pointer",
+                    //   borderRadius: "5px",
+                    //   objectFit: "cover",
+                    // }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setTagsCheckBoxOpen(true);
+                      handleChange(image);
+                      setScoutId(image._id); // Adjust the timeout duration as needed
+                      setLongPressActive(true);
+                    }} // Prevent right-click context menu
+                    onTouchStart={(e) => {
+                      if (e.touches.length > 1) {
+                        e.preventDefault(); // Prevent multi-touch event
+                      }
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "2px",
+                      right: "2px",
+                    }}
+                  >
+                    {tagsCheckBoxOpen ? (
+                      <input
+                        type="checkbox"
+                        checked={tempImages.some(
+                          (ite: any) => ite._id === image._id
+                        )}
+                        onChange={() => handleChange(image)}
+                        title={image.id}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>
               );
+
             })
           ) : !loading ? (
             <div

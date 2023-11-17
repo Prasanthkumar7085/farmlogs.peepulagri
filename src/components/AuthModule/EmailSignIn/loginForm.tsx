@@ -30,6 +30,8 @@ export default function SigninEmail() {
   const router = useRouter();
 
   const signInForm = async (e: any) => {
+    console.log("rasdafdsasd");
+
     e.preventDefault();
     setInvalid(false);
     setLoading(true);
@@ -63,7 +65,10 @@ export default function SigninEmail() {
 
         if (res?.data?.user_details?.user_type == "ADMIN") {
           router.push("/scouts");
-        } else if (res?.data?.user_details?.user_type == "JR_AGRONOMIST") {
+        } else if (
+          res?.data?.user_details?.user_type == "JR_AGRONOMIST" ||
+          res?.data?.user_details?.user_type == "USER"
+        ) {
           router.push("/farms");
         } else if (res?.data?.user_details?.user_type == "AGRONOMIST") {
           router.push("/scouts");

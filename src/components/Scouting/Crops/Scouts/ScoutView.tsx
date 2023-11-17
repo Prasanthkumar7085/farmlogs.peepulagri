@@ -2,13 +2,14 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import NorthIcon from "@mui/icons-material/North";
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getImagesByPaginationService from "../../../../../lib/services/ScoutServices/getImagesByPaginationService";
 import SingleImageComponent from "./SingleImageComponent";
 import styles from "./singleImage.module.css";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface ApiProps {
   page: string | number;
@@ -20,7 +21,6 @@ const ScoutView = () => {
   );
   const [page, setPage] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
-
 
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<any>([]);
@@ -46,7 +46,7 @@ const ScoutView = () => {
       });
       if (response.success) {
         setHasMore(response?.has_more);
-        setImages([...images,...response?.data]);
+        setImages([...images, ...response?.data]);
         // setHasMore(rest.has_more);
       }
     } catch (err) {
@@ -56,40 +56,22 @@ const ScoutView = () => {
     }
   };
 
-  const handleScroll = () => {
-  
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
-      hasMore
-    ) {
-      setPage((prev) => prev + 1);
-      getImages({ page: page + 1 });
-    }
-  }
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [loading]);
+  }, []);
 
- useEffect(() => {
-   const handleScroll = () => {
-     if (window.scrollY > 50) {
-       setIsVisible(true);
-     } else {
-       setIsVisible(false);
-     }
-   };
-
-   window.addEventListener("scroll", handleScroll);
-
-   return () => {
-     window.removeEventListener("scroll", handleScroll);
-   };
- }, []);
-  
   useEffect(() => {
     if (router.isReady) {
       getImages({});
@@ -107,7 +89,7 @@ const ScoutView = () => {
       ) : (
         ""
       )}
-      {/* <InfiniteScroll
+      <InfiniteScroll
         className={styles.infiniteScrollComponent}
         dataLength={images.length}
         next={() => {
@@ -125,8 +107,7 @@ const ScoutView = () => {
             </div>
           )
         }
-
-      > */}
+      >
         {images.length
           ? images.map((item: any, index: number) => {
               return (
@@ -155,14 +136,13 @@ const ScoutView = () => {
             })
           : !loading
           ? "No Data"
-            : ""}
-        
-
-      {/* </InfiniteScroll> */}
-      {loading?<CircularProgress/>:""}
+          : ""}
+      </InfiniteScroll>
+      {loading ? <CircularProgress /> : ""}
       {/* <LoadingComponent loading={loading}/> */}
     </div>
   );
 };
 
 export default ScoutView;
+

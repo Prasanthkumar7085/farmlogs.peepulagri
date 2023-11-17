@@ -11,7 +11,8 @@ import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import ImageComponent from "@/components/Core/ImageComponent";
-
+import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import {
   Breadcrumbs,
   Button,
@@ -20,6 +21,8 @@ import {
   Chip,
   IconButton,
   Link,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
@@ -92,7 +95,7 @@ const SingleViewScoutComponent = () => {
   }, [accessToken, router.isReady]);
 
   useEffect(() => {
-    getPresingedURls()
+    getPresingedURls();
   }, [pageNumber]);
 
   const logout = async () => {
@@ -134,9 +137,11 @@ const SingleViewScoutComponent = () => {
         }
         let temp: any;
         temp = [...data, ...responseData?.data];
-        temp.sort((a: any, b: any) => { (timePipe(b.created_at, "DD-MM-YY") as any) - (timePipe(a.created_at, "DD-MM-YY") as any) })
+        temp.sort((a: any, b: any) => {
+          (timePipe(b.created_at, "DD-MM-YY") as any) -
+            (timePipe(a.created_at, "DD-MM-YY") as any);
+        });
         setData(temp);
-
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -447,7 +452,7 @@ const SingleViewScoutComponent = () => {
   //for date range of images
   const containerRef: any = useRef(null);
   const [visibleImages, setVisibleImages] = useState([]);
-  const [dateRange, setDateRange] = useState('');
+  const [dateRange, setDateRange] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -463,11 +468,16 @@ const SingleViewScoutComponent = () => {
 
         // Calculate the date range for the visible images
         const startDate =
-          visibleImages.length > 0 ? timePipe(visibleImages[0].created_at, "DD MMM YY") : '';
+          visibleImages.length > 0
+            ? timePipe(visibleImages[0].created_at, "DD MMM YY")
+            : "";
         const endDate =
           visibleImages.length > 0
-            ? timePipe(visibleImages[visibleImages.length - 1].created_at, "DD MMM YY")
-            : '';
+            ? timePipe(
+                visibleImages[visibleImages.length - 1].created_at,
+                "DD MMM YY"
+              )
+            : "";
 
         // Update the displayed date range
         setDateRange(`${startDate} - ${endDate}`);
@@ -476,19 +486,33 @@ const SingleViewScoutComponent = () => {
     };
 
     // Add scroll event listener to the container
-    containerRef.current.addEventListener('scroll', handleScroll);
+    containerRef.current.addEventListener("scroll", handleScroll);
 
     // Cleanup event listener on component unmount
     return () => {
-      containerRef.current?.removeEventListener('scroll', handleScroll);
+      containerRef.current?.removeEventListener("scroll", handleScroll);
     };
   }, [data]);
 
+  const [value, setValue] = useState(0);
 
+  const handleChangeMenuView = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    setValue(newValue);
+  };
 
   return (
     <div className={styles.scoutingView}>
-      <div role="presentation">
+      <div
+        role="presentation"
+        style={{
+          border: "2px solid",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
             underline="hover"
@@ -501,32 +525,46 @@ const SingleViewScoutComponent = () => {
             {cropTitle?.slice(0, 1)?.toUpperCase() + cropTitle?.slice(1)}
           </Typography>
         </Breadcrumbs>
+        <div className={styles.breadcrumbs}>
+          <Tabs
+            value={value}
+            onChange={handleChangeMenuView}
+            aria-label="icon position tabs example"
+          >
+            <Tab icon={<GridViewRoundedIcon />} aria-label="Grid" />
+            <Tab icon={<FormatListBulletedRoundedIcon />} aria-label="List" />
+          </Tabs>
+        </div>
       </div>
 
-
-      < InfiniteScroll
+      <InfiniteScroll
         className={styles.infiniteScrollComponent}
         dataLength={data.length}
-        next={() => setPageNumber(prev => prev + 1)}
+        next={() => setPageNumber((prev) => prev + 1)}
         hasMore={hasMore}
-        loader={<div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>}
-        endMessage={<a href="#" className={styles.endOfLogs}>{hasMore ? "" : data.length > 11 ? 'Scroll to Top' : ""}</a>}
+        loader={
+          <div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>
+        }
+        endMessage={
+          <a href="#" className={styles.endOfLogs}>
+            {hasMore ? "" : data.length > 11 ? "Scroll to Top" : ""}
+          </a>
+        }
       >
+        <div className={styles.stickyHeader}>{dateRange}</div>
         <div
-          className={styles.stickyHeader}
-        >
-          {dateRange}
-        </div>
-        <div ref={containerRef}
+          ref={containerRef}
           style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(18%, 1fr))', gap: '2px', overflowY: 'auto',
-            maxHeight: '500px'
-          }}>
-
-          {data?.length ?
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
+            gap: "2px",
+            overflowY: "auto",
+            maxHeight: "500px",
+          }}
+        >
+          {data?.length ? (
             data.map((image: any, indexAttachment: any) => {
               return (
-
                 <img
                   key={indexAttachment}
                   ref={(ref) => (image.ref = ref)}
@@ -536,8 +574,7 @@ const SingleViewScoutComponent = () => {
                       : image.url
                   }
                   alt={`images${indexAttachment}`}
-                  style={{ width: '100%', height: 'auto' }}
-
+                  style={{ width: "100%", height: "auto" }}
                   onClick={() => {
                     if (longpressActive == false) {
                       router.push(
@@ -576,32 +613,31 @@ const SingleViewScoutComponent = () => {
                     }
                   }}
                 />
-
-              )
-            }) : !loading ? (
-              <div
-                id={styles.noData}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "calc(100vh - 150px)",
-                }}
-              >
-                <ImageComponent
-                  src="/emty-folder-image.svg"
-                  alt="empty folder"
-                  width={150}
-                  height={140}
-                />
-                <Typography >No Scoutings</Typography>
-              </div>
-            ) : (
-              ""
-            )}
+              );
+            })
+          ) : !loading ? (
+            <div
+              id={styles.noData}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "calc(100vh - 150px)",
+              }}
+            >
+              <ImageComponent
+                src="/emty-folder-image.svg"
+                alt="empty folder"
+                width={150}
+                height={140}
+              />
+              <Typography>No Scoutings</Typography>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
-
       </InfiniteScroll>
 
       <LoadingComponent loading={loading} />
@@ -688,18 +724,20 @@ const SingleViewScoutComponent = () => {
           ""
         )}
       </div>
-      {data?.length ?
-        <div
-          className={styles.stickyHeader2}
-        >
-          <div style={{ display: "flex", justifyContent: "center", top: "20px" }}>
+      {data?.length ? (
+        <div className={styles.stickyHeader2}>
+          <div
+            style={{ display: "flex", justifyContent: "center", top: "20px" }}
+          >
             <Button>Years</Button>
             <Button>Month</Button>
             <Button>Days</Button>
             <Button variant="contained">All Photos</Button>
-
           </div>
-        </div> : ""}
+        </div>
+      ) : (
+        ""
+      )}
 
       <Toaster richColors position="top-right" closeButton />
     </div>

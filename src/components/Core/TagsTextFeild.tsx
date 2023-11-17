@@ -1,9 +1,11 @@
 import AddIcon from "@mui/icons-material/Add";
+import ClearIcon from '@mui/icons-material/Clear';
 import {
   Autocomplete,
   IconButton,
   LinearProgress,
   TextField,
+  Button, // Import Button from MUI
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -14,6 +16,8 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [newTagValue, setNewTagValue] = useState<any>();
   const [tag, setTag] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isTextFieldOpen, setIsTextFieldOpen] = useState(false);
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -51,44 +55,72 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       setTagValue([...tagValue, newTagValue]);
       setNewTagValue("");
       captureTags([...tagValue, newTagValue]);
+      setIsTextFieldOpen(false); // Close the text field after submitting the new tag
     }
   };
 
   return (
     <div className={styles.addTagContainer}>
-      <Autocomplete
-        multiple
-        id="tag-autocomplete"
-        options={tag?.length ? tag : []}
-        getOptionLabel={(option) => option}
-        inputValue={newTagValue}
-        onInputChange={(e, newInputValue) => {
-          setNewTagValue(newInputValue);
-        }}
-        value={tagValue ? tagValue : []}
-        onChange={(e, newValue) => {
-          setTagValue(newValue);
-          console.log(newValue, "new")
-          captureTags(newValue);
-        }}
-        renderInput={(params) => (
-          <div>
-            <div className={styles.listTags}>
-              <h5>List your tags below:</h5>
-              <IconButton onClick={addNewTag}>
-                <AddIcon />
-              </IconButton>
-            </div>
+      <div className={styles.listTags}>
+        <h5>List your tags below:</h5>
+
+      </div>
+      <div style={{ width: "100%", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ width: "90%" }}>
+          {isTextFieldOpen && ( // Conditionally render the text field based on the state
             <TextField
-              {...params}
               size="small"
               fullWidth
               className={styles.tagsBox}
               placeholder="Enter Tags"
+              value={newTagValue}
+              onChange={(e) => setNewTagValue(e.target.value)}
             />
-          </div>
+          )}
+          {!isTextFieldOpen && (
+            <Autocomplete
+              multiple
+              id="tag-autocomplete"
+              options={tag?.length ? tag : []}
+              getOptionLabel={(option) => option}
+              inputValue={newTagValue}
+              onInputChange={(e, newInputValue) => {
+                setNewTagValue(newInputValue);
+              }}
+              value={tagValue ? tagValue : []}
+              onChange={(e, newValue) => {
+                setTagValue(newValue);
+                captureTags(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  size="small"
+                  fullWidth
+                  className={styles.tagsBox}
+                  placeholder="Enter Tags"
+                />
+              )}
+            />
+          )}
+        </div>
+        {!isTextFieldOpen && (
+          <IconButton onClick={() => setIsTextFieldOpen(true)}>
+            <AddIcon />
+          </IconButton>
         )}
-      />
+        {isTextFieldOpen && (
+          <IconButton onClick={() => setIsTextFieldOpen(false)}>
+            <ClearIcon />
+          </IconButton>
+        )}
+      </div>
+
+      {isTextFieldOpen && ( // Conditionally render the submit button based on the state
+        <Button variant="contained" color="primary" onClick={addNewTag}>
+          Submit
+        </Button>
+      )}
       {loading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
     </div>
   );

@@ -35,10 +35,12 @@ const DashboardPage = () => {
   >([]);
   const [location, setLocation] = useState("");
   const [routerLocation, setRouterLocation] = useState("");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const getAllFarms = async ({
     page = 1,
-    limit = 100,
+    limit = 20,
     search_string = "",
     location,
   }: Partial<{
@@ -63,15 +65,16 @@ const DashboardPage = () => {
           queryParam["location"] = location;
         }
       }
-      router.push({ pathname: "/farms", query: queryParam });
+      router.replace({ pathname: "/farms", query: queryParam });
       url = prepareURLEncodedParams(url, queryParam);
 
       const response = await getAllFarmsService(url, accessToken);
 
       if (response?.success) {
-        const { data, ...rest } = response;
-        setFarmsData(data);
-        setPaginationDetails(rest);
+        const { data, has_more } = response;
+        setFarmsData([...farmsData, ...data]);
+        setHasMore(has_more);
+        console.log(has_more);
       } else if (response?.statusCode == 403) {
         await logout();
       }
@@ -117,7 +120,7 @@ const DashboardPage = () => {
     let locationFromRouter = router.query?.location;
     await getAllFarms({
       page: 1,
-      limit: 100,
+      limit: 20,
       search_string: searchFromRouter as string,
       location: locationFromRouter as string,
     });
@@ -131,40 +134,49 @@ const DashboardPage = () => {
     }
   };
 
-
-
   const getData = async () => {
     if (router.isReady && accessToken) {
       await getAllLocations();
     } else {
       // setLoading(false);
     }
-  }
+  };
 
   const getDataOnLocationChange = async (location: string) => {
-    await getAllFarms({ page: 1, limit: 100, search_string: searchString as string, location: location });
-  }
-
+    await getAllFarms({
+      page: 1,
+      limit: 20,
+      search_string: searchString as string,
+      location: location,
+    });
+  };
 
   useEffect(() => {
     getData();
   }, [router.isReady, accessToken]);
 
   useEffect(() => {
-    setRouterLocation(router?.query.location ? router?.query.location as string : "");
+    setRouterLocation(
+      router?.query.location ? (router?.query.location as string) : ""
+    );
   }, [router?.query.location]);
-
 
   useEffect(() => {
     if (router.isReady && accessToken) {
       const delay = 500;
       const debounce = setTimeout(() => {
-        getAllFarms({ page: 1, limit: 100, search_string: searchString, location: location });
+        getAllFarms({
+          page: 1,
+          limit: 20,
+          search_string: searchString,
+          location: location,
+        });
       }, delay);
       return () => clearTimeout(debounce);
     }
   }, [searchString]);
 
+  console.log(page, hasMore);
 
   return (
     <div id="dashboardPage">
@@ -174,23 +186,35 @@ const DashboardPage = () => {
         locations={locations}
         location={location}
         setLocation={setLocation}
-        getDataOnLocationChange={getDataOnLocationChange} />
+        getDataOnLocationChange={getDataOnLocationChange}
+      />
 
-      {farmsData.length ? <FarmCard farmsData={farmsData} /> :
-        (!loading ? <NoFarmDataComponent noData={!Boolean(farmsData.length)} /> :
-          <div style={{ minHeight: "75vh" }}>
-
-          </div>
-
-        )}
+      {farmsData.length ? (
+        <FarmCard
+          farmsData={farmsData}
+          setPage={setPage}
+          page={page}
+          getAllFarms={getAllFarms}
+          hasMore={hasMore}
+        />
+      ) : !loading ? (
+        <NoFarmDataComponent noData={!Boolean(farmsData.length)} />
+      ) : (
+        <div style={{ minHeight: "75vh" }}></div>
+      )}
       <div className="addFormPositionIcon">
-        <IconButton size="large" className={styles.AddFarmBtn} aria-label="add to shopping cart" onClick={() => {
-          if (routerLocation) {
-            router.push(`/farms/add?location=${routerLocation}`);
-          } else {
-            router.push("/farms/add")
-          }
-        }}>
+        <IconButton
+          size="large"
+          className={styles.AddFarmBtn}
+          aria-label="add to shopping cart"
+          onClick={() => {
+            if (routerLocation) {
+              router.push(`/farms/add?location=${routerLocation}`);
+            } else {
+              router.push("/farms/add");
+            }
+          }}
+        >
           <AddIcon />
         </IconButton>
       </div>

@@ -1,60 +1,71 @@
-.snapScroll{
-    
+.infiniteScrollComponent {
+    max-height: calc(100vh - 130px);
+    overflow-y: scroll !important;
+    scroll-snap-type: y mandatory !important;
+}
+
+#snapScroll {
     scroll-snap-align: start !important;
     scroll-snap-stop: always !important;
 }
-.remondationsdiv{
+
+.remondationsdiv {
     height: 100%;
     width: 100%;
     text-align: end;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     position: absolute;
     top: 0;
     left: 0;
 }
-.recomendations{
+
+.recomendations {
     padding: 1rem;
 }
 
-.overlay{ 
+.overlay {
     position: relative;
     max-width: 100%;
     min-height: 300px;
-    background: radial-gradient(circle at 18.7% 37.8%, rgb(226, 226, 226) 0%, rgb(230, 230, 230) 90%);;
+    background: radial-gradient(circle at 18.7% 37.8%, rgb(226, 226, 226) 0%, rgb(230, 230, 230) 90%);
+    ;
 }
-.button{
+
+.button {
     background-color: #000000b3 !important;
-    color:rgb(13, 222, 13);
-    border:rgb(13, 222, 13);
+    color: #0dde0d;
+    border: #0dde0d;
     border-radius: 10px;
 }
-.button :hover{
-    border-color:rgb(13, 222, 13) !important;
-    color:rgb(13, 222, 13);
+
+.button :hover {
+    border-color: #0dde0d !important;
+    color: #0dde0d;
 
 }
-.btnContent{
+
+.btnContent {
     gap: 10px;
     display: flex;
 }
 
 
- .postDate {
-  font-family: "Inter", sans-serif;
-  font-size: clamp(10px, 3vw, 14px);
-  font-weight: 600;
-  line-height: 1.5;
-  color: #2B53BE;
-  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex-grow: 1;
+.postDate {
+    font-family: "Inter", sans-serif;
+    font-size: clamp(10px, 3vw, 14px);
+    font-weight: 600;
+    line-height: 1.5;
+    color: #2B53BE;
+    background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-grow: 1;
 }
 
 .scrollToTopLink {
@@ -72,14 +83,16 @@
     z-index: 10;
     color: #fff;
 }
-.noMoreImages{
+
+.noMoreImages {
     padding: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.noMoreImages p{
-    border:2px solid #929394;
+
+.noMoreImages p {
+    border: 2px solid #929394;
     background-color: #dcdee0;
     border-radius: 2rem;
     padding: .7rem 2rem;

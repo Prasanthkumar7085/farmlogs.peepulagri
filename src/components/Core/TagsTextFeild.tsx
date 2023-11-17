@@ -37,13 +37,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       };
       const response: any = await fetch(url, options);
       const responseData = await response.json();
-      setTag(responseData.data);
-
-      if (beforeTags?.length) {
-        let data = [...responseData?.data];
-        data = data.filter((e) => beforeTags.includes(e.tag));
-        setTagValue(data);
-      }
+      setTag(responseData.data.map((item: any) => item.tag));
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -53,11 +47,10 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
 
   const addNewTag = () => {
     if (newTagValue) {
-      let temp = { _id: Math.round(100), tag: newTagValue };
-      setTag([...tag, temp]);
-      setTagValue([...tagValue, temp]);
+      setTag([...tag, newTagValue]);
+      setTagValue([...tagValue, newTagValue]);
       setNewTagValue("");
-      captureTags([...tagValue, temp]);
+      captureTags([...tagValue, newTagValue]);
     }
   };
 
@@ -67,7 +60,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         multiple
         id="tag-autocomplete"
         options={tag?.length ? tag : []}
-        getOptionLabel={(option) => option.tag}
+        getOptionLabel={(option) => option}
         inputValue={newTagValue}
         onInputChange={(e, newInputValue) => {
           setNewTagValue(newInputValue);

@@ -76,7 +76,16 @@ const ScoutView = () => {
     if (router.isReady) {
       getImages({});
     }
-  }, [router.isReady, accessToken]);
+  }, [ accessToken, router.isReady])
+
+
+
+
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     getImages({});
+  //   }
+  // }, [router.isReady, accessToken]);
 
   return (
     <div>

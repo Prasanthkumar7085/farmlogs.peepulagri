@@ -10,6 +10,7 @@ import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAtta
 import { useSelector } from "react-redux";
 import updateAttachmentsService from "../../../../../lib/services/ScoutServices/updateAttachmentsService";
 import { Toaster, toast } from "sonner";
+import { useRouter } from "next/router";
 
 interface componentProps {
   detailedImage: any;
@@ -21,6 +22,8 @@ const SingleImageComponent: FC<componentProps> = ({
   scoutDetails,
   getImageData,
 }) => {
+
+  const router = useRouter()
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -57,23 +60,28 @@ const SingleImageComponent: FC<componentProps> = ({
 
   const captureTagsDetailsEdit = async (tags: any, description: any) => {
     try {
-      let body = {
-        attachment_ids: [detailedImage?._id],
-        tags: tags,
-        description: description,
-        suggestions: detailedImage?.suggestions,
-      };
-      let response = await updateAttachmentsService({
-        scoutId: scoutDetails?._id,
-        accessToken: accessToken,
-        body: body,
-      });
+      let body =
+      {
+        farm_image_ids: [detailedImage._id],
+        tags: tags
+      }
+      let options = {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body)
+      }
+
+      let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/tag`, options)
+      let responseData = await response.json()
       if (response?.status >= 200 && response?.status <= 200) {
-        toast.success(response?.message);
+        toast.success(responseData?.message);
         setTagsDrawerEditOpen(false);
         await getImageData({ page: 1 });
       } else {
-        toast.error(response?.message);
+        toast.error(responseData?.message);
       }
     } catch (err) {
       console.error(err);

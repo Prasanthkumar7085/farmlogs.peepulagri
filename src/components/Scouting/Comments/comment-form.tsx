@@ -44,7 +44,6 @@ const CommentForm = ({
   let tempFilesStorage: any = [...attachments];
 
   useEffect(() => {
-    getCropsDetails();
     dispatch(removeTheAttachementsFilesFromStore([]));
   }, []);
 

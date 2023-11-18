@@ -40,8 +40,8 @@ const ScoutView = () => {
     try {
       let response = await getImagesByPaginationService({
         page: page,
-        farmId: router.query?.farmId as string,
-        cropId: router.query.cropId as string,
+        farmId: router.query?.farm_id as string,
+        cropId: router.query.crop_id as string,
         accessToken: accessToken,
       });
       if (response.success) {
@@ -76,7 +76,7 @@ const ScoutView = () => {
     if (router.isReady) {
       getImages({});
     }
-  }, [ accessToken, router.isReady])
+  }, [accessToken, router.isReady])
 
 
 

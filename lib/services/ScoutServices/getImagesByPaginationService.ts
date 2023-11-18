@@ -6,10 +6,11 @@ interface ApiProps {
 }
 const getImagesByPaginationService = async ({
   page,
-  farmId = "65520cdb4a54289a080ba082",
-  cropId = "65523d10c81da3777b7283c7",
+  farmId,
+  cropId,
   accessToken,
 }: Partial<ApiProps>) => {
+
   try {
     let options = {
       headers: new Headers({

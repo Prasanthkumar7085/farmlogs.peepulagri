@@ -63,7 +63,7 @@ const DashboardPage = () => {
         delete queryParam["order_type"]
       }
       if (location) {
-        if (location !== "1") {
+        if (location !== "All") {
           queryParam["location_id"] = location;
           delete queryParam["order_by"]
           delete queryParam["order_type"]
@@ -75,10 +75,14 @@ const DashboardPage = () => {
       const response = await getAllFarmsService(url, accessToken);
 
       if (response?.success) {
-        const { data, has_more } = response;
-        setFarmsData([...farmsData, ...data]);
-        setHasMore(has_more);
-        console.log(has_more);
+        if (location || search_string) {
+          setFarmsData(response.data);
+          setHasMore(response?.has_more);
+        }
+        else {
+          setFarmsData([...farmsData, ...response.data]);
+          setHasMore(response?.has_more);
+        }
       } else if (response?.statusCode == 403) {
         await logout();
       }

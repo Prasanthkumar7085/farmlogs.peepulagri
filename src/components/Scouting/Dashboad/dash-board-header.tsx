@@ -71,7 +71,7 @@ const DashBoardHeader = ({
   const addInputValue = (event: any, value: any) => {
     if (value) {
       setLocation(value?.name);
-      getDataOnLocationChange(value?.name);
+      getDataOnLocationChange(value?._id);
     } else {
       setLocationValue(null);
       setLocation("");

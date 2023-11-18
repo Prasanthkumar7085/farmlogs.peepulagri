@@ -52,7 +52,6 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
       }
       const response: any = await fetch(url, options);
       const responseData = await response.json();
-      console.log(responseData?.data, "lopkh")
       setcrop(responseData.data)
 
 

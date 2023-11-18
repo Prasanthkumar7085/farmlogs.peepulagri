@@ -57,10 +57,14 @@ const DashboardPage = () => {
 
       if (search_string) {
         queryParam["search_string"] = search_string;
+        delete queryParam["order_by"]
+        delete queryParam["order_type"]
       }
       if (location) {
-        if (location !== "All") {
-          queryParam["location"] = location;
+        if (location !== "1") {
+          queryParam["location_id"] = location;
+          delete queryParam["order_by"]
+          delete queryParam["order_type"]
         }
       }
       router.push({ pathname: "/farms", query: queryParam });

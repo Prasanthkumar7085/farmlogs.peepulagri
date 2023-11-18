@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./TagsTextFeild.module.css";
+import { Toaster, toast } from "sonner";
 
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [tagValue, setTagValue] = useState<any>();
@@ -50,27 +51,45 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   };
 
   const addNewTag = () => {
-    if (newTagValue) {
-      setTag([...tag, newTagValue]);
-      setTagValue([...tagValue, newTagValue]);
-      setNewTagValue("");
-      captureTags([...tagValue, newTagValue]);
-      setIsTextFieldOpen(false); // Close the text field after submitting the new tag
+    if (!newTagValue) {
+      return;
     }
+    if (tagValue.includes(newTagValue) || tag.includes(newTagValue)) {
+      toast.error("Tag Already Exists");
+      return;
+    }
+    setTag([...tag, newTagValue]);
+    setTagValue([...tagValue, newTagValue]);
+    setNewTagValue("");
+    captureTags([...tagValue, newTagValue]);
+    setIsTextFieldOpen(false); // Close the text field after submitting the new tag
   };
 
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Tab") {
+      addNewTag();
+    }
+  };
   return (
     <div className={styles.addTagContainer}>
       <div className={styles.listTags}>
         <h5>List your tags below:</h5>
-
       </div>
-      <div style={{ width: "100%", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+      >
         <div style={{ width: "90%" }}>
           {isTextFieldOpen && ( // Conditionally render the text field based on the state
             <TextField
+              onKeyDown={handleKeyDown}
               size="small"
               fullWidth
+              inputMode="text"
               className={styles.tagsBox}
               placeholder="Enter Tags"
               value={newTagValue}
@@ -105,12 +124,18 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
           )}
         </div>
         {!isTextFieldOpen && (
-          <IconButton onClick={() => setIsTextFieldOpen(true)} sx={{ color: 'green' }}>
+          <IconButton
+            onClick={() => setIsTextFieldOpen(true)}
+            sx={{ color: "green" }}
+          >
             <AddIcon />
           </IconButton>
         )}
         {isTextFieldOpen && (
-          <IconButton onClick={() => setIsTextFieldOpen(false)} sx={{ color: 'red' }}>
+          <IconButton
+            onClick={() => setIsTextFieldOpen(false)}
+            sx={{ color: "red" }}
+          >
             <ClearIcon />
           </IconButton>
         )}
@@ -122,6 +147,8 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         </Button>
       )}
       {loading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
+
+      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 };

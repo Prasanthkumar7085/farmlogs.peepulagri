@@ -502,7 +502,7 @@ const SingleViewScoutComponent = () => {
 
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
-      <div className={styles.mobileScoutingViewHeader}      >
+      <div className={styles.mobileScoutingViewHeader}>
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
             underline="hover"
@@ -516,23 +516,30 @@ const SingleViewScoutComponent = () => {
           </Typography>
         </Breadcrumbs>
         <Tabs
-          className={styles.viewingTabs} value={value}
+          className={styles.viewingTabs}
+          value={value}
           onChange={handleChangeMenuView}
           aria-label="icon position tabs example"
         >
           <Tab icon={<GridViewRoundedIcon />} aria-label="Grid" value="1" />
-          <Tab icon={<FormatListBulletedRoundedIcon />} aria-label="List" value="2" />
+          <Tab
+            icon={<FormatListBulletedRoundedIcon />}
+            aria-label="List"
+            value="2"
+          />
         </Tabs>
       </div>
 
-      {value == "1" ?
+      {value == "1" ? (
         <InfiniteScroll
           className={styles.infiniteScrollComponent}
           dataLength={data.length}
           next={() => setPageNumber((prev) => prev + 1)}
           hasMore={hasMore}
           loader={
-            <div className={styles.pageLoader}>{loading ? "Loading..." : ""}</div>
+            <div className={styles.pageLoader}>
+              {loading ? "Loading..." : ""}
+            </div>
           }
           endMessage={
             <a href="#" className={styles.endOfLogs}>
@@ -541,17 +548,25 @@ const SingleViewScoutComponent = () => {
           }
         >
           <div className={styles.stickyHeader}>
-            <div className={styles.dateRange}>
-              {dateRange}
-            </div>
-            {tagsCheckBoxOpen ?
+            <div className={styles.dateRange}>{dateRange}</div>
+            {tagsCheckBoxOpen ? (
               <Button
                 onClick={() => {
-                  setTagsCheckBoxOpen(false)
-                  setSelectedItems([])
-                }} className={styles.selectBtn}> Close</Button> :
-              <Button className={styles.selectBtn}
-                onClick={() => setTagsCheckBoxOpen(true)} >Select</Button>}
+                  setTagsCheckBoxOpen(false);
+                  setSelectedItems([]);
+                }}
+                className={styles.selectBtn}
+              >
+                Cancel
+              </Button>
+            ) : (
+              <Button
+                className={styles.selectBtn}
+                onClick={() => setTagsCheckBoxOpen(true)}
+              >
+                Select
+              </Button>
+            )}
           </div>
           <div
             ref={containerRef}
@@ -580,21 +595,18 @@ const SingleViewScoutComponent = () => {
                       }
                       alt={`images${indexAttachment}`}
                       style={{
-                        width: "100%", height: "100%", position: "absolute", objectFit: "cover",
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        objectFit: "cover",
                         top: "0",
                         right: "0",
                       }}
                       onClick={() => {
-                        if (longpressActive == false) {
+                        if (!longpressActive) {
                           router.push(
                             `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
                           );
-
-                          handleClick(indexAttachment, image);
-                          setScoutId(image._id);
-                          setSingleScoutDetails(image);
-                          setSelectedFile(image);
-                          setSlideShowImages(image?.attachments);
                         } else {
                           handleChange(image); // Call handleLongPress when long press is detected
                         }
@@ -644,7 +656,6 @@ const SingleViewScoutComponent = () => {
                     </div>
                   </div>
                 );
-
               })
             ) : !loading ? (
               <div
@@ -669,9 +680,10 @@ const SingleViewScoutComponent = () => {
               ""
             )}
           </div>
-        </InfiniteScroll> :
+        </InfiniteScroll>
+      ) : (
         <ScoutView />
-      }
+      )}
 
       <LoadingComponent loading={loading} />
 
@@ -759,9 +771,7 @@ const SingleViewScoutComponent = () => {
       </div>
       {data?.length ? (
         <div className={styles.stickyHeader2}>
-          <div
-            className={styles.stickyBtnGrp}
-          >
+          <div className={styles.stickyBtnGrp}>
             <Button sx={{ color: "#454444 !important" }}>Years</Button>
             <Button sx={{ color: "#454444 !important" }}>Month</Button>
             <Button sx={{ color: "#454444 !important" }}>Days</Button>

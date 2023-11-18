@@ -30,8 +30,6 @@ export default function SigninEmail() {
   const router = useRouter();
 
   const signInForm = async (e: any) => {
-    console.log("rasdafdsasd");
-
     e.preventDefault();
     setInvalid(false);
     setLoading(true);

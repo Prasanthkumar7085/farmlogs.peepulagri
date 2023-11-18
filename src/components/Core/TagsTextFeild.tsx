@@ -105,12 +105,12 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
           )}
         </div>
         {!isTextFieldOpen && (
-          <IconButton onClick={() => setIsTextFieldOpen(true)}>
+          <IconButton onClick={() => setIsTextFieldOpen(true)} sx={{ color: 'green' }}>
             <AddIcon />
           </IconButton>
         )}
         {isTextFieldOpen && (
-          <IconButton onClick={() => setIsTextFieldOpen(false)}>
+          <IconButton onClick={() => setIsTextFieldOpen(false)} sx={{ color: 'red' }}>
             <ClearIcon />
           </IconButton>
         )}

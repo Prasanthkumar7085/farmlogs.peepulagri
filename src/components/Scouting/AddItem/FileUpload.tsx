@@ -530,7 +530,7 @@ const FileUploadComponent = () => {
       let success = true;
       await Promise.allSettled(
         urls.map(async (item: propsTypesTagAndComment, index: number) => {
-          if (!index && !tags.length && !!index && !description?.length) {
+          if ((!index && !tags.length) || (!!index && !description?.length)) {
             let options = {
               method: "POST",
               headers: new Headers({

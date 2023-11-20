@@ -143,7 +143,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
 
       {isTextFieldOpen && ( // Conditionally render the submit button based on the state
         <Button variant="contained" color="primary" onClick={addNewTag}>
-          Submit
+          Add
         </Button>
       )}
       {loading ? <LinearProgress sx={{ height: "2px" }} /> : ""}

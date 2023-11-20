@@ -402,6 +402,7 @@ const FileUploadComponent = () => {
     setLoading(true);
 
     try {
+      let isExecuted = false;
       await Promise.allSettled(
         tempFilesStorage.map(async (file: any, index: any) => {
           let obj = {
@@ -431,12 +432,16 @@ const FileUploadComponent = () => {
           let responseData = await response.json();
           if (responseData?.success) {
             imagesIdsArray.push(responseData?.data?._id);
-            await addTagsAndCommentsEvent(imagesIdsArray);
+            isExecuted = true;
           } else if (responseData?.status == 422) {
             setValidations(responseData?.errors);
+            isExecuted = false;
           }
         })
       );
+      if (isExecuted) {
+        await addTagsAndCommentsEvent(imagesIdsArray);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -509,6 +514,8 @@ const FileUploadComponent = () => {
 
   //add tags api
   const addTagsAndCommentsEvent = async (imagesArray: string[]) => {
+    console.log(imagesArray, tags, description);
+
     try {
       let urls = [
         {
@@ -530,7 +537,7 @@ const FileUploadComponent = () => {
       let success = true;
       await Promise.allSettled(
         urls.map(async (item: propsTypesTagAndComment, index: number) => {
-          if ((!index && !tags.length) || (!!index && !description?.length)) {
+          if ((!index && tags.length) || (!!index && description?.length)) {
             let options = {
               method: "POST",
               headers: new Headers({
@@ -556,7 +563,7 @@ const FileUploadComponent = () => {
         })
       );
       if (success) {
-        router.back();
+        // router.back();
       }
     } catch (err) {
       console.error(err);

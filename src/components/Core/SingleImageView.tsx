@@ -340,7 +340,6 @@ const SingleImageView: FC<componentProps> = ({
         // loading={loading}
       />
 
-      <Toaster closeButton richColors />
       <LoadingComponent loading={loading} />
     </div>
   );

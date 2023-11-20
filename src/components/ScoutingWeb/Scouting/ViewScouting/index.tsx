@@ -3,9 +3,10 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
 import { OnlyImagesType } from "@/types/scoutTypes";
 import SellIcon from "@mui/icons-material/Sell";
-import { Chip, Dialog, Grid, Typography } from "@mui/material";
+import { Chip, Dialog, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -30,6 +31,8 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [data, setData] = useState<any>();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -84,13 +87,9 @@ const SingleScoutViewDetails: FC<pageProps> = ({
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {

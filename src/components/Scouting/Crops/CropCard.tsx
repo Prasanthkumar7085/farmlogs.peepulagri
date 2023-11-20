@@ -1,24 +1,21 @@
-import styles from "./crop-card.module.css";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import timePipe from "@/pipes/timePipe";
-import { useRouter } from "next/router";
-import { CropTypeResponse } from "@/types/cropTypes";
-import { Menu, MenuItem, Chip, Avatar, Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
-import updateCropService from "../../../../lib/services/CropServices/updateCropService";
-import { useDispatch, useSelector } from "react-redux";
-import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import deleteCropService from "../../../../lib/services/CropServices/deleteCropService";
-import AlertComponent from "@/components/Core/AlertComponent";
-import { setCropTitleTemp } from "@/Redux/Modules/Farms";
-import SpaIcon from '@mui/icons-material/Spa';
-import Image from "next/image";
-import { deepOrange } from "@mui/material/colors";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { setCropTitleTemp } from "@/Redux/Modules/Farms";
+import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
+import AlertComponent from "@/components/Core/AlertComponent";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import timePipe from "@/pipes/timePipe";
+import { CropTypeResponse } from "@/types/cropTypes";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+import { Avatar, Button, Menu, MenuItem } from "@mui/material";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import deleteCropService from "../../../../lib/services/CropServices/deleteCropService";
+import updateCropService from "../../../../lib/services/CropServices/updateCropService";
+import styles from "./crop-card.module.css";
 
 interface pagePropsType {
   itemDetails: CropTypeResponse;
@@ -41,6 +38,8 @@ const CropCard = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [renameOpen, setRenameOpen] = useState(false);
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -110,17 +109,11 @@ const CropCard = ({
   const [alertType, setAlertType] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
-
-
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -178,7 +171,6 @@ const CropCard = ({
     router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`);
   };
 
-
   let colorsArray = [
     "#ffcc99",
     "#ffccff",
@@ -223,10 +215,10 @@ const CropCard = ({
             <h2 className={styles.FieldCrop}>
               {itemDetails?.title.length > 12
                 ? itemDetails?.title.slice(0, 1).toUpperCase() +
-                itemDetails?.title.slice(1, 9) +
-                "..."
+                  itemDetails?.title.slice(1, 9) +
+                  "..."
                 : itemDetails?.title.slice(0, 1).toUpperCase() +
-                itemDetails?.title.slice(1)}
+                  itemDetails?.title.slice(1)}
             </h2>
             <p className={styles.aug2023}>
               {timePipe(itemDetails.created_at, "DD, MMM YYYY")}
@@ -238,8 +230,7 @@ const CropCard = ({
         <div className={styles.actionButtons}>
           <p className={styles.aug2023}>
             {itemDetails.area
-              ? itemDetails.area +
-              (itemDetails.area < 2 ? " acre" : " acres")
+              ? itemDetails.area + (itemDetails.area < 2 ? " acre" : " acres")
               : 0 + " acres"}
           </p>
           <Button

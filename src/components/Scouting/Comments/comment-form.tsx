@@ -1,3 +1,4 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 import {
   deleteAllMessages,
   removeOneAttachmentElement,
@@ -15,9 +16,9 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./comment-form.module.css";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const CommentForm = ({
   afterCommentAdd,
@@ -33,6 +34,9 @@ const CommentForm = ({
   const filesFromStore = useSelector(
     (state: any) => state.conversation?.attachmentsFilesList
   );
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [comment, setComment] = useState<any>();
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
@@ -106,9 +110,10 @@ const CommentForm = ({
   const getCropsDetails = async () => {
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
-          ? router.query.farm_id
-          : scoutDetails.farm_id?._id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
+          router.query.farm_id
+            ? router.query.farm_id
+            : scoutDetails.farm_id?._id
         }/crops/list`,
         { method: "GET" }
       );
@@ -169,13 +174,9 @@ const CommentForm = ({
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -190,7 +191,7 @@ const CommentForm = ({
     setLoading(true);
     let body = {
       content: comment,
-      "reply_to": comment_id
+      reply_to: comment_id,
     };
     let options = {
       method: "POST",
@@ -379,7 +380,7 @@ const CommentForm = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                        fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                         <div className={styles.photojpg}>
                           <IconButton>
                             <DoneIcon sx={{ color: "#05A155" }} />
@@ -395,7 +396,7 @@ const CommentForm = ({
                       )}
                     </div>
                     {fileProgress[index] !== 100 ||
-                      fileProgress[index] == "fail" ? (
+                    fileProgress[index] == "fail" ? (
                       <img
                         className={styles.close41}
                         alt=""
@@ -408,7 +409,7 @@ const CommentForm = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                      fileProgress[index] !== "fail" ? (
+                    fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -471,7 +472,9 @@ const CommentForm = ({
         </div>
 
         <Button
-          className={comment && !loading ? styles.sendbutton : styles.sendbuttonDisable}
+          className={
+            comment && !loading ? styles.sendbutton : styles.sendbuttonDisable
+          }
           size="medium"
           variant="contained"
           onClick={() =>

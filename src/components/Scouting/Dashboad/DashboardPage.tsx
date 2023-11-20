@@ -1,29 +1,30 @@
-import { useRouter } from "next/router";
-import DashBoardHeader from "./dash-board-header";
-import FarmCard from "./farm-card";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { FarmDataType, PaginationInFarmResponse } from "@/types/farmCardTypes";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
-import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
-import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
-import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
-import AddIcon from "@mui/icons-material/Add";
-import styles from "./DashboardPage.module.css";
-import { IconButton } from "@mui/material";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
+import { FarmDataType, PaginationInFarmResponse } from "@/types/farmCardTypes";
+import AddIcon from "@mui/icons-material/Add";
+import { IconButton } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
+import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
+import styles from "./DashboardPage.module.css";
+import DashBoardHeader from "./dash-board-header";
+import FarmCard from "./farm-card";
 
 const DashboardPage = () => {
-
   const router = useRouter();
   const dispatch = useDispatch();
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [farmsData, setFarmsData] = useState<Array<FarmDataType>>([]);
   const [paginationDetails, setPaginationDetails] =
@@ -59,14 +60,14 @@ const DashboardPage = () => {
 
       if (search_string) {
         queryParam["search_string"] = search_string;
-        delete queryParam["order_by"]
-        delete queryParam["order_type"]
+        delete queryParam["order_by"];
+        delete queryParam["order_type"];
       }
       if (location) {
         if (location !== "All") {
           queryParam["location_id"] = location;
-          delete queryParam["order_by"]
-          delete queryParam["order_type"]
+          delete queryParam["order_by"];
+          delete queryParam["order_type"];
         }
       }
       router.replace({ pathname: "/farms", query: queryParam });
@@ -78,8 +79,7 @@ const DashboardPage = () => {
         if (location || search_string) {
           setFarmsData(response.data);
           setHasMore(response?.has_more);
-        }
-        else {
+        } else {
           setFarmsData([...farmsData, ...response.data]);
           setHasMore(response?.has_more);
         }
@@ -99,13 +99,9 @@ const DashboardPage = () => {
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -229,6 +225,6 @@ const DashboardPage = () => {
       <LoadingComponent loading={loading} />
     </div>
   );
-}
+};
 
 export default DashboardPage;

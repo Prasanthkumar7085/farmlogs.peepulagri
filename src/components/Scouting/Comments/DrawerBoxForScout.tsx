@@ -1,3 +1,4 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 import {
   deleteAllMessages,
   removeTheAttachementsFilesFromStore,
@@ -6,13 +7,13 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
-import { useRouter } from "next/router";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const DrawerComponentForScout = ({
   drawerClose,
@@ -32,13 +33,11 @@ const DrawerComponentForScout = ({
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [loadingThreads, setLoadingThreads] = useState(true);
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   useEffect(() => {
-    if (
-      (router.isReady,
-        accessToken,
-        attachement && openCommentsBox == true)
-    ) {
+    if ((router.isReady, accessToken, attachement && openCommentsBox == true)) {
       getAllScoutComments();
       setLoadingThreads(true);
     }
@@ -46,13 +45,9 @@ const DrawerComponentForScout = ({
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -75,7 +70,7 @@ const DrawerComponentForScout = ({
         options
       );
       let responseData = await response.json();
-      console.log(responseData, "lb")
+      console.log(responseData, "lb");
       if (responseData.success == true) {
         const commentsById: any = {};
 
@@ -108,7 +103,7 @@ const DrawerComponentForScout = ({
         // Convert the commentsById object to an array of comments
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
-        console.log(reverse, "mv")
+        console.log(reverse, "mv");
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
       } else if (responseData?.statusCode == 403) {

@@ -1,40 +1,37 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 import {
-  deleteAllMessages,
-  removeTheAttachementsFilesFromStore,
+  deleteAllMessages
 } from "@/Redux/Modules/Conversations";
+import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
 import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
-import ImageComponent from "@/components/Core/ImageComponent";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import AddIcon from "@mui/icons-material/Add";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
+import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import {
   Breadcrumbs,
   Button,
-  Card,
-  Checkbox,
-  Chip,
   IconButton,
   Link,
   Tab,
   Tabs,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { useCookies } from "react-cookie";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
-import AddIcon from "@mui/icons-material/Add";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import styles from "./crop-card.module.css";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import InfiniteScroll from "react-infinite-scroll-component";
 import ScoutView from "./Scouts/ScoutView";
+import styles from "./crop-card.module.css";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -45,6 +42,9 @@ const SingleViewScoutComponent = () => {
   );
   const cropTitle = useSelector((state: any) => state?.farms?.cropName);
   const farmTitle = useSelector((state: any) => state?.farms?.farmName);
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [data, setData] = useState<any>([]);
   const [selectedFile, setSelectedFile] = useState<any>([]);
@@ -88,7 +88,6 @@ const SingleViewScoutComponent = () => {
   //   }
   // }, [accessToken, router.isReady]);
 
-
   useEffect(() => {
     if (router.isReady) {
       getPresingedURls();
@@ -97,13 +96,9 @@ const SingleViewScoutComponent = () => {
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -471,9 +466,9 @@ const SingleViewScoutComponent = () => {
         const endDate =
           visibleImages.length > 0
             ? timePipe(
-              visibleImages[visibleImages.length - 1].created_at,
-              "DD MMM YY"
-            )
+                visibleImages[visibleImages.length - 1].created_at,
+                "DD MMM YY"
+              )
             : "";
 
         // Update the displayed date range

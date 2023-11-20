@@ -1,16 +1,17 @@
-import { useDispatch, useSelector } from "react-redux";
-import CommentForm from "./comment-form";
-import Threads from "./threads";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import AlertComponent from "@/components/Core/AlertComponent";
-import styles from "./CommentsComponent.module.css";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 import {
   deleteAllMessages,
   removeTheAttachementsFilesFromStore,
 } from "@/Redux/Modules/Conversations";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
+import AlertComponent from "@/components/Core/AlertComponent";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./CommentsComponent.module.css";
+import CommentForm from "./comment-form";
+import Threads from "./threads";
 
 const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const accessToken = useSelector(
@@ -24,16 +25,14 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [getCommentsLoading, setGetCommentsLoading] = useState(false);
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {

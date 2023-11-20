@@ -5,9 +5,16 @@ import {
   SingleScoutResponse,
 } from "@/types/scoutTypes";
 
-import { Button, Toolbar, Tooltip, Typography } from "@mui/material";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
+import timePipe from "@/pipes/timePipe";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import { Button, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
@@ -19,18 +26,9 @@ import SingleScoutViewDetails from "../Scouting/ViewScouting";
 import styles from "../farms/FarmsNavBar.module.css";
 import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
 import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
+import DaySummaryComponent from "./DaySummaryComponent";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import ScoutingDailyImages from "./ScoutingDailyImages";
-import UserDropDownForScouts from "./UserDropDownForScouts";
-import timePipe from "@/pipes/timePipe";
-import DaySummaryComponent from "./DaySummaryComponent";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { log } from "util";
-import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 interface ApiMethodProps {
   page: string | number;
@@ -48,6 +46,9 @@ const ListScouts: FunctionComponent = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -220,13 +221,9 @@ const ListScouts: FunctionComponent = () => {
   };
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {

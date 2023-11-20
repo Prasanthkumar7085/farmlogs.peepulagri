@@ -1,19 +1,19 @@
-import { useState } from "react";
-import styles from "./FarmDetailsCard.module.css";
-import { IconButton } from "@mui/material";
-import { FarmDataType } from "@/types/farmCardTypes";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import timePipe from "@/pipes/timePipe";
-import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import AlertComponent from "@/components/Core/AlertComponent";
-import SettingsIcon from '@mui/icons-material/Settings';
-import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
+import AlertComponent from "@/components/Core/AlertComponent";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import timePipe from "@/pipes/timePipe";
+import { FarmDataType } from "@/types/farmCardTypes";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { IconButton } from "@mui/material";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
+import styles from "./FarmDetailsCard.module.css";
 
 interface PageProps {
   data: any;
@@ -49,6 +49,8 @@ const ScoutingFarmDetailsCard = ({
   const userType = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState("");
@@ -59,13 +61,9 @@ const ScoutingFarmDetailsCard = ({
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -160,8 +158,8 @@ const ScoutingFarmDetailsCard = ({
                   >
                     {item.title.length > 16
                       ? item.title.slice(0, 1).toUpperCase() +
-                      item.title.slice(1, 12) +
-                      "..."
+                        item.title.slice(1, 12) +
+                        "..."
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
                 </div>

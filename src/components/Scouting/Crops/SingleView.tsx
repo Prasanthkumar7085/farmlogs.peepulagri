@@ -32,6 +32,8 @@ import getSingleScoutService from "../../../../lib/services/ScoutServices/getSin
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
+import Image from "next/image";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -42,6 +44,7 @@ const SingleViewScoutComponent = () => {
   );
   const cropTitle = useSelector((state: any) => state?.farms?.cropName);
   const farmTitle = useSelector((state: any) => state?.farms?.farmName);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const [, , removeCookie] = useCookies(["userType"]);
   const [, , loggedIn] = useCookies(["loggedIn"]);
@@ -71,7 +74,7 @@ const SingleViewScoutComponent = () => {
   const [longpressActive, setLongPressActive] = useState<any>(false);
   // let tempImages: any = [...selectedItems];
   const [tempImages, setTempImages] = useState(selectedItems);
-
+  const [deleteLoading, setDeleteLoading] = useState<any>(false)
   const [deletedImages, setDeletedImages] = useState<any>([]);
   const [deletedImagePages, setDeletedImagePages] = useState<any>({});
   const [value, setValue] = useState<any>("1");
@@ -193,7 +196,6 @@ const SingleViewScoutComponent = () => {
   const captureSummary = async (value: any) => {
     if (value) {
       setSummaryContent(value);
-      await updateDescriptionService([], value);
     }
   };
 
@@ -210,151 +212,42 @@ const SingleViewScoutComponent = () => {
     }
   };
   //capture the tags details
-  const captureTagsDetails = async (tags: any, findingsvalue: any) => {
-    setScoutFindings(findingsvalue);
+  const captureTagsDetails = async (tags: any, description: any) => {
+    setLoading(true)
+    try {
+      let body = {
+        farm_image_ids: [router.query.farm_id],
+        tags: tags,
+      };
+      let options = {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body),
+      };
 
-    if (tags?.length && !findingsvalue?.length) {
-      let tempArray = [...tempImages];
-      await tempArray.forEach((obj: any) => {
-        (obj.description = obj?.description),
-          (obj.tags = obj.tags.reduce(
-            (acc: any, tag: any) => {
-              if (!tags.includes(tag)) {
-                acc.push(tag);
-              }
-              return acc;
-            },
-            [...tags]
-          ));
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-    }
-
-    if (
-      tags?.length &&
-      findingsvalue?.length == 0 &&
-      tempImages.some((obj: any) => obj.hasOwnProperty("description")) == true
-    ) {
-      let tempArray = [...tempImages];
-      await tempArray.forEach((obj: any) => {
-        obj.tags = [...tags];
-        obj.description = obj.description;
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-    }
-    if (!tags?.length && findingsvalue?.length) {
-      let tempArray = [...tempImages];
-      await tempArray.forEach((obj: any) => {
-        if (obj.description) {
-          obj.description = obj.description + "\n" + findingsvalue;
-        } else {
-          obj.description = findingsvalue;
-        }
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-    }
-    if (tags?.length && findingsvalue?.length) {
-      let tempArray = [...tempImages];
-
-      await tempArray.forEach((obj: any) => {
-        if (obj.description) {
-          (obj.description = obj.description + "\n" + findingsvalue),
-            (obj.tags = obj.tags.reduce(
-              (acc: any, tag: any) => {
-                if (!tags.includes(tag)) {
-                  acc.push(tag);
-                }
-                return acc;
-              },
-              [...tags]
-            ));
-        } else {
-          (obj.description = findingsvalue),
-            (obj.tags = obj.tags.reduce(
-              (acc: any, tag: any) => {
-                if (!tags.includes(tag)) {
-                  acc.push(tag);
-                }
-                return acc;
-              },
-              [...tags]
-            ));
-        }
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-    }
-
-    if (!tags.length && !findingsvalue?.length) {
-      await updateDescriptionService([], "");
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tag`,
+        options
+      );
+      let responseData = await response.json();
+      if (response?.status >= 200 && response?.status <= 200) {
+        toast.success(responseData?.message);
+        setTagsDrawerOpen(false);
+        await getPresingedURls();
+      } else {
+        toast.error(responseData?.message);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const captureTagsDetailsEdit = async (tags: any, findingsvalue: any) => {
-    setScoutFindings(findingsvalue);
-    if (tags?.length && !findingsvalue?.length) {
-      let tempArray = [...tempImages];
-      await tempArray.forEach((obj: any) => {
-        (obj.description = ""),
-          (obj.tags = obj.tags.reduce(
-            (acc: any, tag: any) => {
-              if (!tags.includes(tag)) {
-                acc.push(tag);
-              }
-              return acc;
-            },
-            [...tags]
-          ));
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-      return;
-    }
 
-    if (tags?.length && findingsvalue?.length == 0) {
-      let tempArray = [...tempImages];
-      await tempArray.forEach((obj: any) => {
-        obj.tags = [...tags];
-        obj.description = obj.description;
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-      return;
-    }
-
-    if (!tags?.length && findingsvalue?.length) {
-      let tempArray = [...tempImages];
-      await tempArray.forEach((obj: any) => {
-        obj.tags = [];
-        obj.description = findingsvalue;
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-      return;
-    }
-
-    if (tags?.length && findingsvalue?.length) {
-      let tempArray = [...tempImages];
-
-      await tempArray.forEach((obj: any) => {
-        (obj.description = findingsvalue), (obj.tags = [...tags]);
-      });
-      setTempImages(tempArray);
-      setSelectedItems(tempArray);
-      await updateDescriptionService(tempArray, selectedFile.summary);
-      return;
-    }
-  };
 
   //checkbox handlechange event
   const handleChange = (itemId: any) => {
@@ -379,60 +272,7 @@ const SingleViewScoutComponent = () => {
     setSelectedFile(sildeShowImages[value]);
   };
 
-  //update the details of the scouting
-  const updateDescriptionService = async (
-    imagesArray: any,
-    summaryValue: any
-  ) => {
-    setLoading(true);
-    let updatedArray = scoutAttachmentDetails?.map((obj: any) => {
-      let matchingObj = imagesArray?.find((item: any) => item._id === obj._id);
-      return matchingObj ? matchingObj : obj;
-    });
 
-    try {
-      let options = {
-        method: "PATCH",
-        headers: new Headers({
-          "content-type": "application/json",
-          authorization: accessToken,
-        }),
-        body: JSON.stringify({
-          farm_id: router.query.farm_id,
-          crop_id: router.query.crop_id,
-          attachments: tempImages?.length
-            ? updatedArray
-            : scoutAttachmentDetails,
-          summary: summaryValue,
-        }),
-      };
-      let response: any = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}`,
-        options
-      );
-      const responseData = await response.json();
-      if (responseData?.success == true) {
-        toast.success("Scout updated successfully");
-        setTagsDrawerEditOpen(false);
-        setTagsDrawerOpen(false);
-        // setSelectedFile([]);
-        setTagsCheckBoxOpen(false);
-        setLongPressActive(false);
-        setSummaryDrawerOpen(false);
-        // setSelectedItems([]);
-        // setScoutAttachementsDetails([]);
-        setSummaryContent("");
-        // setOpenDialog(false);
-        getPresingedURls();
-      } else if (responseData?.statusCode == 403) {
-        await logout();
-      }
-    } catch (err: any) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
   //for date range of images
@@ -488,6 +328,38 @@ const SingleViewScoutComponent = () => {
     setValue(newValue);
   };
 
+  //delete multiple images
+  const deleteImages = async () => {
+    setDeleteLoading(true)
+    let bodyData: any = {
+      "farm_image_ids": selectedItems
+    }
+    let options = {
+      method: "DELETE",
+      headers: new Headers({
+        "content-type": "application/json",
+        authorization: accessToken,
+      }),
+      body: JSON.stringify(bodyData)
+    };
+    try {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/delete-images`,
+        options
+      );
+      let responseData = await response.json()
+      if (responseData?.success) {
+        toast.success("Images Deleted successfully");
+      }
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setDeleteLoading(false)
+    }
+  }
+
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
       <div className={styles.mobileScoutingViewHeader}>
@@ -538,12 +410,13 @@ const SingleViewScoutComponent = () => {
         <div>
           <div className={styles.stickyHeader}>
             <div className={styles.dateRange}>{dateRange}</div>
-            {tagsCheckBoxOpen && data?.length ? (
+            {tagsCheckBoxOpen ? (
               <Button
                 onClick={() => {
                   setTagsCheckBoxOpen(false);
                   setSelectedItems([]);
                 }}
+                sx={{ display: data?.length ? "" : "none" }}
                 className={styles.selectBtn}
               >
                 Cancel
@@ -552,6 +425,8 @@ const SingleViewScoutComponent = () => {
               <Button
                 className={styles.selectBtn}
                 onClick={() => setTagsCheckBoxOpen(true)}
+                sx={{ display: data?.length ? "" : "none" }}
+
               >
                 Select
               </Button>
@@ -647,23 +522,9 @@ const SingleViewScoutComponent = () => {
                 );
               })
             ) : !loading ? (
-              <div
-                id={styles.noData}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "calc(100vh - 150px)",
-                }}
-              >
-                <ImageComponent
-                  src="/emty-folder-image.svg"
-                  alt="empty folder"
-                  width={150}
-                  height={140}
-                />
-                <Typography>No Scoutings</Typography>
+              <div className={styles.noData}>
+                <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
+                <Typography variant="h4">No Images</Typography>
               </div>
             ) : (
               ""
@@ -720,14 +581,6 @@ const SingleViewScoutComponent = () => {
         attachement={selectedFile}
       />
 
-      <TagsDrawerEdit
-        tagsDrawerClose={tagsDrawerClose}
-        captureTagsDetailsEdit={captureTagsDetailsEdit}
-        item={selectedFile}
-        selectedItems={selectedItems}
-        TagsDrawerEditOpen={TagsDrawerEditOpen}
-        loading={loading}
-      />
 
       <div className="addFormPositionIcon">
         {tagsCheckBoxOpen == false && selectedItems?.length == 0 ? (
@@ -743,36 +596,44 @@ const SingleViewScoutComponent = () => {
           >
             <AddIcon />
           </IconButton>
-        ) : selectedItems?.length ? (
-          <IconButton
-            size="large"
-            className={styles.AddTagsbtn}
-            aria-label="add to shopping cart"
-            onClick={() => {
-              setTagsDrawerOpen(true);
-            }}
-          >
-            <LocalOfferIcon />
-          </IconButton>
-        ) : (
-          ""
-        )}
+        ) : ""
+        }
       </div>
       {data?.length ? (
         <div className={styles.stickyHeader2}>
-          <div className={styles.stickyBtnGrp}>
-            <Button sx={{ color: "#454444 !important" }}>Years</Button>
-            <Button sx={{ color: "#454444 !important" }}>Month</Button>
-            <Button sx={{ color: "#454444 !important" }}>Days</Button>
-            <Button sx={{ color: "#fff !important" }}>All Photos</Button>
-          </div>
+          {selectedItems?.length ?
+
+            <div className={styles.stickyBtnGrp}>
+              <Button sx={{ color: "#454444 !important" }} onClick={() => setDeleteOpen(true)}>Delete</Button>
+              <Button sx={{ color: "#454444 !important" }} onClick={() => setTagsDrawerOpen(true)
+              }>Add Tags</Button>
+
+            </div> :
+            <div className={styles.stickyBtnGrp}>
+              <Button sx={{ color: "#454444 !important" }}>Years</Button>
+              <Button sx={{ color: "#454444 !important" }}>Month</Button>
+              <Button sx={{ color: "#454444 !important" }}>Days</Button>
+              <Button sx={{ color: "#fff !important" }}>All Photos</Button>
+            </div>}
         </div>
+      ) : (
+        ""
+      )
+      }
+
+      {deleteOpen ? (
+        <AlertDelete
+          open={deleteOpen}
+          deleteFarm={deleteImages}
+          setDialogOpen={setDeleteOpen}
+          loading={deleteLoading}
+        />
       ) : (
         ""
       )}
 
       <Toaster richColors position="top-right" closeButton />
-    </div>
+    </div >
   );
 };
 export default SingleViewScoutComponent;

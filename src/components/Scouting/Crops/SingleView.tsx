@@ -1,6 +1,6 @@
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import {
-  deleteAllMessages
+  deleteAllMessages, removeTheAttachementsFilesFromStore
 } from "@/Redux/Modules/Conversations";
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
@@ -72,28 +72,29 @@ const SingleViewScoutComponent = () => {
   // let tempImages: any = [...selectedItems];
   const [tempImages, setTempImages] = useState(selectedItems);
 
+  const [deletedImages, setDeletedImages] = useState<any>([]);
+  const [deletedImagePages, setDeletedImagePages] = useState<any>({});
+  const [value, setValue] = useState<any>("1");
+
+
+
   useEffect(() => {
     setTempImages(selectedItems);
   }, [selectedItems]);
 
-  // useEffect(() => {
-  //   if (
-  //     router.query.farm_id &&
-  //     router.isReady &&
-  //     router.query?.crop_id &&
-  //     accessToken
-  //   ) {
-  //     dispatch(removeTheFilesFromStore([]));
-  //     dispatch(removeTheAttachementsFilesFromStore([]));
-  //   }
-  // }, [accessToken, router.isReady]);
 
   useEffect(() => {
     if (router.isReady) {
-      getPresingedURls();
+      getPresingedURls()
+      dispatch(removeTheAttachementsFilesFromStore([]));
     }
   }, [pageNumber, accessToken, router.isReady]);
 
+
+
+
+
+  //logout event when the 403 and 401 error codes
   const logout = async () => {
     try {
       removeCookie("userType");
@@ -105,6 +106,8 @@ const SingleViewScoutComponent = () => {
       console.error(err);
     }
   };
+
+
   const getPresingedURls = async () => {
     setLoading(true);
     let options = {
@@ -441,6 +444,7 @@ const SingleViewScoutComponent = () => {
     }
   };
 
+
   //for date range of images
   const containerRef: any = useRef(null);
   const [visibleImages, setVisibleImages] = useState([]);
@@ -486,8 +490,7 @@ const SingleViewScoutComponent = () => {
     };
   }, [data]);
 
-  const [value, setValue] = useState<any>("1");
-
+  //tabs change code
   const handleChangeMenuView = (
     event: React.SyntheticEvent,
     newValue: number
@@ -526,22 +529,23 @@ const SingleViewScoutComponent = () => {
       </div>
 
       {value == "1" ? (
-        <InfiniteScroll
-          className={styles.infiniteScrollComponent}
-          dataLength={data.length}
-          next={() => setPageNumber((prev) => prev + 1)}
-          hasMore={hasMore}
-          loader={
-            <div className={styles.pageLoader}>
-              {loading ? "Loading..." : ""}
-            </div>
-          }
-          endMessage={
-            <a href="#" className={styles.endOfLogs}>
-              {hasMore ? "" : data.length > 11 ? "Scroll to Top" : ""}
-            </a>
-          }
-        >
+        // <InfiniteScroll
+        //   className={styles.infiniteScrollComponent}
+        //   dataLength={data.length}
+        //   next={() => setPageNumber((prev) => prev + 1)}
+        //   hasMore={hasMore}
+        //   loader={
+        //     <div className={styles.pageLoader}>
+        //       {loading ? "Loading..." : ""}
+        //     </div>
+        //   }
+        //   endMessage={
+        //     <a href="#" className={styles.endOfLogs}>
+        //       {hasMore ? "" : data.length > 11 ? "Scroll to Top" : ""}
+        //     </a>
+        //   }
+        // >
+        <div>
           <div className={styles.stickyHeader}>
             <div className={styles.dateRange}>{dateRange}</div>
             {tagsCheckBoxOpen ? (
@@ -675,7 +679,7 @@ const SingleViewScoutComponent = () => {
               ""
             )}
           </div>
-        </InfiniteScroll>
+        </div>
       ) : (
         <ScoutView />
       )}

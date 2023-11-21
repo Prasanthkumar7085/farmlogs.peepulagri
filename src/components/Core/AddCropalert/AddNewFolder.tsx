@@ -41,7 +41,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
   const dropDownCrops = async () => {
 
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/pending-crop-names`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/crops`;
       const options = {
         method: "GET",
 
@@ -69,6 +69,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
       crop_area: area ? +area : null,
     };
     captureResponseDilog(obj)
+    console.log(obj, "mvg")
   }
 
   return (
@@ -94,7 +95,7 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
             options={crop?.length ? crop : []}
             value={title}
             onChange={(_, newValue: any) => setTitle(newValue)}
-            getOptionLabel={(e) => e.title}
+            getOptionLabel={(e) => e.name}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -135,8 +136,8 @@ const NewFolderDiloag = ({ open, captureResponseDilog, loading, defaultTitle, er
             type={'number'}
             onWheel={(e: any) => e.target.blur()}
             variant="outlined"
-            error={Boolean(errorMessages?.['crop_area'])}
-            helperText={errorMessages?.['crop_area'] ? errorMessages?.['crop_area'] : ""}
+            error={Boolean(errorMessages?.['area'] || errorMessages?.["crop_area"])}
+            helperText={errorMessages?.['area'] ? errorMessages?.['area'] : errorMessages?.["crop_area"]}
             onKeyPress={handleKeyPress}
             inputProps={{
               step: 'any'

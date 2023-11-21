@@ -66,7 +66,7 @@ const FarmCard = ({
                 >
                   <div className={styles.duration} id="duration">
                     <div className={styles.dates}>
-                      {timePipe(item.created_at, "DD, MMM YYYY")}
+                      {timePipe(item.createdAt, "DD, MMM YYYY")}
                     </div>
                     <div className={styles.count}>
                       <ImageComponent

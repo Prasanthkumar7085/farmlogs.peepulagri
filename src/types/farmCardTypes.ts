@@ -48,49 +48,49 @@ export interface FarmDataType {
 }
 
 export interface FarmCardPropsType {
-    _id: string;
-    progress: number;
-    acresCount: number;
-    farmName: string;
-    createAt: string;
-    logCount: number;
+  _id: string;
+  progress: number;
+  acresCount: number;
+  farmName: string;
+  createAt: string;
+  logCount: number;
 }
 
 
 export interface PaginationDetailsType {
-    limit: number;
-    page: number;
-    total: number;
-    total_pages: number;
+  limit: number;
+  page: number;
+  total: number;
+  total_pages: number;
 }
 
 export interface PaginationInFarmResponse {
-    has_more: boolean;
-    total: number;
-    page: number;
-    limit: number;
-    total_pages: number;
-    success: boolean;
-    message: string;
-    search_string: string | null,
+  has_more: boolean;
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+  success: boolean;
+  message: string;
+  search_string: string | null,
 
 
 }
 
 export interface GetLogsByFarmIdPropsType {
-    farmId: string | undefined | number;
-    page: string | undefined | number;
-    limit: string | undefined | number;
-    paramString: string;
-    search: string;
-    orderBy: string;
-    orderType: string;
+  farmId: string | undefined | number;
+  page: string | undefined | number;
+  limit: string | undefined | number;
+  paramString: string;
+  search: string;
+  orderBy: string;
+  orderType: string;
 
 }
 
 export interface QueryParamForFarmLogs {
-    search_string: string;
-    sort_by: string;
-    sort_type: string;
+  search_string: string;
+  sort_by: string;
+  sort_type: string;
 
 }

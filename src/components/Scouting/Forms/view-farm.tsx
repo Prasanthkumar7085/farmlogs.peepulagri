@@ -39,7 +39,7 @@ const ViewFarmPage = () => {
       {!loading ? <div className={styles.viewfarm} id="view-farm">
         <div className={styles.farmdetailsblock}>
           <div className={styles.farm1}>{data?.title}</div>
-          <div className={styles.aug2023}>{timePipe(data?.created_at as string, 'DD, MMM YYYY')}</div>
+          <div className={styles.aug2023}>{timePipe(data?.createdAt as string, 'DD, MMM YYYY')}</div>
           {/* - Current */}
         </div>
         <div className={styles.farmareaheading} id="area">
@@ -61,7 +61,7 @@ const ViewFarmPage = () => {
           <p className={styles.locationMarked} id="location-details">
             <span>
               Location:
-            </span>{data?.location_id?.name ? ' ' + data?.location_id?.name : " N/A"}
+            </span>{data?.location_id?.title ? ' ' + data?.location_id?.title : " N/A"}
           </p>
           {/* <p className={styles.locationMarked} id="location-details">
           <span>

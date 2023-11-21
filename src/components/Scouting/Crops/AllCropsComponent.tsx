@@ -91,7 +91,7 @@ const AllCropsComponent = () => {
 
   //get all crops name
   const getCropsDetails = async (
-    id: string,
+    id: any,
     orderBy = sortBy,
     orderType = sortType
   ) => {
@@ -114,7 +114,7 @@ const AllCropsComponent = () => {
         }),
       };
       let url = prepareURLEncodedParams(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/${id}/crops/all`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${id}/crops/list`,
         queryParams
       );
 
@@ -148,8 +148,7 @@ const AllCropsComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/${formId ? formId : router.query.farm_id
-        }/crops/all`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops`,
         options
       );
       let responseData = await response.json();
@@ -189,6 +188,7 @@ const AllCropsComponent = () => {
 
   //create new folder (dilog)
   const captureResponseDilog = (value: any) => {
+    console.log(value, ",mn")
     if (!value) {
       setDilogOpen(false);
       setErrorMessages([]);
@@ -196,8 +196,9 @@ const AllCropsComponent = () => {
       const { title, crop_area } = value;
 
       let obj = {
-        title: title ? title?.trim() : "",
-        crop_area: crop_area,
+        farm_id: router.query.farm_id,
+        title: title.name ? title.name?.trim() : "",
+        area: crop_area,
       };
 
       setErrorMessages([]);

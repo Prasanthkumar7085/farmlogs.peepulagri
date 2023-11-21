@@ -35,7 +35,7 @@ const AddFarmForm = () => {
 
   const [title, setTitle] = useState<string>("");
   const [location, setLocation] = useState<{
-    name: string;
+    title: string;
     _id: string;
   } | null>();
   const [area, setArea] = useState<string>();
@@ -44,7 +44,7 @@ const AddFarmForm = () => {
   const [optionsLoading, setOptionsLoading] = useState(false);
 
   const [locations, setLocations] = useState<
-    Array<{ name: string; _id: string }>
+    Array<{ title: string; _id: string }>
   >([]);
 
   const [addLocationOpen, setAddLocationOpen] = useState(false);
@@ -96,7 +96,11 @@ const AddFarmForm = () => {
     setLoading(false);
   };
   const edtiFarm = async (obj: any) => {
-    let editedData: any = { ...data };
+    let editedData: any = {
+      "title": data?.title,
+      "area": data?.area,
+      "location_id": data?.location_id
+    };
 
     Object.keys(obj).map((item: string) => {
       editedData[item] = obj[item];
@@ -339,10 +343,10 @@ const AddFarmForm = () => {
                   }
                   value={location}
                   isOptionEqualToValue={(option, value) =>
-                    option.name === value.name
+                    option.title === value.title
                   }
-                  getOptionLabel={(option: { name: string; _id: string }) =>
-                    option.name
+                  getOptionLabel={(option: { title: string; _id: string }) =>
+                    option.title
                   }
                   options={locations}
                   loading={optionsLoading}

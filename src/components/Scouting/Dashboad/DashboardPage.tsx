@@ -31,7 +31,7 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchString, setSearchString] = useState("");
   const [locations, setLocations] = useState<
-    Array<{ name: string; _id: string }>
+    Array<{ title: string; _id: string }>
   >([]);
   const [location, setLocation] = useState("");
   const [routerLocation, setRouterLocation] = useState("");
@@ -63,7 +63,7 @@ const DashboardPage = () => {
         delete queryParam["order_type"]
       }
       if (location) {
-        if (location !== "All") {
+        if (location !== "1") {
           queryParam["location_id"] = location;
           delete queryParam["order_by"]
           delete queryParam["order_type"]
@@ -119,9 +119,9 @@ const DashboardPage = () => {
       return;
     }
     if (response?.data?.length) {
-      setLocations([{ name: "All", _id: "1" }, ...response?.data]);
+      setLocations([{ title: "All", _id: "1" }, ...response?.data]);
     } else {
-      setLocations([{ name: "All", _id: "1" }]);
+      setLocations([{ title: "All", _id: "1" }]);
     }
 
     let searchFromRouter = router.query?.search_string;

@@ -133,7 +133,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/comment/${commnet_id}/delete`,
         options
       );
       let responseData = await response.json();
@@ -164,7 +164,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/comment/${commnet_id}`,
         options
       );
       let responseData = await response.json();
@@ -217,7 +217,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commentId}/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL} / scouts / ${scoutDetails?._id} / attachments / ${attachement?._id} / comments / ${commentId} / attachments`,
         options
       );
       let responseData = await response.json();

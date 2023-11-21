@@ -20,7 +20,7 @@ type captureSearchStringType = (search: string) => void;
 interface pageProps {
   captureSearchString: captureSearchStringType;
   searchString: string;
-  locations: Array<{ name: string; _id: string }>;
+  locations: Array<{ title: string; _id: string }>;
   location: string;
   setLocation: Dispatch<SetStateAction<string>>;
   getDataOnLocationChange: (location: string) => void;
@@ -37,7 +37,7 @@ const DashBoardHeader = ({
   const [search, setSearch] = useState("");
 
   const [locationValue, setLocationValue] = useState<{
-    name: string;
+    title: string;
     _id: string;
   } | null>();
   const [dataSetting, setDataSetting] = useState(false);
@@ -45,7 +45,7 @@ const DashBoardHeader = ({
   useEffect(() => {
     if (locations?.length) {
       let obj: any = locations?.find(
-        (item: { name: string; _id: string }) => item.name == location
+        (item: { title: string; _id: string }) => item.title == location
       );
 
       if (obj) {
@@ -70,7 +70,7 @@ const DashBoardHeader = ({
 
   const addInputValue = (event: any, value: any) => {
     if (value) {
-      setLocation(value?.name);
+      setLocation(value?.title);
       getDataOnLocationChange(value?._id);
     } else {
       setLocationValue(null);
@@ -91,11 +91,11 @@ const DashBoardHeader = ({
                 fullWidth
                 noOptionsText={"No such location!"}
                 value={locationValue}
-                getOptionLabel={(option: { name: string; _id: string }) =>
-                  option.name
+                getOptionLabel={(option: { title: string; _id: string }) =>
+                  option.title
                 }
                 isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
+                  option.title === value.title
                 }
                 options={locations}
                 onChange={addInputValue}

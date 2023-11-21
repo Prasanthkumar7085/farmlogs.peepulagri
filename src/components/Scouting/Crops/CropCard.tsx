@@ -229,7 +229,7 @@ const CropCard = ({
                 itemDetails?.title.slice(1)}
             </h2>
             <p className={styles.aug2023}>
-              {timePipe(itemDetails.created_at, "DD, MMM YYYY")}
+              {timePipe(itemDetails.createdAt, "DD, MMM YYYY")}
             </p>
           </div>
 

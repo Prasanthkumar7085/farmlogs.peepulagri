@@ -6,6 +6,7 @@ import ImageComponent from "../../../components/Core/ImageComponent";
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Button } from "@mui/material";
+import { useEffect, useRef } from "react";
 interface pagePropsType {
   farmsData: Array<FarmDataType>;
   page: number;
@@ -48,6 +49,16 @@ const FarmCard = ({
     "#5F6A89",
     "#067BBD",
   ];
+  const lastItemRef = useRef<HTMLDivElement>(null);
+  const scrollToLastItem = () => {
+    if (lastItemRef.current) {
+      lastItemRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    }
+  };
+  useEffect(() => {
+    // Scroll to the last item when new data is loaded
+    scrollToLastItem();
+  }, [farmsData]);
 
   return (
     <div className={styles.allFormsBlock}>
@@ -63,6 +74,8 @@ const FarmCard = ({
                   className={styles.farmdetails}
                   id="farm-detalis"
                   onClick={() => router.push(`farms/${item._id}/crops`)}
+                  ref={index === farmsData.length - 20 ? lastItemRef : null}
+
                 >
                   <div className={styles.duration} id="duration">
                     <div className={styles.dates}>
@@ -130,16 +143,13 @@ const FarmCard = ({
         : ""}
       {hasMore ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button variant="outlined" onClick={() => {
+          <Button variant="outlined" onClick={(e) => {
+            e.preventDefault()
             setPage((prev) => prev + 1);
             getAllFarms({ page: page + 1 });
           }}>View More</Button>
         </div>
-      ) : (
-        <div className={styles.noMoreImages}>
-          <p>No more Farms</p>
-        </div>
-      )}
+      ) : ""}
 
     </div>
   );

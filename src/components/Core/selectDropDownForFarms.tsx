@@ -43,7 +43,7 @@ const SelectAutoCompleteForFarms = ({
             dispatch(setFarmTitleTemp(value?.title));
           } else {
             onSelectValueFromDropDown("", reason);
-            setDefaultValueSet(value);
+            setDefaultValueSet(null);
           }
         }}
         renderInput={(params) => (

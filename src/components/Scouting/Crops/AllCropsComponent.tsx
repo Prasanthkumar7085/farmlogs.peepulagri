@@ -205,6 +205,7 @@ const AllCropsComponent = () => {
       );
     } else {
       setLoading(false);
+      router.replace(`/farms/${router.query.farm_id}/crops`);
     }
   };
 

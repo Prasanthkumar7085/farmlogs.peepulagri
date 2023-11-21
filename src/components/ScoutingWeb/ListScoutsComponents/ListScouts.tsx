@@ -87,7 +87,6 @@ const ListScouts: FunctionComponent = () => {
         toDate: router.query.to_date as string,
       });
       await getAllFarms(value?._id);
-      await getAllCrops("", "", value?._id);
     } else {
       setUser(null);
       setPage(1);
@@ -101,7 +100,7 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
       });
-      await getAllCrops("", router.query.farm_id as string, "");
+      await getAllCrops("", router.query.farm_id as string);
     }
   };
 
@@ -119,9 +118,10 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
       });
-      await getAllCrops("", value?._id, router.query.created_by as string);
+      await getAllCrops("", value?._id);
     } else {
       setFarm(null);
+      setCrop(null);
       setPage(1);
       getAllScoutsList({
         page: 1,
@@ -132,7 +132,7 @@ const ListScouts: FunctionComponent = () => {
         toDate: router.query.to_date as string,
         cropId: router.query.crop_id as string,
       });
-      await getAllCrops("", "", router.query.created_by as string);
+      await getAllCrops("", "");
     }
   };
 
@@ -382,48 +382,18 @@ const ListScouts: FunctionComponent = () => {
           response?.data?.length &&
           response?.data?.find((item: any) => item._id == farmId);
         setFarm(obj);
+        getAllCrops(router.query.crop_id as string, obj?._id as string);
       }
     } else if (response?.statusCode == 403) {
       await logout();
     }
   };
 
-  const modifyDataToGroup = (data: any) => {
-    if (Array.isArray(data)) {
-      const outputArray: any = [];
-
-      data.forEach((item) => {
-        const farmId = item._id;
-        const farmTitle = item.title;
-
-        item.crops.forEach((crop: any) => {
-          const modifiedCrop = {
-            farm_id: farmId,
-            farm_title: farmTitle,
-            ...crop,
-          };
-
-          outputArray.push(modifiedCrop);
-        });
-      });
-
-      return outputArray;
-    } else return [];
-  };
-  const getAllCrops = async (cropId = "", farmId = "", userId = "") => {
-    let queryParams: any = {};
-
-    if (farmId) {
-      queryParams["farm_id"] = farmId;
-    }
-    if (userId) {
-      queryParams["user_id"] = userId;
-    }
-    let url = prepareURLEncodedParams("", queryParams);
-    const response = await ListAllCropsForDropDownServices(url);
+  const getAllCrops = async (cropId: string, farmId: string) => {
+    const response = await ListAllCropsForDropDownServices(farmId, accessToken);
     if (response?.success) {
       let data = response?.data;
-      data = modifyDataToGroup(data);
+      // data = modifyDataToGroup(data);
 
       setCropOptions(data);
       if (cropId) {
@@ -438,13 +408,10 @@ const ListScouts: FunctionComponent = () => {
     setFarm("");
     setFromDate("");
     setToDate("");
-    setCrop("");
+    setCrop(null);
     setPage(1);
     setLimit(10);
     await getAllScoutsList({});
-    // getAllUsers();
-    getAllFarms();
-    getAllCrops();
   };
 
   useEffect(() => {
@@ -453,11 +420,6 @@ const ListScouts: FunctionComponent = () => {
       getAllFarms(
         router.query.created_by as string,
         router.query.farm_id as string
-      );
-      getAllCrops(
-        router.query.crop_id as string,
-        router.query.farm_id as string,
-        router.query.created_by as string
       );
 
       getAllScoutsList({
@@ -505,7 +467,7 @@ const ListScouts: FunctionComponent = () => {
           <CropAutoCompleteFoScouts
             options={cropOptions}
             onSelectFarmFromDropDown={onSelectCropFromDropDown}
-            label={"title"}
+            farm={farm}
             placeholder={"Select Crop here"}
             defaultValue={crop}
           />

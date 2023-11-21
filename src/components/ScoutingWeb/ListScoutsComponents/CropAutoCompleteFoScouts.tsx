@@ -1,26 +1,20 @@
-import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 import { Autocomplete, TextField } from "@mui/material";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 
 interface PropsTypes {
   options: Array<any> | null | undefined;
   onSelectFarmFromDropDown: (value: string | any, reason: string) => void;
-  label: string;
+  farm: string;
   placeholder: string;
   defaultValue: any | null | undefined;
 }
 const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
   options,
   onSelectFarmFromDropDown,
-  label,
+  farm,
   placeholder,
   defaultValue,
 }) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-
   const [defaultValueSet, setDefaultValueSet] = useState(defaultValue);
   const [autoCompleteLoading, setAutoCompleteLoading] = useState(false);
 
@@ -36,21 +30,13 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
     <div>
       {!autoCompleteLoading ? (
         <Autocomplete
-          groupBy={(option) => option.farm_title}
+          disabled={!farm}
           value={defaultValueSet}
           disablePortal
           size="small"
           id="grouped-demo"
-          options={
-            options && options?.length
-              ? options.sort(
-                (a, b) => -b.farm_title?.localeCompare(a.farm_title)
-              )
-              : []
-          }
-          getOptionLabel={(option: any) =>
-            option[label] ? option[label]?.toUpperCase() : ""
-          }
+          options={options?.length ? options : []}
+          getOptionLabel={(option: any) => option.title}
           renderOption={(props, option) => {
             return (
               <li {...props} key={option?._id}>
@@ -75,17 +61,17 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
             />
           )}
 
-        // sx={{
-        //     width: '1000%',
-        //     background: "#fff",
-        //     "& .MuiInputBase-input ": {
-        //         fontSize: "13px",
-        //         fontWeight: "400",
-        //         fontFamily: "'inter', sans-serif ",
-        //         color: "#000",
+          // sx={{
+          //     width: '1000%',
+          //     background: "#fff",
+          //     "& .MuiInputBase-input ": {
+          //         fontSize: "13px",
+          //         fontWeight: "400",
+          //         fontFamily: "'inter', sans-serif ",
+          //         color: "#000",
 
-        //     }
-        // }}
+          //     }
+          // }}
         />
       ) : (
         ""

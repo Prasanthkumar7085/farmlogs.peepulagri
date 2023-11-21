@@ -19,6 +19,7 @@ import styles from "./crop-card.module.css";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { useCookies } from "react-cookie";
 
 const AllCropsComponent = () => {
   const router = useRouter();
@@ -30,8 +31,8 @@ const AllCropsComponent = () => {
 
   const [defaultValue, setDefaultValue] = useState<any>("");
   const [formId, setFormId] = useState<any>();
-  const [formOptions, setFarmOptions] = useState<any>();
-  const [cropOptions, setCropOptions] = useState<any>();
+  const [formOptions, setFarmOptions] = useState<any>([]);
+  const [cropOptions, setCropOptions] = useState<any>([]);
   const [dilogOpen, setDilogOpen] = useState<any>();
   const [loading, setLoading] = useState<any>(true);
   const [alertMessage, setAlertMessage] = useState("");
@@ -43,15 +44,16 @@ const AllCropsComponent = () => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortType, setSortType] = useState("desc");
 
+  const [searchString, setSearchString] = useState("");
+  const [optionsLoading, setOptionsLoading] = useState(false);
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
+
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -59,16 +61,26 @@ const AllCropsComponent = () => {
     }
   };
   const getFarmDetails = async (farmsearchstring: any, id: any) => {
-    setLoading(true);
+    setOptionsLoading(true);
 
+    if (farmsearchstring) {
+      router.push({
+        pathname: `/farms/${router.query.farm_id}/crops`,
+        query: { search_string: farmsearchstring },
+      });
+    }
     try {
-      let response = await ListAllFarmForDropDownService(farmsearchstring, accessToken);
+      let response = await ListAllFarmForDropDownService(
+        farmsearchstring,
+        accessToken
+      );
       if (response?.success == true && response?.data?.length) {
         setFarmOptions(response?.data);
         if (id) {
           let selectedObject =
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == id);
+
           setDefaultValue(selectedObject?.title);
           dispatch(setFarmTitleTemp(selectedObject?.title));
           captureFarmName(selectedObject);
@@ -81,11 +93,11 @@ const AllCropsComponent = () => {
         await logout();
       } else {
         setFarmOptions([]);
-        setLoading(false);
       }
     } catch (err) {
       console.error(err);
-      setLoading(false);
+    } finally {
+      setOptionsLoading(false);
     }
   };
 
@@ -171,28 +183,33 @@ const AllCropsComponent = () => {
 
   useEffect(() => {
     if (router.isReady && router.query.farm_id && accessToken) {
-      getFarmDetails("", router.query.farm_id);
-      dispatch(removeTheFilesFromStore([]));
+      let delay = 1000;
+      let debounce = setTimeout(() => {
+        dispatch(removeTheFilesFromStore([]));
+
+        getFarmDetails(
+          searchString ? searchString : router.query?.search_string,
+          router.query.farm_id
+        );
+      }, delay);
+      return () => clearTimeout(debounce);
     }
-  }, [accessToken, router.isReady]);
+  }, [searchString, accessToken, router.isReady]);
 
   const captureFarmName = (selectedObject: any) => {
     if (selectedObject && Object.keys(selectedObject).length) {
       setFormId(selectedObject?._id);
       getCropsDetails(selectedObject?._id);
-      router.replace(`/farms/${selectedObject?._id}/crops`);
+      router.replace(
+        `/farms/${selectedObject?._id}/crops?search_string=${selectedObject.title}`
+      );
     } else {
       setLoading(false);
     }
   };
 
-  const captureFarmSearchSting = (value: any) => {
-    getFarmDetails(value, router.query.farm_id);
-  }
-
   //create new folder (dilog)
   const captureResponseDilog = (value: any) => {
-    console.log(value, ",mn")
     if (!value) {
       setDilogOpen(false);
       setErrorMessages([]);
@@ -398,16 +415,18 @@ const AllCropsComponent = () => {
       <FormControl
         variant="outlined"
         className={styles.filterBox}
-      // style={{border:"1px solid"}}
+        // style={{border:"1px solid"}}
       >
         <InputLabel color="primary" />
         <SelectAutoCompleteForFarms
+          optionsLoading={optionsLoading}
           options={formOptions}
           label={"title"}
           onSelectValueFromDropDown={captureFarmName}
           placeholder={"Select Farm"}
           defaultValue={defaultValue}
-          captureFarmSearchSting={captureFarmSearchSting}
+          searchString={searchString}
+          setSearchString={setSearchString}
         />
         <FormHelperText />
       </FormControl>

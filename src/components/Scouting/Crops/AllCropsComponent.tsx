@@ -58,11 +58,11 @@ const AllCropsComponent = () => {
       console.error(err);
     }
   };
-  const getFarmDetails = async (id: any) => {
+  const getFarmDetails = async (farmsearchstring: any, id: any) => {
     setLoading(true);
 
     try {
-      let response = await ListAllFarmForDropDownService("", accessToken);
+      let response = await ListAllFarmForDropDownService(farmsearchstring, accessToken);
       if (response?.success == true && response?.data?.length) {
         setFarmOptions(response?.data);
         if (id) {
@@ -171,7 +171,7 @@ const AllCropsComponent = () => {
 
   useEffect(() => {
     if (router.isReady && router.query.farm_id && accessToken) {
-      getFarmDetails(router.query.farm_id);
+      getFarmDetails("", router.query.farm_id);
       dispatch(removeTheFilesFromStore([]));
     }
   }, [accessToken, router.isReady]);
@@ -185,6 +185,10 @@ const AllCropsComponent = () => {
       setLoading(false);
     }
   };
+
+  const captureFarmSearchSting = (value: any) => {
+    getFarmDetails(value, router.query.farm_id);
+  }
 
   //create new folder (dilog)
   const captureResponseDilog = (value: any) => {
@@ -403,6 +407,7 @@ const AllCropsComponent = () => {
           onSelectValueFromDropDown={captureFarmName}
           placeholder={"Select Farm"}
           defaultValue={defaultValue}
+          captureFarmSearchSting={captureFarmSearchSting}
         />
         <FormHelperText />
       </FormControl>

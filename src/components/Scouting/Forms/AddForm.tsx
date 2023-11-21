@@ -232,7 +232,7 @@ const AddFarmForm = () => {
   const addNewLocation = async (location: string) => {
     setAddLocationLoading(true);
 
-    const response = await addLocationService({ name: location }, accessToken);
+    const response = await addLocationService({ title: location }, accessToken);
     if (response?.success) {
       setAlertMessage(response?.message);
       setAlertType(true);

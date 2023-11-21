@@ -48,7 +48,7 @@ const DashboardPage = () => {
     page: number;
     limit: number;
     search_string: string;
-    location: string;
+    location: any;
   }>) => {
     setLoading(true);
     try {
@@ -64,7 +64,8 @@ const DashboardPage = () => {
         delete queryParam["order_type"];
       }
       if (location) {
-        if (location !== "1") {
+        console.log(location, "m")
+        if (location != "1" && location != "All") {
           queryParam["location_id"] = location;
           delete queryParam["order_by"];
           delete queryParam["order_type"];
@@ -121,7 +122,7 @@ const DashboardPage = () => {
     }
 
     let searchFromRouter = router.query?.search_string;
-    let locationFromRouter = router.query?.location;
+    let locationFromRouter = router.query?.location_id;
     await getAllFarms({
       page: 1,
       limit: 20,
@@ -134,7 +135,7 @@ const DashboardPage = () => {
     if (locationFromRouter) {
       setLocation(locationFromRouter as string);
     } else {
-      setLocation("All");
+      setLocation("");
     }
   };
 
@@ -180,7 +181,6 @@ const DashboardPage = () => {
     }
   }, [searchString]);
 
-  console.log(page, hasMore);
 
   return (
     <div id="dashboardPage">

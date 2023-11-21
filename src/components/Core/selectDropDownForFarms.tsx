@@ -4,14 +4,15 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown, label, placeholder, defaultValue }: any) => {
+const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown, label, placeholder, defaultValue, captureFarmSearchSting }: any) => {
 
     const [defaultValueSet, setDefaultValueSet] = useState<any>();
+    const [searchString, setSearchString] = useState<any>()
     const router = useRouter();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (router.isReady && router.query.farm_id) {
+        if (router.isReady && router.query.farm_id && !searchString) {
             setDefaultValueSet(options && options.find((item: any) => item._id == router.query.farm_id))
         }
 
@@ -39,6 +40,10 @@ const SelectAutoCompleteForFarms = ({ options, value, onSelectValueFromDropDown,
 
                     }
 
+                }}
+                onInputChange={(e, newInputValue) => {
+                    setSearchString(newInputValue);
+                    captureFarmSearchSting(newInputValue)
                 }}
                 renderInput={(params) => <TextField {...params} placeholder={placeholder} />
                 }

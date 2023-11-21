@@ -18,7 +18,7 @@ const getImagesByPaginationService = async ({
       }),
     };
     let response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmId}/crops/${cropId}/farm-images/${page}/10`,
+      `${process.env.NEXT_PUBLIC_API_URL}/crops/${cropId}/images/${page}/10`,
       options
     );
     let responseData = await response.json();

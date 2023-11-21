@@ -132,7 +132,7 @@ const ScoutView = () => {
                 >
                   <Typography className={styles.postDate}>
                     <InsertInvitationIcon />
-                    <span>{timePipe(item.created_at, "DD-MM-YYYY")}</span>
+                    <span>{timePipe(item.uploaded_at, "DD-MM-YYYY")}</span>
                   </Typography>
                 </div>
                 <SingleImageComponent

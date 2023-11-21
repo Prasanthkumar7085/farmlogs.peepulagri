@@ -5,12 +5,14 @@ import {
   IconButton,
   LinearProgress,
   TextField,
-  Button, // Import Button from MUI
+  Button,
+  Chip, // Import Button from MUI
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./TagsTextFeild.module.css";
 import { Toaster, toast } from "sonner";
+import { useRouter } from "next/router";
 
 const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [tagValue, setTagValue] = useState<any>();
@@ -18,7 +20,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const [tag, setTag] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isTextFieldOpen, setIsTextFieldOpen] = useState(false);
-
+  const router = useRouter()
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -31,7 +33,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   const dropDownTags = async () => {
     setLoading(true);
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/farms/list-farm-images/tags/all`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/all`;
       const options = {
         method: "GET",
 
@@ -69,6 +71,32 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
     if (event.key === "Tab") {
       addNewTag();
     }
+  };
+  const handleDeleteChip = async (deletedValue: any) => {
+    const updatedTags = tagValue.filter((tag: any) => tag !== deletedValue);
+    let body = {
+      "tags": [deletedValue],
+      "farm_image_ids": [router.query.farm_id]
+    }
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/farm-images/delete-tags`;
+      const options = {
+        method: "DELETE",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body)
+      };
+      const response: any = await fetch(url, options);
+      const responseData = await response.json();
+    }
+    catch (err) {
+
+    }
+
+    setTagValue(updatedTags);
+    captureTags(updatedTags); // Function to capture updated tags
   };
   return (
     <div className={styles.addTagContainer}>
@@ -111,6 +139,14 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                 setTagValue(newValue);
                 captureTags(newValue);
               }}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    label={option}
+                    onDelete={() => handleDeleteChip(option)}
+                  />
+                ))
+              }
               renderInput={(params) => (
                 <TextField
                   {...params}

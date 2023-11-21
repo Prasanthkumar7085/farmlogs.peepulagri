@@ -111,34 +111,34 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
       {details?.length ? (
         details.map((item: any, index: any) => {
           if (!item.reply_to) {
-            const itemCreatedAt: any = new Date(item.created_at);
+            const itemCreatedAt: any = new Date(item.createdAt);
             const currentDate: any = new Date();
             const timeDifferenceInMilliseconds = currentDate - itemCreatedAt;
             const timeDifferenceInMinutes =
               timeDifferenceInMilliseconds / (1000 * 60);
             return (
               <div className={styles.inMessage} key={index}>
-                {item?.user_type == "JR_AGRONOMIST" ? (
+                {item?.commented_by?.user_type == "farmer" ? (
                   <Avatar sx={{ bgcolor: "chocolate" }}>
-                    {item?.user_type?.slice(0, 2).toUpperCase()}
+                    {item?.commented_by?.name?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 ) : (
                   <Avatar sx={{ bgcolor: "green" }}>
-                    {item?.user_type?.slice(0, 2)}
+                    {item?.commented_by?.user_type?.slice(0, 2)}
                   </Avatar>
                 )}
                 <div className={styles.messagebox}>
                   <div className={styles.userdetails}>
                     <h4 className={styles.jack}>
                       {userDetails?.user_details?.user_type ==
-                        item?.user_type
+                        item?.commented_by?.user_type
                         ? "You"
-                        : item?.user_type == "JR_AGRONOMIST"
-                          ? item.user[0].full_name
+                        : item?.commented_by?.user_type == "farmer"
+                          ? item.commented_by?.name
                           : item?.user_type}
                     </h4>
                     <p className={styles.aug20231030am}>
-                      {timePipe(item.updated_at, "DD-MM-YYYY hh.mm a")}
+                      {timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}
                     </p>
                   </div>
                   <div className={styles.paragraph}>
@@ -166,13 +166,13 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                           variant="caption"
                           sx={{ wordBreak: "break-word" }}
                         >
-                          {item.created_at == item.updated_at ? "" : "(edited)"}
+                          {item.createdAt == item.updatedAt ? "" : "(edited)"}
                         </Typography>
                       </p>
                     )}
                     <div className={styles.attachmentContainer}>
-                      {item.attachments.length !== 0
-                        ? item.attachments.map((file: any, indexfile: any) => {
+                      {item.attachments?.length !== 0
+                        ? item?.attachments?.map((file: any, indexfile: any) => {
                           return (
                             <div
                               className={styles.attachment}
@@ -225,7 +225,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   />
                                 </IconButton>
                                 {userDetails?.user_details?.user_type ==
-                                  item?.user_type ? (
+                                  item?.commented_by?.user_type ? (
                                   <IconButton
                                     onClick={() =>
                                       afterDeleteAttachements(
@@ -335,7 +335,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     </div>
 
                     {userDetails?.user_details?.user_type ==
-                      item?.user_type ? (
+                      item?.commented_by?.user_type ? (
                       <div className={styles.react}>
                         {(currentDate - itemCreatedAt) / (1000 * 60) > 15 ? (
                           ""
@@ -392,7 +392,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                   15 ||
                                   item.replies.some(
                                     (reply: any) =>
-                                      reply.user_type !==
+                                      reply?.commented_by?.user_type !==
                                       userDetails?.user_details?.user_type
                                   )
                                   ? "none"
@@ -441,15 +441,15 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
 
                       return (
                         <div className={styles.inMessage1} key={index}>
-                          {row?.user_type == "JR_AGRONOMIST" ? (
+                          {row?.commented_by?.user_type == "farmer" ? (
                             <Avatar sx={{ bgcolor: "chocolate" }}>
-                              {row?.user_type
+                              {row?.commented_by?.name
                                 ?.slice(0, 2)
                                 .toUpperCase()}
                             </Avatar>
                           ) : (
                             <Avatar sx={{ bgcolor: "green" }}>
-                              {row?.user_type?.slice(0, 2)}
+                              {row?.commented_by?.user_type?.slice(0, 2)}
                             </Avatar>
                           )}{" "}
                           <div className={styles.messagebox1}>
@@ -457,15 +457,15 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                               <div className={styles.userdetails1}>
                                 <h4 className={styles.jack}>
                                   {userDetails?.user_details?.user_type ==
-                                    row?.user_type
+                                    row?.commented_by?.user_type
                                     ? "You"
-                                    : row?.user_type == "USER"
-                                      ? row?.full_name
-                                      : row?.user_type}
+                                    : row?.commented_by?.user_type == "farmer"
+                                      ? row?.commented_by?.name
+                                      : row?.commented_by?.user_type}
                                 </h4>
                                 <p className={styles.aug20231030am}>
                                   {timePipe(
-                                    row.updated_at,
+                                    row.updatedAt,
                                     "DD-MM-YYYY hh:mm a"
                                   )}
                                 </p>
@@ -506,8 +506,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                 </p>
                               )}
 
-                              {row.attachments.length
-                                ? row.attachments.map(
+                              {row?.attachments?.length
+                                ? row?.attachments?.map(
                                   (file: any, fileIndex: any) => {
                                     return (
                                       <div
@@ -549,7 +549,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                                         />
                                         {userDetails?.user_details
                                           ?.user_type ==
-                                          row?.user[0]?.user_type ? (
+                                          row?.commented_by?.user_type ? (
                                           <IconButton
                                             onClick={() =>
                                               afterDeleteAttachements(
@@ -571,7 +571,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                             </div>
 
                             {userDetails?.user_details?.user_type ==
-                              row?.user_type ? (
+                              row?.commented_by?.user_type ? (
                               <div className={styles.actionButton1}>
                                 <div className={styles.react}>
                                   <div className={styles.edit}>
@@ -706,10 +706,9 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           </Box>
         </div>
       ) : (
-        // <div className={styles.noThreadFound}>
-        //   <ChatIcon /> No Comments
-        // </div>
-        ""
+        <div className={styles.noThreadFound}>
+          <ChatIcon /> No Comments
+        </div>
       )}
       <LoadingComponent loading={loading} />
       <AlertComponent

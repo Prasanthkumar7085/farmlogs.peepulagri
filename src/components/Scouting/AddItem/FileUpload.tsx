@@ -174,15 +174,16 @@ const FileUploadComponent = () => {
     fileProgressCopy: any,
     setFileProgress: Function
   ) => {
-    let obj = {
-      attachment: {
-        original_name: file.name,
-        farm_id: router.query.farm_id as string,
-        type: file.type,
-        crop_slug: router.query.crop_id,
-        source: "scouting",
-      },
-    };
+    let obj =
+    {
+      "farm_id": router.query.farm_id as string,
+      "crop_id": router.query.crop_id,
+      "original_name": file.name,
+      "type": file.type,
+      "size": file.size
+    }
+
+
     let options = {
       method: "POST",
       headers: new Headers({
@@ -194,7 +195,7 @@ const FileUploadComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/start-upload`,
         options
       );
       let responseData = await response.json();
@@ -211,9 +212,6 @@ const FileUploadComponent = () => {
           original_name: responseData.data.original_name,
           type: file.type,
           size: file.size,
-          name: responseData.data.name,
-          crop_slug: responseData.data.crop_slug,
-          path: responseData.data.path,
         });
         setAttachments(tempFilesStorage);
       } else {
@@ -248,6 +246,7 @@ const FileUploadComponent = () => {
       method: "POST",
       headers: new Headers({
         "content-type": "application/json",
+        authorization: accessToken,
       }),
       body: JSON.stringify(obj),
     };
@@ -255,12 +254,12 @@ const FileUploadComponent = () => {
     try {
       // Send the chunk to the server using a POST request
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/start-upload/presigned-url`,
         options
       );
       let responseData: any = await response.json();
       if (responseData.success == true) {
-        resurls = [...responseData.url];
+        resurls = [...responseData.data];
 
         const promises = [];
 
@@ -272,6 +271,10 @@ const FileUploadComponent = () => {
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
             method: "PUT",
+            headers: new Headers({
+              "content-type": "application/json",
+              authorization: accessToken,
+            }),
             body: chunk,
           });
 
@@ -315,7 +318,7 @@ const FileUploadComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/complete-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/complete-upload`,
         options
       );
       let responseData: any = await response.json();
@@ -332,8 +335,11 @@ const FileUploadComponent = () => {
     setFileProgress: any
   ) => {
     let obj = {
-      original_name: item.name,
-      type: item.type,
+      "farm_id": router.query.farm_id,
+      "crop_id": router.query.crop_id,
+      "original_name": item.name,
+      "type": item.type,
+      "size": item.size
     };
 
     let options: any = {
@@ -347,7 +353,7 @@ const FileUploadComponent = () => {
 
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/crops/${router.query.crop_id}/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image`,
         options
       );
       let responseData = await response.json();
@@ -362,9 +368,9 @@ const FileUploadComponent = () => {
           original_name: responseData.data.original_name,
           type: item.type,
           size: item.size,
-          path: responseData.data.path,
+          path: responseData?.data?.path,
+          key: responseData?.data?.key
         });
-        console.log(tempFilesStorage, "asdfgh");
         setAttachments(tempFilesStorage);
       } else {
         fileProgressCopy[index] = "fail";
@@ -408,7 +414,7 @@ const FileUploadComponent = () => {
           let obj = {
             farm_id: router.query.farm_id,
             crop_id: router?.query?.crop_id,
-            path: file.path,
+            key: file.key,
             metadata: {
               original_name: file?.original_name,
               size: file?.size,
@@ -426,7 +432,7 @@ const FileUploadComponent = () => {
             }),
           };
           let response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images`,
+            `${process.env.NEXT_PUBLIC_API_URL}/farm-images`,
             options
           );
           let responseData = await response.json();
@@ -440,7 +446,13 @@ const FileUploadComponent = () => {
         })
       );
       if (isExecuted) {
-        await addTagsAndCommentsEvent(imagesIdsArray);
+        if (tags?.length || description?.length) {
+          await addTagsAndCommentsEvent(imagesIdsArray);
+        }
+        else {
+          toast.success("FarmImages added successfully");
+          router.back()
+        }
       }
     } catch (err) {
       console.error(err);
@@ -519,14 +531,14 @@ const FileUploadComponent = () => {
     try {
       let urls = [
         {
-          url: "/farms/farm-images/tag",
+          url: "/farm-images/tag",
           body: {
             farm_image_ids: imagesArray,
             tags: tags,
           },
         },
         {
-          url: "/farms/farm-images/comments",
+          url: "/farm-images/comments",
           body: {
             farm_image_ids: imagesArray,
             content: description,
@@ -563,7 +575,7 @@ const FileUploadComponent = () => {
         })
       );
       if (success) {
-        // router.back();
+        router.back()
       }
     } catch (err) {
       console.error(err);
@@ -652,11 +664,11 @@ const FileUploadComponent = () => {
                         previewImages.find((e: any) => e.fileIndex == item.name)
                           ?.prieviewUrl
                           ? previewImages.find(
-                              (e: any) => e.fileIndex == item.name
-                            ).prieviewUrl
+                            (e: any) => e.fileIndex == item.name
+                          ).prieviewUrl
                           : item.type == "application/pdf"
-                          ? "/pdf-icon.png"
-                          : "/doc-icon.webp"
+                            ? "/pdf-icon.png"
+                            : "/doc-icon.webp"
                       }
                     />
                     <div className={styles.progressdetails}>
@@ -687,7 +699,7 @@ const FileUploadComponent = () => {
                               )}
                             </div>
                             {fileProgress[index] == 100 &&
-                            fileProgress[index] !== "fail" ? (
+                              fileProgress[index] !== "fail" ? (
                               <div className={styles.photojpg}>
                                 <IconButton>
                                   <DoneIcon sx={{ color: "#05A155" }} />
@@ -707,7 +719,7 @@ const FileUploadComponent = () => {
                             )}
                           </div>
                           {fileProgress[index] !== 100 ||
-                          fileProgress[index] == "fail" ? (
+                            fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
                               alt=""
@@ -720,7 +732,7 @@ const FileUploadComponent = () => {
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
-                          fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                             <LinearProgress />
                           ) : fileProgress[index] !== 100 &&
                             fileProgress[index] !== "fail" ? (
@@ -734,7 +746,7 @@ const FileUploadComponent = () => {
                         </Box>
                       </div>
                       {fileProgress[index] == 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         ""
                       ) : (
                         <div className={styles.uploadstatus}>

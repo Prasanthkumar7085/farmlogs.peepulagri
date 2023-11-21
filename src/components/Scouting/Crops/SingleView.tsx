@@ -120,7 +120,7 @@ const SingleViewScoutComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/crops/${router.query.crop_id}/farm-images/${pageNumber}/50`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${pageNumber}/50`,
         options
       );
 
@@ -147,17 +147,7 @@ const SingleViewScoutComponent = () => {
     }
   };
 
-  const getSingleScout = async (scoutId: any) => {
-    const response = await getSingleScoutService(scoutId, accessToken);
 
-    if (response?.success) {
-      if (response?.data?.attachments?.length) {
-        setSlideShowImages(response?.data?.attachments);
-        setScoutData(response?.data);
-      }
-    }
-    setLoading(false);
-  };
 
   const handleOpenDialog = (item: any) => {
     setOpenDialog(true);
@@ -465,14 +455,14 @@ const SingleViewScoutComponent = () => {
         // Calculate the date range for the visible images
         const startDate =
           visibleImages.length > 0
-            ? timePipe(visibleImages[0].created_at, "DD MMM YY")
+            ? timePipe(visibleImages[0].uploaded_at, "DD MMM YY")
             : "";
         const endDate =
           visibleImages.length > 0
             ? timePipe(
-                visibleImages[visibleImages.length - 1].created_at,
-                "DD MMM YY"
-              )
+              visibleImages[visibleImages.length - 1].uploaded_at,
+              "DD MMM YY"
+            )
             : "";
 
         // Update the displayed date range
@@ -548,7 +538,7 @@ const SingleViewScoutComponent = () => {
         <div>
           <div className={styles.stickyHeader}>
             <div className={styles.dateRange}>{dateRange}</div>
-            {tagsCheckBoxOpen ? (
+            {tagsCheckBoxOpen && data?.length ? (
               <Button
                 onClick={() => {
                   setTagsCheckBoxOpen(false);

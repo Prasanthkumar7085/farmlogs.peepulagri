@@ -80,14 +80,14 @@ const SingleImageView: FC<componentProps> = ({
       };
 
       let response: any = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/tag`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tag`,
         options
       );
       let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
         toast.success(responseData?.message);
         setTagsDrawerEditOpen(false);
-        await getImageData({ page: 1 });
+        await getSingleImageDetails();
       } else {
         toast.error(responseData?.message);
       }
@@ -111,7 +111,7 @@ const SingleImageView: FC<componentProps> = ({
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-image/view/${router.query.image_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${router.query.image_id}`,
         options
       );
       const responseData = await response.json();
@@ -146,7 +146,7 @@ const SingleImageView: FC<componentProps> = ({
             {loading ? (
               "-"
             ) : (
-              <span>{timePipe(data?.created_at, "DD-MM-YYYY")}</span>
+              <span>{timePipe(data?.uploaded_at, "DD-MM-YYYY")}</span>
             )}
           </Typography>
         </div>
@@ -243,22 +243,22 @@ const SingleImageView: FC<componentProps> = ({
               <div className={styles.tagNames}>
                 {data?.tags?.length
                   ? data?.tags?.map((item: string, index: number) => {
-                      return (
-                        <Chip
-                          icon={
-                            <SellIcon
-                              sx={{ width: "12px", paddingInlineStart: "4px" }}
-                            />
-                          }
-                          key={index}
-                          label={item}
-                          className={styles.tagsName}
-                          variant="outlined"
-                          size="medium"
-                          color="success"
-                        />
-                      );
-                    })
+                    return (
+                      <Chip
+                        icon={
+                          <SellIcon
+                            sx={{ width: "12px", paddingInlineStart: "4px" }}
+                          />
+                        }
+                        key={index}
+                        label={item}
+                        className={styles.tagsName}
+                        variant="outlined"
+                        size="medium"
+                        color="success"
+                      />
+                    );
+                  })
                   : ""}
               </div>
             ) : (
@@ -337,7 +337,7 @@ const SingleImageView: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={data}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-        // loading={loading}
+      // loading={loading}
       />
 
       <LoadingComponent loading={loading} />

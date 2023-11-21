@@ -66,7 +66,7 @@ const DrawerComponentForScout = ({
     try {
       let response = await fetch(
         // `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/${attachement?._id}/comments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id}/comments`,
         options
       );
       let responseData = await response.json();
@@ -96,14 +96,13 @@ const DrawerComponentForScout = ({
           if (commentsById.hasOwnProperty(commentId)) {
             commentsById[commentId].replies.sort((a: any, b: any) => {
               // Assuming updated_date is in ISO8601 format, you can compare them as strings
-              return a.created_at.localeCompare(b.created_at);
+              return a.createdAt.localeCompare(b.createdAt);
             });
           }
         }
         // Convert the commentsById object to an array of comments
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
-        console.log(reverse, "mv");
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
       } else if (responseData?.statusCode == 403) {
@@ -128,7 +127,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/comment/${commnet_id}/delete`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/comment/${commnet_id}/delete`,
         options
       );
       let responseData = await response.json();
@@ -159,7 +158,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/comment/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/comment/${commnet_id}`,
         options
       );
       let responseData = await response.json();
@@ -212,7 +211,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL} / scouts / ${scoutDetails?._id} / attachments / ${attachement?._id} / comments / ${commentId} / attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/scout/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commentId}/attachments`,
         options
       );
       let responseData = await response.json();

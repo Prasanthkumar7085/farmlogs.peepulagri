@@ -218,7 +218,7 @@ const AllCropsComponent = () => {
 
       let obj = {
         farm_id: router.query.farm_id,
-        title: title.name ? title.name?.trim() : "",
+        title: title ? title?.trim() : "",
         area: crop_area,
       };
 

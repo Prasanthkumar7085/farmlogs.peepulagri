@@ -97,9 +97,10 @@ const CropCard = ({
 
       let obj = {
         title: title ? title?.trim() : "",
-        crop_area: crop_area,
+        area: crop_area,
+        farm_id: router.query.farm_id,
       };
-      renameCrop(obj);
+      editCrop(obj);
     }
   };
 
@@ -121,10 +122,9 @@ const CropCard = ({
     }
   };
 
-  const renameCrop = async (value: any) => {
+  const editCrop = async (value: any) => {
     setLoadingForAdd(true);
     const response = await updateCropService(
-      router.query.farm_id as string,
       itemDetails?._id,
       value,
       accessToken
@@ -147,11 +147,7 @@ const CropCard = ({
 
   const deleteCrop = async () => {
     setDeleteLoading(true);
-    const response = await deleteCropService(
-      router.query.farm_id as string,
-      itemDetails?._id,
-      accessToken
-    );
+    const response = await deleteCropService(itemDetails?._id, accessToken);
     if (response?.success) {
       getCropsDetails(router.query.farm_id as string);
       setAlertMessage(response?.message);

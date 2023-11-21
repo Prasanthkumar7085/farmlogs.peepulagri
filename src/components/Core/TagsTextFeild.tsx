@@ -142,6 +142,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip
+                    key={index}
                     label={option}
                     onDelete={() => handleDeleteChip(option)}
                   />

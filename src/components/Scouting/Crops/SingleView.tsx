@@ -216,7 +216,7 @@ const SingleViewScoutComponent = () => {
     setLoading(true)
     try {
       let body = {
-        farm_image_ids: [router.query.farm_id],
+        farm_image_ids: selectedItems.map((item: any) => item._id),
         tags: tags,
       };
       let options = {
@@ -235,6 +235,7 @@ const SingleViewScoutComponent = () => {
       let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
         toast.success(responseData?.message);
+        setSelectedItems([]);
         setTagsDrawerOpen(false);
         await getPresingedURls();
       } else {
@@ -332,8 +333,10 @@ const SingleViewScoutComponent = () => {
   const deleteImages = async () => {
     setDeleteLoading(true)
     let bodyData: any = {
-      "farm_image_ids": selectedItems
+      "farm_image_ids": selectedItems.map((item: any) => item._id)
     }
+    console.log(bodyData)
+    console.log(JSON.stringify(bodyData))
     let options = {
       method: "DELETE",
       headers: new Headers({
@@ -349,7 +352,11 @@ const SingleViewScoutComponent = () => {
       );
       let responseData = await response.json()
       if (responseData?.success) {
+        await getPresingedURls()
+        setTagsDrawerOpen(false);
         toast.success("Images Deleted successfully");
+        setDeleteOpen(false)
+        setSelectedItems([])
       }
     }
     catch (err) {

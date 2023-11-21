@@ -26,10 +26,15 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   const [search, setSearch] = useState('');
   const [changed, setChanged] = useState(false);
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
-  const [location, setLocation] = useState<{ name: string, _id: string } | null>();
-  const [locations, setLocations] = useState<Array<{ name: string, _id: string }>>([]);
+  const [location, setLocation] = useState<{
+    title: string;
+    _id: string;
+  } | null>();
+  const [locations, setLocations] = useState<
+    Array<{ title: string; _id: string }>
+  >([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
-  const [user, setUser] = useState<string|null>(null);
+  const [user, setUser] = useState<string | null>(null);
   const [users, setUsers] = useState([]);
   const [settingUserLoading, setSettingUserLoading] = useState(false);
 
@@ -40,14 +45,14 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
-      setLocation({ name: "All", _id: "1" });
+      setLocation({ title: "All", _id: "1" });
     }
     if (value) {
       setChanged(true);
       setLocation(value);
       getFarmsData({
         search_string: search,
-        location: value?.name as string,
+        location: value?.title as string,
         userId: user as string,
         page: 1,
         limit: router.query.limit as string,
@@ -87,7 +92,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       const debounce = setTimeout(() => {
         getFarmsData({
           search_string: search,
-          location: location?.name as string,
+          location: location?.title as string,
           userId: router.query.user_id as string,
           page: router.query.page as string,
           limit: router.query.limit as string,
@@ -99,8 +104,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     }
   }, [search, location]);
 
-  const getAllUsers = async (userId = '') => {
-    
+  const getAllUsers = async (userId = "") => {
     const response = await getAllUsersService({ token: accessToken });
     if (response?.success) {
       setUsers(response?.data);
@@ -108,15 +112,14 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         let userObj = response?.data?.find((item: any) => item._id == userId);
         setUser(userObj);
         setSettingUserLoading(true);
-          setTimeout(() => {
-            setSettingUserLoading(false);
-          }, 1);
+        setTimeout(() => {
+          setSettingUserLoading(false);
+        }, 1);
       }
-      
     }
-  }
-  
-  const getLocations = async (newLocation = '') => {
+  };
+
+  const getLocations = async (newLocation = "") => {
     setOptionsLoading(true);
     try {
       const response = await getAllLocationsService(accessToken);
@@ -124,8 +127,10 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         setLocations(response?.data);
         if (newLocation) {
           setSettingLocationLoading(true);
-          const newLocationObject = response?.data?.find((item: any) => item?.name == newLocation);
-          
+          const newLocationObject = response?.data?.find(
+            (item: any) => item?.title == newLocation
+          );
+
           setLocation(newLocationObject);
           setTimeout(() => {
             setSettingLocationLoading(false);
@@ -133,53 +138,49 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         } else {
           setSettingLocationLoading(true);
 
-          // setLocation({ name: 'All', _id: '1' });
+          // setLocation({ title: 'All', _id: '1' });
           setTimeout(() => {
             setSettingLocationLoading(false);
           }, 1);
-          
         }
       }
       if (response?.data?.length) {
-        setLocations([{ name: 'All', _id: '1' }, ...response?.data]);
+        setLocations([{ title: "All", _id: "1" }, ...response?.data]);
       } else {
-        setLocations([{ name: 'All', _id: '1' }]);
+        setLocations([{ title: "All", _id: "1" }]);
       }
-
     } catch (e) {
       console.error(e);
     } finally {
       setOptionsLoading(false);
     }
-  }
+  };
 
   const onChangeUser = (e: any, value: any, reason: any) => {
     if (value) {
-      
       setUser(value);
       getFarmsData({
         search_string: search,
-        location: location?.name as string,
+        location: location?.title as string,
         userId: value._id as string,
         page: 1,
         limit: router.query.limit as string,
         sortBy: router.query.order_by as string,
         sortType: router.query.sort_type as string,
-      })
-    }else{
+      });
+    } else {
       setUser(null);
       getFarmsData({
         search_string: search,
-        location: location?.name as string,
-        userId: '',
+        location: location?.title as string,
+        userId: "",
         page: 1,
         limit: router.query.limit as string,
         sortBy: router.query.order_by as string,
         sortType: router.query.sort_type as string,
-      })
+      });
     }
-  }
-  
+  };
 
   return (
     <div className={styles.farmsnavbar}>
@@ -196,7 +197,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
               </InputAdornment>
             ),
           }}
-          placeholder="Search by farm name"
+          placeholder="Search by farm title"
           fullWidth
           variant="outlined"
           type="search"
@@ -226,9 +227,11 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
             fullWidth
             noOptionsText={"No such location"}
             value={location}
-            isOptionEqualToValue={(option, value) => option.name === value.name}
-            getOptionLabel={(option: { name: string; _id: string }) =>
-              option.name
+            isOptionEqualToValue={(option, value) =>
+              option.title === value.title
+            }
+            getOptionLabel={(option: { title: string; _id: string }) =>
+              option.title
             }
             options={locations}
             loading={optionsLoading}
@@ -253,7 +256,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           ""
         )}
 
-        {userType == "AGRONOMIST" && !settingUserLoading ? (
+        {/* {userType == "agronomist" && !settingUserLoading ? (
           <Autocomplete
             sx={{
               width: "250px",
@@ -289,7 +292,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           />
         ) : (
           ""
-        )}
+        )} */}
         {/* <Button
           className={styles.button}
           variant="contained"

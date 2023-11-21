@@ -28,7 +28,7 @@ export interface FarmDataType {
   logCount: number;
   slug: string;
   location_id: {
-    name: string;
+    title: string;
     _id: string;
   };
   status: string;

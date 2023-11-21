@@ -35,40 +35,45 @@ const CardDetails: FunctionComponent = () => {
   }, [router.isReady, accessToken]);
 
   return (
-
     <div style={{ maxWidth: "100%", padding: "5% 20% 5% 20%" }}>
-      <FarmDetailsMiniCard />
+      <FarmDetailsMiniCard farmDetails={data} />
 
       <div className={styles.viewScoutingHeader}>
-        <div className={styles.iconDiv} style={{ cursor: "pointer" }} onClick={() => router.back()}>
-          <img src="/arrow-left-back.svg" alt="" width={'18px'} />
+        <div
+          className={styles.iconDiv}
+          style={{ cursor: "pointer" }}
+          onClick={() => router.back()}
+        >
+          <img src="/arrow-left-back.svg" alt="" width={"18px"} />
         </div>
-        <h5>
-          View Farm
-        </h5>
+        <h5>View Farm</h5>
       </div>
       <div className={styles.cardDetails}>
-        <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
           <div className={styles.textwrapper}>
             <h1 className={styles.farmname}>
-              {data?.title ? data?.title : ''}
+              {data?.title ? data?.title : ""}
             </h1>
             <p className={styles.dateandtime}>
-              {timePipe(data?.createdAt, 'DD MMM YYYY, hh:mm A')}
+              {timePipe(data?.createdAt, "DD MMM YYYY, hh:mm A")}
             </p>
           </div>
-          {userType == 'AGRONOMIST' ?
+          {userType == "AGRONOMIST" ? (
             <div>
               <div className={styles.textwrapper}>
-                <h1 className={styles.userDetails} >
-                  User Mobile:
-                </h1>
-                <p className={styles.dateandtime}>
-                  {data?.user_id?.phone}
-                </p>
+                <h1 className={styles.userDetails}>User Mobile:</h1>
+                <p className={styles.dateandtime}>{data?.user_id?.phone}</p>
               </div>
             </div>
-            : ""}
+          ) : (
+            ""
+          )}
         </div>
         <div className={styles.landdetails}>
           <div className={styles.lable}>
@@ -80,7 +85,7 @@ const CardDetails: FunctionComponent = () => {
         <div className={styles.landdetails}>
           <div className={styles.lable}>
             <h1 className={styles.heading}>Location</h1>
-            <p className={styles.acres}>{data?.location}</p>
+            <p className={styles.acres}>{data?.location_id.title}</p>
           </div>
         </div>
       </div>

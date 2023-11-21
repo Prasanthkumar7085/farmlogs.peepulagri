@@ -93,7 +93,7 @@ const AllFarmsPage = () => {
   }: callFarmsProps) => {
     setLoading(true);
     try {
-      let url = `farm/${page}/${limit}`;
+      let url = `farms/${page}/${limit}`;
       let queryParam: any = {
         order_by: "createdAt",
         order_type: "desc",
@@ -131,7 +131,6 @@ const AllFarmsPage = () => {
         const { data, ...rest } = response;
         setData(data);
         setPaginationDetails(rest);
-        dispatch(setAllFarms(data));
       } else if (response?.statusCode == 403) {
         await logout();
       }

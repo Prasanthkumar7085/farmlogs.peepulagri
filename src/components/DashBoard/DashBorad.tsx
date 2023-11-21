@@ -20,12 +20,14 @@ const DashBoard = () => {
     const getFarmsData = async () => {
         let response: any = await getAllFarmsService(accessToken);
         if (response?.success) {
-            dispatch(setAllFarms(response?.data))
-            setFarmsData(response);
-            let { query } = router;
-            let { farm_id, ...restQueries } = query
-            let id = (router?.query?.farm_id && router?.query?.farm_id != 'farm_id') ? router?.query?.farm_id : response?.data[0]?._id;
-            router.push({ pathname: `/farm/${id}/logs`, query: restQueries });
+          setFarmsData(response);
+          let { query } = router;
+          let { farm_id, ...restQueries } = query;
+          let id =
+            router?.query?.farm_id && router?.query?.farm_id != "farm_id"
+              ? router?.query?.farm_id
+              : response?.data[0]?._id;
+          router.push({ pathname: `/farm/${id}/logs`, query: restQueries });
         }
         setLoading(false);
     }

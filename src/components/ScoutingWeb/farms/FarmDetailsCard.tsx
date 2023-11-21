@@ -178,7 +178,7 @@ const ScoutingFarmDetailsCard = ({
                 />
                 <div className={styles.duration}>
                   <p className={styles.from}>
-                    {timePipe(item.created_at, "DD, MMM YYYY")}
+                    {timePipe(item.createdAt, "DD, MMM YYYY")}
                   </p>
                   <p className={styles.divider}>-</p>
                   <p className={styles.from}>Current</p>

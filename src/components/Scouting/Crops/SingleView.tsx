@@ -29,6 +29,7 @@ import { Toaster, toast } from "sonner";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
+import { access } from "fs";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -78,10 +79,8 @@ const SingleViewScoutComponent = () => {
     setTempImages(selectedItems);
   }, [selectedItems]);
 
-
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-
 
   // Function to fetch data based on page number
   const fetchNextPage = async (page: any) => {
@@ -96,13 +95,15 @@ const SingleViewScoutComponent = () => {
 
   // Function to check if user has scrolled to the top of the page
   const isScrolledToTop = () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
     return scrollTop === 0;
   };
 
   // Function to check if user has scrolled to the middle of the page
   const isScrolledToMiddle = () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
@@ -117,7 +118,10 @@ const SingleViewScoutComponent = () => {
 
       if (previousData && previousData.length > 0) {
         const newData = [...previousData, ...data.slice(0, -50)];
-        window.scrollTo({ top: document.documentElement.scrollTop + 100, behavior: 'smooth' });
+        window.scrollTo({
+          top: document.documentElement.scrollTop + 100,
+          behavior: "smooth",
+        });
         setData(newData);
         setCurrentPage(previousPage);
       }
@@ -127,7 +131,10 @@ const SingleViewScoutComponent = () => {
 
       if (nextData && nextData.length > 0) {
         const newData = [...data.slice(50), ...nextData];
-        window.scrollTo({ top: document.documentElement.scrollTop - 100, behavior: 'smooth' });
+        window.scrollTo({
+          top: document.documentElement.scrollTop - 100,
+          behavior: "smooth",
+        });
         setData(newData);
         setCurrentPage(nextPage);
       }
@@ -136,24 +143,22 @@ const SingleViewScoutComponent = () => {
 
   // Effect to add scroll event listener when the component mounts
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [currentPage]); // Re-run effect when currentPage changes
 
-
   // Initial fetch when the component mounts
   useEffect(() => {
-    fetchNextPage(currentPage).then((initialData) => {
-      if (initialData && initialData.length > 0) {
-        setData(initialData);
-      }
-    });
-  }, []);
-
-
-
+    if (router.isReady && accessToken) {
+      fetchNextPage(currentPage).then((initialData) => {
+        if (initialData && initialData.length > 0) {
+          setData(initialData);
+        }
+      });
+    }
+  }, [router.isReady, accessToken]);
 
   //logout event when the 403 and 401 error codes
   const logout = async () => {
@@ -191,7 +196,6 @@ const SingleViewScoutComponent = () => {
         setHasMore(responseData?.has_more);
 
         return data.data;
-
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -370,9 +374,9 @@ const SingleViewScoutComponent = () => {
   const deleteImages = async () => {
     setDeleteLoading(true);
     let bodyData: any = {
-      "farm_image_ids": selectedItems.map((item: any) => item._id)
-    }
-   
+      farm_image_ids: selectedItems.map((item: any) => item._id),
+    };
+
     let options = {
       method: "DELETE",
       headers: new Headers({
@@ -388,14 +392,14 @@ const SingleViewScoutComponent = () => {
       );
       let responseData = await response.json();
       if (responseData?.success) {
-        await getPresingedURls(1)
+        await getPresingedURls(1);
         setTagsDrawerOpen(false);
         toast.success("Images Deleted successfully");
-        setDeleteOpen(false)
-        setSelectedItems([])
+        setDeleteOpen(false);
+        setSelectedItems([]);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setDeleteLoading(false);
     }

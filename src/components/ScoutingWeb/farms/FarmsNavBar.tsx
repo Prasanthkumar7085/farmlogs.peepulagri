@@ -46,6 +46,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
       setLocation({ title: "All", _id: "1" });
+      return; 
     }
     if (value) {
       setChanged(true);

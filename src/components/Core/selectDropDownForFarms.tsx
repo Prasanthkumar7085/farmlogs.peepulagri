@@ -12,6 +12,7 @@ const SelectAutoCompleteForFarms = ({
   searchString,
   setSearchString,
   optionsLoading,
+  setOptionsLoading,
 }: any) => {
   const [defaultValueSet, setDefaultValueSet] = useState<any>("");
   const router = useRouter();
@@ -50,7 +51,10 @@ const SelectAutoCompleteForFarms = ({
           <TextField
             {...params}
             placeholder={placeholder}
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setOptionsLoading(true);
+              setSearchString(e.target.value);
+            }}
           />
         )}
         sx={{

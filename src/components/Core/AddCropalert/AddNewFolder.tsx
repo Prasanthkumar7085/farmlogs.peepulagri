@@ -62,7 +62,10 @@ const NewFolderDiloag = ({
   const dropDownCrops = async (defaultTitle: string) => {
     setOptionsLoading(true);
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/crops`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/pending/crop-names`;
+      if (defaultTitle) {
+        url = `${process.env.NEXT_PUBLIC_API_URL}/crops`;
+      }
       const options = {
         method: "GET",
         headers: new Headers({

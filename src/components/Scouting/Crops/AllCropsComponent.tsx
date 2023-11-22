@@ -196,7 +196,11 @@ const AllCropsComponent = () => {
     }
   }, [searchString, accessToken, router.isReady]);
 
-  const captureFarmName = (selectedObject: any) => {
+  const captureFarmName = (selectedObject: any, reason = "") => {
+    if (reason && reason == "clear") {
+      router.replace(`/farms/${selectedObject?._id}/crops`);
+      getFarmDetails("", router.query.farm_id);
+    }
     if (selectedObject && Object.keys(selectedObject).length) {
       setFormId(selectedObject?._id);
       getCropsDetails(selectedObject?._id);
@@ -420,6 +424,7 @@ const AllCropsComponent = () => {
       >
         <InputLabel color="primary" />
         <SelectAutoCompleteForFarms
+          setOptionsLoading={setOptionsLoading}
           optionsLoading={optionsLoading}
           options={formOptions}
           label={"title"}

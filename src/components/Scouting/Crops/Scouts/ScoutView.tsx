@@ -1,15 +1,14 @@
-import LoadingComponent from "@/components/Core/LoadingComponent";
 import timePipe from "@/pipes/timePipe";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import NorthIcon from "@mui/icons-material/North";
-import { CircularProgress, TextField, Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
 import getImagesByPaginationService from "../../../../../lib/services/ScoutServices/getImagesByPaginationService";
 import SingleImageComponent from "./SingleImageComponent";
 import styles from "./singleImage.module.css";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 interface ApiProps {
   page: string | number;
@@ -76,10 +75,7 @@ const ScoutView = () => {
     if (router.isReady) {
       getImages({});
     }
-  }, [accessToken, router.isReady])
-
-
-
+  }, [accessToken, router.isReady]);
 
   // useEffect(() => {
   //   if (router.isReady) {
@@ -119,35 +115,33 @@ const ScoutView = () => {
       >
         {images.length
           ? images.map((item: any, index: number) => {
-            return (
-              <div key={index} id={styles.snapScroll}>
-                <div
-                  style={{
-                    position: "sticky",
-                    top: "0px",
-                    paddingTop: "20px",
-                    background: "#f5f7fa",
-                    zIndex: 2,
-                  }}
-                >
-                  <Typography className={styles.postDate}>
-                    <InsertInvitationIcon />
-                    <span>{timePipe(item.uploaded_at, "DD-MM-YYYY")}</span>
-                  </Typography>
+              return (
+                <div key={index} id={styles.snapScroll}>
+                  <div
+                    style={{
+                      position: "sticky",
+                      top: "0px",
+                      paddingTop: "20px",
+                      background: "#f5f7fa",
+                      zIndex: 2,
+                    }}
+                  >
+                    <Typography className={styles.postDate}>
+                      <InsertInvitationIcon />
+                      <span>{timePipe(item.uploaded_at, "DD-MM-YYYY")}</span>
+                    </Typography>
+                  </div>
+                  <SingleImageComponent
+                    detailedImage={item}
+                    scoutDetails={scoutDetails}
+                    getImageData={getImages}
+                  />
                 </div>
-                <SingleImageComponent
-                  detailedImage={item}
-                  scoutDetails={scoutDetails}
-                  getImageData={getImages}
-                />
-              </div>
-            );
-          })
+              );
+            })
           : !loading
-            ? "No Data"
-            : ""}
-
-
+          ? "No Data"
+          : ""}
       </InfiniteScroll>
       {loading ? <CircularProgress /> : ""}
       {/* <LoadingComponent loading={loading}/> */}
@@ -156,4 +150,3 @@ const ScoutView = () => {
 };
 
 export default ScoutView;
-

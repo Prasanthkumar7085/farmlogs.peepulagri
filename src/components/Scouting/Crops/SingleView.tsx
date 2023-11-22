@@ -86,13 +86,78 @@ const SingleViewScoutComponent = () => {
   }, [selectedItems]);
 
 
-  useEffect(() => {
-    if (router.isReady) {
-      getPresingedURls()
-      dispatch(removeTheAttachementsFilesFromStore([]));
-    }
-  }, [pageNumber, accessToken, router.isReady]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
+
+  // Function to fetch data based on page number
+  const fetchNextPage = async (page: any) => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+    const newData = await getPresingedURls(page);
+    setIsLoading(false);
+
+    return newData;
+  };
+
+  // Function to check if user has scrolled to the top of the page
+  const isScrolledToTop = () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    return scrollTop === 0;
+  };
+
+  // Function to check if user has scrolled to the middle of the page
+  const isScrolledToMiddle = () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    return scrollTop + windowHeight >= documentHeight;
+  };
+
+  // Event listener for scrolling
+  const handleScroll = async () => {
+    if (isScrolledToTop() && hasMore) {
+      const previousPage = currentPage - 1;
+      const previousData = await fetchNextPage(previousPage);
+
+      if (previousData && previousData.length > 0) {
+        const newData = [...previousData, ...data.slice(0, -50)];
+        window.scrollTo({ top: document.documentElement.scrollTop + 100, behavior: 'smooth' });
+        setData(newData);
+        setCurrentPage(previousPage);
+      }
+    } else if (isScrolledToMiddle() && hasMore) {
+      const nextPage = currentPage + 1;
+      const nextData = await fetchNextPage(nextPage);
+
+      if (nextData && nextData.length > 0) {
+        const newData = [...data.slice(50), ...nextData];
+        window.scrollTo({ top: document.documentElement.scrollTop - 100, behavior: 'smooth' });
+        setData(newData);
+        setCurrentPage(nextPage);
+      }
+    }
+  };
+
+  // Effect to add scroll event listener when the component mounts
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [currentPage]); // Re-run effect when currentPage changes
+
+
+  // Initial fetch when the component mounts
+  useEffect(() => {
+    fetchNextPage(currentPage).then((initialData) => {
+      if (initialData && initialData.length > 0) {
+        setData(initialData);
+      }
+    });
+  }, []);
 
 
 
@@ -110,8 +175,8 @@ const SingleViewScoutComponent = () => {
     }
   };
 
-
-  const getPresingedURls = async () => {
+  //get the images urls api
+  const getPresingedURls = async (page: any) => {
     setLoading(true);
     let options = {
       method: "GET",
@@ -123,23 +188,17 @@ const SingleViewScoutComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${pageNumber}/50`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${page}/50`,
         options
       );
 
       let responseData: any = await response.json();
 
       if (responseData.success) {
-        if (responseData?.has_more || responseData?.has_more == false) {
-          setHasMore(responseData?.has_more);
-        }
-        let temp: any;
-        temp = [...data, ...responseData?.data];
-        temp.sort((a: any, b: any) => {
-          (timePipe(b.created_at, "DD-MM-YY") as any) -
-            (timePipe(a.created_at, "DD-MM-YY") as any);
-        });
-        setData(temp);
+        setHasMore(responseData?.has_more);
+
+        return data.data;
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -159,14 +218,6 @@ const SingleViewScoutComponent = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedItems([]);
-  };
-
-  const handleClick = (index: number, item: any) => {
-    handleOpenDialog(item);
-    setIndexOfseletedOne(index);
-    setIndex(index);
-    setSelectedItems([item[index]]);
-    setScoutAttachementsDetails(item);
   };
 
   //for comments drawer open/close
@@ -237,7 +288,7 @@ const SingleViewScoutComponent = () => {
         toast.success(responseData?.message);
         setSelectedItems([]);
         setTagsDrawerOpen(false);
-        await getPresingedURls();
+        await getPresingedURls(1);
       } else {
         toast.error(responseData?.message);
       }
@@ -352,7 +403,7 @@ const SingleViewScoutComponent = () => {
       );
       let responseData = await response.json()
       if (responseData?.success) {
-        await getPresingedURls()
+        await getPresingedURls(1)
         setTagsDrawerOpen(false);
         toast.success("Images Deleted successfully");
         setDeleteOpen(false)

@@ -35,7 +35,6 @@ const DashBoardHeader = ({
   getDataOnLocationChange,
 }: pageProps) => {
   const [search, setSearch] = useState("");
-
   const [locationValue, setLocationValue] = useState<{
     title: string;
     _id: string;
@@ -55,7 +54,7 @@ const DashBoardHeader = ({
           setDataSetting(false);
         }, 1);
       } else {
-        setLocation("");
+        setLocation("All");
       }
     }
   }, [locations, location]);
@@ -70,11 +69,12 @@ const DashBoardHeader = ({
 
   const addInputValue = (event: any, value: any) => {
     if (value) {
+      setLocationValue(value);
       setLocation(value?.title);
       getDataOnLocationChange(value?._id);
     } else {
       setLocationValue(null);
-      setLocation("");
+      setLocation("All");
       getDataOnLocationChange("");
     }
   };
@@ -91,6 +91,7 @@ const DashBoardHeader = ({
                 fullWidth
                 noOptionsText={"No such location!"}
                 value={locationValue}
+                defaultValue={locationValue}
                 getOptionLabel={(option: { title: string; _id: string }) =>
                   option.title
                 }

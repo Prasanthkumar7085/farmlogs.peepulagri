@@ -23,7 +23,6 @@ const AllSummaryComponents = () => {
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<any>();
-    console.log(data);
 
 
     const logout = async () => {
@@ -55,7 +54,6 @@ const AllSummaryComponents = () => {
             );
 
             let responseData: any = await response.json();
-            console.log("data", responseData);
 
 
             if (responseData.status == 200) {

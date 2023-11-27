@@ -68,7 +68,6 @@ const AddSummary = () => {
                 options
             );
             let responseData = await response.json();
-            console.log(responseData);
 
             if (responseData.status == 200) {
                 setSuccess(responseData.message);

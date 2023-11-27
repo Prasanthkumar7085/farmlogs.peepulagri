@@ -101,21 +101,26 @@ const SingleViewScoutComponent = () => {
     return newData;
   };
 
-  // Function to check if user has scrolled to the top of the page
+  // Function to check if user has scrolled to the top of the container
   const isScrolledToTop = () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    return scrollTop === 0;
+
+    if (containerRef.current) {
+      return containerRef.current.scrollTop === 0;
+    }
+    return false;
   };
 
-  // Function to check if user has scrolled to the middle of the page
+  // Function to check if user has scrolled to the middle of the container
   const isScrolledToMiddle = () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
+    if (!containerRef.current) return false;
 
-    return scrollTop + windowHeight >= documentHeight;
+    const scrollTop = containerRef.current.scrollTop;
+    const windowHeight = containerRef.current.clientHeight;
+    const documentHeight = containerRef.current.scrollHeight;
+    const threshold = 100;
+
+    return scrollTop + windowHeight >= documentHeight - threshold;
   };
-
   // Event listener for scrolling
   const handleScroll = async () => {
     if (isScrolledToTop() && hasMore) {
@@ -124,7 +129,7 @@ const SingleViewScoutComponent = () => {
 
       if (previousData && previousData.length > 0) {
         const newData = [...previousData, ...data.slice(0, -50)];
-        window.scrollTo({ top: document.documentElement.scrollTop + 100, behavior: 'smooth' });
+        containerRef.current.scrollTo({ top: containerRef.current.scrollTop + 20, behavior: 'smooth' });
         setData(newData);
         setCurrentPage(previousPage);
       }
@@ -134,7 +139,7 @@ const SingleViewScoutComponent = () => {
 
       if (nextData && nextData.length > 0) {
         const newData = [...data.slice(50), ...nextData];
-        window.scrollTo({ top: document.documentElement.scrollTop - 100, behavior: 'smooth' });
+        containerRef.current.scrollTo({ top: containerRef.current.scrollTop - 20, behavior: 'smooth' });
         setData(newData);
         setCurrentPage(nextPage);
       }
@@ -143,9 +148,14 @@ const SingleViewScoutComponent = () => {
 
   // Effect to add scroll event listener when the component mounts
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    if (containerRef.current) {
+      containerRef.current.addEventListener('scroll', handleScroll);
+    }
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (containerRef.current) {
+        containerRef.current.removeEventListener('scroll', handleScroll);
+      }
     };
   }, [currentPage]); // Re-run effect when currentPage changes
 
@@ -197,7 +207,7 @@ const SingleViewScoutComponent = () => {
       if (responseData.success) {
         setHasMore(responseData?.has_more);
 
-        return data.data;
+        return responseData.data;
 
       } else if (responseData?.statusCode == 403) {
         await logout();

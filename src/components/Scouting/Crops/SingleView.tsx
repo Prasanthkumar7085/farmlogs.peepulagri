@@ -297,6 +297,42 @@ const SingleViewScoutComponent = () => {
     }
   };
 
+  const captureCommentDetails = async (comment: any) => {
+    setLoading(true);
+    try {
+      let body = {
+        farm_image_ids: selectedItems.map((item: any) => item._id),
+        content: comment,
+      };
+      let options = {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body),
+      };
+
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/comments`,
+        options
+      );
+      let responseData = await response.json();
+      if (response?.status >= 200 && response?.status <= 200) {
+        toast.success(responseData?.message);
+        setSelectedItems([]);
+        setTagsDrawerOpen(false);
+        await getPresingedURls(1);
+      } else {
+        toast.error(responseData?.message);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   //checkbox handlechange event
   const handleChange = (itemId: any) => {
     const itemIndex = tempImages.findIndex(
@@ -619,6 +655,7 @@ const SingleViewScoutComponent = () => {
           loading={loading}
           tagsDrawerClose={tagsDrawerClose}
           captureTagsDetails={captureTagsDetails}
+          captureCommentDetails={captureCommentDetails}
           item={selectedFile}
           selectedItems={selectedItems}
         />

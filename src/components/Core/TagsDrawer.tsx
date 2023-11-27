@@ -1,4 +1,3 @@
-
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
@@ -12,6 +11,7 @@ import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import styles from "./TagsDrawer.module.css";
 import TagsTextFeild from "./TagsTextFeild";
+import AddMultipleComments from "./AddMultipleComments";
 
 const TagsDrawer = ({
   tagsDrawerClose,
@@ -20,15 +20,23 @@ const TagsDrawer = ({
   loading,
   selectedItems,
   tagsDrawerOpen,
+  captureCommentDetails,
 }: any) => {
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [description, setDescription] = useState<any>();
   const [tags, setTags] = useState<any>();
+  const [comment, setComment] = useState<any>();
 
   const captureTags = (array: any) => {
     if (array) {
-      console.log(array, "ma")
       setTags(array);
+    }
+  };
+
+  const captureComment = (string: any) => {
+    if (string) {
+      setComment(string);
     }
   };
 
@@ -52,18 +60,24 @@ const TagsDrawer = ({
         <div className={styles.inputBox}>
           <TagsTextFeild captureTags={captureTags} tags={tags} />
         </div>
+        <div className={styles.inputBox}>
+          <AddMultipleComments captureComment={captureComment} />
+        </div>
 
 
       </div>
       <div className={styles.drawerFooter}>
         <Button
           className={styles.submitBtn}
-          disabled={!(tags || description) || loading}
+          disabled={!(tags || comment || description) || loading}
           variant="contained"
           onClick={() => {
-            captureTagsDetails(tags, description);
-            // setTags([]);
-            // setDescription("");
+            if (tags) {
+              captureTagsDetails(tags, description);
+            }
+            if (comment) {
+              captureCommentDetails(comment);
+            }
           }}
         >
           Submit

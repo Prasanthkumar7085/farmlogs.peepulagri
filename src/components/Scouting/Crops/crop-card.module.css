@@ -25,6 +25,16 @@
   padding: 6px 8px;
 }
 
+.summaryBtn {
+  background: red;
+  font-size: 12px;
+  text-transform: capitalize;
+  font-family: "Inter", sans-serif;
+  padding: 2px 10px;
+  color: #fff;
+  border-radius: 16px;
+}
+
 .stickyHeader .selectBtn {
   background: #00000064;
   padding: 0;

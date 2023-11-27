@@ -514,6 +514,10 @@ const SingleViewScoutComponent = () => {
                 Select
               </Button>
             )}
+            <Button className={styles.summaryBtn} onClick={() => router.push(`/farms/${router.query.farm_id}/crops/${router.query.crop_id}/summary`)}>Summary</Button>
+          </div>
+          <div>
+
           </div>
           <div
             ref={containerRef}

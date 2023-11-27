@@ -93,7 +93,12 @@ const SingleImageComponent: FC<componentProps> = ({
   return (
     <div>
       <div className={styles.overlay}>
-        <img src={detailedImage?.url} height={"auto"} width={"100%"} />
+        <img
+          src={detailedImage?.url}
+          height={"auto"}
+          width={"100%"}
+          alt={detailedImage?.key}
+        />
         {detailedImage?.suggestions ? (
           <div className={styles.remondationsdiv}>
             <div className={styles.recomendations}>
@@ -158,7 +163,7 @@ const SingleImageComponent: FC<componentProps> = ({
         {detailedImage?.tags?.length > 3 ? <span>{"... "}</span> : ""}
       </div>
       {detailedImage?.tags?.length > 3 ||
-        detailedImage?.description?.length > 97 ? (
+      detailedImage?.description?.length > 97 ? (
         <span style={{ fontWeight: "bold" }} onClick={openViewMore}>
           Show More
         </span>
@@ -177,7 +182,7 @@ const SingleImageComponent: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={detailedImage}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-      // loading={loading}
+        // loading={loading}
       />
       <ShowMoreInViewAttachmentDetails
         showMoreSuggestions={showMoreSuggestions}

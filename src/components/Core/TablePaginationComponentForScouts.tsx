@@ -57,13 +57,14 @@ const TablePaginationComponentForScouts = ({
           {" "}
           {(paginationDetails?.page == 1
             ? 1
-            : (paginationDetails?.page - 1) * paginationDetails?.limit + 1) +
-            " - " +
-            (paginationDetails?.page == paginationDetails?.total_pages
-              ? paginationDetails?.total
-              : paginationDetails?.total < paginationDetails?.limit
-              ? paginationDetails?.total
-              : paginationDetails?.page * paginationDetails?.limit)}{" "}
+            : (paginationDetails?.page - 1) * paginationDetails?.limit + 1) ||
+            0 +
+              " - " +
+              (paginationDetails?.page == paginationDetails?.total_pages
+                ? paginationDetails?.total || 0
+                : paginationDetails?.total < paginationDetails?.limit
+                ? paginationDetails?.total || 0
+                : paginationDetails?.page * paginationDetails?.limit || 0)}{" "}
           of {paginationDetails?.total} {values}
         </Typography>
       </div>

@@ -2,17 +2,15 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import {
   deleteAllMessages, removeTheAttachementsFilesFromStore
 } from "@/Redux/Modules/Conversations";
-import ImageComponent from "@/components/Core/ImageComponent";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
-import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import AddIcon from "@mui/icons-material/Add";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import {
   Breadcrumbs,
   Button,
@@ -20,20 +18,18 @@ import {
   Link,
   Tab,
   Tabs,
-  Typography
+  Typography,
 } from "@mui/material";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
-import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
-import Image from "next/image";
-import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import { access } from "fs";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -74,21 +70,17 @@ const SingleViewScoutComponent = () => {
   const [longpressActive, setLongPressActive] = useState<any>(false);
   // let tempImages: any = [...selectedItems];
   const [tempImages, setTempImages] = useState(selectedItems);
-  const [deleteLoading, setDeleteLoading] = useState<any>(false)
+  const [deleteLoading, setDeleteLoading] = useState<any>(false);
   const [deletedImages, setDeletedImages] = useState<any>([]);
   const [deletedImagePages, setDeletedImagePages] = useState<any>({});
   const [value, setValue] = useState<any>("1");
-
-
 
   useEffect(() => {
     setTempImages(selectedItems);
   }, [selectedItems]);
 
-
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-
 
   // Function to fetch data based on page number
   const fetchNextPage = async (page: any) => {
@@ -159,18 +151,16 @@ const SingleViewScoutComponent = () => {
     };
   }, [currentPage]); // Re-run effect when currentPage changes
 
-
   // Initial fetch when the component mounts
   useEffect(() => {
-    fetchNextPage(currentPage).then((initialData) => {
-      if (initialData && initialData.length > 0) {
-        setData(initialData);
-      }
-    });
-  }, []);
-
-
-
+    if (router.isReady && accessToken) {
+      fetchNextPage(currentPage).then((initialData) => {
+        if (initialData && initialData.length > 0) {
+          setData(initialData);
+        }
+      });
+    }
+  }, [router.isReady, accessToken]);
 
   //logout event when the 403 and 401 error codes
   const logout = async () => {
@@ -218,8 +208,6 @@ const SingleViewScoutComponent = () => {
       setLoading(false);
     }
   };
-
-
 
   const handleOpenDialog = (item: any) => {
     setOpenDialog(true);
@@ -274,7 +262,7 @@ const SingleViewScoutComponent = () => {
   };
   //capture the tags details
   const captureTagsDetails = async (tags: any, description: any) => {
-    setLoading(true)
+    setLoading(true);
     try {
       let body = {
         farm_image_ids: selectedItems.map((item: any) => item._id),
@@ -309,8 +297,6 @@ const SingleViewScoutComponent = () => {
     }
   };
 
-
-
   //checkbox handlechange event
   const handleChange = (itemId: any) => {
     const itemIndex = tempImages.findIndex(
@@ -333,9 +319,6 @@ const SingleViewScoutComponent = () => {
     setSelectedItems([sildeShowImages[value]]);
     setSelectedFile(sildeShowImages[value]);
   };
-
-
-
 
   //for date range of images
   const containerRef: any = useRef(null);
@@ -392,41 +375,38 @@ const SingleViewScoutComponent = () => {
 
   //delete multiple images
   const deleteImages = async () => {
-    setDeleteLoading(true)
+    setDeleteLoading(true);
     let bodyData: any = {
-      "farm_image_ids": selectedItems.map((item: any) => item._id)
-    }
-    console.log(bodyData)
-    console.log(JSON.stringify(bodyData))
+      farm_image_ids: selectedItems.map((item: any) => item._id),
+    };
+
     let options = {
       method: "DELETE",
       headers: new Headers({
         "content-type": "application/json",
         authorization: accessToken,
       }),
-      body: JSON.stringify(bodyData)
+      body: JSON.stringify(bodyData),
     };
     try {
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/farm-images/delete-images`,
         options
       );
-      let responseData = await response.json()
+      let responseData = await response.json();
       if (responseData?.success) {
-        await getPresingedURls(1)
+        await getPresingedURls(1);
         setTagsDrawerOpen(false);
         toast.success("Images Deleted successfully");
-        setDeleteOpen(false)
-        setSelectedItems([])
+        setDeleteOpen(false);
+        setSelectedItems([]);
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeleteLoading(false);
     }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
-      setDeleteLoading(false)
-    }
-  }
+  };
 
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
@@ -494,7 +474,6 @@ const SingleViewScoutComponent = () => {
                 className={styles.selectBtn}
                 onClick={() => setTagsCheckBoxOpen(true)}
                 sx={{ display: data?.length ? "" : "none" }}
-
               >
                 Select
               </Button>
@@ -525,7 +504,7 @@ const SingleViewScoutComponent = () => {
                           ? "/Play-button.svg"
                           : image.url
                       }
-                      alt={`images${indexAttachment}`}
+                      alt={image?.key}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -591,7 +570,12 @@ const SingleViewScoutComponent = () => {
               })
             ) : !loading ? (
               <div className={styles.noData}>
-                <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
+                <Image
+                  src="/no-crops-image.svg"
+                  alt=""
+                  width={120}
+                  height={120}
+                />
                 <Typography variant="h4">No Images</Typography>
               </div>
             ) : (
@@ -649,7 +633,6 @@ const SingleViewScoutComponent = () => {
         attachement={selectedFile}
       />
 
-
       <div className="addFormPositionIcon">
         {tagsCheckBoxOpen == false && selectedItems?.length == 0 ? (
           <IconButton
@@ -664,30 +647,39 @@ const SingleViewScoutComponent = () => {
           >
             <AddIcon />
           </IconButton>
-        ) : ""
-        }
+        ) : (
+          ""
+        )}
       </div>
       {data?.length ? (
         <div className={styles.stickyHeader2}>
-          {selectedItems?.length ?
-
+          {selectedItems?.length ? (
             <div className={styles.stickyBtnGrp}>
-              <Button sx={{ color: "#454444 !important" }} onClick={() => setDeleteOpen(true)}>Delete</Button>
-              <Button sx={{ color: "#454444 !important" }} onClick={() => setTagsDrawerOpen(true)
-              }>Add Tags</Button>
-
-            </div> :
+              <Button
+                sx={{ color: "#454444 !important" }}
+                onClick={() => setDeleteOpen(true)}
+              >
+                Delete
+              </Button>
+              <Button
+                sx={{ color: "#454444 !important" }}
+                onClick={() => setTagsDrawerOpen(true)}
+              >
+                Add Tags
+              </Button>
+            </div>
+          ) : (
             <div className={styles.stickyBtnGrp}>
               <Button sx={{ color: "#454444 !important" }}>Years</Button>
               <Button sx={{ color: "#454444 !important" }}>Month</Button>
               <Button sx={{ color: "#454444 !important" }}>Days</Button>
               <Button sx={{ color: "#fff !important" }}>All Photos</Button>
-            </div>}
+            </div>
+          )}
         </div>
       ) : (
         ""
-      )
-      }
+      )}
 
       {deleteOpen ? (
         <AlertDelete
@@ -701,7 +693,7 @@ const SingleViewScoutComponent = () => {
       )}
 
       <Toaster richColors position="top-right" closeButton />
-    </div >
+    </div>
   );
 };
 export default SingleViewScoutComponent;

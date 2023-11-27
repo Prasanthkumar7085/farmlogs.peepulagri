@@ -125,6 +125,7 @@ const DashBoardHeader = ({
       <div className={styles.searchbyfarmname} id="search-by-farm-name">
         <TextField
           className={styles.searchfarm}
+          type="search"
           color="primary"
           name="search"
           id="search"
@@ -135,18 +136,18 @@ const DashBoardHeader = ({
           value={search}
           onChange={onChangeSearchString}
           InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => {
-                    setSearch("");
-                    captureSearchString("");
-                  }}
-                >
-                  {search ? <ClearOutlinedIcon /> : ""}
-                </IconButton>
-              </InputAdornment>
-            ),
+            // endAdornment: (
+            //   <InputAdornment position="end">
+            //     <IconButton
+            //       onClick={() => {
+            //         setSearch("");
+            //         captureSearchString("");
+            //       }}
+            //     >
+            //       {search ? <ClearOutlinedIcon /> : ""}
+            //     </IconButton>
+            //   </InputAdornment>
+            // ),
             startAdornment: (
               <InputAdornment position="start">
                 <IconButton>

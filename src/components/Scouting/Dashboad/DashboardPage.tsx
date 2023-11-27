@@ -2,7 +2,7 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
-import { FarmDataType, PaginationInFarmResponse } from "@/types/farmCardTypes";
+import { FarmDataType } from "@/types/farmCardTypes";
 import AddIcon from "@mui/icons-material/Add";
 import { IconButton } from "@mui/material";
 import { useRouter } from "next/router";
@@ -27,8 +27,6 @@ const DashboardPage = () => {
   const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [farmsData, setFarmsData] = useState<Array<FarmDataType>>([]);
-  const [paginationDetails, setPaginationDetails] =
-    useState<PaginationInFarmResponse>();
   const [loading, setLoading] = useState(true);
   const [searchString, setSearchString] = useState("");
   const [locations, setLocations] = useState<
@@ -64,7 +62,7 @@ const DashboardPage = () => {
         delete queryParam["order_type"];
       }
       if (location) {
-        console.log(location, "m")
+        console.log(location, "m");
         if (location != "1" && location != "All") {
           queryParam["location_id"] = location;
           delete queryParam["order_by"];
@@ -180,7 +178,6 @@ const DashboardPage = () => {
       return () => clearTimeout(debounce);
     }
   }, [searchString]);
-
 
   return (
     <div id="dashboardPage">

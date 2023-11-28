@@ -44,9 +44,10 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
+
         const commentsById: any = {};
 
-        responseData.data.forEach((comment: any) => {
+        responseData.data?.forEach((comment: any) => {
           commentsById[comment._id] = {
             ...comment,
             replies: [], // Initialize an empty array for replies
@@ -54,9 +55,9 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         });
 
         // Populate the replies for each comment
-        responseData.data.forEach((comment: any) => {
-          if (comment.type === "REPLY" && comment.reply_to_comment_id) {
-            const parentId = comment.reply_to_comment_id;
+        responseData.data?.forEach((comment: any) => {
+          if (comment.reply_to) {
+            const parentId = comment.reply_to;
             if (commentsById[parentId]) {
               commentsById[parentId].replies.push(comment);
             }
@@ -75,7 +76,9 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         // Convert the commentsById object to an array of comments
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
+        console.log(reverse, "asdf")
         setData(reverse);
+        dispatch(removeTheAttachementsFilesFromStore([]));
       }
     } catch (err) {
       console.error(err);
@@ -241,6 +244,8 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         farmID={rowDetails?.farm_id?._id}
         taskId={rowDetails?._id}
         afterCommentAdd={afterCommentAdd}
+        scoutDetails={rowDetails}
+        attachement={""}
       />
 
       {/* <LoadingComponent loading={loading} /> */}

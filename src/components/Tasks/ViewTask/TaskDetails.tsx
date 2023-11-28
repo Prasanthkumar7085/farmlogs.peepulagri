@@ -20,6 +20,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { Markup } from "interweave";
 import SelectComponent from "@/components/Core/SelectComponent";
+import SelectComponentNoAll from "@/components/Core/SelectComponentNoAll";
 
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
@@ -42,7 +43,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To Start" },
-    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "INPROGRESS", title: "In Progress" },
     { value: "DONE", title: "Done" },
     { value: "PENDING", title: "Pending" },
     { value: "OVER-DUE", title: "Over-due" },
@@ -414,7 +415,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
           <label className={styles.userLabel}>Status</label>
           <div style={{ width: "100%" }}>
             {userType !== "farmer" ? (
-              <SelectComponent
+              <SelectComponentNoAll
                 options={statusOptions}
                 size="small"
                 onChange={(e: any) => {
@@ -424,36 +425,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 value={status ? status : ""}
               />
             ) : (
-              // <Select
-              //   className={styles.inoutbox}
-              //   color="primary"
-              //   size="small"
-              //   placeholder="Enter your Task title here"
-              //   variant="outlined"
-              //   value={status}
-              // onChange={(e) => {
-              //   setStatus(e.target.value);
-              //   onChangeStatus(e.target.value);
-              // }}
-              //   sx={{
-              //     width: "100%",
-              //     background: "#f5f7fa",
-              //     "& .MuiSelect-select": {
-              //       fontSize: "11px",
-              //       fontFamily: "'Inter',sans-serif",
-              //       fontWeight: "600",
-              //     },
-              //     "& .MuiOutlinedInput-notchedOutline": {
-              //       border: "0 !important",
-              //     },
-              //   }}
-              // >
-              //   {statusOptions.map((item: string, index: number) => (
-              //     <MenuItem key={index} value={item}>
-              //       {item}
-              //     </MenuItem>
-              //   ))}
-              // </Select>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p className={styles.status2}>
                   {data?.status ? data?.status : "-"}

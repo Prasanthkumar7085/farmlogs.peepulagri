@@ -18,6 +18,8 @@ import styles from "./TaskForm.module.css";
 import TasksAttachments from "./TasksAttachments";
 import FooterActionButtons from "./footer-action-buttons";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
+import SelectComponent from "@/components/Core/SelectComponent";
+import SelectComponentNoAll from "@/components/Core/SelectComponentNoAll";
 
 const TaskForm = () => {
   const router = useRouter();
@@ -32,13 +34,19 @@ const TaskForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState<Date>();
-  const [status, setStatus] = useState("TODO");
+  const [status, setStatus] = useState("TO-START");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
-  const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
+  const [statusOptions] = useState<Array<{ value: string; title: string }>>([
+    { value: "TO-START", title: "To Start" },
+    { value: "INPROGRESS", title: "In Progress" },
+    { value: "DONE", title: "Done" },
+    { value: "PENDING", title: "Pending" },
+    { value: "OVER-DUE", title: "Over-due" },
+  ]);
   const [user, setUser] = useState<userTaskType>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
 
@@ -155,51 +163,8 @@ const TaskForm = () => {
           </div>
           <form className={styles.formfields}>
             <Grid container rowSpacing={2}>
-              <Grid item xs={12}>
-                <Grid container>
-                  <Grid item xs={8}></Grid>
-                  <Grid item xs={4} className={styles.selectfarm}>
-                    <label className={styles.lable}>
-                      Deadline<span style={{ color: "red" }}>*</span>
-                    </label>
-                    <DatePicker
-                      value={deadline}
-                      disablePast
-                      format="dd/MM/yyyy"
-                      sx={{
-                        width: "100%",
-                        "& .MuiInputBase-root": {
-                          padding: "5px 10px",
-                          borderRadius: "4px",
-                          border: "1px solid #B4C1D6 ",
-                          background: "#fff",
-                        },
-                        "& .MuiInputBase-root::before": {
-                          borderBottom: "0 !important",
-                        },
-                        "& .MuiInputBase-root::after": {
-                          borderBottom: "0 !important",
-                        },
-                      }}
-                      onChange={(newValue: any) => {
-                        setDeadline(newValue);
-                      }}
-                      slotProps={{
-                        textField: {
-                          variant: "standard",
-                          size: "small",
-                          color: "primary",
-                        },
-                      }}
-                    />
-                    <ErrorMessages
-                      errorMessages={errorMessages}
-                      keyname="deadline"
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12}></Grid>
+              {/* <Grid item xs={12}>
                 <Grid container columnSpacing={2}>
                   <Grid item xs={6} className={styles.selectfarm}>
                     <label className={styles.lable}>
@@ -273,7 +238,7 @@ const TaskForm = () => {
                     </div>
                   </Grid>
                 </Grid>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <Grid container columnSpacing={2}>
                   <Grid item xs={8}>
@@ -298,30 +263,61 @@ const TaskForm = () => {
                       />
                     </div>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid container>
+                    <Grid item xs={8}></Grid>
+                    <Grid item xs={4} className={styles.selectfarm}>
+                      <label className={styles.lable}>
+                        Deadline<span style={{ color: "red" }}>*</span>
+                      </label>
+                      <DatePicker
+                        value={deadline}
+                        disablePast
+                        format="dd/MM/yyyy"
+                        sx={{
+                          width: "100%",
+                          "& .MuiInputBase-root": {
+                            padding: "5px 10px",
+                            borderRadius: "4px",
+                            border: "1px solid #B4C1D6 ",
+                            background: "#fff",
+                          },
+                          "& .MuiInputBase-root::before": {
+                            borderBottom: "0 !important",
+                          },
+                          "& .MuiInputBase-root::after": {
+                            borderBottom: "0 !important",
+                          },
+                        }}
+                        onChange={(newValue: any) => {
+                          setDeadline(newValue);
+                        }}
+                        slotProps={{
+                          textField: {
+                            variant: "standard",
+                            size: "small",
+                            color: "primary",
+                          },
+                        }}
+                      />
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="deadline"
+                      />
+                    </Grid>
+                  </Grid>
+                  {/* <Grid item xs={4}>
                     <div className={styles.selectfarm}>
                       <h4 className={styles.title}>
                         Status<span style={{ color: "red" }}></span>
                       </h4>
-                      <Select
-                        className={styles.inoutbox}
-                        color="primary"
+                      <SelectComponentNoAll
+                        options={statusOptions}
                         size="small"
-                        placeholder="Enter your Task title here"
-                        variant="outlined"
-                        fullWidth
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
-                        defaultValue="TODO"
-                      >
-                        {statusOptions.map((item: string, index: number) => (
-                          <MenuItem key={index} value={item}>
-                            {item}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                        onChange={(e: any) => setStatus(e.target.value)}
+                        value={status ? status : ""}
+                      />
                     </div>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
               <Grid item xs={12}>
@@ -341,14 +337,14 @@ const TaskForm = () => {
                   />
                 </div>
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TasksAttachments
                   farmId={defaultValue?._id}
                   setUploadedFiles={setUploadedFiles}
                   multipleFiles={multipleFiles}
                   setMultipleFiles={setMultipleFiles}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </form>
         </div>

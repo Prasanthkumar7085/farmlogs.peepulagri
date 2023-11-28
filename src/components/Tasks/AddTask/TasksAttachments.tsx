@@ -119,8 +119,8 @@ const TasksAttachments: React.FC<PropTypes> = ({
 
   const handleFileChange = async (e: any) => {
     if (!farmId) {
-      setNoFarmIdMessage("Please Select the Farm to Upload the files");
-      return;
+      // setNoFarmIdMessage("Please Select the Farm to Upload the files");
+      // return;
     } else {
       setNoFarmIdMessage("");
     }
@@ -332,7 +332,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
 
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/attachment`,
         options
       );
       let responseData = await response.json();

@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
@@ -79,88 +79,15 @@ const SingleViewScoutComponent = () => {
     setTempImages(selectedItems);
   }, [selectedItems]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Function to fetch data based on page number
-  const fetchNextPage = async (page: any) => {
-    if (isLoading) return;
-
-    setIsLoading(true);
-    const newData = await getPresingedURls(page);
-    setIsLoading(false);
-
-    return newData;
-  };
-
-  // Function to check if user has scrolled to the top of the container
-  const isScrolledToTop = () => {
-
-    if (containerRef.current) {
-      return containerRef.current.scrollTop === 0;
-    }
-    return false;
-  };
-
-  // Function to check if user has scrolled to the middle of the container
-  const isScrolledToMiddle = () => {
-    if (!containerRef.current) return false;
-
-    const scrollTop = containerRef.current.scrollTop;
-    const windowHeight = containerRef.current.clientHeight;
-    const documentHeight = containerRef.current.scrollHeight;
-    const threshold = 100;
-
-    return scrollTop + windowHeight >= documentHeight - threshold;
-  };
-  // Event listener for scrolling
-  const handleScroll = async () => {
-    if (isScrolledToTop() && hasMore) {
-      const previousPage = currentPage - 1;
-      const previousData = await fetchNextPage(previousPage);
-
-      if (previousData && previousData.length > 0) {
-        const newData = [...previousData, ...data.slice(0, -50)];
-        containerRef.current.scrollTo({ top: containerRef.current.scrollTop + 20, behavior: 'smooth' });
-        setData(newData);
-        setCurrentPage(previousPage);
-      }
-    } else if (isScrolledToMiddle() && hasMore) {
-      const nextPage = currentPage + 1;
-      const nextData = await fetchNextPage(nextPage);
-
-      if (nextData && nextData.length > 0) {
-        const newData = [...data.slice(50), ...nextData];
-        containerRef.current.scrollTo({ top: containerRef.current.scrollTop - 20, behavior: 'smooth' });
-        setData(newData);
-        setCurrentPage(nextPage);
-      }
-    }
-  };
-
   // Effect to add scroll event listener when the component mounts
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', handleScroll);
+    if (router.isReady) {
+      getPresingedURls(pageNumber)
     }
 
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [currentPage]); // Re-run effect when currentPage changes
+  }, [accessToken, router.isReady]); // Re-run effect when currentPage changes
 
-  // Initial fetch when the component mounts
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      fetchNextPage(currentPage).then((initialData) => {
-        if (initialData && initialData.length > 0) {
-          setData(initialData);
-        }
-      });
-    }
-  }, [router.isReady, accessToken]);
+
 
   //logout event when the 403 and 401 error codes
   const logout = async () => {
@@ -196,6 +123,7 @@ const SingleViewScoutComponent = () => {
 
       if (responseData.success) {
         setHasMore(responseData?.has_more);
+        setData([...data, ...responseData.data]);
 
         return responseData.data;
 
@@ -401,6 +329,7 @@ const SingleViewScoutComponent = () => {
     };
   }, [data]);
 
+
   //tabs change code
   const handleChangeMenuView = (
     event: React.SyntheticEvent,
@@ -444,6 +373,36 @@ const SingleViewScoutComponent = () => {
     }
   };
 
+  //scroll to the last element of the previous calls
+  const lastItemRef = useRef<HTMLDivElement>(null);
+  const scrollToLastItem = () => {
+    if (lastItemRef.current) {
+      lastItemRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    }
+  };
+
+  //api call after the last element was in the dom (visible)
+  const observer: any = useRef()
+
+  const lastBookElementRef = useCallback((node: any) => {
+
+    if (loading) return
+    if (observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPageNumber(prevPageNumber => prevPageNumber + 1)
+        getPresingedURls(pageNumber + 1)
+        scrollToLastItem() // Restore scroll position after new data is loaded
+      }
+    })
+    if (node) observer.current.observe(node)
+  }, [loading, hasMore])
+
+
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
       <div className={styles.mobileScoutingViewHeader}>
@@ -474,154 +433,214 @@ const SingleViewScoutComponent = () => {
         </Tabs>
       </div>
 
-      {value == "1" ? (
-        // <InfiniteScroll
-        //   className={styles.infiniteScrollComponent}
-        //   dataLength={data.length}
-        //   next={() => setPageNumber((prev) => prev + 1)}
-        //   hasMore={hasMore}
-        //   loader={
-        //     <div className={styles.pageLoader}>
-        //       {loading ? "Loading..." : ""}
-        //     </div>
-        //   }
-        //   endMessage={
-        //     <a href="#" className={styles.endOfLogs}>
-        //       {hasMore ? "" : data.length > 11 ? "Scroll to Top" : ""}
-        //     </a>
-        //   }
-        // >
-        <div>
-          <div className={styles.stickyHeader}>
-            <div className={styles.dateRange}>{dateRange}</div>
-            {tagsCheckBoxOpen ? (
-              <Button
-                onClick={() => {
-                  setTagsCheckBoxOpen(false);
-                  setSelectedItems([]);
-                }}
-                sx={{ display: data?.length ? "" : "none" }}
-                className={styles.selectBtn}
-              >
-                Cancel
-              </Button>
-            ) : (
-              <Button
-                className={styles.selectBtn}
-                onClick={() => setTagsCheckBoxOpen(true)}
-                sx={{ display: data?.length ? "" : "none" }}
-              >
-                Select
-              </Button>
-            )}
-          </div>
-          <div
-            ref={containerRef}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
-              gridGap: "1px",
-              overflowY: "auto",
-              maxHeight: "550px",
-            }}
-          >
-            {data?.length ? (
-              data.map((image: any, indexAttachment: any) => {
-                return (
-                  <div
-                    style={{ position: "relative", paddingTop: "100%" }}
+      {value == "1" ?
+        <div className={styles.stickyHeader}>
+          <div className={styles.dateRange}>{dateRange}</div>
+          {tagsCheckBoxOpen ? (
+            <Button
+              onClick={() => {
+                setTagsCheckBoxOpen(false);
+                setSelectedItems([]);
+              }}
+              sx={{ display: data?.length ? "" : "none" }}
+              className={styles.selectBtn}
+            >
+              Cancel
+            </Button>
+          ) : (
+            <Button
+              className={styles.selectBtn}
+              onClick={() => setTagsCheckBoxOpen(true)}
+              sx={{ display: data?.length ? "" : "none" }}
+            >
+              Select
+            </Button>
+          )}
+        </div> : ""}
+
+      {value == "1" ?
+        <div
+          ref={containerRef}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
+            gridGap: "1px",
+            overflowY: "auto",
+            maxHeight: "550px",
+          }}>
+          {data.map((image: any, indexAttachment: any) => {
+            console.log(data.length, "o")
+            if (data.length === indexAttachment + 1) {
+              return (
+                <div
+                  ref={lastBookElementRef}
+                  style={{ position: "relative", paddingTop: "100%" }}
+                  key={indexAttachment}
+
+                >
+                  <img
+                    className="your-image-class"
                     key={indexAttachment}
-                  >
-                    <img
-                      key={indexAttachment}
-                      ref={(ref) => (image.ref = ref)}
-                      src={
-                        image.type?.slice(0, 2) == "vi"
-                          ? "/Play-button.svg"
-                          : image.url
+                    ref={(ref) => (image.ref = ref)}
+
+                    src={
+                      image.type?.slice(0, 2) == "vi"
+                        ? "/Play-button.svg"
+                        : image.url
+                    }
+                    alt={image?.uploaded_at}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      position: "absolute",
+                      objectFit: "cover",
+                      top: "0",
+                      right: "0",
+                    }}
+                    onClick={() => {
+                      if (!longpressActive) {
+                        router.push(
+                          `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                        );
+                      } else {
+                        handleChange(image); // Call handleLongPress when long press is detected
                       }
-                      alt={image?.key}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        position: "absolute",
-                        objectFit: "cover",
-                        top: "0",
-                        right: "0",
-                      }}
-                      onClick={() => {
-                        if (!longpressActive) {
-                          router.push(
-                            `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                          );
-                        } else {
-                          handleChange(image); // Call handleLongPress when long press is detected
-                        }
-                      }}
-                      // style={{
-                      //   position: "absolute",
-                      //   top: "0",
-                      //   left: "0",
-                      //   width: "100%",
-                      //   height: "100%",
-                      //   cursor: "pointer",
-                      //   borderRadius: "5px",
-                      //   objectFit: "cover",
-                      // }}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        setTagsCheckBoxOpen(true);
-                        handleChange(image);
-                        setScoutId(image._id); // Adjust the timeout duration as needed
-                        setLongPressActive(true);
-                      }} // Prevent right-click context menu
-                      onTouchStart={(e) => {
-                        if (e.touches.length > 1) {
-                          e.preventDefault(); // Prevent multi-touch event
-                        }
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "2px",
-                        right: "2px",
-                      }}
-                    >
-                      {tagsCheckBoxOpen ? (
-                        <input
-                          type="checkbox"
-                          checked={tempImages.some(
-                            (ite: any) => ite._id === image._id
-                          )}
-                          onChange={() => handleChange(image)}
-                          title={image.id}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
+                    }}
+                    // style={{
+                    //   position: "absolute",
+                    //   top: "0",
+                    //   left: "0",
+                    //   width: "100%",
+                    //   height: "100%",
+                    //   cursor: "pointer",
+                    //   borderRadius: "5px",
+                    //   objectFit: "cover",
+                    // }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setTagsCheckBoxOpen(true);
+                      handleChange(image);
+                      setScoutId(image._id); // Adjust the timeout duration as needed
+                      setLongPressActive(true);
+                    }} // Prevent right-click context menu
+                    onTouchStart={(e) => {
+                      if (e.touches.length > 1) {
+                        e.preventDefault(); // Prevent multi-touch event
+                      }
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "2px",
+                      right: "2px",
+                    }}
+                  >
+                    {tagsCheckBoxOpen ? (
+                      <input
+                        type="checkbox"
+                        checked={tempImages.some(
+                          (ite: any) => ite._id === image._id
+                        )}
+                        onChange={() => handleChange(image)}
+                        title={image.id}
+                      />
+                    ) : (
+                      ""
+                    )}
                   </div>
-                );
-              })
-            ) : !loading ? (
-              <div className={styles.noData}>
-                <Image
-                  src="/no-crops-image.svg"
-                  alt=""
-                  width={120}
-                  height={120}
-                />
-                <Typography variant="h4">No Images</Typography>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        </div>
-      ) : (
-        <ScoutView />
-      )}
+                </div>
+              )
+            }
+            else {
+              return (
+                <div
+                  style={{ position: "relative", paddingTop: "100%" }}
+                  key={indexAttachment}
+                  ref={indexAttachment === data.length - 50 ? lastItemRef : null}
+
+                >
+
+                  <img
+                    className="your-image-class"
+                    key={indexAttachment}
+                    ref={(ref) => (image.ref = ref)}
+                    src={
+                      image.type?.slice(0, 2) == "vi"
+                        ? "/Play-button.svg"
+                        : image.url
+                    }
+                    alt={image?.uploaded_at}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      position: "absolute",
+                      objectFit: "cover",
+                      top: "0",
+                      right: "0",
+                    }}
+                    onClick={() => {
+                      if (!longpressActive) {
+                        router.push(
+                          `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                        );
+                      } else {
+                        handleChange(image); // Call handleLongPress when long press is detected
+                      }
+                    }}
+                    // style={{
+                    //   position: "absolute",
+                    //   top: "0",
+                    //   left: "0",
+                    //   width: "100%",
+                    //   height: "100%",
+                    //   cursor: "pointer",
+                    //   borderRadius: "5px",
+                    //   objectFit: "cover",
+                    // }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setTagsCheckBoxOpen(true);
+                      handleChange(image);
+                      setScoutId(image._id); // Adjust the timeout duration as needed
+                      setLongPressActive(true);
+                    }} // Prevent right-click context menu
+                    onTouchStart={(e) => {
+                      if (e.touches.length > 1) {
+                        e.preventDefault(); // Prevent multi-touch event
+                      }
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "2px",
+                      right: "2px",
+                    }}
+                  >
+                    {tagsCheckBoxOpen ? (
+                      <input
+                        type="checkbox"
+                        checked={tempImages.some(
+                          (ite: any) => ite._id === image._id
+                        )}
+                        onChange={() => handleChange(image)}
+                        title={image.id}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>)
+            }
+          }
+          )
+
+          } </div> : <ScoutView />
+
+
+      }
+
 
       <LoadingComponent loading={loading} />
 

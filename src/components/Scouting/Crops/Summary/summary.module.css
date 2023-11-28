@@ -1,0 +1,6 @@
+.AddSummarybtn {
+    background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 80.71%));
+    color: #ffffff;
+    padding: 18px;
+    z-index: 3 !important;
+}

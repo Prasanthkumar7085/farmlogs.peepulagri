@@ -360,11 +360,13 @@ const SingleViewScoutComponent = () => {
       );
       let responseData = await response.json();
       if (responseData?.success) {
-        await getPresingedURls(1);
         setTagsDrawerOpen(false);
+        setTagsCheckBoxOpen(false);
         toast.success("Images Deleted successfully");
         setDeleteOpen(false);
         setSelectedItems([]);
+        await getPresingedURls(1);
+
       }
     } catch (err) {
       console.error(err);

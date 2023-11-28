@@ -131,7 +131,7 @@ const TasksTableComponent = ({
       width: "120px",
     },
     {
-      accessorFn: (row: any) => row.farm_id.title,
+      accessorFn: (row: any) => row?.farm_ids,
       id: "farm_id.title",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
@@ -143,11 +143,18 @@ const TasksTableComponent = ({
       width: "200px",
     },
     {
-      accessorFn: (row: any) => row.assigned_to?.full_name,
+      accessorFn: (row: any) => row.assign_to,
       id: "assigned_to",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+        <span
+          style={{
+            padding: "40px 10px 40px 10px",
+            color: info.getValue()?.length ? "" : "#9a9a9a",
+          }}
+        >
+          {info.getValue()?.length
+            ? info.getValue()?.join(",\n")
+            : "*Not Assigned*"}
         </span>
       ),
       header: () => <span>Assigned to</span>,
@@ -279,7 +286,7 @@ const TasksTableComponent = ({
                   alt="view"
                 />
               </div> */}
-              {userType !== "USER" ? (
+              {userType !== "farmer" ? (
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {

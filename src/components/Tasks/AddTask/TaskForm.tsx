@@ -18,6 +18,8 @@ import styles from "./TaskForm.module.css";
 import TasksAttachments from "./TasksAttachments";
 import FooterActionButtons from "./footer-action-buttons";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
+import SelectComponent from "@/components/Core/SelectComponent";
+import SelectComponentNoAll from "@/components/Core/SelectComponentNoAll";
 
 const TaskForm = () => {
   const router = useRouter();
@@ -38,7 +40,13 @@ const TaskForm = () => {
   const [errorMessages, setErrorMessages] = useState({});
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
-  const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
+  const [statusOptions] = useState<Array<{ value: string; title: string }>>([
+    { value: "TO-START", title: "To Start" },
+    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "DONE", title: "Done" },
+    { value: "PENDING", title: "Pending" },
+    { value: "OVER-DUE", title: "Over-due" },
+  ]);
   const [user, setUser] = useState<userTaskType>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
 
@@ -303,23 +311,12 @@ const TaskForm = () => {
                       <h4 className={styles.title}>
                         Status<span style={{ color: "red" }}></span>
                       </h4>
-                      <Select
-                        className={styles.inoutbox}
-                        color="primary"
+                      <SelectComponentNoAll
+                        options={statusOptions}
                         size="small"
-                        placeholder="Enter your Task title here"
-                        variant="outlined"
-                        fullWidth
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
-                        defaultValue="TODO"
-                      >
-                        {statusOptions.map((item: string, index: number) => (
-                          <MenuItem key={index} value={item}>
-                            {item}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                        onChange={(e: any) => setStatus(e.target.value)}
+                        value={status ? status : ""}
+                      />
                     </div>
                   </Grid>
                 </Grid>

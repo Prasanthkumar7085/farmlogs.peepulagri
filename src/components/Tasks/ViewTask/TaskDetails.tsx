@@ -19,6 +19,7 @@ import Image from "next/image";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { Markup } from "interweave";
+import SelectComponent from "@/components/Core/SelectComponent";
 
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
@@ -39,7 +40,13 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [deadline, setDeadline] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [statusOptions] = useState(["TODO", "IN-PROGRESS", "COMPLETED"]);
+  const [statusOptions] = useState<Array<{ value: string; title: string }>>([
+    { value: "TO-START", title: "To Start" },
+    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "DONE", title: "Done" },
+    { value: "PENDING", title: "Pending" },
+    { value: "OVER-DUE", title: "Over-due" },
+  ]);
   const [farmId, setFarmId] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const [farmName, setFarmName] = useState("");
@@ -64,8 +71,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
-          .utcOffset("+05:30")
-          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -166,7 +173,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                   </IconButton>
                 </div>
-              ) : userType !== "USER" ? (
+              ) : userType !== "farmer" ? (
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
@@ -259,7 +266,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                   </IconButton>
                 </div>
-              ) : userType !== "USER" ? (
+              ) : userType !== "farmer" ? (
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
@@ -289,7 +296,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               justifyContent: "flex-end",
             }}
           >
-            {userType !== "USER" ? (
+            {userType !== "farmer" ? (
               editField == "farm" && editFieldOrNot ? (
                 <div className={styles.iconBlock}>
                   {" "}
@@ -406,38 +413,47 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
         <div className={styles.status}>
           <label className={styles.userLabel}>Status</label>
           <div style={{ width: "100%" }}>
-            {userType !== "USER" ? (
-              <Select
-                className={styles.inoutbox}
-                color="primary"
+            {userType !== "farmer" ? (
+              <SelectComponent
+                options={statusOptions}
                 size="small"
-                placeholder="Enter your Task title here"
-                variant="outlined"
-                value={status}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   setStatus(e.target.value);
                   onChangeStatus(e.target.value);
                 }}
-                sx={{
-                  width: "100%",
-                  background: "#f5f7fa",
-                  "& .MuiSelect-select": {
-                    fontSize: "11px",
-                    fontFamily: "'Inter',sans-serif",
-                    fontWeight: "600",
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    border: "0 !important",
-                  },
-                }}
-              >
-                {statusOptions.map((item: string, index: number) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
+                value={status ? status : ""}
+              />
             ) : (
+              // <Select
+              //   className={styles.inoutbox}
+              //   color="primary"
+              //   size="small"
+              //   placeholder="Enter your Task title here"
+              //   variant="outlined"
+              //   value={status}
+              // onChange={(e) => {
+              //   setStatus(e.target.value);
+              //   onChangeStatus(e.target.value);
+              // }}
+              //   sx={{
+              //     width: "100%",
+              //     background: "#f5f7fa",
+              //     "& .MuiSelect-select": {
+              //       fontSize: "11px",
+              //       fontFamily: "'Inter',sans-serif",
+              //       fontWeight: "600",
+              //     },
+              //     "& .MuiOutlinedInput-notchedOutline": {
+              //       border: "0 !important",
+              //     },
+              //   }}
+              // >
+              //   {statusOptions.map((item: string, index: number) => (
+              //     <MenuItem key={index} value={item}>
+              //       {item}
+              //     </MenuItem>
+              //   ))}
+              // </Select>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p className={styles.status2}>
                   {data?.status ? data?.status : "-"}
@@ -471,7 +487,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
               </IconButton>
             </div>
-          ) : userType !== "USER" ? (
+          ) : userType !== "farmer" ? (
             <div
               onClick={() => {
                 setEditFieldOrNot(true);

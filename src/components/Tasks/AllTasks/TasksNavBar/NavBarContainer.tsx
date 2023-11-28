@@ -51,9 +51,11 @@ const NavBarContainer: React.FC<PropTypes> = ({
   >();
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
-    { value: "TODO", title: "Todo" },
-    { value: "IN-PROGRESS", title: "In-Progress" },
-    { value: "COMPLETED", title: "Completed" },
+    { value: "TO-START", title: "To Start" },
+    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "DONE", title: "Done" },
+    { value: "PENDING", title: "Pending" },
+    { value: "OVER-DUE", title: "Over-due" },
   ]);
 
   const setStatusValue = (e: any) => {
@@ -181,7 +183,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
               }}
             />
           </div>
-          {userType !== "USER" ? (
+          {userType !== "farmer" ? (
             <Button
               className={styles.filter}
               color="primary"

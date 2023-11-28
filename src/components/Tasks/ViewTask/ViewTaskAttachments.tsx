@@ -248,7 +248,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
           ? attachmentData?.map(
             (item: TaskAttachmentsType | any, index: number) => {
               return (
-                <div >
+                <div key={index}>
                   <p className={styles.AttachmentDate}>
                     {timePipe(item[0]?.createdAt, "DD MMM YYYY, hh:mm A")}
                   </p>

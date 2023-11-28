@@ -43,6 +43,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
   const [editField, setEditField] = useState("");
   const [title, setTitle] = useState("");
+  const [assignee, setAssignee] = useState<any>();
+  console.log(assignee);
+
   const [deadline, setDeadline] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
@@ -69,6 +72,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     setFarmId(data?.farm_id ? data?.farm_id?._id : "");
     setFarmName(data?.farm_id?.title ? data?.farm_id?.title : "");
     setUserId(data?.assigned_to?._id as string);
+    setAssignee(data?.assigned_to)
   }, [data, editFieldOrNot]);
 
   const onUpdateField = async () => {
@@ -358,12 +362,16 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   />
                   <ErrorMessages
                     errorMessages={errorMessages}
-                    keyname="assigned_to"
+                    keyname="assign_to"
                   />
                 </div>
               ) : (
                 <h1>
-                  {data?.assigned_to ? data?.assigned_to?.full_name : "-"}
+                  {data?.assign_to ? data?.assign_to.map((item: { _id: string; name: string }, index: number) => {
+                    return <p key={index}>
+                      {item.name}
+                    </p>
+                  }) : "-"}
                 </h1>
               )}
             </div>
@@ -394,8 +402,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                   }}
                 >
                   <img
-                    className={styles.editicon}
-                    src="/task-edit-icon.svg"
+                    className={styles.addicon}
+                    src="/add-plus-icon.svg"
                     alt=""
                   />
                 </IconButton>

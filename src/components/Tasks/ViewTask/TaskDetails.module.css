@@ -13,6 +13,11 @@
   height: 12px;
 }
 
+.addicon {
+  width: 20px;
+  height: 20px;
+}
+
 .iconBlock {
   display: flex;
   align-items: center;
@@ -219,17 +224,20 @@
 }
 
 
-.canceleBtn{
-   color:#3462cf !important
-}.canceleBtn:hover{
-   background-color: #3462cf;
-   color:white
+.canceleBtn {
+  color: #3462cf !important
 }
-.saveBtn{
+
+.canceleBtn:hover {
+  background-color: #3462cf;
+  color: white
+}
+
+.saveBtn {
   background-color: #3462cf;
 }
 
-.saveBtn:hover{
+.saveBtn:hover {
   background: #000000 !important;
-  color:#3462cf
+  color: #3462cf
 }

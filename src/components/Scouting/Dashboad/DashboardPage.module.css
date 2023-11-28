@@ -1,5 +1,5 @@
 .AddFarmBtn {
-    background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
-    color: #ffffff;
-    padding: 18px;
-  }
+  background: #05A155;
+  color: #ffffff;
+  padding: 20px;
+}

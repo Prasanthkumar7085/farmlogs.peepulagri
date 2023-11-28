@@ -32,7 +32,7 @@ const DashboardPage = () => {
   const [locations, setLocations] = useState<
     Array<{ title: string; _id: string }>
   >([]);
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("1");
   const [routerLocation, setRouterLocation] = useState("");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -61,14 +61,14 @@ const DashboardPage = () => {
         delete queryParam["order_by"];
         delete queryParam["order_type"];
       }
-      if (location) {
-        console.log(location, "m");
-        if (location != "1" && location != "All") {
-          queryParam["location_id"] = location;
-          delete queryParam["order_by"];
-          delete queryParam["order_type"];
-        }
-      }
+      // if (location) {
+      //   console.log(location, "m");
+      //   if (location != "1" || location != "All") {
+      //     queryParam["location_id"] = location;
+      //     delete queryParam["order_by"];
+      //     delete queryParam["order_type"];
+      //    }
+      // }
       router.replace({ pathname: "/farms", query: queryParam });
       url = prepareURLEncodedParams(url, queryParam);
 
@@ -216,7 +216,7 @@ const DashboardPage = () => {
             }
           }}
         >
-          <AddIcon />
+          <AddIcon sx={{ fontSize: "2rem" }} />
         </IconButton>
       </div>
       <LoadingComponent loading={loading} />

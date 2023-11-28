@@ -7,6 +7,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Button } from "@mui/material";
 import { createContext, useEffect, useRef } from "react";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 interface pagePropsType {
   farmsData: Array<FarmDataType>;
@@ -66,9 +67,10 @@ const FarmCard = ({
   }, [farmsData]);
 
   return (
-    <div className={styles.allFormsBlock}>
-      {farmsData.length
-        ? farmsData.map((item: FarmDataType, index: number) => {
+    <div className={styles.allForms}>
+      <div className={styles.allFormsBlock}>
+        {farmsData.length
+          ? farmsData.map((item: FarmDataType, index: number) => {
             const colorIndex = index % colorsArray.length;
 
             return (
@@ -105,8 +107,8 @@ const FarmCard = ({
                     >
                       {item.title.length > 16
                         ? item.title.slice(0, 1).toUpperCase() +
-                          item.title.slice(1, 12) +
-                          "..."
+                        item.title.slice(1, 12) +
+                        "..."
                         : item.title[0].toUpperCase() + item.title.slice(1)}
                     </div>
 
@@ -147,10 +149,13 @@ const FarmCard = ({
               </div>
             );
           })
-        : ""}
+          : ""}
+
+      </div>
       {hasMore ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
+            className={styles.farmsViewMoreBtn}
             variant="outlined"
             onClick={(e) => {
               e.preventDefault();
@@ -158,7 +163,7 @@ const FarmCard = ({
               getAllFarms({ page: page + 1 });
             }}
           >
-            View More
+            View More <KeyboardArrowDownIcon sx={{ fontSize: "1.5rem" }} />
           </Button>
         </div>
       ) : (

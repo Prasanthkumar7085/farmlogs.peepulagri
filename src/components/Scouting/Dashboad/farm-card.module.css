@@ -146,3 +146,15 @@
   overflow: scroll;
   padding: 1rem;
 }
+
+.farmsViewMoreBtn {
+  border-radius: 20px !important;
+  text-transform: capitalize !important;
+  font-family: "Inter", sans-serif !important;
+  color: #2E58C4 !important;
+  border: 1px solid #2e58c4 !important;
+  font-size: clamp(12px, 3.5vw, 16px) !important;
+  margin-top: 1rem !important;
+  min-width: inherit !important;
+  padding: 5px 15px !important;
+}

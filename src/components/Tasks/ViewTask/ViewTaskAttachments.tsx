@@ -220,8 +220,13 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       </div>
 
       <div className={styles.allAttachments}>
+<<<<<<< Updated upstream
         {data?.attachments?.length
           ? data?.attachments?.map(
+=======
+        {attachmentData?.length
+          ? attachmentData[0]?.map(
+>>>>>>> Stashed changes
               (item: TaskAttachmentsType | any, index: number) => {
                 return (
                   <div key={index}>
@@ -234,7 +239,11 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
                             onChange={(e) => selectImagesForDelete(e, item)}
                           />
                           <ImageComponent
+<<<<<<< Updated upstream
                             src={getSourceForThumnail(item.type)}
+=======
+                            src={item.url}
+>>>>>>> Stashed changes
                             height={20}
                             width={20}
                             alt={"image"}

@@ -127,7 +127,7 @@ const ThreadsForTasks = ({
                   </Avatar>
                 ) : (
                   <Avatar sx={{ bgcolor: "green" }}>
-                    {item?.commented_by?.user_type?.slice(0, 2)}
+                    {item?.commented_by?.name?.slice(0, 2)}
                   </Avatar>
                 )}
                 <div className={styles.messagebox}>
@@ -136,7 +136,7 @@ const ThreadsForTasks = ({
                       {userDetails?.user_details?.user_type ==
                         item?.commented_by?.user_type
                         ? "You"
-                        : item?.commented_by?.user_type == "farmer"
+                        : item?.commented_by?.user_type !== userDetails?.user_details?.user_type
                           ? item.commented_by?.name
                           : item?.user_type}
                     </h4>
@@ -453,7 +453,7 @@ const ThreadsForTasks = ({
                             </Avatar>
                           ) : (
                             <Avatar sx={{ bgcolor: "green" }}>
-                              {row?.commented_by?.user_type?.slice(0, 2)}
+                              {row?.commented_by?.name?.slice(0, 2)}
                             </Avatar>
                           )}{" "}
                           <div className={styles.messagebox1}>
@@ -463,7 +463,7 @@ const ThreadsForTasks = ({
                                   {userDetails?.user_details?.user_type ==
                                     row?.commented_by?.user_type
                                     ? "You"
-                                    : row?.commented_by?.user_type == "farmer"
+                                    : row?.commented_by?.user_type !== userDetails?.user_details?.user_type
                                       ? row?.commented_by?.name
                                       : row?.commented_by?.user_type}
                                 </h4>

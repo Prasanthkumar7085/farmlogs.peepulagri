@@ -267,8 +267,8 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       </div>
 
       <div className={styles.allAttachments}>
-        {attachmentData[0]?.length
-          ? attachmentData[0]?.map(
+        {attachmentData?.length
+          ? attachmentData?.map(
             (item: TaskAttachmentsType | any, index: number) => {
               return (
                 <div key={index}>

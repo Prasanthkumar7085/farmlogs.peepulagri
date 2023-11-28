@@ -469,7 +469,6 @@ const SingleViewScoutComponent = () => {
             maxHeight: "550px",
           }}>
           {data.map((image: any, indexAttachment: any) => {
-            console.log(data.length, "o")
             if (data.length === indexAttachment + 1) {
               return (
                 <div
@@ -506,16 +505,6 @@ const SingleViewScoutComponent = () => {
                         handleChange(image); // Call handleLongPress when long press is detected
                       }
                     }}
-                    // style={{
-                    //   position: "absolute",
-                    //   top: "0",
-                    //   left: "0",
-                    //   width: "100%",
-                    //   height: "100%",
-                    //   cursor: "pointer",
-                    //   borderRadius: "5px",
-                    //   objectFit: "cover",
-                    // }}
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setTagsCheckBoxOpen(true);
@@ -588,16 +577,7 @@ const SingleViewScoutComponent = () => {
                         handleChange(image); // Call handleLongPress when long press is detected
                       }
                     }}
-                    // style={{
-                    //   position: "absolute",
-                    //   top: "0",
-                    //   left: "0",
-                    //   width: "100%",
-                    //   height: "100%",
-                    //   cursor: "pointer",
-                    //   borderRadius: "5px",
-                    //   objectFit: "cover",
-                    // }}
+
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setTagsCheckBoxOpen(true);

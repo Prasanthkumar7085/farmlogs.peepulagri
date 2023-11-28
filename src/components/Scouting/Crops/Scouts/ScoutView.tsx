@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import getImagesByPaginationService from "../../../../../lib/services/ScoutServices/getImagesByPaginationService";
 import SingleImageComponent from "./SingleImageComponent";
 import styles from "./singleImage.module.css";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 interface ApiProps {
   page: string | number;
@@ -156,7 +157,10 @@ const ScoutView = () => {
         }
       })
       }
+      <LoadingComponent loading={loading} />
+
     </div>
+
   );
 };
 

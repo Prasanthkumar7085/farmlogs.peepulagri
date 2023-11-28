@@ -62,8 +62,8 @@ const TasksTableComponent = ({
         page: router.query.page as string,
         limit: router.query.limit as string,
         search_string: router.query.search_string as string,
-        sortBy: router.query.order_by as string,
-        sortType: router.query.order_type as string,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
         selectedFarmId: router.query.farm_id as string,
         status: router.query.status as string,
         userId: router.query.assigned_to as string,
@@ -154,7 +154,10 @@ const TasksTableComponent = ({
           }}
         >
           {info.getValue()?.length
-            ? info.getValue()?.join(",\n")
+            ? info
+                .getValue()
+                .map((item: { _id: string; name: string }) => item.name)
+                .join(", ")
             : "*Not Assigned*"}
         </span>
       ),

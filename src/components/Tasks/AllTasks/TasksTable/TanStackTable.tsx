@@ -39,13 +39,17 @@ const TanStackTableComponent = ({
     return width;
   };
   const sortAndGetData = (header: any) => {
-    if (header.id == "actions" || header.id == "farm_id.title" || header.id == 'assigned_to') {
+    if (
+      header.id == "actions" ||
+      header.id == "farm_id.title" ||
+      header.id == "assigned_to"
+    ) {
       return;
     }
     let orderBy = header.id;
     let orderType = "asc";
-    if ((router.query.order_by as string) == header.id) {
-      if (router.query.order_type == "asc") {
+    if ((router.query.sort_by as string) == header.id) {
+      if (router.query.sort_type == "asc") {
         orderType = "desc";
       } else {
         orderBy = "";
@@ -67,8 +71,8 @@ const TanStackTableComponent = ({
     getData({
       limit: router.query.limit as string,
       page: value,
-      sortBy: router.query.order_by as string,
-      sortType: router.query.order_type as string,
+      sortBy: router.query.sort_by as string,
+      sortType: router.query.sort_type as string,
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
@@ -79,8 +83,8 @@ const TanStackTableComponent = ({
     getData({
       limit: value,
       page: 1,
-      sortBy: router.query.order_by as string,
-      sortType: router.query.order_type as string,
+      sortBy: router.query.sort_by as string,
+      sortType: router.query.sort_type as string,
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
@@ -134,8 +138,8 @@ const TanStackTableComponent = ({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                            {router.query.order_by == header.id ? (
-                              router.query.order_type == "asc" ? (
+                            {router.query.sort_by == header.id ? (
+                              router.query.sort_type == "asc" ? (
                                 <ImageComponent
                                   src="/sort-asc.svg"
                                   height={15}
@@ -150,7 +154,10 @@ const TanStackTableComponent = ({
                                   alt="image"
                                 />
                               )
-                            ) : (header.id == "farm_id.title" || header.id == "assigned_to") ? "" : (
+                            ) : header.id == "farm_id.title" ||
+                              header.id == "assigned_to" ? (
+                              ""
+                            ) : (
                               <ImageComponent
                                 src="/unsort.svg"
                                 height={15}

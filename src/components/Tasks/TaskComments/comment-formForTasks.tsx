@@ -396,8 +396,9 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
         </div>
 
         <Button
-          className={styles.sendbutton}
-          size="medium"
+          className={
+            comment && !loading ? styles.sendbutton : styles.sendbuttonDisable
+          } size="medium"
           variant="contained"
           disabled={comment || !loading ? false : true}
           onClick={() =>

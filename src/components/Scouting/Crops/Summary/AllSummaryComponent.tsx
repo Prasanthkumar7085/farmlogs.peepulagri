@@ -9,6 +9,8 @@ import AddIcon from "@mui/icons-material/Add";
 import styles from "./summary.module.css"
 import timePipe from "@/pipes/timePipe";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const AllSummaryComponents = () => {
@@ -127,8 +129,8 @@ const AllSummaryComponents = () => {
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>Edit</MenuItem>
-                        <MenuItem onClick={handleClose}>Delete</MenuItem>
+                        <MenuItem sx={{ color: 'green' }} onClick={() => router.push(`/farms/${router?.query.farm_id}/crops/${router.query.crop_id}/summary/update-summary`)}><EditIcon /></MenuItem>
+                        <MenuItem sx={{ color: 'red' }} onClick={handleClose}><DeleteIcon /></MenuItem>
                     </Menu>
                 </Box>
 

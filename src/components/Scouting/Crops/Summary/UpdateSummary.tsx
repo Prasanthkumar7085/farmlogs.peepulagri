@@ -1,0 +1,229 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { Alert, AlertTitle, Backdrop, Button, CircularProgress, Snackbar, TextField } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+
+const UpdateSummary = () => {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const crop_id = router.query.crop_id
+    const farm_id = router.query.farm_id
+
+    const accessToken = useSelector(
+        (state: any) => state.auth.userDetails?.access_token
+    );
+
+    const [, , removeCookie] = useCookies(["userType"]);
+    const [, , loggedIn] = useCookies(["loggedIn"]);
+
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState<any>();
+    const [comment, setComment] = useState<any>();
+    const [date, setDate] = useState<any>();
+    const [dateError, setDateError] = useState<any>();
+    const [commentError, setCommentError] = useState<any>();
+    const [summaryError, setSummaryError] = useState<any>();
+    const [success, setSuccess] = useState<any>();
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+
+
+    const logout = async () => {
+        try {
+            removeCookie("userType");
+            loggedIn("loggedIn");
+            router.push("/");
+            await dispatch(removeUserDetails());
+            await dispatch(deleteAllMessages());
+        } catch (err: any) {
+            console.error(err);
+        }
+    };
+
+    const summary = async () => {
+        setLoading(true);
+        let options = {
+            method: "GET",
+
+            headers: new Headers({
+                "content-type": "application/json",
+                authorization: accessToken,
+            }),
+        };
+        try {
+            let response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${crop_id}/day-summary/2023-11-21`,
+                options
+            );
+
+            let responseData: any = await response.json();
+
+
+            if (responseData.status == 200) {
+                setLoading(true);
+                setData(responseData.data)
+
+            } else if (responseData?.statusCode == 403) {
+                await logout();
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+
+    }
+    useEffect(() => {
+        if (router.isReady) {
+            summary()
+        }
+    }, [router.isReady])
+
+    const updateSummary = async () => {
+        setLoading(true);
+        setDateError('');
+        setCommentError('');
+        setSummaryError('');
+        try {
+            let body = {
+                farm_id: farm_id,
+                content: comment,
+                date: date
+            };
+            let options = {
+                method: "PUT",
+                headers: new Headers({
+                    "content-type": "application/json",
+                    authorization: accessToken,
+                }),
+                body: JSON.stringify(body),
+            };
+
+            let response: any = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${crop_id}/day-summary`,
+                options
+            );
+            let responseData = await response.json();
+
+            if (responseData.status == 200) {
+                setSuccess(responseData.message);
+                setShowSuccessAlert(true);
+                setLoading(false);
+                setTimeout(() => {
+                    setShowSuccessAlert(false);
+                    router.back()
+                }, 1500);
+            } else if (responseData.status == 422) {
+                setDateError(responseData.errors.date);
+                setCommentError(responseData.errors.content);
+                setSummaryError(responseData.errors.summary);
+                setShowErrorAlert(true);
+                setTimeout(() => {
+                    setShowErrorAlert(false);
+                }, 1500);
+            }
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getCurrentDate = () => {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const formatDateForInput = (dateString: any) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    return (
+        <div>
+            <div>Date</div>
+            <TextField
+                type='date'
+                placeholder="Select Date"
+                color="primary"
+                variant="outlined"
+                value={date ? date : formatDateForInput(data?.date)}
+                onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const currentDate = new Date();
+
+                    if (selectedDate > currentDate) {
+                        setDateError('Date cannot be in the future');
+                        return;
+                    }
+
+                    setDate(e.target.value);
+                    setDateError('');
+                    setSummaryError('');
+                }}
+                inputProps={{ max: getCurrentDate() }}
+                sx={{ background: "#fff" }}
+            />
+            <p style={{ color: 'red' }}>{dateError}</p>
+            <div >Comments</div>
+            <TextField
+                color="primary"
+                name="desciption"
+                id="description"
+                minRows={4}
+                maxRows={4}
+                placeholder="Enter your comment here"
+                fullWidth={true}
+                variant="outlined"
+                multiline
+                value={comment ? comment : data?.content}
+                onChange={(e) => {
+                    setComment(e.target.value);
+                    setCommentError('');
+                    setSummaryError('');
+                }}
+                sx={{ background: "#fff" }}
+            />
+            <p style={{ color: 'red' }}>{commentError}</p>
+            <div>
+                <Button type='submit' variant='contained' onClick={updateSummary}>Update</Button>
+            </div>
+            <Snackbar
+                open={showSuccessAlert}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+                <Alert severity="success">
+                    <AlertTitle>Success</AlertTitle>
+                    {success}
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={showErrorAlert}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+                <Alert severity='error'>
+                    <AlertTitle>Error</AlertTitle>
+                    {summaryError}
+                </Alert>
+            </Snackbar>
+            <Backdrop
+                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </div>
+    )
+
+}
+export default UpdateSummary;

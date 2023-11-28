@@ -4,9 +4,11 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Backdrop, Box, Card, CardContent, CircularProgress, IconButton, Typography } from "@mui/material";
+import { Backdrop, Box, Card, CardContent, CircularProgress, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./summary.module.css"
+import timePipe from "@/pipes/timePipe";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 const AllSummaryComponents = () => {
@@ -23,6 +25,15 @@ const AllSummaryComponents = () => {
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<any>();
+    const [anchorEl, setAnchorEl] = useState<any>(null);
+
+    const handleMenu = (event: any) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
 
     const logout = async () => {
@@ -82,12 +93,43 @@ const AllSummaryComponents = () => {
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
                         <Typography component="div" variant="subtitle1" color='blue'>
-                            {data?.date}
+                            {timePipe(data?.date, "DD, MMM YYYY")}
                         </Typography>
                         <Typography variant="subtitle1" color='black' component="div">
                             {data?.content}
                         </Typography>
                     </CardContent>
+
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleMenu}
+                        color="inherit"
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                        id="menu-appbar"
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                        <MenuItem onClick={handleClose}>Edit</MenuItem>
+                        <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    </Menu>
                 </Box>
 
             </Card>

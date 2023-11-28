@@ -43,7 +43,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To Start" },
-    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "INPROGRESS", title: "In Progress" },
     { value: "DONE", title: "Done" },
     { value: "PENDING", title: "Pending" },
     { value: "OVER-DUE", title: "Over-due" },

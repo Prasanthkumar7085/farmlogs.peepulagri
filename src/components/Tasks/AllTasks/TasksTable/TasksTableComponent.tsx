@@ -74,47 +74,48 @@ const TasksTableComponent = ({
     setDeleteLoading(false);
   };
 
+  //task-overdue-icon.svg
   const getStatusLabel = (label: string) => {
     if (!label) return "";
-    if (label == "IN-PROGRESS") {
-      return (
-        <div style={{ display: "flex", gap: "5px" }}>
-          <ImageComponent
-            src="/task-inprogress-icon.svg"
-            height={10}
-            width={10}
-            alt="task-inprogress"
-          />
-          <span>In-Progress</span>
-        </div>
-      );
-    }
-    if (label == "TODO") {
-      return (
-        <div style={{ display: "flex", gap: "5px" }}>
-          <ImageComponent
-            src="/task-todo-icon.svg"
-            height={10}
-            width={10}
-            alt="task-inprogress"
-          />
-          <span>Todo</span>
-        </div>
-      );
-    }
-    if (label == "COMPLETED") {
-      return (
-        <div style={{ display: "flex", gap: "5px" }}>
-          <ImageComponent
-            src="/task-complete-icon.svg"
-            height={10}
-            width={10}
-            alt="task-inprogress"
-          />
-          <span>Completed</span>
-        </div>
-      );
-    }
+
+    return (
+      <div style={{ display: "flex", gap: "5px" }}>
+        <ImageComponent
+          src={`/task-${label}.svg`}
+          height={10}
+          width={10}
+          alt="task-status"
+        />
+        <span>{label}</span>
+      </div>
+    );
+
+    // if (label == "TODO") {
+    //   return (
+    //     <div style={{ display: "flex", gap: "5px" }}>
+    //       <ImageComponent
+    //         src="/task-todo-icon.svg"
+    //         height={10}
+    //         width={10}
+    //         alt="task-inprogress"
+    //       />
+    //       <span>Todo</span>
+    //     </div>
+    //   );
+    // }
+    // if (label == "COMPLETED") {
+    //   return (
+    //     <div style={{ display: "flex", gap: "5px" }}>
+    //       <ImageComponent
+    //         src="/task-complete-icon.svg"
+    //         height={10}
+    //         width={10}
+    //         alt="task-inprogress"
+    //       />
+    //       <span>Completed</span>
+    //     </div>
+    //   );
+    // }
   };
 
   const columns = [
@@ -130,18 +131,18 @@ const TasksTableComponent = ({
       footer: (props: any) => props.column.id,
       width: "120px",
     },
-    {
-      accessorFn: (row: any) => row?.farm_ids,
-      id: "farm_id.title",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
-        </span>
-      ),
-      header: () => <span>Farm Name</span>,
-      footer: (props: any) => props.column.id,
-      width: "200px",
-    },
+    // {
+    //   accessorFn: (row: any) => row?.farm_ids,
+    //   id: "farm_id.title",
+    //   cell: (info: any) => (
+    //     <span style={{ padding: "40px 10px 40px 10px" }}>
+    //       {info.getValue()}
+    //     </span>
+    //   ),
+    //   header: () => <span>Farm Name</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "200px",
+    // },
     {
       accessorFn: (row: any) => row.assign_to,
       id: "assigned_to",

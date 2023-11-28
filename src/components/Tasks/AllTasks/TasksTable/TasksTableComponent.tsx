@@ -13,6 +13,8 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import AttachmentDrawerTaskmodule from "./AttachmentDrawer";
 import Link from "next/link";
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import ViewLogs from "../../ViewTask/ViewLogs";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -47,6 +49,8 @@ const TasksTableComponent = ({
   const [drawerOpen, setDrawerOpen] = useState<any>(false);
   const [rowDetails, setRowDetails] = useState<any>();
   const [attachmentdrawer, setAttachmentDrawer] = useState<any>(false);
+  const [openLogs, setOpenLogs] = useState(false);
+  const [taskId, setTaskId] = useState("");
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -336,6 +340,15 @@ const TasksTableComponent = ({
                   alt=""
                 />
               </div>
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setOpenLogs((prev) => !prev);
+                  setTaskId(info.row.original?._id);
+                }}
+              >
+                <SummarizeIcon sx={{ color: "#4986f7" }} />
+              </div>
             </div>
           }
         </span>
@@ -381,6 +394,7 @@ const TasksTableComponent = ({
         setAttachmentDrawer={setAttachmentDrawer}
         attachmentdrawer={attachmentdrawer}
       />
+      <ViewLogs openLogs={openLogs} setOpenLogs={setOpenLogs} taskId={taskId} />
 
       <Toaster richColors position="top-right" closeButton />
     </div>

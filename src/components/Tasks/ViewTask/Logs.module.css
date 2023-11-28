@@ -1,0 +1,11 @@
+.drawerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drawerHeader h6 {
+    font-size: clamp(16px, 0.833vw, 20px) !important;
+    font-weight: 500 !important;
+    font-family: 'Inter', sans-serif !important;
+}

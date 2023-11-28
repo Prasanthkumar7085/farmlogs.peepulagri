@@ -1,6 +1,6 @@
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { TaskResponseTypes } from "@/types/tasksTypes";
-import { Card } from "@mui/material";
+import { Button, Card } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,6 +10,9 @@ import updateTaskService from "../../../../lib/services/TasksService/updateTaskS
 import ViewTaskAttachments from "./ViewTaskAttachments";
 import styles from "./ViewTaskPage.module.css";
 import { toast } from "sonner";
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import ViewLogs from "./ViewLogs";
+
 const ViewTaskComponent = () => {
   const router = useRouter();
 
@@ -19,6 +22,7 @@ const ViewTaskComponent = () => {
 
   const [data, setData] = useState<TaskResponseTypes | null>();
   const [loading, setLoading] = useState(true);
+  const [openLogs, setOpenLogs] = useState(false);
 
   const getTaskById = async (id: string) => {
     setLoading(true);
@@ -58,10 +62,37 @@ const ViewTaskComponent = () => {
     <div className={styles.viewTaskPage}>
       <div className={styles.viewTaskContainer}>
         <div className={styles.viewPageHeader}>
-          <div className={styles.backButton} onClick={() => router.back()}>
-            <img src="/arrow-left-back.svg" alt="" width={"18px"} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              <div className={styles.backButton} onClick={() => router.back()}>
+                <img src="/arrow-left-back.svg" alt="" width={"18px"} />
+              </div>
+              <h5>View Task</h5>
+            </div>
+            <div>
+              <Button
+                sx={{ display: "flex", gap: "10px" }}
+                variant="outlined"
+                onClick={() => setOpenLogs((prev) => !prev)}
+              >
+                View Logs <SummarizeIcon />
+              </Button>
+            </div>
           </div>
-          <h5>View Task</h5>
         </div>
         <Card
           sx={{
@@ -70,6 +101,11 @@ const ViewTaskComponent = () => {
             marginBottom: "1rem",
           }}
         >
+          <ViewLogs
+            openLogs={openLogs}
+            setOpenLogs={setOpenLogs}
+            taskId={router.query.task_id as string}
+          />
           <TaskDetails data={data} updateTask={updateTask} />
           <ViewTaskAttachments data={data} getTaskById={getTaskById} />
         </Card>

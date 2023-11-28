@@ -13,6 +13,7 @@ import appendAttachmentsInTaskService from "../../../../lib/services/TasksServic
 import deleteTaskAttachmentService from "../../../../lib/services/TasksService/deleteTaskAttachmentService";
 import TasksAttachments from "../AddTask/TasksAttachments";
 import styles from "./TaskDetails.module.css";
+import timePipe from "@/pipes/timePipe";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -183,39 +184,17 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
 
   const [uploadAttachmentsOpen, setUploadAttachmentsOpen] = useState(false);
 
-  const savetheAttachments = async () => {
-    setLoading(true);
-    try {
-      let body = {
-        attachments: files,
-      };
 
-      const response = await appendAttachmentsInTaskService({
-        taskId: data?._id as string,
-        body: body,
-        token: accessToken,
-      });
-      if (response?.success) {
-        toast.success(response?.message);
-        setUploadAttachmentsOpen(!uploadAttachmentsOpen);
-        setFiles([]);
-        setMultipleFiles([]);
-        getTaskById(data?._id as string);
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+  const afterUploadAttachements = (value: any) => {
+    if (value == true) {
+      setUploadAttachmentsOpen(!uploadAttachmentsOpen);
+      setFiles([]);
+      setMultipleFiles([]);
+      getAllAttachments();
     }
   };
 
-  const cancelUpload = () => {
-    setUploadAttachmentsOpen(!uploadAttachmentsOpen);
-    setFiles([]);
-    setMultipleFiles([]);
-  };
+
 
   return (
     <div className={styles.cardDetails} style={{ paddingBottom: "1rem" }}>
@@ -269,64 +248,77 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
           ? attachmentData?.map(
             (item: TaskAttachmentsType | any, index: number) => {
               return (
-                <div key={index}>
-                  <div className={styles.singleAttachment}>
-                    <div className={styles.attachmentDetails}>
-                      <div className={styles.checkGrp}>
-                        <Checkbox
-                          size="small"
-                          sx={{ padding: "0" }}
-                          onChange={(e) => selectImagesForDelete(e, item)}
-                        />
-                        <ImageComponent
-                          src={item.url}
-                          height={20}
-                          width={20}
-                          alt={"image"}
-                        />
-                        <p
-                          onClick={() => window.open(item.url)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          {item?.original_name?.length > 25
-                            ? item?.original_name.slice(0, 22) + "..."
-                            : item?.original_name}
-                        </p>
-                      </div>
+                <div >
+                  <p className={styles.AttachmentDate}>
+                    {timePipe(item[0]?.createdAt, "DD MMM YYYY, hh:mm A")}
+                  </p>
+                  {item?.map((image: any) => {
 
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
+                    return (
+                      <div key={index}>
+                        <div className={styles.singleAttachment}>
+                          <div className={styles.attachmentDetails}>
+                            <div className={styles.checkGrp}>
+                              <Checkbox
+                                size="small"
+                                sx={{ padding: "0" }}
+                                onChange={(e) => selectImagesForDelete(e, image)}
+                              />
+                              <ImageComponent
+                                src={image.url}
+                                height={20}
+                                width={20}
+                                alt={"image"}
+                              />
+                              <p
+                                onClick={() => window.open(image.url)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                {image?.original_name?.length > 25
+                                  ? image?.original_name.slice(0, 22) + "..."
+                                  : image?.original_name}
+                              </p>
+                            </div>
 
-                          gap: "10px",
-                        }}
-                      >
-                        <IconButton
-                          onClick={() => {
-                            downLoadAttachements(item.url);
-                          }}
-                        >
-                          <ImageComponent
-                            src={"/download-1-1.svg"}
-                            height={20}
-                            width={20}
-                            alt={"image"}
-                          />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => {
-                            // downLoadAttachements(item.url);
-                            window.open(item.url);
-                          }}
-                        >
-                          <OpenInNewIcon />
-                        </IconButton>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+
+                                gap: "10px",
+                              }}
+                            >
+                              <IconButton
+                                onClick={() => {
+                                  downLoadAttachements(image.url);
+                                }}
+                              >
+                                <ImageComponent
+                                  src={"/download-1-1.svg"}
+                                  height={20}
+                                  width={20}
+                                  alt={"image"}
+                                />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => {
+                                  // downLoadAttachements(item.url);
+                                  window.open(image.url);
+                                }}
+                              >
+                                <OpenInNewIcon />
+                              </IconButton>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    );
+                  })
+                  }
                 </div>
-              );
+
+              )
+
             }
           )
           : "No Attachements"}
@@ -338,30 +330,9 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
             setUploadedFiles={setUploadedFiles}
             multipleFiles={multipleFiles}
             setMultipleFiles={setMultipleFiles}
+            afterUploadAttachements={afterUploadAttachements}
           />
-          <div
-            style={{
-              minHeight: "30px",
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "10px",
-            }}
-          >
-            <Button
-              className={styles.canceleBtn}
-              variant="outlined"
-              onClick={() => cancelUpload()}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => savetheAttachments()}
-              className={styles.saveBtn}
-            >
-              Save
-            </Button>
-          </div>
+
         </div>
       ) : (
         ""

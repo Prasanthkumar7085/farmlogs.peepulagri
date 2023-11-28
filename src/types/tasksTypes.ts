@@ -56,3 +56,20 @@ export interface FarmInTaskType {
   user_id: string;
   location: string;
 }
+
+
+export interface TasksLogsResponseType {
+  _id: string;
+  task_id: {
+    _id: string;
+    title: string;
+  };
+  message: string;
+  type: string;
+  user_id: {
+    _id: string;
+    name: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}

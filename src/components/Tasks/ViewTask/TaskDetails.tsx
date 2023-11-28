@@ -21,6 +21,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { Markup } from "interweave";
 import SelectComponent from "@/components/Core/SelectComponent";
 import SelectComponentNoAll from "@/components/Core/SelectComponentNoAll";
+import { useRouter } from "next/router";
 
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
@@ -28,6 +29,10 @@ interface PropsType {
 }
 
 const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
+  const router = useRouter();
+  const id = router.query.task_id
+
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -53,6 +58,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [farmName, setFarmName] = useState("");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
+  const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
 
   useEffect(() => {
     setErrorMessages({});
@@ -72,8 +78,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          .utcOffset("+05:30")
+          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -89,6 +95,40 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       if (response?.errors) {
         setErrorMessages(response?.errors);
       }
+    }
+  };
+
+  const addAssignee = async () => {
+    setLoading(true);
+
+    try {
+      if (selectedAssignee) {
+        let body = {
+          assign_to: selectedAssignee.map((user: any) => user._id),
+        };
+        let options = {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            authorization: accessToken,
+          }),
+          body: JSON.stringify(body),
+        };
+
+        let response: any = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}/assignee`,
+          options
+        );
+        let responseData = await response.json();
+
+        if (responseData.status === 200) {
+          // Handle success if needed
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -148,7 +188,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 <h1 className={styles.landPreparation}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                      data?.title.slice(1)
+                    data?.title.slice(1)
                     : "-"}
                 </h1>
               )}
@@ -290,53 +330,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
       </div>
       <div className={styles.viewHeader}>
         <div className={styles.userBlock}>
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            {userType !== "farmer" ? (
-              editField == "farm" && editFieldOrNot ? (
-                <div className={styles.iconBlock}>
-                  {" "}
-                  <IconButton
-                    onClick={() => {
-                      setEditFieldOrNot(false);
-                      setEditField("");
-                    }}
-                  >
-                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      onUpdateField();
-                    }}
-                  >
-                    <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
-                  </IconButton>
-                </div>
-              ) : (
-                <IconButton
-                  sx={{ display: "none" }}
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("farm");
-                  }}
-                >
-                  <img
-                    className={styles.editicon}
-                    src="/task-edit-icon.svg"
-                    alt=""
-                  />
-                </IconButton>
-              )
-            ) : (
-              ""
-            )}
-          </div>
           <div className={styles.userDetails}>
+
             <div
               className={styles.singleDetailsBox}
               style={{
@@ -350,13 +345,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 />{" "}
                 Assignee
               </label>
-              {editField == "farm" && editFieldOrNot ? (
+              {editField == "assignee" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
                     userId={userId}
                     onChange={(assigned_to: any) => {
+                      setSelectedAssignee(assigned_to);
                       setFarmId("");
-                      setUserId(assigned_to?._id);
+                      setUserId(assigned_to[0]?._id);
                       setErrorMessages({});
                     }}
                   />
@@ -371,44 +367,43 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 </h1>
               )}
             </div>
-            <div
-              className={styles.singleDetailsBox}
-              style={{
-                flexDirection: "column",
-                alignItems: "flex-start !important",
-              }}
-            >
-              <label className={styles.userLabel}>
-                {" "}
-                <Image
-                  src="/farmshape2.svg"
-                  alt=""
-                  height={12}
-                  width={12}
-                  style={{ marginRight: "4px" }}
-                />
-                Farm
-              </label>
-              {editField == "farm" && editFieldOrNot ? (
-                <div style={{ width: "100%" }}>
-                  <FarmOptionsInViewTasks
-                    userId={userId}
-                    farmId={farmId}
-                    onChange={(farm_id: any) => {
-                      setFarmId(farm_id?._id);
-                      setFarmName(farm_id?.title);
-                      setErrorMessages({});
+            <div>
+              {editField == "assignee" && editFieldOrNot ? (
+                <div className={styles.iconBlock}>
+                  <IconButton
+                    onClick={() => {
+                      setEditFieldOrNot(false);
+                      setEditField("");
                     }}
-                  />
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname="farm_id"
-                  />
+                  >
+                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      addAssignee();
+                    }}
+                  >
+                    <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                  </IconButton>
                 </div>
+              ) : userType !== "farmer" ? (
+                <IconButton
+                  onClick={() => {
+                    setEditFieldOrNot(true);
+                    setEditField("assignee");
+                  }}
+                >
+                  <img
+                    className={styles.editicon}
+                    src="/task-edit-icon.svg"
+                    alt=""
+                  />
+                </IconButton>
               ) : (
-                <h1>{data?.farm_id ? data?.farm_id?.title : "-"}</h1>
+                ""
               )}
             </div>
+
           </div>
         </div>
         <div className={styles.status}>

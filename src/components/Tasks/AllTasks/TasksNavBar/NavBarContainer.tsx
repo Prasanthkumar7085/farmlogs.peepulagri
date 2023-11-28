@@ -52,7 +52,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To Start" },
-    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "INPROGRESS", title: "In Progress" },
     { value: "DONE", title: "Done" },
     { value: "PENDING", title: "Pending" },
     { value: "OVER-DUE", title: "Over-due" },
@@ -92,12 +92,12 @@ const NavBarContainer: React.FC<PropTypes> = ({
     }
   };
 
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      getAllFarms();
-      getAllUsers();
-    }
-  }, [router.isReady, accessToken]);
+  // useEffect(() => {
+  //   if (router.isReady && accessToken) {
+  //     getAllFarms();
+  //     getAllUsers();
+  //   }
+  // }, [router.isReady, accessToken]);
 
   return (
     <>
@@ -107,51 +107,6 @@ const NavBarContainer: React.FC<PropTypes> = ({
           <h1 className={styles.taskManagement}>{`Task Management`}</h1>
         </div>
         <div className={styles.headeractions}>
-          {/* <div>
-            <Autocomplete
-              sx={{
-                width: "250px",
-                maxWidth: "250px",
-                borderRadius: "4px",
-              }}
-              id="size-small-outlined-multi"
-              size="small"
-              fullWidth
-              noOptionsText={"No such User"}
-              value={user ? user : ""}
-              isOptionEqualToValue={(option: any, value: any) =>
-                option.full_name === value.full_name
-              }
-              getOptionLabel={(option: any) => option.full_name}
-              options={users?.length ? users : []}
-              onChange={onUserChange}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Search by User"
-                  variant="outlined"
-                  size="small"
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                      backgroundColor: "#fff",
-                      border: "none",
-                    },
-                  }}
-                />
-              )}
-            />
-          </div> */}
-          <div style={{ width: "25%" }}>
-            <FarmAutoCompleteInAddTask
-              options={farmOptions}
-              onSelectValueFromDropDown={onSelectValueFromDropDown}
-              label={"title"}
-              placeholder={"Select Farm here"}
-              loading={false}
-              defaultValue={selectedFarmOption}
-            />
-          </div>
           <div style={{ width: "12%" }}>
             <SelectComponent
               options={statusOptions}

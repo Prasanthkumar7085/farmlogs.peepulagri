@@ -74,12 +74,12 @@ const SingleImageComponent: FC<componentProps> = ({
         body: JSON.stringify(body)
       }
 
-      let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farms/farm-images/tag`, options)
+      let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm-images/tag`, options)
       let responseData = await response.json()
       if (response?.status >= 200 && response?.status <= 200) {
         toast.success(responseData?.message);
         setTagsDrawerEditOpen(false);
-        await getImageData({ page: 1 });
+        await getImageData(1);
       } else {
         toast.error(responseData?.message);
       }
@@ -163,7 +163,7 @@ const SingleImageComponent: FC<componentProps> = ({
         {detailedImage?.tags?.length > 3 ? <span>{"... "}</span> : ""}
       </div>
       {detailedImage?.tags?.length > 3 ||
-      detailedImage?.description?.length > 97 ? (
+        detailedImage?.description?.length > 97 ? (
         <span style={{ fontWeight: "bold" }} onClick={openViewMore}>
           Show More
         </span>
@@ -182,7 +182,7 @@ const SingleImageComponent: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={detailedImage}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-        // loading={loading}
+      // loading={loading}
       />
       <ShowMoreInViewAttachmentDetails
         showMoreSuggestions={showMoreSuggestions}

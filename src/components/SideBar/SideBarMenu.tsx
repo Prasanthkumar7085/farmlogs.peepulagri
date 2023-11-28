@@ -172,6 +172,7 @@ const SideBarMenu = ({ children }: any) => {
         ) : (
           <div className={styles.enableDesktop}>
             <div className={styles.noScreen}>Please! Enable desktop view</div>
+            <div className={styles.noScreen}>(or)</div>
             <Button
               className={styles.logout}
               variant={"outlined"}

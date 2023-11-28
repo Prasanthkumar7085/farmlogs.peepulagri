@@ -25,6 +25,10 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+    const userType = useSelector(
+      (state: any) => state.auth.userDetails?.user_details?.user_type
+    );
+
   const [selectedAttachmentIds, setSelectedAttachmentsIds] = useState<
     Array<string>
   >([]);
@@ -188,7 +192,9 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
         >
           Attachments
         </label>
-        {selectedAttachmentIds?.length ? (
+        {userType == "farmer" ? (
+          ""
+        ) : selectedAttachmentIds?.length ? (
           <Button
             onClick={deleteSelectedImages}
             disabled={!selectedAttachmentIds?.length || deleteLoading}

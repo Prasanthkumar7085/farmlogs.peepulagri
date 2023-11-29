@@ -22,15 +22,19 @@ import { Markup } from "interweave";
 import SelectComponent from "@/components/Core/SelectComponent";
 import SelectComponentNoAll from "@/components/Core/SelectComponentNoAll";
 import { useRouter } from "next/router";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
   updateTask: (body: any) => any;
+  getTaskById: (id: string) => void;
 }
 
-const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
+const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => {
   const router = useRouter();
   const id = router.query.task_id
+
+
 
 
   const accessToken = useSelector(
@@ -41,10 +45,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   );
 
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
+  const [deleteFieldOrNot, setDeleteFieldOrNot] = useState(false);
   const [editField, setEditField] = useState("");
+  const [deleteField, setDeleteField] = useState("");
   const [title, setTitle] = useState("");
   const [assignee, setAssignee] = useState<any>();
-  console.log(assignee);
+
 
   const [deadline, setDeadline] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
@@ -62,6 +68,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
   const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
+  const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>([]);
 
   useEffect(() => {
     setErrorMessages({});
@@ -72,7 +79,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
     setFarmId(data?.farm_id ? data?.farm_id?._id : "");
     setFarmName(data?.farm_id?.title ? data?.farm_id?.title : "");
     setUserId(data?.assigned_to?._id as string);
-    setAssignee(data?.assigned_to)
+    setAssignee(data?.assign_to)
   }, [data, editFieldOrNot]);
 
   const onUpdateField = async () => {
@@ -125,14 +132,70 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
         );
         let responseData = await response.json();
 
-        if (responseData.status === 200) {
-          // Handle success if needed
+        if (responseData?.success) {
+          getTaskById(id as string)
+          setEditFieldOrNot(false);
+          setEditField("");
+          toast.success(responseData?.message);
+        } else {
+          toast.error(responseData?.message);
         }
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteAssignee = async () => {
+    setLoading(true);
+
+    try {
+
+
+      if (selectedAssigneeIds.length > 0) {
+        let body = {
+          assign_to: selectedAssigneeIds,
+        };
+
+        let options = {
+          method: "DELETE",
+          headers: new Headers({
+            "content-type": "application/json",
+            authorization: accessToken,
+          }),
+          body: JSON.stringify(body),
+        };
+
+        let response: any = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}/assignee`,
+          options
+        );
+        let responseData = await response.json();
+
+        if (responseData?.success) {
+          getTaskById(id as string)
+          setDeleteFieldOrNot(false);
+          setDeleteField("");
+          setSelectedAssigneeIds([]);
+          toast.success(responseData?.message);
+        } else {
+          toast.error(responseData?.message);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAssigneeCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, assigneeId: string) => {
+    if (e.target.checked) {
+      setSelectedAssigneeIds((prevIds) => [...prevIds, assigneeId]);
+    } else {
+      setSelectedAssigneeIds((prevIds) => prevIds.filter((id) => id !== assigneeId));
     }
   };
 
@@ -353,6 +416,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
                     userId={userId}
+                    assignee={assignee}
                     onChange={(assigned_to: any) => {
                       setSelectedAssignee(assigned_to);
                       setFarmId("");
@@ -369,10 +433,58 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                 <h1>
                   {data?.assign_to ? data?.assign_to.map((item: { _id: string; name: string }, index: number) => {
                     return <p key={index}>
+                      {deleteField == "assignee" && deleteFieldOrNot ? (
+                        <input
+                          type="checkbox"
+                          onChange={(e) => handleAssigneeCheckboxChange(e, item._id)}
+                        />
+
+
+                      ) : ''}
                       {item.name}
                     </p>
                   }) : "-"}
+
                 </h1>
+
+              )}
+            </div>
+            <div>
+              {deleteField == "assignee" && deleteFieldOrNot ? (
+                <div className={styles.iconBlock}>
+                  <IconButton
+                    onClick={() => {
+                      setDeleteFieldOrNot(false);
+                      setDeleteField("");
+                      setSelectedAssigneeIds([]);
+                    }}
+                  >
+                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      deleteAssignee();
+                    }}
+                    disabled={selectedAssigneeIds.length === 0}
+                  >
+                    <DeleteForeverIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                  </IconButton>
+                </div>
+              ) : userType !== "farmer" && !(editField == "assignee" && editFieldOrNot) ? (
+                <IconButton
+                  onClick={() => {
+                    setDeleteFieldOrNot(true);
+                    setDeleteField("assignee");
+                  }}
+                >
+                  <img
+                    className={styles.editicon}
+                    src="/task-edit-icon.svg"
+                    alt=""
+                  />
+                </IconButton>
+              ) : (
+                ""
               )}
             </div>
             <div>
@@ -394,7 +506,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
                     <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                   </IconButton>
                 </div>
-              ) : userType !== "farmer" ? (
+              ) : userType !== "farmer" && !(deleteField == "assignee" && deleteFieldOrNot) ? (
+
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
@@ -410,6 +523,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask }) => {
               ) : (
                 ""
               )}
+
             </div>
 
           </div>

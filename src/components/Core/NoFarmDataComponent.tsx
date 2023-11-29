@@ -3,7 +3,7 @@ import ImageComponent from "./ImageComponent";
 import { Typography } from "@mui/material";
 import styles from "./NoFarmDataComponent.module.css"
 import Lottie from "react-lottie-player";
-import * as noFarmData from "./NoData.json";
+import * as noFarmData from "./noData.json";
 
 const NoFarmDataComponent = ({ noData }: { noData: Boolean }) => {
   //   let noFarmData

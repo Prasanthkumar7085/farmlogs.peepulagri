@@ -23,6 +23,7 @@ export interface TaskResponseTypes {
     title: string;
     _id: string;
   };
+  assign_to: Array<{ _id: string; name: string }>;
   title: string;
   description: string;
   categories: Array<string>;

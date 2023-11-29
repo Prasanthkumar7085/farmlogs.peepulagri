@@ -41,9 +41,9 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
 
   useEffect(() => {
     if (router.isReady) {
-      getAllAttachments();
+      getAllAttachments()
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken])
 
   //get all attachment
   function groupByDate(array: Array<any>) {
@@ -74,7 +74,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       let responseData = await response.json();
       if (responseData.status >= 200 && responseData.status <= 300) {
         let modifiedData = groupByDate(responseData?.data?.attachments);
-        console.log(modifiedData, "mod");
         setAttachmentData([...modifiedData]);
       }
     } catch (err) {
@@ -153,6 +152,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     e: ChangeEvent<HTMLInputElement>,
     item: TaskAttachmentsType
   ) => {
+    console.log(item, "lhh")
     setUploadAttachmentsOpen(false);
     let ids = [...selectedAttachmentIds];
     if (ids.includes(item?._id)) {
@@ -160,6 +160,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     } else {
       ids.push(item?._id);
     }
+    console.log(ids, "pp")
     setSelectedAttachmentsIds(ids);
   };
 
@@ -175,7 +176,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     if (response?.success) {
       toast.success(response?.message);
       setSelectedAttachmentsIds([]);
-      getTaskById(router.query.task_id as string);
+      getAllAttachments();
     } else {
       toast.error(response?.message);
     }
@@ -249,7 +250,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
           ? attachmentData?.map(
             (item: TaskAttachmentsType | any, index: number) => {
               return (
-                <div >
+                <div key={index}>
                   <p className={styles.AttachmentDate}>
                     {timePipe(item[0]?.createdAt, "DD MMM YYYY, hh:mm A")}
                   </p>
@@ -327,7 +328,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       {uploadAttachmentsOpen ? (
         <div>
           <TasksAttachments
-            farmId={data?.farm_id?._id}
+            taskId={""}
             setUploadedFiles={setUploadedFiles}
             multipleFiles={multipleFiles}
             setMultipleFiles={setMultipleFiles}

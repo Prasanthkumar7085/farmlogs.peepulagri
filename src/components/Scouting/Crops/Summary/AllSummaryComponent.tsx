@@ -4,13 +4,17 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Backdrop, Box, Card, CardContent, CircularProgress, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { Backdrop, Box, Card, CardContent, CircularProgress, IconButton, Menu, MenuItem, TextField, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./summary.module.css"
 import timePipe from "@/pipes/timePipe";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
+import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
+import DateRangePickerComponent from "./DateRangePicker";
+
 
 
 const AllSummaryComponents = () => {
@@ -28,6 +32,7 @@ const AllSummaryComponents = () => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<any>();
     const [anchorEl, setAnchorEl] = useState<any>(null);
+    const [searchString, setSearchString] = useState<any>([]);
 
     const handleMenu = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -52,21 +57,18 @@ const AllSummaryComponents = () => {
 
     const summary = async () => {
         setLoading(true);
-        let options = {
-            method: "GET",
-
-            headers: new Headers({
-                "content-type": "application/json",
-                authorization: accessToken,
-            }),
-        };
         try {
-            let response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${crop_id}/day-summary/2023-11-21`,
-                options
-            );
+            let url = `crops/${crop_id}/day-summaries`;
+            let queryParam: any = {};
+            if (searchString && searchString.length === 2) {
+                queryParam["from_date"] = searchString[0];
+                queryParam["to_date"] = searchString[1];
+            }
+            url = prepareURLEncodedParams(url, queryParam);
 
-            let responseData: any = await response.json();
+            let responseData: any = await getAllFarmsService(url, accessToken);
+            console.log(responseData);
+
 
 
             if (responseData.status == 200) {
@@ -87,10 +89,52 @@ const AllSummaryComponents = () => {
         if (router.isReady) {
             summary()
         }
-    }, [router.isReady])
+    }, [router.isReady, searchString]);
+
+    const captureDateValue = (fromDate: string, toDate: string) => {
+        setSearchString([fromDate, toDate])
+
+
+    }
+
 
     return (
         <div>
+            <DateRangePickerComponent captureDateValue={captureDateValue} />
+            <TextField
+                // className={styles.searchfarm}
+                type='date'
+                color="primary"
+                name="search"
+                id="search"
+                size="small"
+                placeholder="Search by Name"
+                fullWidth={true}
+                variant="outlined"
+                value={searchString}
+                onChange={(e) => setSearchString(e.target.value)}
+                InputProps={{
+                    // endAdornment: (
+                    //   <InputAdornment position="end">
+                    //     <IconButton
+                    //       onClick={() => {
+                    //         setSearch("");
+                    //         captureSearchString("");
+                    //       }}
+                    //     >
+                    //       {search ? <ClearOutlinedIcon /> : ""}
+                    //     </IconButton>
+                    //   </InputAdornment>
+                    // ),
+                    // startAdornment: (
+                    //     <InputAdornment position="start">
+                    //         <IconButton>
+                    //             <SearchIcon />
+                    //         </IconButton>
+                    //     </InputAdornment>
+                    // ),
+                }}
+            />
             <Card sx={{ display: 'flex' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: '1 0 auto' }}>

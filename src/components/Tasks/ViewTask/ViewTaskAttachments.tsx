@@ -152,6 +152,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     e: ChangeEvent<HTMLInputElement>,
     item: TaskAttachmentsType
   ) => {
+    console.log(item, "lhh")
     setUploadAttachmentsOpen(false);
     let ids = [...selectedAttachmentIds];
     if (ids.includes(item?._id)) {
@@ -159,6 +160,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     } else {
       ids.push(item?._id);
     }
+    console.log(ids, "pp")
     setSelectedAttachmentsIds(ids);
   };
 
@@ -174,7 +176,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     if (response?.success) {
       toast.success(response?.message);
       setSelectedAttachmentsIds([]);
-      getTaskById(router.query.task_id as string);
+      getAllAttachments();
     } else {
       toast.error(response?.message);
     }
@@ -326,7 +328,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       {uploadAttachmentsOpen ? (
         <div>
           <TasksAttachments
-            farmId={data?.farm_id?._id}
+            taskId={""}
             setUploadedFiles={setUploadedFiles}
             multipleFiles={multipleFiles}
             setMultipleFiles={setMultipleFiles}

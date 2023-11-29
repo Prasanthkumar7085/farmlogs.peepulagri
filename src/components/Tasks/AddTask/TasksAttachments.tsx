@@ -16,18 +16,18 @@ import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import { toast } from "sonner";
 
 interface PropTypes {
-  farmId: string | undefined;
+  taskId: any
   setUploadedFiles: (filesUploaded: any) => void;
   multipleFiles: any;
   setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
   afterUploadAttachements: any
 }
 const TasksAttachments: React.FC<PropTypes> = ({
-  farmId,
   setUploadedFiles,
   multipleFiles,
   setMultipleFiles,
-  afterUploadAttachements
+  afterUploadAttachements,
+  taskId
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -43,6 +43,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
+  const [loading, setLoading] = useState<any>()
 
   // let tempFilesStorage: any = [...attachments];
 
@@ -121,7 +122,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   };
 
   const handleFileChange = async (e: any) => {
-    if (!farmId) {
+    if ("") {
       // setNoFarmIdMessage("Please Select the Farm to Upload the files");
       // return;
     } else {
@@ -164,7 +165,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
     let obj = {
       attachment: {
         original_name: file.name,
-        farm_id: farmId,
         type: file.type,
         source: "tasks",
       },
@@ -378,12 +378,18 @@ const TasksAttachments: React.FC<PropTypes> = ({
     setFileProgress(fileProgressCopy);
   };
 
-  const removeFileAfterAdding = (index: number) => {
+  const removeFileAfterAdding = (index: number, file: any) => {
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
 
     const fileProgressCopy = [...fileProgress];
     fileProgressCopy.splice(index, 1);
+
+    const tempFilesStorageCopy = [...tempFilesStorage];
+    const newArray = tempFilesStorageCopy.filter(
+      (item: any) => item.original_name !== file.name
+    );
+    setAttachments(newArray);
 
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
@@ -403,7 +409,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   };
 
   const addTaskAttachements = async () => {
-    // setLoading(true);
+    setLoading(true);
 
     let modifiedAttachments = tempFilesStorage.map((item: any) => {
       return {
@@ -431,7 +437,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         }),
       };
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router.query.task_id}/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router.query.task_id ? router.query.task_id : taskId}/attachments`,
         options
       );
       let responseData = await response.json();
@@ -439,6 +445,10 @@ const TasksAttachments: React.FC<PropTypes> = ({
         afterUploadAttachements(true)
         setMultipleFiles([])
         setTempFileStorage([])
+        toast.success("Attachements addedd successfully");
+        if (taskId) {
+          router.back()
+        }
       } else if (responseData?.status == 422) {
         setValidations(responseData?.errors);
       }
@@ -447,7 +457,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
     } catch (err) {
       console.error(err);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
     dispatch(removeTheFilesFromStore([]));
   };
@@ -475,7 +485,8 @@ const TasksAttachments: React.FC<PropTypes> = ({
       style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}
     >
       <div className={styles.header}>
-        <h4 className={styles.title}>Attachments (or) Images</h4>
+        {!taskId && !router.query.task_id ? <span style={{ color: "Highlight" }}>You can upload images after submit the task.</span> : ""}
+        <h4 className={styles.title}>Attachments (or) Images </h4>
         <p className={styles.description}>
           You can also drag and drop files to upload them.
         </p>
@@ -490,6 +501,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
           className={styles.link}
           type="file"
           multiple
+          disabled={taskId || router.query.task_id ? false : true}
           onChange={handleFileChange}
           style={{ display: "none" }}
           accept="image/*,video/*"
@@ -549,7 +561,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
-                            onClick={() => removeFileAfterAdding(index)}
+                            onClick={() => removeFileAfterAdding(index, item)}
                           >
                             <DeleteForeverIcon sx={{ color: "#820707" }} />
                           </IconButton>
@@ -563,7 +575,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                           className={styles1.close41}
                           alt=""
                           src="/close-icon.svg"
-                          onClick={() => removeFile(index)}
+                          onClick={() => removeFileAfterAdding(index, item)}
                         />
                       ) : (
                         ""
@@ -606,18 +618,19 @@ const TasksAttachments: React.FC<PropTypes> = ({
           gap: "10px",
         }}
       >
-        <Button
-          className={styles.canceleBtn}
-          variant="outlined"
-          onClick={() => cancelUpload()}
-        >
-          Cancel
-        </Button>
+        {!router.query.task_id ? "" :
+          <Button
+            className={styles.canceleBtn}
+            variant="outlined"
+            onClick={() => cancelUpload()}
+          >
+            Cancel
+          </Button>}
         <Button
           variant="contained"
           onClick={() => addTaskAttachements()}
           className={styles.saveBtn}
-        >
+          disabled={multipleFiles?.length || loading == false ? false : true}        >
           Save
         </Button>
       </div>

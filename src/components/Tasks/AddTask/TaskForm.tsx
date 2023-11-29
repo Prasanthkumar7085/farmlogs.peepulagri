@@ -2,7 +2,7 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
-import { Autocomplete, Grid, MenuItem, Select, TextField } from "@mui/material";
+import { Autocomplete, Button, Grid, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
@@ -51,6 +51,7 @@ const TaskForm = () => {
   const [users, setUsers] = useState<Array<userTaskType>>([]);
 
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
+  const [taskId, setTaskId] = useState<any>()
 
   const getAllFarms = async (id = "", userId = "") => {
     setLoading(true);
@@ -93,7 +94,8 @@ const TaskForm = () => {
     let response = await addTaskService({ body: body, token: accessToken });
     if (response?.success) {
       toast.success(response?.message);
-      router.push("/tasks");
+      // router.push("/tasks");
+      setTaskId(response?.data?._id)
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
@@ -138,6 +140,15 @@ const TaskForm = () => {
   };
 
   const [filestoNullOnFarmChange, setFilestoNullOnFarmChange] = useState(false);
+
+  //
+  const afterUploadAttachements = (value: any) => {
+    if (value == true) {
+      setFiles([]);
+      setMultipleFiles([]);
+    }
+  };
+
 
   // const removeFiles = () => {
   //   setFiles([]);
@@ -348,13 +359,17 @@ const TaskForm = () => {
             </Grid>
           </form>
         </div>
-        <FooterActionButtons addTask={addTask} />
-        {/* <TasksAttachments
+        {taskId ?
+          <Button onClick={() => router.back()} variant="contained">Go Back</Button> :
+          <FooterActionButtons addTask={addTask} />}
+        <TasksAttachments
+          taskId={taskId}
+          setUploadedFiles={setUploadedFiles}
+          multipleFiles={multipleFiles}
+          setMultipleFiles={setMultipleFiles}
+          afterUploadAttachements={afterUploadAttachements}
 
-        // afterUploadAttachements={afterUploadAttachements}
-        /> */}
-
-
+        />
       </>
       <AlertComponent
         alertMessage={alertMessage}

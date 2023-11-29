@@ -106,7 +106,7 @@ const ViewTaskComponent = () => {
             setOpenLogs={setOpenLogs}
             taskId={router.query.task_id as string}
           />
-          <TaskDetails data={data} updateTask={updateTask} />
+          <TaskDetails data={data} updateTask={updateTask} getTaskById={getTaskById} />
           <ViewTaskAttachments data={data} getTaskById={getTaskById} />
         </Card>
       </div>

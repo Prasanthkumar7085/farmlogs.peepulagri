@@ -19,7 +19,7 @@
 .footerActionButtons .cancelBtn {
   border: 1px solid var(--gray-300, #D0D5DD);
   background: var(--White, #FFF);
-  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
+  box-shadow: none !important;
   color: #000;
 }
 
@@ -27,5 +27,5 @@
   color: #fff;
   border: 1px solid var(--Blue-Gradient, #3462CF);
   background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
-  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
+  box-shadow: none !important;
 }

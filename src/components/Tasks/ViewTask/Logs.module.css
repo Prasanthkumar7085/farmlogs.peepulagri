@@ -9,3 +9,74 @@
     font-weight: 500 !important;
     font-family: 'Inter', sans-serif !important;
 }
+
+.taskLogViewCards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    height: 85vh;
+    overflow-y: auto;
+    padding-bottom: 1rem;
+}
+
+.taskLogViewCards::-webkit-scrollbar {
+    background: transparent;
+    width: 5px;
+    height: 3px;
+}
+
+.taskLogViewCards::-webkit-scrollbar:hover {
+    opacity: 1;
+}
+
+.taskLogViewCards:hover::-webkit-scrollbar-thumb {
+    background: rgb(198, 198, 198);
+}
+
+.tasklogViewCard {
+    background-color: #fff;
+    border: 1px solid #e7e7e7;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.taskLogCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.taskViewLogTaskName {
+    color: #A05148;
+    font-size: clamp(16px, 0.83vw, 20px);
+}
+
+.taskStatusUpdateTime {
+    color: #000;
+    font-weight: 500;
+    font-size: clamp(12px, 0.625vw, 16px);
+}
+
+.taskLogStatusAlrert {
+    font-size: clamp(11px, 0.625vw, 16px);
+    font-weight: 500;
+}
+
+.taskStatusUpdatemessage {
+    font-size: clamp(13px, 0.72vw, 18px);
+    font-weight: 500;
+    color: #000;
+}
+
+
+.taskViewLogHeading {
+    color: #3462cf !important;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: clamp(20px, 1vw, 30px) !important;
+    font-family: "Inter", sans-serif !important;
+
+}

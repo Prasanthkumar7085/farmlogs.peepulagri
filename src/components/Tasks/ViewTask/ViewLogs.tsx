@@ -85,20 +85,16 @@ const ViewLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
       sx={{
         "& .MuiPaper-root": {
           padding: "1rem",
+          background: "#f5f5f5",
+          width: "30%",
+          maxWidth: "600px",
+          minWidth: "450px"
         },
       }}
     >
-      <div style={{ minWidth: "30rem" }}>
+      <div>
         <div className={styles.drawerHeader}>
-          <Typography
-            variant="h6"
-            sx={{
-              color: "#3462cf",
-              display: "flex",
-              alignItems: "center",
-              gap: ".5rem",
-            }}
-          >
+          <Typography variant="h5" className={styles.taskViewLogHeading}>
             Logs <SummarizeIcon />
           </Typography>
           <IconButton
@@ -111,36 +107,18 @@ const ViewLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-        }}
-      >
+      <div className={styles.taskLogViewCards}>
         {!logsLoading && logsData?.length ? (
           logsData.map((item: TasksLogsResponseType, index: number) => {
             return (
-              <div
-                key={index}
-                style={{
-                  border: "1px solid green",
-                  borderRadius: "10px",
-                  padding: "1rem",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div>{item.task_id.title}</div>
-                  <div>{timePipe(item.createdAt, "DD/MM/YYYY hh:mm A")}</div>
+              <div className={styles.tasklogViewCard} key={index}>
+                <div className={styles.taskLogCardHeader}>
+                  <div className={styles.taskViewLogTaskName}>{item.task_id.title}</div>
+                  <div className={styles.taskStatusUpdateTime}>{timePipe(item.createdAt, "DD/MM/YYYY hh:mm A")}</div>
                 </div>
                 <div>
-                  <p>{item.type}</p>
-                  <p>{item.message}</p>
+                  <p className={styles.taskLogStatusAlrert}>{item.type}</p>
+                  <p style={{ margin: "0" }} className={styles.taskStatusUpdatemessage}>{item.message}</p>
                 </div>
               </div>
             );

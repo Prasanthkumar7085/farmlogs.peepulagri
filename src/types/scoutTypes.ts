@@ -24,6 +24,7 @@ export interface ScoutAttachmentDetails {
   _id: string;
   url: string;
   tn_url: string;
+  key: string;
 }
 
 export interface CreatedByDetails {

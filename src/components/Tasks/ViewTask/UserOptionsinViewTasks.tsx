@@ -13,10 +13,14 @@ import getAllUsersService from "../../../../lib/services/Users/getAllUsersServic
 interface PropsType {
   userId: string;
   onChange: (assigned_to: any) => void;
+  assignee: Array<{ _id: string; name: string }>
 }
 
-const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
+const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assignee }) => {
   const router = useRouter();
+
+  console.log(onChange);
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -93,6 +97,14 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
               </li>
             );
           }}
+          getOptionDisabled={(option) =>
+            assignee?.length
+              ? assignee?.some(
+                (item) =>
+                  item?._id === option?._id && item?.name === option?.name
+              )
+              : false
+          }
           getOptionLabel={(option: any) => option.name}
           options={userData ? userData : []}
           onChange={captureUser}

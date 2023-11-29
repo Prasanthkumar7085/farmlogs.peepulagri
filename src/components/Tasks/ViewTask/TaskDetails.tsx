@@ -35,6 +35,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
   const id = router.query.task_id
 
 
+
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -48,7 +50,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
   const [deleteField, setDeleteField] = useState("");
   const [title, setTitle] = useState("");
   const [assignee, setAssignee] = useState<any>();
-  console.log(assignee);
+
 
   const [deadline, setDeadline] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
@@ -77,7 +79,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
     setFarmId(data?.farm_id ? data?.farm_id?._id : "");
     setFarmName(data?.farm_id?.title ? data?.farm_id?.title : "");
     setUserId(data?.assigned_to?._id as string);
-    setAssignee(data?.assigned_to)
+    setAssignee(data?.assign_to)
   }, [data, editFieldOrNot]);
 
   const onUpdateField = async () => {
@@ -414,6 +416,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
                     userId={userId}
+                    assignee={assignee}
                     onChange={(assigned_to: any) => {
                       setSelectedAssignee(assigned_to);
                       setFarmId("");

@@ -4,25 +4,23 @@ import { DateRangePicker, Stack } from "rsuite";
 import TextField from '@mui/material/TextField';
 import "rsuite/dist/rsuite.css";
 import { styled } from "@mui/material";
-import styles from "./DateRangePicker.module.css"
+import styles from './DateRangerPicker.module.css'
 
-const DateRangePickerComponent = ({ captureDateValue, ...props }: any) => {
+const DateRangePickerComponent = ({ captureDateValue }: any) => {
 
 
-    const toDate = props?.defaultValue[1]?.slice(0, 10);
 
-    const [fromDate, setFromDate] = useState<any>(props?.defaultValue[0] ? [new Date(props?.defaultValue[0]), new Date(toDate)] : []);
+
+    const [fromDate, setFromDate] = useState<any>();
 
     const [date, setDate] = useState([moment(new Date()).format("YYYY-MM-DD"), moment(new Date()).format("YYYY-MM-DD")])
 
-    const { ...rest } = props;
     return (
         <Stack >
             <DateRangePicker
                 disabledDate={(date: any) => {
                     return date.getTime() > new Date().getTime();
                 }}
-                {...rest}
                 showOneCalendar
                 format="dd-MM-yyyy"
                 placeholder={'dd-mm-yyyy ~ dd-mm-yyyy'}

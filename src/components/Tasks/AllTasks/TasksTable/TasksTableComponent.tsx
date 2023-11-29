@@ -1,6 +1,6 @@
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import { TaskResponseTypes } from "@/types/tasksTypes";
-import { Button, ClickAwayListener, Tooltip } from "@mui/material";
+import { Button, Chip, ClickAwayListener, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import TanStackTableComponent from "./TanStackTable";
@@ -51,6 +51,9 @@ const TasksTableComponent = ({
   const [attachmentdrawer, setAttachmentDrawer] = useState<any>(false);
   const [openLogs, setOpenLogs] = useState(false);
   const [taskId, setTaskId] = useState("");
+  const [showAllAssignee, setShowAllAssignee] = useState(false);
+  const [viewMoreId, setViewMoreId] = useState("");
+  console.log(viewMoreId, "asdf");
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -93,35 +96,54 @@ const TasksTableComponent = ({
         <span>{label}</span>
       </div>
     );
-
-    // if (label == "TODO") {
-    //   return (
-    //     <div style={{ display: "flex", gap: "5px" }}>
-    //       <ImageComponent
-    //         src="/task-todo-icon.svg"
-    //         height={10}
-    //         width={10}
-    //         alt="task-inprogress"
-    //       />
-    //       <span>Todo</span>
-    //     </div>
-    //   );
-    // }
-    // if (label == "COMPLETED") {
-    //   return (
-    //     <div style={{ display: "flex", gap: "5px" }}>
-    //       <ImageComponent
-    //         src="/task-complete-icon.svg"
-    //         height={10}
-    //         width={10}
-    //         alt="task-inprogress"
-    //       />
-    //       <span>Completed</span>
-    //     </div>
-    //   );
-    // }
   };
 
+  const AssignedComponent = ({ info }: any) => {
+    let value = info.getValue()?.assign_to;
+    let id = info.getValue()?._id;
+    value =
+      value?.length > 2
+        ? showAllAssignee && id == viewMoreId
+          ? value
+          : value.slice(0, 2)
+        : value;
+    return (
+      <span
+        style={{
+          padding: "40px 10px 40px 10px",
+          color: value?.length ? "" : "#9a9a9a",
+        }}
+      >
+        {value?.length
+          ? value
+              .map((item: { _id: string; name: string }) => item.name)
+              .join(", ")
+          : "*Not Assigned*"}
+        {info.getValue()?.assign_to?.length > 2 ? (
+          <div
+            style={{ color: "#9a9a9a" }}
+            onClick={() => {
+              if (viewMoreId) {
+                if (id == viewMoreId) {
+                  setShowAllAssignee((prev) => !prev);
+                  setViewMoreId("");
+                } else {
+                  setViewMoreId(id);
+                }
+              } else {
+                setViewMoreId(id);
+                setShowAllAssignee((prev) => !prev);
+              }
+            }}
+          >
+            {showAllAssignee && id == viewMoreId ? "Show Less" : "Show More"}
+          </div>
+        ) : (
+          ""
+        )}
+      </span>
+    );
+  };
   const columns = [
     {
       accessorFn: (row: any) => row.createdAt,
@@ -148,23 +170,11 @@ const TasksTableComponent = ({
     //   width: "200px",
     // },
     {
-      accessorFn: (row: any) => row.assign_to,
+      accessorFn: (row: any) => {
+        return { assign_to: row.assign_to, _id: row._id };
+      },
       id: "assigned_to",
-      cell: (info: any) => (
-        <span
-          style={{
-            padding: "40px 10px 40px 10px",
-            color: info.getValue()?.length ? "" : "#9a9a9a",
-          }}
-        >
-          {info.getValue()?.length
-            ? info
-                .getValue()
-                .map((item: { _id: string; name: string }) => item.name)
-                .join(", ")
-            : "*Not Assigned*"}
-        </span>
-      ),
+      cell: (info: any) => <AssignedComponent info={info} />,
       header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
       width: "150px",
@@ -402,3 +412,4 @@ const TasksTableComponent = ({
 };
 
 export default TasksTableComponent;
+

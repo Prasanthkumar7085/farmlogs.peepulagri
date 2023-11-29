@@ -26,6 +26,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   setPreviewImageDialogOpen,
   viewAttachmentId,
 }) => {
+
   const dispatch = useDispatch();
   const router = useRouter();
   const accessToken = useSelector(
@@ -48,7 +49,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
     if (onlyImages?.length && viewAttachmentId) {
       for (let i = 0; i < onlyImages?.length; i++) {
         if (onlyImages[i]._id == viewAttachmentId) {
-          setScoutId(onlyImages[i].scout_id);
+          setScoutId(onlyImages[i]._id);
           setCurrentIndex(i);
         }
       }
@@ -62,9 +63,14 @@ const SingleScoutViewDetails: FC<pageProps> = ({
   };
 
   const changeImage = (index: number) => {
+
     setCurrentIndex(index);
-    if (onlyImages[index].scout_id !== scoutId) {
-      setScoutId(onlyImages[index].scout_id);
+    if (onlyImages[index]._id !== scoutId) {
+      setScoutId(onlyImages[index]._id);
+      router.push({
+        pathname: `/scouts`,
+        query: { image_id: onlyImages[index]._id },
+      });
     }
   };
 
@@ -153,6 +159,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
       await updateDescriptionService(value, cropID);
     }
   };
+
   return (
     <Dialog
       open={previewImageDialogOpen}
@@ -213,12 +220,12 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                           autoPlay
                           key={index}
                         >
-                          <source src={item.original} type={item.type} />
+                          <source src={item.url} type={item.type} />
                           Your browser does not support the video tag.
                         </video>
                       ) : item.type?.includes("application") ? (
                         <iframe
-                          src={item.original}
+                          src={item.url}
                           width="100%"
                           height="100%"
                           title={`iframe-${index}`}
@@ -227,7 +234,7 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                         <>
                           <img
                             className="zoom-image"
-                            src={item.src}
+                            src={item.url}
                             alt={`Image ${index + 1}`}
                             style={{
                               height: "100%",
@@ -280,19 +287,19 @@ const SingleScoutViewDetails: FC<pageProps> = ({
                     />
 
                     {onlyImages?.length &&
-                    onlyImages[currentIndex]?.tags?.length
+                      onlyImages[currentIndex]?.tags?.length
                       ? onlyImages[currentIndex]?.tags?.map(
-                          (item: string, index: number) => {
-                            return (
-                              <Chip
-                                key={index}
-                                label={item}
-                                className={styles.tagsName}
-                                variant="outlined"
-                              />
-                            );
-                          }
-                        )
+                        (item: string, index: number) => {
+                          return (
+                            <Chip
+                              key={index}
+                              label={item}
+                              className={styles.tagsName}
+                              variant="outlined"
+                            />
+                          );
+                        }
+                      )
                       : ""}
                   </div>
                 ) : (

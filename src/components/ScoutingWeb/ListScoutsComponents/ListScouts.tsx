@@ -43,6 +43,7 @@ const ListScouts: FunctionComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -209,7 +210,7 @@ const ListScouts: FunctionComponent = () => {
     cropId,
   }: Partial<ApiMethodProps>) => {
     setLoading(true);
-    let url = `/crops/${cropId}/images/${page}/${limit}`;
+    let url = `/crops/6554f1b9b7fca2ca9d595281/images/${page}/${limit}`;
     let queryParams: any = {};
     if (page) {
       queryParams["page"] = page;
@@ -238,6 +239,7 @@ const ListScouts: FunctionComponent = () => {
     if (response?.success) {
       const { data, ...rest } = response;
       setPaginationDetails(rest);
+      setOnlyImages(response.data)
 
       const groupedData: any = {};
       // Iterate through yourData and group objects by createdAt date

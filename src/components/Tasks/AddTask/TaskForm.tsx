@@ -2,7 +2,7 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
-import { Autocomplete, Grid, MenuItem, Select, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
@@ -13,13 +13,9 @@ import { Toaster, toast } from "sonner";
 import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import addTaskService from "../../../../lib/services/TasksService/addTaskService";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
-import FarmAutoCompleteInAddTask from "./FarmAutoCompleteInTasks";
 import styles from "./TaskForm.module.css";
-import TasksAttachments from "./TasksAttachments";
 import FooterActionButtons from "./footer-action-buttons";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
-import SelectComponent from "@/components/Core/SelectComponent";
-import SelectComponentNoAll from "@/components/Core/SelectComponentNoAll";
 
 const TaskForm = () => {
   const router = useRouter();
@@ -161,10 +157,10 @@ const TaskForm = () => {
               <h1 className={styles.header}>Add Task</h1>
             </div>
           </div>
-          <form className={styles.formfields}>
-            <Grid container rowSpacing={2}>
-              <Grid item xs={12}></Grid>
-              {/* <Grid item xs={12}>
+          <div className={styles.formBlcok}>
+            <form className={styles.formfields}>
+              <Grid container rowSpacing={2}>
+                {/* <Grid item xs={12}>
                 <Grid container columnSpacing={2}>
                   <Grid item xs={6} className={styles.selectfarm}>
                     <label className={styles.lable}>
@@ -239,32 +235,30 @@ const TaskForm = () => {
                   </Grid>
                 </Grid>
               </Grid> */}
-              <Grid item xs={12}>
-                <Grid container columnSpacing={2}>
-                  <Grid item xs={8}>
-                    <div className={styles.selectfarm}>
-                      <h4 className={styles.title}>
-                        Title<span style={{ color: "red" }}>*</span>
-                      </h4>
-                      <TextField
-                        className={styles.inoutbox}
-                        color="primary"
-                        placeholder="Enter your Task title here"
-                        required={true}
-                        fullWidth={true}
-                        size="small"
-                        variant="outlined"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                      />
-                      <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname="title"
-                      />
-                    </div>
-                  </Grid>
-                  <Grid container>
-                    <Grid item xs={8}></Grid>
+                <Grid item xs={12}>
+                  <Grid container columnSpacing={2}>
+                    <Grid item xs={8}>
+                      <div className={styles.selectfarm}>
+                        <h4 className={styles.title}>
+                          Title<span style={{ color: "red" }}>*</span>
+                        </h4>
+                        <TextField
+                          className={styles.inoutbox}
+                          color="primary"
+                          placeholder="Enter your Task title here"
+                          required={true}
+                          fullWidth={true}
+                          size="small"
+                          variant="outlined"
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                        />
+                        <ErrorMessages
+                          errorMessages={errorMessages}
+                          keyname="title"
+                        />
+                      </div>
+                    </Grid>
                     <Grid item xs={4} className={styles.selectfarm}>
                       <label className={styles.lable}>
                         Deadline<span style={{ color: "red" }}>*</span>
@@ -304,8 +298,8 @@ const TaskForm = () => {
                         keyname="deadline"
                       />
                     </Grid>
-                  </Grid>
-                  {/* <Grid item xs={4}>
+
+                    {/* <Grid item xs={4}>
                     <div className={styles.selectfarm}>
                       <h4 className={styles.title}>
                         Status<span style={{ color: "red" }}></span>
@@ -318,26 +312,26 @@ const TaskForm = () => {
                       />
                     </div>
                   </Grid> */}
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid item xs={12}>
-                <div className={styles.selectfarm}>
-                  <label className={styles.lable}>Description</label>
-                  <TextField
-                    multiline
-                    minRows={4}
-                    maxRows={4}
-                    className={styles.inoutbox}
-                    color="primary"
-                    placeholder="Enter your Task description here"
-                    fullWidth={true}
-                    variant="outlined"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </div>
-              </Grid>
-              {/* <Grid item xs={12}>
+                <Grid item xs={12}>
+                  <div className={styles.selectfarm}>
+                    <label className={styles.lable}>Description</label>
+                    <TextField
+                      multiline
+                      minRows={4}
+                      maxRows={4}
+                      className={styles.inoutbox}
+                      color="primary"
+                      placeholder="Enter your Task description here"
+                      fullWidth={true}
+                      variant="outlined"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </div>
+                </Grid>
+                {/* <Grid item xs={12}>
                 <TasksAttachments
                   farmId={defaultValue?._id}
                   setUploadedFiles={setUploadedFiles}
@@ -345,10 +339,11 @@ const TaskForm = () => {
                   setMultipleFiles={setMultipleFiles}
                 />
               </Grid> */}
-            </Grid>
-          </form>
+              </Grid>
+            </form>
+            <FooterActionButtons addTask={addTask} />
+          </div>
         </div>
-        <FooterActionButtons addTask={addTask} />
         {/* <TasksAttachments
 
         // afterUploadAttachements={afterUploadAttachements}

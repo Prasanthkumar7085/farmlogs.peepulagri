@@ -133,3 +133,13 @@
 .selectfarm textarea::-webkit-scrollbar-thumb:hover {
   background: #5a5959;
 }
+
+.formfields {
+  margin-block: 2rem;
+}
+
+.formBlcok {
+  padding: 0 2rem 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+}

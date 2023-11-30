@@ -207,6 +207,16 @@ const ProcurementsTableComponent = ({
 
   const columns = [
     {
+      accessorFn: (row: any) => row.serial,
+      id: "id",
+      header: () => <span>S.No</span>,
+      footer: (props: any) => props.column.id,
+      width: "50px",
+      minWidth: "50px",
+      maxWidth: "50px",
+    },
+
+    {
       accessorFn: (row: any) => row.title,
       id: "title",
       cell: (info: any) => (

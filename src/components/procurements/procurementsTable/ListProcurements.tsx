@@ -10,6 +10,7 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import getAllProcurementService from "../../../../lib/services/ProcurementServices/getAllProcrumentService";
 import NavBarContainer from "@/components/Tasks/AllTasks/TasksNavBar/NavBarContainer";
 import ProcurementsTableComponent from "./ProcurementsTableComponent";
+import { addSerial } from "@/pipes/addSerial";
 
 export interface ApiCallProps {
     page: string | number;
@@ -90,7 +91,12 @@ const ListProcurments = () => {
         });
         if (response?.success) {
             const { data, ...rest } = response;
-            setData(data);
+            const modifieData = addSerial(
+                data,
+                page,
+                limit
+            );
+            setData(modifieData);
             setPaginationDetails(rest);
         }
         setLoading(false);

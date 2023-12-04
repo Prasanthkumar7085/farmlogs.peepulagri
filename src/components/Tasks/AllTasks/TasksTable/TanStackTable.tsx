@@ -96,7 +96,7 @@ const TanStackTableComponent = ({
       <div>
         <div
           style={{ overflow: "scroll", height: "75vh" }}
-        // className="dataTable-container scrollbar"
+          className="dataTable-container scrollbar"
         >
           <table
             className="table"

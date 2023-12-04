@@ -46,7 +46,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   }, [scoutDetails, attachement]);
 
   const getAllScoutComments = async () => {
-    setGetCommentsLoading(true);
+    setLoading(true);
     let options = {
       method: "GET",
       headers: new Headers({
@@ -56,14 +56,16 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
+        // `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id}/comments`,
         options
       );
       let responseData = await response.json();
+      console.log(responseData, "lb");
       if (responseData.success == true) {
         const commentsById: any = {};
 
-        responseData.data[0]?.comments.forEach((comment: any) => {
+        responseData.data?.forEach((comment: any) => {
           commentsById[comment._id] = {
             ...comment,
             replies: [], // Initialize an empty array for replies
@@ -71,9 +73,9 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
         });
 
         // Populate the replies for each comment
-        responseData.data[0]?.comments.forEach((comment: any) => {
-          if (comment.type === "REPLY" && comment.reply_to_comment_id) {
-            const parentId = comment.reply_to_comment_id;
+        responseData.data?.forEach((comment: any) => {
+          if (comment.reply_to) {
+            const parentId = comment.reply_to;
             if (commentsById[parentId]) {
               commentsById[parentId].replies.push(comment);
             }
@@ -92,18 +94,18 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
         // Convert the commentsById object to an array of comments
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
-
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
-      setGetCommentsLoading(false);
+      setLoading(false);
     }
   };
+
 
   //delete comment api
   const deleteComment = async (commnet_id: any) => {
@@ -117,7 +119,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/comment/${commnet_id}/delete`,
         options
       );
       let responseData = await response.json();
@@ -127,11 +129,12 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
         await logout();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
+
 
   //update any commnet api event
   const updateComment = async (commnet_id: any, updatedContent: any) => {
@@ -148,20 +151,21 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/comment/${commnet_id}`,
         options
       );
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
-
   //adding comment then call the get all api
   const afterCommentAdd = (value: any) => {
     if (value == true) {
@@ -225,16 +229,18 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
           afterUpdateComment={afterUpdateComment}
           afterReply={afterReply}
           afterDeleteAttachements={afterDeleteAttachements}
+          loadingThreads={loading}
           attachement={attachement}
-          loadingThreads={getCommentsLoading}
           scoutDetails={scoutDetails}
         />
+
       </div>
       <CommentForm
         afterCommentAdd={afterCommentAdd}
         scoutDetails={scoutDetails}
         attachement={attachement}
       />
+
 
       <LoadingComponent loading={loading} />
       <AlertComponent

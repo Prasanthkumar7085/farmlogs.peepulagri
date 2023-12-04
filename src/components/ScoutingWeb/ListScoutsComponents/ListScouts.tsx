@@ -22,7 +22,6 @@ import ListAllCropsForDropDownServices from "../../../../lib/services/CropServic
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
-import SingleScoutViewDetails from "../Scouting/ViewScouting";
 import styles from "../farms/FarmsNavBar.module.css";
 import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
 import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
@@ -210,7 +209,7 @@ const ListScouts: FunctionComponent = () => {
     cropId,
   }: Partial<ApiMethodProps>) => {
     setLoading(true);
-    let url = `/crops/6554f1b9b7fca2ca9d595281/images/${page}/${limit}`;
+    let url = `/crops/${cropId}/images/${page}/${limit}`;
     let queryParams: any = {};
     if (page) {
       queryParams["page"] = page;
@@ -225,6 +224,12 @@ const ListScouts: FunctionComponent = () => {
     if (fromDate && toDate) {
       queryParams["from_date"] = fromDate;
       queryParams["to_date"] = toDate;
+    }
+    if (cropId) {
+      queryParams["crop_id"] = cropId
+    }
+    if (farmId) {
+      queryParams["farm_id"] = farmId
     }
 
     const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
@@ -242,7 +247,7 @@ const ListScouts: FunctionComponent = () => {
       setOnlyImages(response.data)
 
       const groupedData: any = {};
-      // Iterate through yourData and group objects by createdAt date
+      // Iterate through Data and group objects by createdAt date
       data.forEach((item: any) => {
         const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
         if (!groupedData[createdAt]) {
@@ -317,6 +322,10 @@ const ListScouts: FunctionComponent = () => {
         let obj = data?.length && data?.find((item: any) => item._id == cropId);
         setCrop(obj);
       }
+      if (router.query.crop_id) {
+        let obj = data?.length && data?.find((item: any) => item._id == router.query.crop_id);
+        setCrop(obj);
+      }
     }
   };
 
@@ -352,8 +361,7 @@ const ListScouts: FunctionComponent = () => {
   }, [router.isReady, accessToken]);
 
   const onClickAttachment = (attachmentId: string) => {
-    setViewAttachmentId(attachmentId);
-    setPreviewImageDialogOpen(true);
+    router.push(`/scouts/farm/${router.query.crop_id}/crops/${router.query.crop_id}/${attachmentId}`)
   };
 
   return (
@@ -450,12 +458,12 @@ const ListScouts: FunctionComponent = () => {
           ""
         )}
       </div>
-      <SingleScoutViewDetails
+      {/* <SingleScoutViewDetails
         viewAttachmentId={viewAttachmentId}
         onlyImages={onlyImages}
         previewImageDialogOpen={previewImageDialogOpen}
         setPreviewImageDialogOpen={setPreviewImageDialogOpen}
-      />
+      /> */}
       <DaySummaryComponent
         openDaySummary={openDaySummary}
         setOpenDaySummary={setOpenDaySummary}

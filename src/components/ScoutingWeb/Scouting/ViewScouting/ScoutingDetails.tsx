@@ -9,7 +9,7 @@ import styles from "./ScoutingDetails.module.css";
 import EditIconComponent from "@/components/Core/SvgIcons/EditIcon";
 import SuggestionsIcon from "@/components/Core/SvgIcons/SuggitionsIcon";
 import { SummaryIcon } from "@/components/Core/SvgIcons/summaryIcon";
-import { AddOutlined } from "@mui/icons-material";
+import { AddOutlined, Route } from "@mui/icons-material";
 import SendIcon from "@mui/icons-material/Send";
 import { Markup } from "interweave";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { Toaster } from "sonner";
 import style from "../../ListScoutsComponents/DaySummary.module.css";
 import formatText from "../../../../../lib/requestUtils/formatTextToBullets";
+import { useRouter } from "next/router";
 
 const ScoutingDetails = ({
   loading,
@@ -28,38 +29,21 @@ const ScoutingDetails = ({
   editRecomendationOpen,
   setEditRecomendationOpen,
 }: any) => {
+  const router = useRouter();
   const [crop, setCrop] = useState<any>();
   const [recomendations, setRecomendations] = useState<any>();
   const [updateLoading, setUpdateLoading] = useState(false);
   const [mainImageData, setMainImageData] = useState<any>();
 
-  useEffect(() => {
-    if (imageData && data) {
-      let obj = data.attachments?.find(
-        (item: any) => item._id == imageData._id
-      );
-      setMainImageData(obj);
-      console.log(obj, "asdf");
 
-      setRecomendations(obj?.suggestions);
-      if (obj?.suggestions) {
-        setEditRecomendationOpen(false);
-        setRecomendations(obj?.suggestions);
-      } else {
-        setEditRecomendationOpen(true);
-        setRecomendations("");
-      }
-    }
-  }, [imageData, data]);
 
   const getCropName = (cropId: string, crops: any) => {
-    let temp = crops?.find((item: any) => item._id == cropId);
-    setCrop(temp);
+    setCrop("");
   };
 
   useEffect(() => {
     if (data) {
-      getCropName(data?.crop_id, data?.farm_id?.crops);
+      getCropName(data?.crop_id?._id, data?.farm_id?.crops);
     }
   }, [data]);
 
@@ -71,7 +55,7 @@ const ScoutingDetails = ({
             <Skeleton width="200px" />
           ) : (
             <p className={styles.startdate}>
-              {timePipe(data?.createdAt, "DD MMM YYYY hh:mm A")}
+              {timePipe(data?.uploaded_at, "DD MMM YYYY hh:mm A")}
             </p>
           )}
           {loading ? (
@@ -86,22 +70,20 @@ const ScoutingDetails = ({
             {loading ? (
               <Skeleton width="300px" height="30px" />
             ) : (
-              data?.farm_id.title +
-              "     " +
-              "(" +
-              data?.farm_id?.location +
-              ")"
+              data?.farm_id.title
+
             )}
           </h2>
         </div>
         <IconButton
           className={styles.iconDiv}
-          onClick={() => setPreviewImageDialogOpen(false)}
+          // onClick={() => setPreviewImageDialogOpen(false)}
+          onClick={() => router.back()}
         >
           <CloseIcon />
         </IconButton>
       </div>
-
+      {/* 
       <div className={style.scoutingdetails}>
         <div className={style.textwrapper}>
           <h6 className={style.summary}>
@@ -124,8 +106,8 @@ const ScoutingDetails = ({
             />
           )}
         </div>
-      </div>
-
+      </div> */}
+      {/* 
       <div className={style.scoutingdetails}>
         <div className={style.textwrapper}>
           <div
@@ -228,14 +210,15 @@ const ScoutingDetails = ({
             </div>
           )}
         </div>
-      </div>
+      </div> */}
+
       <div className={styles.RecommedationBlock}>
         <Typography variant="h6" className={styles.RecommedationHeading}>
           Comments
         </Typography>
         <CommentsComponentForWeb
           scoutDetails={data}
-          attachement={mainImageData}
+          attachement={data}
         />
       </div>
       <Toaster richColors position="top-right" closeButton />

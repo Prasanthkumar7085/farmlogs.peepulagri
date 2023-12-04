@@ -51,11 +51,11 @@ const AllCropsWebPage = () => {
     if (orderType) {
       queryParams["order_type"] = orderType;
     }
-    if (Object.keys(queryParams).length) {
-      queryParamsUrl = prepareURLEncodedParams("", queryParams);
-      router.replace({ pathname: `/farm/${farmId}/crops`, query: queryParams });
-    }
-    const response = await getAllCropsService(farmId, queryParamsUrl);
+    // if (Object.keys(queryParams).length) {
+    //   queryParamsUrl = prepareURLEncodedParams("", queryParams);
+    //   router.replace({ pathname: `/farm/${farmId}/crops/list`, query: queryParams });
+    // }
+    const response = await getAllCropsService(farmId, queryParamsUrl, accessToken);
 
     if (response.success) {
       setCropsData(response?.data);

@@ -62,7 +62,7 @@ export default function SigninEmail() {
         if (res?.data?.user_details?.user_type == "agronomist") {
           router.push("/scouts");
         } else if (res?.data?.user_details?.user_type == "farmer") {
-          router.push("/farms");
+          router.push("/dashboard");
         }
       }
       if (response.status == 422) {

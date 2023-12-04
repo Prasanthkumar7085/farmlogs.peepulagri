@@ -202,11 +202,11 @@ const ListScouts: FunctionComponent = () => {
   const getAllCropImageList = async ({
     page = 1,
     limit = 50,
-    farmId = "6554f051b7fca2ca9d5866ed",
+    farmId,
     userId,
     fromDate,
     toDate,
-    cropId = "6554f1b9b7fca2ca9d595281",
+    cropId,
   }: Partial<ApiMethodProps>) => {
     setLoading(true);
     let url = `/crops/${cropId}/images/${page}/${limit}`;
@@ -320,6 +320,10 @@ const ListScouts: FunctionComponent = () => {
       setCropOptions(data);
       if (cropId) {
         let obj = data?.length && data?.find((item: any) => item._id == cropId);
+        setCrop(obj);
+      }
+      if (router.query.crop_id) {
+        let obj = data?.length && data?.find((item: any) => item._id == router.query.crop_id);
         setCrop(obj);
       }
     }

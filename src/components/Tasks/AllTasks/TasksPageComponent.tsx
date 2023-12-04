@@ -184,6 +184,7 @@ const TasksPageComponent = () => {
         selectedFarm={selectedFarm}
         onStatusChange={onStatusChange}
         onUserChange={onUserChange}
+        titleName={"Task Management"}
       />
       {data.length ? (
         <TasksTableComponent

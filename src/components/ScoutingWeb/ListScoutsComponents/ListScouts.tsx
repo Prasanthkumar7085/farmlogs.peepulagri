@@ -43,6 +43,7 @@ const ListScouts: FunctionComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -53,7 +54,7 @@ const ListScouts: FunctionComponent = () => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(50);
   const [usersOptions, setUserOptions] = useState();
   const [user, setUser] = useState<any>();
   const [farmOptions, setFarmOptions] = useState([]);
@@ -71,45 +72,14 @@ const ListScouts: FunctionComponent = () => {
   const [seletectedItemDetails, setSelectedItemDetails] =
     useState<SingleScoutResponse>();
 
-  const onChangeUser = async (e: any, value: any) => {
-    if (value) {
-      setUser(value);
-      setFarm(null);
-      setCrop(null);
-      setPage(1);
-      await getAllScoutsList({
-        page: 1,
-        limit: router.query.limit as string,
-        userId: value?._id,
-        farmId: "",
-        cropId: "",
-        fromDate: router.query.from_date as string,
-        toDate: router.query.to_date as string,
-      });
-      await getAllFarms(value?._id);
-    } else {
-      setUser(null);
-      setPage(1);
-      await getAllFarms();
-      await getAllScoutsList({
-        page: 1,
-        limit: router.query.limit as string,
-        userId: "",
-        farmId: router.query.farm_id as string,
-        cropId: router.query.crop_id as string,
-        fromDate: router.query.from_date as string,
-        toDate: router.query.to_date as string,
-      });
-      await getAllCrops("", router.query.farm_id as string);
-    }
-  };
+
 
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     if (value) {
       setFarm(value);
       setCrop(null);
       setPage(1);
-      getAllScoutsList({
+      getAllCropImageList({
         page: 1,
         limit: router.query.limit as string,
         userId: router.query.created_by as string,
@@ -123,7 +93,7 @@ const ListScouts: FunctionComponent = () => {
       setFarm(null);
       setCrop(null);
       setPage(1);
-      getAllScoutsList({
+      getAllCropImageList({
         page: 1,
         limit: router.query.limit as string,
         farmId: "",
@@ -140,7 +110,7 @@ const ListScouts: FunctionComponent = () => {
     if (value) {
       setCrop(value);
       setPage(1);
-      getAllScoutsList({
+      getAllCropImageList({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -152,7 +122,7 @@ const ListScouts: FunctionComponent = () => {
     } else {
       setCrop(null);
       setPage(1);
-      getAllScoutsList({
+      getAllCropImageList({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -169,7 +139,7 @@ const ListScouts: FunctionComponent = () => {
       setFromDate(date1);
       setToDate(date2);
       setPage(1);
-      getAllScoutsList({
+      getAllCropImageList({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -182,7 +152,7 @@ const ListScouts: FunctionComponent = () => {
       setFromDate("");
       setToDate("");
       setPage(1);
-      getAllScoutsList({
+      getAllCropImageList({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -197,7 +167,7 @@ const ListScouts: FunctionComponent = () => {
   const captureRowPerItems = (value: number) => {
     setPage(1);
     setLimit(value);
-    getAllScoutsList({
+    getAllCropImageList({
       page: 1,
       limit: value,
       farmId: router.query.farm_id as string,
@@ -209,7 +179,7 @@ const ListScouts: FunctionComponent = () => {
   };
   const capturePageNum = (value: number) => {
     setPage(value);
-    getAllScoutsList({
+    getAllCropImageList({
       page: value,
       limit: router.query.limit as string,
       farmId: router.query.farm_id as string,
@@ -230,9 +200,9 @@ const ListScouts: FunctionComponent = () => {
       console.error(err);
     }
   };
-  const getAllScoutsList = async ({
+  const getAllCropImageList = async ({
     page = 1,
-    limit = 10,
+    limit = 50,
     farmId,
     userId,
     fromDate,
@@ -240,7 +210,7 @@ const ListScouts: FunctionComponent = () => {
     cropId,
   }: Partial<ApiMethodProps>) => {
     setLoading(true);
-    let url = `/scouts/${page}/${limit}`;
+    let url = `/crops/6554f1b9b7fca2ca9d595281/images/${page}/${limit}`;
     let queryParams: any = {};
     if (page) {
       queryParams["page"] = page;
@@ -248,9 +218,7 @@ const ListScouts: FunctionComponent = () => {
     if (limit) {
       queryParams["limit"] = limit;
     }
-    if (farmId) {
-      queryParams["farm_id"] = farmId;
-    }
+
     if (userId) {
       queryParams["created_by"] = userId;
     }
@@ -258,9 +226,7 @@ const ListScouts: FunctionComponent = () => {
       queryParams["from_date"] = fromDate;
       queryParams["to_date"] = toDate;
     }
-    if (cropId) {
-      queryParams["crop_id"] = cropId;
-    }
+
     const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
 
     router.push({ query: queryParams });
@@ -273,11 +239,12 @@ const ListScouts: FunctionComponent = () => {
     if (response?.success) {
       const { data, ...rest } = response;
       setPaginationDetails(rest);
+      setOnlyImages(response.data)
 
       const groupedData: any = {};
       // Iterate through yourData and group objects by createdAt date
       data.forEach((item: any) => {
-        const createdAt = timePipe(item.createdAt, "DD-MM-YYYY");
+        const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
         if (!groupedData[createdAt]) {
           groupedData[createdAt] = [item];
         } else {
@@ -286,11 +253,8 @@ const ListScouts: FunctionComponent = () => {
       });
       // Convert the groupedData object into an array
       const groupedArray = Object.values(groupedData);
-      console.log(groupedArray);
       setData(groupedArray);
 
-      let onlyImagesData = unWindImages(data);
-      setOnlyImages(onlyImagesData);
     } else if (response?.statusCode == 403) {
       await logout();
     } else {
@@ -299,54 +263,7 @@ const ListScouts: FunctionComponent = () => {
     setLoading(false);
   };
 
-  const unWindImages = (data: Array<SingleScoutResponse>) => {
-    let array: any = [];
-    data.length &&
-      data.filter((item: SingleScoutResponse) => {
-        let scoutId = item._id;
-        let updatedAttachments: any =
-          item.attachments?.length &&
-          item.attachments.map((attachemntItem: ScoutAttachmentDetails) => {
-            return { ...attachemntItem, scout_id: scoutId };
-          });
-        array = [...array, ...updatedAttachments];
-      });
-    let details = [];
-    if (array.length) {
-      details = array.map((item: any, index: number) => {
-        if (item.type.includes("video")) {
-          return {
-            ...item,
-            src: "/videoimg.png",
-            height: 80,
-            width: 60,
-            type: item.type,
-            caption: `${index + 1} image`,
-            original: item?.url,
-          };
-        } else if (item.type.includes("application")) {
-          return {
-            ...item,
-            src: "/pdf-icon.png",
-            height: 80,
-            width: 60,
-            type: item.type,
-            caption: `${index + 1} image`,
-            original: item.url,
-          };
-        } else {
-          return {
-            ...item,
-            src: item.url,
-            height: 80,
-            width: 60,
-            type: item.type,
-          };
-        }
-      });
-    }
-    return details;
-  };
+
   const getAllUsers = async (userId = "") => {
     const response = await getAllUsersService({ token: accessToken });
 
@@ -368,8 +285,7 @@ const ListScouts: FunctionComponent = () => {
 
   const getAllFarms = async (userId = "", farmId = "") => {
     let queryParams: any = {
-      order_by: "title",
-      order_type: "asc",
+
     };
 
     let url = prepareURLEncodedParams("", queryParams);
@@ -384,6 +300,7 @@ const ListScouts: FunctionComponent = () => {
         setFarm(obj);
         getAllCrops(router.query.crop_id as string, obj?._id as string);
       }
+
     } else if (response?.statusCode == 403) {
       await logout();
     }
@@ -410,8 +327,8 @@ const ListScouts: FunctionComponent = () => {
     setToDate("");
     setCrop(null);
     setPage(1);
-    setLimit(10);
-    await getAllScoutsList({});
+    setLimit(50);
+    await getAllCropImageList({});
   };
 
   useEffect(() => {
@@ -422,7 +339,7 @@ const ListScouts: FunctionComponent = () => {
         router.query.farm_id as string
       );
 
-      getAllScoutsList({
+      getAllCropImageList({
         page: router.query?.page as string,
         limit: router.query?.limit as string,
         farmId: router.query?.farm_id as string,
@@ -488,131 +405,27 @@ const ListScouts: FunctionComponent = () => {
       <div className={styles.allFarms}>
         {data?.length
           ? data.map((item: any, index: any) => {
-              return (
-                <div key={index} className={styles.allScoutingCards}>
-                  <Typography className={styles.postedDate}>
-                    <InsertInvitationIcon />
-                    <span>
-                      {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
-                    </span>
-                  </Typography>
-                  {item.map((row: any, rowIndex: any) => {
-                    let cropObj = row.farm_id.crops.find(
-                      (ite: any) => ite._id == row.crop_id
-                    );
-                    let cropName = cropObj?.title;
-                    return (
-                      <div className={styles.eachDayScouting} key={rowIndex}>
-                        <div
-                          className={styles.scoutDay}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              gap: "30px",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "20px",
-                              }}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  gap: "0.325rem",
-                                }}
-                              >
-                                <img
-                                  className={styles.farmsIcon}
-                                  alt="Farm Shape"
-                                  src="/farmshape2.svg"
-                                />
-                                {row.farm_id.title}
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  gap: "0.325rem",
-                                }}
-                              >
-                                <img src="/cropName-icon.svg" alt="" />
-                                {cropName}
-                              </div>
-                            </div>
-                          </div>
+            return (
+              <div key={index} className={styles.allScoutingCards}>
+                <Typography className={styles.postedDate}>
+                  <InsertInvitationIcon />
+                  <span>
+                    {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
+                  </span>
+                </Typography>
 
-                          {row?.suggestions ? (
-                            <div
-                              className={styles.hasSuggestions}
-                              onClick={() => {
-                                setOpenDaySummary(true);
-                                setSelectedItemDetails(row);
-                              }}
-                            >
-                              <ImageComponent
-                                src={"./scouting/recommendations-icon.svg"}
-                                height={16}
-                                width={16}
-                              />
-                              <span>Recommendations</span>
-                            </div>
-                          ) : (
-                            <div
-                              className={
-                                row?.summary
-                                  ? styles.hasSummaryBtn
-                                  : styles.noSummaryBtn
-                              }
-                              onClick={() => {
-                                setOpenDaySummary(true);
-                                setSelectedItemDetails(row);
-                              }}
-                            >
-                              {row?.summary ? (
-                                <ImageComponent
-                                  src={"./scouting/HasSummary.svg"}
-                                  height={19}
-                                  width={19}
-                                  alt="no-summary"
-                                />
-                              ) : (
-                                <ImageComponent
-                                  src="/no-summary-icon.svg"
-                                  height={16}
-                                  width={16}
-                                  alt="no-summary"
-                                />
-                              )}
-                              <span>Summary</span>
-                            </div>
-                          )}
-                        </div>
-                        <ScoutingDailyImages
-                          item={row}
-                          key={rowIndex}
-                          onClickAttachment={onClickAttachment}
-                        />
-                      </div>
-                    );
-                  })}
+                <div className={styles.eachDayScouting} key={index}>
+
+                  <ScoutingDailyImages
+                    item={item}
+                    key={index}
+                    onClickAttachment={onClickAttachment}
+                  />
                 </div>
-              );
-            })
+
+              </div>
+            );
+          })
           : ""}
         {!data?.length && !loading ? (
           <div

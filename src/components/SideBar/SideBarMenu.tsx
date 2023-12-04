@@ -40,13 +40,13 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/farm"),
       toolTitle: "Farms",
     },
-    // {
-    //   src: "/support-icon.svg",
-    //   link: "/support",
-    //   isVisible: true,
-    //   active: router.pathname.includes("/support"),
-    //   toolTitle: "Support",
-    // },
+    {
+      src: "/support-icon.svg",
+      link: "/procurements",
+      isVisible: true,
+      active: router.pathname.includes("/procurements"),
+      toolTitle: "Procurements",
+    },
     // {
     //   src: "/timeline-icon.svg",
     //   link: "/timeline",

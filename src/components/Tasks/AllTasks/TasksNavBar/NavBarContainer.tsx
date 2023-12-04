@@ -23,6 +23,7 @@ interface PropTypes {
   selectedFarm: FarmInTaskType | null | undefined;
   onStatusChange: (value: string) => void;
   onUserChange: (e: any, value: userTaskType) => void;
+  titleName: any
 }
 
 const NavBarContainer: React.FC<PropTypes> = ({
@@ -32,6 +33,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
   selectedFarm,
   onStatusChange,
   onUserChange,
+  titleName
 }) => {
   const router = useRouter();
 
@@ -70,7 +72,12 @@ const NavBarContainer: React.FC<PropTypes> = ({
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
-    router.push("/tasks/add");
+    if (titleName == "Procurment Module") {
+      router.push("/procurements/add");
+
+    } else {
+      router.push("/tasks/add");
+    }
   }, []);
 
   const getAllFarms = async () => {
@@ -104,7 +111,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
           <img className={styles.note1Icon} alt="" src="/note-11.svg" />
-          <h1 className={styles.taskManagement}>{`Task Management`}</h1>
+          <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>
         <div className={styles.headeractions}>
           <div style={{ width: "12%" }}>

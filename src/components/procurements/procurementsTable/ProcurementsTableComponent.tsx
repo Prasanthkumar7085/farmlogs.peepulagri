@@ -274,7 +274,7 @@ const ProcurementsTableComponent = ({
     },
 
     {
-      accessorFn: (row: any) => row.approved_by.name,
+      accessorFn: (row: any) => row.approved_by?.name,
       id: "approved_by.name",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
@@ -374,9 +374,6 @@ const ProcurementsTableComponent = ({
               ) : (
                 ""
               )}
-
-
-
             </div>
           }
         </span>

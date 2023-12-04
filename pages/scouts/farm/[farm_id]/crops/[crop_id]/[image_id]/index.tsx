@@ -1,10 +1,10 @@
-import SingleScoutView from "@/components/ScoutingWeb/CropScouts/SingleScoutView";
+import SingleScoutViewDetails from "@/components/ScoutingWeb/Scouting/ViewScouting";
 import { GetServerSideProps } from "next";
 
 const ViewSingleScoutPage = () => {
   return (
     <div>
-      <SingleScoutView />
+      <SingleScoutViewDetails />
     </div>
   );
 };

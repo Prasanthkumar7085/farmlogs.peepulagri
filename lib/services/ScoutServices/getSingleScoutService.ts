@@ -1,5 +1,5 @@
-const getSingleScoutService = async(scoutId:string,token:string) => {
-    
+const getSingleImageDetailsService = async (image_id: any, token: string) => {
+    console.log("pobhj")
     try {
         let options = {
             method: "GET",
@@ -7,15 +7,15 @@ const getSingleScoutService = async(scoutId:string,token:string) => {
                 'authorization': token
             })
         }
-        let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutId}`, options);
+        let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm-images/${image_id}`, options);
         const responseData = await response.json();
         return responseData;
-        
+
     } catch (err: any) {
         console.error(err);
-        
+
     }
 }
 
 
-export default getSingleScoutService;
+export default getSingleImageDetailsService;

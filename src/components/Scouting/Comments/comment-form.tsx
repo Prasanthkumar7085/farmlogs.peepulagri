@@ -112,7 +112,7 @@ const CommentForm = ({
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
           ? router.query.farm_id
-          : scoutDetails.farm_id?._id
+          : scoutDetails.farm_id
         }/crops/list`,
         { method: "GET" }
       );
@@ -123,7 +123,7 @@ const CommentForm = ({
           let cropObj = responseData?.data?.find((item: any) =>
             item._id == router.query.crop_id
               ? router.query.crop_id
-              : scoutDetails.crop_id
+              : scoutDetails.crop_id?._id
           );
           setSelectedCrop(cropObj);
         }

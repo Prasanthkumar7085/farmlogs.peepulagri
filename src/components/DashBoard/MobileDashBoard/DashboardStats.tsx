@@ -71,8 +71,11 @@ const DashboardStats = () => {
                 <div style={{ padding: "0.5rem" }}>
                     <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
                 </div>
+                <div style={{ width: "60%", textAlign: "center" }}>
+                    <h2 className={styles.pageName}>Dashboard</h2>
+                </div>
             </div>
-            <div style={{ background: "#fff", width: "100%", borderRadius: " 30px 30px 0px 0px" }}>
+            <div className={styles.pageContainer}>
                 <div style={{ padding: "1rem" }}>
                     <div className={styles.row}>
                         <div className={styles.farmscard} style={{ background: " #DDD4F2" }}>
@@ -124,10 +127,7 @@ const DashboardStats = () => {
 
                     <div className={styles.gallaryBlock}>
                         <Typography variant="h4" color="red">Recent Uploads</Typography>
-                        <div style={{ height: "36vh", overflowY: "auto" }}>
-
-                            <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
-                        </div>
+                        <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
                     </div>
                 </div>
             </div>

@@ -1,0 +1,107 @@
+.kilograms {
+  position: relative;
+  line-height: 110%;
+}
+.inProgress,
+.inProgress1,
+.inProgress2,
+.inProgress3,
+.inProgress4,
+.inProgress5,
+.inProgress6,
+.inProgress7,
+.todo {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.63rem 0.63rem 0.63rem 1rem;
+  z-index: 0;
+}
+.inProgress,
+.inProgress1,
+.inProgress2,
+.inProgress3,
+.inProgress4,
+.inProgress5,
+.inProgress6,
+.inProgress7 {
+  z-index: 1;
+}
+.inProgress1,
+.inProgress2,
+.inProgress3,
+.inProgress4,
+.inProgress5,
+.inProgress6,
+.inProgress7 {
+  z-index: 2;
+}
+.inProgress2,
+.inProgress3,
+.inProgress4,
+.inProgress5,
+.inProgress6,
+.inProgress7 {
+  z-index: 3;
+}
+.inProgress3,
+.inProgress4,
+.inProgress5,
+.inProgress6,
+.inProgress7 {
+  z-index: 4;
+}
+.inProgress4,
+.inProgress5,
+.inProgress6,
+.inProgress7 {
+  z-index: 5;
+}
+.inProgress5,
+.inProgress6,
+.inProgress7 {
+  z-index: 6;
+}
+.inProgress6,
+.inProgress7 {
+  z-index: 7;
+}
+.inProgress7 {
+  z-index: 8;
+}
+.unitsDropdownChild {
+  position: absolute;
+  margin: 0 !important;
+  top: 5.5rem;
+  right: 0.19rem;
+  border-radius: 4px;
+  background-color: #d9d9d9;
+  width: 0.31rem;
+  height: 7.5rem;
+  flex-shrink: 0;
+  z-index: 9;
+}
+.unitsDropdown {
+  position: relative;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 12.5rem;
+  height: 12.88rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0.5rem 0;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  text-align: left;
+  font-size: 1rem;
+  color: #000;
+  font-family: Inter;
+}

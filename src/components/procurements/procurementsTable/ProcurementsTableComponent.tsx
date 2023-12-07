@@ -251,7 +251,7 @@ const ProcurementsTableComponent = ({
       width: "350px",
     },
     {
-      accessorFn: (row: any) => row.point_of_contact.name,
+      accessorFn: (row: any) => row.point_of_contact?.name,
       id: "point_of_contact.name",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
@@ -335,7 +335,7 @@ const ProcurementsTableComponent = ({
                 justifyContent: "space-evenly",
               }}
             >
-              <Link href={`/tasks/${info.row.original?._id}`}>
+              <Link href={`/procurements/${info.row.original?._id}`}>
                 <ImageComponent
                   src="/view-icon.svg"
                   height={17}

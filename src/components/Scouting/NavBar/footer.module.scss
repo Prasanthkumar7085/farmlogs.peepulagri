@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+.footer {
+    .footerCard {
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+    button {
+        text-transform: capitalize;
+        display: flex;
+        flex-direction: column;
+    }
+    .navButtonList {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .navButton {
+            text-align: center;
+            font-size: clamp(10px, 2.7vw, 12px);
+            font-weight: 500;
+            font-family: "Inter", sans-serif !important;
+        }
+        .navButtonActive {
+            color: #06a3ad;
+            font-size: clamp(10px, 2.7vw, 12px);
+            text-align: center;
+            font-weight: 500;
+            font-family: "Inter", sans-serif !important;
+        }
+        .navButtonCurrency {
+            text-align: center;
+            font-size: clamp(10px, 2.7vw, 12px);
+            font-weight: 500;
+            font-family: "Inter", sans-serif !important;
+            color: #000;
+            background: #c8f5ff !important;
+            border-radius: 50% !important;
+            margin-top: -1.5rem;
+            border: 5px solid #0b939c !important;
+            min-width: 65px;
+            padding: 0 !important;
+            width: 65px;
+            height: 65px;
+            max-width: 65px;
+        }
+        .navButtonCurrencyActive {
+            color: #fff;
+            font-size: clamp(10px, 2.7vw, 12px);
+            text-align: center;
+            font-weight: 500;
+            font-family: "Inter", sans-serif !important;
+            border-radius: 50% !important;
+            margin-top: -1rem;
+            background-color: #0b939c;
+            border: 5px solid #fff !important;
+            min-width: 65px;
+            padding: 0 !important;
+            width: 65px;
+            height: 65px;
+            max-width: 65px;
+        }
+    }
+}

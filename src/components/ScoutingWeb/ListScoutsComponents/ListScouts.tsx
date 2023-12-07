@@ -304,7 +304,7 @@ const ListScouts: FunctionComponent = () => {
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == farmId);
           setFarm(obj);
-          getAllCrops(router.query.crop_id as string, obj?._id as string);
+          getAllCrops(router.query.crop_id as string, farmId);
         } else {
           setFarm(response?.data[0]);
           getAllCrops(

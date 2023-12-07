@@ -216,7 +216,7 @@ const DashboardPage = () => {
             }
           }}
         >
-          <AddIcon sx={{ fontSize: "2rem" }} />
+          <AddIcon sx={{ fontSize: "2rem" }} /> Add Farm
         </IconButton>
       </div>
       <LoadingComponent loading={loading} />

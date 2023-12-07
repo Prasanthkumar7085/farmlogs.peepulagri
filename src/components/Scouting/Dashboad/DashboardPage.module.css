@@ -4,6 +4,8 @@
   padding: 20px;
 }
 
-/* #dashboardPage {
-  background-color: #05A155;
-} */
+#dashboardPage {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}

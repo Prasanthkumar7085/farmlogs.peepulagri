@@ -13,18 +13,28 @@ const FarmsDropDown = ({
   getFarmsSearchString,
   optionsLoading,
   setOptionsLoading,
+  farmDefaultValue
 }: any) => {
   const [defaultValueSet, setDefaultValueSet] = useState<any>("");
   const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (router.isReady && !searchString) {
+    console.log(farmDefaultValue, "p")
+    console.log(options)
+    if (farmDefaultValue) {
+
       setDefaultValueSet(
-        options && options.find((item: any) => item._id == defaultValueSet)
+        options && options.find((item: any) => item._id == farmDefaultValue?._id)
       );
     }
-  }, [router.isReady, options]);
+    else {
+      setDefaultValueSet(
+        options && options.find((item: any) => item._id == defaultValueSet?._id)
+      );
+    }
+
+  }, [options, farmDefaultValue]);
 
   return (
     <div>

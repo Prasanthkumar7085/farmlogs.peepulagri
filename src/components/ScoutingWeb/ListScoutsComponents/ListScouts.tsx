@@ -247,7 +247,7 @@ const ListScouts: FunctionComponent = () => {
       setOnlyImages(response.data);
 
       const groupedData: any = {};
-      // Iterate through Data and group objects by createdAt date
+      // Iterate through Data and group objects by uploaded_at date
       data.forEach((item: any) => {
         const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
         if (!groupedData[createdAt]) {

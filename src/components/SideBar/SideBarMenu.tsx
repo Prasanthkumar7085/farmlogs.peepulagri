@@ -152,8 +152,8 @@ const SideBarMenu = ({ children }: any) => {
         </aside>
         <div className={styles.main}>{children}</div>
       </div>
-      <div id="mobile-view">
-        {userName == "USER" ? (
+      {/* <div id="mobile-view">
+        {userName == "farmer" ? (
           <div style={{ width: "100%", textAlign: "center" }}>
             <Button
               sx={{
@@ -162,7 +162,7 @@ const SideBarMenu = ({ children }: any) => {
                 background: "green",
               }}
               variant={"contained"}
-              onClick={() => router.push("/farms")}
+              onClick={() => router.push("/dashboard")}
             >
               {" "}
               <NorthWestIcon sx={{ color: "#fff", fontSize: "1.5rem" }} /> Go To
@@ -183,7 +183,7 @@ const SideBarMenu = ({ children }: any) => {
             </Button>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

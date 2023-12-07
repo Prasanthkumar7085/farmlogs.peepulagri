@@ -1,11 +1,11 @@
 import { wrapper } from "@/Redux";
-import ScoutingHeader from "@/components/Scouting/NavBar/NavbarComponent";
 import SideBarMenu from "@/components/SideBar/SideBarMenu";
 import theme from "@/themes/themes";
 import { ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import "./global.css";
+import ScoutingHeader from "@/components/Scouting/NavBar/NavbarComponent";
 
 function MyApp({ Component, pageProps, ...rest }: any) {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps, ...rest }: any) {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        {router.pathname.includes("farms") ? (
+        {router.pathname.includes("farms") || router.pathname.includes("dashboard") || router.pathname.includes("summary") ? (
           <ScoutingHeader>
             <Component {...pageProps} />
           </ScoutingHeader>

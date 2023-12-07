@@ -4,15 +4,9 @@ import { Button, Icon, Checkbox, FormControlLabel } from "@mui/material";
 import styles from "./shipped-status.module.css";
 import { useRouter } from "next/router";
 
-type ShippedStatusType = {
-  text?: string;
-  dropdownText?: string;
-};
-
-const ShippedStatus: NextPage<ShippedStatusType> = ({
-  text = "Normal",
-  dropdownText = "Shipped",
-}) => {
+const ShippedStatus = ({
+  data,
+}: any) => {
   const router = useRouter();
   const onBackButton1Click = useCallback(() => {
     router.back();
@@ -42,7 +36,7 @@ const ShippedStatus: NextPage<ShippedStatusType> = ({
         <div className={styles.priority}>
           <label className={styles.label}>Priority</label>
           <div className={styles.prioritycontainer}>
-            <p className={styles.text}>{text}</p>
+            <p className={styles.text}>{data?.priority ? data?.priority : "---"}</p>
           </div>
         </div>
         <div className={styles.priority}>
@@ -51,21 +45,22 @@ const ShippedStatus: NextPage<ShippedStatusType> = ({
             className={styles.statuscontainer}
             onClick={onStatusContainerClick}
           >
-            <p className={styles.text}>{dropdownText}</p>
+            <p className={styles.text}>{data?.status ? data?.status : "---"}</p>
           </div>
         </div>
         <img className={styles.statusrowChild} alt="" src="/line-3@2x.png" />
-        <div
-          className={styles.materialsreceivedcheckbox}
-          onClick={onMaterialsReceivedCheckboxClick}
-        >
-          <FormControlLabel
-            className={styles.unselected}
-            label=""
-            control={<Checkbox color="primary" />}
-          />
-          <p className={styles.materialsReceived}>Materials Received</p>
-        </div>
+        {data?.status == "shipped" ?
+          <div
+            className={styles.materialsreceivedcheckbox}
+            onClick={onMaterialsReceivedCheckboxClick}
+          >
+            <FormControlLabel
+              className={styles.unselected}
+              label=""
+              control={<Checkbox color="primary" />}
+            />
+            <p className={styles.materialsReceived}>Materials Received</p>
+          </div> : ""}
       </div>
     </div>
   );

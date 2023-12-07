@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ShippedStatus from "./shipped-status";
 import ShippedStatusform from "./shipped-statusform";
 import ViewProcurementTable from "./table";
@@ -11,7 +11,8 @@ const ViewProcurementComponent = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-
+  const [data, setData] = useState<any>()
+  console.log(data, "mk")
   const getProcurementById = async () => {
     try {
       const response = await getProcurementByIdService({
@@ -19,6 +20,7 @@ const ViewProcurementComponent = () => {
         accessToken: accessToken,
       });
       if (response.status == 200 || response.status == 201) {
+        setData(response?.data)
         console.log(response);
       }
     } catch (err) {
@@ -32,10 +34,10 @@ const ViewProcurementComponent = () => {
     }
   }, [router.isReady, accessToken]);
   return (
-    <div>
-      <ShippedStatus />
-      <ShippedStatusform />
-      <ViewProcurementTable />
+    <div style={{ width: "50%", margin: "auto" }}>
+      <ShippedStatus data={data} />
+      <ShippedStatusform data={data} />
+      <ViewProcurementTable data={data} />
     </div>
   );
 };

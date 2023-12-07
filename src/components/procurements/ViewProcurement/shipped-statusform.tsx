@@ -1,47 +1,47 @@
 import type { NextPage } from "next";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import styles from "./shipped-statusform.module.css";
+import timePipe from "@/pipes/timePipe";
 
-type ShippedStatusformType = {
-  fARM1?: string;
-  fertilizersAndSoilAmendme?: string;
-  text?: string;
-  hemaGanesh?: string;
-  text1?: string;
-};
+// type ShippedStatusformType = {
+//   fARM1?: string;
+//   fertilizersAndSoilAmendme?: string;
+//   text?: string;
+//   hemaGanesh?: string;
+//   text1?: string;
+// };
 
-const ShippedStatusform: NextPage<ShippedStatusformType> = ({
-  fARM1 = "Farm-1",
-  fertilizersAndSoilAmendme = "Fertilizers and amendments",
-  text = "05, Aug 2023",
-  hemaGanesh = "Hema & Ganesh",
-  text1 = "1Z 999 AA1 01 2345 6784",
-}) => {
+const ShippedStatusform = ({
+  data
+}: any) => {
   return (
     <div className={styles.shippedstatusform}>
-      <div className={styles.farmname}>
-        <p className={styles.farm1}>{fARM1}</p>
-      </div>
+      <Tooltip title={data?.farm_ids?.map((item: any, index: any) => item.title).join(",")} >
+        <div className={styles.farmname}>
+
+          {data?.farm_ids.length < 3 ? data?.farm_ids?.map((item: any, index: any) => item.title).join(",") : data?.farm_ids.slice(0, 2)?.map((item: any, index: any) => item.title).join(",") + "....."}
+        </div>
+      </Tooltip>
       <div className={styles.nameofoperation}>
         <h3 className={styles.fertilizersAndSoil}>
-          {fertilizersAndSoilAmendme}
+          {data?.title}
         </h3>
         <div className={styles.inputWithLabel}>
           <div className={styles.label}>Date Of Operation</div>
           <div className={styles.datecontainer}>
-            <p className={styles.text}>{text}</p>
+            <p className={styles.text}>{timePipe(data?.date_of_operation, "DD-MM-YYYY")}</p>
           </div>
         </div>
       </div>
       <div className={styles.pointofcontact}>
         <label className={styles.label1}>Point Of Contact</label>
-        <h3 className={styles.hemaGanesh}>{hemaGanesh}</h3>
+        <h3 className={styles.hemaGanesh}>{data?.point_of_contact ? data?.point_of_contact : "----"}</h3>
       </div>
       <div className={styles.trackingid}>
         <label className={styles.label1}>Tracking ID</label>
         <div className={styles.information}>
           <div className={styles.id}>
-            <p className={styles.text}>{text1}</p>
+            <p className={styles.text}>{"1234567890p"}</p>
           </div>
           <Button color="primary" variant="contained">
             Copy

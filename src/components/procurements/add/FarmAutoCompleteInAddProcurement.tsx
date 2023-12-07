@@ -14,6 +14,7 @@ interface PropsTypes {
   setOptionsLoading: Dispatch<SetStateAction<boolean>>;
   searchString: string;
   setSearchString: Dispatch<SetStateAction<string>>;
+  isDisabled: boolean;
 }
 const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
   options,
@@ -23,8 +24,8 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
   defaultValue,
   optionsLoading,
   setOptionsLoading,
-  searchString,
   setSearchString,
+  isDisabled,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
       {!autoCompleteLoading ? (
         <Autocomplete
           multiple
+          disabled={isDisabled}
           // groupBy={(option) => option?.user_id?.full_name}
           value={defaultValueSet}
           disablePortal

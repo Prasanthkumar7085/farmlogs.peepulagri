@@ -42,7 +42,6 @@ const ListScouts: FunctionComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -71,7 +70,8 @@ const ListScouts: FunctionComponent = () => {
   const [seletectedItemDetails, setSelectedItemDetails] =
     useState<SingleScoutResponse>();
 
-
+  const [optionsLoading, setOptionsLoading] = useState(false);
+  const [searchString, setSearchString] = useState("");
 
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     if (value) {
@@ -226,10 +226,10 @@ const ListScouts: FunctionComponent = () => {
       queryParams["to_date"] = toDate;
     }
     if (cropId) {
-      queryParams["crop_id"] = cropId
+      queryParams["crop_id"] = cropId;
     }
     if (farmId) {
-      queryParams["farm_id"] = farmId
+      queryParams["farm_id"] = farmId;
     }
 
     const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
@@ -244,10 +244,10 @@ const ListScouts: FunctionComponent = () => {
     if (response?.success) {
       const { data, ...rest } = response;
       setPaginationDetails(rest);
-      setOnlyImages(response.data)
+      setOnlyImages(response.data);
 
       const groupedData: any = {};
-      // Iterate through Data and group objects by createdAt date
+      // Iterate through Data and group objects by uploaded_at date
       data.forEach((item: any) => {
         const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
         if (!groupedData[createdAt]) {
@@ -259,7 +259,6 @@ const ListScouts: FunctionComponent = () => {
       // Convert the groupedData object into an array
       const groupedArray = Object.values(groupedData);
       setData(groupedArray);
-
     } else if (response?.statusCode == 403) {
       await logout();
     } else {
@@ -267,7 +266,6 @@ const ListScouts: FunctionComponent = () => {
     }
     setLoading(false);
   };
-
 
   const getAllUsers = async (userId = "") => {
     const response = await getAllUsersService({ token: accessToken });
@@ -288,26 +286,37 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
-  const getAllFarms = async (userId = "", farmId = "") => {
-    let queryParams: any = {
-
-    };
-
-    let url = prepareURLEncodedParams("", queryParams);
-
-    const response = await ListAllFarmForDropDownService(url, accessToken);
-    if (response?.success) {
-      setFarmOptions(response?.data);
-      if (farmId) {
-        let obj =
-          response?.data?.length &&
-          response?.data?.find((item: any) => item._id == farmId);
-        setFarm(obj);
-        getAllCrops(router.query.crop_id as string, obj?._id as string);
+  const getAllFarms = async (farmId = "", searchString: string) => {
+    try {
+      if (searchString) {
+        router.push({
+          query: { ...router.query, farm_search_string: searchString },
+        });
       }
-
-    } else if (response?.statusCode == 403) {
-      await logout();
+      const response = await ListAllFarmForDropDownService(
+        searchString,
+        accessToken
+      );
+      if (response?.success) {
+        setFarmOptions(response?.data);
+        if (farmId) {
+          let obj =
+            response?.data?.length &&
+            response?.data?.find((item: any) => item._id == farmId);
+          setFarm(obj);
+          getAllCrops(router.query.crop_id as string, obj?._id as string);
+        } else {
+          setFarm(response?.data[0]);
+          getAllCrops(
+            router.query.crop_id as string,
+            response?.data[0]?._id as string
+          );
+        }
+      } else if (response?.statusCode == 403) {
+        await logout();
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -321,10 +330,31 @@ const ListScouts: FunctionComponent = () => {
       if (cropId) {
         let obj = data?.length && data?.find((item: any) => item._id == cropId);
         setCrop(obj);
-      }
-      if (router.query.crop_id) {
-        let obj = data?.length && data?.find((item: any) => item._id == router.query.crop_id);
+        getAllCropImageList({
+          page: router.query?.page as string,
+          limit: router.query?.limit as string,
+          farmId: farmId,
+          userId: router.query?.created_by as string,
+          fromDate: router.query?.from_date as string,
+          toDate: router.query?.to_date as string,
+          cropId: cropId,
+        });
+      } else {
+        let obj = data?.length ? data[0] : null;
+
+        setLoading(false);
         setCrop(obj);
+        if (obj) {
+          getAllCropImageList({
+            page: router.query?.page as string,
+            limit: router.query?.limit as string,
+            farmId: farmId,
+            userId: router.query?.created_by as string,
+            fromDate: router.query?.from_date as string,
+            toDate: router.query?.to_date as string,
+            cropId: obj._id,
+          });
+        }
       }
     }
   };
@@ -340,28 +370,30 @@ const ListScouts: FunctionComponent = () => {
     await getAllCropImageList({});
   };
 
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      // getAllUsers(router.query.created_by as string);
-      getAllFarms(
-        router.query.created_by as string,
-        router.query.farm_id as string
-      );
+  const [mounted, setMounted] = useState(false);
 
-      getAllCropImageList({
-        page: router.query?.page as string,
-        limit: router.query?.limit as string,
-        farmId: router.query?.farm_id as string,
-        userId: router.query?.created_by as string,
-        fromDate: router.query?.from_date as string,
-        toDate: router.query?.to_date as string,
-        cropId: router.query?.crop_id as string,
-      });
+  useEffect(() => {
+    if (router.isReady && accessToken && !mounted) {
+      // getAllUsers(router.query.created_by as string);
+      setSearchString(router.query.farm_search_string as string);
+      setMounted(true);
+      getAllFarms(
+        router.query.farm_id as string,
+        router.query.farm_search_string as string
+      );
     }
   }, [router.isReady, accessToken]);
 
+  useEffect(() => {
+    if (mounted) {
+      getAllFarms(router.query.farm_id as string, searchString);
+    }
+  }, [searchString]);
+
   const onClickAttachment = (attachmentId: string) => {
-    router.push(`/scouts/farm/${router.query.crop_id}/crops/${router.query.crop_id}/${attachmentId}`)
+    router.push(
+      `/scouts/farm/${router.query.crop_id}/crops/${router.query.crop_id}/${attachmentId}`
+    );
   };
 
   return (
@@ -388,6 +420,10 @@ const ListScouts: FunctionComponent = () => {
             label={"title"}
             placeholder={"Select Farm here"}
             defaultValue={farm}
+            optionsLoading={optionsLoading}
+            setOptionsLoading={setOptionsLoading}
+            searchString={searchString}
+            setSearchString={setSearchString}
           />
           <CropAutoCompleteFoScouts
             options={cropOptions}
@@ -413,27 +449,25 @@ const ListScouts: FunctionComponent = () => {
       <div className={styles.allFarms}>
         {data?.length
           ? data.map((item: any, index: any) => {
-            return (
-              <div key={index} className={styles.allScoutingCards}>
-                <Typography className={styles.postedDate}>
-                  <InsertInvitationIcon />
-                  <span>
-                    {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
-                  </span>
-                </Typography>
+              return (
+                <div key={index} className={styles.allScoutingCards}>
+                  <Typography className={styles.postedDate}>
+                    <InsertInvitationIcon />
+                    <span>
+                      {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
+                    </span>
+                  </Typography>
 
-                <div className={styles.eachDayScouting} key={index}>
-
-                  <ScoutingDailyImages
-                    item={item}
-                    key={index}
-                    onClickAttachment={onClickAttachment}
-                  />
+                  <div className={styles.eachDayScouting} key={index}>
+                    <ScoutingDailyImages
+                      item={item}
+                      key={index}
+                      onClickAttachment={onClickAttachment}
+                    />
+                  </div>
                 </div>
-
-              </div>
-            );
-          })
+              );
+            })
           : ""}
         {!data?.length && !loading ? (
           <div

@@ -19,14 +19,14 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (cookies.userType == "farmer") {
       return {
         redirect: {
-          destination: `/farms`,
+          destination: `/dashboard`,
           permanent: false,
         },
       };
     }
     return {
       redirect: {
-        destination: `/farm`,
+        destination: `/dashboard`,
         permanent: false,
       },
     };

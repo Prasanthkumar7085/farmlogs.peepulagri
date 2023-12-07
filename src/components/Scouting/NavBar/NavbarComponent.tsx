@@ -58,11 +58,6 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import styles from "./footer.module.scss";
-import HomeIcon from '@mui/icons-material/Home';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import PaymentsIcon from '@mui/icons-material/Payments';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRouter } from 'next/router';
 import { Button } from "@mui/material";
 

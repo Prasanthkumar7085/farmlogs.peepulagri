@@ -91,10 +91,9 @@ const FarmCard = ({
                         {timePipe(item.createdAt, "DD, MMM YYYY")}
                       </div>
                       <div className={styles.count}>
-                        <ImageComponent
-                          src="/cropName-icon.svg"
-                          height={18}
-                          width={18}
+                        <img
+                          src="/mobileIcons/farms/info.svg"
+                          width={25}
                           alt="image"
                         />
                         {/* <span>{item?.crops_count}</span> */}
@@ -103,7 +102,7 @@ const FarmCard = ({
                     </div>
                     <div
                       className={styles.farm1}
-                      style={{ color: colorsArray[colorIndex] }}
+                      style={{ color: "#D94841" }}
                     >
                       {item.title.length > 16
                         ? item.title.slice(0, 1).toUpperCase() +

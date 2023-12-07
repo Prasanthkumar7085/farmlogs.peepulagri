@@ -31,9 +31,14 @@
 }
 
 .count {
-  display: flex;
-  align-items: center;
-  column-gap: var(--gap-9xs);
+
+  position: absolute;
+  right: 0;
+  top: 1px;
+  padding: 5px;
+  border-radius: 0px 12.8px 0px 12.8px;
+  background: #E6F5EB;
+  box-shadow: 1.339px 1.339px 10.044px 0px #ffffff1a;
 }
 
 .farm1 {
@@ -124,25 +129,26 @@
 }
 
 .farmcard {
-  border-radius: 8px;
-  border: 1px solid rgba(180, 193, 214, 0.50);
+  border-radius: 12px;
   background: #FFF;
+  box-shadow: 2px 2px 9px 0px rgba(0, 0, 0, 0.136);
   justify-content: flex-start;
   padding: var(--padding-xs);
   text-align: left;
   font-size: var(--font-size-xs);
   color: var(--title);
   font-family: var(--text-sm-normal);
+  position: relative;
 }
 
 .allFormsBlock {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 0.65rem;
+  grid-gap: 1.2rem;
 }
 
 .allForms {
-  height: calc(100vh - 220px);
+  height: calc(100vh - 200px);
   overflow: scroll;
   padding: 1rem;
   padding-top: 0;

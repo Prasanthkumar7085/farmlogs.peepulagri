@@ -67,7 +67,7 @@ const DashboardStats = () => {
     return (
 
         <div className={styles.dashboardstats}>
-            <div style={{ background: "#45A845", width: "100%", boxShadow: "0px 1px 0px -1px #ffffffa3" }} >
+            <div className={styles.pageHeader}  >
                 <div style={{ padding: "0.5rem" }}>
                     <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
                 </div>
@@ -122,9 +122,12 @@ const DashboardStats = () => {
                         </div>
                     </div>
 
-                    <div style={{ width: "100%" }}>
-                        <Typography variant="body1" color="red">Recent Uploads</Typography>
-                        <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
+                    <div className={styles.gallaryBlock}>
+                        <Typography variant="h4" color="red">Recent Uploads</Typography>
+                        <div style={{ height: "36vh", overflowY: "auto" }}>
+
+                            <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
+                        </div>
                     </div>
                 </div>
             </div>

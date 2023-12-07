@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 
 const UpdateSummary = () => {
     const router = useRouter();
@@ -38,6 +39,7 @@ const UpdateSummary = () => {
     const [farmId, setFarmID] = useState<any>()
     const [farmDefaultValue, setFarmDefaultValue] = useState<any>()
     const [cropDefaultValue, setCropDefaultValue] = useState<any>()
+    const [errorMessages, setErrorMessages] = useState<any>()
 
     const logout = async () => {
         try {
@@ -107,6 +109,7 @@ const UpdateSummary = () => {
                 setCropDefaultValue(responseData?.data?.crop_id)
                 getAllCropsOptions("", responseData?.data?.farm_id)
                 setFarmID(responseData?.data?.farm_id)
+                setCropId(responseData?.data?.crop_id)
                 await getSingleFarmDetails(responseData?.data?.farm_id)
                 setSummaryData(responseData?.data)
 
@@ -201,6 +204,7 @@ const UpdateSummary = () => {
         }
         else {
             getAllFarmsOptions()
+            setFarmID("")
             setCropOptions([])
         }
     }
@@ -220,6 +224,10 @@ const UpdateSummary = () => {
             setCropId(value?._id)
             // getAllCropsOptions("", value._id)
         }
+        else {
+            setCropId("")
+
+        }
     }
 
 
@@ -233,7 +241,9 @@ const UpdateSummary = () => {
             let body = {
                 farm_id: farmId,
                 content: comment,
-                date: date
+                date: date,
+                crop_id: cropId,
+
             };
             let options = {
                 method: "PATCH",
@@ -245,7 +255,7 @@ const UpdateSummary = () => {
             };
 
             let response: any = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${cropId}/day-summary`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summary/${router.query.summary_id}`,
                 options
             );
             let responseData = await response.json();
@@ -253,12 +263,14 @@ const UpdateSummary = () => {
             if (responseData.status == 200) {
                 setSuccess(responseData.message);
                 setShowSuccessAlert(true);
-                setLoading(false);
                 setTimeout(() => {
                     setShowSuccessAlert(false);
-                    router.back()
                 }, 1500);
+                router.back()
+
             } else if (responseData.status == 422) {
+                setErrorMessages(responseData.errors)
+
                 setDateError(responseData.errors.date);
                 setCommentError(responseData.errors.content);
                 setSummaryError(responseData.errors.summary);
@@ -309,6 +321,8 @@ const UpdateSummary = () => {
                 getFarmsSearchString={getFarmsSearchString}
                 farmDefaultValue={farmDefaultValue}
             />
+            <ErrorMessagesComponent errorMessage={errorMessages?.farm_id} />
+
             <Typography variant="caption">Crop</Typography>
 
             <CropsDropDown
@@ -318,6 +332,7 @@ const UpdateSummary = () => {
                 getCropSearchString={getCropSearchString}
                 cropDefaultValue={cropDefaultValue}
             />
+            <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} />
 
             <Typography variant="caption">Date</Typography>
             <TextField
@@ -342,7 +357,8 @@ const UpdateSummary = () => {
                 inputProps={{ max: getCurrentDate() }}
                 sx={{ width: "100%" }}
             />
-            <p style={{ color: 'red' }}>{dateError}</p>
+            <ErrorMessagesComponent errorMessage={errorMessages?.date} />
+
             <Typography variant="caption">Comments</Typography>
             <TextField
                 color="primary"
@@ -362,7 +378,8 @@ const UpdateSummary = () => {
                 }}
                 sx={{ background: "#fff" }}
             />
-            <p style={{ color: 'red' }}>{commentError}</p>
+            <ErrorMessagesComponent errorMessage={errorMessages?.content} />
+
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
                 <Button type='submit' variant='contained' onClick={() => router.back()}>Cancel</Button>
 

@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import DateRangePickerComponent from "./DateRangePicker";
 import styles from "./summary.module.css";
+import FarmsDropDown from "@/components/Core/FarmsDropDown";
+import CropsDropDown from "@/components/Core/CropsDropDown";
 
 const AllSummaryComponents = () => {
     const router = useRouter();
@@ -29,6 +31,10 @@ const AllSummaryComponents = () => {
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [pageNumber, setPageNumber] = useState(1);
     const [rowId, setRowID] = useState<any>()
+    const [farmOptions, setFarmOptions] = useState<any>()
+    const [cropOptions, setCropOptions] = useState<any>()
+    const [cropId, setCropId] = useState<any>()
+    const [farmId, setFarmID] = useState<any>()
 
     const open = Boolean(anchorEl);
     const handleMenu = (event: any) => {
@@ -51,10 +57,19 @@ const AllSummaryComponents = () => {
         }
     };
 
-    const getSummary = async (page: any) => {
+    const getSummary = async (farmId = "", cropId = "", page: any) => {
         setLoading(true);
         try {
             let queryParams: any = {};
+
+            if (farmId) {
+                queryParams["farm_id"] = farmId
+            }
+
+            if (cropId) {
+                queryParams["crop_id"] = cropId
+            }
+
 
             let options = {
                 method: "GET",
@@ -67,11 +82,21 @@ const AllSummaryComponents = () => {
                 queryParams
             );
 
+
+
             let response = await fetch(url, options);
             let responseData: any = await response.json();
             if (responseData.success) {
-                setHasMore(responseData?.has_more);
-                setData([...data, ...responseData.data]);
+                if (responseData?.has_more) {
+                    setHasMore(responseData?.has_more);
+                    setData([...data, ...responseData.data]);
+
+                }
+                else {
+                    setHasMore(false);
+
+                    setData(responseData.data);
+                }
 
             } else if (responseData?.statusCode == 403) {
                 await logout();
@@ -84,7 +109,7 @@ const AllSummaryComponents = () => {
     };
     useEffect(() => {
         if (router.isReady && accessToken) {
-            getSummary(pageNumber);
+            getSummary("", "", pageNumber);
         }
     }, [router.isReady, accessToken]);
 
@@ -113,9 +138,10 @@ const AllSummaryComponents = () => {
         if (loading) return
         if (observer.current) observer.current.disconnect()
         observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
+            if (entries[0].isIntersecting && hasMore && data.length > 0) {
+                console.log("start")
                 setPageNumber(prevPageNumber => prevPageNumber + 1)
-                getSummary(pageNumber + 1)
+                getSummary(farmId, cropId, pageNumber + 1)
                 scrollToLastItem() // Restore scroll position after new data is loaded
             }
         })
@@ -123,15 +149,142 @@ const AllSummaryComponents = () => {
     }, [loading, hasMore])
 
 
+    //get all farm options api
+    const getAllFarmsOptions = async (searchString = "") => {
 
+        try {
+            let queryParams: any = {};
+
+            if (searchString) {
+                queryParams["search_string"] = searchString
+            }
+            let options = {
+                method: "GET",
+                headers: new Headers({
+                    authorization: accessToken,
+                }),
+            };
+            let url = prepareURLEncodedParams(
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/1/100`,
+                queryParams
+            );
+
+            let response = await fetch(url, options);
+            let responseData: any = await response.json();
+            if (responseData.success) {
+                setFarmOptions(responseData.data)
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    //get all crops 
+    const getAllCropsOptions = async (searchString = "", farmId: "") => {
+
+        try {
+            let queryParams: any = {};
+
+            if (searchString) {
+                queryParams["search_string"] = searchString
+            }
+            let options = {
+                method: "GET",
+                headers: new Headers({
+                    authorization: accessToken,
+                }),
+            };
+            let url = prepareURLEncodedParams(
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmId}/crops/list`,
+                queryParams
+            );
+
+            let response = await fetch(url, options);
+            let responseData: any = await response.json();
+            if (responseData.success) {
+                setCropOptions(responseData.data)
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+    //get the search value from the farms dropDown
+    const getFarmsSearchString = (value: any) => {
+        if (value) {
+            getAllFarmsOptions(value)
+        }
+        else {
+            getAllFarmsOptions("")
+        }
+    }
+    const onSelectValueFromFarmsDropDown = (value: any) => {
+
+        if (value?._id) {
+            getAllCropsOptions("", value?._id)
+            setFarmID(value?._id)
+            getSummary(value?._id, cropId, 1)
+
+        }
+        else {
+            setCropOptions([])
+            getSummary("", "", 1)
+
+        }
+    }
+
+    //get the values from the crops drop down
+    const getCropSearchString = (value: any) => {
+        if (value) {
+            getAllCropsOptions(value, "")
+        }
+        else {
+            getAllFarmsOptions("")
+        }
+    }
+    const onSelectValueFromCropsDropDown = (value: any) => {
+
+        if (value) {
+            setCropId(value?._id)
+            getSummary(farmId, value?._id, 1)
+        }
+        else {
+            getSummary(farmId, "", 1)
+
+        }
+    }
+
+    useEffect(() => {
+        if (router.isReady && accessToken) {
+            getAllFarmsOptions()
+        }
+    }, [router.isReady, accessToken])
 
     return (
         <div>
-            <DateRangePickerComponent captureDateValue={captureDateValue} />
+            <div style={{ display: "flex", width: "100%" }}>
+                <div style={{ width: "50%" }}>
+                    <FarmsDropDown
+                        options={farmOptions}
+                        label={"title"}
+                        onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
+                        getFarmsSearchString={getFarmsSearchString}
 
+                    />
+                </div>
+                <div style={{ width: "50%" }}>
+                    <CropsDropDown
+                        options={cropOptions}
+                        label={"title"}
+                        onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
+                        getCropSearchString={getCropSearchString}
+                    />
+                </div>
+            </div>
 
             {data?.length ? data.map((item: any, index: any) => {
-                if (data.length === index + 1) {
+                if (data.length === index + 1 && hasMore == true) {
                     return (
 
                         <div className={styles.summarycard}
@@ -182,7 +335,7 @@ const AllSummaryComponents = () => {
                         </div>
                     )
                 }
-            }) : ""}
+            }) : "No Summary"}
 
 
             <Menu

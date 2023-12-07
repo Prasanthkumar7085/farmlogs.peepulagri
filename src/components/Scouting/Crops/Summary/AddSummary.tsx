@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 
 
 const AddSummary = () => {
@@ -25,8 +26,6 @@ const AddSummary = () => {
     const [loading, setLoading] = useState(false);
     const [comment, setComment] = useState<any>();
     const [date, setDate] = useState<any>();
-    const [dateError, setDateError] = useState<any>();
-    const [commentError, setCommentError] = useState<any>();
     const [summaryError, setSummaryError] = useState<any>();
     const [success, setSuccess] = useState<any>();
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -35,6 +34,7 @@ const AddSummary = () => {
     const [cropOptions, setCropOptions] = useState<any>()
     const [cropId, setCropId] = useState<any>()
     const [farmId, setFarmID] = useState<any>()
+    const [errorMessages, setErrorMessages] = useState<any>()
 
 
 
@@ -43,9 +43,7 @@ const AddSummary = () => {
 
     const addSummary = async () => {
         setLoading(true);
-        setDateError('');
-        setCommentError('');
-        setSummaryError('');
+
         try {
             let body = {
                 farm_id: farmId,
@@ -76,9 +74,8 @@ const AddSummary = () => {
                     router.back()
                 }, 1500);
             } else if (responseData.status == 422) {
-                setDateError(responseData.errors.date);
-                setCommentError(responseData.errors.content);
-                setSummaryError(responseData.errors.summary);
+                setErrorMessages(responseData.errors)
+
                 setShowErrorAlert(true);
                 setTimeout(() => {
                     setShowErrorAlert(false);
@@ -212,6 +209,8 @@ const AddSummary = () => {
                 onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
                 getFarmsSearchString={getFarmsSearchString}
             />
+            <ErrorMessagesComponent errorMessage={errorMessages?.farm_id} />
+
             <Typography variant="caption">Crop</Typography>
 
             <CropsDropDown
@@ -220,6 +219,8 @@ const AddSummary = () => {
                 onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
                 getCropSearchString={getCropSearchString}
             />
+
+            <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} />
 
             <Typography variant="caption">Date</Typography>
             <TextField
@@ -234,17 +235,16 @@ const AddSummary = () => {
                     const currentDate = new Date();
 
                     if (selectedDate > currentDate) {
-                        setDateError('Date cannot be in the future');
                         return;
                     }
 
                     setDate(e.target.value);
-                    setDateError('');
-                    setSummaryError('');
+
                 }}
                 inputProps={{ max: getCurrentDate() }}
             />
-            <p style={{ color: 'red' }}>{dateError}</p>
+            <ErrorMessagesComponent errorMessage={errorMessages?.date} />
+
             <Typography variant="caption">comment</Typography>
             <TextField
                 color="primary"
@@ -259,13 +259,13 @@ const AddSummary = () => {
                 value={comment}
                 onChange={(e) => {
                     setComment(e.target.value);
-                    setCommentError('');
-                    setSummaryError('');
                 }}
                 sx={{ background: "#fff" }}
             />
-            <p style={{ color: 'red' }}>{commentError}</p>
-            <div>
+            <ErrorMessagesComponent errorMessage={errorMessages?.content} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Button type='submit' variant='contained' onClick={() => router.back()}>Cancel</Button>
+
                 <Button type='submit' variant='contained' onClick={addSummary}>Submit</Button>
             </div>
             <Snackbar
@@ -282,7 +282,7 @@ const AddSummary = () => {
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
                 <Alert severity='error'>
-                    <AlertTitle>Error</AlertTitle>
+                    <AlertTitle>Validation Errors</AlertTitle>
                     {summaryError}
                 </Alert>
             </Snackbar>

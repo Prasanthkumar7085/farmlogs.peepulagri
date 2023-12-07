@@ -58,7 +58,7 @@ const FarmsDropDown = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder={placeholder}
+            placeholder={"Select Farm"}
             onChange={(e) => {
               // setOptionsLoading(true);
               getFarmsSearchString(e.target.value);

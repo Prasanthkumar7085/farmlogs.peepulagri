@@ -59,7 +59,7 @@ const CropsDropDown = ({
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        placeholder={placeholder}
+                        placeholder={"Select Crop"}
                         onChange={(e) => {
                             // setOptionsLoading(true);
                             getCropSearchString(e.target.value);

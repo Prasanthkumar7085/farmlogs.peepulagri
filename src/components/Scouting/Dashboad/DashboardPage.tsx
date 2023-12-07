@@ -180,7 +180,7 @@ const DashboardPage = () => {
   }, [searchString]);
 
   return (
-    <div id="dashboardPage">
+    <div id={styles.dashboardPage}>
       <DashBoardHeader
         captureSearchString={captureSearchString}
         searchString={searchString}

@@ -82,45 +82,54 @@ const DashBoardHeader = ({
   return (
     <div className={styles.dashboardheader} id="dashboard-header">
       <div className={styles.dashboardheading} id="dashboard-heading">
-        <Typography className={styles.dashboard}>Dashboard</Typography>
-        <div className={styles.selectlocation} id="select-location">
-          <div className={styles.srisailam}>
-            {!dataSetting ? (
-              <Autocomplete
-                id="asynchronous-demo"
-                fullWidth
-                noOptionsText={"No such location!"}
-                value={locationValue}
-                defaultValue={locationValue}
-                getOptionLabel={(option: { title: string; _id: string }) =>
-                  option.title
-                }
-                isOptionEqualToValue={(option, value) =>
-                  option.title === value.title
-                }
-                options={locations}
-                onChange={addInputValue}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    className={styles.inputfarmname}
-                    name="location"
-                    size="small"
-                    placeholder="Enter location here"
-                    fullWidth
-                    variant="outlined"
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        background: "#fff",
-                      },
-                    }}
-                  />
-                )}
-              />
-            ) : (
-              ""
-            )}
-          </div>
+        <div className={styles.logoBlock}>
+          <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
+          <Typography className={styles.dashboard}>Farms</Typography>
+        </div>
+        <div className={styles.srisailam}>
+          <img src="/mobileIcons/farms/map-pin-line.svg" alt="" />
+          {!dataSetting ? (
+            <Autocomplete
+              id="asynchronous-demo"
+              fullWidth
+              noOptionsText={"No such location!"}
+              value={locationValue}
+              defaultValue={locationValue}
+              getOptionLabel={(option: { title: string; _id: string }) =>
+                option.title
+              }
+              isOptionEqualToValue={(option, value) =>
+                option.title === value.title
+              }
+              options={locations}
+              onChange={addInputValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="location"
+                  size="small"
+                  placeholder="Enter location here"
+                  fullWidth
+                  // variant="outlined"
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      background: "transperent",
+                      color: "#fff"
+                    },
+                    '& .MuiOutlinedInput-notchedOutline ': {
+                      border: "0",
+                      color: "#fff"
+                    },
+                    '& .MuiButtonBase-root': {
+                      color: "#fff"
+                    }
+                  }}
+                />
+              )}
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className={styles.searchbyfarmname} id="search-by-farm-name">
@@ -137,25 +146,32 @@ const DashBoardHeader = ({
           value={search}
           onChange={onChangeSearchString}
           InputProps={{
-            // endAdornment: (
-            //   <InputAdornment position="end">
-            //     <IconButton
-            //       onClick={() => {
-            //         setSearch("");
-            //         captureSearchString("");
-            //       }}
-            //     >
-            //       {search ? <ClearOutlinedIcon /> : ""}
-            //     </IconButton>
-            //   </InputAdornment>
-            // ),
-            startAdornment: (
+
+            endAdornment: (
               <InputAdornment position="start">
                 <IconButton>
-                  <SearchIcon />
+                  <img src="/mobileIcons/farms/search-icon.svg" alt="" />
                 </IconButton>
               </InputAdornment>
             ),
+          }}
+          sx={{
+            "& .MuiInputBase-root": {
+              background: "#fff",
+              color: "#000",
+              borderRadius: "24px"
+            },
+            '& .MuiOutlinedInput-notchedOutline ': {
+              border: "0",
+              color: "#fff"
+            },
+            '& .MuiButtonBase-root': {
+              color: "#000",
+              padding: "4px !important"
+            },
+            '& .MuiInputBase-input': {
+              padding: "11px 14px"
+            }
           }}
         />
       </div>

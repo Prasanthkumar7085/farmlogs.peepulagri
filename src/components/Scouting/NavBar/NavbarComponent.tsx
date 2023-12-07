@@ -57,7 +57,7 @@
 // export default ScoutingHeader;
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import styles from "./footer.module.scss";
+import styles from "./footer.module.css";
 import { useRouter } from 'next/router';
 import { Button } from "@mui/material";
 

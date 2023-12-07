@@ -19,7 +19,9 @@ const AddProcurementHeader: NextPage = () => {
         color="primary"
         variant="contained"
         onClick={onBackButtonClick}
-      />
+      >
+        <img src="/arrow-left-back-white.svg" alt="" width={"18px"} />
+      </Button>
       <div className={styles.textwrapper}>
         <label className={styles.smalltext}>{`Back to List `}</label>
         <h2 className={styles.largetext}>Add Procurement</h2>

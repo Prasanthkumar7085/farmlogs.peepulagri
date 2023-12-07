@@ -1,0 +1,46 @@
+.unselectedIcon {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.hint {
+  flex: 1;
+  position: relative;
+  line-height: 1.5rem;
+}
+.unselectedParent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.hint8 {
+  position: relative;
+  line-height: 1.5rem;
+}
+.dropdown {
+  position: relative;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid #d0d5dd;
+  box-sizing: border-box;
+  width: 36.88rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1rem;
+  gap: 1rem;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  text-align: left;
+  font-size: 1rem;
+  color: #35353d;
+  font-family: Inter;
+}

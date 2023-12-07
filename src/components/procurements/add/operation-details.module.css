@@ -1,0 +1,84 @@
+.nameOfOperation {
+  cursor: pointer;
+  align-self: stretch;
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.inoutbox {
+  border: 0;
+  background-color: transparent;
+  align-self: stretch;
+}
+.nameofoperation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.label {
+  cursor: pointer;
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.datepicker {
+  align-self: stretch;
+  flex: 1;
+}
+.dateofoperation {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.dateofoperation,
+.dropdown,
+.row {
+  align-self: stretch;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 24px;
+}
+.dropdown {
+  cursor: pointer;
+}
+.selectfarm {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.inputbox {
+  align-self: stretch;
+}
+.column,
+.operationdetails,
+.remarks {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.column,
+.operationdetails {
+  gap: 24px;
+}
+.operationdetails {
+  text-align: left;
+  font-size: 14px;
+  color: #344154;
+  font-family: Inter;
+}

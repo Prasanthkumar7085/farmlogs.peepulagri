@@ -67,63 +67,69 @@ const DashboardStats = () => {
     return (
 
         <div className={styles.dashboardstats}>
-
-            <div className={styles.row}>
-                <div className={styles.farmscard}>
-                    <div className={styles.header}>
-                        <div className={styles.container}>
-                            <img className={styles.farmicon} alt="" src="/farmicon.svg" />
-                        </div>
-                        <label className={styles.lable}>Farms</label>
-                    </div>
-                    <p className={styles.total123}>
-                        <span>{`Total `}</span>
-                        <span className={styles.span}>{data?.length ? data[0]?.data.toLocaleString() : ""}</span>
-                    </p>
+            <div className={styles.pageHeader}  >
+                <div style={{ padding: "0.5rem" }}>
+                    <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
                 </div>
-                <div className={styles.farmscard}>
-                    <div className={styles.header}>
-                        <div className={styles.container}>
-                            <img className={styles.farmicon} alt="" src="/farmicon.svg" />
-                        </div>
-                        <label className={styles.lable}>Crops</label>
-                    </div>
-                    <p className={styles.total123}>
-                        <span>{`Total `}</span>
-                        <span className={styles.span}>{data?.length ? data[1]?.data.toLocaleString() : ""}</span>
-                    </p>
+                <div style={{ width: "60%", textAlign: "center" }}>
+                    <h2 className={styles.pageName}>Dashboard</h2>
                 </div>
             </div>
-            <div className={styles.row}>
-                <div className={styles.farmscard}>
-                    <div className={styles.header}>
-                        <div className={styles.container}>
-                            <img className={styles.farmicon} alt="" src="/farmicon.svg" />
+            <div className={styles.pageContainer}>
+                <div style={{ padding: "1rem" }}>
+                    <div className={styles.row}>
+                        <div className={styles.farmscard} style={{ background: " #DDD4F2" }}>
+                            <div className={styles.header}>
+                                <div className={styles.container}>
+                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/farms-card-icon.svg" />
+                                </div>
+                                <label className={styles.lable}>Farms</label>
+                            </div>
+                            <p className={styles.total123}>
+                                {data?.length ? data[0]?.data.toLocaleString() : ""}
+                            </p>
                         </div>
-                        <label className={styles.lable}>Images</label>
-                    </div>
-                    <p className={styles.total123}>
-                        <span>{`Total `}</span>
-                        <span className={styles.span}>{data?.length ? data[2]?.data.toLocaleString() : ""}</span>
-                    </p>
-                </div>
-                <div className={styles.farmscard}>
-                    <div className={styles.header}>
-                        <div className={styles.container}>
-                            <img className={styles.farmicon} alt="" src="/farmicon.svg" />
+                        <div className={styles.farmscard} style={{ background: "#D6E7FF" }}>
+                            <div className={styles.header}>
+                                <div className={styles.container}>
+                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/crops-card-icon.svg" />
+                                </div>
+                                <label className={styles.lable}>Crops</label>
+                            </div>
+                            <p className={styles.total123}>
+                                {data?.length ? data[1]?.data.toLocaleString() : ""}
+                            </p>
                         </div>
-                        <label className={styles.lable}>Comments</label>
-                    </div>
-                    <p className={styles.total123}>
-                        <span>{`Total `}</span>
-                        <span className={styles.span}>{data?.length ? data[3]?.data.toLocaleString() : ""}</span>
-                    </p>
-                </div>
-            </div>
+                        <div className={styles.farmscard} style={{ background: "#F0D4D4" }}>
+                            <div className={styles.header}>
+                                <div className={styles.container}>
+                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/images-card-icon.svg" />
+                                </div>
+                                <label className={styles.lable}>Images</label>
+                            </div>
+                            <p className={styles.total123}>
+                                {data?.length ? data[2]?.data.toLocaleString() : ""}
+                            </p>
+                        </div>
+                        <div className={styles.farmscard} style={{ background: "#D1F5E5" }}>
+                            <div className={styles.header}>
+                                <div className={styles.container}>
+                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/comments-card-icon.svg" />
+                                </div>
+                                <label className={styles.lable}>Comments</label>
+                            </div>
+                            <p className={styles.total123}>
+                                {data?.length ? data[3]?.data.toLocaleString() : ""}
+                            </p>
 
-            <div style={{ width: "100%" }}>
-                <Typography variant="body1" color="red">Recent Uploads</Typography>
-                <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
+                        </div>
+                    </div>
+
+                    <div className={styles.gallaryBlock}>
+                        <Typography variant="h4" color="red">Recent Uploads</Typography>
+                        <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
+                    </div>
+                </div>
             </div>
         </div>
     );

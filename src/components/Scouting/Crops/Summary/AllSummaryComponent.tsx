@@ -31,6 +31,7 @@ const AllSummaryComponents = () => {
     const [anchorEl, setAnchorEl] = useState<any>(null);
     const [searchString, setSearchString] = useState<any>([]);
 
+    const open = Boolean(anchorEl);
     const handleMenu = (event: any) => {
         setAnchorEl(event.currentTarget);
     };
@@ -108,7 +109,7 @@ const AllSummaryComponents = () => {
                         <div className={styles.header}>
                             <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
                             <div className={styles.optopns}>
-                                <img className={styles.vectorIcon} alt="" src="/vector.svg" />
+                                <img className={styles.vectorIcon} alt="" src="/vector.svg" onClick={(e) => handleMenu(e)} />
                             </div>
                         </div>
                         <p className={styles.chilliBeingA}>
@@ -117,6 +118,25 @@ const AllSummaryComponents = () => {
                     </div>
                 )
             }) : ""}
+
+            <Menu
+                id="demo-positioned-menu"
+                aria-labelledby="demo-positioned-button"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+            >
+                <MenuItem onClick={handleClose}>Edit</MenuItem>
+                <MenuItem onClick={handleClose}>Delete</MenuItem>
+            </Menu>
 
 
 

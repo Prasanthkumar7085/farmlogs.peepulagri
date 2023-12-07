@@ -1,29 +1,19 @@
+import { Chip, TextField } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import type { NextPage } from "next";
 import {
-  useState,
-  useCallback,
+  ChangeEvent,
   Dispatch,
   SetStateAction,
-  ChangeEvent,
+  useCallback,
+  useState,
 } from "react";
-import {
-  TextField,
-  InputAdornment,
-  Icon,
-  IconButton,
-  Select,
-  InputLabel,
-  MenuItem,
-  FormHelperText,
-  FormControl,
-} from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import Dropdown from "./dropdown";
 // import PortalPopup from "./portal-popup";
-import styles from "./operation-details.module.css";
-import FarmAutoCompleteInAddProcurement from "./FarmAutoCompleteInAddProcurement";
 import ErrorMessages from "@/components/Core/ErrorMessages";
+import FarmAutoCompleteInAddProcurement from "./FarmAutoCompleteInAddProcurement";
+import styles from "./operation-details.module.css";
+import { useRouter } from "next/router";
 
 interface pagePropTypes {
   farmOptions: string[];
@@ -37,8 +27,8 @@ interface pagePropTypes {
   setSearchString: Dispatch<SetStateAction<string>>;
   title: string;
   setTitle: Dispatch<SetStateAction<string>>;
-  dateOfOperation: string;
-  setDataOfOperation: Dispatch<SetStateAction<string>>;
+  dateOfOperation: Date | null;
+  setDataOfOperation: Dispatch<SetStateAction<Date | null>>;
   remarks: string;
   setRemarks: Dispatch<SetStateAction<string>>;
 
@@ -52,6 +42,11 @@ interface pagePropTypes {
       Partial<{ date_of_operation?: string; farm_ids?: string; title?: string }>
     >
   >;
+  editFarms?: { title: string; _id: string }[] | [];
+  setEditFarms: Dispatch<SetStateAction<{ title: string; _id: string }[] | []>>;
+
+  isDisabled: boolean;
+  setIsDisabled: Dispatch<SetStateAction<boolean>>;
 }
 const OperationDetails: NextPage<pagePropTypes> = ({
   farmOptions,
@@ -73,16 +68,21 @@ const OperationDetails: NextPage<pagePropTypes> = ({
 
   errorMessages,
   setErrorMessages,
+
+  editFarms,
+  setEditFarms,
+
+  isDisabled,
+  setIsDisabled,
 }) => {
-  const [isDropdown1Open, setDropdown1Open] = useState(false);
+  const router = useRouter();
 
-  const openDropdown1 = useCallback(() => {
-    setDropdown1Open(true);
-  }, []);
-
-  const closeDropdown1 = useCallback(() => {
-    setDropdown1Open(false);
-  }, []);
+  const deleteEditedFarms = (id: string) => {
+    let data = editFarms?.length
+      ? editFarms.filter((item) => item._id != id)
+      : [];
+    setEditFarms(data);
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -94,6 +94,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 Name Of Operation<strong style={{ color: "red" }}>*</strong>
               </label>
               <TextField
+                disabled={isDisabled}
                 className={styles.inoutbox}
                 color="primary"
                 placeholder="Enter your title here"
@@ -111,6 +112,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               </label>
               <div className={styles.datepicker}>
                 <DatePicker
+                  disabled={isDisabled}
                   label="Select Date "
                   value={dateOfOperation}
                   onChange={(newValue: any) => {
@@ -137,6 +139,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 {`Select Farm `} <strong style={{ color: "red" }}>*</strong>
               </label>
               <FarmAutoCompleteInAddProcurement
+                isDisabled={isDisabled}
                 options={farmOptions}
                 onSelectFarmFromDropDown={onSelectFarmFromDropDown}
                 label={"title"}
@@ -151,14 +154,28 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 errorMessages={errorMessages}
                 keyname={"farm_ids"}
               />
+              {router.query.procurement_id && editFarms?.length
+                ? editFarms.map((item) => {
+                    return (
+                      <Chip
+                        label={item.title}
+                        key={item._id}
+                        clickable
+                        disabled={isDisabled}
+                        onDelete={() => deleteEditedFarms(item._id)}
+                      />
+                    );
+                  })
+                : ""}
             </div>
             <div className={styles.remarks}>
               <label className={styles.nameOfOperation}>Remarks</label>
               <TextField
+                disabled={isDisabled}
                 className={styles.inputbox}
                 color="primary"
                 defaultValue="Enter your remarks here"
-                variant="filled"
+                variant="outlined"
                 multiline
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}

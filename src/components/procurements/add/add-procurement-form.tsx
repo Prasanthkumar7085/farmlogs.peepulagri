@@ -13,6 +13,10 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import { useCookies } from "react-cookie";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import getProcurementByIdService from "../../../../lib/services/ProcurementServices/getProcurementByIdService";
+import updateProcurementService from "../../../../lib/services/ProcurementServices/updateProcurementService";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 interface ApiProps {
   page: number;
@@ -29,7 +33,7 @@ const AddProcurementForm: NextPage = () => {
   const router = useRouter();
 
   const [title, setTitle] = useState("");
-  const [dateOfOperation, setDataOfOperation] = useState("");
+  const [dateOfOperation, setDataOfOperation] = useState<Date | null>(null);
   const [remarks, setRemarks] = useState("");
 
   const [farmOptions, setFarmOptions] = useState([]);
@@ -38,6 +42,11 @@ const AddProcurementForm: NextPage = () => {
   const [searchString, setSearchString] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const [editFarms, setEditFarms] = useState<
+    { title: string; _id: string }[] | []
+  >([]);
 
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     try {
@@ -116,8 +125,79 @@ const AddProcurementForm: NextPage = () => {
     }
   };
 
+  const updateProcurement = async () => {
+    setLoading(true);
+    setErrorMessages({});
+    try {
+      let data = {
+        title: title,
+        date_of_operation: dateOfOperation
+          ? new Date(dateOfOperation)?.toISOString()
+          : "",
+        remarks: remarks,
+        farm_ids: [
+          ...(farm?.length
+            ? farm.map((item: { _id: string }) => item._id)
+            : []),
+          ...(editFarms?.length
+            ? editFarms.map((item: { _id: string }) => item._id)
+            : []),
+        ],
+      };
+
+      const response = await updateProcurementService({
+        procurementId: router.query.procurement_id as string,
+        body: data,
+        token: accessToken,
+      });
+      if (response.status == 200 || response.status == 201) {
+        toast.success(response?.message);
+      } else if (response.status == 422) {
+        setErrorMessages(response?.errors);
+      } else if (response.status == 403) {
+        await logout();
+      } else if (response.status == 401) {
+        toast.error(response?.message);
+      } else {
+        throw response;
+      }
+    } catch (err) {
+      toast.error("Something went wrong!" || err);
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getProcurementData = async () => {
+    setLoading(true);
+    try {
+      const response = await getProcurementByIdService({
+        procurementId: router.query.procurement_id as string,
+        accessToken: accessToken,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        setIsDisabled(true);
+        setDataOfOperation(
+          response?.data?.date_of_operation
+            ? new Date(response?.data?.date_of_operation)
+            : null
+        );
+        setRemarks(response?.data?.remarks);
+        setTitle(response?.data?.title);
+        setEditFarms(response?.data?.farm_ids);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     if (router.isReady && accessToken) {
+      if (router.query.procurement_id) {
+        getProcurementData();
+      }
       let delay = 500;
       let debounce = setTimeout(() => {
         getFarmOptions({ searchString: searchString });
@@ -128,6 +208,13 @@ const AddProcurementForm: NextPage = () => {
   return (
     <form className={styles.addprocurementform}>
       <div className={styles.formgroup}>
+        <Button
+          variant="outlined"
+          sx={{ color: "red", borderColor: "red" }}
+          onClick={() => setIsDisabled(!isDisabled)}
+        >
+          {isDisabled ? <EditOutlinedIcon /> : <CancelOutlinedIcon />}
+        </Button>
         <OperationDetails
           farmOptions={farmOptions}
           onSelectFarmFromDropDown={onSelectFarmFromDropDown}
@@ -146,19 +233,34 @@ const AddProcurementForm: NextPage = () => {
           setRemarks={setRemarks}
           errorMessages={errorMessages}
           setErrorMessages={setErrorMessages}
+          editFarms={editFarms}
+          setEditFarms={setEditFarms}
+          isDisabled={isDisabled}
+          setIsDisabled={setIsDisabled}
         />
-        {/* <MaterialsRequired /> */}
       </div>
-      <div className={styles.modalActions}>
-        <div className={styles.buttonsgroup}>
-          <Button color="primary" variant="outlined">
-            Cancel
-          </Button>
-          <Button color="primary" variant="contained" onClick={addProcurement}>
-            Submit
-          </Button>
+      {isDisabled ? (
+        ""
+      ) : (
+        <div className={styles.modalActions}>
+          <div className={styles.buttonsgroup}>
+            <Button color="primary" variant="outlined">
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                router.query.procurement_id
+                  ? updateProcurement()
+                  : addProcurement();
+              }}
+            >
+              {router.query.procurement_id ? "Update" : "Submit"}
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
       <LoadingComponent loading={loading} />
       <Toaster closeButton richColors position="top-right" />
     </form>

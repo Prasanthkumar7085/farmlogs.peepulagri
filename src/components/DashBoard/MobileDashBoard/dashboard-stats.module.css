@@ -1,10 +1,13 @@
 .farmicon {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  overflow: hidden;
-  flex-shrink: 0;
+  width: 25px;
 }
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+}
+
 .container {
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.3);
@@ -14,15 +17,22 @@
   justify-content: flex-start;
   padding: 6px;
 }
+
+/* 
 .header,
 .lable {
   align-self: stretch;
-}
+} */
+
 .lable {
-  cursor: pointer;
-  position: relative;
+  color: #252F38;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 3.5vw, 15px);
+  font-weight: 400;
   line-height: 100%;
+
 }
+
 .header {
   display: flex;
   flex-direction: column;
@@ -30,44 +40,45 @@
   justify-content: flex-start;
   gap: 8px;
 }
-.span {
-  font-size: 18px;
-  font-weight: 500;
-  color: #000;
-}
+
+
+
 .total123 {
   margin: 0;
-  align-self: stretch;
-  position: relative;
+  color: #000;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(16px, 5vw, 18px);
+  font-style: normal;
+  font-weight: 500;
   line-height: 100%;
-  font-size: 12px;
-  color: #414e5a;
 }
+
 .dashboardstats,
-.farmscard,
-.row {
+.farmscard {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 16px;
+  gap: 12px;
 }
+
 .farmscard {
   flex: 1;
   border-radius: 8px;
-  background-color: #ddd4f2;
   overflow: hidden;
   flex-direction: column;
   padding: 12px;
 }
-.dashboardstats,
-.row {
+
+.dashboardstats {
   align-self: stretch;
   flex-direction: row;
 }
+
 .dashboardstats {
   flex-direction: column;
   text-align: left;
   font-size: 14px;
   color: #252f38;
   font-family: Inter;
+  background: #45A845;
 }

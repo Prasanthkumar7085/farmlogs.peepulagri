@@ -1,17 +1,19 @@
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import { Alert, AlertTitle, Backdrop, Button, CircularProgress, Snackbar, TextField } from "@mui/material";
+import CropsDropDown from "@/components/Core/CropsDropDown";
+import FarmsDropDown from "@/components/Core/FarmsDropDown";
+import { Alert, AlertTitle, Backdrop, Button, CircularProgress, Snackbar, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
+import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 
 
 const AddSummary = () => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const crop_id = router.query.crop_id
-    const farm_id = router.query.farm_id
+
 
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
@@ -29,19 +31,15 @@ const AddSummary = () => {
     const [success, setSuccess] = useState<any>();
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [farmOptions, setFarmOptions] = useState<any>()
+    const [cropOptions, setCropOptions] = useState<any>()
+    const [cropId, setCropId] = useState<any>()
+    const [farmId, setFarmID] = useState<any>()
 
 
-    const logout = async () => {
-        try {
-            removeCookie("userType");
-            loggedIn("loggedIn");
-            router.push("/");
-            await dispatch(removeUserDetails());
-            await dispatch(deleteAllMessages());
-        } catch (err: any) {
-            console.error(err);
-        }
-    };
+
+
+
 
     const addSummary = async () => {
         setLoading(true);
@@ -50,7 +48,7 @@ const AddSummary = () => {
         setSummaryError('');
         try {
             let body = {
-                farm_id: farm_id,
+                farm_id: farmId,
                 content: comment,
                 date: date
             };
@@ -64,7 +62,7 @@ const AddSummary = () => {
             };
 
             let response: any = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${crop_id}/day-summary`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${cropId}/day-summary`,
                 options
             );
             let responseData = await response.json();
@@ -94,6 +92,109 @@ const AddSummary = () => {
         }
     };
 
+    //get all farm options api
+    const getAllFarmsOptions = async (searchString = "") => {
+
+        try {
+            let queryParams: any = {};
+
+            if (searchString) {
+                queryParams["search_string"] = searchString
+            }
+            let options = {
+                method: "GET",
+                headers: new Headers({
+                    authorization: accessToken,
+                }),
+            };
+            let url = prepareURLEncodedParams(
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/1/100`,
+                queryParams
+            );
+
+            let response = await fetch(url, options);
+            let responseData: any = await response.json();
+            if (responseData.success) {
+                setFarmOptions(responseData.data)
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    //get all crops 
+    const getAllCropsOptions = async (searchString = "", farmId: "") => {
+
+        try {
+            let queryParams: any = {};
+
+            if (searchString) {
+                queryParams["search_string"] = searchString
+            }
+            let options = {
+                method: "GET",
+                headers: new Headers({
+                    authorization: accessToken,
+                }),
+            };
+            let url = prepareURLEncodedParams(
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmId}/crops/list`,
+                queryParams
+            );
+
+            let response = await fetch(url, options);
+            let responseData: any = await response.json();
+            if (responseData.success) {
+                setCropOptions(responseData.data)
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+    //get the search value from the farms dropDown
+    const getFarmsSearchString = (value: any) => {
+        if (value) {
+            getAllFarmsOptions(value)
+        }
+        else {
+            getAllFarmsOptions("")
+        }
+    }
+    const onSelectValueFromFarmsDropDown = (value: any) => {
+
+        if (value?._id) {
+            getAllCropsOptions("", value?._id)
+            setFarmID(value?._id)
+        }
+        else {
+            setCropOptions([])
+        }
+    }
+
+    //get the values from the crops drop down
+    const getCropSearchString = (value: any) => {
+        if (value) {
+            getAllCropsOptions(value, "")
+        }
+        else {
+            getAllFarmsOptions("")
+        }
+    }
+    const onSelectValueFromCropsDropDown = (value: any) => {
+
+        if (value) {
+            setCropId(value?._id)
+            // getAllCropsOptions("", value._id)
+        }
+    }
+    useEffect(() => {
+        if (router.isReady && accessToken) {
+            getAllFarmsOptions()
+        }
+    }, [router.isReady, accessToken])
+
     const getCurrentDate = () => {
         const currentDate = new Date();
         const year = currentDate.getFullYear();
@@ -104,13 +205,30 @@ const AddSummary = () => {
 
     return (
         <div>
-            <div>Date</div>
+            <Typography variant="caption">Farm</Typography>
+            <FarmsDropDown
+                options={farmOptions}
+                label={"title"}
+                onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
+                getFarmsSearchString={getFarmsSearchString}
+            />
+            <Typography variant="caption">Crop</Typography>
+
+            <CropsDropDown
+                options={cropOptions}
+                label={"title"}
+                onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
+                getCropSearchString={getCropSearchString}
+            />
+
+            <Typography variant="caption">Date</Typography>
             <TextField
                 type='date'
                 placeholder="Select Date"
                 color="primary"
                 variant="outlined"
                 value={date}
+                sx={{ width: "100%" }}
                 onChange={(e) => {
                     const selectedDate = new Date(e.target.value);
                     const currentDate = new Date();
@@ -125,10 +243,9 @@ const AddSummary = () => {
                     setSummaryError('');
                 }}
                 inputProps={{ max: getCurrentDate() }}
-                sx={{ background: "#fff" }}
             />
             <p style={{ color: 'red' }}>{dateError}</p>
-            <div >Comments</div>
+            <Typography variant="caption">comment</Typography>
             <TextField
                 color="primary"
                 name="desciption"

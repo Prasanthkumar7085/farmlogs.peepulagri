@@ -12,9 +12,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
-import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import DateRangePickerComponent from "./DateRangePicker";
-
 
 
 const AllSummaryComponents = () => {
@@ -25,7 +23,6 @@ const AllSummaryComponents = () => {
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
-
     const [, , removeCookie] = useCookies(["userType"]);
     const [, , loggedIn] = useCookies(["loggedIn"]);
 
@@ -55,23 +52,25 @@ const AllSummaryComponents = () => {
         }
     };
 
-    const summary = async () => {
+    const getSummary = async () => {
         setLoading(true);
         try {
-            let url = `crops/${crop_id}/day-summaries`;
-            let queryParam: any = {};
-            if (searchString && searchString.length === 2) {
-                queryParam["from_date"] = searchString[0];
-                queryParam["to_date"] = searchString[1];
-            }
-            url = prepareURLEncodedParams(url, queryParam);
+            let queryParams: any = {};
 
-            let responseData: any = await getAllFarmsService(url, accessToken);
-            console.log(responseData);
+            let options = {
+                method: "GET",
+                headers: new Headers({
+                    authorization: accessToken,
+                }),
+            };
+            let url = prepareURLEncodedParams(
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summaries/1/20`,
+                queryParams
+            );
 
-
-
-            if (responseData.status == 200) {
+            let response = await fetch(url, options);
+            let responseData: any = await response.json();
+            if (responseData.success) {
                 setLoading(true);
                 setData(responseData.data)
 
@@ -86,10 +85,10 @@ const AllSummaryComponents = () => {
 
     }
     useEffect(() => {
-        if (router.isReady) {
-            summary()
+        if (router.isReady && accessToken) {
+            getSummary()
         }
-    }, [router.isReady, searchString]);
+    }, [router.isReady, accessToken]);
 
     const captureDateValue = (fromDate: string, toDate: string) => {
         setSearchString([fromDate, toDate])
@@ -101,84 +100,26 @@ const AllSummaryComponents = () => {
     return (
         <div>
             <DateRangePickerComponent captureDateValue={captureDateValue} />
-            <TextField
-                // className={styles.searchfarm}
-                type='date'
-                color="primary"
-                name="search"
-                id="search"
-                size="small"
-                placeholder="Search by Name"
-                fullWidth={true}
-                variant="outlined"
-                value={searchString}
-                onChange={(e) => setSearchString(e.target.value)}
-                InputProps={{
-                    // endAdornment: (
-                    //   <InputAdornment position="end">
-                    //     <IconButton
-                    //       onClick={() => {
-                    //         setSearch("");
-                    //         captureSearchString("");
-                    //       }}
-                    //     >
-                    //       {search ? <ClearOutlinedIcon /> : ""}
-                    //     </IconButton>
-                    //   </InputAdornment>
-                    // ),
-                    // startAdornment: (
-                    //     <InputAdornment position="start">
-                    //         <IconButton>
-                    //             <SearchIcon />
-                    //         </IconButton>
-                    //     </InputAdornment>
-                    // ),
-                }}
-            />
-            <Card sx={{ display: 'flex' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-                        <Typography component="div" variant="subtitle1" color='blue'>
-                            {timePipe(data?.date, "DD, MMM YYYY")}
-                        </Typography>
-                        <Typography variant="subtitle1" color='black' component="div">
-                            {data?.content}
-                        </Typography>
-                    </CardContent>
 
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleMenu}
-                        color="inherit"
-                    >
-                        <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                        <MenuItem sx={{ color: 'green' }} onClick={() => router.push(`/farms/${router?.query.farm_id}/crops/${router.query.crop_id}/summary/update-summary`)}><EditIcon /></MenuItem>
-                        <MenuItem sx={{ color: 'red' }} onClick={handleClose}><DeleteIcon /></MenuItem>
-                    </Menu>
-                </Box>
 
-            </Card>
+            {data?.length ? data.map((item: any, index: any) => {
+                return (
+                    <div className={styles.summarycard}>
+                        <div className={styles.header}>
+                            <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
+                            <div className={styles.optopns}>
+                                <img className={styles.vectorIcon} alt="" src="/vector.svg" />
+                            </div>
+                        </div>
+                        <p className={styles.chilliBeingA}>
+                            {item.content}
+                        </p>
+                    </div>
+                )
+            }) : ""}
+
+
+
             <div className="addFormPositionIcon">
                 <IconButton
                     className={styles.AddSummarybtn}

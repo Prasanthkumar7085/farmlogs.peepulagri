@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps, ...rest }: any) {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        {router.pathname.includes("farms") || router.pathname.includes("dashboard") ? (
+        {router.pathname.includes("farms") || router.pathname.includes("dashboard") || router.pathname.includes("summary") ? (
           <ScoutingHeader>
             <Component {...pageProps} />
           </ScoutingHeader>

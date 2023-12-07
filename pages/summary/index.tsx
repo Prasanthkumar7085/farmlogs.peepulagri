@@ -2,7 +2,7 @@ import AllSummaryComponents from "@/components/Scouting/Crops/Summary/AllSummary
 import Header1 from "@/components/Scouting/Header/HeaderComponent";
 
 
-const Summary = () => {
+const SummaryPage = () => {
 
     return (
         <div>
@@ -11,4 +11,4 @@ const Summary = () => {
         </div>
     )
 }
-export default Summary;
+export default SummaryPage;

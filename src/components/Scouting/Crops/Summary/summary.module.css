@@ -3,4 +3,61 @@
     color: #ffffff;
     padding: 18px;
     z-index: 3 !important;
+}.date {
+    margin: 0;
+    flex: 1;
+    position: relative;
+    font-size: inherit;
+    font-weight: 500;
+    font-family: inherit;
+}
+
+.vectorIcon {
+    position: relative;
+    width: 16px;
+    height: 3.3px;
+}
+
+.header,
+.optopns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.optopns {
+    overflow: hidden;
+    justify-content: center;
+    padding: 4px 11px;
+}
+
+.header {
+    align-self: stretch;
+    justify-content: flex-start;
+}
+
+.chilliBeingA {
+    margin: 0;
+    align-self: stretch;
+    position: relative;
+    font-size: 14px;
+    line-height: 140%;
+    color: #35353d;
+}
+
+.summarycard {
+    align-self: stretch;
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 16px;
+    gap: 8px;
+    text-align: left;
+    font-size: 12px;
+    color: #05a155;
+    font-family: Inter;
 }

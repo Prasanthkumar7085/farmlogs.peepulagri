@@ -1,0 +1,126 @@
+.supportingText,
+.text {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  letter-spacing: -0.01em;
+  line-height: 100%;
+}
+.text {
+  font-size: inherit;
+  font-weight: 500;
+  font-family: inherit;
+}
+.supportingText {
+  display: flex;
+  align-items: center;
+  width: 1268px;
+  flex-shrink: 0;
+}
+.heading,
+.textAndSupportingText {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.textAndSupportingText {
+  align-self: stretch;
+  flex-direction: row;
+  align-items: center;
+  font-size: 14px;
+  color: #6a7185;
+}
+.heading {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.heading,
+.input,
+.label {
+  align-self: stretch;
+}
+.label {
+  cursor: pointer;
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.input {
+  border: 0;
+  background-color: transparent;
+}
+.inputField {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.inputbox {
+  border: 0;
+  background-color: transparent;
+  flex: 1;
+}
+.dropdown {
+  cursor: pointer;
+}
+.input1 {
+  align-self: stretch;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  border: 1px solid #d0d5dd;
+  overflow: hidden;
+  flex-direction: row;
+}
+.group,
+.input1,
+.priority,
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.row {
+  align-self: stretch;
+  flex-direction: row;
+  gap: 24px;
+  font-size: 14px;
+  color: #344154;
+}
+.group,
+.priority {
+  flex-direction: column;
+}
+.group {
+  align-self: stretch;
+  gap: 24px;
+}
+.priority {
+  width: 465px;
+  gap: 8px;
+}
+.selectbox {
+  align-self: stretch;
+  cursor: pointer;
+}
+.materialsrequired,
+.personofcontact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.personofcontact {
+  flex: 1;
+  gap: 8px;
+}
+.materialsrequired {
+  align-self: stretch;
+  gap: 24px;
+  text-align: left;
+  font-size: 18px;
+  color: #101828;
+  font-family: Inter;
+}

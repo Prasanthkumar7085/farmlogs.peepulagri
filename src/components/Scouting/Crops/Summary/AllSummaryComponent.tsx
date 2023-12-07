@@ -28,6 +28,7 @@ const AllSummaryComponents = () => {
     const [searchString, setSearchString] = useState<any>([]);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [pageNumber, setPageNumber] = useState(1);
+    const [rowId, setRowID] = useState<any>()
 
     const open = Boolean(anchorEl);
     const handleMenu = (event: any) => {
@@ -139,14 +140,22 @@ const AllSummaryComponents = () => {
                         >
                             <div className={styles.header}>
                                 <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
+                                <h4 className={styles.date}>{item?.crop_id?.title}</h4>
+
                                 <div className={styles.optopns}>
-                                    <img className={styles.vectorIcon} alt="" src="/vector.svg" onClick={(e) => handleMenu(e)} />
+                                    <img className={styles.vectorIcon} alt="" src="/vector.svg" onClick={(e) => {
+                                        handleMenu(e)
+                                        setRowID(item._id)
+                                    }} />
+
                                 </div>
                             </div>
                             <p className={styles.chilliBeingA}>
                                 {item.content}
                             </p>
+
                         </div>
+
                     )
                 }
                 else {
@@ -158,17 +167,23 @@ const AllSummaryComponents = () => {
                         >
                             <div className={styles.header}>
                                 <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
+                                <h4 className={styles.date} style={{ color: "red" }}>{item?.crop_id?.title}</h4>
                                 <div className={styles.optopns}>
-                                    <img className={styles.vectorIcon} alt="" src="/vector.svg" onClick={(e) => handleMenu(e)} />
+                                    <img className={styles.vectorIcon} alt="" src="/vector.svg" onClick={(e) => {
+                                        handleMenu(e)
+                                        setRowID(item._id)
+                                    }} />
                                 </div>
                             </div>
                             <p className={styles.chilliBeingA}>
                                 {item.content}
                             </p>
+
                         </div>
                     )
                 }
             }) : ""}
+
 
             <Menu
                 id="demo-positioned-menu"
@@ -185,10 +200,13 @@ const AllSummaryComponents = () => {
                     horizontal: 'left',
                 }}
             >
-                <MenuItem onClick={handleClose}>Edit</MenuItem>
+                <MenuItem onClick={() => {
+                    router.push(
+                        `/summary/${rowId}/edit`
+                    );
+                }}>Edit</MenuItem>
                 <MenuItem onClick={handleClose}>Delete</MenuItem>
             </Menu>
-
 
 
             <div className="addFormPositionIcon">
@@ -197,7 +215,7 @@ const AllSummaryComponents = () => {
                     aria-label="add to shopping cart"
                     onClick={() => {
                         router.push(
-                            `/farms/${router?.query.farm_id}/crops/${router.query.crop_id}/summary/add-summary`
+                            `/summary/add`
                         );
                     }}
                 >

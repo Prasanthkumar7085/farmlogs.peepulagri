@@ -37,6 +37,7 @@ const UpdateSummary = () => {
     const [cropId, setCropId] = useState<any>()
     const [farmId, setFarmID] = useState<any>()
     const [farmDefaultValue, setFarmDefaultValue] = useState<any>()
+    const [cropDefaultValue, setCropDefaultValue] = useState<any>()
 
     const logout = async () => {
         try {
@@ -100,6 +101,12 @@ const UpdateSummary = () => {
             let responseData: any = await response.json();
 
             if (responseData.status == 200) {
+                setComment(responseData?.data?.content)
+                setDate(formatDateForInput(responseData?.data?.date))
+                setFarmDefaultValue(responseData?.data?.farm_id)
+                setCropDefaultValue(responseData?.data?.crop_id)
+                getAllCropsOptions("", responseData?.data?.farm_id)
+                setFarmID(responseData?.data?.farm_id)
                 await getSingleFarmDetails(responseData?.data?.farm_id)
                 setSummaryData(responseData?.data)
 
@@ -138,7 +145,7 @@ const UpdateSummary = () => {
             let responseData: any = await response.json();
             if (responseData.success) {
                 setFarmOptions(responseData.data)
-                setFarmDefaultValue(responseData.data && responseData.data.find((item: any) => item._id == summaryData?.farm_id))
+
 
             }
         }
@@ -224,12 +231,12 @@ const UpdateSummary = () => {
         setSummaryError('');
         try {
             let body = {
-                farm_id: farm_id,
+                farm_id: farmId,
                 content: comment,
                 date: date
             };
             let options = {
-                method: "PUT",
+                method: "PATCH",
                 headers: new Headers({
                     "content-type": "application/json",
                     authorization: accessToken,
@@ -238,7 +245,7 @@ const UpdateSummary = () => {
             };
 
             let response: any = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${crop_id}/day-summary`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${cropId}/day-summary`,
                 options
             );
             let responseData = await response.json();
@@ -309,6 +316,7 @@ const UpdateSummary = () => {
                 label={"title"}
                 onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
                 getCropSearchString={getCropSearchString}
+                cropDefaultValue={cropDefaultValue}
             />
 
             <Typography variant="caption">Date</Typography>
@@ -317,7 +325,7 @@ const UpdateSummary = () => {
                 placeholder="Select Date"
                 color="primary"
                 variant="outlined"
-                value={date ? date : formatDateForInput(summaryData?.date)}
+                value={date}
                 onChange={(e) => {
                     const selectedDate = new Date(e.target.value);
                     const currentDate = new Date();
@@ -346,7 +354,7 @@ const UpdateSummary = () => {
                 fullWidth={true}
                 variant="outlined"
                 multiline
-                value={comment ? comment : summaryData?.content}
+                value={comment}
                 onChange={(e) => {
                     setComment(e.target.value);
                     setCommentError('');
@@ -355,7 +363,9 @@ const UpdateSummary = () => {
                 sx={{ background: "#fff" }}
             />
             <p style={{ color: 'red' }}>{commentError}</p>
-            <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
+                <Button type='submit' variant='contained' onClick={() => router.back()}>Cancel</Button>
+
                 <Button type='submit' variant='contained' onClick={updateSummary}>Update</Button>
             </div>
             <Snackbar

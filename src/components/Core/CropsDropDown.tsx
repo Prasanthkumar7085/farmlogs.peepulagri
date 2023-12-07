@@ -13,18 +13,27 @@ const CropsDropDown = ({
     getCropSearchString,
     optionsLoading,
     setOptionsLoading,
+    cropDefaultValue
 }: any) => {
     const [defaultValueSet, setDefaultValueSet] = useState<any>("");
     const router = useRouter();
     const dispatch = useDispatch();
 
+
     useEffect(() => {
-        if (router.isReady && !searchString) {
+
+        if (cropDefaultValue) {
             setDefaultValueSet(
-                options && options.find((item: any) => item._id == defaultValueSet)
+                options && options.find((item: any) => item._id == cropDefaultValue)
             );
         }
-    }, [router.isReady, options]);
+        else {
+            setDefaultValueSet(
+                options && options.find((item: any) => item._id == defaultValueSet?._id)
+            );
+        }
+
+    }, [options, cropDefaultValue]);
 
     return (
         <div>

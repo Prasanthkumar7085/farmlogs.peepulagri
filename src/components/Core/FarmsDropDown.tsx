@@ -20,12 +20,11 @@ const FarmsDropDown = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(farmDefaultValue, "p")
-    console.log(options)
+
     if (farmDefaultValue) {
 
       setDefaultValueSet(
-        options && options.find((item: any) => item._id == farmDefaultValue?._id)
+        options && options.find((item: any) => item._id == farmDefaultValue)
       );
     }
     else {

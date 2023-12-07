@@ -1,0 +1,95 @@
+.backbutton {
+  align-self: stretch;
+  cursor: pointer;
+}
+.label,
+.text {
+  position: relative;
+}
+.label {
+  cursor: pointer;
+  line-height: 20px;
+}
+.text {
+  margin: 0;
+  line-height: 24px;
+  font-weight: 600;
+}
+.prioritycontainer {
+  border-radius: 16px;
+  background-color: #05a155;
+  align-items: flex-end;
+  padding: 5px 15px;
+  color: #fff;
+}
+.priority,
+.prioritycontainer,
+.statuscontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.priority {
+  align-items: center;
+  gap: 8px;
+}
+.statuscontainer {
+  border-radius: 30px;
+  background-color: #83bf6e;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  overflow: hidden;
+  align-items: flex-start;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+}
+.statusrowChild {
+  align-self: stretch;
+  max-height: 100%;
+  width: 1px;
+  object-fit: cover;
+}
+.statusrowChild,
+.unselected {
+  position: relative;
+}
+.materialsReceived {
+  margin: 0;
+  position: relative;
+  line-height: 18px;
+  font-weight: 500;
+}
+.materialsreceivedcheckbox {
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #d0d5dd;
+  box-sizing: border-box;
+  height: 34px;
+  justify-content: center;
+  padding: 10px;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #35353d;
+}
+.materialsreceivedcheckbox,
+.shippedstatus,
+.statusrow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.statusrow {
+  justify-content: flex-start;
+  gap: 16px;
+}
+.shippedstatus {
+  align-self: stretch;
+  justify-content: space-between;
+  padding: 0 2px 0 0;
+  text-align: left;
+  font-size: 14px;
+  color: #344154;
+  font-family: Inter;
+}

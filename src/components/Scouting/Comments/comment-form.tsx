@@ -151,7 +151,7 @@ const CommentForm = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id}/comment`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id ? attachement?._id : router.query.image_id}/comment`,
         options
       );
       let responseData = await response.json();

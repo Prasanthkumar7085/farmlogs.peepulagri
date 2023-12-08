@@ -1,4 +1,5 @@
 import { removeOneAttachmentElement, removeTheAttachementsFilesFromStore, storeAttachementsFilesArray } from "@/Redux/Modules/Conversations";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
 import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/material";
@@ -122,8 +123,8 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
     setLoading(true)
     let body = {
       "content": comment,
-      "type": "REPLY",
-      "attachments": tempFilesStorage
+      reply_to: comment_id,
+
 
     }
     let options = {
@@ -135,7 +136,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
       body: JSON.stringify(body)
     }
     try {
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/comments/${comment_id}/reply`, options)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/add-comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
 
@@ -313,7 +314,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                      fileProgress[index] !== "fail" ? (
+                        fileProgress[index] !== "fail" ? (
                         <div className={styles.photojpg}>
                           <IconButton>
                             <DoneIcon sx={{ color: "#05A155" }} />
@@ -329,7 +330,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
                       )}
                     </div>
                     {fileProgress[index] !== 100 ||
-                    fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                       <img
                         className={styles.close41}
                         alt=""
@@ -342,7 +343,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                    fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -396,8 +397,9 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
         </div>
 
         <Button
-          className={styles.sendbutton}
-          size="medium"
+          className={
+            comment && !loading ? styles.sendbutton : styles.sendbuttonDisable
+          } size="medium"
           variant="contained"
           disabled={comment || !loading ? false : true}
           onClick={() =>
@@ -407,6 +409,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
           {loading ? "Sending..." : "Send"}
         </Button>
       </div>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

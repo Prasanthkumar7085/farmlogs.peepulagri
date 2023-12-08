@@ -1,7 +1,7 @@
 .dashboard {
-  color: #A05148 !important;
-  font-family: Inter !important;
-  font-size: clamp(20px, 5.5vw, 24px) !important;
+  color: #fff !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(16px, 3.5vw, 20px) !important;
   font-weight: 600 !important;
   line-height: normal !important;
 }
@@ -15,12 +15,15 @@
   font-weight: 300;
   display: flex;
   align-items: center;
-  gap: 3px;
-  width: 100%;
+  flex-direction: row;
+  width: 45%;
 }
 
-
-
+.logoBlock {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
 .dashboardheading,
 .selectlocation {
@@ -52,13 +55,18 @@
   justify-content: center;
 }
 
+.searchbyfarmname {
+  padding: 0 0.5rem;
+}
+
 .dashboardheader {
   flex-direction: column;
   justify-content: flex-start;
-  gap: var(--gap-base);
+  gap: 1.5rem;
   text-align: left;
   color: var(--brown);
   font-family: var(--text-sm-normal);
-  background-color: #fff;
-  padding: 2rem 1rem 1rem 1rem;
+  border-radius: 0px 0px 20px 20px;
+  background: #45A845;
+  padding: 0.5rem 0.5rem 3rem 0.5rem;
 }

@@ -21,6 +21,7 @@ type FarmDetailsMiniCardType = {
   rectangleDivBottom?: Partial<CSSProperties>;
   rectangleDivWidth?: Partial<CSSProperties>;
   rectangleDivHeight?: Partial<CSSProperties>;
+  farmDetails?: any;
 };
 
 const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
@@ -34,8 +35,8 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
   rectangleDivBottom,
   rectangleDivWidth,
   rectangleDivHeight,
+  farmDetails,
 }: any) => {
-
   const cardStyle: CSSProperties = useMemo(() => {
     return {
       top: cardTop,
@@ -44,7 +45,6 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
       left: cardLeft,
     };
   }, [cardTop, cardRight, cardAlignItems, cardLeft]);
-
 
   const vectorIconStyle: CSSProperties = useMemo(() => {
     return {
@@ -67,19 +67,11 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
     rectangleDivHeight,
   ]);
 
-
   const router = useRouter();
-  const dispatch = useDispatch();
-
-  const farmDetails = useSelector((state: any) => state.farms?.singleFarm);
-
 
   useEffect(() => {
-
     if (router.query?.farm_id && router.isReady) {
-      dispatch(setSingleFarm(router?.query?.farm_id))
     }
-
   }, [router.query?.farm_id, router.isReady]);
 
   return (
@@ -93,10 +85,14 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
         />
         <div className={styles.farm1Parent}>
           <div className={styles.farm1}>
-            {farmDetails?.title ? (farmDetails?.title?.length > 16 ?
-              (farmDetails?.title?.slice(0, 1).toUpperCase() +
-                farmDetails?.title?.slice(1, 10) + '...') :
-              farmDetails?.title[0].toUpperCase() + farmDetails?.title?.slice(1,)) : ""}
+            {farmDetails?.title
+              ? farmDetails?.title?.length > 16
+                ? farmDetails?.title?.slice(0, 1).toUpperCase() +
+                  farmDetails?.title?.slice(1, 10) +
+                  "..."
+                : farmDetails?.title[0].toUpperCase() +
+                  farmDetails?.title?.slice(1)
+              : ""}
           </div>
           <div className={styles.acres}>{farmDetails?.area} Acres</div>
         </div>

@@ -54,10 +54,10 @@ const TasksPageComponent = () => {
       queryParams["search_string"] = search_string;
     }
     if (sortBy) {
-      queryParams["order_by"] = sortBy;
+      queryParams["sort_by"] = sortBy;
     }
     if (sortType) {
-      queryParams["order_type"] = sortType;
+      queryParams["sort_type"] = sortType;
     }
     if (selectedFarmId) {
       queryParams["farm_id"] = selectedFarmId;
@@ -184,6 +184,7 @@ const TasksPageComponent = () => {
         selectedFarm={selectedFarm}
         onStatusChange={onStatusChange}
         onUserChange={onUserChange}
+        titleName={"Task Management"}
       />
       {data.length ? (
         <TasksTableComponent

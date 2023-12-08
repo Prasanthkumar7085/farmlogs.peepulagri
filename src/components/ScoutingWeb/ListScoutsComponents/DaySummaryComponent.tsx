@@ -1,7 +1,11 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import { CropType, SingleScoutResponse } from "@/types/scoutTypes";
-import { AddOutlined, EditOutlined } from "@mui/icons-material";
+import { AddOutlined } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import SendIcon from "@mui/icons-material/Send";
 import {
   Button,
@@ -12,19 +16,16 @@ import {
   TextField,
 } from "@mui/material";
 import { Markup } from "interweave";
+import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
+import formatText from "../../../../lib/requestUtils/formatTextToBullets";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
 import postrecomendationsService from "../../../../lib/services/ScoutServices/postrecomendationsService";
 import styles from "../Scouting/ViewScouting/ScoutingDetails.module.css";
 import style from "./DaySummary.module.css";
-import ImageComponent from "@/components/Core/ImageComponent";
-import EditIcon from "@mui/icons-material/Edit";
-import { useRouter } from "next/router";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import formatText from "../../../../lib/requestUtils/formatTextToBullets";
 
 interface pageProps {
   openDaySummary: boolean;
@@ -57,6 +58,9 @@ const DaySummaryComponent: FC<pageProps> = ({
   const userType = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const getCropName = (cropId: string, crops: Array<CropType>) => {
     if (crops.length) {
@@ -126,13 +130,9 @@ const DaySummaryComponent: FC<pageProps> = ({
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {

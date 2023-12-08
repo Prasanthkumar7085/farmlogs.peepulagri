@@ -1,0 +1,283 @@
+.infiniteScrollComponent {
+    max-height: calc(100vh - 130px);
+    overflow-y: scroll !important;
+    scroll-snap-type: y mandatory !important;
+}
+
+#snapScroll {
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+}
+
+.remondationsdiv {
+    height: 100%;
+    width: 100%;
+    text-align: end;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.recomendations {
+    padding: 1rem;
+}
+
+.overlay {
+    position: relative;
+    max-width: 100%;
+    min-height: 300px;
+    background: radial-gradient(circle at 18.7% 37.8%, rgb(226, 226, 226) 0%, rgb(230, 230, 230) 90%);
+    ;
+}
+
+.button {
+    background-color: #000000b3 !important;
+    color: #0dde0d;
+    border: #0dde0d;
+    border-radius: 10px;
+}
+
+.button :hover {
+    border-color: #0dde0d !important;
+    color: #0dde0d;
+
+}
+
+.btnContent {
+    gap: 10px;
+    display: flex;
+}
+
+
+.postDate {
+    font-family: "Inter", sans-serif;
+    font-size: clamp(10px, 3vw, 14px);
+    font-weight: 600;
+    line-height: 1.5;
+    color: #2B53BE;
+    background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-grow: 1;
+}
+
+.scrollToTopLink {
+    text-decoration: none;
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% 50%;
+    background: #0bbb0b;
+    z-index: 10;
+    color: #fff;
+}
+
+.noMoreImages {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.noMoreImages p {
+    border: 2px solid #929394;
+    background-color: #dcdee0;
+    border-radius: 2rem;
+    padding: .7rem 2rem;
+    font-weight: bold;
+}
+.AddTagsDrawer {
+  border-radius: 10px 0 0;
+  overflow: hidden;
+  z-index: 1500;
+}
+
+.AddTagsDrawer .MuiDialog-paper {
+  background-color: var(--background);
+}
+
+.drawerHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--background);
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  z-index: 100;
+}
+
+.drawerHeading h6 {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(18px, 4vw, 18px);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #3462CF;
+}
+
+.drawerHeading svg {
+  width: 25px;
+  height: 25px;
+}
+
+.drawerHeading svg path {
+  fill: #3462cf;
+}
+
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.drawerBody .findingDec {
+  display: flex;
+  flex-direction: column;
+}
+
+.findingDec .bodyHeading {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(14px, 4vw, 16px);
+  font-weight: 400;
+  line-height: 140%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bodyDescription {
+  color: #6A7185;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 4vw, 14px);
+  font-weight: 400;
+  line-height: 150%;
+  margin-bottom: 1rem;
+}
+
+.drawerFooter,
+.drawerBody {
+  padding: 1rem 1rem;
+  background-color: var(--background);
+}
+
+.drawerFooter {
+  text-align: right;
+}
+
+
+.label {
+  margin-bottom: 0.24rem;
+  font-size: 1rem;
+  color: var(--gray-700);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  line-height: 1.42;
+}
+
+.inputBox {
+  margin-bottom: 1rem;
+}
+
+.submitBtn {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  line-height: 1.5;
+  /* 150% */
+  border-radius: 6px !important;
+  /* background: var(--Blue-Gradient, linear-gradient(142deg, #3462cf 0%, #2b53be 97.71%)) !important; */
+  text-transform: capitalize;
+  color: var(--white) !important;
+  min-width: 120px !important;
+  box-shadow: none !important;
+}
+
+.submitBtnSuccess 
+.submitBtnSuccess :hover
+{
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  /* 150% */
+  border-radius: 8px;
+  border: 1px solid var(--Green-Gradient, #05A155);
+  background: var(--Green-Gradient, #05A155);
+  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05);
+  text-transform: capitalize;
+  color: var(--white);
+}
+
+/* //update */
+.updateTagDrawerHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 0.5rem;
+}
+
+.updateTagDrawerHeading p {
+  color: #000;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 500;
+}
+
+.updateSubmitBtn {
+  text-transform: capitalize !important;
+  border-radius: 8px;
+  border: 1px solid #3462CF;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
+  color: var(--White, #FFF);
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(14px, 3vw, 14px);
+  font-weight: 500;
+  line-height: 24px;
+  margin-top: 1rem;
+  min-width: inherit;
+}
+
+.updateSubmitBtnDisabled{
+  text-transform: capitalize !important;
+  border-radius: 8px;
+  border: 1px solid #bababa !important;
+  background: linear-gradient(142deg, #a1a1a1 0%, #bababa 97.71%) !important;
+  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
+  color: var(--White, #dedede) !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(14px, 3vw, 14px);
+  font-weight: 500;
+  line-height: 24px;
+  margin-top: 1rem;
+  min-width: inherit;
+}
+
+.tagNames {
+  align-items: center;
+  gap: 0.7rem;
+  height: auto;
+  padding:1rem;
+  background-color: #d7ffeb;
+  border-bottom: 1px solid #bcdecd;
+}
+.tagNames [class*="MuiChip-outlined"]{
+  background: #ffffff84;
+  overflow: hidden;
+}

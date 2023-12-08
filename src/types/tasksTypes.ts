@@ -23,6 +23,7 @@ export interface TaskResponseTypes {
     title: string;
     _id: string;
   };
+  assign_to: Array<{ _id: string; name: string }>;
   title: string;
   description: string;
   categories: Array<string>;
@@ -54,4 +55,21 @@ export interface FarmInTaskType {
   updatedAt: string;
   user_id: string;
   location: string;
+}
+
+
+export interface TasksLogsResponseType {
+  _id: string;
+  task_id: {
+    _id: string;
+    title: string;
+  };
+  message: string;
+  type: string;
+  user_id: {
+    _id: string;
+    name: string;
+  };
+  createdAt: string;
+  updatedAt: string;
 }

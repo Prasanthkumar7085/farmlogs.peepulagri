@@ -1,21 +1,20 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { setAllFarms } from "@/Redux/Modules/Farms";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import TablePaginationForFarms from "@/components/Core/TablePaginationForFarms";
+import { FarmDataType } from "@/types/farmCardTypes";
+import SortIcon from "@mui/icons-material/Sort";
+import { List, ListItem, Menu, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import ScoutingFarmDetailsCard from "./FarmDetailsCard";
 import FarmsNavBarWeb from "./FarmsNavBar";
 import styles from "./FarmsNavBar.module.css";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { FarmDataType } from "@/types/farmCardTypes";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
-import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
-import { setAllFarms } from "@/Redux/Modules/Farms";
-import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
-import TablePaginationForFarms from "@/components/Core/TablePaginationForFarms";
-import { List, ListItem, Menu, Typography } from "@mui/material";
-import SortIcon from "@mui/icons-material/Sort"
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import { id } from "date-fns/locale";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 
 interface callFarmsProps {
   search_string: string;
@@ -33,6 +32,9 @@ const AllFarmsPage = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [data, setData] = useState<Array<FarmDataType>>([]);
   const [paginationDetails, setPaginationDetails] = useState<any>();
@@ -91,7 +93,7 @@ const AllFarmsPage = () => {
   }: callFarmsProps) => {
     setLoading(true);
     try {
-      let url = `farm/${page}/${limit}`;
+      let url = `farms/${page}/${limit}`;
       let queryParam: any = {
         order_by: "createdAt",
         order_type: "desc",
@@ -129,7 +131,6 @@ const AllFarmsPage = () => {
         const { data, ...rest } = response;
         setData(data);
         setPaginationDetails(rest);
-        dispatch(setAllFarms(data));
       } else if (response?.statusCode == 403) {
         await logout();
       }
@@ -141,13 +142,9 @@ const AllFarmsPage = () => {
   };
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {

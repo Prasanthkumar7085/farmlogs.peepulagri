@@ -1,0 +1,284 @@
+.label {
+  position: relative;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  font-family: Inter;
+  color: #344154;
+  text-align: left;
+}
+.inputField {
+  width: 295px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px 5px 2px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.th {
+  position: relative;
+  padding-right: 5px;
+  padding-bottom: 5px;
+}
+.available {
+  color: #344154;
+}
+.qty {
+  color: #6a7185;
+}
+.label1 {
+  position: relative;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  font-family: Inter;
+  text-align: left;
+}
+.inputField1 {
+  width: 158px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px 5px 2px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.label3 {
+  position: relative;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  font-family: Inter;
+  color: #344054;
+  text-align: left;
+}
+.inputField3,
+.inputField4,
+.inputField5 {
+  width: 159px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px 5px 2px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.inputField4,
+.inputField5 {
+  width: 277px;
+}
+.inputField5 {
+  width: 105px;
+}
+.price {
+  color: #344054;
+}
+.inputField7 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px 5px 2px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+.inputField8 {
+  width: 1px;
+  height: 100%;
+}
+.th8 {
+  position: relative;
+  padding-bottom: 5px;
+}
+.tr {
+  background-color: #fff;
+}
+.dropdownText,
+.text {
+  position: relative;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: Inter;
+  text-align: left;
+}
+.text {
+  text-transform: capitalize;
+  font-weight: 500;
+  color: #35353d;
+  display: inline-block;
+  width: 258px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.dropdownText {
+  color: #101828;
+}
+.inputField10,
+.inputField11 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.inputField10 {
+  border-right: 1px solid #e9edf1;
+  border-left: 1px solid #e9edf1;
+  width: 160px;
+}
+.inputField11 {
+  width: 158px;
+}
+.dropdownText2 {
+  align-self: stretch;
+  position: relative;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: Inter;
+  color: #101828;
+  text-align: left;
+}
+.inputField12,
+.inputField13 {
+  border-radius: 0 5px 5px 0;
+  background-color: #f5f7fa;
+  border-left: 1px solid #e9edf1;
+  box-sizing: border-box;
+  width: 158px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5px 10px;
+  height: 100%;
+}
+.inputField13 {
+  width: 278px;
+  justify-content: flex-start;
+}
+.shipped {
+  position: relative;
+  font-size: 14px;
+  font-family: Inter;
+  color: #101828;
+  text-align: left;
+}
+.button,
+.inputField14 {
+  display: flex;
+  flex-direction: row;
+}
+.button {
+  border-radius: 30px;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.05);
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+}
+.inputField14 {
+  border-radius: 0 5px 5px 0;
+  border-left: 1px solid #e9edf1;
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px;
+  width: 100%;
+  height: 100%;
+}
+.inputField14,
+.inputField15,
+.tr1 {
+  background-color: #f5f7fa;
+}
+.inputField15 {
+  border-radius: 0 5px 5px 0;
+  border-left: 1px solid #e9edf1;
+  box-sizing: border-box;
+  width: 158px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px;
+  height: 100%;
+}
+.tr1 {
+  border-radius: 5px;
+}
+.inputField35,
+.row {
+  width: 293px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.inputField35 {
+  border-radius: 0 5px 5px 0;
+  background-color: #f5f7fa;
+  border-left: 1px solid #e9edf1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.dropdownText29 {
+  position: relative;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: Inter;
+  color: #101828;
+  text-align: left;
+}
+.inputField44 {
+  width: 1150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 7px 16px 7px 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.td42 {
+  position: relative;
+  padding-right: 5px;
+}
+.dropdownText30 {
+  position: relative;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: Inter;
+  color: #fff;
+  text-align: left;
+}
+.inputField45 {
+  background: linear-gradient(142.18deg, #3462cf, #2b53be);
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 7px 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.td43 {
+  position: relative;
+}
+.table {
+  align-self: stretch;
+  gap: 5px;
+  width: 50%;
+}

@@ -13,25 +13,28 @@ import getAllUsersService from "../../../../lib/services/Users/getAllUsersServic
 interface PropsType {
   userId: string;
   onChange: (assigned_to: any) => void;
+  assignee: Array<{ _id: string; name: string }>
 }
-const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
+
+const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assignee }) => {
   const router = useRouter();
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
 
   const [userData, setUserData] = useState<Array<any>>([]);
-  const [defaultValue, setDefaultValue] = useState<any | null>();
+  const [selectedUsers, setSelectedUsers] = useState<Array<any>>([]);
   const [loading, setLoading] = useState(false);
   const [userLoaded, setUserLoaded] = useState(false);
 
   const captureUser = (event: any, selectedObject: any) => {
-    if (selectedObject && Object.keys(selectedObject).length) {
-      setDefaultValue(selectedObject);
+    if (selectedObject) {
+      setSelectedUsers(selectedObject);
       onChange(selectedObject);
     } else {
-      setDefaultValue(null);
-      onChange("");
+      setSelectedUsers([]);
+      onChange([]);
     }
   };
 
@@ -46,7 +49,7 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
       if (id) {
         let obj = response?.data?.find((item: any) => item._id == id);
 
-        setDefaultValue(obj);
+        setSelectedUsers([obj]); // Use setSelectedUsers to set the default value
         setUserLoaded(true);
         setTimeout(() => {
           setUserLoaded(false);
@@ -75,25 +78,33 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
               paddingBlock: "5px !important",
               background: "#fff",
             },
-
           }}
           id="size-small-outlined-multi"
           size="small"
           fullWidth
+          multiple
           noOptionsText={"No such User"}
-          value={defaultValue}
+          value={selectedUsers}
           isOptionEqualToValue={(option: any, value: any) =>
             option._id === value._id
           }
           renderOption={(props, option) => {
             return (
               <li {...props} key={option._id}>
-                {option.full_name}
+                {option.name}
               </li>
             );
           }}
-          getOptionLabel={(option: any) => option.full_name}
-          options={userData}
+          getOptionDisabled={(option) =>
+            assignee?.length
+              ? assignee?.some(
+                (item) =>
+                  item?._id === option?._id && item?.name === option?.name
+              )
+              : false
+          }
+          getOptionLabel={(option: any) => option.name}
+          options={userData ? userData : []}
           onChange={captureUser}
           renderInput={(params) => (
             <TextField
@@ -118,4 +129,5 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange }) => {
     </div>
   );
 };
+
 export default UserOptionsinViewTasks;

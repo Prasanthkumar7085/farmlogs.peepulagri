@@ -23,6 +23,7 @@ interface PropTypes {
   selectedFarm: FarmInTaskType | null | undefined;
   onStatusChange: (value: string) => void;
   onUserChange: (e: any, value: userTaskType) => void;
+  titleName: any
 }
 
 const NavBarContainer: React.FC<PropTypes> = ({
@@ -32,6 +33,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
   selectedFarm,
   onStatusChange,
   onUserChange,
+  titleName
 }) => {
   const router = useRouter();
 
@@ -51,9 +53,11 @@ const NavBarContainer: React.FC<PropTypes> = ({
   >();
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
-    { value: "TODO", title: "Todo" },
-    { value: "IN-PROGRESS", title: "In-Progress" },
-    { value: "COMPLETED", title: "Completed" },
+    { value: "TO-START", title: "To-Start" },
+    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "DONE", title: "Done" },
+    { value: "PENDING", title: "Pending" },
+    { value: "OVER-DUE", title: "Over-due" },
   ]);
 
   const setStatusValue = (e: any) => {
@@ -68,7 +72,12 @@ const NavBarContainer: React.FC<PropTypes> = ({
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
-    router.push("/tasks/add");
+    if (titleName == "Procurment Module") {
+      router.push("/procurements/add");
+
+    } else {
+      router.push("/tasks/add");
+    }
   }, []);
 
   const getAllFarms = async () => {
@@ -90,66 +99,21 @@ const NavBarContainer: React.FC<PropTypes> = ({
     }
   };
 
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      getAllFarms();
-      getAllUsers();
-    }
-  }, [router.isReady, accessToken]);
+  // useEffect(() => {
+  //   if (router.isReady && accessToken) {
+  //     getAllFarms();
+  //     getAllUsers();
+  //   }
+  // }, [router.isReady, accessToken]);
 
   return (
     <>
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
           <img className={styles.note1Icon} alt="" src="/note-11.svg" />
-          <h1 className={styles.taskManagement}>{`Task Management`}</h1>
+          <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>
         <div className={styles.headeractions}>
-          {/* <div>
-            <Autocomplete
-              sx={{
-                width: "250px",
-                maxWidth: "250px",
-                borderRadius: "4px",
-              }}
-              id="size-small-outlined-multi"
-              size="small"
-              fullWidth
-              noOptionsText={"No such User"}
-              value={user ? user : ""}
-              isOptionEqualToValue={(option: any, value: any) =>
-                option.full_name === value.full_name
-              }
-              getOptionLabel={(option: any) => option.full_name}
-              options={users?.length ? users : []}
-              onChange={onUserChange}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Search by User"
-                  variant="outlined"
-                  size="small"
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                      backgroundColor: "#fff",
-                      border: "none",
-                    },
-                  }}
-                />
-              )}
-            />
-          </div> */}
-          <div style={{ width: "25%" }}>
-            <FarmAutoCompleteInAddTask
-              options={farmOptions}
-              onSelectValueFromDropDown={onSelectValueFromDropDown}
-              label={"title"}
-              placeholder={"Select Farm here"}
-              loading={false}
-              defaultValue={selectedFarmOption}
-            />
-          </div>
           <div style={{ width: "12%" }}>
             <SelectComponent
               options={statusOptions}
@@ -181,7 +145,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
               }}
             />
           </div>
-          {userType !== "USER" ? (
+          {userType !== "farmer" ? (
             <Button
               className={styles.filter}
               color="primary"

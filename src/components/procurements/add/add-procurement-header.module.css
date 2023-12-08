@@ -1,0 +1,40 @@
+.backbutton {
+  align-self: stretch;
+  cursor: pointer;
+}
+.largetext,
+.smalltext {
+  align-self: stretch;
+  position: relative;
+  line-height: 100%;
+}
+.smalltext {
+  cursor: pointer;
+}
+.largetext {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  font-family: inherit;
+  color: #a05148;
+}
+.addprocurementheader,
+.textwrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.textwrapper {
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+.addprocurementheader {
+  align-self: stretch;
+  flex-direction: row;
+  gap: 16px;
+  text-align: left;
+  font-size: 12px;
+  color: #000;
+  font-family: Inter;
+}

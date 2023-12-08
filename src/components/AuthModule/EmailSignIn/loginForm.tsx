@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styles from "../SignUp/SignUp.module.css";
 import { useCookies } from "react-cookie";
+import { Toaster, toast } from "sonner";
 
 export default function SigninEmail() {
   const dispatch = useDispatch();
@@ -51,9 +52,6 @@ export default function SigninEmail() {
       );
       const res = await response.json();
       if (response.status == 200 || response.status == 201) {
-        // Cookies.set("loggedIn", "true");
-        // Cookies.set("userType", res?.data?.user_details?.user_type);
-
         loggedIn("loggedIn", "true");
         userType("userType", res?.data?.user_details?.user_type);
 
@@ -61,12 +59,10 @@ export default function SigninEmail() {
           dispatch(setUserDetails(res?.data));
         }
 
-        if (res?.data?.user_details?.user_type == "ADMIN") {
+        if (res?.data?.user_details?.user_type == "agronomist") {
           router.push("/scouts");
-        } else if (res?.data?.user_details?.user_type == "USER") {
-          router.push("/farms");
-        } else if (res?.data?.user_details?.user_type == "AGRONOMIST") {
-          router.push("/scouts");
+        } else if (res?.data?.user_details?.user_type == "farmer") {
+          router.push("/dashboard");
         }
       }
       if (response.status == 422) {
@@ -185,11 +181,11 @@ export default function SigninEmail() {
             ) : (
               ""
             )}
-            <div style={{ textAlign: "end" }}>
-              {/* <div onClick={forgotButton} className={styles.forgotBtn}>
+            {/* <div style={{ textAlign: "end" }}>
+              <div onClick={forgotButton} className={styles.forgotBtn}>
                 Forgot Password?
-              </div> */}
-            </div>
+              </div>
+            </div> */}
           </div>
 
           <Button

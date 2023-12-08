@@ -40,13 +40,13 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/farm"),
       toolTitle: "Farms",
     },
-    // {
-    //   src: "/support-icon.svg",
-    //   link: "/support",
-    //   isVisible: true,
-    //   active: router.pathname.includes("/support"),
-    //   toolTitle: "Support",
-    // },
+    {
+      src: "/support-icon.svg",
+      link: "/procurements",
+      isVisible: true,
+      active: router.pathname.includes("/procurements"),
+      toolTitle: "Procurements",
+    },
     // {
     //   src: "/timeline-icon.svg",
     //   link: "/timeline",
@@ -61,13 +61,13 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/scouts"),
       toolTitle: "Scouts",
     },
-    // {
-    //   src: "/tasks-menu-icon.svg",
-    //   link: "/tasks",
-    //   isVisible: userName !== "ADMIN",
-    //   active: router.pathname.includes("/tasks"),
-    //   toolTitle: "Tasks",
-    // },
+    {
+      src: "/tasks-menu-icon.svg",
+      link: "/tasks",
+      isVisible: userName !== "ADMIN",
+      active: router.pathname.includes("/tasks"),
+      toolTitle: "Tasks",
+    },
     // { src: '/calendaricon.svg', link: "/" },
     // { src: '/graph-icon.svg', link: "/" },
   ];
@@ -152,8 +152,8 @@ const SideBarMenu = ({ children }: any) => {
         </aside>
         <div className={styles.main}>{children}</div>
       </div>
-      <div id="mobile-view">
-        {userName == "USER" ? (
+      {/* <div id="mobile-view">
+        {userName == "farmer" ? (
           <div style={{ width: "100%", textAlign: "center" }}>
             <Button
               sx={{
@@ -162,7 +162,7 @@ const SideBarMenu = ({ children }: any) => {
                 background: "green",
               }}
               variant={"contained"}
-              onClick={() => router.push("/farms")}
+              onClick={() => router.push("/dashboard")}
             >
               {" "}
               <NorthWestIcon sx={{ color: "#fff", fontSize: "1.5rem" }} /> Go To
@@ -172,6 +172,7 @@ const SideBarMenu = ({ children }: any) => {
         ) : (
           <div className={styles.enableDesktop}>
             <div className={styles.noScreen}>Please! Enable desktop view</div>
+            <div className={styles.noScreen}>(or)</div>
             <Button
               className={styles.logout}
               variant={"outlined"}
@@ -182,7 +183,7 @@ const SideBarMenu = ({ children }: any) => {
             </Button>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

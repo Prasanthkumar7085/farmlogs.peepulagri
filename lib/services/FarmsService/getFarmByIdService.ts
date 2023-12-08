@@ -1,11 +1,11 @@
 
-const getFarmByIdService = async (farmId: string,accessToken:string) => {
+const getFarmByIdService = async (farmId: string, accessToken: string) => {
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}`
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmId}`
     let options = {
         method: "GET",
         headers: new Headers({
-            'authorization':accessToken
+            'authorization': accessToken
         })
     }
     try {

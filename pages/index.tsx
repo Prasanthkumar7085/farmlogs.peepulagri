@@ -16,17 +16,17 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { cookies } = req;
 
   if (cookies.loggedIn == "true") {
-    if (cookies.userType == "USER") {
+    if (cookies.userType == "farmer") {
       return {
         redirect: {
-          destination: `/farms`,
+          destination: `/dashboard`,
           permanent: false,
         },
       };
     }
     return {
       redirect: {
-        destination: `/farm`,
+        destination: `/dashboard`,
         permanent: false,
       },
     };

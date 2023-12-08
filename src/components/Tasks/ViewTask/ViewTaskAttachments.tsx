@@ -4,15 +4,23 @@ import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Button, Checkbox, CircularProgress, IconButton } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  CircularProgress,
+  Collapse,
+  IconButton,
+} from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import appendAttachmentsInTaskService from "../../../../lib/services/TasksService/appendAttachmentsInTaskService";
 import deleteTaskAttachmentService from "../../../../lib/services/TasksService/deleteTaskAttachmentService";
 import TasksAttachments from "../AddTask/TasksAttachments";
 import styles from "./TaskDetails.module.css";
+import timePipe from "@/pipes/timePipe";
+import { Clear, EditOutlined } from "@mui/icons-material";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -25,6 +33,10 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const userType = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?.user_type
+  );
+
   const [selectedAttachmentIds, setSelectedAttachmentsIds] = useState<
     Array<string>
   >([]);
@@ -32,6 +44,52 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
   const [files, setFiles] = useState([]);
+  const [attachmentData, setAttachmentData] = useState<any>();
+  const [isEditable, setIsEditable] = useState(false);
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      getAllAttachments();
+    }
+  }, [router.isReady, accessToken]);
+
+  //get all attachment
+  function groupByDate(array: Array<any>) {
+    const groupedByDate = array.reduce((result, obj) => {
+      const dateKey = obj.createdAt.split("T")[0]; // Extract the date from the timestamp
+      if (!result[dateKey]) {
+        result[dateKey] = [];
+      }
+      result[dateKey].push(obj);
+      return result;
+    }, {});
+    return Object.values(groupedByDate).reverse();
+  }
+
+  const getAllAttachments = async () => {
+    setLoading(true);
+    let options = {
+      method: "GET",
+      headers: new Headers({
+        authorization: accessToken,
+      }),
+    };
+    try {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router?.query?.task_id}/attachments`,
+        options
+      );
+      let responseData = await response.json();
+      if (responseData.status >= 200 && responseData.status <= 300) {
+        let modifiedData = groupByDate(responseData?.data?.attachments);
+        setAttachmentData([...modifiedData]);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const setUploadedFiles = (filesUploaded: any) => {
     setFiles(filesUploaded);
@@ -102,6 +160,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     e: ChangeEvent<HTMLInputElement>,
     item: TaskAttachmentsType
   ) => {
+    console.log(item, "lhh");
     setUploadAttachmentsOpen(false);
     let ids = [...selectedAttachmentIds];
     if (ids.includes(item?._id)) {
@@ -109,6 +168,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     } else {
       ids.push(item?._id);
     }
+    console.log(ids, "pp");
     setSelectedAttachmentsIds(ids);
   };
 
@@ -124,7 +184,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     if (response?.success) {
       toast.success(response?.message);
       setSelectedAttachmentsIds([]);
-      getTaskById(router.query.task_id as string);
+      getAllAttachments();
     } else {
       toast.error(response?.message);
     }
@@ -134,38 +194,13 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
 
   const [uploadAttachmentsOpen, setUploadAttachmentsOpen] = useState(false);
 
-  const savetheAttachments = async () => {
-    setLoading(true);
-    try {
-      let body = {
-        attachments: files,
-      };
-
-      const response = await appendAttachmentsInTaskService({
-        taskId: data?._id as string,
-        body: body,
-        token: accessToken,
-      });
-      if (response?.success) {
-        toast.success(response?.message);
-        setUploadAttachmentsOpen(!uploadAttachmentsOpen);
-        setFiles([]);
-        setMultipleFiles([]);
-        getTaskById(data?._id as string);
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+  const afterUploadAttachements = (value: any) => {
+    if (value == true) {
+      setUploadAttachmentsOpen(!uploadAttachmentsOpen);
+      setFiles([]);
+      setMultipleFiles([]);
+      getAllAttachments();
     }
-  };
-
-  const cancelUpload = () => {
-    setUploadAttachmentsOpen(!uploadAttachmentsOpen);
-    setFiles([]);
-    setMultipleFiles([]);
   };
 
   return (
@@ -188,133 +223,143 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
         >
           Attachments
         </label>
-        {selectedAttachmentIds?.length ? (
-          <Button
-            onClick={deleteSelectedImages}
-            disabled={!selectedAttachmentIds?.length || deleteLoading}
-          >
-            {deleteLoading ? (
-              <CircularProgress size="1.5rem" sx={{ color: "red" }} />
-            ) : (
-              <ImageComponent
-                src="/trast-icon.svg"
-                height={17}
-                width={17}
-                alt="delete"
-              />
-            )}
-          </Button>
+        {userType == "farmer" ? (
+          ""
+        ) : selectedAttachmentIds?.length ? (
+          <div>
+            <IconButton
+              onClick={() => {
+                setIsEditable(false);
+                setSelectedAttachmentsIds([]);
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+            <IconButton
+              onClick={deleteSelectedImages}
+              disabled={!selectedAttachmentIds?.length || deleteLoading}
+            >
+              {deleteLoading ? (
+                <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+              ) : (
+                <ImageComponent
+                  src="/trast-icon.svg"
+                  height={17}
+                  width={17}
+                  alt="delete"
+                />
+              )}
+            </IconButton>
+          </div>
         ) : (
-          <IconButton
-            onClick={() => setUploadAttachmentsOpen(!uploadAttachmentsOpen)}
-          >
-            {uploadAttachmentsOpen ? <ClearIcon /> : <AddIcon />}
-          </IconButton>
+          <div>
+            <IconButton onClick={() => setIsEditable(!isEditable)}>
+              {isEditable ? <ClearIcon /> : <EditOutlined />}
+            </IconButton>
+            <IconButton
+              onClick={() => setUploadAttachmentsOpen(!uploadAttachmentsOpen)}
+            >
+              {uploadAttachmentsOpen ? <ClearIcon /> : <AddIcon />}
+            </IconButton>
+          </div>
         )}
       </div>
-
+      <Collapse in={uploadAttachmentsOpen}>
+        <div>
+          <TasksAttachments
+            taskId={""}
+            setUploadedFiles={setUploadedFiles}
+            multipleFiles={multipleFiles}
+            setMultipleFiles={setMultipleFiles}
+            afterUploadAttachements={afterUploadAttachements}
+          />
+        </div>
+      </Collapse>
       <div className={styles.allAttachments}>
-        {data?.attachments?.length
-          ? data?.attachments?.map(
+        {attachmentData?.length
+          ? attachmentData?.map(
               (item: TaskAttachmentsType | any, index: number) => {
                 return (
                   <div key={index}>
-                    <div className={styles.singleAttachment}>
-                      <div className={styles.attachmentDetails}>
-                        <div className={styles.checkGrp}>
-                          <Checkbox
-                            size="small"
-                            sx={{ padding: "0" }}
-                            onChange={(e) => selectImagesForDelete(e, item)}
-                          />
-                          <ImageComponent
-                            src={getSourceForThumnail(item.type)}
-                            height={20}
-                            width={20}
-                            alt={"image"}
-                          />
-                          <p
-                            onClick={() => window.open(item.url)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            {item?.original_name?.length > 25
-                              ? item?.original_name.slice(0, 22) + "..."
-                              : item?.original_name}
-                          </p>
-                        </div>
+                    <p className={styles.AttachmentDate}>
+                      {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
+                    </p>
+                    {item?.map((image: any) => {
+                      return (
+                        <div key={index}>
+                          <div className={styles.singleAttachment}>
+                            <div className={styles.attachmentDetails}>
+                              <div className={styles.checkGrp}>
+                                <Checkbox
+                                  size="small"
+                                  sx={{
+                                    padding: "0",
+                                    display: isEditable ? "" : "none",
+                                  }}
+                                  onChange={(e) =>
+                                    selectImagesForDelete(e, image)
+                                  }
+                                  checked={selectedAttachmentIds.includes(
+                                    image?._id
+                                  )}
+                                />
+                                <ImageComponent
+                                  src={image.url}
+                                  height={20}
+                                  width={20}
+                                  alt={"image"}
+                                />
+                                <p
+                                  onClick={() => window.open(image.url)}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  {image?.key?.length > 25
+                                    ? image?.key.slice(0, 22) + "..."
+                                    : image?.key}
+                                </p>
+                              </div>
 
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
 
-                            gap: "10px",
-                          }}
-                        >
-                          <IconButton
-                            onClick={() => {
-                              downLoadAttachements(item.url);
-                            }}
-                          >
-                            <ImageComponent
-                              src={"/download-1-1.svg"}
-                              height={20}
-                              width={20}
-                              alt={"image"}
-                            />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => {
-                              // downLoadAttachements(item.url);
-                              window.open(item.url);
-                            }}
-                          >
-                            <OpenInNewIcon />
-                          </IconButton>
+                                  gap: "10px",
+                                }}
+                              >
+                                <IconButton
+                                  onClick={() => {
+                                    downLoadAttachements(image.url);
+                                  }}
+                                >
+                                  <ImageComponent
+                                    src={"/download-1-1.svg"}
+                                    height={20}
+                                    width={20}
+                                    alt={"image"}
+                                  />
+                                </IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    // downLoadAttachements(item.url);
+                                    window.open(image.url);
+                                  }}
+                                >
+                                  <OpenInNewIcon />
+                                </IconButton>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
                 );
               }
             )
           : "No Attachements"}
       </div>
-      {uploadAttachmentsOpen ? (
-        <div>
-          <TasksAttachments
-            farmId={data?.farm_id?._id}
-            setUploadedFiles={setUploadedFiles}
-            multipleFiles={multipleFiles}
-            setMultipleFiles={setMultipleFiles}
-          />
-          <div
-            style={{
-              minHeight: "30px",
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "10px",
-            }}
-          >
-            <Button
-              className={styles.canceleBtn}
-              variant="outlined"
-              onClick={() => cancelUpload()}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => savetheAttachments()}
-              className={styles.saveBtn}
-            >
-              Save
-            </Button>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
+
       <Toaster richColors position="top-right" closeButton />
 
       <LoadingComponent loading={loading} />

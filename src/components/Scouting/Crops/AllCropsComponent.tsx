@@ -19,6 +19,7 @@ import styles from "./crop-card.module.css";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { useCookies } from "react-cookie";
 
 const AllCropsComponent = () => {
   const router = useRouter();
@@ -30,8 +31,8 @@ const AllCropsComponent = () => {
 
   const [defaultValue, setDefaultValue] = useState<any>("");
   const [formId, setFormId] = useState<any>();
-  const [formOptions, setFarmOptions] = useState<any>();
-  const [cropOptions, setCropOptions] = useState<any>();
+  const [formOptions, setFarmOptions] = useState<any>([]);
+  const [cropOptions, setCropOptions] = useState<any>([]);
   const [dilogOpen, setDilogOpen] = useState<any>();
   const [loading, setLoading] = useState<any>(true);
   const [alertMessage, setAlertMessage] = useState("");
@@ -43,32 +44,43 @@ const AllCropsComponent = () => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortType, setSortType] = useState("desc");
 
+  const [searchString, setSearchString] = useState("");
+  const [optionsLoading, setOptionsLoading] = useState(false);
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
+
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
       console.error(err);
     }
   };
-  const getFarmDetails = async (id: any) => {
-    setLoading(true);
+  const getFarmDetails = async (farmsearchstring: any, id: any) => {
+    setOptionsLoading(true);
 
+    if (farmsearchstring) {
+      router.push({
+        pathname: `/farms/${router.query.farm_id}/crops`,
+        query: { search_string: farmsearchstring },
+      });
+    }
     try {
-      let response = await ListAllFarmForDropDownService("", accessToken);
+      let response = await ListAllFarmForDropDownService(
+        farmsearchstring,
+        accessToken
+      );
       if (response?.success == true && response?.data?.length) {
         setFarmOptions(response?.data);
         if (id) {
           let selectedObject =
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == id);
+
           setDefaultValue(selectedObject?.title);
           dispatch(setFarmTitleTemp(selectedObject?.title));
           captureFarmName(selectedObject);
@@ -81,17 +93,17 @@ const AllCropsComponent = () => {
         await logout();
       } else {
         setFarmOptions([]);
-        setLoading(false);
       }
     } catch (err) {
       console.error(err);
-      setLoading(false);
+    } finally {
+      setOptionsLoading(false);
     }
   };
 
   //get all crops name
   const getCropsDetails = async (
-    id: string,
+    id: any,
     orderBy = sortBy,
     orderType = sortType
   ) => {
@@ -107,12 +119,18 @@ const AllCropsComponent = () => {
         queryParams["order_type"] = orderType;
       }
 
+      let options = {
+        method: "GET",
+        headers: new Headers({
+          authorization: accessToken,
+        }),
+      };
       let url = prepareURLEncodedParams(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${id}/crops/list`,
         queryParams
       );
 
-      let response = await fetch(url, { method: "GET" });
+      let response = await fetch(url, options);
       let responseData: any = await response.json();
 
       if (responseData.success == true) {
@@ -142,9 +160,7 @@ const AllCropsComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
-          formId ? formId : router.query.farm_id
-        }/crops`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops`,
         options
       );
       let responseData = await response.json();
@@ -167,18 +183,33 @@ const AllCropsComponent = () => {
 
   useEffect(() => {
     if (router.isReady && router.query.farm_id && accessToken) {
-      getFarmDetails(router.query.farm_id);
-      dispatch(removeTheFilesFromStore([]));
-    }
-  }, [accessToken, router.isReady]);
+      let delay = 1000;
+      let debounce = setTimeout(() => {
+        dispatch(removeTheFilesFromStore([]));
 
-  const captureFarmName = (selectedObject: any) => {
+        getFarmDetails(
+          searchString ? searchString : router.query?.search_string,
+          router.query.farm_id
+        );
+      }, delay);
+      return () => clearTimeout(debounce);
+    }
+  }, [searchString, accessToken, router.isReady]);
+
+  const captureFarmName = (selectedObject: any, reason = "") => {
+    if (reason && reason == "clear") {
+      router.replace(`/farms/${selectedObject?._id}/crops`);
+      getFarmDetails("", router.query.farm_id);
+    }
     if (selectedObject && Object.keys(selectedObject).length) {
       setFormId(selectedObject?._id);
       getCropsDetails(selectedObject?._id);
-      router.replace(`/farms/${selectedObject?._id}/crops`);
+      router.replace(
+        `/farms/${selectedObject?._id}/crops?search_string=${selectedObject.title}`
+      );
     } else {
       setLoading(false);
+      router.replace(`/farms/${router.query.farm_id}/crops`);
     }
   };
 
@@ -191,8 +222,9 @@ const AllCropsComponent = () => {
       const { title, crop_area } = value;
 
       let obj = {
+        farm_id: router.query.farm_id,
         title: title ? title?.trim() : "",
-        crop_area: crop_area,
+        area: crop_area,
       };
 
       setErrorMessages([]);
@@ -384,104 +416,139 @@ const AllCropsComponent = () => {
   ];
 
   return (
-    <div className={styles.myCropsPage}>
-      <FormControl
-        variant="outlined"
-        className={styles.filterBox}
-        // style={{border:"1px solid"}}
-      >
-        <InputLabel color="primary" />
-        <SelectAutoCompleteForFarms
-          options={formOptions}
-          label={"title"}
-          onSelectValueFromDropDown={captureFarmName}
-          placeholder={"Select Farm"}
-          defaultValue={defaultValue}
-        />
-        <FormHelperText />
-      </FormControl>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-        }}
-      >
-        <IconButton onClick={() => toggleDrawer(true)}>
-          <SortIcon />
-          <Typography variant="caption">Sort By</Typography>
-        </IconButton>
-        <React.Fragment>
-          <Drawer
-            onClose={() => toggleDrawer(false)}
-            anchor={"bottom"}
-            open={state["bottom"]}
-          >
-            <Box>
-              <SortMenu />
-            </Box>
-          </Drawer>
-        </React.Fragment>
-      </div>
+    <div>
+      <div className={styles.pageHeader}>
+        <div className={styles.header} id="header" >
+          <img
+            className={styles.iconsiconArrowLeft}
+            alt=""
+            src="/iconsiconarrowleft.svg"
+            onClick={() => router.push('/farms')}
 
-      <div className={styles.allCrops}>
-        {cropOptions?.length ? (
-          <div id={styles.allCropCardBlock}>
-            {cropOptions?.map((item: any, index: any) => {
-              const colorIndex = index % colorsArray.length;
-
-              return (
-                <CropCard
-                  itemDetails={item}
-                  key={index}
-                  getCropsDetails={getCropsDetails}
-                  colorIndex={colorIndex}
-                />
-              );
-            })}
+          />
+          <Typography className={styles.viewFarm}>My Crops</Typography>
+          <div className={styles.headericon} id="header-icon">
           </div>
-        ) : !loading ? (
-          <div className={styles.noData}>
-            <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
-            <Typography variant="h4">This farm has no crops</Typography>
+        </div>
+        <div className={styles.searchBlock}>
+          <FormControl
+            variant="outlined"
+            className={styles.filterBox}
+            sx={{
+              " .MuiAutocomplete-root": {
+
+                borderRadius: "30px",
+              },
+              "& .MuiInputBase-root": {
+                background: "#fff",
+                color: "#000",
+                borderRadius: "24px",
+                paddingBlock: "12px !important"
+              },
+              '& .MuiOutlinedInput-notchedOutline ': {
+                border: "0",
+                color: "#fff"
+              },
+
+            }}
+          >
+            <InputLabel color="primary" />
+            <SelectAutoCompleteForFarms
+              setOptionsLoading={setOptionsLoading}
+              optionsLoading={optionsLoading}
+              options={formOptions}
+              label={"title"}
+              onSelectValueFromDropDown={captureFarmName}
+              placeholder={"Select Farm"}
+              defaultValue={defaultValue}
+              searchString={searchString}
+              setSearchString={setSearchString}
+            />
+            <FormHelperText />
+          </FormControl>
+          <div
+            style={{
+              width: "13%"
+            }}
+          >
+            <IconButton className={styles.sortIconBtn} onClick={() => toggleDrawer(true)}>
+              <img src="/mobileIcons/crops/SortIcon.svg" alt="" width={"24px"} />
+            </IconButton>
+            <React.Fragment>
+              <Drawer
+                onClose={() => toggleDrawer(false)}
+                anchor={"bottom"}
+                open={state["bottom"]}
+              >
+                <Box>
+                  <SortMenu />
+                </Box>
+              </Drawer>
+            </React.Fragment>
+          </div>
+        </div>
+      </div>
+      <div className={styles.myCropsPage}>
+
+        <div className={styles.allCrops}>
+          {cropOptions?.length ? (
+            <div id={styles.allCropCardBlock}>
+              {cropOptions?.map((item: any, index: any) => {
+                const colorIndex = index % colorsArray.length;
+
+                return (
+                  <CropCard
+                    itemDetails={item}
+                    key={index}
+                    getCropsDetails={getCropsDetails}
+                    colorIndex={colorIndex}
+                  />
+                );
+              })}
+            </div>
+          ) : !loading ? (
+            <div className={styles.noData}>
+              <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
+              <Typography variant="h4">This farm has no crops</Typography>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+
+        {!loading ? (
+          <div className="addFormPositionIcon">
+            <IconButton
+              size="large"
+              className={styles.AddScoutingbtn}
+              aria-label="add to shopping cart"
+              onClick={() => setDilogOpen(true)}
+            >
+              <img src="/mobileIcons/farms/AddFarmicon.svg" alt="" width={"25px"} />  Add Crop
+            </IconButton>
           </div>
         ) : (
           ""
         )}
-      </div>
 
-      {!loading ? (
-        <div className="addFormPositionIcon">
-          <IconButton
-            size="large"
-            className={styles.AddScoutingbtn}
-            aria-label="add to shopping cart"
-            onClick={() => setDilogOpen(true)}
-          >
-            <AddIcon />
-          </IconButton>
-        </div>
-      ) : (
-        ""
-      )}
-
-      {dilogOpen ? (
-        <NewFolderDiloag
-          open={dilogOpen}
-          captureResponseDilog={captureResponseDilog}
-          loading={loadingForAdd}
-          errorMessages={errorMessages}
+        {dilogOpen ? (
+          <NewFolderDiloag
+            open={dilogOpen}
+            captureResponseDilog={captureResponseDilog}
+            loading={loadingForAdd}
+            errorMessages={errorMessages}
+          />
+        ) : (
+          ""
+        )}
+        <AlertComponent
+          alertMessage={alertMessage}
+          alertType={alertType}
+          setAlertMessage={setAlertMessage}
+          mobile={true}
         />
-      ) : (
-        ""
-      )}
-      <AlertComponent
-        alertMessage={alertMessage}
-        alertType={alertType}
-        setAlertMessage={setAlertMessage}
-        mobile={true}
-      />
-      <LoadingComponent loading={loading} />
+        <LoadingComponent loading={loading} />
+      </div>
     </div>
   );
 };

@@ -1,5 +1,7 @@
+import { prepareURLEncodedParams } from "../../requestUtils/urlEncoder";
+
 const ListAllFarmForDropDownService = async (
-  queryString: string,
+  searchString: string,
   token: string
 ) => {
   try {
@@ -9,15 +11,21 @@ const ListAllFarmForDropDownService = async (
         authorization: token,
       }),
     };
-    let response: any = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/farm/list${queryString}`,
-      options
+    let queryParams: any = {};
+
+    if (searchString) {
+      queryParams["search_string"] = searchString;
+    }
+    let url = prepareURLEncodedParams(
+      `${process.env.NEXT_PUBLIC_API_URL}/farms/1/20`,
+      queryParams
     );
+    let response: any = await fetch(url, options);
     const responseData = await response.json();
     return responseData;
   } catch (err: any) {
     console.error(err);
-    return;
+    throw err;
   }
 };
 

@@ -7,24 +7,28 @@ import styles from "@/components/AddLogs/attachments.module.css";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DoneIcon from "@mui/icons-material/Done";
-import { Box, IconButton, LinearProgress } from "@mui/material";
+import { Box, Button, IconButton, LinearProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles1 from "./../../Scouting/AddItem/add-scout.module.css";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
+import { toast } from "sonner";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 interface PropTypes {
-  farmId: string | undefined;
+  taskId: any;
   setUploadedFiles: (filesUploaded: any) => void;
   multipleFiles: any;
   setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
+  afterUploadAttachements: any;
 }
 const TasksAttachments: React.FC<PropTypes> = ({
-  farmId,
   setUploadedFiles,
   multipleFiles,
   setMultipleFiles,
+  afterUploadAttachements,
+  taskId,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -40,6 +44,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
+  const [loading, setLoading] = useState<any>();
 
   // let tempFilesStorage: any = [...attachments];
 
@@ -118,9 +123,9 @@ const TasksAttachments: React.FC<PropTypes> = ({
   };
 
   const handleFileChange = async (e: any) => {
-    if (!farmId) {
-      setNoFarmIdMessage("Please Select the Farm to Upload the files");
-      return;
+    if ("") {
+      // setNoFarmIdMessage("Please Select the Farm to Upload the files");
+      // return;
     } else {
       setNoFarmIdMessage("");
     }
@@ -161,7 +166,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
     let obj = {
       attachment: {
         original_name: file.name,
-        farm_id: farmId,
         type: file.type,
         source: "tasks",
       },
@@ -305,6 +309,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   };
 
   //file upload normal smaller than 5 mb
+
   const fileUploadEvent = async (
     item: any,
     index: any,
@@ -312,13 +317,9 @@ const TasksAttachments: React.FC<PropTypes> = ({
     setFileProgress: any
   ) => {
     let obj = {
-      attachment: {
-        original_name: item.name,
-        type: item.type,
-        size: item.size,
-        source: "tasks",
-        farm_id: farmId,
-      },
+      original_name: item.name,
+      type: item.type,
+      size: item.size,
     };
 
     let options: any = {
@@ -332,7 +333,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
 
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/upload-attachment`,
         options
       );
       let responseData = await response.json();
@@ -347,12 +348,10 @@ const TasksAttachments: React.FC<PropTypes> = ({
           original_name: responseData.data.original_name,
           type: item.type,
           size: item.size,
-          name: responseData.data.name,
-          crop_slug: responseData.data.crop_slug,
-          path: responseData.data.path,
+          path: responseData?.data?.path,
+          key: responseData?.data?.key,
         });
         setAttachments(tempFilesStorage);
-        setUploadedFiles(tempFilesStorage);
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -361,7 +360,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
       console.error(err);
     }
   };
-
   const bytesToMB = (bytes: any) => {
     return bytes / (1024 * 1024);
   };
@@ -381,12 +379,18 @@ const TasksAttachments: React.FC<PropTypes> = ({
     setFileProgress(fileProgressCopy);
   };
 
-  const removeFileAfterAdding = (index: number) => {
+  const removeFileAfterAdding = (index: number, file: any) => {
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
 
     const fileProgressCopy = [...fileProgress];
     fileProgressCopy.splice(index, 1);
+
+    const tempFilesStorageCopy = [...tempFilesStorage];
+    const newArray = tempFilesStorageCopy.filter(
+      (item: any) => item.original_name !== file.name
+    );
+    setAttachments(newArray);
 
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
@@ -398,6 +402,64 @@ const TasksAttachments: React.FC<PropTypes> = ({
       dispatch(removeTheFilesFromStore([]));
     }
   }, [accessToken]);
+
+  //cancel upload
+  const cancelUpload = () => {
+    setTempFileStorage([]);
+    setMultipleFiles([]);
+  };
+
+  const addTaskAttachements = async () => {
+    setLoading(true);
+
+    let modifiedAttachments = tempFilesStorage.map((item: any) => {
+      return {
+        key: item.key,
+        metadata: {
+          original_name: item.original_name,
+          size: item.size,
+          type: item.type,
+        },
+      };
+    });
+    try {
+      let obj = {
+        attachments: modifiedAttachments,
+      };
+
+      let options: any = {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+      };
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${
+          router.query.task_id ? router.query.task_id : taskId
+        }/attachments`,
+        options
+      );
+      let responseData = await response.json();
+      if (responseData?.success) {
+        afterUploadAttachements(true);
+        setMultipleFiles([]);
+        setTempFileStorage([]);
+        toast.success("Attachement(s) addedd successfully");
+        if (taskId) {
+          router.back();
+        }
+      } else if (responseData?.status == 422) {
+        setValidations(responseData?.errors);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+    dispatch(removeTheFilesFromStore([]));
+  };
 
   //   useEffect(() => {
   //     const confirmationMessage =
@@ -421,7 +483,14 @@ const TasksAttachments: React.FC<PropTypes> = ({
       style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}
     >
       <div className={styles.header}>
-        <h4 className={styles.title}>Attachments (or) Images</h4>
+        {!taskId && !router.query.task_id ? (
+          <span style={{ color: "Highlight" }}>
+            You can upload images after submit the task.
+          </span>
+        ) : (
+          ""
+        )}
+        <h4 className={styles.title}>Attachments (or) Images </h4>
         <p className={styles.description}>
           You can also drag and drop files to upload them.
         </p>
@@ -436,6 +505,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
           className={styles.link}
           type="file"
           multiple
+          disabled={taskId || router.query.task_id ? false : true}
           onChange={handleFileChange}
           style={{ display: "none" }}
           accept="image/*,video/*"
@@ -495,7 +565,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
-                            onClick={() => removeFileAfterAdding(index)}
+                            onClick={() => removeFileAfterAdding(index, item)}
                           >
                             <DeleteForeverIcon sx={{ color: "#820707" }} />
                           </IconButton>
@@ -509,7 +579,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                           className={styles1.close41}
                           alt=""
                           src="/close-icon.svg"
-                          onClick={() => removeFile(index)}
+                          onClick={() => removeFileAfterAdding(index, item)}
                         />
                       ) : (
                         ""
@@ -544,6 +614,35 @@ const TasksAttachments: React.FC<PropTypes> = ({
             </div>
           </div>
         ))}
+      <div
+        style={{
+          minHeight: "30px",
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: "10px",
+        }}
+      >
+        {!router.query.task_id ? (
+          ""
+        ) : (
+          <Button
+            className={styles.canceleBtn}
+            variant="outlined"
+            onClick={() => cancelUpload()}
+          >
+            Cancel
+          </Button>
+        )}
+        <Button
+          variant="contained"
+          onClick={() => addTaskAttachements()}
+          className={styles.saveBtn}
+          disabled={!tempFilesStorage?.length || loading}
+        >
+          Save
+        </Button>
+      </div>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

@@ -16,7 +16,7 @@
 #navBar {
     width: 100%;
     max-width: 500px;
-    z-index: 2;
+    z-index: 4;
     position: fixed;
     top: 0;
     background-color: #fff;

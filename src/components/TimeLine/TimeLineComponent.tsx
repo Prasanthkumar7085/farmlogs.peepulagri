@@ -63,7 +63,6 @@ const TimeLineComponent = () => {
         try {
             if (response?.success && response.data.length) {
                 setFarmOptions(response?.data);
-                dispatch(setAllFarms(response?.data));
                 if (id) {
                     let selectedObject = response?.data?.length && response?.data.find((item: any) => item._id == id);
 

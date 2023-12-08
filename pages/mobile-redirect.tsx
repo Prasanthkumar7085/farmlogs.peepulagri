@@ -4,21 +4,19 @@ import { setToInitialState } from "@/Redux/Modules/Farms";
 import { resetOtpCountDown } from "@/Redux/Modules/Otp";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 
 const Redirect = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
   const onLogoutCMenuItemck = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
       await dispatch(resetOtpCountDown());

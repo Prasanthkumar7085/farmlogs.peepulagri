@@ -1,5 +1,19 @@
 .AddFarmBtn {
-    background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
-    color: #ffffff;
-    padding: 18px;
-  }
+  background: #D94841;
+  color: #ffffff;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  border-radius: 20px !important;
+}
+
+.AddFarmBtn img {
+  margin-right: 3px;
+}
+
+#dashboardPage {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}

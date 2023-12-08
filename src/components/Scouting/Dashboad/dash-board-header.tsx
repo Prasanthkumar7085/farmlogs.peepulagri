@@ -20,7 +20,7 @@ type captureSearchStringType = (search: string) => void;
 interface pageProps {
   captureSearchString: captureSearchStringType;
   searchString: string;
-  locations: Array<{ name: string; _id: string }>;
+  locations: Array<{ title: string; _id: string }>;
   location: string;
   setLocation: Dispatch<SetStateAction<string>>;
   getDataOnLocationChange: (location: string) => void;
@@ -35,9 +35,8 @@ const DashBoardHeader = ({
   getDataOnLocationChange,
 }: pageProps) => {
   const [search, setSearch] = useState("");
-
   const [locationValue, setLocationValue] = useState<{
-    name: string;
+    title: string;
     _id: string;
   } | null>();
   const [dataSetting, setDataSetting] = useState(false);
@@ -45,7 +44,7 @@ const DashBoardHeader = ({
   useEffect(() => {
     if (locations?.length) {
       let obj: any = locations?.find(
-        (item: { name: string; _id: string }) => item.name == location
+        (item: { title: string; _id: string }) => item.title == location
       );
 
       if (obj) {
@@ -55,7 +54,7 @@ const DashBoardHeader = ({
           setDataSetting(false);
         }, 1);
       } else {
-        setLocation("");
+        setLocation("All");
       }
     }
   }, [locations, location]);
@@ -70,11 +69,12 @@ const DashBoardHeader = ({
 
   const addInputValue = (event: any, value: any) => {
     if (value) {
-      setLocation(value?.name);
-      getDataOnLocationChange(value?.name);
+      setLocationValue(value);
+      setLocation(value?.title);
+      getDataOnLocationChange(value?._id);
     } else {
       setLocationValue(null);
-      setLocation("");
+      setLocation("All");
       getDataOnLocationChange("");
     }
   };
@@ -82,49 +82,60 @@ const DashBoardHeader = ({
   return (
     <div className={styles.dashboardheader} id="dashboard-header">
       <div className={styles.dashboardheading} id="dashboard-heading">
-        <Typography className={styles.dashboard}>Dashboard</Typography>
-        <div className={styles.selectlocation} id="select-location">
-          <div className={styles.srisailam}>
-            {!dataSetting ? (
-              <Autocomplete
-                id="asynchronous-demo"
-                fullWidth
-                noOptionsText={"No such location!"}
-                value={locationValue}
-                getOptionLabel={(option: { name: string; _id: string }) =>
-                  option.name
-                }
-                isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
-                }
-                options={locations}
-                onChange={addInputValue}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    className={styles.inputfarmname}
-                    name="location"
-                    size="small"
-                    placeholder="Enter location here"
-                    fullWidth
-                    variant="outlined"
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        background: "#fff",
-                      },
-                    }}
-                  />
-                )}
-              />
-            ) : (
-              ""
-            )}
-          </div>
+        <div className={styles.logoBlock}>
+          <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
+          <Typography className={styles.dashboard}>Farms</Typography>
+        </div>
+        <div className={styles.srisailam}>
+          <img src="/mobileIcons/farms/map-pin-line.svg" alt="" />
+          {!dataSetting ? (
+            <Autocomplete
+              id="asynchronous-demo"
+              fullWidth
+              noOptionsText={"No such location!"}
+              value={locationValue}
+              defaultValue={locationValue}
+              getOptionLabel={(option: { title: string; _id: string }) =>
+                option.title
+              }
+              isOptionEqualToValue={(option, value) =>
+                option.title === value.title
+              }
+              options={locations}
+              onChange={addInputValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="location"
+                  size="small"
+                  placeholder="Enter location here"
+                  fullWidth
+                  // variant="outlined"
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      background: "transperent",
+                      color: "#fff"
+                    },
+                    '& .MuiOutlinedInput-notchedOutline ': {
+                      border: "0",
+                      color: "#fff"
+                    },
+                    '& .MuiButtonBase-root': {
+                      color: "#fff"
+                    }
+                  }}
+                />
+              )}
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className={styles.searchbyfarmname} id="search-by-farm-name">
         <TextField
           className={styles.searchfarm}
+          type="search"
           color="primary"
           name="search"
           id="search"
@@ -135,25 +146,32 @@ const DashBoardHeader = ({
           value={search}
           onChange={onChangeSearchString}
           InputProps={{
+
             endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => {
-                    setSearch("");
-                    captureSearchString("");
-                  }}
-                >
-                  {search ? <ClearOutlinedIcon /> : ""}
-                </IconButton>
-              </InputAdornment>
-            ),
-            startAdornment: (
               <InputAdornment position="start">
                 <IconButton>
-                  <SearchIcon />
+                  <img src="/mobileIcons/farms/search-icon.svg" alt="" />
                 </IconButton>
               </InputAdornment>
             ),
+          }}
+          sx={{
+            "& .MuiInputBase-root": {
+              background: "#fff",
+              color: "#000",
+              borderRadius: "24px"
+            },
+            '& .MuiOutlinedInput-notchedOutline ': {
+              border: "0",
+              color: "#fff"
+            },
+            '& .MuiButtonBase-root': {
+              color: "#000",
+              padding: "4px !important"
+            },
+            '& .MuiInputBase-input': {
+              padding: "11px 14px"
+            }
           }}
         />
       </div>

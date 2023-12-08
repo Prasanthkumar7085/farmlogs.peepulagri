@@ -26,6 +26,16 @@ import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarm
 import Header1 from "../Header/HeaderComponent";
 import Camera from "./Camera";
 import styles from "./add-scout.module.css";
+import { Toaster, toast } from "sonner";
+
+interface propsTypesTagAndComment {
+  url: string;
+  body: {
+    farm_image_ids: string[];
+    tags?: string[];
+    content?: string;
+  };
+}
 
 const FileUploadComponent = () => {
   const router = useRouter();
@@ -33,17 +43,13 @@ const FileUploadComponent = () => {
 
   const filesFromStore = useSelector((state: any) => state.farms?.filesList);
 
-  
   const [openCamera, setOpenCamera] = useState<any>(false);
   const [loading, setLoading] = useState<any>(false);
   const [multipleFiles, setMultipleFiles] = useState<any>();
 
   const [fileProgress, setFileProgress] = useState<number[] | any>([]);
-  const [selectedCrop, setSelectedCrop] = useState<any>();
-  const [description, setDescription] = useState<any>();
+  const [description, setDescription] = useState<string>("");
   const [attachments, setAttachments] = useState<any>([]);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState(false);
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [validations, setValidations] = useState<any>();
   const [tags, setTags] = useState<any>([]);
@@ -73,49 +79,6 @@ const FileUploadComponent = () => {
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
-  };
-
-  const getFormDetails = async (id: any) => {
-    let response = await getAllFarmsService(accessToken);
-
-    try {
-      if (response?.success && response.data.length) {
-        if (id) {
-          let selectedObject =
-            response?.data?.length &&
-            response?.data.find((item: any) => item._id == id);
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  //get all crops name
-  const getCropsDetails = async (id: any) => {
-    try {
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${id}/crops/list`,
-        { method: "GET" }
-      );
-      let responseData: any = await response.json();
-
-      if (responseData.success == true) {
-        if (router.query.crop_id) {
-          let cropObj = responseData?.data?.find(
-            (item: any) => item._id == router.query.crop_id
-          );
-          setSelectedCrop(cropObj);
-        } else {
-          if (responseData.data.length == 1) {
-            setSelectedCrop(responseData?.data[0]);
-          } else {
-          }
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   const previewImagesEvent = (file: any, index: any) => {
@@ -211,15 +174,16 @@ const FileUploadComponent = () => {
     fileProgressCopy: any,
     setFileProgress: Function
   ) => {
-    let obj = {
-      attachment: {
-        original_name: file.name,
-        farm_id: router.query.farm_id as string,
-        type: file.type,
-        crop_slug: selectedCrop?.slug,
-        source: "scouting",
-      },
-    };
+    let obj =
+    {
+      "farm_id": router.query.farm_id as string,
+      "crop_id": router.query.crop_id,
+      "original_name": file.name,
+      "type": file.type,
+      "size": file.size
+    }
+
+
     let options = {
       method: "POST",
       headers: new Headers({
@@ -231,7 +195,7 @@ const FileUploadComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/start-upload`,
         options
       );
       let responseData = await response.json();
@@ -248,9 +212,6 @@ const FileUploadComponent = () => {
           original_name: responseData.data.original_name,
           type: file.type,
           size: file.size,
-          name: responseData.data.name,
-          crop_slug: responseData.data.crop_slug,
-          path: responseData.data.path,
         });
         setAttachments(tempFilesStorage);
       } else {
@@ -285,6 +246,7 @@ const FileUploadComponent = () => {
       method: "POST",
       headers: new Headers({
         "content-type": "application/json",
+        authorization: accessToken,
       }),
       body: JSON.stringify(obj),
     };
@@ -292,12 +254,12 @@ const FileUploadComponent = () => {
     try {
       // Send the chunk to the server using a POST request
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/start-upload/presigned-url`,
         options
       );
       let responseData: any = await response.json();
       if (responseData.success == true) {
-        resurls = [...responseData.url];
+        resurls = [...responseData.data];
 
         const promises = [];
 
@@ -309,6 +271,10 @@ const FileUploadComponent = () => {
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
             method: "PUT",
+            headers: new Headers({
+              "content-type": "application/json",
+              authorization: accessToken,
+            }),
             body: chunk,
           });
 
@@ -352,7 +318,7 @@ const FileUploadComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/complete-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/complete-upload`,
         options
       );
       let responseData: any = await response.json();
@@ -369,14 +335,11 @@ const FileUploadComponent = () => {
     setFileProgress: any
   ) => {
     let obj = {
-      attachment: {
-        original_name: item.name,
-        type: item.type,
-        size: item.size,
-        source: "scouting",
-        crop_slug: selectedCrop?.slug,
-        farm_id: router.query.farm_id,
-      },
+      "farm_id": router.query.farm_id,
+      "crop_id": router.query.crop_id,
+      "original_name": item.name,
+      "type": item.type,
+      "size": item.size
     };
 
     let options: any = {
@@ -390,7 +353,7 @@ const FileUploadComponent = () => {
 
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image`,
         options
       );
       let responseData = await response.json();
@@ -405,9 +368,8 @@ const FileUploadComponent = () => {
           original_name: responseData.data.original_name,
           type: item.type,
           size: item.size,
-          name: responseData.data.name,
-          crop_slug: responseData.data.crop_slug,
-          path: responseData.data.path,
+          path: responseData?.data?.path,
+          key: responseData?.data?.key
         });
         setAttachments(tempFilesStorage);
       } else {
@@ -421,8 +383,6 @@ const FileUploadComponent = () => {
 
   useEffect(() => {
     if (router.query.farm_id && accessToken) {
-      getFormDetails(router.query.farm_id);
-      getCropsDetails(router.query.farm_id);
       dispatch(removeTheFilesFromStore([]));
     }
   }, [accessToken, router.query.farm_id]);
@@ -444,49 +404,62 @@ const FileUploadComponent = () => {
   }, []);
 
   const addScoutDetails = async () => {
-    const newArray = tempFilesStorage.map((obj: any) => ({
-      ...obj,
-      tags: tags,
-      time: new Date(),
-      description: description,
-    }));
-
+    let imagesIdsArray: any = [];
     setLoading(true);
-    let obj = {
-      farm_id: router.query.farm_id,
-      attachments: newArray,
-      crop_id: selectedCrop?._id,
-    };
-
-    let options: any = {
-      method: "POST",
-      body: JSON.stringify(obj),
-      headers: new Headers({
-        "content-type": "application/json",
-        authorization: accessToken,
-      }),
-    };
 
     try {
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts`,
-        options
+      let isExecuted = false;
+      await Promise.allSettled(
+        tempFilesStorage.map(async (file: any, index: any) => {
+          let obj = {
+            farm_id: router.query.farm_id,
+            crop_id: router?.query?.crop_id,
+            key: file.key,
+            metadata: {
+              original_name: file?.original_name,
+              size: file?.size,
+              type: file?.type,
+            },
+            tags: [],
+          };
+
+          let options: any = {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: new Headers({
+              "content-type": "application/json",
+              authorization: accessToken,
+            }),
+          };
+          let response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/farm-images`,
+            options
+          );
+          let responseData = await response.json();
+          if (responseData?.success) {
+            imagesIdsArray.push(responseData?.data?._id);
+            isExecuted = true;
+          } else if (responseData?.status == 422) {
+            setValidations(responseData?.errors);
+            isExecuted = false;
+          }
+        })
       );
-      let responseData = await response.json();
-      if (responseData.success == true) {
-        dispatch(removeTheFilesFromStore([]));
-        setAlertMessage(responseData.message);
-        setAlertType(true);
-        router.back();
-      } else if (responseData.status == 422) {
-        setValidations(responseData?.errors);
+      if (isExecuted) {
+        if (tags?.length || description?.length) {
+          await addTagsAndCommentsEvent(imagesIdsArray);
+        }
+        else {
+          toast.success("FarmImages added successfully");
+          router.back()
+        }
       }
-      setLoading(false);
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
+    dispatch(removeTheFilesFromStore([]));
   };
 
   //onClose camera
@@ -544,10 +517,68 @@ const FileUploadComponent = () => {
     }
   };
 
-  //capture the tags
+  // //capture the tags
   const captureTags = (array: any) => {
     if (array) {
       setTags(array);
+    }
+  };
+
+  //add tags api
+  const addTagsAndCommentsEvent = async (imagesArray: string[]) => {
+    console.log(imagesArray, tags, description);
+
+    try {
+      let urls = [
+        {
+          url: "/farm-images/tag",
+          body: {
+            farm_image_ids: imagesArray,
+            tags: tags,
+          },
+        },
+        {
+          url: "/farm-images/comments",
+          body: {
+            farm_image_ids: imagesArray,
+            content: description,
+          },
+        },
+      ];
+
+      let success = true;
+      await Promise.allSettled(
+        urls.map(async (item: propsTypesTagAndComment, index: number) => {
+          if ((!index && tags.length) || (!!index && description?.length)) {
+            let options = {
+              method: "POST",
+              headers: new Headers({
+                "content-type": "application/json",
+                authorization: accessToken,
+              }),
+              body: JSON.stringify(item.body),
+            };
+
+            let response: any = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}${item.url}`,
+              options
+            );
+            let responseData = await response.json();
+            if (responseData.success) {
+              toast.success(responseData?.message);
+            } else {
+              success = false;
+              toast.error(responseData?.message);
+              throw responseData;
+            }
+          }
+        })
+      );
+      if (success) {
+        router.back()
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -581,7 +612,7 @@ const FileUploadComponent = () => {
                       </div>
                     </div>
                     <div className={styles.imagesupload} id="images-upload">
-                      <div className={styles.captureimage} id="capture-image">
+                      {/* <div className={styles.captureimage} id="capture-image">
                         <div className={styles.camera}>
                           <img
                             className={styles.camera1Icon}
@@ -592,7 +623,7 @@ const FileUploadComponent = () => {
 
                           <div className={styles.capture}> Capture </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div id="capture-image">
                         <div className={styles.uploadimage}>
                           <label>
@@ -615,7 +646,9 @@ const FileUploadComponent = () => {
                 </div>
               </div>
             </div>
-            <ErrorMessagesComponent errorMessage={validations?.attachments} />
+            <ErrorMessagesComponent
+              errorMessage={validations?.farm_image_ids}
+            />
             {multipleFiles &&
               Array?.from(multipleFiles).map((item: any, index: any) => (
                 <div
@@ -631,11 +664,11 @@ const FileUploadComponent = () => {
                         previewImages.find((e: any) => e.fileIndex == item.name)
                           ?.prieviewUrl
                           ? previewImages.find(
-                              (e: any) => e.fileIndex == item.name
-                            ).prieviewUrl
+                            (e: any) => e.fileIndex == item.name
+                          ).prieviewUrl
                           : item.type == "application/pdf"
-                          ? "/pdf-icon.png"
-                          : "/doc-icon.webp"
+                            ? "/pdf-icon.png"
+                            : "/doc-icon.webp"
                       }
                     />
                     <div className={styles.progressdetails}>
@@ -666,7 +699,7 @@ const FileUploadComponent = () => {
                               )}
                             </div>
                             {fileProgress[index] == 100 &&
-                            fileProgress[index] !== "fail" ? (
+                              fileProgress[index] !== "fail" ? (
                               <div className={styles.photojpg}>
                                 <IconButton>
                                   <DoneIcon sx={{ color: "#05A155" }} />
@@ -686,7 +719,7 @@ const FileUploadComponent = () => {
                             )}
                           </div>
                           {fileProgress[index] !== 100 ||
-                          fileProgress[index] == "fail" ? (
+                            fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
                               alt=""
@@ -699,7 +732,7 @@ const FileUploadComponent = () => {
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
-                          fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                             <LinearProgress />
                           ) : fileProgress[index] !== 100 &&
                             fileProgress[index] !== "fail" ? (
@@ -713,7 +746,7 @@ const FileUploadComponent = () => {
                         </Box>
                       </div>
                       {fileProgress[index] == 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         ""
                       ) : (
                         <div className={styles.uploadstatus}>
@@ -730,14 +763,14 @@ const FileUploadComponent = () => {
               <div className={styles.descriptionblock}>
                 <div className={styles.addscoutdetails}>
                   <div className={styles.inputField}>
+                    <div style={{ width: "100%" }} className={styles.input}>
+                      <TagsTextFeild captureTags={captureTags} />
+                    </div>
                     <div
                       className={styles.farmselection}
                       id="input-description"
                     >
-                      <div className={styles.label1}>
-                        Findings
-                        {/* <strong style={{ color: "rgb(228 12 15)" }}>*</strong> */}
-                      </div>
+                      <div className={styles.label1}>Comments</div>
                       <TextField
                         className={styles.input}
                         color="primary"
@@ -745,7 +778,7 @@ const FileUploadComponent = () => {
                         id="description"
                         minRows={4}
                         maxRows={4}
-                        placeholder="Enter your findings here"
+                        placeholder="Enter your comment here"
                         fullWidth={true}
                         variant="outlined"
                         multiline
@@ -759,9 +792,6 @@ const FileUploadComponent = () => {
                       <ErrorMessagesComponent
                         errorMessage={validations?.description}
                       />
-                    </div>
-                    <div style={{ width: "100%" }} className={styles.input}>
-                      <TagsTextFeild captureTags={captureTags} />
                     </div>
                   </div>
                 </div>
@@ -786,6 +816,7 @@ const FileUploadComponent = () => {
                       id="submit"
                       size="large"
                       variant="contained"
+                      disabled={!tempFilesStorage.length}
                       onClick={() => addScoutDetails()}
                       endIcon={<Icon>arrow_forward_sharp</Icon>}
                     >
@@ -798,11 +829,7 @@ const FileUploadComponent = () => {
           </div>
         </div>
       )}
-      <AlertComponent
-        alertMessage={alertMessage}
-        alertType={alertType}
-        setAlertMessage={setAlertMessage}
-      />
+      <Toaster richColors closeButton position="top-right" />
       <LoadingComponent loading={loading} />
     </div>
   );

@@ -13,6 +13,19 @@ body {
     margin: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    background: #F8F8F8;
+}
+
+.MuiTabs-indicator {
+    display: none !important;
+}
+
+.MuiTabs-flexContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
 }
 
 :root {
@@ -316,15 +329,13 @@ body {
     position: relative;
 }
 
-#dashboardPage {
-    padding-top: 4rem;
-}
+
 
 .addFormPositionIcon {
     cursor: pointer;
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: 5rem;
+    right: 1rem;
 }
 
 #mobileOtpVerify p {
@@ -452,5 +463,5 @@ left: 10px !important;
 }
 
 .MuiPopper-root {
-    z-index: 2000!important;
+    z-index: 2000 !important;
 }

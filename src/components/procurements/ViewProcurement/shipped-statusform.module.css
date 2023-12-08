@@ -1,0 +1,138 @@
+.farm1 {
+  margin: 0;
+  position: relative;
+  line-height: 24px;
+}
+.farmname {
+  border-radius: 0 0 14px 0;
+  background: linear-gradient(142.18deg, #3462cf, #2b53be);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 3px 14px;
+  font-size: 16px;
+  color: #fff;
+}
+.fertilizersAndSoil {
+  margin: 0;
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+  font-size: inherit;
+  line-height: 150%;
+  font-weight: 400;
+  font-family: inherit;
+  display: flex;
+  align-items: flex-end;
+}
+.label,
+.text {
+  position: relative;
+}
+.label {
+  flex: 1;
+  line-height: 20px;
+  font-weight: 500;
+  display: inline-block;
+  width: 123px;
+}
+.text {
+  margin: 0;
+}
+.datecontainer {
+  background-color: #f5f7fa;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 4px 10px;
+  font-size: 16px;
+  color: #35353d;
+}
+.datecontainer,
+.inputWithLabel,
+.nameofoperation {
+  display: flex;
+  align-items: flex-start;
+}
+.inputWithLabel {
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #344154;
+}
+.nameofoperation {
+  align-self: stretch;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 24px;
+  color: #35353d;
+}
+.hemaGanesh,
+.label1 {
+  flex: 1;
+  position: relative;
+  display: inline-block;
+  width: 1310px;
+}
+.label1 {
+  cursor: pointer;
+  line-height: 20px;
+  font-weight: 500;
+}
+.hemaGanesh {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  color: #6a7185;
+}
+.pointofcontact {
+  width: 1310px;
+  height: 47px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+}
+.id,
+.information {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.id {
+  background-color: rgba(254, 201, 147, 0.3);
+  align-items: flex-start;
+  padding: 4px 10px;
+}
+.information {
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  color: #35353d;
+}
+.shippedstatusform,
+.trackingid {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+}
+.shippedstatusform {
+  border-radius: 4px 4px 0 0;
+  background-color: #fff;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding: 0 20px 16px;
+  gap: 10px;
+  text-align: left;
+  font-size: 14px;
+  color: #344154;
+  font-family: Inter;
+}

@@ -5,7 +5,7 @@ import {
 import styles from "../farms/FarmsNavBar.module.css";
 
 interface propTypes {
-  item: SingleScoutResponse;
+  item: any;
   onClickAttachment: (attachmentId: string) => void;
 }
 const ScoutingDailyImages: React.FC<propTypes> = ({
@@ -14,8 +14,8 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
 }) => {
   return (
     <div className={styles.allScoutImgContainer}>
-      {item?.attachments?.length
-        ? item?.attachments?.map(
+      {item?.length
+        ? item?.map(
           (imageItem: ScoutAttachmentDetails, index: number) => {
             return (
               <div
@@ -25,13 +25,11 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
               >
                 <img
                   src={
-                    imageItem.type?.includes("video")
-                      ? "/Play-button.svg"
-                      : imageItem?.tn_url
+                    imageItem?.url
                   }
                   height={100}
                   width={100}
-                  alt={imageItem.original_name}
+                  alt={imageItem.key}
                 />
               </div>
             );

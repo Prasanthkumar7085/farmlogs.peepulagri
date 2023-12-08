@@ -41,11 +41,18 @@ const AlertDelete = ({
             variant="contained"
             color="error"
             size="small"
+            disabled={loading}
             onClick={() => deleteFarm()}
+            sx={{
+              "&.Mui-disabled": {
+                background: "#c62828",
+                color: "#000"
+              }
+            }}
           >
             <div className={styles.text}>
               {loading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                <CircularProgress size="1.3rem" sx={{ color: "white" }} />
               ) : (
                 "Delete"
               )}

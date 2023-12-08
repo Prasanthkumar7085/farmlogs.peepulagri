@@ -1,8 +1,8 @@
 
-const editFarmService = async (body: any,token:string,farmId:string) => {
+const editFarmService = async (body: any, token: string, farmId: string) => {
 
     try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/farm/${farmId}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmId}`;
         const options = {
             method: "PATCH",
             body: JSON.stringify(body),

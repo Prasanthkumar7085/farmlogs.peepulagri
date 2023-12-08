@@ -25,7 +25,7 @@ const AttachmentDrawerTaskmodule = ({
 
   function groupByDate(array: Array<any>) {
     const groupedByDate = array.reduce((result, obj) => {
-      const dateKey = obj.time.split("T")[0]; // Extract the date from the timestamp
+      const dateKey = obj.createdAt.split("T")[0]; // Extract the date from the timestamp
       if (!result[dateKey]) {
         result[dateKey] = [];
       }
@@ -47,7 +47,7 @@ const AttachmentDrawerTaskmodule = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${rowDetails?._id}/attachments`,
         options
       );
       let responseData = await response.json();
@@ -106,7 +106,7 @@ const AttachmentDrawerTaskmodule = ({
               return (
                 <div style={{ marginBottom: "1rem" }} key={index}>
                   <p className={styles.AttachmentDate}>
-                    {timePipe(item[0]?.time, "DD MMM YYYY, hh:mm A")}
+                    {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
                   </p>
                   <div className={styles.attachmentDrawer}>
                     {item?.map((image: any, index: number) => {

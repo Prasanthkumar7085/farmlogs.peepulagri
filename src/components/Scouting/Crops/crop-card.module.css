@@ -1,6 +1,130 @@
+/* header */
+.iconsiconArrowLeft {
+  width: 24px;
+}
+
+.viewFarm {
+  color: #fff !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(18px, 4vw, 20px) !important;
+  font-weight: 500 !important;
+}
+
+.searchBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #05A155;
+  padding: 1rem 1rem 3rem 1rem;
+  border-radius: 0 0 30px 30px;
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.headericon {
+  width: 32px;
+  text-align: end;
+}
+
+.header {
+  background-color: #05A155;
+  justify-content: space-between;
+  padding: 1rem;
+
+}
+
+.sortIconBtn {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 100%;
+  padding-block: 12px;
+}
+
+.avatharImg {
+  border: 1px solid red;
+  padding: 4px;
+  border-radius: 50%;
+
+}
+
+.iconBlock {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.cropDetailsBlock {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobileScoutingViewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 1rem;
+  background-color: var(--background);
+  border-bottom: 1px solid #d5d5d5;
+}
+
+.viewingTabs button {
+  padding: 0;
+  min-width: inherit;
+  min-height: inherit;
+}
+
+.viewingTabs {
+  min-height: inherit !important;
+}
+
+.stickyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  padding: 6px 8px;
+}
+
+.summaryBtn {
+  background: red;
+  font-size: 12px;
+  text-transform: capitalize;
+  font-family: "Inter", sans-serif;
+  padding: 2px 10px;
+  color: #fff;
+  border-radius: 16px;
+}
+
+.stickyHeader .selectBtn {
+  background: #00000064;
+  padding: 0;
+  font-size: 12px;
+  text-transform: capitalize;
+  font-family: "Inter", sans-serif;
+  padding: 2px 10px;
+  color: #fff;
+  border-radius: 16px;
+}
+
+.dateRange {
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: #000;
+  text-shadow: 1px 1px 2px #fff,
+    0 0 1em #fff,
+    0 0 0.2em #fff;
+
+}
+
 .folderIcon {
   width: 45px;
-  height: 45px;
 }
 
 .actions {
@@ -30,6 +154,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
@@ -41,16 +166,16 @@
 .FieldCrop {
   color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 3.5vw, 16px);
-  font-weight: 500;
+  font-size: clamp(18px, 4vw, 20px);
+  font-weight: 400;
   line-height: 100%;
 }
 
 .aug2023 {
-  color: #6A7185;
+  color: #A05148;
   font-family: "Inter", sans-serif;
-  font-size: clamp(10px, 3vw, 12px);
-  font-weight: 400;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 500;
   line-height: 100%;
 }
 
@@ -64,27 +189,29 @@
 }
 
 .cropcard {
-  border-radius: var(--br-5xs);
-  background: #ffffff;
-  padding: 10px;
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 2px 2px 9px 0px #00000012;
+  border: 1px solid #00000016;
+  padding: 14px;
   gap: var(--gap-xs);
 }
 
 #allCropCardBlock {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
 }
 
 .filterBox {
-  padding: 0.65rem 0.65rem 0rem 0.65rem !important;
-  width: calc(100% - 1.3rem);
+  width: 85%;
 }
 
 .allCrops {
   height: calc(100vh - 224px);
   overflow: scroll;
   padding: 0 0.65rem;
+  margin-top: -1.5rem;
 }
 
 #noData {
@@ -189,16 +316,16 @@
 
 .mobileScoutGridGallary {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 10px;
   margin-top: 5px;
   padding-top: 8px;
   border-top: 1px solid #E9EDF1;
 }
 
-.scoutingView {
-  height: calc(100vh - 190px);
-}
+/* .scoutingView {
+  height: calc(100vh - 250px);
+} */
 
 .scoutingView nav {
   margin-bottom: 1px;
@@ -256,11 +383,7 @@
 /* .breadcrumbs a{
   font-size: clamp(12px, 1.75vw, 16px);
 } */
-.breadcrumbs {
-  padding: 0.5rem 0.75rem;
-  background-color: var(--background);
-  border-bottom: 1px solid var(--stroke);
-}
+.breadcrumbs {}
 
 .ctaButton {
   display: flex;
@@ -293,15 +416,52 @@
 }
 
 .AddScoutingbtn {
-  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #D94841;
   color: #ffffff;
-  padding: 18px;
+  padding: 8px 15px;
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  border-radius: 20px !important;
+  z-index: 3 !important;
+  font-size: clamp(13px, 3.5vw, 15px);
 }
 
-.subTitle{
-  font-family: 'Inter',sans-serif;
+.subTitle {
+  font-family: 'Inter', sans-serif;
   color: var(--gray-900);
   font-size: 1.5rem;
   font-weight: 500;
   margin-top: 1.5rem;
+}
+
+.stickyHeader2 {
+  position: fixed;
+  width: 100%;
+  max-width: 500px;
+  bottom: 1%;
+  z-index: 999;
+  color: black;
+}
+
+.stickyBtnGrp {
+  background-color: #a9a9a9;
+  margin-inline: 1rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stickyBtnGrp button {
+  text-transform: capitalize !important;
+  font-size: 12px !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  padding-block: 0;
+  min-width: inherit !important;
 }

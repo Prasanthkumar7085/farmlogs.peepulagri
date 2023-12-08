@@ -1,3 +1,4 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
 import {
   deleteAllMessages,
   removeTheAttachementsFilesFromStore,
@@ -6,13 +7,13 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
-import { useRouter } from "next/router";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
 
 const DrawerComponentForScout = ({
   drawerClose,
@@ -32,13 +33,11 @@ const DrawerComponentForScout = ({
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [loadingThreads, setLoadingThreads] = useState(true);
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
 
   useEffect(() => {
-    if (
-      (router.isReady,
-      accessToken,
-      scoutDetails && attachement && openCommentsBox == true)
-    ) {
+    if ((router.isReady, accessToken, attachement && openCommentsBox == true)) {
       getAllScoutComments();
       setLoadingThreads(true);
     }
@@ -46,13 +45,9 @@ const DrawerComponentForScout = ({
 
   const logout = async () => {
     try {
-      const responseUserType = await fetch("/api/remove-cookie");
-      if (responseUserType) {
-        const responseLogin = await fetch("/api/remove-cookie");
-        if (responseLogin.status) {
-          router.push("/");
-        } else throw responseLogin;
-      }
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
     } catch (err: any) {
@@ -70,14 +65,16 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
+        // `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id}/comments`,
         options
       );
       let responseData = await response.json();
+      console.log(responseData, "lb");
       if (responseData.success == true) {
         const commentsById: any = {};
 
-        responseData.data[0]?.comments.forEach((comment: any) => {
+        responseData.data?.forEach((comment: any) => {
           commentsById[comment._id] = {
             ...comment,
             replies: [], // Initialize an empty array for replies
@@ -85,9 +82,9 @@ const DrawerComponentForScout = ({
         });
 
         // Populate the replies for each comment
-        responseData.data[0]?.comments.forEach((comment: any) => {
-          if (comment.type === "REPLY" && comment.reply_to_comment_id) {
-            const parentId = comment.reply_to_comment_id;
+        responseData.data?.forEach((comment: any) => {
+          if (comment.reply_to) {
+            const parentId = comment.reply_to;
             if (commentsById[parentId]) {
               commentsById[parentId].replies.push(comment);
             }
@@ -106,7 +103,6 @@ const DrawerComponentForScout = ({
         // Convert the commentsById object to an array of comments
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
-
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
       } else if (responseData?.statusCode == 403) {
@@ -131,7 +127,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/comment/${commnet_id}/delete`,
         options
       );
       let responseData = await response.json();
@@ -162,7 +158,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commnet_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/comment/${commnet_id}`,
         options
       );
       let responseData = await response.json();
@@ -215,7 +211,7 @@ const DrawerComponentForScout = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commentId}/attachments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/scout/${scoutDetails?._id}/attachments/${attachement?._id}/comments/${commentId}/attachments`,
         options
       );
       let responseData = await response.json();
@@ -272,8 +268,8 @@ const DrawerComponentForScout = ({
         </div>
         <CommentForm
           afterCommentAdd={afterCommentAdd}
-          scoutDetails={scoutDetails}
-          attachement={attachement}
+          scoutDetails={data}
+          attachement={data}
         />
 
         <LoadingComponent loading={loading} />

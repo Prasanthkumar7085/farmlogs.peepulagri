@@ -4,7 +4,15 @@
   align-self: stretch;
   position: relative;
 }
+.saveBtn{
+  background-color: #3462cf;
+  color: white;
 
+}
+.saveBtn:hover{
+  background-color: white !important;
+  color: #3462cf !important;
+}
 .title {
   font-size: inherit;
   line-height: 12px;

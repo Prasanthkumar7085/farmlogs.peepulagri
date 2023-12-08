@@ -44,9 +44,10 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
+
         const commentsById: any = {};
 
-        responseData.data.forEach((comment: any) => {
+        responseData.data?.forEach((comment: any) => {
           commentsById[comment._id] = {
             ...comment,
             replies: [], // Initialize an empty array for replies
@@ -54,9 +55,9 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         });
 
         // Populate the replies for each comment
-        responseData.data.forEach((comment: any) => {
-          if (comment.type === "REPLY" && comment.reply_to_comment_id) {
-            const parentId = comment.reply_to_comment_id;
+        responseData.data?.forEach((comment: any) => {
+          if (comment.reply_to) {
+            const parentId = comment.reply_to;
             if (commentsById[parentId]) {
               commentsById[parentId].replies.push(comment);
             }
@@ -76,6 +77,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
         setData(reverse);
+        dispatch(removeTheAttachementsFilesFromStore([]));
       }
     } catch (err) {
       console.error(err);
@@ -86,7 +88,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
 
   //delete comment api
   const deleteComment = async (commnet_id: any) => {
-    setDeleteLoading(true);
+    setLoading(true);
     let options = {
       method: "DELETE",
       headers: new Headers({
@@ -101,12 +103,13 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
+        toast.success(responseData?.message);
         getAllScoutComments();
       }
     } catch (err) {
       console.error(err);
     } finally {
-      setDeleteLoading(false);
+      setLoading(false);
     }
   };
 
@@ -241,6 +244,8 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         farmID={rowDetails?.farm_id?._id}
         taskId={rowDetails?._id}
         afterCommentAdd={afterCommentAdd}
+        scoutDetails={rowDetails}
+        attachement={""}
       />
 
       {/* <LoadingComponent loading={loading} /> */}

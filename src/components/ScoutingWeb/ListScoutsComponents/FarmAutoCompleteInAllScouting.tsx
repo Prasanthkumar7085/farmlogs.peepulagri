@@ -1,7 +1,7 @@
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
 import { Autocomplete, TextField } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 interface PropsTypes {
@@ -10,6 +10,10 @@ interface PropsTypes {
   label: string;
   placeholder: string;
   defaultValue: any | null | undefined;
+  optionsLoading: boolean;
+  setOptionsLoading: Dispatch<SetStateAction<boolean>>;
+  searchString: string;
+  setSearchString: Dispatch<SetStateAction<string>>;
 }
 const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
   options,
@@ -17,6 +21,10 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
   label,
   placeholder,
   defaultValue,
+  optionsLoading,
+  setOptionsLoading,
+  searchString,
+  setSearchString,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -42,6 +50,7 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
           size="small"
           id="combo-box-demo"
           options={options && options?.length ? options : []}
+          loading={optionsLoading}
           getOptionLabel={(option: any) =>
             option[label] ? option[label]?.toUpperCase() : ""
           }
@@ -66,20 +75,24 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
               {...params}
               placeholder={placeholder}
               sx={{ width: "100%", background: "#fff" }}
+              onChange={(e) => {
+                setOptionsLoading(true);
+                setSearchString(e.target.value);
+              }}
             />
           )}
 
-        // sx={{
-        //     width: '1000%',
-        //     background: "#fff",
-        //     "& .MuiInputBase-input ": {
-        //         fontSize: "13px",
-        //         fontWeight: "400",
-        //         fontFamily: "'inter', sans-serif ",
-        //         color: "#000",
+          // sx={{
+          //     width: '1000%',
+          //     background: "#fff",
+          //     "& .MuiInputBase-input ": {
+          //         fontSize: "13px",
+          //         fontWeight: "400",
+          //         fontFamily: "'inter', sans-serif ",
+          //         color: "#000",
 
-        //     }
-        // }}
+          //     }
+          // }}
         />
       ) : (
         ""

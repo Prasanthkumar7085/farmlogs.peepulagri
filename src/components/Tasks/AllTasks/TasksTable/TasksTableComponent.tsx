@@ -1,6 +1,6 @@
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import { TaskResponseTypes } from "@/types/tasksTypes";
-import { Button, ClickAwayListener, Tooltip } from "@mui/material";
+import { Button, Chip, ClickAwayListener, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import TanStackTableComponent from "./TanStackTable";
@@ -13,6 +13,8 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import AttachmentDrawerTaskmodule from "./AttachmentDrawer";
 import Link from "next/link";
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import ViewLogs from "../../ViewTask/ViewLogs";
 
 interface pageProps {
   data: Array<TaskResponseTypes> | any;
@@ -47,6 +49,10 @@ const TasksTableComponent = ({
   const [drawerOpen, setDrawerOpen] = useState<any>(false);
   const [rowDetails, setRowDetails] = useState<any>();
   const [attachmentdrawer, setAttachmentDrawer] = useState<any>(false);
+  const [openLogs, setOpenLogs] = useState(false);
+  const [taskId, setTaskId] = useState("");
+  const [showAllAssignee, setShowAllAssignee] = useState(false);
+  const [viewMoreId, setViewMoreId] = useState("");
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -62,8 +68,8 @@ const TasksTableComponent = ({
         page: router.query.page as string,
         limit: router.query.limit as string,
         search_string: router.query.search_string as string,
-        sortBy: router.query.order_by as string,
-        sortType: router.query.order_type as string,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
         selectedFarmId: router.query.farm_id as string,
         status: router.query.status as string,
         userId: router.query.assigned_to as string,
@@ -74,49 +80,69 @@ const TasksTableComponent = ({
     setDeleteLoading(false);
   };
 
+  //task-overdue-icon.svg
   const getStatusLabel = (label: string) => {
     if (!label) return "";
-    if (label == "IN-PROGRESS") {
-      return (
-        <div style={{ display: "flex", gap: "5px" }}>
-          <ImageComponent
-            src="/task-inprogress-icon.svg"
-            height={10}
-            width={10}
-            alt="task-inprogress"
-          />
-          <span>In-Progress</span>
-        </div>
-      );
-    }
-    if (label == "TODO") {
-      return (
-        <div style={{ display: "flex", gap: "5px" }}>
-          <ImageComponent
-            src="/task-todo-icon.svg"
-            height={10}
-            width={10}
-            alt="task-inprogress"
-          />
-          <span>Todo</span>
-        </div>
-      );
-    }
-    if (label == "COMPLETED") {
-      return (
-        <div style={{ display: "flex", gap: "5px" }}>
-          <ImageComponent
-            src="/task-complete-icon.svg"
-            height={10}
-            width={10}
-            alt="task-inprogress"
-          />
-          <span>Completed</span>
-        </div>
-      );
-    }
+
+    return (
+      <div style={{ display: "flex", gap: "5px" }}>
+        <ImageComponent
+          src={`/task-${label}.svg`}
+          height={10}
+          width={10}
+          alt="task-status"
+        />
+        <span>{label}</span>
+      </div>
+    );
   };
 
+  const AssignedComponent = ({ info }: any) => {
+    let value = info.getValue()?.assign_to;
+    let id = info.getValue()?._id;
+    value =
+      value?.length > 2
+        ? showAllAssignee && id == viewMoreId
+          ? value
+          : value.slice(0, 2)
+        : value;
+    return (
+      <span
+        style={{
+          padding: "40px 10px 40px 10px",
+          color: value?.length ? "" : "#9a9a9a",
+        }}
+      >
+        {value?.length
+          ? value
+              .map((item: { _id: string; name: string }) => item.name)
+              .join(", ")
+          : "*Not Assigned*"}
+        {info.getValue()?.assign_to?.length > 2 ? (
+          <div
+            style={{ color: "#9a9a9a", cursor: "pointer" }}
+            onClick={() => {
+              if (viewMoreId) {
+                if (id == viewMoreId) {
+                  setShowAllAssignee((prev) => !prev);
+                  setViewMoreId("");
+                } else {
+                  setViewMoreId(id);
+                }
+              } else {
+                setViewMoreId(id);
+                setShowAllAssignee((prev) => !prev);
+              }
+            }}
+          >
+            {showAllAssignee && id == viewMoreId ? "Show Less" : "Show More"}
+          </div>
+        ) : (
+          ""
+        )}
+      </span>
+    );
+  };
   const columns = [
     {
       accessorFn: (row: any) => row.createdAt,
@@ -130,26 +156,24 @@ const TasksTableComponent = ({
       footer: (props: any) => props.column.id,
       width: "120px",
     },
+    // {
+    //   accessorFn: (row: any) => row?.farm_ids,
+    //   id: "farm_id.title",
+    //   cell: (info: any) => (
+    //     <span style={{ padding: "40px 10px 40px 10px" }}>
+    //       {info.getValue()}
+    //     </span>
+    //   ),
+    //   header: () => <span>Farm Name</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "200px",
+    // },
     {
-      accessorFn: (row: any) => row.farm_id.title,
-      id: "farm_id.title",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
-        </span>
-      ),
-      header: () => <span>Farm Name</span>,
-      footer: (props: any) => props.column.id,
-      width: "200px",
-    },
-    {
-      accessorFn: (row: any) => row.assigned_to?.full_name,
+      accessorFn: (row: any) => {
+        return { assign_to: row.assign_to, _id: row._id };
+      },
       id: "assigned_to",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
-        </span>
-      ),
+      cell: (info: any) => <AssignedComponent info={info} />,
       header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
       width: "150px",
@@ -211,8 +235,8 @@ const TasksTableComponent = ({
                   : info.getValue()
                   ? info.getValue().slice(0, 1).toUpperCase() +
                     info.getValue().slice(1)
-                  : ""
-                : ""}
+                  : "-"
+                : "-"}
             </span>
           </Tooltip>
         </span>
@@ -279,7 +303,7 @@ const TasksTableComponent = ({
                   alt="view"
                 />
               </div> */}
-              {userType !== "USER" ? (
+              {userType !== "farmer" ? (
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -324,6 +348,15 @@ const TasksTableComponent = ({
                   width={17}
                   alt=""
                 />
+              </div>
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setOpenLogs((prev) => !prev);
+                  setTaskId(info.row.original?._id);
+                }}
+              >
+                <SummarizeIcon sx={{ color: "#4986f7" }} />
               </div>
             </div>
           }
@@ -370,6 +403,7 @@ const TasksTableComponent = ({
         setAttachmentDrawer={setAttachmentDrawer}
         attachmentdrawer={attachmentdrawer}
       />
+      <ViewLogs openLogs={openLogs} setOpenLogs={setOpenLogs} taskId={taskId} />
 
       <Toaster richColors position="top-right" closeButton />
     </div>
@@ -377,3 +411,4 @@ const TasksTableComponent = ({
 };
 
 export default TasksTableComponent;
+

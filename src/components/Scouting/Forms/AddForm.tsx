@@ -397,6 +397,9 @@ const AddFarmForm = () => {
                             height: "inherit",
                             fontFamily: "'Inter', sans-serif"
 
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: "grey !important"
                           }
                         }}
                       />
@@ -417,11 +420,15 @@ const AddFarmForm = () => {
                       background: "#fff",
                     },
                     '& .MuiInputBase-input': {
-                      padding: "11.5px 14px",
+                      padding: "12px 14px",
                       height: "inherit",
                       fontFamily: "'Inter', sans-serif",
 
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: "grey !important"
                     }
+
                   }}
                   {...register("area")}
                   className={styles.inputfarmname}
@@ -452,14 +459,13 @@ const AddFarmForm = () => {
                   variant="outlined"
                   onClick={() => router.back()}
                 >
-                  Back
+                  Cancel
                 </Button>
                 <Button
                   className={styles.submit}
                   color="primary"
                   name="submit"
                   variant="contained"
-                  endIcon={<Icon>arrow_forward_sharp</Icon>}
                   type="submit"
                 >
                   Submit

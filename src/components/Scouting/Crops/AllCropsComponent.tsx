@@ -524,7 +524,7 @@ const AllCropsComponent = () => {
               aria-label="add to shopping cart"
               onClick={() => setDilogOpen(true)}
             >
-              <AddIcon />
+              <img src="/mobileIcons/farms/AddFarmicon.svg" alt="" width={"25px"} />  Add Crop
             </IconButton>
           </div>
         ) : (

@@ -416,10 +416,18 @@
 }
 
 .AddScoutingbtn {
-  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #D94841;
   color: #ffffff;
-  padding: 18px;
+  padding: 8px 15px;
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  border-radius: 20px !important;
   z-index: 3 !important;
+  font-size: clamp(13px, 3.5vw, 15px);
 }
 
 .subTitle {

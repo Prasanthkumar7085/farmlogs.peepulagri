@@ -125,7 +125,7 @@
 
 .farm {
   justify-content: flex-end;
-  gap: var(--gap-lg);
+  gap: 1.5rem;
 }
 
 .farmcard {
@@ -133,7 +133,7 @@
   background: #FFF;
   box-shadow: 2px 2px 9px 0px rgba(0, 0, 0, 0.136);
   justify-content: flex-start;
-  padding: var(--padding-xs);
+  padding: 1rem;
   text-align: left;
   font-size: var(--font-size-xs);
   color: var(--title);

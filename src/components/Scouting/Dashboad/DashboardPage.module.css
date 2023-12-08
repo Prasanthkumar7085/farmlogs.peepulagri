@@ -1,7 +1,15 @@
 .AddFarmBtn {
-  background: #05A155;
+  background: #D94841;
   color: #ffffff;
-  padding: 20px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  border-radius: 20px !important;
+}
+
+.AddFarmBtn img {
+  margin-right: 3px;
 }
 
 #dashboardPage {

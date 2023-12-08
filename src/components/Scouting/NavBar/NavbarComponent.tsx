@@ -72,7 +72,6 @@ export default function ScoutingHeader({ children }: any) {
             right: 0,
             borderRadius: "0 !important"
         }}>
-
             <div className={styles.navButtonList}>
                 <Button className={router.pathname.includes("/dashboard") ? styles.navButtonActive : styles.navButton}
                     onClick={() => router.push("/dashboard")}>{router.pathname.includes("/dashboard") ? <img src="./mobileIcons/navTabs/dashboard-mobile-active.svg" alt="" width={"25px"} /> : <img src="./mobileIcons/navTabs/dashboard-mobile.svg" alt="" width={"25px"} />} Dashboard</Button>

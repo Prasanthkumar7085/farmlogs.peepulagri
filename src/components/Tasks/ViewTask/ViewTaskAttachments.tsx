@@ -282,7 +282,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
                 return (
                   <div key={index}>
                     <p className={styles.AttachmentDate}>
-                      {timePipe(item[0]?.createdAt, "DD MMM YYYY, hh:mm A")}
+                      {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
                     </p>
                     {item?.map((image: any) => {
                       return (

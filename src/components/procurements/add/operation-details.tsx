@@ -104,6 +104,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               </label>
               <div className={styles.datepicker}>
                 <DatePicker
+                  disablePast
                   disabled={isDisabled}
                   label="Select Date "
                   value={dateOfOperation}

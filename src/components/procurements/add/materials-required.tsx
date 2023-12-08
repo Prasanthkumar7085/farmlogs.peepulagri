@@ -31,6 +31,7 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import getMaterialsByProcurementIdService from "../../../../lib/services/ProcurementServices/getMaterialsByProcurementIdService";
+import { Delete, DeleteOutline, EditOutlined } from "@mui/icons-material";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -98,6 +99,7 @@ const MaterialsRequired: NextPage = () => {
         setAvailableUnits("");
 
         toast.success(response?.message);
+        getAllProcurementMaterials();
       } else if (response?.status == 422) {
         setErrorMessages(response?.errors);
       } else if (response?.status == 401) {
@@ -263,6 +265,7 @@ const MaterialsRequired: NextPage = () => {
                   <TableCell>Name</TableCell>
                   <TableCell>Material Procurement (Qty)</TableCell>
                   <TableCell>Material Availability (Qty)</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -295,6 +298,10 @@ const MaterialsRequired: NextPage = () => {
                               {item.available_units
                                 ? `(${item.available_units})`
                                 : ""}
+                            </TableCell>
+                            <TableCell>
+                              <EditOutlined sx={{ color: "red" }} />
+                              <DeleteOutline sx={{ color: "red" }} />
                             </TableCell>
                           </TableRow>
                         );

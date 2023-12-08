@@ -1,37 +1,41 @@
-import type { NextPage } from "next";
-import { useState, useCallback, ChangeEvent, useEffect } from "react";
 import {
+  Autocomplete,
   Button,
-  Icon,
-  TextField,
-  InputAdornment,
+  CircularProgress,
+  Drawer,
+  FormControl,
+  FormHelperText,
   IconButton,
-  Select,
   InputLabel,
   MenuItem,
-  FormHelperText,
-  FormControl,
+  Select,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
+  TableHead,
+  TableRow,
+  TextField,
 } from "@mui/material";
-import UnitsDropdown from "./units-dropdown";
-// import PortalPopup from "./portal-popup";
-import Dropdown1 from "./dropdown1";
-import styles from "./materials-required.module.css";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import addProcurementMaterialService from "../../../../lib/services/ProcurementServices/addProcurementMaterialService";
-import ErrorMessages from "@/components/Core/ErrorMessages";
-import { toast } from "sonner";
-import { useCookies } from "react-cookie";
+import type { NextPage } from "next";
+import { ChangeEvent, useEffect, useState } from "react";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import { Clear, DeleteOutline, EditOutlined } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import addProcurementMaterialService from "../../../../lib/services/ProcurementServices/addProcurementMaterialService";
+import deleteMaterialByIdService from "../../../../lib/services/ProcurementServices/deleteMaterialByIdService";
 import getMaterialsByProcurementIdService from "../../../../lib/services/ProcurementServices/getMaterialsByProcurementIdService";
-import { Delete, DeleteOutline, EditOutlined } from "@mui/icons-material";
+import styles from "./materials-required.module.css";
+import FooterActionButtons from "@/components/Tasks/AddTask/footer-action-buttons";
+import updateMaterialsByIdService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
+import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
+import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -50,6 +54,8 @@ const MaterialsRequired: NextPage = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const details = useSelector((state: any) => state.auth.userDetails);
+
   const router = useRouter();
   const [name, setName] = useState("");
   const [requiredQty, setRequiredQty] = useState<null | number | string>(null);
@@ -61,6 +67,55 @@ const MaterialsRequired: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [materials, setMaterials] = useState([]);
+  const [deleteMaterialOpen, setDeleteMaterialOpen] = useState(false);
+  const [deleteMaterialId, setDeleteMaterialId] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [editMaterialOpen, setEditMaterialOpen] = useState(false);
+  const [editMaterialData, setEditMaterialData] = useState({});
+  const [editNameValue, setEditNameValue] = useState<string>("");
+
+  const [editRequiredQty, setEditRequiredQty] = useState<
+    null | number | string
+  >(null);
+  const [editRequiredUnits, setEditRequiredUnits] = useState<string>("");
+  const [editAvailableQty, setEditAvailableQty] = useState<
+    null | number | string
+  >(null);
+  const [editAvailableUnits, setEditAvailableUnits] = useState<string>("");
+
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [editMaterialId, setEditMaterialId] = useState("");
+
+  const [editErrorMessages, setEditErrorMessages] = useState({});
+  const [usersData, setUsersData] = useState([]);
+
+  const deleteMaterial = async () => {
+    setDeleteLoading(true);
+
+    try {
+      const response = await deleteMaterialByIdService({
+        materialId: deleteMaterialId,
+        token: accessToken,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        setDeleteMaterialId("");
+        setDeleteMaterialOpen(false);
+        toast.success(response?.message);
+        await getAllProcurementMaterials();
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
 
   const logout = async () => {
     try {
@@ -140,9 +195,72 @@ const MaterialsRequired: NextPage = () => {
       setLoading(false);
     }
   };
+
+  const updateMaterialById = async () => {
+    setUpdateLoading(true);
+
+    try {
+      const body = {
+        procurement_req_id: router.query.procurement_id,
+        name: editNameValue,
+        required_qty: editRequiredQty ? +editRequiredQty : null,
+        required_units: editRequiredUnits,
+        available_qty: editAvailableQty ? +editAvailableQty : null,
+        available_units: editAvailableUnits,
+      };
+      const response = await updateMaterialsByIdService({
+        token: accessToken,
+        materialId: editMaterialId,
+        body: body as ApiCallService,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        setEditNameValue("");
+        setEditRequiredQty(null);
+        setEditRequiredUnits("");
+        setEditAvailableQty(null);
+        setEditAvailableUnits("");
+        setEditMaterialOpen(false);
+        toast.success(response?.message);
+
+        getAllProcurementMaterials();
+      } else if (response?.status == 422) {
+        setEditErrorMessages(response?.errors);
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  const getAllUsers = async () => {
+    try {
+      const response = await getAllUsersService({ token: accessToken });
+      if (response?.status == 200 || response?.status == 201) {
+        setUsersData(response?.data);
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllProcurementMaterials();
+      getAllUsers();
     }
   }, [router.isReady, accessToken]);
   return (
@@ -273,6 +391,7 @@ const MaterialsRequired: NextPage = () => {
                   ? materials.map(
                       (
                         item: {
+                          _id: string;
                           name: string;
                           required_qty: number;
                           required_units: string;
@@ -300,8 +419,28 @@ const MaterialsRequired: NextPage = () => {
                                 : ""}
                             </TableCell>
                             <TableCell>
-                              <EditOutlined sx={{ color: "red" }} />
-                              <DeleteOutline sx={{ color: "red" }} />
+                              <IconButton
+                                onClick={() => {
+                                  setEditAvailableQty(item.available_qty);
+                                  setEditAvailableUnits(item.available_units);
+                                  setEditRequiredQty(item.required_qty);
+                                  setEditRequiredUnits(item.required_units);
+                                  setEditNameValue(item.name);
+
+                                  setEditMaterialId(item._id);
+                                  setEditMaterialOpen(true);
+                                }}
+                              >
+                                <EditOutlined sx={{ color: "red" }} />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => {
+                                  setDeleteMaterialId(item._id);
+                                  setDeleteMaterialOpen(true);
+                                }}
+                              >
+                                <DeleteOutline sx={{ color: "red" }} />
+                              </IconButton>
                             </TableCell>
                           </TableRow>
                         );
@@ -315,20 +454,39 @@ const MaterialsRequired: NextPage = () => {
         <div className={styles.row}>
           <div className={styles.personofcontact}>
             <label className={styles.label}>Person of Contact (POC)</label>
-            <FormControl className={styles.selectbox} variant="outlined">
-              <InputLabel color="primary" />
-              <Select color="primary" defaultValue="Name">
-                <MenuItem value="Gopi">Gopi</MenuItem>
-                <MenuItem value="Latha">Latha</MenuItem>
-                <MenuItem value="Madhuri">Madhuri</MenuItem>
-                <MenuItem value="Sai">Sai</MenuItem>
-              </Select>
-              <FormHelperText />
-            </FormControl>
+            {/* <Autocomplete
+              options={usersData?.length ? usersData : []}
+
+            /> */}
           </div>
         </div>
       </div>
 
+      <AlertDelete
+        open={deleteMaterialOpen}
+        deleteFarm={deleteMaterial}
+        setDialogOpen={setDeleteMaterialOpen}
+        loading={deleteLoading}
+      />
+
+      <EditMaterialDrawer
+        editMaterialOpen={editMaterialOpen}
+        setEditMaterialOpen={setEditMaterialOpen}
+        editAvailableQty={editAvailableQty}
+        setEditAvailableQty={setEditAvailableQty}
+        editAvailableUnits={editAvailableUnits}
+        setEditAvailableUnits={setEditAvailableUnits}
+        editRequiredQty={editRequiredQty}
+        setEditRequiredQty={setEditRequiredQty}
+        editRequiredUnits={editRequiredUnits}
+        setEditRequiredUnits={setEditRequiredUnits}
+        editNameValue={editNameValue}
+        setEditNameValue={setEditNameValue}
+        editErrorMessages={editErrorMessages}
+        setEditErrorMessages={setEditErrorMessages}
+        updateMaterialById={updateMaterialById}
+        updateLoading={updateLoading}
+      />
       <LoadingComponent loading={loading} />
     </>
   );

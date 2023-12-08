@@ -4,7 +4,13 @@ import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Button, Checkbox, CircularProgress, IconButton } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  CircularProgress,
+  Collapse,
+  IconButton,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -14,6 +20,7 @@ import deleteTaskAttachmentService from "../../../../lib/services/TasksService/d
 import TasksAttachments from "../AddTask/TasksAttachments";
 import styles from "./TaskDetails.module.css";
 import timePipe from "@/pipes/timePipe";
+import { Clear, EditOutlined } from "@mui/icons-material";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -38,6 +45,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
   const [files, setFiles] = useState([]);
   const [attachmentData, setAttachmentData] = useState<any>();
+  const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -218,30 +226,55 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
         {userType == "farmer" ? (
           ""
         ) : selectedAttachmentIds?.length ? (
-          <Button
-            onClick={deleteSelectedImages}
-            disabled={!selectedAttachmentIds?.length || deleteLoading}
-          >
-            {deleteLoading ? (
-              <CircularProgress size="1.5rem" sx={{ color: "red" }} />
-            ) : (
-              <ImageComponent
-                src="/trast-icon.svg"
-                height={17}
-                width={17}
-                alt="delete"
-              />
-            )}
-          </Button>
+          <div>
+            <IconButton
+              onClick={() => {
+                setIsEditable(false);
+                setSelectedAttachmentsIds([]);
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+            <IconButton
+              onClick={deleteSelectedImages}
+              disabled={!selectedAttachmentIds?.length || deleteLoading}
+            >
+              {deleteLoading ? (
+                <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+              ) : (
+                <ImageComponent
+                  src="/trast-icon.svg"
+                  height={17}
+                  width={17}
+                  alt="delete"
+                />
+              )}
+            </IconButton>
+          </div>
         ) : (
-          <IconButton
-            onClick={() => setUploadAttachmentsOpen(!uploadAttachmentsOpen)}
-          >
-            {uploadAttachmentsOpen ? <ClearIcon /> : <AddIcon />}
-          </IconButton>
+          <div>
+            <IconButton onClick={() => setIsEditable(!isEditable)}>
+              {isEditable ? <ClearIcon /> : <EditOutlined />}
+            </IconButton>
+            <IconButton
+              onClick={() => setUploadAttachmentsOpen(!uploadAttachmentsOpen)}
+            >
+              {uploadAttachmentsOpen ? <ClearIcon /> : <AddIcon />}
+            </IconButton>
+          </div>
         )}
       </div>
-
+      <Collapse in={uploadAttachmentsOpen}>
+        <div>
+          <TasksAttachments
+            taskId={""}
+            setUploadedFiles={setUploadedFiles}
+            multipleFiles={multipleFiles}
+            setMultipleFiles={setMultipleFiles}
+            afterUploadAttachements={afterUploadAttachements}
+          />
+        </div>
+      </Collapse>
       <div className={styles.allAttachments}>
         {attachmentData?.length
           ? attachmentData?.map(
@@ -259,10 +292,16 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
                               <div className={styles.checkGrp}>
                                 <Checkbox
                                   size="small"
-                                  sx={{ padding: "0" }}
+                                  sx={{
+                                    padding: "0",
+                                    display: isEditable ? "" : "none",
+                                  }}
                                   onChange={(e) =>
                                     selectImagesForDelete(e, image)
                                   }
+                                  checked={selectedAttachmentIds.includes(
+                                    image?._id
+                                  )}
                                 />
                                 <ImageComponent
                                   src={image.url}
@@ -320,19 +359,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
             )
           : "No Attachements"}
       </div>
-      {uploadAttachmentsOpen ? (
-        <div>
-          <TasksAttachments
-            taskId={""}
-            setUploadedFiles={setUploadedFiles}
-            multipleFiles={multipleFiles}
-            setMultipleFiles={setMultipleFiles}
-            afterUploadAttachements={afterUploadAttachements}
-          />
-        </div>
-      ) : (
-        ""
-      )}
+
       <Toaster richColors position="top-right" closeButton />
 
       <LoadingComponent loading={loading} />

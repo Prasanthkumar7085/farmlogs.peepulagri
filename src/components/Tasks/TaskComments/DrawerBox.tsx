@@ -88,7 +88,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
 
   //delete comment api
   const deleteComment = async (commnet_id: any) => {
-    setDeleteLoading(true);
+    setLoading(true);
     let options = {
       method: "DELETE",
       headers: new Headers({
@@ -103,12 +103,13 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
+        toast.success(responseData?.message);
         getAllScoutComments();
       }
     } catch (err) {
       console.error(err);
     } finally {
-      setDeleteLoading(false);
+      setLoading(false);
     }
   };
 

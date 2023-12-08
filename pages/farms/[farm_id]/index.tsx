@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 const FormView = () => {
     return (
         <div>
-            <ViewHeader name={'View Farm'} />
+            {/* <ViewHeader name={'View Farm'} /> */}
             <ViewFarmPage />
         </div>
     );
@@ -29,10 +29,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
     } else if (cookies.userType == 'ADMIN') {
         return {
-          redirect: {
-            destination: `/scouts`,
-            permanent: false,
-          },
+            redirect: {
+                destination: `/scouts`,
+                permanent: false,
+            },
         };
     }
     return {

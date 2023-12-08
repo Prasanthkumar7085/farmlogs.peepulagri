@@ -1,131 +1,122 @@
-.farm1 {
-  color: #05A155;
-  font-family: "Inter", sans-serif;
-  font-size: clamp(16px, 4vw, 20px);
-  line-height: 100%;
-  font-weight: 500;
+.viewFarmDetailsCard {
+  margin: 1rem;
 }
 
-.aug2023 {
-  color: #6A7185;
+.viewfarmCard {
+  border-radius: 10px;
+  border: 1px solid #DEDEDE;
+  background: #FFF;
+  padding: 1rem;
+}
+
+.farmdetailsblock {
+  background-color: #fff;
+}
+
+.eachFarmDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1rem;
+  border-bottom: 1px solid #d3d3d3;
+  padding-block: 1.5rem;
+}
+
+.eachFarmDetails:last-child {
+  border-bottom: 1px solid #fff !important;
+}
+
+.detailsHeading {
+  color: #000;
+  font-size: clamp(16px, 3.5vw, 20px);
   font-family: "Inter", sans-serif;
-  font-size: clamp(12px, 3.5vw, 16px);
   font-weight: 400;
-  line-height: 100%;
-  letter-spacing: -0.32px;
-}
-
-
-.farmdetailsblock {
-  align-self: stretch;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
-.farmdetailsblock {
-  gap: 0.5rem;
-}
-
-
-.text {
-  color: #35353D;
+.aboutFarm {
+  color: #000;
+  font-size: clamp(16px, 3.5vw, 20px);
   font-family: "Inter", sans-serif;
-  font-size: clamp(12px, 3.5vw, 16px);
-  font-weight: 800;
-  line-height: 18px;
+  font-weight: 400;
 }
 
-.acres {
-  font-size: clamp(12px, 3.5vw, 16px);
-  color: #A05148;
-  font-family: "Inter", sans-serif;
-  font-weight: 500;
-  line-height: 140%;
-}
-
-
-.farmareaheading {
-  align-self: stretch;
+.overViewBtns {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
+  margin-block: 2rem;
+  gap: 1rem;
 }
 
-.farmareainacres {
-  height: 20px;
+.farmOverView {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  border-radius: 90px;
+  width: 35%;
+  padding-block: 12px;
 }
 
-.farmarea,
-.farmareaheading {
-  color: var(--brown);
-}
-
-.farmareaheading {
-  gap: .3125rem;
-}
-
-.mapimage6Icon {
-  position: absolute;
-  top: calc(50% - 74px);
-  left: calc(50% - 181px);
-  width: 430px;
-  height: 932.21px;
-  object-fit: cover;
-}
-
-.locationIcon {
-  position: absolute;
-  top: calc(50% - 14px);
-  left: 223px;
-  width: 24px;
-  height: 28px;
-}
-
-.map {
-  align-self: stretch;
-  position: relative;
-  border-radius: var(--br-5xs);
-  background-color: var(--white);
-  height: 148px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-
-.locationMarked {
+.overViewText h6 {
   margin: 0;
-  line-height: 140%;
-  font-weight: 500;
-  color: #6A7185;
+  font-weight: 400;
+  font-size: clamp(16px, 3.5vw, 20px);
   font-family: "Inter", sans-serif;
-  font-size: clamp(12px, 3.5vw, 16px);
 }
 
-.locationMarked span {
-  color: #000 !important;
+.overViewText span {
+  font-size: clamp(12px, 2.5vw, 14px);
+  font-family: "Inter", sans-serif;
 }
 
-.locationdetailsblock {
-  align-items: flex-start;
-  gap: var(--gap-5xs);
+.overViewText {
+  text-align: center;
+  color: #fff;
 }
 
-
-.locationdetailsblock,
-.viewfarm {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.locationdetails {
-  align-items: flex-end;
-  color: var(--color-black);
-}
 
 .viewfarm {
   gap: var(--gap-base);
   padding: 1rem;
+}
+
+.iconsiconArrowLeft {
+  width: 20px;
+}
+
+.viewFarm {
+  color: #fff !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(16px, 3.5vw, 20px) !important;
+  font-weight: 500 !important;
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.headericon {
+  width: 32px;
+}
+
+.infoIcon {
+  width: 32px;
+
+}
+
+.iconBlock {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.header {
+  background-color: #45A845;
+  justify-content: space-between;
+  padding: 10px 1rem;
 }

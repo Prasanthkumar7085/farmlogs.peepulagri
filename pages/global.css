@@ -13,9 +13,8 @@ body {
     margin: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
-
     scroll-snap-type: y mandatory;
-
+    background: #F8F8F8;
 }
 
 .MuiTabs-indicator {
@@ -335,8 +334,8 @@ body {
 .addFormPositionIcon {
     cursor: pointer;
     position: fixed;
-    bottom: 4rem;
-    right: 2rem;
+    bottom: 5rem;
+    right: 1rem;
 }
 
 #mobileOtpVerify p {

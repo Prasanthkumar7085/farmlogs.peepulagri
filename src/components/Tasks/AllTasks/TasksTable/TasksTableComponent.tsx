@@ -120,7 +120,7 @@ const TasksTableComponent = ({
           : "*Not Assigned*"}
         {info.getValue()?.assign_to?.length > 2 ? (
           <div
-            style={{ color: "#9a9a9a" }}
+            style={{ color: "#9a9a9a", cursor: "pointer" }}
             onClick={() => {
               if (viewMoreId) {
                 if (id == viewMoreId) {

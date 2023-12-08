@@ -215,7 +215,7 @@ const DashboardPage = () => {
             }
           }}
         >
-          <AddIcon sx={{ fontSize: "2rem" }} /> Add Farm
+          <img src="/mobileIcons/farms/AddFarmicon.svg" alt="" width={"25px"} /> Add Farm
         </IconButton>
       </div>
       <LoadingComponent loading={loading} />

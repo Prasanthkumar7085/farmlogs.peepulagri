@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 const AddFormPage = () => {
     return (
         <>
-            <Header1 name={'Add Farm'} />
+            {/* <Header1 name={'Add Farm'} /> */}
             <AddFarmForm />
         </>
     )
@@ -28,10 +28,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
     } else if (cookies.userType == 'ADMIN') {
         return {
-          redirect: {
-            destination: `/scouts`,
-            permanent: false,
-          },
+            redirect: {
+                destination: `/scouts`,
+                permanent: false,
+            },
         };
     }
     return {

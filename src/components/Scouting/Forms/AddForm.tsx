@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Icon,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -19,20 +20,17 @@ import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByI
 import addLocationService from "../../../../lib/services/Locations/addLocationService";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import styles from "./add-farm-form1.module.css";
-
+import AddIcon from '@mui/icons-material/Add';
 const AddFarmForm = () => {
   const router = useRouter();
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-
   const [errorMessages, setErrorMessages] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [data, setData] = useState<FarmDataType>();
-
   const [title, setTitle] = useState<string>("");
   const [location, setLocation] = useState<{
     title: string;
@@ -46,13 +44,10 @@ const AddFarmForm = () => {
   const [locations, setLocations] = useState<
     Array<{ title: string; _id: string }>
   >([]);
-
   const [addLocationOpen, setAddLocationOpen] = useState(false);
-
   const [hiddenLoading, setHiddenLoading] = useState(false);
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [addLocationLoading, setAddLocationLoading] = useState(false);
-
   const [newLocation, setNewLocation] = useState("");
 
   const {
@@ -250,244 +245,253 @@ const AddFarmForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitClick)}>
-      {!loading ? (
-        <div className={styles.addfarmform} id="add-farm">
-          <div className={styles.formfields} id="form-fields">
-            <div className={styles.farmname} id="farm-name">
-              <div className={styles.label}>
-                {" "}
-                Title<span style={{ color: "red" }}>*</span>
-              </div>
-              <TextField
-                sx={{
-                  "& .MuiInputBase-root": {
-                    background: "#fff",
-                  },
-                }}
-                {...register("title")}
-                name="title"
-                fullWidth
-                className={styles.inputfarmname}
-                size="small"
-                placeholder="Enter Title"
-                variant="outlined"
-                error={Boolean(errorMessages?.["title"])}
-                helperText={
-                  errorMessages?.["title"] ? errorMessages?.["title"] : ""
-                }
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            {/* <div className={styles.addlocationbutton} id="add-location">
-                            <div className={styles.locationheading} id="location-heading">
-                                <div className={styles.text}>Location</div>
-                                <div className={styles.supportingText}>
-                                    You can add Manually or choose on map
-                                </div>
-                            </div>
-                            <Button
-                                className={styles.button}
-                                variant="contained"
-                                onClick={onButtonClick}
-                            >
-                                <MyLocationOutlinedIcon sx={{ fontSize: "12px" }} /> Locate On Map
-                            </Button>
-                        </div> */}
-            <div className={styles.farmname} id="enter-location">
-              <div
-                className={styles.label}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <span>
-                  Location<span style={{ color: "red" }}>*</span>
-                </span>{" "}
-                <span
-                  style={{ color: "#3276c3" }}
-                  onClick={() => {
-                    setNewLocation("");
-                    setAddLocationOpen(true);
+    <div>
+      <div className={styles.header} id="header">
+        <img
+          className={styles.iconsiconArrowLeft}
+          alt=""
+          src="/iconsiconarrowleft.svg"
+          onClick={() => router.back()}
+        />
+        <Typography className={styles.viewFarm}>Add Farm</Typography>
+        <div className={styles.headericon} id="header-icon">
+        </div>
+      </div>
+      <form onSubmit={handleSubmit(onSubmitClick)}>
+        {!loading ? (
+          <div className={styles.addfarmform} id="add-farm">
+            <div className={styles.formfields} id="form-fields">
+              <div className={styles.farmname} id="farm-name">
+                <div className={styles.label}>
+                  Title
+                </div>
+                <TextField
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      background: "#fff",
+                    },
+                    '& .MuiInputBase-input': {
+                      padding: "11.5px 14px",
+                      height: "inherit",
+                      fontFamily: "'Inter', sans-serif"
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: "grey !important"
+                    }
                   }}
-                >
-                  + Add Location
-                </span>
+                  {...register("title")}
+                  name="title"
+                  fullWidth
+                  className={styles.inputfarmname}
+                  size="small"
+                  placeholder="Farm Name"
+                  variant="outlined"
+                  error={Boolean(errorMessages?.["title"])}
+                  helperText={
+                    errorMessages?.["title"] ? errorMessages?.["title"] : ""
+                  }
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
               </div>
 
-              {!hiddenLoading && !settingLocationLoading ? (
-                <Autocomplete
-                  id="asynchronous-demo"
-                  open={open}
-                  fullWidth
-                  onOpen={() => {
-                    getLocations("");
-                    setOpen(true);
+              <div className={styles.farmname} id="enter-location">
+                <div
+                  className={styles.label}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                    marginBottom: "0.5rem",
+                    width: "100%",
                   }}
-                  onClose={() => {
-                    setOpen(false);
-                  }}
-                  noOptionsText={
-                    <div>
-                      {"No such location!"}{" "}
-                      <span
-                        style={{ color: "blue" }}
-                        onClick={() => setAddLocationOpen(true)}
-                      >
-                        Add New?
-                      </span>
-                    </div>
-                  }
-                  value={location}
-                  isOptionEqualToValue={(option, value) =>
-                    option.title === value.title
-                  }
-                  getOptionLabel={(option: { title: string; _id: string }) =>
-                    option.title
-                  }
-                  options={locations}
-                  loading={optionsLoading}
-                  onInputChange={addInputValue}
-                  onChange={(e: any, value: any, reason: any) => {
-                    if (reason == "clear") {
-                      setLocation(null);
+                >
+                  <span>
+                    Location
+                  </span>
+                  <span
+                    className={styles.addLocationBtn}
+                    onClick={() => {
+                      setNewLocation("");
+                      setAddLocationOpen(true);
+                    }}
+                  >
+                    <AddIcon sx={{ fontSize: "1.2rem" }} /> ADD
+                  </span>
+                </div>
+
+                {!hiddenLoading && !settingLocationLoading ? (
+                  <Autocomplete
+                    id="asynchronous-demo"
+                    open={open}
+                    fullWidth
+                    onOpen={() => {
+                      getLocations("");
+                      setOpen(true);
+                    }}
+                    onClose={() => {
+                      setOpen(false);
+                    }}
+                    noOptionsText={
+                      <div>
+                        {"No such location!"}{" "}
+                        <span
+                          style={{ color: "blue" }}
+                          onClick={() => setAddLocationOpen(true)}
+                        >
+                          Add New?
+                        </span>
+                      </div>
                     }
-                    if (value) {
-                      setLocation(value);
+                    value={location}
+                    isOptionEqualToValue={(option, value) =>
+                      option.title === value.title
                     }
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <React.Fragment>
-                            {optionsLoading ? (
-                              <CircularProgress color="inherit" size={20} />
-                            ) : null}
-                            {params.InputProps.endAdornment}
-                          </React.Fragment>
-                        ),
-                      }}
-                      {...register("location_id")}
-                      className={styles.inputfarmname}
-                      name="location_id"
-                      size="small"
-                      placeholder="Enter location here"
-                      fullWidth
-                      variant="outlined"
-                      error={Boolean(errorMessages?.["location_id"])}
-                      helperText={
-                        errorMessages?.["location_id"]
-                          ? errorMessages?.["location_id"]
-                          : ""
+                    getOptionLabel={(option: { title: string; _id: string }) =>
+                      option.title
+                    }
+                    options={locations}
+                    loading={optionsLoading}
+                    onInputChange={addInputValue}
+                    onChange={(e: any, value: any, reason: any) => {
+                      if (reason == "clear") {
+                        setLocation(null);
                       }
-                      sx={{
-                        "& .MuiInputBase-root": {
-                          background: "#fff",
-                        },
-                      }}
-                    />
-                  )}
-                />
-              ) : (
-                ""
-              )}
-              {/* <TextField
-                            sx={{
-                                '& .MuiInputBase-root': {
-                                    background: "#fff"
-                                }
-                            }}
-                            {...register('location')}
-                            className={styles.inputfarmname}
-                            name="location"
-                            size="small"
-                            placeholder="Enter location here"
-                            fullWidth
-                            variant="outlined"
-                            error={Boolean(errorMessages?.['location'])}
-                            helperText={errorMessages?.['location'] ? errorMessages?.['location'] : ""}
-                            value={location}
-                            onChange={(e)=>setLocation(e.target.value)}
-                        /> */}
-            </div>
-            <div className={styles.farmname} id="acres">
-              <div className={styles.label}>
-                Total Land (acres)<span style={{ color: "red" }}>*</span>
+                      if (value) {
+                        setLocation(value);
+                      }
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <React.Fragment>
+                              {optionsLoading ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </React.Fragment>
+                          ),
+                        }}
+                        {...register("location_id")}
+                        className={styles.inputfarmname}
+                        name="location_id"
+                        size="small"
+                        placeholder=""
+                        fullWidth
+                        variant="outlined"
+                        error={Boolean(errorMessages?.["location_id"])}
+                        helperText={
+                          errorMessages?.["location_id"]
+                            ? errorMessages?.["location_id"]
+                            : ""
+                        }
+                        sx={{
+                          "& .MuiInputBase-root": {
+                            background: "#fff",
+                          },
+                          '& .MuiInputBase-input': {
+                            padding: "5.5px 14px !important",
+                            height: "inherit",
+                            fontFamily: "'Inter', sans-serif"
+
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: "grey !important"
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                ) : (
+                  ""
+                )}
+
               </div>
-              <TextField
-                sx={{
-                  "& .MuiInputBase-root": {
-                    background: "#fff",
-                  },
-                }}
-                {...register("area")}
-                className={styles.inputfarmname}
-                name="area"
-                size="small"
-                placeholder="Enter total area"
-                fullWidth
-                type={"number"}
-                onWheel={(e: any) => e.target.blur()}
-                variant="outlined"
-                error={Boolean(errorMessages?.["area"])}
-                helperText={
-                  errorMessages?.["area"] ? errorMessages?.["area"] : ""
-                }
-                onKeyPress={handleKeyPress}
-                inputProps={{
-                  step: "any",
-                }}
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-              />
-            </div>
-            <div className={styles.buttons}>
-              <Button
-                className={styles.back}
-                name="back"
-                size="medium"
-                variant="outlined"
-                onClick={() => router.back()}
-              >
-                Back
-              </Button>
-              <Button
-                className={styles.submit}
-                color="primary"
-                name="submit"
-                variant="contained"
-                endIcon={<Icon>arrow_forward_sharp</Icon>}
-                type="submit"
-              >
-                Submit
-              </Button>
+              <div className={styles.farmname} id="acres" style={{ paddingTop: "1rem" }}>
+                <div className={styles.label}>
+                  Total Land (acres)
+                </div>
+                <TextField
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      background: "#fff",
+                    },
+                    '& .MuiInputBase-input': {
+                      padding: "12px 14px",
+                      height: "inherit",
+                      fontFamily: "'Inter', sans-serif",
+
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: "grey !important"
+                    }
+
+                  }}
+                  {...register("area")}
+                  className={styles.inputfarmname}
+                  name="area"
+                  size="small"
+                  placeholder="Acres"
+                  fullWidth
+                  type={"number"}
+                  onWheel={(e: any) => e.target.blur()}
+                  variant="outlined"
+                  error={Boolean(errorMessages?.["area"])}
+                  helperText={
+                    errorMessages?.["area"] ? errorMessages?.["area"] : ""
+                  }
+                  onKeyPress={handleKeyPress}
+                  inputProps={{
+                    step: "any",
+                  }}
+                  value={area}
+                  onChange={(e) => setArea(e.target.value)}
+                />
+              </div>
+              <div className={styles.buttons}>
+                <Button
+                  className={styles.back}
+                  name="back"
+                  size="medium"
+                  variant="outlined"
+                  onClick={() => router.back()}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className={styles.submit}
+                  color="primary"
+                  name="submit"
+                  variant="contained"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        ""
-      )}
-      <LoadingComponent loading={loading} />
-      <AlertComponent
-        alertMessage={alertMessage}
-        alertType={alertType}
-        setAlertMessage={setAlertMessage}
-        mobile={true}
-      />
-      <AddLocationDialog
-        open={addLocationOpen}
-        captureResponseDilog={captureResponseDilog}
-        defaultTitle={newLocation}
-        errorMessages={errorMessages}
-        loading={addLocationLoading}
-      />
-    </form>
+        ) : (
+          ""
+        )}
+        <LoadingComponent loading={loading} />
+        <AlertComponent
+          alertMessage={alertMessage}
+          alertType={alertType}
+          setAlertMessage={setAlertMessage}
+          mobile={true}
+        />
+        <AddLocationDialog
+          open={addLocationOpen}
+          captureResponseDilog={captureResponseDilog}
+          defaultTitle={newLocation}
+          errorMessages={errorMessages}
+          loading={addLocationLoading}
+        />
+      </form>
+    </div>
   );
 };
 

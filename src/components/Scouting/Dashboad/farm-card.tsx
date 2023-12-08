@@ -93,7 +93,7 @@ const FarmCard = ({
                       <div className={styles.dates}>
                         {timePipe(item.createdAt, "DD, MMM YYYY")}
                       </div>
-                      <div className={styles.count}>
+                      <div className={styles.count} onClick={() => router.push(`farms/${item._id}`)}>
                         <img
                           src="/mobileIcons/farms/info.svg"
                           width={25}
@@ -133,19 +133,18 @@ const FarmCard = ({
                         </div>
                       </div>
                     </div>
-                    <div
+                    {/* <div
                       className={styles.viewfarm}
                       id="icon-button-view-farm"
                       onClick={() => router.push(`farms/${item._id}`)}
                     >
-                      {/* <SettingsIcon sx={{ color: "#c1c1c1" }} /> */}
                       <ImageComponent
                         src="/setting.svg"
                         height={18}
                         width={18}
                         alt="image"
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

@@ -9,7 +9,7 @@ import {
 import OperationDetails from "./operation-details";
 import MaterialsRequired from "./materials-required";
 import styles from "./add-procurement-form.module.css";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
@@ -23,6 +23,7 @@ import getProcurementByIdService from "../../../../lib/services/ProcurementServi
 import updateProcurementService from "../../../../lib/services/ProcurementServices/updateProcurementService";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import POC from "../edit/POC";
 
 interface ApiProps {
   page: number;
@@ -55,6 +56,8 @@ const AddProcurementForm: NextPage = () => {
   >([]);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const [procurementData, setProcurementData] = useState({});
 
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     try {
@@ -188,12 +191,14 @@ const AddProcurementForm: NextPage = () => {
         accessToken: accessToken,
       });
       if (response?.status == 200 || response?.status == 201) {
+        setProcurementData(response?.data);
         setIsDisabled(true);
         setDataOfOperation(
           response?.data?.date_of_operation
             ? new Date(response?.data?.date_of_operation)
             : null
         );
+
         setRemarks(response?.data?.remarks);
         setTitle(response?.data?.title);
         setEditFarms(response?.data?.farm_ids);
@@ -231,100 +236,109 @@ const AddProcurementForm: NextPage = () => {
     }
   }, [router.isReady, accessToken, searchString]);
   return (
-    <form className={styles.addprocurementform}>
-      <div className={styles.formgroup}>
-        {router.query.procurement_id ? (
-          <Button
-            variant="outlined"
-            sx={{ color: "red", borderColor: "red" }}
-            onClick={() => setIsDisabled(!isDisabled)}
-          >
-            {router.query.procurement_id && isDisabled ? (
-              <EditOutlinedIcon />
-            ) : (
-              <CancelOutlinedIcon />
-            )}
-          </Button>
-        ) : (
-          ""
-        )}
-        <OperationDetails
-          farmOptions={farmOptions}
-          onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-          label={"title"}
-          placeholder={"Select Farm here"}
-          defaultValue={farm}
-          optionsLoading={optionsLoading}
-          setOptionsLoading={setOptionsLoading}
-          searchString={searchString}
-          setSearchString={setSearchString}
-          title={title}
-          setTitle={setTitle}
-          dateOfOperation={dateOfOperation}
-          setDataOfOperation={setDataOfOperation}
-          remarks={remarks}
-          setRemarks={setRemarks}
-          errorMessages={errorMessages}
-          setErrorMessages={setErrorMessages}
-          editFarms={editFarms}
-          setEditFarms={setEditFarms}
-          isDisabled={isDisabled}
-          setIsDisabled={setIsDisabled}
-        />
-      </div>
-      {isDisabled ? (
-        ""
-      ) : (
-        <div className={styles.modalActions}>
-          <div className={styles.buttonsgroup}>
+    <div>
+      <form className={styles.addprocurementform}>
+        <div className={styles.formgroup}>
+          {router.query.procurement_id ? (
             <Button
-              color="primary"
               variant="outlined"
-              onClick={() => {
-                router.query.procurement_id
-                  ? deleteProcurement()
-                  : router.back();
-              }}
+              sx={{ color: "red", borderColor: "red" }}
+              onClick={() => setIsDisabled(!isDisabled)}
             >
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                router.query.procurement_id
-                  ? updateProcurement()
-                  : addProcurement();
-              }}
-            >
-              {router.query.procurement_id ? "Update" : "Submit"}
-            </Button>
-          </div>
-        </div>
-      )}
-
-      <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
-        <DialogContent>
-          <h4>Do you want to delete the Procurement?</h4>
-        </DialogContent>
-        <DialogActions>
-          <div>
-            <Button variant="outlined" onClick={() => setDeleteOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="contained" onClick={() => deleteProcurementApi()}>
-              {deleteLoading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+              {router.query.procurement_id && isDisabled ? (
+                <EditOutlinedIcon />
               ) : (
-                "Yes! Delete"
+                <CancelOutlinedIcon />
               )}
             </Button>
+          ) : (
+            ""
+          )}
+          <OperationDetails
+            farmOptions={farmOptions}
+            onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+            label={"title"}
+            placeholder={"Select Farm here"}
+            defaultValue={farm}
+            optionsLoading={optionsLoading}
+            setOptionsLoading={setOptionsLoading}
+            searchString={searchString}
+            setSearchString={setSearchString}
+            title={title}
+            setTitle={setTitle}
+            dateOfOperation={dateOfOperation}
+            setDataOfOperation={setDataOfOperation}
+            remarks={remarks}
+            setRemarks={setRemarks}
+            errorMessages={errorMessages}
+            setErrorMessages={setErrorMessages}
+            editFarms={editFarms}
+            setEditFarms={setEditFarms}
+            isDisabled={isDisabled}
+            setIsDisabled={setIsDisabled}
+          />
+        </div>
+        {isDisabled ? (
+          ""
+        ) : (
+          <div className={styles.modalActions}>
+            <div className={styles.buttonsgroup}>
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() => {
+                  router.query.procurement_id
+                    ? deleteProcurement()
+                    : router.back();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  router.query.procurement_id
+                    ? updateProcurement()
+                    : addProcurement();
+                }}
+              >
+                {router.query.procurement_id ? "Update" : "Submit"}
+              </Button>
+            </div>
           </div>
-        </DialogActions>
-      </Dialog>
-      <LoadingComponent loading={loading} />
-      <Toaster closeButton richColors position="top-right" />
-    </form>
+        )}
+
+        <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
+          <DialogContent>
+            <h4>Do you want to delete the Procurement?</h4>
+          </DialogContent>
+          <DialogActions>
+            <div>
+              <Button variant="outlined" onClick={() => setDeleteOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => deleteProcurementApi()}
+              >
+                {deleteLoading ? (
+                  <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                ) : (
+                  "Yes! Delete"
+                )}
+              </Button>
+            </div>
+          </DialogActions>
+        </Dialog>
+        <LoadingComponent loading={loading} />
+        <Toaster closeButton richColors position="top-right" />
+      </form>
+      <POC
+        procurementData={procurementData}
+        getProcurementData={getProcurementData}
+      />
+    </div>
   );
 };
 

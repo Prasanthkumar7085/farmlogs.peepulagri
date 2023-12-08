@@ -76,7 +76,6 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         // Convert the commentsById object to an array of comments
         const formattedData = Object.values(commentsById);
         let reverse = formattedData.slice().reverse();
-        console.log(reverse, "asdf")
         setData(reverse);
         dispatch(removeTheAttachementsFilesFromStore([]));
       }

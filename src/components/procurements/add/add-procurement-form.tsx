@@ -1,5 +1,11 @@
 import type { NextPage } from "next";
-import { Button } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+} from "@mui/material";
 import OperationDetails from "./operation-details";
 import MaterialsRequired from "./materials-required";
 import styles from "./add-procurement-form.module.css";
@@ -47,6 +53,8 @@ const AddProcurementForm: NextPage = () => {
   const [editFarms, setEditFarms] = useState<
     { title: string; _id: string }[] | []
   >([]);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     try {
@@ -152,6 +160,9 @@ const AddProcurementForm: NextPage = () => {
       });
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
+        setFarm([]);
+        await getProcurementData();
+        setIsDisabled(true);
       } else if (response.status == 422) {
         setErrorMessages(response?.errors);
       } else if (response.status == 403) {
@@ -193,6 +204,20 @@ const AddProcurementForm: NextPage = () => {
       setLoading(false);
     }
   };
+
+  const deleteProcurement = () => {
+    setDeleteOpen(true);
+  };
+
+  const deleteProcurementApi = async () => {
+    setDeleteLoading(true);
+    try {
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
   useEffect(() => {
     if (router.isReady && accessToken) {
       if (router.query.procurement_id) {
@@ -213,7 +238,11 @@ const AddProcurementForm: NextPage = () => {
           sx={{ color: "red", borderColor: "red" }}
           onClick={() => setIsDisabled(!isDisabled)}
         >
-          {isDisabled ? <EditOutlinedIcon /> : <CancelOutlinedIcon />}
+          {router.query.procurement_id && isDisabled ? (
+            <EditOutlinedIcon />
+          ) : (
+            <CancelOutlinedIcon />
+          )}
         </Button>
         <OperationDetails
           farmOptions={farmOptions}
@@ -244,7 +273,15 @@ const AddProcurementForm: NextPage = () => {
       ) : (
         <div className={styles.modalActions}>
           <div className={styles.buttonsgroup}>
-            <Button color="primary" variant="outlined">
+            <Button
+              color="primary"
+              variant="outlined"
+              onClick={() => {
+                router.query.procurement_id
+                  ? deleteProcurement()
+                  : router.back();
+              }}
+            >
               Cancel
             </Button>
             <Button
@@ -261,6 +298,26 @@ const AddProcurementForm: NextPage = () => {
           </div>
         </div>
       )}
+
+      <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
+        <DialogContent>
+          <h4>Do you want to delete the Procurement?</h4>
+        </DialogContent>
+        <DialogActions>
+          <div>
+            <Button variant="outlined" onClick={() => setDeleteOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="contained" onClick={() => deleteProcurementApi()}>
+              {deleteLoading ? (
+                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+              ) : (
+                "Yes! Delete"
+              )}
+            </Button>
+          </div>
+        </DialogActions>
+      </Dialog>
       <LoadingComponent loading={loading} />
       <Toaster closeButton richColors position="top-right" />
     </form>

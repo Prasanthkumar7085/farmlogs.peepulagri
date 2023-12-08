@@ -67,7 +67,7 @@ const ViewFarmPage = () => {
     setLoading(false);
   };
 
-
+  // Crop.svg
   return (
     <div>
       <div className={styles.header} id="header">
@@ -84,7 +84,23 @@ const ViewFarmPage = () => {
       </div>
       {!loading ? (
         <div className={styles.viewFarmDetailsCard}>
-          <div className={styles.viewfarm} id="view-farm">
+          <div className={styles.overViewBtns}>
+            <div className={styles.farmOverView} style={{ background: "#D94841" }}>
+              <img src="/mobileIcons/farms/Crop.svg" alt="" width={"24px"} />
+              <div className={styles.overViewText}>
+                <h6>22</h6>
+                <span>Crops</span>
+              </div>
+            </div>
+            <div className={styles.farmOverView} style={{ background: "#05A155" }}>
+              <img src="/mobileIcons/farms/image-fill.svg" alt="" width={"24px"} />
+              <div className={styles.overViewText}>
+                <h6>5</h6>
+                <span>Images</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.viewfarmCard} id="view-farm">
             <Box className={styles.farmdetailsblock}>
               <div className={styles.iconBlock} >
                 <div onClick={handleClick}>
@@ -111,7 +127,8 @@ const ViewFarmPage = () => {
               </div>
               <div className={styles.eachFarmDetails} >
                 <div className={styles.detailsHeading}>
-                  Title
+                  <img src="/mobileIcons/farms/farm-view-mobile.svg" alt="" width={"20px"} />
+                  <span>Title</span>
                 </div>
                 <div className={styles.aboutFarm}>
                   {data?.title}
@@ -119,7 +136,9 @@ const ViewFarmPage = () => {
               </div>
               <div className={styles.eachFarmDetails}>
                 <div className={styles.detailsHeading}>
-                  Acres
+                  <img src="/mobileIcons/farms/field-icon.svg" alt="" width={"20px"} />
+                  <span> Acres</span>
+
                 </div>
                 <div className={styles.aboutFarm}>
                   {data?.area ? Math.floor(data?.area * 100) / 100 : ""}
@@ -128,7 +147,9 @@ const ViewFarmPage = () => {
               </div>
               <div className={styles.eachFarmDetails} >
                 <div className={styles.detailsHeading}>
-                  Location
+                  <img src="/mobileIcons/farms/map-pin-line-view.svg" alt="" width={"20px"} />
+                  <span>  Location</span>
+
                 </div>
                 <div className={styles.aboutFarm}>
                   {data?.location_id?.title ? ' ' + data?.location_id?.title : " N/A"}
@@ -137,7 +158,9 @@ const ViewFarmPage = () => {
               </div>
               <div className={styles.eachFarmDetails} >
                 <div className={styles.detailsHeading}>
-                  Created On
+                  <img src="/mobileIcons/farms/calendar-blank.svg" alt="" width={"20px"} />
+                  <span>Created On</span>
+
                 </div>
                 <div className={styles.aboutFarm}>
                   {timePipe(data?.createdAt as string, 'DD, MMM YYYY')}

@@ -19,8 +19,6 @@ interface PropsType {
 const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assignee }) => {
   const router = useRouter();
 
-  console.log(onChange);
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );

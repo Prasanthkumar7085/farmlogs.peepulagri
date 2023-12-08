@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const UpdateSummary = () => {
     const router = useRouter();
@@ -403,12 +404,7 @@ const UpdateSummary = () => {
                     {summaryError}
                 </Alert>
             </Snackbar>
-            <Backdrop
-                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
+            <LoadingComponent loading={loading} />
         </div>
     )
 

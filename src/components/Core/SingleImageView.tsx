@@ -39,6 +39,7 @@ const SingleImageView: FC<componentProps> = ({
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
   const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
   const [isZoom, setISZoom] = useState<any>();
+  const [tagsDetails, setTagsDetails] = useState<any>()
 
   const tagsDrawerClose = (value: any) => {
     if (value == false) {
@@ -125,10 +126,34 @@ const SingleImageView: FC<componentProps> = ({
     }
   };
 
+  const getImageBasedTags = async () => {
+    let options = {
+      method: "GET",
+      headers: new Headers({
+        authorization: accessToken,
+      }),
+    };
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/${router.query.image_id}`,
+        options
+      );
+      const responseData = await response.json();
+      if (responseData.success) {
+        setTagsDetails(responseData?.data);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   //call the api
   useEffect(() => {
     if (router.isReady) {
       getSingleImageDetails();
+      getImageBasedTags()
     }
   }, [router.isReady, accessToken]);
 
@@ -179,28 +204,7 @@ const SingleImageView: FC<componentProps> = ({
             <ReactPanZoom alt={`Image ${data?.created_at}`} image={data?.url} />
           )}
         </div>
-        {data?.suggestions ? (
-          <div className={styles.remondationsdiv}>
-            <div className={styles.recomendations}>
-              <Button
-                className={styles.button}
-                variant="outlined"
-                onClick={openViewMore}
-              >
-                <div className={styles.btnContent}>
-                  <ImageComponent
-                    src={"/scouting/recommendations-icon.svg"}
-                    height={16}
-                    width={16}
-                  />
-                  Recomendations
-                </div>
-              </Button>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
+
       </div>
       <div>
         {" "}
@@ -237,12 +241,12 @@ const SingleImageView: FC<componentProps> = ({
           : ""}
       </div>
       <div className={styles.scoutingdetails}>
-        {data ? (
+        {tagsDetails?.tags ? (
           <div className={styles.cropDetailsBlock}>
-            {data?.tags?.length ? (
+            {tagsDetails?.tags?.length ? (
               <div className={styles.tagNames}>
-                {data?.tags?.length
-                  ? data?.tags?.map((item: string, index: number) => {
+                {tagsDetails?.tags?.length
+                  ? tagsDetails?.tags?.map((item: string, index: number) => {
                     return (
                       <Chip
                         icon={
@@ -265,60 +269,7 @@ const SingleImageView: FC<componentProps> = ({
               ""
             )}
 
-            <div className={styles.drawerBody}>
-              {data?.description ? (
-                <div>
-                  <div className={styles.findingDec}>
-                    <span
-                      className={styles.bodyHeading}
-                      style={{ color: "#3462CF" }}
-                    >
-                      <ImageComponent
-                        src={"/scouting/HasSummary.svg"}
-                        height={19}
-                        width={19}
-                        alt="no-summary"
-                      />
-                      <span>Findings</span>
-                    </span>
-                    <Typography
-                      variant="caption"
-                      className={styles.bodyDescription}
-                    >
-                      <Markup content={formatText(data?.description)} />
-                    </Typography>
-                  </div>
-                  <Divider />
-                </div>
-              ) : (
-                ""
-              )}
-              <div className={styles.findingDec}>
-                <span
-                  className={styles.bodyHeading}
-                  style={{ color: "#05A155", fontWeight: "600 !important" }}
-                >
-                  <ImageComponent
-                    src={"/scouting/recommendations-icon.svg"}
-                    height={16}
-                    width={16}
-                  />
-                  <span>Recommendations</span>
-                </span>
-                <Typography
-                  variant="caption"
-                  className={styles.bodyDescription}
-                >
-                  <Markup
-                    content={
-                      data?.suggestions
-                        ? data?.suggestions
-                        : "*No Recommendations added*"
-                    }
-                  />
-                </Typography>
-              </div>
-            </div>
+
           </div>
         ) : (
           ""

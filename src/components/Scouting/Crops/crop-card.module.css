@@ -89,6 +89,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
@@ -130,9 +131,8 @@
 }
 
 #allCropCardBlock {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .filterBox {

@@ -1,8 +1,8 @@
 export interface CropTypeInFarms {
-    title: string;
-    active: boolean,
-    slug: string,
-    _id: string;
+  title: string;
+  active: boolean,
+  slug: string,
+  _id: string;
 }
 
 export interface CropTypeResponse {
@@ -15,4 +15,5 @@ export interface CropTypeResponse {
   _id: string;
   created_at: string;
   updatedAt: string;
+  url: string;
 }

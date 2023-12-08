@@ -68,23 +68,7 @@ const EditTagsForSingleAttachment = ({
           beforeTags={item?.tags}
         />
 
-        {/* <Typography>Findings</Typography>
-        <TextField
-          color="primary"
-          name="description"
-          id="description"
-          minRows={4}
-          maxRows={4}
-          placeholder="Enter your findings here"
-          fullWidth={true}
-          variant="outlined"
-          multiline
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-          sx={{ background: "#fff" }}
-        /> */}
+
       </div>
 
       <Button

@@ -12,6 +12,7 @@ import DateRangePickerComponent from "./DateRangePicker";
 import styles from "./summary.module.css";
 import FarmsDropDown from "@/components/Core/FarmsDropDown";
 import CropsDropDown from "@/components/Core/CropsDropDown";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const AllSummaryComponents = () => {
     const router = useRouter();
@@ -376,12 +377,7 @@ const AllSummaryComponents = () => {
                 </IconButton>
 
             </div>
-            <Backdrop
-                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
+            <LoadingComponent loading={loading} />
         </div>
     )
 }

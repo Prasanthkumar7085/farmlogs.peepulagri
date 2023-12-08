@@ -4,7 +4,7 @@ import timePipe from "@/pipes/timePipe";
 import { TaskResponseTypes } from "@/types/tasksTypes";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import { IconButton, MenuItem, Select, TextField } from "@mui/material";
+import { IconButton, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
@@ -69,6 +69,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
   const [userId, setUserId] = useState("");
   const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
   const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setErrorMessages({});
@@ -255,7 +256,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                 <h1 className={styles.landPreparation}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                    data?.title.slice(1)
+                      data?.title.slice(1)
                     : "-"}
                 </h1>
               )}
@@ -328,7 +329,13 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         disablePast
                         value={deadline}
                         onChange={(newValue: any) => {
-                          setDeadline(newValue);
+                          const currentDate = new Date();
+                          if (newValue < currentDate) {
+                            setError('Please select a future date');
+                          } else {
+                            setError('');
+                            setDeadline(newValue);
+                          }
                         }}
                         format="dd/MM/yyyy"
                         slotProps={{
@@ -340,6 +347,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         }}
                       />
                     </LocalizationProvider>
+                    {error && <Typography variant="body2" color="error">{error}</Typography>}
+
                   </div>
                 </div>
               ) : (
@@ -398,7 +407,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
       <div className={styles.viewHeader}>
         <div className={styles.userBlock}>
           <div className={styles.userDetails}>
-
             <div
               className={styles.singleDetailsBox}
               style={{
@@ -430,24 +438,37 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   />
                 </div>
               ) : (
-                <h1>
-                  {data?.assign_to ? data?.assign_to.map((item: { _id: string; name: string }, index: number) => {
-                    return <p key={index}>
-                      {deleteField == "assignee" && deleteFieldOrNot ? (
-                        <input
-                          type="checkbox"
-                          onChange={(e) => handleAssigneeCheckboxChange(e, item._id)}
-                        />
-
-
-                      ) : ''}
-                      {item.name}
-                    </p>
-                  }) : "-"}
-
-                </h1>
-
+                ""
               )}
+              <div
+                style={{
+                  display: "grid",
+                  width: "45rem",
+                  gridTemplateColumns: "repeat(3,1fr)",
+                }}
+              >
+                {data?.assign_to
+                  ? data?.assign_to.map(
+                      (item: { _id: string; name: string }, index: number) => {
+                        return (
+                          <div key={index}>
+                            {deleteField == "assignee" && deleteFieldOrNot ? (
+                              <input
+                                type="checkbox"
+                                onChange={(e) =>
+                                  handleAssigneeCheckboxChange(e, item._id)
+                                }
+                              />
+                            ) : (
+                              ""
+                            )}
+                            {item.name},
+                          </div>
+                        );
+                      }
+                    )
+                  : "-"}
+              </div>
             </div>
             <div>
               {deleteField == "assignee" && deleteFieldOrNot ? (
@@ -467,10 +488,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                     }}
                     disabled={selectedAssigneeIds.length === 0}
                   >
-                    <DeleteForeverIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                    <DeleteForeverIcon
+                      sx={{ color: "green", fontSize: "1.4rem" }}
+                    />
                   </IconButton>
                 </div>
-              ) : userType !== "farmer" && !(editField == "assignee" && editFieldOrNot) ? (
+              ) : userType !== "farmer" &&
+                data?.assign_to?.length &&
+                !(editField == "assignee" && editFieldOrNot) ? (
                 <IconButton
                   onClick={() => {
                     setDeleteFieldOrNot(true);
@@ -506,8 +531,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                     <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                   </IconButton>
                 </div>
-              ) : userType !== "farmer" && !(deleteField == "assignee" && deleteFieldOrNot) ? (
-
+              ) : userType !== "farmer" &&
+                !(deleteField == "assignee" && deleteFieldOrNot) ? (
                 <IconButton
                   onClick={() => {
                     setEditFieldOrNot(true);
@@ -523,9 +548,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
               ) : (
                 ""
               )}
-
             </div>
-
           </div>
         </div>
         <div className={styles.status}>

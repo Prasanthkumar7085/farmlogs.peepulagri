@@ -2,7 +2,7 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
@@ -30,7 +30,7 @@ const TaskForm = () => {
   const [defaultValue, setDefaultValue] = useState<FarmInTaskType | null>();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [deadline, setDeadline] = useState<Date>();
+  const [deadline, setDeadline] = useState<Date | null>();
   const [status, setStatus] = useState("TO-START");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
@@ -46,9 +46,10 @@ const TaskForm = () => {
   ]);
   const [user, setUser] = useState<userTaskType>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
+  const [error, setError] = useState("");
 
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
-  const [taskId, setTaskId] = useState<any>()
+  const [taskId, setTaskId] = useState<any>();
 
   const getAllFarms = async (id = "", userId = "") => {
     setLoading(true);
@@ -79,8 +80,8 @@ const TaskForm = () => {
       categories: [],
       deadline: deadline
         ? moment(deadline)
-          .utcOffset("+05:30")
-          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -92,7 +93,7 @@ const TaskForm = () => {
     if (response?.success) {
       toast.success(response?.message);
       router.push("/tasks");
-      setTaskId(response?.data?._id)
+      setTaskId(response?.data?._id);
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     }
@@ -145,7 +146,6 @@ const TaskForm = () => {
       setMultipleFiles([]);
     }
   };
-
 
   // const removeFiles = () => {
   //   setFiles([]);
@@ -296,7 +296,14 @@ const TaskForm = () => {
                             },
                           }}
                           onChange={(newValue: any) => {
-                            setDeadline(newValue);
+                            const currentDate = new Date();
+                            if (newValue < currentDate) {
+                              setError("Please select a future date");
+                              setDeadline(null);
+                            } else {
+                              setError("");
+                              setDeadline(newValue);
+                            }
                           }}
                           slotProps={{
                             textField: {
@@ -306,6 +313,12 @@ const TaskForm = () => {
                             },
                           }}
                         />
+                        {error && (
+                          <Typography variant="body2" color="error">
+                            {error}
+                          </Typography>
+                        )}
+
                         <ErrorMessages
                           errorMessages={errorMessages}
                           keyname="deadline"
@@ -347,7 +360,6 @@ const TaskForm = () => {
                 </Grid>
               </form>
               <div style={{ marginTop: "1.5rem" }}>
-
                 <FooterActionButtons addTask={addTask} />
               </div>
               {/* {taskId ? <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
@@ -365,8 +377,6 @@ const TaskForm = () => {
             </div>
           </div>
         </div>
-
-
       </>
       <AlertComponent
         alertMessage={alertMessage}

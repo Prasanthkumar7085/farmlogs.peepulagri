@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import formatMoney from "@/pipes/formatMoney";
 import { Typography } from "@mui/material";
 import LatestImagesComponent from "./LatestImages";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const DashboardStats = () => {
     const router = useRouter()
@@ -131,6 +132,7 @@ const DashboardStats = () => {
                     </div>
                 </div>
             </div>
+            <LoadingComponent loading={loading} />
         </div>
     );
 };

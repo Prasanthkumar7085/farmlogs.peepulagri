@@ -53,7 +53,6 @@ const TasksTableComponent = ({
   const [taskId, setTaskId] = useState("");
   const [showAllAssignee, setShowAllAssignee] = useState(false);
   const [viewMoreId, setViewMoreId] = useState("");
-  console.log(viewMoreId, "asdf");
 
   const deleteTask = async () => {
     setDeleteLoading(true);
@@ -121,7 +120,7 @@ const TasksTableComponent = ({
           : "*Not Assigned*"}
         {info.getValue()?.assign_to?.length > 2 ? (
           <div
-            style={{ color: "#9a9a9a" }}
+            style={{ color: "#9a9a9a", cursor: "pointer" }}
             onClick={() => {
               if (viewMoreId) {
                 if (id == viewMoreId) {
@@ -236,8 +235,8 @@ const TasksTableComponent = ({
                   : info.getValue()
                   ? info.getValue().slice(0, 1).toUpperCase() +
                     info.getValue().slice(1)
-                  : ""
-                : ""}
+                  : "-"
+                : "-"}
             </span>
           </Tooltip>
         </span>

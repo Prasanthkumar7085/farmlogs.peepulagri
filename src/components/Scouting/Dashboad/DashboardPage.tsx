@@ -61,14 +61,12 @@ const DashboardPage = () => {
         delete queryParam["order_by"];
         delete queryParam["order_type"];
       }
-      // if (location) {
-      //   console.log(location, "m");
-      //   if (location != "1" || location != "All") {
-      //     queryParam["location_id"] = location;
-      //     delete queryParam["order_by"];
-      //     delete queryParam["order_type"];
-      //    }
-      // }
+      if (location != "1" && location) {
+        queryParam["location_id"] = location;
+        delete queryParam["order_by"];
+        delete queryParam["order_type"];
+      }
+
       router.replace({ pathname: "/farms", query: queryParam });
       url = prepareURLEncodedParams(url, queryParam);
 
@@ -76,7 +74,7 @@ const DashboardPage = () => {
 
       if (response?.success) {
         if (location || search_string) {
-          setFarmsData(response.data);
+          setFarmsData([...farmsData, ...response.data]);
           setHasMore(response?.has_more);
         } else {
           setFarmsData([...farmsData, ...response.data]);
@@ -195,6 +193,7 @@ const DashboardPage = () => {
           farmsData={farmsData}
           setPage={setPage}
           page={page}
+
           getAllFarms={getAllFarms}
           hasMore={hasMore}
         />

@@ -201,6 +201,7 @@ const CropCard = ({
           <Avatar
             sx={{ bgcolor: colorsArray[colorIndex], color: "black !important" }}
             className={styles.avatarImage}
+            variant="square"
           >
             {itemDetails?.title.toUpperCase().slice(0, 2)}
           </Avatar>
@@ -208,13 +209,14 @@ const CropCard = ({
             className={styles.textWrapper}
             onClick={() => setToStorage(itemDetails?.title)}
           >
+
             <h2 className={styles.FieldCrop}>
               {itemDetails?.title.length > 12
                 ? itemDetails?.title.slice(0, 1).toUpperCase() +
-                  itemDetails?.title.slice(1, 9) +
-                  "..."
+                itemDetails?.title.slice(1, 9) +
+                "..."
                 : itemDetails?.title.slice(0, 1).toUpperCase() +
-                  itemDetails?.title.slice(1)}
+                itemDetails?.title.slice(1)}
             </h2>
             <p className={styles.aug2023}>
               {timePipe(itemDetails.createdAt, "DD, MMM YYYY")}
@@ -222,8 +224,14 @@ const CropCard = ({
           </div>
 
           <MenuItemsForFolder />
+          <Avatar
+            alt="Remy Sharp"
+            src={itemDetails?.url}
+            sx={{ width: 56, height: 56 }}
+          />
         </div>
         <div className={styles.actionButtons}>
+
           <p className={styles.aug2023}>
             {itemDetails.area
               ? itemDetails.area + (itemDetails.area < 2 ? " acre" : " acres")

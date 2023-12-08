@@ -23,7 +23,7 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { Clear, DeleteOutline, EditOutlined } from "@mui/icons-material";
+import { Clear, DeleteOutline, Edit, EditOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
@@ -87,7 +87,6 @@ const MaterialsRequired: NextPage = () => {
   const [editMaterialId, setEditMaterialId] = useState("");
 
   const [editErrorMessages, setEditErrorMessages] = useState({});
-  const [usersData, setUsersData] = useState([]);
 
   const deleteMaterial = async () => {
     setDeleteLoading(true);
@@ -240,31 +239,22 @@ const MaterialsRequired: NextPage = () => {
     }
   };
 
-  const getAllUsers = async () => {
+  const addPOCtoProcurement = async () => {
     try {
-      const response = await getAllUsersService({ token: accessToken });
-      if (response?.status == 200 || response?.status == 201) {
-        setUsersData(response?.data);
-      } else if (response?.status == 401) {
-        toast.error(response?.message);
-      } else if (response?.status == 403) {
-        logout();
-      } else {
-        toast.error("Something went wrong");
-        throw response;
-      }
+      setLoading(true);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllProcurementMaterials();
-      getAllUsers();
     }
   }, [router.isReady, accessToken]);
   return (
-    <>
+    <div style={{ paddingBottom: "5rem" }}>
       <div className={styles.materialsrequired}>
         <div className={styles.group}>
           <div className={styles.heading}>
@@ -451,15 +441,6 @@ const MaterialsRequired: NextPage = () => {
             </Table>
           </div>
         </div>
-        <div className={styles.row}>
-          <div className={styles.personofcontact}>
-            <label className={styles.label}>Person of Contact (POC)</label>
-            {/* <Autocomplete
-              options={usersData?.length ? usersData : []}
-
-            /> */}
-          </div>
-        </div>
       </div>
 
       <AlertDelete
@@ -488,7 +469,7 @@ const MaterialsRequired: NextPage = () => {
         updateLoading={updateLoading}
       />
       <LoadingComponent loading={loading} />
-    </>
+    </div>
   );
 };
 

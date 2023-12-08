@@ -13,7 +13,7 @@ interface pagePropsType {
   farmsData: Array<FarmDataType>;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
-  getAllFarms: ({ page }: { page: number }) => void;
+  getAllFarms: any;
   hasMore: boolean;
 }
 const FarmCard = ({
@@ -24,6 +24,9 @@ const FarmCard = ({
   hasMore,
 }: pagePropsType) => {
   const router = useRouter();
+  console.log(page, "khfg")
+  let searchFromRouter = router.query?.search_string;
+  let locationFromRouter = router.query?.location_id;
 
   let colorsArray = [
     "#C71585",
@@ -159,7 +162,12 @@ const FarmCard = ({
             onClick={(e) => {
               e.preventDefault();
               setPage((prev) => prev + 1);
-              getAllFarms({ page: page + 1 });
+
+              getAllFarms({
+                page: page + 1,
+                search_string: searchFromRouter as string,
+                location: locationFromRouter as string,
+              });
             }}
           >
             View More <KeyboardArrowDownIcon sx={{ fontSize: "1.5rem" }} />

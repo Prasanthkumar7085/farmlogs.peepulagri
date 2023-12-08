@@ -6,6 +6,19 @@
   letter-spacing: -0.01em;
   line-height: 100%;
 }
+
+.buttonsgroup{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.modalActions {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
 .text {
   font-size: inherit;
   font-weight: 500;

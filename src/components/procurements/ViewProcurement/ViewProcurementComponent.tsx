@@ -12,7 +12,6 @@ const ViewProcurementComponent = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
   const [data, setData] = useState<any>()
-  console.log(data, "mk")
   const getProcurementById = async () => {
     try {
       const response = await getProcurementByIdService({
@@ -28,6 +27,13 @@ const ViewProcurementComponent = () => {
     }
   };
 
+  //after chnage status 
+  const afterStatusChange = (value: any) => {
+    if (value == true) {
+      getProcurementById()
+    }
+  }
+
   useEffect(() => {
     if (router.isReady && accessToken) {
       getProcurementById();
@@ -35,7 +41,7 @@ const ViewProcurementComponent = () => {
   }, [router.isReady, accessToken]);
   return (
     <div style={{ width: "50%", margin: "auto" }}>
-      <ShippedStatus data={data} />
+      <ShippedStatus data={data} afterStatusChange={afterStatusChange} />
       <ShippedStatusform data={data} />
       <ViewProcurementTable data={data} />
     </div>

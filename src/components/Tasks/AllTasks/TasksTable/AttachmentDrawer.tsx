@@ -106,7 +106,7 @@ const AttachmentDrawerTaskmodule = ({
               return (
                 <div style={{ marginBottom: "1rem" }} key={index}>
                   <p className={styles.AttachmentDate}>
-                    {timePipe(item[0]?.createdAt, "DD MMM YYYY, hh:mm A")}
+                    {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
                   </p>
                   <div className={styles.attachmentDrawer}>
                     {item?.map((image: any, index: number) => {

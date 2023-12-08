@@ -1,6 +1,7 @@
-const addProcurementMaterialService = async ({
+const updateMaterialsByIdService = async ({
   body,
   token,
+  materialId,
 }: {
   body: {
     procurement_req_id: string;
@@ -10,12 +11,13 @@ const addProcurementMaterialService = async ({
     available_qty?: number | null;
     available_units?: string;
   };
+  materialId: string;
   token: string;
 }) => {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/materials`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/materials/${materialId}`;
     const options = {
-      method: "POST",
+      method: "PATCH",
       headers: new Headers({
         authorization: token,
         "content-type": "application/json",
@@ -31,4 +33,4 @@ const addProcurementMaterialService = async ({
   }
 };
 
-export default addProcurementMaterialService;
+export default updateMaterialsByIdService;

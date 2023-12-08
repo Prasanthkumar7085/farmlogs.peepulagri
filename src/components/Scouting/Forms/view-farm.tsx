@@ -25,6 +25,7 @@ const ViewFarmPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState(false);
+  const [statsData, setStatsData] = useState<any>([])
 
   const getFarmDataById = async () => {
     setLoading(true);
@@ -37,9 +38,50 @@ const ViewFarmPage = () => {
     setLoading(false);
   }
 
+  const getStatsCount = async () => {
+    setLoading(true)
+    try {
+      let urls = [
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/crops-count`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/images-count`,
+      ];
+      let tempResult: any = [];
+
+      const responses = await Promise.allSettled(
+        urls.map(async (url) => {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: new Headers({
+              authorization: accessToken,
+            }),
+          });
+          return response.json();
+        })
+      );
+
+      responses.forEach((result, num) => {
+        if (result.status === "fulfilled") {
+          tempResult.push(result.value);
+        }
+        if (result.status === "rejected") {
+        }
+      });
+      console.log(tempResult, "klo")
+      setStatsData(tempResult)
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false)
+
+    }
+  }
+
   useEffect(() => {
     if (router.isReady && accessToken) {
       getFarmDataById();
+      getStatsCount();
     }
   }, [router.isReady, accessToken]);
   const handleClick = (event: any) => {
@@ -88,14 +130,14 @@ const ViewFarmPage = () => {
             <div className={styles.farmOverView} style={{ background: "#D94841" }}>
               <img src="/mobileIcons/farms/Crop.svg" alt="" width={"24px"} />
               <div className={styles.overViewText}>
-                <h6>22</h6>
+                <h6>{statsData[0]?.data}</h6>
                 <span>Crops</span>
               </div>
             </div>
             <div className={styles.farmOverView} style={{ background: "#05A155" }}>
               <img src="/mobileIcons/farms/image-fill.svg" alt="" width={"24px"} />
               <div className={styles.overViewText}>
-                <h6>5</h6>
+                <h6>{statsData[1]?.data}</h6>
                 <span>Images</span>
               </div>
             </div>

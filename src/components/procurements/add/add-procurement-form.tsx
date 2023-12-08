@@ -233,17 +233,21 @@ const AddProcurementForm: NextPage = () => {
   return (
     <form className={styles.addprocurementform}>
       <div className={styles.formgroup}>
-        <Button
-          variant="outlined"
-          sx={{ color: "red", borderColor: "red" }}
-          onClick={() => setIsDisabled(!isDisabled)}
-        >
-          {router.query.procurement_id && isDisabled ? (
-            <EditOutlinedIcon />
-          ) : (
-            <CancelOutlinedIcon />
-          )}
-        </Button>
+        {router.query.procurement_id ? (
+          <Button
+            variant="outlined"
+            sx={{ color: "red", borderColor: "red" }}
+            onClick={() => setIsDisabled(!isDisabled)}
+          >
+            {router.query.procurement_id && isDisabled ? (
+              <EditOutlinedIcon />
+            ) : (
+              <CancelOutlinedIcon />
+            )}
+          </Button>
+        ) : (
+          ""
+        )}
         <OperationDetails
           farmOptions={farmOptions}
           onSelectFarmFromDropDown={onSelectFarmFromDropDown}

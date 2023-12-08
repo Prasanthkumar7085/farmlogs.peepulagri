@@ -184,53 +184,53 @@ const ListProcurments = () => {
     };
 
     return (
-        <div style={{ padding: "1rem 2rem" }}>
-            <NavBarContainer
-                onChangeSearch={onChangeSearch}
-                searchString={searchString}
-                onSelectValueFromDropDown={onSelectValueFromDropDown}
-                selectedFarm={selectedFarm}
-                onStatusChange={onStatusChange}
-                onUserChange={onUserChange}
-                titleName={"Procurment Module"}
+      <div style={{ padding: "1rem 2rem" }}>
+        <NavBarContainer
+          onChangeSearch={onChangeSearch}
+          searchString={searchString}
+          onSelectValueFromDropDown={onSelectValueFromDropDown}
+          selectedFarm={selectedFarm}
+          onStatusChange={onStatusChange}
+          onUserChange={onUserChange}
+          titleName={"Procurment Module"}
+        />
+        {data.length ? (
+          <ProcurementsTableComponent
+            data={data}
+            getData={getAllProcurements}
+            paginationDetails={paginationDetails}
+          />
+        ) : !loading ? (
+          <div
+            style={{
+              justifyContent: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <ImageComponent
+              src="/no-tasks-data.svg"
+              height={500}
+              width={500}
+              alt="no-tasks"
             />
-            {data.length ? (
-                <ProcurementsTableComponent
-                    data={data}
-                    getData={getAllProcurements}
-                    paginationDetails={paginationDetails}
-                />
-            ) : !loading ? (
-                <div
-                    style={{
-                        justifyContent: "center",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}
-                >
-                    <ImageComponent
-                        src="/no-tasks-data.svg"
-                        height={500}
-                        width={500}
-                        alt="no-tasks"
-                    />
-                    <div
-                        style={{
-                            fontSize: "20px",
-                            fontWeight: "bold",
-                            color: "#a05148",
-                        }}
-                    >
-                        No Procurments
-                    </div>
-                </div>
-            ) : (
-                ""
-            )}
+            <div
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                color: "#a05148",
+              }}
+            >
+              No Procurements
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
 
-            <LoadingComponent loading={loading} />
-        </div>
+        <LoadingComponent loading={loading} />
+      </div>
     );
 };
 

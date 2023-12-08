@@ -416,108 +416,139 @@ const AllCropsComponent = () => {
   ];
 
   return (
-    <div className={styles.myCropsPage}>
-      <FormControl
-        variant="outlined"
-        className={styles.filterBox}
-        // style={{border:"1px solid"}}
-      >
-        <InputLabel color="primary" />
-        <SelectAutoCompleteForFarms
-          setOptionsLoading={setOptionsLoading}
-          optionsLoading={optionsLoading}
-          options={formOptions}
-          label={"title"}
-          onSelectValueFromDropDown={captureFarmName}
-          placeholder={"Select Farm"}
-          defaultValue={defaultValue}
-          searchString={searchString}
-          setSearchString={setSearchString}
-        />
-        <FormHelperText />
-      </FormControl>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-        }}
-      >
-        <IconButton onClick={() => toggleDrawer(true)}>
-          <SortIcon />
-          <Typography variant="caption">Sort By</Typography>
-        </IconButton>
-        <React.Fragment>
-          <Drawer
-            onClose={() => toggleDrawer(false)}
-            anchor={"bottom"}
-            open={state["bottom"]}
-          >
-            <Box>
-              <SortMenu />
-            </Box>
-          </Drawer>
-        </React.Fragment>
-      </div>
+    <div>
+      <div className={styles.pageHeader}>
+        <div className={styles.header} id="header" >
+          <img
+            className={styles.iconsiconArrowLeft}
+            alt=""
+            src="/iconsiconarrowleft.svg"
+            onClick={() => router.push('/farms')}
 
-      <div className={styles.allCrops}>
-        {cropOptions?.length ? (
-          <div id={styles.allCropCardBlock}>
-            {cropOptions?.map((item: any, index: any) => {
-              const colorIndex = index % colorsArray.length;
-
-              return (
-                <CropCard
-                  itemDetails={item}
-                  key={index}
-                  getCropsDetails={getCropsDetails}
-                  colorIndex={colorIndex}
-                />
-              );
-            })}
+          />
+          <Typography className={styles.viewFarm}>My Crops</Typography>
+          <div className={styles.headericon} id="header-icon">
           </div>
-        ) : !loading ? (
-          <div className={styles.noData}>
-            <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
-            <Typography variant="h4">This farm has no crops</Typography>
+        </div>
+        <div className={styles.searchBlock}>
+          <FormControl
+            variant="outlined"
+            className={styles.filterBox}
+            sx={{
+              " .MuiAutocomplete-root": {
+
+                borderRadius: "30px",
+              },
+              "& .MuiInputBase-root": {
+                background: "#fff",
+                color: "#000",
+                borderRadius: "24px",
+                paddingBlock: "12px !important"
+              },
+              '& .MuiOutlinedInput-notchedOutline ': {
+                border: "0",
+                color: "#fff"
+              },
+
+            }}
+          >
+            <InputLabel color="primary" />
+            <SelectAutoCompleteForFarms
+              setOptionsLoading={setOptionsLoading}
+              optionsLoading={optionsLoading}
+              options={formOptions}
+              label={"title"}
+              onSelectValueFromDropDown={captureFarmName}
+              placeholder={"Select Farm"}
+              defaultValue={defaultValue}
+              searchString={searchString}
+              setSearchString={setSearchString}
+            />
+            <FormHelperText />
+          </FormControl>
+          <div
+            style={{
+              width: "13%"
+            }}
+          >
+            <IconButton className={styles.sortIconBtn} onClick={() => toggleDrawer(true)}>
+              <img src="/mobileIcons/crops/SortIcon.svg" alt="" width={"24px"} />
+            </IconButton>
+            <React.Fragment>
+              <Drawer
+                onClose={() => toggleDrawer(false)}
+                anchor={"bottom"}
+                open={state["bottom"]}
+              >
+                <Box>
+                  <SortMenu />
+                </Box>
+              </Drawer>
+            </React.Fragment>
+          </div>
+        </div>
+      </div>
+      <div className={styles.myCropsPage}>
+
+        <div className={styles.allCrops}>
+          {cropOptions?.length ? (
+            <div id={styles.allCropCardBlock}>
+              {cropOptions?.map((item: any, index: any) => {
+                const colorIndex = index % colorsArray.length;
+
+                return (
+                  <CropCard
+                    itemDetails={item}
+                    key={index}
+                    getCropsDetails={getCropsDetails}
+                    colorIndex={colorIndex}
+                  />
+                );
+              })}
+            </div>
+          ) : !loading ? (
+            <div className={styles.noData}>
+              <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
+              <Typography variant="h4">This farm has no crops</Typography>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+
+        {!loading ? (
+          <div className="addFormPositionIcon">
+            <IconButton
+              size="large"
+              className={styles.AddScoutingbtn}
+              aria-label="add to shopping cart"
+              onClick={() => setDilogOpen(true)}
+            >
+              <AddIcon />
+            </IconButton>
           </div>
         ) : (
           ""
         )}
-      </div>
 
-      {!loading ? (
-        <div className="addFormPositionIcon">
-          <IconButton
-            size="large"
-            className={styles.AddScoutingbtn}
-            aria-label="add to shopping cart"
-            onClick={() => setDilogOpen(true)}
-          >
-            <AddIcon />
-          </IconButton>
-        </div>
-      ) : (
-        ""
-      )}
-
-      {dilogOpen ? (
-        <NewFolderDiloag
-          open={dilogOpen}
-          captureResponseDilog={captureResponseDilog}
-          loading={loadingForAdd}
-          errorMessages={errorMessages}
+        {dilogOpen ? (
+          <NewFolderDiloag
+            open={dilogOpen}
+            captureResponseDilog={captureResponseDilog}
+            loading={loadingForAdd}
+            errorMessages={errorMessages}
+          />
+        ) : (
+          ""
+        )}
+        <AlertComponent
+          alertMessage={alertMessage}
+          alertType={alertType}
+          setAlertMessage={setAlertMessage}
+          mobile={true}
         />
-      ) : (
-        ""
-      )}
-      <AlertComponent
-        alertMessage={alertMessage}
-        alertType={alertType}
-        setAlertMessage={setAlertMessage}
-        mobile={true}
-      />
-      <LoadingComponent loading={loading} />
+        <LoadingComponent loading={loading} />
+      </div>
     </div>
   );
 };

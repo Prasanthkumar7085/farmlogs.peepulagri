@@ -1,3 +1,49 @@
+/* header */
+.iconsiconArrowLeft {
+  width: 24px;
+}
+
+.viewFarm {
+  color: #fff !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(18px, 4vw, 20px) !important;
+  font-weight: 500 !important;
+}
+
+.searchBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #05A155;
+  padding: 1rem 1rem 3rem 1rem;
+  border-radius: 0 0 30px 30px;
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.headericon {
+  width: 32px;
+  text-align: end;
+}
+
+.header {
+  background-color: #05A155;
+  justify-content: space-between;
+  padding: 1rem;
+
+}
+
+.sortIconBtn {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 100%;
+  padding-block: 12px;
+}
+
 .mobileScoutingViewHeader {
   display: flex;
   align-items: center;
@@ -59,7 +105,6 @@
 
 .folderIcon {
   width: 45px;
-  height: 45px;
 }
 
 .actions {
@@ -136,14 +181,14 @@
 }
 
 .filterBox {
-  padding: 0.65rem 0.65rem 0rem 0.65rem !important;
-  width: calc(100% - 1.3rem);
+  width: 85%;
 }
 
 .allCrops {
   height: calc(100vh - 224px);
   overflow: scroll;
   padding: 0 0.65rem;
+  margin-top: -1.5rem;
 }
 
 #noData {

@@ -346,7 +346,7 @@ const ProcurementsTableComponent = ({
               <div
                 style={{ cursor: "pointer" }}
                 onClick={() =>
-                  router.push(`/tasks/${info.row.original?._id}/edit`)
+                  router.push(`/procurements/${info.row.original?._id}/edit`)
                 }
               >
                 <ImageComponent

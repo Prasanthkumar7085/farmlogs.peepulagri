@@ -235,8 +235,8 @@ const TasksTableComponent = ({
                   : info.getValue()
                   ? info.getValue().slice(0, 1).toUpperCase() +
                     info.getValue().slice(1)
-                  : ""
-                : ""}
+                  : "-"
+                : "-"}
             </span>
           </Tooltip>
         </span>

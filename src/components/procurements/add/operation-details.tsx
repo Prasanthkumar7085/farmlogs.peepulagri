@@ -51,29 +51,21 @@ interface pagePropTypes {
 const OperationDetails: NextPage<pagePropTypes> = ({
   farmOptions,
   onSelectFarmFromDropDown,
-  label,
-  placeholder,
   defaultValue,
   optionsLoading,
   setOptionsLoading,
   searchString,
   setSearchString,
-
   title,
   setTitle,
   dateOfOperation,
   setDataOfOperation,
   remarks,
   setRemarks,
-
   errorMessages,
-  setErrorMessages,
-
   editFarms,
   setEditFarms,
-
   isDisabled,
-  setIsDisabled,
 }) => {
   const router = useRouter();
 
@@ -149,6 +141,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 setOptionsLoading={setOptionsLoading}
                 searchString={searchString}
                 setSearchString={setSearchString}
+                editFarms={editFarms}
               />
               <ErrorMessages
                 errorMessages={errorMessages}

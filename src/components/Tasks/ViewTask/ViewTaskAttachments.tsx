@@ -40,10 +40,10 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const [attachmentData, setAttachmentData] = useState<any>();
 
   useEffect(() => {
-    if (router.isReady) {
-      getAllAttachments()
+    if (router.isReady && accessToken) {
+      getAllAttachments();
     }
-  }, [router.isReady, accessToken])
+  }, [router.isReady, accessToken]);
 
   //get all attachment
   function groupByDate(array: Array<any>) {
@@ -152,7 +152,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     e: ChangeEvent<HTMLInputElement>,
     item: TaskAttachmentsType
   ) => {
-    console.log(item, "lhh")
+    console.log(item, "lhh");
     setUploadAttachmentsOpen(false);
     let ids = [...selectedAttachmentIds];
     if (ids.includes(item?._id)) {
@@ -160,7 +160,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     } else {
       ids.push(item?._id);
     }
-    console.log(ids, "pp")
+    console.log(ids, "pp");
     setSelectedAttachmentsIds(ids);
   };
 
@@ -186,7 +186,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
 
   const [uploadAttachmentsOpen, setUploadAttachmentsOpen] = useState(false);
 
-
   const afterUploadAttachements = (value: any) => {
     if (value == true) {
       setUploadAttachmentsOpen(!uploadAttachmentsOpen);
@@ -195,8 +194,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       getAllAttachments();
     }
   };
-
-
 
   return (
     <div className={styles.cardDetails} style={{ paddingBottom: "1rem" }}>
@@ -248,81 +245,79 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
       <div className={styles.allAttachments}>
         {attachmentData?.length
           ? attachmentData?.map(
-            (item: TaskAttachmentsType | any, index: number) => {
-              return (
-                <div key={index}>
-                  <p className={styles.AttachmentDate}>
-                    {timePipe(item[0]?.createdAt, "DD MMM YYYY, hh:mm A")}
-                  </p>
-                  {item?.map((image: any) => {
-
-                    return (
-                      <div key={index}>
-                        <div className={styles.singleAttachment}>
-                          <div className={styles.attachmentDetails}>
-                            <div className={styles.checkGrp}>
-                              <Checkbox
-                                size="small"
-                                sx={{ padding: "0" }}
-                                onChange={(e) => selectImagesForDelete(e, image)}
-                              />
-                              <ImageComponent
-                                src={image.url}
-                                height={20}
-                                width={20}
-                                alt={"image"}
-                              />
-                              <p
-                                onClick={() => window.open(image.url)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                {image?.original_name?.length > 25
-                                  ? image?.original_name.slice(0, 22) + "..."
-                                  : image?.original_name}
-                              </p>
-                            </div>
-
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-
-                                gap: "10px",
-                              }}
-                            >
-                              <IconButton
-                                onClick={() => {
-                                  downLoadAttachements(image.url);
-                                }}
-                              >
+              (item: TaskAttachmentsType | any, index: number) => {
+                return (
+                  <div key={index}>
+                    <p className={styles.AttachmentDate}>
+                      {timePipe(item[0]?.createdAt, "DD MMM YYYY, hh:mm A")}
+                    </p>
+                    {item?.map((image: any) => {
+                      return (
+                        <div key={index}>
+                          <div className={styles.singleAttachment}>
+                            <div className={styles.attachmentDetails}>
+                              <div className={styles.checkGrp}>
+                                <Checkbox
+                                  size="small"
+                                  sx={{ padding: "0" }}
+                                  onChange={(e) =>
+                                    selectImagesForDelete(e, image)
+                                  }
+                                />
                                 <ImageComponent
-                                  src={"/download-1-1.svg"}
+                                  src={image.url}
                                   height={20}
                                   width={20}
                                   alt={"image"}
                                 />
-                              </IconButton>
-                              <IconButton
-                                onClick={() => {
-                                  // downLoadAttachements(item.url);
-                                  window.open(image.url);
+                                <p
+                                  onClick={() => window.open(image.url)}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  {image?.key?.length > 25
+                                    ? image?.key.slice(0, 22) + "..."
+                                    : image?.key}
+                                </p>
+                              </div>
+
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+
+                                  gap: "10px",
                                 }}
                               >
-                                <OpenInNewIcon />
-                              </IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    downLoadAttachements(image.url);
+                                  }}
+                                >
+                                  <ImageComponent
+                                    src={"/download-1-1.svg"}
+                                    height={20}
+                                    width={20}
+                                    alt={"image"}
+                                  />
+                                </IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    // downLoadAttachements(item.url);
+                                    window.open(image.url);
+                                  }}
+                                >
+                                  <OpenInNewIcon />
+                                </IconButton>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })
-                  }
-                </div>
-
-              )
-
-            }
-          )
+                      );
+                    })}
+                  </div>
+                );
+              }
+            )
           : "No Attachements"}
       </div>
       {uploadAttachmentsOpen ? (
@@ -334,7 +329,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
             setMultipleFiles={setMultipleFiles}
             afterUploadAttachements={afterUploadAttachements}
           />
-
         </div>
       ) : (
         ""

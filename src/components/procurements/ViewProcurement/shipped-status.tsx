@@ -30,30 +30,30 @@ const ShippedStatus = ({
 
   //change the status
   const onStatusChangeEvent = async () => {
-    console.log("oiuyhgf")
     setLoading(true)
     try {
       let changedStatus: any;
-      // if (data?.status == "PENDING") {
-      //   changedStatus = "APPROVED"
-      // }
-      // if (data?.status == "APPROVED") {
-      //   changedStatus = "PURCHASED"
-      // }
-      // if (data?.status == "PURCHASED") {
-      //   changedStatus = "SHIPPED"
-      // }
-      // if (data?.status == "SHIPPED") {
-      //   changedStatus = "DELIVERED"
-      // }
-      // if (data?.status == "DELIVERED") {
-      //   changedStatus = "COMPLETED"
-      // }
+      if (data?.status == "PENDING") {
+        changedStatus = "APPROVED"
+      }
+      if (data?.status == "APPROVED") {
+        changedStatus = "PURCHASED"
+      }
+      if (data?.status == "PURCHASED") {
+        changedStatus = "SHIPPED"
+      }
+      if (data?.status == "SHIPPED") {
+        changedStatus = "DELIVERED"
+      }
+      if (data?.status == "DELIVERED") {
+        changedStatus = "COMPLETED"
+      }
       const response = await updateStatusService({
         procurement_id: data?._id,
-        status: "APPROVED",
+        status: changedStatus,
         accessToken,
       });
+
       if (response.success) {
         setDialogOpen(false)
         afterStatusChange(true)

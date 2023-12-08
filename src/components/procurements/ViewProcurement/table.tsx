@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import styles from "./table.module.css";
-import { Divider, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, ButtonBase, Divider, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import getMaterialsByProcurementIdService from "../../../../lib/services/ProcurementServices/getMaterialsByProcurementIdService";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,10 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import { toast } from "sonner";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import ImageComponent from "@/components/Core/ImageComponent";
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import updateMaterialStatusService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialItemStatus";
+import AlertStautsChange from "@/components/Core/StatusChangeDilog/alert-stauts-change";
 const ViewProcurementTable = ({ data }: any) => {
 
 
@@ -25,9 +28,9 @@ const ViewProcurementTable = ({ data }: any) => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [materials, setMaterials] = useState([]);
+  const [materials, setMaterials] = useState<any>([]);
   const [loading, setLoading] = useState(false);
-
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   //logout function for 403 error
   const logout = async () => {
@@ -67,6 +70,38 @@ const ViewProcurementTable = ({ data }: any) => {
     }
   };
 
+  //update the status
+  const onStatusChangeEvent = async (changedStatus: any, material_id: any) => {
+    setLoading(true)
+    try {
+
+      const response = await updateMaterialStatusService({
+        material_id: material_id,
+        status: changedStatus,
+        accessToken,
+      });
+
+      if (response.success) {
+        setDialogOpen(false)
+        getAllProcurementMaterials()
+        toast.success(response?.message);
+
+      }
+      else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      }
+      console.log(response)
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false)
+    }
+  };
+
   //api calls
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -87,6 +122,8 @@ const ViewProcurementTable = ({ data }: any) => {
               <TableCell >Available(Qty)</TableCell>
               <TableCell >Procurement(Qty)</TableCell>
               <TableCell >Status</TableCell>
+              <TableCell >Approved By</TableCell>
+              <TableCell >Actions</TableCell>
 
 
             </TableRow>
@@ -104,7 +141,44 @@ const ViewProcurementTable = ({ data }: any) => {
                   <TableCell >{row?.available_qty ? row?.available_qty + " " + row.available_units : "---"}</TableCell>
                   <TableCell >{row?.required_qty ? row?.required_qty + " " + row.required_units : "---"}</TableCell>
                   <TableCell >{row?.status ? row?.status : "---"}</TableCell>
-                  {row.approved_by ? <TableCell >{row?.approved_by ? row?.approved_by : "---"}</TableCell> : ""}
+                  <TableCell >{row?.approved_by ? row?.approved_by : "---"}</TableCell>
+                  <TableCell >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+
+                      {row?.status !== "APPROVED" ?
+                        <div
+                          style={{ cursor: "pointer" }}
+
+                        >
+                          <IconButton onClick={() => onStatusChangeEvent("reject", row?._id)}>
+                            <RemoveCircleOutlineIcon />
+                          </IconButton>
+                        </div> : ""}
+                      {row?.status !== "APPROVED" ?
+
+                        <div
+                          style={{ cursor: "pointer" }}
+
+                        >
+                          <ImageComponent
+                            src="/pencil-icon.svg"
+                            height={17}
+                            width={17}
+                            alt="view"
+                          />
+                        </div> : ""}
+                      <div
+                        style={{ cursor: "pointer" }}
+
+                      >
+                        <Button variant="outlined" onClick={() => onStatusChangeEvent("approve", row?._id)}>
+                          {row?.status == "APPROVED" ? "Add Purchase" :
+                            "Approve"}
+                        </Button>
+                      </div>
+                    </div>
+                  </TableCell>
+
                 </TableRow>
               )
             })}
@@ -112,6 +186,7 @@ const ViewProcurementTable = ({ data }: any) => {
         </Table> : ''}
 
       <LoadingComponent loading={loading} />
+      {/* <AlertStautsChange open={dialogOpen} statusChange={onStatusChangeEvent} setDialogOpen={setDialogOpen} loading={loading} /> */}
 
     </div>
   );

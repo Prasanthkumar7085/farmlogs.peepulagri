@@ -44,6 +44,13 @@
   padding-block: 12px;
 }
 
+.avatharImg {
+  border: 1px solid red;
+  padding: 4px;
+  border-radius: 50%;
+
+}
+
 .mobileScoutingViewHeader {
   display: flex;
   align-items: center;
@@ -169,8 +176,10 @@
 }
 
 .cropcard {
-  border-radius: var(--br-5xs);
-  background: #ffffff;
+  border-radius: 16px;
+  background: #FFF;
+  box-shadow: 2px 2px 9px 0px rgba(0, 0, 0, 0.05);
+
   padding: 10px;
   gap: var(--gap-xs);
 }
@@ -178,6 +187,7 @@
 #allCropCardBlock {
   display: flex;
   flex-direction: column;
+  row-gap: 1.5rem;
 }
 
 .filterBox {

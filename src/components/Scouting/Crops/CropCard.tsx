@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import deleteCropService from "../../../../lib/services/CropServices/deleteCropService";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
 import styles from "./crop-card.module.css";
+import { imageConfigDefault } from "next/dist/shared/lib/image-config";
 
 interface pagePropsType {
   itemDetails: CropTypeResponse;
@@ -224,10 +225,12 @@ const CropCard = ({
           </div>
 
           <MenuItemsForFolder />
-          <Avatar
-            alt="Remy Sharp"
-            src={itemDetails?.url}
-            sx={{ width: 56, height: 56 }}
+          <img
+            className={styles.avatharImg}
+            alt=""
+            src={itemDetails?.url ? itemDetails?.url : "/mobileIcons/crops/No_Image.svg"}
+            width={"56px"}
+            height={"56px"}
           />
         </div>
         <div className={styles.actionButtons}>

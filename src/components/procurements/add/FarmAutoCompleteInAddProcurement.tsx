@@ -15,6 +15,7 @@ interface PropsTypes {
   searchString: string;
   setSearchString: Dispatch<SetStateAction<string>>;
   isDisabled: boolean;
+  editFarms?: { title: string; _id: string }[] | [];
 }
 const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
   options,
@@ -26,6 +27,7 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
   setOptionsLoading,
   setSearchString,
   isDisabled,
+  editFarms,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -56,6 +58,9 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
           loading={optionsLoading}
           getOptionLabel={(option: any) =>
             option[label] ? option[label]?.toUpperCase() : ""
+          }
+          getOptionDisabled={(option) =>
+            Boolean(editFarms?.some((item) => item._id == option._id))
           }
           renderOption={(props, option) => {
             return (

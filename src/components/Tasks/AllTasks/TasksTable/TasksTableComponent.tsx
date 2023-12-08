@@ -53,7 +53,6 @@ const TasksTableComponent = ({
   const [taskId, setTaskId] = useState("");
   const [showAllAssignee, setShowAllAssignee] = useState(false);
   const [viewMoreId, setViewMoreId] = useState("");
-  console.log(viewMoreId, "asdf");
 
   const deleteTask = async () => {
     setDeleteLoading(true);

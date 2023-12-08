@@ -5,8 +5,7 @@ import { GetServerSideProps } from "next"
 const AllCropsPage = () => {
     return (
         <div>
-            <HeaderComponentAllCrops name={"My Crops"} />
-
+            {/* <HeaderComponentAllCrops name={"My Crops"} /> */}
             <AllCropsComponent />
         </div>
     )

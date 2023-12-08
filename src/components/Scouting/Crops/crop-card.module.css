@@ -1,3 +1,69 @@
+/* header */
+.iconsiconArrowLeft {
+  width: 24px;
+}
+
+.viewFarm {
+  color: #fff !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(18px, 4vw, 20px) !important;
+  font-weight: 500 !important;
+}
+
+.searchBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #05A155;
+  padding: 1rem 1rem 3rem 1rem;
+  border-radius: 0 0 30px 30px;
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.headericon {
+  width: 32px;
+  text-align: end;
+}
+
+.header {
+  background-color: #05A155;
+  justify-content: space-between;
+  padding: 1rem;
+
+}
+
+.sortIconBtn {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 100%;
+  padding-block: 12px;
+}
+
+.avatharImg {
+  border: 1px solid red;
+  padding: 4px;
+  border-radius: 50%;
+
+}
+
+.iconBlock {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.cropDetailsBlock {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .mobileScoutingViewHeader {
   display: flex;
   align-items: center;
@@ -59,7 +125,6 @@
 
 .folderIcon {
   width: 45px;
-  height: 45px;
 }
 
 .actions {
@@ -101,16 +166,16 @@
 .FieldCrop {
   color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 3.5vw, 16px);
-  font-weight: 500;
+  font-size: clamp(18px, 4vw, 20px);
+  font-weight: 400;
   line-height: 100%;
 }
 
 .aug2023 {
-  color: #6A7185;
+  color: #A05148;
   font-family: "Inter", sans-serif;
-  font-size: clamp(10px, 3vw, 12px);
-  font-weight: 400;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 500;
   line-height: 100%;
 }
 
@@ -124,26 +189,29 @@
 }
 
 .cropcard {
-  border-radius: var(--br-5xs);
-  background: #ffffff;
-  padding: 10px;
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 2px 2px 9px 0px #00000012;
+  border: 1px solid #00000016;
+  padding: 14px;
   gap: var(--gap-xs);
 }
 
 #allCropCardBlock {
   display: flex;
   flex-direction: column;
+  row-gap: 1.5rem;
 }
 
 .filterBox {
-  padding: 0.65rem 0.65rem 0rem 0.65rem !important;
-  width: calc(100% - 1.3rem);
+  width: 85%;
 }
 
 .allCrops {
   height: calc(100vh - 224px);
   overflow: scroll;
   padding: 0 0.65rem;
+  margin-top: -1.5rem;
 }
 
 #noData {
@@ -348,10 +416,18 @@
 }
 
 .AddScoutingbtn {
-  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%));
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #D94841;
   color: #ffffff;
-  padding: 18px;
+  padding: 8px 15px;
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  border-radius: 20px !important;
   z-index: 3 !important;
+  font-size: clamp(13px, 3.5vw, 15px);
 }
 
 .subTitle {

@@ -54,7 +54,7 @@ const DashBoardHeader = ({
           setDataSetting(false);
         }, 1);
       } else {
-        setLocation("All");
+        setLocation("1");
       }
     }
   }, [locations, location]);

@@ -40,13 +40,13 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/farm"),
       toolTitle: "Farms",
     },
-    {
-      src: "/support-icon.svg",
-      link: "/procurements",
-      isVisible: true,
-      active: router.pathname.includes("/procurements"),
-      toolTitle: "Procurements",
-    },
+    // {
+    //   src: "/support-icon.svg",
+    //   link: "/procurements",
+    //   isVisible: true,
+    //   active: router.pathname.includes("/procurements"),
+    //   toolTitle: "Procurements",
+    // },
     // {
     //   src: "/timeline-icon.svg",
     //   link: "/timeline",
@@ -61,13 +61,13 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/scouts"),
       toolTitle: "Scouts",
     },
-    {
-      src: "/tasks-menu-icon.svg",
-      link: "/tasks",
-      isVisible: userName !== "ADMIN",
-      active: router.pathname.includes("/tasks"),
-      toolTitle: "Tasks",
-    },
+    // {
+    //   src: "/tasks-menu-icon.svg",
+    //   link: "/tasks",
+    //   isVisible: userName !== "ADMIN",
+    //   active: router.pathname.includes("/tasks"),
+    //   toolTitle: "Tasks",
+    // },
     // { src: '/calendaricon.svg', link: "/" },
     // { src: '/graph-icon.svg', link: "/" },
   ];

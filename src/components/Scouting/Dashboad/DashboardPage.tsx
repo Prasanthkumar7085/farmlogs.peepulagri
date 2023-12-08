@@ -42,11 +42,13 @@ const DashboardPage = () => {
     limit = 20,
     search_string = "",
     location,
+    addData,
   }: Partial<{
     page: number;
     limit: number;
     search_string: string;
     location: any;
+    addData: boolean;
   }>) => {
     setLoading(true);
     try {
@@ -61,7 +63,8 @@ const DashboardPage = () => {
         delete queryParam["order_by"];
         delete queryParam["order_type"];
       }
-      if (location != "1" && location) {
+
+      if (location != 1 && location) {
         queryParam["location_id"] = location;
         delete queryParam["order_by"];
         delete queryParam["order_type"];
@@ -73,11 +76,16 @@ const DashboardPage = () => {
       const response = await getAllFarmsService(url, accessToken);
 
       if (response?.success) {
-        if (location || search_string) {
-          setFarmsData([...farmsData, ...response.data]);
-          setHasMore(response?.has_more);
+        if (addData) {
+          if (location || search_string) {
+            setFarmsData([...farmsData, ...response.data]);
+            setHasMore(response?.has_more);
+          } else {
+            setFarmsData([...farmsData, ...response.data]);
+            setHasMore(response?.has_more);
+          }
         } else {
-          setFarmsData([...farmsData, ...response.data]);
+          setFarmsData([...response.data]);
           setHasMore(response?.has_more);
         }
       } else if (response?.statusCode == 403) {
@@ -153,7 +161,9 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    getData();
+    if (router.isReady && accessToken) {
+      getData();
+    }
   }, [router.isReady, accessToken]);
 
   useEffect(() => {
@@ -162,6 +172,8 @@ const DashboardPage = () => {
     );
   }, [router?.query.location]);
 
+  console.log(location);
+  
   useEffect(() => {
     if (router.isReady && accessToken) {
       const delay = 500;

@@ -2,7 +2,7 @@ import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
@@ -46,6 +46,7 @@ const TaskForm = () => {
   ]);
   const [user, setUser] = useState<userTaskType>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
+  const [error, setError] = useState('');
 
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
   const [taskId, setTaskId] = useState<any>()
@@ -296,7 +297,14 @@ const TaskForm = () => {
                             },
                           }}
                           onChange={(newValue: any) => {
-                            setDeadline(newValue);
+                            const currentDate = new Date();
+                            if (newValue < currentDate) {
+                              setError('Please select a future date');
+                              setDeadline("");
+                            } else {
+                              setError('');
+                              setDeadline(newValue);
+                            }
                           }}
                           slotProps={{
                             textField: {
@@ -306,6 +314,8 @@ const TaskForm = () => {
                             },
                           }}
                         />
+                        {error && <Typography variant="body2" color="error">{error}</Typography>}
+
                         <ErrorMessages
                           errorMessages={errorMessages}
                           keyname="deadline"

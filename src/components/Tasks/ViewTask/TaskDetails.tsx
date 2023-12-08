@@ -4,7 +4,7 @@ import timePipe from "@/pipes/timePipe";
 import { TaskResponseTypes } from "@/types/tasksTypes";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import { IconButton, MenuItem, Select, TextField } from "@mui/material";
+import { IconButton, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
@@ -69,6 +69,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
   const [userId, setUserId] = useState("");
   const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
   const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setErrorMessages({});
@@ -328,7 +329,13 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         disablePast
                         value={deadline}
                         onChange={(newValue: any) => {
-                          setDeadline(newValue);
+                          const currentDate = new Date();
+                          if (newValue < currentDate) {
+                            setError('Please select a future date');
+                          } else {
+                            setError('');
+                            setDeadline(newValue);
+                          }
                         }}
                         format="dd/MM/yyyy"
                         slotProps={{
@@ -340,6 +347,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         }}
                       />
                     </LocalizationProvider>
+                    {error && <Typography variant="body2" color="error">{error}</Typography>}
+
                   </div>
                 </div>
               ) : (

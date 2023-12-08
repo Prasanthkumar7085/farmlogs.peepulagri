@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import deleteCropService from "../../../../lib/services/CropServices/deleteCropService";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
 import styles from "./crop-card.module.css";
-import { imageConfigDefault } from "next/dist/shared/lib/image-config";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 interface pagePropsType {
   itemDetails: CropTypeResponse;
@@ -194,37 +194,77 @@ const CropCard = ({
     "#d0ffff",
     "#d5ebed",
   ];
+  const handleMenuClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div className={styles.folder}>
       <div className={styles.cropcard}>
-        <div className={styles.icons}>
-          <Avatar
-            sx={{ bgcolor: colorsArray[colorIndex], color: "black !important" }}
-            className={styles.avatarImage}
-            variant="square"
-          >
-            {itemDetails?.title.toUpperCase().slice(0, 2)}
-          </Avatar>
-          <div
-            className={styles.textWrapper}
-            onClick={() => setToStorage(itemDetails?.title)}
-          >
-
-            <h2 className={styles.FieldCrop}>
-              {itemDetails?.title.length > 12
-                ? itemDetails?.title.slice(0, 1).toUpperCase() +
-                itemDetails?.title.slice(1, 9) +
-                "..."
-                : itemDetails?.title.slice(0, 1).toUpperCase() +
-                itemDetails?.title.slice(1)}
-            </h2>
-            <p className={styles.aug2023}>
-              {timePipe(itemDetails.createdAt, "DD, MMM YYYY")}
-            </p>
+        <div className={styles.iconBlock} >
+          <div onClick={handleMenuClick}>
+            < MoreHorizIcon sx={{ fontSize: "2rem" }} />
           </div>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
 
-          <MenuItemsForFolder />
+            sx={{
+              '& .MuiMenuItem-root': {
+                display: "flex", alignItems: "center", gap: "0.5rem",
+                minHeight: "inherit",
+
+              }
+            }}
+          >
+            <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => {
+              handleClose();
+              setRenameOpen(true);
+            }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
+            <MenuItem onClick={() => {
+              setDeleteOpen(true);
+              handleClose();
+            }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
+
+          </Menu>
+        </div>
+        <div className={styles.icons}>
+          <div className={styles.cropDetailsBlock}>
+            <Avatar
+              sx={{ bgcolor: "#E6F5EB", color: "#05A155 !important", fontSize: "1.2rem" }}
+              className={styles.avatarImage}
+              variant="square"
+            >
+              {itemDetails?.title.toUpperCase().slice(0, 1)}
+            </Avatar>
+            <div
+              className={styles.textWrapper}
+              onClick={() => setToStorage(itemDetails?.title)}
+            >
+
+              <h2 className={styles.FieldCrop}>
+                {itemDetails?.title.length > 12
+                  ? itemDetails?.title.slice(0, 1).toUpperCase() +
+                  itemDetails?.title.slice(1, 9) +
+                  "..."
+                  : itemDetails?.title.slice(0, 1).toUpperCase() +
+                  itemDetails?.title.slice(1)}
+              </h2>
+              <p className={styles.aug2023}>
+                {/* {timePipe(itemDetails.createdAt, "DD, MMM YYYY")} */}
+                {itemDetails.area
+                  ? itemDetails.area + (itemDetails.area < 2 ? " acre" : " acres")
+                  : 0 + " acres"}
+              </p>
+            </div>
+          </div>
+          {/* <MenuItemsForFolder /> */}
           <img
             className={styles.avatharImg}
             alt=""
@@ -232,32 +272,6 @@ const CropCard = ({
             width={"56px"}
             height={"56px"}
           />
-        </div>
-        <div className={styles.actionButtons}>
-
-          <p className={styles.aug2023}>
-            {itemDetails.area
-              ? itemDetails.area + (itemDetails.area < 2 ? " acre" : " acres")
-              : 0 + " acres"}
-          </p>
-          <Button
-            className={styles.button}
-            onClick={() => {
-              handleClose();
-              setRenameOpen(true);
-            }}
-          >
-            <ModeEditOutlinedIcon sx={{ fontSize: "16px", color: "#ff4444" }} />
-          </Button>
-          <Button
-            className={styles.button}
-            onClick={() => {
-              setDeleteOpen(true);
-              handleClose();
-            }}
-          >
-            <DeleteOutlinedIcon sx={{ fontSize: "16px", color: "#555555" }} />
-          </Button>
         </div>
       </div>
       {renameOpen ? (

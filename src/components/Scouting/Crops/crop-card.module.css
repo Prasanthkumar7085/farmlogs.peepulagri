@@ -51,6 +51,19 @@
 
 }
 
+.iconBlock {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.cropDetailsBlock {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .mobileScoutingViewHeader {
   display: flex;
   align-items: center;
@@ -153,16 +166,16 @@
 .FieldCrop {
   color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 3.5vw, 16px);
-  font-weight: 500;
+  font-size: clamp(18px, 4vw, 20px);
+  font-weight: 400;
   line-height: 100%;
 }
 
 .aug2023 {
-  color: #6A7185;
+  color: #A05148;
   font-family: "Inter", sans-serif;
-  font-size: clamp(10px, 3vw, 12px);
-  font-weight: 400;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 500;
   line-height: 100%;
 }
 
@@ -176,11 +189,11 @@
 }
 
 .cropcard {
-  border-radius: 16px;
+  border-radius: 8px;
   background: #FFF;
-  box-shadow: 2px 2px 9px 0px rgba(0, 0, 0, 0.05);
-
-  padding: 10px;
+  box-shadow: 2px 2px 9px 0px #00000012;
+  border: 1px solid #00000016;
+  padding: 14px;
   gap: var(--gap-xs);
 }
 

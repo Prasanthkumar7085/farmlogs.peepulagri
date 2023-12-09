@@ -63,6 +63,7 @@ const AllSummaryComponents = () => {
 
     const getSummary = async (farmId = "", cropId = "", page: any) => {
         setLoading(true);
+        console.log(page, "lnb")
         try {
             let queryParams: any = {};
 
@@ -92,8 +93,14 @@ const AllSummaryComponents = () => {
             let responseData: any = await response.json();
             if (responseData.success) {
                 if (responseData?.has_more) {
-                    setHasMore(responseData?.has_more);
-                    setData([...data, ...responseData.data]);
+                    if (page !== 1) {
+                        setHasMore(responseData?.has_more);
+                        setData([...data, ...responseData.data]);
+                    }
+                    else {
+                        setHasMore(responseData?.has_more);
+                        setData(responseData.data);
+                    }
 
                 }
                 else {
@@ -232,9 +239,10 @@ const AllSummaryComponents = () => {
 
         }
         else {
+            setFarmID("")
+            setCropId("")
             setCropOptions([])
             getSummary("", "", 1)
-
         }
     }
 
@@ -254,6 +262,7 @@ const AllSummaryComponents = () => {
             getSummary(farmId, value?._id, 1)
         }
         else {
+            setCropId("")
             getSummary(farmId, "", 1)
 
         }
@@ -414,7 +423,6 @@ const AllSummaryComponents = () => {
                         `/summary/${rowId}/edit`
                     );
                 }}>Update</MenuItem>
-                <MenuItem onClick={handleClose}>Delete</MenuItem>
             </Menu>
             <div className="addFormPositionIcon">
                 <IconButton

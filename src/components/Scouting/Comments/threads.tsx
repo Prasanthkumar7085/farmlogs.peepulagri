@@ -253,7 +253,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                     </div>
                   </div>
                   <div className={styles.actionButton}>
-                    <div className={styles.reply}>
+                    {/* <div className={styles.reply}>
                       {replyOpen == false ? (
                         <div
                           className={styles.reply1}
@@ -332,7 +332,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       ) : (
                         ""
                       )}
-                    </div>
+                    </div> */}
 
                     {userDetails?.user_details?.user_type ==
                       item?.commented_by?.user_type ? (

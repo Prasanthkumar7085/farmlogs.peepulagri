@@ -1,4 +1,7 @@
+import { useRouter } from "next/router";
+
 const LatestImagesComponent = ({ data }: any) => {
+    const router = useRouter();
     return (
         <div style={{
             display: "grid",
@@ -22,6 +25,8 @@ const LatestImagesComponent = ({ data }: any) => {
                                         ? "/Play-button.svg"
                                         : item.url
                                 }
+                                onClick={() =>
+                                    router.push(`/farms/${item?.farm_id?._id}/crops/${item?.crop_id?._id}/view/${item?._id}`)}
                                 alt={item?.uploaded_at}
                                 style={{
                                     width: "100%",
@@ -30,6 +35,7 @@ const LatestImagesComponent = ({ data }: any) => {
                                     objectFit: "cover",
                                     top: "0",
                                     right: "0",
+                                    cursor: "pointer"
                                 }}
 
                             />

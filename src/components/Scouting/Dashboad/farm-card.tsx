@@ -77,6 +77,17 @@ const FarmCard = ({
                 <div className={styles.farmcard} id="farm-card" key={index}>
                   <div className={styles.farm} id="farm">
                     <div
+                      className={styles.count}
+                      onClick={() => router.push(`farms/${item._id}`)}
+                    >
+                      <img
+                        src="/mobileIcons/farms/info.svg"
+                        width={25}
+                        alt="image"
+                      />
+                      {/* <span>{item?.crops_count}</span> */}
+                    </div>
+                    <div
                       className={styles.farmdetails}
                       id="farm-detalis"
                       onClick={() =>
@@ -90,17 +101,7 @@ const FarmCard = ({
                         <div className={styles.dates}>
                           {timePipe(item.createdAt, "DD, MMM YYYY")}
                         </div>
-                        <div
-                          className={styles.count}
-                          onClick={() => router.push(`farms/${item._id}`)}
-                        >
-                          <img
-                            src="/mobileIcons/farms/info.svg"
-                            width={25}
-                            alt="image"
-                          />
-                          {/* <span>{item?.crops_count}</span> */}
-                        </div>
+
                         {/* - Current  */}
                       </div>
                       <div

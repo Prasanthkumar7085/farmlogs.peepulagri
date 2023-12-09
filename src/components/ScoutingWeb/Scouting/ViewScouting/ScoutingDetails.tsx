@@ -67,7 +67,13 @@ const ScoutingDetails = ({
               {data?.crop_id?.title}
             </h1>
           )}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <h2 className={styles.farmname}>
               {loading ? (
                 <Skeleton width="300px" height="30px" />
@@ -76,7 +82,11 @@ const ScoutingDetails = ({
               )}
             </h2>
 
-            <Typography className={styles.farmname} variant="caption" color="indigo">
+            <Typography
+              className={styles.farmname}
+              variant="caption"
+              color="indigo"
+            >
               {loading ? (
                 <Skeleton width="300px" height="30px" />
               ) : (
@@ -92,7 +102,6 @@ const ScoutingDetails = ({
         >
           <CloseIcon />
         </IconButton>
-
       </div>
       <div
         style={{
@@ -106,12 +115,12 @@ const ScoutingDetails = ({
           flexDirection: "row",
         }}
       >
-        <Chip
+        {/* <Chip
           className={styles.tagsLabel}
           icon={<SellIcon sx={{ fontSize: 15 }} color="info" />}
           label="Tags"
           variant="outlined"
-        />
+        /> */}
       </div>
       {data?.tags?.length ? (
         <div
@@ -122,38 +131,35 @@ const ScoutingDetails = ({
             justifyContent: "flex-start",
             margin: "0 auto",
             display: "flex",
+            flexWrap: "wrap",
             width: "85%",
             flexDirection: "row",
           }}
         >
-
-
           {data?.tags?.length
-            ? data?.tags?.map(
-              (item: string, index: number) => {
+            ? data?.tags?.map((item: string, index: number) => {
                 return (
                   <Chip
+                    icon={<SellIcon sx={{ fontSize: 15 }} color="success" />}
                     key={index}
                     label={item}
                     className={styles.tagsName}
                     variant="outlined"
                   />
                 );
-              }
-            )
+              })
             : "No tags  "}
         </div>
-      ) : <div>No tags</div>}
+      ) : (
+        <div>No tags</div>
+      )}
       <hr />
 
       <div className={styles.RecommedationBlock}>
         <Typography variant="h6" className={styles.RecommedationHeading}>
           Comments
         </Typography>
-        <CommentsComponentForWeb
-          scoutDetails={data}
-          attachement={data}
-        />
+        <CommentsComponentForWeb scoutDetails={data} attachement={data} />
       </div>
       <Toaster richColors position="top-right" closeButton />
     </div>

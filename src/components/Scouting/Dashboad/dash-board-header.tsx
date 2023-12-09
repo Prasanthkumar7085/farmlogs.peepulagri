@@ -15,6 +15,7 @@ import {
   useState,
 } from "react";
 import styles from "./dash-board-header.module.css";
+import { useRouter } from "next/router";
 type captureSearchStringType = (search: string) => void;
 
 interface pageProps {
@@ -40,6 +41,7 @@ const DashBoardHeader = ({
     _id: string;
   } | null>();
   const [dataSetting, setDataSetting] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     if (locations?.length) {
@@ -83,7 +85,8 @@ const DashBoardHeader = ({
     <div className={styles.dashboardheader} id="dashboard-header">
       <div className={styles.dashboardheading} id="dashboard-heading">
         <div className={styles.logoBlock}>
-          <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
+
+          <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} onClick={() => router.push("/dashboard")} />
           <Typography className={styles.dashboard}>Farms</Typography>
         </div>
         <div className={styles.srisailam}>

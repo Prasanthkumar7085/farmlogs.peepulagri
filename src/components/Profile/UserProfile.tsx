@@ -68,7 +68,7 @@ const UserProfile = () => {
     return (
         <div>
             <div className={styles.summaryHeader} id="header" >
-                <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
+                <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} onClick={() => router.push("/dashboard")} />
                 <Typography className={styles.viewFarm}>Profile</Typography>
                 <div className={styles.headericon} id="header-icon">
                 </div>

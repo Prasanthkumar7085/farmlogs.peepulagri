@@ -1,21 +1,18 @@
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import CropsDropDown from "@/components/Core/CropsDropDown";
+import FarmsDropDown from "@/components/Core/FarmsDropDown";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import timePipe from "@/pipes/timePipe";
-import AddIcon from "@mui/icons-material/Add";
-import { Backdrop, Box, CircularProgress, IconButton, Menu, MenuItem, Typography, dividerClasses } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
-import DateRangePickerComponent from "./DateRangePicker";
 import styles from "./summary.module.css";
-import FarmsDropDown from "@/components/Core/FarmsDropDown";
-import CropsDropDown from "@/components/Core/CropsDropDown";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import NoDataComponent from "@/components/Core/NoDataComponent";
-import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 
 const AllSummaryComponents = () => {
     const router = useRouter();

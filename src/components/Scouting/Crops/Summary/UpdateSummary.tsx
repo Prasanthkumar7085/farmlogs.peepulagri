@@ -10,6 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+
 import styles from "./summary.module.css"
 const UpdateSummary = () => {
     const router = useRouter();
@@ -346,58 +349,71 @@ const UpdateSummary = () => {
             />
             <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} /> */}
             <div className={styles.updatedSummaryContainer}>
+                <div className={styles.singleFarmBlock}>
+                    <Typography variant="h6">Date</Typography>
+                    <TextField
+                        type='date'
+                        placeholder="Select Date"
+                        color="primary"
+                        variant="outlined"
+                        value={date}
+                        onChange={(e) => {
+                            const selectedDate = new Date(e.target.value);
+                            const currentDate = new Date();
 
+                            if (selectedDate > currentDate) {
+                                setDateError('Date cannot be in the future');
+                                return;
+                            }
 
-                <Typography variant="caption">Date</Typography>
-                <TextField
-                    type='date'
-                    placeholder="Select Date"
-                    color="primary"
-                    variant="outlined"
-                    value={date}
-                    onChange={(e) => {
-                        const selectedDate = new Date(e.target.value);
-                        const currentDate = new Date();
+                            setDate(e.target.value);
+                            setDateError('');
+                            setSummaryError('');
+                        }}
+                        inputProps={{ max: getCurrentDate() }}
+                        sx={{
+                            width: "100%", background: "#fff",
+                            '& .MuiOutlinedInput-notchedOutline ': {
+                                border: "1px solid grey !important",
+                                borderRadius: "10px !important"
+                            }
+                        }}
+                    />
+                    <ErrorMessagesComponent errorMessage={errorMessages?.date} />
+                </div>
 
-                        if (selectedDate > currentDate) {
-                            setDateError('Date cannot be in the future');
-                            return;
-                        }
+                <div className={styles.singleFarmBlock}>
+                    <Typography variant="h6">Comments</Typography>
+                    <TextField
+                        color="primary"
+                        name="desciption"
+                        id="description"
+                        minRows={5}
+                        maxRows={5}
+                        placeholder="Enter your comment here"
+                        fullWidth={true}
+                        variant="outlined"
+                        multiline
+                        value={comment}
+                        onChange={(e) => {
+                            setComment(e.target.value);
+                            setCommentError('');
+                            setSummaryError('');
+                        }}
+                        sx={{
+                            background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
+                                border: "1px solid grey !important",
+                                borderRadius: "10px !important"
+                            }
+                        }}
+                    />
+                    <ErrorMessagesComponent errorMessage={errorMessages?.content} />
+                </div>
 
-                        setDate(e.target.value);
-                        setDateError('');
-                        setSummaryError('');
-                    }}
-                    inputProps={{ max: getCurrentDate() }}
-                    sx={{ width: "100%" }}
-                />
-                <ErrorMessagesComponent errorMessage={errorMessages?.date} />
+                <div className={styles.UpdateBtnGrp} >
+                    <Button className={styles.updateCancelBtn} type='submit' variant='outlined' onClick={() => router.back()}>Cancel</Button>
 
-                <Typography variant="caption">Comments</Typography>
-                <TextField
-                    color="primary"
-                    name="desciption"
-                    id="description"
-                    minRows={4}
-                    maxRows={4}
-                    placeholder="Enter your comment here"
-                    fullWidth={true}
-                    variant="outlined"
-                    multiline
-                    value={comment}
-                    onChange={(e) => {
-                        setComment(e.target.value);
-                        setCommentError('');
-                        setSummaryError('');
-                    }}
-                    sx={{ background: "#fff" }}
-                />
-                <ErrorMessagesComponent errorMessage={errorMessages?.content} />
-
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                    <Button type='submit' variant='contained' onClick={() => router.back()}>Cancel</Button>
-
-                    <Button type='submit' variant='contained' onClick={updateSummary}>Update</Button>
+                    <Button className={styles.updatedSaveBtn} type='submit' variant='contained' onClick={updateSummary}>Update</Button>
                 </div>
             </div>
             <Snackbar

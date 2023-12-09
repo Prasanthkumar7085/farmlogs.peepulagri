@@ -126,4 +126,43 @@
     padding: 2rem 1rem 1rem;
 }
 
+.updatedSummaryContainer h6 {
+    font-size: clamp(14px, 3.5vw, 18px);
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    color: #000;
+
+}
+
+.singleFarmBlock {
+    margin-bottom: 1.2rem;
+}
+
+.UpdateBtnGrp {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.UpdateBtnGrp button {
+    padding-block: 10px !important;
+    border-radius: 4px !important;
+    text-transform: capitalize !important;
+    font-size: clamp(16px, 4vw, 20px) !important;
+    font-family: "Inter", sans-serif !important;
+}
+
+.updateCancelBtn {
+    border: 1px solid #d94841 !important;
+    color: #d94841 !important;
+
+}
+
+.updatedSaveBtn {
+    color: #fff !important;
+    background-color: #d94841 !important;
+
+}
+
 /* update summary styles ends here */

@@ -326,7 +326,7 @@
 .allScoutsFilterBlock {
   width: auto;
   display: grid;
-  grid-template-columns: 250px 250px 250px 35px;
+  grid-template-columns:  250px 250px 35px;
   grid-column-gap: 1rem;
 }
 

@@ -152,7 +152,7 @@ const SingleImageView: FC<componentProps> = ({
 
   //call the api
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && accessToken) {
       getSingleImageDetails();
       getImageBasedTags()
     }

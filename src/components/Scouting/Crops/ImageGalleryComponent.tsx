@@ -31,7 +31,7 @@ import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
 import { access } from "fs";
 import ImageComponent from "@/components/Core/ImageComponent";
-
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -85,7 +85,6 @@ const ImageGalleryComponent = () => {
   useEffect(() => {
     if (router.isReady) {
       getPresingedURls(pageNumber)
-
     }
 
   }, [accessToken, router.isReady]); // Re-run effect when currentPage changes
@@ -228,6 +227,8 @@ const ImageGalleryComponent = () => {
     }
   };
 
+
+
   const captureCommentDetails = async (comment: any) => {
     setLoading(true);
     try {
@@ -269,6 +270,8 @@ const ImageGalleryComponent = () => {
     const itemIndex = tempImages.findIndex(
       (ite: any) => ite._id === itemId._id
     );
+
+
 
     if (itemIndex === -1) {
       setSelectedItems([...tempImages, itemId]);
@@ -325,7 +328,7 @@ const ImageGalleryComponent = () => {
 
     // Add scroll event listener to the container
     containerRef.current.addEventListener("scroll", handleScroll);
-
+    handleScroll()
     // Cleanup event listener on component unmount
     return () => {
       containerRef.current?.removeEventListener("scroll", handleScroll);
@@ -408,6 +411,46 @@ const ImageGalleryComponent = () => {
   }, [loading, hasMore])
 
 
+  //download multiple images
+  const downloadFiles = async () => {
+    setLoading(true)
+    try {
+      for (const item of selectedItems || []) {
+        // const response = await fetch(item?.url);
+
+        // if (!response.ok) {
+        //   throw new Error('Network response was not ok.');
+        // }
+
+        let filename = item.crop_id.slug + item.key;
+
+        // const blob = await response.blob();
+        // const blobUrl = window.URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = item.url;
+        downloadLink.download = filename;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        toast.success("Downloaded Successfully");
+
+        // window.URL.revokeObjectURL(blobUrl);
+      }
+    } catch (error) {
+      console.error('Error occurred while downloading files:', error);
+      // Handle the error as needed
+      toast.error("Download Failed");
+
+    }
+    finally {
+      setLoading(false)
+
+    }
+  };
+
+
 
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
@@ -420,14 +463,11 @@ const ImageGalleryComponent = () => {
           >
             {farmTitle}
           </Link>
-          <span style={{ fontSize: "1.2rem" }}>/</span>
           <Typography color="text.primary">
             {cropTitle?.slice(0, 1)?.toUpperCase() + cropTitle?.slice(1)}
           </Typography>
-        </div>
-        <div className={styles.headericon} id="header-icon">
-        </div>
-        {/* <Tabs
+        </Breadcrumbs>
+        <Tabs
           className={styles.viewingTabs}
           value={value}
           onChange={handleChangeMenuView}
@@ -493,6 +533,12 @@ const ImageGalleryComponent = () => {
                       alt="tag"
                     />
                   </IconButton>
+
+                  <IconButton
+                    onClick={() => downloadFiles()}
+                  >
+                    <FileDownloadIcon />
+                  </IconButton>
                 </div> : ""}
 
             </div>
@@ -511,8 +557,13 @@ const ImageGalleryComponent = () => {
       {value == "1" ?
         <div
           ref={containerRef}
-          className={styles.imageGallaryContainer}
-        >
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
+            gridGap: "1px",
+            overflowY: "auto",
+            maxHeight: "550px",
+          }}>
           {data.map((image: any, indexAttachment: any) => {
             if (data.length === indexAttachment + 1) {
               return (

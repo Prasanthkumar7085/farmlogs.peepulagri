@@ -464,14 +464,11 @@ const ImageGalleryComponent = () => {
           >
             {farmTitle}
           </Link>
-          <span style={{ fontSize: "1.2rem" }}>/</span>
           <Typography color="text.primary">
             {cropTitle?.slice(0, 1)?.toUpperCase() + cropTitle?.slice(1)}
           </Typography>
-        </div>
-        <div className={styles.headericon} id="header-icon">
-        </div>
-        {/* <Tabs
+        </Breadcrumbs>
+        <Tabs
           className={styles.viewingTabs}
           value={value}
           onChange={handleChangeMenuView}
@@ -561,8 +558,13 @@ const ImageGalleryComponent = () => {
       {value == "1" ?
         <div
           ref={containerRef}
-          className={styles.imageGallaryContainer}
-        >
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
+            gridGap: "1px",
+            overflowY: "auto",
+            maxHeight: "550px",
+          }}>
           {data.map((image: any, indexAttachment: any) => {
             if (data.length === indexAttachment + 1) {
               return (

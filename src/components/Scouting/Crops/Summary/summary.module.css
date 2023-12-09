@@ -1,23 +1,78 @@
+/*09-12 letest summary page styling starts here*/
+.iconsiconArrowLeft {
+    width: 25px;
+}
+
+.viewFarm {
+    color: #fff !important;
+    font-family: "Inter", sans-serif !important;
+    font-size: clamp(18px, 4.5vw, 20px) !important;
+    font-weight: 400 !important;
+}
+
+
+.summaryHeader {
+    display: flex;
+    align-items: center;
+}
+
+.headericon {
+    width: 32px;
+    text-align: end;
+}
+
+.summaryHeader {
+    background-color: var(--white);
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background-color: #05A155;
+
+}
+
+.searchBlock {
+    background-color: #05A155;
+    padding: 0.5rem 1rem 4rem;
+    border-radius: 0 0 30px 30px;
+}
+
+.allSummaryCardsBlock {
+    padding: 0 1rem;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+    margin-top: -2rem;
+}
+
+
+/* latest summary page stylings ends here 12-09 */
+
 .AddSummarybtn {
     background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 80.71%));
     color: #ffffff;
     padding: 18px;
     z-index: 3 !important;
-}.date {
-    margin: 0;
-    flex: 1;
-    position: relative;
-    font-size: inherit;
-    font-weight: 500;
-    font-family: inherit;
 }
 
-.vectorIcon {
-    position: relative;
-    width: 16px;
-    height: 3.3px;
-    cursor: pointer;
+.date {
+    white-space: nowrap;
+    font-weight: 300;
+    margin: 0;
+    color: #05A155;
+    font-size: clamp(14px, 3vw, 16px);
 }
+
+.cropTitle {
+    white-space: nowrap;
+    font-weight: 300;
+    margin: 0;
+    color: #d94841;
+    font-size: clamp(14px, 3vw, 16px);
+}
+
+/* .vectorIcon {
+    width: 24px;
+    height: 24px;
+} */
 
 .header,
 .optopns {
@@ -26,15 +81,21 @@
     align-items: center;
 }
 
-.optopns {
+/* .optopns {
     overflow: hidden;
     justify-content: center;
     padding: 4px 11px;
-}
+} */
 
 .header {
     align-self: stretch;
-    justify-content: flex-start;
+    justify-content: space-between;
+}
+
+.summaryHeading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .chilliBeingA {
@@ -47,6 +108,7 @@
 }
 
 .summarycard {
+    margin-bottom: 1rem;
     align-self: stretch;
     border-radius: 16px;
     background-color: #fff;
@@ -58,7 +120,5 @@
     padding: 16px;
     gap: 8px;
     text-align: left;
-    font-size: 12px;
-    color: #05a155;
-    font-family: Inter;
+
 }

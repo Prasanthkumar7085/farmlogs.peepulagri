@@ -2,7 +2,7 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
 import AddIcon from "@mui/icons-material/Add";
-import { Backdrop, CircularProgress, IconButton, Menu, MenuItem } from "@mui/material";
+import { Backdrop, CircularProgress, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -264,17 +264,27 @@ const AllSummaryComponents = () => {
 
     return (
         <div>
-            <div style={{ display: "flex", width: "100%" }}>
-                <div style={{ width: "50%" }}>
+            <div className={styles.summaryHeader} id="header" >
+                <img
+                    className={styles.iconsiconArrowLeft}
+                    alt=""
+                    src="/iconsiconarrowleft.svg"
+                    onClick={() => router.back()}
+                />
+                <Typography className={styles.viewFarm}>Summary</Typography>
+                <div className={styles.headericon} id="header-icon">
+                </div>
+            </div>
+            <div className={styles.searchBlock} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gridGap: "1rem" }}>
+                <div >
                     <FarmsDropDown
                         options={farmOptions}
                         label={"title"}
                         onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
                         getFarmsSearchString={getFarmsSearchString}
-
                     />
                 </div>
-                <div style={{ width: "50%" }}>
+                <div>
                     <CropsDropDown
                         options={cropOptions}
                         label={"title"}
@@ -283,61 +293,65 @@ const AllSummaryComponents = () => {
                     />
                 </div>
             </div>
+            <div className={styles.allSummaryCardsBlock}>
+                {data?.length ? data.map((item: any, index: any) => {
+                    if (data.length === index + 1 && hasMore == true) {
+                        return (
 
-            {data?.length ? data.map((item: any, index: any) => {
-                if (data.length === index + 1 && hasMore == true) {
-                    return (
+                            <div className={styles.summarycard}
+                                key={index}
+                                ref={lastBookElementRef}
+                            >
+                                <div className={styles.header}>
+                                    <div className={styles.summaryHeading}>
+                                        <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
+                                        <h4 className={styles.cropTitle}>{item?.crop_id?.title}</h4>
+                                    </div>
 
-                        <div className={styles.summarycard}
-                            key={index}
-                            ref={lastBookElementRef}
-                        >
-                            <div className={styles.header}>
-                                <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
-                                <h4 className={styles.date}>{item?.crop_id?.title}</h4>
+                                    <div className={styles.optopns}>
+                                        <img className={styles.vectorIcon} alt="" src="/mobileIcons/summary/dots-three-vertical.svg" onClick={(e) => {
+                                            handleMenu(e)
+                                            setRowID(item._id)
+                                        }} />
 
-                                <div className={styles.optopns}>
-                                    <img className={styles.vectorIcon} alt="" src="/vector.svg" onClick={(e) => {
-                                        handleMenu(e)
-                                        setRowID(item._id)
-                                    }} />
-
+                                    </div>
                                 </div>
+                                <p className={styles.chilliBeingA}>
+                                    {item.content}
+                                </p>
+
                             </div>
-                            <p className={styles.chilliBeingA}>
-                                {item.content}
-                            </p>
 
-                        </div>
+                        )
+                    }
+                    else {
+                        return (
 
-                    )
-                }
-                else {
-                    return (
-
-                        <div className={styles.summarycard}
-                            key={index}
-                            ref={index === data.length - 20 ? lastItemRef : null}
-                        >
-                            <div className={styles.header}>
-                                <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
-                                <h4 className={styles.date} style={{ color: "red" }}>{item?.crop_id?.title}</h4>
-                                <div className={styles.optopns}>
-                                    <img className={styles.vectorIcon} alt="" src="/vector.svg" onClick={(e) => {
-                                        handleMenu(e)
-                                        setRowID(item._id)
-                                    }} />
+                            <div className={styles.summarycard}
+                                key={index}
+                                ref={index === data.length - 20 ? lastItemRef : null}
+                            >
+                                <div className={styles.header}>
+                                    <div className={styles.summaryHeading}>
+                                        <h4 className={styles.date}>{timePipe(item.date, "DD MMM, YYYY")}</h4>
+                                        <h4 className={styles.cropTitle} >{item?.crop_id?.title}</h4>
+                                    </div>
+                                    <div className={styles.optopns}>
+                                        <img className={styles.vectorIcon} alt="" src="/mobileIcons/summary/dots-three-vertical.svg" onClick={(e) => {
+                                            handleMenu(e)
+                                            setRowID(item._id)
+                                        }} />
+                                    </div>
                                 </div>
+                                <p className={styles.chilliBeingA}>
+                                    {item.content}
+                                </p>
+
                             </div>
-                            <p className={styles.chilliBeingA}>
-                                {item.content}
-                            </p>
-
-                        </div>
-                    )
-                }
-            }) : "No Summary"}
-
+                        )
+                    }
+                }) : "No Summary"}
+            </div>
 
             <Menu
                 id="demo-positioned-menu"
@@ -346,12 +360,12 @@ const AllSummaryComponents = () => {
                 open={open}
                 onClose={handleClose}
                 anchorOrigin={{
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'left',
                 }}
                 transformOrigin={{
                     vertical: 'top',
-                    horizontal: 'left',
+                    horizontal: 'center',
                 }}
             >
                 <MenuItem onClick={() => {
@@ -361,8 +375,6 @@ const AllSummaryComponents = () => {
                 }}>Edit</MenuItem>
                 <MenuItem onClick={handleClose}>Delete</MenuItem>
             </Menu>
-
-
             <div className="addFormPositionIcon">
                 <IconButton
                     className={styles.AddSummarybtn}

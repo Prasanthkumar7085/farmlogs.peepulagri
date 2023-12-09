@@ -6,7 +6,7 @@ const SummaryPage = () => {
 
     return (
         <div>
-            <Header1 name={"Day Summary"} />
+            {/* <Header1 name={"Day Summary"} /> */}
             <AllSummaryComponents />
         </div>
     )

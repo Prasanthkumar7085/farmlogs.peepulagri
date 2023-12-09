@@ -70,7 +70,7 @@ const DashboardStats = () => {
         <div className={styles.dashboardstats}>
             <div className={styles.pageHeader}  >
                 <div style={{ padding: "0.5rem" }}>
-                    <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
+                    <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} onClick={() => router.push("/dashboard")} />
                 </div>
                 <div style={{ width: "60%", textAlign: "center" }}>
                     <h2 className={styles.pageName}>Dashboard</h2>

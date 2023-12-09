@@ -565,7 +565,7 @@ const ImageGalleryComponent = () => {
                         right: "0",
                       }}
                       onClick={() => {
-                        if (!longpressActive) {
+                        if (!longpressActive || tagsCheckBoxOpen == false) {
                           router.push(
                             `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
                           );

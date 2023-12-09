@@ -14,7 +14,7 @@ import { Logout } from "@mui/icons-material";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 
-interface item {
+interface ItemProps {
   src: string;
   link: string;
   isVisible: boolean;
@@ -99,16 +99,16 @@ const SideBarMenu = ({ children }: any) => {
               onClick={() => router.push("/farm")}
             />
             <List>
-              {menuListItems.map((item: item, index: number) => {
-                if (item.isVisible) {
+              {menuListItems.map((item: any, index: number) => {
+                if (item?.isVisible) {
                   return (
                     <ListItem className={styles.menuItem} key={index}>
-                      <Tooltip title={item.toolTitle} placement="right">
-                        <Link href={item.link}>
+                      <Tooltip title={item?.toolTitle} placement="right">
+                        <Link href={item?.link}>
                           <ListItemButton
-                            // onClick={() => router.push(item.link)}
+                            // onClick={() => router.push(item?.link)}
                             className={
-                              item.active
+                              item?.active
                                 ? styles.activeMenuItem
                                 : styles.inactiveMenuItem
                             }
@@ -116,7 +116,7 @@ const SideBarMenu = ({ children }: any) => {
                             <Image
                               className={styles.apps1Icon}
                               alt=""
-                              src={item.src}
+                              src={item?.src}
                               width={20}
                               height={20}
                             />

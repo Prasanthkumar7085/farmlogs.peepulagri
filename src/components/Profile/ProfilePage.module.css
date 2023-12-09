@@ -1,10 +1,43 @@
 .profilePage {
-    width: 50%;
+    width: 50vw;
     margin: 0 auto;
     padding-top: 3rem;
     max-width: 650px;
 
 
+}
+
+.profilePageCard{
+    border: 2px solid #9a9a9a;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    background-color: #fff;
+}
+.header{
+    font-size: auto;
+    font-weight: bold;
+}
+.content{
+    padding: 1rem .5rem 0rem ;
+    display: flex;
+    flex-direction: column;
+    gap:.3rem
+}
+.contentGrid{
+    border-radius: .5rem;
+    background-color: #f5f7fa;
+    display: flex;
+    align-items:center;
+    padding: .5rem 1rem;
+}
+.heading{
+    font-family: Inter;
+    min-width: 15rem;
+    color:#a05148;
+    font-weight: bold;
+}
+.value{
+    font-family: Inter;
 }
 
 .updatePasswordPage {

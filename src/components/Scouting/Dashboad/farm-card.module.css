@@ -124,6 +124,7 @@
 }
 
 .farm {
+  width:90% !important;
   justify-content: flex-end;
   gap: 2rem;
 }

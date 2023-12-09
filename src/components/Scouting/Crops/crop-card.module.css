@@ -69,7 +69,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 1rem;
-  background-color: var(--background);
+  background-color: #05A155;
   border-bottom: 1px solid #d5d5d5;
 }
 
@@ -113,10 +113,10 @@
 }
 
 .dateRange {
-  font-size: 13px;
+  font-size: clamp(16px, 3.5vw, 18px);
   font-family: "Inter", sans-serif;
   font-weight: 600;
-  color: #000;
+  color: #A05148;
   text-shadow: 1px 1px 2px #fff,
     0 0 1em #fff,
     0 0 0.2em #fff;
@@ -332,17 +332,17 @@
 }
 
 .scoutingView a {
-  color: #6A7185;
+  color: #fff;
   font-family: "Inter", sans-serif;
-  font-size: clamp(12px, 1.75vw, 16px);
+  font-size: clamp(18px, 3vw, 20px);
   font-weight: 500;
 }
 
-.scoutingView li p {
-  color: #35353D;
+.scoutingView p {
+  color: #fff;
   font-family: "Inter", sans-serif;
-  font-size: clamp(12px, 1.75vw, 16px);
-  font-weight: 600;
+  font-size: clamp(18px, 3vw, 20px);
+  font-weight: 500;
   text-transform: capitalize;
 }
 
@@ -380,10 +380,12 @@
   font-weight: 500;
 }
 
-/* .breadcrumbs a{
-  font-size: clamp(12px, 1.75vw, 16px);
-} */
-.breadcrumbs {}
+
+.breadcrumbs {
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
 
 .ctaButton {
   display: flex;

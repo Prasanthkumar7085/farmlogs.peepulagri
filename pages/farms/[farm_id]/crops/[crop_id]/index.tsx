@@ -7,7 +7,7 @@ const SingleScoutViewPage = () => {
 
   return (
     <div>
-      <Header1 name={"Scouting"} />
+      {/* <Header1 name={"Scouting"} /> */}
       <SingleViewScoutComponent />
     </div>
   )

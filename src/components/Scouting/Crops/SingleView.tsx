@@ -408,7 +408,13 @@ const SingleViewScoutComponent = () => {
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
       <div className={styles.mobileScoutingViewHeader}>
-        <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
+        <img
+          className={styles.iconsiconArrowLeft}
+          alt=""
+          src="/iconsiconarrowleft.svg"
+          onClick={() => router.back()}
+        />
+        <div className={styles.breadcrumbs}>
           <Link
             underline="hover"
             color="inherit"
@@ -416,11 +422,14 @@ const SingleViewScoutComponent = () => {
           >
             {farmTitle}
           </Link>
+          <span style={{ fontSize: "1.2rem" }}>/</span>
           <Typography color="text.primary">
             {cropTitle?.slice(0, 1)?.toUpperCase() + cropTitle?.slice(1)}
           </Typography>
-        </Breadcrumbs>
-        <Tabs
+        </div>
+        <div className={styles.headericon} id="header-icon">
+        </div>
+        {/* <Tabs
           className={styles.viewingTabs}
           value={value}
           onChange={handleChangeMenuView}
@@ -432,7 +441,7 @@ const SingleViewScoutComponent = () => {
             aria-label="List"
             value="2"
           />
-        </Tabs>
+        </Tabs> */}
       </div>
 
       {value == "1" ?

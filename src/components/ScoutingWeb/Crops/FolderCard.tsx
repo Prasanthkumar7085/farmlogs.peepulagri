@@ -5,7 +5,7 @@ import { CropTypeResponse } from "@/types/cropTypes";
 import timePipe from "@/pipes/timePipe";
 import { useDispatch } from "react-redux";
 import { setCropTitleTemp } from "@/Redux/Modules/Farms";
-import { Tooltip } from "@mui/material";
+import { Avatar, Tooltip } from "@mui/material";
 
 interface pageProps {
   cropsData: Array<CropTypeResponse>;
@@ -32,13 +32,21 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
             onClick={() => onFolderStructureContainerClick(item)}
           >
             <div className={styles.folder}>
-              <img
-                className={styles.folderIcon}
-                alt=""
-                src="/folder.svg"
-              />
+              <Avatar
+                sx={{ bgcolor: "#E6F5EB", color: "#05A155 !important", fontSize: "1.2rem", width: "30%", height: '70%' }}
+                className={styles.avatarImage}
+                variant="square"
+              >
+                {item?.title.toUpperCase().slice(0, 1)}
+              </Avatar>
               <div className={styles.moreicon}>
-                {/* <MoreVertIcon sx={{ color: "#FFB110", fontSize: "1.2rem !important" }} /> */}
+                <img
+                  className={styles.avatharImg}
+                  alt=""
+                  src={item?.url ? item?.url : "/mobileIcons/crops/No_Image.svg"}
+                  width={"56px"}
+                  height={"56px"}
+                />
               </div>
             </div>
             <div className={styles.textwrapper}>
@@ -62,9 +70,7 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
                       : ""}
                   </h6>
                 </Tooltip>
-                {/* <div className={styles.date}>
-                          {timePipe(item.createdAt, "DD, MMM YYYY")}
-                        </div> */}
+
               </div>
               <div
                 style={{
@@ -76,9 +82,11 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
                 <div className={styles.date}>
                   {timePipe(item.createdAt, "DD, MMM YYYY")}
                 </div>
+
                 <div className={styles.date}>
-                  {item.crop_area ? item.crop_area : 0}{" "}
-                  {item.crop_area > 1 ? "acres" : "acre"}
+
+                  {item.area ? item.area : 0}{" "}
+                  {item.area > 1 ? "acres" : "acre"}
                 </div>
               </div>
             </div>

@@ -18,7 +18,7 @@ import styles from "./FarmsNavBar.module.css";
 
 interface callFarmsProps {
   search_string: string;
-  location: string;
+  location: any;
   userId: string;
   page: number | string;
   limit: number | string;
@@ -84,7 +84,7 @@ const AllFarmsPage = () => {
   };
   const getFarmsData = async ({
     search_string = "",
-    location = "All",
+    location,
     userId,
     page = 1,
     limit = 20,
@@ -95,8 +95,8 @@ const AllFarmsPage = () => {
     try {
       let url = `farms/${page}/${limit}`;
       let queryParam: any = {
-        order_by: "createdAt",
-        order_type: "desc",
+        sort_by: "createdAt",
+        sort_type: "desc",
       };
       if (page) {
         queryParam["page"] = page;
@@ -105,20 +105,25 @@ const AllFarmsPage = () => {
         queryParam["limit"] = limit;
       }
       if (sortBy) {
-        queryParam["order_by"] = sortBy;
+        queryParam["sort_by"] = sortBy;
       }
       if (sortType) {
-        queryParam["order_type"] = sortType;
+        queryParam["sort_type"] = sortType;
       }
-
       if (search_string) {
         queryParam["search_string"] = search_string;
+        delete queryParam["sort_by"];
+        delete queryParam["sort_type"];
       }
-      if (location) {
-        if (location !== "All") {
-          queryParam["location"] = location;
-        }
+
+      if (location != 1 && location) {
+        queryParam["location_id"] = location;
+        delete queryParam["order_by"];
+        delete queryParam["order_type"];
       }
+
+
+
       if (userId) {
         queryParam["user_id"] = userId;
       }

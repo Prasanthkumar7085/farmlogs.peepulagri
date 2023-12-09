@@ -31,7 +31,7 @@ import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
 import { access } from "fs";
 import ImageComponent from "@/components/Core/ImageComponent";
-
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -228,6 +228,8 @@ const ImageGalleryComponent = () => {
     }
   };
 
+
+
   const captureCommentDetails = async (comment: any) => {
     setLoading(true);
     try {
@@ -269,6 +271,8 @@ const ImageGalleryComponent = () => {
     const itemIndex = tempImages.findIndex(
       (ite: any) => ite._id === itemId._id
     );
+
+
 
     if (itemIndex === -1) {
       setSelectedItems([...tempImages, itemId]);
@@ -408,6 +412,46 @@ const ImageGalleryComponent = () => {
   }, [loading, hasMore])
 
 
+  //download multiple images
+  const downloadFiles = async () => {
+    setLoading(true)
+    try {
+      for (const item of selectedItems || []) {
+        // const response = await fetch(item?.url);
+
+        // if (!response.ok) {
+        //   throw new Error('Network response was not ok.');
+        // }
+
+        let filename = item.crop_id.slug + item.key;
+
+        // const blob = await response.blob();
+        // const blobUrl = window.URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = item.url;
+        downloadLink.download = filename;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        toast.success("Downloaded Successfully");
+
+        // window.URL.revokeObjectURL(blobUrl);
+      }
+    } catch (error) {
+      console.error('Error occurred while downloading files:', error);
+      // Handle the error as needed
+      toast.error("Download Failed");
+
+    }
+    finally {
+      setLoading(false)
+
+    }
+  };
+
+
 
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
@@ -489,6 +533,12 @@ const ImageGalleryComponent = () => {
                       height={17}
                       alt="tag"
                     />
+                  </IconButton>
+
+                  <IconButton
+                    onClick={() => downloadFiles()}
+                  >
+                    <FileDownloadIcon />
                   </IconButton>
                 </div> : ""}
 

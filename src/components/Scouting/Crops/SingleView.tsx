@@ -30,6 +30,7 @@ import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
 import { access } from "fs";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 const SingleViewScoutComponent = () => {
   const router = useRouter();
@@ -80,9 +81,11 @@ const SingleViewScoutComponent = () => {
   }, [selectedItems]);
 
   // Effect to add scroll event listener when the component mounts
+
   useEffect(() => {
     if (router.isReady) {
       getPresingedURls(pageNumber)
+
     }
 
   }, [accessToken, router.isReady]); // Re-run effect when currentPage changes
@@ -407,7 +410,7 @@ const SingleViewScoutComponent = () => {
 
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
-      <div className={styles.mobileScoutingViewHeader}>
+      {/* <div className={styles.mobileScoutingViewHeader}>
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
             underline="hover"
@@ -433,22 +436,63 @@ const SingleViewScoutComponent = () => {
             value="2"
           />
         </Tabs>
+      </div> */}
+      <div className={styles.header} id="header">
+        <img
+          className={styles.iconsiconArrowLeft}
+          alt=""
+          src="/iconsiconarrowleft.svg"
+          onClick={() => router.back()}
+        />
+        <Typography className={styles.viewFarm}>{farmTitle + "/" + cropTitle}
+        </Typography>
+        <div className={styles.headericon} id="header-icon" >
+        </div>
+
       </div>
 
       {value == "1" ?
         <div className={styles.stickyHeader}>
           <div className={styles.dateRange}>{dateRange}</div>
           {tagsCheckBoxOpen ? (
-            <Button
-              onClick={() => {
-                setTagsCheckBoxOpen(false);
-                setSelectedItems([]);
-              }}
-              sx={{ display: data?.length ? "" : "none" }}
-              className={styles.selectBtn}
-            >
-              Cancel
-            </Button>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Button
+                onClick={() => {
+                  setTagsCheckBoxOpen(false);
+                  setSelectedItems([]);
+                }}
+                sx={{ display: data?.length ? "" : "none" }}
+                className={styles.selectBtn}
+              >
+                Cancel
+              </Button>
+              {selectedItems?.length ?
+                <div>
+                  <IconButton
+                    onClick={() => setDeleteOpen(true)}
+                  >
+                    <ImageComponent
+                      src={"/farm-delete-icon.svg"}
+                      width={17}
+                      height={17}
+                      alt="delete"
+                    />
+                  </IconButton>
+
+                  <IconButton
+                    onClick={() => setTagsDrawerOpen(true)}
+                  >
+                    <ImageComponent
+                      src={"/tag.svg"}
+                      width={17}
+                      height={17}
+                      alt="tag"
+                    />
+                  </IconButton>
+                </div> : ""}
+
+            </div>
+
           ) : (
             <Button
               className={styles.selectBtn}
@@ -689,7 +733,7 @@ const SingleViewScoutComponent = () => {
           ""
         )}
       </div>
-      {data?.length ? (
+      {/* {data?.length ? (
         <div className={styles.stickyHeader2}>
           {selectedItems?.length ? (
             <div className={styles.stickyBtnGrp}>
@@ -717,7 +761,7 @@ const SingleViewScoutComponent = () => {
         </div>
       ) : (
         ""
-      )}
+      )} */}
 
       {deleteOpen ? (
         <AlertDelete

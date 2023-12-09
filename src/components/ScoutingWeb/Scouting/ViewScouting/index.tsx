@@ -156,91 +156,9 @@ const SingleScoutViewDetails = () => {
               /> */}
             </>
           </div>
-          <div
-            style={{
-              color: "white",
-              alignItems: "flex-start",
-              padding: "4px 20px 4px 20px",
-              justifyContent: "flex-start",
-              margin: "0 auto",
-              display: "flex",
-              width: "85%",
-              flexDirection: "row",
-            }}
-          >
-            <Typography variant="caption" sx={{ color: "black" }}>
-              {timePipe(
-                data?.uploaded_at,
-                "DD-MM-YYYY hh.mm a"
-              )}
-            </Typography>
-          </div>
-          {data?.tags?.length ? (
-            <div
-              style={{
-                color: "black",
-                alignItems: "flex-start",
-                padding: "4px 20px 4px 20px",
-                justifyContent: "flex-start",
-                margin: "0 auto",
-                display: "flex",
-                width: "85%",
-                flexDirection: "row",
-              }}
-            >
-              <Chip
-                className={styles.tagsLabel}
-                icon={<SellIcon sx={{ fontSize: 15 }} />}
-                label="Tags"
-                variant="outlined"
-              />
 
-              {data?.tags?.length
-                ? data?.tags?.map(
-                  (item: string, index: number) => {
-                    return (
-                      <Chip
-                        key={index}
-                        label={item}
-                        className={styles.tagsName}
-                        variant="outlined"
-                      />
-                    );
-                  }
-                )
-                : ""}
-            </div>
-          ) : ""}
 
-          <div className={styles.AllImagesBlock}>
-            {finalImages.map((image: any, index: number) => (
-              <div key={index}>
-                <div
-                  style={{
-                    width: "100%",
-                    paddingTop: "100%",
-                    position: "relative",
-                  }}
-                >
-                  <img
-                    src={image.src}
-                    alt="Gallery Image"
-                    style={{
-                      position: "absolute",
-                      objectFit: "cover",
-                      width: "100%",
-                      height: "100%",
-                      top: 0,
-                      left: 0,
-                      boxShadow: "0px 0px 2px 0px #ffffff5c",
-                      zIndex: 0,
-                      borderRadius: "8px",
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+
         </div>
       </div>
       <div className={styles.galleryItemDetails}>

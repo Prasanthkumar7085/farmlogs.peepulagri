@@ -1,7 +1,7 @@
 import CommentsComponentForWeb from "@/components/Scouting/Comments/CommentsComponentForweb";
 import timePipe from "@/pipes/timePipe";
 import CloseIcon from "@mui/icons-material/Close";
-import { Button, CircularProgress, IconButton, Skeleton, TextField, Typography } from "@mui/material";
+import { Button, Chip, CircularProgress, IconButton, Skeleton, TextField, Typography } from "@mui/material";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "yet-another-react-lightbox/styles.css";
 import styles from "./ScoutingDetails.module.css";
@@ -18,6 +18,7 @@ import { Toaster } from "sonner";
 import style from "../../ListScoutsComponents/DaySummary.module.css";
 import formatText from "../../../../../lib/requestUtils/formatTextToBullets";
 import { useRouter } from "next/router";
+import SellIcon from "@mui/icons-material/Sell";
 
 const ScoutingDetails = ({
   loading,
@@ -63,17 +64,26 @@ const ScoutingDetails = ({
           ) : (
             <h1 className={styles.cropName}>
               <img src="/cropName-icon.svg" alt="" />
-              {crop?.title}{" "}
+              {data?.crop_id?.title}
             </h1>
           )}
-          <h2 className={styles.farmname}>
-            {loading ? (
-              <Skeleton width="300px" height="30px" />
-            ) : (
-              data?.farm_id.title
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <h2 className={styles.farmname}>
+              {loading ? (
+                <Skeleton width="300px" height="30px" />
+              ) : (
+                data?.farm_id.title
+              )}
+            </h2>
 
-            )}
-          </h2>
+            <Typography className={styles.farmname} variant="caption" color="indigo">
+              {loading ? (
+                <Skeleton width="300px" height="30px" />
+              ) : (
+                " (Uploaded By" + ":" + data?.uploaded_by.name + ")"
+              )}
+            </Typography>
+          </div>
         </div>
         <IconButton
           className={styles.iconDiv}
@@ -82,135 +92,59 @@ const ScoutingDetails = ({
         >
           <CloseIcon />
         </IconButton>
-      </div>
-      {/* 
-      <div className={style.scoutingdetails}>
-        <div className={style.textwrapper}>
-          <h6 className={style.summary}>
-            <SummaryIcon /> Findings
-          </h6>
-          {loading ? (
-            <div>
-              <Skeleton width="400px" height="20px" />
-              <Skeleton width="400px" height="20px" />
-              <Skeleton width="400px" height="20px" />
-              <Skeleton width="400px" height="20px" />
-            </div>
-          ) : (
-            <Markup
-              content={
-                content?.length
-                  ? formatText(content)
-                  : "<span class='nocontent'>No findings added yet!</span>"
-              }
-            />
-          )}
-        </div>
-      </div> */}
-      {/* 
-      <div className={style.scoutingdetails}>
-        <div className={style.textwrapper}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
-            <h6 className={style.recomendation}>
-              <SuggestionsIcon />
-              Recommendations
-            </h6>
-            {loading || editRecomendationOpen ? (
-              ""
-            ) : mainImageData?.suggestions ? (
-              <IconButton
-                className={style.editIcon}
-                onClick={() => {
-                  setEditRecomendationOpen(true);
-                }}
-              >
-                <EditIconComponent />
-              </IconButton>
-            ) : (
-              <IconButton
-                color="success"
-                className={style.addIcon}
-                onClick={() => {
-                  setEditRecomendationOpen(true);
-                }}
-              >
-                <AddOutlined />
-              </IconButton>
-            )}
-          </div>
 
-          {!loading && editRecomendationOpen ? (
-            <div style={{ width: "100%" }}>
-              <TextField
-                className={style.textAria}
-                value={recomendations}
-                onChange={(e) => setRecomendations(e.target.value)}
-                multiline
-                placeholder={"Your recomendations here..."}
-                minRows={4}
-                maxRows={8}
-                sx={{
-                  width: "100%",
-                }}
-              />
-              <div className={style.sendButtonDiv}>
-                <Button
-                  className={style.cancelButton}
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setEditRecomendationOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className={
-                    recomendations ? style.sendButton : style.sendButtonDisabled
-                  }
-                  variant="contained"
-                  size="small"
-                  disabled={recomendations ? false : true}
-                  onClick={() => {
-                    let temp = { ...mainImageData };
-                    temp.suggestions = recomendations;
-                    afterUpdateRecommandations([temp], crop?._id);
-                  }}
-                >
-                  {mainImageData?.suggestions ? "Update" : " Submit"}
-                  {updateLoading ? (
-                    <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                  ) : (
-                    ""
-                  )}
-                </Button>
-              </div>
-            </div>
-          ) : loading ? (
-            <div style={{ paddingLeft: "10px" }}>
-              <Skeleton width="300px" height="20px" />
-              <Skeleton width="300px" height="20px" />
-              <Skeleton width="300px" height="20px" />
-              <Skeleton width="300px" height="20px" />
-            </div>
-          ) : (
-            <div className={style.recomdationContent}>
-              <Markup
-                content={
-                  mainImageData?.suggestions
-                    ? formatText(mainImageData?.suggestions)
-                    : "<span class='nocontent'>No recommendations added yet!</span>"
-                }
-              />
-            </div>
-          )}
+      </div>
+      <div
+        style={{
+          color: "white",
+          alignItems: "flex-start",
+          padding: "4px 20px 4px 20px",
+          justifyContent: "flex-start",
+          margin: "0 auto",
+          display: "flex",
+          width: "85%",
+          flexDirection: "row",
+        }}
+      >
+        <Chip
+          className={styles.tagsLabel}
+          icon={<SellIcon sx={{ fontSize: 15 }} color="info" />}
+          label="Tags"
+          variant="outlined"
+        />
+      </div>
+      {data?.tags?.length ? (
+        <div
+          style={{
+            color: "black",
+            alignItems: "flex-start",
+            padding: "4px 20px 4px 20px",
+            justifyContent: "flex-start",
+            margin: "0 auto",
+            display: "flex",
+            width: "85%",
+            flexDirection: "row",
+          }}
+        >
+
+
+          {data?.tags?.length
+            ? data?.tags?.map(
+              (item: string, index: number) => {
+                return (
+                  <Chip
+                    key={index}
+                    label={item}
+                    className={styles.tagsName}
+                    variant="outlined"
+                  />
+                );
+              }
+            )
+            : "No tags  "}
         </div>
-      </div> */}
+      ) : <div>No tags</div>}
+      <hr />
 
       <div className={styles.RecommedationBlock}>
         <Typography variant="h6" className={styles.RecommedationHeading}>

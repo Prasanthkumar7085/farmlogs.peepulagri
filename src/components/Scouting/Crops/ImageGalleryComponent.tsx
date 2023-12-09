@@ -777,7 +777,8 @@ const ImageGalleryComponent = () => {
               );
             }}
           >
-            <AddIcon />
+            <img src="/mobileIcons/scouting/Add_Scouting.svg" alt="" width={"25px"} />
+            <span>Upload</span>
           </IconButton>
         ) : (
           ""

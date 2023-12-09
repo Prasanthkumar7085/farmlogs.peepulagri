@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
+import styles from "./userProfile.module.css"
 
 const UserProfile = () => {
     const router = useRouter();
@@ -64,24 +65,32 @@ const UserProfile = () => {
         }
     }, [router.isReady, accessToken])
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div>
-                <Avatar
-                    alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
-                    sx={{ width: 56, height: 56 }}
-                />
+        <div>
+            <div className={styles.summaryHeader} id="header" >
+                <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} />
+                <Typography className={styles.viewFarm}>Profile</Typography>
+                <div className={styles.headericon} id="header-icon">
+                </div>
             </div>
-            <div>
-                <Typography variant="caption">{data?.name ? data?.name : "-"}</Typography><br />
-                <Typography variant="caption">{data?.email ? data?.email : "-"}</Typography>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem", paddingTop: "5rem", gap: "6rem" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <div style={{ border: "1px solid #D94841", padding: "5px", borderRadius: "50%", width: "130px", }}>
+                        <Avatar
+                            alt="Remy Sharp"
+                            src="/static/images/avatar/1.jpg"
+                            sx={{ width: 130, height: 130, fontWeight: "700", fontSize: "2.4rem", color: "#D94841", background: "#f5e7d6" }}
+                        />
+                    </div>
+                    <div className={styles.userDetails}>
+                        <Typography variant="h6">{data?.name ? data?.name : "-"}</Typography>
+                        <Typography >{data?.email ? data?.email : "-"}</Typography>
+
+                    </div>
+                </div>
+                <Button fullWidth className={styles.logOutBtn} variant="outlined" onClick={logout}><img src="/mobileIcons/summary/sign-out-light.svg" alt="" width={"20px"} /> Log out</Button>
 
             </div>
-            <div >
-                <Button variant="outlined" onClick={logout}>Log out</Button>
-            </div>
-
-        </div>
+        </div >
     )
 }
 export default UserProfile;

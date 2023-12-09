@@ -1,0 +1,61 @@
+.iconsiconArrowLeft {
+    width: 25px;
+}
+
+.viewFarm {
+    color: #fff !important;
+    font-family: "Inter", sans-serif !important;
+    font-size: clamp(18px, 4.5vw, 20px) !important;
+    font-weight: 400 !important;
+}
+
+
+.summaryHeader {
+    display: flex;
+    align-items: center;
+    background-color: #f5e7d6;
+}
+
+.headericon {
+    width: 32px;
+    text-align: end;
+}
+
+.summaryHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background-color: #05A155;
+
+}
+
+.userDetails {
+    text-align: center;
+}
+
+.userDetails h6 {
+    margin: 0;
+    color: #000;
+    font-size: clamp(20px, 4vw, 24px);
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+}
+
+.userDetails p {
+    color: #05A155;
+    font-size: clamp(18px, 3.5vw, 20px);
+    font-family: "Inter", sans-serif;
+}
+
+.logOutBtn {
+    font-size: clamp(18px, 4vw, 20px) !important;
+    font-family: "Inter", sans-serif !important;
+    color: #D94841 !important;
+    border: 1px solid #D94841 !important;
+    border-radius: 8px !important;
+    padding-block: 5px !important;
+    text-transform: capitalize !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}

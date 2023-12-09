@@ -422,11 +422,6 @@ const ListScouts: FunctionComponent = () => {
 
   useEffect(() => {
     if (router.isReady && accessToken && !mounted) {
-      // getAllUsers(router.query.created_by as string);
-      if (router.query.farm_search_string) {
-        setSearchString(router.query.farm_search_string as string);
-      }
-
       setMounted(true);
       getAllFarms({
         farmId: router.query.farm_id as string,

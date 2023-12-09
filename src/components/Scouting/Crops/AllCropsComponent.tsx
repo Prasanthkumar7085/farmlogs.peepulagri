@@ -249,7 +249,7 @@ const AllCropsComponent = () => {
       } else if (value == 4 && sortType == "desc") {
         return true;
       }
-    } else if (sortBy == "crop_area") {
+    } else if (sortBy == "area") {
       if (value == 5 && sortType == "desc") {
         return true;
       } else if (value == 6 && sortType == "asc") {
@@ -348,7 +348,7 @@ const AllCropsComponent = () => {
           </div>
         </ListItem>
         <Divider variant="middle" className={styles.divider} component="li" />
-        <ListItem onClick={() => sortByMethod("crop_area", "desc")}>
+        <ListItem onClick={() => sortByMethod("area", "desc")}>
           <RadioButtonUncheckedIcon
             sx={{
               display: sortMethod(5) ? "none" : "flex",
@@ -366,7 +366,7 @@ const AllCropsComponent = () => {
             {"Area Highest first"}
           </div>
         </ListItem>
-        <ListItem onClick={() => sortByMethod("crop_area", "asc")}>
+        <ListItem onClick={() => sortByMethod("area", "asc")}>
           <RadioButtonUncheckedIcon
             sx={{
               display: sortMethod(6) ? "none" : "flex",

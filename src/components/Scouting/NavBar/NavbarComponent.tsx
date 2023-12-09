@@ -77,7 +77,7 @@ export default function ScoutingHeader({ children }: any) {
                     onClick={() => router.push("/dashboard")}>{router.pathname.includes("/dashboard") ? <img src="/mobileIcons/navTabs/house-fill.svg" alt="" width={"25px"} /> : <img src="/mobileIcons/navTabs/dashboard-mobile.svg" alt="" width={"25px"} />} Dashboard</Button>
 
                 <Button className={router.pathname.includes("/farms") ? styles.navButtonActive : styles.navButton}
-                    onClick={() => router.push("/farms")}>{router.pathname.includes("/farms") ? <img src="/mobileIcons/navTabs/farms-mobile-active.svg" alt="" /> : <img src="/mobileIcons/navTabs/farms-mobile.svg" alt="" width={"25px"} />} Farms</Button>
+                    onClick={() => router.push("/farms")}>{router.pathname.includes("/farms") ? <img src="/mobileIcons/navTabs/farms-mobile-active.svg" alt="" width={"25px"} /> : <img src="/mobileIcons/navTabs/farms-mobile.svg" alt="" width={"25px"} />} Farms</Button>
 
                 <Button
                     className={router.pathname.includes("/summary") ? styles.navButtonActive : styles.navButton}

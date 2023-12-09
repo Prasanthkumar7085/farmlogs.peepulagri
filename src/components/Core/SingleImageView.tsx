@@ -161,7 +161,7 @@ const SingleImageView: FC<componentProps> = ({
   return (
     <div>
       <div className={styles.overlay}>
-        <div className={styles.singleImageViewHeader} >
+        <div className={styles.singleImageViewHeader}>
           <img
             alt=""
             src="/iconsiconarrowleft.svg"
@@ -169,8 +169,7 @@ const SingleImageView: FC<componentProps> = ({
             width={"24px"}
           />
           <Typography>{farmTitle + "/" + cropTitle}</Typography>
-          <div className={styles.headericon} id="header-icon" >
-          </div>
+          <div className={styles.headericon} id="header-icon"></div>
 
           {/* <Typography className={styles.postDate}>
             <InsertInvitationIcon />
@@ -210,7 +209,6 @@ const SingleImageView: FC<componentProps> = ({
             <ReactPanZoom alt={`Image ${data?.created_at}`} image={data?.url} />
           )}
         </div>
-
       </div>
       <div className={styles.imgDetailButtons}>
         <div className={styles.ButtonGrp}>
@@ -230,7 +228,6 @@ const SingleImageView: FC<componentProps> = ({
           </IconButton>
           <IconButton
             sx={{ borderRadius: "0 25px 25px 0" }}
-
             className={styles.singleBtn}
             onClick={() => {
               captureImageDilogOptions("comments");
@@ -252,7 +249,7 @@ const SingleImageView: FC<componentProps> = ({
             : data?.description
           : ""}
       </div> */}
-      <div className={styles.scoutingdetails}>
+      {/* <div className={styles.scoutingdetails}>
         {tagsDetails?.tags ? (
           <div className={styles.cropDetailsBlock}>
             {tagsDetails?.tags?.length ? (
@@ -286,7 +283,7 @@ const SingleImageView: FC<componentProps> = ({
         ) : (
           ""
         )}
-      </div>
+      </div> */}
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}
@@ -300,7 +297,7 @@ const SingleImageView: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={data}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-      // loading={loading}
+        // loading={loading}
       />
 
       <LoadingComponent loading={loading} />

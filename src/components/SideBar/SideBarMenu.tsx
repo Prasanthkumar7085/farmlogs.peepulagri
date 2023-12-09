@@ -37,7 +37,9 @@ const SideBarMenu = ({ children }: any) => {
       src: "/dashboard-icon.svg",
       link: `/farm`,
       isVisible: true,
-      active: router.pathname.includes("/farm"),
+      active:
+        router.pathname.includes("/farm") &&
+        !router.pathname.includes("/scouts"),
       toolTitle: "Farms",
     },
     // {

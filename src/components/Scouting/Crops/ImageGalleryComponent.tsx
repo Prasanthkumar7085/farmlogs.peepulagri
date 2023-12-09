@@ -1,26 +1,15 @@
 import { removeUserDetails } from "@/Redux/Modules/Auth";
-import {
-  deleteAllMessages, removeTheAttachementsFilesFromStore
-} from "@/Redux/Modules/Conversations";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
 import AddIcon from "@mui/icons-material/Add";
-import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
-import {
-  Breadcrumbs,
-  Button,
-  IconButton,
-  Link,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
-import Image from "next/image";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { Button, IconButton, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -29,9 +18,6 @@ import { Toaster, toast } from "sonner";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
-import { access } from "fs";
-import ImageComponent from "@/components/Core/ImageComponent";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -84,12 +70,9 @@ const ImageGalleryComponent = () => {
 
   useEffect(() => {
     if (router.isReady) {
-      getPresingedURls(pageNumber)
+      getPresingedURls(pageNumber);
     }
-
   }, [accessToken, router.isReady]); // Re-run effect when currentPage changes
-
-
 
   //logout event when the 403 and 401 error codes
   const logout = async () => {
@@ -105,7 +88,7 @@ const ImageGalleryComponent = () => {
   };
 
   //get the images urls api
-  const getPresingedURls = async (page: any) => {
+  const getPresingedURls = async (page: any, pageChange = false) => {
     setLoading(true);
     let options = {
       method: "GET",
@@ -125,10 +108,9 @@ const ImageGalleryComponent = () => {
 
       if (responseData.success) {
         setHasMore(responseData?.has_more);
-        setData([...data, ...responseData.data]);
-
+        if (pageChange) setData([...data, ...responseData?.data]);
+        else setData([...responseData?.data]);
         return responseData.data;
-
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -227,8 +209,6 @@ const ImageGalleryComponent = () => {
     }
   };
 
-
-
   const captureCommentDetails = async (comment: any) => {
     setLoading(true);
     try {
@@ -270,8 +250,6 @@ const ImageGalleryComponent = () => {
     const itemIndex = tempImages.findIndex(
       (ite: any) => ite._id === itemId._id
     );
-
-
 
     if (itemIndex === -1) {
       setSelectedItems([...tempImages, itemId]);
@@ -315,9 +293,9 @@ const ImageGalleryComponent = () => {
         const endDate =
           visibleImages.length > 0
             ? timePipe(
-              visibleImages[visibleImages.length - 1].uploaded_at,
-              "DD MMM YY"
-            )
+                visibleImages[visibleImages.length - 1].uploaded_at,
+                "DD MMM YY"
+              )
             : "";
 
         // Update the displayed date range
@@ -328,13 +306,12 @@ const ImageGalleryComponent = () => {
 
     // Add scroll event listener to the container
     containerRef.current.addEventListener("scroll", handleScroll);
-    handleScroll()
+    handleScroll();
     // Cleanup event listener on component unmount
     return () => {
       containerRef.current?.removeEventListener("scroll", handleScroll);
     };
   }, [data]);
-
 
   //tabs change code
   const handleChangeMenuView = (
@@ -371,8 +348,8 @@ const ImageGalleryComponent = () => {
         toast.success("Images Deleted successfully");
         setDeleteOpen(false);
         setSelectedItems([]);
+        // setData([]);
         await getPresingedURls(1);
-
       }
     } catch (err) {
       console.error(err);
@@ -394,26 +371,27 @@ const ImageGalleryComponent = () => {
   };
 
   //api call after the last element was in the dom (visible)
-  const observer: any = useRef()
+  const observer: any = useRef();
 
-  const lastBookElementRef = useCallback((node: any) => {
-
-    if (loading) return
-    if (observer.current) observer.current.disconnect()
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPageNumber(prevPageNumber => prevPageNumber + 1)
-        getPresingedURls(pageNumber + 1)
-        scrollToLastItem() // Restore scroll position after new data is loaded
-      }
-    })
-    if (node) observer.current.observe(node)
-  }, [loading, hasMore])
-
+  const lastBookElementRef = useCallback(
+    (node: any) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNumber((prevPageNumber) => prevPageNumber + 1);
+          getPresingedURls(pageNumber + 1, true);
+          scrollToLastItem(); // Restore scroll position after new data is loaded
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
 
   //download multiple images
   const downloadFiles = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       for (const item of selectedItems || []) {
         // const response = await fetch(item?.url);
@@ -439,18 +417,13 @@ const ImageGalleryComponent = () => {
         // window.URL.revokeObjectURL(blobUrl);
       }
     } catch (error) {
-      console.error('Error occurred while downloading files:', error);
+      console.error("Error occurred while downloading files:", error);
       // Handle the error as needed
       toast.error("Download Failed");
-
-    }
-    finally {
-      setLoading(false)
-
+    } finally {
+      setLoading(false);
     }
   };
-
-
 
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
@@ -488,14 +461,13 @@ const ImageGalleryComponent = () => {
           src="/iconsiconarrowleft.svg"
           onClick={() => router.back()}
         />
-        <Typography className={styles.viewFarm}>{farmTitle + "/" + cropTitle}
+        <Typography className={styles.viewFarm}>
+          {farmTitle + "/" + cropTitle}
         </Typography>
-        <div className={styles.headericon} id="header-icon" >
-        </div>
-
+        <div className={styles.headericon} id="header-icon"></div>
       </div>
 
-      {value == "1" ?
+      {value == "1" ? (
         <div className={styles.stickyHeader}>
           <div className={styles.dateRange}>{dateRange}</div>
           {tagsCheckBoxOpen ? (
@@ -510,11 +482,9 @@ const ImageGalleryComponent = () => {
               >
                 Cancel
               </Button>
-              {selectedItems?.length ?
+              {selectedItems?.length ? (
                 <div>
-                  <IconButton
-                    onClick={() => setDeleteOpen(true)}
-                  >
+                  <IconButton onClick={() => setDeleteOpen(true)}>
                     <ImageComponent
                       src={"/farm-delete-icon.svg"}
                       width={17}
@@ -523,9 +493,7 @@ const ImageGalleryComponent = () => {
                     />
                   </IconButton>
 
-                  <IconButton
-                    onClick={() => setTagsDrawerOpen(true)}
-                  >
+                  <IconButton onClick={() => setTagsDrawerOpen(true)}>
                     <ImageComponent
                       src={"/tag.svg"}
                       width={17}
@@ -534,15 +502,14 @@ const ImageGalleryComponent = () => {
                     />
                   </IconButton>
 
-                  <IconButton
-                    onClick={() => downloadFiles()}
-                  >
+                  <IconButton onClick={() => downloadFiles()}>
                     <FileDownloadIcon />
                   </IconButton>
-                </div> : ""}
-
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-
           ) : (
             <Button
               className={styles.selectBtn}
@@ -552,9 +519,12 @@ const ImageGalleryComponent = () => {
               Select
             </Button>
           )}
-        </div> : ""}
+        </div>
+      ) : (
+        ""
+      )}
 
-      {value == "1" ?
+      {value == "1" ? (
         <div
           ref={containerRef}
           style={{
@@ -563,7 +533,8 @@ const ImageGalleryComponent = () => {
             gridGap: "1px",
             overflowY: "auto",
             maxHeight: "550px",
-          }}>
+          }}
+        >
           {data.map((image: any, indexAttachment: any) => {
             if (data.length === indexAttachment + 1) {
               return (
@@ -571,13 +542,11 @@ const ImageGalleryComponent = () => {
                   ref={lastBookElementRef}
                   style={{ position: "relative", paddingTop: "100%" }}
                   key={indexAttachment}
-
                 >
                   <img
                     className="your-image-class"
                     key={indexAttachment}
                     ref={(ref) => (image.ref = ref)}
-
                     src={
                       image.type?.slice(0, 2) == "vi"
                         ? "/Play-button.svg"
@@ -635,17 +604,16 @@ const ImageGalleryComponent = () => {
                     )}
                   </div>
                 </div>
-              )
-            }
-            else {
+              );
+            } else {
               return (
                 <div
                   style={{ position: "relative", paddingTop: "100%" }}
                   key={indexAttachment}
-                  ref={indexAttachment === data.length - 50 ? lastItemRef : null}
-
+                  ref={
+                    indexAttachment === data.length - 50 ? lastItemRef : null
+                  }
                 >
-
                   <img
                     className="your-image-class"
                     key={indexAttachment}
@@ -673,7 +641,6 @@ const ImageGalleryComponent = () => {
                         handleChange(image); // Call handleLongPress when long press is detected
                       }
                     }}
-
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setTagsCheckBoxOpen(true);
@@ -707,16 +674,14 @@ const ImageGalleryComponent = () => {
                       ""
                     )}
                   </div>
-                </div>)
+                </div>
+              );
             }
-          }
-          )
-
-          } </div> : <ScoutView />
-
-
-      }
-
+          })}{" "}
+        </div>
+      ) : (
+        <ScoutView />
+      )}
 
       <LoadingComponent loading={loading} />
 

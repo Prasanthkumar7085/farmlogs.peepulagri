@@ -25,6 +25,7 @@ const EditTagsForSingleAttachment = ({
     if (array) {
       setTags(array);
     }
+    console.log(array);
   };
   useEffect(() => {
     if (TagsDrawerEditOpen) {
@@ -67,14 +68,12 @@ const EditTagsForSingleAttachment = ({
           tags={tags}
           beforeTags={item?.tags}
         />
-
-
       </div>
 
       <Button
         variant="contained"
         onClick={() => {
-          captureTagsDetailsEdit(tags, description);
+          captureTagsDetailsEdit([...tags, ...item.tags], description);
         }}
         disabled={loading || !(tags?.length || description?.length)}
         className={

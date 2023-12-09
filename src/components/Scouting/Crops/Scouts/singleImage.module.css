@@ -13,6 +13,19 @@
   font-family: "Inter", sans-serif;
 }
 
+.imgDetailButtons {
+  position: absolute;
+  bottom: 5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.singleBtn {
+  background-color: #000000a8;
+  padding: 10px 2rem;
+}
 
 .infiniteScrollComponent {
   max-height: calc(100vh - 130px);
@@ -285,12 +298,14 @@
 }
 
 .tagNames {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.7rem;
   height: auto;
   padding: 1rem;
-  background-color: #d7ffeb;
-  border-bottom: 1px solid #bcdecd;
+  /* background-color: #d7ffeb;
+  border-bottom: 1px solid #bcdecd; */
 }
 
 .tagNames [class*="MuiChip-outlined"] {

@@ -166,6 +166,7 @@ const SingleImageView: FC<componentProps> = ({
             alt=""
             src="/iconsiconarrowleft.svg"
             onClick={() => router.back()}
+            width={"24px"}
           />
           <Typography>{farmTitle + "/" + cropTitle}</Typography>
           <div className={styles.headericon} id="header-icon" >
@@ -211,40 +212,46 @@ const SingleImageView: FC<componentProps> = ({
         </div>
 
       </div>
-      <div>
-        {" "}
-        <IconButton
-          onClick={() => {
-            captureImageDilogOptions("tag");
-          }}
-        >
-          <Image
-            src={"/add-tag-icon-black.svg"}
-            width={20}
-            height={20}
-            alt="pp"
-          />
-        </IconButton>
-        <IconButton
-          onClick={() => {
-            captureImageDilogOptions("comments");
-          }}
-        >
-          <Image
-            src={"/comment-black-icon.svg"}
-            width={20}
-            height={20}
-            alt="pp"
-          />
-        </IconButton>
+      <div className={styles.imgDetailButtons}>
+        <div className={styles.ButtonGrp}>
+          <IconButton
+            sx={{ borderRadius: "25px 0 0 25px" }}
+            className={styles.singleBtn}
+            onClick={() => {
+              captureImageDilogOptions("tag");
+            }}
+          >
+            <Image
+              src={"/mobileIcons/scouting/tag-light.svg"}
+              width={25}
+              height={25}
+              alt="pp"
+            />
+          </IconButton>
+          <IconButton
+            sx={{ borderRadius: "0 25px 25px 0" }}
+
+            className={styles.singleBtn}
+            onClick={() => {
+              captureImageDilogOptions("comments");
+            }}
+          >
+            <Image
+              src={"/mobileIcons/scouting/chat-circle-light.svg"}
+              width={25}
+              height={25}
+              alt="pp"
+            />
+          </IconButton>
+        </div>
       </div>
-      <div>
+      {/* <div>
         {data?.description
           ? data?.description?.length > 97
             ? data?.description?.slice(0, 100) + "..."
             : data?.description
           : ""}
-      </div>
+      </div> */}
       <div className={styles.scoutingdetails}>
         {tagsDetails?.tags ? (
           <div className={styles.cropDetailsBlock}>

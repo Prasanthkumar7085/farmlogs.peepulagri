@@ -17,14 +17,16 @@
   position: absolute;
   bottom: 5rem;
   width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .singleBtn {
-  background-color: #000000a8;
-  padding: 10px 2rem;
+  background-color: #000000a8 !important;
+  padding: 10px 2rem !important;
 }
 
 .infiniteScrollComponent {

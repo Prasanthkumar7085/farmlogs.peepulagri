@@ -4,7 +4,7 @@ import { GetServerSideProps } from "next"
 
 const AllCropsPage = () => {
     return (
-        <div>
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             {/* <HeaderComponentAllCrops name={"My Crops"} /> */}
             <AllCropsComponent />
         </div>

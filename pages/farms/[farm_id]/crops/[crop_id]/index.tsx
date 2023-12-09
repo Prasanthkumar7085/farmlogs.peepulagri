@@ -6,7 +6,7 @@ import { GetServerSideProps } from "next";
 const ImageGalleryPage = () => {
 
   return (
-    <div>
+    <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
       <ImageGalleryComponent />
     </div>
   )

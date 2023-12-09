@@ -272,7 +272,7 @@ const AllSummaryComponents = () => {
     }, [router.isReady, accessToken])
 
     return (
-        <div>
+        <div >
             <div className={styles.summaryHeader} id="header" >
                 <img
                     className={styles.iconsiconArrowLeft}

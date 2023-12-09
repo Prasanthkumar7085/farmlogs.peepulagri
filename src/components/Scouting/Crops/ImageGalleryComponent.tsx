@@ -684,13 +684,19 @@ const ImageGalleryComponent = () => {
               }
             })
           ) : (
-            <NoDataAnimatedComponent noData={!data?.length} />
+            ""
           )}
         </div>
+
+
       ) : (
         <ScoutView />
       )}
+      {data?.length == 0 && !loading &&
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
 
+          <NoDataAnimatedComponent noData={!data?.length} />
+        </div>}
       <LoadingComponent loading={loading} />
 
       <VideoDialogForScout

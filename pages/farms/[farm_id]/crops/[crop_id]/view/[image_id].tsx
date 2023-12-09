@@ -5,7 +5,7 @@ import Header1 from "@/components/Scouting/Header/HeaderComponent";
 
 const ScoutViewPage = () => {
   return (
-    <div>
+    <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
       {/* <Header1 name={"Scouting"} />
 
       <ScoutView /> */}

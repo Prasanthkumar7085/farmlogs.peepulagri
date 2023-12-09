@@ -253,7 +253,7 @@ const AddFarmForm = () => {
           src="/iconsiconarrowleft.svg"
           onClick={() => router.back()}
         />
-        <Typography className={styles.viewFarm}>Add Farm</Typography>
+        <Typography className={styles.viewFarm}>{router?.query?.farm_id ? "Edit Farm" : "Add Farm"}</Typography>
         <div className={styles.headericon} id="header-icon">
         </div>
       </div>

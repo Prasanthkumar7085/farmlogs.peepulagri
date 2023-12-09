@@ -38,10 +38,17 @@
 }
 
 .sortIconBtn {
-  background-color: #fff;
-  border-radius: 50%;
-  width: 100%;
-  padding-block: 12px;
+  background-color: #fff !important;
+  border-radius: 50% !important;
+  width: 100% !important;
+  padding-block: 12px !important;
+}
+
+.sortIconBtn:hover {
+  background-color: #fff !important;
+  border-radius: 50% !important;
+  width: 100% !important;
+  padding-block: 12px !important;
 }
 
 .avatharImg {
@@ -438,6 +445,7 @@
   z-index: 3 !important;
   font-size: clamp(14px, 3.5vw, 15px) !important;
 }
+
 .AddScoutingbtn:hover {
   display: flex !important;
   align-items: center !important;

@@ -4,10 +4,9 @@ import { GetServerSideProps } from "next";
 
 const AddFormPage = () => {
     return (
-        <>
-            <Header1 name={'Edit Farm'} />
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             <AddFarmForm />
-        </>
+        </div>
     )
 }
 export default AddFormPage;
@@ -28,10 +27,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
     } else if (cookies.userType == 'ADMIN') {
         return {
-          redirect: {
-            destination: `/scouts`,
-            permanent: false,
-          },
+            redirect: {
+                destination: `/scouts`,
+                permanent: false,
+            },
         };
     }
     return {

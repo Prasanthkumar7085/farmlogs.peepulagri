@@ -1,103 +1,120 @@
+/* singleImageView styles */
+.singleImageViewHeader {
+  background-color: #05A155;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.singleImageViewHeader p {
+  font-size: clamp(18px, 4vw, 20px);
+  font-family: "Inter", sans-serif;
+}
+
+
 .infiniteScrollComponent {
-    max-height: calc(100vh - 130px);
-    overflow-y: scroll !important;
-    scroll-snap-type: y mandatory !important;
+  max-height: calc(100vh - 130px);
+  overflow-y: scroll !important;
+  scroll-snap-type: y mandatory !important;
 }
 
 #snapScroll {
-    scroll-snap-align: start !important;
-    scroll-snap-stop: always !important;
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always !important;
 }
 
 .remondationsdiv {
-    height: 100%;
-    width: 100%;
-    text-align: end;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    position: absolute;
-    top: 0;
-    left: 0;
+  height: 100%;
+  width: 100%;
+  text-align: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .recomendations {
-    padding: 1rem;
+  padding: 1rem;
 }
 
 .overlay {
-    position: relative;
-    max-width: 100%;
-    min-height: 300px;
-    background: radial-gradient(circle at 18.7% 37.8%, rgb(226, 226, 226) 0%, rgb(230, 230, 230) 90%);
-    ;
+  position: relative;
+  max-width: 100%;
+  min-height: 300px;
+  background: radial-gradient(circle at 18.7% 37.8%, rgb(226, 226, 226) 0%, rgb(230, 230, 230) 90%);
+  ;
 }
 
 .button {
-    background-color: #000000b3 !important;
-    color: #0dde0d;
-    border: #0dde0d;
-    border-radius: 10px;
+  background-color: #000000b3 !important;
+  color: #0dde0d;
+  border: #0dde0d;
+  border-radius: 10px;
 }
 
 .button :hover {
-    border-color: #0dde0d !important;
-    color: #0dde0d;
+  border-color: #0dde0d !important;
+  color: #0dde0d;
 
 }
 
 .btnContent {
-    gap: 10px;
-    display: flex;
+  gap: 10px;
+  display: flex;
 }
 
 
 .postDate {
-    font-family: "Inter", sans-serif;
-    font-size: clamp(10px, 3vw, 14px);
-    font-weight: 600;
-    line-height: 1.5;
-    color: #2B53BE;
-    background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    flex-grow: 1;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 3vw, 14px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: #2B53BE;
+  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-grow: 1;
 }
 
 .scrollToTopLink {
-    text-decoration: none;
-    position: fixed;
-    bottom: 10px;
-    right: 20px;
-    width: 3rem;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50% 50%;
-    background: #0bbb0b;
-    z-index: 10;
-    color: #fff;
+  text-decoration: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50% 50%;
+  background: #0bbb0b;
+  z-index: 10;
+  color: #fff;
 }
 
 .noMoreImages {
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .noMoreImages p {
-    border: 2px solid #929394;
-    background-color: #dcdee0;
-    border-radius: 2rem;
-    padding: .7rem 2rem;
-    font-weight: bold;
+  border: 2px solid #929394;
+  background-color: #dcdee0;
+  border-radius: 2rem;
+  padding: .7rem 2rem;
+  font-weight: bold;
 }
+
 .AddTagsDrawer {
   border-radius: 10px 0 0;
   overflow: hidden;
@@ -208,9 +225,7 @@
   box-shadow: none !important;
 }
 
-.submitBtnSuccess 
-.submitBtnSuccess :hover
-{
+.submitBtnSuccess .submitBtnSuccess :hover {
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 500;
@@ -254,7 +269,7 @@
   min-width: inherit;
 }
 
-.updateSubmitBtnDisabled{
+.updateSubmitBtnDisabled {
   text-transform: capitalize !important;
   border-radius: 8px;
   border: 1px solid #bababa !important;
@@ -273,11 +288,12 @@
   align-items: center;
   gap: 0.7rem;
   height: auto;
-  padding:1rem;
+  padding: 1rem;
   background-color: #d7ffeb;
   border-bottom: 1px solid #bcdecd;
 }
-.tagNames [class*="MuiChip-outlined"]{
+
+.tagNames [class*="MuiChip-outlined"] {
   background: #ffffff84;
   overflow: hidden;
 }

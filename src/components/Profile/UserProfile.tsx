@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./userProfile.module.css"
+import LoadingComponent from "../Core/LoadingComponent";
 
 const UserProfile = () => {
     const router = useRouter();
@@ -77,9 +78,10 @@ const UserProfile = () => {
                     <div style={{ border: "1px solid #D94841", padding: "5px", borderRadius: "50%", width: "130px", }}>
                         <Avatar
                             alt="Remy Sharp"
-                            src="/static/images/avatar/1.jpg"
                             sx={{ width: 130, height: 130, fontWeight: "700", fontSize: "2.4rem", color: "#D94841", background: "#f5e7d6" }}
-                        />
+                        >
+                            {data?.name.slice(0, 1)}
+                        </Avatar>
                     </div>
                     <div className={styles.userDetails}>
                         <Typography variant="h6">{data?.name ? data?.name : "-"}</Typography>
@@ -90,6 +92,7 @@ const UserProfile = () => {
                 <Button fullWidth className={styles.logOutBtn} variant="outlined" onClick={logout}><img src="/mobileIcons/summary/sign-out-light.svg" alt="" width={"20px"} /> Log out</Button>
 
             </div>
+            <LoadingComponent loading={loading} />
         </div >
     )
 }

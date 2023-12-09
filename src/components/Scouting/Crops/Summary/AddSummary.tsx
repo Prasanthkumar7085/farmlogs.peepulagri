@@ -271,7 +271,7 @@ const AddSummary = () => {
                 </div>
                 <div className={styles.singleFarmBlock}>
 
-                    <Typography variant="h6">comment</Typography>
+                    <Typography variant="h6">Comment</Typography>
                     <TextField
                         color="primary"
                         name="desciption"

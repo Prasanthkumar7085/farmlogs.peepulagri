@@ -293,9 +293,9 @@ const ImageGalleryComponent = () => {
         const endDate =
           visibleImages.length > 0
             ? timePipe(
-                visibleImages[visibleImages.length - 1].uploaded_at,
-                "DD MMM YY"
-              )
+              visibleImages[visibleImages.length - 1].uploaded_at,
+              "DD MMM YY"
+            )
             : "";
 
         // Update the displayed date range
@@ -479,25 +479,26 @@ const ImageGalleryComponent = () => {
                 }}
                 sx={{ display: data?.length ? "" : "none" }}
                 className={styles.selectBtn}
+                style={{ minWidth: "inherit" }}
               >
-                Cancel
+                <img src="/mobileIcons/scouting/x-light.svg" alt="" width="20px" />
               </Button>
               {selectedItems?.length ? (
                 <div>
                   <IconButton onClick={() => setDeleteOpen(true)}>
                     <ImageComponent
-                      src={"/farm-delete-icon.svg"}
-                      width={17}
-                      height={17}
-                      alt="delete"
+                      src={"/mobileIcons/scouting/trash-simple-light.svg"}
+                      width={18}
+                      height={18}
+                      alt=""
                     />
                   </IconButton>
 
                   <IconButton onClick={() => setTagsDrawerOpen(true)}>
                     <ImageComponent
-                      src={"/tag.svg"}
-                      width={17}
-                      height={17}
+                      src={"/mobileIcons/navTabs/tagIcon-selectImage.svg"}
+                      width={18}
+                      height={18}
                       alt="tag"
                     />
                   </IconButton>
@@ -529,10 +530,10 @@ const ImageGalleryComponent = () => {
           ref={containerRef}
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
+            gridTemplateColumns: "repeat(4, 1fr)",
             gridGap: "1px",
             overflowY: "auto",
-            maxHeight: "550px",
+            maxHeight: "calc(100vh - 160px)",
           }}
         >
           {data.map((image: any, indexAttachment: any) => {
@@ -663,6 +664,7 @@ const ImageGalleryComponent = () => {
                   >
                     {tagsCheckBoxOpen ? (
                       <input
+                        style={{ width: "18px", height: "18px", border: "1px solid #000" }}
                         type="checkbox"
                         checked={tempImages.some(
                           (ite: any) => ite._id === image._id

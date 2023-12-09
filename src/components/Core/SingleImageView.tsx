@@ -166,7 +166,7 @@ const SingleImageView: FC<componentProps> = ({
             alt=""
             src="/iconsiconarrowleft.svg"
             onClick={() => router.back()}
-            width={"24px"}
+            width={"25px"}
           />
           <Typography>{farmTitle + "/" + cropTitle}</Typography>
           <div className={styles.headericon} id="header-icon"></div>
@@ -297,7 +297,7 @@ const SingleImageView: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={data}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-        // loading={loading}
+      // loading={loading}
       />
 
       <LoadingComponent loading={loading} />

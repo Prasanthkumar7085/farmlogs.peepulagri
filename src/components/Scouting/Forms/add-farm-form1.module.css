@@ -142,13 +142,13 @@
 }
 
 .iconsiconArrowLeft {
-  width: 20px;
+  width: 25px;
 }
 
 .viewFarm {
   color: #fff !important;
   font-family: "Inter", sans-serif !important;
-  font-size: clamp(16px, 3.5vw, 20px) !important;
+  font-size: clamp(18px, 3.5vw, 20px) !important;
   font-weight: 500 !important;
 }
 
@@ -166,5 +166,5 @@
 .header {
   background-color: #45A845;
   justify-content: space-between;
-  padding: 10px 1rem;
+  padding: 16px 1rem;
 }

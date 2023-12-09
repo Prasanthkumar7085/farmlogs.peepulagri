@@ -15,10 +15,10 @@ import getAllUsersService from "../../../../lib/services/Users/getAllUsersServic
 export interface pageProps {
   getFarmsData:
   ({ search_string, location, userId, page, limit, sortBy, sortType }:
-    { search_string: string, location: string, userId: string,page:string|number,limit:string|number,sortBy:string,sortType:string }) => void;
+    { search_string: string, location: string, userId: string, page: string | number, limit: string | number, sortBy: string, sortType: string }) => void;
 }
 const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
-  
+
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
   const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
 
@@ -46,14 +46,14 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
       setLocation({ title: "All", _id: "1" });
-      return; 
+      return;
     }
     if (value) {
       setChanged(true);
       setLocation(value);
       getFarmsData({
         search_string: search,
-        location: value?.title as string,
+        location: value?._id as string,
         userId: user as string,
         page: 1,
         limit: router.query.limit as string,
@@ -93,7 +93,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       const debounce = setTimeout(() => {
         getFarmsData({
           search_string: search,
-          location: location?.title as string,
+          location: location?._id as string,
           userId: router.query.user_id as string,
           page: router.query.page as string,
           limit: router.query.limit as string,

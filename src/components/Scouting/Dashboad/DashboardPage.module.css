@@ -1,11 +1,14 @@
 .AddFarmBtn {
   background: #D94841;
   color: #ffffff;
-  padding: 8px 12px;
-  font-size: 13px;
+  padding: 10px 12px;
+  font-size: 14px;
   font-family: "Inter", sans-serif;
   font-weight: 200;
   border-radius: 20px !important;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .AddFarmBtn img {

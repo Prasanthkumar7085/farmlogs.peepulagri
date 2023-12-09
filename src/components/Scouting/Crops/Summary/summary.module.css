@@ -47,10 +47,18 @@
 /* latest summary page stylings ends here 12-09 */
 
 .AddSummarybtn {
-    background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 80.71%));
+    background: #d94841;
     color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     padding: 18px;
     z-index: 3 !important;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 300;
+    font-family: "Inter", sans-serif;
+    border-radius: 20px !important;
 }
 
 .date {
@@ -69,10 +77,6 @@
     font-size: clamp(14px, 3vw, 16px);
 }
 
-/* .vectorIcon {
-    width: 24px;
-    height: 24px;
-} */
 
 .header,
 .optopns {
@@ -80,12 +84,6 @@
     flex-direction: row;
     align-items: center;
 }
-
-/* .optopns {
-    overflow: hidden;
-    justify-content: center;
-    padding: 4px 11px;
-} */
 
 .header {
     align-self: stretch;
@@ -100,11 +98,11 @@
 
 .chilliBeingA {
     margin: 0;
-    align-self: stretch;
-    position: relative;
     font-size: 14px;
     line-height: 140%;
-    color: #35353d;
+    color: #000;
+    font-weight: 400;
+    font-family: "Inter", sans-serif;
 }
 
 .summarycard {
@@ -118,7 +116,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     padding: 16px;
-    gap: 8px;
+    gap: 10px;
     text-align: left;
 
 }

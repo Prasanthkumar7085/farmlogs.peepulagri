@@ -173,7 +173,7 @@ const DashboardPage = () => {
   }, [router?.query.location]);
 
   console.log(location);
-  
+
   useEffect(() => {
     if (router.isReady && accessToken) {
       const delay = 500;
@@ -227,7 +227,8 @@ const DashboardPage = () => {
             }
           }}
         >
-          <img src="/mobileIcons/farms/AddFarmicon.svg" alt="" width={"25px"} /> Add Farm
+          <img src="/mobileIcons/farms/AddFarmicon.svg" alt="" width={"25px"} />
+          <span>Add Farm</span>
         </IconButton>
       </div>
       <LoadingComponent loading={loading} />

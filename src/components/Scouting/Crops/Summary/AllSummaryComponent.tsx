@@ -2,7 +2,7 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
 import AddIcon from "@mui/icons-material/Add";
-import { Backdrop, CircularProgress, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, IconButton, Menu, MenuItem, Typography, dividerClasses } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -13,6 +13,9 @@ import styles from "./summary.module.css";
 import FarmsDropDown from "@/components/Core/FarmsDropDown";
 import CropsDropDown from "@/components/Core/CropsDropDown";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import NoDataComponent from "@/components/Core/NoDataComponent";
+import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 
 const AllSummaryComponents = () => {
     const router = useRouter();
@@ -307,13 +310,12 @@ const AllSummaryComponents = () => {
                                         <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
                                         <h4 className={styles.cropTitle}>{item?.crop_id?.title}</h4>
                                     </div>
+                                    <div className={styles.vectorIcon} onClick={(e) => {
+                                        handleMenu(e)
+                                        setRowID(item._id)
+                                    }}>
 
-                                    <div className={styles.optopns}>
-                                        <img className={styles.vectorIcon} alt="" src="/mobileIcons/summary/dots-three-vertical.svg" onClick={(e) => {
-                                            handleMenu(e)
-                                            setRowID(item._id)
-                                        }} />
-
+                                        <MoreVertIcon sx={{ fontSize: "1.5rem" }} />
                                     </div>
                                 </div>
                                 <p className={styles.chilliBeingA}>
@@ -336,11 +338,11 @@ const AllSummaryComponents = () => {
                                         <h4 className={styles.date}>{timePipe(item.date, "DD MMM, YYYY")}</h4>
                                         <h4 className={styles.cropTitle} >{item?.crop_id?.title}</h4>
                                     </div>
-                                    <div className={styles.optopns}>
-                                        <img className={styles.vectorIcon} alt="" src="/mobileIcons/summary/dots-three-vertical.svg" onClick={(e) => {
-                                            handleMenu(e)
-                                            setRowID(item._id)
-                                        }} />
+                                    <div className={styles.vectorIcon} onClick={(e) => {
+                                        handleMenu(e)
+                                        setRowID(item._id)
+                                    }}>
+                                        <MoreVertIcon sx={{ fontSize: "1.5rem" }} />
                                     </div>
                                 </div>
                                 <p className={styles.chilliBeingA}>
@@ -350,7 +352,10 @@ const AllSummaryComponents = () => {
                             </div>
                         )
                     }
-                }) : "No Summary"}
+                }) : !loading ? (
+                    <NoFarmDataComponent noData={!Boolean(data.length)} />
+                ) : (
+                    "")}
             </div>
 
             <Menu
@@ -372,7 +377,7 @@ const AllSummaryComponents = () => {
                     router.push(
                         `/summary/${rowId}/edit`
                     );
-                }}>Edit</MenuItem>
+                }}>Update</MenuItem>
                 <MenuItem onClick={handleClose}>Delete</MenuItem>
             </Menu>
             <div className="addFormPositionIcon">
@@ -385,7 +390,8 @@ const AllSummaryComponents = () => {
                         );
                     }}
                 >
-                    <AddIcon />
+                    <img src="/mobileIcons/summary/add-summary-icon.svg" alt="" width={"24px"} />
+                    <span>Add Summary</span>
                 </IconButton>
 
             </div>

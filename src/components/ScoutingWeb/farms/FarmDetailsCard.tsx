@@ -158,8 +158,8 @@ const ScoutingFarmDetailsCard = ({
                   >
                     {item.title.length > 16
                       ? item.title.slice(0, 1).toUpperCase() +
-                        item.title.slice(1, 12) +
-                        "..."
+                      item.title.slice(1, 12) +
+                      "..."
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
                 </div>
@@ -170,6 +170,22 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.text}>{item.area}</p>
                 </div>
               </div>
+
+              <div className={styles.timeline}>
+                {/* <img
+                  className={styles.calendarIcon}
+                  alt=""
+                  src="/farm-date-icon.svg"
+                /> */}
+                <div className={styles.duration}>
+                  <p className={styles.from}>
+                    Location
+                  </p>
+                  <p className={styles.divider}>-</p>
+                  <p className={styles.from}>{item?.location_id?.title}</p>
+                </div>
+              </div>
+
               <div className={styles.timeline}>
                 <img
                   className={styles.calendarIcon}
@@ -180,8 +196,7 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.from}>
                     {timePipe(item.createdAt, "DD, MMM YYYY")}
                   </p>
-                  <p className={styles.divider}>-</p>
-                  <p className={styles.from}>Current</p>
+
                 </div>
               </div>
             </div>
@@ -207,7 +222,11 @@ const ScoutingFarmDetailsCard = ({
                   className={styles.view}
                   onClick={() => onViewClick(item._id)}
                 >
-                  <SettingsIcon sx={{ color: "#6A7185" }} />
+                  <img
+                    src="/mobileIcons/farms/info.svg"
+                    width={25}
+                    alt="image"
+                  />
                 </IconButton>
                 {/* <IconButton className={styles.edit}>
                   <img

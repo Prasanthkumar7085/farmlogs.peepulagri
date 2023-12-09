@@ -95,8 +95,8 @@ const AllFarmsPage = () => {
     try {
       let url = `farms/${page}/${limit}`;
       let queryParam: any = {
-        order_by: "createdAt",
-        order_type: "desc",
+        sort_by: "createdAt",
+        sort_type: "desc",
       };
       if (page) {
         queryParam["page"] = page;
@@ -105,15 +105,15 @@ const AllFarmsPage = () => {
         queryParam["limit"] = limit;
       }
       if (sortBy) {
-        queryParam["order_by"] = sortBy;
+        queryParam["sort_by"] = sortBy;
       }
       if (sortType) {
-        queryParam["order_type"] = sortType;
+        queryParam["sort_type"] = sortType;
       }
       if (search_string) {
         queryParam["search_string"] = search_string;
-        delete queryParam["order_by"];
-        delete queryParam["order_type"];
+        delete queryParam["sort_by"];
+        delete queryParam["sort_type"];
       }
 
       if (location != 1 && location) {

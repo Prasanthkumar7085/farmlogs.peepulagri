@@ -323,7 +323,7 @@ const UpdateSummary = () => {
                     src="/iconsiconarrowleft.svg"
                     onClick={() => router.back()}
                 />
-                <Typography className={styles.viewFarm}>Update Summary</Typography>
+                <Typography className={styles.viewFarm}>Edit Summary</Typography>
                 <div className={styles.headericon} id="header-icon">
                 </div>
             </div>

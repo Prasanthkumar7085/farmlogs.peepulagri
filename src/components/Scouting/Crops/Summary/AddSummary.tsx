@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import styles from "./summary.module.css";
 
 const AddSummary = () => {
     const router = useRouter();
@@ -203,71 +203,103 @@ const AddSummary = () => {
 
     return (
         <div>
-            <Typography variant="caption">Farm</Typography>
-            <FarmsDropDown
-                options={farmOptions}
-                label={"title"}
-                onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
-                getFarmsSearchString={getFarmsSearchString}
-            />
-            <ErrorMessagesComponent errorMessage={errorMessages?.farm_id} />
+            <div className={styles.summaryHeader} id="header" >
+                <img
+                    className={styles.iconsiconArrowLeft}
+                    alt=""
+                    src="/iconsiconarrowleft.svg"
+                    onClick={() => router.back()}
+                />
+                <Typography className={styles.viewFarm}>Add Summary</Typography>
+                <div className={styles.headericon} id="header-icon">
+                </div>
+            </div>
+            <div className={styles.updatedSummaryContainer}>
 
-            <Typography variant="caption">Crop</Typography>
+                <div className={styles.singleFarmBlock}>
+                    <Typography variant="h6">Farm</Typography>
+                    <FarmsDropDown
+                        options={farmOptions}
+                        label={"title"}
+                        onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
+                        getFarmsSearchString={getFarmsSearchString}
+                    />
+                    <ErrorMessagesComponent errorMessage={errorMessages?.farm_id} />
+                </div>
+                <div className={styles.singleFarmBlock}>
 
-            <CropsDropDown
-                options={cropOptions}
-                label={"title"}
-                onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
-                getCropSearchString={getCropSearchString}
-            />
+                    <Typography variant="h6">Crop</Typography>
 
-            <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} />
+                    <CropsDropDown
+                        options={cropOptions}
+                        label={"title"}
+                        onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
+                        getCropSearchString={getCropSearchString}
+                    />
 
-            <Typography variant="caption">Date</Typography>
-            <TextField
-                type='date'
-                placeholder="Select Date"
-                color="primary"
-                variant="outlined"
-                value={date}
-                sx={{ width: "100%" }}
-                onChange={(e) => {
-                    const selectedDate = new Date(e.target.value);
-                    const currentDate = new Date();
+                    <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} />
+                </div>
+                <div className={styles.singleFarmBlock}>
 
-                    if (selectedDate > currentDate) {
-                        return;
-                    }
+                    <Typography variant="h6">Date</Typography>
+                    <TextField
+                        type='date'
+                        placeholder="Select Date"
+                        color="primary"
+                        variant="outlined"
+                        value={date}
+                        sx={{
+                            width: "100%", background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
+                                border: "1px solid grey !important",
+                                borderRadius: "10px !important"
+                            }
+                        }}
+                        onChange={(e) => {
+                            const selectedDate = new Date(e.target.value);
+                            const currentDate = new Date();
 
-                    setDate(e.target.value);
+                            if (selectedDate > currentDate) {
+                                return;
+                            }
 
-                }}
-                inputProps={{ max: getCurrentDate() }}
-            />
-            <ErrorMessagesComponent errorMessage={errorMessages?.date} />
+                            setDate(e.target.value);
 
-            <Typography variant="caption">comment</Typography>
-            <TextField
-                color="primary"
-                name="desciption"
-                id="description"
-                minRows={4}
-                maxRows={4}
-                placeholder="Enter your comment here"
-                fullWidth={true}
-                variant="outlined"
-                multiline
-                value={comment}
-                onChange={(e) => {
-                    setComment(e.target.value);
-                }}
-                sx={{ background: "#fff" }}
-            />
-            <ErrorMessagesComponent errorMessage={errorMessages?.content} />
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Button type='submit' variant='contained' onClick={() => router.back()}>Cancel</Button>
+                        }}
+                        inputProps={{ max: getCurrentDate() }}
+                    />
+                    <ErrorMessagesComponent errorMessage={errorMessages?.date} />
+                </div>
+                <div className={styles.singleFarmBlock}>
 
-                <Button type='submit' variant='contained' onClick={addSummary}>Submit</Button>
+                    <Typography variant="h6">comment</Typography>
+                    <TextField
+                        color="primary"
+                        name="desciption"
+                        id="description"
+                        minRows={5}
+                        maxRows={5}
+                        placeholder="Enter your comment here"
+                        fullWidth={true}
+                        variant="outlined"
+                        multiline
+                        value={comment}
+                        onChange={(e) => {
+                            setComment(e.target.value);
+                        }}
+                        sx={{
+                            background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
+                                border: "1px solid grey !important",
+                                borderRadius: "10px !important"
+                            }
+                        }}
+                    />
+                    <ErrorMessagesComponent errorMessage={errorMessages?.content} />
+                </div>
+                <div className={styles.UpdateBtnGrp} >
+                    <Button className={styles.updateCancelBtn} type='submit' variant='outlined' onClick={() => router.back()}>Cancel</Button>
+
+                    <Button className={styles.updatedSaveBtn} type='submit' variant='contained' onClick={addSummary}>Add</Button>
+                </div>
             </div>
             <Snackbar
                 open={showSuccessAlert}

@@ -6,7 +6,7 @@ const SummaryAdd = () => {
 
     return (
         <div>
-            <Header1 name={"Add Summary"} />
+            {/* <Header1 name={"Add Summary"} /> */}
             <AddSummary />
         </div>
     )

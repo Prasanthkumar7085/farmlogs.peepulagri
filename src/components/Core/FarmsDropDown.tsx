@@ -82,6 +82,10 @@ const FarmsDropDown = ({
             padding: "11px 14px !important"
 
           },
+          '& .MuiOutlinedInput-notchedOutline ': {
+            border: "1px solid grey !important",
+            borderRadius: "10px !important"
+          }
         }}
 
       />

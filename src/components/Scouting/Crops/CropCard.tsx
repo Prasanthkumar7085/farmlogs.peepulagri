@@ -205,61 +205,76 @@ const CropCard = ({
   return (
     <div className={styles.folder}>
       <div className={styles.cropcard}>
-        <div className={styles.iconBlock} >
+        <div className={styles.iconBlock}>
           <div onClick={handleMenuClick}>
-            < MoreHorizIcon sx={{ fontSize: "2rem" }} />
+            <MoreHorizIcon sx={{ fontSize: "2rem" }} />
           </div>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
-
             sx={{
-              '& .MuiMenuItem-root': {
-                display: "flex", alignItems: "center", gap: "0.5rem",
+              "& .MuiMenuItem-root": {
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
                 minHeight: "inherit",
-
-              }
+              },
             }}
           >
-            <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => {
-              handleClose();
-              setRenameOpen(true);
-            }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
-            <MenuItem onClick={() => {
-              setDeleteOpen(true);
-              handleClose();
-            }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
-
+            <MenuItem
+              sx={{ borderBottom: "1px solid #B4C1D6" }}
+              onClick={() => {
+                handleClose();
+                setRenameOpen(true);
+              }}
+            >
+              {" "}
+              <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />
+              Edit
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setDeleteOpen(true);
+                handleClose();
+              }}
+            >
+              <DeleteOutlinedIcon sx={{ fontSize: "16px" }} />
+              Delete
+            </MenuItem>
           </Menu>
         </div>
-        <div className={styles.icons}>
+        <div
+          className={styles.icons}
+          onClick={() => setToStorage(itemDetails?.title)}
+        >
           <div className={styles.cropDetailsBlock}>
             <Avatar
-              sx={{ bgcolor: "#E6F5EB", color: "#05A155 !important", fontSize: "1.2rem" }}
+              sx={{
+                bgcolor: "#E6F5EB",
+                color: "#05A155 !important",
+                fontSize: "1.2rem",
+              }}
               className={styles.avatarImage}
               variant="square"
             >
               {itemDetails?.title.toUpperCase().slice(0, 1)}
             </Avatar>
-            <div
-              className={styles.textWrapper}
-              onClick={() => setToStorage(itemDetails?.title)}
-            >
-
+            <div className={styles.textWrapper}>
               <h2 className={styles.FieldCrop}>
                 {itemDetails?.title.length > 12
                   ? itemDetails?.title.slice(0, 1).toUpperCase() +
-                  itemDetails?.title.slice(1, 9) +
-                  "..."
+                    itemDetails?.title.slice(1, 9) +
+                    "..."
                   : itemDetails?.title.slice(0, 1).toUpperCase() +
-                  itemDetails?.title.slice(1)}
+                    itemDetails?.title.slice(1)}
               </h2>
               <p className={styles.aug2023}>
                 {/* {timePipe(itemDetails.createdAt, "DD, MMM YYYY")} */}
                 {itemDetails.area
-                  ? itemDetails.area + (itemDetails.area < 2 ? " acre" : " acres")
+                  ? itemDetails.area +
+                    (itemDetails.area < 2 ? " acre" : " acres")
                   : 0 + " acres"}
               </p>
             </div>
@@ -268,7 +283,11 @@ const CropCard = ({
           <img
             className={styles.avatharImg}
             alt=""
-            src={itemDetails?.url ? itemDetails?.url : "/mobileIcons/crops/No_Image.svg"}
+            src={
+              itemDetails?.url
+                ? itemDetails?.url
+                : "/mobileIcons/crops/No_Image.svg"
+            }
             width={"56px"}
             height={"56px"}
           />

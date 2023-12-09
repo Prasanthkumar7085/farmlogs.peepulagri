@@ -3,11 +3,11 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import SummaryTextDilog from "@/components/Core/SummaryTextDilog";
 import TagsDrawer from "@/components/Core/TagsDrawer";
 import VideoDialogForScout from "@/components/VideoDiloagForSingleScout";
 import timePipe from "@/pipes/timePipe";
-import AddIcon from "@mui/icons-material/Add";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { Button, IconButton, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -18,6 +18,7 @@ import { Toaster, toast } from "sonner";
 import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
+import NoDataAnimatedComponent from "@/components/Core/NoDataAnimatedComponent";
 const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -535,149 +536,153 @@ const ImageGalleryComponent = () => {
             maxHeight: "550px",
           }}
         >
-          {data.map((image: any, indexAttachment: any) => {
-            if (data.length === indexAttachment + 1) {
-              return (
-                <div
-                  ref={lastBookElementRef}
-                  style={{ position: "relative", paddingTop: "100%" }}
-                  key={indexAttachment}
-                >
-                  <img
-                    className="your-image-class"
-                    key={indexAttachment}
-                    ref={(ref) => (image.ref = ref)}
-                    src={
-                      image.type?.slice(0, 2) == "vi"
-                        ? "/Play-button.svg"
-                        : image.url
-                    }
-                    alt={image?.uploaded_at}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "absolute",
-                      objectFit: "cover",
-                      top: "0",
-                      right: "0",
-                    }}
-                    onClick={() => {
-                      if (!longpressActive) {
-                        router.push(
-                          `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                        );
-                      } else {
-                        handleChange(image); // Call handleLongPress when long press is detected
-                      }
-                    }}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      setTagsCheckBoxOpen(true);
-                      handleChange(image);
-                      setScoutId(image._id); // Adjust the timeout duration as needed
-                      setLongPressActive(true);
-                    }} // Prevent right-click context menu
-                    onTouchStart={(e) => {
-                      if (e.touches.length > 1) {
-                        e.preventDefault(); // Prevent multi-touch event
-                      }
-                    }}
-                  />
+          {data?.length ? (
+            data.map((image: any, indexAttachment: any) => {
+              if (data.length === indexAttachment + 1) {
+                return (
                   <div
-                    style={{
-                      position: "absolute",
-                      top: "2px",
-                      right: "2px",
-                    }}
-                  >
-                    {tagsCheckBoxOpen ? (
-                      <input
-                        type="checkbox"
-                        checked={tempImages.some(
-                          (ite: any) => ite._id === image._id
-                        )}
-                        onChange={() => handleChange(image)}
-                        title={image.id}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
-              );
-            } else {
-              return (
-                <div
-                  style={{ position: "relative", paddingTop: "100%" }}
-                  key={indexAttachment}
-                  ref={
-                    indexAttachment === data.length - 50 ? lastItemRef : null
-                  }
-                >
-                  <img
-                    className="your-image-class"
+                    ref={lastBookElementRef}
+                    style={{ position: "relative", paddingTop: "100%" }}
                     key={indexAttachment}
-                    ref={(ref) => (image.ref = ref)}
-                    src={
-                      image.type?.slice(0, 2) == "vi"
-                        ? "/Play-button.svg"
-                        : image.url
-                    }
-                    alt={image?.uploaded_at}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "absolute",
-                      objectFit: "cover",
-                      top: "0",
-                      right: "0",
-                    }}
-                    onClick={() => {
-                      if (!longpressActive) {
-                        router.push(
-                          `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                        );
-                      } else {
-                        handleChange(image); // Call handleLongPress when long press is detected
-                      }
-                    }}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      setTagsCheckBoxOpen(true);
-                      handleChange(image);
-                      setScoutId(image._id); // Adjust the timeout duration as needed
-                      setLongPressActive(true);
-                    }} // Prevent right-click context menu
-                    onTouchStart={(e) => {
-                      if (e.touches.length > 1) {
-                        e.preventDefault(); // Prevent multi-touch event
-                      }
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "2px",
-                      right: "2px",
-                    }}
                   >
-                    {tagsCheckBoxOpen ? (
-                      <input
-                        type="checkbox"
-                        checked={tempImages.some(
-                          (ite: any) => ite._id === image._id
-                        )}
-                        onChange={() => handleChange(image)}
-                        title={image.id}
-                      />
-                    ) : (
-                      ""
-                    )}
+                    <img
+                      className="your-image-class"
+                      key={indexAttachment}
+                      ref={(ref) => (image.ref = ref)}
+                      src={
+                        image.type?.slice(0, 2) == "vi"
+                          ? "/Play-button.svg"
+                          : image.url
+                      }
+                      alt={image?.uploaded_at}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        objectFit: "cover",
+                        top: "0",
+                        right: "0",
+                      }}
+                      onClick={() => {
+                        if (!longpressActive) {
+                          router.push(
+                            `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                          );
+                        } else {
+                          handleChange(image); // Call handleLongPress when long press is detected
+                        }
+                      }}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        setTagsCheckBoxOpen(true);
+                        handleChange(image);
+                        setScoutId(image._id); // Adjust the timeout duration as needed
+                        setLongPressActive(true);
+                      }} // Prevent right-click context menu
+                      onTouchStart={(e) => {
+                        if (e.touches.length > 1) {
+                          e.preventDefault(); // Prevent multi-touch event
+                        }
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                      }}
+                    >
+                      {tagsCheckBoxOpen ? (
+                        <input
+                          type="checkbox"
+                          checked={tempImages.some(
+                            (ite: any) => ite._id === image._id
+                          )}
+                          onChange={() => handleChange(image)}
+                          title={image.id}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            }
-          })}{" "}
+                );
+              } else {
+                return (
+                  <div
+                    style={{ position: "relative", paddingTop: "100%" }}
+                    key={indexAttachment}
+                    ref={
+                      indexAttachment === data.length - 50 ? lastItemRef : null
+                    }
+                  >
+                    <img
+                      className="your-image-class"
+                      key={indexAttachment}
+                      ref={(ref) => (image.ref = ref)}
+                      src={
+                        image.type?.slice(0, 2) == "vi"
+                          ? "/Play-button.svg"
+                          : image.url
+                      }
+                      alt={image?.uploaded_at}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        objectFit: "cover",
+                        top: "0",
+                        right: "0",
+                      }}
+                      onClick={() => {
+                        if (!longpressActive) {
+                          router.push(
+                            `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                          );
+                        } else {
+                          handleChange(image); // Call handleLongPress when long press is detected
+                        }
+                      }}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        setTagsCheckBoxOpen(true);
+                        handleChange(image);
+                        setScoutId(image._id); // Adjust the timeout duration as needed
+                        setLongPressActive(true);
+                      }} // Prevent right-click context menu
+                      onTouchStart={(e) => {
+                        if (e.touches.length > 1) {
+                          e.preventDefault(); // Prevent multi-touch event
+                        }
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                      }}
+                    >
+                      {tagsCheckBoxOpen ? (
+                        <input
+                          type="checkbox"
+                          checked={tempImages.some(
+                            (ite: any) => ite._id === image._id
+                          )}
+                          onChange={() => handleChange(image)}
+                          title={image.id}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+            })
+          ) : (
+            <NoDataAnimatedComponent noData={!data?.length} />
+          )}
         </div>
       ) : (
         <ScoutView />
@@ -742,7 +747,11 @@ const ImageGalleryComponent = () => {
               );
             }}
           >
-            <img src="/mobileIcons/scouting/Add_Scouting.svg" alt="" width={"25px"} />
+            <img
+              src="/mobileIcons/scouting/Add_Scouting.svg"
+              alt=""
+              width={"25px"}
+            />
             <span>Upload</span>
           </IconButton>
         ) : (

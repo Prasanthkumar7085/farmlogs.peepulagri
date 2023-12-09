@@ -46,17 +46,31 @@
 /* latest summary page stylings ends here 12-09 */
 
 .AddSummarybtn {
-    background: #d94841;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 18px;
+    background: #d94841 !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    padding: 18px ;
     z-index: 3 !important;
-    padding: 10px 12px;
-    font-size: 14px;
-    font-weight: 300;
-    font-family: "Inter", sans-serif;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    font-family: "Inter", sans-serif !important;
+    border-radius: 20px !important;
+}
+.AddSummarybtn:hover {
+    background: #d94841 !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    padding: 18px ;
+    z-index: 3 !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    font-family: "Inter", sans-serif !important;
     border-radius: 20px !important;
 }
 

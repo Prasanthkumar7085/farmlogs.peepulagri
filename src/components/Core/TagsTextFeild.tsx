@@ -135,7 +135,11 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                 })}
               </div>
             ) : (
-              <div style={{ color: "#9a9a9a" }}>{"*No Tags to display*"} </div>
+              <div style={{ color: "#9a9a9a" }}>
+                {router.pathname.includes("/add-item")
+                  ? ""
+                  : "*No Tags to display*"}
+              </div>
             )}
           </div>
         ) : (

@@ -30,8 +30,9 @@ import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
 import { access } from "fs";
+import ImageComponent from "@/components/Core/ImageComponent";
 
-const SingleViewScoutComponent = () => {
+const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -80,9 +81,11 @@ const SingleViewScoutComponent = () => {
   }, [selectedItems]);
 
   // Effect to add scroll event listener when the component mounts
+
   useEffect(() => {
     if (router.isReady) {
       getPresingedURls(pageNumber)
+
     }
 
   }, [accessToken, router.isReady]); // Re-run effect when currentPage changes
@@ -405,16 +408,11 @@ const SingleViewScoutComponent = () => {
   }, [loading, hasMore])
 
 
+
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
-      <div className={styles.mobileScoutingViewHeader}>
-        <img
-          className={styles.iconsiconArrowLeft}
-          alt=""
-          src="/iconsiconarrowleft.svg"
-          onClick={() => router.back()}
-        />
-        <div className={styles.breadcrumbs}>
+      {/* <div className={styles.mobileScoutingViewHeader}>
+        <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
             underline="hover"
             color="inherit"
@@ -441,23 +439,64 @@ const SingleViewScoutComponent = () => {
             aria-label="List"
             value="2"
           />
-        </Tabs> */}
+        </Tabs>
+      </div> */}
+      <div className={styles.header} id="header">
+        <img
+          className={styles.iconsiconArrowLeft}
+          alt=""
+          src="/iconsiconarrowleft.svg"
+          onClick={() => router.back()}
+        />
+        <Typography className={styles.viewFarm}>{farmTitle + "/" + cropTitle}
+        </Typography>
+        <div className={styles.headericon} id="header-icon" >
+        </div>
+
       </div>
 
       {value == "1" ?
         <div className={styles.stickyHeader}>
           <div className={styles.dateRange}>{dateRange}</div>
           {tagsCheckBoxOpen ? (
-            <Button
-              onClick={() => {
-                setTagsCheckBoxOpen(false);
-                setSelectedItems([]);
-              }}
-              sx={{ display: data?.length ? "" : "none" }}
-              className={styles.selectBtn}
-            >
-              Cancel
-            </Button>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Button
+                onClick={() => {
+                  setTagsCheckBoxOpen(false);
+                  setSelectedItems([]);
+                }}
+                sx={{ display: data?.length ? "" : "none" }}
+                className={styles.selectBtn}
+              >
+                Cancel
+              </Button>
+              {selectedItems?.length ?
+                <div>
+                  <IconButton
+                    onClick={() => setDeleteOpen(true)}
+                  >
+                    <ImageComponent
+                      src={"/farm-delete-icon.svg"}
+                      width={17}
+                      height={17}
+                      alt="delete"
+                    />
+                  </IconButton>
+
+                  <IconButton
+                    onClick={() => setTagsDrawerOpen(true)}
+                  >
+                    <ImageComponent
+                      src={"/tag.svg"}
+                      width={17}
+                      height={17}
+                      alt="tag"
+                    />
+                  </IconButton>
+                </div> : ""}
+
+            </div>
+
           ) : (
             <Button
               className={styles.selectBtn}
@@ -472,13 +511,8 @@ const SingleViewScoutComponent = () => {
       {value == "1" ?
         <div
           ref={containerRef}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(18%, 1fr))",
-            gridGap: "1px",
-            overflowY: "auto",
-            maxHeight: "550px",
-          }}>
+          className={styles.imageGallaryContainer}
+        >
           {data.map((image: any, indexAttachment: any) => {
             if (data.length === indexAttachment + 1) {
               return (
@@ -698,7 +732,7 @@ const SingleViewScoutComponent = () => {
           ""
         )}
       </div>
-      {data?.length ? (
+      {/* {data?.length ? (
         <div className={styles.stickyHeader2}>
           {selectedItems?.length ? (
             <div className={styles.stickyBtnGrp}>
@@ -726,7 +760,7 @@ const SingleViewScoutComponent = () => {
         </div>
       ) : (
         ""
-      )}
+      )} */}
 
       {deleteOpen ? (
         <AlertDelete
@@ -743,4 +777,4 @@ const SingleViewScoutComponent = () => {
     </div>
   );
 };
-export default SingleViewScoutComponent;
+export default ImageGalleryComponent;

@@ -34,7 +34,8 @@ const SingleImageView: FC<componentProps> = ({
   );
 
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>(false);
-
+  const cropTitle = useSelector((state: any) => state?.farms?.cropName);
+  const farmTitle = useSelector((state: any) => state?.farms?.farmName);
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
   const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
@@ -160,20 +161,24 @@ const SingleImageView: FC<componentProps> = ({
   return (
     <div>
       <div className={styles.overlay}>
-        <div style={{ display: "flex", marginTop: "90px" }}>
+        <div className={styles.singleImageViewHeader} >
           <img
             alt=""
             src="/iconsiconarrowleft.svg"
             onClick={() => router.back()}
           />
-          <Typography className={styles.postDate}>
+          <Typography>{farmTitle + "/" + cropTitle}</Typography>
+          <div className={styles.headericon} id="header-icon" >
+          </div>
+
+          {/* <Typography className={styles.postDate}>
             <InsertInvitationIcon />
             {loading ? (
               "-"
             ) : (
               <span>{timePipe(data?.uploaded_at, "DD-MM-YYYY")}</span>
             )}
-          </Typography>
+          </Typography> */}
         </div>
         {/* <>
                     {isZoom ? (

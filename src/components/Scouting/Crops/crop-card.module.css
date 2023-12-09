@@ -102,14 +102,14 @@
 }
 
 .stickyHeader .selectBtn {
-  background: #00000064;
   padding: 0;
-  font-size: 12px;
+  font-size: clamp(16px, 3vw, 18px);
   text-transform: capitalize;
   font-family: "Inter", sans-serif;
   padding: 2px 10px;
-  color: #fff;
+  color: #000;
   border-radius: 16px;
+  font-weight: 400;
 }
 
 .dateRange {
@@ -121,6 +121,14 @@
     0 0 1em #fff,
     0 0 0.2em #fff;
 
+}
+
+.imageGallaryContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1px;
+  overflow-y: auto;
+  max-height: calc(100vh - 157px);
 }
 
 .folderIcon {

@@ -32,7 +32,7 @@ import styles from "./crop-card.module.css";
 import { access } from "fs";
 import ImageComponent from "@/components/Core/ImageComponent";
 
-const SingleViewScoutComponent = () => {
+const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -408,6 +408,7 @@ const SingleViewScoutComponent = () => {
   }, [loading, hasMore])
 
 
+
   return (
     <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
       {/* <div className={styles.mobileScoutingViewHeader}>
@@ -778,4 +779,4 @@ const SingleViewScoutComponent = () => {
     </div>
   );
 };
-export default SingleViewScoutComponent;
+export default ImageGalleryComponent;

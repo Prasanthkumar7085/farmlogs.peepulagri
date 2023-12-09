@@ -1,17 +1,17 @@
-import SingleViewScoutComponent from "@/components/Scouting/Crops/SingleView";
+import ImageGalleryComponent from "@/components/Scouting/Crops/ImageGalleryComponent";
 import Header1 from "@/components/Scouting/Header/HeaderComponent";
 import { Button } from "@mui/material";
 import { GetServerSideProps } from "next";
 
-const SingleScoutViewPage = () => {
+const ImageGalleryPage = () => {
 
   return (
     <div>
-      <SingleViewScoutComponent />
+      <ImageGalleryComponent />
     </div>
   )
 }
-export default SingleScoutViewPage;
+export default ImageGalleryPage;
 
 
 

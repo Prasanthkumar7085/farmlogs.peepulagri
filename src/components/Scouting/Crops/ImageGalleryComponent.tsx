@@ -85,7 +85,6 @@ const ImageGalleryComponent = () => {
   useEffect(() => {
     if (router.isReady) {
       getPresingedURls(pageNumber)
-
     }
 
   }, [accessToken, router.isReady]); // Re-run effect when currentPage changes
@@ -329,7 +328,7 @@ const ImageGalleryComponent = () => {
 
     // Add scroll event listener to the container
     containerRef.current.addEventListener("scroll", handleScroll);
-
+    handleScroll()
     // Cleanup event listener on component unmount
     return () => {
       containerRef.current?.removeEventListener("scroll", handleScroll);

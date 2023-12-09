@@ -69,11 +69,19 @@ const CropsDropDown = ({
                 sx={{
                     width: "100%",
                     background: "#fff",
+                    borderRadius: "24px",
+
                     "& .MuiInputBase-input ": {
                         fontSize: "13px",
                         fontWeight: "400",
                         fontFamily: "'inter', sans-serif ",
                         color: "#000",
+                    },
+                    "& .MuiInputBase-root": {
+                        background: "#fff",
+                        color: "#000",
+                        padding: "11px 14px !important"
+
                     },
                 }}
             />

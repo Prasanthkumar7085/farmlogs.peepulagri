@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import styles from "./summary.module.css"
 const UpdateSummary = () => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -313,7 +313,18 @@ const UpdateSummary = () => {
 
     return (
         <div>
-            <Typography variant="caption">Farm</Typography>
+            <div className={styles.summaryHeader} id="header" >
+                <img
+                    className={styles.iconsiconArrowLeft}
+                    alt=""
+                    src="/iconsiconarrowleft.svg"
+                    onClick={() => router.back()}
+                />
+                <Typography className={styles.viewFarm}>Update Summary</Typography>
+                <div className={styles.headericon} id="header-icon">
+                </div>
+            </div>
+            {/* <Typography variant="caption">Farm</Typography>
 
             <FarmsDropDown
                 options={farmOptions}
@@ -322,9 +333,9 @@ const UpdateSummary = () => {
                 getFarmsSearchString={getFarmsSearchString}
                 farmDefaultValue={farmDefaultValue}
             />
-            <ErrorMessagesComponent errorMessage={errorMessages?.farm_id} />
+            <ErrorMessagesComponent errorMessage={errorMessages?.farm_id} /> */}
 
-            <Typography variant="caption">Crop</Typography>
+            {/* <Typography variant="caption">Crop</Typography>
 
             <CropsDropDown
                 options={cropOptions}
@@ -333,58 +344,61 @@ const UpdateSummary = () => {
                 getCropSearchString={getCropSearchString}
                 cropDefaultValue={cropDefaultValue}
             />
-            <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} />
+            <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} /> */}
+            <div className={styles.updatedSummaryContainer}>
 
-            <Typography variant="caption">Date</Typography>
-            <TextField
-                type='date'
-                placeholder="Select Date"
-                color="primary"
-                variant="outlined"
-                value={date}
-                onChange={(e) => {
-                    const selectedDate = new Date(e.target.value);
-                    const currentDate = new Date();
 
-                    if (selectedDate > currentDate) {
-                        setDateError('Date cannot be in the future');
-                        return;
-                    }
+                <Typography variant="caption">Date</Typography>
+                <TextField
+                    type='date'
+                    placeholder="Select Date"
+                    color="primary"
+                    variant="outlined"
+                    value={date}
+                    onChange={(e) => {
+                        const selectedDate = new Date(e.target.value);
+                        const currentDate = new Date();
 
-                    setDate(e.target.value);
-                    setDateError('');
-                    setSummaryError('');
-                }}
-                inputProps={{ max: getCurrentDate() }}
-                sx={{ width: "100%" }}
-            />
-            <ErrorMessagesComponent errorMessage={errorMessages?.date} />
+                        if (selectedDate > currentDate) {
+                            setDateError('Date cannot be in the future');
+                            return;
+                        }
 
-            <Typography variant="caption">Comments</Typography>
-            <TextField
-                color="primary"
-                name="desciption"
-                id="description"
-                minRows={4}
-                maxRows={4}
-                placeholder="Enter your comment here"
-                fullWidth={true}
-                variant="outlined"
-                multiline
-                value={comment}
-                onChange={(e) => {
-                    setComment(e.target.value);
-                    setCommentError('');
-                    setSummaryError('');
-                }}
-                sx={{ background: "#fff" }}
-            />
-            <ErrorMessagesComponent errorMessage={errorMessages?.content} />
+                        setDate(e.target.value);
+                        setDateError('');
+                        setSummaryError('');
+                    }}
+                    inputProps={{ max: getCurrentDate() }}
+                    sx={{ width: "100%" }}
+                />
+                <ErrorMessagesComponent errorMessage={errorMessages?.date} />
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                <Button type='submit' variant='contained' onClick={() => router.back()}>Cancel</Button>
+                <Typography variant="caption">Comments</Typography>
+                <TextField
+                    color="primary"
+                    name="desciption"
+                    id="description"
+                    minRows={4}
+                    maxRows={4}
+                    placeholder="Enter your comment here"
+                    fullWidth={true}
+                    variant="outlined"
+                    multiline
+                    value={comment}
+                    onChange={(e) => {
+                        setComment(e.target.value);
+                        setCommentError('');
+                        setSummaryError('');
+                    }}
+                    sx={{ background: "#fff" }}
+                />
+                <ErrorMessagesComponent errorMessage={errorMessages?.content} />
 
-                <Button type='submit' variant='contained' onClick={updateSummary}>Update</Button>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
+                    <Button type='submit' variant='contained' onClick={() => router.back()}>Cancel</Button>
+
+                    <Button type='submit' variant='contained' onClick={updateSummary}>Update</Button>
+                </div>
             </div>
             <Snackbar
                 open={showSuccessAlert}

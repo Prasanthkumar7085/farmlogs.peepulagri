@@ -2,7 +2,7 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
 import AddIcon from "@mui/icons-material/Add";
-import { Backdrop, CircularProgress, IconButton, Menu, MenuItem, Typography, dividerClasses } from "@mui/material";
+import { Backdrop, Box, CircularProgress, IconButton, Menu, MenuItem, Typography, dividerClasses } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -278,23 +278,59 @@ const AllSummaryComponents = () => {
                 <div className={styles.headericon} id="header-icon">
                 </div>
             </div>
-            <div className={styles.searchBlock} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gridGap: "1rem" }}>
-                <div >
+            <div className={styles.searchBlock} style={{ display: "grid", gridTemplateColumns: farmId ? "1fr 1fr" : "1fr", gridGap: "1rem" }}>
+                <Box sx={{
+                    "& .MuiInputBase-root": {
+                        background: "#fff",
+                        color: "#000",
+                        borderRadius: "24px"
+                    },
+                    '& .MuiOutlinedInput-notchedOutline ': {
+                        border: "0",
+                        color: "#fff"
+                    },
+                    '& .MuiButtonBase-root': {
+                        color: "#000",
+                        padding: "4px !important"
+                    },
+                    '& .MuiInputBase-input': {
+                        padding: "11px 14px"
+                    }
+                }}>
                     <FarmsDropDown
                         options={farmOptions}
                         label={"title"}
                         onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
                         getFarmsSearchString={getFarmsSearchString}
                     />
-                </div>
-                <div>
-                    <CropsDropDown
-                        options={cropOptions}
-                        label={"title"}
-                        onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
-                        getCropSearchString={getCropSearchString}
-                    />
-                </div>
+                </Box>
+
+                {farmId ?
+                    <Box sx={{
+                        "& .MuiInputBase-root": {
+                            background: "#fff",
+                            color: "#000",
+                            borderRadius: "24px"
+                        },
+                        '& .MuiOutlinedInput-notchedOutline ': {
+                            border: "0",
+                            color: "#fff"
+                        },
+                        '& .MuiButtonBase-root': {
+                            color: "#000",
+                            padding: "4px !important"
+                        },
+                        '& .MuiInputBase-input': {
+                            padding: "11px 14px"
+                        }
+                    }}>
+                        <CropsDropDown
+                            options={cropOptions}
+                            label={"title"}
+                            onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
+                            getCropSearchString={getCropSearchString}
+                        />
+                    </Box> : ""}
             </div>
             <div className={styles.allSummaryCardsBlock}>
                 {data?.length ? data.map((item: any, index: any) => {

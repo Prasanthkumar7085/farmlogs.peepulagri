@@ -10,6 +10,20 @@
     font-family: 'Inter', sans-serif !important;
 }
 
+.threadsDrawerTasks::-webkit-scrollbar {
+    background: transparent;
+    width: 5px;
+    height: 3px;
+}
+
+.threadsDrawerTasks::-webkit-scrollbar:hover {
+    opacity: 1;
+}
+
+.threadsDrawerTasks:hover::-webkit-scrollbar-thumb {
+    background: rgb(198, 198, 198);
+}
+
 /* tack modules attachmentments drawer styles */
 .attachmentDrawer {
     display: grid;
@@ -69,7 +83,7 @@
 .singleImageDialog {
     width: 60%;
     margin: 0 auto;
-    height: 600px;
+    height: 654px;
 }
 
 .singleImageDialog img {

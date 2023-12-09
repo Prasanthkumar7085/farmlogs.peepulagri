@@ -12,46 +12,35 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import updateTaskStatusService from "../../../../lib/services/TasksService/updateTaskStatusService";
-import FarmOptionsInViewTasks from "./FarmOptionsInViewTasks";
 import styles from "./TaskDetails.module.css";
 import UserOptionsinViewTasks from "./UserOptionsinViewTasks";
 import Image from "next/image";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { Markup } from "interweave";
-import SelectComponent from "@/components/Core/SelectComponent";
 import SelectComponentNoAll from "@/components/Core/SelectComponentNoAll";
 import { useRouter } from "next/router";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-
 interface PropsType {
   data: TaskResponseTypes | null | undefined;
   updateTask: (body: any) => any;
   getTaskById: (id: string) => void;
 }
-
 const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => {
   const router = useRouter();
   const id = router.query.task_id
-
-
-
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
   const userType = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
-
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
   const [deleteFieldOrNot, setDeleteFieldOrNot] = useState(false);
   const [editField, setEditField] = useState("");
   const [deleteField, setDeleteField] = useState("");
   const [title, setTitle] = useState("");
   const [assignee, setAssignee] = useState<any>();
-
-
   const [deadline, setDeadline] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
@@ -256,7 +245,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                 <h1 className={styles.landPreparation}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                      data?.title.slice(1)
+                    data?.title.slice(1)
                     : "-"}
                 </h1>
               )}
@@ -407,19 +396,96 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
       <div className={styles.viewHeader}>
         <div className={styles.userBlock}>
           <div className={styles.userDetails}>
-            <div
-              className={styles.singleDetailsBox}
-              style={{
-                flexDirection: "column",
-                alignItems: "flex-start !important",
-              }}
-            >
+            <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
               <label className={styles.userLabel}>
                 <PersonOutlineOutlinedIcon
                   sx={{ fontSize: "1rem", marginRight: "5px" }}
-                />{" "}
+                />
                 Assignee
               </label>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <div>
+                  {deleteField == "assignee" && deleteFieldOrNot ? (
+                    <div className={styles.iconBlock}>
+                      <IconButton
+                        onClick={() => {
+                          setDeleteFieldOrNot(false);
+                          setDeleteField("");
+                          setSelectedAssigneeIds([]);
+                        }}
+                      >
+                        <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          deleteAssignee();
+                        }}
+                        disabled={selectedAssigneeIds.length === 0}
+                      >
+                        <DeleteForeverIcon
+                          sx={{ color: "green", fontSize: "1.4rem" }}
+                        />
+                      </IconButton>
+                    </div>
+                  ) : userType !== "farmer" &&
+                    data?.assign_to?.length &&
+                    !(editField == "assignee" && editFieldOrNot) ? (
+                    <IconButton
+                      onClick={() => {
+                        setDeleteFieldOrNot(true);
+                        setDeleteField("assignee");
+                      }}
+                    >
+                      <img
+                        className={styles.editicon}
+                        src="/task-edit-icon.svg"
+                        alt=""
+                      />
+                    </IconButton>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div>
+                  {editField == "assignee" && editFieldOrNot ? (
+                    <div className={styles.iconBlock}>
+                      <IconButton
+                        onClick={() => {
+                          setEditFieldOrNot(false);
+                          setEditField("");
+                        }}
+                      >
+                        <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          addAssignee();
+                        }}
+                      >
+                        <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                      </IconButton>
+                    </div>
+                  ) : userType !== "farmer" &&
+                    !(deleteField == "assignee" && deleteFieldOrNot) ? (
+                    <IconButton
+                      onClick={() => {
+                        setEditFieldOrNot(true);
+                        setEditField("assignee");
+                      }}
+                    >
+                      <img
+                        className={styles.addicon}
+                        src="/add-plus-icon.svg"
+                        alt=""
+                      />
+                    </IconButton>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            </div>
+            <div>
               {editField == "assignee" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
                   <UserOptionsinViewTasks
@@ -440,114 +506,29 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
               ) : (
                 ""
               )}
-              <div
-                style={{
-                  display: "grid",
-                  width: "45rem",
-                  gridTemplateColumns: "repeat(3,1fr)",
-                }}
-              >
+              <div className={styles.allAsigneeGrp}>
                 {data?.assign_to
                   ? data?.assign_to.map(
-                      (item: { _id: string; name: string }, index: number) => {
-                        return (
-                          <div key={index}>
-                            {deleteField == "assignee" && deleteFieldOrNot ? (
-                              <input
-                                type="checkbox"
-                                onChange={(e) =>
-                                  handleAssigneeCheckboxChange(e, item._id)
-                                }
-                              />
-                            ) : (
-                              ""
-                            )}
-                            {item.name},
-                          </div>
-                        );
-                      }
-                    )
+                    (item: { _id: string; name: string }, index: number) => {
+                      return (
+                        <div key={index} className={styles.singleAsignee}>
+                          {deleteField == "assignee" && deleteFieldOrNot ? (
+                            <input
+                              type="checkbox"
+                              onChange={(e) =>
+                                handleAssigneeCheckboxChange(e, item._id)
+                              }
+                            />
+                          ) : (
+                            ""
+                          )}
+                          {item.name},
+                        </div>
+                      );
+                    }
+                  )
                   : "-"}
               </div>
-            </div>
-            <div>
-              {deleteField == "assignee" && deleteFieldOrNot ? (
-                <div className={styles.iconBlock}>
-                  <IconButton
-                    onClick={() => {
-                      setDeleteFieldOrNot(false);
-                      setDeleteField("");
-                      setSelectedAssigneeIds([]);
-                    }}
-                  >
-                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      deleteAssignee();
-                    }}
-                    disabled={selectedAssigneeIds.length === 0}
-                  >
-                    <DeleteForeverIcon
-                      sx={{ color: "green", fontSize: "1.4rem" }}
-                    />
-                  </IconButton>
-                </div>
-              ) : userType !== "farmer" &&
-                data?.assign_to?.length &&
-                !(editField == "assignee" && editFieldOrNot) ? (
-                <IconButton
-                  onClick={() => {
-                    setDeleteFieldOrNot(true);
-                    setDeleteField("assignee");
-                  }}
-                >
-                  <img
-                    className={styles.editicon}
-                    src="/task-edit-icon.svg"
-                    alt=""
-                  />
-                </IconButton>
-              ) : (
-                ""
-              )}
-            </div>
-            <div>
-              {editField == "assignee" && editFieldOrNot ? (
-                <div className={styles.iconBlock}>
-                  <IconButton
-                    onClick={() => {
-                      setEditFieldOrNot(false);
-                      setEditField("");
-                    }}
-                  >
-                    <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      addAssignee();
-                    }}
-                  >
-                    <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
-                  </IconButton>
-                </div>
-              ) : userType !== "farmer" &&
-                !(deleteField == "assignee" && deleteFieldOrNot) ? (
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("assignee");
-                  }}
-                >
-                  <img
-                    className={styles.addicon}
-                    src="/add-plus-icon.svg"
-                    alt=""
-                  />
-                </IconButton>
-              ) : (
-                ""
-              )}
             </div>
           </div>
         </div>

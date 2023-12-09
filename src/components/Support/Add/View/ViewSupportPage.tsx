@@ -40,13 +40,13 @@ const ViewSupportPage = () => {
         }
     }
     return (
-        
+
         <div className={styles.viewSupportContainer}>
             <div className={styles.mainDetailBlock}>
                 <HeadSupportPart data={data} />
                 <ViewSupportBody data={data} getOneSupportById={getOneSupportById} />
             </div>
-            <div className={styles.threads}>
+            <div className={styles.threads} >
                 <Typography variant="h6" className={styles.cardTitle}>Conversation</Typography>
                 <SupportConversationScreen data={data} />
             </div>

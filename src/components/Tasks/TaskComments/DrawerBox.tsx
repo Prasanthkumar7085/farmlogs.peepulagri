@@ -217,6 +217,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       </div>
 
       <div
+        className={styles.threadsDrawerTasks}
         style={{
           display: "flex",
           flexDirection: "column",

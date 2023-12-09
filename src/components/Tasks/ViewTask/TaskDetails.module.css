@@ -1,7 +1,13 @@
-.singleDetailsBox {
-  display: flex;
-  gap: 0.5rem;
-  width: 100%;
+.allAsigneeGrp {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.5rem 0.5rem;
+}
+
+.singleAsignee {
+  font-size: clamp(13.5px, 0.72vw, 18px) !important;
+  font-family: "Inter", sans-serif !important;
+  color: #A05148;
 }
 
 .landPreparation {
@@ -10,12 +16,10 @@
 
 .editicon {
   width: 12px;
-  height: 12px;
 }
 
 .addicon {
   width: 20px;
-  height: 20px;
 }
 
 .iconBlock {
@@ -33,12 +37,12 @@
 }
 
 .userBlock {
-  width: 50%;
+  width: 60%;
 }
 
 .userDetails {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -191,7 +195,7 @@
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 4rem;
   grid-row-gap: 1rem;
-  width: 90%;
+  width: 100%;
   margin: 0.5rem auto 0;
 
 }
@@ -200,6 +204,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .attachmentDetails {

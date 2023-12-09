@@ -115,8 +115,8 @@ const TasksTableComponent = ({
       >
         {value?.length
           ? value
-              .map((item: { _id: string; name: string }) => item.name)
-              .join(", ")
+            .map((item: { _id: string; name: string }) => item.name)
+            .join(", ")
           : "*Not Assigned*"}
         {info.getValue()?.assign_to?.length > 2 ? (
           <div
@@ -196,13 +196,13 @@ const TasksTableComponent = ({
             {info.getValue()
               ? info.getValue()?.length > 34
                 ? (info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                      info.getValue().slice(1, 30)
-                    : "") + "....."
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                  info.getValue().slice(1, 30)
+                  : "") + "....."
                 : info.getValue()
-                ? info.getValue().slice(0, 1).toUpperCase() +
+                  ? info.getValue().slice(0, 1).toUpperCase() +
                   info.getValue().slice(1)
-                : ""
+                  : ""
               : ""}
           </span>
         </Tooltip>
@@ -229,13 +229,13 @@ const TasksTableComponent = ({
               {info.getValue()
                 ? info.getValue()?.length > 45
                   ? (info.getValue()
-                      ? info.getValue().slice(0, 1).toUpperCase() +
-                        info.getValue().slice(1, 41)
-                      : "") + "....."
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1, 41)
+                    : "") + "....."
                   : info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
+                    ? info.getValue().slice(0, 1).toUpperCase() +
                     info.getValue().slice(1)
-                  : "-"
+                    : "-"
                 : "-"}
             </span>
           </Tooltip>

@@ -110,7 +110,7 @@ const ThreadsForTasks = ({
   };
 
   return (
-    <div className={styles.threads}>
+    <div className={styles.threads} >
       {details?.length ? (
         details.map((item: any, index: any) => {
           if (!item.reply_to) {

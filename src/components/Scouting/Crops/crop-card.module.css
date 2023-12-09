@@ -115,7 +115,7 @@
 .dateRange {
   font-size: clamp(16px, 3.5vw, 18px);
   font-family: "Inter", sans-serif;
-  font-weight: 600;
+  font-weight: 400;
   color: #A05148;
   text-shadow: 1px 1px 2px #fff,
     0 0 1em #fff,

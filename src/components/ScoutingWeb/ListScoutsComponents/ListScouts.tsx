@@ -488,10 +488,10 @@ const ListScouts: FunctionComponent = () => {
             placeholder={"Select Crop here"}
             defaultValue={crop}
           />
-          <DateRangePickerForAllScouts
+          {/* <DateRangePickerForAllScouts
             onDateFilterChange={onDateFilterChange}
-          />
-          <Button
+          /> */}
+          {/* <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
             sx={{ color: "#000", minWidth: "inherit", padding: "0" }}
@@ -499,7 +499,7 @@ const ListScouts: FunctionComponent = () => {
             <Tooltip title={"Clear Filter"}>
               <FilterAltIcon sx={{ fontSize: "1.7rem" }} />
             </Tooltip>
-          </Button>
+          </Button> */}
         </div>
       </div>
       <div className={styles.allFarms}>

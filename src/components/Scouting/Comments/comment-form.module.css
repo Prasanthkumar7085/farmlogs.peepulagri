@@ -70,9 +70,7 @@
 .commentform {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  align-self: stretch;
+  align-items:flex-end
 }
 
 .actions {

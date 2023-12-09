@@ -435,7 +435,7 @@ const CommentForm = ({
           </div>
         ))}
       <div className={styles.actions}>
-        <div className={styles.attachments}>
+        {/* <div className={styles.attachments}>
           <div className={styles.link}>
             <label>
               <img
@@ -468,7 +468,7 @@ const CommentForm = ({
               hidden
             />
           </label>
-        </div>
+        </div> */}
 
         <Button
           className={

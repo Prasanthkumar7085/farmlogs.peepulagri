@@ -252,7 +252,7 @@ const SingleImageView: FC<componentProps> = ({
             : data?.description
           : ""}
       </div> */}
-      <div className={styles.scoutingdetails}>
+      {/* <div className={styles.scoutingdetails}>
         {tagsDetails?.tags ? (
           <div className={styles.cropDetailsBlock}>
             {tagsDetails?.tags?.length ? (
@@ -286,7 +286,7 @@ const SingleImageView: FC<componentProps> = ({
         ) : (
           ""
         )}
-      </div>
+      </div> */}
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}

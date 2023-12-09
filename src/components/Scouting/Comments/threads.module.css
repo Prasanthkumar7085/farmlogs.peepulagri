@@ -191,7 +191,7 @@
 
 .actionButton {
   align-self: stretch;
-  justify-content: flex-start;
+  justify-content: flex-end;
   gap: var(--gap-base);
   color: var(--primary-blue);
 }
@@ -359,5 +359,5 @@
   max-width: 100%;
   column-gap: 0.5rem;
   color: var(--gray-700);
-  align-self: flex-start;
+  align-self: center;
 } 

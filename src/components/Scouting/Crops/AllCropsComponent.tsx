@@ -113,10 +113,10 @@ const AllCropsComponent = () => {
       let queryParams: any = {};
 
       if (orderBy) {
-        queryParams["order_by"] = orderBy;
+        queryParams["sort_by"] = orderBy;
       }
       if (orderType) {
-        queryParams["order_type"] = orderType;
+        queryParams["sort_type"] = orderType;
       }
 
       let options = {

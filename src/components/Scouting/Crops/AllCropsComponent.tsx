@@ -24,6 +24,7 @@ import { useCookies } from "react-cookie";
 const AllCropsComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const form_Id = router.query.farm_id
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -215,7 +216,7 @@ const AllCropsComponent = () => {
 
   //create new folder (dilog)
   const captureResponseDilog = (value: any) => {
-    if (!value) {
+    if (value) {
       setDilogOpen(false);
       setErrorMessages([]);
     } else {
@@ -499,6 +500,7 @@ const AllCropsComponent = () => {
                 return (
                   <CropCard
                     itemDetails={item}
+                    form_Id={formId}
                     key={index}
                     getCropsDetails={getCropsDetails}
                     colorIndex={colorIndex}
@@ -522,7 +524,7 @@ const AllCropsComponent = () => {
               size="large"
               className={styles.AddScoutingbtn}
               aria-label="add to shopping cart"
-              onClick={() => setDilogOpen(true)}
+              onClick={() => router.push({ pathname: `/farms/${router.query.farm_id}/crops/add-crop` })}
             >
               <img src="/mobileIcons/crops/Add-crop.svg" alt="" width={"25px"} />
               <span>Add Crop</span>

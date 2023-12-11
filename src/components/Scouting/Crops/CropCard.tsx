@@ -22,12 +22,15 @@ interface pagePropsType {
   itemDetails: CropTypeResponse;
   getCropsDetails: (farmId: string) => void;
   colorIndex: number;
+  form_Id: string;
 }
 const CropCard = ({
   itemDetails,
+  form_Id,
   getCropsDetails,
   colorIndex,
 }: pagePropsType) => {
+
   const router = useRouter();
   // const id = router.query.farm_id
   const dispatch = useDispatch();
@@ -90,6 +93,8 @@ const CropCard = ({
   };
 
   const captureResponseDilog = (value: any, index: number) => {
+    console.log(value);
+
     setErrorMessages([]);
     if (!value) {
       setRenameOpen(false);
@@ -133,8 +138,8 @@ const CropCard = ({
     if (response?.success) {
       getCropsDetails(router.query.farm_id as string);
       setAlertMessage(response?.message);
-      setAlertType(true);
-      setRenameOpen(false);
+      router.back()
+
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     } else if (response?.statusCode == 403) {
@@ -226,8 +231,7 @@ const CropCard = ({
             <MenuItem
               sx={{ borderBottom: "1px solid #B4C1D6" }}
               onClick={() => {
-                handleClose();
-                setRenameOpen(true);
+                router.push(`/farms/${form_Id}/crops/${itemDetails?._id}/update-crop`)
               }}
             >
               {" "}
@@ -265,16 +269,16 @@ const CropCard = ({
               <h2 className={styles.FieldCrop}>
                 {itemDetails?.title.length > 12
                   ? itemDetails?.title.slice(0, 1).toUpperCase() +
-                    itemDetails?.title.slice(1, 9) +
-                    "..."
+                  itemDetails?.title.slice(1, 9) +
+                  "..."
                   : itemDetails?.title.slice(0, 1).toUpperCase() +
-                    itemDetails?.title.slice(1)}
+                  itemDetails?.title.slice(1)}
               </h2>
               <p className={styles.aug2023}>
                 {/* {timePipe(itemDetails.createdAt, "DD, MMM YYYY")} */}
                 {itemDetails.area
                   ? itemDetails.area +
-                    (itemDetails.area < 2 ? " acre" : " acres")
+                  (itemDetails.area < 2 ? " acre" : " acres")
                   : 0 + " acres"}
               </p>
             </div>
@@ -298,6 +302,7 @@ const CropCard = ({
           open={renameOpen}
           captureResponseDilog={captureResponseDilog}
           loading={loadingForAdd}
+          itemDetails={itemDetails}
           defaultTitle={itemDetails?.title}
           defaultArea={itemDetails?.area}
           errorMessages={errorMessages}

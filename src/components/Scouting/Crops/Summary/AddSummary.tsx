@@ -44,6 +44,7 @@ const AddSummary = () => {
 
     const addSummary = async () => {
         setLoading(true);
+        setErrorMessages('')
 
         try {
             let body = {
@@ -181,6 +182,7 @@ const AddSummary = () => {
         }
     }
     const onSelectValueFromCropsDropDown = (value: any) => {
+        console.log(value);
 
         if (value) {
             setCropId(value?._id)
@@ -263,6 +265,7 @@ const AddSummary = () => {
                             }
 
                             setDate(e.target.value);
+                            setErrorMessages('');
 
                         }}
                         inputProps={{ max: getCurrentDate() }}
@@ -285,6 +288,7 @@ const AddSummary = () => {
                         value={comment}
                         onChange={(e) => {
                             setComment(e.target.value);
+                            setErrorMessages('');
                         }}
                         sx={{
                             background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
@@ -310,7 +314,7 @@ const AddSummary = () => {
                     {success}
                 </Alert>
             </Snackbar>
-            <Snackbar
+            {/* <Snackbar
                 open={showErrorAlert}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
@@ -318,7 +322,7 @@ const AddSummary = () => {
                     <AlertTitle>Validation Errors</AlertTitle>
                     {summaryError}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
             <LoadingComponent loading={loading} />
 
         </div>

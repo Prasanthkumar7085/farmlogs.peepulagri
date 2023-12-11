@@ -17,6 +17,7 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import AlertComponent from "../AlertComponent";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
+import LoadingComponent from "../LoadingComponent";
 
 const NewFolderDiloag = ({
   open,
@@ -119,6 +120,7 @@ const NewFolderDiloag = ({
       if (responseData.success) {
         setAlertMessage(responseData.message);
         setAlertType(true);
+        router.back();
       } else if (responseData?.status == 422) {
         setErrorMessages(responseData?.errors);
       } else if (responseData?.statusCode == 403) {
@@ -146,9 +148,7 @@ const NewFolderDiloag = ({
     if (response?.success) {
       setAlertMessage(response?.message);
       setAlertType(true)
-      setTimeout(() => {
-        router.back()
-      }, 1500);
+      router.back()
 
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
@@ -272,6 +272,7 @@ const NewFolderDiloag = ({
             onChange={(_, newValue: any) => {
               setTitle(newValue?.title || newValue?.name);
               setDefaultValue(newValue);
+              setErrorMessages('')
             }}
             getOptionLabel={(e) => e.title || e.name}
             renderInput={(params) => (
@@ -329,7 +330,10 @@ const NewFolderDiloag = ({
               step: "any",
             }}
             value={area}
-            onChange={(e) => setArea(e.target.value)}
+            onChange={(e) => {
+              setArea(e.target.value);
+              setErrorMessages('')
+            }}
             InputProps={{ style: { appearance: "none" } }}
             onKeyDown={(e: any) => {
               if (e.key == "Enter") createCrop();
@@ -380,6 +384,7 @@ const NewFolderDiloag = ({
             setAlertMessage={setAlertMessage}
             mobile={true}
           />
+          <LoadingComponent loading={loadingForAdd} />
         </div>
       </div>
     </div>

@@ -5,38 +5,74 @@ import {
   CircularProgress,
   Autocomplete,
   LinearProgress,
+  Typography,
 } from "@mui/material";
 import styles from "./new-folder1.module.css";
 import { useEffect, useState } from "react";
 import SpaIcon from "@mui/icons-material/Spa";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useCookies } from "react-cookie";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import AlertComponent from "../AlertComponent";
+import updateCropService from "../../../../lib/services/CropServices/updateCropService";
 
 const NewFolderDiloag = ({
   open,
   captureResponseDilog,
   loading,
   defaultTitle,
-  errorMessages,
+  // errorMessages,
   defaultArea,
+  itemDetails
 }: any) => {
+
   const router = useRouter();
+  const dispatch = useDispatch();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const crop_id: any = router.query.crop_id
+  console.log(crop_id);
+
 
   const [title, setTitle] = useState<string | null>(null);
-  const [area, setArea] = useState("");
+  const [area, setArea] = useState<any>();
   const [crop, setcrop] = useState([]);
+  const [cropDetails, setCropDetails] = useState<any>();
+  console.log(cropDetails);
+
 
   const [optionsLoading, setOptionsLoading] = useState(false);
+  const [loadingForAdd, setLoadingForAdd] = useState<any>();
+  const [errorMessages, setErrorMessages] = useState<any>();
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState(false);
 
   const [defaultValue, setDefaultValue] = useState<any>(null);
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
+
+  const logout = async () => {
+    try {
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    setArea(defaultArea);
-    dropDownCrops(defaultTitle);
-  }, [open]);
+    // setArea(defaultArea);
+    dropDownCrops();
+    if (router.isReady && crop_id) {
+      singleCrop();
+    }
+  }, [open, router.isReady]);
 
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
@@ -58,14 +94,80 @@ const NewFolderDiloag = ({
       event.preventDefault();
     }
   };
+  //create crop api call
+  const createCrop = async () => {
+    setLoadingForAdd(true);
+    let obj = {
+      farm_id: router.query.farm_id,
+      title: title ? title?.trim() : "",
+      area: + area,
+    };
+    let options = {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: new Headers({
+        "content-type": "application/json",
+        authorization: accessToken,
+      }),
+    };
+    try {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/crops`,
+        options
+      );
+      let responseData = await response.json();
+      if (responseData.success) {
+        setAlertMessage(responseData.message);
+        setAlertType(true);
+      } else if (responseData?.status == 422) {
+        setErrorMessages(responseData?.errors);
+      } else if (responseData?.statusCode == 403) {
+        await logout();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingForAdd(false);
+    }
+  };
 
-  const dropDownCrops = async (defaultTitle: string) => {
+  const editCrop = async () => {
+    let obj = {
+      farm_id: router.query.farm_id,
+      title: title ? title?.trim() : "",
+      area: + area,
+    };
+    setLoadingForAdd(true);
+    const response = await updateCropService(
+      crop_id,
+      obj,
+      accessToken
+    );
+    if (response?.success) {
+      setAlertMessage(response?.message);
+      setAlertType(true)
+      setTimeout(() => {
+        router.back()
+      }, 1500);
+
+    } else if (response?.status == 422) {
+      setErrorMessages(response?.errors);
+    } else if (response?.statusCode == 403) {
+      await logout();
+    } else {
+      setAlertMessage(response?.message);
+      setAlertType(false);
+    }
+    setLoadingForAdd(false);
+  };
+
+  const dropDownCrops = async () => {
     setOptionsLoading(true);
     try {
       let url = `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/pending/crop-names`;
-      if (defaultTitle) {
-        url = `${process.env.NEXT_PUBLIC_API_URL}/crops`;
-      }
+      // if (defaultTitle) {
+      //   url = `${process.env.NEXT_PUBLIC_API_URL}/crops`;
+      // }
       const options = {
         method: "GET",
         headers: new Headers({
@@ -77,11 +179,36 @@ const NewFolderDiloag = ({
       const responseData = await response.json();
 
       setcrop(responseData.data);
-      if (defaultTitle) {
-        let obj = responseData?.data.find((e: any) => e.name == defaultTitle);
-        setDefaultValue(obj);
-        setTitle(obj.name);
-      }
+      // if (defaultTitle) {
+      //   let obj = responseData?.data.find((e: any) => e.name == defaultTitle);
+      //   setDefaultValue(obj);
+      //   // setTitle(obj.name);
+      // }
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setOptionsLoading(false);
+    }
+  };
+
+  const singleCrop = async () => {
+    setOptionsLoading(true);
+    try {
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}`;
+
+      const options = {
+        method: "GET",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+      };
+      const response: any = await fetch(url, options);
+      const responseData = await response.json();
+      setDefaultValue(responseData.data);
+      setTitle(responseData.data.title);
+      setCropDetails(responseData.data);
+      setArea(responseData.data.area);
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -94,22 +221,38 @@ const NewFolderDiloag = ({
       title: title ? title : "",
       crop_area: area ? +area : null,
     };
-    captureResponseDilog(obj);
   };
 
   return (
-    <Dialog
-      open={open}
-      PaperProps={{
-        sx: {
-          borderRadius: "16px",
-          width: "90%",
-          margin: "0",
-          minWidth: "280px",
-          maxWidth: "320px",
-        },
-      }}
-    >
+    <div>
+      {crop_id ? (
+        <div className={styles.header} id="header" >
+          <img
+            className={styles.iconsiconArrowLeft}
+            alt=""
+            src="/iconsiconarrowleft.svg"
+            onClick={() => router.back()}
+
+          />
+          <Typography className={styles.viewFarm}>Update Crop</Typography>
+          <div className={styles.headericon} id="header-icon">
+          </div>
+        </div>
+      ) : (
+        <div className={styles.header} id="header" >
+          <img
+            className={styles.iconsiconArrowLeft}
+            alt=""
+            src="/iconsiconarrowleft.svg"
+            onClick={() => router.back()}
+
+          />
+          <Typography className={styles.viewFarm}>Add Crop</Typography>
+          <div className={styles.headericon} id="header-icon">
+          </div>
+        </div>
+      )}
+
       <div className={styles.newfolder}>
         <div className={styles.frame}>
           <h3 className={styles.newFolder}>
@@ -127,10 +270,10 @@ const NewFolderDiloag = ({
             options={crop?.length ? crop : []}
             value={defaultValue}
             onChange={(_, newValue: any) => {
-              setTitle(newValue?.name);
+              setTitle(newValue?.title || newValue?.name);
               setDefaultValue(newValue);
             }}
-            getOptionLabel={(e) => e.name}
+            getOptionLabel={(e) => e.title || e.name}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -189,7 +332,7 @@ const NewFolderDiloag = ({
             onChange={(e) => setArea(e.target.value)}
             InputProps={{ style: { appearance: "none" } }}
             onKeyDown={(e: any) => {
-              if (e.key == "Enter") callData();
+              if (e.key == "Enter") createCrop();
             }}
           />
         </div>
@@ -200,33 +343,46 @@ const NewFolderDiloag = ({
             size="small"
             variant="outlined"
             onClick={() => {
-              captureResponseDilog(false);
-              setTitle(null);
-              setArea("");
+              router.back()
             }}
           >
             Cancel
           </Button>
-          <Button
-            className={styles.buttoncreatefolder}
-            color="primary"
-            size="small"
-            variant="contained"
-            fullWidth
-            onClick={() => callData()}
-            disabled={optionsLoading || loading}
-          >
-            {loading ? (
-              <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-            ) : defaultTitle ? (
-              "Update Crop"
-            ) : (
-              "Create Crop"
-            )}
-          </Button>
+          {crop_id ? (
+            <Button
+              className={styles.buttoncreatefolder}
+              color="primary"
+              size="small"
+              variant="contained"
+              fullWidth
+              onClick={editCrop}
+              disabled={optionsLoading || loadingForAdd}
+            >
+              Update Crop
+            </Button>
+          ) : (
+            <Button
+              className={styles.buttoncreatefolder}
+              color="primary"
+              size="small"
+              variant="contained"
+              fullWidth
+              onClick={createCrop}
+              disabled={optionsLoading || loadingForAdd}
+            >
+              Create Crop
+            </Button>
+          )}
+
+          <AlertComponent
+            alertMessage={alertMessage}
+            alertType={alertType}
+            setAlertMessage={setAlertMessage}
+            mobile={true}
+          />
         </div>
       </div>
-    </Dialog>
+    </div>
   );
 };
 

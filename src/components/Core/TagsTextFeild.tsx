@@ -168,7 +168,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
               sx={{
                 '& .MuiInputBase-root': {
                   background: "#fff",
-                  paddingBlock: "10px !important"
+                  paddingBlock: "8px !important"
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderColor: "grey !important",
@@ -215,7 +215,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                   sx={{
                     '& .MuiInputBase-root': {
                       background: "#fff",
-                      paddingBlock: "10px !important"
+                      paddingBlock: "8px !important"
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderColor: "grey !important",

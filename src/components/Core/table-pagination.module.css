@@ -9,9 +9,12 @@
     box-shadow: none;
     border-radius: 0;
 }
-.tablePagination *{
+
+.tablePagination * {
     font-size: clamp(0.8125rem, 0.72vw, 1.25rem);
+    padding-right: 1rem;
 }
+
 .label {
     margin-right: 10px;
 }

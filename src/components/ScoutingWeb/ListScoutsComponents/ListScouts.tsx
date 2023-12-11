@@ -226,71 +226,80 @@ const ListScouts: FunctionComponent = () => {
     toDate,
     cropId,
   }: Partial<ApiMethodProps>) => {
-    setLoading(true);
+    try {
 
-    if (!cropId) {
-      setData([]);
-      return;
-    }
-    let url = `/crops/${cropId}/images/${page}/${limit}`;
-    let queryParams: any = {};
-    if (page) {
-      queryParams["page"] = page;
-    }
-    if (limit) {
-      queryParams["limit"] = limit;
-    }
+      setLoading(true);
 
-    if (userId) {
-      queryParams["created_by"] = userId;
-    }
-    if (fromDate && toDate) {
-      queryParams["from_date"] = fromDate;
-      queryParams["to_date"] = toDate;
-    }
-    if (cropId) {
-      queryParams["crop_id"] = cropId;
-    }
-    if (farmId) {
-      queryParams["farm_id"] = farmId;
-    }
-    if (router.query.farm_search_string) {
-      queryParams["farm_search_string"] = router.query.farm_search_string;
-    }
+      if (!cropId) {
+        setData([]);
+        return;
+      }
+      let url = `/crops/${cropId}/images/${page}/${limit}`;
+      let queryParams: any = {};
+      if (page) {
+        queryParams["page"] = page;
+      }
+      if (limit) {
+        queryParams["limit"] = limit;
+      }
 
-    const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
+      if (userId) {
+        queryParams["created_by"] = userId;
+      }
+      if (fromDate && toDate) {
+        queryParams["from_date"] = fromDate;
+        queryParams["to_date"] = toDate;
+      }
+      if (cropId) {
+        queryParams["crop_id"] = cropId;
+      }
+      if (farmId) {
+        queryParams["farm_id"] = farmId;
+      }
+      if (router.query.farm_search_string) {
+        queryParams["farm_search_string"] = router.query.farm_search_string;
+      }
 
-    router.push({ query: queryParams });
-    url = prepareURLEncodedParams(url, restParams);
-    const response = await getAllExistedScoutsService({
-      url: url,
-      token: accessToken,
-    });
+      const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
 
-    if (response?.success) {
-      const { data, ...rest } = response;
-      setPaginationDetails(rest);
-      setOnlyImages(response.data);
-
-      const groupedData: any = {};
-      // Iterate through Data and group objects by uploaded_at date
-      data.forEach((item: any) => {
-        const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
-        if (!groupedData[createdAt]) {
-          groupedData[createdAt] = [item];
-        } else {
-          groupedData[createdAt].push(item);
-        }
+      router.push({ query: queryParams });
+      url = prepareURLEncodedParams(url, restParams);
+      const response = await getAllExistedScoutsService({
+        url: url,
+        token: accessToken,
       });
-      // Convert the groupedData object into an array
-      const groupedArray = Object.values(groupedData);
-      setData(groupedArray);
-    } else if (response?.statusCode == 403) {
-      await logout();
-    } else {
-      toast.error("Failed to fetch");
+
+      if (response?.success) {
+        const { data, ...rest } = response;
+        setPaginationDetails(rest);
+        setOnlyImages(response.data);
+
+        const groupedData: any = {};
+        // Iterate through Data and group objects by uploaded_at date
+        data.forEach((item: any) => {
+          const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
+          if (!groupedData[createdAt]) {
+            groupedData[createdAt] = [item];
+          } else {
+            groupedData[createdAt].push(item);
+          }
+        });
+        // Convert the groupedData object into an array
+        const groupedArray = Object.values(groupedData);
+        setData(groupedArray);
+      } else if (response?.statusCode == 403) {
+        await logout();
+      } else {
+        toast.error("Failed to fetch");
+      }
     }
-    setLoading(false);
+    catch (err: any) {
+      console.error(err);
+
+    } finally {
+
+      setLoading(false);
+    }
   };
 
   const getAllUsers = async (userId = "") => {
@@ -364,7 +373,6 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const getAllCrops = async (cropId: string, farmId: string) => {
-    setLoading(true);
     if (!farmId) {
       return;
     }
@@ -389,7 +397,6 @@ const ListScouts: FunctionComponent = () => {
       } else {
         let obj = data?.length ? data[0] : null;
 
-        setLoading(false);
         setCrop(obj);
         if (obj) {
           getAllCropImageList({
@@ -404,7 +411,6 @@ const ListScouts: FunctionComponent = () => {
         }
       }
     }
-    setLoading(false);
   };
 
   const clearAllFilterAndGetData = async () => {
@@ -500,27 +506,27 @@ const ListScouts: FunctionComponent = () => {
       <div className={styles.allFarms}>
         {data?.length
           ? data.map((item: any, index: any) => {
-              return (
-                <div key={index} className={styles.allScoutingCards}>
-                  <Typography className={styles.postedDate}>
-                    <InsertInvitationIcon />
-                    <span>
-                      {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
-                    </span>
-                  </Typography>
+            return (
+              <div key={index} className={styles.allScoutingCards}>
+                <Typography className={styles.postedDate}>
+                  <InsertInvitationIcon />
+                  <span>
+                    {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
+                  </span>
+                </Typography>
 
-                  <div className={styles.eachDayScouting} key={index}>
-                    <ScoutingDailyImages
-                      item={item}
-                      key={index}
-                      onClickAttachment={onClickAttachment}
-                    />
-                  </div>
+                <div className={styles.eachDayScouting} key={index}>
+                  <ScoutingDailyImages
+                    item={item}
+                    key={index}
+                    onClickAttachment={onClickAttachment}
+                  />
                 </div>
-              );
-            })
+              </div>
+            );
+          })
           : ""}
-        {!data?.length && !loading ? (
+        {!data?.length && !loading ?
           <div
             id={styles.noData}
             style={{
@@ -539,9 +545,7 @@ const ListScouts: FunctionComponent = () => {
             />
             <Typography className={styles.subTitle}>No Scoutings</Typography>
           </div>
-        ) : (
-          ""
-        )}
+          : ""}
       </div>
       {/* <SingleScoutViewDetails
         viewAttachmentId={viewAttachmentId}

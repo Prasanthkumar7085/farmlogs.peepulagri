@@ -10,14 +10,17 @@
     flex-wrap: wrap;
     word-break: break-word;
 }
+
 .listTags {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-.listTags h5{
+
+.listTags h5 {
     margin: 0;
 }
+
 .addTagContainer {
     display: flex;
     flex-direction: column;
@@ -39,11 +42,11 @@
 }
 
 .tagsBox input {
-    background-color: var(--white);
+    /* background-color: var(--white); */
     font-size: 1rem;
+    font-family: "Inter", sans-serif !important
 }
 
 #tag-autocomplete {
     background-color: #E9EDF1;
 }
-

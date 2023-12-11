@@ -14,7 +14,7 @@ body {
     box-sizing: border-box;
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
-    background: #F8F8F8;
+    background: linear-gradient(120deg, #05a15609, #d9494109, #d9484109, #05a15609);
 }
 
 .MuiTabs-indicator {

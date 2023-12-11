@@ -3,7 +3,10 @@ import { GetServerSideProps } from "next";
 
 const FileUploadPage = () => {
     return (
-        <FileUploadComponent />
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
+
+            <FileUploadComponent />
+        </div>
     )
 }
 export default FileUploadPage

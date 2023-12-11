@@ -18,6 +18,7 @@ import {
   IconButton,
   LinearProgress,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -592,10 +593,22 @@ const FileUploadComponent = () => {
         />
       ) : (
         <div>
-          <Header1
+          {/* <Header1
             name={"Add Scout"}
             router={`/farms/${router.query.farm_id}/crops`}
-          />
+          /> */}
+          <div className={styles.header} id="header">
+            <img
+              className={styles.iconsiconArrowLeft}
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.push(`/farms/${router.query.farm_id}/crops`)}
+            />
+            <Typography className={styles.viewFarm}>Add Scout</Typography>
+            <div className={styles.headericon} id="header-icon">
+            </div>
+          </div>
+
           <div className={styles.addscout} id="add-scout">
             <div className={styles.scoutdetails} id="scout-details">
               <div className={styles.addscoutdetails} id="add-scout-details">

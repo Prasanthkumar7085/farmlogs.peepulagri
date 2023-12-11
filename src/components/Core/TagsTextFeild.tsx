@@ -91,7 +91,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       };
       const response: any = await fetch(url, options);
       const responseData = await response.json();
-    } catch (err) {}
+    } catch (err) { }
 
     setTagValue(updatedTags);
     captureTags(updatedTags); // Function to capture updated tags
@@ -165,6 +165,16 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
               placeholder="Enter Tags"
               value={newTagValue}
               onChange={(e) => setNewTagValue(e.target.value)}
+              sx={{
+                '& .MuiInputBase-root': {
+                  background: "#fff",
+                  paddingBlock: "10px !important"
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "grey !important",
+                  borderRadius: "4px"
+                }
+              }}
             />
           )}
           {!isTextFieldOpen && (
@@ -202,6 +212,16 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                   fullWidth
                   className={styles.tagsBox}
                   placeholder="Enter Tags"
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      background: "#fff",
+                      paddingBlock: "10px !important"
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: "grey !important",
+                      borderRadius: "4px"
+                    }
+                  }}
                 />
               )}
             />
@@ -226,7 +246,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       </div>
 
       {isTextFieldOpen && ( // Conditionally render the submit button based on the state
-        <Button variant="contained" color="primary" onClick={addNewTag}>
+        <Button sx={{ background: "#d94841" }} variant="contained" color="primary" onClick={addNewTag}>
           Add
         </Button>
       )}

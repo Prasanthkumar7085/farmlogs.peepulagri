@@ -49,6 +49,7 @@ const AddFarmForm = () => {
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [addLocationLoading, setAddLocationLoading] = useState(false);
   const [newLocation, setNewLocation] = useState("");
+  const [addLocation, setAddLocation] = useState<any>();
 
   const {
     register,
@@ -232,8 +233,8 @@ const AddFarmForm = () => {
       setAlertMessage(response?.message);
       setAlertType(true);
       setAddLocationOpen(false);
-
-      getLocations(response?.data?.name);
+      setAddLocation(response.data);
+      getLocations(response?.data);
       setNewLocation("");
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
@@ -379,7 +380,7 @@ const AddFarmForm = () => {
                         className={styles.inputfarmname}
                         name="location_id"
                         size="small"
-                        placeholder=""
+                        placeholder="Add Location"
                         fullWidth
                         variant="outlined"
                         error={Boolean(errorMessages?.["location_id"])}

@@ -255,10 +255,7 @@ const NewFolderDiloag = ({
 
       <div className={styles.newfolder}>
         <div className={styles.frame}>
-          <h3 className={styles.newFolder}>
-            <SpaIcon />
-            <span>{defaultTitle ? `Rename Crop` : `New Crop`}</span>
-          </h3>
+
 
           <div style={{ textAlign: "left", width: "100%" }}>
             <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
@@ -281,7 +278,7 @@ const NewFolderDiloag = ({
                 className={styles.input}
                 color="primary"
                 size="small"
-                placeholder="Enter folder title here"
+                placeholder="Select Crop"
                 variant="outlined"
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
@@ -312,7 +309,7 @@ const NewFolderDiloag = ({
             className={styles.input}
             name="area"
             size="small"
-            placeholder="Enter total area"
+            placeholder="Enter area"
             fullWidth
             type={"number"}
             onWheel={(e: any) => e.target.blur()}

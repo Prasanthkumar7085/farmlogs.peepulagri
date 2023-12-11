@@ -54,20 +54,20 @@ const DashboardPage = () => {
     try {
       let url = `farms/${page}/${limit}`;
       let queryParam: any = {
-        order_by: "createdAt",
-        order_type: "desc",
+        sort_by: "createdAt",
+        sort_type: "desc",
       };
 
       if (search_string) {
         queryParam["search_string"] = search_string;
-        delete queryParam["order_by"];
-        delete queryParam["order_type"];
+        delete queryParam["sort_by"];
+        delete queryParam["sort_type"];
       }
 
       if (location != 1 && location) {
         queryParam["location_id"] = location;
-        delete queryParam["order_by"];
-        delete queryParam["order_type"];
+        delete queryParam["sort_by"];
+        delete queryParam["sort_type"];
       }
 
       router.replace({ pathname: "/farms", query: queryParam });
@@ -182,7 +182,7 @@ const DashboardPage = () => {
           page: 1,
           limit: 20,
           search_string: searchString,
-          location: location,
+          location: router?.query.location,
         });
       }, delay);
       return () => clearTimeout(debounce);
@@ -205,6 +205,7 @@ const DashboardPage = () => {
           farmsData={farmsData}
           setPage={setPage}
           page={page}
+          loading={loading}
 
           getAllFarms={getAllFarms}
           hasMore={hasMore}

@@ -49,6 +49,7 @@ const AddSummary = () => {
         try {
             let body = {
                 farm_id: farmId,
+                crop_id: cropId,
                 content: comment,
                 date: date
             };
@@ -62,7 +63,7 @@ const AddSummary = () => {
             };
 
             let response: any = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${cropId}/day-summary`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summary`,
                 options
             );
             let responseData = await response.json();

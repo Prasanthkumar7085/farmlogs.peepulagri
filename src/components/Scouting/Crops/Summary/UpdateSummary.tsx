@@ -267,9 +267,10 @@ const UpdateSummary = () => {
             if (responseData.status == 200) {
                 setSuccess(responseData.message);
                 setShowSuccessAlert(true);
+                router.back()
                 setTimeout(() => {
                     setShowSuccessAlert(false);
-                    router.back()
+
                 }, 1500);
 
 

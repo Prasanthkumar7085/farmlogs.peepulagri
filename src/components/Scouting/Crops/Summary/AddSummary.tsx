@@ -71,9 +71,10 @@ const AddSummary = () => {
                 setSuccess(responseData.message);
                 setShowSuccessAlert(true);
                 setLoading(false);
+                router.back()
                 setTimeout(() => {
                     setShowSuccessAlert(false);
-                    router.back()
+
                 }, 1500);
             } else if (responseData.status == 422) {
                 setErrorMessages(responseData.errors)

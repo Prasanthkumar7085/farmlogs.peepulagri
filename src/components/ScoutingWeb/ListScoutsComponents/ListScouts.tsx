@@ -50,7 +50,7 @@ const ListScouts: FunctionComponent = () => {
   const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
   const [usersOptions, setUserOptions] = useState();
@@ -84,6 +84,7 @@ const ListScouts: FunctionComponent = () => {
       setCrop(null);
       setFarm(null);
       setData([]);
+
       getAllFarms({ clearOrNot: true });
       return;
     }
@@ -226,80 +227,72 @@ const ListScouts: FunctionComponent = () => {
     toDate,
     cropId,
   }: Partial<ApiMethodProps>) => {
-    try {
+    setLoading(true);
+    if (!cropId) {
+      setData([]);
+      return;
+    }
+    let url = `/crops/${cropId}/images/${page}/${limit}`;
+    let queryParams: any = {};
+    if (page) {
+      queryParams["page"] = page;
+    }
+    if (limit) {
+      queryParams["limit"] = limit;
+    }
 
-      setLoading(true);
+    if (userId) {
+      queryParams["created_by"] = userId;
+    }
+    if (fromDate && toDate) {
+      queryParams["from_date"] = fromDate;
+      queryParams["to_date"] = toDate;
+    }
+    if (cropId) {
+      queryParams["crop_id"] = cropId;
+    }
+    if (farmId) {
+      queryParams["farm_id"] = farmId;
+    }
+    if (router.query.farm_search_string) {
+      queryParams["farm_search_string"] = router.query.farm_search_string;
+    }
 
-      if (!cropId) {
-        setData([]);
-        return;
-      }
-      let url = `/crops/${cropId}/images/${page}/${limit}`;
-      let queryParams: any = {};
-      if (page) {
-        queryParams["page"] = page;
-      }
-      if (limit) {
-        queryParams["limit"] = limit;
-      }
+    const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
 
-      if (userId) {
-        queryParams["created_by"] = userId;
-      }
-      if (fromDate && toDate) {
-        queryParams["from_date"] = fromDate;
-        queryParams["to_date"] = toDate;
-      }
-      if (cropId) {
-        queryParams["crop_id"] = cropId;
-      }
-      if (farmId) {
-        queryParams["farm_id"] = farmId;
-      }
-      if (router.query.farm_search_string) {
-        queryParams["farm_search_string"] = router.query.farm_search_string;
-      }
+    router.push({ query: queryParams });
+    url = prepareURLEncodedParams(url, restParams);
+    const response = await getAllExistedScoutsService({
+      url: url,
+      token: accessToken,
+    });
 
-      const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
-
-      router.push({ query: queryParams });
-      url = prepareURLEncodedParams(url, restParams);
-      const response = await getAllExistedScoutsService({
-        url: url,
-        token: accessToken,
+    if (response?.success) {
+      const { data, ...rest } = response;
+      setPaginationDetails(rest);
+      setOnlyImages(response.data);
+      const groupedData: any = {};
+      // Iterate through Data and group objects by uploaded_at date
+      data.forEach((item: any) => {
+        const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
+        if (!groupedData[createdAt]) {
+          groupedData[createdAt] = [item];
+        } else {
+          groupedData[createdAt].push(item);
+        }
       });
+      // Convert the groupedData object into an array
+      const groupedArray = Object.values(groupedData);
+      setData(groupedArray);
+      setLoading(false)
 
-      if (response?.success) {
-        const { data, ...rest } = response;
-        setPaginationDetails(rest);
-        setOnlyImages(response.data);
-
-        const groupedData: any = {};
-        // Iterate through Data and group objects by uploaded_at date
-        data.forEach((item: any) => {
-          const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
-          if (!groupedData[createdAt]) {
-            groupedData[createdAt] = [item];
-          } else {
-            groupedData[createdAt].push(item);
-          }
-        });
-        // Convert the groupedData object into an array
-        const groupedArray = Object.values(groupedData);
-        setData(groupedArray);
-      } else if (response?.statusCode == 403) {
-        await logout();
-      } else {
-        toast.error("Failed to fetch");
-      }
+    } else if (response?.statusCode == 403) {
+      await logout();
+    } else {
+      toast.error("Failed to fetch");
     }
-    catch (err: any) {
-      console.error(err);
 
-    } finally {
 
-      setLoading(false);
-    }
   };
 
   const getAllUsers = async (userId = "") => {
@@ -409,6 +402,7 @@ const ListScouts: FunctionComponent = () => {
             cropId: obj._id,
           });
         }
+
       }
     }
   };

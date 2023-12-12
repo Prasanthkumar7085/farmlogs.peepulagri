@@ -14,6 +14,8 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 import styles from "./summary.module.css"
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const UpdateSummary = () => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -353,7 +355,7 @@ const UpdateSummary = () => {
             <div className={styles.updatedSummaryContainer}>
                 <div className={styles.singleFarmBlock}>
                     <Typography variant="h6">Date</Typography>
-                    <TextField
+                    {/* <TextField
                         type='date'
                         placeholder="Select Date"
                         color="primary"
@@ -381,7 +383,36 @@ const UpdateSummary = () => {
                                 borderRadius: "10px !important"
                             }
                         }}
-                    />
+                    /> */}
+                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                        <MobileDatePicker sx={{
+                            width: "100%",
+                            '& .MuiOutlinedInput-notchedOutline ': {
+                                borderColor: "grey !important",
+                                borderRadius: "8px !important",
+                                color: "#000"
+                            },
+                            '& .MuiInputBase-input': {
+                                padding: "12px 14px",
+                                borderRadius: "10px !important",
+                                color: "#000",
+                                background: "#fff",
+
+
+                            }
+                        }}
+                            value={date}
+
+                            format="DD-MM-YYYY"
+                            onChange={(e) => {
+
+                                setDate(e);
+                                setDateError('');
+                                setSummaryError('');
+                                setErrorMessages('');
+                            }} />
+                    </LocalizationProvider> */}
                     <ErrorMessagesComponent errorMessage={errorMessages?.date} />
                 </div>
 

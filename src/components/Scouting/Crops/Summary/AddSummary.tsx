@@ -282,26 +282,24 @@ const AddSummary = () => {
                         <MobileDatePicker sx={{
                             width: "100%",
                             '& .MuiOutlinedInput-notchedOutline ': {
-                                background: "#fff",
                                 borderColor: "grey !important",
-                                borderRadius: "8px !important"
+                                borderRadius: "8px !important",
+                                color: "#000"
                             },
                             '& .MuiInputBase-input': {
                                 padding: "12px 14px",
-                                borderRadius: "10px !important"
+                                borderRadius: "10px !important",
+                                color: "#000",
+                                background: "#fff",
+
 
                             }
                         }}
                             value={date}
 
                             format="DD-MM-YYYY"
+                            label={"Select Date"}
                             onChange={(e) => {
-                                const selectedDate = new Date(e);
-                                const currentDate = new Date();
-                                console.log(e);
-                                if (selectedDate > currentDate) {
-                                    return;
-                                }
 
                                 setDate(e);
                                 setErrorMessages('');

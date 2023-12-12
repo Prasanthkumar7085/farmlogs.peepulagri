@@ -602,7 +602,7 @@ const FileUploadComponent = () => {
               className={styles.iconsiconArrowLeft}
               alt=""
               src="/iconsiconarrowleft.svg"
-              onClick={() => router.push(`/farms/${router.query.farm_id}/crops`)}
+              onClick={() => router.back()}
             />
             <Typography className={styles.viewFarm}>Add Scout</Typography>
             <div className={styles.headericon} id="header-icon">
@@ -824,7 +824,7 @@ const FileUploadComponent = () => {
                     </Button>
                     <Button
                       className={styles.submit}
-                      color="primary"
+
                       name="submit"
                       id="submit"
                       size="large"

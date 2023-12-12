@@ -49,6 +49,8 @@ const EditTagsForSingleAttachment = ({
           padding: "0 1rem 1rem",
           borderRadius: "20px 20px 0 0",
           background: "#F5F7FA",
+          maxWidth: "calc(500px - 30px)",
+          margin: "0 auto"
         },
       }}
     >

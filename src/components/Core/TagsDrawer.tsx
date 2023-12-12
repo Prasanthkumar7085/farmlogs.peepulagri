@@ -45,6 +45,11 @@ const TagsDrawer = ({
       anchor={"bottom"}
       open={isDrawerOpen}
       className={styles.AddTagsDrawer}
+      sx={{
+        '& .MuiPaper-root': {
+          maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0"
+        }
+      }}
     >
       <div className={styles.drawerHeading}>
         <Typography variant="h6">Tag Images</Typography>

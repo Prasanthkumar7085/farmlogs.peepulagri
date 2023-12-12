@@ -108,9 +108,7 @@
   box-shadow: none !important;
 }
 
-.submitBtnSuccess 
-.submitBtnSuccess :hover
-{
+.submitBtnSuccess .submitBtnSuccess :hover {
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 500;
@@ -142,8 +140,8 @@
 .updateSubmitBtn {
   text-transform: capitalize !important;
   border-radius: 8px;
-  border: 1px solid #3462CF;
-  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%);
+  border: 1px solid #d94841;
+  background: #d94841;
   box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
   color: var(--White, #FFF);
   font-family: "Inter", sans-serif !important;
@@ -154,7 +152,7 @@
   min-width: inherit;
 }
 
-.updateSubmitBtnDisabled{
+.updateSubmitBtnDisabled {
   text-transform: capitalize !important;
   border-radius: 8px;
   border: 1px solid #bababa !important;
@@ -177,7 +175,8 @@
   background-color: #d7ffeb;
   border-bottom: 1px solid #bcdecd;
 }
-.tagNames [class*="MuiChip-outlined"]{
+
+.tagNames [class*="MuiChip-outlined"] {
   background: #ffffff84;
   overflow: hidden;
 }

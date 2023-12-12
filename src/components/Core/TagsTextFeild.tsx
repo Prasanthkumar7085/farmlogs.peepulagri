@@ -118,18 +118,18 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                 {tagValue?.map((item: string, index: number) => {
                   return (
                     <Chip
-                      icon={
-                        <SellIcon
-                          sx={{ width: "12px", paddingInlineStart: "4px" }}
-                        />
-                      }
+                      sx={{
+                        border: "1px solid #d94841", color: "#d94841", marginRight: "5px", marginBottom: "10px",
+                        '& .MuiSvgIcon-root': {
+                          color: "#d94841"
+                        }
+                      }}
                       onDelete={() => handleDeleteChip(item)}
                       key={index}
                       label={item}
                       className={styles.tagsName}
                       variant="outlined"
                       size="medium"
-                      color="success"
                     />
                   );
                 })}
@@ -230,7 +230,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         {!isTextFieldOpen && (
           <IconButton
             onClick={() => setIsTextFieldOpen(true)}
-            sx={{ color: "green" }}
+            sx={{ color: "green", border: "1px solid grey", borderRadius: "4px" }}
           >
             <AddIcon />
           </IconButton>

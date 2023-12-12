@@ -39,7 +39,7 @@ const DashBoardHeader = ({
   const [locationValue, setLocationValue] = useState<{
     title: string;
     _id: string;
-  } | null>();
+  } | null>({ title: "All", _id: "1" });
   const [dataSetting, setDataSetting] = useState(false);
   const router = useRouter()
 
@@ -77,6 +77,7 @@ const DashBoardHeader = ({
     } else {
       setLocationValue(null);
       setLocation("All");
+
       getDataOnLocationChange("");
     }
   };
@@ -85,7 +86,6 @@ const DashBoardHeader = ({
     <div className={styles.dashboardheader} id="dashboard-header">
       <div className={styles.dashboardheading} id="dashboard-heading">
         <div className={styles.logoBlock}>
-
           <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} onClick={() => router.push("/dashboard")} />
           <Typography className={styles.dashboard}>Farms</Typography>
         </div>
@@ -113,6 +113,7 @@ const DashBoardHeader = ({
                   size="small"
                   placeholder="Enter location here"
                   fullWidth
+                  defaultValue={"All"}
                   // variant="outlined"
                   sx={{
                     "& .MuiInputBase-root": {

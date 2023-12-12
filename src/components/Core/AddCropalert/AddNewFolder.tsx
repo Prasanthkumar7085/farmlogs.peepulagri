@@ -17,6 +17,7 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import AlertComponent from "../AlertComponent";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
+import LoadingComponent from "../LoadingComponent";
 
 const NewFolderDiloag = ({
   open,
@@ -119,6 +120,7 @@ const NewFolderDiloag = ({
       if (responseData.success) {
         setAlertMessage(responseData.message);
         setAlertType(true);
+        router.back();
       } else if (responseData?.status == 422) {
         setErrorMessages(responseData?.errors);
       } else if (responseData?.statusCode == 403) {
@@ -146,9 +148,7 @@ const NewFolderDiloag = ({
     if (response?.success) {
       setAlertMessage(response?.message);
       setAlertType(true)
-      setTimeout(() => {
-        router.back()
-      }, 1500);
+      router.back()
 
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
@@ -255,10 +255,7 @@ const NewFolderDiloag = ({
 
       <div className={styles.newfolder}>
         <div className={styles.frame}>
-          <h3 className={styles.newFolder}>
-            <SpaIcon />
-            <span>{defaultTitle ? `Rename Crop` : `New Crop`}</span>
-          </h3>
+
 
           <div style={{ textAlign: "left", width: "100%" }}>
             <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
@@ -272,6 +269,7 @@ const NewFolderDiloag = ({
             onChange={(_, newValue: any) => {
               setTitle(newValue?.title || newValue?.name);
               setDefaultValue(newValue);
+              setErrorMessages('')
             }}
             getOptionLabel={(e) => e.title || e.name}
             renderInput={(params) => (
@@ -280,7 +278,7 @@ const NewFolderDiloag = ({
                 className={styles.input}
                 color="primary"
                 size="small"
-                placeholder="Enter folder title here"
+                placeholder="Select Crop"
                 variant="outlined"
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
@@ -311,7 +309,7 @@ const NewFolderDiloag = ({
             className={styles.input}
             name="area"
             size="small"
-            placeholder="Enter total area"
+            placeholder="Enter area"
             fullWidth
             type={"number"}
             onWheel={(e: any) => e.target.blur()}
@@ -329,7 +327,10 @@ const NewFolderDiloag = ({
               step: "any",
             }}
             value={area}
-            onChange={(e) => setArea(e.target.value)}
+            onChange={(e) => {
+              setArea(e.target.value);
+              setErrorMessages('')
+            }}
             InputProps={{ style: { appearance: "none" } }}
             onKeyDown={(e: any) => {
               if (e.key == "Enter") createCrop();
@@ -380,6 +381,7 @@ const NewFolderDiloag = ({
             setAlertMessage={setAlertMessage}
             mobile={true}
           />
+          <LoadingComponent loading={loadingForAdd} />
         </div>
       </div>
     </div>

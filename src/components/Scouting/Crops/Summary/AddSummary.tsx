@@ -44,10 +44,12 @@ const AddSummary = () => {
 
     const addSummary = async () => {
         setLoading(true);
+        setErrorMessages('')
 
         try {
             let body = {
                 farm_id: farmId,
+                crop_id: cropId,
                 content: comment,
                 date: date
             };
@@ -61,7 +63,7 @@ const AddSummary = () => {
             };
 
             let response: any = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${cropId}/day-summary`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summary`,
                 options
             );
             let responseData = await response.json();
@@ -70,9 +72,10 @@ const AddSummary = () => {
                 setSuccess(responseData.message);
                 setShowSuccessAlert(true);
                 setLoading(false);
+                router.back()
                 setTimeout(() => {
                     setShowSuccessAlert(false);
-                    router.back()
+
                 }, 1500);
             } else if (responseData.status == 422) {
                 setErrorMessages(responseData.errors)
@@ -181,6 +184,7 @@ const AddSummary = () => {
         }
     }
     const onSelectValueFromCropsDropDown = (value: any) => {
+        console.log(value);
 
         if (value) {
             setCropId(value?._id)
@@ -263,6 +267,7 @@ const AddSummary = () => {
                             }
 
                             setDate(e.target.value);
+                            setErrorMessages('');
 
                         }}
                         inputProps={{ max: getCurrentDate() }}
@@ -285,6 +290,7 @@ const AddSummary = () => {
                         value={comment}
                         onChange={(e) => {
                             setComment(e.target.value);
+                            setErrorMessages('');
                         }}
                         sx={{
                             background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
@@ -310,7 +316,7 @@ const AddSummary = () => {
                     {success}
                 </Alert>
             </Snackbar>
-            <Snackbar
+            {/* <Snackbar
                 open={showErrorAlert}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
@@ -318,7 +324,7 @@ const AddSummary = () => {
                     <AlertTitle>Validation Errors</AlertTitle>
                     {summaryError}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
             <LoadingComponent loading={loading} />
 
         </div>

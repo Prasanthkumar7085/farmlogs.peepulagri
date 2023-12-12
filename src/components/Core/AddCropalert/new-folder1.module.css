@@ -60,8 +60,15 @@
 
 
 .buttoncreatefolder {
-  color: #fff !important;
-  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%) !important;
+border-radius: 4px !important;
+  border: 1px solid #d94841 !important;
+  background: #d94841 !important;
+  box-shadow: 4px 4px 10px 0px #0202460d !important;
+  color: #FFF !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(15px, 3.5vw, 16px) !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
 }
 
 .buttoncreatefolder:disabled {
@@ -71,12 +78,10 @@
 
 
 .buttons {
-  align-self: stretch;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 1rem;
-  margin-top: 2rem;
+  display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .newfolder {

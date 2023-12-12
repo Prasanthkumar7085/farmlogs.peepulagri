@@ -267,17 +267,19 @@ const UpdateSummary = () => {
             if (responseData.status == 200) {
                 setSuccess(responseData.message);
                 setShowSuccessAlert(true);
+                router.back()
                 setTimeout(() => {
                     setShowSuccessAlert(false);
+
                 }, 1500);
-                router.back()
+
 
             } else if (responseData.status == 422) {
                 setErrorMessages(responseData.errors)
 
                 setDateError(responseData.errors.date);
                 setCommentError(responseData.errors.content);
-                setSummaryError(responseData.errors.summary);
+                // setSummaryError(responseData.errors.summary);
                 setShowErrorAlert(true);
                 setTimeout(() => {
                     setShowErrorAlert(false);
@@ -369,6 +371,7 @@ const UpdateSummary = () => {
                             setDate(e.target.value);
                             setDateError('');
                             setSummaryError('');
+                            setErrorMessages('');
                         }}
                         inputProps={{ max: getCurrentDate() }}
                         sx={{
@@ -399,6 +402,7 @@ const UpdateSummary = () => {
                             setComment(e.target.value);
                             setCommentError('');
                             setSummaryError('');
+                            setErrorMessages('');
                         }}
                         sx={{
                             background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
@@ -425,7 +429,7 @@ const UpdateSummary = () => {
                     {success}
                 </Alert>
             </Snackbar>
-            <Snackbar
+            {/* <Snackbar
                 open={showErrorAlert}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
@@ -433,7 +437,7 @@ const UpdateSummary = () => {
                     <AlertTitle>Error</AlertTitle>
                     {summaryError}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
             <LoadingComponent loading={loading} />
         </div>
     )

@@ -10,23 +10,30 @@
   background: var(--Stroke, #E9EDF1);
 }
 
+.ImageContainBlock img {
+  height: 90vh;
+  object-fit: contain;
+}
+
 .tagsLabel {
   height: 25px !important;
   padding-left: 4px !important;
   background-color: green !important;
   margin-right: 10px !important;
   font-size: 13px !important;
-  color: white!important;
+  color: white !important;
 }
-.tagsName{
+
+.tagsName {
   height: 25px !important;
   padding-left: 4px !important;
-  color:black !important;
+  color: black !important;
   margin-right: 10px !important;
   font-size: 13px !important;
   margin-bottom: 5px !important;
-  
+
 }
+
 .scoutingdetails {
   padding: 1rem 1.2rem;
   border-bottom: 1px solid #E9EDF1;
@@ -269,25 +276,29 @@
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 0.5rem;
 }
+
 .galleryContainer {
   display: grid;
   grid-template-columns: 1fr 450px;
 }
+
 .RightImageContainer {
   height: 100vh;
   overflow-y: auto;
   /* background-color: #000; */
   width: calc(92vw - 450px);
 }
+
 .galleryItemDetails {
   background-color: #ffffff;
   z-index: 100;
 }
-.galleryView [class^= "carousel-status"]{
+
+.galleryView [class^="carousel-status"] {
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: rgba(0,0,0,0.75);
+  background-color: rgba(0, 0, 0, 0.75);
   padding: 3px 10px;
-  border-radius: 4px 0 0 4px; 
+  border-radius: 4px 0 0 4px;
 }

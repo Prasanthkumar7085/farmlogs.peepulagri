@@ -134,6 +134,7 @@ const SingleScoutViewDetails = () => {
 
 
           <div
+            className={styles.ImageContainBlock}
             style={{
               width: "85%",
               margin: "0 auto",

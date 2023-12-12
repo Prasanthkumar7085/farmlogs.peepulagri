@@ -25,7 +25,7 @@ const TablePaginationComponentForScouts = ({
     setPageNum(1);
   };
 
-  const [limitOptions] = useState([10, 20, 40, 80, 100]);
+  const [limitOptions] = useState([50, 70, 90, 100]);
 
   return (
     <Card className={styles.tablePagination}>
@@ -37,7 +37,7 @@ const TablePaginationComponentForScouts = ({
         <Select
           value={noOfRows}
           onChange={handlePagerowChange}
-          defaultValue={router?.query?.limit ? router?.query?.limit : 10}
+          defaultValue={router?.query?.limit ? router?.query?.limit : 50}
           sx={{
             height: "25px !important",
             borderRadius: "3px !important",
@@ -59,10 +59,10 @@ const TablePaginationComponentForScouts = ({
             ? 1
             : (paginationDetails?.page - 1) * paginationDetails?.limit + 1) ||
             0 +
-              " - " +
-              (paginationDetails?.page == paginationDetails?.total_pages
-                ? paginationDetails?.total || 0
-                : paginationDetails?.total < paginationDetails?.limit
+            " - " +
+            (paginationDetails?.page == paginationDetails?.total_pages
+              ? paginationDetails?.total || 0
+              : paginationDetails?.total < paginationDetails?.limit
                 ? paginationDetails?.total || 0
                 : paginationDetails?.page * paginationDetails?.limit || 0)}{" "}
           of {paginationDetails?.total} {values}

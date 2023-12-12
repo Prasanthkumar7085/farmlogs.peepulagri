@@ -497,7 +497,7 @@ const ListScouts: FunctionComponent = () => {
           </Button> */}
         </div>
       </div>
-      <div className={styles.allFarms}>
+      <div className={styles.AllScoutsWeb}>
         {data?.length
           ? data.map((item: any, index: any) => {
             return (

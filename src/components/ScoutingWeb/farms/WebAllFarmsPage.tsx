@@ -263,45 +263,44 @@ const AllFarmsPage = () => {
           <MenuOptions />
         </Menu>
       </div>
-      <div className={styles.allFarms}>
-        {data.length ? (
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-          >
+      {data.length ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", overflowX: "hidden" }}>
+
+          <div className={styles.allFarms}>
             <ScoutingFarmDetailsCard
               getFarmsData={getFarmsData}
               data={data}
               onViewClick={onViewClick}
             />
-            <TablePaginationForFarms
-              paginationDetails={paginationDetails}
-              capturePageNum={capturePageNum}
-              captureRowPerItems={captureRowPerItems}
-              values="Farms"
-            />
           </div>
-        ) : !loading ? (
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              src="/no-farms-image.svg"
-              alt="noFarms"
-              width={450}
-              height={350}
-            />
-            <p style={{ margin: "0" }}>No farms</p>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
+          <TablePaginationForFarms
+            paginationDetails={paginationDetails}
+            capturePageNum={capturePageNum}
+            captureRowPerItems={captureRowPerItems}
+            values="Farms"
+          />
+        </div>
+      ) : !loading ? (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src="/no-farms-image.svg"
+            alt="noFarms"
+            width={450}
+            height={350}
+          />
+          <p style={{ margin: "0" }}>No farms</p>
+        </div>
+      ) : (
+        ""
+      )}
 
       <LoadingComponent loading={loading} />
     </div>

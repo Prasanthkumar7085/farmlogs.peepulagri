@@ -452,7 +452,11 @@ const FileUploadComponent = () => {
         }
         else {
           toast.success("FarmImages added successfully");
-          router.back()
+          setTimeout(() => {
+            setLoading(false);
+            router.back()
+          }, 2000);
+
         }
       }
     } catch (err) {

@@ -356,7 +356,7 @@ const TasksTableComponent = ({
                   setTaskId(info.row.original?._id);
                 }}
               >
-                <SummarizeIcon sx={{ color: "#4986f7" }} />
+                <SummarizeIcon sx={{ color: "#4986f7", fontSize: "1.3rem" }} />
               </div>
             </div>
           }

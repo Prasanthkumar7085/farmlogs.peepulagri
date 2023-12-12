@@ -296,7 +296,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
             Due Date
           </label>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <div className={styles.singleDetailsBox}>
+            <div className={styles.singleDetailsBox} style={{ display: "flex" }}>
               {editField == "deadline" && editFieldOrNot ? (
                 <div className={styles.responseDate2} style={{ width: "100%" }}>
                   <div style={{ display: "flex", width: "100%" }}>
@@ -336,9 +336,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         }}
                       />
                     </LocalizationProvider>
-                    {error && <Typography variant="body2" color="error">{error}</Typography>}
 
                   </div>
+
                 </div>
               ) : (
                 <div style={{ display: "flex" }}>
@@ -390,7 +390,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
               )}
             </div>
           </div>
-          <ErrorMessages errorMessages={errorMessages} keyname="deadline" />
+          <div>
+            {error && <Typography variant="body2" color="error">{error}</Typography>}
+
+
+            <ErrorMessages errorMessages={errorMessages} keyname="deadline" />
+          </div>
         </div>
       </div>
       <div className={styles.viewHeader}>

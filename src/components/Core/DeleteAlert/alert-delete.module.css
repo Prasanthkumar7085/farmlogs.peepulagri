@@ -1,41 +1,36 @@
-.infoIcon {
-  width: 40px;
-  height: 40px;
-}
-
 .areYouSure {
   line-height: 24px;
-  font-size: clamp(14px, 3vw, 16px);
+  font-size: clamp(12px, 3vw, 14px);
   font-weight: 500;
+  color: #d32f2f;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 
 .thisWillBe {
-  font-size: clamp(12px, 3vw, 14px);
+  font-size: clamp(12px, 2.5vw, 12px);
   line-height: 21px;
-  display: flex;
-  align-items: center;
-  font-family: 'inter';
+  text-align: center;
 }
 
-.text {
-  line-height: 24px;
-  font-weight: 500;
-}
+
 
 .buttoncancel,
 .buttongotit {
   flex: 1;
-  border-radius: var(--br-5xs);
+  border-radius: 4px !important;
   overflow: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   padding: .5rem;
-  font-family: 'Inter', sans-serif; 
+  font-family: 'Inter', sans-serif !important;
   font-weight: 500;
   letter-spacing: 0.05rem;
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 2.5vw, 14px);
 }
 
 .buttoncancel {
@@ -56,16 +51,14 @@
   color: var(--gray-700) !important;
 }
 
+.buttons {
+  margin-top: 2rem;
+}
+
 .alertdelete {
-  border-radius: var(--br-base);
-  background-color: var(--white);
-  border: 1px solid var(--gray-300);
   overflow: hidden;
   flex-direction: column;
   justify-content: center;
   padding: var(--padding-base);
-  text-align: left;
-  font-size: var(--text-md-medium-size);
-  color: var(--high-emphasis);
-  font-family: var(--text-md-medium);
+
 }

@@ -185,7 +185,7 @@ const POC = ({
                 {...params}
                 placeholder={"Select POC to this Procurement"}
                 sx={{ width: "100%", background: "#fff" }}
-                onChange={(e) => {}}
+                onChange={(e) => { }}
               />
             )}
             sx={{
@@ -226,6 +226,7 @@ const POC = ({
         deleteFarm={deletePOC}
         setDialogOpen={setShowDeletePOC}
         loading={deleteLoading}
+        deleteTitleProp={"POC"}
       />
 
       <LoadingComponent loading={loading} />

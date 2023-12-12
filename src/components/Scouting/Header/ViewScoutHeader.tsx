@@ -34,7 +34,7 @@ const ViewScoutHeader = ({ name }: any) => {
     const deleteScout = async () => {
         setLoading(true);
         handleClose();
-        const response = await deleteScoutService(router.query.scout_id as string,accessToken);
+        const response = await deleteScoutService(router.query.scout_id as string, accessToken);
         if (response?.success) {
             setAlertMessage(response?.message);
             setAlertType(true);
@@ -82,12 +82,12 @@ const ViewScoutHeader = ({ name }: any) => {
                     }}
                 >
                     {/* <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem> */}
-                    <MenuItem onClick={() => { setAnchorEl(null); setDialogOpen(true)}}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
+                    <MenuItem onClick={() => { setAnchorEl(null); setDialogOpen(true) }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
                 </Menu>
             </div>
             <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
             {/* <LoadingComponent loading={loading} /> */}
-            <AlertDelete open={dialogOpen} deleteFarm={deleteScout} setDialogOpen={setDialogOpen} loading={loading} />
+            <AlertDelete open={dialogOpen} deleteFarm={deleteScout} setDialogOpen={setDialogOpen} loading={loading} deleteTitleProp={"Scout"} />
         </div>
 
     );

@@ -54,7 +54,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   };
 
   const addNewTag = () => {
-    if (!newTagValue) {
+    if (!newTagValue?.trim()) {
       return;
     }
     if (tagValue.includes(newTagValue) || tag.includes(newTagValue)) {
@@ -246,7 +246,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       </div>
 
       {isTextFieldOpen && ( // Conditionally render the submit button based on the state
-        <Button sx={{ background: "#d94841" }} variant="contained" color="primary" onClick={addNewTag}>
+        <Button className={styles.addNewTagBtn} sx={{ background: "#d94841" }} variant="contained" onClick={addNewTag}>
           Add
         </Button>
       )}

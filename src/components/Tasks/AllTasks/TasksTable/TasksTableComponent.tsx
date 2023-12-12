@@ -16,24 +16,24 @@ import Link from "next/link";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import ViewLogs from "../../ViewTask/ViewLogs";
 
-interface pageProps {
-  data: Array<TaskResponseTypes> | any;
-  getData: ({
-    page = 1,
-    limit = 10,
-    search_string = "",
-    sortBy = "",
-    sortType = "",
-    selectedFarmId = "",
-    status = "",
-  }: ApiCallProps) => void;
-  paginationDetails: any;
-}
+// interface pageProps {
+//   data: Array<TaskResponseTypes> | any;
+//   getData: ({
+//     page = 1,
+//     limit = 10,
+//     search_string = "",
+//     sortBy = "",
+//     sortType = "",
+//     selectedFarmId = "",
+//     status = "",
+//   }: ApiCallProps) => void;
+//   paginationDetails: any;
+// }
 const TasksTableComponent = ({
   data,
   getData,
   paginationDetails,
-}: pageProps) => {
+}: any) => {
   const router = useRouter();
 
   const userType = useSelector(
@@ -388,6 +388,7 @@ const TasksTableComponent = ({
         setDialogOpen={setDialogOpen}
         deleteFarm={deleteTask}
         loading={deleteLoading}
+        deleteTitleProp={"Task"}
       />
 
       <DrawerBoxComponent

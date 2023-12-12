@@ -16,18 +16,20 @@ const AddLocationDialog = ({ open, captureResponseDilog, loading, defaultTitle, 
   useEffect(() => {
     setLocation(defaultTitle);
   }, [open]);
-  
+
 
   return (
     <Dialog open={open} PaperProps={{
       sx: {
-        borderRadius: "8px", width: "90%", margin: "0",
+        borderRadius: "8px", width: "80%", margin: "0",
+        maxWidth: "330px",
+        padding: "0.5rem"
       }
     }}>
 
       <div className={styles.newfolder}>
         <div className={styles.frame}>
-          <h3 className={styles.newFolder}><AddLocationAltIcon /> <span>{`Add Location`}</span></h3>
+          <h3 className={styles.newFolder}>New Location</h3>
           <TextField
             className={styles.input}
             color="primary"
@@ -39,15 +41,28 @@ const AddLocationDialog = ({ open, captureResponseDilog, loading, defaultTitle, 
             onKeyDown={(e: any) => { if (e.key == 'Enter') { captureResponseDilog(location) } }}
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: "8px !important"
+                borderRadius: "4px !important",
+                borderColor: "green !important"
+              },
+              '& .MuiInputBase-input': {
+                padding: "12px 14px !important"
               }
             }}
             error={errorMessages ? Boolean(errorMessages['name']) : false}
             helperText={errorMessages ? errorMessages['name'] : ""}
           />
-         
+
         </div>
         <div className={styles.buttons}>
+          <Button
+            className={styles.buttoncancelfolder}
+            color="primary"
+            size="small"
+            variant="outlined"
+            onClick={() => { captureResponseDilog(false); setLocation('') }}
+          >
+            Cancel
+          </Button>
           <Button
             className={styles.buttoncreatefolder}
             color="primary"
@@ -58,18 +73,10 @@ const AddLocationDialog = ({ open, captureResponseDilog, loading, defaultTitle, 
           >
             {loading ?
               <CircularProgress size="1.5rem" sx={{ color: "white" }} /> :
-             ('Add Location')}
+              ('Add')}
 
           </Button>
-          <Button
-            className={styles.buttoncancelfolder}
-            color="primary"
-            size="small"
-            variant="outlined"
-            onClick={() => { captureResponseDilog(false); setLocation('')}}
-          >
-            Cancel
-          </Button>
+
         </div>
       </div>
     </Dialog >

@@ -1,15 +1,12 @@
 .newFolder {
   color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(16px, 4vw, 20px);
+  font-size: clamp(14px, 3vw, 16px);
   font-weight: 500;
   line-height: 100%;
   margin: 0;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #05A155;
+  text-align: center;
+
 }
 
 .input {
@@ -25,31 +22,43 @@
   gap: var(--gap-base);
 }
 
-.buttoncreatefolder{
-  align-self: stretch !important;
+.buttoncreatefolder {
   text-transform: capitalize !important;
-  border-radius: 8px !important;
+  border-radius: 4px !important;
   box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
   font-size: clamp(14px, 3vw, 16px) !important;
   padding-block: 0.5rem !important;
   font-weight: 500 !important;
-}
-.buttoncancelfolder {
-  align-self: stretch !important;
-  text-transform: capitalize !important;
-  border-radius: 8px !important;
-  border: 1px solid #3462CF !important;
-  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
-  font-size: clamp(14px, 3vw, 16px) !important;
-  padding-block: 0.5rem !important;
-  font-weight: 500 !important;
+  font-family: "Inter", sans-serif !important;
 }
 
+.buttoncancelfolder {
+  text-transform: capitalize !important;
+  border-radius: 4px !important;
+  color: #d94841 !important;
+  border: 1px solid #d94841 !important;
+  box-shadow: 4px 4px 10px 0px rgba(2, 2, 70, 0.05) !important;
+  font-size: clamp(14px, 3vw, 16px) !important;
+  padding-block: 0.5rem !important;
+  font-weight: 500 !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+.buttoncancelfolder:hover {
+  color: #d94841 !important;
+  border: 1px solid #d94841 !important;
+}
 
 .buttoncreatefolder {
   color: #fff !important;
-  background: linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%) !important;
+  background: #d94841 !important;
 }
+
+.buttoncreatefolder:hover {
+  color: #fff !important;
+  background: #d94841 !important;
+}
+
 .buttoncreatefolder:disabled {
   color: #6b6a6a !important;
   background: linear-gradient(142deg, #cfcfcf 0%, #cfcfcf 97.71%) !important;
@@ -58,12 +67,14 @@
 
 .buttons {
   align-self: stretch;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   justify-content: center;
 }
-.buttons > *{
+
+.buttons>* {
   flex-grow: 1;
 }
 
@@ -72,4 +83,5 @@
   background-color: #fff;
   align-items: center;
   padding: 1.5rem 1rem 2rem;
+  text-align: center;
 }

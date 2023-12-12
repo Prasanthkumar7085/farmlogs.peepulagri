@@ -379,63 +379,63 @@ const MaterialsRequired: NextPage = () => {
               <TableBody>
                 {materials.length
                   ? materials.map(
-                      (
-                        item: {
-                          _id: string;
-                          name: string;
-                          required_qty: number;
-                          required_units: string;
-                          available_qty: number | null;
-                          available_units: string;
-                        },
-                        index: number
-                      ) => {
-                        return (
-                          <TableRow key={index}>
-                            <TableCell>{index + 1}.</TableCell>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>
-                              {item.required_qty ? `${item.required_qty}` : ""}
-                              {item.required_units
-                                ? `(${item.required_units})`
-                                : ""}
-                            </TableCell>
-                            <TableCell>
-                              {item.available_qty
-                                ? `${item.available_qty}`
-                                : ""}
-                              {item.available_units
-                                ? `(${item.available_units})`
-                                : ""}
-                            </TableCell>
-                            <TableCell>
-                              <IconButton
-                                onClick={() => {
-                                  setEditAvailableQty(item.available_qty);
-                                  setEditAvailableUnits(item.available_units);
-                                  setEditRequiredQty(item.required_qty);
-                                  setEditRequiredUnits(item.required_units);
-                                  setEditNameValue(item.name);
+                    (
+                      item: {
+                        _id: string;
+                        name: string;
+                        required_qty: number;
+                        required_units: string;
+                        available_qty: number | null;
+                        available_units: string;
+                      },
+                      index: number
+                    ) => {
+                      return (
+                        <TableRow key={index}>
+                          <TableCell>{index + 1}.</TableCell>
+                          <TableCell>{item.name}</TableCell>
+                          <TableCell>
+                            {item.required_qty ? `${item.required_qty}` : ""}
+                            {item.required_units
+                              ? `(${item.required_units})`
+                              : ""}
+                          </TableCell>
+                          <TableCell>
+                            {item.available_qty
+                              ? `${item.available_qty}`
+                              : ""}
+                            {item.available_units
+                              ? `(${item.available_units})`
+                              : ""}
+                          </TableCell>
+                          <TableCell>
+                            <IconButton
+                              onClick={() => {
+                                setEditAvailableQty(item.available_qty);
+                                setEditAvailableUnits(item.available_units);
+                                setEditRequiredQty(item.required_qty);
+                                setEditRequiredUnits(item.required_units);
+                                setEditNameValue(item.name);
 
-                                  setEditMaterialId(item._id);
-                                  setEditMaterialOpen(true);
-                                }}
-                              >
-                                <EditOutlined sx={{ color: "red" }} />
-                              </IconButton>
-                              <IconButton
-                                onClick={() => {
-                                  setDeleteMaterialId(item._id);
-                                  setDeleteMaterialOpen(true);
-                                }}
-                              >
-                                <DeleteOutline sx={{ color: "red" }} />
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      }
-                    )
+                                setEditMaterialId(item._id);
+                                setEditMaterialOpen(true);
+                              }}
+                            >
+                              <EditOutlined sx={{ color: "red" }} />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => {
+                                setDeleteMaterialId(item._id);
+                                setDeleteMaterialOpen(true);
+                              }}
+                            >
+                              <DeleteOutline sx={{ color: "red" }} />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )
                   : "No Materials"}
               </TableBody>
             </Table>
@@ -448,6 +448,7 @@ const MaterialsRequired: NextPage = () => {
         deleteFarm={deleteMaterial}
         setDialogOpen={setDeleteMaterialOpen}
         loading={deleteLoading}
+        deleteTitleProp={"Material"}
       />
 
       <EditMaterialDrawer

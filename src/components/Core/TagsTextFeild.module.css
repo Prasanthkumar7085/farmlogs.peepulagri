@@ -11,6 +11,14 @@
     word-break: break-word;
 }
 
+.addNewTagBtn {
+    background-color: #d94841 !important;
+}
+
+.addNewTagBtn:hover {
+    background-color: #d94841 !important;
+}
+
 .listTags {
     display: flex;
     align-items: center;

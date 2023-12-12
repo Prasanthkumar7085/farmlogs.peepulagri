@@ -427,7 +427,7 @@ const ImageGalleryComponent = () => {
   };
 
   return (
-    <div className={styles.scoutingView} style={{ backgroundColor: "#f5f7fa" }}>
+    <div className={styles.scoutingView}>
       {/* <div className={styles.mobileScoutingViewHeader}>
         <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
           <Link
@@ -470,7 +470,7 @@ const ImageGalleryComponent = () => {
 
       {value == "1" ? (
         <div className={styles.stickyHeader}>
-          <div className={styles.dateRange}>{dateRange}</div>
+          <div className={styles.dateRange}>{dateRange ? dateRange : ""}</div>
           {tagsCheckBoxOpen ? (
             <div style={{ display: "flex", alignItems: "center" }}>
               <Button
@@ -803,6 +803,7 @@ const ImageGalleryComponent = () => {
           deleteFarm={deleteImages}
           setDialogOpen={setDeleteOpen}
           loading={deleteLoading}
+          deleteTitleProp={"Images"}
         />
       ) : (
         ""

@@ -253,6 +253,7 @@ const ScoutingFarmDetailsCard = ({
         setDialogOpen={setDeleteDialogOpen}
         open={deleteDialogOpen}
         loading={deleteLoading}
+        deleteTitleProp={"Farm"}
       />
       <AlertComponent
         alertMessage={alertMessage}

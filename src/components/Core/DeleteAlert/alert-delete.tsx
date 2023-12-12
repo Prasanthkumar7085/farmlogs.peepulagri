@@ -1,31 +1,44 @@
 import { Button, CircularProgress, Dialog } from "@mui/material";
 import styles from "./alert-delete.module.css";
+import { useEffect, useState } from "react";
 
 interface pagePropsType {
   open: boolean;
   deleteFarm: () => void;
   setDialogOpen: (newValue: boolean) => void;
   loading: boolean;
+  deleteTitleProp?: string;
 }
 const AlertDelete = ({
   open,
   deleteFarm,
   setDialogOpen,
   loading,
+  deleteTitleProp,
+
 }: pagePropsType) => {
+  // const [deleteContent, setDeleteContent] = useState("");
+  // useEffect(() => {
+  //   if (deleteTitleProp) {
+  //     setDeleteContent(deleteTitleProp)
+  //   } else {
+  //     setDeleteContent("Farm")
+  //   }
+  // },
+  //   [])
   return (
     <Dialog
       open={open}
-      PaperProps={{ sx: { borderRadius: "16px", minWidth: "290px", maxWidth: "320px" } }}
+      PaperProps={{ sx: { borderRadius: "10px", minWidth: "290px", maxWidth: "320px" } }}
     >
       <div className={styles.alertdelete}>
-        <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
-        <div>
+
+        <div style={{ margin: "0 auto" }}>
           <div
             className={styles.areYouSure}
-          >{`Are you sure  Want To Delete `}</div>
+          >{`Delete this ${deleteTitleProp}`}</div>
           <div className={styles.thisWillBe}>
-            This Will Be deleted Permanently
+            {`This ${deleteTitleProp} will be deleted permanently`}
           </div>
         </div>
         <div className={styles.buttons}>

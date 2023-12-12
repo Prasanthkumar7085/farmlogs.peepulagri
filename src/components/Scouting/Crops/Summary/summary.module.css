@@ -51,7 +51,7 @@
     display: flex !important;
     align-items: center !important;
     gap: 0.4rem !important;
-    padding: 18px ;
+    padding: 18px;
     z-index: 3 !important;
     padding: 10px 12px !important;
     font-size: 14px !important;
@@ -59,13 +59,14 @@
     font-family: "Inter", sans-serif !important;
     border-radius: 20px !important;
 }
+
 .AddSummarybtn:hover {
     background: #d94841 !important;
     color: #ffffff !important;
     display: flex !important;
     align-items: center !important;
     gap: 0.4rem !important;
-    padding: 18px ;
+    padding: 18px;
     z-index: 3 !important;
     padding: 10px 12px !important;
     font-size: 14px !important;
@@ -79,7 +80,7 @@
     font-weight: 300;
     margin: 0;
     color: #05A155;
-    font-size: clamp(14px, 3vw, 16px);
+    font-size: clamp(12px, 3.3vw, 16px);
 }
 
 .cropTitle {
@@ -87,7 +88,7 @@
     font-weight: 300;
     margin: 0;
     color: #d94841;
-    font-size: clamp(14px, 3vw, 16px);
+    font-size: clamp(12px, 3.3vw, 16px);
 }
 
 
@@ -111,7 +112,7 @@
 
 .chilliBeingA {
     margin: 0;
-    font-size: 14px;
+    font-size: clamp(12px, 3vw, 16px);
     line-height: 140%;
     color: #000;
     font-weight: 400;

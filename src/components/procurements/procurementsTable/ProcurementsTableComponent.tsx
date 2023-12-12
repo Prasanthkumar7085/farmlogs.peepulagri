@@ -15,24 +15,23 @@ import { deepOrange } from "@mui/material/colors";
 import { setAllFarms } from "@/Redux/Modules/Farms";
 
 
-interface pageProps {
-  data: Array<TaskResponseTypes> | any;
-  getData: ({
-    page = 1,
-    limit = 10,
-    search_string = "",
-    sortBy = "",
-    sortType = "",
-    selectedFarmId = "",
-    status = "",
-  }: ApiCallProps) => void;
-  paginationDetails: any;
-}
+// interface pageProps {
+//   data: Array<TaskResponseTypes> | any;
+//   getData: ({
+//     page = 1,
+//     limit = 10,
+//     search_string = "",
+//     sortBy = "",
+//     sortType = "",
+//     selectedFarmId = "",
+//     status = "",
+//   }: any)
+// }
 const ProcurementsTableComponent = ({
   data,
   getData,
   paginationDetails,
-}: pageProps) => {
+}: any) => {
   const router = useRouter();
 
   const userType = useSelector(
@@ -404,6 +403,7 @@ const ProcurementsTableComponent = ({
         setDialogOpen={setDialogOpen}
         deleteFarm={deleteProcurment}
         loading={deleteLoading}
+        deleteTitleProp={"Procurement"}
       />
 
       {/* <DrawerBoxComponent

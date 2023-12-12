@@ -4,10 +4,10 @@ import { GetServerSideProps } from "next";
 
 const AddFormPage = () => {
     return (
-        <>
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             {/* <Header1 name={'Add Farm'} /> */}
             <AddFarmForm />
-        </>
+        </div>
     )
 }
 export default AddFormPage;

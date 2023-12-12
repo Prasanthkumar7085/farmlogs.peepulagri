@@ -218,7 +218,7 @@ const ViewFarmPage = () => {
       <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
 
       <LoadingComponent loading={loading} />
-      <AlertDelete open={dialogOpen} deleteFarm={deleteFarm} setDialogOpen={setDialogOpen} loading={loading} />
+      <AlertDelete open={dialogOpen} deleteFarm={deleteFarm} setDialogOpen={setDialogOpen} loading={loading} deleteTitleProp={"Farm"} />
 
     </div>
   );

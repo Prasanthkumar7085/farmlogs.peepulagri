@@ -6,7 +6,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import timePipe from "@/pipes/timePipe";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -350,7 +350,17 @@ const AllSummaryComponents = () => {
                                 <div className={styles.header}>
                                     <div className={styles.summaryHeading}>
                                         <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
-                                        <h4 className={styles.cropTitle}>{item?.crop_id?.title}</h4>
+                                        <h6 className={styles.cropTitle}>
+                                            {item?.crop_id?.title
+                                                ? item?.crop_id?.title?.length > 18
+                                                    ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
+                                                    item?.crop_id?.title?.slice(1, 20) +
+                                                    "..."
+                                                    : item?.crop_id?.title[0].toUpperCase() +
+                                                    item?.crop_id?.title?.slice(1)
+                                                : ""}
+                                        </h6>
+                                        {/* <h4 className={styles.cropTitle}>{item?.crop_id?.title}</h4> */}
                                     </div>
                                     <div className={styles.vectorIcon} onClick={(e) => {
                                         handleMenu(e)
@@ -378,7 +388,14 @@ const AllSummaryComponents = () => {
                                 <div className={styles.header}>
                                     <div className={styles.summaryHeading}>
                                         <h4 className={styles.date}>{timePipe(item.date, "DD MMM, YYYY")}</h4>
-                                        <h4 className={styles.cropTitle} >{item?.crop_id?.title}</h4>
+                                        <h4 className={styles.cropTitle} >{item?.crop_id?.title
+                                            ? item?.crop_id?.title?.length > 18
+                                                ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
+                                                item?.crop_id?.title?.slice(1, 20) +
+                                                "..."
+                                                : item?.crop_id?.title[0].toUpperCase() +
+                                                item?.crop_id?.title?.slice(1)
+                                            : ""}</h4>
                                     </div>
                                     <div className={styles.vectorIcon} onClick={(e) => {
                                         handleMenu(e)
@@ -415,7 +432,7 @@ const AllSummaryComponents = () => {
                     horizontal: 'center',
                 }}
             >
-                <MenuItem onClick={() => {
+                <MenuItem sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif", color: "#000" }} onClick={() => {
                     router.push(
                         `/summary/${rowId}/edit`
                     );

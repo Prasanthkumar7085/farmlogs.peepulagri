@@ -316,6 +316,7 @@ const CropCard = ({
           deleteFarm={deleteCrop}
           setDialogOpen={setDeleteOpen}
           loading={deleteLoading}
+          deleteTitleProp={"Crop"}
         />
       ) : (
         ""

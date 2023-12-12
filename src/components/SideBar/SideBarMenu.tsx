@@ -63,13 +63,13 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/scouts"),
       toolTitle: "Scouts",
     },
-    {
-      src: "/tasks-menu-icon.svg",
-      link: "/tasks",
-      isVisible: userName !== "ADMIN",
-      active: router.pathname.includes("/tasks"),
-      toolTitle: "Tasks",
-    },
+    // {
+    //   src: "/tasks-menu-icon.svg",
+    //   link: "/tasks",
+    //   isVisible: userName !== "ADMIN",
+    //   active: router.pathname.includes("/tasks"),
+    //   toolTitle: "Tasks",
+    // },
     // { src: '/calendaricon.svg', link: "/" },
     // { src: '/graph-icon.svg', link: "/" },
   ];

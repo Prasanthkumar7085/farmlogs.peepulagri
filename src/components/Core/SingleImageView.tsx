@@ -39,8 +39,6 @@ const SingleImageView: FC<componentProps> = ({
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
   const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
-  const [isZoom, setISZoom] = useState<any>();
-  const [tagsDetails, setTagsDetails] = useState<any>()
 
   const tagsDrawerClose = (value: any) => {
     if (value == false) {
@@ -127,34 +125,10 @@ const SingleImageView: FC<componentProps> = ({
     }
   };
 
-  const getImageBasedTags = async () => {
-    let options = {
-      method: "GET",
-      headers: new Headers({
-        authorization: accessToken,
-      }),
-    };
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/${router.query.image_id}`,
-        options
-      );
-      const responseData = await response.json();
-      if (responseData.success) {
-        setTagsDetails(responseData?.data);
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   //call the api
   useEffect(() => {
     if (router.isReady && accessToken) {
       getSingleImageDetails();
-      getImageBasedTags()
     }
   }, [router.isReady, accessToken]);
 
@@ -206,7 +180,7 @@ const SingleImageView: FC<componentProps> = ({
           {loading ? (
             ""
           ) : (
-            <ReactPanZoom alt={`Image ${data?.created_at}`} image={data?.url} />
+            <ReactPanZoom alt={`${data?.key}`} image={data?.url} />
           )}
         </div>
       </div>
@@ -297,7 +271,7 @@ const SingleImageView: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={data}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-      // loading={loading}
+        // loading={loading}
       />
 
       <LoadingComponent loading={loading} />

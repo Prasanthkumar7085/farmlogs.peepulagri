@@ -13,9 +13,13 @@ import { useSelector } from "react-redux";
 import styles from "./TagsTextFeild.module.css";
 import { Toaster, toast } from "sonner";
 import { useRouter } from "next/router";
-import SellIcon from "@mui/icons-material/Sell";
 
-const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
+const TagsTextFeild = ({
+  captureTags,
+  tags,
+  beforeTags,
+  TagsDrawerEditOpen,
+}: any) => {
   const [tagValue, setTagValue] = useState<any>();
   const [newTagValue, setNewTagValue] = useState<any>();
   const [tag, setTag] = useState<any[]>([]);
@@ -29,7 +33,7 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   useEffect(() => {
     setTagValue(beforeTags ? beforeTags : []);
     dropDownTags();
-  }, [accessToken]);
+  }, [TagsDrawerEditOpen, beforeTags]);
 
   const dropDownTags = async () => {
     setLoading(true);
@@ -75,9 +79,10 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
   };
   const handleDeleteChip = async (deletedValue: any) => {
     const updatedTags = tagValue.filter((tag: any) => tag !== deletedValue);
+    setTagValue(updatedTags);
     let body = {
       tags: [deletedValue],
-      farm_image_ids: [router.query.farm_id],
+      farm_image_ids: [router.query.image_id],
     };
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/farm-images/delete-tags`;
@@ -91,18 +96,11 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       };
       const response: any = await fetch(url, options);
       const responseData = await response.json();
-    } catch (err) { }
+    } catch (err) {}
 
-    setTagValue(updatedTags);
     captureTags(updatedTags); // Function to capture updated tags
   };
 
-  const handleTagDelete = (deletedChip: string) => {
-    let index = tagValue?.indexOf(deletedChip);
-    let temp = [...tagValue];
-    temp.splice(index, 1);
-    setTagValue(temp);
-  };
   const [extraTags, setExtraTags] = useState<any>([]);
 
   return (
@@ -119,10 +117,13 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                   return (
                     <Chip
                       sx={{
-                        border: "1px solid #d94841", color: "#d94841", marginRight: "5px", marginBottom: "10px",
-                        '& .MuiSvgIcon-root': {
-                          color: "#d94841"
-                        }
+                        border: "1px solid #d94841",
+                        color: "#d94841",
+                        marginRight: "5px",
+                        marginBottom: "10px",
+                        "& .MuiSvgIcon-root": {
+                          color: "#d94841",
+                        },
                       }}
                       onDelete={() => handleDeleteChip(item)}
                       key={index}
@@ -166,14 +167,14 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
               value={newTagValue}
               onChange={(e) => setNewTagValue(e.target.value)}
               sx={{
-                '& .MuiInputBase-root': {
+                "& .MuiInputBase-root": {
                   background: "#fff",
-                  paddingBlock: "8px !important"
+                  paddingBlock: "8px !important",
                 },
-                '& .MuiOutlinedInput-notchedOutline': {
+                "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "grey !important",
-                  borderRadius: "4px"
-                }
+                  borderRadius: "4px",
+                },
               }}
             />
           )}
@@ -213,14 +214,14 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
                   className={styles.tagsBox}
                   placeholder="Enter Tags"
                   sx={{
-                    '& .MuiInputBase-root': {
+                    "& .MuiInputBase-root": {
                       background: "#fff",
-                      paddingBlock: "8px !important"
+                      paddingBlock: "8px !important",
                     },
-                    '& .MuiOutlinedInput-notchedOutline': {
+                    "& .MuiOutlinedInput-notchedOutline": {
                       borderColor: "grey !important",
-                      borderRadius: "4px"
-                    }
+                      borderRadius: "4px",
+                    },
                   }}
                 />
               )}
@@ -230,7 +231,11 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
         {!isTextFieldOpen && (
           <IconButton
             onClick={() => setIsTextFieldOpen(true)}
-            sx={{ color: "green", border: "1px solid grey", borderRadius: "4px" }}
+            sx={{
+              color: "green",
+              border: "1px solid grey",
+              borderRadius: "4px",
+            }}
           >
             <AddIcon />
           </IconButton>
@@ -246,7 +251,12 @@ const TagsTextFeild = ({ captureTags, tags, beforeTags }: any) => {
       </div>
 
       {isTextFieldOpen && ( // Conditionally render the submit button based on the state
-        <Button className={styles.addNewTagBtn} sx={{ background: "#d94841" }} variant="contained" onClick={addNewTag}>
+        <Button
+          className={styles.addNewTagBtn}
+          sx={{ background: "#d94841" }}
+          variant="contained"
+          onClick={addNewTag}
+        >
           Add
         </Button>
       )}

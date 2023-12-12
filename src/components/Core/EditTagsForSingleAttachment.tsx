@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import TagsTextFeild from "./TagsTextFeild";
 import styles from "./TagsDrawer.module.css";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 const EditTagsForSingleAttachment = ({
   TagsDrawerEditOpen,
   tagsDrawerClose,
@@ -18,8 +20,15 @@ const EditTagsForSingleAttachment = ({
   captureTagsDetailsEdit,
   loading,
 }: any) => {
+  const router = useRouter();
+
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
+
   const [description, setDescription] = useState<any>("");
   const [tags, setTags] = useState<any>([]);
+  const [tagsDetails, setTagsDetails] = useState<Partial<{ tags: string[] }>>();
 
   const captureTags = (array: any) => {
     if (array) {
@@ -27,15 +36,43 @@ const EditTagsForSingleAttachment = ({
     }
     console.log(array);
   };
+
+  const getImageBasedTags = async () => {
+    let options = {
+      method: "GET",
+      headers: new Headers({
+        authorization: accessToken,
+      }),
+    };
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/${router.query.image_id}`,
+        options
+      );
+      const responseData = await response.json();
+      if (responseData.success) {
+        setTagsDetails(responseData?.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log(tagsDetails, "asdf");
+
   useEffect(() => {
     if (TagsDrawerEditOpen) {
       setDescription(item?.description);
       setTags(item ? item?.tags : []);
+      getImageBasedTags();
     } else {
       setTags([]);
       setDescription("");
+      setTagsDetails({});
     }
   }, [TagsDrawerEditOpen]);
+
+  console.log(item?.tags, tagsDetails, "asdf");
 
   return (
     <Drawer
@@ -50,7 +87,7 @@ const EditTagsForSingleAttachment = ({
           borderRadius: "20px 20px 0 0",
           background: "#F5F7FA",
           maxWidth: "calc(500px - 30px)",
-          margin: "0 auto"
+          margin: "0 auto",
         },
       }}
     >
@@ -68,7 +105,8 @@ const EditTagsForSingleAttachment = ({
         <TagsTextFeild
           captureTags={captureTags}
           tags={tags}
-          beforeTags={item?.tags}
+          beforeTags={tagsDetails?.tags}
+          TagsDrawerEditOpen={TagsDrawerEditOpen}
         />
       </div>
 

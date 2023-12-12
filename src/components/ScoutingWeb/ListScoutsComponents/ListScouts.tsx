@@ -50,7 +50,7 @@ const ListScouts: FunctionComponent = () => {
   const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
   const [usersOptions, setUserOptions] = useState();
@@ -74,6 +74,7 @@ const ListScouts: FunctionComponent = () => {
   const [searchString, setSearchString] = useState("");
 
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
+    setData([]);
     if (reason == "clear") {
       let routerData = { ...router.query };
       delete routerData?.farm_id;
@@ -284,15 +285,12 @@ const ListScouts: FunctionComponent = () => {
       // Convert the groupedData object into an array
       const groupedArray = Object.values(groupedData);
       setData(groupedArray);
-      setLoading(false)
-
+      setLoading(false);
     } else if (response?.statusCode == 403) {
       await logout();
     } else {
       toast.error("Failed to fetch");
     }
-
-
   };
 
   const getAllUsers = async (userId = "") => {
@@ -366,6 +364,7 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const getAllCrops = async (cropId: string, farmId: string) => {
+    setLoading(true);
     if (!farmId) {
       return;
     }
@@ -373,7 +372,10 @@ const ListScouts: FunctionComponent = () => {
     if (response?.success) {
       let data = response?.data;
       // data = modifyDataToGroup(data);
-
+      if (!data?.length) {
+        setLoading(false);
+        return;
+      }
       setCropOptions(data);
       if (cropId) {
         let obj = data?.length && data?.find((item: any) => item._id == cropId);
@@ -402,7 +404,6 @@ const ListScouts: FunctionComponent = () => {
             cropId: obj._id,
           });
         }
-
       }
     }
   };

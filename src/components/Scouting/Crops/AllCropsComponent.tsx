@@ -24,7 +24,7 @@ import { useCookies } from "react-cookie";
 const AllCropsComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const form_Id = router.query.farm_id
+  const form_Id = router.query.farm_id;
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -70,6 +70,7 @@ const AllCropsComponent = () => {
         query: { search_string: farmsearchstring },
       });
     }
+
     try {
       let response = await ListAllFarmForDropDownService(
         farmsearchstring,
@@ -188,6 +189,7 @@ const AllCropsComponent = () => {
       let debounce = setTimeout(() => {
         dispatch(removeTheFilesFromStore([]));
 
+        console.log(router.isReady, searchString, "reason");
         getFarmDetails(
           searchString ? searchString : router.query?.search_string,
           router.query.farm_id
@@ -419,17 +421,15 @@ const AllCropsComponent = () => {
   return (
     <div>
       <div className={styles.pageHeader}>
-        <div className={styles.header} id="header" >
+        <div className={styles.header} id="header">
           <img
             className={styles.iconsiconArrowLeft}
             alt=""
             src="/iconsiconarrowleft.svg"
-            onClick={() => router.push('/farms')}
-
+            onClick={() => router.push("/farms")}
           />
           <Typography className={styles.viewFarm}>My Crops</Typography>
-          <div className={styles.headericon} id="header-icon">
-          </div>
+          <div className={styles.headericon} id="header-icon"></div>
         </div>
         <div className={styles.searchBlock}>
           <FormControl
@@ -437,20 +437,18 @@ const AllCropsComponent = () => {
             className={styles.filterBox}
             sx={{
               " .MuiAutocomplete-root": {
-
                 borderRadius: "30px",
               },
               "& .MuiInputBase-root": {
                 background: "#fff",
                 color: "#000",
                 borderRadius: "24px",
-                paddingBlock: "12px !important"
+                paddingBlock: "12px !important",
               },
-              '& .MuiOutlinedInput-notchedOutline ': {
+              "& .MuiOutlinedInput-notchedOutline ": {
                 border: "0",
-                color: "#fff"
+                color: "#fff",
               },
-
             }}
           >
             <InputLabel color="primary" />
@@ -469,11 +467,18 @@ const AllCropsComponent = () => {
           </FormControl>
           <div
             style={{
-              width: "13%"
+              width: "13%",
             }}
           >
-            <IconButton className={styles.sortIconBtn} onClick={() => toggleDrawer(true)}>
-              <img src="/mobileIcons/crops/SortIcon.svg" alt="" width={"24px"} />
+            <IconButton
+              className={styles.sortIconBtn}
+              onClick={() => toggleDrawer(true)}
+            >
+              <img
+                src="/mobileIcons/crops/SortIcon.svg"
+                alt=""
+                width={"24px"}
+              />
             </IconButton>
             <React.Fragment>
               <Drawer
@@ -490,7 +495,6 @@ const AllCropsComponent = () => {
         </div>
       </div>
       <div className={styles.myCropsPage}>
-
         <div className={styles.allCrops}>
           {cropOptions?.length ? (
             <div id={styles.allCropCardBlock}>
@@ -510,7 +514,12 @@ const AllCropsComponent = () => {
             </div>
           ) : !loading ? (
             <div className={styles.noData}>
-              <Image src="/no-crops-image.svg" alt="" width={120} height={120} />
+              <Image
+                src="/no-crops-image.svg"
+                alt=""
+                width={120}
+                height={120}
+              />
               <Typography variant="h4">This farm has no crops</Typography>
             </div>
           ) : (
@@ -524,11 +533,18 @@ const AllCropsComponent = () => {
               size="large"
               className={styles.AddScoutingbtn}
               aria-label="add to shopping cart"
-              onClick={() => router.push({ pathname: `/farms/${router.query.farm_id}/crops/add-crop` })}
+              onClick={() =>
+                router.push({
+                  pathname: `/farms/${router.query.farm_id}/crops/add-crop`,
+                })
+              }
             >
-              <img src="/mobileIcons/crops/Add-crop.svg" alt="" width={"25px"} />
+              <img
+                src="/mobileIcons/crops/Add-crop.svg"
+                alt=""
+                width={"25px"}
+              />
               <span>Add Crop</span>
-
             </IconButton>
           </div>
         ) : (

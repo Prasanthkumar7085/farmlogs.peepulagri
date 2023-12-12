@@ -80,7 +80,9 @@ const CropsDropDown = ({
                     "& .MuiInputBase-root": {
                         background: "#fff",
                         color: "#000",
-                        padding: "11px 14px !important"
+                        padding: "11px 14px !important",
+                        borderRadius: "10px !important"
+
 
                     },
                     '& .MuiOutlinedInput-notchedOutline ': {

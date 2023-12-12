@@ -31,6 +31,7 @@
     "ckeditor4-react": "^5.0.0",
     "ckeditor5": "^40.0.0",
     "date-fns": "^2.30.0",
+    "dayjs": "^1.11.10",
     "eslint-config-next": "^13.4.17",
     "interweave": "^13.1.0",
     "moment": "^2.29.4",

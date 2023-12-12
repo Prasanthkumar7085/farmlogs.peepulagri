@@ -11,6 +11,9 @@ import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEnco
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./summary.module.css";
+import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 const AddSummary = () => {
     const router = useRouter();
@@ -205,6 +208,8 @@ const AddSummary = () => {
         return `${year}-${month}-${day}`;
     };
 
+
+
     return (
         <div>
             <div className={styles.summaryHeader} id="header" >
@@ -246,7 +251,7 @@ const AddSummary = () => {
                 <div className={styles.singleFarmBlock}>
 
                     <Typography variant="h6">Date</Typography>
-                    <TextField
+                    {/* <TextField
                         type='date'
                         placeholder="Select Date"
                         color="primary"
@@ -271,7 +276,39 @@ const AddSummary = () => {
 
                         }}
                         inputProps={{ max: getCurrentDate() }}
-                    />
+                    /> */}
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                        <MobileDatePicker sx={{
+                            width: "100%",
+                            '& .MuiOutlinedInput-notchedOutline ': {
+                                background: "#fff",
+                                borderColor: "grey !important",
+                                borderRadius: "8px !important"
+                            },
+                            '& .MuiInputBase-input': {
+                                padding: "12px 14px",
+                                borderRadius: "10px !important"
+
+                            }
+                        }}
+                            value={date}
+
+                            format="DD-MM-YYYY"
+                            onChange={(e) => {
+                                const selectedDate = new Date(e);
+                                const currentDate = new Date();
+                                console.log(e);
+                                if (selectedDate > currentDate) {
+                                    return;
+                                }
+
+                                setDate(e);
+                                setErrorMessages('');
+
+                            }} />
+                    </LocalizationProvider>
+
                     <ErrorMessagesComponent errorMessage={errorMessages?.date} />
                 </div>
                 <div className={styles.singleFarmBlock}>
@@ -296,6 +333,10 @@ const AddSummary = () => {
                             background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
                                 border: "1px solid grey !important",
                                 borderRadius: "10px !important"
+                            },
+                            '& .MuiInputBase-input': {
+                                borderRadius: "10px !important"
+
                             }
                         }}
                     />

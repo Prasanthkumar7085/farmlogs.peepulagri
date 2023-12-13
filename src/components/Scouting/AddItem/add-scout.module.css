@@ -115,11 +115,11 @@
 }
 
 .uploadimage {
-    border: 1px dashed #4a86f7;
+    border: 1px dashed #A05148;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 5px;
 }
 
 .addscoutdetails {

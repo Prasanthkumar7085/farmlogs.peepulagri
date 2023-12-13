@@ -146,9 +146,9 @@ const AllSummaryComponents = () => {
         if (observer.current) observer.current.disconnect()
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMore && data.length > 0) {
-              setPageNumber((prevPageNumber) => prevPageNumber + 1);
-              getSummary(farmId, cropId, pageNumber + 1);
-              scrollToLastItem(); // Restore scroll position after new data is loaded
+                setPageNumber((prevPageNumber) => prevPageNumber + 1);
+                getSummary(farmId, cropId, pageNumber + 1);
+                scrollToLastItem(); // Restore scroll position after new data is loaded
             }
         })
         if (node) observer.current.observe(node)
@@ -435,6 +435,8 @@ const AllSummaryComponents = () => {
                         `/summary/${rowId}/edit`
                     );
                 }}>Update</MenuItem>
+                <MenuItem sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif", color: "#000" }}
+                >Delete</MenuItem>
             </Menu>
             <div className="addFormPositionIcon">
                 <IconButton

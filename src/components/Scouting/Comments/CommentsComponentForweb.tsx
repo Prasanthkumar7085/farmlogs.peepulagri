@@ -20,7 +20,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState<any>();
+  const [loading, setLoading] = useState(true);
   const [afterReply, setAfterReply] = useState<any>();
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);

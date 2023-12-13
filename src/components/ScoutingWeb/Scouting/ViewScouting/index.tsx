@@ -15,6 +15,7 @@ import ScoutingDetails from "./ScoutingDetails";
 import styles from "./ScoutingDetails.module.css";
 import getSingleImageDetailsService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
 import ReactPanZoom from "react-image-pan-zoom-rotate";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 interface pageProps {
   onlyImages: Array<OnlyImagesType>;
@@ -33,18 +34,12 @@ const SingleScoutViewDetails = () => {
   const [, , loggedIn] = useCookies(["loggedIn"]);
 
   const [data, setData] = useState<any>();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [finalImages, setFinalImages] = useState([]);
-  const [curoselOpen, setCuroselOpen] = useState<any>(false);
-  const [selectedImage, setSelectedImage] = useState<any>();
   const [content, setContent] = useState<any>();
-  const [scoutId, setScoutId] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [editRecomendationOpen, setEditRecomendationOpen] = useState(false);
 
   useEffect(() => {
-    if (router.isReady && router.query.image_id) {
-
+    if (router.isReady && accessToken) {
       getSingleScoutDetails()
     }
   }, [router.isReady, accessToken]);
@@ -143,7 +138,7 @@ const SingleScoutViewDetails = () => {
           >
 
             <>
-              <ReactPanZoom alt={`Image ${data?.key}`} image={data?.url} />
+              <ReactPanZoom alt={data?.key ? `Image ${data?.key}` : "Image"} image={data?.url} />
 
               {/* <img
                 className="zoom-image"

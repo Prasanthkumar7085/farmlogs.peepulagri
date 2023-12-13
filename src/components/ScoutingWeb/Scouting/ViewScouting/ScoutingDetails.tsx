@@ -19,6 +19,7 @@ import style from "../../ListScoutsComponents/DaySummary.module.css";
 import formatText from "../../../../../lib/requestUtils/formatTextToBullets";
 import { useRouter } from "next/router";
 import SellIcon from "@mui/icons-material/Sell";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const ScoutingDetails = ({
   loading,
@@ -138,16 +139,16 @@ const ScoutingDetails = ({
         >
           {data?.tags?.length
             ? data?.tags?.map((item: string, index: number) => {
-                return (
-                  <Chip
-                    icon={<SellIcon sx={{ fontSize: 15 }} color="success" />}
-                    key={index}
-                    label={item}
-                    className={styles.tagsName}
-                    variant="outlined"
-                  />
-                );
-              })
+              return (
+                <Chip
+                  icon={<SellIcon sx={{ fontSize: 15 }} color="success" />}
+                  key={index}
+                  label={item}
+                  className={styles.tagsName}
+                  variant="outlined"
+                />
+              );
+            })
             : "No tags  "}
         </div>
       ) : (
@@ -162,6 +163,7 @@ const ScoutingDetails = ({
         <CommentsComponentForWeb scoutDetails={data} attachement={data} />
       </div>
       <Toaster richColors position="top-right" closeButton />
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

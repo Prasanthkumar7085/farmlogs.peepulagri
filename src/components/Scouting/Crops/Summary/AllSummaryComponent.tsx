@@ -229,6 +229,11 @@ const AllSummaryComponents = () => {
 
         if (value?._id) {
             getAllCropsOptions("", value?._id)
+            // {
+            //     value?._id ?
+            //         value?._id?.length > 20 ? (value?._id?.slice(0, 17)) + '...' : value?._id
+            //     : ""
+            // }
             setFarmID(value?._id)
             getSummary(value?._id, cropId, 1)
 
@@ -287,11 +292,13 @@ const AllSummaryComponents = () => {
                     "& .MuiInputBase-root": {
                         background: "#fff",
                         color: "#000",
-                        borderRadius: "24px"
+                        borderRadius: "24px !important"
                     },
                     '& .MuiOutlinedInput-notchedOutline ': {
                         border: "0",
-                        color: "#fff"
+                        color: "#fff",
+                        borderRadius: "24px !important"
+
                     },
                     '& .MuiButtonBase-root': {
                         color: "#000",
@@ -314,11 +321,13 @@ const AllSummaryComponents = () => {
                         "& .MuiInputBase-root": {
                             background: "#fff",
                             color: "#000",
-                            borderRadius: "24px"
+                            borderRadius: "24px !important"
                         },
                         '& .MuiOutlinedInput-notchedOutline ': {
                             border: "0",
-                            color: "#fff"
+                            color: "#fff",
+                            borderRadius: "24px !important"
+
                         },
                         '& .MuiButtonBase-root': {
                             color: "#000",

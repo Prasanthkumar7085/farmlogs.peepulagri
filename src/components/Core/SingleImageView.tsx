@@ -130,33 +130,33 @@ const SingleImageView: FC<componentProps> = ({
   return (
     <div>
       <div className={styles.overlay}>
-        <div style={{ position: "fixed", width: "100%", zIndex: "1", maxWidth: "500px" }}>
+        {/* <div style={{ position: "fixed", width: "100%", zIndex: "1", maxWidth: "500px" }}> */}
 
-          <div className={styles.singleImageViewHeader}>
-            <img
-              alt=""
-              src="/iconsiconarrowleft.svg"
-              onClick={() => router.back()}
-              width={"25px"}
-            />
-            <Typography>
-              {(data?.farm_id?.title
-                ? data?.farm_id?.title[0]?.toUpperCase() +
-                data?.farm_id?.title?.slice(1)
-                : "") +
-                "/" +
-                (data?.crop_id?.title
-                  ? data?.crop_id?.title[0]?.toUpperCase() +
-                  data?.crop_id?.title?.slice(1)
-                  : "")}
-            </Typography>
-            <div className={styles.headericon} id="header-icon"></div>
+        <div className={styles.singleImageViewHeader}>
+          <img
+            alt=""
+            src="/iconsiconarrowleft.svg"
+            onClick={() => router.back()}
+            width={"25px"}
+          />
+          <Typography>
+            {(data?.farm_id?.title
+              ? data?.farm_id?.title[0]?.toUpperCase() +
+              data?.farm_id?.title?.slice(1)
+              : "") +
+              "/" +
+              (data?.crop_id?.title
+                ? data?.crop_id?.title[0]?.toUpperCase() +
+                data?.crop_id?.title?.slice(1)
+                : "")}
+          </Typography>
+          <div className={styles.headericon} id="header-icon"></div>
 
 
-          </div>
         </div>
+        {/* </div> */}
 
-        <div
+        {/* <div
           style={{
             height: "calc(100vh - 61px)",
             width: "100%",
@@ -169,6 +169,14 @@ const SingleImageView: FC<componentProps> = ({
           ) : (
             <ReactPanZoom alt={`${data?.key}`} image={data?.url} />
           )}
+        </div> */}
+        <div style={{
+          height: "calc(100vh - 123px)",
+          width: "100%",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          <img src={data?.url} alt={`${data?.key}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </div>
       </div>
       <div className={styles.imgDetailButtons}>

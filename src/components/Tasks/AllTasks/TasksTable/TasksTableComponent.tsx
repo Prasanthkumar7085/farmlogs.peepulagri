@@ -280,6 +280,7 @@ const TasksTableComponent = ({
                 display: "flex",
                 width: "100%",
                 justifyContent: "space-evenly",
+                alignItems: "center !important"
               }}
             >
               <Link href={`/tasks/${info.row.original?._id}`}>

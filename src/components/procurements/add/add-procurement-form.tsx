@@ -1,4 +1,8 @@
-import type { NextPage } from "next";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   Button,
   CircularProgress,
@@ -6,24 +10,19 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
-import OperationDetails from "./operation-details";
-import MaterialsRequired from "./materials-required";
-import styles from "./add-procurement-form.module.css";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import addProcurementService from "../../../../lib/services/ProcurementServices/addProcurementService";
-import { Toaster, toast } from "sonner";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import { useCookies } from "react-cookie";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import getProcurementByIdService from "../../../../lib/services/ProcurementServices/getProcurementByIdService";
 import updateProcurementService from "../../../../lib/services/ProcurementServices/updateProcurementService";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import POC from "../edit/POC";
+import styles from "./add-procurement-form.module.css";
+import OperationDetails from "./operation-details";
 
 interface ApiProps {
   page: number;
@@ -68,7 +67,6 @@ const AddProcurementForm: NextPage = () => {
       if (response.success) {
         setFarmOptions(response?.data);
       }
-      console.log(response);
     } catch (err) {
       console.error(err);
     }
@@ -114,7 +112,6 @@ const AddProcurementForm: NextPage = () => {
       });
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
-        console.log(response);
 
         setTimeout(() => {
           router.push(`/procurements/${response?.data?._id}/edit`);

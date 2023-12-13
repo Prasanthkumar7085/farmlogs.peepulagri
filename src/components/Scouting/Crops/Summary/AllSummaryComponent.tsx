@@ -60,7 +60,6 @@ const AllSummaryComponents = () => {
 
     const getSummary = async (farmId = "", cropId = "", page: any) => {
         setLoading(true);
-        console.log(page, "lnb")
         try {
             let queryParams: any = {};
 
@@ -147,10 +146,9 @@ const AllSummaryComponents = () => {
         if (observer.current) observer.current.disconnect()
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMore && data.length > 0) {
-                console.log("start")
-                setPageNumber(prevPageNumber => prevPageNumber + 1)
-                getSummary(farmId, cropId, pageNumber + 1)
-                scrollToLastItem() // Restore scroll position after new data is loaded
+              setPageNumber((prevPageNumber) => prevPageNumber + 1);
+              getSummary(farmId, cropId, pageNumber + 1);
+              scrollToLastItem(); // Restore scroll position after new data is loaded
             }
         })
         if (node) observer.current.observe(node)
@@ -184,7 +182,7 @@ const AllSummaryComponents = () => {
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
     }
 
@@ -215,7 +213,7 @@ const AllSummaryComponents = () => {
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
     }
     //get the search value from the farms dropDown

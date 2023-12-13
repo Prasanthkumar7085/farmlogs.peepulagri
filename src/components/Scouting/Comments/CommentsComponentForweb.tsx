@@ -61,7 +61,6 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
         options
       );
       let responseData = await response.json();
-      console.log(responseData, "lb");
       if (responseData.success == true) {
         const commentsById: any = {};
 
@@ -106,7 +105,6 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     }
   };
 
-
   //delete comment api
   const deleteComment = async (commnet_id: any) => {
     setLoading(true);
@@ -134,7 +132,6 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
       setLoading(false);
     }
   };
-
 
   //update any commnet api event
   const updateComment = async (commnet_id: any, updatedContent: any) => {
@@ -213,7 +210,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
         getAllScoutComments();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -233,14 +230,12 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
           attachement={attachement}
           scoutDetails={scoutDetails}
         />
-
       </div>
       <CommentForm
         afterCommentAdd={afterCommentAdd}
         scoutDetails={scoutDetails}
         attachement={attachement}
       />
-
 
       <LoadingComponent loading={loading} />
       <AlertComponent

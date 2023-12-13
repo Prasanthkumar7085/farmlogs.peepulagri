@@ -93,8 +93,6 @@ const CropCard = ({
   };
 
   const captureResponseDilog = (value: any, index: number) => {
-    console.log(value);
-
     setErrorMessages([]);
     if (!value) {
       setRenameOpen(false);

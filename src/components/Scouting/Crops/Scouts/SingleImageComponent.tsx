@@ -1,16 +1,14 @@
+import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAttachment";
 import ImageComponent from "@/components/Core/ImageComponent";
 import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
-import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
 import { Button, Chip, IconButton } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { FC, useState } from "react";
+import { useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
 import DrawerComponentForScout from "../../Comments/DrawerBoxForScout";
 import styles from "./singleImage.module.css";
-import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAttachment";
-import { useSelector } from "react-redux";
-import updateAttachmentsService from "../../../../../lib/services/ScoutServices/updateAttachmentsService";
-import { Toaster, toast } from "sonner";
-import { useRouter } from "next/router";
 
 interface componentProps {
   detailedImage: any;
@@ -22,8 +20,7 @@ const SingleImageComponent: FC<componentProps> = ({
   scoutDetails,
   getImageData,
 }) => {
-
-  const router = useRouter()
+  const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -60,25 +57,28 @@ const SingleImageComponent: FC<componentProps> = ({
 
   const captureTagsDetailsEdit = async (tags: any, description: any) => {
     try {
-      let body =
-      {
+      let body = {
         farm_image_ids: [detailedImage._id],
-        tags: tags
-      }
+        tags: tags,
+      };
       let options = {
         method: "POST",
         headers: new Headers({
           "content-type": "application/json",
           authorization: accessToken,
         }),
-        body: JSON.stringify(body)
-      }
+        body: JSON.stringify(body),
+      };
 
-      let response: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/farm-images/tag`, options)
-      let responseData = await response.json()
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tag`,
+        options
+      );
+      let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
         toast.success(responseData?.message);
         setTagsDrawerEditOpen(false);
+        toast.success(responseData?.message);
         await getImageData(1);
       } else {
         toast.error(responseData?.message);
@@ -163,7 +163,7 @@ const SingleImageComponent: FC<componentProps> = ({
         {detailedImage?.tags?.length > 3 ? <span>{"... "}</span> : ""}
       </div>
       {detailedImage?.tags?.length > 3 ||
-        detailedImage?.description?.length > 97 ? (
+      detailedImage?.description?.length > 97 ? (
         <span style={{ fontWeight: "bold" }} onClick={openViewMore}>
           Show More
         </span>
@@ -182,14 +182,14 @@ const SingleImageComponent: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={detailedImage}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-      // loading={loading}
+        // loading={loading}
       />
       <ShowMoreInViewAttachmentDetails
         showMoreSuggestions={showMoreSuggestions}
         setShowMoreSuggestions={setShowMoreSuggestions}
         item={detailedImage ? detailedImage : ""}
       />
-      <Toaster closeButton richColors />
+      <Toaster closeButton richColors position="top-right" />
     </div>
   );
 };

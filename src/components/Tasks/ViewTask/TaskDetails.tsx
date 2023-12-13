@@ -315,7 +315,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                             borderBottom: "0 !important",
                           },
                         }}
-                        // maxDate={today.setDate(today.getDate() - 1)}
+                        maxDate={today.setDate(today.getDate() - 1)}
                         disablePast
                         value={deadline}
                         onChange={(newValue: any) => {

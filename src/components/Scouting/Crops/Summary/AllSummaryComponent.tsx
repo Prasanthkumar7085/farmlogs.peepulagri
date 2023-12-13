@@ -358,6 +358,14 @@ const AllSummaryComponents = () => {
                                     <div className={styles.summaryHeading}>
                                         <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
                                         <h6 className={styles.cropTitle}>
+                                            {/* <span> {item?.crop_id?.title
+                                                ? item?.crop_id?.title?.length > 18
+                                                    ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
+                                                    item?.crop_id?.title?.slice(1, 20) +
+                                                    "..."
+                                                    : item?.crop_id?.title[0].toUpperCase() +
+                                                    item?.crop_id?.title?.slice(1)
+                                                : ""}</span> */}
                                             {item?.crop_id?.title
                                                 ? item?.crop_id?.title?.length > 18
                                                     ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
@@ -366,6 +374,7 @@ const AllSummaryComponents = () => {
                                                     : item?.crop_id?.title[0].toUpperCase() +
                                                     item?.crop_id?.title?.slice(1)
                                                 : ""}
+
                                         </h6>
                                         {/* <h4 className={styles.cropTitle}>{item?.crop_id?.title}</h4> */}
                                     </div>

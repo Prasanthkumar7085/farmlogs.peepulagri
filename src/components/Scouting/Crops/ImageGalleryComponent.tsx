@@ -225,6 +225,7 @@ const ImageGalleryComponent = () => {
         toast.success(responseData?.message);
         setSelectedItems([]);
         setTagsDrawerOpen(false);
+        setTagsCheckBoxOpen(false)
         await getPresingedURls(1);
       } else {
         toast.error(responseData?.message);
@@ -261,6 +262,7 @@ const ImageGalleryComponent = () => {
         toast.success(responseData?.message);
         setSelectedItems([]);
         setTagsDrawerOpen(false);
+        setTagsCheckBoxOpen(false);
         await getPresingedURls(1);
       } else {
         toast.error(responseData?.message);
@@ -566,7 +568,7 @@ const ImageGalleryComponent = () => {
                                 ? "/Play-button.svg"
                                 : image.url
                             }
-                            alt={image?.uploaded_at}
+                            alt=""
                             style={{
                               width: "100%",
                               height: "100%",
@@ -658,7 +660,7 @@ const ImageGalleryComponent = () => {
                                 ? "/Play-button.svg"
                                 : image.url
                             }
-                            alt={image?.uploaded_at}
+                            alt=""
                             style={{
                               width: "100%",
                               height: "100%",

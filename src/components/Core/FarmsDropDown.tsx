@@ -34,6 +34,7 @@ const FarmsDropDown = ({
     }
 
   }, [options, farmDefaultValue]);
+  console.log(defaultValueSet);
 
   return (
     <div>
@@ -81,6 +82,7 @@ const FarmsDropDown = ({
             background: "#fff",
             color: "#000",
             padding: "11px 14px !important",
+            paddingRight: "50px !important"
           },
           '& .MuiOutlinedInput-notchedOutline ': {
             border: "1px solid grey !important",

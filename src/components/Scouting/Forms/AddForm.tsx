@@ -20,6 +20,7 @@ import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByI
 import addLocationService from "../../../../lib/services/Locations/addLocationService";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import styles from "./add-farm-form1.module.css";
+import { toast } from "sonner";
 const AddFarmForm = () => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -234,7 +235,9 @@ const AddFarmForm = () => {
       getLocations(response?.data);
       setNewLocation("");
     } else if (response?.status == 422) {
-      setErrorMessages(response?.errors);
+      toast.error("Location already exists")
+      setAlertMessage(response?.errors?.title);
+      setAlertType(false);
     } else {
       setAlertMessage(response?.message);
       setAlertType(false);

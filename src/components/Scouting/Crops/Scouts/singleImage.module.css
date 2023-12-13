@@ -14,7 +14,7 @@
 }
 
 .imgDetailButtons {
-  position: absolute;
+  position: fixed;
   bottom: 5rem;
   width: 100%;
   max-width: 500px;

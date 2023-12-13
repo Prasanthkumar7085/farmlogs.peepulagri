@@ -451,7 +451,24 @@ const ImageGalleryComponent = () => {
           onClick={() => router.back()}
         />
         <Typography className={styles.viewFarm}>
-          {farmTitle + "/" + cropTitle}
+
+          {
+            (farmTitle
+              ? farmTitle?.length > 10
+                ? farmTitle.slice(0, 1).toUpperCase() +
+                farmTitle?.slice(1, 14) +
+                "..."
+                : farmTitle[0].toUpperCase() +
+                farmTitle?.slice(1)
+              : "") + "/" + (cropTitle
+                ? cropTitle?.length > 10
+                  ? cropTitle.slice(0, 1).toUpperCase() +
+                  cropTitle?.slice(1, 14) +
+                  "..."
+                  : cropTitle[0].toUpperCase() +
+                  cropTitle?.slice(1)
+                : "")}
+
         </Typography>
         <div className={styles.headericon} id="header-icon"></div>
       </div>
@@ -703,7 +720,7 @@ const ImageGalleryComponent = () => {
           }) : ""}
       </div>
       {data?.length == 0 && !loading &&
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "calc(100vh - 160px)" }}>
 
           <NoDataAnimatedComponent noData={!data?.length} />
         </div>}

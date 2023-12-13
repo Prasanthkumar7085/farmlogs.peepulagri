@@ -6,6 +6,7 @@ import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/materia
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 import styles from "src/components/Scouting/Comments/comment-form.module.css";
 
 const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID }: any) => {
@@ -104,6 +105,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/add-comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
+        toast.success("Comment added successfully")
         setComment("")
         afterCommentAdd(true)
         setMultipleFiles([])
@@ -139,6 +141,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/add-comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
+        toast.success("Reply added successfully")
 
         setComment("")
         afterCommentAdd(true)
@@ -370,7 +373,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
           </div>
         ))}
       <div className={styles.actions}>
-        <div className={styles.attachments}>
+        {/* <div className={styles.attachments}>
           <div className={styles.link}>
             <label>
               <img className={styles.groupIcon} alt="" src="/group.svg" />
@@ -394,7 +397,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
               hidden
             />
           </label>
-        </div>
+        </div> */}
 
         <Button
           className={

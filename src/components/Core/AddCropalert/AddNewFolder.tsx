@@ -1,3 +1,4 @@
+
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import {
@@ -22,13 +23,11 @@ const NewFolderDiloag = ({ open }: any) => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const crop_id: any = router.query.crop_id;
-
+  const crop_id: any = router.query.crop_id
   const [title, setTitle] = useState<string | null>(null);
   const [area, setArea] = useState<any>();
   const [crop, setcrop] = useState([]);
   const [cropDetails, setCropDetails] = useState<any>();
-
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [loadingForAdd, setLoadingForAdd] = useState<any>();
   const [errorMessages, setErrorMessages] = useState<any>();
@@ -212,8 +211,9 @@ const NewFolderDiloag = ({ open }: any) => {
             src="/iconsiconarrowleft.svg"
             onClick={() => router.back()}
           />
-          <Typography className={styles.viewFarm}>Update Crop</Typography>
-          <div className={styles.headericon} id="header-icon"></div>
+          <Typography className={styles.viewFarm}>Edit Crop</Typography>
+          <div className={styles.headericon} id="header-icon">
+          </div>
         </div>
       ) : (
         <div className={styles.header} id="header">
@@ -233,7 +233,6 @@ const NewFolderDiloag = ({ open }: any) => {
           <div style={{ textAlign: "left", width: "100%" }}>
             <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
               {"Title"}
-              <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
             </h4>
           </div>
           <Autocomplete
@@ -256,6 +255,14 @@ const NewFolderDiloag = ({ open }: any) => {
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderRadius: "8px !important",
+                    borderColor: "grey !important"
+
+                  },
+                  "& .MuiInputBase-root": {
+                    background: "#fff",
+                    borderRadius: "8px !important",
+                    paddingBlock: "10px !important"
+
                   },
                 }}
                 error={errorMessages ? errorMessages["title"] : ""}
@@ -266,17 +273,29 @@ const NewFolderDiloag = ({ open }: any) => {
           {optionsLoading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
         </div>
 
-        <div className={styles.frame}>
+        <div className={styles.frame} style={{ marginTop: "1.5rem" }}>
           <div style={{ textAlign: "left", width: "100%" }}>
             <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
-              {"Crop Area"}
-              <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
+              {"Area"}
             </h4>
           </div>
           <TextField
             sx={{
               "& .MuiInputBase-root": {
                 background: "#fff",
+                paddingBlock: "5.5px !important",
+                borderRadius: "8px !important",
+                color: "#000",
+                fontFamily: "'Inter', sans-serif"
+
+
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderRadius: "8px !important",
+                borderColor: "grey !important",
+                color: "#000",
+                fontFamily: "'Inter', sans-serif"
+
               },
             }}
             className={styles.input}
@@ -332,7 +351,7 @@ const NewFolderDiloag = ({ open }: any) => {
               onClick={editCrop}
               disabled={optionsLoading || loadingForAdd}
             >
-              Update Crop
+              Submit
             </Button>
           ) : (
             <Button
@@ -344,7 +363,7 @@ const NewFolderDiloag = ({ open }: any) => {
               onClick={createCrop}
               disabled={optionsLoading || loadingForAdd}
             >
-              Create Crop
+              Submit
             </Button>
           )}
 

@@ -4,7 +4,7 @@ import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 const AddCrop = () => {
 
     return (
-        <div>
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             <NewFolderDiloag />
         </div>
     );

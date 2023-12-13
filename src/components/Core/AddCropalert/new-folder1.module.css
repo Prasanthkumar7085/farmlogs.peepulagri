@@ -32,7 +32,6 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-top: 0.6rem;
 }
 
 .buttoncreatefolder {
@@ -50,17 +49,17 @@
   font-family: 'Inter', sans-serif;
   font-weight: 500 !important;
   text-transform: capitalize !important;
-  border-radius: 8px !important;
-  border: 1px solid #999999 !important;
+  border-radius: 4px !important;
+  border: 1px solid #d94841 !important;
   box-shadow: none !important;
-  font-size: clamp(14px, 3vw, 16px) !important;
+  font-size: clamp(15px, 3vw, 16px) !important;
   padding: 0.5rem 2.5rem;
-  color: #333333;
+  color: #d94841;
 }
 
 
 .buttoncreatefolder {
-border-radius: 4px !important;
+  border-radius: 4px !important;
   border: 1px solid #d94841 !important;
   background: #d94841 !important;
   box-shadow: 4px 4px 10px 0px #0202460d !important;
@@ -79,14 +78,13 @@ border-radius: 4px !important;
 
 .buttons {
   display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1.5rem;
-    margin-top: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .newfolder {
   border-radius: 8px;
-  background-color: #fff;
   align-items: center;
   padding: 1rem;
 }

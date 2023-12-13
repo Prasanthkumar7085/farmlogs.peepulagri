@@ -209,7 +209,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
     let stringWithActualNewLine = temp.replace(/\n/g, "<br/>");
     return stringWithActualNewLine;
   };
-
+  const today = new Date();
   return (
     <div className={styles.cardDetails}>
       <div
@@ -315,16 +315,13 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                             borderBottom: "0 !important",
                           },
                         }}
+                        // maxDate={today.setDate(today.getDate() - 1)}
                         disablePast
                         value={deadline}
                         onChange={(newValue: any) => {
-                          const currentDate = new Date();
-                          if (newValue < currentDate) {
-                            setError('Please select a future date');
-                          } else {
-                            setError('');
-                            setDeadline(newValue);
-                          }
+
+                          setDeadline(newValue);
+
                         }}
                         format="dd/MM/yyyy"
                         slotProps={{

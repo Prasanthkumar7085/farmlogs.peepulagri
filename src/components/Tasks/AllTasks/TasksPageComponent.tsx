@@ -8,6 +8,7 @@ import getAllTasksService from "../../../../lib/services/TasksService/getAllTask
 import NavBarContainer from "./TasksNavBar/NavBarContainer";
 import TasksTableComponent from "./TasksTable/TasksTableComponent";
 import ImageComponent from "@/components/Core/ImageComponent";
+import { useCookies } from "react-cookie";
 
 export interface ApiCallProps {
   page: string | number;
@@ -31,6 +32,19 @@ const TasksPageComponent = () => {
   const [loading, setLoading] = useState(true);
   const [searchString, setSearchString] = useState("");
   const [selectedFarm, setSelectedFarm] = useState<FarmInTaskType | null>();
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
+
+  const logout = async () => {
+    try {
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
+
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
 
   const getAllTasks = async ({
     page = 1,
@@ -86,10 +100,15 @@ const TasksPageComponent = () => {
       paramString: paramString,
       accessToken,
     });
+    console.log(response);
+
     if (response?.success) {
       const { data, ...rest } = response;
       setData(data);
       setPaginationDetails(rest);
+    }
+    if (response.status == 401) {
+      logout();
     }
     setLoading(false);
   };

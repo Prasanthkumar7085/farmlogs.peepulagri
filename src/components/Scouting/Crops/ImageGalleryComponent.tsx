@@ -629,7 +629,7 @@ const ImageGalleryComponent = () => {
               return (
                 <div key={indexAttachment}
                   ref={
-                    indexAttachment === data.length - data.length ? lastItemRef : null
+                    indexAttachment === data.length - 50 ? lastItemRef : null
                   }
                 >
                   <Typography variant="caption" className={styles.scoutingDate}>{images.date}</Typography>

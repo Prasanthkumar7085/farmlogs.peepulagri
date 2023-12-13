@@ -17,6 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 
 import styles from "./summary.module.css";
+import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from 'dayjs';
+import { toast } from "sonner";
+
 const UpdateSummary = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -47,7 +52,6 @@ const UpdateSummary = () => {
   const [farmDefaultValue, setFarmDefaultValue] = useState<any>();
   const [cropDefaultValue, setCropDefaultValue] = useState<any>();
   const [errorMessages, setErrorMessages] = useState<any>();
-
   const logout = async () => {
     try {
       removeCookie("userType");
@@ -360,35 +364,35 @@ const UpdateSummary = () => {
                             }
                         }}
                     /> */}
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                        <MobileDatePicker sx={{
-                            width: "100%",
-                            '& .MuiOutlinedInput-notchedOutline ': {
-                                borderColor: "grey !important",
-                                borderRadius: "8px !important",
-                                color: "#000"
-                            },
-                            '& .MuiInputBase-input': {
-                                padding: "12px 14px",
-                                borderRadius: "10px !important",
-                                color: "#000",
-                                background: "#fff",
+            <MobileDatePicker sx={{
+              width: "100%",
+              '& .MuiOutlinedInput-notchedOutline ': {
+                borderColor: "grey !important",
+                borderRadius: "8px !important",
+                color: "#000"
+              },
+              '& .MuiInputBase-input': {
+                padding: "12px 14px",
+                borderRadius: "10px !important",
+                color: "#000",
+                background: "#fff",
 
 
-                            }
-                        }}
-                            value={date}
+              }
+            }}
+              value={dayjs(date)}
 
-                            format="DD-MM-YYYY"
-                            onChange={(e) => {
+              format="DD-MM-YYYY"
+              onChange={(e) => {
 
-                                setDate(e);
-                                setDateError('');
-                                setSummaryError('');
-                                setErrorMessages('');
-                            }} />
-                    </LocalizationProvider> */}
+                setDate(e);
+                setDateError('');
+                setSummaryError('');
+                setErrorMessages('');
+              }} />
+          </LocalizationProvider>
           <ErrorMessagesComponent errorMessage={errorMessages?.date} />
         </div>
 

@@ -80,8 +80,8 @@ const TaskForm = () => {
       categories: [],
       deadline: deadline
         ? moment(deadline)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          .utcOffset("+05:30")
+          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -258,7 +258,7 @@ const TaskForm = () => {
                           <TextField
                             className={styles.inoutbox}
                             color="primary"
-                            placeholder="Enter your Task title here"
+                            placeholder="Enter your task title here"
                             required={true}
                             fullWidth={true}
                             size="small"
@@ -349,7 +349,7 @@ const TaskForm = () => {
                         maxRows={4}
                         className={styles.inoutbox}
                         color="primary"
-                        placeholder="Enter your Task description here"
+                        placeholder="Enter your task description here"
                         fullWidth={true}
                         variant="outlined"
                         value={description}

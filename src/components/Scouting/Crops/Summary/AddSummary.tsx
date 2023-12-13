@@ -1,19 +1,16 @@
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import CropsDropDown from "@/components/Core/CropsDropDown";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import FarmsDropDown from "@/components/Core/FarmsDropDown";
-import { Alert, AlertTitle, Backdrop, Button, CircularProgress, Snackbar, TextField, Typography } from "@mui/material";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import { Alert, AlertTitle, Button, Snackbar, TextField, Typography } from "@mui/material";
+import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
-import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
-import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./summary.module.css";
-import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 
 const AddSummary = () => {
     const router = useRouter();
@@ -123,7 +120,7 @@ const AddSummary = () => {
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
     }
 
@@ -154,7 +151,7 @@ const AddSummary = () => {
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
     }
     //get the search value from the farms dropDown
@@ -187,13 +184,11 @@ const AddSummary = () => {
         }
     }
     const onSelectValueFromCropsDropDown = (value: any) => {
-        console.log(value);
-
-        if (value) {
-            setCropId(value?._id)
-            // getAllCropsOptions("", value._id)
-        }
-    }
+      if (value) {
+        setCropId(value?._id);
+        // getAllCropsOptions("", value._id)
+      }
+    };
     useEffect(() => {
         if (router.isReady && accessToken) {
             getAllFarmsOptions()

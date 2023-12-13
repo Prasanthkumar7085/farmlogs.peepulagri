@@ -3,7 +3,6 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import { FarmDataType } from "@/types/farmCardTypes";
-import AddIcon from "@mui/icons-material/Add";
 import { IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -172,8 +171,6 @@ const DashboardPage = () => {
     );
   }, [router?.query.location]);
 
-  console.log(location);
-
   useEffect(() => {
     if (router.isReady && accessToken) {
       const delay = 500;
@@ -206,7 +203,6 @@ const DashboardPage = () => {
           setPage={setPage}
           page={page}
           loading={loading}
-
           getAllFarms={getAllFarms}
           hasMore={hasMore}
         />

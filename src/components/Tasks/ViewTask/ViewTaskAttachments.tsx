@@ -1,11 +1,12 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import timePipe from "@/pipes/timePipe";
 import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
+import { EditOutlined } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
-  Button,
   Checkbox,
   CircularProgress,
   Collapse,
@@ -15,12 +16,9 @@ import { useRouter } from "next/router";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
-import appendAttachmentsInTaskService from "../../../../lib/services/TasksService/appendAttachmentsInTaskService";
 import deleteTaskAttachmentService from "../../../../lib/services/TasksService/deleteTaskAttachmentService";
 import TasksAttachments from "../AddTask/TasksAttachments";
 import styles from "./TaskDetails.module.css";
-import timePipe from "@/pipes/timePipe";
-import { Clear, EditOutlined } from "@mui/icons-material";
 
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
@@ -46,6 +44,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
   const [files, setFiles] = useState([]);
   const [attachmentData, setAttachmentData] = useState<any>();
   const [isEditable, setIsEditable] = useState(false);
+  const [uploadAttachmentsOpen, setUploadAttachmentsOpen] = useState(false);
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -145,22 +144,10 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     }
   };
 
-  const getSourceForThumnail = (type = "") => {
-    if (type && type.includes("pdf")) {
-      return "/pdf.svg";
-    } else if (type && type.includes("video")) {
-      return "/videoimg.png";
-    } else if (type && type.includes("image")) {
-      return "/image.svg";
-    } else {
-    }
-  };
-
   const selectImagesForDelete = (
     e: ChangeEvent<HTMLInputElement>,
     item: TaskAttachmentsType
   ) => {
-    console.log(item, "lhh");
     setUploadAttachmentsOpen(false);
     let ids = [...selectedAttachmentIds];
     if (ids.includes(item?._id)) {
@@ -168,7 +155,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     } else {
       ids.push(item?._id);
     }
-    console.log(ids, "pp");
     setSelectedAttachmentsIds(ids);
   };
 
@@ -192,7 +178,6 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
     setDeleteLoading(false);
   };
 
-  const [uploadAttachmentsOpen, setUploadAttachmentsOpen] = useState(false);
 
   const afterUploadAttachements = (value: any) => {
     if (value == true) {

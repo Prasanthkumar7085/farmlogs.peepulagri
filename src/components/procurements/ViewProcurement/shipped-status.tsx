@@ -1,27 +1,21 @@
-import type { NextPage } from "next";
-import { useCallback, useState } from "react";
-import { Button, Icon, Checkbox, FormControlLabel } from "@mui/material";
-import styles from "./shipped-status.module.css";
+import AlertStautsChange from "@/components/Core/StatusChangeDilog/alert-stauts-change";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
 import { useRouter } from "next/router";
+import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
-import AlertStautsChange from "@/components/Core/StatusChangeDilog/alert-stauts-change";
+import styles from "./shipped-status.module.css";
 
-const ShippedStatus = ({
-  data,
-  afterStatusChange
-}: any) => {
-
+const ShippedStatus = ({ data, afterStatusChange }: any) => {
   const router = useRouter();
-  const [status, setStauts] = useState<any>()
-  const [loading, setLoading] = useState<any>(false)
+  const [status, setStauts] = useState<any>();
+  const [loading, setLoading] = useState<any>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
   const userDetails = useSelector((state: any) => state.auth.userDetails);
-
 
   const onBackButton1Click = useCallback(() => {
     router.back();
@@ -30,23 +24,23 @@ const ShippedStatus = ({
 
   //change the status
   const onStatusChangeEvent = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       let changedStatus: any;
       if (data?.status == "PENDING") {
-        changedStatus = "APPROVED"
+        changedStatus = "APPROVED";
       }
       if (data?.status == "APPROVED") {
-        changedStatus = "PURCHASED"
+        changedStatus = "PURCHASED";
       }
       if (data?.status == "PURCHASED") {
-        changedStatus = "SHIPPED"
+        changedStatus = "SHIPPED";
       }
       if (data?.status == "SHIPPED") {
-        changedStatus = "DELIVERED"
+        changedStatus = "DELIVERED";
       }
       if (data?.status == "DELIVERED") {
-        changedStatus = "COMPLETED"
+        changedStatus = "COMPLETED";
       }
       const response = await updateStatusService({
         procurement_id: data?._id,
@@ -55,16 +49,13 @@ const ShippedStatus = ({
       });
 
       if (response.success) {
-        setDialogOpen(false)
-        afterStatusChange(true)
+        setDialogOpen(false);
+        afterStatusChange(true);
       }
-      console.log(response)
-    }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,7 +78,9 @@ const ShippedStatus = ({
         <div className={styles.priority}>
           <label className={styles.label}>Priority</label>
           <div className={styles.prioritycontainer}>
-            <p className={styles.text}>{data?.priority ? data?.priority : "---"}</p>
+            <p className={styles.text}>
+              {data?.priority ? data?.priority : "---"}
+            </p>
           </div>
         </div>
         <div className={styles.priority}>
@@ -100,7 +93,7 @@ const ShippedStatus = ({
           </div>
         </div>
         <img className={styles.statusrowChild} alt="" src="/line-3@2x.png" />
-        {data?.status == "shipped" ?
+        {data?.status == "shipped" ? (
           <div
             className={styles.materialsreceivedcheckbox}
             onClick={onMaterialsReceivedCheckboxClick}
@@ -111,10 +104,17 @@ const ShippedStatus = ({
               control={<Checkbox color="primary" />}
             />
             <p className={styles.materialsReceived}>Materials Received</p>
-          </div> : ""}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
-      <AlertStautsChange open={dialogOpen} statusChange={onStatusChangeEvent} setDialogOpen={setDialogOpen} loading={loading} />
-
+      <AlertStautsChange
+        open={dialogOpen}
+        statusChange={onStatusChangeEvent}
+        setDialogOpen={setDialogOpen}
+        loading={loading}
+      />
     </div>
   );
 };

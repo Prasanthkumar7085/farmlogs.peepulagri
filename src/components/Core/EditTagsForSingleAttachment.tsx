@@ -4,15 +4,14 @@ import {
   CircularProgress,
   Drawer,
   IconButton,
-  TextField,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import TagsTextFeild from "./TagsTextFeild";
-import styles from "./TagsDrawer.module.css";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import styles from "./TagsDrawer.module.css";
+import TagsTextFeild from "./TagsTextFeild";
 const EditTagsForSingleAttachment = ({
   TagsDrawerEditOpen,
   tagsDrawerClose,
@@ -28,13 +27,16 @@ const EditTagsForSingleAttachment = ({
 
   const [description, setDescription] = useState<any>("");
   const [tags, setTags] = useState<any>([]);
-  const [tagsDetails, setTagsDetails] = useState<Partial<{ tags: string[] }>>();
+  const [tagsDetails, setTagsDetails] = useState<
+    Partial<{ tags: string[] }> | any
+  >({
+    tags: [],
+  });
 
   const captureTags = (array: any) => {
     if (array) {
       setTags(array);
     }
-    console.log(array);
   };
 
   const getImageBasedTags = async () => {
@@ -54,16 +56,13 @@ const EditTagsForSingleAttachment = ({
         setTagsDetails(responseData?.data);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
-
-  console.log(tagsDetails, "asdf");
 
   useEffect(() => {
     if (TagsDrawerEditOpen) {
       setDescription(item?.description);
-      setTags(item ? item?.tags : []);
       getImageBasedTags();
     } else {
       setTags([]);
@@ -71,8 +70,6 @@ const EditTagsForSingleAttachment = ({
       setTagsDetails({});
     }
   }, [TagsDrawerEditOpen]);
-
-  console.log(item?.tags, tagsDetails, "asdf");
 
   return (
     <Drawer
@@ -107,13 +104,14 @@ const EditTagsForSingleAttachment = ({
           tags={tags}
           beforeTags={tagsDetails?.tags}
           TagsDrawerEditOpen={TagsDrawerEditOpen}
+          getImageBasedTags={getImageBasedTags}
         />
       </div>
 
       <Button
         variant="contained"
         onClick={() => {
-          captureTagsDetailsEdit([...tags, ...item.tags], description);
+          captureTagsDetailsEdit([...tags, ...tagsDetails?.tags], description);
         }}
         disabled={loading || !(tags?.length || description?.length)}
         className={

@@ -1,28 +1,21 @@
-import { Box, Button, FormControl, FormHelperText, Icon, IconButton, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
-import CameraCapture from "./Camera";
-import Axios from "axios"
-import styles from "./add-scout.module.css";
-import Header1 from "../Header/HeaderComponent";
-import SelectComponent from "@/components/Core/SelectComponent";
-import { useDispatch, useSelector } from "react-redux";
-import Camera from "./Camera";
-import base64ToFile from "@/pipes/base64FileConvert";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
-import { useRouter } from "next/router";
+import { removeOneElement, removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
 import AlertComponent from "@/components/Core/AlertComponent";
+import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import base64ToFile from "@/pipes/base64FileConvert";
+import timePipe from "@/pipes/timePipe";
+import { SingleScoutResponse } from "@/types/scoutTypes";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from "@mui/icons-material/Done";
-import { removeOneElement, removeTheFilesFromStore, storeFilesArray } from "@/Redux/Modules/Farms";
-import SelectAutoCompleteForCrops from "@/components/Core/SelectComponentForCrops";
-import timePipe from "@/pipes/timePipe";
+import { Box, Button, Icon, IconButton, LinearProgress, TextField } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
 import getSingleScoutService from "../../../../lib/services/ScoutServices/getSingleScoutService";
-import { SingleScoutResponse } from "@/types/scoutTypes";
-import updateDescritionService from "../../../../lib/services/ScoutServices/updateDescription";
 import updateDescriptionService from "../../../../lib/services/ScoutServices/updateDescription";
-import ErrorMessages from "@/components/Core/ErrorMessages";
-import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
+import Camera from "./Camera";
+import styles from "./add-scout.module.css";
 
 
 const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) => {
@@ -81,8 +74,13 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
         try {
 
             await updateAttachements()
-            const response = await updateDescriptionService(router.query?.scout_id as string, accessToken, data, tempFilesStorage, description)
-            console.log(response)
+            const response = await updateDescriptionService(
+              router.query?.scout_id as string,
+              accessToken,
+              data,
+              tempFilesStorage,
+              description
+            );
             if (response?.success == true) {
                 setAlertMessage(response?.message)
                 setAlertType(true)
@@ -93,7 +91,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
         finally {
             setLoading(false);
@@ -210,17 +208,21 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
                 // Ensure metadata is loaded before capturing a frame
                 video.addEventListener('canplay', () => {
-                    const canvas: any = document.createElement('canvas');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                  const canvas: any = document.createElement("canvas");
+                  canvas.width = video.videoWidth;
+                  canvas.height = video.videoHeight;
+                  canvas
+                    .getContext("2d")
+                    .drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                    const thumbnailUrl = canvas.toDataURL();
-                    console.log(thumbnailUrl)
-                    previewStorage.splice(1, 0, { fileIndex: file.name, prieviewUrl: thumbnailUrl })
-                    setPreviewImages(previewStorage);
-                    video.remove();
+                  const thumbnailUrl = canvas.toDataURL();
 
+                  previewStorage.splice(1, 0, {
+                    fileIndex: file.name,
+                    prieviewUrl: thumbnailUrl,
+                  });
+                  setPreviewImages(previewStorage);
+                  video.remove();
                 });
 
                 // Start loading the video metadata
@@ -296,87 +298,96 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
-                console.log(responseData)
-                setUploadId(responseData.data.upload_id)
-                await uploadFileintoChuncks(responseData.data.upload_id, file, index, fileProgressCopy, setFileProgress, responseData.data.file_key)
-                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: file.type, size: file.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
-                setAttachments(tempFilesStorage)
+              setUploadId(responseData.data.upload_id);
+              await uploadFileintoChuncks(
+                responseData.data.upload_id,
+                file,
+                index,
+                fileProgressCopy,
+                setFileProgress,
+                responseData.data.file_key
+              );
+              tempFilesStorage.splice(1, 0, {
+                original_name: responseData.data.original_name,
+                type: file.type,
+                size: file.size,
+                name: responseData.data.name,
+                crop_slug: responseData.data.crop_slug,
+                path: responseData.data.path,
+              });
+              setAttachments(tempFilesStorage);
             }
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
 
     }
 
     //file upload into multipart
     const uploadFileintoChuncks = async (uploadid: any, file: any, index: any, fileProgressCopy: number[], setFileProgress: Function, key: any) => {
+      const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
+      const totalChunks = Math.ceil(file.size / chunkSize);
 
-        console.log(key)
-        console.log(uploadid)
-        const chunkSize = 5 * 1024 * 1024; // 1MB chunks (you can adjust this as needed)
-        const totalChunks = Math.ceil(file.size / chunkSize);
+      let resurls;
 
-        let resurls;
+      let obj = {
+        file_key: key,
+        upload_id: uploadid,
+        parts: totalChunks,
+      };
+      let options = {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+        }),
+        body: JSON.stringify(obj),
+      };
 
-        let obj = {
-            file_key: key,
-            upload_id: uploadid,
-            parts: totalChunks
+      try {
+        // Send the chunk to the server using a POST request
+        let response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`,
+          options
+        );
+        let responseData: any = await response.json();
+        if (responseData.success == true) {
+          sestPresignedUrls(responseData.url);
+          resurls = [...responseData.url];
+
+          const promises = [];
+
+          for (
+            let currentChunk = 0;
+            currentChunk < totalChunks;
+            currentChunk++
+          ) {
+            const start = currentChunk * chunkSize;
+            const end = Math.min(start + chunkSize, file.size);
+            const chunk = file.slice(start, end);
+
+            // promises.push(axios.put(resurls[currentChunk], chunk))
+            let response: any = await fetch(resurls[currentChunk], {
+              method: "PUT",
+              body: chunk,
+            });
+
+            const progress = ((currentChunk + 1) / totalChunks) * 100;
+            promises.push(response);
+
+            fileProgressCopy[index] = progress;
+            setFileProgress([...fileProgressCopy]);
+          }
+
+          let promiseResponseObj = promises.map((part: any, index: any) => ({
+            ETag: part.headers.get("Etag").replace(/"/g, ""),
+            PartNumber: index + 1,
+          }));
+          await mergeFileChuncksEvent(promiseResponseObj, uploadid, key, index);
         }
-        let options = {
-            method: "POST",
-            headers: new Headers({
-                'content-type': 'application/json'
-            }),
-            body: JSON.stringify(obj)
-
-        }
-
-        try {
-            // Send the chunk to the server using a POST request
-            let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`, options);
-            let responseData: any = await response.json();
-            if (responseData.success == true) {
-
-                sestPresignedUrls(responseData.url)
-                resurls = [...responseData.url]
-
-                const promises = []
-
-                for (let currentChunk = 0; currentChunk < totalChunks; currentChunk++) {
-                    const start = currentChunk * chunkSize;
-                    const end = Math.min(start + chunkSize, file.size);
-                    const chunk = file.slice(start, end);
-
-                    // promises.push(axios.put(resurls[currentChunk], chunk))
-                    let response: any = await fetch(resurls[currentChunk], {
-                        method: 'PUT',
-                        body: chunk,
-                    });
-
-                    const progress = ((currentChunk + 1) / totalChunks) * 100;
-                    promises.push(response);
-
-                    fileProgressCopy[index] = progress;
-                    setFileProgress([...fileProgressCopy]);
-                }
-
-
-
-                let promiseResponseObj = promises.map((part: any, index: any) => ({
-                    ETag: part.headers.get('Etag').replace(/"/g, ''),
-                    PartNumber: index + 1
-                }))
-                await mergeFileChuncksEvent(promiseResponseObj, uploadid, key, index)
-
-            }
-
-
-        } catch (error) {
-            console.error('Error uploading chunk:', error);
-        }
-
+      } catch (error) {
+        console.error("Error uploading chunk:", error);
+      }
     }
 
 
@@ -403,7 +414,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
 
     }
@@ -439,13 +450,23 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
             let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments`, options);
             let responseData = await response.json();
             if (responseData.success == true) {
-                console.log(responseData, "dd")
-                let preSignedResponse = await fetch(responseData.data.target_url, { method: "PUT", body: item });
+               
+                let preSignedResponse = await fetch(
+                  responseData.data.target_url,
+                  { method: "PUT", body: item }
+                );
                 fileProgressCopy[index] = 100;
                 setFileProgress([...fileProgressCopy]);
-                tempFilesStorage.splice(1, 0, { original_name: responseData.data.original_name, type: item.type, size: item.size, name: responseData.data.name, crop_slug: responseData.data.crop_slug, path: responseData.data.path })
-                setAttachments(tempFilesStorage)
-                console.log(tempFilesStorage)
+                tempFilesStorage.splice(1, 0, {
+                  original_name: responseData.data.original_name,
+                  type: item.type,
+                  size: item.size,
+                  name: responseData.data.name,
+                  crop_slug: responseData.data.crop_slug,
+                  path: responseData.data.path,
+                });
+                setAttachments(tempFilesStorage);
+               
 
             }
             else {
@@ -495,7 +516,7 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
 
         }
         catch (err) {
-            console.log(err)
+            console.error(err);
         }
         finally {
             setLoading(false)
@@ -563,12 +584,11 @@ const FileUploadEditComponent = ({ captureFileUploadOptions, cameraOpen }: any) 
     const [cropName, setCropName] = useState<any>()
 
     const captureCropName = (selectedObject: any) => {
-        console.log(selectedObject)
-        if (selectedObject) {
-            setSelectedCrop(selectedObject)
-            setCropName(selectedObject.title)
-        }
-    }
+      if (selectedObject) {
+        setSelectedCrop(selectedObject);
+        setCropName(selectedObject.title);
+      }
+    };
 
 
     useEffect(() => {

@@ -2,11 +2,11 @@ import AddLocationDialog from "@/components/Core/AddLocationDialog/AddLocationDi
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmDataType } from "@/types/farmCardTypes";
+import AddIcon from "@mui/icons-material/Add";
 import {
   Autocomplete,
   Button,
   CircularProgress,
-  Icon,
   TextField,
   Typography,
 } from "@mui/material";
@@ -20,7 +20,6 @@ import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByI
 import addLocationService from "../../../../lib/services/Locations/addLocationService";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import styles from "./add-farm-form1.module.css";
-import AddIcon from '@mui/icons-material/Add';
 const AddFarmForm = () => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -93,9 +92,9 @@ const AddFarmForm = () => {
   };
   const edtiFarm = async (obj: any) => {
     let editedData: any = {
-      "title": data?.title,
-      "area": data?.area,
-      "location_id": data?.location_id
+      title: data?.title,
+      area: data?.area,
+      location_id: data?.location_id,
     };
 
     Object.keys(obj).map((item: string) => {
@@ -114,8 +113,6 @@ const AddFarmForm = () => {
     setErrorMessages({});
     setLoading(true);
 
-    console.log(area, "1");
-    console.log(location?._id, "lo")
     let obj = {
       title: title,
       location_id: location?._id,
@@ -254,31 +251,30 @@ const AddFarmForm = () => {
           src="/iconsiconarrowleft.svg"
           onClick={() => router.back()}
         />
-        <Typography className={styles.viewFarm}>{router?.query?.farm_id ? "Edit Farm" : "Add Farm"}</Typography>
-        <div className={styles.headericon} id="header-icon">
-        </div>
+        <Typography className={styles.viewFarm}>
+          {router?.query?.farm_id ? "Edit Farm" : "Add Farm"}
+        </Typography>
+        <div className={styles.headericon} id="header-icon"></div>
       </div>
       <form onSubmit={handleSubmit(onSubmitClick)}>
         {!loading ? (
           <div className={styles.addfarmform} id="add-farm">
             <div className={styles.formfields} id="form-fields">
               <div className={styles.farmname} id="farm-name">
-                <div className={styles.label}>
-                  Title
-                </div>
+                <div className={styles.label}>Title</div>
                 <TextField
                   sx={{
                     "& .MuiInputBase-root": {
                       background: "#fff",
                     },
-                    '& .MuiInputBase-input': {
+                    "& .MuiInputBase-input": {
                       padding: "11.5px 14px",
                       height: "inherit",
-                      fontFamily: "'Inter', sans-serif"
+                      fontFamily: "'Inter', sans-serif",
                     },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: "grey !important"
-                    }
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "grey !important",
+                    },
                   }}
                   {...register("title")}
                   name="title"
@@ -307,9 +303,7 @@ const AddFarmForm = () => {
                     width: "100%",
                   }}
                 >
-                  <span>
-                    Location
-                  </span>
+                  <span>Location</span>
                   <span
                     className={styles.addLocationBtn}
                     onClick={() => {
@@ -393,15 +387,14 @@ const AddFarmForm = () => {
                           "& .MuiInputBase-root": {
                             background: "#fff",
                           },
-                          '& .MuiInputBase-input': {
+                          "& .MuiInputBase-input": {
                             padding: "5.5px 14px !important",
                             height: "inherit",
-                            fontFamily: "'Inter', sans-serif"
-
+                            fontFamily: "'Inter', sans-serif",
                           },
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: "grey !important"
-                          }
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "grey !important",
+                          },
                         }}
                       />
                     )}
@@ -409,27 +402,26 @@ const AddFarmForm = () => {
                 ) : (
                   ""
                 )}
-
               </div>
-              <div className={styles.farmname} id="acres" style={{ paddingTop: "1rem" }}>
-                <div className={styles.label}>
-                  Total Land (acres)
-                </div>
+              <div
+                className={styles.farmname}
+                id="acres"
+                style={{ paddingTop: "1rem" }}
+              >
+                <div className={styles.label}>Total Land (acres)</div>
                 <TextField
                   sx={{
                     "& .MuiInputBase-root": {
                       background: "#fff",
                     },
-                    '& .MuiInputBase-input': {
+                    "& .MuiInputBase-input": {
                       padding: "12px 14px",
                       height: "inherit",
                       fontFamily: "'Inter', sans-serif",
-
                     },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: "grey !important"
-                    }
-
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "grey !important",
+                    },
                   }}
                   {...register("area")}
                   className={styles.inputfarmname}

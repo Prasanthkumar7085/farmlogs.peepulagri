@@ -3,23 +3,29 @@ import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
-import AddIcon from '@mui/icons-material/Add';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import SortIcon from '@mui/icons-material/Sort';
-import { Box, Divider, Drawer, FormControl, FormHelperText, IconButton, InputLabel, ListItem, Typography } from "@mui/material";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import SortIcon from "@mui/icons-material/Sort";
+import {
+  Box,
+  Divider,
+  Drawer,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputLabel,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
+import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import CropCard from "./CropCard";
 import styles from "./crop-card.module.css";
-import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import { useCookies } from "react-cookie";
 
 const AllCropsComponent = () => {
   const router = useRouter();
@@ -55,8 +61,6 @@ const AllCropsComponent = () => {
       removeCookie("userType");
       loggedIn("loggedIn");
       router.push("/");
-      await dispatch(removeUserDetails());
-      await dispatch(deleteAllMessages());
     } catch (err: any) {
       console.error(err);
     }
@@ -189,7 +193,6 @@ const AllCropsComponent = () => {
       let debounce = setTimeout(() => {
         dispatch(removeTheFilesFromStore([]));
 
-        console.log(router.isReady, searchString, "reason");
         getFarmDetails(
           searchString ? searchString : router.query?.search_string,
           router.query.farm_id

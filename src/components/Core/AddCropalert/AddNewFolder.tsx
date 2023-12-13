@@ -1,33 +1,23 @@
-import {
-  TextField,
-  Button,
-  Dialog,
-  CircularProgress,
-  Autocomplete,
-  LinearProgress,
-  Typography,
-} from "@mui/material";
-import styles from "./new-folder1.module.css";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { useCookies } from "react-cookie";
+
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import AlertComponent from "../AlertComponent";
+import {
+  Autocomplete,
+  Button,
+  LinearProgress,
+  TextField,
+  Typography
+} from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
+import AlertComponent from "../AlertComponent";
 import LoadingComponent from "../LoadingComponent";
+import styles from "./new-folder1.module.css";
 
-const NewFolderDiloag = ({
-  open,
-  captureResponseDilog,
-  loading,
-  defaultTitle,
-  // errorMessages,
-  defaultArea,
-  itemDetails
-}: any) => {
-
+const NewFolderDiloag = ({ open }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const accessToken = useSelector(
@@ -94,7 +84,7 @@ const NewFolderDiloag = ({
     let obj = {
       farm_id: router.query.farm_id,
       title: title ? title?.trim() : "",
-      area: + area,
+      area: +area,
     };
     let options = {
       method: "POST",
@@ -130,19 +120,14 @@ const NewFolderDiloag = ({
     let obj = {
       farm_id: router.query.farm_id,
       title: title ? title?.trim() : "",
-      area: + area,
+      area: +area,
     };
     setLoadingForAdd(true);
-    const response = await updateCropService(
-      crop_id,
-      obj,
-      accessToken
-    );
+    const response = await updateCropService(crop_id, obj, accessToken);
     if (response?.success) {
       setAlertMessage(response?.message);
-      setAlertType(true)
-      router.back()
-
+      setAlertType(true);
+      router.back();
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     } else if (response?.statusCode == 403) {
@@ -219,30 +204,27 @@ const NewFolderDiloag = ({
   return (
     <div>
       {crop_id ? (
-        <div className={styles.header} id="header" >
+        <div className={styles.header} id="header">
           <img
             className={styles.iconsiconArrowLeft}
             alt=""
             src="/iconsiconarrowleft.svg"
             onClick={() => router.back()}
-
           />
           <Typography className={styles.viewFarm}>Edit Crop</Typography>
           <div className={styles.headericon} id="header-icon">
           </div>
         </div>
       ) : (
-        <div className={styles.header} id="header" >
+        <div className={styles.header} id="header">
           <img
             className={styles.iconsiconArrowLeft}
             alt=""
             src="/iconsiconarrowleft.svg"
             onClick={() => router.back()}
-
           />
           <Typography className={styles.viewFarm}>Add Crop</Typography>
-          <div className={styles.headericon} id="header-icon">
-          </div>
+          <div className={styles.headericon} id="header-icon"></div>
         </div>
       )}
 
@@ -259,7 +241,7 @@ const NewFolderDiloag = ({
             onChange={(_, newValue: any) => {
               setTitle(newValue?.title || newValue?.name);
               setDefaultValue(newValue);
-              setErrorMessages('')
+              setErrorMessages("");
             }}
             getOptionLabel={(e) => e.title || e.name}
             renderInput={(params) => (
@@ -339,7 +321,7 @@ const NewFolderDiloag = ({
             value={area}
             onChange={(e) => {
               setArea(e.target.value);
-              setErrorMessages('')
+              setErrorMessages("");
             }}
             InputProps={{ style: { appearance: "none" } }}
             onKeyDown={(e: any) => {
@@ -354,7 +336,7 @@ const NewFolderDiloag = ({
             size="small"
             variant="outlined"
             onClick={() => {
-              router.back()
+              router.back();
             }}
           >
             Cancel

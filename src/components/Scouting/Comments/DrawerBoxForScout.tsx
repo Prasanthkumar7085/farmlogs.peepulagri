@@ -70,7 +70,6 @@ const DrawerComponentForScout = ({
         options
       );
       let responseData = await response.json();
-      console.log(responseData, "lb");
       if (responseData.success == true) {
         const commentsById: any = {};
 

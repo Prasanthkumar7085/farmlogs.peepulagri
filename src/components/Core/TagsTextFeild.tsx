@@ -2,33 +2,36 @@ import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from '@mui/icons-material/Clear';
 import {
   Autocomplete,
+  Button,
+  Chip,
   IconButton,
   LinearProgress,
   TextField,
-  Button,
-  Chip, // Import Button from MUI
 } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import styles from "./TagsTextFeild.module.css";
 import { Toaster, toast } from "sonner";
-import { useRouter } from "next/router";
+import styles from "./TagsTextFeild.module.css";
 
 const TagsTextFeild = ({
   captureTags,
   tags,
   beforeTags,
   TagsDrawerEditOpen,
+  getImageBasedTags,
 }: any) => {
+  const router = useRouter();
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
+
   const [tagValue, setTagValue] = useState<any>();
   const [newTagValue, setNewTagValue] = useState<any>();
   const [tag, setTag] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isTextFieldOpen, setIsTextFieldOpen] = useState(false);
-  const router = useRouter();
-  const accessToken = useSelector(
-    (state: any) => state.auth.userDetails?.access_token
-  );
+  const [extraTags, setExtraTags] = useState<any>([]);
 
   useEffect(() => {
     setTagValue(beforeTags ? beforeTags : []);
@@ -61,15 +64,20 @@ const TagsTextFeild = ({
     if (!newTagValue?.trim()) {
       return;
     }
-    if (tagValue.includes(newTagValue) || tag.includes(newTagValue)) {
+    if (
+      tagValue.includes(newTagValue?.trim()) ||
+      tag.includes(newTagValue?.trim())
+    ) {
       toast.error("Tag Already Exists");
       return;
+    } else {
+      toast.success("Tag Added Successfully");
     }
-    setTag([...tag, newTagValue]);
-    setExtraTags([...extraTags, newTagValue]);
+    setTag([...tag, newTagValue?.trim()]);
+    setExtraTags([...extraTags, newTagValue?.trim()]);
     setNewTagValue("");
-    captureTags([...extraTags, newTagValue]);
-    setIsTextFieldOpen(false); // Close the text field after submitting the new tag
+    captureTags([...extraTags, newTagValue?.trim()]);
+    setIsTextFieldOpen(false);
   };
 
   const handleKeyDown = (event: any) => {
@@ -78,8 +86,6 @@ const TagsTextFeild = ({
     }
   };
   const handleDeleteChip = async (deletedValue: any) => {
-    const updatedTags = tagValue.filter((tag: any) => tag !== deletedValue);
-    setTagValue(updatedTags);
     let body = {
       tags: [deletedValue],
       farm_image_ids: [router.query.image_id],
@@ -96,12 +102,16 @@ const TagsTextFeild = ({
       };
       const response: any = await fetch(url, options);
       const responseData = await response.json();
-    } catch (err) {}
-
-    captureTags(updatedTags); // Function to capture updated tags
+      if (responseData?.success) {
+        toast.success(responseData?.message);
+        await getImageBasedTags();
+      } else {
+        toast.error(responseData?.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
-
-  const [extraTags, setExtraTags] = useState<any>([]);
 
   return (
     <div className={styles.addTagContainer}>

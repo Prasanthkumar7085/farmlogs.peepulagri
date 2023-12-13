@@ -55,7 +55,7 @@ const SingleScoutView = () => {
         await logout();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }

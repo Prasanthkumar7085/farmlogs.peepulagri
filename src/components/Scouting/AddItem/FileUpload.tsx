@@ -531,8 +531,6 @@ const FileUploadComponent = () => {
 
   //add tags api
   const addTagsAndCommentsEvent = async (imagesArray: string[]) => {
-    console.log(imagesArray, tags, description);
-
     try {
       let urls = [
         {
@@ -580,7 +578,10 @@ const FileUploadComponent = () => {
         })
       );
       if (success) {
-        router.back()
+        setTimeout(() => {
+          setLoading(false);
+          router.back();
+        }, 2000);
       }
     } catch (err) {
       console.error(err);

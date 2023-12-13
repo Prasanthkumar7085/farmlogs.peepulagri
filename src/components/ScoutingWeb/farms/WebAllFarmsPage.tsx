@@ -49,7 +49,7 @@ const AllFarmsPage = () => {
         userId: router.query.user_id as string,
         page: router.query.page as string,
         limit: router.query.limit as string,
-        sortBy: router.query.order_by as string,
+        sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
       });
     }
@@ -66,7 +66,7 @@ const AllFarmsPage = () => {
       userId: router.query.user_id as string,
       page: value,
       limit: router.query.limit as string,
-      sortBy: router.query.order_by as string,
+      sortBy: router.query.sort_by as string,
       sortType: router.query.sort_type as string,
     });
   };
@@ -78,7 +78,7 @@ const AllFarmsPage = () => {
       userId: router.query.user_id as string,
       page: 1,
       limit: value,
-      sortBy: router.query.order_by as string,
+      sortBy: router.query.sort_by as string,
       sortType: router.query.sort_type as string,
     });
   };
@@ -118,11 +118,9 @@ const AllFarmsPage = () => {
 
       if (location != 1 && location) {
         queryParam["location_id"] = location;
-        delete queryParam["order_by"];
-        delete queryParam["order_type"];
+        delete queryParam["sort_by"];
+        delete queryParam["sort_type"];
       }
-
-
 
       if (userId) {
         queryParam["user_id"] = userId;
@@ -159,8 +157,8 @@ const AllFarmsPage = () => {
 
   const getColor = (orderBy: string, orderType: string) => {
     if (
-      orderBy == router.query.order_by &&
-      orderType == router.query.order_type
+      orderBy == router.query.sort_by &&
+      orderType == router.query.sort_type
     ) {
       return "#dedede";
     }

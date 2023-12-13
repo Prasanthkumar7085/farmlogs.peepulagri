@@ -374,6 +374,9 @@ const ListScouts: FunctionComponent = () => {
       // data = modifyDataToGroup(data);
       if (!data?.length) {
         setLoading(false);
+        setCrop(null);
+        setCropOptions(data);
+        setPaginationDetails({});
         return;
       }
       setCropOptions(data);

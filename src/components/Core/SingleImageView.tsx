@@ -114,7 +114,10 @@ const SingleImageView: FC<componentProps> = ({
         `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${router.query.image_id}`,
         options
       );
+
       const responseData = await response.json();
+      console.log(responseData, "asdfw");
+
       if (responseData.success) {
         setData(responseData?.data);
       }
@@ -142,7 +145,17 @@ const SingleImageView: FC<componentProps> = ({
             onClick={() => router.back()}
             width={"25px"}
           />
-          <Typography>{farmTitle + "/" + cropTitle}</Typography>
+          <Typography>
+            {(data?.farm_id?.title
+              ? data?.farm_id?.title[0]?.toUpperCase() +
+                data?.farm_id?.title?.slice(1)
+              : "") +
+              "/" +
+              (data?.crop_id?.title
+                ? data?.crop_id?.title[0]?.toUpperCase() +
+                  data?.crop_id?.title?.slice(1)
+                : "")}
+          </Typography>
           <div className={styles.headericon} id="header-icon"></div>
 
           {/* <Typography className={styles.postDate}>

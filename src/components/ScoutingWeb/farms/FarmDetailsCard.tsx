@@ -158,8 +158,8 @@ const ScoutingFarmDetailsCard = ({
                   >
                     {item.title.length > 16
                       ? item.title.slice(0, 1).toUpperCase() +
-                      item.title.slice(1, 12) +
-                      "..."
+                        item.title.slice(1, 12) +
+                        "..."
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
                 </div>
@@ -167,7 +167,13 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.totalAcres}>
                     Total <span>(acres)</span>
                   </p>
-                  <p className={styles.text}>{item.area}</p>
+                  <p className={styles.text}>
+                    {item.area
+                      ? item.area?.toString()?.includes(".")
+                        ? (+item.area)?.toFixed(2)
+                        : item.area
+                      : "0"}
+                  </p>
                 </div>
               </div>
 
@@ -178,9 +184,7 @@ const ScoutingFarmDetailsCard = ({
                   src="/farm-date-icon.svg"
                 /> */}
                 <div className={styles.duration}>
-                  <p className={styles.from}>
-                    Location
-                  </p>
+                  <p className={styles.from}>Location</p>
                   <p className={styles.divider}>-</p>
                   <p className={styles.from}>{item?.location_id?.title}</p>
                 </div>
@@ -196,7 +200,6 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.from}>
                     {timePipe(item.createdAt, "DD, MMM YYYY")}
                   </p>
-
                 </div>
               </div>
             </div>

@@ -184,10 +184,10 @@ const AddSummary = () => {
         }
     }
     const onSelectValueFromCropsDropDown = (value: any) => {
-      if (value) {
-        setCropId(value?._id);
-        // getAllCropsOptions("", value._id)
-      }
+        if (value) {
+            setCropId(value?._id);
+            // getAllCropsOptions("", value._id)
+        }
     };
     useEffect(() => {
         if (router.isReady && accessToken) {
@@ -291,7 +291,7 @@ const AddSummary = () => {
                             }
                         }}
                             value={date}
-
+                            disableFuture
                             format="DD-MM-YYYY"
                             label={"Select Date"}
                             onChange={(e) => {

@@ -62,10 +62,23 @@ const ImageGalleryComponent = () => {
   const [deletedImages, setDeletedImages] = useState<any>([]);
   const [deletedImagePages, setDeletedImagePages] = useState<any>({});
   const [value, setValue] = useState<any>("1");
+  const [tagsSuccess, setTagsSuccess] = useState(false);
+  const [commentSuccess, setCommentSuccess] = useState(false);
+
+  useEffect(() => {
+    if (tagsSuccess && commentSuccess) {
+      toast.success('Tags and Comments added Successfully')
+    }
+
+  }, [tagsSuccess, commentSuccess])
+
+
 
   useEffect(() => {
     setTempImages(selectedItems);
   }, [selectedItems]);
+
+
 
   // Effect to add scroll event listener when the component mounts
 
@@ -222,7 +235,8 @@ const ImageGalleryComponent = () => {
       );
       let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
-        toast.success(responseData?.message);
+        // toast.success(responseData?.message);
+        setTagsSuccess(true)
         setSelectedItems([]);
         setTagsDrawerOpen(false);
         setTagsCheckBoxOpen(false)
@@ -259,7 +273,9 @@ const ImageGalleryComponent = () => {
       );
       let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
-        toast.success(responseData?.message);
+        // toast.success(responseData?.message);
+        setCommentSuccess(true);
+
         setSelectedItems([]);
         setTagsDrawerOpen(false);
         setTagsCheckBoxOpen(false);
@@ -273,6 +289,8 @@ const ImageGalleryComponent = () => {
       setLoading(false);
     }
   };
+
+
 
   //checkbox handlechange event
   const handleChange = (itemId: any) => {

@@ -130,7 +130,7 @@ const SingleImageView: FC<componentProps> = ({
   return (
     <div>
       <div className={styles.overlay}>
-        <div style={{ position: "fixed", width: "100%", zIndex: "1" }}>
+        <div style={{ position: "fixed", width: "100%", zIndex: "1", maxWidth: "500px" }}>
 
           <div className={styles.singleImageViewHeader}>
             <img

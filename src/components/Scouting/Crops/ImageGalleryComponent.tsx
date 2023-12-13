@@ -477,40 +477,39 @@ const ImageGalleryComponent = () => {
         <div className={styles.stickyHeader}>
           {tagsCheckBoxOpen ? (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <Button
+              <IconButton
                 onClick={() => {
                   setTagsCheckBoxOpen(false);
                   setSelectedItems([]);
                 }}
                 sx={{ display: data?.length ? "" : "none" }}
                 className={styles.selectBtn}
-                style={{ minWidth: "inherit" }}
               >
                 <img src="/mobileIcons/scouting/x-light.svg" alt="" width="20px" />
-              </Button>
+              </IconButton>
               {selectedItems?.length ? (
-                <div>
-                  <IconButton onClick={() => setDeleteOpen(true)}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <IconButton className={styles.selectBtn} onClick={() => setDeleteOpen(true)} sx={{ paddingBlock: "0" }}>
                     <ImageComponent
                       src={"/mobileIcons/scouting/trash-simple-light.svg"}
-                      width={18}
-                      height={18}
+                      width={20}
+                      height={20}
                       alt=""
                     />
                   </IconButton>
 
-                  <IconButton onClick={() => setTagsDrawerOpen(true)}>
+                  <IconButton className={styles.selectBtn} onClick={() => setTagsDrawerOpen(true)} sx={{ paddingBlock: "0" }}>
                     <ImageComponent
                       src={"/mobileIcons/navTabs/tagIcon-selectImage.svg"}
-                      width={18}
-                      height={18}
+                      width={20}
+                      height={20}
                       alt="tag"
                     />
                   </IconButton>
 
-                  <IconButton onClick={() => downloadFiles()}>
+                  {/* <IconButton onClick={() => downloadFiles()}>
                     <FileDownloadIcon />
-                  </IconButton>
+                  </IconButton> */}
                 </div>
               ) : (
                 ""
@@ -542,13 +541,13 @@ const ImageGalleryComponent = () => {
                 <div key={indexAttachment}
                   ref={lastBookElementRef}
                 >
-                  <Typography variant="caption">{images.date}</Typography>
+                  <Typography variant="caption" className={styles.scoutingDate}>{images.date}</Typography>
                   <div
                     style={{
                       display: "grid",
                       gridTemplateColumns: "repeat(4, 1fr)",
-                      gridGap: "16px",
-                      maxHeight: "calc(100vh - 160px)",
+                      gridGap: "1px",
+                      marginBottom: "5px"
                     }}
                   >
                     {images?.images?.map((image: any, index: any) => {
@@ -633,20 +632,21 @@ const ImageGalleryComponent = () => {
                     indexAttachment === data.length - data.length ? lastItemRef : null
                   }
                 >
-                  <Typography variant="caption">{images.date}</Typography>
+                  <Typography variant="caption" className={styles.scoutingDate}>{images.date}</Typography>
                   <div
                     style={{
                       display: "grid",
                       gridTemplateColumns: "repeat(4, 1fr)",
                       gridGap: "1px",
-                      maxHeight: "calc(100vh - 160px)",
+                      marginBottom: "5px"
+
                     }}
                   >
                     {images?.images?.map((image: any, index: any) => {
 
                       return (
                         <div
-                          style={{ position: "relative" }}
+                          style={{ position: "relative", height: "100px" }}
                           key={index}
 
                         >

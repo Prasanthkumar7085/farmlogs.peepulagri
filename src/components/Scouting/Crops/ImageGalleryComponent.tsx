@@ -101,7 +101,7 @@ const ImageGalleryComponent = () => {
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${page}/50`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/day-wise/${page}/50`,
         options
       );
 
@@ -109,7 +109,33 @@ const ImageGalleryComponent = () => {
 
       if (responseData.success) {
         setHasMore(responseData?.has_more);
-        if (pageChange) setData([...data, ...responseData?.data]);
+        if (pageChange) {
+
+          setData((prevData: any) => {
+            const newData = [...prevData, ...responseData?.data];
+            // Assuming 'date' is the property to match for merging
+            const mergedData: any = {};
+
+            // Merge data based on date
+            newData.forEach((item: any) => {
+              const date = item.date;
+
+              if (!mergedData[date]) {
+                mergedData[date] = { ...item };
+              } else {
+                // Merge images for the same date
+                mergedData[date].images = [
+                  ...mergedData[date].images,
+                  ...item.images,
+                ];
+              }
+            });
+
+            // Convert merged data object back to an array
+            return Object.values(mergedData);
+          })
+
+        }
         else setData([...responseData?.data]);
         return responseData.data;
       } else if (responseData?.statusCode == 403) {
@@ -274,50 +300,7 @@ const ImageGalleryComponent = () => {
   const [visibleImages, setVisibleImages] = useState([]);
   const [dateRange, setDateRange] = useState("");
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (containerRef.current) {
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const visibleImages = data.filter((image: any) => {
-          const imageRect = image.ref.getBoundingClientRect();
-          return (
-            imageRect.top >= containerRect.top &&
-            imageRect.bottom <= containerRect.bottom
-          );
-        });
 
-        // Calculate the date range for the visible images
-        const startDate =
-          visibleImages.length > 0
-            ? timePipe(visibleImages[0].uploaded_at, "DD MMM YY")
-            : "";
-        const endDate =
-          visibleImages.length > 0
-            ? timePipe(
-              visibleImages[visibleImages.length - 1].uploaded_at,
-              "DD MMM YY"
-            )
-            : "";
-
-        // Update the displayed date range
-        if (startDate && endDate) {
-
-          setDateRange(`${startDate} - ${endDate}`);
-        } else {
-          setDateRange('')
-        }
-        setVisibleImages(visibleImages);
-      }
-    };
-
-    // Add scroll event listener to the container
-    containerRef.current.addEventListener("scroll", handleScroll);
-    handleScroll();
-    // Cleanup event listener on component unmount
-    return () => {
-      containerRef.current?.removeEventListener("scroll", handleScroll);
-    };
-  }, [data]);
 
   //tabs change code
   const handleChangeMenuView = (
@@ -492,7 +475,6 @@ const ImageGalleryComponent = () => {
 
       {value == "1" ? (
         <div className={styles.stickyHeader}>
-          <div className={styles.dateRange}>{dateRange ? dateRange : ""}</div>
           {tagsCheckBoxOpen ? (
             <div style={{ display: "flex", alignItems: "center" }}>
               <Button
@@ -548,172 +530,195 @@ const ImageGalleryComponent = () => {
         ""
       )}
 
-      {value == "1" ? (
-        <div
-          ref={containerRef}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gridGap: "1px",
-            overflowY: "auto",
-            maxHeight: "calc(100vh - 160px)",
-          }}
-        >
-          {data?.length ? (
-            data.map((image: any, indexAttachment: any) => {
-              if (data.length === indexAttachment + 1) {
-                return (
-                  <div
-                    ref={lastBookElementRef}
-                    style={{ position: "relative", paddingTop: "100%" }}
-                    key={indexAttachment}
-                  >
-                    <img
-                      className="your-image-class"
-                      key={indexAttachment}
-                      ref={(ref) => (image.ref = ref)}
-                      src={
-                        image.type?.slice(0, 2) == "vi"
-                          ? "/Play-button.svg"
-                          : image.url
-                      }
-                      alt={image?.uploaded_at}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        position: "absolute",
-                        objectFit: "cover",
-                        top: "0",
-                        right: "0",
-                      }}
-                      onClick={() => {
-                        if (!longpressActive || tagsCheckBoxOpen == false) {
-                          router.push(
-                            `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                          );
-                        } else {
-                          handleChange(image); // Call handleLongPress when long press is detected
-                        }
-                      }}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        setTagsCheckBoxOpen(true);
-                        handleChange(image);
-                        setScoutId(image._id); // Adjust the timeout duration as needed
-                        setLongPressActive(true);
-                      }} // Prevent right-click context menu
-                      onTouchStart={(e) => {
-                        if (e.touches.length > 1) {
-                          e.preventDefault(); // Prevent multi-touch event
-                        }
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "2px",
-                        right: "2px",
-                      }}
-                    >
-                      {tagsCheckBoxOpen ? (
-                        <input
-                          style={{ width: "18px", height: "18px", border: "1px solid #000" }}
-                          type="checkbox"
-                          checked={tempImages.some(
-                            (ite: any) => ite._id === image._id
-                          )}
-                          onChange={() => handleChange(image)}
-                          title={image.id}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                );
-              } else {
-                return (
-                  <div
-                    style={{ position: "relative", paddingTop: "100%" }}
-                    key={indexAttachment}
-                    ref={
-                      indexAttachment === data.length - 50 ? lastItemRef : null
-                    }
-                  >
-                    <img
-                      className="your-image-class"
-                      key={indexAttachment}
-                      ref={(ref) => (image.ref = ref)}
-                      src={
-                        image.type?.slice(0, 2) == "vi"
-                          ? "/Play-button.svg"
-                          : image.url
-                      }
-                      alt={image?.uploaded_at}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        position: "absolute",
-                        objectFit: "cover",
-                        top: "0",
-                        right: "0",
-                      }}
-                      onClick={() => {
-                        if (!longpressActive) {
-                          router.push(
-                            `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                          );
-                        } else {
-                          handleChange(image); // Call handleLongPress when long press is detected
-                        }
-                      }}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        setTagsCheckBoxOpen(true);
-                        handleChange(image);
-                        setScoutId(image._id); // Adjust the timeout duration as needed
-                        setLongPressActive(true);
-                      }} // Prevent right-click context menu
-                      onTouchStart={(e) => {
-                        if (e.touches.length > 1) {
-                          e.preventDefault(); // Prevent multi-touch event
-                        }
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "2px",
-                        right: "2px",
-                      }}
-                    >
-                      {tagsCheckBoxOpen ? (
-                        <input
-                          style={{ width: "18px", height: "18px", border: "1px solid #000" }}
-                          type="checkbox"
-                          checked={tempImages.some(
-                            (ite: any) => ite._id === image._id
-                          )}
-                          onChange={() => handleChange(image)}
-                          title={image.id}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                );
-              }
-            })
-          ) : (
-            ""
-          )}
-        </div>
+      <div style={{
+        overflowY: "auto",
+        maxHeight: "calc(100vh - 160px)",
 
+      }}>
+        {data?.length ?
+          data.map((images: any, indexAttachment: any) => {
+            if (data.length === indexAttachment + 1) {
+              return (
+                <div key={indexAttachment}
+                  ref={lastBookElementRef}
+                >
+                  <Typography variant="caption">{images.date}</Typography>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gridGap: "16px",
+                      maxHeight: "calc(100vh - 160px)",
+                    }}
+                  >
+                    {images?.images?.map((image: any, index: any) => {
 
-      ) : (
-        <ScoutView />
-      )}
+                      return (
+                        <div
+                          style={{ position: "relative", height: "100px" }}
+                          key={index}
+
+                        >
+                          <img
+                            className="your-image-class"
+                            key={index}
+                            src={
+                              image.type?.slice(0, 2) == "vi"
+                                ? "/Play-button.svg"
+                                : image.url
+                            }
+                            alt={image?.uploaded_at}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              top: "0",
+                              right: "0",
+                            }}
+                            onClick={() => {
+                              if (!longpressActive || tagsCheckBoxOpen == false) {
+                                router.push(
+                                  `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                                );
+                              } else {
+                                handleChange(image); // Call handleLongPress when long press is detected
+                              }
+                            }}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              setTagsCheckBoxOpen(true);
+                              handleChange(image);
+                              setScoutId(image._id); // Adjust the timeout duration as needed
+                              setLongPressActive(true);
+                            }} // Prevent right-click context menu
+                            onTouchStart={(e) => {
+                              if (e.touches.length > 1) {
+                                e.preventDefault(); // Prevent multi-touch event
+                              }
+                            }}
+                          />
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "2px",
+                              right: "2px",
+                            }}
+                          >
+                            {tagsCheckBoxOpen ? (
+                              <input
+                                style={{ width: "18px", height: "18px", border: "1px solid #000" }}
+                                type="checkbox"
+                                checked={tempImages.some(
+                                  (ite: any) => ite._id === image._id
+                                )}
+                                onChange={() => handleChange(image)}
+                                title={image.id}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                      )
+
+                    })}
+                  </div>
+                </div>
+              )
+            }
+            else {
+              return (
+                <div key={indexAttachment}
+                  ref={
+                    indexAttachment === data.length - data.length ? lastItemRef : null
+                  }
+                >
+                  <Typography variant="caption">{images.date}</Typography>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gridGap: "1px",
+                      maxHeight: "calc(100vh - 160px)",
+                    }}
+                  >
+                    {images?.images?.map((image: any, index: any) => {
+
+                      return (
+                        <div
+                          style={{ position: "relative" }}
+                          key={index}
+
+                        >
+                          <img
+                            className="your-image-class"
+                            key={index}
+                            src={
+                              image.type?.slice(0, 2) == "vi"
+                                ? "/Play-button.svg"
+                                : image.url
+                            }
+                            alt={image?.uploaded_at}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              top: "0",
+                              right: "0",
+                            }}
+                            onClick={() => {
+                              if (!longpressActive || tagsCheckBoxOpen == false) {
+                                router.push(
+                                  `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                                );
+                              } else {
+                                handleChange(image); // Call handleLongPress when long press is detected
+                              }
+                            }}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              setTagsCheckBoxOpen(true);
+                              handleChange(image);
+                              setScoutId(image._id); // Adjust the timeout duration as needed
+                              setLongPressActive(true);
+                            }} // Prevent right-click context menu
+                            onTouchStart={(e) => {
+                              if (e.touches.length > 1) {
+                                e.preventDefault(); // Prevent multi-touch event
+                              }
+                            }}
+                          />
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "2px",
+                              right: "2px",
+                            }}
+                          >
+                            {tagsCheckBoxOpen ? (
+                              <input
+                                style={{ width: "18px", height: "18px", border: "1px solid #000" }}
+                                type="checkbox"
+                                checked={tempImages.some(
+                                  (ite: any) => ite._id === image._id
+                                )}
+                                onChange={() => handleChange(image)}
+                                title={image.id}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                      )
+
+                    })}
+                  </div>
+                </div>
+              )
+            }
+          }) : ""}
+      </div>
       {data?.length == 0 && !loading &&
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "calc(100vh - 160px)" }}>
 

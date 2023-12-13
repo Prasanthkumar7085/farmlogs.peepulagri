@@ -1,21 +1,13 @@
-import ImageComponent from "@/components/Core/ImageComponent";
-import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
-import TagsDrawerEdit from "@/components/Core/TagsDrawerEdit";
-import { Button, Chip, Divider, IconButton, Typography } from "@mui/material";
-import Image from "next/image";
-import { FC, useEffect, useState } from "react";
-import styles from "../Scouting/Crops/Scouts/singleImage.module.css";
 import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAttachment";
+import { IconButton, Typography } from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { FC, useEffect, useState } from "react";
+import ReactPanZoom from "react-image-pan-zoom-rotate";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
-import { useRouter } from "next/router";
 import DrawerComponentForScout from "../Scouting/Comments/DrawerBoxForScout";
-import timePipe from "@/pipes/timePipe";
-import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
-import ReactPanZoom from "react-image-pan-zoom-rotate";
-import { Markup } from "interweave";
-import SellIcon from "@mui/icons-material/Sell";
-import formatText from "../../../lib/requestUtils/formatTextToBullets";
+import styles from "../Scouting/Crops/Scouts/singleImage.module.css";
 import LoadingComponent from "./LoadingComponent";
 
 interface componentProps {
@@ -138,53 +130,35 @@ const SingleImageView: FC<componentProps> = ({
   return (
     <div>
       <div className={styles.overlay}>
-        <div className={styles.singleImageViewHeader}>
-          <img
-            alt=""
-            src="/iconsiconarrowleft.svg"
-            onClick={() => router.back()}
-            width={"25px"}
-          />
-          <Typography>
-            {(data?.farm_id?.title
-              ? data?.farm_id?.title[0]?.toUpperCase() +
-                data?.farm_id?.title?.slice(1)
-              : "") +
-              "/" +
-              (data?.crop_id?.title
-                ? data?.crop_id?.title[0]?.toUpperCase() +
-                  data?.crop_id?.title?.slice(1)
-                : "")}
-          </Typography>
-          <div className={styles.headericon} id="header-icon"></div>
+        <div style={{ position: "fixed", width: "100%", zIndex: "1" }}>
 
-          {/* <Typography className={styles.postDate}>
-            <InsertInvitationIcon />
-            {loading ? (
-              "-"
-            ) : (
-              <span>{timePipe(data?.uploaded_at, "DD-MM-YYYY")}</span>
-            )}
-          </Typography> */}
+          <div className={styles.singleImageViewHeader}>
+            <img
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.back()}
+              width={"25px"}
+            />
+            <Typography>
+              {(data?.farm_id?.title
+                ? data?.farm_id?.title[0]?.toUpperCase() +
+                data?.farm_id?.title?.slice(1)
+                : "") +
+                "/" +
+                (data?.crop_id?.title
+                  ? data?.crop_id?.title[0]?.toUpperCase() +
+                  data?.crop_id?.title?.slice(1)
+                  : "")}
+            </Typography>
+            <div className={styles.headericon} id="header-icon"></div>
+
+
+          </div>
         </div>
-        {/* <>
-                    {isZoom ? (
-                        <ReactPanZoom
-                            image={data.url}
-                            alt={`Image alt text ${data?.created_at}`}
-                        />
-                    ) : (
-                        <img
-                            className="zoom-image"
-                            src={data?.url}
-                            alt={`Image ${data?.created_at}`}
-                            height={"auto"} width={"100%"}
-                        />
-                    )}
-                </> */}
+
         <div
           style={{
-            height: "auto",
+            height: "calc(100vh - 61px)",
             width: "100%",
             position: "relative",
             overflow: "hidden",
@@ -229,48 +203,6 @@ const SingleImageView: FC<componentProps> = ({
           </IconButton>
         </div>
       </div>
-      {/* <div>
-        {data?.description
-          ? data?.description?.length > 97
-            ? data?.description?.slice(0, 100) + "..."
-            : data?.description
-          : ""}
-      </div> */}
-      {/* <div className={styles.scoutingdetails}>
-        {tagsDetails?.tags ? (
-          <div className={styles.cropDetailsBlock}>
-            {tagsDetails?.tags?.length ? (
-              <div className={styles.tagNames}>
-                {tagsDetails?.tags?.length
-                  ? tagsDetails?.tags?.map((item: string, index: number) => {
-                    return (
-                      <Chip
-                        icon={
-                          <SellIcon
-                            sx={{ width: "12px", paddingInlineStart: "4px" }}
-                          />
-                        }
-                        key={index}
-                        label={item}
-                        className={styles.tagsName}
-                        variant="outlined"
-                        size="medium"
-                        color="success"
-                      />
-                    );
-                  })
-                  : ""}
-              </div>
-            ) : (
-              ""
-            )}
-
-
-          </div>
-        ) : (
-          ""
-        )}
-      </div> */}
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}
@@ -284,10 +216,10 @@ const SingleImageView: FC<componentProps> = ({
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={data}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-        // loading={loading}
       />
 
       <LoadingComponent loading={loading} />
+      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 };

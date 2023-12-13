@@ -358,14 +358,14 @@ const AllSummaryComponents = () => {
                                     <div className={styles.summaryHeading}>
                                         <h4 className={styles.date}>{timePipe(item.date, "ddd DD-MMM-YYYY")}</h4>
                                         <h6 className={styles.cropTitle}>
-                                            {/* <span> {item?.crop_id?.title
-                                                ? item?.crop_id?.title?.length > 18
-                                                    ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
-                                                    item?.crop_id?.title?.slice(1, 20) +
+                                            <span> {item?.farm_id?.title
+                                                ? item?.farm_id?.title?.length > 18
+                                                    ? item?.farm_id?.title?.slice(0, 1).toUpperCase() +
+                                                    item?.farm_id?.title?.slice(1, 17) +
                                                     "..."
-                                                    : item?.crop_id?.title[0].toUpperCase() +
-                                                    item?.crop_id?.title?.slice(1)
-                                                : ""}</span> */}
+                                                    : item?.farm_id?.title[0].toUpperCase() +
+                                                    item?.farm_id?.title?.slice(1)
+                                                : "ty"}</span>
                                             {item?.crop_id?.title
                                                 ? item?.crop_id?.title?.length > 18
                                                     ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
@@ -404,14 +404,22 @@ const AllSummaryComponents = () => {
                                 <div className={styles.header}>
                                     <div className={styles.summaryHeading}>
                                         <h4 className={styles.date}>{timePipe(item.date, "DD MMM, YYYY")}</h4>
-                                        <h4 className={styles.cropTitle} >{item?.crop_id?.title
-                                            ? item?.crop_id?.title?.length > 18
-                                                ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
-                                                item?.crop_id?.title?.slice(1, 20) +
-                                                "..."
-                                                : item?.crop_id?.title[0].toUpperCase() +
-                                                item?.crop_id?.title?.slice(1)
-                                            : ""}</h4>
+                                        <h4 className={styles.cropTitle} >
+                                            {item?.farm_id?.title
+                                                ? item?.farm_id?.title?.length > 10
+                                                    ? item?.farm_id?.title?.slice(0, 1).toUpperCase() +
+                                                    item?.farm_id?.title?.slice(1, 9) +
+                                                    "..."
+                                                    : item?.farm_id?.title[0].toUpperCase() +
+                                                    item?.farm_id?.title?.slice(1)
+                                                : "ty"} <span>( {item?.crop_id?.title
+                                                    ? item?.crop_id?.title?.length > 17
+                                                        ? item?.crop_id?.title?.slice(0, 1).toUpperCase() +
+                                                        item?.crop_id?.title?.slice(1, 16) +
+                                                        "..."
+                                                        : item?.crop_id?.title[0].toUpperCase() +
+                                                        item?.crop_id?.title?.slice(1)
+                                                    : ""})</span></h4>
                                     </div>
                                     <div className={styles.vectorIcon} onClick={(e) => {
                                         handleMenu(e)

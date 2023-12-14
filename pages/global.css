@@ -17,6 +17,18 @@ body {
     min-height: 100vh;
     background: linear-gradient(120deg, #05a15609, #d9494109, #d9484109, #05a15609);
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 
 .MuiTabs-indicator {
     display: none !important;

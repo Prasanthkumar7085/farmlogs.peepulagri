@@ -43,13 +43,6 @@ const SideBarMenu = ({ children }: any) => {
       toolTitle: "Farms",
     },
     // {
-    //   src: "/support-icon.svg",
-    //   link: "/procurements",
-    //   isVisible: true,
-    //   active: router.pathname.includes("/procurements"),
-    //   toolTitle: "Procurements",
-    // },
-    // {
     //   src: "/timeline-icon.svg",
     //   link: "/timeline",
     //   isVisible: userName !== "ADMIN",
@@ -69,6 +62,13 @@ const SideBarMenu = ({ children }: any) => {
       isVisible: userName !== "ADMIN",
       active: router.pathname.includes("/tasks"),
       toolTitle: "Tasks",
+    },
+    {
+      src: "/support-icon.svg",
+      link: "/procurements",
+      isVisible: true,
+      active: router.pathname.includes("/procurements"),
+      toolTitle: "Procurements",
     },
     // { src: '/calendaricon.svg', link: "/" },
     // { src: '/graph-icon.svg', link: "/" },

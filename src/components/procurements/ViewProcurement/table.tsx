@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import updateMaterialStatusService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialItemStatus";
 import getMaterialsByProcurementIdService from "../../../../lib/services/ProcurementServices/getMaterialsByProcurementIdService";
+import ViewMaterialDrawer from "./ViewMaterialDrawer";
 const ViewProcurementTable = ({ data }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -31,8 +32,11 @@ const ViewProcurementTable = ({ data }: any) => {
   );
 
   const [materials, setMaterials] = useState<any>([]);
+  const [materialDetails, setMaterialsDetails] = useState<any>();
+  const [materialId, setMaterialId] = useState("");
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [materialOpen, setMaterialOpen] = useState(false);
 
   //logout function for 403 error
   const logout = async () => {
@@ -64,6 +68,16 @@ const ViewProcurementTable = ({ data }: any) => {
       } else {
         toast.error("Something went wrong");
         throw response;
+      }
+      if (response?.data) {
+        {
+          response?.data.map((data: any) => {
+
+            if (data.status === "APPROVED") {
+              setMaterialsDetails(data.status);
+            }
+          })
+        }
       }
     } catch (err) {
       console.error(err);
@@ -98,6 +112,8 @@ const ViewProcurementTable = ({ data }: any) => {
     }
   };
 
+
+
   //api calls
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -117,6 +133,12 @@ const ViewProcurementTable = ({ data }: any) => {
               <TableCell>Procurement(Qty)</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Approved By</TableCell>
+              {materialDetails ?
+                <>
+                  <TableCell>Name of Vendor</TableCell>
+                  <TableCell>Price(Rs)</TableCell>
+                </>
+                : ''}
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -142,6 +164,14 @@ const ViewProcurementTable = ({ data }: any) => {
                   <TableCell>
                     {row?.approved_by ? row?.approved_by : "---"}
                   </TableCell>
+                  {materialDetails ?
+                    <>
+                      <TableCell>{row?.vendor ? row?.vendor : "---"}</TableCell>
+                      <TableCell>
+                        {row?.price ? row?.price : "---"}
+                      </TableCell>
+                    </>
+                    : ''}
                   <TableCell>
                     <div
                       style={{
@@ -152,40 +182,64 @@ const ViewProcurementTable = ({ data }: any) => {
                     >
                       {row?.status !== "APPROVED" ? (
                         <div style={{ cursor: "pointer" }}>
-                          <IconButton
-                            onClick={() =>
-                              onStatusChangeEvent("reject", row?._id)
-                            }
-                          >
-                            <RemoveCircleOutlineIcon />
-                          </IconButton>
+                          {!row?.price && row?.status !== "REJECTED" ?
+                            <IconButton
+                              onClick={() =>
+                                onStatusChangeEvent("reject", row?._id)
+                              }
+                            >
+                              <RemoveCircleOutlineIcon />
+                            </IconButton>
+                            : ''}
                         </div>
                       ) : (
                         ""
                       )}
                       {row?.status !== "APPROVED" ? (
                         <div style={{ cursor: "pointer" }}>
-                          <ImageComponent
-                            src="/pencil-icon.svg"
-                            height={17}
-                            width={17}
-                            alt="view"
-                          />
+                          {!row?.price && !row?.vendor ?
+                            <ImageComponent
+                              src="/pencil-icon.svg"
+                              height={17}
+                              width={17}
+                              alt="view"
+                            />
+                            : ''}
+
                         </div>
                       ) : (
                         ""
                       )}
                       <div style={{ cursor: "pointer" }}>
-                        <Button
-                          variant="outlined"
-                          onClick={() =>
-                            onStatusChangeEvent("approve", row?._id)
-                          }
-                        >
-                          {row?.status == "APPROVED"
-                            ? "Add Purchase"
-                            : "Approve"}
-                        </Button>
+                        {row?.status == "APPROVED" ? (
+                          <Button
+                            variant="outlined"
+                            onClick={() => {
+                              setMaterialId(row?._id);
+                              setMaterialOpen(true)
+                            }
+                            }
+                          >
+                            {row?.price && row?.vendor ? "Edit Purchase" : "Add Purchase"}
+
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="outlined"
+                            onClick={() => {
+                              if (!row?.price && !row?.vendor) {
+                                onStatusChangeEvent("approve", row?._id)
+                              } else {
+                                setMaterialId(row?._id);
+                                setMaterialOpen(true)
+                              }
+                            }
+                            }
+                          >
+
+                            {row?.price && row?.vendor ? "Edit Purchase" : "Approve"}
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </TableCell>
@@ -199,6 +253,7 @@ const ViewProcurementTable = ({ data }: any) => {
       )}
 
       <LoadingComponent loading={loading} />
+      <ViewMaterialDrawer materialId={materialId} materialOpen={materialOpen} setMaterialOpen={setMaterialOpen} getAllProcurementMaterials={getAllProcurementMaterials} />
       {/* <AlertStautsChange open={dialogOpen} statusChange={onStatusChangeEvent} setDialogOpen={setDialogOpen} loading={loading} /> */}
     </div>
   );

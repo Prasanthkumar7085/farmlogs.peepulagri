@@ -26,6 +26,7 @@ import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import CropCard from "./CropCard";
 import styles from "./crop-card.module.css";
+import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
 
 const AllCropsComponent = () => {
   const router = useRouter();
@@ -516,14 +517,18 @@ const AllCropsComponent = () => {
               })}
             </div>
           ) : !loading ? (
-            <div className={styles.noData}>
-              <Image
-                src="/no-crops-image.svg"
-                alt=""
-                width={120}
-                height={120}
-              />
-              <Typography variant="h4">This farm has no crops</Typography>
+            // <div className={styles.noData}>
+            //   <Image
+            //     src="/no-crops-image.svg"
+            //     alt=""
+            //     width={120}
+            //     height={120}
+            //   />
+            //   <Typography variant="h4">This farm has no crops</Typography>
+            // </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 222px)" }}>
+              <NoDataMobileComponent noData={!Boolean(cropOptions?.length)} noDataImg={"/NoDataImages/No_Crops.svg"} />
+              <p className="noSummaryText">No Crops</p>
             </div>
           ) : (
             ""

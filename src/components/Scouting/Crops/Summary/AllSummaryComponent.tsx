@@ -13,6 +13,7 @@ import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import styles from "./summary.module.css";
+import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
 
 const AllSummaryComponents = () => {
     const router = useRouter();
@@ -436,7 +437,10 @@ const AllSummaryComponents = () => {
                         )
                     }
                 }) : !loading ? (
-                    <NoFarmDataComponent noData={!Boolean(data.length)} />
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 180px)" }}>
+                        <NoDataMobileComponent noData={!Boolean(data.length)} noDataImg={"/NoDataImages/No_summary.svg"} />
+                        <p className="noSummaryText">No summary</p>
+                    </div>
                 ) : (
                     "")}
             </div>

@@ -19,6 +19,7 @@ import DrawerComponentForScout from "../Comments/DrawerBoxForScout";
 import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
 import NoDataAnimatedComponent from "@/components/Core/NoDataAnimatedComponent";
+import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
 const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -740,10 +741,15 @@ const ImageGalleryComponent = () => {
           }) : ""}
       </div>
       {data?.length == 0 && !loading &&
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "calc(100vh - 160px)" }}>
+        // <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "calc(100vh - 160px)" }}>
 
-          <NoDataAnimatedComponent noData={!data?.length} />
-        </div>}
+        //   <NoDataAnimatedComponent noData={!data?.length} />
+        // </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 180px)" }}>
+          <NoDataMobileComponent noData={!Boolean(data?.length)} noDataImg={"/NoDataImages/No_Scouting.svg"} />
+          <p className="noSummaryText">No Images</p>
+        </div>
+      }
       <LoadingComponent loading={loading} />
 
       <VideoDialogForScout

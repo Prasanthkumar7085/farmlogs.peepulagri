@@ -14,6 +14,7 @@ import getAllLocationsService from "../../../../lib/services/Locations/getAllLoc
 import styles from "./DashboardPage.module.css";
 import DashBoardHeader from "./dash-board-header";
 import FarmCard from "./farm-card";
+import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -207,7 +208,11 @@ const DashboardPage = () => {
           hasMore={hasMore}
         />
       ) : !loading ? (
-        <NoFarmDataComponent noData={!Boolean(farmsData.length)} />
+
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 180px)" }}>
+          <NoDataMobileComponent noData={!Boolean(farmsData.length)} noDataImg={"/NoDataImages/No_Farms.svg"} />
+          <p className="noSummaryText">No Farms</p>
+        </div>
       ) : (
         <div style={{ minHeight: "75vh" }}></div>
       )}

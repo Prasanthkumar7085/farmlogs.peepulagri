@@ -1,11 +1,11 @@
 import React from "react";
 import ImageComponent from "./ImageComponent";
 
-const NoDataComponent = ({ noData }: { noData: Boolean }, noDataImg: any) => {
+const NoDataMobileComponent = ({ noData, noDataImg }: { noData: Boolean, noDataImg: any }) => {
     return (
         <React.Fragment>
-            {noData ? <ImageComponent src={noDataImg} height={100} width={100} alt="nodata" /> : ""}
+            {noData ? <ImageComponent src={noDataImg} height={100} width={150} alt="nodata" /> : ""}
         </React.Fragment>
     )
 }
-export default NoDataComponent;
+export default NoDataMobileComponent;

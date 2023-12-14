@@ -230,8 +230,9 @@
 }
 
 .allCrops {
-  height: calc(100vh - 224px);
-  overflow: scroll;
+  height: calc(100vh - 203px);
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0 0.65rem;
   margin-top: -1.5rem;
 }

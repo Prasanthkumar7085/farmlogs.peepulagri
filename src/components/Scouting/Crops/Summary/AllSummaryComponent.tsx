@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import styles from "./summary.module.css";
 import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import AlertComponent from "@/components/Core/AlertComponent";
 
 const AllSummaryComponents = () => {
     const router = useRouter();
@@ -37,7 +39,9 @@ const AllSummaryComponents = () => {
     const [cropOptions, setCropOptions] = useState<any>()
     const [cropId, setCropId] = useState<any>()
     const [farmId, setFarmID] = useState<any>()
-
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertType, setAlertType] = useState(false);
     const open = Boolean(anchorEl);
     const handleMenu = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -268,6 +272,34 @@ const AllSummaryComponents = () => {
 
         }
     }
+    const deleteSummary = async () => {
+        setLoading(true);
+        handleClose();
+
+        let options = {
+            method: "DELETE",
+            headers: new Headers({
+                "content-type": "application/json",
+                authorization: accessToken,
+            }),
+        };
+
+        let response: any = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summary/${rowId}`,
+            options
+        );
+        let responseData = await response.json();
+        if (responseData?.success) {
+            setAlertMessage(responseData?.message);
+            setDialogOpen(false);
+            setAlertType(true);
+            getSummary("", "", pageNumber);
+        } else {
+            setAlertMessage(responseData?.message);
+            setAlertType(false);
+        }
+        setLoading(false);
+    };
 
     useEffect(() => {
         if (router.isReady && accessToken) {
@@ -446,6 +478,7 @@ const AllSummaryComponents = () => {
             </div>
 
             <Menu
+                className={styles.menuListSummary}
                 id="demo-positioned-menu"
                 aria-labelledby="demo-positioned-button"
                 anchorEl={anchorEl}
@@ -465,7 +498,10 @@ const AllSummaryComponents = () => {
                         `/summary/${rowId}/edit`
                     );
                 }}>Update</MenuItem>
-                <MenuItem sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif", color: "#000" }}
+                <MenuItem onClick={() => {
+                    setDialogOpen(true);
+                    setAnchorEl(null);
+                }} sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif", color: "#000" }}
                 >Delete</MenuItem>
             </Menu>
             <div className="addFormPositionIcon">
@@ -483,6 +519,19 @@ const AllSummaryComponents = () => {
                 </IconButton>
 
             </div>
+            <AlertDelete
+                open={dialogOpen}
+                deleteFarm={deleteSummary}
+                setDialogOpen={setDialogOpen}
+                loading={loading}
+                deleteTitleProp={"Summary"}
+            />
+            <AlertComponent
+                alertMessage={alertMessage}
+                alertType={alertType}
+                setAlertMessage={setAlertMessage}
+                mobile={true}
+            />
             <LoadingComponent loading={loading} />
         </div>
     )

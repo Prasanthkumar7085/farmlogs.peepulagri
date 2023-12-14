@@ -176,7 +176,8 @@ const SingleImageView: FC<componentProps> = ({
           position: "relative",
           overflow: "hidden",
         }}>
-          <img src={data?.url} alt={`${data?.key}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+          {data?.url ?
+            <img src={data?.url} alt={`${data?.key}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} /> : ""}
         </div>
       </div>
       <div className={styles.imgDetailButtons}>

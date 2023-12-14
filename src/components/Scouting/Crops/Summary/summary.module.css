@@ -184,8 +184,8 @@
 
 
 .menuListSummary ul li {
-    min-height: inherit;
-    padding-block: 5px;
-    font-size: 14px;
-    font-family: "Inter", sans-serif;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    font-family: "Inter", sans-serif !important;
+
 }

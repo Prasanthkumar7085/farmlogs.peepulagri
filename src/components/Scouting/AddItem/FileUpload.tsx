@@ -80,6 +80,7 @@ const FileUploadComponent = () => {
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
+    toast.success("File deleted successfully")
   };
 
   const previewImagesEvent = (file: any, index: any) => {
@@ -736,7 +737,7 @@ const FileUploadComponent = () => {
                               ""
                             )}
                           </div>
-                          {fileProgress[index] !== 100 ||
+                          {/* {fileProgress[index] !== 100 ||
                             fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
@@ -746,7 +747,7 @@ const FileUploadComponent = () => {
                             />
                           ) : (
                             ""
-                          )}
+                          )} */}
                         </div>
                         <Box sx={{ width: "100%" }}>
                           {fileProgress[index] == 0 &&
@@ -777,72 +778,75 @@ const FileUploadComponent = () => {
                   </div>
                 </div>
               ))}
-            <div className={styles.scoutdescription} id="scout-description">
-              <div className={styles.descriptionblock}>
-                <div className={styles.addscoutdetails}>
-                  <div className={styles.inputField}>
-                    <div style={{ width: "100%" }} className={styles.input}>
-                      <TagsTextFeild captureTags={captureTags} />
-                    </div>
-                    <div
-                      className={styles.farmselection}
-                      id="input-description"
-                    >
-                      <div className={styles.label1}>Comments</div>
-                      <TextField
-                        className={styles.input}
-                        color="primary"
-                        name="desciption"
-                        id="description"
-                        minRows={4}
-                        maxRows={4}
-                        placeholder="Enter your comment here"
-                        fullWidth={true}
-                        variant="outlined"
-                        multiline
-                        value={description}
-                        onChange={(e) => {
-                          setDescription(e.target.value);
-                          setValidations({});
-                        }}
-                        sx={{ background: "#fff" }}
-                      />
-                      <ErrorMessagesComponent
-                        errorMessage={validations?.description}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.footeractionbuttons} id="footer-buttons">
-                  <div className={styles.buttons} id="buttons">
-                    <Button
-                      className={styles.back}
-                      sx={{ width: 130 }}
-                      color="primary"
-                      name="back"
-                      id="back"
-                      size="large"
-                      variant="outlined"
-                      onClick={() => router.back()}
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      className={styles.submit}
 
-                      name="submit"
-                      id="submit"
-                      size="large"
-                      variant="contained"
-                      disabled={!tempFilesStorage.length}
-                      onClick={() => addScoutDetails()}
-                      endIcon={<Icon>arrow_forward_sharp</Icon>}
-                    >
-                      Submit
-                    </Button>
+            <div className={styles.scoutdescription} id="scout-description">
+              {multipleFiles?.length ?
+                <div className={styles.descriptionblock}>
+
+                  <div className={styles.addscoutdetails}>
+                    <div className={styles.inputField}>
+                      <div style={{ width: "100%" }} className={styles.input}>
+                        <TagsTextFeild captureTags={captureTags} />
+                      </div>
+                      <div
+                        className={styles.farmselection}
+                        id="input-description"
+                      >
+                        <div className={styles.label1}>Comments</div>
+                        <TextField
+                          className={styles.input}
+                          color="primary"
+                          name="desciption"
+                          id="description"
+                          minRows={4}
+                          maxRows={4}
+                          placeholder="Enter your comment here"
+                          fullWidth={true}
+                          variant="outlined"
+                          multiline
+                          value={description}
+                          onChange={(e) => {
+                            setDescription(e.target.value);
+                            setValidations({});
+                          }}
+                          sx={{ background: "#fff" }}
+                        />
+                        <ErrorMessagesComponent
+                          errorMessage={validations?.description}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+
+                  <div className={styles.footeractionbuttons} id="footer-buttons">
+                    <div className={styles.buttons} id="buttons">
+                      <Button
+                        className={styles.back}
+                        sx={{ width: 130 }}
+                        color="primary"
+                        name="back"
+                        id="back"
+                        size="large"
+                        variant="outlined"
+                        onClick={() => router.back()}
+                      >
+                        Go Back
+                      </Button>
+                      <Button
+                        className={styles.submit}
+
+                        name="submit"
+                        id="submit"
+                        size="large"
+                        variant="contained"
+                        disabled={!tempFilesStorage.length}
+                        onClick={() => addScoutDetails()}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </div> : ""}
             </div>
           </div>
         </div>

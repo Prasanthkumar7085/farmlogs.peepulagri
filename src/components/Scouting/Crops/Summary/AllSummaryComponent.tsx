@@ -492,16 +492,25 @@ const AllSummaryComponents = () => {
                     vertical: 'top',
                     horizontal: 'center',
                 }}
+                sx={{
+                    "& .MuiMenuItem-root": {
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        minHeight: "inherit",
+                    },
+                }}
             >
-                <MenuItem sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif", color: "#000" }} onClick={() => {
-                    router.push(
-                        `/summary/${rowId}/edit`
-                    );
-                }}>Update</MenuItem>
+                <MenuItem
+                    sx={{ paddingBlock: "5px", fontFamily: "'Inter', sans-serif", color: "#000", borderBottom: "1px solid #B4C1D6" }} onClick={() => {
+                        router.push(
+                            `/summary/${rowId}/edit`
+                        );
+                    }}>Update</MenuItem>
                 <MenuItem onClick={() => {
                     setDialogOpen(true);
                     setAnchorEl(null);
-                }} sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif", color: "#000" }}
+                }} sx={{ paddingBlock: "5px", fontFamily: "'Inter', sans-serif", color: "#000" }}
                 >Delete</MenuItem>
             </Menu>
             <div className="addFormPositionIcon">

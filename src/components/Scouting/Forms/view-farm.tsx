@@ -172,6 +172,7 @@ const ViewFarmPage = () => {
                       alignItems: "center",
                       gap: "0.5rem",
                       minHeight: "inherit",
+                      fontFamily: "'Inter', sans-serif"
                     },
                   }}
                 >
@@ -183,7 +184,6 @@ const ViewFarmPage = () => {
                     }}
                   >
                     {" "}
-                    <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />
                     Edit
                   </MenuItem>
                   <MenuItem
@@ -192,7 +192,6 @@ const ViewFarmPage = () => {
                       setAnchorEl(null);
                     }}
                   >
-                    <DeleteOutlinedIcon sx={{ fontSize: "16px" }} />
                     Delete
                   </MenuItem>
                 </Menu>

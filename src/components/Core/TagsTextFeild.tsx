@@ -116,7 +116,7 @@ const TagsTextFeild = ({
   return (
     <div className={styles.addTagContainer}>
       <div className={styles.listTags}>
-        <h5 style={{ paddingBottom: "5px", fontSize: "clamp(13px, 2.5vw, 14px)", fontFamily: "'Inter', sans-serif", fontWeight: "400" }}>Tags</h5>
+        <h5 style={{ paddingBottom: "5px", fontSize: "clamp(13px, 2.5vw, 14px)", fontFamily: "'Inter', sans-serif", fontWeight: "500", color: "#000" }}>Tags</h5>
       </div>
       <div className={styles.scoutingdetails}>
         {tagValue ? (
@@ -179,7 +179,7 @@ const TagsTextFeild = ({
               sx={{
                 "& .MuiInputBase-root": {
                   background: "#fff",
-                  paddingBlock: "8px !important",
+                  paddingBlock: "4px !important",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "grey !important",
@@ -191,6 +191,7 @@ const TagsTextFeild = ({
           {!isTextFieldOpen && (
             <Autocomplete
               multiple
+              limitTags={1}
               id="tag-autocomplete"
               options={tag?.length ? tag : []}
               getOptionLabel={(option) => option}
@@ -252,8 +253,13 @@ const TagsTextFeild = ({
         )}
         {isTextFieldOpen && (
           <IconButton
+            sx={{
+              color: "#d94841",
+              border: "1px solid #d9484",
+              borderRadius: "4px",
+            }}
             onClick={() => setIsTextFieldOpen(false)}
-            sx={{ color: "red" }}
+
           >
             <ClearIcon />
           </IconButton>

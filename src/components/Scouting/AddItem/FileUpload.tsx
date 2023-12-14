@@ -452,11 +452,9 @@ const FileUploadComponent = () => {
           await addTagsAndCommentsEvent(imagesIdsArray);
         }
         else {
-          toast.success("FarmImages added successfully");
-          setTimeout(() => {
-            setLoading(false);
-            router.back()
-          }, 2000);
+          toast.success("Farm Images added successfully");
+          router.back()
+
 
         }
       }
@@ -569,7 +567,7 @@ const FileUploadComponent = () => {
             );
             let responseData = await response.json();
             if (responseData.success) {
-              toast.success(responseData?.message);
+              // toast.success(responseData?.message);
             } else {
               success = false;
               toast.error(responseData?.message);
@@ -579,13 +577,16 @@ const FileUploadComponent = () => {
         })
       );
       if (success) {
-        setTimeout(() => {
-          setLoading(false);
-          router.back();
-        }, 2000);
+        toast.success("Farm Images added successfully");
+        router.back();
       }
     } catch (err) {
       console.error(err);
+    }
+    finally {
+
+      setLoading(false);
+
     }
   };
 
@@ -839,7 +840,7 @@ const FileUploadComponent = () => {
                         id="submit"
                         size="large"
                         variant="contained"
-                        disabled={!tempFilesStorage.length}
+                        disabled={!tempFilesStorage.length || loading}
                         onClick={() => addScoutDetails()}
                       >
                         Submit

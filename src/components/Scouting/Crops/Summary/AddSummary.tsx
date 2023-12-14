@@ -11,6 +11,7 @@ import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
 import styles from "./summary.module.css";
+import timePipe from "@/pipes/timePipe";
 
 const AddSummary = () => {
     const router = useRouter();
@@ -51,7 +52,7 @@ const AddSummary = () => {
                 farm_id: farmId,
                 crop_id: cropId,
                 content: comment,
-                date: date
+                date: date ? timePipe(date, "YYYY-MM-DD") : ""
             };
             let options = {
                 method: "POST",
@@ -283,7 +284,7 @@ const AddSummary = () => {
                             },
                             '& .MuiInputBase-input': {
                                 padding: "12px 14px",
-                                borderRadius: "10px !important",
+                                borderRadius: "8px !important",
                                 color: "#000",
                                 background: "#fff",
 
@@ -306,14 +307,14 @@ const AddSummary = () => {
                 </div>
                 <div className={styles.singleFarmBlock}>
 
-                    <Typography variant="h6">Comment</Typography>
+                    <Typography variant="h6">Summary</Typography>
                     <TextField
                         color="primary"
                         name="desciption"
                         id="description"
                         minRows={5}
                         maxRows={5}
-                        placeholder="Enter your comment here"
+                        placeholder="Add Summary"
                         fullWidth={true}
                         variant="outlined"
                         multiline
@@ -323,7 +324,8 @@ const AddSummary = () => {
                             setErrorMessages('');
                         }}
                         sx={{
-                            background: "#fff", '& .MuiOutlinedInput-notchedOutline ': {
+                            background: "#fff", borderRadius: "10px !important",
+                            '& .MuiOutlinedInput-notchedOutline ': {
                                 border: "1px solid grey !important",
                                 borderRadius: "10px !important"
                             },

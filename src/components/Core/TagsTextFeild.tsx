@@ -134,6 +134,10 @@ const TagsTextFeild = ({
                         "& .MuiSvgIcon-root": {
                           color: "#d94841",
                         },
+                        '& .MuiSvgIcon-root:hover': {
+                          color: "#d94841 !important",
+
+                        }
                       }}
                       onDelete={() => handleDeleteChip(item)}
                       key={index}

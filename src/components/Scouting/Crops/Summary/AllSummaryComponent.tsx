@@ -293,7 +293,7 @@ const AllSummaryComponents = () => {
             setAlertMessage(responseData?.message);
             setDialogOpen(false);
             setAlertType(true);
-            getSummary("", "", pageNumber);
+            getSummary("", "", 1);
         } else {
             setAlertMessage(responseData?.message);
             setAlertType(false);

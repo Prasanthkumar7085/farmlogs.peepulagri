@@ -50,16 +50,26 @@
 }
 .sendbuttonDisable,
 .sendbutton {
-  border-radius: 6px;
+  border-radius: 6px !important;
   box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15) !important;
-  color: #FFF;
-  font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 0.72vw, 16px);
-  font-weight: 500;
-  line-height: 24px;
+  color: #FFF !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(14px, 0.72vw, 16px) !important;
+  font-weight: 500 !important;
+  line-height: 24px !important;
   padding: 6px 35px !important;
-  min-width: 150px;
-  text-transform: capitalize;
+  min-width: 150px !important;
+  text-transform: capitalize !important;
+}
+.sendbuttonDisable {
+  background-color:grey !important;
+}
+.sendbutton {
+  background-color:#d94841 !important;
+}
+.sendbutton:hover {
+    background-color:#d94841 !important;
+
 }
 .sendbuttonDisable {
   opacity: 0.8;

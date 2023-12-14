@@ -117,6 +117,8 @@
     color: #000;
     font-weight: 400;
     font-family: "Inter", sans-serif;
+    word-break:break-all !important;
+
 }
 
 .summarycard {
@@ -137,11 +139,11 @@
 
 /* update summary styles start here */
 .updatedSummaryContainer {
-    padding: 2rem 1rem 1rem;
+    padding: 1.5rem 1rem 1rem;
 }
 
 .updatedSummaryContainer h6 {
-    font-size: clamp(14px, 3.5vw, 18px);
+    font-size: clamp(14px, 3.5vw, 16px);
     font-family: "Inter", sans-serif;
     font-weight: 500;
     color: #000;
@@ -150,21 +152,21 @@
 }
 
 .singleFarmBlock {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .UpdateBtnGrp {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 1.5rem;
-    margin-top: 3rem;
+    margin-top: 2.5rem;
 }
 
 .UpdateBtnGrp button {
     padding-block: 10px !important;
     border-radius: 4px !important;
     text-transform: capitalize !important;
-    font-size: clamp(16px, 4vw, 20px) !important;
+    font-size: clamp(16px, 3vw, 16px) !important;
     font-family: "Inter", sans-serif !important;
 }
 

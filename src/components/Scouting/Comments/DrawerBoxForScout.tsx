@@ -230,7 +230,12 @@ const DrawerComponentForScout = ({
     <Drawer
       anchor={"bottom"}
       open={openCommentsBox}
-      sx={{ zIndex: "1300 !important" }}
+      sx={{
+        zIndex: "1300 !important",
+        '& .MuiPaper-root': {
+          width: "100%", maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0 "
+        }
+      }}
     >
       <div
         style={{

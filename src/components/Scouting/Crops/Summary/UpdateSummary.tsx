@@ -21,6 +21,7 @@ import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
 import { toast } from "sonner";
+import timePipe from "@/pipes/timePipe";
 
 const UpdateSummary = () => {
   const router = useRouter();
@@ -234,7 +235,7 @@ const UpdateSummary = () => {
       let body = {
         farm_id: farmId,
         content: comment,
-        date: date,
+        date: date ? timePipe(date, "YYYY-MM-DD") : "",
         crop_id: cropId,
       };
       let options = {
@@ -382,6 +383,7 @@ const UpdateSummary = () => {
 
               }
             }}
+              disableFuture
               value={dayjs(date)}
 
               format="DD-MM-YYYY"
@@ -397,14 +399,14 @@ const UpdateSummary = () => {
         </div>
 
         <div className={styles.singleFarmBlock}>
-          <Typography variant="h6">Comments</Typography>
+          <Typography variant="h6">Summary</Typography>
           <TextField
             color="primary"
             name="desciption"
             id="description"
             minRows={5}
             maxRows={5}
-            placeholder="Enter your comment here"
+            placeholder="Add Summary"
             fullWidth={true}
             variant="outlined"
             multiline
@@ -417,6 +419,8 @@ const UpdateSummary = () => {
             }}
             sx={{
               background: "#fff",
+              borderRadius: "10px !important",
+
               "& .MuiOutlinedInput-notchedOutline ": {
                 border: "1px solid grey !important",
                 borderRadius: "10px !important",

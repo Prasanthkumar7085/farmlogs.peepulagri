@@ -94,7 +94,7 @@
 }
 
 .submitBtn {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif !important;
   font-size: 1rem !important;
   font-weight: 400 !important;
   line-height: 1.5;
@@ -105,6 +105,10 @@
   min-width: 120px !important;
   box-shadow: none !important;
   padding-block: 8px !important;
+}
+.submitBtn:hover {
+    background: #d94841 !important;
+
 }
 
 .submitDisableBtn {
@@ -152,17 +156,20 @@
 
 .updateSubmitBtn {
   text-transform: capitalize !important;
-  border-radius: 8px;
-  border: 1px solid #d94841;
-  background: #d94841;
-  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15);
-  color: var(--White, #FFF);
+  border-radius: 8px !important;
+  border: 1px solid #d94841 !important;
+  background: #d94841 !important;
+  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15) !important;
+  color: var(--White, #FFF) !important;
   font-family: "Inter", sans-serif !important;
-  font-size: clamp(14px, 3vw, 14px);
-  font-weight: 500;
-  line-height: 24px;
+  font-size: clamp(14px, 3vw, 14px) !important;
+  font-weight: 500 !important !important;
+  line-height: 24px !important;
   margin-top: 1rem;
-  min-width: inherit;
+  min-width: inherit !important;
+}
+.updateSubmitBtn:hover {
+  background: #d94841 !important;
 }
 
 .updateSubmitBtnDisabled {

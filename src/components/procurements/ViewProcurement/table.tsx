@@ -20,6 +20,19 @@ import { toast } from "sonner";
 import updateMaterialStatusService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialItemStatus";
 import getMaterialsByProcurementIdService from "../../../../lib/services/ProcurementServices/getMaterialsByProcurementIdService";
 import ViewMaterialDrawer from "./ViewMaterialDrawer";
+import updateMaterialsByIdService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
+import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
+import getSingleMaterilsService from "../../../../lib/services/ProcurementServices/getSingleMaterilsService";
+import { EditOutlined } from "@mui/icons-material"
+
+interface ApiCallService {
+  procurement_req_id: string;
+  name: string;
+  required_qty: number | null;
+  required_units: string;
+  available_qty?: number | null;
+  available_units?: string;
+}
 const ViewProcurementTable = ({ data }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -37,6 +50,22 @@ const ViewProcurementTable = ({ data }: any) => {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [materialOpen, setMaterialOpen] = useState(false);
+  const [editMaterialOpen, setEditMaterialOpen] = useState(false);
+  const [editNameValue, setEditNameValue] = useState<string>("");
+
+  const [editRequiredQty, setEditRequiredQty] = useState<
+    null | number | string
+  >(null);
+  const [editRequiredUnits, setEditRequiredUnits] = useState<string>("");
+  const [editAvailableQty, setEditAvailableQty] = useState<
+    null | number | string
+  >(null);
+  const [editAvailableUnits, setEditAvailableUnits] = useState<string>("");
+
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [editMaterialId, setEditMaterialId] = useState("");
+
+  const [editErrorMessages, setEditErrorMessages] = useState({});
 
   //logout function for 403 error
   const logout = async () => {
@@ -111,15 +140,97 @@ const ViewProcurementTable = ({ data }: any) => {
       setLoading(false);
     }
   };
-
-
-
-  //api calls
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllProcurementMaterials();
     }
+
   }, [router.isReady, accessToken]);
+
+  const updateMaterialById = async () => {
+    setUpdateLoading(true);
+
+    try {
+      const body = {
+        procurement_req_id: router.query.procurement_id,
+        name: editNameValue,
+        required_qty: editRequiredQty ? +editRequiredQty : null,
+        required_units: editRequiredUnits,
+        available_qty: editAvailableQty ? +editAvailableQty : null,
+        available_units: editAvailableUnits,
+      };
+      const response = await updateMaterialsByIdService({
+        token: accessToken,
+        materialId: editMaterialId,
+        body: body as ApiCallService,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        setEditNameValue("");
+        setEditRequiredQty(null);
+        setEditRequiredUnits("");
+        setEditAvailableQty(null);
+        setEditAvailableUnits("");
+        setEditMaterialOpen(false);
+        toast.success(response?.message);
+
+        getAllProcurementMaterials();
+      } else if (response?.status == 422) {
+        setEditErrorMessages(response?.errors);
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  const getSingleMaterials = async () => {
+    setUpdateLoading(true);
+    try {
+      let response = await getSingleMaterilsService({
+        token: accessToken,
+        procurementId: editMaterialId,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        setEditAvailableQty(response?.data?.available_qty);
+        setEditAvailableUnits(response?.data?.available_units);
+        setEditRequiredQty(response?.data?.required_qty);
+        setEditRequiredUnits(response?.data?.required_units);
+        setEditNameValue(response?.data?.name);
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  //api calls
+  useEffect(() => {
+    if (editMaterialOpen) {
+      getSingleMaterials();
+    } else {
+      setEditNameValue("");
+      setEditRequiredQty(null);
+      setEditRequiredUnits("");
+      setEditAvailableQty(null);
+      setEditAvailableUnits("");
+    }
+  }, [editMaterialOpen])
+
 
   return (
     <div>
@@ -198,12 +309,14 @@ const ViewProcurementTable = ({ data }: any) => {
                       {row?.status !== "APPROVED" ? (
                         <div style={{ cursor: "pointer" }}>
                           {!row?.price && !row?.vendor ?
-                            <ImageComponent
-                              src="/pencil-icon.svg"
-                              height={17}
-                              width={17}
-                              alt="view"
-                            />
+                            <IconButton
+                              onClick={() => {
+                                setEditMaterialId(row._id);
+                                setEditMaterialOpen(true);
+                              }}
+                            >
+                              <EditOutlined sx={{ color: "red" }} />
+                            </IconButton>
                             : ''}
 
                         </div>
@@ -254,6 +367,24 @@ const ViewProcurementTable = ({ data }: any) => {
 
       <LoadingComponent loading={loading} />
       <ViewMaterialDrawer materialId={materialId} materialOpen={materialOpen} setMaterialOpen={setMaterialOpen} getAllProcurementMaterials={getAllProcurementMaterials} />
+      <EditMaterialDrawer
+        editMaterialOpen={editMaterialOpen}
+        setEditMaterialOpen={setEditMaterialOpen}
+        editAvailableQty={editAvailableQty}
+        setEditAvailableQty={setEditAvailableQty}
+        editAvailableUnits={editAvailableUnits}
+        setEditAvailableUnits={setEditAvailableUnits}
+        editRequiredQty={editRequiredQty}
+        setEditRequiredQty={setEditRequiredQty}
+        editRequiredUnits={editRequiredUnits}
+        setEditRequiredUnits={setEditRequiredUnits}
+        editNameValue={editNameValue}
+        setEditNameValue={setEditNameValue}
+        editErrorMessages={editErrorMessages}
+        setEditErrorMessages={setEditErrorMessages}
+        updateMaterialById={updateMaterialById}
+        updateLoading={updateLoading}
+      />
       {/* <AlertStautsChange open={dialogOpen} statusChange={onStatusChangeEvent} setDialogOpen={setDialogOpen} loading={loading} /> */}
     </div>
   );

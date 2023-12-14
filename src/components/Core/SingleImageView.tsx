@@ -171,7 +171,7 @@ const SingleImageView: FC<componentProps> = ({
           )}
         </div> */}
         <div style={{
-          height: "calc(100vh - 123px)",
+          height: "calc(100vh - 115px)",
           width: "100%",
           position: "relative",
           overflow: "hidden",

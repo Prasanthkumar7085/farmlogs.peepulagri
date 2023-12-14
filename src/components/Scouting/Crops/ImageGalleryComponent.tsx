@@ -552,7 +552,7 @@ const ImageGalleryComponent = () => {
 
       <div style={{
         overflowY: "auto",
-        maxHeight: "calc(100vh - 160px)",
+        maxHeight: "calc(100vh - 156px)",
 
       }}>
         {data?.length ?
@@ -741,10 +741,6 @@ const ImageGalleryComponent = () => {
           }) : ""}
       </div>
       {data?.length == 0 && !loading &&
-        // <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "calc(100vh - 160px)" }}>
-
-        //   <NoDataAnimatedComponent noData={!data?.length} />
-        // </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 180px)" }}>
           <NoDataMobileComponent noData={!Boolean(data?.length)} noDataImg={"/NoDataImages/No_Scouting.svg"} />
           <p className="noSummaryText">No Images</p>

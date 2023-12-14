@@ -73,7 +73,7 @@ const TagsDrawer = ({
       </div>
       <div className={styles.drawerFooter}>
         <Button
-          className={styles.submitBtn}
+          className={!(tags || comment || description) || loading ? styles.submitDisableBtn : styles.submitBtn}
           disabled={!(tags || comment || description) || loading}
           variant="contained"
           onClick={() => {

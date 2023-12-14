@@ -67,15 +67,6 @@ const ImageGalleryComponent = () => {
   const [commentSuccess, setCommentSuccess] = useState(false);
 
   useEffect(() => {
-    if (tagsSuccess && commentSuccess) {
-      toast.success('Tags and Comments added Successfully')
-    }
-
-  }, [tagsSuccess, commentSuccess])
-
-
-
-  useEffect(() => {
     setTempImages(selectedItems);
   }, [selectedItems]);
 
@@ -215,6 +206,7 @@ const ImageGalleryComponent = () => {
   };
   //capture the tags details
   const captureTagsDetails = async (tags: any, description: any) => {
+    setTagsSuccess(true)
     setLoading(true);
     try {
       let body = {
@@ -236,12 +228,17 @@ const ImageGalleryComponent = () => {
       );
       let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
-        // toast.success(responseData?.message);
-        setTagsSuccess(true)
+        if (tagsSuccess && commentSuccess) {
+          console.log("osd")
+        }
+        else {
+          toast.success(responseData?.message);
+        }
         setSelectedItems([]);
         setTagsDrawerOpen(false);
         setTagsCheckBoxOpen(false)
         await getPresingedURls(1);
+
       } else {
         toast.error(responseData?.message);
       }
@@ -253,6 +250,7 @@ const ImageGalleryComponent = () => {
   };
 
   const captureCommentDetails = async (comment: any) => {
+    setCommentSuccess(true)
     setLoading(true);
     try {
       let body = {
@@ -274,7 +272,12 @@ const ImageGalleryComponent = () => {
       );
       let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
-        // toast.success(responseData?.message);
+        if (tagsSuccess && commentSuccess) {
+          toast.success("Tag and Comment added successfully");
+        }
+        else {
+          toast.success(responseData?.message);
+        }
         setCommentSuccess(true);
 
         setSelectedItems([]);
@@ -437,33 +440,7 @@ const ImageGalleryComponent = () => {
 
   return (
     <div className={styles.scoutingView}>
-      {/* <div className={styles.mobileScoutingViewHeader}>
-        <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
-          <Link
-            underline="hover"
-            color="inherit"
-            href={`/farms/${router.query.farm_id}/crops`}
-          >
-            {farmTitle}
-          </Link>
-          <Typography color="text.primary">
-            {cropTitle?.slice(0, 1)?.toUpperCase() + cropTitle?.slice(1)}
-          </Typography>
-        </Breadcrumbs>
-        <Tabs
-          className={styles.viewingTabs}
-          value={value}
-          onChange={handleChangeMenuView}
-          aria-label="icon position tabs example"
-        >
-          <Tab icon={<GridViewRoundedIcon />} aria-label="Grid" value="1" />
-          <Tab
-            icon={<FormatListBulletedRoundedIcon />}
-            aria-label="List"
-            value="2"
-          />
-        </Tabs>
-      </div> */}
+
       <div className={styles.header} id="header">
         <img
           className={styles.iconsiconArrowLeft}

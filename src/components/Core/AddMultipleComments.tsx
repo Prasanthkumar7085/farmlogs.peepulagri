@@ -8,7 +8,7 @@ const AddMultipleComments = ({ captureComment }: any) => {
 
     return (
         <div>
-            <div >Comments</div>
+            <div style={{ paddingBottom: "5px", fontSize: "clamp(13px, 2.5vw, 14px)", fontFamily: "'Inter', sans-serif" }}>Comments</div>
             <TextField
                 color="primary"
                 name="desciption"

@@ -13,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: var(--background);
+  background-color: #05A155;
   position: sticky;
   top: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -23,20 +23,19 @@
 .drawerHeading h6 {
   font-family: "Inter", sans-serif;
   font-size: clamp(18px, 4vw, 18px);
-  font-weight: 500;
+  font-weight: 400;
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  color: #3462CF;
+  color: #fff;
 }
 
 .drawerHeading svg {
   width: 25px;
-  height: 25px;
 }
 
 .drawerHeading svg path {
-  fill: #3462cf;
+  fill: #fff;
 }
 
 .drawerBody {
@@ -97,15 +96,29 @@
 .submitBtn {
   font-family: 'Inter', sans-serif;
   font-size: 1rem !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   line-height: 1.5;
-  /* 150% */
-  border-radius: 6px !important;
-  /* background: var(--Blue-Gradient, linear-gradient(142deg, #3462cf 0%, #2b53be 97.71%)) !important; */
+  border-radius: 4px !important;
+  background: #d94841 !important;
   text-transform: capitalize;
   color: var(--white) !important;
   min-width: 120px !important;
   box-shadow: none !important;
+  padding-block: 8px !important;
+}
+
+.submitDisableBtn {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5;
+  border-radius: 4px !important;
+  background: grey !important;
+  text-transform: capitalize;
+  color: var(--white) !important;
+  min-width: 120px !important;
+  box-shadow: none !important;
+  padding-block: 8px !important;
 }
 
 .submitBtnSuccess .submitBtnSuccess :hover {

@@ -116,7 +116,7 @@ const TagsTextFeild = ({
   return (
     <div className={styles.addTagContainer}>
       <div className={styles.listTags}>
-        <h5>List your tags below:</h5>
+        <h5 style={{ paddingBottom: "5px", fontSize: "clamp(13px, 2.5vw, 14px)", fontFamily: "'Inter', sans-serif", fontWeight: "400" }}>Tags</h5>
       </div>
       <div className={styles.scoutingdetails}>
         {tagValue ? (

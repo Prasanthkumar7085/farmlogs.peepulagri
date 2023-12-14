@@ -14,6 +14,8 @@ import timePipe from "@/pipes/timePipe";
 const ShippedStatusform = ({
   data
 }: any) => {
+  console.log(data);
+
   return (
     <div className={styles.shippedstatusform}>
       <Tooltip title={data?.farm_ids?.map((item: any, index: any) => item.title).join(",")} >
@@ -35,7 +37,7 @@ const ShippedStatusform = ({
       </div>
       <div className={styles.pointofcontact}>
         <label className={styles.label1}>Point Of Contact</label>
-        <h3 className={styles.hemaGanesh}>{data?.point_of_contact ? data?.point_of_contact : "----"}</h3>
+        <h3 className={styles.hemaGanesh}>{data?.point_of_contact?.name ? data?.point_of_contact?.name : "----"}</h3>
       </div>
       <div className={styles.trackingid}>
         <label className={styles.label1}>Tracking ID</label>

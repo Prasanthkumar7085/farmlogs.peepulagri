@@ -274,6 +274,8 @@ const ImageGalleryComponent = () => {
       if (response?.status >= 200 && response?.status <= 200) {
         if (tagsSuccess && commentSuccess) {
           toast.success("Tag and Comment added successfully");
+          setCommentSuccess(false)
+          setTagsSuccess(false)
         }
         else {
           toast.success(responseData?.message);

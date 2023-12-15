@@ -5,6 +5,7 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   Button,
+  Card,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -24,12 +25,13 @@ import POC from "../edit/POC";
 import styles from "./add-procurement-form.module.css";
 import OperationDetails from "./operation-details";
 import deleteAddProcurementService from "../../../../lib/services/ProcurementServices/deleteAddProcurementService";
+import AddProcurementHeader from "./add-procurement-header";
 
 interface ApiProps {
   page: number;
   searchString: string;
 }
-const AddProcurementForm: NextPage = () => {
+const AddProcurementForm = () => {
   const dispatch = useDispatch();
 
   const accessToken = useSelector(
@@ -253,75 +255,97 @@ const AddProcurementForm: NextPage = () => {
     <div>
       <form className={styles.addprocurementform}>
         <div className={styles.formgroup}>
-          {router.query.procurement_id ? (
-            <Button
-              variant="outlined"
-              sx={{ color: "red", borderColor: "red" }}
-              onClick={() => setIsDisabled(!isDisabled)}
-            >
-              {router.query.procurement_id && isDisabled ? (
-                <EditOutlinedIcon />
+
+
+          <Card style={{ width: "60%", margin: "auto", height: "90vh" }}>
+            <div style={{ display: 'flex', justifyContent: "space-between" }}>
+              <AddProcurementHeader />
+
+              {router.query.procurement_id ? (
+                <Button
+                  variant="outlined"
+                  sx={{ color: "red", borderColor: "red" }}
+                  onClick={() => setIsDisabled(!isDisabled)}
+                >
+                  {router.query.procurement_id && isDisabled ? (
+                    <EditOutlinedIcon />
+                  ) : (
+                    <CancelOutlinedIcon />
+                  )}
+                </Button>
               ) : (
-                <CancelOutlinedIcon />
+                ""
               )}
-            </Button>
-          ) : (
-            ""
-          )}
-          <OperationDetails
-            farmOptions={farmOptions}
-            onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-            label={"title"}
-            placeholder={"Select Farm here"}
-            defaultValue={farm}
-            optionsLoading={optionsLoading}
-            setOptionsLoading={setOptionsLoading}
-            searchString={searchString}
-            setSearchString={setSearchString}
-            title={title}
-            setTitle={setTitle}
-            dateOfOperation={dateOfOperation}
-            setDataOfOperation={setDataOfOperation}
-            remarks={remarks}
-            setRemarks={setRemarks}
-            errorMessages={errorMessages}
-            setErrorMessages={setErrorMessages}
-            editFarms={editFarms}
-            setEditFarms={setEditFarms}
-            isDisabled={isDisabled}
-            setIsDisabled={setIsDisabled}
-          />
-        </div>
-        {isDisabled ? (
-          ""
-        ) : (
-          <div className={styles.modalActions}>
-            <div className={styles.buttonsgroup}>
-              <Button
-                color="primary"
-                variant="outlined"
-                onClick={() => {
-                  router.query.procurement_id
-                    ? deleteProcurement()
-                    : router.back();
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  router.query.procurement_id
-                    ? updateProcurement()
-                    : addProcurement();
-                }}
-              >
-                {router.query.procurement_id ? "Update" : "Submit"}
-              </Button>
             </div>
-          </div>
-        )}
+            <OperationDetails
+              farmOptions={farmOptions}
+              onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+              label={"title"}
+              placeholder={"Select Farm here"}
+              defaultValue={farm}
+              optionsLoading={optionsLoading}
+              setOptionsLoading={setOptionsLoading}
+              searchString={searchString}
+              setSearchString={setSearchString}
+              title={title}
+              setTitle={setTitle}
+              dateOfOperation={dateOfOperation}
+              setDataOfOperation={setDataOfOperation}
+              remarks={remarks}
+              setRemarks={setRemarks}
+              errorMessages={errorMessages}
+              setErrorMessages={setErrorMessages}
+              editFarms={editFarms}
+              setEditFarms={setEditFarms}
+              isDisabled={isDisabled}
+              setIsDisabled={setIsDisabled}
+            />
+
+            <div style={{ marginTop: "50px", marginRight: "20px" }}>
+              {isDisabled ? (
+                ""
+              ) : (
+                <div className={styles.modalActions}>
+                  <div className={styles.buttonsgroup}>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      onClick={() => {
+                        router.query.procurement_id
+                          ? deleteProcurement()
+                          : router.back();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => {
+                        router.query.procurement_id
+                          ? updateProcurement()
+                          : addProcurement();
+                      }}
+                    >
+                      {router.query.procurement_id ? "Update" : "Submit"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div>
+              {router.query.procurement_id ?
+                <POC
+                  procurementData={procurementData}
+                  getProcurementData={getProcurementData}
+                />
+                : ''}
+            </div>
+          </Card>
+
+
+        </div>
+
 
         <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
           <DialogContent>
@@ -348,12 +372,7 @@ const AddProcurementForm: NextPage = () => {
         <LoadingComponent loading={loading} />
         <Toaster closeButton richColors position="top-right" />
       </form>
-      {router.query.procurement_id ?
-        <POC
-          procurementData={procurementData}
-          getProcurementData={getProcurementData}
-        />
-        : ''}
+
     </div>
   );
 };

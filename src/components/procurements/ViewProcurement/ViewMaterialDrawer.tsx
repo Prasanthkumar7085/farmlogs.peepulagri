@@ -17,6 +17,7 @@ import { NextPage } from "next";
 import { useSelector } from "react-redux";
 import getSingleMaterilsService from "../../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import addMaterialParchaseService from "../../../../lib/services/ProcurementServices/addMaterialPurchaseService";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 
 const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllProcurementMaterials }: any) => {
@@ -254,6 +255,8 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         </Button>
                     </div>
                 </div>
+                            <LoadingComponent loading={loading}/>
+
             </div>
         </Drawer>
     );

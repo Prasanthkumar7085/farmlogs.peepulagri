@@ -7,7 +7,6 @@ import POC from "./POC";
 const EditProcurementComponent = () => {
   return (
     <div>
-      <AddProcurementHeader />
       <AddProcurementForm />
       <MaterialsRequired />
     </div>

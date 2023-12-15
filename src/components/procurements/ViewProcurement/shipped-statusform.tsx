@@ -39,7 +39,7 @@ const ShippedStatusform = ({
         <label className={styles.label1}>Point Of Contact</label>
         <h3 className={styles.hemaGanesh}>{data?.point_of_contact?.name ? data?.point_of_contact?.name : "----"}</h3>
       </div>
-      <div className={styles.trackingid}>
+      {/* <div className={styles.trackingid}>
         <label className={styles.label1}>Tracking ID</label>
         <div className={styles.information}>
           <div className={styles.id}>
@@ -49,7 +49,7 @@ const ShippedStatusform = ({
             Copy
           </Button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

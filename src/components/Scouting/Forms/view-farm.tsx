@@ -172,7 +172,8 @@ const ViewFarmPage = () => {
                       alignItems: "center",
                       gap: "0.5rem",
                       minHeight: "inherit",
-                      fontFamily: "'Inter', sans-serif"
+                      fontFamily: "'Inter', sans-serif",
+
                     },
                   }}
                 >

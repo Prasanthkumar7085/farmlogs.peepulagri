@@ -90,6 +90,7 @@ const AddFarmForm = () => {
     let response = await addFarmService(obj, accessToken);
     detailsAfterResponse(response);
     setLoading(false);
+
   };
   const edtiFarm = async (obj: any) => {
     let editedData: any = {
@@ -346,7 +347,7 @@ const AddFarmForm = () => {
                       option.title === value.title
                     }
                     getOptionLabel={(option: { title: string; _id: string }) =>
-                      option.title
+                      option.title.toUpperCase()
                     }
                     options={locations}
                     loading={optionsLoading}

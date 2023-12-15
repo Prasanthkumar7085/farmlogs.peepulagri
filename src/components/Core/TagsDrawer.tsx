@@ -62,6 +62,7 @@ const TagsDrawer = ({
         </IconButton>
       </div>
       <div className={styles.drawerBody}>
+        {selectedItems.length} images selected
         <div className={styles.inputBox}>
           <TagsTextFeild captureTags={captureTags} tags={tags} />
         </div>

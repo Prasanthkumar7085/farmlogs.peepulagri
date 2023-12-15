@@ -44,6 +44,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
   const [deadline, setDeadline] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  console.log(status);
+
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
@@ -237,6 +239,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                       // background: "#ffff",
                     }}
                     size="small"
+                    disabled={status === "DONE"}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
@@ -254,6 +257,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
               {editField == "title" && editFieldOrNot ? (
                 <div className={styles.iconBlock}>
                   <IconButton
+                    disabled={status === "DONE"}
                     onClick={() => {
                       setEditFieldOrNot(false);
                       setEditField("");
@@ -262,6 +266,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                     <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                   </IconButton>
                   <IconButton
+                    disabled={status === "DONE"}
                     onClick={() => {
                       onUpdateField();
                       // setEditFieldOrNot(false);
@@ -272,18 +277,22 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   </IconButton>
                 </div>
               ) : userType !== "farmer" ? (
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("title");
-                  }}
-                >
-                  <img
-                    className={styles.editicon}
-                    src="/task-edit-icon.svg"
-                    alt=""
-                  />
-                </IconButton>
+                <>
+                  {status !== "DONE" ?
+                    <IconButton
+                      onClick={() => {
+                        setEditFieldOrNot(true);
+                        setEditField("title");
+                      }}
+                    >
+                      <img
+                        className={styles.editicon}
+                        src="/task-edit-icon.svg"
+                        alt=""
+                      />
+                    </IconButton>
+                    : ''}
+                </>
               ) : (
                 ""
               )}
@@ -317,6 +326,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         }}
                         maxDate={today.setDate(today.getDate() - 1)}
                         disablePast
+                        disabled={status === "DONE"}
                         value={deadline}
                         onChange={(newValue: any) => {
 
@@ -352,6 +362,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
               {editField == "deadline" && editFieldOrNot ? (
                 <div className={styles.iconBlock}>
                   <IconButton
+                    disabled={status === "DONE"}
                     onClick={() => {
                       setEditFieldOrNot(false);
                       setEditField("");
@@ -360,6 +371,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                     <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                   </IconButton>
                   <IconButton
+                    disabled={status === "DONE"}
                     onClick={() => {
                       onUpdateField();
                       // setEditFieldOrNot(false);
@@ -370,18 +382,23 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   </IconButton>
                 </div>
               ) : userType !== "farmer" ? (
-                <IconButton
-                  onClick={() => {
-                    setEditFieldOrNot(true);
-                    setEditField("deadline");
-                  }}
-                >
-                  <img
-                    className={styles.editicon}
-                    src="/task-edit-icon.svg"
-                    alt=""
-                  />
-                </IconButton>
+                <>
+                  {status !== "DONE" ?
+                    <IconButton
+                      disabled={status === "DONE"}
+                      onClick={() => {
+                        setEditFieldOrNot(true);
+                        setEditField("deadline");
+                      }}
+                    >
+                      <img
+                        className={styles.editicon}
+                        src="/task-edit-icon.svg"
+                        alt=""
+                      />
+                    </IconButton>
+                    : ''}
+                </>
               ) : (
                 ""
               )}
@@ -410,6 +427,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   {deleteField == "assignee" && deleteFieldOrNot ? (
                     <div className={styles.iconBlock}>
                       <IconButton
+                        disabled={status === "DONE"}
                         onClick={() => {
                           setDeleteFieldOrNot(false);
                           setDeleteField("");
@@ -419,10 +437,11 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                       </IconButton>
                       <IconButton
+
                         onClick={() => {
                           deleteAssignee();
                         }}
-                        disabled={selectedAssigneeIds.length === 0}
+                        disabled={selectedAssigneeIds.length === 0 || status === "DONE"}
                       >
                         <DeleteForeverIcon
                           sx={{ color: "green", fontSize: "1.4rem" }}
@@ -432,18 +451,23 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   ) : userType !== "farmer" &&
                     data?.assign_to?.length &&
                     !(editField == "assignee" && editFieldOrNot) ? (
-                    <IconButton
-                      onClick={() => {
-                        setDeleteFieldOrNot(true);
-                        setDeleteField("assignee");
-                      }}
-                    >
-                      <img
-                        className={styles.editicon}
-                        src="/task-edit-icon.svg"
-                        alt=""
-                      />
-                    </IconButton>
+                    <>
+                      {status !== "DONE" ?
+                        <IconButton
+                          disabled={status === "DONE"}
+                          onClick={() => {
+                            setDeleteFieldOrNot(true);
+                            setDeleteField("assignee");
+                          }}
+                        >
+                          <img
+                            className={styles.editicon}
+                            src="/task-edit-icon.svg"
+                            alt=""
+                          />
+                        </IconButton>
+                        : ''}
+                    </>
                   ) : (
                     ""
                   )}
@@ -452,6 +476,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   {editField == "assignee" && editFieldOrNot ? (
                     <div className={styles.iconBlock}>
                       <IconButton
+                        disabled={status === "DONE"}
                         onClick={() => {
                           setEditFieldOrNot(false);
                           setEditField("");
@@ -460,6 +485,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                       </IconButton>
                       <IconButton
+                        disabled={status === "DONE"}
                         onClick={() => {
                           addAssignee();
                         }}
@@ -469,18 +495,23 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                     </div>
                   ) : userType !== "farmer" &&
                     !(deleteField == "assignee" && deleteFieldOrNot) ? (
-                    <IconButton
-                      onClick={() => {
-                        setEditFieldOrNot(true);
-                        setEditField("assignee");
-                      }}
-                    >
-                      <img
-                        className={styles.addicon}
-                        src="/add-plus-icon.svg"
-                        alt=""
-                      />
-                    </IconButton>
+                    <>
+                      {status !== "DONE" ?
+                        <IconButton
+                          disabled={status === "DONE"}
+                          onClick={() => {
+                            setEditFieldOrNot(true);
+                            setEditField("assignee");
+                          }}
+                        >
+                          <img
+                            className={styles.addicon}
+                            src="/add-plus-icon.svg"
+                            alt=""
+                          />
+                        </IconButton>
+                        : ''}
+                    </>
                   ) : (
                     ""
                   )}
@@ -540,6 +571,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
             {userType !== "farmer" ? (
               <SelectComponentNoAll
                 options={statusOptions}
+                disabled={status === "DONE"}
                 size="small"
                 onChange={(e: any) => {
                   setStatus(e.target.value);
@@ -564,6 +596,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
           {editField == "description" && editFieldOrNot ? (
             <div className={styles.iconBlock}>
               <IconButton
+                disabled={status === "DONE"}
                 onClick={() => {
                   setEditFieldOrNot(false);
                   setEditField("");
@@ -572,6 +605,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                 <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
               </IconButton>
               <IconButton
+                disabled={status === "DONE"}
                 onClick={() => {
                   onUpdateField();
                   // setEditFieldOrNot(false);
@@ -582,15 +616,20 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
               </IconButton>
             </div>
           ) : userType !== "farmer" ? (
-            <div
-              onClick={() => {
-                setEditFieldOrNot(true);
-                setEditField("description");
-              }}
-              className={styles.editDesc}
-            >
-              <p style={{ margin: "0" }}>Edit</p>
-            </div>
+            <>
+              {status !== "DONE" ?
+                <div
+                  onClick={() => {
+                    setEditFieldOrNot(true);
+                    setEditField("description");
+                  }}
+
+                  className={styles.editDesc}
+                >
+                  <p style={{ margin: "0" }}>Edit</p>
+                </div>
+                : ''}
+            </>
           ) : (
             ""
           )}
@@ -598,6 +637,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
         {editField == "description" && editFieldOrNot ? (
           <div style={{ width: "100%" }}>
             <TextField
+              disabled={status === "DONE"}
               className={styles.descriptionPara}
               multiline
               minRows={4}

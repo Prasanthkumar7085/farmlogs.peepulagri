@@ -6,6 +6,7 @@ export interface userTaskType {
   createdAt: string;
   updatedAt: string;
   __v: 0;
+  name:string;
 }
 
 export interface TaskAttachmentsType {

@@ -32,6 +32,7 @@ const TagsTextFeild = ({
   const [loading, setLoading] = useState(true);
   const [isTextFieldOpen, setIsTextFieldOpen] = useState(false);
   const [extraTags, setExtraTags] = useState<any>([]);
+  const [deleteTagLoading,setDeleteTagLoading] = useState(false)
 
   useEffect(() => {
     setTagValue(beforeTags ? beforeTags : []);
@@ -86,6 +87,7 @@ const TagsTextFeild = ({
     }
   };
   const handleDeleteChip = async (deletedValue: any) => {
+   setDeleteTagLoading(true)
     let body = {
       tags: [deletedValue],
       farm_image_ids: [router.query.image_id],
@@ -110,6 +112,8 @@ const TagsTextFeild = ({
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setDeleteTagLoading(false);
     }
   };
 
@@ -134,12 +138,12 @@ const TagsTextFeild = ({
                         "& .MuiSvgIcon-root": {
                           color: "#d94841",
                         },
-                        '& .MuiSvgIcon-root:hover': {
+                        "& .MuiSvgIcon-root:hover": {
                           color: "#d94841 !important",
-
-                        }
+                        },
                       }}
-                      onDelete={() => handleDeleteChip(item)}
+                      
+                      onDelete={() => deleteTagLoading ? () => { } : handleDeleteChip(item)}
                       key={index}
                       label={item}
                       className={styles.tagsName}

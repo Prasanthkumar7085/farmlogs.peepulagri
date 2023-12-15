@@ -14,21 +14,24 @@ const SelectAutoCompleteForFarmsCropPage = ({
   setSearchString,
   optionsLoading,
   setOptionsLoading,
-
+  defaultValue,
 }: any) => {
   const [defaultValueSet, setDefaultValueSet] = useState<any>("");
   const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (router.isReady && router.query?.farm_id && !searchString) {
+    if (
+      router.isReady &&
+      router.query?.farm_id &&
+      !searchString &&
+      defaultValue
+    ) {
       setDefaultValueSet(
         options && options.find((item: any) => item._id == router.query.farm_id)
-
       );
     }
-  }, [router.isReady, options, router.query?.farm_id]);
-
+  }, [router.isReady, defaultValue, router.query?.farm_id]);
 
   return (
     <div>
@@ -38,9 +41,17 @@ const SelectAutoCompleteForFarmsCropPage = ({
         size="small"
         id="combo-box-demo"
         options={options && options?.length ? options : []}
-        getOptionLabel={(option: any) =>
-          option[label] ? option[label]?.toUpperCase() + " (" + option["area"] + " acrs)" : ""
-        }
+        getOptionLabel={(option: any) => {
+          if (option._id == defaultValueSet?._id) {
+            return option[label]
+              ? option[label]?.toUpperCase() +
+                  " (" +
+                  +option["area"]?.toFixed(2) +
+                  " acrs)"
+              : "";
+          }
+          return option[label];
+        }}
         onChange={(e: any, value: any, reason: any) => {
           if (value) {
             onSelectValueFromDropDown(value, reason);

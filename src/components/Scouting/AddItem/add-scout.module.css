@@ -272,7 +272,6 @@
 .back {
     border-radius: 6px !important;
     border: 1px solid #d94841 !important;
-    background: #FFF !important;
     box-shadow: 4px 4px 10px 0px #0202460a !important;
     padding: 8px 20px !important;
     color: #d94841 !important;
@@ -294,7 +293,10 @@
     font-weight: 400 !important;
     text-transform: capitalize !important;
 }
+.submit:hover {
+        background: #d94841 !important;
 
+}
 .buttons,
 .footeractionbuttons {
     align-self: stretch;

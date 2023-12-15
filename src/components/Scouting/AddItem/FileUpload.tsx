@@ -452,9 +452,8 @@ const FileUploadComponent = () => {
           await addTagsAndCommentsEvent(imagesIdsArray);
         }
         else {
-          toast.success("Farm Images added successfully");
           router.back()
-
+          toast.success("Farm Images added successfully");
 
         }
       }

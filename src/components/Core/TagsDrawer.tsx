@@ -28,8 +28,8 @@ const TagsDrawer = ({
   const [tags, setTags] = useState<any>();
   const [comment, setComment] = useState<any>();
 
-  const captureTags = (array: any) => {
-    if (array) {
+  const captureTags = (array: string[]) => {
+    if (array?.length) {
       setTags(array);
     }
   };
@@ -46,13 +46,15 @@ const TagsDrawer = ({
       open={isDrawerOpen}
       className={styles.AddTagsDrawer}
       sx={{
-        '& .MuiPaper-root': {
-          maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0"
-        }
+        "& .MuiPaper-root": {
+          maxWidth: "500px",
+          margin: "0 auto",
+          borderRadius: "20px 20px 0 0",
+        },
       }}
     >
       <div className={styles.drawerHeading}>
-        <Typography variant="h6">Tag Images</Typography>
+        <Typography variant="h6">Tags</Typography>
         <IconButton
           onClick={() => {
             tagsDrawerClose(false);
@@ -69,13 +71,15 @@ const TagsDrawer = ({
         <div className={styles.inputBox}>
           <AddMultipleComments captureComment={captureComment} />
         </div>
-
-
       </div>
       <div className={styles.drawerFooter}>
         <Button
-          className={!(tags || comment || description) || loading ? styles.submitDisableBtn : styles.submitBtn}
-          disabled={!(tags || comment || description) || loading}
+          className={
+            !(tags?.length || comment || description) || loading
+              ? styles.submitDisableBtn
+              : styles.submitBtn
+          }
+          disabled={!(tags?.length || comment || description) || loading}
           variant="contained"
           onClick={() => {
             if (tags) {

@@ -3,12 +3,12 @@ import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
 import getAllTasksService from "../../../../lib/services/TasksService/getAllTasksService";
-import NavBarContainer from "./TasksNavBar/NavBarContainer";
 import TasksTableComponent from "./TasksTable/TasksTableComponent";
 import ImageComponent from "@/components/Core/ImageComponent";
 import { useCookies } from "react-cookie";
+import { prepareURLEncodedParamsWithArray } from "../../../../lib/requestUtils/urlEncoderWithArray";
+import NavContainer from "./TasksNavBar/NavContainer";
 
 export interface ApiCallProps {
   page: string | number;
@@ -18,7 +18,7 @@ export interface ApiCallProps {
   sortType: string;
   selectedFarmId: string;
   status: string;
-  userId: string;
+  userId: string[];
 }
 const TasksPageComponent = () => {
   const router = useRouter();
@@ -54,7 +54,7 @@ const TasksPageComponent = () => {
     sortType = "",
     selectedFarmId = "",
     status = "ALL",
-    userId = "",
+    userId = [],
   }: Partial<ApiCallProps>) => {
     setLoading(true);
     let queryParams: any = {};
@@ -81,8 +81,8 @@ const TasksPageComponent = () => {
         queryParams["status"] = status;
       }
     }
-    if (userId) {
-      queryParams["assigned_to"] = userId;
+    if (userId?.length) {
+      queryParams["assign_to"] = userId;
     }
 
     const {
@@ -92,7 +92,10 @@ const TasksPageComponent = () => {
     } = queryParams;
 
     router.push({ query: queryParams });
-    const paramString = prepareURLEncodedParams("", queryParamsUpdated);
+    const paramString = prepareURLEncodedParamsWithArray(
+      "",
+      queryParamsUpdated
+    );
 
     const response = await getAllTasksService({
       page: page,
@@ -100,7 +103,6 @@ const TasksPageComponent = () => {
       paramString: paramString,
       accessToken,
     });
-    console.log(response);
 
     if (response?.success) {
       const { data, ...rest } = response;
@@ -125,7 +127,7 @@ const TasksPageComponent = () => {
           sortType: router.query.order_type as string,
           selectedFarmId: router.query.farm_id as string,
           status: router.query.status as string,
-          userId: router.query.assigned_to as string,
+          userId: router.query.assign_to as string[],
         });
       }, delay);
       return () => clearTimeout(debounce);
@@ -151,7 +153,7 @@ const TasksPageComponent = () => {
         sortType: router.query.order_type as string,
         selectedFarmId: value?._id,
         status: router.query.status as string,
-        userId: router.query.assigned_to as string,
+        userId: router.query.assign_to as string[],
       });
     } else {
       setSelectedFarm(null);
@@ -163,7 +165,7 @@ const TasksPageComponent = () => {
         sortType: router.query.order_type as string,
         selectedFarmId: "",
         status: router.query.status as string,
-        userId: router.query.assigned_to as string,
+        userId: router.query.assign_to as string[],
       });
     }
   };
@@ -177,11 +179,11 @@ const TasksPageComponent = () => {
       sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
       status: value,
-      userId: router.query.assigned_to as string,
+      userId: router.query.assign_to as string[],
     });
   };
 
-  const onUserChange = async (e: any, value: userTaskType) => {
+  const onUserChange = async (value: string[] | []) => {
     getAllTasks({
       page: 1,
       limit: router.query.limit as string,
@@ -190,13 +192,13 @@ const TasksPageComponent = () => {
       sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: value?._id as string,
+      userId: value,
     });
   };
 
   return (
     <div style={{ padding: "1rem 2rem" }}>
-      <NavBarContainer
+      {/* <NavBarContainerTasks
         onChangeSearch={onChangeSearch}
         searchString={searchString}
         onSelectValueFromDropDown={onSelectValueFromDropDown}
@@ -204,6 +206,14 @@ const TasksPageComponent = () => {
         onStatusChange={onStatusChange}
         onUserChange={onUserChange}
         titleName={"Task Management"}
+      /> */}
+      <NavContainer
+        onChangeSearch={onChangeSearch}
+        searchString={searchString}
+        onSelectValueFromDropDown={onSelectValueFromDropDown}
+        selectedFarm={selectedFarm}
+        onStatusChange={onStatusChange}
+        onUserChange={onUserChange}
       />
       {data.length ? (
         <TasksTableComponent

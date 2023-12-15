@@ -389,8 +389,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
           </div>
           <div>
             {error && <Typography variant="body2" color="error">{error}</Typography>}
-
-
             <ErrorMessages errorMessages={errorMessages} keyname="deadline" />
           </div>
         </div>

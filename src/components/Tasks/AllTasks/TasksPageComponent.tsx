@@ -9,6 +9,7 @@ import NavBarContainer from "./TasksNavBar/NavBarContainer";
 import TasksTableComponent from "./TasksTable/TasksTableComponent";
 import ImageComponent from "@/components/Core/ImageComponent";
 import { useCookies } from "react-cookie";
+import NavBarContainerTasks from "./TasksNavBar/NavBarContainer-tasks";
 
 export interface ApiCallProps {
   page: string | number;
@@ -196,7 +197,7 @@ const TasksPageComponent = () => {
 
   return (
     <div style={{ padding: "1rem 2rem" }}>
-      <NavBarContainer
+      <NavBarContainerTasks
         onChangeSearch={onChangeSearch}
         searchString={searchString}
         onSelectValueFromDropDown={onSelectValueFromDropDown}

@@ -615,23 +615,27 @@ const FileUploadComponent = () => {
             </div>
           </div>
 
-          <div className={styles.addscout} id="add-scout">
-            <div className={styles.scoutdetails} id="scout-details">
-              <div className={styles.addscoutdetails} id="add-scout-details">
-                <div className={styles.farmselection} id="images">
-                  <div className={styles.inputField}>
-                    <div className={styles.label1}></div>
-                  </div>
-
+          <div style={{
+            overflowY: "auto",
+            maxHeight: "calc(105vh - 156px)",
+          }}>
+            <div className={styles.addscout} id="add-scout">
+              <div className={styles.scoutdetails} id="scout-details">
+                <div className={styles.addscoutdetails} id="add-scout-details">
                   <div className={styles.farmselection} id="images">
                     <div className={styles.inputField}>
-                      <div className={styles.label1}>
-                        Images
-                        <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
-                      </div>
+                      <div className={styles.label1}></div>
                     </div>
-                    <div className={styles.imagesupload} id="images-upload">
-                      {/* <div className={styles.captureimage} id="capture-image">
+
+                    <div className={styles.farmselection} id="images">
+                      <div className={styles.inputField}>
+                        <div className={styles.label1}>
+                          Images
+                          <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
+                        </div>
+                      </div>
+                      <div className={styles.imagesupload} id="images-upload">
+                        {/* <div className={styles.captureimage} id="capture-image">
                         <div className={styles.camera}>
                           <img
                             className={styles.camera1Icon}
@@ -643,101 +647,102 @@ const FileUploadComponent = () => {
                           <div className={styles.capture}> Capture </div>
                         </div>
                       </div> */}
-                      <div id="capture-image">
-                        <div className={styles.uploadimage}>
-                          <label>
-                            <img alt="" src="/upload-image-icon.svg" />
-                            <input
-                              type="file"
-                              alt="images-upload"
-                              accept="image/*"
-                              multiple
-                              onChange={handleFileChange}
-                              hidden
-                            />
-                          </label>
+                        <div id="capture-image">
+                          <div className={styles.uploadimage}>
+                            <label>
+                              <img alt="" src="/upload-image-icon.svg" />
+                              <input
+                                type="file"
+                                alt="images-upload"
+                                accept="image/*"
+                                multiple
+                                onChange={handleFileChange}
+                                hidden
+                              />
+                            </label>
 
-                          <div className={styles.capture}> Upload </div>
+                            <div className={styles.capture}> Upload </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <ErrorMessagesComponent
-              errorMessage={validations?.farm_image_ids}
-            />
-            {multipleFiles &&
-              Array?.from(multipleFiles).map((item: any, index: any) => (
-                <div
-                  className={styles.uploadprogress}
-                  id="upload-progress"
-                  key={index}
-                >
-                  <div className={styles.progress} id="progress">
-                    <img
-                      className={styles.image21}
-                      alt=""
-                      src={
-                        previewImages.find((e: any) => e.fileIndex == item.name)
-                          ?.prieviewUrl
-                          ? previewImages.find(
-                            (e: any) => e.fileIndex == item.name
-                          ).prieviewUrl
-                          : item.type == "application/pdf"
-                            ? "/pdf-icon.png"
-                            : "/doc-icon.webp"
-                      }
-                    />
-                    <div className={styles.progressdetails}>
-                      <div className={styles.uploaddetails}>
-                        <div className={styles.uploadcontroller}>
-                          <div className={styles.uploadname}>
-                            <div className={styles.uploadItem}>
-                              <div
-                                className={styles.photojpg}
-                                style={{
-                                  color:
-                                    fileProgress[index] == "fail" ? "red" : "",
-                                }}
-                              >
-                                {item.name?.length > 25
-                                  ? item.name?.slice(0, 22) + "..."
-                                  : item.name}
-                              </div>
-                              {fileProgress[index] == "fail" ? (
+              <ErrorMessagesComponent
+                errorMessage={validations?.farm_image_ids}
+              />
+
+              {multipleFiles &&
+                Array?.from(multipleFiles).map((item: any, index: any) => (
+                  <div
+                    className={styles.uploadprogress}
+                    id="upload-progress"
+                    key={index}
+                  >
+                    <div className={styles.progress} id="progress">
+                      <img
+                        className={styles.image21}
+                        alt=""
+                        src={
+                          previewImages.find((e: any) => e.fileIndex == item.name)
+                            ?.prieviewUrl
+                            ? previewImages.find(
+                              (e: any) => e.fileIndex == item.name
+                            ).prieviewUrl
+                            : item.type == "application/pdf"
+                              ? "/pdf-icon.png"
+                              : "/doc-icon.webp"
+                        }
+                      />
+                      <div className={styles.progressdetails}>
+                        <div className={styles.uploaddetails}>
+                          <div className={styles.uploadcontroller}>
+                            <div className={styles.uploadname}>
+                              <div className={styles.uploadItem}>
                                 <div
                                   className={styles.photojpg}
-                                  style={{ color: "red" }}
+                                  style={{
+                                    color:
+                                      fileProgress[index] == "fail" ? "red" : "",
+                                  }}
                                 >
-                                  Cancelled
+                                  {item.name?.length > 25
+                                    ? item.name?.slice(0, 22) + "..."
+                                    : item.name}
+                                </div>
+                                {fileProgress[index] == "fail" ? (
+                                  <div
+                                    className={styles.photojpg}
+                                    style={{ color: "red" }}
+                                  >
+                                    Cancelled
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              {fileProgress[index] == 100 &&
+                                fileProgress[index] !== "fail" ? (
+                                <div className={styles.photojpg}>
+                                  <IconButton>
+                                    <DoneIcon sx={{ color: "#05A155" }} />
+                                  </IconButton>
+                                  <IconButton
+                                    onClick={() =>
+                                      removeFileAfterAdding(index, item)
+                                    }
+                                  >
+                                    <DeleteForeverIcon
+                                      sx={{ color: "#820707" }}
+                                    />
+                                  </IconButton>
                                 </div>
                               ) : (
                                 ""
                               )}
                             </div>
-                            {fileProgress[index] == 100 &&
-                              fileProgress[index] !== "fail" ? (
-                              <div className={styles.photojpg}>
-                                <IconButton>
-                                  <DoneIcon sx={{ color: "#05A155" }} />
-                                </IconButton>
-                                <IconButton
-                                  onClick={() =>
-                                    removeFileAfterAdding(index, item)
-                                  }
-                                >
-                                  <DeleteForeverIcon
-                                    sx={{ color: "#820707" }}
-                                  />
-                                </IconButton>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                          {/* {fileProgress[index] !== 100 ||
+                            {/* {fileProgress[index] !== 100 ||
                             fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
@@ -748,105 +753,106 @@ const FileUploadComponent = () => {
                           ) : (
                             ""
                           )} */}
-                        </div>
-                        <Box sx={{ width: "100%" }}>
-                          {fileProgress[index] == 0 &&
-                            fileProgress[index] !== "fail" ? (
-                            <LinearProgress />
-                          ) : fileProgress[index] !== 100 &&
-                            fileProgress[index] !== "fail" ? (
-                            <LinearProgress
-                              variant="determinate"
-                              value={fileProgress[index]}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </Box>
-                      </div>
-                      {fileProgress[index] == 100 ||
-                        fileProgress[index] == "fail" ? (
-                        ""
-                      ) : (
-                        <div className={styles.uploadstatus}>
-                          <div className={styles.completed}>
-                            {fileProgress[index]?.toFixed(2) + "%"}
                           </div>
+                          <Box sx={{ width: "100%" }}>
+                            {fileProgress[index] == 0 &&
+                              fileProgress[index] !== "fail" ? (
+                              <LinearProgress />
+                            ) : fileProgress[index] !== 100 &&
+                              fileProgress[index] !== "fail" ? (
+                              <LinearProgress
+                                variant="determinate"
+                                value={fileProgress[index]}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
                         </div>
-                      )}
+                        {fileProgress[index] == 100 ||
+                          fileProgress[index] == "fail" ? (
+                          ""
+                        ) : (
+                          <div className={styles.uploadstatus}>
+                            <div className={styles.completed}>
+                              {fileProgress[index]?.toFixed(2) + "%"}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-            <div className={styles.scoutdescription} id="scout-description">
-              {multipleFiles?.length ?
-                <div className={styles.descriptionblock}>
+              <div className={styles.scoutdescription} id="scout-description">
+                {multipleFiles?.length ?
+                  <div className={styles.descriptionblock}>
 
-                  <div className={styles.addscoutdetails}>
-                    <div className={styles.inputField}>
-                      <div style={{ width: "100%" }} className={styles.input}>
-                        <TagsTextFeild captureTags={captureTags} />
+                    <div className={styles.addscoutdetails}>
+                      <div className={styles.inputField}>
+                        <div style={{ width: "100%" }} className={styles.input}>
+                          <TagsTextFeild captureTags={captureTags} />
+                        </div>
+                        <div
+                          className={styles.farmselection}
+                          id="input-description"
+                        >
+                          <div className={styles.label1}>Comments</div>
+                          <TextField
+                            className={styles.input}
+                            color="primary"
+                            name="desciption"
+                            id="description"
+                            minRows={4}
+                            maxRows={4}
+                            placeholder="Enter your comment here"
+                            fullWidth={true}
+                            variant="outlined"
+                            multiline
+                            value={description}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                              setValidations({});
+                            }}
+                            sx={{ background: "#fff" }}
+                          />
+                          <ErrorMessagesComponent
+                            errorMessage={validations?.description}
+                          />
+                        </div>
                       </div>
-                      <div
-                        className={styles.farmselection}
-                        id="input-description"
-                      >
-                        <div className={styles.label1}>Comments</div>
-                        <TextField
-                          className={styles.input}
+                    </div>
+
+                    <div className={styles.footeractionbuttons} id="footer-buttons">
+                      <div className={styles.buttons} id="buttons">
+                        <Button
+                          className={styles.back}
+                          sx={{ width: 130 }}
                           color="primary"
-                          name="desciption"
-                          id="description"
-                          minRows={4}
-                          maxRows={4}
-                          placeholder="Enter your comment here"
-                          fullWidth={true}
+                          name="back"
+                          id="back"
+                          size="large"
                           variant="outlined"
-                          multiline
-                          value={description}
-                          onChange={(e) => {
-                            setDescription(e.target.value);
-                            setValidations({});
-                          }}
-                          sx={{ background: "#fff" }}
-                        />
-                        <ErrorMessagesComponent
-                          errorMessage={validations?.description}
-                        />
+                          onClick={() => router.back()}
+                        >
+                          Go Back
+                        </Button>
+                        <Button
+                          className={styles.submit}
+
+                          name="submit"
+                          id="submit"
+                          size="large"
+                          variant="contained"
+                          disabled={!tempFilesStorage.length || loading}
+                          onClick={() => addScoutDetails()}
+                        >
+                          Submit
+                        </Button>
                       </div>
                     </div>
-                  </div>
-
-                  <div className={styles.footeractionbuttons} id="footer-buttons">
-                    <div className={styles.buttons} id="buttons">
-                      <Button
-                        className={styles.back}
-                        sx={{ width: 130 }}
-                        color="primary"
-                        name="back"
-                        id="back"
-                        size="large"
-                        variant="outlined"
-                        onClick={() => router.back()}
-                      >
-                        Go Back
-                      </Button>
-                      <Button
-                        className={styles.submit}
-
-                        name="submit"
-                        id="submit"
-                        size="large"
-                        variant="contained"
-                        disabled={!tempFilesStorage.length || loading}
-                        onClick={() => addScoutDetails()}
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </div>
-                </div> : ""}
+                  </div> : ""}
+              </div>
             </div>
           </div>
         </div>

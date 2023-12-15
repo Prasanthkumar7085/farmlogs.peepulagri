@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import { useSelector } from "react-redux";
 import styles from "./TagsDrawer.module.css";
-import TagsTextFeild from "./TagsTextFeild";
+import TagsTextFeildForImages from "./TagsTextFeildForImages";
 const EditTagsForSingleAttachment = ({
+  setTagsDrawerEditOpen,
   TagsDrawerEditOpen,
   tagsDrawerClose,
   item,
@@ -32,12 +33,6 @@ const EditTagsForSingleAttachment = ({
   >({
     tags: [],
   });
-
-  const captureTags = (array: any) => {
-    if (array) {
-      setTags(array);
-    }
-  };
 
   const getImageBasedTags = async () => {
     let options = {
@@ -99,9 +94,7 @@ const EditTagsForSingleAttachment = ({
         </IconButton>
       </div>
       <div style={{ width: "100%" }}>
-        <TagsTextFeild
-          captureTags={captureTags}
-          tags={tags}
+        <TagsTextFeildForImages
           beforeTags={tagsDetails?.tags}
           TagsDrawerEditOpen={TagsDrawerEditOpen}
           getImageBasedTags={getImageBasedTags}
@@ -110,15 +103,17 @@ const EditTagsForSingleAttachment = ({
 
       <Button
         variant="contained"
+        className={styles.updateSubmitBtn}
         onClick={() => {
-          captureTagsDetailsEdit([...tags, ...tagsDetails?.tags], description);
+          setTagsDrawerEditOpen(false);
+          // captureTagsDetailsEdit([...tags, ...tagsDetails?.tags], description);
         }}
-        disabled={loading || !(tags?.length || description?.length)}
-        className={
-          loading || !(tags?.length || description?.length)
-            ? styles.updateSubmitBtnDisabled
-            : styles.updateSubmitBtn
-        }
+        // disabled={loading || !(tags?.length || description?.length)}
+        // className={
+        //   loading || !(tags?.length || description?.length)
+        //     ? styles.updateSubmitBtnDisabled
+        //     : styles.updateSubmitBtn
+        // }
       >
         {loading ? (
           <CircularProgress size="1.5rem" sx={{ color: "white" }} />

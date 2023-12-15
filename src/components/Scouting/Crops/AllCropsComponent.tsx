@@ -47,7 +47,6 @@ const AllCropsComponent = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [loadingForAdd, setLoadingForAdd] = useState<any>();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [errorMessages, setErrorMessages] = useState([]);
   const [state, setState] = useState({ bottom: false });
   const [sortBy, setSortBy] = useState("createdAt");
@@ -67,7 +66,11 @@ const AllCropsComponent = () => {
       console.error(err);
     }
   };
-  const getFarmDetails = async (farmsearchstring: any, id: any) => {
+  const getFarmDetails = async (
+    farmsearchstring: any,
+    id: any,
+    reason = ""
+  ) => {
     setOptionsLoading(true);
 
     if (farmsearchstring) {
@@ -84,17 +87,19 @@ const AllCropsComponent = () => {
       );
       if (response?.success == true && response?.data?.length) {
         setFarmOptions(response?.data);
-        if (id) {
+        if (reason == "clear") {
+          setDefaultValue(null);
+        } else if (id) {
           let selectedObject =
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == id);
 
           setDefaultValue(selectedObject?.title);
-          dispatch(setFarmTitleTemp(selectedObject?.title));
+          // dispatch(setFarmTitleTemp(selectedObject?.title));
           captureFarmName(selectedObject);
         } else {
           setDefaultValue(response?.data[0].title);
-          dispatch(setFarmTitleTemp(response?.data[0].title));
+          // dispatch(setFarmTitleTemp(response?.data[0].title));
           captureFarmName(response?.data[0]);
         }
       } else if (response?.statusCode == 403) {
@@ -191,7 +196,7 @@ const AllCropsComponent = () => {
 
   useEffect(() => {
     if (router.isReady && router.query.farm_id && accessToken) {
-      let delay = 1000;
+      let delay = 500;
       let debounce = setTimeout(() => {
         dispatch(removeTheFilesFromStore([]));
 
@@ -207,7 +212,7 @@ const AllCropsComponent = () => {
   const captureFarmName = (selectedObject: any, reason = "") => {
     if (reason && reason == "clear") {
       router.replace(`/farms/${selectedObject?._id}/crops`);
-      getFarmDetails("", router.query.farm_id);
+      getFarmDetails("", router.query.farm_id, reason);
     }
     if (selectedObject && Object.keys(selectedObject).length) {
       setFormId(selectedObject?._id);

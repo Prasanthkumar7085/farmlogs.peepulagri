@@ -42,6 +42,8 @@ const AllSummaryComponents = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [alertType, setAlertType] = useState(false);
+    const [deleteID, setDeleteID] = useState<any>()
+
     const open = Boolean(anchorEl);
     const handleMenu = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -64,6 +66,7 @@ const AllSummaryComponents = () => {
     };
 
     const getSummary = async (farmId = "", cropId = "", page: any) => {
+        console.log(page, "j")
         setLoading(true);
         try {
             let queryParams: any = {};
@@ -96,17 +99,22 @@ const AllSummaryComponents = () => {
                 if (responseData?.has_more) {
                     if (page !== 1) {
                         setHasMore(responseData?.has_more);
-                        setData([...data, ...responseData.data]);
+
+                        let temp = [...data, ...responseData.data]
+                        const newArray = temp.filter(obj => obj._id !== deleteID);
+                        setData(newArray)
+
                     }
                     else {
                         setHasMore(responseData?.has_more);
                         setData(responseData.data);
+
+                        console.log(responseData?.data)
                     }
 
                 }
                 else {
                     setHasMore(false);
-
                     setData(responseData.data);
                 }
 
@@ -293,6 +301,7 @@ const AllSummaryComponents = () => {
             setAlertMessage(responseData?.message);
             setDialogOpen(false);
             setAlertType(true);
+            setDeleteID(rowId)
             getSummary("", "", 1);
         } else {
             setAlertMessage(responseData?.message);

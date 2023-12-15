@@ -23,6 +23,7 @@ import updateProcurementService from "../../../../lib/services/ProcurementServic
 import POC from "../edit/POC";
 import styles from "./add-procurement-form.module.css";
 import OperationDetails from "./operation-details";
+import deleteAddProcurementService from "../../../../lib/services/ProcurementServices/deleteAddProcurementService";
 
 interface ApiProps {
   page: number;
@@ -212,8 +213,24 @@ const AddProcurementForm: NextPage = () => {
   };
 
   const deleteProcurementApi = async () => {
-    setDeleteLoading(true);
     try {
+      const response = await deleteAddProcurementService({
+        procurementId: router.query.procurement_id,
+        token: accessToken,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.message);
+        router.back();
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+
+      setDeleteLoading(true);
     } catch (err) {
       console.error(err);
     } finally {
@@ -331,10 +348,12 @@ const AddProcurementForm: NextPage = () => {
         <LoadingComponent loading={loading} />
         <Toaster closeButton richColors position="top-right" />
       </form>
-      <POC
-        procurementData={procurementData}
-        getProcurementData={getProcurementData}
-      />
+      {router.query.procurement_id ?
+        <POC
+          procurementData={procurementData}
+          getProcurementData={getProcurementData}
+        />
+        : ''}
     </div>
   );
 };

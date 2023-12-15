@@ -438,6 +438,14 @@ const ImageGalleryComponent = () => {
     }
   };
 
+
+  //changing the date format
+  function changeDateFormat(originalDate: any) {
+    const parts = originalDate.split('-');
+    const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+    return formattedDate;
+  }
+
   return (
     <div className={styles.scoutingView}>
 
@@ -487,14 +495,7 @@ const ImageGalleryComponent = () => {
               </IconButton>
               {selectedItems?.length ? (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <IconButton className={styles.selectBtn} onClick={() => setDeleteOpen(true)} sx={{ paddingBlock: "0" }}>
-                    <ImageComponent
-                      src={"/mobileIcons/scouting/trash-simple-light.svg"}
-                      width={20}
-                      height={20}
-                      alt=""
-                    />
-                  </IconButton>
+
 
                   <IconButton className={styles.selectBtn} onClick={() => setTagsDrawerOpen(true)} sx={{ paddingBlock: "0" }}>
                     <ImageComponent
@@ -502,6 +503,14 @@ const ImageGalleryComponent = () => {
                       width={20}
                       height={20}
                       alt="tag"
+                    />
+                  </IconButton>
+                  <IconButton className={styles.selectBtn} onClick={() => setDeleteOpen(true)} sx={{ paddingBlock: "0" }}>
+                    <ImageComponent
+                      src={"/mobileIcons/scouting/trash-simple-light.svg"}
+                      width={20}
+                      height={20}
+                      alt=""
                     />
                   </IconButton>
 
@@ -539,7 +548,7 @@ const ImageGalleryComponent = () => {
                 <div key={indexAttachment}
                   ref={lastBookElementRef}
                 >
-                  <Typography variant="caption" className={styles.scoutingDate}>{images.date}</Typography>
+                  <Typography variant="caption" className={styles.scoutingDate}>{changeDateFormat(images.date)}</Typography>
                   <div
                     style={{
                       display: "grid",
@@ -630,7 +639,7 @@ const ImageGalleryComponent = () => {
                     indexAttachment === data.length - 50 ? lastItemRef : null
                   }
                 >
-                  <Typography variant="caption" className={styles.scoutingDate}>{images.date}</Typography>
+                  <Typography variant="caption" className={styles.scoutingDate}>{timePipe(images.date, "DD MMM YY")}</Typography>
                   <div
                     style={{
                       display: "grid",

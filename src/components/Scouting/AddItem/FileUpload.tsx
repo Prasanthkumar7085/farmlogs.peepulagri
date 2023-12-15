@@ -651,7 +651,7 @@ const FileUploadComponent = () => {
                             <input
                               type="file"
                               alt="images-upload"
-                              accept="image/*, video/*"
+                              accept="image/*"
                               multiple
                               onChange={handleFileChange}
                               hidden

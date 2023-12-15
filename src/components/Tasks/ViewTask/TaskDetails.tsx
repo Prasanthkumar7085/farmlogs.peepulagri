@@ -35,6 +35,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
   const userType = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
+  const loggedInUserId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
+  );
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
   const [deleteFieldOrNot, setDeleteFieldOrNot] = useState(false);
   const [editField, setEditField] = useState("");
@@ -44,23 +47,20 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
   const [deadline, setDeadline] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  console.log(status);
 
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
     { value: "DONE", title: "Done" },
     { value: "PENDING", title: "Pending" },
-    { value: "OVER-DUE", title: "Over-due" },
+    // { value: "OVER-DUE", title: "Over-due" },
   ]);
   const [farmId, setFarmId] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
-  const [farmName, setFarmName] = useState("");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
   const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
   const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>([]);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     setErrorMessages({});
@@ -69,9 +69,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
     setDescription(data?.description ? data?.description : "");
     setStatus(data?.status ? data?.status : "");
     setFarmId(data?.farm_id ? data?.farm_id?._id : "");
-    setFarmName(data?.farm_id?.title ? data?.farm_id?.title : "");
     setUserId(data?.assigned_to?._id as string);
-    setAssignee(data?.assign_to)
+    setAssignee(data?.assign_to);
   }, [data, editFieldOrNot]);
 
   const onUpdateField = async () => {
@@ -81,8 +80,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
       farm_id: farmId,
       deadline: deadline
         ? moment(deadline)
-          .utcOffset("+05:30")
-          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
         : "",
       description: description ? description : "",
       title: title ? title : "",
@@ -125,7 +124,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
         let responseData = await response.json();
 
         if (responseData?.success) {
-          getTaskById(id as string)
+          getTaskById(id as string);
           setEditFieldOrNot(false);
           setEditField("");
           toast.success(responseData?.message);
@@ -144,8 +143,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
     setLoading(true);
 
     try {
-
-
       if (selectedAssigneeIds.length > 0) {
         let body = {
           assign_to: selectedAssigneeIds,
@@ -167,7 +164,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
         let responseData = await response.json();
 
         if (responseData?.success) {
-          getTaskById(id as string)
+          getTaskById(id as string);
           setDeleteFieldOrNot(false);
           setDeleteField("");
           setSelectedAssigneeIds([]);
@@ -183,11 +180,16 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
     }
   };
 
-  const handleAssigneeCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, assigneeId: string) => {
+  const handleAssigneeCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    assigneeId: string
+  ) => {
     if (e.target.checked) {
       setSelectedAssigneeIds((prevIds) => [...prevIds, assigneeId]);
     } else {
-      setSelectedAssigneeIds((prevIds) => prevIds.filter((id) => id !== assigneeId));
+      setSelectedAssigneeIds((prevIds) =>
+        prevIds.filter((id) => id !== assigneeId)
+      );
     }
   };
 
@@ -200,6 +202,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
     });
     if (response?.success) {
       toast.success(response?.message);
+      await getTaskById(router.query.task_id as string);
     } else {
       toast.error(response?.message);
     }
@@ -247,11 +250,12 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                 <h1 className={styles.landPreparation}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                    data?.title.slice(1)
+                      data?.title.slice(1)
                     : "-"}
                 </h1>
               )}
             </div>
+
             <div>
               {editField == "title" && editFieldOrNot ? (
                 <div className={styles.iconBlock}>
@@ -273,9 +277,10 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                     <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                   </IconButton>
                 </div>
-              ) : userType !== "farmer" ? (
+              ) : (
                 <>
-                  {status !== "DONE" ?
+                  {status !== "DONE" &&
+                  loggedInUserId == data?.created_by?._id ? (
                     <IconButton
                       onClick={() => {
                         setEditFieldOrNot(true);
@@ -288,21 +293,27 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         alt=""
                       />
                     </IconButton>
-                    : ''}
+                  ) : (
+                    ""
+                  )}
                 </>
-              ) : (
-                ""
               )}
             </div>
           </div>
           <ErrorMessages errorMessages={errorMessages} keyname="title" />
         </div>
+        {/* <h1 className={styles.landPreparation}>
+          {data?.created_by.name ? data?.created_by.name : "-"}
+        </h1> */}
         <div>
           <label className={styles.userLabel} style={{ width: "100px" }}>
             Due Date
           </label>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <div className={styles.singleDetailsBox} style={{ display: "flex" }}>
+            <div
+              className={styles.singleDetailsBox}
+              style={{ display: "flex" }}
+            >
               {editField == "deadline" && editFieldOrNot ? (
                 <div className={styles.responseDate2} style={{ width: "100%" }}>
                   <div style={{ display: "flex", width: "100%" }}>
@@ -325,9 +336,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         disablePast
                         value={deadline}
                         onChange={(newValue: any) => {
-
                           setDeadline(newValue);
-
                         }}
                         format="dd/MM/yyyy"
                         slotProps={{
@@ -339,9 +348,7 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         }}
                       />
                     </LocalizationProvider>
-
                   </div>
-
                 </div>
               ) : (
                 <div style={{ display: "flex" }}>
@@ -375,9 +382,10 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                     <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                   </IconButton>
                 </div>
-              ) : userType !== "farmer" ? (
+              ) : (
                 <>
-                  {status !== "DONE" ?
+                  {status !== "DONE" &&
+                  loggedInUserId == data?.created_by?._id ? (
                     <IconButton
                       onClick={() => {
                         setEditFieldOrNot(true);
@@ -390,15 +398,14 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         alt=""
                       />
                     </IconButton>
-                    : ''}
+                  ) : (
+                    ""
+                  )}
                 </>
-              ) : (
-                ""
               )}
             </div>
           </div>
           <div>
-            {error && <Typography variant="body2" color="error">{error}</Typography>}
             <ErrorMessages errorMessages={errorMessages} keyname="deadline" />
           </div>
         </div>
@@ -406,19 +413,27 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
       <div className={styles.viewHeader}>
         <div className={styles.userBlock}>
           <div className={styles.userDetails}>
-            <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
+            >
               <label className={styles.userLabel}>
                 <PersonOutlineOutlinedIcon
                   sx={{ fontSize: "1rem", marginRight: "5px" }}
                 />
                 Assignee
               </label>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
                 <div>
                   {deleteField == "assignee" && deleteFieldOrNot ? (
                     <div className={styles.iconBlock}>
                       <IconButton
-
                         onClick={() => {
                           setDeleteFieldOrNot(false);
                           setDeleteField("");
@@ -428,24 +443,24 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                       </IconButton>
                       <IconButton
-
                         onClick={() => {
                           deleteAssignee();
                         }}
-                        disabled={selectedAssigneeIds.length === 0 || status === "DONE"}
+                        disabled={
+                          selectedAssigneeIds.length === 0 || status === "DONE"
+                        }
                       >
                         <DeleteForeverIcon
                           sx={{ color: "green", fontSize: "1.4rem" }}
                         />
                       </IconButton>
                     </div>
-                  ) : userType !== "farmer" &&
-                    data?.assign_to?.length &&
+                  ) : data?.assign_to?.length &&
                     !(editField == "assignee" && editFieldOrNot) ? (
                     <>
-                      {status !== "DONE" ?
+                      {status !== "DONE" &&
+                      loggedInUserId == data?.created_by?._id ? (
                         <IconButton
-
                           onClick={() => {
                             setDeleteFieldOrNot(true);
                             setDeleteField("assignee");
@@ -457,7 +472,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                             alt=""
                           />
                         </IconButton>
-                        : ''}
+                      ) : (
+                        ""
+                      )}
                     </>
                   ) : (
                     ""
@@ -467,7 +484,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   {editField == "assignee" && editFieldOrNot ? (
                     <div className={styles.iconBlock}>
                       <IconButton
-
                         onClick={() => {
                           setEditFieldOrNot(false);
                           setEditField("");
@@ -483,10 +499,10 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                         <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                       </IconButton>
                     </div>
-                  ) : userType !== "farmer" &&
-                    !(deleteField == "assignee" && deleteFieldOrNot) ? (
+                  ) : !(deleteField == "assignee" && deleteFieldOrNot) ? (
                     <>
-                      {status !== "DONE" ?
+                      {status !== "DONE" &&
+                      loggedInUserId == data?.created_by?._id ? (
                         <IconButton
                           onClick={() => {
                             setEditFieldOrNot(true);
@@ -499,7 +515,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                             alt=""
                           />
                         </IconButton>
-                        : ''}
+                      ) : (
+                        ""
+                      )}
                     </>
                   ) : (
                     ""
@@ -531,24 +549,24 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
               <div className={styles.allAsigneeGrp}>
                 {data?.assign_to
                   ? data?.assign_to.map(
-                    (item: { _id: string; name: string }, index: number) => {
-                      return (
-                        <div key={index} className={styles.singleAsignee}>
-                          {deleteField == "assignee" && deleteFieldOrNot ? (
-                            <input
-                              type="checkbox"
-                              onChange={(e) =>
-                                handleAssigneeCheckboxChange(e, item._id)
-                              }
-                            />
-                          ) : (
-                            ""
-                          )}
-                          {item.name},
-                        </div>
-                      );
-                    }
-                  )
+                      (item: { _id: string; name: string }, index: number) => {
+                        return (
+                          <div key={index} className={styles.singleAsignee}>
+                            {deleteField == "assignee" && deleteFieldOrNot ? (
+                              <input
+                                type="checkbox"
+                                onChange={(e) =>
+                                  handleAssigneeCheckboxChange(e, item._id)
+                                }
+                              />
+                            ) : (
+                              ""
+                            )}
+                            {item.name},
+                          </div>
+                        );
+                      }
+                    )
                   : "-"}
               </div>
             </div>
@@ -557,24 +575,18 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
         <div className={styles.status}>
           <label className={styles.userLabel}>Status</label>
           <div style={{ width: "100%" }}>
-            {userType !== "farmer" ? (
-              <SelectComponentNoAll
-                options={statusOptions}
-                disabled={status === "DONE"}
-                size="small"
-                onChange={(e: any) => {
-                  setStatus(e.target.value);
-                  onChangeStatus(e.target.value);
-                }}
-                value={status ? status : ""}
-              />
-            ) : (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <p className={styles.status2}>
-                  {data?.status ? data?.status : "-"}
-                </p>
-              </div>
-            )}
+            <SelectComponentNoAll
+              options={statusOptions}
+              disabled={
+                status === "DONE" || loggedInUserId != data?.created_by?._id
+              }
+              size="small"
+              onChange={(e: any) => {
+                // setStatus(e.target.value);
+                onChangeStatus(e.target.value);
+              }}
+              value={status ? status : ""}
+            />
           </div>
         </div>
       </div>
@@ -585,7 +597,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
           {editField == "description" && editFieldOrNot ? (
             <div className={styles.iconBlock}>
               <IconButton
-
                 onClick={() => {
                   setEditFieldOrNot(false);
                   setEditField("");
@@ -594,7 +605,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                 <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
               </IconButton>
               <IconButton
-
                 onClick={() => {
                   onUpdateField();
                   // setEditFieldOrNot(false);
@@ -606,18 +616,19 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
             </div>
           ) : userType !== "farmer" ? (
             <>
-              {status !== "DONE" ?
+              {status !== "DONE" && loggedInUserId == data?.created_by?._id ? (
                 <div
                   onClick={() => {
                     setEditFieldOrNot(true);
                     setEditField("description");
                   }}
-
                   className={styles.editDesc}
                 >
                   <p style={{ margin: "0" }}>Edit</p>
                 </div>
-                : ''}
+              ) : (
+                ""
+              )}
             </>
           ) : (
             ""
@@ -626,7 +637,6 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
         {editField == "description" && editFieldOrNot ? (
           <div style={{ width: "100%" }}>
             <TextField
-
               className={styles.descriptionPara}
               multiline
               minRows={4}

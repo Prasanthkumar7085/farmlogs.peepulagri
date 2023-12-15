@@ -36,8 +36,8 @@ const TasksTableComponent = ({
 }: any) => {
   const router = useRouter();
 
-  const userType = useSelector(
-    (state: any) => state.auth.userDetails?.user_details?.user_type
+  const userId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
   );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -115,8 +115,8 @@ const TasksTableComponent = ({
       >
         {value?.length
           ? value
-            .map((item: { _id: string; name: string }) => item.name)
-            .join(", ")
+              .map((item: { _id: string; name: string }) => item.name)
+              .join(", ")
           : "*Not Assigned*"}
         {info.getValue()?.assign_to?.length > 2 ? (
           <div
@@ -203,13 +203,13 @@ const TasksTableComponent = ({
             {info.getValue()
               ? info.getValue()?.length > 34
                 ? (info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
-                  info.getValue().slice(1, 30)
-                  : "") + "....."
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                      info.getValue().slice(1, 30)
+                    : "") + "....."
                 : info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
+                ? info.getValue().slice(0, 1).toUpperCase() +
                   info.getValue().slice(1)
-                  : ""
+                : ""
               : ""}
           </span>
         </Tooltip>
@@ -236,13 +236,13 @@ const TasksTableComponent = ({
               {info.getValue()
                 ? info.getValue()?.length > 45
                   ? (info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1, 41)
-                    : "") + "....."
+                      ? info.getValue().slice(0, 1).toUpperCase() +
+                        info.getValue().slice(1, 41)
+                      : "") + "....."
                   : info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
+                  ? info.getValue().slice(0, 1).toUpperCase() +
                     info.getValue().slice(1)
-                    : "-"
+                  : "-"
                 : "-"}
             </span>
           </Tooltip>
@@ -287,56 +287,57 @@ const TasksTableComponent = ({
                 display: "flex",
                 width: "100%",
                 justifyContent: "space-evenly",
-                alignItems: "center !important"
+                alignItems: "center !important",
               }}
             >
               <Tooltip title="View">
                 <Link href={`/tasks/${info.row.original?._id}`}>
-
                   <ImageComponent
                     src="/view-icon.svg"
                     height={17}
                     width={17}
                     alt="view"
                   />
-
                 </Link>
               </Tooltip>
-              {/* <div
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  router.push(`/tasks/${info.row.original?._id}/edit`)
+
+              <Tooltip
+                title={
+                  info.row.original?.status == "DONE" ||
+                  info.row.original?.created_by?._id !== userId
+                    ? "You dont't have permission for this action"
+                    : "Delete"
                 }
               >
-                <ImageComponent
-                  src="/pencil-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </div> */}
-              {userType !== "farmer" ? (
-                <Tooltip title="Delete">
-                  <div
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setDeleteTaskId(info.row.original?._id);
-                      setDialogOpen(true);
-                    }}
-                  >
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (
+                      info.row.original?.status == "DONE" ||
+                      info.row.original?.created_by?._id !== userId
+                    ) {
+                      return;
+                    }
+                    setDeleteTaskId(info.row.original?._id);
+                    setDialogOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src={
+                      !(
+                        info.row.original?.status == "DONE" ||
+                        info.row.original?.created_by?._id !== userId
+                      )
+                        ? "/trast-icon.svg"
+                        : "/trast-icon-disabled.svg"
+                    }
+                    height={17}
+                    width={17}
+                    alt="view"
+                  />
+                </div>
+              </Tooltip>
 
-                    <ImageComponent
-                      src="/trast-icon.svg"
-                      height={17}
-                      width={17}
-                      alt="view"
-                    />
-
-                  </div>
-                </Tooltip>
-              ) : (
-                ""
-              )}
               <Tooltip title="Comments">
                 <div
                   style={{ cursor: "pointer" }}
@@ -345,7 +346,6 @@ const TasksTableComponent = ({
                     setDrawerOpen(true);
                   }}
                 >
-
                   <ImageComponent
                     src="/task-comments.svg"
                     height={17}
@@ -354,7 +354,13 @@ const TasksTableComponent = ({
                   />
                 </div>
               </Tooltip>
-              <Tooltip title="Attachments">
+              <Tooltip
+                title={
+                  info.row.original.attachements
+                    ? "Attachments"
+                    : "No Attachments"
+                }
+              >
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -362,14 +368,16 @@ const TasksTableComponent = ({
                     setAttachmentDrawer(true);
                   }}
                 >
-
                   <ImageComponent
-                    src="/task-table-attachment-icon.svg"
+                    src={
+                      info.row.original.attachements
+                        ? "/task-table-attachment-icon.svg"
+                        : "task-table-attachment-icon-disabled.svg"
+                    }
                     height={17}
                     width={17}
                     alt=""
                   />
-
                 </div>
               </Tooltip>
               <div
@@ -380,7 +388,9 @@ const TasksTableComponent = ({
                 }}
               >
                 <Tooltip title="Logs">
-                  <SummarizeIcon sx={{ color: "#4986f7", fontSize: "1.3rem" }} />
+                  <SummarizeIcon
+                    sx={{ color: "#4986f7", fontSize: "1.3rem" }}
+                  />
                 </Tooltip>
               </div>
             </div>

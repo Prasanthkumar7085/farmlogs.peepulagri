@@ -108,13 +108,12 @@ const SingleImageView: FC<componentProps> = ({
       );
 
       const responseData = await response.json();
-      console.log(responseData, "asdfw");
 
       if (responseData.success) {
         setData(responseData?.data);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }

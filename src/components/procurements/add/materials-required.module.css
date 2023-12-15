@@ -92,7 +92,7 @@
 .priority,
 .row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
 }
 .row {
@@ -118,23 +118,17 @@
   align-self: stretch;
   cursor: pointer;
 }
-.materialsrequired,
-.personofcontact {
+.materialsrequired
+ {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+
+    width: 80%;
+    margin-left: 60px;
+
 }
 .personofcontact {
   flex: 1;
   gap: 8px;
 }
 
-.materialsrequired {
-  align-self: stretch;
-  gap: 24px;
-  text-align: left;
-  font-size: 18px;
-  color: #101828;
-  font-family: Inter;
-}

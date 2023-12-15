@@ -261,16 +261,7 @@ const ProcurementsTableComponent = ({
       footer: (props: any) => props.column.id,
       width: "150px",
     },
-    {
-      accessorFn: (row: any) => {
-        return { materials_required: row.materials_required, _id: row._id };
-      },
-      id: "materials_required",
-      cell: (info: any) => <MaterialAssignedComponent info={info} />,
-      header: () => <span>Materials Required</span>,
-      footer: (props: any) => props.column.id,
-      width: "200px",
-    },
+
 
     {
       accessorFn: (row: any) => row.approved_by?.name,
@@ -309,18 +300,18 @@ const ProcurementsTableComponent = ({
       footer: (props: any) => props.column.id,
       width: "120px",
     },
-    {
-      accessorFn: (row: any) => row.completed_at,
-      id: "completed_at",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
-        </span>
-      ),
-      header: () => <span>Day of Closing</span>,
-      footer: (props: any) => props.column.id,
-      width: "120px",
-    },
+    // {
+    //   accessorFn: (row: any) => row.completed_at,
+    //   id: "completed_at",
+    //   cell: (info: any) => (
+    //     <span style={{ padding: "40px 10px 40px 10px" }}>
+    //       {timePipe(info.getValue(), "DD-MM-YYYY")}
+    //     </span>
+    //   ),
+    //   header: () => <span>Day of Closing</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "120px",
+    // },
     {
       // accessorFn: (row: any) => row.description,
       id: "actions",

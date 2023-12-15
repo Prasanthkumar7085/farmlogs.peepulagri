@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import {
   Autocomplete,
   Button,
@@ -13,10 +13,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import styles from "./TagsTextFeild.module.css";
+import addTagService from "../../../lib/services/TagsService/addTagService";
 
-const TagsTextFeild = ({
-  captureTags,
-  tags,
+const TagsTextFeildForImages = ({
   beforeTags,
   TagsDrawerEditOpen,
   getImageBasedTags,
@@ -31,14 +30,18 @@ const TagsTextFeild = ({
   const [tag, setTag] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isTextFieldOpen, setIsTextFieldOpen] = useState(false);
-  const [extraTags, setExtraTags] = useState<any>([]);
   const [deleteTagLoading, setDeleteTagLoading] = useState(false);
   const [renderField, setRenderField] = useState(true);
 
   useEffect(() => {
+    if (TagsDrawerEditOpen) {
+      dropDownTags();
+    }
+  }, [TagsDrawerEditOpen]);
+
+  useEffect(() => {
     setTagValue(beforeTags ? beforeTags : []);
-    dropDownTags();
-  }, [TagsDrawerEditOpen, beforeTags]);
+  }, [beforeTags]);
 
   const dropDownTags = async () => {
     setLoading(true);
@@ -62,31 +65,6 @@ const TagsTextFeild = ({
     }
   };
 
-  const addNewTag = () => {
-    if (!newTagValue?.trim()) {
-      return;
-    }
-    if (
-      tagValue.includes(newTagValue?.trim()) ||
-      tag.includes(newTagValue?.trim())
-    ) {
-      toast.error("Tag Already Exists");
-      return;
-    } else {
-      toast.success("Tag Added Successfully");
-    }
-    setTag([...tag, newTagValue?.trim()]);
-    setExtraTags([...extraTags, newTagValue?.trim()]);
-    setNewTagValue("");
-    captureTags([...extraTags, newTagValue?.trim()]);
-    setIsTextFieldOpen(false);
-  };
-
-  const handleKeyDown = (event: any) => {
-    if (event.key === "Tab") {
-      addNewTag();
-    }
-  };
   const handleDeleteChip = async (deletedValue: any) => {
     setDeleteTagLoading(true);
     let body = {
@@ -118,55 +96,42 @@ const TagsTextFeild = ({
     }
   };
 
-  const removeTagsFromExtraTags = (item: string) => {
-    let tags = (tempTags: string[]) =>
-      tempTags?.filter((tempItem: string) => tempItem != item);
-    setExtraTags(tags);
-    captureTags(tags);
+  const addTagToImage = async (value: string, callAllTagsOrNot = false) => {
+    try {
+      const response = await addTagService({
+        body: {
+          farm_image_ids: [router.query.image_id as string],
+          tags: [value],
+        },
+        token: accessToken,
+      });
+      if (response?.success) {
+        toast.success(response?.message);
+        setIsTextFieldOpen(false);
+        getImageBasedTags();
+        callAllTagsOrNot ? dropDownTags() : () => {};
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <div className={styles.addTagContainer}>
-      <div className={styles.listTags}></div>
-      <div className={styles.scoutingdetails}>
-        {tagValue ? (
-          <div className={styles.cropDetailsBlock}>
-            {tagValue?.length ? (
-              <div className={styles.tagNames}>
-                {tagValue?.map((item: string, index: number) => {
-                  return (
-                    <Chip
-                      sx={{
-                        border: "1px solid #d94841",
-                        color: "#d94841",
-                        marginRight: "5px",
-                        marginBottom: "10px",
-                        "& .MuiSvgIcon-root": {
-                          color: "#d94841",
-                        },
-                        "& .MuiSvgIcon-root:hover": {
-                          color: "#d94841 !important",
-                        },
-                      }}
-                      onDelete={() =>
-                        deleteTagLoading ? () => {} : handleDeleteChip(item)
-                      }
-                      key={index}
-                      label={item}
-                      className={styles.tagsName}
-                      variant="outlined"
-                      size="medium"
-                    />
-                  );
-                })}
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        ) : (
-          ""
-        )}
+      <div className={styles.listTags}>
+        <h5
+          style={{
+            paddingBottom: "5px",
+            fontSize: "clamp(13px, 2.5vw, 14px)",
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: "500",
+            color: "#000",
+          }}
+        >
+          Tags
+        </h5>
       </div>
 
       <div
@@ -180,7 +145,9 @@ const TagsTextFeild = ({
         <div style={{ width: "90%" }}>
           {isTextFieldOpen && ( // Conditionally render the text field based on the state
             <TextField
-              onKeyDown={handleKeyDown}
+              onKeyDown={(event: any) =>
+                event.key === "Tab" ? addTagToImage(newTagValue) : () => {}
+              }
               size="small"
               fullWidth
               inputMode="text"
@@ -202,6 +169,7 @@ const TagsTextFeild = ({
           )}
           {!isTextFieldOpen && renderField && (
             <Autocomplete
+              // multiple
               limitTags={1}
               id="tag-autocomplete"
               options={tag?.length ? tag : []}
@@ -211,15 +179,16 @@ const TagsTextFeild = ({
                 setNewTagValue(newInputValue);
               }}
               getOptionDisabled={(option) =>
-                extraTags && extraTags?.includes(option)
+                beforeTags && beforeTags?.includes(option)
               }
+              // value={extraTags ? extraTags : []}
               onChange={(e, newValue) => {
-                setExtraTags([...extraTags, newValue]);
-                captureTags([...extraTags, newValue]);
                 setRenderField(false);
                 setTimeout(() => {
                   setRenderField(true);
                 }, 0.1);
+
+                addTagToImage(newValue);
               }}
               renderInput={(params) => (
                 <TextField
@@ -243,7 +212,6 @@ const TagsTextFeild = ({
             />
           )}
         </div>
-
         {!isTextFieldOpen && (
           <IconButton
             onClick={() => setIsTextFieldOpen(true)}
@@ -275,44 +243,62 @@ const TagsTextFeild = ({
           className={styles.addNewTagBtn}
           sx={{ background: "#d94841" }}
           variant="contained"
-          onClick={addNewTag}
+          onClick={() => addTagToImage(newTagValue, true)}
         >
           Add
         </Button>
       )}
       {loading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
 
-      <div>
-        {extraTags?.map((item: string, index: number) => {
-          return (
-            <Chip
-              sx={{
-                border: "1px solid #d94841",
-                color: "#d94841",
-                marginRight: "5px",
-                marginBottom: "10px",
-                "& .MuiSvgIcon-root": {
-                  color: "#d94841",
-                },
-                "& .MuiSvgIcon-root:hover": {
-                  color: "#d94841 !important",
-                },
-              }}
-              onDelete={() => removeTagsFromExtraTags(item)}
-              key={index}
-              label={
-                item?.length
-                  ? item?.length > 47
-                    ? item?.slice(0, 50) + "..."
-                    : item
-                  : ""
-              }
-              className={styles.tagsName}
-              variant="outlined"
-              size="medium"
-            />
-          );
-        })}
+      <div className={styles.scoutingdetails}>
+        {tagValue ? (
+          <div className={styles.cropDetailsBlock}>
+            {tagValue?.length ? (
+              <div className={styles.tagNames}>
+                {tagValue?.map((item: string, index: number) => {
+                  return (
+                    <Chip
+                      sx={{
+                        border: "1px solid #d94841",
+                        color: "#d94841",
+                        marginRight: "5px",
+                        marginBottom: "10px",
+                        "& .MuiSvgIcon-root": {
+                          color: "#d94841",
+                        },
+                        "& .MuiSvgIcon-root:hover": {
+                          color: "#d94841 !important",
+                        },
+                      }}
+                      onDelete={() =>
+                        deleteTagLoading ? () => {} : handleDeleteChip(item)
+                      }
+                      key={index}
+                      label={
+                        item?.length
+                          ? item?.length > 47
+                            ? item?.slice(0, 50) + "..."
+                            : item
+                          : ""
+                      }
+                      className={styles.tagsName}
+                      variant="outlined"
+                      size="medium"
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div style={{ color: "#9a9a9a" }}>
+                {router.pathname.includes("/view")
+                  ? ""
+                  : "*No Tags to display*"}
+              </div>
+            )}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <Toaster richColors closeButton position="top-right" />
@@ -320,4 +306,4 @@ const TagsTextFeild = ({
   );
 };
 
-export default TagsTextFeild;
+export default TagsTextFeildForImages;

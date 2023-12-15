@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Button,
+  Card,
   CircularProgress,
   Drawer,
   FormControl,
@@ -254,110 +255,112 @@ const MaterialsRequired: NextPage = () => {
     }
   }, [router.isReady, accessToken]);
   return (
-    <div style={{ paddingBottom: "5rem" }}>
+    <Card style={{ width: "60%", height: "80vh", marginLeft: "23%", marginTop: "40px" }}>
       <div className={styles.materialsrequired}>
-        <div className={styles.group}>
-          <div className={styles.heading}>
-            <h2 className={styles.text}>Material Requirements</h2>
-            <div className={styles.textAndSupportingText}>
-              <p className={styles.supportingText}>
-                You can add List of items here based on requirement
-              </p>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => addMaterial()}
-              >
-                Add
-              </Button>
-            </div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.inputField}>
-              <label className={styles.label}>
-                Material Name <strong style={{ color: "red" }}>*</strong>
-              </label>
-              <TextField
-                className={styles.input}
-                color="primary"
-                placeholder="Please enter the material title"
-                variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
-            </div>
+        <div className={styles.heading}>
+          <h2 className={styles.text}>Material Requirements</h2>
+          <div className={styles.textAndSupportingText}>
+            <p className={styles.supportingText}>
+              You can add List of items here based on requirement
+            </p>
 
-            <div className={styles.personofcontact}>
-              <label className={styles.label}>
-                Material Procurement (Qty){" "}
-                <strong style={{ color: "red" }}>*</strong>
-              </label>
-              <div className={styles.input1}>
-                <div style={{ width: "80%" }}>
-                  <TextField
-                    className={styles.inputbox}
-                    sx={{ width: "100%" }}
-                    color="primary"
-                    placeholder="Enter Procurement Quantity"
-                    variant="outlined"
-                    type="number"
-                    value={requiredQty}
-                    onChange={(e: any) => setRequiredQty(e.target.value)}
-                  />
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname={"required_qty"}
-                  />
-                </div>
-                <FormControl className={styles.dropdown} variant="outlined">
-                  <InputLabel color="primary" />
-                  <Select
-                    color="primary"
-                    defaultValue="Litres"
-                    value={requiredUnits}
-                    onChange={(e: any) => setRequiredUnits(e.target.value)}
-                  >
-                    <MenuItem value="Litres">Litres</MenuItem>
-                    <MenuItem value="Kilograms">Kilograms</MenuItem>
-                  </Select>
-                  <FormHelperText />
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname={"required_units"}
-                  />
-                </FormControl>
-              </div>
-            </div>
-            <div className={styles.personofcontact}>
-              <label className={styles.label}>
-                Material Available (Qty)(optional)
-              </label>
-              <div className={styles.input1}>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
+          <div style={{ width: "100%" }}>
+            <h6 className={styles.label}>
+              Material Name <strong style={{ color: "red" }}>*</strong>
+            </h6>
+            <TextField
+              className={styles.input}
+              color="primary"
+              placeholder="Please enter the material title"
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
+          </div>
+
+          <div style={{ width: "100%" }}>
+            <h6>
+              Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
+
+            </h6>
+            <div style={{ display: "flex" }}>
+              <div >
                 <TextField
                   className={styles.inputbox}
+                  sx={{ width: "100%" }}
                   color="primary"
-                  placeholder="Enter Availble Quantity"
+                  placeholder="Enter Procurement Quantity"
                   variant="outlined"
                   type="number"
-                  value={availableQty}
-                  onChange={(e: any) => setAvailableQty(e.target.value)}
+                  value={requiredQty}
+                  onChange={(e: any) => setRequiredQty(e.target.value)}
                 />
-                <FormControl className={styles.dropdown} variant="outlined">
-                  <InputLabel color="primary" />
-                  <Select
-                    color="primary"
-                    defaultValue="Litres"
-                    value={availableUnits}
-                    onChange={(e: any) => setAvailableUnits(e.target.value)}
-                  >
-                    <MenuItem value="Litres">Litres</MenuItem>
-                    <MenuItem value="Kilograms">Kilograms</MenuItem>
-                  </Select>
-                  <FormHelperText />
-                </FormControl>
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_qty"}
+                />
               </div>
+              <FormControl className={styles.dropdown} variant="outlined">
+                <InputLabel color="primary" />
+                <Select
+                  color="primary"
+                  defaultValue="Litres"
+                  value={requiredUnits}
+                  onChange={(e: any) => setRequiredUnits(e.target.value)}
+                >
+                  <MenuItem value="Litres">Litres</MenuItem>
+                  <MenuItem value="Kilograms">Kilograms</MenuItem>
+                </Select>
+                <FormHelperText />
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_units"}
+                />
+              </FormControl>
             </div>
+          </div>
+          <div style={{ width: "100%" }}>
+            <h6 >
+              Material Available (Qty)(optional)
+            </h6>
+            <div style={{ display: "flex" }}>
+              <TextField
+                color="primary"
+                placeholder="Enter Availble Quantity"
+                variant="outlined"
+                type="number"
+                value={availableQty}
+                onChange={(e: any) => setAvailableQty(e.target.value)}
+              />
+              <FormControl className={styles.dropdown} variant="outlined">
+                <InputLabel color="primary" />
+                <Select
+                  color="primary"
+                  defaultValue="Litres"
+                  value={availableUnits}
+                  onChange={(e: any) => setAvailableUnits(e.target.value)}
+                >
+                  <MenuItem value="Litres">Litres</MenuItem>
+                  <MenuItem value="Kilograms">Kilograms</MenuItem>
+                </Select>
+                <FormHelperText />
+              </FormControl>
+            </div>
+          </div>
+          <div >
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => addMaterial()}
+            >
+              Add
+            </Button>
           </div>
         </div>
 
@@ -470,7 +473,7 @@ const MaterialsRequired: NextPage = () => {
         updateLoading={updateLoading}
       />
       <LoadingComponent loading={loading} />
-    </div>
+    </Card>
   );
 };
 

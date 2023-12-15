@@ -108,13 +108,12 @@ const SingleImageView: FC<componentProps> = ({
       );
 
       const responseData = await response.json();
-      console.log(responseData, "asdfw");
 
       if (responseData.success) {
         setData(responseData?.data);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -140,28 +139,25 @@ const SingleImageView: FC<componentProps> = ({
             width={"25px"}
           />
           <Typography>
-
-
-            {
-              (data?.farm_id?.title
-                ? data?.farm_id?.title?.length > 10
-                  ? data?.farm_id?.title.slice(0, 1).toUpperCase() +
+            {(data?.farm_id?.title
+              ? data?.farm_id?.title?.length > 10
+                ? data?.farm_id?.title.slice(0, 1).toUpperCase() +
                   data?.farm_id?.title?.slice(1, 14) +
                   "..."
-                  : data?.farm_id?.title[0].toUpperCase() +
+                : data?.farm_id?.title[0].toUpperCase() +
                   data?.farm_id?.title?.slice(1)
-                : "") + "/" + (data?.crop_id?.title
-                  ? data?.crop_id?.title?.length > 10
-                    ? data?.crop_id?.title.slice(0, 1).toUpperCase() +
+              : "") +
+              "/" +
+              (data?.crop_id?.title
+                ? data?.crop_id?.title?.length > 10
+                  ? data?.crop_id?.title.slice(0, 1).toUpperCase() +
                     data?.crop_id?.title?.slice(1, 14) +
                     "..."
-                    : data?.crop_id?.title[0].toUpperCase() +
+                  : data?.crop_id?.title[0].toUpperCase() +
                     data?.crop_id?.title?.slice(1)
-                  : "")}
+                : "")}
           </Typography>
           <div className={styles.headericon} id="header-icon"></div>
-
-
         </div>
         {/* </div> */}
 
@@ -179,14 +175,23 @@ const SingleImageView: FC<componentProps> = ({
             <ReactPanZoom alt={`${data?.key}`} image={data?.url} />
           )}
         </div> */}
-        <div style={{
-          height: "calc(100vh - 115px)",
-          width: "100%",
-          position: "relative",
-          overflow: "hidden",
-        }}>
-          {data?.url ?
-            <img src={data?.url} alt={`${data?.key}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} /> : ""}
+        <div
+          style={{
+            height: "calc(100vh - 115px)",
+            width: "100%",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {data?.url ? (
+            <img
+              src={data?.url}
+              alt={`${data?.key}`}
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className={styles.imgDetailButtons}>
@@ -233,6 +238,7 @@ const SingleImageView: FC<componentProps> = ({
         tagsDrawerClose={tagsDrawerClose}
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={data}
+        setTagsDrawerEditOpen={setTagsDrawerEditOpen}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
       />
 

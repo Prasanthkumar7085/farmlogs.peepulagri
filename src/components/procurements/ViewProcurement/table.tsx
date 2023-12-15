@@ -102,9 +102,8 @@ const ViewProcurementTable = ({ data }: any) => {
         {
           response?.data.map((data: any) => {
 
-            if (data.status === "APPROVED") {
-              setMaterialsDetails(data.status);
-            }
+            setMaterialsDetails(data.status);
+
           })
         }
       }
@@ -231,7 +230,11 @@ const ViewProcurementTable = ({ data }: any) => {
     }
   }, [editMaterialOpen])
 
+  const sumOfPrices = (details: any) => {
+    const sum = details.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.price, 0);
 
+    return sum;
+  }
   return (
     <div>
       <hr />
@@ -250,7 +253,7 @@ const ViewProcurementTable = ({ data }: any) => {
                   <TableCell>Price(Rs)</TableCell>
                 </>
                 : ''}
-              <TableCell>Actions</TableCell>
+              <TableCell style={{ display: data.status == "SHIPPED" || data.status == "DELIVERED" ? "none" : "" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -323,7 +326,8 @@ const ViewProcurementTable = ({ data }: any) => {
                       ) : (
                         ""
                       )}
-                      <div style={{ cursor: "pointer" }}>
+
+                      <div style={{ cursor: "pointer", display: data.status == "SHIPPED" || data.status == "DELIVERED" ? "none" : "block" }}>
                         {row?.status == "APPROVED" ? (
                           <Button
                             variant="outlined"
@@ -359,6 +363,17 @@ const ViewProcurementTable = ({ data }: any) => {
                 </TableRow>
               );
             })}
+            <TableRow >
+              <TableCell colSpan={1}></TableCell>
+              <TableCell colSpan={1}></TableCell>
+              <TableCell colSpan={1}></TableCell>
+              <TableCell colSpan={1}></TableCell>
+              <TableCell colSpan={1}></TableCell>
+              <TableCell colSpan={1}>Total</TableCell>
+              <TableCell colSpan={1}>{sumOfPrices(materials)}</TableCell>
+
+            </TableRow>
+
           </TableBody>
         </Table>
       ) : (

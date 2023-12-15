@@ -124,7 +124,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                   </Avatar>
                 ) : (
                   <Avatar sx={{ bgcolor: "green" }}>
-                    {item?.commented_by?.name?.slice(0, 2)}
+                    {item?.commented_by?.name?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 )}
                 <div className={styles.messagebox}>

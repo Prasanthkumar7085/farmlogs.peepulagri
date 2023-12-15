@@ -147,7 +147,7 @@ const POC = ({
     }
   }, [router.isReady, accessToken]);
   return (
-    <div className={styles.row}>
+    <div style={{ marginLeft: "10%" }}>
       <div className={styles.personofcontact}>
         <h3 className={styles.label}>Person of Contact (POC)</h3>
         {procurementData?.point_of_contact?._id ? (
@@ -159,6 +159,19 @@ const POC = ({
             }}
           >
             <div>{procurementData?.point_of_contact?.name}</div>
+            {procurementData?.point_of_contact?._id ? (
+              <div>
+                <IconButton
+                  onClick={() => {
+                    setShowDeletePOC(true);
+                  }}
+                >
+                  <Delete sx={{ color: "blue" }} />
+                </IconButton>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         ) : (
           <Autocomplete
@@ -201,19 +214,7 @@ const POC = ({
           />
         )}
         <ErrorMessages errorMessages={errors} keyname={"point_of_contact"} />
-        {procurementData?.point_of_contact?._id ? (
-          <div>
-            <IconButton
-              onClick={() => {
-                setShowDeletePOC(true);
-              }}
-            >
-              <Delete sx={{ color: "blue" }} />
-            </IconButton>
-          </div>
-        ) : (
-          ""
-        )}
+
       </div>
       {!procurementData?.point_of_contact?._id ? (
         <Button onClick={addPOCtoProcurement}>Add</Button>

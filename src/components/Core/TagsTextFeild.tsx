@@ -124,23 +124,10 @@ const TagsTextFeild = ({
     setExtraTags(tags);
     captureTags(tags);
   };
-  console.log(extraTags, "asdf");
 
   return (
     <div className={styles.addTagContainer}>
-      <div className={styles.listTags}>
-        <h5
-          style={{
-            paddingBottom: "5px",
-            fontSize: "clamp(13px, 2.5vw, 14px)",
-            fontFamily: "'Inter', sans-serif",
-            fontWeight: "500",
-            color: "#000",
-          }}
-        >
-          Tags
-        </h5>
-      </div>
+      <div className={styles.listTags}></div>
       <div className={styles.scoutingdetails}>
         {tagValue ? (
           <div className={styles.cropDetailsBlock}>
@@ -181,32 +168,7 @@ const TagsTextFeild = ({
           ""
         )}
       </div>
-      <div>
-        {extraTags?.map((item: string, index: number) => {
-          return (
-            <Chip
-              sx={{
-                border: "1px solid #d94841",
-                color: "#d94841",
-                marginRight: "5px",
-                marginBottom: "10px",
-                "& .MuiSvgIcon-root": {
-                  color: "#d94841",
-                },
-                "& .MuiSvgIcon-root:hover": {
-                  color: "#d94841 !important",
-                },
-              }}
-              onDelete={() => removeTagsFromExtraTags(item)}
-              key={index}
-              label={item}
-              className={styles.tagsName}
-              variant="outlined"
-              size="medium"
-            />
-          );
-        })}
-      </div>
+
       <div
         style={{
           width: "100%",
@@ -281,6 +243,7 @@ const TagsTextFeild = ({
             />
           )}
         </div>
+
         {!isTextFieldOpen && (
           <IconButton
             onClick={() => setIsTextFieldOpen(true)}
@@ -318,6 +281,39 @@ const TagsTextFeild = ({
         </Button>
       )}
       {loading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
+
+      <div>
+        {extraTags?.map((item: string, index: number) => {
+          return (
+            <Chip
+              sx={{
+                border: "1px solid #d94841",
+                color: "#d94841",
+                marginRight: "5px",
+                marginBottom: "10px",
+                "& .MuiSvgIcon-root": {
+                  color: "#d94841",
+                },
+                "& .MuiSvgIcon-root:hover": {
+                  color: "#d94841 !important",
+                },
+              }}
+              onDelete={() => removeTagsFromExtraTags(item)}
+              key={index}
+              label={
+                item?.length
+                  ? item?.length > 47
+                    ? item?.slice(0, 50) + "..."
+                    : item
+                  : ""
+              }
+              className={styles.tagsName}
+              variant="outlined"
+              size="medium"
+            />
+          );
+        })}
+      </div>
 
       <Toaster richColors closeButton position="top-right" />
     </div>

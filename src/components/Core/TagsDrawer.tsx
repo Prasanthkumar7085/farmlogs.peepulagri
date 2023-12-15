@@ -54,7 +54,7 @@ const TagsDrawer = ({
       }}
     >
       <div className={styles.drawerHeading}>
-        <Typography variant="h6">Tag Images</Typography>
+        <Typography variant="h6">Tags</Typography>
         <IconButton
           onClick={() => {
             tagsDrawerClose(false);

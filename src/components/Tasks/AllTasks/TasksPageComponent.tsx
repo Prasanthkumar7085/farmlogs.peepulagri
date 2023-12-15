@@ -92,8 +92,10 @@ const TasksPageComponent = () => {
     } = queryParams;
 
     router.push({ query: queryParams });
-    const paramString = prepareURLEncodedParamsWithArray("", queryParamsUpdated);
-    console.log(paramString, 'lplplp');
+    const paramString = prepareURLEncodedParamsWithArray(
+      "",
+      queryParamsUpdated
+    );
 
     const response = await getAllTasksService({
       page: page,
@@ -101,7 +103,6 @@ const TasksPageComponent = () => {
       paramString: paramString,
       accessToken,
     });
-    // console.log(response);
 
     if (response?.success) {
       const { data, ...rest } = response;

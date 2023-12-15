@@ -229,9 +229,7 @@ const ImageGalleryComponent = () => {
       let responseData = await response.json();
       if (response?.status >= 200 && response?.status <= 200) {
         if (tagsSuccess && commentSuccess) {
-          console.log("osd")
-        }
-        else {
+        } else {
           toast.success(responseData?.message);
         }
         setSelectedItems([]);

@@ -11,33 +11,41 @@ import timePipe from "@/pipes/timePipe";
 //   text1?: string;
 // };
 
-const ShippedStatusform = ({
-  data
-}: any) => {
-  console.log(data);
-
+const ShippedStatusform = ({ data }: any) => {
   return (
     <div className={styles.shippedstatusform}>
-      <Tooltip title={data?.farm_ids?.map((item: any, index: any) => item.title).join(",")} >
+      <Tooltip
+        title={data?.farm_ids
+          ?.map((item: any, index: any) => item.title)
+          .join(",")}
+      >
         <div className={styles.farmname}>
-
-          {data?.farm_ids.length < 3 ? data?.farm_ids?.map((item: any, index: any) => item.title).join(",") : data?.farm_ids.slice(0, 2)?.map((item: any, index: any) => item.title).join(",") + "....."}
+          {data?.farm_ids.length < 3
+            ? data?.farm_ids
+                ?.map((item: any, index: any) => item.title)
+                .join(",")
+            : data?.farm_ids
+                .slice(0, 2)
+                ?.map((item: any, index: any) => item.title)
+                .join(",") + "....."}
         </div>
       </Tooltip>
       <div className={styles.nameofoperation}>
-        <h3 className={styles.fertilizersAndSoil}>
-          {data?.title}
-        </h3>
+        <h3 className={styles.fertilizersAndSoil}>{data?.title}</h3>
         <div className={styles.inputWithLabel}>
           <div className={styles.label}>Date Of Operation</div>
           <div className={styles.datecontainer}>
-            <p className={styles.text}>{timePipe(data?.date_of_operation, "DD-MM-YYYY")}</p>
+            <p className={styles.text}>
+              {timePipe(data?.date_of_operation, "DD-MM-YYYY")}
+            </p>
           </div>
         </div>
       </div>
       <div className={styles.pointofcontact}>
         <label className={styles.label1}>Point Of Contact</label>
-        <h3 className={styles.hemaGanesh}>{data?.point_of_contact?.name ? data?.point_of_contact?.name : "----"}</h3>
+        <h3 className={styles.hemaGanesh}>
+          {data?.point_of_contact?.name ? data?.point_of_contact?.name : "----"}
+        </h3>
       </div>
       <div className={styles.trackingid}>
         <label className={styles.label1}>Tracking ID</label>

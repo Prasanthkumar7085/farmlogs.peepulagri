@@ -169,6 +169,13 @@ const TasksTableComponent = ({
     //   width: "200px",
     // },
     {
+      accessorFn: (row: any) => row?.created_by?.name,
+      id: "created_by",
+      header: () => <span>Created By</span>,
+      footer: (props: any) => props.column.id,
+      width: "150px",
+    },
+    {
       accessorFn: (row: any) => {
         return { assign_to: row.assign_to, _id: row._id };
       },
@@ -283,14 +290,18 @@ const TasksTableComponent = ({
                 alignItems: "center !important"
               }}
             >
-              <Link href={`/tasks/${info.row.original?._id}`}>
-                <ImageComponent
-                  src="/view-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </Link>
+              <Tooltip title="View">
+                <Link href={`/tasks/${info.row.original?._id}`}>
+
+                  <ImageComponent
+                    src="/view-icon.svg"
+                    height={17}
+                    width={17}
+                    alt="view"
+                  />
+
+                </Link>
+              </Tooltip>
               {/* <div
                 style={{ cursor: "pointer" }}
                 onClick={() =>
@@ -305,51 +316,62 @@ const TasksTableComponent = ({
                 />
               </div> */}
               {userType !== "farmer" ? (
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setDeleteTaskId(info.row.original?._id);
-                    setDialogOpen(true);
-                  }}
-                >
-                  <ImageComponent
-                    src="/trast-icon.svg"
-                    height={17}
-                    width={17}
-                    alt="view"
-                  />
-                </div>
+                <Tooltip title="Delete">
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setDeleteTaskId(info.row.original?._id);
+                      setDialogOpen(true);
+                    }}
+                  >
+
+                    <ImageComponent
+                      src="/trast-icon.svg"
+                      height={17}
+                      width={17}
+                      alt="view"
+                    />
+
+                  </div>
+                </Tooltip>
               ) : (
                 ""
               )}
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setRowDetails(info.row.original);
-                  setDrawerOpen(true);
-                }}
-              >
-                <ImageComponent
-                  src="/task-comments.svg"
-                  height={17}
-                  width={17}
-                  alt="comments"
-                />
-              </div>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setRowDetails(info.row.original);
-                  setAttachmentDrawer(true);
-                }}
-              >
-                <ImageComponent
-                  src="/task-table-attachment-icon.svg"
-                  height={17}
-                  width={17}
-                  alt=""
-                />
-              </div>
+              <Tooltip title="Comments">
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setRowDetails(info.row.original);
+                    setDrawerOpen(true);
+                  }}
+                >
+
+                  <ImageComponent
+                    src="/task-comments.svg"
+                    height={17}
+                    width={17}
+                    alt="comments"
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip title="Attachments">
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setRowDetails(info.row.original);
+                    setAttachmentDrawer(true);
+                  }}
+                >
+
+                  <ImageComponent
+                    src="/task-table-attachment-icon.svg"
+                    height={17}
+                    width={17}
+                    alt=""
+                  />
+
+                </div>
+              </Tooltip>
               <div
                 style={{ cursor: "pointer" }}
                 onClick={() => {
@@ -357,7 +379,9 @@ const TasksTableComponent = ({
                   setTaskId(info.row.original?._id);
                 }}
               >
-                <SummarizeIcon sx={{ color: "#4986f7", fontSize: "1.3rem" }} />
+                <Tooltip title="Logs">
+                  <SummarizeIcon sx={{ color: "#4986f7", fontSize: "1.3rem" }} />
+                </Tooltip>
               </div>
             </div>
           }

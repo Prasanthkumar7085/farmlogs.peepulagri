@@ -19,6 +19,7 @@ export interface ApiCallProps {
   selectedFarmId: string;
   status: string;
   userId: string[];
+  isMyTasks: boolean | string
 }
 const TasksPageComponent = () => {
   const router = useRouter();
@@ -55,6 +56,7 @@ const TasksPageComponent = () => {
     selectedFarmId = "",
     status = "ALL",
     userId = [],
+    isMyTasks = false
   }: Partial<ApiCallProps>) => {
     setLoading(true);
     let queryParams: any = {};
@@ -84,16 +86,19 @@ const TasksPageComponent = () => {
     if (userId?.length) {
       queryParams["assign_to"] = userId;
     }
+    if (isMyTasks) {
+      queryParams["is_my_task"] = true;
+    }
 
     const {
       page: pageCount,
       limit: limitCount,
+      is_my_task,
       ...queryParamsUpdated
     } = queryParams;
 
     router.push({ query: queryParams });
     const paramString = prepareURLEncodedParamsWithArray("", queryParamsUpdated);
-    console.log(paramString, 'lplplp');
 
     const response = await getAllTasksService({
       page: page,
@@ -127,6 +132,7 @@ const TasksPageComponent = () => {
           selectedFarmId: router.query.farm_id as string,
           status: router.query.status as string,
           userId: router.query.assign_to as string[],
+          isMyTasks: router.query.is_my_task as string
         });
       }, delay);
       return () => clearTimeout(debounce);
@@ -182,7 +188,8 @@ const TasksPageComponent = () => {
     });
   };
 
-  const onUserChange = async (value: string[] | []) => {
+  const onUserChange = async (value: string[] | [], isMyTasks = false) => {
+
     getAllTasks({
       page: 1,
       limit: router.query.limit as string,
@@ -192,6 +199,7 @@ const TasksPageComponent = () => {
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
       userId: value,
+      isMyTasks: isMyTasks
     });
   };
 
@@ -213,6 +221,7 @@ const TasksPageComponent = () => {
         selectedFarm={selectedFarm}
         onStatusChange={onStatusChange}
         onUserChange={onUserChange}
+        getAllTasksTab={getAllTasks}
       />
       {data.length ? (
         <TasksTableComponent

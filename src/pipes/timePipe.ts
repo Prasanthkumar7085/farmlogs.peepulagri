@@ -11,7 +11,7 @@ const timePipe = (timeString: any, format: string) => {
             return date;
         }
     }
-    return 'NA';
+    return '-';
 }
 
 export default timePipe;

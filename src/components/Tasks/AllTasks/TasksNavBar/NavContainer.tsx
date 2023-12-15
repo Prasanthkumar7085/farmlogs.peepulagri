@@ -14,7 +14,6 @@ import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInTasks";
 import styles from "./NavBarContainer.module.css";
 import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from "@mui/icons-material/Add";
-import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 interface PropTypes {
     onChangeSearch: (search: string) => void;
@@ -22,7 +21,8 @@ interface PropTypes {
     onSelectValueFromDropDown: (value: FarmInTaskType, reason: string) => void;
     selectedFarm: FarmInTaskType | null | undefined;
     onStatusChange: (value: string) => void;
-    onUserChange: (value: string[] | []) => void;
+    onUserChange: (value: string[] | [], isMyTasks: boolean) => void;
+    getAllTasksTab: any;
 }
 
 const NavContainer: React.FC<PropTypes> = ({
@@ -32,12 +32,18 @@ const NavContainer: React.FC<PropTypes> = ({
     selectedFarm,
     onStatusChange,
     onUserChange,
+    getAllTasksTab
 }) => {
     const router = useRouter();
 
     const userType = useSelector(
         (state: any) => state.auth.userDetails?.user_details?.user_type
     );
+    const userId = useSelector(
+        (state: any) => state.auth.userDetails?.user_details?._id
+
+    );
+
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
@@ -45,6 +51,7 @@ const NavContainer: React.FC<PropTypes> = ({
     const [search, setSearch] = useState("");
     const [users, setUsers] = useState<Array<userTaskType>>([]);
     const [user, setUser] = useState<userTaskType[] | null>([]);
+
     const [selectedFarmOption, setSelectedFarmOption] = useState<
         FarmInTaskType | null | undefined
     >();
@@ -66,6 +73,7 @@ const NavContainer: React.FC<PropTypes> = ({
         setSearch(searchString);
         setSelectedFarmOption(selectedFarm);
         setStatus(router.query.status as string);
+
     }, [searchString, selectedFarm, router.query.status]);
 
     const onButtonAddTaskClick = useCallback(() => {
@@ -92,61 +100,89 @@ const NavContainer: React.FC<PropTypes> = ({
         setSelectedUsers(usersObj)
 
     }
+
+
+
     return (
         <>
             <div className={styles.navbarcontainer}>
-                <div className={styles.pagetitle}>
-                    <img className={styles.note1Icon} alt="" src="/note-11.svg" />
-                    <h1 className={styles.taskManagement}>{`Task Management`}</h1>
+                <div>
+
+                    <div className={styles.pagetitle}>
+                        <img className={styles.note1Icon} alt="" src="/note-11.svg" />
+                        <h1 className={styles.taskManagement}>{`Task Management`}</h1>
+                    </div>
+
+                    <Button sx={{ color: (router.query.is_my_task == 'true') ? 'green' : "red" }}
+
+                        onClick={() => {
+                            setUser([])
+                            onUserChange([userId], true)
+                        }}>My Tasks</Button>
+                    <Button sx={{ color: (router.query.is_my_task == 'true') ? 'red' : "green" }} onClick={() => {
+                        setUser([])
+                        getAllTasksTab({
+                            page: router.query.page as string,
+                            limit: router.query.limit as string,
+                            search_string: searchString,
+                            sortBy: router.query.order_by as string,
+                            sortType: router.query.order_type as string,
+                            selectedFarmId: router.query.farm_id as string,
+                            status: router.query.status as string,
+                            userId: [],
+                        })
+                    }}>All Tasks</Button>
+
                 </div>
                 <div className={styles.headeractions}>
-                    <div>
-                        <Autocomplete
-                            multiple
-                            sx={{
-                                width: "250px",
-                                maxWidth: "250px",
-                                borderRadius: "4px",
-                            }}
-                            id="size-small-outlined-multi"
-                            size="small"
-                            fullWidth
-                            noOptionsText={"No such User"}
-                            value={selectedUsers?.length ? selectedUsers : []}
+                    {!(router.query.is_my_task == 'true') ?
+                        <div>
+                            <Autocomplete
+                                multiple
+                                sx={{
+                                    width: "250px",
+                                    maxWidth: "250px",
+                                    borderRadius: "4px",
+                                }}
+                                id="size-small-outlined-multi"
+                                size="small"
+                                fullWidth
+                                noOptionsText={"No such User"}
+                                value={selectedUsers?.length ? selectedUsers : []}
 
-                            isOptionEqualToValue={(option: any, value: any) =>
-                                option.name === value.name
-                            }
-                            getOptionLabel={(option: any) => {
-                                return option.name
+                                isOptionEqualToValue={(option: any, value: any) =>
+                                    option.name === value.name
+                                }
+                                getOptionLabel={(option: any) => {
+                                    return option.name
 
 
-                            }}
-                            options={users}
-                            onChange={(e: any, value: userTaskType[] | []) => {
-                                setSelectedUsers(value)
-                                setUser(value);
-                                let data: string[] = value?.length ?
-                                    value?.map((item: { _id: string, name: string }) => item._id) : []
-                                onUserChange(data)
-                            }}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    placeholder="Search by User"
-                                    variant="outlined"
-                                    size="small"
-                                    sx={{
-                                        "& .MuiInputBase-root": {
-                                            fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                                            backgroundColor: "#fff",
-                                            border: "none",
-                                        },
-                                    }}
-                                />
-                            )}
-                        />
-                    </div>
+                                }}
+                                options={users}
+                                onChange={(e: any, value: userTaskType[] | []) => {
+                                    setSelectedUsers(value)
+                                    setUser(value);
+                                    let data: string[] = value?.length ?
+                                        value?.map((item: { _id: string, name: string }) => item._id) : []
+                                    onUserChange(data, false)
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        placeholder="Search by User"
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{
+                                            "& .MuiInputBase-root": {
+                                                fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                                                backgroundColor: "#fff",
+                                                border: "none",
+                                            },
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div> : ""}
 
                     <div style={{ width: "12%" }}>
                         <SelectComponent

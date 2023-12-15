@@ -155,7 +155,7 @@ const TagsTextFeild = ({
               </div>
             ) : (
               <div style={{ color: "#9a9a9a" }}>
-                {router.pathname.includes("/add-item")
+                {router.pathname.includes("/view")
                   ? ""
                   : "*No Tags to display*"}
               </div>

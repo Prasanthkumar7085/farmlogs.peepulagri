@@ -3,6 +3,7 @@
   width: 100%;
   text-align: center;
 }
+
 .apps1Icon,
 .logoIcon {
   position: relative;
@@ -10,7 +11,8 @@
   height: 50px;
   cursor: pointer;
 }
-.enableDesktop{
+
+.enableDesktop {
   padding: 3rem;
   width: 100%;
   text-align: center;
@@ -19,22 +21,26 @@
   gap: 10px;
   align-items: center;
 }
-.noScreen{
-   
+
+.noScreen {
+
   color: #a05148 !important;
   width: 200px !important;
   font-weight: bold;
 }
+
 .logout,
-.logout:hover{
+.logout:hover {
   width: 200px !important;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
+
 .logoIcon {
   margin-bottom: 2rem;
 }
+
 .apps1Icon {
   width: 24px;
   height: 24px;
@@ -45,10 +51,12 @@
 .menuItem {
   text-decoration: none;
 }
+
 .inactiveMenuItem {
   border-radius: 5px;
   background-color: none !important;
 }
+
 .inactiveMenuItem:hover {
   border-radius: 5px;
   background-color: #2b55b8 !important;
@@ -58,10 +66,12 @@
   border-radius: 5px !important;
   background-color: #219654 !important;
 }
+
 .activeMenuItem:hover {
   border-radius: 5px !important;
   background-color: #1c7f47 !important;
 }
+
 .menuItem.active {
   background-color: #2A51AE;
 }
@@ -118,7 +128,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: linear-gradient(142.18deg, #3462cf, #2b53be);
+  background-color: #45A845;
   border-right: 1px solid var(--stroke);
   box-sizing: border-box;
   width: 5rem;
@@ -136,7 +146,8 @@
   min-height: 100vh;
   position: relative;
 }
-.profileBtnGroup{
+
+.profileBtnGroup {
   display: flex;
   flex-direction: column;
   gap: 2rem;

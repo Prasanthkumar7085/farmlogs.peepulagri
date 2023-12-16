@@ -9,6 +9,7 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import { useCookies } from "react-cookie";
 import { prepareURLEncodedParamsWithArray } from "../../../../lib/requestUtils/urlEncoderWithArray";
 import NavContainer from "./TasksNavBar/NavContainer";
+import { addSerial } from "@/pipes/addSerial";
 
 export interface ApiCallProps {
   page: string | number;
@@ -19,7 +20,7 @@ export interface ApiCallProps {
   selectedFarmId: string;
   status: string;
   userId: string[];
-  isMyTasks: boolean | string
+  isMyTasks: boolean | string;
 }
 const TasksPageComponent = () => {
   const router = useRouter();
@@ -41,7 +42,6 @@ const TasksPageComponent = () => {
       removeCookie("userType");
       loggedIn("loggedIn");
       router.push("/");
-
     } catch (err: any) {
       console.error(err);
     }
@@ -56,7 +56,7 @@ const TasksPageComponent = () => {
     selectedFarmId = "",
     status = "ALL",
     userId = [],
-    isMyTasks = false
+    isMyTasks = false,
   }: Partial<ApiCallProps>) => {
     setLoading(true);
     let queryParams: any = {};
@@ -85,6 +85,7 @@ const TasksPageComponent = () => {
     }
     if (userId?.length) {
       queryParams["assign_to"] = userId;
+      queryParams["created_by"] = userId;
     }
     if (isMyTasks) {
       queryParams["is_my_task"] = true;
@@ -112,7 +113,9 @@ const TasksPageComponent = () => {
 
     if (response?.success) {
       const { data, ...rest } = response;
-      setData(data);
+
+      const modifieData = addSerial(data, page, limit);
+      setData(modifieData);
       setPaginationDetails(rest);
     }
     if (response.status == 401) {
@@ -134,7 +137,7 @@ const TasksPageComponent = () => {
           selectedFarmId: router.query.farm_id as string,
           status: router.query.status as string,
           userId: router.query.assign_to as string[],
-          isMyTasks: router.query.is_my_task as string
+          isMyTasks: router.query.is_my_task as string,
         });
       }, delay);
       return () => clearTimeout(debounce);
@@ -191,7 +194,6 @@ const TasksPageComponent = () => {
   };
 
   const onUserChange = async (value: string[] | [], isMyTasks = false) => {
-
     getAllTasks({
       page: 1,
       limit: router.query.limit as string,
@@ -201,7 +203,7 @@ const TasksPageComponent = () => {
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
       userId: value,
-      isMyTasks: isMyTasks
+      isMyTasks: isMyTasks,
     });
   };
 

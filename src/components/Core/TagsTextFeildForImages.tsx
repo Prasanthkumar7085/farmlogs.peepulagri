@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import styles from "./TagsTextFeild.module.css";
 import addTagService from "../../../lib/services/TagsService/addTagService";
+import { SendOutlined } from "@mui/icons-material";
 
 const TagsTextFeildForImages = ({
   beforeTags,
@@ -225,29 +226,35 @@ const TagsTextFeildForImages = ({
           </IconButton>
         )}
         {isTextFieldOpen && (
-          <IconButton
-            sx={{
-              color: "#d94841",
-              border: "1px solid #d9484",
-              borderRadius: "4px",
-            }}
-            onClick={() => setIsTextFieldOpen(false)}
-          >
-            <ClearIcon />
-          </IconButton>
+          <div style={{ display: "flex " }}>
+            <IconButton
+              sx={{
+                color: "#d94841",
+                border: "1px solid #d9484",
+                borderRadius: "4px",
+              }}
+              onClick={() => setIsTextFieldOpen(false)}
+            >
+              <ClearIcon />
+            </IconButton>
+            <IconButton
+              className={
+                newTagValue ? styles.addNewTagBtn : styles.addNewTagBtnDisabled
+              }
+              sx={{ background: "#d94841" }}
+              disabled={!newTagValue}
+              onClick={() => addTagToImage(newTagValue, true)}
+            >
+              <SendOutlined sx={{ color: "white" }} />
+            </IconButton>
+          </div>
         )}
       </div>
 
-      {isTextFieldOpen && ( // Conditionally render the submit button based on the state
-        <Button
-          className={styles.addNewTagBtn}
-          sx={{ background: "#d94841" }}
-          variant="contained"
-          onClick={() => addTagToImage(newTagValue, true)}
-        >
-          Add
-        </Button>
-      )}
+      {/* {isTextFieldOpen &&
+        newTagValue && ( // Conditionally render the submit button based on the state
+         
+        )} */}
       {loading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
 
       <div className={styles.scoutingdetails}>

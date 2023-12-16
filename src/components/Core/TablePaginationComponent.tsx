@@ -22,7 +22,9 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
     };
 
     const [limitOptions] = useState(
-      router.pathname == "/tasks" ? [15, 30, 50, 100] : [10, 25, 50, 100]
+      router.pathname == "/tasks"
+        ? [15, 30, 50, 100, 200, 300]
+        : [10, 25, 50, 100]
     );
 
     return (

@@ -145,6 +145,18 @@ const TasksTableComponent = ({
   };
   const columns = [
     {
+      accessorFn: (row: any) => row.serial,
+      id: "serial",
+      cell: (info: any) => (
+        <span style={{ padding: "40px 10px 40px 10px" }}>
+          {info.getValue()}
+        </span>
+      ),
+      header: () => <span>S.No</span>,
+      footer: (props: any) => props.column.id,
+      width: "120px",
+    },
+    {
       accessorFn: (row: any) => row.createdAt,
       id: "createdAt",
       cell: (info: any) => (

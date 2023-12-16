@@ -11,6 +11,13 @@
     word-break: break-word;
 }
 
+
+.addNewTagBtnDisabled{
+    background-color: #c2c2c2 !important;
+}
+.addNewTagBtnDisabled:hover{
+    background-color: #c2c2c2 !important;
+}
 .addNewTagBtn {
     background-color: #d94841 !important;
 }

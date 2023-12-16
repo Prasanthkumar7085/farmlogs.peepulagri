@@ -25,10 +25,18 @@ interface PropsType {
   data: TaskResponseTypes | null | undefined;
   updateTask: (body: any) => any;
   getTaskById: (id: string) => void;
+  hasEditAccess: boolean | undefined;
 }
-const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => {
+const TaskDetails: React.FC<PropsType> = ({
+  data,
+  updateTask,
+  getTaskById,
+  hasEditAccess,
+}) => {
+  console.log(hasEditAccess, "fdsa");
+
   const router = useRouter();
-  const id = router.query.task_id
+  const id = router.query.task_id;
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -431,7 +439,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
               >
                 <div>
-                  {deleteField == "assignee" && deleteFieldOrNot ? (
+                  {deleteField == "assignee" &&
+                  deleteFieldOrNot &&
+                  hasEditAccess ? (
                     <div className={styles.iconBlock}>
                       <IconButton
                         onClick={() => {
@@ -447,7 +457,9 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                           deleteAssignee();
                         }}
                         disabled={
-                          selectedAssigneeIds.length === 0 || status === "DONE"
+                          selectedAssigneeIds.length === 0 ||
+                          status === "DONE" ||
+                          !hasEditAccess
                         }
                       >
                         <DeleteForeverIcon
@@ -502,7 +514,8 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
                   ) : !(deleteField == "assignee" && deleteFieldOrNot) ? (
                     <>
                       {status !== "DONE" &&
-                      loggedInUserId == data?.created_by?._id ? (
+                      (loggedInUserId == data?.created_by?._id ||
+                        hasEditAccess) ? (
                         <IconButton
                           onClick={() => {
                             setEditFieldOrNot(true);
@@ -578,7 +591,11 @@ const TaskDetails: React.FC<PropsType> = ({ data, updateTask, getTaskById }) => 
             <SelectComponentNoAll
               options={statusOptions}
               disabled={
-                status === "DONE" || loggedInUserId != data?.created_by?._id
+                !(
+                  !(status === "DONE") ||
+                  !(loggedInUserId != data?.created_by?._id) ||
+                  !hasEditAccess
+                )
               }
               size="small"
               onChange={(e: any) => {

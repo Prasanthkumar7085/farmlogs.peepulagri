@@ -209,15 +209,6 @@ const TasksPageComponent = () => {
 
   return (
     <div style={{ padding: "1rem 2rem" }}>
-      {/* <NavBarContainerTasks
-        onChangeSearch={onChangeSearch}
-        searchString={searchString}
-        onSelectValueFromDropDown={onSelectValueFromDropDown}
-        selectedFarm={selectedFarm}
-        onStatusChange={onStatusChange}
-        onUserChange={onUserChange}
-        titleName={"Task Management"}
-      /> */}
       <NavContainer
         onChangeSearch={onChangeSearch}
         searchString={searchString}

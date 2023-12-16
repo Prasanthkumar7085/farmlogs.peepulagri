@@ -591,11 +591,8 @@ const TaskDetails: React.FC<PropsType> = ({
             <SelectComponentNoAll
               options={statusOptions}
               disabled={
-                !(
-                  !(status === "DONE") ||
-                  !(loggedInUserId != data?.created_by?._id) ||
-                  !hasEditAccess
-                )
+                status === "DONE" ||
+                !(!(loggedInUserId != data?.created_by?._id) || !hasEditAccess)
               }
               size="small"
               onChange={(e: any) => {

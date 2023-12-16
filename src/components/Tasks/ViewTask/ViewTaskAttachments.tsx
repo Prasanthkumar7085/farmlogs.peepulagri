@@ -23,9 +23,14 @@ import styles from "./TaskDetails.module.css";
 interface pageProps {
   data: TaskResponseTypes | null | undefined;
   getTaskById: (id: string) => void;
+  hasEditAccess: boolean | undefined;
 }
 
-const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
+const ViewTaskAttachments: FC<pageProps> = ({
+  data,
+  getTaskById,
+  hasEditAccess,
+}) => {
   const router = useRouter();
 
   const accessToken = useSelector(
@@ -208,7 +213,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
           Attachments
         </label>
         {selectedAttachmentIds?.length &&
-        loggedInUserId == data?.created_by?._id ? (
+        (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
           <div>
             <IconButton
               onClick={() => {
@@ -237,7 +242,7 @@ const ViewTaskAttachments: FC<pageProps> = ({ data, getTaskById }) => {
         ) : (
           <>
             {data?.status !== "DONE" &&
-            loggedInUserId == data?.created_by?._id ? (
+            (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
               <div>
                 <IconButton onClick={() => setIsEditable(!isEditable)}>
                   {isEditable ? <ClearIcon /> : <EditOutlined />}

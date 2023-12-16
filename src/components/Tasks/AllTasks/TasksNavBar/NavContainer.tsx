@@ -15,6 +15,7 @@ import styles from "./NavBarContainer.module.css";
 import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from "@mui/icons-material/Add";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
+import { Search } from "@mui/icons-material";
 interface PropTypes {
     onChangeSearch: (search: string) => void;
     searchString: string;
@@ -232,7 +233,7 @@ const NavContainer: React.FC<PropTypes> = ({
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Icon>search_sharp</Icon>
+                      <Search />
                     </InputAdornment>
                   ),
                 }}

@@ -19,100 +19,124 @@ const ViewTaskComponent = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+const loggedInUserId = useSelector(
+  (state: any) => state.auth.userDetails?.user_details?._id
+);
+const [data, setData] = useState<TaskResponseTypes | null>();
+const [loading, setLoading] = useState(true);
+const [openLogs, setOpenLogs] = useState(false);
+const [hasEditAccess, setHasEditAccess] = useState<boolean | undefined>(false);
 
-  const [data, setData] = useState<TaskResponseTypes | null>();
-  const [loading, setLoading] = useState(true);
-  const [openLogs, setOpenLogs] = useState(false);
+const getTaskById = async (id: string) => {
+  setLoading(true);
+  const response = await getTaskByIdService({
+    taskId: id,
+    token: accessToken,
+  });
 
-  const getTaskById = async (id: string) => {
-    setLoading(true);
-    const response = await getTaskByIdService({
-      taskId: id,
-      token: accessToken,
-    });
+  if (response?.success) {
+    setData(response?.data);
 
-    if (response?.success) {
-      setData(response?.data);
-    }
-    setLoading(false);
-  };
+    console.log(
+      response?.data?.assign_to?.some(
+        (item: any) => item?._id == loggedInUserId
+      )
+    );
 
-  const updateTask = async (body: any) => {
-    setLoading(true);
-    const response = await updateTaskService({
-      taskId: data?._id as string,
-      body: body,
-      token: accessToken,
-    });
-    if (response?.success) {
-      toast.success(response?.message);
-      await getTaskById(router.query.task_id as string);
-    }
-    setLoading(false);
-    return response;
-  };
+    setHasEditAccess(
+      response?.data?.assign_to?.some(
+        (item: any) => item?._id == loggedInUserId
+      )
+    );
+  }
+  setLoading(false);
+};
 
-  useEffect(() => {
-    if (router.isReady && accessToken && router.query.task_id) {
-      getTaskById(router.query.task_id as string);
-    }
-  }, [router.isReady, accessToken, router.query.task_id]);
+const updateTask = async (body: any) => {
+  setLoading(true);
+  const response = await updateTaskService({
+    taskId: data?._id as string,
+    body: body,
+    token: accessToken,
+  });
+  if (response?.success) {
+    toast.success(response?.message);
+    await getTaskById(router.query.task_id as string);
+  }
+  setLoading(false);
+  return response;
+};
 
-  return (
-    <div className={styles.viewTaskPage}>
-      <div className={styles.viewTaskContainer}>
-        <div className={styles.viewPageHeader}>
+useEffect(() => {
+  if (router.isReady && accessToken && router.query.task_id) {
+    getTaskById(router.query.task_id as string);
+  }
+}, [router.isReady, accessToken, router.query.task_id]);
+
+return (
+  <div className={styles.viewTaskPage}>
+    <div className={styles.viewTaskContainer}>
+      <div className={styles.viewPageHeader}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-              justifyContent: "space-between",
-              width: "100%",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-              }}
+            <div className={styles.backButton} onClick={() => router.back()}>
+              <img src="/arrow-left-back.svg" alt="" width={"18px"} />
+            </div>
+            <h5>View Task</h5>
+          </div>
+          <div>
+            <Button
+              sx={{ display: "flex", gap: "10px" }}
+              variant="outlined"
+              onClick={() => setOpenLogs((prev) => !prev)}
             >
-              <div className={styles.backButton} onClick={() => router.back()}>
-                <img src="/arrow-left-back.svg" alt="" width={"18px"} />
-              </div>
-              <h5>View Task</h5>
-            </div>
-            <div>
-              <Button
-                sx={{ display: "flex", gap: "10px" }}
-                variant="outlined"
-                onClick={() => setOpenLogs((prev) => !prev)}
-              >
-                View Logs <SummarizeIcon />
-              </Button>
-            </div>
+              View Logs <SummarizeIcon />
+            </Button>
           </div>
         </div>
-        <Card
-          sx={{
-            width: "100%",
-            borderRadius: "10px",
-            marginBottom: "1rem",
-          }}
-        >
-          <ViewLogs
-            openLogs={openLogs}
-            setOpenLogs={setOpenLogs}
-            taskId={router.query.task_id as string}
-          />
-          <TaskDetails data={data} updateTask={updateTask} getTaskById={getTaskById} />
-          <ViewTaskAttachments data={data} getTaskById={getTaskById} />
-        </Card>
       </div>
-      <LoadingComponent loading={loading} />
+      <Card
+        sx={{
+          width: "100%",
+          borderRadius: "10px",
+          marginBottom: "1rem",
+        }}
+      >
+        <ViewLogs
+          openLogs={openLogs}
+          setOpenLogs={setOpenLogs}
+          taskId={router.query.task_id as string}
+        />
+        <TaskDetails
+          data={data}
+          updateTask={updateTask}
+          getTaskById={getTaskById}
+          hasEditAccess={hasEditAccess}
+        />
+        <ViewTaskAttachments
+          data={data}
+          getTaskById={getTaskById}
+          hasEditAccess={hasEditAccess}
+        />
+      </Card>
     </div>
-  );
+    <LoadingComponent loading={loading} />
+  </div>
+);
 };
 
 export default ViewTaskComponent;

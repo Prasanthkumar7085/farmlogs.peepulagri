@@ -1,0 +1,206 @@
+.taskViewPage {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 3rem;
+}
+
+/* .taskViewPageContainer {
+
+} */
+.taskViewBlock {
+    padding: 0;
+}
+
+.taskDetailsBlock {
+    border-radius: 16px 0px 0px 16px;
+    background: #FFF;
+    padding: 1.25rem;
+    box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.05);
+}
+
+.blockHeading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+}
+
+.blockDescription {
+    color: green;
+}
+
+.taskAttachmentsBlock {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.attachmentsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.attachmentHeading {
+    margin: 0;
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 0.833vw, 18px);
+    font-weight: 500;
+    line-height: 100%;
+}
+
+.attachmentBtnGrp {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.addAttachmentBtn {
+    border-radius: 4px !important;
+    background: #45A845 !important;
+    color: #FFF !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 0.72vw, 16px) !important;
+    font-weight: 500 !important;
+    line-height: 18px !important;
+    padding-inline: 25px !important;
+    text-transform: capitalize !important;
+    min-width: inherit !important;
+}
+
+.addAttachmentBtn:hover {
+    background: #45A845 !important;
+}
+
+.deleteAttachmentBtn {
+    border-radius: 4px !important;
+    background: #D94841 !important;
+    min-width: inherit !important;
+}
+
+.deleteAttachmentBtn:hover {
+    background: #D94841 !important;
+}
+
+.allAttachmentsBlock {
+    border-radius: 4px;
+    border: 1px solid #D0D5DD;
+}
+
+.singleAttachmentBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 5px 1rem;
+    border-bottom: 1px solid #D0D5DD;
+}
+
+.singleAttachmentBlock:last-child {
+    border-bottom: 0px solid #D0D5DD;
+}
+
+.tumblineBlock {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.imgTitle {
+    color: #000;
+    /* text-overflow: ellipsis; */
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 0.72vw, 16px);
+    font-weight: 400;
+    line-height: 100%;
+}
+
+.uploadedDate {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 0.72vw, 16px);
+    font-weight: 400;
+    line-height: 100%;
+    color: #6A7185;
+}
+
+.checkbox span {
+    padding: 0 !important;
+}
+
+.viewTask {
+    color: #45A845;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(10px, 0.625vw, 16px);
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.farmTitle {
+    color: #35353D;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(18px, 1.2vw, 24px);
+    font-weight: 500;
+    line-height: 100%;
+    margin: 0;
+}
+
+.statusButtton {
+    border-radius: 30px;
+    border: 1px solid #F2A84C;
+    color: #F2A84C;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(11px, 0.72vw, 16px);
+    font-weight: 500;
+    line-height: 100%;
+    padding: 5px 10px;
+    white-space: nowrap;
+    max-width: 60px;
+    margin: 0;
+}
+
+.description {
+    color: #101828;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 0.83vw, 20px);
+    font-weight: 500;
+    line-height: 18px;
+    margin: 0;
+}
+
+.descriptionText {
+    color: #35353D;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 0.83vw, 16px);
+    font-weight: 400;
+    line-height: 150%;
+    margin: 0;
+}
+
+.blockDescription {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 2rem;
+}
+
+.fileUploadBlock {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.fileUploadHeading {
+    margin: 0;
+    color: #101828;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(15px, 0.9vw, 20px);
+    font-weight: 500;
+    line-height: 18px;
+
+}

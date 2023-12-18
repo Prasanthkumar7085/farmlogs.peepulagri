@@ -371,6 +371,26 @@
     gap: 0.5rem;
 }
 
+.AssignyBtnGrp {
+    text-align: end;
+    margin-top: 1rem;
+}
+
+.confirmAssignyBtn {
+    color: #45A845 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 0.72vw, 14px) !important;
+    font-weight: 500 !important;
+    line-height: 18px;
+    border: 1px solid #45A845 !important;
+    text-transform: capitalize !important;
+}
+
+.confirmAssignyBtn:hover {
+    color: #45A845 !important;
+    border: 1px solid #45A845 !important;
+}
+
 .statusMenuItem {
     color: #000;
     font-family: 'Inter', sans-serif;

@@ -60,12 +60,10 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
   };
 
   useEffect(() => {
-    if (router.isReady && accessToken) {
-      if (router.query.task_id) {
-        getAllUsers(userId);
-      }
+    if (accessToken) {
+      getAllUsers(userId);
     }
-  }, [router.isReady, accessToken]);
+  }, [accessToken]);
 
   return (
     <div>

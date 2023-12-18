@@ -18,6 +18,7 @@ import updateTaskService from "../../../../../lib/services/TasksService/updateTa
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
 
 const TaskViewComponent = () => {
     const router = useRouter();
@@ -34,14 +35,21 @@ const TaskViewComponent = () => {
     const [errorMessages, setErrorMessages] = useState({});
     const [assignee, setAssignee] = useState<any>();
     const [status, setStatus] = useState("");
+    const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
+    const [deleteField, setDeleteField] = useState("");
+    const [deleteFieldOrNot, setDeleteFieldOrNot] = useState(false);
 
-    const [data, setData] = useState<TaskResponseTypes | null>();
+    const [data, setData] = useState<TaskResponseTypes | null | any>({});
     const [loading, setLoading] = useState(true);
     const [hasEditAccess, setHasEditAccess] = useState<boolean | undefined>(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [files, setFiles] = useState([]);
     const [multipleFiles, setMultipleFiles] = useState<any>([]);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorAssignyEl, setAnchorAssignyEl] = useState<null | HTMLElement>(null);
+    const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>(
+        []
+    );
     const [statusOptions] = useState<Array<{ value: string; title: string }>>([
         { value: "TO-START", title: "To-Start" },
         { value: "INPROGRESS", title: "In-Progress" },
@@ -52,6 +60,7 @@ const TaskViewComponent = () => {
     const [farmId, setFarmId] = useState("");
     const [userId, setUserId] = useState("");
     const today = new Date();
+    const id = router.query.task_id;
 
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -59,6 +68,13 @@ const TaskViewComponent = () => {
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+    const assignyOpen = Boolean(anchorAssignyEl);
+    const handleAssignyClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorAssignyEl(event.currentTarget);
+    };
+    const handleAssignyClose = () => {
+        setAnchorAssignyEl(null);
     };
 
     const accessToken = useSelector(
@@ -77,34 +93,7 @@ const TaskViewComponent = () => {
         setUserId(data?.assigned_to?._id as string);
         setAssignee(data?.assign_to);
     }, [data, editFieldOrNot]);
-    function stringToColor(string: string) {
-        let hash = 0;
-        let i;
 
-        /* eslint-disable no-bitwise */
-        for (i = 0; i < string.length; i += 1) {
-            hash = string.charCodeAt(i) + ((hash << 5) - hash);
-        }
-
-        let color = '#';
-
-        for (i = 0; i < 3; i += 1) {
-            const value = (hash >> (i * 8)) & 0xff;
-            color += `00${value.toString(16)}`.slice(-2);
-        }
-        /* eslint-enable no-bitwise */
-
-        return color;
-    }
-
-    function stringAvatar(name: string) {
-        return {
-            sx: {
-                bgcolor: stringToColor(name),
-            },
-            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-        };
-    }
     //Get Task by Id
     const getTaskById = async (id: string) => {
         setLoading(true);
@@ -363,6 +352,100 @@ const TaskViewComponent = () => {
     //         }
     //     }
     // };
+    //select assingee for delete
+    const handleAssigneeCheckboxChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        assigneeId: string
+    ) => {
+        if (e.target.checked) {
+            setSelectedAssigneeIds((prevIds) => [...prevIds, assigneeId]);
+        } else {
+            setSelectedAssigneeIds((prevIds) =>
+                prevIds.filter((id) => id !== assigneeId)
+            );
+        }
+    };
+    //delete assignee
+    const deleteAssignee = async () => {
+        setLoading(true);
+
+        try {
+            if (selectedAssigneeIds.length > 0) {
+                let body = {
+                    assign_to: selectedAssigneeIds,
+                };
+
+                let options = {
+                    method: "DELETE",
+                    headers: new Headers({
+                        "content-type": "application/json",
+                        authorization: accessToken,
+                    }),
+                    body: JSON.stringify(body),
+                };
+
+                let response: any = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}/assignee`,
+                    options
+                );
+                let responseData = await response.json();
+
+                if (responseData?.success) {
+                    setDeleteFieldOrNot(false);
+                    setDeleteField("");
+                    setSelectedAssigneeIds([]);
+                    getTaskById(id as string);
+                    toast.success(responseData?.message);
+                } else {
+                    toast.error(responseData?.message);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+    //add assignee aapi
+    const addAssignee = async () => {
+        setLoading(true);
+
+        try {
+            if (selectedAssignee) {
+                let body = {
+                    assign_to: selectedAssignee.map((user: any) => user._id),
+                };
+                let options = {
+                    method: "POST",
+                    headers: new Headers({
+                        "content-type": "application/json",
+                        authorization: accessToken,
+                    }),
+                    body: JSON.stringify(body),
+                };
+
+                let response: any = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}/assignee`,
+                    options
+                );
+                let responseData = await response.json();
+
+                if (responseData?.success) {
+                    getTaskById(id as string);
+                    setEditFieldOrNot(false);
+                    setEditField("");
+                    toast.success(responseData?.message);
+                } else {
+                    toast.error(responseData?.message);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className={styles.taskViewPage}>
             <div >
@@ -407,11 +490,34 @@ const TaskViewComponent = () => {
                         </div>
                         <div className={styles.blockDescription}>
                             <h6 className={styles.description}>Description</h6>
-                            <p className={styles.descriptionText}>  {data?.description ? (
-                                <Markup content={getDescriptionData(data?.description)} />
+                            {editField == "description" && editFieldOrNot ? (
+                                <ClickAwayListener onClickAway={() => {
+                                    onUpdateField({});
+
+                                    setEditField('');
+                                    setEditFieldOrNot(false)
+                                }}>
+                                    <TextField
+                                        className={styles.descriptionPara}
+                                        multiline
+                                        minRows={4}
+                                        maxRows={4}
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        sx={{ width: "100%", background: "#f5f7fa" }}
+                                        placeholder="Enter description here"
+                                    />
+                                </ClickAwayListener>
                             ) : (
-                                "-"
-                            )}</p>
+                                <p className={styles.descriptionText} onClick={() => {
+                                    setEditFieldOrNot(true);
+                                    setEditField("description");
+                                }}>  {data?.description ? (
+                                    <Markup content={getDescriptionData(data?.description)} />
+                                ) : (
+                                    "-"
+                                )}</p>
+                            )}
                         </div>
                         <div className={styles.taskAttachmentsBlock}>
                             <div className={styles.attachmentsHeader}>
@@ -448,11 +554,13 @@ const TaskViewComponent = () => {
                                                         </div>
                                                         <img src={item.url} alt="" className={styles.thumbnailImg} />
                                                     </div>
-                                                    <div className={styles.imgTitle}> {item?.key?.length > 25
-                                                        ? item?.key.slice(0, 22) + "..."
+
+                                                    <div className={styles.imgTitle}> {item?.key?.length > 20
+                                                        ? item?.key.slice(0, 20) + "..." + item?.key?.split('.')[item?.key?.split('.')?.length - 1]
                                                         : item?.key}</div>
+
                                                     <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY")}</div>
-                                                    <div onClick={() => {
+                                                    <div style={{ width: "15%" }} onClick={() => {
                                                         downLoadAttachements(item.url);
                                                     }}>
                                                         <img src="/viewTaskIcons/download.svg" alt="" />
@@ -482,7 +590,6 @@ const TaskViewComponent = () => {
                         <div className={styles.DatePickerBlock}>
                             <p className={styles.dueDate}>Due Date</p>
                             <div className={styles.datePicker}>
-
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
                                         sx={{
@@ -530,9 +637,11 @@ const TaskViewComponent = () => {
                         <div className={styles.assignedByBlock}>
                             <div className={styles.assignedByHeading}>Assigned By</div>
                             <div className={styles.assignedByName}>
-                                <Avatar {...stringAvatar('Daniel Hamilton')} sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#45A845" }} />
+                                <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#45A845" }} >
+                                    {data?.created_by?.name?.split(' ')?.length > 1 ? `${data?.created_by?.name?.split(' ')[0][0]}${data?.created_by?.name?.split(' ')[1][0]}`.toUpperCase() : data?.created_by?.name.slice(0, 2)?.toUpperCase()}
+                                </Avatar>
                                 <p className={styles.assignedByFullName}>
-                                    {data?.created_by.name ? data?.created_by.name : "-"}
+                                    {data?.created_by?.name ? data?.created_by?.name : "-"}
                                 </p>
 
                             </div>
@@ -542,7 +651,20 @@ const TaskViewComponent = () => {
                                 <div className={styles.assigneeHeading}>
                                     Assign To
                                 </div>
-                                <Button className={styles.addAssignyBtn}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
+                                    <Button className={styles.addAssignyBtn} onClick={handleAssignyClick}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
+
+                                    {selectedAssigneeIds?.length ? <Button
+                                        className={styles.deleteAttachmentBtn} onClick={() => {
+                                            deleteAssignee();
+                                        }}>
+                                        {deleteLoading ? (
+                                            <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                        ) : (
+                                            <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
+                                        )}
+                                    </Button> : ""}
+                                </div>
                             </div>
                             <div className={styles.allAssignysBlock}>
                                 {data?.assign_to
@@ -551,11 +673,21 @@ const TaskViewComponent = () => {
                                             return (
                                                 <div key={index} className={styles.singleAssignyBlock}>
                                                     <div className={styles.checkbox}>
-                                                        <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />
+                                                        <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
+                                                            handleAssigneeCheckboxChange(e, item._id)
+
+                                                        }
+                                                            checked={selectedAssigneeIds.includes(
+                                                                item?._id
+                                                            )}
+                                                        />
 
                                                     </div>
                                                     <div className={styles.assingyNameBlock}>
-                                                        <Avatar {...stringAvatar('Daniel Hamilton')} sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} />
+                                                        <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >
+                                                            {item.name.split(' ')?.length > 1 ? `${item.name.split(' ')[0][0]}${item.name.split(' ')[1][0]}`.toUpperCase() : item.name.slice(0, 2)?.toUpperCase()}
+
+                                                        </Avatar>
                                                         <p className={styles.assignedByFullName}>
                                                             {item.name}
                                                         </p>
@@ -600,6 +732,40 @@ const TaskViewComponent = () => {
                             </MenuItem>
                         );
                     })}
+            </Menu>
+            <Menu
+                id="fade-menu"
+                MenuListProps={{
+                    'aria-labelledby': 'fade-button',
+                }}
+                anchorEl={anchorAssignyEl}
+                open={assignyOpen}
+                onClose={handleAssignyClose}
+                TransitionComponent={Fade}
+                PaperProps={{
+                    style: {
+                        width: '30ch',
+                    },
+                }}
+            >
+                <div style={{ padding: "1rem" }}>
+                    <UserOptionsinViewTasks
+                        userId={userId}
+                        assignee={assignee}
+                        onChange={(assigned_to: any) => {
+                            setSelectedAssignee(assigned_to);
+                            setFarmId("");
+                            setUserId(assigned_to[0]?._id);
+                            setErrorMessages({});
+                        }}
+                    />
+                    <div className={styles.AssignyBtnGrp}>
+                        <Button onClick={() => {
+                            addAssignee();
+                            handleAssignyClose();
+                        }} variant="outlined" className={styles.confirmAssignyBtn} >Confirm</Button>
+                    </div>
+                </div>
             </Menu>
             <LoadingComponent loading={loading} />
 

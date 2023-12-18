@@ -20,6 +20,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
 import ErrorMessages from "@/components/Core/ErrorMessages";
+import ViewLogs from "../../ViewTask/ViewLogs";
 
 const TaskViewComponent = () => {
     const router = useRouter();
@@ -28,6 +29,8 @@ const TaskViewComponent = () => {
     const [selectedAttachmentIds, setSelectedAttachmentsIds] = useState<
         Array<string>
     >([]);
+    const [openLogs, setOpenLogs] = useState(false);
+
     const [editField, setEditField] = useState("");
     const [editFieldOrNot, setEditFieldOrNot] = useState(false);
     const [title, setTitle] = useState("");
@@ -452,13 +455,14 @@ const TaskViewComponent = () => {
     return (
         <div className={styles.taskViewPage}>
             <div >
-                <Button className={styles.backBtn}> <img src="/viewTaskIcons/back-icon.svg" alt="" width="18px" /> </Button>
+                <Button className={styles.backBtn} onClick={() => router.back()}> <img src="/viewTaskIcons/back-icon.svg" alt="" width="18px" /> </Button>
             </div>
             <div className={styles.taskViewPageContainer}>
                 <Card className={styles.taskViewBlock}>
                     <div className={styles.taskDetailsBlock}>
                         <div className={styles.blockHeading}>
                             <p className={styles.viewTask}>View TAsk</p>
+
                             {editField == "title" && editFieldOrNot ? (
                                 <div style={{ width: "100%" }}>
 
@@ -480,10 +484,17 @@ const TaskViewComponent = () => {
 
                                 </div>
                             ) : (
-                                <h6 className={styles.farmTitle} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
-                                    ? data?.title.slice(0, 1).toUpperCase() +
-                                    data?.title.slice(1)
-                                    : "-"}</h6>
+                                <div>
+                                    {status !== "DONE" &&
+                                        loggedInUserId == data?.created_by?._id ? (
+                                        <h6 className={styles.farmTitle} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
+                                            ? data?.title.slice(0, 1).toUpperCase() +
+                                            data?.title.slice(1)
+                                            : "-"}</h6>) : (<h6 className={styles.farmTitle} >{data?.title
+                                                ? data?.title.slice(0, 1).toUpperCase() +
+                                                data?.title.slice(1)
+                                                : "-"}</h6>)}
+                                </div>
                             )}
                             {editField == "title" && editFieldOrNot ? (
                                 <div className={styles.editModeBtnGrp}>
@@ -500,10 +511,15 @@ const TaskViewComponent = () => {
                                         <img src="/viewTaskIcons/confirm-icon.svg" alt="" width={"20px"} />
                                     </IconButton>
                                 </div>) : ("")}
+
                             <div >
-                                <p className={styles.statusButtton} onClick={handleClick}>
-                                    {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
-                                </p>
+
+                                {status !== "DONE" &&
+                                    loggedInUserId == data?.created_by?._id ? (
+                                    <p className={styles.statusButtton} onClick={handleClick}>
+                                        {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
+                                    </p>) : (<p className={styles.statusButtton} >
+                                        {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}</p>)}
                             </div>
                         </div>
                         <div className={styles.blockDescription}>
@@ -527,14 +543,22 @@ const TaskViewComponent = () => {
                                     placeholder="Enter description here"
                                 />
                             ) : (
-                                <p className={styles.descriptionText} onClick={() => {
-                                    setEditFieldOrNot(true);
-                                    setEditField("description");
-                                }}>  {data?.description ? (
-                                    <Markup content={getDescriptionData(data?.description)} />
-                                ) : (
-                                    "-"
-                                )}</p>
+                                <div>
+                                    {status !== "DONE" &&
+                                        loggedInUserId == data?.created_by?._id ? (
+                                        <p className={styles.descriptionText} onClick={() => {
+                                            setEditFieldOrNot(true);
+                                            setEditField("description");
+                                        }}>  {data?.description ? (
+                                            <Markup content={getDescriptionData(data?.description)} />
+                                        ) : (
+                                            "-"
+                                        )}</p>) : (<p className={styles.descriptionText} >  {data?.description ? (
+                                            <Markup content={getDescriptionData(data?.description)} />
+                                        ) : (
+                                            "-"
+                                        )}</p>)}
+                                </div>
                             )}
                             {editField == "description" && editFieldOrNot ? (
                                 <div className={styles.editModeBtnGrp}>
@@ -622,127 +646,150 @@ const TaskViewComponent = () => {
                             </div> : ""}
                     </div>
                     <div className={styles.assignedDetailsBlock}>
-                        <div className={styles.DatePickerBlock}>
-                            <p className={styles.dueDate}>Due Date</p>
-                            <div className={styles.datePicker}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DatePicker
-                                        sx={{
-                                            width: "100%",
-                                            "& .MuiButtonBase-root": {
-                                                paddingRight: "10px !important",
-                                            },
+                        <div>
 
-                                            "& .MuiInputBase-root::before": {
-                                                borderBottom: "0 !important",
-                                            },
-                                            "& .MuiInputBase-root::after": {
-                                                borderBottom: "0 !important",
-                                            },
-                                        }}
-                                        disablePast
-                                        value={new Date(deadlineString)}
-                                        onChange={(newValue: any) => {
-                                            let dateNow = new Date();
-                                            let dateWithPresentTime = moment(new Date(newValue))
-                                                .set({
-                                                    hour: dateNow.getHours(),
-                                                    minute: dateNow.getMinutes(),
-                                                    second: dateNow.getSeconds(),
-                                                    millisecond: dateNow.getMilliseconds(),
-                                                })
-                                                .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+                            <div className={styles.DatePickerBlock}>
+                                <p className={styles.dueDate}>Due Date</p>
+                                <div className={styles.datePicker}>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <DatePicker
+                                            sx={{
+                                                width: "100%",
+                                                "& .MuiButtonBase-root": {
+                                                    paddingRight: "10px !important",
+                                                },
 
-                                            setDeadlineString(dateWithPresentTime);
+                                                "& .MuiInputBase-root::before": {
+                                                    borderBottom: "0 !important",
+                                                },
+                                                "& .MuiInputBase-root::after": {
+                                                    borderBottom: "0 !important",
+                                                },
+                                            }}
+                                            disablePast
+                                            value={new Date(deadlineString)}
+                                            onChange={(newValue: any) => {
+                                                let dateNow = new Date();
+                                                let dateWithPresentTime = moment(new Date(newValue))
+                                                    .set({
+                                                        hour: dateNow.getHours(),
+                                                        minute: dateNow.getMinutes(),
+                                                        second: dateNow.getSeconds(),
+                                                        millisecond: dateNow.getMilliseconds(),
+                                                    })
+                                                    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-                                            onUpdateField({ deadlineProp: dateWithPresentTime })
-                                        }}
-                                        format="dd/MM/yyyy"
-                                        slotProps={{
-                                            textField: {
-                                                variant: "standard",
-                                                size: "medium",
-                                                color: "primary",
-                                            },
-                                        }}
-                                    />
-                                </LocalizationProvider>
-                            </div>
-                        </div>
-                        <div className={styles.assignedByBlock}>
-                            <div className={styles.assignedByHeading}>Assigned By</div>
-                            <div className={styles.assignedByName}>
-                                <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#45A845" }} >
-                                    {data?.created_by?.name?.split(' ')?.length > 1 ? `${data?.created_by?.name?.split(' ')[0][0]}${data?.created_by?.name?.split(' ')[1][0]}`.toUpperCase() : data?.created_by?.name.slice(0, 2)?.toUpperCase()}
-                                </Avatar>
-                                <p className={styles.assignedByFullName}>
-                                    {data?.created_by?.name ? data?.created_by?.name : "-"}
-                                </p>
+                                                setDeadlineString(dateWithPresentTime);
 
-                            </div>
-                        </div>
-                        <div className={styles.taskAssignedTeamBlock}>
-                            <div className={styles.assigneeTeamHeader}>
-                                <div className={styles.assigneeHeading}>
-                                    Assign To
-                                </div>
-                                <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
-                                    <Button className={styles.addAssignyBtn} onClick={handleAssignyClick}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
-
-                                    {selectedAssigneeIds?.length ? <Button
-                                        className={styles.deleteAttachmentBtn} onClick={() => {
-                                            deleteAssignee();
-                                        }}>
-                                        {deleteLoading ? (
-                                            <CircularProgress size="1.5rem" sx={{ color: "red" }} />
-                                        ) : (
-                                            <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
-                                        )}
-                                    </Button> : ""}
+                                                onUpdateField({ deadlineProp: dateWithPresentTime })
+                                            }}
+                                            format="dd/MM/yyyy"
+                                            slotProps={{
+                                                textField: {
+                                                    variant: "standard",
+                                                    size: "medium",
+                                                    color: "primary",
+                                                },
+                                            }}
+                                        />
+                                    </LocalizationProvider>
                                 </div>
                             </div>
-                            {data?.assign_to?.length ?
-                                <div className={styles.allAssignysBlock}>
-                                    {data?.assign_to
-                                        ? data?.assign_to.map(
-                                            (item: { _id: string; name: string }, index: number) => {
-                                                return (
-                                                    <div key={index} className={styles.singleAssignyBlock}>
-                                                        <div className={styles.checkbox}>
-                                                            <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
-                                                                handleAssigneeCheckboxChange(e, item._id)
-                                                            }
-                                                                checked={selectedAssigneeIds.includes(
-                                                                    item?._id
-                                                                )}
-                                                            />
+                            <div className={styles.assignedByBlock}>
+                                <div className={styles.assignedByHeading}>Assigned By</div>
+                                <div className={styles.assignedByName}>
+                                    <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#45A845" }} >
+                                        {data?.created_by?.name?.split(' ')?.length > 1 ? `${data?.created_by?.name?.split(' ')[0][0]}${data?.created_by?.name?.split(' ')[1][0]}`.toUpperCase() : data?.created_by?.name.slice(0, 2)?.toUpperCase()}
+                                    </Avatar>
+                                    <p className={styles.assignedByFullName}>
+                                        {data?.created_by?.name ? data?.created_by?.name : "-"}
+                                    </p>
+
+                                </div>
+                            </div>
+                            <div className={styles.taskAssignedTeamBlock}>
+                                <div className={styles.assigneeTeamHeader}>
+                                    <div className={styles.assigneeHeading}>
+                                        Assign To
+                                    </div>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
+                                        <Button className={styles.addAssignyBtn} onClick={handleAssignyClick}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
+                                        {status !== "DONE" &&
+                                            loggedInUserId == data?.created_by?._id ? (
+                                            <div>
+                                                {selectedAssigneeIds?.length ? <Button disabled={
+                                                    selectedAssigneeIds.length === 0 ||
+                                                    status === "DONE" ||
+                                                    !hasEditAccess
+                                                }
+                                                    className={styles.deleteAttachmentBtn} onClick={() => {
+                                                        deleteAssignee();
+                                                    }}>
+                                                    {deleteLoading ? (
+                                                        <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                                    ) : (
+                                                        <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
+                                                    )}
+                                                </Button> : ""}
+                                            </div>
+                                        ) : ("")}
+                                    </div>
+                                </div>
+                                {data?.assign_to?.length ?
+                                    <div className={styles.allAssignysBlock}>
+                                        {data?.assign_to
+                                            ? data?.assign_to.map(
+                                                (item: { _id: string; name: string }, index: number) => {
+                                                    return (
+                                                        <div key={index} className={styles.singleAssignyBlock}>
+                                                            <div className={styles.checkbox}>
+                                                                <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
+                                                                    handleAssigneeCheckboxChange(e, item._id)
+                                                                }
+                                                                    checked={selectedAssigneeIds.includes(
+                                                                        item?._id
+                                                                    )}
+                                                                />
+
+                                                            </div>
+                                                            <div className={styles.assingyNameBlock}>
+                                                                <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >
+                                                                    {item.name.split(' ')?.length > 1 ? `${item.name.split(' ')[0][0]}${item.name.split(' ')[1][0]}`.toUpperCase() : item.name.slice(0, 2)?.toUpperCase()}
+
+                                                                </Avatar>
+                                                                <p className={styles.assignedByFullName}>
+                                                                    {item.name}
+                                                                </p>
+
+                                                            </div>
 
                                                         </div>
-                                                        <div className={styles.assingyNameBlock}>
-                                                            <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >
-                                                                {item.name.split(' ')?.length > 1 ? `${item.name.split(' ')[0][0]}${item.name.split(' ')[1][0]}`.toUpperCase() : item.name.slice(0, 2)?.toUpperCase()}
-
-                                                            </Avatar>
-                                                            <p className={styles.assignedByFullName}>
-                                                                {item.name}
-                                                            </p>
-
-                                                        </div>
-
-                                                    </div>
-                                                );
-                                            }
-                                        )
-                                        : "-"}
-                                </div>
-                                : <div style={{ textAlign: "center" }}>
-                                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px" }}>Not at assigned</p>
-                                </div>}
+                                                    );
+                                                }
+                                            )
+                                            : "-"}
+                                    </div>
+                                    : <div style={{ textAlign: "center" }}>
+                                        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px" }}>Not at assigned</p>
+                                    </div>}
+                            </div>
+                        </div>
+                        <div className={styles.viewLogsBlock}>
+                            <Button className={styles.viewLogsBtn} onClick={() => setOpenLogs((prev) => !prev)}
+                            >
+                                View Logs
+                                <img src="/viewTaskIcons/logs-icon.svg" alt="" width={"15px"} />
+                            </Button>
                         </div>
                     </div>
 
                 </Card>
             </div>
+            <ViewLogs
+                openLogs={openLogs}
+                setOpenLogs={setOpenLogs}
+                taskId={router.query.task_id as string}
+            />
             <Menu
                 id="fade-menu"
                 MenuListProps={{

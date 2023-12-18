@@ -12,12 +12,21 @@
 }
 
 .backBtn {
-    min-width: inherit;
-    border-radius: 50%;
-    border: 1px solid var(--Stroke, #E9EDF1);
-    background: #FFF;
-    padding: 10px 6px;
-    margin-top: 1rem;
+    min-width: inherit !important;
+    border-radius: 50% !important;
+    border: 1px solid var(--Stroke, #E9EDF1) !important;
+    background: #FFF !important;
+    padding: 10px 6px !important;
+    margin-top: 1rem !important;
+}
+
+.backBtn:hover {
+    min-width: inherit !important;
+    border-radius: 50% !important;
+    border: 1px solid var(--Stroke, #E9EDF1) !important;
+    background: #FFF !important;
+    padding: 10px 6px !important;
+    margin-top: 1rem !important;
 }
 
 .taskViewBlock {
@@ -40,7 +49,36 @@
     border-radius: 0px 16px 16px 0px;
     border-left: 1px solid #D0D5DD;
     background: #FFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     /* box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.05); */
+}
+
+.viewLogsBlock {
+    border-top: 1px solid #D0D5DD;
+    padding: 1rem 1rem 0.5rem 1rem;
+}
+
+.viewLogsBtn {
+    color: var(--Red, #D94841) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 0.72vw, 16px) !important;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+    text-transform: capitalize !important;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.viewLogsBtn:hover {
+    color: var(--Red, #D94841) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 0.72vw, 16px) !important;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+    text-transform: capitalize !important;
 }
 
 .blockHeading {
@@ -320,10 +358,10 @@
 }
 
 .editModeBtnGrp {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.8rem;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.8rem !important;
 }
 
 .assigneeHeading {

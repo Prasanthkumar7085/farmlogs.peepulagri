@@ -85,9 +85,9 @@ const TasksPageComponent = () => {
     }
     if (userId?.length) {
       queryParams["assign_to"] = userId;
-      queryParams["created_by"] = userId;
+      // queryParams["created_by"] = userId;
     }
-    if (isMyTasks) {
+    if (Boolean(isMyTasks)) {
       queryParams["is_my_task"] = true;
     }
 

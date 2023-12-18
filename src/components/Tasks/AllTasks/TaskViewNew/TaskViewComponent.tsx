@@ -29,7 +29,7 @@ const TaskViewComponent = () => {
     const [editField, setEditField] = useState("");
     const [editFieldOrNot, setEditFieldOrNot] = useState(false);
     const [title, setTitle] = useState("");
-    const [deadline, setDeadline] = useState<Date | string | any>("");
+    const [deadlineString, setDeadlineString] = useState<Date | string | any>("");
     const [description, setDescription] = useState("");
     const [errorMessages, setErrorMessages] = useState({});
     const [assignee, setAssignee] = useState<any>();
@@ -70,7 +70,7 @@ const TaskViewComponent = () => {
     useEffect(() => {
         setErrorMessages({});
         setTitle(data?.title ? data?.title : "");
-        setDeadline(data?.deadline ? new Date(data?.deadline) : "");
+        setDeadlineString(data?.deadline ? data?.deadline : "")
         setDescription(data?.description ? data?.description : "");
         setStatus(data?.status ? data?.status : "");
         setFarmId(data?.farm_id ? data?.farm_id?._id : "");
@@ -310,8 +310,8 @@ const TaskViewComponent = () => {
             ...data,
             assigned_to: userId,
             farm_id: farmId,
-            deadline: deadlineProp ? deadlineProp : (deadline
-                ? moment(deadline)
+            deadline: deadlineProp ? deadlineProp : (deadlineString
+                ? moment(deadlineString)
                     .utcOffset("+05:30")
                     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
                 : ""),
@@ -482,49 +482,49 @@ const TaskViewComponent = () => {
                         <div className={styles.DatePickerBlock}>
                             <p className={styles.dueDate}>Due Date</p>
                             <div className={styles.datePicker}>
-                                {editField == "deadline" && editFieldOrNot ? (
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        <DatePicker
-                                            sx={{
-                                                width: "100%",
-                                                "& .MuiButtonBase-root": {
-                                                    paddingRight: "10px !important",
-                                                },
 
-                                                "& .MuiInputBase-root::before": {
-                                                    borderBottom: "0 !important",
-                                                },
-                                                "& .MuiInputBase-root::after": {
-                                                    borderBottom: "0 !important",
-                                                },
-                                            }}
-                                            disablePast
-                                            value={deadline}
-                                            onChange={(newValue: any) => {
-                                                setDeadline(newValue);
-                                                onUpdateField({ deadlineProp: newValue })
-                                            }}
-                                            format="dd/MM/yyyy"
-                                            slotProps={{
-                                                textField: {
-                                                    variant: "standard",
-                                                    size: "medium",
-                                                    color: "primary",
-                                                },
-                                            }}
-                                        />
-                                    </LocalizationProvider>) : (
-                                    // <p className={styles.dateText}>
-                                    //     {data?.deadline
-                                    //         ? timePipe(data?.deadline, "DD, MMM YYYY")
-                                    //         : "-"}
-                                    //     <img onClick={() => {
-                                    //         setEditFieldOrNot(true);
-                                    //         setEditField("deadline");
-                                    //     }} src="/viewTaskIcons/calender-icon.svg" alt="" />
-                                    // </p>
-                                    ""
-                                )}
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        sx={{
+                                            width: "100%",
+                                            "& .MuiButtonBase-root": {
+                                                paddingRight: "10px !important",
+                                            },
+
+                                            "& .MuiInputBase-root::before": {
+                                                borderBottom: "0 !important",
+                                            },
+                                            "& .MuiInputBase-root::after": {
+                                                borderBottom: "0 !important",
+                                            },
+                                        }}
+                                        disablePast
+                                        value={new Date(deadlineString)}
+                                        onChange={(newValue: any) => {
+                                            let dateNow = new Date();
+                                            let dateWithPresentTime = moment(new Date(newValue))
+                                                .set({
+                                                    hour: dateNow.getHours(),
+                                                    minute: dateNow.getMinutes(),
+                                                    second: dateNow.getSeconds(),
+                                                    millisecond: dateNow.getMilliseconds(),
+                                                })
+                                                .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+                                            setDeadlineString(dateWithPresentTime);
+
+                                            onUpdateField({ deadlineProp: dateWithPresentTime })
+                                        }}
+                                        format="dd/MM/yyyy"
+                                        slotProps={{
+                                            textField: {
+                                                variant: "standard",
+                                                size: "medium",
+                                                color: "primary",
+                                            },
+                                        }}
+                                    />
+                                </LocalizationProvider>
                             </div>
                         </div>
                         <div className={styles.assignedByBlock}>
@@ -601,6 +601,8 @@ const TaskViewComponent = () => {
                         );
                     })}
             </Menu>
+            <LoadingComponent loading={loading} />
+
         </div>
 
     );

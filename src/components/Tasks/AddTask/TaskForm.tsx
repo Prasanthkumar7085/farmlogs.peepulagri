@@ -30,7 +30,8 @@ const TaskForm = () => {
   const [defaultValue, setDefaultValue] = useState<FarmInTaskType | null>();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [deadline, setDeadline] = useState<Date | null>();
+  const [deadline, setDeadline] = useState<Date | null | string>();
+  const [deadlineString, setDeadlineString] = useState("");
   const [status, setStatus] = useState("TO-START");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
@@ -78,11 +79,7 @@ const TaskForm = () => {
       assigned_to: user?._id,
       farm_id: defaultValue?._id,
       categories: [],
-      deadline: deadline
-        ? moment(deadline)
-          .utcOffset("+05:30")
-          .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-        : "",
+      deadline: deadlineString ? deadlineString : "",
       description: description ? description : "",
       title: title ? title : "",
       attachments: files,
@@ -296,14 +293,18 @@ const TaskForm = () => {
                             },
                           }}
                           onChange={(newValue: any) => {
-                            const currentDate = new Date();
-                            if (newValue < currentDate) {
-                              setError("Please select a future date");
-                              setDeadline(null);
-                            } else {
-                              setError("");
-                              setDeadline(newValue);
-                            }
+                            let dateNow = new Date();
+                            let dateWithPresentTime = moment(new Date(newValue))
+                              .set({
+                                hour: dateNow.getHours(),
+                                minute: dateNow.getMinutes(),
+                                second: dateNow.getSeconds(),
+                                millisecond: dateNow.getMilliseconds(),
+                              })
+                              .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+                            setDeadlineString(dateWithPresentTime);
+                            setDeadline(newValue);
                           }}
                           slotProps={{
                             textField: {

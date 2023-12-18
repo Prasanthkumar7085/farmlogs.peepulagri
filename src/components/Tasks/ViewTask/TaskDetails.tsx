@@ -53,6 +53,8 @@ const TaskDetails: React.FC<PropsType> = ({
   const [title, setTitle] = useState("");
   const [assignee, setAssignee] = useState<any>();
   const [deadline, setDeadline] = useState<Date | string | any>("");
+  const [deadlineString, setDeadlineString] = useState("");
+
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
 
@@ -68,7 +70,9 @@ const TaskDetails: React.FC<PropsType> = ({
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
   const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
-  const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>([]);
+  const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>(
+    []
+  );
 
   useEffect(() => {
     setErrorMessages({});
@@ -234,7 +238,9 @@ const TaskDetails: React.FC<PropsType> = ({
         }}
       >
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <div className={styles.singleDetailsBox}>
               {editField == "title" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
@@ -317,13 +323,18 @@ const TaskDetails: React.FC<PropsType> = ({
           <label className={styles.userLabel} style={{ width: "100px" }}>
             Due Date
           </label>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <div
               className={styles.singleDetailsBox}
               style={{ display: "flex" }}
             >
               {editField == "deadline" && editFieldOrNot ? (
-                <div className={styles.responseDate2} style={{ width: "100%" }}>
+                <div
+                  className={styles.responseDate2}
+                  style={{ width: "100%" }}
+                >
                   <div style={{ display: "flex", width: "100%" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
@@ -340,10 +351,20 @@ const TaskDetails: React.FC<PropsType> = ({
                             borderBottom: "0 !important",
                           },
                         }}
-                        maxDate={today.setDate(today.getDate() - 1)}
                         disablePast
                         value={deadline}
                         onChange={(newValue: any) => {
+                          let dateNow = new Date();
+                          let dateWithPresentTime = moment(new Date(newValue))
+                            .set({
+                              hour: dateNow.getHours(),
+                              minute: dateNow.getMinutes(),
+                              second: dateNow.getSeconds(),
+                              millisecond: dateNow.getMilliseconds(),
+                            })
+                            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+                          setDeadlineString(dateWithPresentTime);
                           setDeadline(newValue);
                         }}
                         format="dd/MM/yyyy"
@@ -436,7 +457,11 @@ const TaskDetails: React.FC<PropsType> = ({
                 Assignee
               </label>
               <div
-                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
               >
                 <div>
                   {deleteField == "assignee" &&
@@ -450,7 +475,9 @@ const TaskDetails: React.FC<PropsType> = ({
                           setSelectedAssigneeIds([]);
                         }}
                       >
-                        <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                        <CloseIcon
+                          sx={{ color: "red", fontSize: "1.2rem" }}
+                        />
                       </IconButton>
                       <IconButton
                         onClick={() => {
@@ -501,14 +528,18 @@ const TaskDetails: React.FC<PropsType> = ({
                           setEditField("");
                         }}
                       >
-                        <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
+                        <CloseIcon
+                          sx={{ color: "red", fontSize: "1.2rem" }}
+                        />
                       </IconButton>
                       <IconButton
                         onClick={() => {
                           addAssignee();
                         }}
                       >
-                        <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
+                        <DoneIcon
+                          sx={{ color: "green", fontSize: "1.4rem" }}
+                        />
                       </IconButton>
                     </div>
                   ) : !(deleteField == "assignee" && deleteFieldOrNot) ? (
@@ -562,7 +593,10 @@ const TaskDetails: React.FC<PropsType> = ({
               <div className={styles.allAsigneeGrp}>
                 {data?.assign_to
                   ? data?.assign_to.map(
-                    (item: { _id: string; name: string }, index: number) => {
+                    (
+                      item: { _id: string; name: string },
+                      index: number
+                    ) => {
                       return (
                         <div key={index} className={styles.singleAsignee}>
                           {deleteField == "assignee" && deleteFieldOrNot ? (
@@ -592,7 +626,9 @@ const TaskDetails: React.FC<PropsType> = ({
               options={statusOptions}
               disabled={
                 status === "DONE" ||
-                !(!(loggedInUserId != data?.created_by?._id) || !hasEditAccess)
+                !(
+                  !(loggedInUserId != data?.created_by?._id) || !hasEditAccess
+                )
               }
               size="small"
               onChange={(e: any) => {
@@ -630,7 +666,8 @@ const TaskDetails: React.FC<PropsType> = ({
             </div>
           ) : userType !== "farmer" ? (
             <>
-              {status !== "DONE" && loggedInUserId == data?.created_by?._id ? (
+              {status !== "DONE" &&
+                loggedInUserId == data?.created_by?._id ? (
                 <div
                   onClick={() => {
                     setEditFieldOrNot(true);

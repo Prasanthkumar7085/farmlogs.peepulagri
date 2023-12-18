@@ -270,30 +270,13 @@
     border-radius: 6px;
     border: 1px solid #D0D5DD;
     padding: 0 14px;
-    padding-right: 0;
     width: 65%;
-
-}
-
-.dateText {
-    margin: 0;
-    font-size: clamp(12px, 0.625vw, 14px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.dateText img {
-    background-color: #E9EDF1;
-    padding: 8px 14px;
-    border-radius: 0 6px 6px 0;
 }
 
 .assignedByBlock {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 1.5rem 0 1rem 1.5rem;
 }
 

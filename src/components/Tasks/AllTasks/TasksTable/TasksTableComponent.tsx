@@ -203,6 +203,8 @@ const TasksTableComponent = ({
       id: "title",
       cell: (info: any) => (
         <Tooltip
+          followCursor
+          arrow
           title={
             info.getValue()?.length > 34 ? (
               <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
@@ -236,6 +238,8 @@ const TasksTableComponent = ({
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
           <Tooltip
+            followCursor
+            arrow
             title={
               info.getValue()?.length > 45 ? (
                 <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
@@ -302,7 +306,7 @@ const TasksTableComponent = ({
                 alignItems: "center !important",
               }}
             >
-              <Tooltip title="View">
+              <Tooltip followCursor arrow title="View">
                 <Link href={`/tasks/${info.row.original?._id}`}>
                   <ImageComponent
                     src="/view-icon.svg"
@@ -314,6 +318,8 @@ const TasksTableComponent = ({
               </Tooltip>
 
               <Tooltip
+                followCursor
+                arrow
                 title={
                   info.row.original?.status == "DONE" ||
                   info.row.original?.created_by?._id !== userId
@@ -350,7 +356,7 @@ const TasksTableComponent = ({
                 </div>
               </Tooltip>
 
-              <Tooltip title="Comments">
+              <Tooltip followCursor arrow title="Comments">
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -367,8 +373,10 @@ const TasksTableComponent = ({
                 </div>
               </Tooltip>
               <Tooltip
+                followCursor
+                arrow
                 title={
-                  info.row.original.attachements
+                  info.row.original.attachments
                     ? "Attachments"
                     : "No Attachments"
                 }
@@ -376,13 +384,16 @@ const TasksTableComponent = ({
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    setRowDetails(info.row.original);
-                    setAttachmentDrawer(true);
+                    console.log(info.row.original.attachements, "ooo");
+                    if (info.row.original.attachments) {
+                      setRowDetails(info.row.original);
+                      setAttachmentDrawer(true);
+                    }
                   }}
                 >
                   <ImageComponent
                     src={
-                      info.row.original.attachements
+                      info.row.original.attachments
                         ? "/task-table-attachment-icon.svg"
                         : "task-table-attachment-icon-disabled.svg"
                     }
@@ -399,7 +410,7 @@ const TasksTableComponent = ({
                   setTaskId(info.row.original?._id);
                 }}
               >
-                <Tooltip title="Logs">
+                <Tooltip followCursor arrow title="Logs">
                   <SummarizeIcon
                     sx={{ color: "#4986f7", fontSize: "1.3rem" }}
                   />

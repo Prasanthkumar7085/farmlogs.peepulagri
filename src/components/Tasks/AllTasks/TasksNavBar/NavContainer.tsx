@@ -171,33 +171,35 @@ const NavContainer: React.FC<PropTypes> = ({
         </div>
 
         <div className={styles.headeractions}>
-          <Button
-            id="demo-positioned-button"
-            aria-controls={open ? 'demo-positioned-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            variant='contained'
-          >
-            Select Users
-          </Button>
-          <Menu
-            id="demo-positioned-menu"
-            aria-labelledby="demo-positioned-button"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-          >
-            {!(router.query.is_my_task == "true") ? (
-              <div>
+          {!(router.query.is_my_task == "true") ? (
+            <div>
+              <Button
+                id="demo-positioned-button"
+                aria-controls={open ? 'demo-positioned-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                variant='contained'
+              >
+                Select Users
+              </Button>
+              <Menu
+                id="demo-positioned-menu"
+                aria-labelledby="demo-positioned-button"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+              >
+
+
                 <Autocomplete
                   multiple
                   sx={{
@@ -243,11 +245,13 @@ const NavContainer: React.FC<PropTypes> = ({
                     />
                   )}
                 />
-              </div>
-            ) : (
-              ""
-            )}
-          </Menu>
+
+
+              </Menu>
+            </div>
+          ) : (
+            ""
+          )}
 
           <div style={{ width: "12%" }}>
             <SelectComponent

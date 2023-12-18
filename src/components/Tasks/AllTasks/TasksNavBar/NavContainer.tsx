@@ -16,6 +16,7 @@ import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from "@mui/icons-material/Add";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import { Search } from "@mui/icons-material";
+import Menu from '@mui/material/Menu';
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -52,6 +53,8 @@ const NavContainer: React.FC<PropTypes> = ({
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<Array<userTaskType>>([]);
   const [user, setUser] = useState<userTaskType[] | null>([]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const [selectedFarmOption, setSelectedFarmOption] = useState<
     FarmInTaskType | null | undefined
@@ -67,6 +70,13 @@ const NavContainer: React.FC<PropTypes> = ({
   const [selectedUsers, setSelectedUsers] = useState<
     { name: string; _id: string }[] | null
   >();
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const setStatusValue = (e: any) => {
     onStatusChange(e.target.value);
@@ -159,58 +169,85 @@ const NavContainer: React.FC<PropTypes> = ({
             All Tasks
           </Button>
         </div>
+
         <div className={styles.headeractions}>
-          {!(router.query.is_my_task == "true") ? (
-            <div>
-              <Autocomplete
-                multiple
-                sx={{
-                  width: "250px",
-                  maxWidth: "250px",
-                  borderRadius: "4px",
-                }}
-                id="size-small-outlined-multi"
-                size="small"
-                fullWidth
-                noOptionsText={"No such User"}
-                value={selectedUsers?.length ? selectedUsers : []}
-                isOptionEqualToValue={(option: any, value: any) =>
-                  option.name === value.name
-                }
-                getOptionLabel={(option: any) => {
-                  return option.name;
-                }}
-                options={users}
-                onChange={(e: any, value: userTaskType[] | []) => {
-                  setSelectedUsers(value);
-                  setUser(value);
-                  let data: string[] = value?.length
-                    ? value?.map(
-                      (item: { _id: string; name: string }) => item._id
-                    )
-                    : [];
-                  onUserChange(data, false);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="Search by User"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                        backgroundColor: "#fff",
-                        border: "none",
-                      },
-                    }}
-                  />
-                )}
-              />
-            </div>
-          ) : (
-            ""
-          )}
+          <Button
+            id="demo-positioned-button"
+            aria-controls={open ? 'demo-positioned-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+            variant='contained'
+          >
+            Select Users
+          </Button>
+          <Menu
+            id="demo-positioned-menu"
+            aria-labelledby="demo-positioned-button"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+          >
+            {!(router.query.is_my_task == "true") ? (
+              <div>
+                <Autocomplete
+                  multiple
+                  sx={{
+                    width: "250px",
+                    maxWidth: "250px",
+                    borderRadius: "4px",
+                  }}
+                  id="size-small-outlined-multi"
+                  size="small"
+                  fullWidth
+                  noOptionsText={"No such User"}
+                  value={selectedUsers?.length ? selectedUsers : []}
+                  isOptionEqualToValue={(option: any, value: any) =>
+                    option.name === value.name
+                  }
+                  getOptionLabel={(option: any) => {
+                    return option.name;
+                  }}
+                  options={users}
+                  onChange={(e: any, value: userTaskType[] | []) => {
+                    setSelectedUsers(value);
+                    setUser(value);
+                    let data: string[] = value?.length
+                      ? value?.map(
+                        (item: { _id: string; name: string }) => item._id
+                      )
+                      : [];
+                    onUserChange(data, false);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Search by User"
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        "& .MuiInputBase-root": {
+                          fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                          backgroundColor: "#fff",
+                          border: "none",
+                        },
+                      }}
+                    />
+                  )}
+                />
+              </div>
+            ) : (
+              ""
+            )}
+          </Menu>
 
           <div style={{ width: "12%" }}>
             <SelectComponent

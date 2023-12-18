@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 const ViewTask = () => {
   return (
     <div>
-      <ViewTaskComponent />
+      {/* <ViewTaskComponent /> */}
       <TaskViewComponent />
     </div>
   );

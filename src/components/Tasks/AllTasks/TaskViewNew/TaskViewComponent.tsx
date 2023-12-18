@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, Checkbox, CircularProgress, ClickAwayListener, Collapse, Fade, Grid, IconButton, Menu, MenuItem, TextField } from "@mui/material";
+import { Avatar, Box, Button, Card, Checkbox, CircularProgress, ClickAwayListener, Collapse, Fade, Grid, IconButton, Menu, MenuItem, TextField, dividerClasses } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import styles from "./TaskViewComponent.module.css"
 import { ChangeEvent, useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
+import ErrorMessages from "@/components/Core/ErrorMessages";
 
 const TaskViewComponent = () => {
     const router = useRouter();
@@ -316,11 +317,13 @@ const TaskViewComponent = () => {
         if (response?.success) {
             toast.success(response?.message);
             await getTaskById(router.query.task_id as string);
-
+            setEditFieldOrNot(false);
+            setEditField("");
         }
         else {
             if (response?.errors) {
                 setErrorMessages(response?.errors);
+
             }
         }
         setLoading(false);
@@ -464,11 +467,17 @@ const TaskViewComponent = () => {
                                         sx={{
                                             width: "100%",
                                             background: "#ffff",
+                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: "#45A845 !important",
+                                                borderRadius: "8px !important"
+                                            }
                                         }}
                                         size="small"
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                     />
+                                    <ErrorMessages errorMessages={errorMessages} keyname="title" />
+
                                 </div>
                             ) : (
                                 <h6 className={styles.farmTitle} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
@@ -487,8 +496,6 @@ const TaskViewComponent = () => {
 
                                     <IconButton sx={{ padding: "0" }} onClick={() => {
                                         onUpdateField({});
-                                        setEditField('');
-                                        setEditFieldOrNot(false)
                                     }}>
                                         <img src="/viewTaskIcons/confirm-icon.svg" alt="" width={"20px"} />
                                     </IconButton>
@@ -510,7 +517,13 @@ const TaskViewComponent = () => {
                                     maxRows={4}
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    sx={{ width: "100%", background: "#f5f7fa" }}
+                                    sx={{
+                                        width: "100%",
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: "#45A845 !important",
+                                            borderRadius: "8px !important"
+                                        }
+                                    }}
                                     placeholder="Enter description here"
                                 />
                             ) : (
@@ -534,8 +547,7 @@ const TaskViewComponent = () => {
 
                                     <IconButton sx={{ padding: "0" }} onClick={() => {
                                         onUpdateField({});
-                                        setEditField('');
-                                        setEditFieldOrNot(false)
+
                                     }}>
                                         <img src="/viewTaskIcons/confirm-icon.svg" alt="" width={"20px"} />
                                     </IconButton>
@@ -723,7 +735,9 @@ const TaskViewComponent = () => {
                                         )
                                         : "-"}
                                 </div>
-                                : ""}
+                                : <div style={{ textAlign: "center" }}>
+                                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px" }}>Not at assigned</p>
+                                </div>}
                         </div>
                     </div>
 

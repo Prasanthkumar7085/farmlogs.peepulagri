@@ -354,7 +354,9 @@ const ViewTaskAttachments: FC<pageProps> = ({
                 );
               }
             )
-          : "No Attachements"}
+          : !uploadAttachmentsOpen
+          ? "No Attachements"
+          : ""}
       </div>
 
       <Toaster richColors position="top-right" closeButton />

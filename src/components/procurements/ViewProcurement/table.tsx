@@ -33,7 +33,7 @@ interface ApiCallService {
   available_qty?: number | null;
   available_units?: string;
 }
-const ViewProcurementTable = ({ data }: any) => {
+const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -99,6 +99,7 @@ const ViewProcurementTable = ({ data }: any) => {
         throw response;
       }
       if (response?.data) {
+        afterMaterialStatusChange(true)
         {
           response?.data.map((data: any) => {
 
@@ -126,6 +127,7 @@ const ViewProcurementTable = ({ data }: any) => {
 
       if (response.success) {
         setDialogOpen(false);
+        afterMaterialStatusChange(true)
         getAllProcurementMaterials();
         toast.success(response?.message);
       } else if (response?.status == 401) {
@@ -253,7 +255,7 @@ const ViewProcurementTable = ({ data }: any) => {
                   <TableCell>Price(Rs)</TableCell>
                 </>
                 : ''}
-              <TableCell style={{ display: data.status == "SHIPPED" || data.status == "DELIVERED" ? "none" : "" }}>Actions</TableCell>
+              <TableCell style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -327,7 +329,7 @@ const ViewProcurementTable = ({ data }: any) => {
                         ""
                       )}
 
-                      <div style={{ cursor: "pointer", display: data.status == "SHIPPED" || data.status == "DELIVERED" ? "none" : "block" }}>
+                      <div style={{ cursor: "pointer", display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "block" }}>
                         {row?.status == "APPROVED" ? (
                           <Button
                             variant="outlined"

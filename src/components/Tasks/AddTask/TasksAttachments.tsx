@@ -436,8 +436,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         }),
       };
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${
-          router.query.task_id ? router.query.task_id : taskId
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router.query.task_id ? router.query.task_id : taskId
         }/attachments`,
         options
       );
@@ -482,7 +481,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
       className={styles.attachments}
       style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}
     >
-      <div className={styles.header}>
+      {/* <div className={styles.header}>
         {!taskId && !router.query.task_id ? (
           <span style={{ color: "Highlight" }}>
             You can upload images after submit the task.
@@ -494,7 +493,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         <p className={styles.description}>
           You can also drag and drop files to upload them.
         </p>
-      </div>
+      </div> */}
 
       <label className={styles.UpdateFiles}>
         <div className={styles.link} style={{ background: "#fff !important" }}>
@@ -528,10 +527,10 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                        .prieviewUrl
+                      .prieviewUrl
                     : item.type == "application/pdf"
-                    ? "/pdf-icon.png"
-                    : "/doc-icon.webp"
+                      ? "/pdf-icon.png"
+                      : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -561,7 +560,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                      fileProgress[index] !== "fail" ? (
+                        fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
@@ -574,7 +573,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -588,7 +587,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                    fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (

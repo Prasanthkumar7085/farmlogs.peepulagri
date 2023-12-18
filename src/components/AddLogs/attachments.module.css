@@ -4,15 +4,18 @@
   align-self: stretch;
   position: relative;
 }
-.saveBtn{
+
+.saveBtn {
   background-color: #3462cf;
   color: white;
 
 }
-.saveBtn:hover{
+
+.saveBtn:hover {
   background-color: white !important;
   color: #3462cf !important;
 }
+
 .title {
   font-size: inherit;
   line-height: 12px;
@@ -25,6 +28,7 @@
   line-height: 14px;
   color: var(--body);
 }
+
 .header {
   width: 750px;
   display: flex;
@@ -33,17 +37,20 @@
   justify-content: flex-end;
   gap: var(--gap-5xs);
 }
+
 .attachments,
 .link {
   align-self: stretch;
   display: flex;
   justify-content: flex-start;
 }
+
 .UpdateFiles {
   width: 100%;
   position: relative;
 }
-.uploadFiles{
+
+.uploadFiles {
   position: absolute;
   top: 0;
   left: 0;
@@ -51,6 +58,7 @@
   bottom: 0;
   opacity: 0;
 }
+
 .uploadFiles,
 .link {
   border-radius: var(--br-8xs);
@@ -69,14 +77,16 @@
   line-height: 1;
   gap: 1em;
 }
+
 .link .icon {
   height: var(--padding-5xl);
   width: var(--padding-5xl);
 }
+
 .attachments {
-  border-top: 1px solid var(--stroke);
+  /* border-top: 1px solid var(--stroke); */
   flex-direction: column;
-  padding: var(--padding-13xl) 0;
+  /* padding: var(--padding-13xl) 0; */
   align-items: flex-start;
   gap: var(--gap-xs);
   text-align: left;
@@ -85,6 +95,7 @@
   font-family: var(--text-sm-medium);
   flex: 1;
 }
+
 .attachments .attachmentItem {
   display: grid;
   grid-template-columns: 50px auto 40px;
@@ -95,19 +106,23 @@
   padding: 4px;
   border-radius: 10px;
 }
+
 .attachments .attachmentItem p {
   color: var(--gray-700);
   font-size: var(--text-sm-normal-size);
 }
-.attachments .attachmentItem img{
+
+.attachments .attachmentItem img {
   border-radius: 8px;
 }
+
 .table {
   border: 1px solid rgba(0, 0, 0, 0.2);
   min-width: 100%;
   margin-top: .5rem;
   border-radius: 3px;
 }
+
 .table tbody td,
 .table thead th {
   padding-block: 8px;

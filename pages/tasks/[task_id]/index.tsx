@@ -1,3 +1,4 @@
+import TaskViewComponent from "@/components/Tasks/AllTasks/TaskViewNew/TaskViewComponent";
 import ViewTaskComponent from "@/components/Tasks/ViewTask/ViewTaskComponent";
 import { GetServerSideProps } from "next";
 
@@ -5,6 +6,7 @@ const ViewTask = () => {
   return (
     <div>
       <ViewTaskComponent />
+      <TaskViewComponent />
     </div>
   );
 };

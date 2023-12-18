@@ -1,9 +1,82 @@
-import { Avatar, Button, Card, Checkbox, Grid } from "@mui/material";
+import { Avatar, Box, Button, Card, Checkbox, CircularProgress, ClickAwayListener, Collapse, Fade, Grid, Menu, MenuItem, TextField } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import styles from "./TaskViewComponent.module.css"
+import { ChangeEvent, useEffect, useState } from "react";
+import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
+import getTaskByIdService from "../../../../../lib/services/TasksService/getTaskByIdService";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { Markup } from "interweave";
+import timePipe from "@/pipes/timePipe";
+import { toast } from "sonner";
+import deleteTaskAttachmentService from "../../../../../lib/services/TasksService/deleteTaskAttachmentService";
+import TasksAttachments from "../../AddTask/TasksAttachments";
+import updateTaskStatusService from "../../../../../lib/services/TasksService/updateTaskStatusService";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import moment from "moment";
+import updateTaskService from "../../../../../lib/services/TasksService/updateTaskService";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 
 const TaskViewComponent = () => {
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+    const router = useRouter();
+    const [attachmentData, setAttachmentData] = useState<any>();
+    const [uploadAttachmentsOpen, setUploadAttachmentsOpen] = useState(false);
+    const [selectedAttachmentIds, setSelectedAttachmentsIds] = useState<
+        Array<string>
+    >([]);
+    const [editField, setEditField] = useState("");
+    const [editFieldOrNot, setEditFieldOrNot] = useState(false);
+    const [title, setTitle] = useState("");
+    const [deadline, setDeadline] = useState<Date | string | any>("");
+    const [description, setDescription] = useState("");
+    const [errorMessages, setErrorMessages] = useState({});
+    const [assignee, setAssignee] = useState<any>();
+    const [status, setStatus] = useState("");
+
+    const [data, setData] = useState<TaskResponseTypes | null>();
+    const [loading, setLoading] = useState(true);
+    const [hasEditAccess, setHasEditAccess] = useState<boolean | undefined>(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [files, setFiles] = useState([]);
+    const [multipleFiles, setMultipleFiles] = useState<any>([]);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [statusOptions] = useState<Array<{ value: string; title: string }>>([
+        { value: "TO-START", title: "To-Start" },
+        { value: "INPROGRESS", title: "In-Progress" },
+        { value: "DONE", title: "Done" },
+        { value: "PENDING", title: "Pending" },
+        // { value: "OVER-DUE", title: "Over-due" },
+    ]);
+    const [farmId, setFarmId] = useState("");
+    const [userId, setUserId] = useState("");
+    const today = new Date();
+
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const accessToken = useSelector(
+        (state: any) => state.auth.userDetails?.access_token
+    );
+    const loggedInUserId = useSelector(
+        (state: any) => state.auth.userDetails?.user_details?._id
+    );
+    useEffect(() => {
+        setErrorMessages({});
+        setTitle(data?.title ? data?.title : "");
+        setDeadline(data?.deadline ? new Date(data?.deadline) : "");
+        setDescription(data?.description ? data?.description : "");
+        setStatus(data?.status ? data?.status : "");
+        setFarmId(data?.farm_id ? data?.farm_id?._id : "");
+        setUserId(data?.assigned_to?._id as string);
+        setAssignee(data?.assign_to);
+    }, [data, editFieldOrNot]);
     function stringToColor(string: string) {
         let hash = 0;
         let i;
@@ -32,10 +105,266 @@ const TaskViewComponent = () => {
             children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
         };
     }
+    //Get Task by Id
+    const getTaskById = async (id: string) => {
+        setLoading(true);
+        const response = await getTaskByIdService({
+            taskId: id,
+            token: accessToken,
+        });
 
+        if (response?.success) {
+            setData(response?.data);
+
+            console.log(
+                response?.data?.assign_to?.some(
+                    (item: any) => item?._id == loggedInUserId
+                )
+            );
+
+            setHasEditAccess(
+                response?.data?.assign_to?.some(
+                    (item: any) => item?._id == loggedInUserId
+                )
+            );
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        if (router.isReady && accessToken && router.query.task_id) {
+            getTaskById(router.query.task_id as string);
+        }
+    }, [router.isReady, accessToken, router.query.task_id]);
+    //description data getting
+    const getDescriptionData = (description: string) => {
+        let temp = description.slice(0, 1).toUpperCase() + description.slice(1);
+        let stringWithActualNewLine = temp.replace(/\n/g, "<br/>");
+        return stringWithActualNewLine;
+    };
+    //getting all attachements
+    function groupByDate(array: Array<any>) {
+        const groupedByDate = array.reduce((result, obj) => {
+            const dateKey = obj.createdAt.split("T")[0]; // Extract the date from the timestamp
+            if (!result[dateKey]) {
+                result[dateKey] = [];
+            }
+            result[dateKey].push(obj);
+            return result;
+        }, {});
+        return Object.values(groupedByDate).reverse();
+    }
+    const getAllAttachments = async () => {
+        setLoading(true);
+        let options = {
+            method: "GET",
+            headers: new Headers({
+                authorization: accessToken,
+            }),
+        };
+        try {
+            let response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router?.query?.task_id}/attachments`,
+                options
+            );
+            let responseData = await response.json();
+            if (responseData.status >= 200 && responseData.status <= 300) {
+                // let modifiedData = groupByDate(responseData?.data?.attachments);
+                console.log(responseData?.data?.attachments);
+
+                setAttachmentData([...responseData?.data?.attachments]);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (router.isReady && accessToken) {
+            getAllAttachments();
+        }
+    }, [router.isReady, accessToken]);
+    //select images for delete
+    const selectImagesForDelete = (
+        e: ChangeEvent<HTMLInputElement>,
+        item: TaskAttachmentsType
+    ) => {
+        setUploadAttachmentsOpen(false);
+        let ids = [...selectedAttachmentIds];
+        if (ids.includes(item?._id)) {
+            ids = ids.filter((itemId: string) => itemId !== item?._id);
+        } else {
+            ids.push(item?._id);
+        }
+        setSelectedAttachmentsIds(ids);
+    };
+    //download attachment
+    const downLoadAttachements = async (file: any) => {
+        setLoading(true);
+        try {
+            if (file) {
+                fetch(file)
+                    .then((response) => {
+                        // Get the filename from the response headers
+                        const contentDisposition = response.headers.get(
+                            "content-disposition"
+                        );
+                        let filename = "downloaded_file"; // Default filename if not found in headers
+
+                        if (contentDisposition) {
+                            const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                            if (filenameMatch && filenameMatch.length > 1) {
+                                filename = filenameMatch[1];
+                            }
+                        }
+
+                        // Create a URL for the blob
+                        return response.blob().then((blob) => ({ blob, filename }));
+                    })
+                    .then(({ blob, filename }) => {
+                        const blobUrl = window.URL.createObjectURL(blob);
+
+                        const downloadLink = document.createElement("a");
+                        downloadLink.href = blobUrl;
+                        downloadLink.download = filename; // Use the obtained filename
+                        downloadLink.style.display = "none";
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+
+                        // Clean up the blob URL
+                        window.URL.revokeObjectURL(blobUrl);
+                        toast.success("Attachement downloaded successfully");
+                    })
+                    .catch((error) => {
+                        console.error("Error downloading file:", error);
+                    });
+                // setAlertMessage("Attachement downloaded successfully")
+                // setAlertType(true)
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    //delete selected images
+
+    const deleteSelectedImages = async () => {
+        setDeleteLoading(true);
+
+        let response = await deleteTaskAttachmentService({
+            token: accessToken,
+            taskId: data?._id as string,
+            body: { attachment_ids: selectedAttachmentIds },
+        });
+
+        if (response?.success) {
+            toast.success(response?.message);
+            setSelectedAttachmentsIds([]);
+            getAllAttachments();
+        } else {
+            toast.error(response?.message);
+        }
+
+        setDeleteLoading(false);
+    };
+    const setUploadedFiles = (filesUploaded: any) => {
+        setFiles(filesUploaded);
+    };
+
+    //after upload attachements
+    const afterUploadAttachements = (value: any) => {
+        if (value == true) {
+            setUploadAttachmentsOpen(!uploadAttachmentsOpen);
+            setFiles([]);
+            setMultipleFiles([]);
+            getAllAttachments();
+        }
+    };
+    console.log(selectedAttachmentIds);
+
+    //status change api
+    const onChangeStatus = async (status: string) => {
+        setLoading(true);
+
+        const response = await updateTaskStatusService({
+            token: accessToken,
+            taskId: data?._id as string,
+            body: { status: status },
+        });
+        if (response?.success) {
+            toast.success(response?.message);
+            await getTaskById(router.query.task_id as string);
+        } else {
+            toast.error(response?.message);
+        }
+        setLoading(false);
+    };
+    //updated farm title api
+    const onUpdateField = async ({ deadlineProp }: Partial<{ deadlineProp: string }>) => {
+        setLoading(true);
+        let body = {
+            ...data,
+            assigned_to: userId,
+            farm_id: farmId,
+            deadline: deadlineProp ? deadlineProp : (deadline
+                ? moment(deadline)
+                    .utcOffset("+05:30")
+                    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+                : ""),
+            description: description ? description : "",
+            title: title ? title : "",
+            status: status,
+        };
+        const response = await updateTaskService({
+            taskId: data?._id as string,
+            body: body,
+            token: accessToken,
+        });
+        if (response?.success) {
+            toast.success(response?.message);
+            await getTaskById(router.query.task_id as string);
+
+        }
+        else {
+            if (response?.errors) {
+                setErrorMessages(response?.errors);
+            }
+        }
+        setLoading(false);
+        // return response;
+    };
+    // const onUpdateField = async () => {
+    //     let body = {
+    //         ...data,
+    //         assigned_to: userId,
+    //         farm_id: farmId,
+    //         deadline: deadline
+    //             ? moment(deadline)
+    //                 .utcOffset("+05:30")
+    //                 .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+    //             : "",
+    //         description: description ? description : "",
+    //         title: title ? title : "",
+    //         status: status,
+    //     };
+
+    //     const response = await updateTask(body);
+
+    //     if (response?.success) {
+    //         setEditFieldOrNot(false);
+    //         setEditField("");
+    //     } else {
+    //         if (response?.errors) {
+    //             setErrorMessages(response?.errors);
+    //         }
+    //     }
+    // };
     return (
         <div className={styles.taskViewPage}>
-
             <div >
                 <Button className={styles.backBtn}> <img src="/viewTaskIcons/back-icon.svg" alt="" width="18px" /> </Button>
             </div>
@@ -44,69 +373,166 @@ const TaskViewComponent = () => {
                     <div className={styles.taskDetailsBlock}>
                         <div className={styles.blockHeading}>
                             <p className={styles.viewTask}>View TAsk</p>
-                            <h6 className={styles.farmTitle}>Land Preparation</h6>
+                            {editField == "title" && editFieldOrNot ? (
+                                <div style={{ width: "100%" }}>
+                                    <ClickAwayListener onClickAway={() => {
+                                        onUpdateField({});
+
+                                        setEditField('');
+                                        setEditFieldOrNot(false)
+                                    }}>
+                                        <TextField
+                                            placeholder="Enter Title here"
+                                            sx={{
+                                                width: "100%",
+                                                background: "#ffff",
+                                            }}
+                                            size="small"
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                        />
+                                    </ClickAwayListener>
+                                </div>
+                            ) : (
+                                <h6 className={styles.farmTitle} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
+                                    ? data?.title.slice(0, 1).toUpperCase() +
+                                    data?.title.slice(1)
+                                    : "-"}</h6>
+                            )}
                             <div >
-                                <p className={styles.statusButtton}>
-                                    In-Progress
+                                <p className={styles.statusButtton} onClick={handleClick}>
+                                    {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
                                 </p>
                             </div>
                         </div>
                         <div className={styles.blockDescription}>
                             <h6 className={styles.description}>Description</h6>
-                            <p className={styles.descriptionText}>Farmers prepare the field by plowing and leveling it to create suitable soil conditions for chili cultivation.Land preparation is a crucial step in agriculture that involves various practices to make the land suitable for planting crops. It plays a vital role in ensuring crop growth, uniformity, and overall productivity. Here is a description of land preparation</p>
+                            <p className={styles.descriptionText}>  {data?.description ? (
+                                <Markup content={getDescriptionData(data?.description)} />
+                            ) : (
+                                "-"
+                            )}</p>
                         </div>
                         <div className={styles.taskAttachmentsBlock}>
                             <div className={styles.attachmentsHeader}>
                                 <p className={styles.attachmentHeading}>Attachments</p>
                                 <div className={styles.attachmentBtnGrp}>
-                                    <Button className={styles.addAttachmentBtn}><img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
-                                    <Button className={styles.deleteAttachmentBtn}> <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} /> </Button>
+                                    {/* <Button className={styles.addAttachmentBtn} onClick={() =>
+                                        setUploadAttachmentsOpen(!uploadAttachmentsOpen)
+                                    }><img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button> */}
+                                    {selectedAttachmentIds?.length ? <Button
+                                        className={styles.deleteAttachmentBtn} disabled={deleteLoading} onClick={deleteSelectedImages}>
+                                        {deleteLoading ? (
+                                            <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                        ) : (
+                                            <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
+                                        )}
+                                    </Button> : ""}
                                 </div>
                             </div>
                             <div className={styles.allAttachmentsBlock}>
-                                <div className={styles.singleAttachmentBlock}>
-                                    <div className={styles.tumblineBlock}>
-                                        <div className={styles.checkbox}>
-                                            <Checkbox {...label} sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />
+                                {attachmentData?.length
+                                    ? attachmentData?.map(
+                                        (item: TaskAttachmentsType | any, index: number) => {
+                                            return (
+                                                <div key={index} className={styles.singleAttachmentBlock}>
+                                                    <div className={styles.tumblineBlock}>
+                                                        <div className={styles.checkbox}>
+                                                            <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
+                                                                selectImagesForDelete(e, item)
+                                                            }
+                                                                checked={selectedAttachmentIds.includes(
+                                                                    item?._id
+                                                                )} />
 
-                                        </div>
-                                        <img src="/viewTaskIcons/thumbline-img.png" alt="" className={styles.thumbnailImg} />
-                                    </div>
-                                    <div className={styles.imgTitle}>Postharvest.png</div>
-                                    <div className={styles.uploadedDate}>14 Dec 2023</div>
-                                    <img src="/viewTaskIcons/download.svg" alt="" />
-                                </div>
-                                <div className={styles.singleAttachmentBlock}>
-                                    <div className={styles.tumblineBlock}>
-                                        <div className={styles.checkbox}>
-                                            <Checkbox {...label} sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />
+                                                        </div>
+                                                        <img src={item.url} alt="" className={styles.thumbnailImg} />
+                                                    </div>
+                                                    <div className={styles.imgTitle}> {item?.key?.length > 25
+                                                        ? item?.key.slice(0, 22) + "..."
+                                                        : item?.key}</div>
+                                                    <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY")}</div>
+                                                    <div onClick={() => {
+                                                        downLoadAttachements(item.url);
+                                                    }}>
+                                                        <img src="/viewTaskIcons/download.svg" alt="" />
+                                                    </div>
+                                                </div>
 
-                                        </div>
-                                        <img src="/viewTaskIcons/thumbline-img.png" alt="" className={styles.thumbnailImg} />
-                                    </div>
-                                    <div className={styles.imgTitle}>Postharvest.png</div>
-                                    <div className={styles.uploadedDate}>14 Dec 2023</div>
-                                    <img src="/viewTaskIcons/download.svg" alt="" />
-                                </div>
+                                            );
+                                        }
+                                    )
+                                    : "No Attachements"}
                             </div>
                         </div>
                         <div className={styles.fileUploadBlock}>
                             <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
-                            <div className={styles.uploadingFile}>
+                            <div>
+                                <TasksAttachments
+                                    taskId={""}
+                                    setUploadedFiles={setUploadedFiles}
+                                    multipleFiles={multipleFiles}
+                                    setMultipleFiles={setMultipleFiles}
+                                    afterUploadAttachements={afterUploadAttachements}
+                                />
                             </div>
                         </div>
                     </div>
                     <div className={styles.assignedDetailsBlock}>
                         <div className={styles.DatePickerBlock}>
                             <p className={styles.dueDate}>Due Date</p>
-                            <div className={styles.datePicker}></div>
+                            <div className={styles.datePicker}>
+                                {editField == "deadline" && editFieldOrNot ? (
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <DatePicker
+                                            sx={{
+                                                width: "100%",
+                                                "& .MuiButtonBase-root": {
+                                                    paddingRight: "10px !important",
+                                                },
+
+                                                "& .MuiInputBase-root::before": {
+                                                    borderBottom: "0 !important",
+                                                },
+                                                "& .MuiInputBase-root::after": {
+                                                    borderBottom: "0 !important",
+                                                },
+                                            }}
+                                            disablePast
+                                            value={deadline}
+                                            onChange={(newValue: any) => {
+                                                setDeadline(newValue);
+                                                onUpdateField({ deadlineProp: newValue })
+                                            }}
+                                            format="dd/MM/yyyy"
+                                            slotProps={{
+                                                textField: {
+                                                    variant: "standard",
+                                                    size: "medium",
+                                                    color: "primary",
+                                                },
+                                            }}
+                                        />
+                                    </LocalizationProvider>) : (
+                                    // <p className={styles.dateText}>
+                                    //     {data?.deadline
+                                    //         ? timePipe(data?.deadline, "DD, MMM YYYY")
+                                    //         : "-"}
+                                    //     <img onClick={() => {
+                                    //         setEditFieldOrNot(true);
+                                    //         setEditField("deadline");
+                                    //     }} src="/viewTaskIcons/calender-icon.svg" alt="" />
+                                    // </p>
+                                    ""
+                                )}
+                            </div>
                         </div>
                         <div className={styles.assignedByBlock}>
                             <div className={styles.assignedByHeading}>Assigned By</div>
                             <div className={styles.assignedByName}>
                                 <Avatar {...stringAvatar('Daniel Hamilton')} sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#45A845" }} />
                                 <p className={styles.assignedByFullName}>
-                                    Daniel Hamilton
+                                    {data?.created_by.name ? data?.created_by.name : "-"}
                                 </p>
 
                             </div>
@@ -119,42 +545,64 @@ const TaskViewComponent = () => {
                                 <Button className={styles.addAssignyBtn}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
                             </div>
                             <div className={styles.allAssignysBlock}>
-                                <div className={styles.singleAssignyBlock}>
-                                    <div className={styles.checkbox}>
-                                        <Checkbox {...label} sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />
+                                {data?.assign_to
+                                    ? data?.assign_to.map(
+                                        (item: { _id: string; name: string }, index: number) => {
+                                            return (
+                                                <div key={index} className={styles.singleAssignyBlock}>
+                                                    <div className={styles.checkbox}>
+                                                        <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />
 
-                                    </div>
-                                    <div className={styles.assingyNameBlock}>
-                                        <Avatar {...stringAvatar('Daniel Hamilton')} sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} />
-                                        <p className={styles.assignedByFullName}>
-                                            Daniel Hamilton
-                                        </p>
+                                                    </div>
+                                                    <div className={styles.assingyNameBlock}>
+                                                        <Avatar {...stringAvatar('Daniel Hamilton')} sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} />
+                                                        <p className={styles.assignedByFullName}>
+                                                            {item.name}
+                                                        </p>
 
-                                    </div>
+                                                    </div>
 
-                                </div>
-                                <div className={styles.singleAssignyBlock}>
-                                    <div className={styles.checkbox}>
-                                        <Checkbox {...label} sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />
-
-                                    </div>
-                                    <div className={styles.assingyNameBlock}>
-                                        <Avatar {...stringAvatar('Daniel Hamilton')} sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} />
-                                        <p className={styles.assignedByFullName}>
-                                            Daniel Hamilton
-                                        </p>
-
-                                    </div>
-
-                                </div>
+                                                </div>
+                                            );
+                                        }
+                                    )
+                                    : "-"}
                             </div>
                         </div>
                     </div>
 
                 </Card>
             </div>
+            <Menu
+                id="fade-menu"
+                MenuListProps={{
+                    'aria-labelledby': 'fade-button',
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                TransitionComponent={Fade}
+                PaperProps={{
+                    style: {
+                        width: '20ch',
+                    },
+                }}
+            >
 
+                {statusOptions?.length &&
+                    statusOptions.map((item: { value: string; title: string }, index: number) => {
+                        return (
+                            <MenuItem className={styles.statusMenuItem} onClick={() => {
+                                handleClose()
+                                onChangeStatus(item.value)
+                            }} key={index} value={item.value}>
+                                {item.title}
+                            </MenuItem>
+                        );
+                    })}
+            </Menu>
         </div>
+
     );
 }
 

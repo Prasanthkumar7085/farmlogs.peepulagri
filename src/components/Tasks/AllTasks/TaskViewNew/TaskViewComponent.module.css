@@ -137,6 +137,14 @@
     gap: 5px;
 }
 
+.thumbnailImg {
+    width: 50px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 2px;
+
+}
+
 .imgTitle {
     color: #000;
     /* text-overflow: ellipsis; */
@@ -261,8 +269,24 @@
 .datePicker {
     border-radius: 6px;
     border: 1px solid #D0D5DD;
-    padding: 14px;
+    padding: 0 14px;
+    padding-right: 0;
     width: 65%;
+
+}
+
+.dateText {
+    margin: 0;
+    font-size: clamp(12px, 0.625vw, 14px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dateText img {
+    background-color: #E9EDF1;
+    padding: 8px 14px;
+    border-radius: 0 6px 6px 0;
 }
 
 .assignedByBlock {
@@ -362,4 +386,13 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.statusMenuItem {
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(10px, 0.65vw, 12px);
+    font-weight: 400;
+    line-height: 100%;
+    padding-block: 8px;
 }

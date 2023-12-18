@@ -613,34 +613,30 @@ const TasksAttachments: React.FC<PropTypes> = ({
             </div>
           </div>
         ))}
-      <div
-        style={{
-          minHeight: "30px",
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: "10px",
-        }}
-      >
-        {!router.query.task_id ? (
-          ""
-        ) : (
+      {tempFilesStorage?.length ?
+        <div
+          className={styles.uploadFilesBtnGrp}>
+          {!router.query.task_id ? (
+            ""
+          ) : (
+            <Button
+              className={styles.canceleBtn}
+              variant="outlined"
+              onClick={() => cancelUpload()}
+            >
+              Cancel
+            </Button>
+          )}
           <Button
-            className={styles.canceleBtn}
-            variant="outlined"
-            onClick={() => cancelUpload()}
+            variant="contained"
+            onClick={() => addTaskAttachements()}
+            className={styles.saveBtn}
+            disabled={!tempFilesStorage?.length || loading}
           >
-            Cancel
+            Save
           </Button>
-        )}
-        <Button
-          variant="contained"
-          onClick={() => addTaskAttachements()}
-          className={styles.saveBtn}
-          disabled={!tempFilesStorage?.length || loading}
-        >
-          Save
-        </Button>
-      </div>
+        </div>
+        : ""}
       <LoadingComponent loading={loading} />
     </div>
   );

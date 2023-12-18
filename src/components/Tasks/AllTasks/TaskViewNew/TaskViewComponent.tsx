@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, Checkbox, CircularProgress, ClickAwayListener, Collapse, Fade, Grid, Menu, MenuItem, TextField } from "@mui/material";
+import { Avatar, Box, Button, Card, Checkbox, CircularProgress, ClickAwayListener, Collapse, Fade, Grid, IconButton, Menu, MenuItem, TextField } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import styles from "./TaskViewComponent.module.css"
 import { ChangeEvent, useEffect, useState } from "react";
@@ -458,23 +458,17 @@ const TaskViewComponent = () => {
                             <p className={styles.viewTask}>View TAsk</p>
                             {editField == "title" && editFieldOrNot ? (
                                 <div style={{ width: "100%" }}>
-                                    <ClickAwayListener onClickAway={() => {
-                                        onUpdateField({});
 
-                                        setEditField('');
-                                        setEditFieldOrNot(false)
-                                    }}>
-                                        <TextField
-                                            placeholder="Enter Title here"
-                                            sx={{
-                                                width: "100%",
-                                                background: "#ffff",
-                                            }}
-                                            size="small"
-                                            value={title}
-                                            onChange={(e) => setTitle(e.target.value)}
-                                        />
-                                    </ClickAwayListener>
+                                    <TextField
+                                        placeholder="Enter Title here"
+                                        sx={{
+                                            width: "100%",
+                                            background: "#ffff",
+                                        }}
+                                        size="small"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                    />
                                 </div>
                             ) : (
                                 <h6 className={styles.farmTitle} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
@@ -482,6 +476,23 @@ const TaskViewComponent = () => {
                                     data?.title.slice(1)
                                     : "-"}</h6>
                             )}
+                            {editField == "title" && editFieldOrNot ? (
+                                <div className={styles.editModeBtnGrp}>
+                                    <IconButton sx={{ padding: "0" }} onClick={() => {
+                                        setEditField('');
+                                        setEditFieldOrNot(false)
+                                    }}>
+                                        <img src="/ViewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
+                                    </IconButton>
+
+                                    <IconButton sx={{ padding: "0" }} onClick={() => {
+                                        onUpdateField({});
+                                        setEditField('');
+                                        setEditFieldOrNot(false)
+                                    }}>
+                                        <img src="/viewTaskIcons/confirm-icon.svg" alt="" width={"20px"} />
+                                    </IconButton>
+                                </div>) : ("")}
                             <div >
                                 <p className={styles.statusButtton} onClick={handleClick}>
                                     {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
@@ -491,23 +502,17 @@ const TaskViewComponent = () => {
                         <div className={styles.blockDescription}>
                             <h6 className={styles.description}>Description</h6>
                             {editField == "description" && editFieldOrNot ? (
-                                <ClickAwayListener onClickAway={() => {
-                                    onUpdateField({});
 
-                                    setEditField('');
-                                    setEditFieldOrNot(false)
-                                }}>
-                                    <TextField
-                                        className={styles.descriptionPara}
-                                        multiline
-                                        minRows={4}
-                                        maxRows={4}
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                        sx={{ width: "100%", background: "#f5f7fa" }}
-                                        placeholder="Enter description here"
-                                    />
-                                </ClickAwayListener>
+                                <TextField
+                                    className={styles.descriptionPara}
+                                    multiline
+                                    minRows={4}
+                                    maxRows={4}
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    sx={{ width: "100%", background: "#f5f7fa" }}
+                                    placeholder="Enter description here"
+                                />
                             ) : (
                                 <p className={styles.descriptionText} onClick={() => {
                                     setEditFieldOrNot(true);
@@ -518,60 +523,23 @@ const TaskViewComponent = () => {
                                     "-"
                                 )}</p>
                             )}
-                        </div>
-                        <div className={styles.taskAttachmentsBlock}>
-                            <div className={styles.attachmentsHeader}>
-                                <p className={styles.attachmentHeading}>Attachments</p>
-                                <div className={styles.attachmentBtnGrp}>
-                                    {/* <Button className={styles.addAttachmentBtn} onClick={() =>
-                                        setUploadAttachmentsOpen(!uploadAttachmentsOpen)
-                                    }><img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button> */}
-                                    {selectedAttachmentIds?.length ? <Button
-                                        className={styles.deleteAttachmentBtn} disabled={deleteLoading} onClick={deleteSelectedImages}>
-                                        {deleteLoading ? (
-                                            <CircularProgress size="1.5rem" sx={{ color: "red" }} />
-                                        ) : (
-                                            <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
-                                        )}
-                                    </Button> : ""}
-                                </div>
-                            </div>
-                            <div className={styles.allAttachmentsBlock}>
-                                {attachmentData?.length
-                                    ? attachmentData?.map(
-                                        (item: TaskAttachmentsType | any, index: number) => {
-                                            return (
-                                                <div key={index} className={styles.singleAttachmentBlock}>
-                                                    <div className={styles.tumblineBlock}>
-                                                        <div className={styles.checkbox}>
-                                                            <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
-                                                                selectImagesForDelete(e, item)
-                                                            }
-                                                                checked={selectedAttachmentIds.includes(
-                                                                    item?._id
-                                                                )} />
+                            {editField == "description" && editFieldOrNot ? (
+                                <div className={styles.editModeBtnGrp}>
+                                    <IconButton sx={{ padding: "0" }} onClick={() => {
+                                        setEditField('');
+                                        setEditFieldOrNot(false)
+                                    }}>
+                                        <img src="/ViewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
+                                    </IconButton>
 
-                                                        </div>
-                                                        <img src={item.url} alt="" className={styles.thumbnailImg} />
-                                                    </div>
-
-                                                    <div className={styles.imgTitle}> {item?.key?.length > 20
-                                                        ? item?.key.slice(0, 20) + "..." + item?.key?.split('.')[item?.key?.split('.')?.length - 1]
-                                                        : item?.key}</div>
-
-                                                    <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY")}</div>
-                                                    <div style={{ width: "15%" }} onClick={() => {
-                                                        downLoadAttachements(item.url);
-                                                    }}>
-                                                        <img src="/viewTaskIcons/download.svg" alt="" />
-                                                    </div>
-                                                </div>
-
-                                            );
-                                        }
-                                    )
-                                    : "No Attachements"}
-                            </div>
+                                    <IconButton sx={{ padding: "0" }} onClick={() => {
+                                        onUpdateField({});
+                                        setEditField('');
+                                        setEditFieldOrNot(false)
+                                    }}>
+                                        <img src="/viewTaskIcons/confirm-icon.svg" alt="" width={"20px"} />
+                                    </IconButton>
+                                </div>) : ("")}
                         </div>
                         <div className={styles.fileUploadBlock}>
                             <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
@@ -585,6 +553,61 @@ const TaskViewComponent = () => {
                                 />
                             </div>
                         </div>
+                        {attachmentData?.length ?
+                            <div className={styles.taskAttachmentsBlock}>
+                                <div className={styles.attachmentsHeader}>
+                                    <p className={styles.attachmentHeading}>Attachments</p>
+                                    <div className={styles.attachmentBtnGrp}>
+                                        {/* <Button className={styles.addAttachmentBtn} onClick={() =>
+                                        setUploadAttachmentsOpen(!uploadAttachmentsOpen)
+                                    }><img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button> */}
+                                        {selectedAttachmentIds?.length ? <Button
+                                            className={styles.deleteAttachmentBtn} disabled={deleteLoading} onClick={deleteSelectedImages}>
+                                            {deleteLoading ? (
+                                                <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                            ) : (
+                                                <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
+                                            )}
+                                        </Button> : ""}
+                                    </div>
+                                </div>
+                                <div className={styles.allAttachmentsBlock}>
+                                    {attachmentData?.length
+                                        ? attachmentData?.map(
+                                            (item: TaskAttachmentsType | any, index: number) => {
+                                                return (
+                                                    <div key={index} className={styles.singleAttachmentBlock}>
+                                                        <div className={styles.tumblineBlock}>
+                                                            <div className={styles.checkbox}>
+                                                                <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
+                                                                    selectImagesForDelete(e, item)
+                                                                }
+                                                                    checked={selectedAttachmentIds.includes(
+                                                                        item?._id
+                                                                    )} />
+
+                                                            </div>
+                                                            <img src={item.url} alt="" className={styles.thumbnailImg} />
+                                                        </div>
+
+                                                        <div className={styles.imgTitle}> {item?.key?.length > 20
+                                                            ? item?.key.slice(0, 20) + "..." + item?.key?.split('.')[item?.key?.split('.')?.length - 1]
+                                                            : item?.key}</div>
+
+                                                        <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY")}</div>
+                                                        <div style={{ width: "15%" }} onClick={() => {
+                                                            downLoadAttachements(item.url);
+                                                        }}>
+                                                            <img src="/viewTaskIcons/download.svg" alt="" />
+                                                        </div>
+                                                    </div>
+
+                                                );
+                                            }
+                                        )
+                                        : "No Attachements"}
+                                </div>
+                            </div> : ""}
                     </div>
                     <div className={styles.assignedDetailsBlock}>
                         <div className={styles.DatePickerBlock}>
@@ -666,40 +689,41 @@ const TaskViewComponent = () => {
                                     </Button> : ""}
                                 </div>
                             </div>
-                            <div className={styles.allAssignysBlock}>
-                                {data?.assign_to
-                                    ? data?.assign_to.map(
-                                        (item: { _id: string; name: string }, index: number) => {
-                                            return (
-                                                <div key={index} className={styles.singleAssignyBlock}>
-                                                    <div className={styles.checkbox}>
-                                                        <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
-                                                            handleAssigneeCheckboxChange(e, item._id)
+                            {data?.assign_to?.length ?
+                                <div className={styles.allAssignysBlock}>
+                                    {data?.assign_to
+                                        ? data?.assign_to.map(
+                                            (item: { _id: string; name: string }, index: number) => {
+                                                return (
+                                                    <div key={index} className={styles.singleAssignyBlock}>
+                                                        <div className={styles.checkbox}>
+                                                            <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
+                                                                handleAssigneeCheckboxChange(e, item._id)
+                                                            }
+                                                                checked={selectedAssigneeIds.includes(
+                                                                    item?._id
+                                                                )}
+                                                            />
 
-                                                        }
-                                                            checked={selectedAssigneeIds.includes(
-                                                                item?._id
-                                                            )}
-                                                        />
+                                                        </div>
+                                                        <div className={styles.assingyNameBlock}>
+                                                            <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >
+                                                                {item.name.split(' ')?.length > 1 ? `${item.name.split(' ')[0][0]}${item.name.split(' ')[1][0]}`.toUpperCase() : item.name.slice(0, 2)?.toUpperCase()}
+
+                                                            </Avatar>
+                                                            <p className={styles.assignedByFullName}>
+                                                                {item.name}
+                                                            </p>
+
+                                                        </div>
 
                                                     </div>
-                                                    <div className={styles.assingyNameBlock}>
-                                                        <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >
-                                                            {item.name.split(' ')?.length > 1 ? `${item.name.split(' ')[0][0]}${item.name.split(' ')[1][0]}`.toUpperCase() : item.name.slice(0, 2)?.toUpperCase()}
-
-                                                        </Avatar>
-                                                        <p className={styles.assignedByFullName}>
-                                                            {item.name}
-                                                        </p>
-
-                                                    </div>
-
-                                                </div>
-                                            );
-                                        }
-                                    )
-                                    : "-"}
-                            </div>
+                                                );
+                                            }
+                                        )
+                                        : "-"}
+                                </div>
+                                : ""}
                         </div>
                     </div>
 

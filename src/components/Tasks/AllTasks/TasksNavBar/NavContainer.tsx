@@ -64,8 +64,9 @@ const NavContainer: React.FC<PropTypes> = ({
     { value: "PENDING", title: "Pending" },
     { value: "OVER-DUE", title: "Over-due" },
   ]);
-  const [selectedUsers, setSelectedUsers] =
-    useState<{ name: string; _id: string }[]>();
+  const [selectedUsers, setSelectedUsers] = useState<
+    { name: string; _id: string }[] | null
+  >();
 
   const setStatusValue = (e: any) => {
     onStatusChange(e.target.value);
@@ -100,6 +101,10 @@ const NavContainer: React.FC<PropTypes> = ({
     let usersObj = usersData.filter((item: any) =>
       router.query.assign_to?.includes(item?._id)
     );
+    if (router.query.is_my_task) {
+      setSelectedUsers(null);
+      return;
+    }
     setSelectedUsers(usersObj);
   };
 

@@ -2,13 +2,16 @@ import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAtta
 import { IconButton, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import ReactPanZoom from "react-image-pan-zoom-rotate";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import DrawerComponentForScout from "../Scouting/Comments/DrawerBoxForScout";
 import styles from "../Scouting/Crops/Scouts/singleImage.module.css";
 import LoadingComponent from "./LoadingComponent";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { useCookies } from "react-cookie";
 
 interface componentProps {
   detailedImage: any;
@@ -25,12 +28,21 @@ const SingleImageView: FC<componentProps> = ({
     (state: any) => state.auth.userDetails?.access_token
   );
 
+  const dispatch = useDispatch()
   const [TagsDrawerEditOpen, setTagsDrawerEditOpen] = useState<any>(false);
   const cropTitle = useSelector((state: any) => state?.farms?.cropName);
   const farmTitle = useSelector((state: any) => state?.farms?.farmName);
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
   const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState<any>();
+
+
+  const [, , removeCookie] = useCookies(["userType"]);
+  const [, , loggedIn] = useCookies(["loggedIn"]);
+
 
   const tagsDrawerClose = (value: any) => {
     if (value == false) {
@@ -79,7 +91,6 @@ const SingleImageView: FC<componentProps> = ({
       if (response?.status >= 200 && response?.status <= 200) {
         toast.success(responseData?.message);
         setTagsDrawerEditOpen(false);
-        await getSingleImageDetails();
       } else {
         toast.error(responseData?.message);
       }
@@ -90,10 +101,54 @@ const SingleImageView: FC<componentProps> = ({
     }
   };
 
-  const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState<any>();
+  const logout = async () => {
+    try {
+      removeCookie("userType");
+      loggedIn("loggedIn");
+      router.push("/");
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
+
+
+  //scroll to the last element of the previous calls
+  const lastItemRef = useRef<HTMLDivElement>(null);
+  const scrollToLastItem = () => {
+    if (lastItemRef.current) {
+      lastItemRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    }
+  };
+
+  //api call after the last element was in the dom (visible)
+  const observer: any = useRef();
+
+  const lastBookElementRef = useCallback(
+    (node: any) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          getInstaScrollImageDetails(data[9]?._id)
+          scrollToLastItem(); // Restore scroll position after new data is loaded
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
+
+
+
+
   //get the get image details api
-  const getSingleImageDetails = async () => {
+  const getInstaScrollImageDetails = async (lastImage_id: any) => {
     setLoading(true);
     let options = {
       method: "GET",
@@ -103,14 +158,21 @@ const SingleImageView: FC<componentProps> = ({
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${router.query.image_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/next/10`,
         options
       );
 
       const responseData = await response.json();
-
       if (responseData.success) {
-        setData(responseData?.data);
+        if (responseData?.data.length !== 0) {
+          setHasMore(true);
+          setData([...data, ...responseData.data]);
+        } else {
+          setHasMore(false);
+          setData(responseData.data);
+        }
+      } else if (responseData?.statusCode == 403) {
+        await logout();
       }
     } catch (err) {
       console.error(err);
@@ -119,10 +181,11 @@ const SingleImageView: FC<componentProps> = ({
     }
   };
 
+
   //call the api
   useEffect(() => {
     if (router.isReady && accessToken) {
-      getSingleImageDetails();
+      getInstaScrollImageDetails(router.query.image_id);
     }
   }, [router.isReady, accessToken]);
 
@@ -142,56 +205,130 @@ const SingleImageView: FC<componentProps> = ({
             {(data?.farm_id?.title
               ? data?.farm_id?.title?.length > 10
                 ? data?.farm_id?.title.slice(0, 1).toUpperCase() +
-                  data?.farm_id?.title?.slice(1, 14) +
-                  "..."
+                data?.farm_id?.title?.slice(1, 14) +
+                "..."
                 : data?.farm_id?.title[0].toUpperCase() +
-                  data?.farm_id?.title?.slice(1)
+                data?.farm_id?.title?.slice(1)
               : "") +
               "/" +
               (data?.crop_id?.title
                 ? data?.crop_id?.title?.length > 10
                   ? data?.crop_id?.title.slice(0, 1).toUpperCase() +
-                    data?.crop_id?.title?.slice(1, 14) +
-                    "..."
+                  data?.crop_id?.title?.slice(1, 14) +
+                  "..."
                   : data?.crop_id?.title[0].toUpperCase() +
-                    data?.crop_id?.title?.slice(1)
+                  data?.crop_id?.title?.slice(1)
                 : "")}
           </Typography>
           <div className={styles.headericon} id="header-icon"></div>
         </div>
         {/* </div> */}
 
-        {/* <div
-          style={{
-            height: "calc(100vh - 61px)",
-            width: "100%",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {loading ? (
-            ""
-          ) : (
-            <ReactPanZoom alt={`${data?.key}`} image={data?.url} />
-          )}
-        </div> */}
+
         <div
           style={{
-            height: "calc(100vh - 115px)",
+            overflowY: "auto",
+            maxHeight: "calc(105vh - 156px)",
             width: "100%",
             position: "relative",
-            overflow: "hidden",
           }}
         >
-          {data?.url ? (
-            <img
-              src={data?.url}
-              alt={`${data?.key}`}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-          ) : (
+          {data?.length ?
+            data.map((image: any, index: any) => {
+              if (data.length === index + 1) {
+
+                return (
+                  <div key={index}
+                    ref={lastBookElementRef}
+                  >
+                    <img
+                      src={image?.url}
+                      alt={`${image?.key}`}
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
+                    <div className={styles.ButtonGrp}>
+                      <IconButton
+                        sx={{ borderRadius: "25px 0 0 25px" }}
+                        className={styles.singleBtn}
+                        onClick={() => {
+                          captureImageDilogOptions("tag");
+                        }}
+                      >
+                        <Image
+                          src={"/mobileIcons/scouting/tag-light.svg"}
+                          width={25}
+                          height={25}
+                          alt="pp"
+                        />
+                      </IconButton>
+                      <IconButton
+                        sx={{ borderRadius: "0 25px 25px 0" }}
+                        className={styles.singleBtn}
+                        onClick={() => {
+                          captureImageDilogOptions("comments");
+                        }}
+                      >
+                        <Image
+                          src={"/mobileIcons/scouting/chat-circle-light.svg"}
+                          width={25}
+                          height={25}
+                          alt="pp"
+                        />
+                      </IconButton>
+                    </div>
+                  </div>
+                )
+              }
+              else {
+                return (
+                  <div key={index}
+                    ref={
+                      index === data.length - 10 ? lastItemRef : null
+                    }                >
+                    <img
+                      src={image?.url}
+                      alt={`${image?.key}`}
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
+                    <div className={styles.ButtonGrp}>
+                      <IconButton
+                        sx={{ borderRadius: "25px 0 0 25px" }}
+                        className={styles.singleBtn}
+                        onClick={() => {
+                          captureImageDilogOptions("tag");
+                        }}
+                      >
+                        <Image
+                          src={"/mobileIcons/scouting/tag-light.svg"}
+                          width={25}
+                          height={25}
+                          alt="pp"
+                        />
+                      </IconButton>
+                      <IconButton
+                        sx={{ borderRadius: "0 25px 25px 0" }}
+                        className={styles.singleBtn}
+                        onClick={() => {
+                          captureImageDilogOptions("comments");
+                        }}
+                      >
+                        <Image
+                          src={"/mobileIcons/scouting/chat-circle-light.svg"}
+                          width={25}
+                          height={25}
+                          alt="pp"
+                        />
+                      </IconButton>
+                    </div>
+                  </div>
+                )
+              }
+            })
+
+
+            :
             ""
-          )}
+          }
         </div>
       </div>
       <div className={styles.imgDetailButtons}>

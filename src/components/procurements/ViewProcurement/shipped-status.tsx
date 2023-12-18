@@ -109,12 +109,13 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           ""
         )}
       </div>
-      <AlertStautsChange
-        open={dialogOpen}
-        statusChange={onStatusChangeEvent}
-        setDialogOpen={setDialogOpen}
-        loading={loading}
-      />
+      {data?.status == "COMPLETED" ?
+        "" : <AlertStautsChange
+          open={dialogOpen}
+          statusChange={onStatusChangeEvent}
+          setDialogOpen={setDialogOpen}
+          loading={loading}
+        />}
     </div>
   );
 };

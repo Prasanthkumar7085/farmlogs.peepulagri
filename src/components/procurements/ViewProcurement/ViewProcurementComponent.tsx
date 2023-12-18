@@ -32,6 +32,11 @@ const ViewProcurementComponent = () => {
       getProcurementById();
     }
   };
+  const afterMaterialStatusChange = (value: any) => {
+    if (value) {
+      getProcurementById();
+    }
+  }
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -42,7 +47,7 @@ const ViewProcurementComponent = () => {
     <div style={{ width: "50%", margin: "auto" }}>
       <ShippedStatus data={data} afterStatusChange={afterStatusChange} />
       <ShippedStatusform data={data} />
-      <ViewProcurementTable data={data} />
+      <ViewProcurementTable data={data} afterMaterialStatusChange={afterMaterialStatusChange} />
     </div>
   );
 };

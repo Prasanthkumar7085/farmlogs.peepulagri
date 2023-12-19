@@ -79,7 +79,7 @@ const SingleImageComponent: FC<componentProps> = ({
         toast.success(responseData?.message);
         setTagsDrawerEditOpen(false);
         toast.success(responseData?.message);
-        await getImageData(1);
+        await getImageData();
       } else {
         toast.error(responseData?.message);
       }
@@ -163,7 +163,7 @@ const SingleImageComponent: FC<componentProps> = ({
         {detailedImage?.tags?.length > 3 ? <span>{"... "}</span> : ""}
       </div>
       {detailedImage?.tags?.length > 3 ||
-      detailedImage?.description?.length > 97 ? (
+        detailedImage?.description?.length > 97 ? (
         <span style={{ fontWeight: "bold" }} onClick={openViewMore}>
           Show More
         </span>
@@ -181,8 +181,8 @@ const SingleImageComponent: FC<componentProps> = ({
         tagsDrawerClose={tagsDrawerClose}
         captureTagsDetailsEdit={captureTagsDetailsEdit}
         item={detailedImage}
+        setTagsDrawerEditOpen={setTagsDrawerEditOpen}
         TagsDrawerEditOpen={TagsDrawerEditOpen}
-        // loading={loading}
       />
       <ShowMoreInViewAttachmentDetails
         showMoreSuggestions={showMoreSuggestions}

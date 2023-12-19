@@ -43,7 +43,7 @@ const EditTagsForSingleAttachment = ({
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/${router.query.image_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/${item?._id}`,
         options
       );
       const responseData = await response.json();
@@ -108,12 +108,12 @@ const EditTagsForSingleAttachment = ({
           setTagsDrawerEditOpen(false);
           // captureTagsDetailsEdit([...tags, ...tagsDetails?.tags], description);
         }}
-        // disabled={loading || !(tags?.length || description?.length)}
-        // className={
-        //   loading || !(tags?.length || description?.length)
-        //     ? styles.updateSubmitBtnDisabled
-        //     : styles.updateSubmitBtn
-        // }
+      // disabled={loading || !(tags?.length || description?.length)}
+      // className={
+      //   loading || !(tags?.length || description?.length)
+      //     ? styles.updateSubmitBtnDisabled
+      //     : styles.updateSubmitBtn
+      // }
       >
         {loading ? (
           <CircularProgress size="1.5rem" sx={{ color: "white" }} />

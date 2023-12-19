@@ -515,7 +515,7 @@ const TaskViewComponent = () => {
                             <div >
 
                                 {status !== "DONE" &&
-                                    loggedInUserId == data?.created_by?._id ? (
+                                    (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
                                     <p className={styles.statusButtton} onClick={handleClick}>
                                         {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
                                     </p>) : (<p className={styles.statusButtton} >
@@ -578,16 +578,23 @@ const TaskViewComponent = () => {
                                 </div>) : ("")}
                         </div>
                         <div className={styles.fileUploadBlock}>
-                            <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
-                            <div>
-                                <TasksAttachments
-                                    taskId={""}
-                                    setUploadedFiles={setUploadedFiles}
-                                    multipleFiles={multipleFiles}
-                                    setMultipleFiles={setMultipleFiles}
-                                    afterUploadAttachements={afterUploadAttachements}
-                                />
-                            </div>
+                            {loggedInUserId == data?.created_by?._id || hasEditAccess ?
+                                <>
+                                    <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
+                                    <div>
+
+                                        <TasksAttachments
+                                            taskId={""}
+                                            disabled={status === "DONE"}
+                                            setUploadedFiles={setUploadedFiles}
+                                            multipleFiles={multipleFiles}
+                                            setMultipleFiles={setMultipleFiles}
+                                            afterUploadAttachements={afterUploadAttachements}
+                                        />
+
+                                    </div>
+                                </>
+                                : ''}
                         </div>
                         {attachmentData?.length ?
                             <div className={styles.taskAttachmentsBlock}>
@@ -615,19 +622,21 @@ const TaskViewComponent = () => {
                                                     <div key={index} className={styles.singleAttachmentBlock}>
                                                         <div className={styles.tumblineBlock}>
                                                             <div className={styles.checkbox}>
-                                                                <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
-                                                                    selectImagesForDelete(e, item)
-                                                                }
-                                                                    checked={selectedAttachmentIds.includes(
-                                                                        item?._id
-                                                                    )} />
+                                                                {loggedInUserId == data?.created_by?._id ?
+                                                                    <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} disabled={status === "DONE" && loggedInUserId == data?.created_by?._id} onChange={(e) =>
+                                                                        selectImagesForDelete(e, item)
+                                                                    }
+                                                                        checked={selectedAttachmentIds.includes(
+                                                                            item?._id
+                                                                        )} />
+                                                                    : ''}
 
                                                             </div>
                                                             <img src={item.url} alt="" className={styles.thumbnailImg} />
                                                         </div>
 
                                                         <div className={styles.imgTitle}> {item?.key?.length > 20
-                                                            ? item?.key.slice(0, 20) + "..." + item?.key?.split('.')[item?.key?.split('.')?.length - 1]
+                                                            ? item?.key.slice(0, 20) + "..." //+ item?.key?.split('.')[item?.key?.split('.')?.length - 1]
                                                             : item?.key}</div>
 
                                                         <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY")}</div>
@@ -668,6 +677,7 @@ const TaskViewComponent = () => {
                                             }}
                                             disablePast
                                             value={new Date(deadlineString)}
+                                            disabled={status === "DONE" || !(loggedInUserId == data?.created_by?._id)}
                                             onChange={(newValue: any) => {
                                                 let dateNow = new Date();
                                                 let dateWithPresentTime = moment(new Date(newValue))
@@ -713,7 +723,9 @@ const TaskViewComponent = () => {
                                         Assign To
                                     </div>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
-                                        <Button className={styles.addAssignyBtn} onClick={handleAssignyClick}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
+                                        {loggedInUserId == data?.created_by?._id || hasEditAccess ?
+                                            <Button className={styles.addAssignyBtn} disabled={status === "DONE" && loggedInUserId == data?.created_by?._id} onClick={handleAssignyClick}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
+                                            : ''}
                                         {status !== "DONE" &&
                                             loggedInUserId == data?.created_by?._id ? (
                                             <div>
@@ -743,14 +755,15 @@ const TaskViewComponent = () => {
                                                     return (
                                                         <div key={index} className={styles.singleAssignyBlock}>
                                                             <div className={styles.checkbox}>
-                                                                <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
-                                                                    handleAssigneeCheckboxChange(e, item._id)
-                                                                }
-                                                                    checked={selectedAssigneeIds.includes(
-                                                                        item?._id
-                                                                    )}
-                                                                />
-
+                                                                {loggedInUserId == data?.created_by?._id ?
+                                                                    <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} disabled={status === "DONE" && loggedInUserId == data?.created_by?._id} onChange={(e) =>
+                                                                        handleAssigneeCheckboxChange(e, item._id)
+                                                                    }
+                                                                        checked={selectedAssigneeIds.includes(
+                                                                            item?._id
+                                                                        )}
+                                                                    />
+                                                                    : ''}
                                                             </div>
                                                             <div className={styles.assingyNameBlock}>
                                                                 <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >

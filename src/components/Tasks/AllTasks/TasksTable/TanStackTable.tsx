@@ -65,7 +65,7 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      userId: router.query.assigned_to ? [router.query.assigned_to as string] : [],
     });
   };
   const capturePageNum = (value: number) => {
@@ -77,7 +77,7 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      userId: router.query.assigned_to ? [router.query.assigned_to as string] : [],
     });
   };
   const captureRowPerItems = (value: number) => {
@@ -89,7 +89,7 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      userId: router.query.assigned_to ? [router.query.assigned_to as string] : [],
     });
   };
   return (

@@ -22,6 +22,7 @@ interface PropTypes {
   multipleFiles: any;
   setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
   afterUploadAttachements: any;
+  disabled: any
 }
 const TasksAttachments: React.FC<PropTypes> = ({
   setUploadedFiles,
@@ -29,6 +30,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   setMultipleFiles,
   afterUploadAttachements,
   taskId,
+  disabled,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -505,7 +507,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
           className={styles.link}
           type="file"
           multiple
-          disabled={taskId || router.query.task_id ? false : true}
+          disabled={disabled}
           onChange={handleFileChange}
           style={{ display: "none" }}
           accept="image/*,video/*"

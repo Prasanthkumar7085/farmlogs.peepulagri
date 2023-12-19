@@ -18,10 +18,9 @@ interface PropsType {
   userId: string;
   onChange: (assigned_to: any) => void;
   assignee: Array<{ _id: string; name: string }>,
-  closeAssigne: any
 }
 
-const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assignee, closeAssigne }) => {
+const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assignee }) => {
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -79,16 +78,7 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (closeAssigne == true) {
-      setRenderField(false);
-      setTimeout(() => {
-        setRenderField(true);
-      }, 0.1);
-      setSelectedUsers(null);
 
-    }
-  }, [closeAssigne])
 
   return (
     <div>

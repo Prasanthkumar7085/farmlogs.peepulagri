@@ -53,7 +53,6 @@ const TaskViewComponent = () => {
     const [multipleFiles, setMultipleFiles] = useState<any>([]);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [anchorAssignyEl, setAnchorAssignyEl] = useState<null | HTMLElement>(null);
-    const [closeAssigne, setCloseAssigne] = useState<any>(false)
     const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>(
         []
     );
@@ -82,7 +81,6 @@ const TaskViewComponent = () => {
     };
     const handleAssignyClose = () => {
         setAnchorAssignyEl(null);
-        setCloseAssigne(true)
     };
 
     const accessToken = useSelector(
@@ -862,7 +860,7 @@ const TaskViewComponent = () => {
                     <UserOptionsinViewTasks
                         userId={userId}
                         assignee={assignee}
-                        closeAssigne={closeAssigne}
+                        // closeAssigne={closeAssigne}
                         onChange={(assigned_to: any) => {
                             setSelectedAssignee(assigned_to);
                             setFarmId("");

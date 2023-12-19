@@ -136,6 +136,7 @@ const SingleImageView: FC<componentProps> = ({
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore && data.length > 0) {
+          getInstaScrollImageDetails(data[data?.length - 1]?._id)
           scrollToLastItem(); // Restore scroll position after new data is loaded
         }
       });
@@ -164,7 +165,7 @@ const SingleImageView: FC<componentProps> = ({
 
       const responseData = await response.json();
       if (responseData.success) {
-        if (responseData?.data.length !== 0) {
+        if (responseData?.data.length !== 1) {
           setHasMore(true);
           setData([...data, ...responseData?.data]);
         } else {

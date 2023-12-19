@@ -21,6 +21,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import ViewLogs from "../../ViewTask/ViewLogs";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 const TaskViewComponent = () => {
     const router = useRouter();
@@ -600,7 +601,21 @@ const TaskViewComponent = () => {
                                                                     : ''}
 
                                                             </div>
-                                                            <img src={item.url} alt="" className={styles.thumbnailImg} />
+                                                            {item?.key.includes("pdf") ?
+                                                                <ImageComponent
+                                                                    src={"/pdf-icon.png"}
+                                                                    height={20}
+                                                                    width={20}
+                                                                    alt={"image"}
+                                                                /> :
+
+                                                                <ImageComponent
+                                                                    src={item.url}
+                                                                    height={20}
+                                                                    width={20}
+                                                                    alt={"image"}
+                                                                />
+                                                            }
                                                         </div>
 
                                                         <div className={styles.imgTitle}> {item?.key?.length > 20

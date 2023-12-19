@@ -301,6 +301,7 @@ const ViewTaskAttachments: FC<pageProps> = ({
                                   image?._id
                                 )}
                               />
+
                               <ImageComponent
                                 src={image.url}
                                 height={20}

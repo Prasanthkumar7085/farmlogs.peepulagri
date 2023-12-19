@@ -12,6 +12,7 @@ import LoadingComponent from "./LoadingComponent";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import { useCookies } from "react-cookie";
+import SingleImageComponent from "../Scouting/Crops/Scouts/SingleImageComponent";
 
 interface componentProps {
   detailedImage: any;
@@ -134,15 +135,13 @@ const SingleImageView: FC<componentProps> = ({
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          console.log("werqwe")
-          getInstaScrollImageDetails(data[9]?._id)
+        if (entries[0].isIntersecting && hasMore && data.length > 0) {
           scrollToLastItem(); // Restore scroll position after new data is loaded
         }
       });
       if (node) observer.current.observe(node);
     },
-    []
+    [hasMore, loading]
   );
 
 
@@ -166,16 +165,11 @@ const SingleImageView: FC<componentProps> = ({
       const responseData = await response.json();
       if (responseData.success) {
         if (responseData?.data.length !== 0) {
-          console.log(responseData?.data)
-          console.log("jds")
           setHasMore(true);
           setData([...data, ...responseData?.data]);
-          console.log([...data, ...responseData.data])
         } else {
-          console.log("poi")
           setHasMore(false);
           setData(responseData?.data);
-          console.log(responseData?.data)
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -240,18 +234,17 @@ const SingleImageView: FC<componentProps> = ({
       >
         {data?.length ?
           data.map((image: any, index: any) => {
-            if (data?.length === index + 1) {
-              console.log("pwpw")
+            if (data?.length === index + 1 && hasMore == true) {
               return (
                 <div key={index}
                   ref={lastBookElementRef}
                 >
-                  <img
-                    src={image?.url}
-                    alt={`${image?.key}`}
-                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                  <SingleImageComponent
+                    detailedImage={image}
+                    scoutDetails={data}
+                    getImageData={""}
                   />
-                  <div className={styles.ButtonGrp}>
+                  {/* <div className={styles.ButtonGrp}>
                     <IconButton
                       sx={{ borderRadius: "25px 0 0 25px" }}
                       className={styles.singleBtn}
@@ -280,23 +273,22 @@ const SingleImageView: FC<componentProps> = ({
                         alt="pp"
                       />
                     </IconButton>
-                  </div>
+                  </div> */}
                 </div>
               )
             }
             else {
-              console.log("prasanth")
               return (
                 <div key={index}
                   ref={
                     index === data.length - 10 ? lastItemRef : null
                   }                >
-                  <img
+                  {/* <img
                     src={image?.url}
                     alt={`${image?.key}`}
                     style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                  />
-                  <div className={styles.ButtonGrp}>
+                  /> */}
+                  {/* <div className={styles.ButtonGrp}>
                     <IconButton
                       sx={{ borderRadius: "25px 0 0 25px" }}
                       className={styles.singleBtn}
@@ -325,7 +317,12 @@ const SingleImageView: FC<componentProps> = ({
                         alt="pp"
                       />
                     </IconButton>
-                  </div>
+                  </div> */}
+                  <SingleImageComponent
+                    detailedImage={image}
+                    scoutDetails={data}
+                    getImageData={""}
+                  />
                 </div>
               )
             }

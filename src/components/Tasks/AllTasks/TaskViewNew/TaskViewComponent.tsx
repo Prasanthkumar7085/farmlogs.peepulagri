@@ -57,8 +57,9 @@ const TaskViewComponent = () => {
     const [statusOptions] = useState<Array<{ value: string; title: string }>>([
         { value: "TO-START", title: "To-Start" },
         { value: "INPROGRESS", title: "In-Progress" },
-        { value: "DONE", title: "Done" },
         { value: "PENDING", title: "Pending" },
+        { value: "DONE", title: "Done" },
+
         // { value: "OVER-DUE", title: "Over-due" },
     ]);
     const [farmId, setFarmId] = useState("");
@@ -776,7 +777,7 @@ const TaskViewComponent = () => {
                 TransitionComponent={Fade}
                 PaperProps={{
                     style: {
-                        width: '20ch',
+                        width: '15ch',
                     },
                 }}
             >

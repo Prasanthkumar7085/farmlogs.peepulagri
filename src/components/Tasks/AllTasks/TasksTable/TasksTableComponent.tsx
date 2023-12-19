@@ -101,10 +101,10 @@ const TasksTableComponent = ({
     let value = info.getValue()?.assign_to;
     let id = info.getValue()?._id;
     value =
-      value?.length > 2
+      value?.length > 1
         ? showAllAssignee && id == viewMoreId
           ? value
-          : value.slice(0, 2)
+          : value.slice(0, 1)
         : value;
     return (
       <span
@@ -115,8 +115,8 @@ const TasksTableComponent = ({
       >
         {value?.length
           ? value
-              .map((item: { _id: string; name: string }) => item.name)
-              .join(", ")
+            .map((item: { _id: string; name: string }) => item.name)
+            .join(", ")
           : "*Not Assigned*"}
         {info.getValue()?.assign_to?.length > 2 ? (
           <div
@@ -148,25 +148,27 @@ const TasksTableComponent = ({
       accessorFn: (row: any) => row.serial,
       id: "serial",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
+        <span >
           {info.getValue()}
         </span>
       ),
-      header: () => <span>S.No</span>,
+      header: () => <span >S.No</span>,
       footer: (props: any) => props.column.id,
-      width: "120px",
+      width: "45px",
     },
     {
       accessorFn: (row: any) => row.createdAt,
       id: "createdAt",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
+        <span >
+          <p>
+            {timePipe(info.getValue(), "DD MMM YYYY")}
+          </p>
         </span>
       ),
       header: () => <span>Created On</span>,
       footer: (props: any) => props.column.id,
-      width: "120px",
+      width: "110px",
     },
     // {
     //   accessorFn: (row: any) => row?.farm_ids,
@@ -195,7 +197,7 @@ const TasksTableComponent = ({
       cell: (info: any) => <AssignedComponent info={info} />,
       header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
-      width: "150px",
+      width: "200px",
     },
 
     {
@@ -206,7 +208,7 @@ const TasksTableComponent = ({
           followCursor
           arrow
           title={
-            info.getValue()?.length > 34 ? (
+            info.getValue()?.length > 30 ? (
               <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
             ) : (
               ""
@@ -215,33 +217,33 @@ const TasksTableComponent = ({
         >
           <span>
             {info.getValue()
-              ? info.getValue()?.length > 34
+              ? info.getValue()?.length > 30
                 ? (info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                      info.getValue().slice(1, 30)
-                    : "") + "....."
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                  info.getValue().slice(1, 26)
+                  : "") + "....."
                 : info.getValue()
-                ? info.getValue().slice(0, 1).toUpperCase() +
+                  ? info.getValue().slice(0, 1).toUpperCase() +
                   info.getValue().slice(1)
-                : ""
+                  : ""
               : ""}
           </span>
         </Tooltip>
       ),
-      header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
+      header: () => <span>Title</span>,
       footer: (props: any) => props.column.id,
-      width: "250px",
+      width: "200px",
     },
     {
       accessorFn: (row: any) => row.description,
       id: "description",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
+        <span >
           <Tooltip
             followCursor
             arrow
             title={
-              info.getValue()?.length > 45 ? (
+              info.getValue()?.length > 40 ? (
                 <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
               ) : (
                 ""
@@ -250,15 +252,15 @@ const TasksTableComponent = ({
           >
             <span>
               {info.getValue()
-                ? info.getValue()?.length > 45
+                ? info.getValue()?.length > 40
                   ? (info.getValue()
-                      ? info.getValue().slice(0, 1).toUpperCase() +
-                        info.getValue().slice(1, 41)
-                      : "") + "....."
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                    info.getValue().slice(1, 35)
+                    : "") + "....."
                   : info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
+                    ? info.getValue().slice(0, 1).toUpperCase() +
                     info.getValue().slice(1)
-                  : "-"
+                    : "-"
                 : "-"}
             </span>
           </Tooltip>
@@ -266,14 +268,17 @@ const TasksTableComponent = ({
       ),
       header: () => <span>Description</span>,
       footer: (props: any) => props.column.id,
-      width: "350px",
+      width: "300px",
     },
     {
       accessorFn: (row: any) => row.deadline,
       id: "deadline",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
+        <span >
+          <p>
+
+            {timePipe(info.getValue(), "DD MMM YYYY")}
+          </p>
         </span>
       ),
       header: () => <span>Due Date</span>,
@@ -284,19 +289,19 @@ const TasksTableComponent = ({
       accessorFn: (row: any) => row.status,
       id: "status",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
+        <span >
           {getStatusLabel(info.getValue())}
         </span>
       ),
       header: () => <span>Status</span>,
       footer: (props: any) => props.column.id,
-      width: "120px",
+      width: "110px",
     },
     {
       // accessorFn: (row: any) => row.description,
       id: "actions",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
+        <span>
           {
             <div
               style={{
@@ -322,7 +327,7 @@ const TasksTableComponent = ({
                 arrow
                 title={
                   info.row.original?.status == "DONE" ||
-                  info.row.original?.created_by?._id !== userId
+                    info.row.original?.created_by?._id !== userId
                     ? "You dont't have permission for this action"
                     : "Delete"
                 }

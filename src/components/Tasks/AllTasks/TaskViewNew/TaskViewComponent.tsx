@@ -487,7 +487,6 @@ const TaskViewComponent = () => {
                                 </div>) : ("")}
 
                             <div >
-
                                 <p className={styles.statusButtton} style={{ cursor: status !== "DONE" && (loggedInUserId == data?.created_by?._id || hasEditAccess) ? "pointer" : "default" }} onClick={(e) => status !== "DONE" && (loggedInUserId == data?.created_by?._id || hasEditAccess) ? handleClick(e) : ""}>
                                     {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
                                 </p>
@@ -850,7 +849,6 @@ const TaskViewComponent = () => {
                 </div>
             </Menu>
             <LoadingComponent loading={loading} />
-
             <Toaster closeButton richColors position="top-right" />
         </div>
 

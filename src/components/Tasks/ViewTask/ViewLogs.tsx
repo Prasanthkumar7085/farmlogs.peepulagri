@@ -17,7 +17,6 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import { TasksLogsResponseType } from "@/types/tasksTypes";
 import timePipe from "@/pipes/timePipe";
-import SummarizeIcon from "@mui/icons-material/Summarize";
 
 interface propType {
   openLogs: boolean;

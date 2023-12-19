@@ -477,7 +477,7 @@
 
 .statusMenu {
     border-radius: 20px !important;
-    box-shadow: 2px 2px 9px 0px rgba(0, 0, 0, 0.20) !important;
+    box-shadow: 2px 2px 90px 0px #00000033 !important;
 }
 
 .statusMenuItem {
@@ -489,6 +489,11 @@
     padding-block: 8px;
 }
 
+.statusMenuItem:hover {
+    border-left: 2px solid #45A845;
+    background: #F7FFFB;
+}
+
 .statusMenuItemSelected {
     color: #000;
     font-family: 'Inter', sans-serif;
@@ -497,4 +502,8 @@
     line-height: 100%;
     padding-block: 8px;
     background-color: #D0D5DD;
+}
+
+.statusMenuItemSelected:hover {
+    border-left: 2px solid #45A845;
 }

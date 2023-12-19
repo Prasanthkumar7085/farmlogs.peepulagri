@@ -1,0 +1,44 @@
+.selectedUser {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-inline: 0 !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    border-left: 2px solid #fff !important;
+    margin-bottom: 8px !important;
+    background-color: #fff !important;
+    color: #1A1A1A !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 0.72vw, 14px) !important;
+    font-weight: 400 !important;
+    line-height: 100% !important;
+    letter-spacing: 0.14px !important;
+}
+
+.selectedUser:hover {
+    border-left: 2px solid #45A845 !important;
+    background: #F7FFFB !important;
+}
+
+.allSelectedUsersBlock {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 10px !important;
+
+}
+
+.allSelectedUsersBlock::-webkit-scrollbar {
+    background: transparent;
+    width: 2px;
+    height: 3px;
+}
+
+.allSelectedUsersBlock::-webkit-scrollbar:hover {
+    opacity: 1;
+}
+
+.allSelectedUsersBlock:hover::-webkit-scrollbar-thumb {
+    background: rgb(198, 198, 198);
+}

@@ -21,6 +21,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import ViewLogs from "../../ViewTask/ViewLogs";
+import CloseIcon from "@mui/icons-material/Close";
 
 const TaskViewComponent = () => {
     const router = useRouter();
@@ -51,6 +52,7 @@ const TaskViewComponent = () => {
     const [multipleFiles, setMultipleFiles] = useState<any>([]);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [anchorAssignyEl, setAnchorAssignyEl] = useState<null | HTMLElement>(null);
+    const [closeAssigne, setCloseAssigne] = useState<any>(false)
     const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>(
         []
     );
@@ -79,6 +81,7 @@ const TaskViewComponent = () => {
     };
     const handleAssignyClose = () => {
         setAnchorAssignyEl(null);
+        setCloseAssigne(true)
     };
 
     const accessToken = useSelector(
@@ -157,8 +160,6 @@ const TaskViewComponent = () => {
             let responseData = await response.json();
             if (responseData.status >= 200 && responseData.status <= 300) {
                 // let modifiedData = groupByDate(responseData?.data?.attachments);
-                console.log(responseData?.data?.attachments);
-
                 setAttachmentData([...responseData?.data?.attachments]);
             }
         } catch (err) {
@@ -167,6 +168,8 @@ const TaskViewComponent = () => {
             setLoading(false);
         }
     };
+
+
     useEffect(() => {
         if (router.isReady && accessToken) {
             getAllAttachments();
@@ -271,7 +274,6 @@ const TaskViewComponent = () => {
             getAllAttachments();
         }
     };
-    console.log(selectedAttachmentIds);
 
     //status change api
     const onChangeStatus = async (status: string) => {
@@ -796,7 +798,7 @@ const TaskViewComponent = () => {
                 className={styles.statusMenu}
                 PaperProps={{
                     style: {
-                        width: '15ch',
+                        width: '15ch', borderRadius: "20px !important",
                     },
                 }}
             >
@@ -821,7 +823,7 @@ const TaskViewComponent = () => {
                 }}
                 anchorEl={anchorAssignyEl}
                 open={assignyOpen}
-                onClose={handleAssignyClose}
+                // onClose={handleAssignyClose}
                 TransitionComponent={Fade}
                 PaperProps={{
                     style: {
@@ -829,17 +831,27 @@ const TaskViewComponent = () => {
                     },
                 }}
             >
-                <div style={{ padding: "1rem" }}>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <IconButton onClick={handleAssignyClose}>
+
+                        <CloseIcon sx={{ color: "#000", fontSize: "1.2rem" }} />
+                    </IconButton>
+
+                </div>
+                <div style={{ padding: "1rem", paddingTop: "0" }}>
                     <UserOptionsinViewTasks
                         userId={userId}
                         assignee={assignee}
+                        closeAssigne={closeAssigne}
                         onChange={(assigned_to: any) => {
                             setSelectedAssignee(assigned_to);
                             setFarmId("");
                             setUserId(assigned_to[0]?._id);
                             setErrorMessages({});
+
                         }}
                     />
+
                     <div className={styles.AssignyBtnGrp}>
                         <Button onClick={() => {
                             addAssignee();

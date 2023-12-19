@@ -59,8 +59,7 @@ const TaskViewComponent = () => {
         { value: "INPROGRESS", title: "In-Progress" },
         { value: "PENDING", title: "Pending" },
         { value: "DONE", title: "Done" },
-
-        // { value: "OVER-DUE", title: "Over-due" },
+        { value: "OVER-DUE", title: "Over-due" },
     ]);
     const [farmId, setFarmId] = useState("");
     const [userId, setUserId] = useState("");
@@ -805,14 +804,15 @@ const TaskViewComponent = () => {
 
                 {statusOptions?.length &&
                     statusOptions.map((item: { value: string; title: string }, index: number) => {
-                        return (
-                            <MenuItem disabled={status == item.value} className={status == item.value ? styles.statusMenuItemSelected : styles.statusMenuItem} onClick={() => {
-                                handleClose()
-                                onChangeStatus(item.value)
-                            }} key={index} value={item.value}>
-                                {item.title}
-                            </MenuItem>
-                        );
+                        if (item.value !== 'OVER-DUE')
+                            return (
+                                <MenuItem disabled={status == item.value} className={status == item.value ? styles.statusMenuItemSelected : styles.statusMenuItem} onClick={() => {
+                                    handleClose()
+                                    onChangeStatus(item.value)
+                                }} key={index} value={item.value}>
+                                    {item.title}
+                                </MenuItem>
+                            );
                     })}
             </Menu>
             <Menu

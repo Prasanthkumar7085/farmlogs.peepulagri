@@ -22,7 +22,7 @@ interface PropTypes {
   multipleFiles: any;
   setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
   afterUploadAttachements: any;
-  disabled: any
+  disabled: boolean
 }
 const TasksAttachments: React.FC<PropTypes> = ({
   setUploadedFiles,

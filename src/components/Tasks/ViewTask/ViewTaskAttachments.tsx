@@ -269,6 +269,7 @@ const ViewTaskAttachments: FC<pageProps> = ({
             multipleFiles={multipleFiles}
             setMultipleFiles={setMultipleFiles}
             afterUploadAttachements={afterUploadAttachements}
+            disabled={!hasEditAccess}
           />
         </div>
       </Collapse>

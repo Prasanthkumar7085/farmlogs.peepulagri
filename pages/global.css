@@ -197,7 +197,7 @@ input[type=number] {
 .dataTable-container .tbody .table-row .cell:first-child {
     position: sticky;
     left: 0;
-    box-shadow: -20px 0 20px -35px #000000b3 inset;
+    box-shadow: -17px 0 20px -35px #000000b3 inset;
     background: #fff;
 }
 
@@ -206,7 +206,7 @@ input[type=number] {
     right: 0;
     background: #fff;
     /* border-left: 1px solid #d8d7d6; */
-    box-shadow: 20px 0 20px -35px #000000b3 inset;
+    box-shadow: 17px 0 20px -35px #000000b3 inset;
 }
 
 .dataTable-container .tbody .cell {
@@ -224,6 +224,7 @@ input[type=number] {
 .dataTable-container .tbody .cell span p {
     margin: 0;
     color: #6A7185 !important;
+    font-size: clamp(13px, 0.72vw, 15px);
 }
 
 .mapImage {

@@ -149,9 +149,7 @@ const TasksTableComponent = ({
       id: "serial",
       cell: (info: any) => (
         <span >
-
           {info.getValue()}
-
         </span>
       ),
       header: () => <span >S.No</span>,
@@ -277,7 +275,10 @@ const TasksTableComponent = ({
       id: "deadline",
       cell: (info: any) => (
         <span >
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
+          <p>
+
+            {timePipe(info.getValue(), "DD MMM YYYY")}
+          </p>
         </span>
       ),
       header: () => <span>Due Date</span>,

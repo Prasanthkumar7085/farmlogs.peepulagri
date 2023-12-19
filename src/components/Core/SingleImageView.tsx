@@ -167,10 +167,15 @@ const SingleImageView: FC<componentProps> = ({
       if (responseData.success) {
         if (responseData?.data.length !== 1) {
           setHasMore(true);
-          setData([...data, ...responseData?.data]);
+          if (data?.length) {
+            setData([...data, ...responseData?.data.slice(1,)]);
+          }
+          else {
+            setData([...data, ...responseData?.data]);
+          }
         } else {
           setHasMore(false);
-          setData(responseData?.data);
+          setData([...data, ...responseData?.data]);
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -202,7 +207,7 @@ const SingleImageView: FC<componentProps> = ({
             onClick={() => router.back()}
             width={"25px"}
           />
-          <Typography>
+          {/* <Typography>
             {(data?.farm_id?.title
               ? data?.farm_id?.title?.length > 10
                 ? data?.farm_id?.title.slice(0, 1).toUpperCase() +
@@ -220,7 +225,7 @@ const SingleImageView: FC<componentProps> = ({
                   : data?.crop_id?.title[0].toUpperCase() +
                   data?.crop_id?.title?.slice(1)
                 : "")}
-          </Typography>
+          </Typography> */}
           <div className={styles.headericon} id="header-icon"></div>
         </div>
         {/* </div> */}
@@ -231,6 +236,7 @@ const SingleImageView: FC<componentProps> = ({
         style={{
           overflowY: "auto",
           maxHeight: "calc(100vh - 156px)",
+          scrollSnapType: "y mandatory"
         }}
       >
         {data?.length ?
@@ -238,6 +244,10 @@ const SingleImageView: FC<componentProps> = ({
             if (data?.length === index + 1 && hasMore == true) {
               return (
                 <div key={index}
+                  style={{
+                    height: "calc(100vh - 156px)",
+                    scrollSnapAlign: "start"
+                  }}
                   ref={lastBookElementRef}
                 >
                   <SingleImageComponent
@@ -281,6 +291,10 @@ const SingleImageView: FC<componentProps> = ({
             else {
               return (
                 <div key={index}
+                  style={{
+                    height: "calc(100vh - 156px)",
+                    scrollSnapAlign: "start"
+                  }}
                   ref={
                     index === data.length - 10 ? lastItemRef : null
                   }                >

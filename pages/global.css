@@ -17,16 +17,17 @@ body {
     min-height: 100vh;
     background: linear-gradient(120deg, #05a15609, #d9494109, #d9484109, #05a15609);
 }
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 
@@ -163,10 +164,10 @@ input[type=number] {
 .dataTable-container .thead .cell {
     color: var(--white, #FFF);
     font-family: "Inter", sans-serif;
-    font-size: 14px;
+    font-size: clamp(12px, 0.72vw, 14px);
     font-weight: 600;
     padding: 10px 0 10px 10px;
-    border-right: 1px solid #d8d7d6;
+    /* border-right: 1px solid #d8d7d6; */
     border-bottom: 1px solid #d8d7d6;
 
 }
@@ -175,7 +176,7 @@ input[type=number] {
     position: sticky;
     right: 0;
     background: var(--color-sienna);
-    border-left: 1px solid #d8d7d6;
+    /* border-left: 1px solid #d8d7d6; */
 }
 
 .dataTable-container .thead .table-row .cell:last-child img {
@@ -204,21 +205,26 @@ input[type=number] {
     position: sticky;
     right: 0;
     background: #fff;
-    border-left: 1px solid #d8d7d6;
+    /* border-left: 1px solid #d8d7d6; */
     box-shadow: 20px 0 20px -35px #000000b3 inset;
 }
 
 .dataTable-container .tbody .cell {
     padding: 10px;
-    border-right: 1px solid #d8d7d6;
+    /* border-right: 1px solid #d8d7d6; */
     border-bottom: 1px solid #d8d7d6;
     background-color: #fff;
+    font-size: clamp(12px, 0.72vw, 14px);
 }
 
 .dataTable-container .tbody .cell span {
     padding: 0 !important;
 }
 
+.dataTable-container .tbody .cell span p {
+    margin: 0;
+    color: #6A7185 !important;
+}
 
 .mapImage {
     width: 100%;

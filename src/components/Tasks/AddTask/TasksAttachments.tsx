@@ -447,7 +447,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         afterUploadAttachements(true);
         setMultipleFiles([]);
         setTempFileStorage([]);
-        toast.success("Attachement(s) addedd successfully");
+        toast.success(responseData?.message);
         if (taskId) {
           router.back();
         }

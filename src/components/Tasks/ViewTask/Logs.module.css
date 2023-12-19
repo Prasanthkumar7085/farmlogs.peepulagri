@@ -34,6 +34,7 @@
 .tasklogViewCard {
     border-bottom: 1px solid #E9EDF1;
     padding: 1rem;
+    padding-right: 0;
 }
 
 .tasklogViewCard:last-child {

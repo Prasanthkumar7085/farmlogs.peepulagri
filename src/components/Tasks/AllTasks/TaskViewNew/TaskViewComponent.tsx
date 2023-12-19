@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, Checkbox, CircularProgress, ClickAwayListener, Collapse, Fade, Grid, IconButton, Menu, MenuItem, TextField, dividerClasses } from "@mui/material";
+import { Avatar, Box, Button, Card, Checkbox, CircularProgress, ClickAwayListener, Collapse, Fade, Grid, IconButton, InputAdornment, Menu, MenuItem, TextField, dividerClasses } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import styles from "./TaskViewComponent.module.css"
 import { ChangeEvent, useEffect, useState } from "react";
@@ -8,14 +8,14 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Markup } from "interweave";
 import timePipe from "@/pipes/timePipe";
-import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 import deleteTaskAttachmentService from "../../../../../lib/services/TasksService/deleteTaskAttachmentService";
 import TasksAttachments from "../../AddTask/TasksAttachments";
 import updateTaskStatusService from "../../../../../lib/services/TasksService/updateTaskStatusService";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import moment from "moment";
 import updateTaskService from "../../../../../lib/services/TasksService/updateTaskService";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
@@ -422,6 +422,11 @@ const TaskViewComponent = () => {
         }
     };
 
+    const [calenderOpen, setCalenderOpen] = useState(false);
+    const handleCalenderOpen = () => setCalenderOpen(true);
+    const handleCalenderClose = () => setCalenderOpen(false);
+
+
     return (
         <div className={styles.taskViewPage}>
             <div >
@@ -484,12 +489,16 @@ const TaskViewComponent = () => {
 
                             <div >
 
-                                {status !== "DONE" &&
+                                <p className={styles.statusButtton} style={{ cursor: status !== "DONE" && (loggedInUserId == data?.created_by?._id || hasEditAccess) ? "pointer" : "default" }} onClick={(e) => status !== "DONE" && (loggedInUserId == data?.created_by?._id || hasEditAccess) ? handleClick(e) : ""}>
+                                    {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
+                                </p>
+
+                                {/* {status !== "DONE" &&
                                     (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
                                     <p className={styles.statusButtton} style={{ cursor: "pointer" }} onClick={handleClick}>
                                         {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
                                     </p>) : (<p className={styles.statusButtton} >
-                                        {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}</p>)}
+                                        {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}</p>)} */}
                             </div>
                         </div>
                         <div className={styles.blockDescription}>
@@ -600,10 +609,16 @@ const TaskViewComponent = () => {
                                                                     : ''}
 
                                                             </div>
-                                                            <img src={item.url} alt="" className={styles.thumbnailImg} />
+                                                            <img style={{ cursor: "pointer" }} onClick={() => {
+                                                                // downLoadAttachements(item.url);
+                                                                window.open(item.url);
+                                                            }} src={item.url} alt="" className={styles.thumbnailImg} />
                                                         </div>
 
-                                                        <div className={styles.imgTitle}> {item?.key?.length > 20
+                                                        <div className={styles.imgTitle} style={{ cursor: "pointer" }} onClick={() => {
+                                                            // downLoadAttachements(item.url);
+                                                            window.open(item.url);
+                                                        }}> {item?.key?.length > 20
                                                             ? item?.key.slice(0, 20) + "..." //+ item?.key?.split('.')[item?.key?.split('.')?.length - 1]
                                                             : item?.key}</div>
 
@@ -626,9 +641,12 @@ const TaskViewComponent = () => {
                         <div>
                             <div className={styles.DatePickerBlock}>
                                 <p className={styles.dueDate}>Due Date</p>
-                                <div className={styles.datePicker}>
+                                <div className={styles.datePicker} style={{ display: "flex" }}>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        <DatePicker
+                                        <MobileDatePicker
+                                            open={calenderOpen}
+                                            onOpen={handleCalenderOpen}
+                                            onClose={handleCalenderClose}
                                             sx={{
                                                 width: "100%",
                                                 "& .MuiButtonBase-root": {
@@ -645,7 +663,8 @@ const TaskViewComponent = () => {
                                             disablePast
                                             value={new Date(deadlineString)}
                                             disabled={status === "DONE" || !(loggedInUserId == data?.created_by?._id)}
-                                            onChange={(newValue: any) => {
+
+                                            onAccept={(newValue: any) => {
                                                 let dateNow = new Date();
                                                 let dateWithPresentTime = moment(new Date(newValue))
                                                     .set({
@@ -661,6 +680,7 @@ const TaskViewComponent = () => {
                                                 onUpdateField({ deadlineProp: dateWithPresentTime })
                                             }}
                                             format="dd/MM/yyyy"
+
                                             slotProps={{
                                                 textField: {
                                                     variant: "standard",
@@ -670,6 +690,7 @@ const TaskViewComponent = () => {
                                             }}
                                         />
                                     </LocalizationProvider>
+                                    <img onClick={handleCalenderOpen} src="/viewTaskIcons/calender-icon.svg" alt="" style={{ background: "#E9EDF1", paddingInline: "1rem", borderRadius: "0 6px 6px 0" }} />
                                 </div>
                             </div>
                             <div className={styles.assignedByBlock}>
@@ -785,7 +806,7 @@ const TaskViewComponent = () => {
                 {statusOptions?.length &&
                     statusOptions.map((item: { value: string; title: string }, index: number) => {
                         return (
-                            <MenuItem className={styles.statusMenuItem} onClick={() => {
+                            <MenuItem disabled={status == item.value} className={status == item.value ? styles.statusMenuItemSelected : styles.statusMenuItem} onClick={() => {
                                 handleClose()
                                 onChangeStatus(item.value)
                             }} key={index} value={item.value}>
@@ -830,6 +851,7 @@ const TaskViewComponent = () => {
             </Menu>
             <LoadingComponent loading={loading} />
 
+            <Toaster closeButton richColors position="top-right" />
         </div>
 
     );

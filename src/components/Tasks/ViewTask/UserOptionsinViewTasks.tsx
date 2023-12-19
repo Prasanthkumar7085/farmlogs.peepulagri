@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Chip,
   CircularProgress,
   InputAdornment,
   LinearProgress,
@@ -67,15 +68,62 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
 
   return (
     <div>
+      {/* <div>
+        {tagValue ? (
+          <div >
+            {tagValue?.length ? (
+              <div >
+                {tagValue?.map((item: string, index: number) => {
+                  return (
+                    <Chip
+                      sx={{
+                        border: "1px solid #d94841",
+                        color: "#d94841",
+                        marginRight: "5px",
+                        marginBottom: "10px",
+                        "& .MuiSvgIcon-root": {
+                          color: "#d94841",
+                        },
+                        "& .MuiSvgIcon-root:hover": {
+                          color: "#d94841 !important",
+                        },
+                      }}
+                      // onDelete={() =>
+                      //   deleteTagLoading ? () => { } : handleDeleteChip(item)
+                      // }
+                      key={index}
+                      label={item}
+                      // className={styles.tagsName}
+                      variant="outlined"
+                      size="medium"
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        ) : (
+          ""
+        )}
+      </div> */}
       {!userLoaded ? (
         <Autocomplete
           sx={{
             width: "100%",
             borderRadius: "4px",
+            border: "1px solid lightgrey",
             "& .MuiInputBase-root": {
               paddingBlock: "5px !important",
               background: "#fff",
+              maxHeight: "200px", overflowY: "auto"
+
             },
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: "#fff !important"
+            }
+
           }}
           id="size-small-outlined-multi"
           size="small"
@@ -107,7 +155,7 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder="Select user mobile"
+              placeholder="Select users"
               variant="outlined"
               size="small"
               sx={{
@@ -115,7 +163,9 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
                   fontSize: "clamp(.875rem, 1vw, 1.125rem)",
                   backgroundColor: "#fff",
                   border: "none",
+
                 },
+
               }}
             />
           )}

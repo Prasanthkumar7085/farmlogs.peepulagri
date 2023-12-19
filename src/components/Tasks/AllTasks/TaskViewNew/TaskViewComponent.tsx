@@ -22,6 +22,7 @@ import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import ViewLogs from "../../ViewTask/ViewLogs";
 import CloseIcon from "@mui/icons-material/Close";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 const TaskViewComponent = () => {
     const router = useRouter();
@@ -609,14 +610,33 @@ const TaskViewComponent = () => {
                                                                     : ''}
 
                                                             </div>
-                                                            <img style={{ cursor: "pointer" }} onClick={() => {
-                                                                // downLoadAttachements(item.url);
-                                                                window.open(item.url);
-                                                            }} src={item.url} alt="" className={styles.thumbnailImg} />
+                                                            {item?.key.includes("pdf") ?
+                                                                <ImageComponent
+                                                                    src={"/pdf-icon.png"}
+                                                                    height={20}
+                                                                    width={20}
+                                                                    alt={"image"}
+                                                                    onClick={() => {
+                                                                        downLoadAttachements(item.url);
+                                                                        window.open(item.url);
+                                                                    }}
+                                                                /> :
+
+                                                                <ImageComponent
+                                                                    src={item.url}
+                                                                    height={20}
+                                                                    width={20}
+                                                                    alt={"image"}
+                                                                    onClick={() => {
+                                                                        downLoadAttachements(item.url);
+                                                                        window.open(item.url);
+                                                                    }}
+                                                                />
+                                                            }
                                                         </div>
 
                                                         <div className={styles.imgTitle} style={{ cursor: "pointer" }} onClick={() => {
-                                                            // downLoadAttachements(item.url);
+                                                            downLoadAttachements(item.url);
                                                             window.open(item.url);
                                                         }}> {item?.key?.length > 20
                                                             ? item?.key.slice(0, 20) + "..." //+ item?.key?.split('.')[item?.key?.split('.')?.length - 1]

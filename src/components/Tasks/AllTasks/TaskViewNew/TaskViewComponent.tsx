@@ -109,12 +109,6 @@ const TaskViewComponent = () => {
         if (response?.success) {
             setData(response?.data);
 
-            console.log(
-                response?.data?.assign_to?.some(
-                    (item: any) => item?._id == loggedInUserId
-                )
-            );
-
             setHasEditAccess(
                 response?.data?.assign_to?.some(
                     (item: any) => item?._id == loggedInUserId
@@ -332,32 +326,7 @@ const TaskViewComponent = () => {
         setLoading(false);
         // return response;
     };
-    // const onUpdateField = async () => {
-    //     let body = {
-    //         ...data,
-    //         assigned_to: userId,
-    //         farm_id: farmId,
-    //         deadline: deadline
-    //             ? moment(deadline)
-    //                 .utcOffset("+05:30")
-    //                 .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-    //             : "",
-    //         description: description ? description : "",
-    //         title: title ? title : "",
-    //         status: status,
-    //     };
 
-    //     const response = await updateTask(body);
-
-    //     if (response?.success) {
-    //         setEditFieldOrNot(false);
-    //         setEditField("");
-    //     } else {
-    //         if (response?.errors) {
-    //             setErrorMessages(response?.errors);
-    //         }
-    //     }
-    // };
     //select assingee for delete
     const handleAssigneeCheckboxChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -487,10 +456,10 @@ const TaskViewComponent = () => {
                                 <div>
                                     {status !== "DONE" &&
                                         loggedInUserId == data?.created_by?._id ? (
-                                        <h6 className={styles.farmTitle} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
+                                        <h6 className={styles.farmTitle} style={{ cursor: "pointer" }} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
                                             ? data?.title.slice(0, 1).toUpperCase() +
                                             data?.title.slice(1)
-                                            : "-"}</h6>) : (<h6 className={styles.farmTitle} >{data?.title
+                                            : "-"}</h6>) : (<h6 className={styles.farmTitle}  >{data?.title
                                                 ? data?.title.slice(0, 1).toUpperCase() +
                                                 data?.title.slice(1)
                                                 : "-"}</h6>)}
@@ -516,7 +485,7 @@ const TaskViewComponent = () => {
 
                                 {status !== "DONE" &&
                                     (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
-                                    <p className={styles.statusButtton} onClick={handleClick}>
+                                    <p className={styles.statusButtton} style={{ cursor: "pointer" }} onClick={handleClick}>
                                         {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
                                     </p>) : (<p className={styles.statusButtton} >
                                         {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}</p>)}
@@ -525,7 +494,6 @@ const TaskViewComponent = () => {
                         <div className={styles.blockDescription}>
                             <h6 className={styles.description}>Description</h6>
                             {editField == "description" && editFieldOrNot ? (
-
                                 <TextField
                                     className={styles.descriptionPara}
                                     multiline
@@ -546,7 +514,7 @@ const TaskViewComponent = () => {
                                 <div>
                                     {status !== "DONE" &&
                                         loggedInUserId == data?.created_by?._id ? (
-                                        <p className={styles.descriptionText} onClick={() => {
+                                        <p className={styles.descriptionText} style={{ cursor: "pointer" }} onClick={() => {
                                             setEditFieldOrNot(true);
                                             setEditField("description");
                                         }}>  {data?.description ? (
@@ -582,7 +550,6 @@ const TaskViewComponent = () => {
                                 <>
                                     <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
                                     <div>
-
                                         <TasksAttachments
                                             taskId={""}
                                             disabled={status === "DONE"}
@@ -607,7 +574,7 @@ const TaskViewComponent = () => {
                                         {selectedAttachmentIds?.length ? <Button
                                             className={styles.deleteAttachmentBtn} disabled={deleteLoading} onClick={deleteSelectedImages}>
                                             {deleteLoading ? (
-                                                <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                                <CircularProgress size="1.1rem" sx={{ color: "white" }} />
                                             ) : (
                                                 <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
                                             )}
@@ -643,7 +610,7 @@ const TaskViewComponent = () => {
                                                         <div style={{ width: "15%" }} onClick={() => {
                                                             downLoadAttachements(item.url);
                                                         }}>
-                                                            <img src="/viewTaskIcons/download.svg" alt="" />
+                                                            <img style={{ cursor: "pointer" }} src="/viewTaskIcons/download.svg" alt="" />
                                                         </div>
                                                     </div>
 
@@ -656,7 +623,6 @@ const TaskViewComponent = () => {
                     </div>
                     <div className={styles.assignedDetailsBlock}>
                         <div>
-
                             <div className={styles.DatePickerBlock}>
                                 <p className={styles.dueDate}>Due Date</p>
                                 <div className={styles.datePicker}>
@@ -729,16 +695,12 @@ const TaskViewComponent = () => {
                                         {status !== "DONE" &&
                                             loggedInUserId == data?.created_by?._id ? (
                                             <div>
-                                                {selectedAssigneeIds?.length ? <Button disabled={
-                                                    selectedAssigneeIds.length === 0 ||
-                                                    status === "DONE" ||
-                                                    !hasEditAccess
-                                                }
+                                                {selectedAssigneeIds?.length ? <Button
                                                     className={styles.deleteAttachmentBtn} onClick={() => {
                                                         deleteAssignee();
                                                     }}>
                                                     {deleteLoading ? (
-                                                        <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                                        <CircularProgress size="1.1rem" sx={{ color: "white" }} />
                                                     ) : (
                                                         <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
                                                     )}

@@ -154,6 +154,23 @@
 .allAttachmentsBlock {
     border-radius: 4px;
     border: 1px solid #D0D5DD;
+    max-height: 200px;
+    overflow-y: auto;
+
+}
+
+.allAttachmentsBlock::-webkit-scrollbar {
+    background: transparent;
+    width: 2px;
+    height: 3px;
+}
+
+.allAttachmentsBlock::-webkit-scrollbar:hover {
+    opacity: 1;
+}
+
+.allAttachmentsBlock:hover::-webkit-scrollbar-thumb {
+    background: rgb(198, 198, 198);
 }
 
 .singleAttachmentBlock {
@@ -396,6 +413,22 @@
     border-radius: 4px;
     border: 1px solid #D0D5DD;
     margin-top: 0.8rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.allAssignysBlock::-webkit-scrollbar {
+    background: transparent;
+    width: 2px;
+    height: 3px;
+}
+
+.allAssignysBlock::-webkit-scrollbar:hover {
+    opacity: 1;
+}
+
+.allAssignysBlock:hover::-webkit-scrollbar-thumb {
+    background: rgb(198, 198, 198);
 }
 
 .singleAssignyBlock {

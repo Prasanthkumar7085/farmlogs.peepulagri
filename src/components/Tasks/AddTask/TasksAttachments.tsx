@@ -498,7 +498,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
       </div> */}
 
       <label className={styles.UpdateFiles}>
-        <div className={styles.link} style={{ background: "#fff !important" }}>
+        <div className={styles.link} style={{ background: "#fff !important", cursor: "pointer" }}>
           {/* <AttachmentIcon className={styles.icon} /> */}
           <img src="/viewTaskIcons/image-icon.svg" alt="" className={styles.icon} />
           <div className={styles.text}> <span style={{ textDecoration: "underline", color: "#232323 !important" }}>Click to upload</span> or drag and drop</div>

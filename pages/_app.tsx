@@ -18,11 +18,12 @@ function MyApp({ Component, pageProps, ...rest }: any) {
     "/signup-verify",
     "/forgot-password",
     "/forgot-password/reset-password",
+
   ];
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        {router.pathname.includes("farms") || router.pathname.includes("dashboard") || router.pathname.includes("summary") || router.pathname.includes("profile/user") ? (
+        {router.pathname.includes("farms") || router.pathname.includes("users-tasks") || router.pathname.includes("dashboard") || router.pathname.includes("summary") || router.pathname.includes("profile/user") ? (
           <ScoutingHeader>
             <Component {...pageProps} />
           </ScoutingHeader>

@@ -22,6 +22,7 @@ interface PropTypes {
   multipleFiles: any;
   setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
   afterUploadAttachements: any;
+  disabled: boolean
 }
 const TasksAttachments: React.FC<PropTypes> = ({
   setUploadedFiles,
@@ -29,6 +30,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   setMultipleFiles,
   afterUploadAttachements,
   taskId,
+  disabled,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -496,7 +498,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
       </div> */}
 
       <label className={styles.UpdateFiles}>
-        <div className={styles.link} style={{ background: "#fff !important" }}>
+        <div className={styles.link} style={{ background: "#fff !important", cursor: "pointer" }}>
           {/* <AttachmentIcon className={styles.icon} /> */}
           <img src="/viewTaskIcons/image-icon.svg" alt="" className={styles.icon} />
           <div className={styles.text}> <span style={{ textDecoration: "underline", color: "#232323 !important" }}>Click to upload</span> or drag and drop</div>
@@ -505,7 +507,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
           className={styles.link}
           type="file"
           multiple
-          disabled={taskId || router.query.task_id ? false : true}
+          disabled={disabled}
           onChange={handleFileChange}
           style={{ display: "none" }}
           accept="image/*,video/*"

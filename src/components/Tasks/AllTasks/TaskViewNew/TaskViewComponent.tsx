@@ -109,12 +109,6 @@ const TaskViewComponent = () => {
         if (response?.success) {
             setData(response?.data);
 
-            console.log(
-                response?.data?.assign_to?.some(
-                    (item: any) => item?._id == loggedInUserId
-                )
-            );
-
             setHasEditAccess(
                 response?.data?.assign_to?.some(
                     (item: any) => item?._id == loggedInUserId
@@ -332,32 +326,7 @@ const TaskViewComponent = () => {
         setLoading(false);
         // return response;
     };
-    // const onUpdateField = async () => {
-    //     let body = {
-    //         ...data,
-    //         assigned_to: userId,
-    //         farm_id: farmId,
-    //         deadline: deadline
-    //             ? moment(deadline)
-    //                 .utcOffset("+05:30")
-    //                 .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-    //             : "",
-    //         description: description ? description : "",
-    //         title: title ? title : "",
-    //         status: status,
-    //     };
 
-    //     const response = await updateTask(body);
-
-    //     if (response?.success) {
-    //         setEditFieldOrNot(false);
-    //         setEditField("");
-    //     } else {
-    //         if (response?.errors) {
-    //             setErrorMessages(response?.errors);
-    //         }
-    //     }
-    // };
     //select assingee for delete
     const handleAssigneeCheckboxChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -487,10 +456,10 @@ const TaskViewComponent = () => {
                                 <div>
                                     {status !== "DONE" &&
                                         loggedInUserId == data?.created_by?._id ? (
-                                        <h6 className={styles.farmTitle} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
+                                        <h6 className={styles.farmTitle} style={{ cursor: "pointer" }} onClick={() => { setEditField('title'); setEditFieldOrNot(true) }}>{data?.title
                                             ? data?.title.slice(0, 1).toUpperCase() +
                                             data?.title.slice(1)
-                                            : "-"}</h6>) : (<h6 className={styles.farmTitle} >{data?.title
+                                            : "-"}</h6>) : (<h6 className={styles.farmTitle}  >{data?.title
                                                 ? data?.title.slice(0, 1).toUpperCase() +
                                                 data?.title.slice(1)
                                                 : "-"}</h6>)}
@@ -515,8 +484,8 @@ const TaskViewComponent = () => {
                             <div >
 
                                 {status !== "DONE" &&
-                                    loggedInUserId == data?.created_by?._id ? (
-                                    <p className={styles.statusButtton} onClick={handleClick}>
+                                    (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
+                                    <p className={styles.statusButtton} style={{ cursor: "pointer" }} onClick={handleClick}>
                                         {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}
                                     </p>) : (<p className={styles.statusButtton} >
                                         {data?.status ? statusOptions?.find((item) => item.value == data?.status)?.title : ""}</p>)}
@@ -525,7 +494,6 @@ const TaskViewComponent = () => {
                         <div className={styles.blockDescription}>
                             <h6 className={styles.description}>Description</h6>
                             {editField == "description" && editFieldOrNot ? (
-
                                 <TextField
                                     className={styles.descriptionPara}
                                     multiline
@@ -546,7 +514,7 @@ const TaskViewComponent = () => {
                                 <div>
                                     {status !== "DONE" &&
                                         loggedInUserId == data?.created_by?._id ? (
-                                        <p className={styles.descriptionText} onClick={() => {
+                                        <p className={styles.descriptionText} style={{ cursor: "pointer" }} onClick={() => {
                                             setEditFieldOrNot(true);
                                             setEditField("description");
                                         }}>  {data?.description ? (
@@ -578,16 +546,22 @@ const TaskViewComponent = () => {
                                 </div>) : ("")}
                         </div>
                         <div className={styles.fileUploadBlock}>
-                            <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
-                            <div>
-                                <TasksAttachments
-                                    taskId={""}
-                                    setUploadedFiles={setUploadedFiles}
-                                    multipleFiles={multipleFiles}
-                                    setMultipleFiles={setMultipleFiles}
-                                    afterUploadAttachements={afterUploadAttachements}
-                                />
-                            </div>
+                            {loggedInUserId == data?.created_by?._id || hasEditAccess ?
+                                <>
+                                    <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
+                                    <div>
+                                        <TasksAttachments
+                                            taskId={""}
+                                            disabled={status === "DONE"}
+                                            setUploadedFiles={setUploadedFiles}
+                                            multipleFiles={multipleFiles}
+                                            setMultipleFiles={setMultipleFiles}
+                                            afterUploadAttachements={afterUploadAttachements}
+                                        />
+
+                                    </div>
+                                </>
+                                : ''}
                         </div>
                         {attachmentData?.length ?
                             <div className={styles.taskAttachmentsBlock}>
@@ -600,7 +574,7 @@ const TaskViewComponent = () => {
                                         {selectedAttachmentIds?.length ? <Button
                                             className={styles.deleteAttachmentBtn} disabled={deleteLoading} onClick={deleteSelectedImages}>
                                             {deleteLoading ? (
-                                                <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                                <CircularProgress size="1.1rem" sx={{ color: "white" }} />
                                             ) : (
                                                 <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
                                             )}
@@ -615,26 +589,28 @@ const TaskViewComponent = () => {
                                                     <div key={index} className={styles.singleAttachmentBlock}>
                                                         <div className={styles.tumblineBlock}>
                                                             <div className={styles.checkbox}>
-                                                                <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
-                                                                    selectImagesForDelete(e, item)
-                                                                }
-                                                                    checked={selectedAttachmentIds.includes(
-                                                                        item?._id
-                                                                    )} />
+                                                                {loggedInUserId == data?.created_by?._id ?
+                                                                    <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} disabled={status === "DONE" && loggedInUserId == data?.created_by?._id} onChange={(e) =>
+                                                                        selectImagesForDelete(e, item)
+                                                                    }
+                                                                        checked={selectedAttachmentIds.includes(
+                                                                            item?._id
+                                                                        )} />
+                                                                    : ''}
 
                                                             </div>
                                                             <img src={item.url} alt="" className={styles.thumbnailImg} />
                                                         </div>
 
                                                         <div className={styles.imgTitle}> {item?.key?.length > 20
-                                                            ? item?.key.slice(0, 20) + "..." + item?.key?.split('.')[item?.key?.split('.')?.length - 1]
+                                                            ? item?.key.slice(0, 20) + "..." //+ item?.key?.split('.')[item?.key?.split('.')?.length - 1]
                                                             : item?.key}</div>
 
                                                         <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY")}</div>
                                                         <div style={{ width: "15%" }} onClick={() => {
                                                             downLoadAttachements(item.url);
                                                         }}>
-                                                            <img src="/viewTaskIcons/download.svg" alt="" />
+                                                            <img style={{ cursor: "pointer" }} src="/viewTaskIcons/download.svg" alt="" />
                                                         </div>
                                                     </div>
 
@@ -647,7 +623,6 @@ const TaskViewComponent = () => {
                     </div>
                     <div className={styles.assignedDetailsBlock}>
                         <div>
-
                             <div className={styles.DatePickerBlock}>
                                 <p className={styles.dueDate}>Due Date</p>
                                 <div className={styles.datePicker}>
@@ -668,6 +643,7 @@ const TaskViewComponent = () => {
                                             }}
                                             disablePast
                                             value={new Date(deadlineString)}
+                                            disabled={status === "DONE" || !(loggedInUserId == data?.created_by?._id)}
                                             onChange={(newValue: any) => {
                                                 let dateNow = new Date();
                                                 let dateWithPresentTime = moment(new Date(newValue))
@@ -713,20 +689,18 @@ const TaskViewComponent = () => {
                                         Assign To
                                     </div>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
-                                        <Button className={styles.addAssignyBtn} onClick={handleAssignyClick}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
+                                        {loggedInUserId == data?.created_by?._id || hasEditAccess ?
+                                            <Button className={styles.addAssignyBtn} disabled={status === "DONE" && loggedInUserId == data?.created_by?._id} onClick={handleAssignyClick}> <img src="/viewTaskIcons/plus-icon.svg" alt="" width="15px" height="15px" /> Add</Button>
+                                            : ''}
                                         {status !== "DONE" &&
                                             loggedInUserId == data?.created_by?._id ? (
                                             <div>
-                                                {selectedAssigneeIds?.length ? <Button disabled={
-                                                    selectedAssigneeIds.length === 0 ||
-                                                    status === "DONE" ||
-                                                    !hasEditAccess
-                                                }
+                                                {selectedAssigneeIds?.length ? <Button
                                                     className={styles.deleteAttachmentBtn} onClick={() => {
                                                         deleteAssignee();
                                                     }}>
                                                     {deleteLoading ? (
-                                                        <CircularProgress size="1.5rem" sx={{ color: "red" }} />
+                                                        <CircularProgress size="1.1rem" sx={{ color: "white" }} />
                                                     ) : (
                                                         <img src="/viewTaskIcons/delete-icon.svg" alt="" width="15px" height={"16px"} />
                                                     )}
@@ -743,14 +717,15 @@ const TaskViewComponent = () => {
                                                     return (
                                                         <div key={index} className={styles.singleAssignyBlock}>
                                                             <div className={styles.checkbox}>
-                                                                <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={(e) =>
-                                                                    handleAssigneeCheckboxChange(e, item._id)
-                                                                }
-                                                                    checked={selectedAssigneeIds.includes(
-                                                                        item?._id
-                                                                    )}
-                                                                />
-
+                                                                {loggedInUserId == data?.created_by?._id ?
+                                                                    <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} disabled={status === "DONE" && loggedInUserId == data?.created_by?._id} onChange={(e) =>
+                                                                        handleAssigneeCheckboxChange(e, item._id)
+                                                                    }
+                                                                        checked={selectedAssigneeIds.includes(
+                                                                            item?._id
+                                                                        )}
+                                                                    />
+                                                                    : ''}
                                                             </div>
                                                             <div className={styles.assingyNameBlock}>
                                                                 <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >

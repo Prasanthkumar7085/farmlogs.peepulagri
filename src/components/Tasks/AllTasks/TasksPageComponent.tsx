@@ -191,7 +191,7 @@ const TasksPageComponent = () => {
       sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
       status: value,
-      userId: [router.query.assign_to] as string[],
+      userId: router.query.assign_to ? [router.query.assign_to] as string[] : [],
     });
   };
 

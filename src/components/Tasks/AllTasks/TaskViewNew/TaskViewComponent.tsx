@@ -731,7 +731,6 @@ const TaskViewComponent = () => {
                                                             <div className={styles.assingyNameBlock}>
                                                                 <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#6A7185" }} >
                                                                     {item.name.split(' ')?.length > 1 ? `${item.name.split(' ')[0][0]}${item.name.split(' ')[1][0]}`.toUpperCase() : item.name.slice(0, 2)?.toUpperCase()}
-
                                                                 </Avatar>
                                                                 <p className={styles.assignedByFullName}>
                                                                     {item.name}
@@ -775,6 +774,7 @@ const TaskViewComponent = () => {
                 open={open}
                 onClose={handleClose}
                 TransitionComponent={Fade}
+                className={styles.statusMenu}
                 PaperProps={{
                     style: {
                         width: '15ch',

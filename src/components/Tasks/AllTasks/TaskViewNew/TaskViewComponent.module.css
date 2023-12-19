@@ -471,6 +471,11 @@
     border: 1px solid #45A845 !important;
 }
 
+.statusMenu {
+    border-radius: 20px !important;
+    box-shadow: 2px 2px 9px 0px rgba(0, 0, 0, 0.20) !important;
+}
+
 .statusMenuItem {
     color: #000;
     font-family: 'Inter', sans-serif;

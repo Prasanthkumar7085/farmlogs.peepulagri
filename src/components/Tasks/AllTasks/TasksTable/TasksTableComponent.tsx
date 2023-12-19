@@ -118,7 +118,7 @@ const TasksTableComponent = ({
             .map((item: { _id: string; name: string }) => item.name)
             .join(", ")
           : "*Not Assigned*"}
-        {info.getValue()?.assign_to?.length > 2 ? (
+        {info.getValue()?.assign_to?.length >= 2 ? (
           <div
             style={{ color: "#9a9a9a", cursor: "pointer" }}
             onClick={() => {

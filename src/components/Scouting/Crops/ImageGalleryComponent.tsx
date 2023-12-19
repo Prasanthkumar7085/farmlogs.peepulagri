@@ -403,40 +403,23 @@ const ImageGalleryComponent = () => {
   );
 
   //download multiple images
-  const downloadFiles = async () => {
-    setLoading(true);
-    try {
-      for (const item of selectedItems || []) {
-        // const response = await fetch(item?.url);
-
-        // if (!response.ok) {
-        //   throw new Error('Network response was not ok.');
-        // }
-
-        let filename = item.crop_id.slug + item.key;
-
-        // const blob = await response.blob();
-        // const blobUrl = window.URL.createObjectURL(blob);
-
-        const downloadLink = document.createElement("a");
-        downloadLink.href = item.url;
-        downloadLink.download = filename;
-        downloadLink.style.display = "none";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        toast.success("Downloaded Successfully");
-
-        // window.URL.revokeObjectURL(blobUrl);
-      }
-    } catch (error) {
-      console.error("Error occurred while downloading files:", error);
-      // Handle the error as needed
-      toast.error("Download Failed");
-    } finally {
-      setLoading(false);
+  const handleDownload = async () => {
+    for (let i = 0; i < selectedItems.length; i++) {
+      await downloadImage(selectedItems[i], i);
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Adjust the delay time if needed
     }
   };
+
+  const downloadImage = (image: any, index: any) => {
+    return new Promise<void>((resolve) => {
+      const link = document.createElement('a');
+      link.href = image.url;
+      link.setAttribute('download', `image_${index + 1}`);
+      link.click();
+      resolve();
+    });
+  };
+
 
 
   //changing the date format
@@ -514,9 +497,9 @@ const ImageGalleryComponent = () => {
                     />
                   </IconButton>
 
-                  {/* <IconButton onClick={() => downloadFiles()}>
+                  <IconButton onClick={() => handleDownload()}>
                     <FileDownloadIcon />
-                  </IconButton> */}
+                  </IconButton>
                 </div>
               ) : (
                 ""

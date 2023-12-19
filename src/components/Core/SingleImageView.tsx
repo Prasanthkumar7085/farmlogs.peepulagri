@@ -35,9 +35,9 @@ const SingleImageView: FC<componentProps> = ({
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
   const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState<any>();
+  const [loading, setLoading] = useState<any>(false);
 
 
   const [, , removeCookie] = useCookies(["userType"]);
@@ -134,14 +134,15 @@ const SingleImageView: FC<componentProps> = ({
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
+        if (entries[0].isIntersecting) {
+          console.log("werqwe")
           getInstaScrollImageDetails(data[9]?._id)
           scrollToLastItem(); // Restore scroll position after new data is loaded
         }
       });
       if (node) observer.current.observe(node);
     },
-    [loading, hasMore]
+    []
   );
 
 
@@ -158,18 +159,23 @@ const SingleImageView: FC<componentProps> = ({
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/next/10`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/10`,
         options
       );
 
       const responseData = await response.json();
       if (responseData.success) {
         if (responseData?.data.length !== 0) {
+          console.log(responseData?.data)
+          console.log("jds")
           setHasMore(true);
-          setData([...data, ...responseData.data]);
+          setData([...data, ...responseData?.data]);
+          console.log([...data, ...responseData.data])
         } else {
+          console.log("poi")
           setHasMore(false);
-          setData(responseData.data);
+          setData(responseData?.data);
+          console.log(responseData?.data)
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -187,11 +193,11 @@ const SingleImageView: FC<componentProps> = ({
     if (router.isReady && accessToken) {
       getInstaScrollImageDetails(router.query.image_id);
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken, router.query.image_id]);
 
   return (
     <div>
-      <div className={styles.overlay}>
+      <div >
         {/* <div style={{ position: "fixed", width: "100%", zIndex: "1", maxWidth: "500px" }}> */}
 
         <div className={styles.singleImageViewHeader}>
@@ -224,145 +230,113 @@ const SingleImageView: FC<componentProps> = ({
         </div>
         {/* </div> */}
 
-
-        <div
-          style={{
-            overflowY: "auto",
-            maxHeight: "calc(105vh - 156px)",
-            width: "100%",
-            position: "relative",
-          }}
-        >
-          {data?.length ?
-            data.map((image: any, index: any) => {
-              if (data.length === index + 1) {
-
-                return (
-                  <div key={index}
-                    ref={lastBookElementRef}
-                  >
-                    <img
-                      src={image?.url}
-                      alt={`${image?.key}`}
-                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                    />
-                    <div className={styles.ButtonGrp}>
-                      <IconButton
-                        sx={{ borderRadius: "25px 0 0 25px" }}
-                        className={styles.singleBtn}
-                        onClick={() => {
-                          captureImageDilogOptions("tag");
-                        }}
-                      >
-                        <Image
-                          src={"/mobileIcons/scouting/tag-light.svg"}
-                          width={25}
-                          height={25}
-                          alt="pp"
-                        />
-                      </IconButton>
-                      <IconButton
-                        sx={{ borderRadius: "0 25px 25px 0" }}
-                        className={styles.singleBtn}
-                        onClick={() => {
-                          captureImageDilogOptions("comments");
-                        }}
-                      >
-                        <Image
-                          src={"/mobileIcons/scouting/chat-circle-light.svg"}
-                          width={25}
-                          height={25}
-                          alt="pp"
-                        />
-                      </IconButton>
-                    </div>
-                  </div>
-                )
-              }
-              else {
-                return (
-                  <div key={index}
-                    ref={
-                      index === data.length - 10 ? lastItemRef : null
-                    }                >
-                    <img
-                      src={image?.url}
-                      alt={`${image?.key}`}
-                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                    />
-                    <div className={styles.ButtonGrp}>
-                      <IconButton
-                        sx={{ borderRadius: "25px 0 0 25px" }}
-                        className={styles.singleBtn}
-                        onClick={() => {
-                          captureImageDilogOptions("tag");
-                        }}
-                      >
-                        <Image
-                          src={"/mobileIcons/scouting/tag-light.svg"}
-                          width={25}
-                          height={25}
-                          alt="pp"
-                        />
-                      </IconButton>
-                      <IconButton
-                        sx={{ borderRadius: "0 25px 25px 0" }}
-                        className={styles.singleBtn}
-                        onClick={() => {
-                          captureImageDilogOptions("comments");
-                        }}
-                      >
-                        <Image
-                          src={"/mobileIcons/scouting/chat-circle-light.svg"}
-                          width={25}
-                          height={25}
-                          alt="pp"
-                        />
-                      </IconButton>
-                    </div>
-                  </div>
-                )
-              }
-            })
-
-
-            :
-            ""
-          }
-        </div>
       </div>
-      <div className={styles.imgDetailButtons}>
-        <div className={styles.ButtonGrp}>
-          <IconButton
-            sx={{ borderRadius: "25px 0 0 25px" }}
-            className={styles.singleBtn}
-            onClick={() => {
-              captureImageDilogOptions("tag");
-            }}
-          >
-            <Image
-              src={"/mobileIcons/scouting/tag-light.svg"}
-              width={25}
-              height={25}
-              alt="pp"
-            />
-          </IconButton>
-          <IconButton
-            sx={{ borderRadius: "0 25px 25px 0" }}
-            className={styles.singleBtn}
-            onClick={() => {
-              captureImageDilogOptions("comments");
-            }}
-          >
-            <Image
-              src={"/mobileIcons/scouting/chat-circle-light.svg"}
-              width={25}
-              height={25}
-              alt="pp"
-            />
-          </IconButton>
-        </div>
+
+      <div
+        style={{
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 156px)",
+        }}
+      >
+        {data?.length ?
+          data.map((image: any, index: any) => {
+            if (data?.length === index + 1) {
+              console.log("pwpw")
+              return (
+                <div key={index}
+                  ref={lastBookElementRef}
+                >
+                  <img
+                    src={image?.url}
+                    alt={`${image?.key}`}
+                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                  />
+                  <div className={styles.ButtonGrp}>
+                    <IconButton
+                      sx={{ borderRadius: "25px 0 0 25px" }}
+                      className={styles.singleBtn}
+                      onClick={() => {
+                        captureImageDilogOptions("tag");
+                      }}
+                    >
+                      <Image
+                        src={"/mobileIcons/scouting/tag-light.svg"}
+                        width={25}
+                        height={25}
+                        alt="pp"
+                      />
+                    </IconButton>
+                    <IconButton
+                      sx={{ borderRadius: "0 25px 25px 0" }}
+                      className={styles.singleBtn}
+                      onClick={() => {
+                        captureImageDilogOptions("comments");
+                      }}
+                    >
+                      <Image
+                        src={"/mobileIcons/scouting/chat-circle-light.svg"}
+                        width={25}
+                        height={25}
+                        alt="pp"
+                      />
+                    </IconButton>
+                  </div>
+                </div>
+              )
+            }
+            else {
+              console.log("prasanth")
+              return (
+                <div key={index}
+                  ref={
+                    index === data.length - 10 ? lastItemRef : null
+                  }                >
+                  <img
+                    src={image?.url}
+                    alt={`${image?.key}`}
+                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                  />
+                  <div className={styles.ButtonGrp}>
+                    <IconButton
+                      sx={{ borderRadius: "25px 0 0 25px" }}
+                      className={styles.singleBtn}
+                      onClick={() => {
+                        captureImageDilogOptions("tag");
+                      }}
+                    >
+                      <Image
+                        src={"/mobileIcons/scouting/tag-light.svg"}
+                        width={25}
+                        height={25}
+                        alt="pp"
+                      />
+                    </IconButton>
+                    <IconButton
+                      sx={{ borderRadius: "0 25px 25px 0" }}
+                      className={styles.singleBtn}
+                      onClick={() => {
+                        captureImageDilogOptions("comments");
+                      }}
+                    >
+                      <Image
+                        src={"/mobileIcons/scouting/chat-circle-light.svg"}
+                        width={25}
+                        height={25}
+                        alt="pp"
+                      />
+                    </IconButton>
+                  </div>
+                </div>
+              )
+            }
+          })
+
+
+          :
+          ""
+        }
       </div>
+
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}

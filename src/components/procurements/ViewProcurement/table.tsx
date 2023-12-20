@@ -37,8 +37,8 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -70,8 +70,8 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   //logout function for 403 error
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -278,7 +278,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                   </TableCell>
                   <TableCell>{row?.status ? row?.status : "---"}</TableCell>
                   <TableCell>
-                    {row?.approved_by ? row?.approved_by : "---"}
+                    {row?.approved_by?.name ? row?.approved_by?.name : "---"}
                   </TableCell>
                   {materialDetails ?
                     <>

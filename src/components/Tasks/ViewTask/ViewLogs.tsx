@@ -17,7 +17,6 @@ import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import { TasksLogsResponseType } from "@/types/tasksTypes";
 import timePipe from "@/pipes/timePipe";
-import SummarizeIcon from "@mui/icons-material/Summarize";
 
 interface propType {
   openLogs: boolean;
@@ -33,15 +32,15 @@ const ViewLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
   );
 
   const [logsLoading, setLogsLoading] = useState(true);
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [logsData, setLogsData] = useState<Array<TasksLogsResponseType>>([]);
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());

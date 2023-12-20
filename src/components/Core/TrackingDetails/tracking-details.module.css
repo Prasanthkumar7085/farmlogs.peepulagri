@@ -1,0 +1,84 @@
+.infoIcon {
+  width: 40px;
+  height: 40px;
+}
+
+.areYouSure {
+  line-height: 24px;
+  font-size: clamp(14px, 3vw, 16px);
+  font-weight: 500;
+}
+.label {
+  color: #000;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 3.25vw, 14px);
+  font-weight: 500;
+}
+
+.textfeild {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.thisWillBe {
+  font-size: clamp(12px, 3vw, 14px);
+  line-height: 21px;
+  display: flex;
+  align-items: center;
+  font-family: 'inter';
+}
+
+.text {
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.buttoncancel,
+.buttongotit {
+  flex: 1;
+  border-radius: var(--br-5xs);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  font-family: 'Inter', sans-serif; 
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+}
+
+.buttoncancel {
+  background-color: #fff !important;
+  border: 1px solid var(--gray-300) !important;
+  color: #000 !important;
+}
+
+.alertdelete,
+.buttons {
+    align-self: stretch !important;
+  display: flex !important;
+  flex-direction: row;
+  align-items: flex-start ;
+  justify-content: flex-start ;
+  gap: 1.2rem !important;
+  text-align: center !important;
+  color: var(--gray-700) !important;
+}
+
+.alertdelete {
+  border-radius: var(--br-base);
+  background-color: var(--white);
+  border: 1px solid var(--gray-300);
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--padding-base);
+  text-align: left;
+  font-size: var(--text-md-medium-size);
+  color: var(--high-emphasis);
+  font-family: var(--text-md-medium);
+}

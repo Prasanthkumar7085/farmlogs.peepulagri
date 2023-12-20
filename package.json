@@ -71,11 +71,13 @@
     "sass": "^1.68.0",
     "sonner": "^1.0.3",
     "typescript": "5.1.6",
+    "uuid": "^9.0.1",
     "yet-another-react-lightbox": "^3.12.2"
   },
   "devDependencies": {
     "@types/react-image-gallery": "^1.2.1",
     "@types/react-modal": "^3.16.1",
+    "@types/uuid": "^9.0.7",
     "eslint": "^8.47.0"
   }
 }

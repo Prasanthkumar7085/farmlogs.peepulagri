@@ -43,7 +43,6 @@
 .suggestions {
   padding: 20px;
   display: flex;
-  word-wrap: break-word !important;
   word-break: break-all !important;
   max-width: 400px !important;
 }

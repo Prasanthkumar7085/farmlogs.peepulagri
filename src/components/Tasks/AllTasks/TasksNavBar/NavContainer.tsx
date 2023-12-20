@@ -1,22 +1,21 @@
+import { changeTaskFilterOpen } from "@/Redux/Modules/Farms";
+import SelectComponent from "@/components/Core/SelectComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
+import { Search } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import {
   Autocomplete,
   Button,
-  Icon,
+  Collapse,
   InputAdornment,
   TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsService";
-import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInTasks";
-import styles from "./NavBarContainer.module.css";
-import SelectComponent from "@/components/Core/SelectComponent";
-import AddIcon from "@mui/icons-material/Add";
+import { useDispatch, useSelector } from "react-redux";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
-import { Search } from "@mui/icons-material";
-import Menu from '@mui/material/Menu';
+import styles from "./NavBarContainer.module.css";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -34,16 +33,20 @@ const NavContainer: React.FC<PropTypes> = ({
   selectedFarm,
   onStatusChange,
   onUserChange,
-  getAllTasksTab
+  getAllTasksTab,
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const userType = useSelector(
+  const filterOpenOrNot = useSelector(
+    (state: any) => state?.farms?.taskFilterOpen
+  );
+
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
   const userId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
-
   );
 
   const accessToken = useSelector(
@@ -53,8 +56,6 @@ const NavContainer: React.FC<PropTypes> = ({
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<Array<userTaskType>>([]);
   const [user, setUser] = useState<userTaskType[] | null>([]);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
   const [selectedFarmOption, setSelectedFarmOption] = useState<
     FarmInTaskType | null | undefined
@@ -70,13 +71,13 @@ const NavContainer: React.FC<PropTypes> = ({
   const [selectedUsers, setSelectedUsers] = useState<
     { name: string; _id: string }[] | null
   >();
+  const [filtersLength, setFiltersLength] = useState(0);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  useEffect(() => {
+    let { page, limit, search_string, is_my_task, ...rest } = router.query;
+
+    setFiltersLength(Object.keys(rest)?.length);
+  }, [router.query]);
 
   const setStatusValue = (e: any) => {
     onStatusChange(e.target.value);
@@ -118,95 +119,158 @@ const NavContainer: React.FC<PropTypes> = ({
     setSelectedUsers(usersObj);
   };
 
+  const clearFiltersDisabledOrNot = () => {
+    let { page, limit, ...rest } = router.query;
+    return !Object.keys(rest)?.length;
+  };
+
   return (
     <>
       <div className={styles.navbarcontainer}>
-        <div>
-          <div className={styles.pagetitle}>
-            <img className={styles.note1Icon} alt="" src="/note-11.svg" />
-            <h1 className={styles.taskManagement}>{`Task Management`}</h1>
-          </div>
-
+        <div className={styles.pagetitle}>
+          <img className={styles.note1Icon} alt="" src="/viewTaskIcons/task-symbol-icon.svg" />
+          <h1 className={styles.taskManagement}>{`Task Management`}</h1>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <Button
-            sx={{
-              color: router.query.is_my_task == "true" ? "green" : "red",
-              textDecoration:
-                router.query.is_my_task == "true" ? "underline" : "none",
+            id="demo-positioned-button"
+            aria-controls={filterOpenOrNot ? "demo-positioned-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={filterOpenOrNot ? "true" : undefined}
+            onClick={(e) => {
+              dispatch(changeTaskFilterOpen());
             }}
-            onClick={() => {
-              if (router.query.is_my_task == "true") {
-                return;
-              }
-              setUser([]);
-              onUserChange([userId], true);
-            }}
+            variant="contained"
+            className={
+              filtersLength ? styles.activeFilterBtn : styles.filterBtn
+            }
           >
-            My Tasks
+            <img
+              src={
+                filtersLength
+                  ? "/viewTaskIcons/filter-sybol-icon-active.svg"
+                  : "/viewTaskIcons/filter-sybol-icon.svg"
+              }
+              alt=""
+              width={"14px"}
+            />
+            <span style={{ display: "flex", alignItems: "center", gap: "2px" }}>
+              Filter{" "}
+              <span className={styles.FilterCount}>
+                {" "}
+                {filtersLength ? filtersLength : ""}
+              </span>
+            </span>
           </Button>
-          <Button
+          <TextField
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              onChangeSearch(e.target.value);
+            }}
+            className={styles.searchbar}
+            color="primary"
+            size="small"
+            placeholder="Search By Title"
             sx={{
-              color: router.query.is_my_task == "true" ? "red" : "green",
-              textDecoration:
-                router.query.is_my_task == "true" ? "none" : "underline",
+              width: "100%",
+              background: "#fff !important",
+              minWidth: "250px",
+              maxWidth: "300px",
             }}
-            onClick={() => {
-              if (!(router.query.is_my_task == "true")) {
-                return;
-              }
-              setUser([]);
-              getAllTasksTab({
-                page: router.query.page as string,
-                limit: router.query.limit as string,
-                search_string: searchString,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
-                selectedFarmId: router.query.farm_id as string,
-                status: router.query.status as string,
-                userId: [],
-              });
+            variant="outlined"
+            type="search"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
             }}
+          />
+          <Button
+            className={styles.filterAddBtn}
+            color="primary"
+            size="small"
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={onButtonAddTaskClick}
           >
-            All Tasks
+            Add
           </Button>
         </div>
+      </div>
 
-        <div className={styles.headeractions}>
-          {!(router.query.is_my_task == "true") ? (
+      <Collapse in={filterOpenOrNot}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingBottom: "1rem",
+          }}
+        >
+          <div className={styles.TabButtonGrp}>
+            <Button
+              className={
+                router.query.is_my_task == "true"
+                  ? styles.tabActiveButton
+                  : styles.tabButton
+              }
+              onClick={() => {
+                if (router.query.is_my_task == "true") {
+                  return;
+                }
+                setUser([]);
+                setSelectedUsers([]);
+                onUserChange([userId], true);
+              }}
+            >
+              My Tasks
+            </Button>
+            <Button
+              className={
+                router.query.is_my_task !== "true"
+                  ? styles.tabActiveButton
+                  : styles.tabButton
+              }
+              onClick={() => {
+                if (!(router.query.is_my_task == "true")) {
+                  return;
+                }
+                setUser([]);
+                setSelectedUsers([]);
+
+                getAllTasksTab({
+                  page: router.query.page as string,
+                  limit: router.query.limit as string,
+                  search_string: searchString,
+                  sortBy: router.query.order_by as string,
+                  sortType: router.query.order_type as string,
+                  selectedFarmId: router.query.farm_id as string,
+                  status: router.query.status as string,
+                  userId: [],
+                  isMyTasks: false,
+                });
+              }}
+            >
+              All Tasks
+            </Button>
+          </div>
+
+          <div
+            className={styles.headeractions}
+            style={{
+              width: "35%",
+              display: "grid",
+              gridTemplateColumns: "2fr 1fr .5fr",
+            }}
+          >
             <div>
-              <Button
-                id="demo-positioned-button"
-                aria-controls={open ? 'demo-positioned-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-                variant='contained'
-              >
-                Select Users
-              </Button>
-              <Menu
-                id="demo-positioned-menu"
-                aria-labelledby="demo-positioned-button"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-              >
-
-
+              {!(router.query.is_my_task == "true") ? (
                 <Autocomplete
+                  limitTags={1}
                   multiple
-                  sx={{
-                    width: "250px",
-                    maxWidth: "250px",
-                    borderRadius: "4px",
-                  }}
                   id="size-small-outlined-multi"
                   size="small"
                   fullWidth
@@ -224,8 +288,8 @@ const NavContainer: React.FC<PropTypes> = ({
                     setUser(value);
                     let data: string[] = value?.length
                       ? value?.map(
-                        (item: { _id: string; name: string }) => item._id
-                      )
+                          (item: { _id: string; name: string }) => item._id
+                        )
                       : [];
                     onUserChange(data, false);
                   }}
@@ -237,69 +301,49 @@ const NavContainer: React.FC<PropTypes> = ({
                       size="small"
                       sx={{
                         "& .MuiInputBase-root": {
-                          fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                          fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
                           backgroundColor: "#fff",
                           border: "none",
+                          fontFamily: "'Inter', sans-serif ",
                         },
                       }}
                     />
                   )}
                 />
-
-
-              </Menu>
+              ) : (
+                ""
+              )}
             </div>
-          ) : (
-            ""
-          )}
 
-          <div style={{ width: "12%" }}>
             <SelectComponent
               options={statusOptions}
               size="small"
               onChange={setStatusValue}
               value={status ? status : ""}
             />
-          </div>
-          <div style={{ width: "25%" }}>
-            <TextField
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                onChangeSearch(e.target.value);
-              }}
-              className={styles.searchbar}
-              color="primary"
-              size="small"
-              placeholder="Search By Title"
-              sx={{ width: "100%", background: "#fff !important" }}
-              variant="outlined"
-              type="search"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
-          {userType !== "USER" ? (
             <Button
-              className={styles.filter}
-              color="primary"
-              size="small"
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={onButtonAddTaskClick}
+              onClick={() => {
+                setUser(null);
+                setSelectedUsers(null);
+                getAllTasksTab({
+                  page: 1,
+                  limit: 15,
+                  search_string: "",
+                  sortBy: "",
+                  sortType: "",
+                  selectedFarmId: "",
+                  status: "",
+                  userId: [],
+                  isMyTasks: false,
+                });
+              }}
+              disabled={clearFiltersDisabledOrNot()}
             >
-              Add
+              <FilterAltOffIcon />
             </Button>
-          ) : (
-            ""
-          )}
+          </div>
         </div>
-      </div>
+      </Collapse>
     </>
   );
 };

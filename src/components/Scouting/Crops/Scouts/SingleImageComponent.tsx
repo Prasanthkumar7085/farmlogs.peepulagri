@@ -1,7 +1,7 @@
 import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAttachment";
 import ImageComponent from "@/components/Core/ImageComponent";
 import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
-import { Button, Chip, IconButton } from "@mui/material";
+import { Button, Chip, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import DrawerComponentForScout from "../../Comments/DrawerBoxForScout";
 import styles from "./singleImage.module.css";
+import timePipe from "@/pipes/timePipe";
 
 interface componentProps {
   detailedImage: any;
@@ -91,36 +92,19 @@ const SingleImageComponent: FC<componentProps> = ({
   };
 
   return (
-    <div>
-      <div className={styles.overlay}>
+    <div style={{ paddingTop: "1rem" }} >
+      <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem" }}>
+        <img src="/viewTaskIcons/calender-icon.svg" alt="icon" />
+        {timePipe(detailedImage?.uploaded_at, "DD MMM YY hh:mm A")}</Typography>
+      <div style={{ height: "60vh", background: "#000" }}>
+
         <img
+          style={{ objectFit: "contain", height: "100%" }}
           src={detailedImage?.url}
-          height={"auto"}
           width={"100%"}
           alt={detailedImage?.key}
         />
-        {detailedImage?.suggestions ? (
-          <div className={styles.remondationsdiv}>
-            <div className={styles.recomendations}>
-              <Button
-                className={styles.button}
-                variant="outlined"
-                onClick={openViewMore}
-              >
-                <div className={styles.btnContent}>
-                  <ImageComponent
-                    src={"/scouting/recommendations-icon.svg"}
-                    height={16}
-                    width={16}
-                  />
-                  Recomendations
-                </div>
-              </Button>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
+
       </div>
       <div>
         {" "}
@@ -149,27 +133,14 @@ const SingleImageComponent: FC<componentProps> = ({
           />
         </IconButton>
       </div>
-      <div>
-        {detailedImage?.description
-          ? detailedImage?.description?.length > 97
-            ? detailedImage?.description?.slice(0, 100) + "..."
-            : detailedImage?.description
-          : ""}
-      </div>
-      <div>
-        {detailedImage?.tags?.slice(0, 3).map((item: string) => {
+
+      <div style={{ display: "flex", alignItems: "center", gap: "5px", flexWrap: "wrap" }}>
+        {detailedImage?.tags?.map((item: string) => {
           return <Chip label={item} key={item} />;
         })}
-        {detailedImage?.tags?.length > 3 ? <span>{"... "}</span> : ""}
+
       </div>
-      {detailedImage?.tags?.length > 3 ||
-        detailedImage?.description?.length > 97 ? (
-        <span style={{ fontWeight: "bold" }} onClick={openViewMore}>
-          Show More
-        </span>
-      ) : (
-        ""
-      )}
+
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}
         drawerClose={drawerClose}

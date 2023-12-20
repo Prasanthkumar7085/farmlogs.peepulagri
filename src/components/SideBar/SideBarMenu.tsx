@@ -27,8 +27,8 @@ const SideBarMenu = ({ children }: any) => {
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -57,27 +57,27 @@ const SideBarMenu = ({ children }: any) => {
       toolTitle: "Scouts",
     },
     {
-      src: "/tasks-menu-icon.svg",
+      src: "/viewTaskIcons/task-symbol-icon-sidenav.svg",
       link: "/tasks",
       isVisible: userName !== "ADMIN",
       active: router.pathname.includes("/tasks"),
       toolTitle: "Tasks",
     },
-    {
-      src: "/support-icon.svg",
-      link: "/procurements",
-      isVisible: true,
-      active: router.pathname.includes("/procurements"),
-      toolTitle: "Procurements",
-    },
+    // {
+    //   src: "/support-icon.svg",
+    //   link: "/procurements",
+    //   isVisible: true,
+    //   active: router.pathname.includes("/procurements"),
+    //   toolTitle: "Procurements",
+    // },
     // { src: '/calendaricon.svg', link: "/" },
     // { src: '/graph-icon.svg', link: "/" },
   ];
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());

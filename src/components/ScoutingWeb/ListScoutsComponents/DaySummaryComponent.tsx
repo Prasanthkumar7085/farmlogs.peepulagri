@@ -55,12 +55,12 @@ const DaySummaryComponent: FC<pageProps> = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const getCropName = (cropId: string, crops: Array<CropType>) => {
     if (crops.length) {
@@ -130,8 +130,8 @@ const DaySummaryComponent: FC<pageProps> = ({
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -246,7 +246,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                   />
                   <span>Recommendations</span>
                 </h1>
-                {loading || editRecomendation || userType == "USER" ? (
+                {loading || editRecomendation || userType_v2 == "USER" ? (
                   ""
                 ) : singleScoutData?.suggestions ? (
                   <IconButton
@@ -271,7 +271,7 @@ const DaySummaryComponent: FC<pageProps> = ({
 
               {!loading && editRecomendation ? (
                 <div style={{ width: "100%" }}>
-                  {!(userType == "USER") ? (
+                  {!(userType_v2 == "USER") ? (
                     <TextField
                       className={style.textAria}
                       value={recomendations}
@@ -291,7 +291,7 @@ const DaySummaryComponent: FC<pageProps> = ({
                       />
                     </div>
                   )}
-                  {!(userType == "USER") ? (
+                  {!(userType_v2 == "USER") ? (
                     <div className={style.sendButtonDiv}>
                       <Button
                         className={style.cancelButton}

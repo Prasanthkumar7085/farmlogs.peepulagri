@@ -115,7 +115,7 @@ const AttachmentDrawerTaskmodule = ({
                           key={index}
                           className={styles.taskModuleAttachmentBlock}
                         >
-                          {image?.type?.includes("video") ? (
+                          {image?.metadata?.type?.includes("video") ?
                             <img
                               src={"/videoimg.png"}
                               alt=""
@@ -123,15 +123,56 @@ const AttachmentDrawerTaskmodule = ({
                               width={100}
                               className={styles.attachmentImg}
                             />
-                          ) : (
-                            <img
-                              src={image?.url}
-                              alt=""
-                              height={100}
-                              width={100}
-                              className={styles.attachmentImg}
-                            />
-                          )}
+                            :
+                            image?.metadata?.type?.includes("pdf") ?
+                              <img
+                                src={"/pdf-icon.png"}
+                                alt=""
+                                height={100}
+                                width={100}
+                                className={styles.attachmentImg}
+                              /> :
+                              image?.metadata?.type?.includes("csv") ?
+                                <img
+                                  src={"/csv-icon.png"}
+                                  alt=""
+                                  height={100}
+                                  width={100}
+                                  className={styles.attachmentImg}
+                                /> :
+                                image?.metadata?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || image?.metadata?.type.includes("xlsx") ?
+
+                                  <img
+                                    src={"/google-sheets-icon.webp"}
+                                    alt=""
+                                    height={100}
+                                    width={100}
+                                    className={styles.attachmentImg}
+                                  /> :
+                                  image?.metadata?.type.includes("doc") || image?.metadata?.type.includes("docx") ?
+                                    <img
+                                      src={"/doc-icon.webp"}
+                                      alt=""
+                                      height={100}
+                                      width={100}
+                                      className={styles.attachmentImg}
+                                    /> :
+                                    image?.metadata?.type.includes("image") ?
+                                      <img
+                                        src={image?.url}
+                                        alt=""
+                                        height={100}
+                                        width={100}
+                                        className={styles.attachmentImg}
+                                      /> :
+                                      <img
+                                        src={".."}
+                                        alt=""
+                                        height={100}
+                                        width={100}
+                                        className={styles.attachmentImg}
+                                      />
+                          }
                           <div
                             className={styles.viewIcon}
                             onClick={() => {
@@ -187,14 +228,20 @@ const AttachmentDrawerTaskmodule = ({
             <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
           </div>
           <div className={styles.singleImageDialog}>
-            {imageid?.type?.includes("video") ? (
+            {imageid?.metadata?.type?.includes("video") ?
               <video controls width="100%" height="auto" autoPlay>
                 <source src={imageid?.url} type={imageid?.type} />
                 Your browser does not support the video tag.
               </video>
-            ) : (
-              <img src={imageid?.url} alt="" />
-            )}
+              :
+              imageid?.metadata?.type?.includes("image") ?
+                <img src={imageid?.url} alt="" /> :
+
+                <iframe src={imageid?.url} width={"100%"} height={"100%"}>
+                  <p>No preview available for this file type.</p>
+                </iframe>
+
+            }
           </div>
         </div>
       </Dialog>

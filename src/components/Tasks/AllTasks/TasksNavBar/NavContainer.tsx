@@ -138,7 +138,7 @@ const NavContainer: React.FC<PropTypes> = ({
     <>
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
-          <img className={styles.note1Icon} alt="" src="/note-11.svg" />
+          <img className={styles.note1Icon} alt="" src="/viewTaskIcons/task-symbol-icon.svg" />
           <h1 className={styles.taskManagement}>{`Task Management`}</h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>

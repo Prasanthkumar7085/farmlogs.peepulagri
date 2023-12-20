@@ -314,10 +314,10 @@ const TasksTableComponent = ({
               <Tooltip followCursor arrow title="View">
                 <Link href={`/tasks/${info.row.original?._id}`}>
                   <ImageComponent
-                    src="/view-icon.svg"
-                    height={17}
-                    width={17}
-                    alt="view"
+                    src="/viewTaskIcons/task-table-view.svg"
+                    height={18}
+                    width={18}
+                    alt=""
                   />
                 </Link>
               </Tooltip>
@@ -351,32 +351,17 @@ const TasksTableComponent = ({
                         info.row.original?.status == "DONE" ||
                         info.row.original?.created_by?._id !== userId
                       )
-                        ? "/trast-icon.svg"
-                        : "/trast-icon-disabled.svg"
+                        ? "/viewTaskIcons/task-table-delete.svg"
+                        : "/viewTaskIcons/task-table-delete-disable.svg"
                     }
                     height={17}
                     width={17}
-                    alt="view"
+                    alt=""
                   />
                 </div>
               </Tooltip>
 
-              <Tooltip followCursor arrow title="Comments">
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setRowDetails(info.row.original);
-                    setDrawerOpen(true);
-                  }}
-                >
-                  <ImageComponent
-                    src="/task-comments.svg"
-                    height={17}
-                    width={17}
-                    alt="comments"
-                  />
-                </div>
-              </Tooltip>
+
               <Tooltip
                 followCursor
                 arrow
@@ -399,28 +384,48 @@ const TasksTableComponent = ({
                   <ImageComponent
                     src={
                       info.row.original.attachments
-                        ? "/task-table-attachment-icon.svg"
-                        : "task-table-attachment-icon-disabled.svg"
+                        ? "/viewTaskIcons/task-table-attachment.svg"
+                        : "/viewTaskIcons/task-table-attachment-disable.svg"
                     }
-                    height={17}
-                    width={17}
+                    height={15}
+                    width={15}
                     alt=""
                   />
                 </div>
               </Tooltip>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setOpenLogs((prev) => !prev);
-                  setTaskId(info.row.original?._id);
-                }}
-              >
-                <Tooltip followCursor arrow title="Logs">
-                  <SummarizeIcon
-                    sx={{ color: "#4986f7", fontSize: "1.3rem" }}
+              <Tooltip followCursor arrow title="Comments">
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setRowDetails(info.row.original);
+                    setDrawerOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src="/viewTaskIcons/task-table-comments.svg"
+                    height={17}
+                    width={17}
+                    alt="comments"
                   />
-                </Tooltip>
-              </div>
+                </div>
+              </Tooltip>
+              <Tooltip followCursor arrow title="Logs">
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setOpenLogs((prev) => !prev);
+                    setTaskId(info.row.original?._id);
+                  }}
+                >
+                  <ImageComponent
+                    src=
+                    "/viewTaskIcons/logs-icon.svg"
+                    height={14}
+                    width={13}
+                    alt=""
+                  />
+                </div>
+              </Tooltip>
             </div>
           }
         </span>

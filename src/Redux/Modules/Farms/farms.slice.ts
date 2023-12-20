@@ -9,7 +9,8 @@ export const initialState: Farms.FarmsData = {
   singleFarm: {},
   filesList: [],
   cropName: '',
-  farmName:""
+  farmName:"",
+  taskFilterOpen:false
 };
 
 export const farmsSlice = createSlice({
@@ -46,6 +47,9 @@ export const farmsSlice = createSlice({
     },
     setToInitialState: (state: any) => {
       state = initialState;
+    },
+    changeTaskFilterOpen:(state:any)=>{
+      state.taskFilterOpen = !state.taskFilterOpen
     }
   },
 });
@@ -57,7 +61,8 @@ export const {
   setFarmTitleTemp,
   removeTheFilesFromStore,
   removeOneElement,
-  setToInitialState
+  setToInitialState,
+  changeTaskFilterOpen
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
 

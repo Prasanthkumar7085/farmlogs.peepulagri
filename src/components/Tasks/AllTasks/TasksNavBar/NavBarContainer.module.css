@@ -1,9 +1,5 @@
 .note1Icon {
-  position: relative;
   width: 24px;
-  height: 24px;
-  overflow: hidden;
-  flex-shrink: 0;
 }
 
 .taskManagement {
@@ -20,17 +16,20 @@
   gap: 10px;
 }
 
-.filter {
+.filterAddBtn {
   border-radius: 4px !important;
   background: #05A155 !important;
   color: #FFF !important;
   font-family: "Inter", sans-serif !important;
   font-size: clamp(14px, 0.72vw, 16px) !important;
   font-weight: 500;
-  padding-block: 5px !important;
+  padding: 5px 25px !important;
+  text-transform: capitalize !important;
+  display: flex;
+  align-items: center;
 }
 
-.filter:hover {
+.filterAddBtn:hover {
   background: #05A155 !important;
 }
 
@@ -53,7 +52,110 @@
 
 .navbarcontainer {
   justify-content: space-between;
-  font-family: Inter;
-  padding-block: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  padding-block: 0.8rem;
+  padding-top: 0.5rem;
   width: 100%;
+}
+
+.filterBtn {
+  padding: 5.5px 25px !important;
+  border-radius: 4px !important;
+  border: 1px solid #D3D5DB !important;
+  background: #FFF !important;
+  color: #6A7185 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(14px, 0.83vw, 16px) !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+  text-transform: capitalize !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.activeFilterBtn {
+  padding: 5.5px 25px !important;
+  border-radius: 4px !important;
+  border: 1px solid #D3D5DB !important;
+  background: #F0FFF0 !important;
+  color: #05A155 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(14px, 0.83vw, 16px) !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+  text-transform: capitalize !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.activeFilterBtn:hover {
+  padding: 5.5px 25px !important;
+  border-radius: 4px !important;
+  border: 1px solid #D3D5DB !important;
+  background: #F0FFF0 !important;
+  color: #05A155 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(14px, 0.83vw, 16px) !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+  text-transform: capitalize !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.filterBtn:hover {
+  background: #FFF !important;
+  color: #6A7185 !important;
+  box-shadow: none !important;
+}
+
+.FilterCount {
+  color: #fff;
+  font-size: 10px;
+  padding: 0px 6px;
+  border-radius: 50%;
+  background-color: #05A155;
+}
+
+.TabButtonGrp {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.tabButton {
+  background-color: #F0FFF0 !important;
+  border: 1px solid #05A155 !important;
+  color: #05A155 !important;
+  padding: 5px 20px !important;
+  border-radius: 20px !important;
+  font-size: clamp(13px, 0.72vw, 16px) !important;
+  text-transform: capitalize !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.tabButton:hover {
+  background-color: #F0FFF0 !important;
+  border: 1px solid #05A155 !important;
+  color: #05A155 !important;
+}
+
+.tabActiveButton {
+  font-size: clamp(13px, 0.72vw, 16px) !important;
+  text-transform: capitalize !important;
+  font-family: 'Inter', sans-serif !important;
+  background-color: #05A155 !important;
+  border: 1px solid #05A155 !important;
+  color: #fff !important;
+  padding: 5px 20px !important;
+  border-radius: 20px !important;
+}
+
+.tabActiveButton:hover {
+  background-color: #05A155 !important;
+  border: 1px solid #05A155 !important;
+  color: #fff !important;
 }

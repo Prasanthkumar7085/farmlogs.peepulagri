@@ -46,8 +46,8 @@ const ListScouts: FunctionComponent = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -210,8 +210,8 @@ const ListScouts: FunctionComponent = () => {
   };
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());

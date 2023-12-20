@@ -19,7 +19,9 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
 
     const router = useRouter();
 
-    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+    const userType_v2 = useSelector(
+      (state: any) => state.auth.userDetails?.user_details?.user_type
+    );
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
     const [supportStatus, setSupportStatus] = useState<string>('');
@@ -99,81 +101,99 @@ const ViewSupportBody = ({ data, getOneSupportById }: { data: SupportResponseDat
         else return '-'
     }
     return (
-
-        <div className={styles.supportBody}>
-            <div>
-                <div className={styles.eachModule}>
-                    <div className={styles.eachCell}>
-                        <Typography className={styles.label}>
-                            Support ID
-                        </Typography>
-                        <Typography className={styles.value}>
-                            {data?.support_id}
-                        </Typography>
-                    </div>
-                    <div className={styles.eachCell}>
-                        <Typography className={styles.label}>
-                            Status
-                        </Typography>
-                        {userType == 'ADMIN' ?
-                        <SelectComponent sx={{minWidth: "130px"}}
-                            value={supportStatus ? supportStatus : ""}
-                            defaultValue={supportStatus}
-                            options={statusOptions}
-                            onChange={onChangeStatus}
-                            size="small"
-                            disabled={supportStatus == 'ARCHIVE' ? true : false}
-                        />
-                        : getStatusTitle(data?.status as string)}
-                    </div>
-                </div>
-                <div className={styles.dateRangeRow}>
-                    <div className={styles.eachCell}>
-
-                        <Typography className={styles.label}>
-                            Date
-                        </Typography>
-                        <Chip className={styles.date} label={timePipe(data?.createdAt as string, 'DD, MMM YYYY')} />
-                    </div>
-                    <div className={styles.eachCell}>
-                        <Typography className={styles.label}>
-                            Response Date
-                        </Typography>
-                        <Chip className={styles.date} label={timePipe(data?.recent_response_at as string, 'DD, MMM YYYY')} />
-                    </div>
-                </div>
-                <div className={styles.attachmentsList}>
-                    <div className={styles.subTitle}>Attachments</div>
-                    <div className={styles.container}>
-                        {downloadUrls.length ? downloadUrls.map((item: any, index: number) => {
-                            return (
-                                <div className={styles.eachFile} key={index}>
-                                    <Image
-                                        alt={`image-${index}`}
-                                        height={100}
-                                        width={150}
-                                        src={getSrc(item)}
-                                    />
-                                    <div className={styles.actionButton}>
-                                        <IconButton className={styles.iconButton} onClick={() => window.open(item.downloadUrl)}>
-                                            <OpenInNewIcon />
-                                        </IconButton>
-                                        {userType == 'ADMIN' ? "" : <IconButton className={styles.iconButton} onClick={() => deleteImage(item)}>
-                                            <DeleteOutlineIcon />
-                                        </IconButton>}
-                                    </div>
-                                </div>
-                            )
-                        }) :
-                            <p style={{ color: "#919191" }}>{"No Attachments"}</p>
-                        }
-                    </div>
-                </div>
+      <div className={styles.supportBody}>
+        <div>
+          <div className={styles.eachModule}>
+            <div className={styles.eachCell}>
+              <Typography className={styles.label}>Support ID</Typography>
+              <Typography className={styles.value}>
+                {data?.support_id}
+              </Typography>
             </div>
-
-            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+            <div className={styles.eachCell}>
+              <Typography className={styles.label}>Status</Typography>
+              {userType_v2 == "ADMIN" ? (
+                <SelectComponent
+                  sx={{ minWidth: "130px" }}
+                  value={supportStatus ? supportStatus : ""}
+                  defaultValue={supportStatus}
+                  options={statusOptions}
+                  onChange={onChangeStatus}
+                  size="small"
+                  disabled={supportStatus == "ARCHIVE" ? true : false}
+                />
+              ) : (
+                getStatusTitle(data?.status as string)
+              )}
+            </div>
+          </div>
+          <div className={styles.dateRangeRow}>
+            <div className={styles.eachCell}>
+              <Typography className={styles.label}>Date</Typography>
+              <Chip
+                className={styles.date}
+                label={timePipe(data?.createdAt as string, "DD, MMM YYYY")}
+              />
+            </div>
+            <div className={styles.eachCell}>
+              <Typography className={styles.label}>Response Date</Typography>
+              <Chip
+                className={styles.date}
+                label={timePipe(
+                  data?.recent_response_at as string,
+                  "DD, MMM YYYY"
+                )}
+              />
+            </div>
+          </div>
+          <div className={styles.attachmentsList}>
+            <div className={styles.subTitle}>Attachments</div>
+            <div className={styles.container}>
+              {downloadUrls.length ? (
+                downloadUrls.map((item: any, index: number) => {
+                  return (
+                    <div className={styles.eachFile} key={index}>
+                      <Image
+                        alt={`image-${index}`}
+                        height={100}
+                        width={150}
+                        src={getSrc(item)}
+                      />
+                      <div className={styles.actionButton}>
+                        <IconButton
+                          className={styles.iconButton}
+                          onClick={() => window.open(item.downloadUrl)}
+                        >
+                          <OpenInNewIcon />
+                        </IconButton>
+                        {userType_v2 == "ADMIN" ? (
+                          ""
+                        ) : (
+                          <IconButton
+                            className={styles.iconButton}
+                            onClick={() => deleteImage(item)}
+                          >
+                            <DeleteOutlineIcon />
+                          </IconButton>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p style={{ color: "#919191" }}>{"No Attachments"}</p>
+              )}
+            </div>
+          </div>
         </div>
-    )
+
+        <AlertComponent
+          alertMessage={alertMessage}
+          alertType={alertType}
+          setAlertMessage={setAlertMessage}
+        />
+      </div>
+    );
 }
 
 export default ViewSupportBody;

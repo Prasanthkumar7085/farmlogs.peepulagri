@@ -31,6 +31,16 @@
   right: 1rem;
   margin: 0 auto;
 }
+@media(max-width: 576px){
+  .bgImage .vectorBottom {
+    position: absolute;
+  bottom: 1rem;
+  left: inherit;
+  right: 1rem;
+  margin: 0 auto;
+  }
+
+}
 .logo {
   margin: -2rem 0 2rem;
   height: auto;

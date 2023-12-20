@@ -106,19 +106,12 @@ const EditTagsForSingleAttachment = ({
         className={styles.updateSubmitBtn}
         onClick={() => {
           setTagsDrawerEditOpen(false);
-          // captureTagsDetailsEdit([...tags, ...tagsDetails?.tags], description);
         }}
-      // disabled={loading || !(tags?.length || description?.length)}
-      // className={
-      //   loading || !(tags?.length || description?.length)
-      //     ? styles.updateSubmitBtnDisabled
-      //     : styles.updateSubmitBtn
-      // }
       >
         {loading ? (
           <CircularProgress size="1.5rem" sx={{ color: "white" }} />
         ) : (
-          "Submit"
+          "Close"
         )}
       </Button>
     </Drawer>

@@ -19,8 +19,8 @@ import { Toaster, toast } from "sonner";
 
 export default function SigninEmail() {
   const dispatch = useDispatch();
-  const [, userType] = useCookies(["userType"]);
-  const [, loggedIn] = useCookies(["loggedIn"]);
+  const [, userType_v2] = useCookies(["userType_v2"]);
+  const [, loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [email, setEmail] = useState<any>();
   const [password, setPassword] = useState<any>();
@@ -52,8 +52,8 @@ export default function SigninEmail() {
       );
       const res = await response.json();
       if (response.status == 200 || response.status == 201) {
-        loggedIn("loggedIn", "true");
-        userType("userType", res?.data?.user_details?.user_type);
+        loggedIn_v2("loggedIn_v2", "true");
+        userType_v2("userType_v2", res?.data?.user_details?.user_type);
 
         if ("data" in res) {
           dispatch(setUserDetails(res?.data));

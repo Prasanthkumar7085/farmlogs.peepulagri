@@ -25,8 +25,8 @@ const AllSummaryComponents = () => {
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
-    const [, , removeCookie] = useCookies(["userType"]);
-    const [, , loggedIn] = useCookies(["loggedIn"]);
+    const [, , removeCookie] = useCookies(["userType_v2"]);
+    const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<any>([]);
@@ -34,35 +34,35 @@ const AllSummaryComponents = () => {
     const [searchString, setSearchString] = useState<any>([]);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [pageNumber, setPageNumber] = useState(1);
-    const [rowId, setRowID] = useState<any>()
-    const [farmOptions, setFarmOptions] = useState<any>()
-    const [cropOptions, setCropOptions] = useState<any>()
-    const [cropId, setCropId] = useState<any>()
-    const [farmId, setFarmID] = useState<any>()
+    const [rowId, setRowID] = useState<any>();
+    const [farmOptions, setFarmOptions] = useState<any>();
+    const [cropOptions, setCropOptions] = useState<any>();
+    const [cropId, setCropId] = useState<any>();
+    const [farmId, setFarmID] = useState<any>();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [alertType, setAlertType] = useState(false);
-    const [deleteID, setDeleteID] = useState<any>()
+    const [deleteID, setDeleteID] = useState<any>();
 
     const open = Boolean(anchorEl);
     const handleMenu = (event: any) => {
-        setAnchorEl(event.currentTarget);
+      setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
+      setAnchorEl(null);
     };
 
     const logout = async () => {
-        try {
-            removeCookie("userType");
-            loggedIn("loggedIn");
-            router.push("/");
-            await dispatch(removeUserDetails());
-            await dispatch(deleteAllMessages());
-        } catch (err: any) {
-            console.error(err);
-        }
+      try {
+        removeCookie("userType_v2");
+        loggedIn_v2("loggedIn_v2");
+        router.push("/");
+        await dispatch(removeUserDetails());
+        await dispatch(deleteAllMessages());
+      } catch (err: any) {
+        console.error(err);
+      }
     };
 
     const getSummary = async (farmId = "", cropId = "", page: any) => {

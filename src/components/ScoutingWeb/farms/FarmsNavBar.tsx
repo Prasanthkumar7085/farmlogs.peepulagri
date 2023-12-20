@@ -20,7 +20,9 @@ export interface pageProps {
 const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
 
   const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
-  const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+  const userType_v2 = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?.user_type
+  );
 
   const router = useRouter();
   const [search, setSearch] = useState('');
@@ -73,7 +75,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     } else {
       getLocations();
     }
-    if (userType == "AGRONOMIST") {
+    if (userType_v2 == "AGRONOMIST") {
       if (router.query.user_id) {
         getAllUsers(router.query.user_id as string);
       } else {
@@ -82,10 +84,10 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
     }
   };
   useEffect(() => {
-    if (router.isReady && accessToken && userType) {
+    if (router.isReady && accessToken && userType_v2) {
       callData();
     }
-  }, [router.isReady, accessToken, userType]);
+  }, [router.isReady, accessToken, userType_v2]);
 
   useEffect(() => {
     if (changed) {
@@ -257,7 +259,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           ""
         )}
 
-        {/* {userType == "agronomist" && !settingUserLoading ? (
+        {/* {userType_v2 == "agronomist" && !settingUserLoading ? (
           <Autocomplete
             sx={{
               width: "250px",

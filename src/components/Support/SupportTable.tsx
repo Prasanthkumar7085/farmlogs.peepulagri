@@ -7,13 +7,14 @@ import { useRouter } from "next/router";
 
 const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
 
-    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+    const userType_v2 = useSelector(
+      (state: any) => state.auth.userDetails?.user_details?.user_type
+    );
     const router = useRouter();
 
     const getHiddenColumns = () => {
 
-        if (userType !== 'ADMIN')
-            return ['user_id.full_name']
+        if (userType_v2 !== "ADMIN") return ["user_id.full_name"];
         return []
     }
     const {
@@ -100,4 +101,4 @@ const SupportTable = ({ columns, data, loading, appliedSort }: any) => {
 
 export default SupportTable;
 
-// (!cell.column.show && userType == 'ADMIN') ? (<td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>) : null
+// (!cell.column.show && userType_v2 == 'ADMIN') ? (<td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>) : null

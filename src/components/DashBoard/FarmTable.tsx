@@ -92,4 +92,4 @@ const FarmTable = ({ columns, data, loading, appliedSort }: any) => {
 
 export default FarmTable;
 
-// (!cell.column.show && userType == 'ADMIN') ? (<td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>) : null
+// (!cell.column.show && userType_v2 == 'ADMIN') ? (<td className="cell" {...cell.getCellProps()} key={cellIndex}>{cell.render("Cell")}</td>) : null

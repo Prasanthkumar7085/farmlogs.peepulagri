@@ -463,6 +463,15 @@
     margin-top: 1rem;
 }
 
+.confirmAssignyBtnDisabled{
+    color: #b7b7b7 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 0.72vw, 14px) !important;
+    font-weight: 500 !important;
+    line-height: 18px;
+    border: 1px solid #b7b7b7 !important;
+    text-transform: capitalize !important;
+}
 .confirmAssignyBtn {
     color: #45A845 !important;
     font-family: 'Inter', sans-serif !important;

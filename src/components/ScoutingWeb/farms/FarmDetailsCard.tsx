@@ -46,11 +46,11 @@ const ScoutingFarmDetailsCard = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState("");
@@ -61,8 +61,8 @@ const ScoutingFarmDetailsCard = ({
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -211,7 +211,7 @@ const ScoutingFarmDetailsCard = ({
               }}
             >
               <div onClick={() => router.push(`/farm/${item?._id}/crops`)}>
-                {userType == "AGRONOMIST" ? (
+                {userType_v2 == "AGRONOMIST" ? (
                   <p className={styles.mobile}>
                     <AccountCircleIcon />
                     <span>{item?.user_id?.full_name}</span>

@@ -1,24 +1,21 @@
+import { changeTaskFilterOpen } from "@/Redux/Modules/Farms";
+import SelectComponent from "@/components/Core/SelectComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
+import { Search } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import {
   Autocomplete,
   Button,
   Collapse,
-  Icon,
   InputAdornment,
   TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsService";
-import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInTasks";
-import styles from "./NavBarContainer.module.css";
-import SelectComponent from "@/components/Core/SelectComponent";
-import AddIcon from "@mui/icons-material/Add";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
-import { Search } from "@mui/icons-material";
-import Menu from "@mui/material/Menu";
-import { changeTaskFilterOpen } from "@/Redux/Modules/Farms";
+import styles from "./NavBarContainer.module.css";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -40,7 +37,6 @@ const NavContainer: React.FC<PropTypes> = ({
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
 
   const filterOpenOrNot = useSelector(
     (state: any) => state?.farms?.taskFilterOpen
@@ -121,6 +117,11 @@ const NavContainer: React.FC<PropTypes> = ({
       return;
     }
     setSelectedUsers(usersObj);
+  };
+
+  const clearFiltersDisabledOrNot = () => {
+    let { page, limit, ...rest } = router.query;
+    return !Object.keys(rest)?.length;
   };
 
   return (
@@ -249,6 +250,7 @@ const NavContainer: React.FC<PropTypes> = ({
                   selectedFarmId: router.query.farm_id as string,
                   status: router.query.status as string,
                   userId: [],
+                  isMyTasks: false,
                 });
               }}
             >
@@ -261,7 +263,7 @@ const NavContainer: React.FC<PropTypes> = ({
             style={{
               width: "35%",
               display: "grid",
-              gridTemplateColumns: "2fr 1fr",
+              gridTemplateColumns: "2fr 1fr .5fr",
             }}
           >
             <div>
@@ -312,73 +314,6 @@ const NavContainer: React.FC<PropTypes> = ({
                 ""
               )}
             </div>
-            {/* {!(router.query.is_my_task == "true") ? (
-            <div>
-              <Menu
-                id="demo-positioned-menu"
-                aria-labelledby="demo-positioned-button"
-                anchorEl={anchorEl}
-                open={openMenu}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-              >
-                <Autocomplete
-                  multiple
-                  sx={{
-                    width: "250px",
-                    maxWidth: "250px",
-                    borderRadius: "4px",
-                  }}
-                  id="size-small-outlined-multi"
-                  size="small"
-                  fullWidth
-                  noOptionsText={"No such User"}
-                  value={selectedUsers?.length ? selectedUsers : []}
-                  isOptionEqualToValue={(option: any, value: any) =>
-                    option.name === value.name
-                  }
-                  getOptionLabel={(option: any) => {
-                    return option.name;
-                  }}
-                  options={users}
-                  onChange={(e: any, value: userTaskType[] | []) => {
-                    setSelectedUsers(value);
-                    setUser(value);
-                    let data: string[] = value?.length
-                      ? value?.map(
-                          (item: { _id: string; name: string }) => item._id
-                        )
-                      : [];
-                    onUserChange(data, false);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      placeholder="Search by User"
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        "& .MuiInputBase-root": {
-                          fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                          backgroundColor: "#fff",
-                          border: "none",
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Menu>
-            </div>
-          ) : (
-            ""
-          )} */}
 
             <SelectComponent
               options={statusOptions}
@@ -386,6 +321,26 @@ const NavContainer: React.FC<PropTypes> = ({
               onChange={setStatusValue}
               value={status ? status : ""}
             />
+            <Button
+              onClick={() => {
+                setUser(null);
+                setSelectedUsers(null);
+                getAllTasksTab({
+                  page: 1,
+                  limit: 15,
+                  search_string: "",
+                  sortBy: "",
+                  sortType: "",
+                  selectedFarmId: "",
+                  status: "",
+                  userId: [],
+                  isMyTasks: false,
+                });
+              }}
+              disabled={clearFiltersDisabledOrNot()}
+            >
+              <FilterAltOffIcon />
+            </Button>
           </div>
         </div>
       </Collapse>

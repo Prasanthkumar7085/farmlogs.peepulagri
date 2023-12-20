@@ -46,7 +46,7 @@ const NavContainer: React.FC<PropTypes> = ({
     (state: any) => state?.farms?.taskFilterOpen
   );
 
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
   const userId = useSelector(

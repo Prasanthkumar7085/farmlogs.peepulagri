@@ -34,13 +34,13 @@ const TasksPageComponent = () => {
   const [loading, setLoading] = useState(true);
   const [searchString, setSearchString] = useState("");
   const [selectedFarm, setSelectedFarm] = useState<FarmInTaskType | null>();
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
     } catch (err: any) {
       console.error(err);

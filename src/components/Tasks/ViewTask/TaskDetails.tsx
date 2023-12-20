@@ -40,7 +40,7 @@ const TaskDetails: React.FC<PropsType> = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
   const loggedInUserId = useSelector(
@@ -238,9 +238,7 @@ const TaskDetails: React.FC<PropsType> = ({
         }}
       >
         <div>
-          <div
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-          >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div className={styles.singleDetailsBox}>
               {editField == "title" && editFieldOrNot ? (
                 <div style={{ width: "100%" }}>
@@ -264,7 +262,7 @@ const TaskDetails: React.FC<PropsType> = ({
                 <h1 className={styles.landPreparation}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                    data?.title.slice(1)
+                      data?.title.slice(1)
                     : "-"}
                 </h1>
               )}
@@ -294,7 +292,7 @@ const TaskDetails: React.FC<PropsType> = ({
               ) : (
                 <>
                   {status !== "DONE" &&
-                    loggedInUserId == data?.created_by?._id ? (
+                  loggedInUserId == data?.created_by?._id ? (
                     <IconButton
                       onClick={() => {
                         setEditFieldOrNot(true);
@@ -323,18 +321,13 @@ const TaskDetails: React.FC<PropsType> = ({
           <label className={styles.userLabel} style={{ width: "100px" }}>
             Due Date
           </label>
-          <div
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-          >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div
               className={styles.singleDetailsBox}
               style={{ display: "flex" }}
             >
               {editField == "deadline" && editFieldOrNot ? (
-                <div
-                  className={styles.responseDate2}
-                  style={{ width: "100%" }}
-                >
+                <div className={styles.responseDate2} style={{ width: "100%" }}>
                   <div style={{ display: "flex", width: "100%" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
@@ -414,7 +407,7 @@ const TaskDetails: React.FC<PropsType> = ({
               ) : (
                 <>
                   {status !== "DONE" &&
-                    loggedInUserId == data?.created_by?._id ? (
+                  loggedInUserId == data?.created_by?._id ? (
                     <IconButton
                       onClick={() => {
                         setEditFieldOrNot(true);
@@ -465,8 +458,8 @@ const TaskDetails: React.FC<PropsType> = ({
               >
                 <div>
                   {deleteField == "assignee" &&
-                    deleteFieldOrNot &&
-                    hasEditAccess ? (
+                  deleteFieldOrNot &&
+                  hasEditAccess ? (
                     <div className={styles.iconBlock}>
                       <IconButton
                         onClick={() => {
@@ -475,9 +468,7 @@ const TaskDetails: React.FC<PropsType> = ({
                           setSelectedAssigneeIds([]);
                         }}
                       >
-                        <CloseIcon
-                          sx={{ color: "red", fontSize: "1.2rem" }}
-                        />
+                        <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                       </IconButton>
                       <IconButton
                         onClick={() => {
@@ -498,7 +489,7 @@ const TaskDetails: React.FC<PropsType> = ({
                     !(editField == "assignee" && editFieldOrNot) ? (
                     <>
                       {status !== "DONE" &&
-                        loggedInUserId == data?.created_by?._id ? (
+                      loggedInUserId == data?.created_by?._id ? (
                         <IconButton
                           onClick={() => {
                             setDeleteFieldOrNot(true);
@@ -528,25 +519,21 @@ const TaskDetails: React.FC<PropsType> = ({
                           setEditField("");
                         }}
                       >
-                        <CloseIcon
-                          sx={{ color: "red", fontSize: "1.2rem" }}
-                        />
+                        <CloseIcon sx={{ color: "red", fontSize: "1.2rem" }} />
                       </IconButton>
                       <IconButton
                         onClick={() => {
                           addAssignee();
                         }}
                       >
-                        <DoneIcon
-                          sx={{ color: "green", fontSize: "1.4rem" }}
-                        />
+                        <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
                       </IconButton>
                     </div>
                   ) : !(deleteField == "assignee" && deleteFieldOrNot) ? (
                     <>
                       {status !== "DONE" &&
-                        (loggedInUserId == data?.created_by?._id ||
-                          hasEditAccess) ? (
+                      (loggedInUserId == data?.created_by?._id ||
+                        hasEditAccess) ? (
                         <IconButton
                           onClick={() => {
                             setEditFieldOrNot(true);
@@ -593,27 +580,24 @@ const TaskDetails: React.FC<PropsType> = ({
               <div className={styles.allAsigneeGrp}>
                 {data?.assign_to
                   ? data?.assign_to.map(
-                    (
-                      item: { _id: string; name: string },
-                      index: number
-                    ) => {
-                      return (
-                        <div key={index} className={styles.singleAsignee}>
-                          {deleteField == "assignee" && deleteFieldOrNot ? (
-                            <input
-                              type="checkbox"
-                              onChange={(e) =>
-                                handleAssigneeCheckboxChange(e, item._id)
-                              }
-                            />
-                          ) : (
-                            ""
-                          )}
-                          {item.name},
-                        </div>
-                      );
-                    }
-                  )
+                      (item: { _id: string; name: string }, index: number) => {
+                        return (
+                          <div key={index} className={styles.singleAsignee}>
+                            {deleteField == "assignee" && deleteFieldOrNot ? (
+                              <input
+                                type="checkbox"
+                                onChange={(e) =>
+                                  handleAssigneeCheckboxChange(e, item._id)
+                                }
+                              />
+                            ) : (
+                              ""
+                            )}
+                            {item.name},
+                          </div>
+                        );
+                      }
+                    )
                   : "-"}
               </div>
             </div>
@@ -626,9 +610,7 @@ const TaskDetails: React.FC<PropsType> = ({
               options={statusOptions}
               disabled={
                 status === "DONE" ||
-                !(
-                  !(loggedInUserId != data?.created_by?._id) || !hasEditAccess
-                )
+                !(!(loggedInUserId != data?.created_by?._id) || !hasEditAccess)
               }
               size="small"
               onChange={(e: any) => {
@@ -664,10 +646,9 @@ const TaskDetails: React.FC<PropsType> = ({
                 <DoneIcon sx={{ color: "green", fontSize: "1.4rem" }} />
               </IconButton>
             </div>
-          ) : userType !== "farmer" ? (
+          ) : userType_v2 !== "farmer" ? (
             <>
-              {status !== "DONE" &&
-                loggedInUserId == data?.created_by?._id ? (
+              {status !== "DONE" && loggedInUserId == data?.created_by?._id ? (
                 <div
                   onClick={() => {
                     setEditFieldOrNot(true);

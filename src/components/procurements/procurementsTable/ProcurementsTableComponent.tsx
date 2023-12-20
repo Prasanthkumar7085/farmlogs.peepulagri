@@ -34,7 +34,7 @@ const ProcurementsTableComponent = ({
 }: any) => {
   const router = useRouter();
 
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
   const accessToken = useSelector(
@@ -262,7 +262,6 @@ const ProcurementsTableComponent = ({
       width: "150px",
     },
 
-
     {
       accessorFn: (row: any) => row.approved_by?.name,
       id: "approved_by.name",
@@ -346,7 +345,7 @@ const ProcurementsTableComponent = ({
                   alt="view"
                 />
               </div>
-              {userType !== "farmer" ? (
+              {userType_v2 !== "farmer" ? (
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {

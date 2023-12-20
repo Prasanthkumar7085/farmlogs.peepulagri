@@ -26,17 +26,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     const { cookies } = req;
 
 
-    if (cookies.loggedIn == 'true') {
+    if (cookies.loggedIn_v2 == "true") {
+      let id = "log_id";
 
-        let id = 'log_id'
-
-
-        return {
-            redirect: {
-                destination: `/farm/${id}/logs`,
-                permanent: false,
-            },
-        };
+      return {
+        redirect: {
+          destination: `/farm/${id}/logs`,
+          permanent: false,
+        },
+      };
     }
     return {
         props: {},

@@ -278,7 +278,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                   </TableCell>
                   <TableCell>{row?.status ? row?.status : "---"}</TableCell>
                   <TableCell>
-                    {row?.approved_by ? row?.approved_by : "---"}
+                    {row?.approved_by?.name ? row?.approved_by?.name : "---"}
                   </TableCell>
                   {materialDetails ?
                     <>

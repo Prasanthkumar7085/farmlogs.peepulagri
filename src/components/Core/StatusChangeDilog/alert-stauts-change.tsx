@@ -3,7 +3,7 @@ import styles from "./alert-status.module.css";
 
 interface pagePropsType {
   open: boolean;
-  statusChange: () => void;
+  statusChange: any;
   setDialogOpen: (newValue: boolean) => void;
   loading: boolean;
 }

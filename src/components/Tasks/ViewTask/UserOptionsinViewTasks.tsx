@@ -2,40 +2,51 @@ import {
   Autocomplete,
   Chip,
   CircularProgress,
+  Fade,
   InputAdornment,
   LinearProgress,
+  Menu,
+  MenuItem,
   TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
-
+import styles from "./userOptions.module.css"
 interface PropsType {
   userId: string;
   onChange: (assigned_to: any) => void;
-  assignee: Array<{ _id: string; name: string }>
+  assignee: Array<{ _id: string; name: string }>,
 }
 
 const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assignee }) => {
   const router = useRouter();
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
 
   const [userData, setUserData] = useState<Array<any>>([]);
-  const [selectedUsers, setSelectedUsers] = useState<Array<any>>([]);
+  const [selectedUsers, setSelectedUsers] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [userLoaded, setUserLoaded] = useState(false);
-
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [usersArray, setUsersArray] = useState<any>([])
+  const [renderField, setRenderField] = useState(true);
   const captureUser = (event: any, selectedObject: any) => {
     if (selectedObject) {
       setSelectedUsers(selectedObject);
-      onChange(selectedObject);
+      setUsersArray([...usersArray, selectedObject])
+      onChange([...usersArray, selectedObject]);
+      setRenderField(false);
+      setTimeout(() => {
+        setRenderField(true);
+      }, 0.1);
+      setSelectedUsers(null);
+
     } else {
-      setSelectedUsers([]);
-      onChange([]);
+      setSelectedUsers(null);
+      onChange([...usersArray, selectedObject]);
     }
   };
 
@@ -47,15 +58,16 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
     if (response?.success) {
       setUserData(response?.data);
 
-      if (id) {
-        let obj = response?.data?.find((item: any) => item._id == id);
 
-        setSelectedUsers([obj]); // Use setSelectedUsers to set the default value
-        setUserLoaded(true);
-        setTimeout(() => {
-          setUserLoaded(false);
-        }, 1);
-      }
+      // if (id) {
+      //   let obj = response?.data?.find((item: any) => item._id == id);
+
+      //   setSelectedUsers([obj]); // Use setSelectedUsers to set the default value
+      //   setUserLoaded(true);
+      //   setTimeout(() => {
+      //     setUserLoaded(false);
+      //   }, 1);
+      // }
     }
     setLoading(false);
   };
@@ -66,49 +78,11 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
     }
   }, [accessToken]);
 
+
+
   return (
     <div>
-      {/* <div>
-        {tagValue ? (
-          <div >
-            {tagValue?.length ? (
-              <div >
-                {tagValue?.map((item: string, index: number) => {
-                  return (
-                    <Chip
-                      sx={{
-                        border: "1px solid #d94841",
-                        color: "#d94841",
-                        marginRight: "5px",
-                        marginBottom: "10px",
-                        "& .MuiSvgIcon-root": {
-                          color: "#d94841",
-                        },
-                        "& .MuiSvgIcon-root:hover": {
-                          color: "#d94841 !important",
-                        },
-                      }}
-                      // onDelete={() =>
-                      //   deleteTagLoading ? () => { } : handleDeleteChip(item)
-                      // }
-                      key={index}
-                      label={item}
-                      // className={styles.tagsName}
-                      variant="outlined"
-                      size="medium"
-                    />
-                  );
-                })}
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        ) : (
-          ""
-        )}
-      </div> */}
-      {!userLoaded ? (
+      {!userLoaded && renderField ? (
         <Autocomplete
           sx={{
             width: "100%",
@@ -128,12 +102,12 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
           id="size-small-outlined-multi"
           size="small"
           fullWidth
-          multiple
           noOptionsText={"No such User"}
-          value={selectedUsers}
           isOptionEqualToValue={(option: any, value: any) =>
             option._id === value._id
           }
+          value={selectedUsers}
+          onChange={captureUser}
           renderOption={(props, option) => {
             return (
               <li {...props} key={option._id}>
@@ -151,7 +125,6 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
           }
           getOptionLabel={(option: any) => option.name}
           options={userData ? userData : []}
-          onChange={captureUser}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -173,6 +146,23 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
       ) : (
         ""
       )}
+      <div className={styles.allSelectedUsersBlock
+      }>
+
+        {usersArray?.map((user: any) => (
+          <Chip className={styles.selectedUser}
+            key={user._id}
+            label={user.name}
+            onDelete={() => {
+              const updatedUsers = usersArray.filter(
+                (selectedUser: any) => selectedUser._id !== user._id
+              );
+              setUsersArray(updatedUsers);
+            }}
+            style={{ marginRight: '5px' }}
+          />
+        ))}
+      </div>
       {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
     </div>
   );

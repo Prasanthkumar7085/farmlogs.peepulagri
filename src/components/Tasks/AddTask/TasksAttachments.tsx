@@ -47,7 +47,22 @@ const TasksAttachments: React.FC<PropTypes> = ({
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
   const [loading, setLoading] = useState<any>();
-
+  const [imageTypeArray, setImageTypeArray] = useState(['application/pdf',
+    'application/docx',
+    'application/doc',
+    'application/txt',
+    'application/xlsx',
+    'application/csv',
+    'text/plain',
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/svg',
+    'image/webp',
+    'video/webm',
+    'video/mp4',
+    'application/msword',
+    'text/csv']);
   // let tempFilesStorage: any = [...attachments];
 
   // let previewStorage = [...previewImages];

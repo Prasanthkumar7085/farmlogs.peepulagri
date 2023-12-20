@@ -2,6 +2,7 @@ import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
 import {
   Autocomplete,
   Button,
+  Collapse,
   Icon,
   InputAdornment,
   TextField,
@@ -16,7 +17,7 @@ import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from "@mui/icons-material/Add";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import { Search } from "@mui/icons-material";
-import Menu from '@mui/material/Menu';
+import Menu from "@mui/material/Menu";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -34,7 +35,7 @@ const NavContainer: React.FC<PropTypes> = ({
   selectedFarm,
   onStatusChange,
   onUserChange,
-  getAllTasksTab
+  getAllTasksTab,
 }) => {
   const router = useRouter();
 
@@ -43,7 +44,6 @@ const NavContainer: React.FC<PropTypes> = ({
   );
   const userId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
-
   );
 
   const accessToken = useSelector(
@@ -125,8 +125,34 @@ const NavContainer: React.FC<PropTypes> = ({
           <div className={styles.pagetitle}>
             <img className={styles.note1Icon} alt="" src="/note-11.svg" />
             <h1 className={styles.taskManagement}>{`Task Management`}</h1>
+            <Button
+              id="demo-positioned-button"
+              aria-controls={open ? "demo-positioned-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={(e) => {
+                !open ? handleClick(e) : handleClose();
+              }}
+              variant="contained"
+            >
+              Filter
+            </Button>
+            <Button
+              className={styles.filter}
+              color="primary"
+              size="small"
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={onButtonAddTaskClick}
+            >
+              Add
+            </Button>
           </div>
+        </div>
+      </div>
 
+      <Collapse in={open}>
+        <div>
           <Button
             sx={{
               color: router.query.is_my_task == "true" ? "green" : "red",
@@ -171,35 +197,66 @@ const NavContainer: React.FC<PropTypes> = ({
         </div>
 
         <div className={styles.headeractions}>
-          {!(router.query.is_my_task == "true") ? (
+          <Autocomplete
+            multiple
+            sx={{
+              width: "250px",
+              maxWidth: "250px",
+              borderRadius: "4px",
+            }}
+            id="size-small-outlined-multi"
+            size="small"
+            fullWidth
+            noOptionsText={"No such User"}
+            value={selectedUsers?.length ? selectedUsers : []}
+            isOptionEqualToValue={(option: any, value: any) =>
+              option.name === value.name
+            }
+            getOptionLabel={(option: any) => {
+              return option.name;
+            }}
+            options={users}
+            onChange={(e: any, value: userTaskType[] | []) => {
+              setSelectedUsers(value);
+              setUser(value);
+              let data: string[] = value?.length
+                ? value?.map((item: { _id: string; name: string }) => item._id)
+                : [];
+              onUserChange(data, false);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Search by User"
+                variant="outlined"
+                size="small"
+                sx={{
+                  "& .MuiInputBase-root": {
+                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                    backgroundColor: "#fff",
+                    border: "none",
+                  },
+                }}
+              />
+            )}
+          />
+          {/* {!(router.query.is_my_task == "true") ? (
             <div>
-              <Button
-                id="demo-positioned-button"
-                aria-controls={open ? 'demo-positioned-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-                variant='contained'
-              >
-                Select Users
-              </Button>
               <Menu
                 id="demo-positioned-menu"
                 aria-labelledby="demo-positioned-button"
                 anchorEl={anchorEl}
-                open={open}
+                open={openMenu}
                 onClose={handleClose}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
+                  vertical: "top",
+                  horizontal: "left",
                 }}
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
+                  vertical: "top",
+                  horizontal: "left",
                 }}
               >
-
-
                 <Autocomplete
                   multiple
                   sx={{
@@ -224,8 +281,8 @@ const NavContainer: React.FC<PropTypes> = ({
                     setUser(value);
                     let data: string[] = value?.length
                       ? value?.map(
-                        (item: { _id: string; name: string }) => item._id
-                      )
+                          (item: { _id: string; name: string }) => item._id
+                        )
                       : [];
                     onUserChange(data, false);
                   }}
@@ -245,13 +302,11 @@ const NavContainer: React.FC<PropTypes> = ({
                     />
                   )}
                 />
-
-
               </Menu>
             </div>
           ) : (
             ""
-          )}
+          )} */}
 
           <div style={{ width: "12%" }}>
             <SelectComponent
@@ -284,22 +339,8 @@ const NavContainer: React.FC<PropTypes> = ({
               }}
             />
           </div>
-          {userType !== "USER" ? (
-            <Button
-              className={styles.filter}
-              color="primary"
-              size="small"
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={onButtonAddTaskClick}
-            >
-              Add
-            </Button>
-          ) : (
-            ""
-          )}
         </div>
-      </div>
+      </Collapse>
     </>
   );
 };

@@ -96,7 +96,7 @@ const SingleImageComponent: FC<componentProps> = ({
       <div className={styles.overlay}>
         <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem" }}>
           <img src="/viewTaskIcons/calender-icon.svg" alt="icon" />
-          {timePipe(detailedImage?.uploaded_at, "DD MMM YY")}</Typography>
+          {timePipe(detailedImage?.uploaded_at, "DD MMM YY hh:mm A")}</Typography>
         <img
           src={detailedImage?.url}
           height={"auto"}

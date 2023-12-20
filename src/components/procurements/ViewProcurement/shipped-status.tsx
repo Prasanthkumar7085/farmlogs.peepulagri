@@ -5,12 +5,15 @@ import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
 import styles from "./shipped-status.module.css";
+import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDetailsDilog";
+import { toast } from "sonner";
 
 const ShippedStatus = ({ data, afterStatusChange }: any) => {
   const router = useRouter();
   const [status, setStauts] = useState<any>();
   const [loading, setLoading] = useState<any>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [openTrackingDilog, setTrackingDialogOpen] = useState<any>(false)
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -24,6 +27,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
 
   //change the status
   const onStatusChangeEvent = async () => {
+
     setLoading(true);
     try {
       let changedStatus: any;
@@ -50,18 +54,33 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
 
       if (response.success) {
         setDialogOpen(false);
-        afterStatusChange(true);
+        afterStatusChange(true)
+        toast.success(response?.message)
+
+
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
+
   };
+
+  const addTracking = (value: any) => {
+    if (value == true) {
+      setDialogOpen(true)
+    }
+  }
+
 
   const onMaterialsReceivedCheckboxClick = useCallback(() => {
     // Please sync "Procurement Module/View/Delivered" to the project
   }, []);
+
+  const handleChange = () => {
+    setTrackingDialogOpen(true)
+  }
 
   return (
     <div className={styles.shippedstatus}>
@@ -87,7 +106,13 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           <label className={styles.label}>Status</label>
           <div
             className={styles.statuscontainer}
-            onClick={() => setDialogOpen(true)}
+            onClick={() => {
+              if (data?.status == "PURCHASED") {
+                setTrackingDialogOpen(true);
+              } else {
+                setDialogOpen(true)
+              }
+            }}
           >
             <p className={styles.text}>{data?.status ? data?.status : "---"}</p>
           </div>
@@ -116,6 +141,13 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           setDialogOpen={setDialogOpen}
           loading={loading}
         />}
+      <TrackingDetailsDilog
+        open={openTrackingDilog}
+        addTracking={addTracking}
+        setTrackingDialogOpen={setTrackingDialogOpen}
+        loading={loading}
+      />
+
     </div>
   );
 };

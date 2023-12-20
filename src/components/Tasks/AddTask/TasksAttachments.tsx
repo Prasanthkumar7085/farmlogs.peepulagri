@@ -562,9 +562,13 @@ const TasksAttachments: React.FC<PropTypes> = ({
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
                       .prieviewUrl
-                    : item.type == "application/pdf"
+                    : item.type.includes("pdf")
                       ? "/pdf-icon.png"
-                      : "/doc-icon.webp"
+                      : item.type.includes("csv") ?
+                        "/csv-icon.png" :
+                        item.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || item.type.includes("xlsx") ?
+                          "/google-sheets-icon.webp" :
+                          "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>

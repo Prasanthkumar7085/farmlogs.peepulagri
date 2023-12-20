@@ -92,14 +92,15 @@ const SingleImageComponent: FC<componentProps> = ({
   };
 
   return (
-    <div  >
-      <div className={styles.overlay}>
-        <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem" }}>
-          <img src="/viewTaskIcons/calender-icon.svg" alt="icon" />
-          {timePipe(detailedImage?.uploaded_at, "DD MMM YY hh:mm A")}</Typography>
+    <div style={{ paddingTop: "1rem" }} >
+      <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem" }}>
+        <img src="/viewTaskIcons/calender-icon.svg" alt="icon" />
+        {timePipe(detailedImage?.uploaded_at, "DD MMM YY hh:mm A")}</Typography>
+      <div style={{ height: "60vh", background: "#000" }}>
+
         <img
+          style={{ objectFit: "contain", height: "100%" }}
           src={detailedImage?.url}
-          height={"auto"}
           width={"100%"}
           alt={detailedImage?.key}
         />
@@ -133,7 +134,7 @@ const SingleImageComponent: FC<componentProps> = ({
         </IconButton>
       </div>
 
-      <div>
+      <div style={{ display: "flex", alignItems: "center", gap: "5px", flexWrap: "wrap" }}>
         {detailedImage?.tags?.map((item: string) => {
           return <Chip label={item} key={item} />;
         })}

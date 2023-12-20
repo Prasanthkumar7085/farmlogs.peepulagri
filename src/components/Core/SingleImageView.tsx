@@ -234,7 +234,7 @@ const SingleImageView: FC<componentProps> = ({
       <div
         style={{
           overflowY: "auto",
-          maxHeight: "calc(100vh - 156px)",
+          maxHeight: "calc(100vh - 136px)",
           scrollSnapType: "y mandatory"
         }}
       >
@@ -244,7 +244,6 @@ const SingleImageView: FC<componentProps> = ({
               return (
                 <div key={index}
                   style={{
-                    height: "calc(100vh - 156px)",
                     scrollSnapAlign: "start"
                   }}
                   ref={lastBookElementRef}
@@ -291,7 +290,6 @@ const SingleImageView: FC<componentProps> = ({
               return (
                 <div key={index}
                   style={{
-                    height: "calc(100vh - 156px)",
                     scrollSnapAlign: "start"
                   }}
                   ref={

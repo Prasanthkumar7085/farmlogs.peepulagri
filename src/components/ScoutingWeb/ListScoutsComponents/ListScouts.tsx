@@ -141,6 +141,8 @@ const ListScouts: FunctionComponent = () => {
     } else {
       setCrop(null);
       setPage(1);
+
+      setLoading(false);
       getAllCropImageList({
         page: 1,
         limit: router.query.limit as string,
@@ -228,11 +230,12 @@ const ListScouts: FunctionComponent = () => {
     toDate,
     cropId,
   }: Partial<ApiMethodProps>) => {
-    setLoading(true);
     if (!cropId) {
       setData([]);
       return;
     }
+    setLoading(true);
+
     let url = `/crops/${cropId}/images/${page}/${limit}`;
     let queryParams: any = {};
     if (page) {

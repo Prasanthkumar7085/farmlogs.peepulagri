@@ -609,22 +609,20 @@ const TaskViewComponent = () => {
 
                                                             </div>
                                                             {item?.key.includes("pdf") ?
-                                                                <ImageComponent
-                                                                    src={"/pdf-icon.png"}
-                                                                    height={20}
-                                                                    width={20}
-                                                                    alt={"image"}
+                                                                <img
+                                                                    src="/pdf-icon.png"
+                                                                    className={styles.thumbnailImg}
+                                                                    alt={""}
                                                                     onClick={() => {
                                                                         downLoadAttachements(item.url);
                                                                         window.open(item.url);
                                                                     }}
                                                                 /> :
 
-                                                                <ImageComponent
+                                                                <img
                                                                     src={item.url}
-                                                                    height={20}
-                                                                    width={20}
-                                                                    alt={"image"}
+                                                                    alt={""}
+                                                                    className={styles.thumbnailImg}
                                                                     onClick={() => {
                                                                         downLoadAttachements(item.url);
                                                                         window.open(item.url);

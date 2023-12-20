@@ -608,7 +608,7 @@ const TaskViewComponent = () => {
                                                                     : ''}
 
                                                             </div>
-                                                            {item?.key.includes("pdf") ?
+                                                            {item?.metadata?.type.includes("pdf") ?
                                                                 <img
                                                                     src="/pdf-icon.png"
                                                                     className={styles.thumbnailImg}
@@ -618,16 +618,56 @@ const TaskViewComponent = () => {
                                                                         window.open(item.url);
                                                                     }}
                                                                 /> :
+                                                                item?.metadata?.type.includes("csv") ?
+                                                                    <img
+                                                                        src="/csv-icon.png"
+                                                                        className={styles.thumbnailImg}
+                                                                        alt={""}
+                                                                        onClick={() => {
+                                                                            downLoadAttachements(item.url);
+                                                                            window.open(item.url);
+                                                                        }}
+                                                                    /> :
 
-                                                                <img
-                                                                    src={item.url}
-                                                                    alt={""}
-                                                                    className={styles.thumbnailImg}
-                                                                    onClick={() => {
-                                                                        downLoadAttachements(item.url);
-                                                                        window.open(item.url);
-                                                                    }}
-                                                                />
+                                                                    item?.metadata?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || item?.metadata?.type.includes("xlsx") ?
+                                                                        <img
+                                                                            src="/google-sheets-icon.webp"
+                                                                            className={styles.thumbnailImg}
+                                                                            alt={""}
+                                                                            onClick={() => {
+                                                                                downLoadAttachements(item.url);
+                                                                                window.open(item.url);
+                                                                            }}
+                                                                        /> :
+                                                                        item?.metadata?.type.includes("doc") || item?.metadata?.type.includes("docx") ?
+                                                                            <img
+                                                                                src="/doc-icon.webp"
+                                                                                className={styles.thumbnailImg}
+                                                                                alt={""}
+                                                                                onClick={() => {
+                                                                                    downLoadAttachements(item.url);
+                                                                                    window.open(item.url);
+                                                                                }}
+                                                                            /> :
+                                                                            item?.metadata?.type.includes("video") ?
+                                                                                <img
+                                                                                    src="/video-icon.png"
+                                                                                    className={styles.thumbnailImg}
+                                                                                    alt={""}
+                                                                                    onClick={() => {
+                                                                                        downLoadAttachements(item.url);
+                                                                                        window.open(item.url);
+                                                                                    }}
+                                                                                /> :
+                                                                                <img
+                                                                                    src={item.url}
+                                                                                    alt={""}
+                                                                                    className={styles.thumbnailImg}
+                                                                                    onClick={() => {
+                                                                                        downLoadAttachements(item.url);
+                                                                                        window.open(item.url);
+                                                                                    }}
+                                                                                />
                                                             }
                                                         </div>
 
@@ -638,7 +678,7 @@ const TaskViewComponent = () => {
                                                             ? item?.key.slice(0, 20) + "..." //+ item?.key?.split('.')[item?.key?.split('.')?.length - 1]
                                                             : item?.key}</div>
 
-                                                        <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY")}</div>
+                                                        <div className={styles.uploadedDate}>{timePipe(item?.createdAt, "DD MMM YYYY hh:mm A")}</div>
                                                         <div style={{ width: "15%" }} onClick={() => {
                                                             downLoadAttachements(item.url);
                                                         }}>

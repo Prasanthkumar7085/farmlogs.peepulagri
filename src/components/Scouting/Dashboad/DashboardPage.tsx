@@ -147,7 +147,7 @@ const DashboardPage = () => {
     if (router.isReady && accessToken) {
       await getAllLocations();
     } else {
-      // setLoading(false);
+      setLoading(false);
     }
   };
 

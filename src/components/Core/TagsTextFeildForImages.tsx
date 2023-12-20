@@ -197,7 +197,7 @@ const TagsTextFeildForImages = ({
                   size="small"
                   fullWidth
                   className={styles.tagsBox}
-                  placeholder="Enter Tags"
+                  placeholder="Select tags to add"
                   sx={{
                     "& .MuiInputBase-root": {
                       background: "#fff",
@@ -308,7 +308,7 @@ const TagsTextFeildForImages = ({
         )}
       </div>
 
-      <Toaster richColors closeButton position="top-right" />
+      {/* <Toaster richColors closeButton position="top-right" /> */}
     </div>
   );
 };

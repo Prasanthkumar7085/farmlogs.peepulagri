@@ -546,6 +546,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         <p style={{ color: "red", fontSize: "12px" }}>{noFarmIdMessage}</p>
       </label>
       <ErrorMessagesComponent errorMessage={validations?.attachments} />
+
       {multipleFiles &&
         Array?.from(multipleFiles).map((item: any, index: any) => (
           <div
@@ -553,7 +554,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
             id="upload-progress"
             key={index}
           >
-            <div className={styles1.progress} id="progress">
+            <div className={styles1.progress} id="progress" >
               <img
                 className={styles1.image21}
                 alt=""
@@ -579,6 +580,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         <div
                           className={styles1.photojpg}
                           style={{
+                            fontSize: "14px",
                             color: fileProgress[index] == "fail" ? "red" : "",
                           }}
                         >
@@ -592,7 +594,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                             Cancelled
                           </div>
                         ) : (
-                          <div className={styles1.photojpg}>
+                          <div className={styles1.photojpg} style={{ fontSize: "13px", }}>
                             {bytesToMB(item.size).toFixed(2)}MB
                           </div>
                         )}
@@ -641,8 +643,8 @@ const TasksAttachments: React.FC<PropTypes> = ({
                 {fileProgress[index] == 100 || fileProgress[index] == "fail" ? (
                   ""
                 ) : (
-                  <div className={styles1.uploadstatus}>
-                    <div className={styles1.completed}>
+                  <div className={styles1.uploadstatus} >
+                    <div className={styles1.completed} >
                       {fileProgress[index]?.toFixed(2) + "%"}
                     </div>
                   </div>
@@ -651,6 +653,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
             </div>
           </div>
         ))}
+
       {tempFilesStorage?.length ?
         <div
           className={styles.uploadFilesBtnGrp}>

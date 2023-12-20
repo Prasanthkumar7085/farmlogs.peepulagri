@@ -72,7 +72,12 @@ const TasksTableComponent = ({
         sortType: router.query.sort_type as string,
         selectedFarmId: router.query.farm_id as string,
         status: router.query.status as string,
-        userId: router.query.assigned_to as string,
+        userId: router.query.assign_to
+          ? Array.isArray(router.query.assign_to)
+            ? (router.query.assign_to as string[])
+            : ([router.query.assign_to] as string[])
+          : [],
+        isMyTasks: router.query.is_my_task as string,
       });
     } else {
       toast.error(response?.message);

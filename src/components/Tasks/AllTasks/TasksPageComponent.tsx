@@ -83,7 +83,6 @@ const TasksPageComponent = () => {
         queryParams["status"] = status;
       }
     }
-    console.log(userId, 'pkpk');
 
     if (userId?.length) {
       queryParams["assign_to"] = userId;
@@ -169,7 +168,12 @@ const TasksPageComponent = () => {
         sortType: router.query.order_type as string,
         selectedFarmId: value?._id,
         status: router.query.status as string,
-        userId: [router.query.assign_to] as string[],
+        userId: router.query.assign_to
+          ? Array.isArray(router.query.assign_to)
+            ? (router.query.assign_to as string[])
+            : ([router.query.assign_to] as string[])
+          : [],
+        isMyTasks: router.query.is_my_task as string,
       });
     } else {
       setSelectedFarm(null);
@@ -181,7 +185,12 @@ const TasksPageComponent = () => {
         sortType: router.query.order_type as string,
         selectedFarmId: "",
         status: router.query.status as string,
-        userId: [router.query.assign_to] as string[],
+        userId: router.query.assign_to
+          ? Array.isArray(router.query.assign_to)
+            ? (router.query.assign_to as string[])
+            : ([router.query.assign_to] as string[])
+          : [],
+        isMyTasks: router.query.is_my_task as string,
       });
     }
   };
@@ -195,7 +204,12 @@ const TasksPageComponent = () => {
       sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
       status: value,
-      userId: router.query.assign_to ? [router.query.assign_to] as string[] : [],
+      userId: router.query.assign_to
+        ? Array.isArray(router.query.assign_to)
+          ? (router.query.assign_to as string[])
+          : ([router.query.assign_to] as string[])
+        : [],
+      isMyTasks: router.query.is_my_task as string,
     });
   };
 

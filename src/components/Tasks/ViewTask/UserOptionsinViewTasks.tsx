@@ -14,13 +14,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import styles from "./userOptions.module.css"
+import { userTaskType } from "@/types/tasksTypes";
 interface PropsType {
   userId: string;
   onChange: (assigned_to: any) => void;
-  assignee: Array<{ _id: string; name: string }>,
+  assignee: Array<{ _id: string; name: string }>;
 }
 
-const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assignee }) => {
+const UserOptionsinViewTasks: React.FC<PropsType> = ({
+  userId,
+  onChange,
+  assignee,
+}) => {
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -31,19 +36,18 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
   const [loading, setLoading] = useState(false);
   const [userLoaded, setUserLoaded] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [usersArray, setUsersArray] = useState<any>([])
+  const [usersArray, setUsersArray] = useState<userTaskType[]>([]);
   const [renderField, setRenderField] = useState(true);
   const captureUser = (event: any, selectedObject: any) => {
     if (selectedObject) {
       setSelectedUsers(selectedObject);
-      setUsersArray([...usersArray, selectedObject])
+      setUsersArray([...usersArray, selectedObject]);
       onChange([...usersArray, selectedObject]);
       setRenderField(false);
       setTimeout(() => {
         setRenderField(true);
       }, 0.1);
       setSelectedUsers(null);
-
     } else {
       setSelectedUsers(null);
       onChange([...usersArray, selectedObject]);
@@ -57,7 +61,6 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
 
     if (response?.success) {
       setUserData(response?.data);
-
 
       // if (id) {
       //   let obj = response?.data?.find((item: any) => item._id == id);
@@ -78,8 +81,6 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
     }
   }, [accessToken]);
 
-
-
   return (
     <div>
       {!userLoaded && renderField ? (
@@ -91,13 +92,12 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
             "& .MuiInputBase-root": {
               paddingBlock: "5px !important",
               background: "#fff",
-              maxHeight: "200px", overflowY: "auto"
-
+              maxHeight: "200px",
+              overflowY: "auto",
             },
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: "#fff !important"
-            }
-
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#fff !important",
+            },
           }}
           id="size-small-outlined-multi"
           size="small"
@@ -115,14 +115,21 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
               </li>
             );
           }}
-          getOptionDisabled={(option) =>
-            assignee?.length
+          getOptionDisabled={(option) => {
+            let firstOption = assignee?.length
               ? assignee?.some(
-                (item) =>
-                  item?._id === option?._id && item?.name === option?.name
-              )
-              : false
-          }
+                  (item) =>
+                    item?._id === option?._id && item?.name === option?.name
+                )
+              : false;
+            let secondOption = usersArray?.length
+              ? usersArray?.some(
+                  (item: userTaskType) =>
+                    item?._id === option?._id && item?.name === option?.name
+                )
+              : false;
+            return firstOption || secondOption;
+          }}
           getOptionLabel={(option: any) => option.name}
           options={userData ? userData : []}
           renderInput={(params) => (
@@ -136,9 +143,7 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
                   fontSize: "clamp(.875rem, 1vw, 1.125rem)",
                   backgroundColor: "#fff",
                   border: "none",
-
                 },
-
               }}
             />
           )}
@@ -146,11 +151,11 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
       ) : (
         ""
       )}
-      <div className={styles.allSelectedUsersBlock
-      }>
-
+      {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
+      <div className={styles.allSelectedUsersBlock}>
         {usersArray?.map((user: any) => (
-          <Chip className={styles.selectedUser}
+          <Chip
+            className={styles.selectedUser}
             key={user._id}
             label={user.name}
             onDelete={() => {
@@ -158,12 +163,12 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({ userId, onChange, assigne
                 (selectedUser: any) => selectedUser._id !== user._id
               );
               setUsersArray(updatedUsers);
+              onChange(updatedUsers);
             }}
-            style={{ marginRight: '5px' }}
+            style={{ marginRight: "5px" }}
           />
         ))}
       </div>
-      {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
     </div>
   );
 };

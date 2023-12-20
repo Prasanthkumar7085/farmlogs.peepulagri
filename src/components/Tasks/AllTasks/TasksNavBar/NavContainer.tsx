@@ -42,8 +42,9 @@ const NavContainer: React.FC<PropTypes> = ({
   const dispatch = useDispatch();
 
 
-  const filterOpenOrNot = useSelector((state: any) => state?.farms?.taskFilterOpen);
-  console.log(filterOpenOrNot);
+  const filterOpenOrNot = useSelector(
+    (state: any) => state?.farms?.taskFilterOpen
+  );
 
   const userType = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
@@ -59,8 +60,6 @@ const NavContainer: React.FC<PropTypes> = ({
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<Array<userTaskType>>([]);
   const [user, setUser] = useState<userTaskType[] | null>([]);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
   const [selectedFarmOption, setSelectedFarmOption] = useState<
     FarmInTaskType | null | undefined
@@ -79,19 +78,10 @@ const NavContainer: React.FC<PropTypes> = ({
   const [filtersLength, setFiltersLength] = useState(0);
 
   useEffect(() => {
-
     let { page, limit, search_string, is_my_task, ...rest } = router.query;
 
-    setFiltersLength(Object.keys(rest)?.length)
-
+    setFiltersLength(Object.keys(rest)?.length);
   }, [router.query]);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const setStatusValue = (e: any) => {
     onStatusChange(e.target.value);
@@ -102,7 +92,6 @@ const NavContainer: React.FC<PropTypes> = ({
     setSearch(searchString);
     setSelectedFarmOption(selectedFarm);
     setStatus(router.query.status as string);
-    setAnchorEl(filterOpenOrNot)
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
@@ -144,19 +133,33 @@ const NavContainer: React.FC<PropTypes> = ({
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <Button
             id="demo-positioned-button"
-            aria-controls={open ? "demo-positioned-menu" : undefined}
+            aria-controls={filterOpenOrNot ? "demo-positioned-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
+            aria-expanded={filterOpenOrNot ? "true" : undefined}
             onClick={(e) => {
-              dispatch(changeTaskFilterOpen())
-              !open ? handleClick(e) : handleClose();
+              dispatch(changeTaskFilterOpen());
             }}
             variant="contained"
-            className={filtersLength ? styles.activeFilterBtn : styles.filterBtn}
+            className={
+              filtersLength ? styles.activeFilterBtn : styles.filterBtn
+            }
           >
-            <img src={filtersLength ? "/viewTaskIcons/filter-sybol-icon-active.svg" : "/viewTaskIcons/filter-sybol-icon.svg"} alt="" width={"14px"} />
+            <img
+              src={
+                filtersLength
+                  ? "/viewTaskIcons/filter-sybol-icon-active.svg"
+                  : "/viewTaskIcons/filter-sybol-icon.svg"
+              }
+              alt=""
+              width={"14px"}
+            />
             <span style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-              Filter <span className={styles.FilterCount}> {filtersLength ? filtersLength : ""}</span></span>
+              Filter{" "}
+              <span className={styles.FilterCount}>
+                {" "}
+                {filtersLength ? filtersLength : ""}
+              </span>
+            </span>
           </Button>
           <TextField
             value={search}
@@ -168,7 +171,12 @@ const NavContainer: React.FC<PropTypes> = ({
             color="primary"
             size="small"
             placeholder="Search By Title"
-            sx={{ width: "100%", background: "#fff !important", minWidth: "250px", maxWidth: "300px" }}
+            sx={{
+              width: "100%",
+              background: "#fff !important",
+              minWidth: "250px",
+              maxWidth: "300px",
+            }}
             variant="outlined"
             type="search"
             InputProps={{
@@ -189,34 +197,48 @@ const NavContainer: React.FC<PropTypes> = ({
           >
             Add
           </Button>
-
         </div>
-      </div >
+      </div>
 
-      <Collapse in={open} >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "1rem" }}>
+      <Collapse in={filterOpenOrNot}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingBottom: "1rem",
+          }}
+        >
           <div className={styles.TabButtonGrp}>
             <Button
-              className={router.query.is_my_task == "true" ? styles.tabActiveButton : styles.tabButton}
+              className={
+                router.query.is_my_task == "true"
+                  ? styles.tabActiveButton
+                  : styles.tabButton
+              }
               onClick={() => {
                 if (router.query.is_my_task == "true") {
                   return;
                 }
                 setUser([]);
-                setSelectedUsers([])
+                setSelectedUsers([]);
                 onUserChange([userId], true);
               }}
             >
               My Tasks
             </Button>
             <Button
-              className={router.query.is_my_task !== "true" ? styles.tabActiveButton : styles.tabButton}
+              className={
+                router.query.is_my_task !== "true"
+                  ? styles.tabActiveButton
+                  : styles.tabButton
+              }
               onClick={() => {
                 if (!(router.query.is_my_task == "true")) {
                   return;
                 }
                 setUser([]);
-                setSelectedUsers([])
+                setSelectedUsers([]);
 
                 getAllTasksTab({
                   page: router.query.page as string,
@@ -234,7 +256,14 @@ const NavContainer: React.FC<PropTypes> = ({
             </Button>
           </div>
 
-          <div className={styles.headeractions} style={{ width: "35%", display: "grid", gridTemplateColumns: "2fr 1fr" }}>
+          <div
+            className={styles.headeractions}
+            style={{
+              width: "35%",
+              display: "grid",
+              gridTemplateColumns: "2fr 1fr",
+            }}
+          >
             <div>
               {!(router.query.is_my_task == "true") ? (
                 <Autocomplete
@@ -256,7 +285,9 @@ const NavContainer: React.FC<PropTypes> = ({
                     setSelectedUsers(value);
                     setUser(value);
                     let data: string[] = value?.length
-                      ? value?.map((item: { _id: string; name: string }) => item._id)
+                      ? value?.map(
+                          (item: { _id: string; name: string }) => item._id
+                        )
                       : [];
                     onUserChange(data, false);
                   }}
@@ -271,12 +302,15 @@ const NavContainer: React.FC<PropTypes> = ({
                           fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
                           backgroundColor: "#fff",
                           border: "none",
-                          fontFamily: "'Inter', sans-serif "
+                          fontFamily: "'Inter', sans-serif ",
                         },
                       }}
                     />
                   )}
-                />) : ("")}
+                />
+              ) : (
+                ""
+              )}
             </div>
             {/* {!(router.query.is_my_task == "true") ? (
             <div>
@@ -346,14 +380,12 @@ const NavContainer: React.FC<PropTypes> = ({
             ""
           )} */}
 
-
             <SelectComponent
               options={statusOptions}
               size="small"
               onChange={setStatusValue}
               value={status ? status : ""}
             />
-
           </div>
         </div>
       </Collapse>

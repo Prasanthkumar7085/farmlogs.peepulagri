@@ -7,10 +7,10 @@ const SelectComponent = ({ options, ...rest }: any) => {
     return (
         <Select
             size="small"
-
             sx={{
                 width: "100%",
-                background: "#fff"
+                background: "#fff",
+                color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
             }}
             displayEmpty
             {...rest}

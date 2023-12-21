@@ -13,6 +13,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddAssigneeMembers from "./AddAssigneeMembers";
 import { Toaster, toast } from "sonner";
 import AssignedToContainer from "./assigned-to-container";
+import MainContent from "./main-content";
+import updateTaskStatusService from "../../../../lib/services/TasksService/updateTaskStatusService";
 
 
 const ViewTaskComponent = () => {
@@ -38,13 +40,24 @@ const ViewTaskComponent = () => {
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(true);
     const [hasEditAccess, setHasEditAccess] = useState<boolean | undefined>(false);
+    const [status, setStatus] = useState("");
     const [assignedBy, setAssigneeBy] = useState('');
     const [usersDrawerOpen, setUsersDrawerOpen] = useState<any>(false);
     const [assignee, setAssignee] = useState<any>();
     const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const [farmId, setFarmId] = useState("");
     const [userId, setUserId] = useState("");
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     const getTaskById = async (id: string) => {
         setLoading(true);
@@ -59,6 +72,7 @@ const ViewTaskComponent = () => {
             setDeadlineString(response?.data?.deadline ? response?.data?.deadline : "")
             setDescription(response?.data?.description ? response?.data?.description : "");
             setAssigneeBy(response.data?.created_by.name ? response.data?.created_by.name : "");
+            setStatus(response?.data?.status ? response?.data?.status : "");
             setAssignee(response?.data?.assign_to);
             setFarmId(response?.data?.farm_id ? response?.data?.farm_id?._id : "");
 
@@ -150,9 +164,27 @@ const ViewTaskComponent = () => {
         }
     };
 
+    const onChangeStatus = async (status: string) => {
+        setLoading(true);
+
+        const response = await updateTaskStatusService({
+            token: accessToken,
+            taskId: data?._id as string,
+            body: { status: status },
+        });
+        if (response?.success) {
+            toast.success(response?.message);
+            await getTaskById(router.query.task_id as string);
+        } else {
+            toast.error(response?.message);
+        }
+        setLoading(false);
+    };
+
     return (
         <div>
             <ViewtaskHeader />
+            <MainContent title={title} onChangeStatus={onChangeStatus} open={open} anchorEl={anchorEl} handleClose={handleClose} status={status} hasEditAccess={hasEditAccess} data={data} handleClick={handleClick} />
             <DescriptionContainer description={description} />
             <AttachmentsContainer attachmentData={attachmentData} getAllAttachments={getAllAttachments} />
             <AssignedByContainer assignedBy={assignedBy} />

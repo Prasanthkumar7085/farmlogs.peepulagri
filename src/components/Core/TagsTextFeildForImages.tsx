@@ -98,6 +98,15 @@ const TagsTextFeildForImages = ({
   };
 
   const addTagToImage = async (value: string, callAllTagsOrNot = false) => {
+    if (
+      tagValue.find(
+        (item: string) => item.toLowerCase() == value?.toLowerCase()
+      )
+    ) {
+      toast.error("Tag already added");
+      return;
+    }
+
     try {
       const response = await addTagService({
         body: {

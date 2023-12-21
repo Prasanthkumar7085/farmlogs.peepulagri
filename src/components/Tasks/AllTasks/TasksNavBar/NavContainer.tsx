@@ -9,6 +9,7 @@ import {
   Button,
   Collapse,
   InputAdornment,
+  Menu,
   TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -35,6 +36,14 @@ const NavContainer: React.FC<PropTypes> = ({
   onUserChange,
   getAllTasksTab,
 }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -137,9 +146,10 @@ const NavContainer: React.FC<PropTypes> = ({
             aria-controls={filterOpenOrNot ? "demo-positioned-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={filterOpenOrNot ? "true" : undefined}
-            onClick={(e) => {
-              dispatch(changeTaskFilterOpen());
-            }}
+            // onClick={(e) => {
+            //   dispatch(changeTaskFilterOpen());
+            // }}
+            onClick={handleClick}
             variant="contained"
             className={
               filtersLength ? styles.activeFilterBtn : styles.filterBtn
@@ -154,12 +164,8 @@ const NavContainer: React.FC<PropTypes> = ({
               alt=""
               width={"14px"}
             />
-            <span style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-              Filter{" "}
-              <span className={styles.FilterCount}>
-                {" "}
-                {filtersLength ? filtersLength : ""}
-              </span>
+            <span>
+              Filter
             </span>
           </Button>
           <TextField
@@ -263,10 +269,10 @@ const NavContainer: React.FC<PropTypes> = ({
             style={{
               width: "35%",
               display: "grid",
-              gridTemplateColumns: "2fr 1fr .5fr",
+              gridTemplateColumns: "200px",
             }}
           >
-            <div>
+            {/* <div>
               {!(router.query.is_my_task == "true") ? (
                 <Autocomplete
                   limitTags={1}
@@ -313,7 +319,7 @@ const NavContainer: React.FC<PropTypes> = ({
               ) : (
                 ""
               )}
-            </div>
+            </div> */}
 
             <SelectComponent
               options={statusOptions}
@@ -321,7 +327,7 @@ const NavContainer: React.FC<PropTypes> = ({
               onChange={setStatusValue}
               value={status ? status : ""}
             />
-            <Button
+            {/* <Button
               onClick={() => {
                 setUser(null);
                 setSelectedUsers(null);
@@ -340,10 +346,74 @@ const NavContainer: React.FC<PropTypes> = ({
               disabled={clearFiltersDisabledOrNot()}
             >
               <FilterAltOffIcon />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+        PaperProps={{
+          style: {
+            width: "28ch",
+            padding: "1rem"
+          },
+        }}
+      >
+        <div>
+          {!(router.query.is_my_task == "true") ? (
+            <Autocomplete
+              limitTags={1}
+              multiple
+              id="size-small-outlined-multi"
+              size="small"
+              fullWidth
+              noOptionsText={"No such User"}
+              value={selectedUsers?.length ? selectedUsers : []}
+              isOptionEqualToValue={(option: any, value: any) =>
+                option.name === value.name
+              }
+              getOptionLabel={(option: any) => {
+                return option.name;
+              }}
+              options={users}
+              onChange={(e: any, value: userTaskType[] | []) => {
+                setSelectedUsers(value);
+                setUser(value);
+                let data: string[] = value?.length
+                  ? value?.map(
+                    (item: { _id: string; name: string }) => item._id
+                  )
+                  : [];
+                onUserChange(data, false);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search by User"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
+                      backgroundColor: "#fff",
+                      border: "none",
+                      fontFamily: "'Inter', sans-serif ",
+                    },
+                  }}
+                />
+              )}
+            />
+          ) : (
+            ""
+          )}
+        </div>
+      </Menu>
     </>
   );
 };

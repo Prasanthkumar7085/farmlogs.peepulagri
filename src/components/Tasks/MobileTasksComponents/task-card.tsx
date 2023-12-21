@@ -24,20 +24,27 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
 
 
   return (
-    <div style={{
-      padding: "0 1rem",
-      height: "calc(100vh - 140px)",
-      overflowY: "auto",
-      marginTop: "2rem"
-    }}>
-
+    <div className={styles.allTaskCardsBlock}>
       {data?.length && data?.map((item: any, index: any) => {
         if (data.length === index + 1 && hasMore == true) {
           return (
-            <div className={styles.taskCard} onClick={onTaskCardClick} key={index} ref={lastBookElementRef}>
+            <div className={styles[item.status]} id={styles.taskCard} onClick={onTaskCardClick} key={index} ref={lastBookElementRef}>
               <div className={styles.contentcontainer}>
                 <div className={styles.row}>
-                  <h2 className={styles.title}>{item.title}</h2>
+                  <h2 className={styles.title}>
+
+                    {item?.title
+                      ? item?.title?.length > 25
+                        ? item?.title
+                          ?.slice(0, 1)
+                          .toUpperCase() +
+                        item?.title?.slice(1, 22) +
+                        "..."
+                        : item?.title[0].toUpperCase() +
+                        item?.title?.slice(1)
+                      : "ty"}
+
+                  </h2>
                   <div className={styles.duedatecontainer}>
                     <img
                       className={styles.calendarBlank1Icon}
@@ -51,7 +58,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
                   <h3 className={styles.farmname}>SpiceVine Gardens</h3>
                   <div className={styles.profile}>
                     <h1 className={styles.jj}>
-                      <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#d94841" }} >
+                      <Avatar sx={{ fontSize: "9px", width: "20px", height: "20px", background: "#d94841" }} >
                         {item?.created_by?.name?.split(' ')?.length > 1 ? `${item?.created_by?.name?.split(' ')[0][0]}${item?.created_by?.name?.split(' ')[1][0]}`.toUpperCase() : item?.created_by?.name.slice(0, 2)?.toUpperCase()}
                       </Avatar>
                     </h1>
@@ -63,12 +70,22 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
         }
         else {
           return (
-            <div className={styles.taskCard} onClick={onTaskCardClick} key={index}
+            <div className={styles[item.status]} id={styles.taskCard} onClick={onTaskCardClick} key={index}
               ref={index === data.length - 15 ? lastItemRef : null}
             >
               <div className={styles.contentcontainer}>
                 <div className={styles.row}>
-                  <h2 className={styles.title}>{item.title}</h2>
+                  <h2 className={styles.title}>{item?.title
+                    ? item?.title?.length > 25
+                      ? item?.title
+                        ?.slice(0, 1)
+                        .toUpperCase() +
+                      item?.title?.slice(1, 22) +
+                      "..."
+                      : item?.title[0].toUpperCase() +
+                      item?.title?.slice(1)
+                    : "ty"}
+                  </h2>
                   <div className={styles.duedatecontainer}>
                     <img
                       className={styles.calendarBlank1Icon}
@@ -82,7 +99,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
                   <h3 className={styles.farmname}>SpiceVine Gardens</h3>
                   <div className={styles.profile}>
                     <h1 className={styles.jj}>
-                      <Avatar sx={{ fontSize: "6px", width: "18px", height: "18px", background: "#d94841" }} >
+                      <Avatar sx={{ fontSize: "9px", width: "20px", height: "20px", background: "#d94841" }} >
                         {item?.created_by?.name?.split(' ')?.length > 1 ? `${item?.created_by?.name?.split(' ')[0][0]}${item?.created_by?.name?.split(' ')[1][0]}`.toUpperCase() : item?.created_by?.name.slice(0, 2)?.toUpperCase()}
                       </Avatar>
                     </h1>

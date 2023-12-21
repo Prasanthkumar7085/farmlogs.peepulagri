@@ -54,7 +54,7 @@ const FileUploadComponent = () => {
   const [validations, setValidations] = useState<any>();
   const [tags, setTags] = useState<any>([]);
   const [lats, setLats] = useState<{ latitude: number; longitude: number }>();
-  const [accuracy1, setAccuracy1] = useState<number>();
+  // const [accuracy1, setAccuracy1] = useState<number>();
 
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
@@ -644,10 +644,6 @@ const FileUploadComponent = () => {
             console.log(position);
 
             const { latitude, longitude, accuracy } = position.coords;
-            setAccuracy1(accuracy);
-            if (accuracy < 10) {
-              loadMap();
-            }
             const latLng = new (window as any).google.maps.LatLng(
               latitude,
               longitude
@@ -736,19 +732,6 @@ const FileUploadComponent = () => {
                         </div>
                       </div>
                       <div className={styles.imagesupload} id="images-upload">
-                        {/* <div className={styles.captureimage} id="capture-image">
-                        <div className={styles.camera}>
-                          <img
-                            className={styles.camera1Icon}
-                            alt=""
-                            src="/camera-1.svg"
-                            onClick={() => setOpenCamera(true)}
-                          />
-
-                          <div className={styles.capture}> Capture </div>
-                        </div>
-                      </div> */}
-                        {accuracy1}
                         <div id="capture-image">
                           <div className={styles.uploadimage}>
                             <label>

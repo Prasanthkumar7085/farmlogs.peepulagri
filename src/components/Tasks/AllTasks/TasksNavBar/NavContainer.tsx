@@ -10,7 +10,7 @@ import {
   TextField
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import styles from "./NavBarContainer.module.css";
@@ -35,21 +35,11 @@ const NavContainer: React.FC<PropTypes> = ({
   getAllTasksTab,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [filterAnchorEl, setFilterAnchorEl] = useState<any>(null)
-  console.log(filterAnchorEl);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<any>(null);
 
   const open = Boolean(anchorEl);
   const handleClick = (event: any | null, filterOrNot = false) => {
-
-    if (event) { setAnchorEl(event.currentTarget); }
-
-    if (filterOrNot) {
-      dispatch(changeTaskFilterUserOpen(event.currentTarget))
-      setFilterAnchorEl(event?.currentTarget)
-
-    } else {
-      setAnchorEl(event)
-    }
+    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -144,24 +134,29 @@ const NavContainer: React.FC<PropTypes> = ({
   };
   console.log(selectedUsers);
 
+  const targetDivRef = useRef(null);
 
   return (
     <>
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
-          <img className={styles.note1Icon} alt="" src="/viewTaskIcons/task-symbol-icon.svg" />
+          <img
+            className={styles.note1Icon}
+            alt=""
+            src="/viewTaskIcons/task-symbol-icon.svg"
+          />
           <h1 className={styles.taskManagement}>{`Task Management`}</h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <Button
+            ref={targetDivRef}
             id="demo-positioned-button"
             aria-controls={filterOpenOrNot ? "demo-positioned-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={filterOpenOrNot ? "true" : undefined}
-            // onClick={(e) => {
-            //   dispatch(changeTaskFilterOpen());
-            // }}
-            onClick={(e) => handleClick(e, true)}
+            onClick={(e) => {
+              handleClick(e, true);
+            }}
             variant="contained"
             className={
               filtersLength ? styles.activeFilterBtn : styles.filterBtn
@@ -176,9 +171,7 @@ const NavContainer: React.FC<PropTypes> = ({
               alt=""
               width={"14px"}
             />
-            <span>
-              Filter
-            </span>
+            <span>Filter</span>
           </Button>
           <TextField
             value={search}
@@ -332,8 +325,25 @@ const NavContainer: React.FC<PropTypes> = ({
                 ""
               )}
             </div> */}
-            {selectedUsers?.length ?
-              <div className={styles.selectedUsersCount} onClick={(e) => handleClick(filterAnchorEl)}> <span style={{ fontWeight: "500" }}>User :</span> <span>{selectedUsers[0]?.name}</span>  <span className={styles.count}>+{selectedUsers?.length > 1 ? selectedUsers?.length - 1 : ""}</span>   </div> : <div></div>}
+            {selectedUsers?.length ? (
+              <div
+                className={styles.selectedUsersCount}
+                onClick={(e) => handleClick(e)}
+              >
+                {" "}
+                <span style={{ fontWeight: "500" }}>User :</span>{" "}
+                <span>{selectedUsers[0]?.name}</span>{" "}
+                {selectedUsers?.length > 1 ? (
+                  <span className={styles.count}>
+                    + {selectedUsers?.length - 1}
+                  </span>
+                ) : (
+                  ""
+                )}{" "}
+              </div>
+            ) : (
+              <div></div>
+            )}
 
             <SelectComponent
               options={statusOptions}
@@ -370,19 +380,25 @@ const NavContainer: React.FC<PropTypes> = ({
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button',
+          "aria-labelledby": "basic-button",
         }}
         PaperProps={{
           style: {
             width: "28ch",
-            padding: "1rem"
+            padding: "1rem",
           },
         }}
       >
         <div>
           {!(router.query.is_my_task == "true") ? (
             <Autocomplete
-              limitTags={1}
+              sx={{
+                "& .MuiChip-root": {
+                  background: "#f0fff0",
+                  border: "1px solid #05a155",
+                  borderRadius: "5px",
+                },
+              }}
               multiple
               id="size-small-outlined-multi"
               size="small"
@@ -396,13 +412,17 @@ const NavContainer: React.FC<PropTypes> = ({
                 return option.name;
               }}
               options={users}
-              onChange={(e: any, value: userTaskType[] | []) => {
+              onChange={(e, value: userTaskType[] | []) => {
+                if (!value?.length) {
+                  setAnchorEl(null);
+                }
+
                 setSelectedUsers(value);
                 setUser(value);
                 let data: string[] = value?.length
                   ? value?.map(
-                    (item: { _id: string; name: string }) => item._id
-                  )
+                      (item: { _id: string; name: string }) => item._id
+                    )
                   : [];
                 onUserChange(data, false);
               }}

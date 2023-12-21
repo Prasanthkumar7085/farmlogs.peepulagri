@@ -152,12 +152,8 @@ const TasksTableComponent = ({
     {
       accessorFn: (row: any) => row.serial,
       id: "serial",
-      cell: (info: any) => (
-        <span >
-          {info.getValue()}
-        </span>
-      ),
-      header: () => <span >S.No</span>,
+      cell: (info: any) => <span>{info.getValue()}</span>,
+      header: () => <span>S.No</span>,
       footer: (props: any) => props.column.id,
       width: "45px",
     },
@@ -165,10 +161,8 @@ const TasksTableComponent = ({
       accessorFn: (row: any) => row.createdAt,
       id: "createdAt",
       cell: (info: any) => (
-        <span >
-          <p>
-            {timePipe(info.getValue(), "DD MMM YYYY")}
-          </p>
+        <span>
+          <p>{timePipe(info.getValue(), "DD MMM YYYY")}</p>
         </span>
       ),
       header: () => <span>Created On</span>,
@@ -192,7 +186,7 @@ const TasksTableComponent = ({
       id: "created_by",
       header: () => <span>Created By</span>,
       footer: (props: any) => props.column.id,
-      width: "150px",
+      width: "120px",
     },
     {
       accessorFn: (row: any) => {
@@ -202,7 +196,7 @@ const TasksTableComponent = ({
       cell: (info: any) => <AssignedComponent info={info} />,
       header: () => <span>Assigned to</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "150px",
     },
 
     {
@@ -224,13 +218,13 @@ const TasksTableComponent = ({
             {info.getValue()
               ? info.getValue()?.length > 30
                 ? (info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
-                  info.getValue().slice(1, 26)
-                  : "") + "....."
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                      info.getValue().slice(1, 26)
+                    : "") + "....."
                 : info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
+                ? info.getValue().slice(0, 1).toUpperCase() +
                   info.getValue().slice(1)
-                  : ""
+                : ""
               : ""}
           </span>
         </Tooltip>
@@ -239,51 +233,48 @@ const TasksTableComponent = ({
       footer: (props: any) => props.column.id,
       width: "200px",
     },
-    {
-      accessorFn: (row: any) => row.description,
-      id: "description",
-      cell: (info: any) => (
-        <span >
-          <Tooltip
-            followCursor
-            arrow
-            title={
-              info.getValue()?.length > 40 ? (
-                <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
-              ) : (
-                ""
-              )
-            }
-          >
-            <span>
-              {info.getValue()
-                ? info.getValue()?.length > 40
-                  ? (info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1, 35)
-                    : "") + "....."
-                  : info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1)
-                    : "-"
-                : "-"}
-            </span>
-          </Tooltip>
-        </span>
-      ),
-      header: () => <span>Description</span>,
-      footer: (props: any) => props.column.id,
-      width: "300px",
-    },
+    // {
+    //   accessorFn: (row: any) => row.description,
+    //   id: "description",
+    //   cell: (info: any) => (
+    //     <span >
+    //       <Tooltip
+    //         followCursor
+    //         arrow
+    //         title={
+    //           info.getValue()?.length > 40 ? (
+    //             <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
+    //           ) : (
+    //             ""
+    //           )
+    //         }
+    //       >
+    //         <span>
+    //           {info.getValue()
+    //             ? info.getValue()?.length > 40
+    //               ? (info.getValue()
+    //                 ? info.getValue().slice(0, 1).toUpperCase() +
+    //                 info.getValue().slice(1, 35)
+    //                 : "") + "....."
+    //               : info.getValue()
+    //                 ? info.getValue().slice(0, 1).toUpperCase() +
+    //                 info.getValue().slice(1)
+    //                 : "-"
+    //             : "-"}
+    //         </span>
+    //       </Tooltip>
+    //     </span>
+    //   ),
+    //   header: () => <span>Description</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "300px",
+    // },
     {
       accessorFn: (row: any) => row.deadline,
       id: "deadline",
       cell: (info: any) => (
-        <span >
-          <p>
-
-            {timePipe(info.getValue(), "DD MMM YYYY")}
-          </p>
+        <span>
+          <p>{timePipe(info.getValue(), "DD MMM YYYY")}</p>
         </span>
       ),
       header: () => <span>Due Date</span>,
@@ -293,11 +284,7 @@ const TasksTableComponent = ({
     {
       accessorFn: (row: any) => row.status,
       id: "status",
-      cell: (info: any) => (
-        <span >
-          {getStatusLabel(info.getValue())}
-        </span>
-      ),
+      cell: (info: any) => <span>{getStatusLabel(info.getValue())}</span>,
       header: () => <span>Status</span>,
       footer: (props: any) => props.column.id,
       width: "110px",
@@ -332,7 +319,7 @@ const TasksTableComponent = ({
                 arrow
                 title={
                   info.row.original?.status == "DONE" ||
-                    info.row.original?.created_by?._id !== userId
+                  info.row.original?.created_by?._id !== userId
                     ? "You dont't have permission for this action"
                     : "Delete"
                 }
@@ -365,7 +352,6 @@ const TasksTableComponent = ({
                   />
                 </div>
               </Tooltip>
-
 
               <Tooltip
                 followCursor
@@ -423,8 +409,7 @@ const TasksTableComponent = ({
                   }}
                 >
                   <ImageComponent
-                    src=
-                    "/viewTaskIcons/logs-icon.svg"
+                    src="/viewTaskIcons/logs-icon.svg"
                     height={14}
                     width={13}
                     alt=""

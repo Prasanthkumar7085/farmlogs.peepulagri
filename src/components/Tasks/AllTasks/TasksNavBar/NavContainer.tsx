@@ -201,7 +201,7 @@ const NavContainer: React.FC<PropTypes> = ({
         </div>
       </div>
 
-      <Collapse in={filterOpenOrNot}>
+      <div>
         <div
           style={{
             display: "flex",
@@ -288,8 +288,8 @@ const NavContainer: React.FC<PropTypes> = ({
                     setUser(value);
                     let data: string[] = value?.length
                       ? value?.map(
-                          (item: { _id: string; name: string }) => item._id
-                        )
+                        (item: { _id: string; name: string }) => item._id
+                      )
                       : [];
                     onUserChange(data, false);
                   }}
@@ -343,7 +343,7 @@ const NavContainer: React.FC<PropTypes> = ({
             </Button>
           </div>
         </div>
-      </Collapse>
+      </div>
     </>
   );
 };

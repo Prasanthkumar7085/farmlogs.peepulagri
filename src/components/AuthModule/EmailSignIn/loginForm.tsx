@@ -59,7 +59,7 @@ export default function SigninEmail() {
           dispatch(setUserDetails(res?.data));
         }
 
-        if (res?.data?.user_details?.user_type == "agronomist") {
+        if (res?.data?.user_details?.user_type == "agronomist" || res?.data?.user_details?.user_type == "admin") {
           router.push("/scouts");
         } else if (res?.data?.user_details?.user_type == "farmer") {
           router.push("/dashboard");

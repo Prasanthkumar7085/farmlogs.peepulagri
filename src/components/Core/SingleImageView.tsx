@@ -130,10 +130,12 @@ const SingleImageView: FC<componentProps> = ({
   const observer: any = useRef();
 
   const lastBookElementRef = useCallback(
+
     (node: any) => {
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
+        console.log("poiuytrew")
         if (entries[0].isIntersecting && hasMore && data.length > 0) {
           getInstaScrollImageDetails(data[data?.length - 1]?._id)
           scrollToLastItem(); // Restore scroll position after new data is loaded
@@ -248,7 +250,6 @@ const SingleImageView: FC<componentProps> = ({
         style={{
           overflowY: "auto",
           maxHeight: "calc(100vh - 136px)",
-          scrollSnapType: "y mandatory"
         }}
       >
         {data?.length ?
@@ -256,9 +257,7 @@ const SingleImageView: FC<componentProps> = ({
             if (data?.length === index + 1 && hasMore == true) {
               return (
                 <div key={index}
-                  style={{
-                    scrollSnapAlign: "start"
-                  }}
+
                   ref={lastBookElementRef}
                 >
                   <SingleImageComponent
@@ -302,9 +301,7 @@ const SingleImageView: FC<componentProps> = ({
             else {
               return (
                 <div key={index}
-                  style={{
-                    scrollSnapAlign: "start"
-                  }}
+
                   ref={
                     index === data.length - 10 ? lastItemRef : null
                   }                >

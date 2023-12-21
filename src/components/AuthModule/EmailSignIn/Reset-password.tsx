@@ -75,123 +75,149 @@ export default function ResetPasswordPage() {
     };
 
     return (
-        <div id={styles.loginPage}>
-            <div className={styles.bgImage}>
-                <img src="/login-bg.webp" alt="Bg Image" />
-            </div>
-            {resetSuccess ?
-                <div>
-                    <div className={styles.formCard}>
-                        <div className={styles.innerWrap}>
-                            <div style={{ textAlign: "center" }}>
-                                <ImageComponent src="/Logo-color.svg" width="100" height="80" />
-                                <Typography className={styles.passwordSuccessmg}>Password updated  successfully</Typography>
-                            </div>
-                            <div className={styles.backToLogin}>
-                                <div className={styles.backToLogin_btn} style={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
-                                    <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
-                                    <Typography>
-                                        Back To Login
-                                    </Typography>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                :
-                <form noValidate className={styles.formCard} onSubmit={Resetpassword}>
-                    <div className={styles.innerWrap}>
-                        <div className={styles.header}>
-                            <ImageComponent src="/Logo-color.svg" width="90" height="70" />
-                            <span className={styles.content}>
-                                <Typography variant="h5">
-                                    Reset Password
-                                </Typography>
-                                <Typography component="p">
-                                    Create new password
-                                </Typography>
-                            </span>
-                        </div>
-                        <div>
-                            <TextField
-                                placeholder='New password'
-                                sx={{
-                                    width: "100%",
-                                    '& .MuiInputBase-root': {
-                                        background: "#fff"
-                                    }
-                                }}
-                                size='small'
-                                type={showPassword ? "text" : "password"}
-                                value={newpassword}
-                                onChange={(e) => {
-                                    setNewPassword(e.target.value)
-                                    setErrorMessages(null)
-                                }}
-
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton onClick={togglePasswordVisibility} edge="end">
-                                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                            <ErrorMessagesComponent errorMessage={errorMessages?.new_password} />
-
-                        </div>
-                        <div>
-                            <TextField
-                                placeholder='Conform password'
-                                sx={{
-                                    width: "100%",
-                                    '& .MuiInputBase-root': {
-                                        background: "#fff"
-                                    }
-                                }}
-                                size='small'
-                                type={showConfirmPassword ? "text" : "password"}
-                                value={conformpassword}
-                                onChange={(e) => {
-                                    setConformPassword(e.target.value)
-                                    setErrorMessages(null)
-                                }}
-
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton onClick={toggleConfirmPasswordVisibility
-                                            } edge="end">
-                                                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                            <ErrorMessagesComponent errorMessage={errorMessages?.confirm_password
-                            } />
-                            {invalid ?
-                                <p style={{ margin: "0", color: "red", fontSize: "12px" }}>{invalid}</p>
-                                : ""}
-                        </div>
-                        <Button className={styles.reset_Btn} variant='contained' fullWidth type='submit'>Save</Button>
-                        <div className={styles.backToLogin}>
-                            <div className={styles.backToLogin_btn} style={{ justifyContent: "flex-start !important" }} onClick={() => router.push('/')}>
-                                <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
-                                <Typography>
-
-                                    Back To Login
-                                </Typography>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            }
-            <LoadingComponent loading={loading} />
-
+      <div id={styles.loginPage}>
+        <div className={styles.bgImage}>
+          <picture>
+            <img src="/login-bg.webp" alt="Bg Image" />
+          </picture>
         </div>
+        {resetSuccess ? (
+          <div>
+            <div className={styles.formCard}>
+              <div className={styles.innerWrap}>
+                <div style={{ textAlign: "center" }}>
+                  <ImageComponent
+                    src="/Logo-color.svg"
+                    width="100"
+                    height="80"
+                  />
+                  <Typography className={styles.passwordSuccessmg}>
+                    Password updated successfully
+                  </Typography>
+                </div>
+                <div className={styles.backToLogin}>
+                  <div
+                    className={styles.backToLogin_btn}
+                    style={{ justifyContent: "flex-start !important" }}
+                    onClick={() => router.push("/")}
+                  >
+                    <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
+                    <Typography>Back To Login</Typography>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <form noValidate className={styles.formCard} onSubmit={Resetpassword}>
+            <div className={styles.innerWrap}>
+              <div className={styles.header}>
+                <ImageComponent src="/Logo-color.svg" width="90" height="70" />
+                <span className={styles.content}>
+                  <Typography variant="h5">Reset Password</Typography>
+                  <Typography component="p">Create new password</Typography>
+                </span>
+              </div>
+              <div>
+                <TextField
+                  placeholder="New password"
+                  sx={{
+                    width: "100%",
+                    "& .MuiInputBase-root": {
+                      background: "#fff",
+                    },
+                  }}
+                  size="small"
+                  type={showPassword ? "text" : "password"}
+                  value={newpassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    setErrorMessages(null);
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={togglePasswordVisibility}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <ErrorMessagesComponent
+                  errorMessage={errorMessages?.new_password}
+                />
+              </div>
+              <div>
+                <TextField
+                  placeholder="Conform password"
+                  sx={{
+                    width: "100%",
+                    "& .MuiInputBase-root": {
+                      background: "#fff",
+                    },
+                  }}
+                  size="small"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={conformpassword}
+                  onChange={(e) => {
+                    setConformPassword(e.target.value);
+                    setErrorMessages(null);
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={toggleConfirmPasswordVisibility}
+                          edge="end"
+                        >
+                          {showConfirmPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <ErrorMessagesComponent
+                  errorMessage={errorMessages?.confirm_password}
+                />
+                {invalid ? (
+                  <p style={{ margin: "0", color: "red", fontSize: "12px" }}>
+                    {invalid}
+                  </p>
+                ) : (
+                  ""
+                )}
+              </div>
+              <Button
+                className={styles.reset_Btn}
+                variant="contained"
+                fullWidth
+                type="submit"
+              >
+                Save
+              </Button>
+              <div className={styles.backToLogin}>
+                <div
+                  className={styles.backToLogin_btn}
+                  style={{ justifyContent: "flex-start !important" }}
+                  onClick={() => router.push("/")}
+                >
+                  <KeyboardBackspaceIcon sx={{ marginRight: "0.5rem" }} />
+                  <Typography>Back To Login</Typography>
+                </div>
+              </div>
+            </div>
+          </form>
+        )}
+        <LoadingComponent loading={loading} />
+      </div>
     );
 }
 

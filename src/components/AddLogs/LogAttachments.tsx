@@ -92,16 +92,36 @@ const LogAttachments = ({ loadAttachments, onChangeFile, uploadFiles, files, upl
         {files &&
           Array.from(files).map((file: any, index) => {
             return (
-              <div key={index} className={styles.attachmentItem} style={{backgroundColor: "#F5F7FA"}}>
-                {file ? <img src={getImageObjectUrl(file)} alt={`image-${index}`} height={50} width={50} style={{ objectFit: "cover" }} /> : ""}
-              <Typography>
-                  {file.name}
-              </Typography>
-                <IconButton color="error" aria-label="delete" onClick={() => deleteSelectedFile(index)} disabled={uploadButtonLoading}>
+              <div
+                key={index}
+                className={styles.attachmentItem}
+                style={{ backgroundColor: "#F5F7FA" }}
+              >
+                {file ? (
+                  <picture>
+                    {" "}
+                    <img
+                      src={getImageObjectUrl(file)}
+                      alt={`image-${index}`}
+                      height={50}
+                      width={50}
+                      style={{ objectFit: "cover" }}
+                    />
+                  </picture>
+                ) : (
+                  ""
+                )}
+                <Typography>{file.name}</Typography>
+                <IconButton
+                  color="error"
+                  aria-label="delete"
+                  onClick={() => deleteSelectedFile(index)}
+                  disabled={uploadButtonLoading}
+                >
                   <CloseIcon />
-              </IconButton>
+                </IconButton>
               </div>
-            )
+            );
           })}
       </div>
       {files?.length ?

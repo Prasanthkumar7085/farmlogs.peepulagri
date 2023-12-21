@@ -8,6 +8,8 @@ import Drawer from "@mui/material/Drawer";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../TaskComments/Comments.module.css";
+import getImageSrcUrl from "@/pipes/getImageSrcUrl";
+import { Toaster, toast } from "sonner";
 const AttachmentDrawerTaskmodule = ({
   attachmentDrawerClose,
   rowDetails,
@@ -61,6 +63,14 @@ const AttachmentDrawerTaskmodule = ({
       setLoading(false);
     }
   };
+
+  const getAcceptedForPreviewImageOrNot = (item: any) => {
+    return !(
+      item?.metadata?.type.includes("pdf") ||
+      item?.metadata?.type.includes("video") ||
+      item?.metadata?.type?.includes("image")
+    );
+  };
   useEffect(() => {
     if (attachmentdrawer) {
       getAllAttachments();
@@ -69,6 +79,55 @@ const AttachmentDrawerTaskmodule = ({
     }
   }, [attachmentdrawer]);
 
+  const downLoadAttachements = async (file: any, name: string) => {
+    try {
+      if (file) {
+        fetch(file)
+          .then((response) => {
+            // Get the filename from the response headers
+            const contentDisposition = response.headers.get(
+              "content-disposition"
+            );
+            let filename = "downloaded_file"; // Default filename if not found in headers
+            if (name) {
+              filename = name;
+            }
+
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (filenameMatch && filenameMatch.length > 1) {
+                filename = filenameMatch[1];
+              }
+            }
+
+            // Create a URL for the blob
+            return response.blob().then((blob) => ({ blob, filename }));
+          })
+          .then(({ blob, filename }) => {
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            // Clean up the blob URL
+            window.URL.revokeObjectURL(blobUrl);
+            toast.success("Attachement downloaded successfully");
+          })
+          .catch((error) => {
+            console.error("Error downloading file:", error);
+          });
+        // setAlertMessage("Attachement downloaded successfully")
+        // setAlertType(true)
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div>
       <Drawer
@@ -115,73 +174,33 @@ const AttachmentDrawerTaskmodule = ({
                           key={index}
                           className={styles.taskModuleAttachmentBlock}
                         >
-                          {image?.metadata?.type?.includes("video") ?
-                            <img
-                              src={"/videoimg.png"}
-                              alt=""
-                              height={100}
-                              width={100}
-                              className={styles.attachmentImg}
-                            />
-                            :
-                            image?.metadata?.type?.includes("pdf") ?
-                              <img
-                                src={"/pdf-icon.png"}
-                                alt=""
-                                height={100}
-                                width={100}
-                                className={styles.attachmentImg}
-                              /> :
-                              image?.metadata?.type?.includes("csv") ?
-                                <img
-                                  src={"/csv-icon.png"}
-                                  alt=""
-                                  height={100}
-                                  width={100}
-                                  className={styles.attachmentImg}
-                                /> :
-                                image?.metadata?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || image?.metadata?.type.includes("xlsx") ?
-
-                                  <img
-                                    src={"/google-sheets-icon.webp"}
-                                    alt=""
-                                    height={100}
-                                    width={100}
-                                    className={styles.attachmentImg}
-                                  /> :
-                                  image?.metadata?.type.includes("doc") || image?.metadata?.type.includes("docx") ?
-                                    <img
-                                      src={"/doc-icon.webp"}
-                                      alt=""
-                                      height={100}
-                                      width={100}
-                                      className={styles.attachmentImg}
-                                    /> :
-                                    image?.metadata?.type.includes("image") ?
-                                      <img
-                                        src={image?.url}
-                                        alt=""
-                                        height={100}
-                                        width={100}
-                                        className={styles.attachmentImg}
-                                      /> :
-                                      <img
-                                        src={".."}
-                                        alt=""
-                                        height={100}
-                                        width={100}
-                                        className={styles.attachmentImg}
-                                      />
-                          }
+                          <img
+                            src={getImageSrcUrl(image)}
+                            alt=""
+                            height={100}
+                            width={100}
+                            className={styles.attachmentImg}
+                          />
                           <div
                             className={styles.viewIcon}
                             onClick={() => {
+                              if (getAcceptedForPreviewImageOrNot(image)) {
+                                downLoadAttachements(
+                                  image?.url,
+                                  image?.metadata?.original_name
+                                );
+                                return;
+                              }
                               setSingleImageView(true);
                               setImageId(image);
                             }}
                           >
                             <img
-                              src="/view-icon-task.svg"
+                              src={
+                                getAcceptedForPreviewImageOrNot(image)
+                                  ? "/viewTaskIcons/download-white.svg"
+                                  : "/view-icon-task.svg"
+                              }
                               height={30}
                               width={30}
                               alt="view"
@@ -228,23 +247,24 @@ const AttachmentDrawerTaskmodule = ({
             <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
           </div>
           <div className={styles.singleImageDialog}>
-            {imageid?.metadata?.type?.includes("video") ?
+            {imageid?.metadata?.type?.includes("video") ? (
               <video controls width="100%" height="auto" autoPlay>
                 <source src={imageid?.url} type={imageid?.type} />
                 Your browser does not support the video tag.
               </video>
-              :
-              imageid?.metadata?.type?.includes("image") ?
-                <img src={imageid?.url} alt="" /> :
-
-                <iframe src={imageid?.url} width={"100%"} height={"100%"}>
-                  <p>No preview available for this file type.</p>
-                </iframe>
-
-            }
+            ) : imageid?.metadata?.type?.includes("image") ? (
+              <img src={imageid?.url} alt="" />
+            ) : (
+              <iframe src={imageid?.url} width={"100%"} height={"90%"}>
+                <p style={{ background: "white" }}>
+                  No preview available for this file type.
+                </p>
+              </iframe>
+            )}
           </div>
         </div>
       </Dialog>
+      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 };

@@ -143,7 +143,9 @@ const SignUpVerify = () => {
   return (
     <div id={styles.loginPage}>
       <div className={styles.bgImage}>
-        <img src="/login-bg.webp" alt="Bg Image" />
+        <picture>
+          <img src="/login-bg.webp" alt="Bg Image" />
+        </picture>
       </div>
 
       <form onSubmit={verifyOtp} className={styles.formCard}>
@@ -157,7 +159,9 @@ const SignUpVerify = () => {
           </div>
 
           <div>
-            <Typography className={styles.label}>{"We've sent an OTP to your phone number"}</Typography>
+            <Typography className={styles.label}>
+              {"We've sent an OTP to your phone number"}
+            </Typography>
             <TextField
               autoFocus
               fullWidth
@@ -169,7 +173,9 @@ const SignUpVerify = () => {
               onChange={handleOtpChange}
               className={styles.phoneNo}
               onKeyPress={handleKeyPress}
-              onKeyDown={(e: any) => { if (e.key == 'Enter') verifyOtp(e) }}
+              onKeyDown={(e: any) => {
+                if (e.key == "Enter") verifyOtp(e);
+              }}
             />
           </div>
 
@@ -178,7 +184,6 @@ const SignUpVerify = () => {
             type="submit"
             size="large"
             variant="contained"
-
           >
             {loadingWhileVerifyingOtp ? (
               <CircularProgress size="1.5rem" sx={{ color: "white" }} />
@@ -186,13 +191,29 @@ const SignUpVerify = () => {
               "Submit"
             )}
           </Button>
-          <Button variant="outlined" onClick={() => router.push({ pathname: '/' })}>Cancel</Button>
+          <Button
+            variant="outlined"
+            onClick={() => router.push({ pathname: "/" })}
+          >
+            Cancel
+          </Button>
 
-          {!seconds ? <p className={styles.helperText}>{"Did not receive an OTP?"}
-            <Button variant="text" onClick={resetCountdown} disabled={otpCountDown} sx={{ textTransform: "capitalize" }}>Resend OTP</Button>
-          </p> : ""}
+          {!seconds ? (
+            <p className={styles.helperText}>
+              {"Did not receive an OTP?"}
+              <Button
+                variant="text"
+                onClick={resetCountdown}
+                disabled={otpCountDown}
+                sx={{ textTransform: "capitalize" }}
+              >
+                Resend OTP
+              </Button>
+            </p>
+          ) : (
+            ""
+          )}
           {seconds ? `Resend in ${otpCountDown}s` : ""}
-
         </div>
       </form>
     </div>

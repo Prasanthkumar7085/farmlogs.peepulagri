@@ -3,7 +3,6 @@ import {
   removeTheFilesFromStore,
   storeFilesArray,
 } from "@/Redux/Modules/Farms";
-import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import TagsTextFeild from "@/components/Core/TagsTextFeild";
@@ -14,7 +13,6 @@ import DoneIcon from "@mui/icons-material/Done";
 import {
   Box,
   Button,
-  Icon,
   IconButton,
   LinearProgress,
   TextField,
@@ -23,11 +21,12 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
-import Header1 from "../Header/HeaderComponent";
+import { Toaster, toast } from "sonner";
 import Camera from "./Camera";
 import styles from "./add-scout.module.css";
-import { Toaster, toast } from "sonner";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { useCookies } from "react-cookie";
 
 interface propsTypesTagAndComment {
   url: string;
@@ -54,6 +53,11 @@ const FileUploadComponent = () => {
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [validations, setValidations] = useState<any>();
   const [tags, setTags] = useState<any>([]);
+  const [lats, setLats] = useState<{ latitude: number; longitude: number }>();
+  const [accuracy1, setAccuracy1] = useState<number>();
+
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -80,7 +84,7 @@ const FileUploadComponent = () => {
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
-    toast.success("File deleted successfully")
+    toast.success("File deleted successfully");
   };
 
   const previewImagesEvent = (file: any, index: any) => {
@@ -169,6 +173,17 @@ const FileUploadComponent = () => {
     });
   };
 
+  const logout = async () => {
+    try {
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
+      router.push("/");
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
   //start the file upload event
   const startUploadEvent = async (
     file: any,
@@ -176,15 +191,17 @@ const FileUploadComponent = () => {
     fileProgressCopy: any,
     setFileProgress: Function
   ) => {
-    let obj =
-    {
-      "farm_id": router.query.farm_id as string,
-      "crop_id": router.query.crop_id,
-      "original_name": file.name,
-      "type": file.type,
-      "size": file.size
-    }
-
+    let obj = {
+      farm_id: router.query.farm_id as string,
+      crop_id: router.query.crop_id,
+      original_name: file.name,
+      type: file.type,
+      size: file.size,
+      geometry: {
+        type: "Polygon",
+        coordinates: [[lats?.latitude, lats?.longitude, 0]],
+      },
+    };
 
     let options = {
       method: "POST",
@@ -216,6 +233,8 @@ const FileUploadComponent = () => {
           size: file.size,
         });
         setAttachments(tempFilesStorage);
+      } else if (response.status == 401) {
+        await logout();
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -324,6 +343,10 @@ const FileUploadComponent = () => {
         options
       );
       let responseData: any = await response.json();
+      if (responseData?.success) {
+      } else if (response.status == 401) {
+        await logout();
+      }
     } catch (err) {
       console.error(err);
     }
@@ -337,11 +360,15 @@ const FileUploadComponent = () => {
     setFileProgress: any
   ) => {
     let obj = {
-      "farm_id": router.query.farm_id,
-      "crop_id": router.query.crop_id,
-      "original_name": item.name,
-      "type": item.type,
-      "size": item.size
+      farm_id: router.query.farm_id,
+      crop_id: router.query.crop_id,
+      original_name: item.name,
+      type: item.type,
+      size: item.size,
+      geometry: {
+        type: "Polygon",
+        coordinates: [[lats?.latitude, lats?.longitude, 0]],
+      },
     };
 
     let options: any = {
@@ -371,9 +398,11 @@ const FileUploadComponent = () => {
           type: item.type,
           size: item.size,
           path: responseData?.data?.path,
-          key: responseData?.data?.key
+          key: responseData?.data?.key,
         });
         setAttachments(tempFilesStorage);
+      } else if (response.status == 401) {
+        await logout();
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -386,6 +415,7 @@ const FileUploadComponent = () => {
   useEffect(() => {
     if (router.query.farm_id && accessToken) {
       dispatch(removeTheFilesFromStore([]));
+      loadMap();
     }
   }, [accessToken, router.query.farm_id]);
 
@@ -423,6 +453,8 @@ const FileUploadComponent = () => {
               type: file?.type,
             },
             tags: [],
+
+            coordinates: [lats?.latitude, lats?.longitude, 0],
           };
 
           let options: any = {
@@ -444,17 +476,17 @@ const FileUploadComponent = () => {
           } else if (responseData?.status == 422) {
             setValidations(responseData?.errors);
             isExecuted = false;
+          } else if (response.status == 401) {
+            await logout();
           }
         })
       );
       if (isExecuted) {
         if (tags?.length || description?.length) {
           await addTagsAndCommentsEvent(imagesIdsArray);
-        }
-        else {
-          router.back()
+        } else {
+          router.back();
           toast.success("Farm Images added successfully");
-
         }
       }
     } catch (err) {
@@ -567,6 +599,8 @@ const FileUploadComponent = () => {
             let responseData = await response.json();
             if (responseData.success) {
               // toast.success(responseData?.message);
+            } else if (response.status == 401) {
+              await logout();
             } else {
               success = false;
               toast.error(responseData?.message);
@@ -581,12 +615,78 @@ const FileUploadComponent = () => {
       }
     } catch (err) {
       console.error(err);
-    }
-    finally {
-
+    } finally {
       setLoading(false);
-
     }
+  };
+
+  const loadMap = () => {
+    setLoading(true);
+    // Replace 'YOUR_GOOGLE_MAPS_API_KEY' with your actual Google Maps API key
+    // const apiKey = "";
+
+    const script = document.createElement("script");
+    script.src = `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
+
+    script.onload = () => {
+      // Google Maps API loaded successfully
+      const geocoder = new (window as any).google.maps.Geocoder();
+
+      // Use the geocoder to get the user's location
+      if (navigator.geolocation) {
+        const geolocationOptions = {
+          enableHighAccuracy: true,
+          maximumAge: 0, // Forces the device to get a new location
+          timeout: 10000, // Set a timeout for getting the location
+        };
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            console.log(position);
+
+            const { latitude, longitude, accuracy } = position.coords;
+            setAccuracy1(accuracy);
+            if (accuracy < 10) {
+              loadMap();
+            }
+            const latLng = new (window as any).google.maps.LatLng(
+              latitude,
+              longitude
+            );
+
+            geocoder.geocode(
+              { location: latLng },
+              (results: any, status: any) => {
+                if (status === "OK") {
+                  if (results[0]) {
+                    // Parse the data to get the address or other information as needed
+                    console.log("Address:", results[0].formatted_address);
+                    setLats({ latitude, longitude });
+                    console.log("Location:", { latitude, longitude });
+                  } else {
+                    console.error("No results found");
+                  }
+                } else {
+                  console.error("Geocoder failed due to:", status);
+                }
+              }
+            );
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          },
+          geolocationOptions
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    script.onerror = () => {
+      console.error("Error loading Google Maps API.");
+    };
+
+    document.head.appendChild(script);
+    setLoading(false);
   };
 
   return (
@@ -611,14 +711,15 @@ const FileUploadComponent = () => {
               onClick={() => router.back()}
             />
             <Typography className={styles.viewFarm}>Add Scout</Typography>
-            <div className={styles.headericon} id="header-icon">
-            </div>
+            <div className={styles.headericon} id="header-icon"></div>
           </div>
 
-          <div style={{
-            overflowY: "auto",
-            maxHeight: "calc(105vh - 156px)",
-          }}>
+          <div
+            style={{
+              overflowY: "auto",
+              maxHeight: "calc(105vh - 156px)",
+            }}
+          >
             <div className={styles.addscout} id="add-scout">
               <div className={styles.scoutdetails} id="scout-details">
                 <div className={styles.addscoutdetails} id="add-scout-details">
@@ -647,6 +748,7 @@ const FileUploadComponent = () => {
                           <div className={styles.capture}> Capture </div>
                         </div>
                       </div> */}
+                        {accuracy1}
                         <div id="capture-image">
                           <div className={styles.uploadimage}>
                             <label>
@@ -685,14 +787,15 @@ const FileUploadComponent = () => {
                         className={styles.image21}
                         alt=""
                         src={
-                          previewImages.find((e: any) => e.fileIndex == item.name)
-                            ?.prieviewUrl
+                          previewImages.find(
+                            (e: any) => e.fileIndex == item.name
+                          )?.prieviewUrl
                             ? previewImages.find(
-                              (e: any) => e.fileIndex == item.name
-                            ).prieviewUrl
+                                (e: any) => e.fileIndex == item.name
+                              ).prieviewUrl
                             : item.type == "application/pdf"
-                              ? "/pdf-icon.png"
-                              : "/doc-icon.webp"
+                            ? "/pdf-icon.png"
+                            : "/doc-icon.webp"
                         }
                       />
                       <div className={styles.progressdetails}>
@@ -704,7 +807,9 @@ const FileUploadComponent = () => {
                                   className={styles.photojpg}
                                   style={{
                                     color:
-                                      fileProgress[index] == "fail" ? "red" : "",
+                                      fileProgress[index] == "fail"
+                                        ? "red"
+                                        : "",
                                   }}
                                 >
                                   {item.name?.length > 25
@@ -723,7 +828,7 @@ const FileUploadComponent = () => {
                                 )}
                               </div>
                               {fileProgress[index] == 100 &&
-                                fileProgress[index] !== "fail" ? (
+                              fileProgress[index] !== "fail" ? (
                                 <div className={styles.photojpg}>
                                   <IconButton>
                                     <DoneIcon sx={{ color: "#05A155" }} />
@@ -756,7 +861,7 @@ const FileUploadComponent = () => {
                           </div>
                           <Box sx={{ width: "100%" }}>
                             {fileProgress[index] == 0 &&
-                              fileProgress[index] !== "fail" ? (
+                            fileProgress[index] !== "fail" ? (
                               <LinearProgress />
                             ) : fileProgress[index] !== 100 &&
                               fileProgress[index] !== "fail" ? (
@@ -770,7 +875,7 @@ const FileUploadComponent = () => {
                           </Box>
                         </div>
                         {fileProgress[index] == 100 ||
-                          fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                           ""
                         ) : (
                           <div className={styles.uploadstatus}>
@@ -785,9 +890,8 @@ const FileUploadComponent = () => {
                 ))}
 
               <div className={styles.scoutdescription} id="scout-description">
-                {multipleFiles?.length ?
+                {multipleFiles?.length ? (
                   <div className={styles.descriptionblock}>
-
                     <div className={styles.addscoutdetails}>
                       <div className={styles.inputField}>
                         <div style={{ width: "100%" }} className={styles.input}>
@@ -823,7 +927,10 @@ const FileUploadComponent = () => {
                       </div>
                     </div>
 
-                    <div className={styles.footeractionbuttons} id="footer-buttons">
+                    <div
+                      className={styles.footeractionbuttons}
+                      id="footer-buttons"
+                    >
                       <div className={styles.buttons} id="buttons">
                         <Button
                           className={styles.back}
@@ -839,7 +946,6 @@ const FileUploadComponent = () => {
                         </Button>
                         <Button
                           className={styles.submit}
-
                           name="submit"
                           id="submit"
                           size="large"
@@ -851,7 +957,10 @@ const FileUploadComponent = () => {
                         </Button>
                       </div>
                     </div>
-                  </div> : ""}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

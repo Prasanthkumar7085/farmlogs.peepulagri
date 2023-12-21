@@ -17,9 +17,8 @@ import moment from 'moment';
 
 
 const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
-  const onTaskCardClick = useCallback(() => {
-    // Please sync "View Task" to the project
-  }, []);
+  const router = useRouter();
+
 
 
 
@@ -28,7 +27,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
       {data?.length && data?.map((item: any, index: any) => {
         if (data.length === index + 1 && hasMore == true) {
           return (
-            <div className={styles[item.status]} id={styles.taskCard} onClick={onTaskCardClick} key={index} ref={lastBookElementRef}>
+            <div className={styles[item.status]} id={styles.taskCard} onClick={() => router.push(`/users-tasks/${item._id}/view`)} key={index} ref={lastBookElementRef}>
               <div className={styles.contentcontainer}>
                 <div className={styles.row}>
                   <h2 className={styles.title}>
@@ -70,7 +69,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
         }
         else {
           return (
-            <div className={styles[item.status]} id={styles.taskCard} onClick={onTaskCardClick} key={index}
+            <div className={styles[item.status]} id={styles.taskCard} onClick={() => router.push(`/users-tasks/${item._id}/view`)} key={index}
               ref={index === data.length - 15 ? lastItemRef : null}
             >
               <div className={styles.contentcontainer}>

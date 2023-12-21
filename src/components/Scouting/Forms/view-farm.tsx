@@ -251,6 +251,19 @@ const ViewFarmPage = () => {
               </div>
             </Box>
           </div>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            alignSelf: "stretch",
+            justifyContent: "end",
+            gap: "0.2rem",
+            marginTop: "10px",
+            cursor: "pointer"
+          }}
+            onClick={() => router.push(`/farms/${router.query.farm_id}/map`)}>
+            <Typography>Add map</Typography>
+            <img src={"/google-maps.png"} width={22} height={22} />
+          </div>
         </div>
       ) : (
         ""

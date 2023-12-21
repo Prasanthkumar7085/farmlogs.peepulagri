@@ -167,14 +167,27 @@ const SingleImageView: FC<componentProps> = ({
         if (responseData?.data.length !== 1) {
           setHasMore(true);
           if (data?.length) {
-            setData([...data, ...responseData?.data.slice(1,)]);
+            let temp = [...data, ...responseData?.data.slice(1,)]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(uniqueObjects);
+
           }
           else {
-            setData([...data, ...responseData?.data]);
+            let temp = [...data, ...responseData?.data]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(uniqueObjects);
           }
         } else {
           setHasMore(false);
-          setData([...data, ...responseData?.data]);
+          let temp = [...data, ...responseData?.data]
+          const uniqueObjects = Array.from(
+            temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+          );
+          setData(uniqueObjects);
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -206,25 +219,25 @@ const SingleImageView: FC<componentProps> = ({
             onClick={() => router.back()}
             width={"25px"}
           />
-          {/* <Typography>
-            {(data?.farm_id?.title
-              ? data?.farm_id?.title?.length > 10
-                ? data?.farm_id?.title.slice(0, 1).toUpperCase() +
-                data?.farm_id?.title?.slice(1, 14) +
+          <Typography>
+            {(data[0]?.farm_id?.title
+              ? data[0]?.farm_id?.title?.length > 10
+                ? data[0]?.farm_id?.title.slice(0, 1).toUpperCase() +
+                data[0]?.farm_id?.title?.slice(1, 14) +
                 "..."
-                : data?.farm_id?.title[0].toUpperCase() +
-                data?.farm_id?.title?.slice(1)
+                : data[0]?.farm_id?.title[0].toUpperCase() +
+                data[0]?.farm_id?.title?.slice(1)
               : "") +
               "/" +
-              (data?.crop_id?.title
-                ? data?.crop_id?.title?.length > 10
-                  ? data?.crop_id?.title.slice(0, 1).toUpperCase() +
-                  data?.crop_id?.title?.slice(1, 14) +
+              (data[0]?.crop_id?.title
+                ? data[0]?.crop_id?.title?.length > 10
+                  ? data[0]?.crop_id?.title.slice(0, 1).toUpperCase() +
+                  data[0]?.crop_id?.title?.slice(1, 14) +
                   "..."
-                  : data?.crop_id?.title[0].toUpperCase() +
-                  data?.crop_id?.title?.slice(1)
+                  : data[0]?.crop_id?.title[0].toUpperCase() +
+                  data[0]?.crop_id?.title?.slice(1)
                 : "")}
-          </Typography> */}
+          </Typography>
           <div className={styles.headericon} id="header-icon"></div>
         </div>
         {/* </div> */}

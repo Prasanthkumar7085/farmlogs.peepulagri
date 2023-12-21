@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { Button } from '@mui/material';
-
+import { Button, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+import styles from "./google-map.module.css";
 const GoogleMapComponent = () => {
 
+    const router = useRouter()
     const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
     console.log(userLocation, "pp")
     const [map, setMap] = useState(null);
@@ -104,37 +106,84 @@ const GoogleMapComponent = () => {
         }
     };
     return (
-        <div style={{ width: '100%', height: '400px' }}>
+        <div >
+            <div className={styles.header} id="header">
+                <img
+                    className={styles.iconsiconArrowLeft}
+                    alt=""
+                    src="/iconsiconarrowleft.svg"
+                    onClick={() => router.back()}
+                />
+                <Typography className={styles.viewFarm}>
+                    Add Map
+                </Typography>
+                <div className={styles.headericon} id="header-icon"></div>
+            </div>
             <div style={{ display: "flex", justifyContent: "end", marginBottom: "20px" }}>
 
-                <div>
-                    <Button onClick={undoLastPoint} disabled={polygonCoords.length === 0} variant="outlined">
-                        Undo Last Point
-                    </Button>
-                </div>
+
                 <div>
                     <Button onClick={toggleMapType} variant="contained">
                         {mapType === 'roadmap' ? 'Switch to Satellite' : 'Switch to Roadmap'}
                     </Button>
                 </div>
             </div>
-            <GoogleMapReact
-                bootstrapURLKeys={{
-                    key: 'AIzaSyAqlzQZ9Ytc07b63uin6ab85mCYuqtcTk8',
-                    libraries: ['drawing'],
-                }}
-                defaultCenter={{
-                    "lat": 17.385044,
-                    "lng": 78.486671
-                }}
-                options={{
-                    mapTypeId: mapType, // Set the initial map type
-                }}
-                defaultZoom={12}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-            />
-
+            <div style={{ width: '100%', height: '65vh' }}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{
+                        key: 'AIzaSyAqlzQZ9Ytc07b63uin6ab85mCYuqtcTk8',
+                        libraries: ['drawing'],
+                    }}
+                    defaultCenter={{
+                        "lat": 15.1534671,
+                        "lng": 79.8478049
+                    }}
+                    options={{
+                        mapTypeId: mapType, // Set the initial map type
+                    }}
+                    defaultZoom={12}
+                    yesIWantToUseGoogleMapApiInternals
+                    onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                />
+                {polygonCoords.length === 0 ? "" :
+                    <div style={{
+                        position: "absolute",
+                        top: "72%",
+                        right: "20%",
+                    }}>
+                        <Button onClick={undoLastPoint} variant="outlined"
+                            sx={{ backgroundColor: "orange" }}
+                            disabled={polygonCoords.length === 0}>
+                            <img src={"/undo-icon.png"} width={25} height={25} />  Undo Last Point
+                        </Button>
+                    </div>}
+            </div>
+            <div style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gridGap: "1.5rem",
+                marginTop: "1.5rem"
+            }}>
+                <Button
+                    className={styles.back}
+                    name="back"
+                    size="medium"
+                    variant="outlined"
+                    onClick={() => router.back()}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    className={styles.submit}
+                    color="primary"
+                    name="submit"
+                    variant="contained"
+                    type="submit"
+                    disabled={polygonCoords?.length ? false : true}
+                >
+                    Submit
+                </Button>
+            </div>
 
         </div>
     )

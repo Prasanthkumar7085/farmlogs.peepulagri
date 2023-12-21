@@ -1,22 +1,20 @@
-import { changeTaskFilterOpen } from "@/Redux/Modules/Farms";
 import SelectComponent from "@/components/Core/SelectComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
 import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import {
   Autocomplete,
   Button,
-  Collapse,
   InputAdornment,
   Menu,
-  TextField,
+  TextField
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import styles from "./NavBarContainer.module.css";
+import { changeTaskFilterUserOpen } from "@/Redux/Modules/Farms";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -37,9 +35,21 @@ const NavContainer: React.FC<PropTypes> = ({
   getAllTasksTab,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<any>(null)
+  console.log(filterAnchorEl);
+
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (event: any | null, filterOrNot = false) => {
+
+    if (event) { setAnchorEl(event.currentTarget); }
+
+    if (filterOrNot) {
+      dispatch(changeTaskFilterUserOpen(event.currentTarget))
+      setFilterAnchorEl(event?.currentTarget)
+
+    } else {
+      setAnchorEl(event)
+    }
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -132,6 +142,8 @@ const NavContainer: React.FC<PropTypes> = ({
     let { page, limit, ...rest } = router.query;
     return !Object.keys(rest)?.length;
   };
+  console.log(selectedUsers);
+
 
   return (
     <>
@@ -149,7 +161,7 @@ const NavContainer: React.FC<PropTypes> = ({
             // onClick={(e) => {
             //   dispatch(changeTaskFilterOpen());
             // }}
-            onClick={handleClick}
+            onClick={(e) => handleClick(e, true)}
             variant="contained"
             className={
               filtersLength ? styles.activeFilterBtn : styles.filterBtn
@@ -269,7 +281,7 @@ const NavContainer: React.FC<PropTypes> = ({
             style={{
               width: "35%",
               display: "grid",
-              gridTemplateColumns: "200px",
+              gridTemplateColumns: "200px 200px",
             }}
           >
             {/* <div>
@@ -320,6 +332,8 @@ const NavContainer: React.FC<PropTypes> = ({
                 ""
               )}
             </div> */}
+            {selectedUsers?.length ?
+              <div className={styles.selectedUsersCount} onClick={(e) => handleClick(filterAnchorEl)}> <span style={{ fontWeight: "500" }}>User :</span> <span>{selectedUsers[0]?.name}</span>  <span className={styles.count}>+{selectedUsers?.length > 1 ? selectedUsers?.length - 1 : ""}</span>   </div> : <div></div>}
 
             <SelectComponent
               options={statusOptions}

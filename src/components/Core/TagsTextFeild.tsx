@@ -63,13 +63,17 @@ const TagsTextFeild = ({
   };
 
   const addNewTag = () => {
+    toast.dismiss();
     if (!newTagValue?.trim()) {
+      setNewTagValue("");
       return;
     }
     if (
       tagValue.includes(newTagValue?.trim()) ||
-      tag.includes(newTagValue?.trim())
+      tag.includes(newTagValue?.trim()) ||
+      extraTags.includes(newTagValue?.trim())
     ) {
+      setNewTagValue("");
       toast.error("Tag Already Exists");
       return;
     } else {
@@ -246,7 +250,10 @@ const TagsTextFeild = ({
 
         {!isTextFieldOpen && (
           <IconButton
-            onClick={() => setIsTextFieldOpen(true)}
+            onClick={() => {
+              toast.dismiss();
+              setIsTextFieldOpen(true);
+            }}
             sx={{
               color: "green",
               border: "1px solid grey",
@@ -263,7 +270,10 @@ const TagsTextFeild = ({
               border: "1px solid #d9484",
               borderRadius: "4px",
             }}
-            onClick={() => setIsTextFieldOpen(false)}
+            onClick={() => {
+              toast.dismiss();
+              setIsTextFieldOpen(false);
+            }}
           >
             <ClearIcon />
           </IconButton>
@@ -272,7 +282,12 @@ const TagsTextFeild = ({
 
       {isTextFieldOpen && ( // Conditionally render the submit button based on the state
         <Button
-          className={styles.addNewTagBtn}
+          disabled={!newTagValue?.trim()?.length}
+          className={
+            newTagValue?.trim()?.length
+              ? styles.addNewTagBtn
+              : styles.addNewTagBtnDisabled
+          }
           sx={{ background: "#d94841" }}
           variant="contained"
           onClick={addNewTag}

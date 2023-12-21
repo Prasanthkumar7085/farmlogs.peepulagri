@@ -8,7 +8,7 @@ const AssignedToContainer = ({ setUsersDrawerOpen, assignee }: any) => {
 
     return (
         <div className={styles.assignedbycontainer}>
-            <label className={styles.assignedBy}>Created by</label>
+            <label className={styles.assignedBy}>Assigned To</label>
             <IconButton
                 onClick={() => setUsersDrawerOpen(true)}
             >

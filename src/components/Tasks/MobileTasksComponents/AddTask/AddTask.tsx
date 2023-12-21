@@ -15,6 +15,7 @@ import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllF
 import addTaskService from "../../../../../lib/services/TasksService/addTaskService";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import { MobileDatePicker } from '@mui/x-date-pickers';
+import styles from "./AddTaskMobile.module.css";
 const AddTask = () => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -151,147 +152,171 @@ const AddTask = () => {
     //   }, 100);
     // };
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <>
-                <div >
-                    <div id="header">
-                        <img
 
-                            alt=""
-                            src="/iconsiconarrowleft.svg"
-                            onClick={() => router.back()}
-                        />
-                        <Typography >
-                            Add Task
-                        </Typography>
-                        <div id="header-icon"></div>
-                    </div>
-                    <div style={{ width: "100%" }}>
-                        <div >
-                            <form >
-                                <Grid container rowSpacing={2}>
+        <div className={styles.addTaskPageMobile}>
+            <div className={styles.AddTaskHeader}>
+                <img
 
-                                    <Grid item xs={12}>
-                                        <Grid container columnSpacing={2}>
-                                            <Grid item xs={8}>
-                                                <div >
-                                                    <h4 >
-                                                        Title<span style={{ color: "red" }}>*</span>
-                                                    </h4>
-                                                    <TextField
-
-                                                        color="primary"
-                                                        placeholder="Enter your task title here"
-                                                        required={true}
-                                                        fullWidth={true}
-                                                        size="small"
-                                                        variant="outlined"
-                                                        value={title}
-                                                        onChange={(e) => setTitle(e.target.value)}
-                                                    />
-                                                    <ErrorMessages
-                                                        errorMessages={errorMessages}
-                                                        keyname="title"
-                                                    />
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={4} >
-                                                <label >
-                                                    Deadline<span style={{ color: "red" }}>*</span>
-                                                </label>
-                                                <MobileDatePicker
-                                                    value={deadline}
-                                                    disablePast
-                                                    format="dd/MM/yyyy"
-                                                    sx={{
-                                                        width: "100%",
-                                                        "& .MuiInputBase-root": {
-                                                            padding: "5px 10px",
-                                                            borderRadius: "4px",
-                                                            border: "1px solid #B4C1D6 ",
-                                                            background: "#fff",
-                                                        },
-                                                        "& .MuiInputBase-root::before": {
-                                                            borderBottom: "0 !important",
-                                                        },
-                                                        "& .MuiInputBase-root::after": {
-                                                            borderBottom: "0 !important",
-                                                        },
-                                                    }}
-                                                    onChange={(newValue: any) => {
-                                                        let dateNow = new Date();
-                                                        let dateWithPresentTime = moment(new Date(newValue))
-                                                            .set({
-                                                                hour: dateNow.getHours(),
-                                                                minute: dateNow.getMinutes(),
-                                                                second: dateNow.getSeconds(),
-                                                                millisecond: dateNow.getMilliseconds(),
-                                                            })
-                                                            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-                                                        setDeadlineString(dateWithPresentTime);
-                                                        setDeadline(newValue);
-                                                    }}
-                                                    slotProps={{
-                                                        textField: {
-                                                            variant: "standard",
-                                                            size: "small",
-                                                            color: "primary",
-                                                        },
-                                                    }}
-                                                />
-                                                {error && (
-                                                    <Typography variant="body2" color="error">
-                                                        {error}
-                                                    </Typography>
-                                                )}
-
-                                                <ErrorMessages
-                                                    errorMessages={errorMessages}
-                                                    keyname="deadline"
-                                                />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <div >
-                                            <label>Description</label>
-                                            <TextField
-                                                multiline
-                                                minRows={4}
-                                                maxRows={4}
-                                                color="primary"
-                                                placeholder="Enter your task description here"
-                                                fullWidth={true}
-                                                variant="outlined"
-                                                value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
-                                            />
-                                        </div>
-                                    </Grid>
-                                </Grid>
-                            </form>
-                            <div style={{ marginTop: "1.5rem" }}>
-                                <Button
-                                    onClick={() => router.back()}
-                                    variant="contained"
-                                    size="medium"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    // direction={true}
-                                    onClick={addTask}
-                                    variant="contained"
-                                    size="medium"
-                                >
-                                    Add
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
+                    alt=""
+                    src="/iconsiconarrowleft.svg"
+                    onClick={() => router.back()}
+                />
+                <Typography className={styles.pageTitle}>
+                    Add Task
+                </Typography>
+                <div id="header-icon" style={{ width: "30px" }}>
                 </div>
-            </>
+            </div>
+
+            <form className={styles.addTaskFormContainer}>
+                <div className={styles.eachFormBlock}>
+                    <h4 className={styles.eachFormTitle}>
+                        Title<span style={{ color: "red" }}>*</span>
+                    </h4>
+                    <TextField
+
+                        color="primary"
+                        placeholder="Enter your task title here"
+                        required={true}
+                        fullWidth={true}
+                        size="small"
+                        variant="outlined"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        sx={{
+                            "& .MuiOutlinedInput-notchedOutline ": {
+                                borderColor: "grey !important",
+                                borderRadius: "8px !important",
+                                color: "#000",
+                            },
+                            "& .MuiInputBase-input": {
+                                padding: "12px 14px",
+                                borderRadius: "8px !important",
+                                color: "#000",
+                                background: "#fff",
+                            },
+                        }}
+                    />
+                    <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="title"
+                    />
+                </div>
+                <div className={styles.eachFormBlock}>
+                    <h4 className={styles.eachFormTitle}>
+                        Deadline<span style={{ color: "red" }}>*</span>
+                    </h4>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <MobileDatePicker
+                            value={deadline}
+                            disablePast
+                            format="dd/MM/yyyy"
+                            sx={{
+                                width: "100%",
+                                "& .MuiOutlinedInput-notchedOutline ": {
+                                    borderColor: "grey !important",
+                                    borderRadius: "8px !important",
+                                    color: "#000",
+                                },
+                                "& .MuiInputBase-input": {
+                                    padding: "12px 14px",
+                                    borderRadius: "8px !important",
+                                    color: "#000",
+                                    background: "#fff",
+                                },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px",
+                                    border: "1px solid #B4C1D6 ",
+                                    background: "#fff",
+                                },
+                                "& .MuiInputBase-root::before": {
+                                    borderBottom: "0 !important",
+                                },
+                                "& .MuiInputBase-root::after": {
+                                    borderBottom: "0 !important",
+                                },
+                            }}
+                            onChange={(newValue: any) => {
+                                let dateNow = new Date();
+                                let dateWithPresentTime = moment(new Date(newValue))
+                                    .set({
+                                        hour: dateNow.getHours(),
+                                        minute: dateNow.getMinutes(),
+                                        second: dateNow.getSeconds(),
+                                        millisecond: dateNow.getMilliseconds(),
+                                    })
+                                    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+                                setDeadlineString(dateWithPresentTime);
+                                setDeadline(newValue);
+                            }}
+                            slotProps={{
+                                textField: {
+                                    variant: "standard",
+                                    size: "small",
+                                    color: "primary",
+                                },
+                            }}
+                        />
+                    </LocalizationProvider>
+                    {error && (
+                        <Typography variant="body2" color="error">
+                            {error}
+                        </Typography>
+                    )}
+
+                    <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="deadline"
+                    />
+                </div>
+                <div className={styles.eachFormBlock}>
+                    <h4 className={styles.eachFormTitle}>Description</h4>
+                    <TextField
+                        sx={{
+                            "& .MuiOutlinedInput-notchedOutline ": {
+                                borderColor: "grey !important",
+                                borderRadius: "8px !important",
+                                color: "#000",
+                            },
+                            "& .MuiInputBase-root": {
+                                padding: "12px 14px",
+                                borderRadius: "8px !important",
+                                color: "#000",
+                                background: "#fff",
+                            },
+                        }}
+                        multiline
+                        minRows={4}
+                        maxRows={4}
+                        color="primary"
+                        placeholder="Enter your task description here"
+                        fullWidth={true}
+                        variant="outlined"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </div>
+                <div className={styles.addTaskBtnGrp}>
+                    <Button
+                        onClick={() => router.back()}
+                        variant="outlined"
+                        size="medium"
+                        className={styles.cancelTaskBtn}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={addTask}
+                        variant="contained"
+                        size="medium"
+                        className={styles.addTaskBtn}
+                    >
+                        Add
+                    </Button>
+                </div>
+            </form>
+
             <AlertComponent
                 alertMessage={alertMessage}
                 alertType={alertType}
@@ -299,7 +324,8 @@ const AddTask = () => {
             />
             <LoadingComponent loading={loading} />
             <Toaster richColors position="top-right" closeButton />
-        </LocalizationProvider>
+        </div>
+
     );
 };
 

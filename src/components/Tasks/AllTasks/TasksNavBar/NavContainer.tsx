@@ -10,7 +10,7 @@ import {
   TextField
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import styles from "./NavBarContainer.module.css";
@@ -35,21 +35,11 @@ const NavContainer: React.FC<PropTypes> = ({
   getAllTasksTab,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [filterAnchorEl, setFilterAnchorEl] = useState<any>(null)
-  console.log(filterAnchorEl);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<any>(null);
 
   const open = Boolean(anchorEl);
   const handleClick = (event: any | null, filterOrNot = false) => {
-
-    if (event) { setAnchorEl(event.currentTarget); }
-
-    if (filterOrNot) {
-      dispatch(changeTaskFilterUserOpen(event.currentTarget))
-      setFilterAnchorEl(event?.currentTarget)
-
-    } else {
-      setAnchorEl(event)
-    }
+    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -144,6 +134,7 @@ const NavContainer: React.FC<PropTypes> = ({
   };
   console.log(selectedUsers);
 
+  const targetDivRef = useRef(null);
 
   return (
     <>
@@ -158,14 +149,14 @@ const NavContainer: React.FC<PropTypes> = ({
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <Button
+            ref={targetDivRef}
             id="demo-positioned-button"
             aria-controls={filterOpenOrNot ? "demo-positioned-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={filterOpenOrNot ? "true" : undefined}
-            // onClick={(e) => {
-            //   dispatch(changeTaskFilterOpen());
-            // }}
-            onClick={(e) => handleClick(e, true)}
+            onClick={(e) => {
+              handleClick(e, true);
+            }}
             variant="contained"
             className={
               filtersLength ? styles.activeFilterBtn : styles.filterBtn
@@ -337,7 +328,7 @@ const NavContainer: React.FC<PropTypes> = ({
             {selectedUsers?.length ? (
               <div
                 className={styles.selectedUsersCount}
-                onClick={(e) => handleClick(filterAnchorEl)}
+                onClick={(e) => handleClick(e)}
               >
                 {" "}
                 <span style={{ fontWeight: "500" }}>User :</span>{" "}
@@ -401,6 +392,13 @@ const NavContainer: React.FC<PropTypes> = ({
         <div>
           {!(router.query.is_my_task == "true") ? (
             <Autocomplete
+              sx={{
+                "& .MuiChip-root": {
+                  background: "#f0fff0",
+                  border: "1px solid #05a155",
+                  borderRadius: "5px",
+                },
+              }}
               multiple
               id="size-small-outlined-multi"
               size="small"
@@ -414,7 +412,11 @@ const NavContainer: React.FC<PropTypes> = ({
                 return option.name;
               }}
               options={users}
-              onChange={(e: any, value: userTaskType[] | []) => {
+              onChange={(e, value: userTaskType[] | []) => {
+                if (!value?.length) {
+                  setAnchorEl(null);
+                }
+
                 setSelectedUsers(value);
                 setUser(value);
                 let data: string[] = value?.length

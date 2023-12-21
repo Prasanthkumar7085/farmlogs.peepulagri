@@ -16,10 +16,14 @@ const AlertStautsChange = ({
   return (
     <Dialog
       open={open}
-      PaperProps={{ sx: { borderRadius: "16px", minWidth: "290px", maxWidth: "320px" } }}
+      PaperProps={{
+        sx: { borderRadius: "16px", minWidth: "290px", maxWidth: "320px" },
+      }}
     >
       <div className={styles.alertdelete}>
-        <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
+        <picture>
+          <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
+        </picture>
         <div>
           <div
             className={styles.areYouSure}
@@ -46,8 +50,8 @@ const AlertStautsChange = ({
             sx={{
               "&.Mui-disabled": {
                 background: "#c62828",
-                color: "#000"
-              }
+                color: "#000",
+              },
             }}
           >
             <div className={styles.text}>

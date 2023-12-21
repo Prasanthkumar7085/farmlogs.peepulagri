@@ -95,11 +95,11 @@ const AllCropsComponent = () => {
             response?.data?.find((item: any) => item._id == id);
 
           setDefaultValue(selectedObject?.title);
-          // dispatch(setFarmTitleTemp(selectedObject?.title));
+          dispatch(setFarmTitleTemp(selectedObject?.title));
           captureFarmName(selectedObject);
         } else {
           setDefaultValue(response?.data[0].title);
-          // dispatch(setFarmTitleTemp(response?.data[0].title));
+          dispatch(setFarmTitleTemp(response?.data[0].title));
           captureFarmName(response?.data[0]);
         }
       } else if (response?.statusCode == 403) {

@@ -383,11 +383,25 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
             maxWidth: "120px",
             accessor: (row: any) => {
                 return (
-                    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                       <img src="/timehalfpast-green.svg" alt="view" width="18" />
-                        <span style={{ color: "var(--body)" }}>{row.total_manual_hours + ' Hrs'}</span>
-                    </div>
-                       )
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <picture>
+                      <img
+                        src="/timehalfpast-green.svg"
+                        alt="view"
+                        width="18"
+                      />
+                    </picture>
+                    <span style={{ color: "var(--body)" }}>
+                      {row.total_manual_hours + " Hrs"}
+                    </span>
+                  </div>
+                );
             }
         },
         {
@@ -399,11 +413,21 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
             maxWidth: "120px",
             accessor: (row: any) => {
                 return (
-                    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                       <img src="/timehalfpast-blue.svg" alt="view" width="18" />
-                        <span style={{ color: "var(--body)" }}>{row.total_machinary_hours + ' Hrs'}</span>
-                    </div>
-                       )
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <picture>
+                      <img src="/timehalfpast-blue.svg" alt="view" width="18" />
+                    </picture>
+                    <span style={{ color: "var(--body)" }}>
+                      {row.total_machinary_hours + " Hrs"}
+                    </span>
+                  </div>
+                );
             }
         },
         {
@@ -411,27 +435,50 @@ const FarmTableLogs = ({ getFarmsData }: any) => {
             maxWidth: "120px",
             accessor: (row: any) => {
                 return (
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
-                        <IconButton onClick={() =>
-                            router.push({
-                                query: { farm_id: router.query.farm_id, log_id: row._id },
-                                pathname: '/farm/[farm_id]/logs/[log_id]'
-                            })
-                        }>
-                            <img src="/view-icon.svg" alt="view" width="18" />
-                        </IconButton>
-                        <IconButton onClick={() =>
-                            router.push({
-                                query: { farm_id: router.query.farm_id, log_id: row._id },
-                                pathname: '/farm/[farm_id]/logs/[log_id]/edit'
-                            })}>
-                            <img src="/pencil-icon.svg" alt="view" width="18" />
-                        </IconButton>
-                        <IconButton onClick={() => deleteLog(row)}>
-                            <img src="/trast-icon.svg" alt="view" width="18" />
-                        </IconButton>
-                    </div>
-                )
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <IconButton
+                      onClick={() =>
+                        router.push({
+                          query: {
+                            farm_id: router.query.farm_id,
+                            log_id: row._id,
+                          },
+                          pathname: "/farm/[farm_id]/logs/[log_id]",
+                        })
+                      }
+                    >
+                      <picture>
+                        <img src="/view-icon.svg" alt="view" width="18" />
+                      </picture>
+                    </IconButton>
+                    <IconButton
+                      onClick={() =>
+                        router.push({
+                          query: {
+                            farm_id: router.query.farm_id,
+                            log_id: row._id,
+                          },
+                          pathname: "/farm/[farm_id]/logs/[log_id]/edit",
+                        })
+                      }
+                    >
+                      <picture>
+                        <img src="/pencil-icon.svg" alt="view" width="18" />
+                      </picture>
+                    </IconButton>
+                    <IconButton onClick={() => deleteLog(row)}>
+                      <picture>
+                        <img src="/trast-icon.svg" alt="view" width="18" />
+                      </picture>
+                    </IconButton>
+                  </div>
+                );
             }
         },
     ];

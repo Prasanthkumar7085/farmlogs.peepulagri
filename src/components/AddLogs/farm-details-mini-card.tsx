@@ -77,12 +77,14 @@ const FarmDetailsMiniCard: NextPage<FarmDetailsMiniCardType> = ({
   return (
     <div className={styles.card} style={cardStyle}>
       <div className={styles.vectorParent}>
-        <img
-          className={styles.frameChild}
-          alt=""
-          src="/vector-13.svg"
-          style={vectorIconStyle}
-        />
+        <picture>
+          <img
+            className={styles.frameChild}
+            alt=""
+            src="/vector-13.svg"
+            style={vectorIconStyle}
+          />
+        </picture>
         <div className={styles.farm1Parent}>
           <div className={styles.farm1}>
             {farmDetails?.title

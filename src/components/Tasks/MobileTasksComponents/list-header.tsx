@@ -13,7 +13,7 @@ const ListHeader = ({ onDateChange }: any) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div className={styles.listheader}>
-        {/* <div className={styles.heading}>Today’s Tasks</div>
+        <div className={styles.heading}>Today’s Tasks</div>
         <div>
           <DateRangePicker
             onChange={(value: [Date, Date] | null) => {
@@ -24,7 +24,7 @@ const ListHeader = ({ onDateChange }: any) => {
             placement="auto"
             style={{ width: '100%' }}
           />
-        </div> */}
+        </div>
       </div>
     </LocalizationProvider>
   );

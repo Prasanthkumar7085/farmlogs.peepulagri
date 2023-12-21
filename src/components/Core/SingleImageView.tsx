@@ -130,10 +130,12 @@ const SingleImageView: FC<componentProps> = ({
   const observer: any = useRef();
 
   const lastBookElementRef = useCallback(
+
     (node: any) => {
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
+        console.log("poiuytrew")
         if (entries[0].isIntersecting && hasMore && data.length > 0) {
           getInstaScrollImageDetails(data[data?.length - 1]?._id)
           scrollToLastItem(); // Restore scroll position after new data is loaded
@@ -167,14 +169,27 @@ const SingleImageView: FC<componentProps> = ({
         if (responseData?.data.length !== 1) {
           setHasMore(true);
           if (data?.length) {
-            setData([...data, ...responseData?.data.slice(1,)]);
+            let temp = [...data, ...responseData?.data.slice(1,)]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(uniqueObjects);
+
           }
           else {
-            setData([...data, ...responseData?.data]);
+            let temp = [...data, ...responseData?.data]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(uniqueObjects);
           }
         } else {
           setHasMore(false);
-          setData([...data, ...responseData?.data]);
+          let temp = [...data, ...responseData?.data]
+          const uniqueObjects = Array.from(
+            temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+          );
+          setData(uniqueObjects);
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -196,46 +211,46 @@ const SingleImageView: FC<componentProps> = ({
 
   return (
     <div>
-      <div >
+      <div>
         {/* <div style={{ position: "fixed", width: "100%", zIndex: "1", maxWidth: "500px" }}> */}
 
         <div className={styles.singleImageViewHeader}>
-          <img
-            alt=""
-            src="/iconsiconarrowleft.svg"
-            onClick={() => router.back()}
-            width={"25px"}
-          />
-          {/* <Typography>
-            {(data?.farm_id?.title
-              ? data?.farm_id?.title?.length > 10
-                ? data?.farm_id?.title.slice(0, 1).toUpperCase() +
-                data?.farm_id?.title?.slice(1, 14) +
+          <picture>
+            <img
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.back()}
+              width={"25px"}
+            />
+          </picture>
+          <Typography>
+            {(data[0]?.farm_id?.title
+              ? data[0]?.farm_id?.title?.length > 10
+                ? data[0]?.farm_id?.title.slice(0, 1).toUpperCase() +
+                data[0]?.farm_id?.title?.slice(1, 14) +
                 "..."
-                : data?.farm_id?.title[0].toUpperCase() +
-                data?.farm_id?.title?.slice(1)
+                : data[0]?.farm_id?.title[0].toUpperCase() +
+                data[0]?.farm_id?.title?.slice(1)
               : "") +
               "/" +
-              (data?.crop_id?.title
-                ? data?.crop_id?.title?.length > 10
-                  ? data?.crop_id?.title.slice(0, 1).toUpperCase() +
-                  data?.crop_id?.title?.slice(1, 14) +
+              (data[0]?.crop_id?.title
+                ? data[0]?.crop_id?.title?.length > 10
+                  ? data[0]?.crop_id?.title.slice(0, 1).toUpperCase() +
+                  data[0]?.crop_id?.title?.slice(1, 14) +
                   "..."
-                  : data?.crop_id?.title[0].toUpperCase() +
-                  data?.crop_id?.title?.slice(1)
+                  : data[0]?.crop_id?.title[0].toUpperCase() +
+                  data[0]?.crop_id?.title?.slice(1)
                 : "")}
-          </Typography> */}
+          </Typography>
           <div className={styles.headericon} id="header-icon"></div>
         </div>
         {/* </div> */}
-
       </div>
 
       <div
         style={{
           overflowY: "auto",
           maxHeight: "calc(100vh - 136px)",
-          scrollSnapType: "y mandatory"
         }}
       >
         {data?.length ?
@@ -243,9 +258,7 @@ const SingleImageView: FC<componentProps> = ({
             if (data?.length === index + 1 && hasMore == true) {
               return (
                 <div key={index}
-                  style={{
-                    scrollSnapAlign: "start"
-                  }}
+
                   ref={lastBookElementRef}
                 >
                   <SingleImageComponent
@@ -289,9 +302,7 @@ const SingleImageView: FC<componentProps> = ({
             else {
               return (
                 <div key={index}
-                  style={{
-                    scrollSnapAlign: "start"
-                  }}
+
                   ref={
                     index === data.length - 10 ? lastItemRef : null
                   }                >
@@ -336,16 +347,11 @@ const SingleImageView: FC<componentProps> = ({
                     getImageData={""}
                   />
                 </div>
-              )
+              );
             }
           })
-
-
-          :
-          ""
-        }
+          : ""}
       </div>
-
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}

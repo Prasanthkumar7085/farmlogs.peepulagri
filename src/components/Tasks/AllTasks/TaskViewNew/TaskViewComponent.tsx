@@ -20,6 +20,7 @@ import TasksAttachments from "../../AddTask/TasksAttachments";
 import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
 import ViewLogs from "../../ViewTask/ViewLogs";
 import styles from "./TaskViewComponent.module.css";
+import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 
 const TaskViewComponent = () => {
   const router = useRouter();
@@ -44,15 +45,17 @@ const TaskViewComponent = () => {
 
   const [data, setData] = useState<TaskResponseTypes | null | any>({});
   const [loading, setLoading] = useState(true);
-  const [hasEditAccess, setHasEditAccess] = useState<boolean | undefined>(false);
+  const [hasEditAccess, setHasEditAccess] = useState<boolean | undefined>(
+    false
+  );
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [anchorAssignyEl, setAnchorAssignyEl] = useState<null | HTMLElement>(null);
-  const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>(
-    []
+  const [anchorAssignyEl, setAnchorAssignyEl] = useState<null | HTMLElement>(
+    null
   );
+  const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>([]);
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
@@ -62,7 +65,9 @@ const TaskViewComponent = () => {
   ]);
   const [farmId, setFarmId] = useState("");
   const [userId, setUserId] = useState("");
-  const today = new Date();
+
+  const [downloadImageId, setDownloadImageId] = useState("");
+
   const id = router.query.task_id;
 
   const open = Boolean(anchorEl);
@@ -89,7 +94,7 @@ const TaskViewComponent = () => {
   useEffect(() => {
     setErrorMessages({});
     setTitle(data?.title ? data?.title : "");
-    setDeadlineString(data?.deadline ? data?.deadline : "")
+    setDeadlineString(data?.deadline ? data?.deadline : "");
     setDescription(data?.description ? data?.description : "");
     setStatus(data?.status ? data?.status : "");
     setFarmId(data?.farm_id ? data?.farm_id?._id : "");
@@ -165,7 +170,6 @@ const TaskViewComponent = () => {
     }
   };
 
-
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllAttachments();
@@ -186,8 +190,9 @@ const TaskViewComponent = () => {
     setSelectedAttachmentsIds(ids);
   };
   //download attachment
-  const downLoadAttachements = async (file: any, name: string) => {
-    setLoading(true);
+  const downLoadAttachements = async (file: any, name: string, id: string) => {
+
+    setDownloadImageId(id);
     try {
       if (file) {
         fetch(file)
@@ -202,8 +207,7 @@ const TaskViewComponent = () => {
             }
 
             if (contentDisposition) {
-              const filenameMatch =
-                contentDisposition.match(/filename="(.+)"/);
+              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
               if (filenameMatch && filenameMatch.length > 1) {
                 filename = filenameMatch[1];
               }
@@ -236,7 +240,9 @@ const TaskViewComponent = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setDownloadImageId("");
+      }, 500);
     }
   };
 
@@ -431,7 +437,6 @@ const TaskViewComponent = () => {
   const handleCalenderOpen = () => setCalenderOpen(true);
   const handleCalenderClose = () => setCalenderOpen(false);
 
-  console.log("selectedAssignee", selectedAssignee);
 
   return (
     <div className={styles.taskViewPage}>
@@ -476,8 +481,8 @@ const TaskViewComponent = () => {
                       className={styles.farmTitle}
                       style={{ cursor: "pointer" }}
                       onClick={() => {
-                        //   setEditField("title");
-                        //   setEditFieldOrNot(true);
+                        setEditField("title");
+                        setEditFieldOrNot(true);
                       }}
                     >
                       {data?.title
@@ -505,7 +510,7 @@ const TaskViewComponent = () => {
                     }}
                   >
                     <img
-                      src="/ViewTaskIcons/cancel-icon.svg"
+                      src="/viewTaskIcons/cancel-icon.svg"
                       alt=""
                       width={"20px"}
                     />
@@ -534,8 +539,7 @@ const TaskViewComponent = () => {
                   style={{
                     cursor:
                       status !== "DONE" &&
-                        (loggedInUserId == data?.created_by?._id ||
-                          hasEditAccess)
+                        (loggedInUserId == data?.created_by?._id || hasEditAccess)
                         ? "pointer"
                         : "default",
                   }}
@@ -547,9 +551,8 @@ const TaskViewComponent = () => {
                   }
                 >
                   {data?.status
-                    ? statusOptions?.find(
-                      (item) => item.value == data?.status
-                    )?.title
+                    ? statusOptions?.find((item) => item.value == data?.status)
+                      ?.title
                     : ""}
                 </p>
 
@@ -588,8 +591,8 @@ const TaskViewComponent = () => {
                       className={styles.descriptionText}
                       style={{ cursor: "pointer" }}
                       onClick={() => {
-                        //   setEditFieldOrNot(true);
-                        //   setEditField("description");
+                        setEditFieldOrNot(true);
+                        setEditField("description");
                       }}
                     >
                       {" "}
@@ -625,7 +628,7 @@ const TaskViewComponent = () => {
                     }}
                   >
                     <img
-                      src="/ViewTaskIcons/cancel-icon.svg"
+                      src="/viewTaskIcons/cancel-icon.svg"
                       alt=""
                       width={"20px"}
                     />
@@ -722,8 +725,7 @@ const TaskViewComponent = () => {
                                     }}
                                     disabled={
                                       status === "DONE" &&
-                                      loggedInUserId ==
-                                      data?.created_by?._id
+                                      loggedInUserId == data?.created_by?._id
                                     }
                                     onChange={(e) =>
                                       selectImagesForDelete(e, item)
@@ -736,92 +738,14 @@ const TaskViewComponent = () => {
                                   ""
                                 )}
                               </div>
-                              {item?.metadata?.type.includes("pdf") ? (
-                                <img
-                                  src="/pdf-icon.png"
-                                  className={styles.thumbnailImg}
-                                  alt={""}
-                                  onClick={() => {
-                                    downLoadAttachements(
-                                      item.url,
-                                      item?.metadata?.original_name
-                                    );
-                                    window.open(item.url);
-                                  }}
-                                />
-                              ) : item?.metadata?.type.includes("csv") ? (
-                                <img
-                                  src="/csv-icon.png"
-                                  className={styles.thumbnailImg}
-                                  alt={""}
-                                  onClick={() => {
-                                    downLoadAttachements(
-                                      item.url,
-                                      item?.metadata?.original_name
-                                    );
-                                    window.open(item.url);
-                                  }}
-                                />
-                              ) : item?.metadata?.type ==
-                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                                item?.metadata?.type.includes("xlsx") ? (
-                                <img
-                                  src="/google-sheets-icon.webp"
-                                  className={styles.thumbnailImg}
-                                  alt={""}
-                                  onClick={() => {
-                                    downLoadAttachements(
-                                      item.url,
-                                      item?.metadata?.original_name
-                                    );
-                                    window.open(item.url);
-                                  }}
-                                />
-                              ) : item?.metadata?.type.includes("doc") ||
-                                item?.metadata?.type.includes("docx") ? (
-                                <img
-                                  src="/doc-icon.webp"
-                                  className={styles.thumbnailImg}
-                                  alt={""}
-                                  onClick={() => {
-                                    downLoadAttachements(
-                                      item.url,
-                                      item?.metadata?.original_name
-                                    );
-                                    window.open(item.url);
-                                  }}
-                                />
-                              ) : item?.metadata?.type.includes("video") ? (
-                                <img
-                                  src="/video-icon.png"
-                                  className={styles.thumbnailImg}
-                                  alt={""}
-                                  onClick={() => {
-                                    downLoadAttachements(
-                                      item.url,
-                                      item?.metadata?.original_name
-                                    );
-                                    window.open(item.url);
-                                  }}
-                                />
-                              ) : (
-                                <img
-                                  src={
-                                    item?.metadata?.type?.includes("image")
-                                      ? item.url
-                                      : "/other_icon.png"
-                                  }
-                                  alt={""}
-                                  className={styles.thumbnailImg}
-                                  onClick={() => {
-                                    downLoadAttachements(
-                                      item.url,
-                                      item?.metadata?.original_name
-                                    );
-                                    window.open(item.url);
-                                  }}
-                                />
-                              )}
+                              <img
+                                src={getImageSrcUrl(item)}
+                                className={styles.thumbnailImg}
+                                alt={""}
+                                onClick={() => {
+                                  window.open(item.url);
+                                }}
+                              />
                             </div>
 
                             <div
@@ -831,24 +755,16 @@ const TaskViewComponent = () => {
                                 width: "25%",
                               }}
                               onClick={() => {
-                                downLoadAttachements(
-                                  item.url,
-                                  item?.metadata?.original_name
-                                );
                                 window.open(item.url);
                               }}
                             >
                               {" "}
                               {item?.metadata?.original_name?.length > 15
-                                ? item?.metadata?.original_name.slice(
-                                  0,
-                                  13
-                                ) +
+                                ? item?.metadata?.original_name.slice(0, 13) +
                                 "..." +
                                 item?.metadata?.original_name?.split(".")[
-                                item?.metadata?.original_name?.split(
-                                  "."
-                                )?.length - 1
+                                item?.metadata?.original_name?.split(".")
+                                  ?.length - 1
                                 ]
                                 : item?.metadata?.original_name}
                             </div>
@@ -864,17 +780,27 @@ const TaskViewComponent = () => {
                               onClick={() => {
                                 downLoadAttachements(
                                   item.url,
-                                  item?.metadata?.original_name
+                                  item?.metadata?.original_name,
+                                  item?._id
                                 );
                               }}
                             >
-                              <img
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                                src="/viewTaskIcons/download.svg"
-                                alt=""
-                              />
+                              <picture>
+                                {downloadImageId == item?._id ? (
+                                  <CircularProgress
+                                    size="1rem"
+                                    sx={{ color: "green" }}
+                                  />
+                                ) : (
+                                  <img
+                                    style={{
+                                      cursor: "pointer",
+                                    }}
+                                    src="/viewTaskIcons/download.svg"
+                                    alt=""
+                                  />
+                                )}
+                              </picture>
                             </div>
                           </div>
                         );
@@ -891,10 +817,7 @@ const TaskViewComponent = () => {
             <div>
               <div className={styles.DatePickerBlock}>
                 <p className={styles.dueDate}>Due Date</p>
-                <div
-                  className={styles.datePicker}
-                  style={{ display: "flex" }}
-                >
+                <div className={styles.datePicker} style={{ display: "flex" }}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <MobileDatePicker
                       open={calenderOpen}
@@ -1065,8 +988,7 @@ const TaskViewComponent = () => {
                                     }}
                                     disabled={
                                       status === "DONE" &&
-                                      loggedInUserId ==
-                                      data?.created_by?._id
+                                      loggedInUserId == data?.created_by?._id
                                     }
                                     onChange={(e) =>
                                       handleAssigneeCheckboxChange(
@@ -1126,11 +1048,7 @@ const TaskViewComponent = () => {
                 onClick={() => setOpenLogs((prev) => !prev)}
               >
                 View Logs
-                <img
-                  src="/viewTaskIcons/logs-icon.svg"
-                  alt=""
-                  width={"15px"}
-                />
+                <img src="/viewTaskIcons/logs-icon.svg" alt="" width={"15px"} />
               </Button>
             </div>
           </div>

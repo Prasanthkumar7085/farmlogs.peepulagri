@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import styles from "./header1.module.css";
 import { Autocomplete, Button, Drawer, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -8,14 +7,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import { useSelector } from "react-redux";
 import { userTaskType } from "@/types/tasksTypes";
-
-const Header1 = ({ onChangeSearch, onUserChange }: any) => {
+import styles from "./taskHeader.module.css"
+const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
   const router = useRouter();
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<Array<userTaskType>>([]);
   const [usersDrawerOpen, setUsersDrawerOpen] = useState<any>(false);
@@ -53,7 +50,7 @@ const Header1 = ({ onChangeSearch, onUserChange }: any) => {
     <header className={styles.header}>
       <div className={styles.row}>
         <div className={styles.group}>
-          <IconButton onClick={() => router.back()}>
+          <IconButton sx={{ padding: "0" }} onClick={() => router.back()}>
             <img
               className={styles.arrowDownBold1Icon}
               alt=""
@@ -75,18 +72,30 @@ const Header1 = ({ onChangeSearch, onUserChange }: any) => {
           </div>
         </div>
       </div>
-      <div style={{ width: "50%" }}>
+      <div style={{ width: "100%" }}>
         <TextField
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
             onChangeSearch(e.target.value);
           }}
-          className={styles.searchbar}
           color="primary"
           size="small"
           placeholder="Search By Title"
-          sx={{ width: "100%", background: "#fff !important" }}
+          sx={{
+            width: "100%", borderRadius: "20px", background: "#fff !important",
+            '& .MuiInputBase-root': {
+              borderRadius: "20px !important"
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderRadius: "20px !important",
+              borderColor: "#fff !important"
+
+            },
+            '& .MuiInputBase-input': {
+              paddingBlock: "11px"
+            }
+          }}
           variant="outlined"
           type="search"
           InputProps={{
@@ -204,4 +213,4 @@ const Header1 = ({ onChangeSearch, onUserChange }: any) => {
   );
 };
 
-export default Header1;
+export default TaskHeader;

@@ -149,7 +149,11 @@ const NavContainer: React.FC<PropTypes> = ({
     <>
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
-          <img className={styles.note1Icon} alt="" src="/viewTaskIcons/task-symbol-icon.svg" />
+          <img
+            className={styles.note1Icon}
+            alt=""
+            src="/viewTaskIcons/task-symbol-icon.svg"
+          />
           <h1 className={styles.taskManagement}>{`Task Management`}</h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -176,9 +180,7 @@ const NavContainer: React.FC<PropTypes> = ({
               alt=""
               width={"14px"}
             />
-            <span>
-              Filter
-            </span>
+            <span>Filter</span>
           </Button>
           <TextField
             value={search}
@@ -332,8 +334,25 @@ const NavContainer: React.FC<PropTypes> = ({
                 ""
               )}
             </div> */}
-            {selectedUsers?.length ?
-              <div className={styles.selectedUsersCount} onClick={(e) => handleClick(filterAnchorEl)}> <span style={{ fontWeight: "500" }}>User :</span> <span>{selectedUsers[0]?.name}</span>  <span className={styles.count}>+{selectedUsers?.length > 1 ? selectedUsers?.length - 1 : ""}</span>   </div> : <div></div>}
+            {selectedUsers?.length ? (
+              <div
+                className={styles.selectedUsersCount}
+                onClick={(e) => handleClick(filterAnchorEl)}
+              >
+                {" "}
+                <span style={{ fontWeight: "500" }}>User :</span>{" "}
+                <span>{selectedUsers[0]?.name}</span>{" "}
+                {selectedUsers?.length > 1 ? (
+                  <span className={styles.count}>
+                    + {selectedUsers?.length - 1}
+                  </span>
+                ) : (
+                  ""
+                )}{" "}
+              </div>
+            ) : (
+              <div></div>
+            )}
 
             <SelectComponent
               options={statusOptions}
@@ -370,19 +389,18 @@ const NavContainer: React.FC<PropTypes> = ({
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button',
+          "aria-labelledby": "basic-button",
         }}
         PaperProps={{
           style: {
             width: "28ch",
-            padding: "1rem"
+            padding: "1rem",
           },
         }}
       >
         <div>
           {!(router.query.is_my_task == "true") ? (
             <Autocomplete
-              limitTags={1}
               multiple
               id="size-small-outlined-multi"
               size="small"
@@ -401,8 +419,8 @@ const NavContainer: React.FC<PropTypes> = ({
                 setUser(value);
                 let data: string[] = value?.length
                   ? value?.map(
-                    (item: { _id: string; name: string }) => item._id
-                  )
+                      (item: { _id: string; name: string }) => item._id
+                    )
                   : [];
                 onUserChange(data, false);
               }}

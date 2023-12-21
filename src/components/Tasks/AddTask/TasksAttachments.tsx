@@ -529,10 +529,28 @@ const TasksAttachments: React.FC<PropTypes> = ({
       </div> */}
 
       <label className={styles.UpdateFiles}>
-        <div className={styles.link} style={{ background: "#fff !important", cursor: "pointer" }}>
+        <div
+          className={styles.link}
+          style={{ background: "#fff !important", cursor: "pointer" }}
+        >
           {/* <AttachmentIcon className={styles.icon} /> */}
-          <img src="/viewTaskIcons/image-icon.svg" alt="" className={styles.icon} />
-          <div className={styles.text}> <span style={{ textDecoration: "underline", color: "#232323 !important" }}>Click to upload</span> or drag and drop</div>
+          <img
+            src="/viewTaskIcons/image-icon.svg"
+            alt=""
+            className={styles.icon}
+          />
+          <div className={styles.text}>
+            {" "}
+            <span
+              style={{
+                textDecoration: "underline",
+                color: "#232323 !important",
+              }}
+            >
+              Click to upload
+            </span>{" "}
+            {router.pathname.includes("/users-tasks") ? "" : "or drag and drop"}
+          </div>
         </div>
         <input
           className={styles.link}
@@ -554,7 +572,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
             id="upload-progress"
             key={index}
           >
-            <div className={styles1.progress} id="progress" >
+            <div className={styles1.progress} id="progress">
               <img
                 className={styles1.image21}
                 alt=""
@@ -562,14 +580,16 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                      .prieviewUrl
+                        .prieviewUrl
                     : item.type.includes("pdf")
-                      ? "/pdf-icon.png"
-                      : item.type.includes("csv") ?
-                        "/csv-icon.png" :
-                        item.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || item.type.includes("xlsx") ?
-                          "/google-sheets-icon.webp" :
-                          "/doc-icon.webp"
+                    ? "/pdf-icon.png"
+                    : item.type.includes("csv")
+                    ? "/csv-icon.png"
+                    : item.type ==
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                      item.type.includes("xlsx")
+                    ? "/google-sheets-icon.webp"
+                    : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -594,13 +614,16 @@ const TasksAttachments: React.FC<PropTypes> = ({
                             Cancelled
                           </div>
                         ) : (
-                          <div className={styles1.photojpg} style={{ fontSize: "13px", }}>
+                          <div
+                            className={styles1.photojpg}
+                            style={{ fontSize: "13px" }}
+                          >
                             {bytesToMB(item.size).toFixed(2)}MB
                           </div>
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                        fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
@@ -613,7 +636,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                        fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -627,7 +650,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                      fileProgress[index] !== "fail" ? (
+                    fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -643,8 +666,8 @@ const TasksAttachments: React.FC<PropTypes> = ({
                 {fileProgress[index] == 100 || fileProgress[index] == "fail" ? (
                   ""
                 ) : (
-                  <div className={styles1.uploadstatus} >
-                    <div className={styles1.completed} >
+                  <div className={styles1.uploadstatus}>
+                    <div className={styles1.completed}>
                       {fileProgress[index]?.toFixed(2) + "%"}
                     </div>
                   </div>
@@ -654,9 +677,8 @@ const TasksAttachments: React.FC<PropTypes> = ({
           </div>
         ))}
 
-      {tempFilesStorage?.length ?
-        <div
-          className={styles.uploadFilesBtnGrp}>
+      {tempFilesStorage?.length ? (
+        <div className={styles.uploadFilesBtnGrp}>
           {!router.query.task_id ? (
             ""
           ) : (
@@ -677,7 +699,9 @@ const TasksAttachments: React.FC<PropTypes> = ({
             Save
           </Button>
         </div>
-        : ""}
+      ) : (
+        ""
+      )}
       <LoadingComponent loading={loading} />
     </div>
   );

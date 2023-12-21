@@ -1,4 +1,3 @@
-
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
 import { Close } from "@mui/icons-material";
@@ -10,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "../../TaskComments/Comments.module.css";
 import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import { Toaster, toast } from "sonner";
-const AttachmentDrawerTaskmodule = ({
+const AttachmentDrawerMobile = ({
   attachmentDrawerClose,
   rowDetails,
   attachmentdrawer,
@@ -136,9 +135,9 @@ const AttachmentDrawerTaskmodule = ({
         open={attachmentdrawer}
         sx={{
           "& .MuiPaper-root": {
-            borderRadius: "10px",
-            overflow: "auto",
-            maxHeight: "60%",
+            padding: "1rem",
+            minWidth: "100vw",
+            maxWidth: "100vw",
           },
         }}
       >
@@ -159,7 +158,6 @@ const AttachmentDrawerTaskmodule = ({
             display: "flex",
             flexDirection: "column",
             paddingBlock: "1rem",
-            padding: "0 1rem",
           }}
         >
           {!loading && attachmentData?.length ? (
@@ -270,4 +268,4 @@ const AttachmentDrawerTaskmodule = ({
     </div>
   );
 };
-export default AttachmentDrawerTaskmodule;
+export default AttachmentDrawerMobile;

@@ -461,6 +461,7 @@ const TasksTableComponent = ({
         rowDetails={rowDetails}
         setAttachmentDrawer={setAttachmentDrawer}
         attachmentdrawer={attachmentdrawer}
+        direction={"right"}
       />
       <ViewLogs openLogs={openLogs} setOpenLogs={setOpenLogs} taskId={taskId} />
 

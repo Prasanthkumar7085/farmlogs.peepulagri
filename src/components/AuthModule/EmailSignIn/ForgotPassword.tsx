@@ -137,7 +137,9 @@ export default function ForgotPasswordPage() {
   return (
     <div id={styles.loginPage}>
       <div className={styles.bgImage}>
-        <img src="/login-bg.webp" alt="Bg Image" />
+        <picture>
+          <img src="/login-bg.webp" alt="Bg Image" />
+        </picture>
       </div>
 
       <form noValidate className={styles.formCard} onSubmit={RequestOtp}>

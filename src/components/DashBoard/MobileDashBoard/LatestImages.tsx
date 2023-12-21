@@ -25,29 +25,31 @@ const LatestImagesComponent = ({ data }: any) => {
                     width: "100%",
                   }}
                 >
-                  <img
-                    key={index}
-                    src={
-                      item.type?.slice(0, 2) == "vi"
-                        ? "/Play-button.svg"
-                        : item.url
-                    }
-                    onClick={() =>
-                      router.push(
-                        `/farms/${item?.farm_id?._id}/crops/${item?.crop_id?._id}/view/${item?._id}`
-                      )
-                    }
-                    alt={item?.uploaded_at}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "absolute",
-                      objectFit: "cover",
-                      top: "0",
-                      right: "0",
-                      cursor: "pointer",
-                    }}
-                  />
+                  <picture>
+                    <img
+                      key={index}
+                      src={
+                        item.type?.slice(0, 2) == "vi"
+                          ? "/Play-button.svg"
+                          : item.url
+                      }
+                      onClick={() =>
+                        router.push(
+                          `/farms/${item?.farm_id?._id}/crops/${item?.crop_id?._id}/view/${item?._id}`
+                        )
+                      }
+                      alt={item?.uploaded_at}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        objectFit: "cover",
+                        top: "0",
+                        right: "0",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </picture>
                 </div>
               );
             })

@@ -205,24 +205,27 @@ const NewFolderDiloag = ({ open }: any) => {
     <div>
       {crop_id ? (
         <div className={styles.header} id="header">
-          <img
-            className={styles.iconsiconArrowLeft}
-            alt=""
-            src="/iconsiconarrowleft.svg"
-            onClick={() => router.back()}
-          />
+          <picture>
+            <img
+              className={styles.iconsiconArrowLeft}
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.back()}
+            />
+          </picture>
           <Typography className={styles.viewFarm}>Edit Crop</Typography>
-          <div className={styles.headericon} id="header-icon">
-          </div>
+          <div className={styles.headericon} id="header-icon"></div>
         </div>
       ) : (
         <div className={styles.header} id="header">
-          <img
-            className={styles.iconsiconArrowLeft}
-            alt=""
-            src="/iconsiconarrowleft.svg"
-            onClick={() => router.back()}
-          />
+          <picture>
+            <img
+              className={styles.iconsiconArrowLeft}
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.back()}
+            />
+          </picture>
           <Typography className={styles.viewFarm}>Add Crop</Typography>
           <div className={styles.headericon} id="header-icon"></div>
         </div>
@@ -231,9 +234,7 @@ const NewFolderDiloag = ({ open }: any) => {
       <div className={styles.newfolder}>
         <div className={styles.frame}>
           <div style={{ textAlign: "left", width: "100%" }}>
-            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
-              {"Title"}
-            </h4>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{"Title"}</h4>
           </div>
           <Autocomplete
             options={crop?.length ? crop : []}
@@ -255,14 +256,12 @@ const NewFolderDiloag = ({ open }: any) => {
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderRadius: "8px !important",
-                    borderColor: "grey !important"
-
+                    borderColor: "grey !important",
                   },
                   "& .MuiInputBase-root": {
                     background: "#fff",
                     borderRadius: "8px !important",
-                    paddingBlock: "10px !important"
-
+                    paddingBlock: "10px !important",
                   },
                 }}
                 error={errorMessages ? errorMessages["title"] : ""}
@@ -275,9 +274,7 @@ const NewFolderDiloag = ({ open }: any) => {
 
         <div className={styles.frame} style={{ marginTop: "1.5rem" }}>
           <div style={{ textAlign: "left", width: "100%" }}>
-            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
-              {"Area"}
-            </h4>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{"Area"}</h4>
           </div>
           <TextField
             sx={{
@@ -286,16 +283,13 @@ const NewFolderDiloag = ({ open }: any) => {
                 paddingBlock: "5.5px !important",
                 borderRadius: "8px !important",
                 color: "#000",
-                fontFamily: "'Inter', sans-serif"
-
-
+                fontFamily: "'Inter', sans-serif",
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderRadius: "8px !important",
                 borderColor: "grey !important",
                 color: "#000",
-                fontFamily: "'Inter', sans-serif"
-
+                fontFamily: "'Inter', sans-serif",
               },
             }}
             className={styles.input}

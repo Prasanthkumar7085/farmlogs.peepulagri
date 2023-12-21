@@ -36,68 +36,76 @@ const ViewSingleImagePreview = ({ open, onClose, media, index }: any) => {
 
     }
     return (
-        <Dialog
-            autoFocus
-            onKeyDown={getKey}
-            open={open}
-            onClose={handleClose}
-            fullWidth
-            sx={{
-                background: "#0000008f",
-                '& .MuiPaper-root': {
-                    margin: "0 !important",
-                    width: "95%",
-                    background: "#ffffff00",
-                    boxShadow: "none !important",
-                    height: "calc(100% - 140px)"
-                },
-                '& .MuiTypography-root': {
-                    textAlign: "right",
-                    color: "#fff"
-                },
-                '& .MuiDialogContent-root': {
-                    padding: "1rem"
-                },
-                '& .MuiDialogActions-root ': {
-                    justifyContent: "center !important"
-                }
-            }}>
-            <DialogTitle>
-                <IconButton onClick={handleClose} sx={{ padding: "0" }}>
-                    <CloseIcon sx={{ color: "#fff" }} />
-                </IconButton>
-            </DialogTitle>
-            <DialogContent>
-                {/* <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray.length <= 1}>
+      <Dialog
+        autoFocus
+        onKeyDown={getKey}
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        sx={{
+          background: "#0000008f",
+          "& .MuiPaper-root": {
+            margin: "0 !important",
+            width: "95%",
+            background: "#ffffff00",
+            boxShadow: "none !important",
+            height: "calc(100% - 140px)",
+          },
+          "& .MuiTypography-root": {
+            textAlign: "right",
+            color: "#fff",
+          },
+          "& .MuiDialogContent-root": {
+            padding: "1rem",
+          },
+          "& .MuiDialogActions-root ": {
+            justifyContent: "center !important",
+          },
+        }}
+      >
+        <DialogTitle>
+          <IconButton onClick={handleClose} sx={{ padding: "0" }}>
+            <CloseIcon sx={{ color: "#fff" }} />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          {/* <IconButton className={styles.positionLeftImg} onClick={playPrevious} disabled={mediaArray.length <= 1}>
                     <NavigateBeforeIcon sx={{ color: "#fff" }} />
                 </IconButton> */}
-                {media && (
-                    <div className={styles.scoutDailogImg}>
-                        {media?.type?.includes('video') ? (
-                            <video controls width="100%" height="auto" autoPlay key={currentIndex}>
-                                <source src={media?.original} type={media?.type} />
-                                Your browser does not support the video tag.
-                            </video>
-                        ) : (
-                            <img
-                                loading='lazy'
-                                src={media?.url} // Change this to use the mediaArray
-                                alt={`Image ${currentIndex + 1}`}
-                            />
-                        )}
-
-                    </div>
-                )}
-                {/* <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray.length <= 1}>
+          {media && (
+            <div className={styles.scoutDailogImg}>
+              {media?.type?.includes("video") ? (
+                <video
+                  controls
+                  width="100%"
+                  height="auto"
+                  autoPlay
+                  key={currentIndex}
+                >
+                  <source src={media?.original} type={media?.type} />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <picture>
+                  <img
+                    loading="lazy"
+                    src={media?.url} // Change this to use the mediaArray
+                    alt={`Image ${currentIndex + 1}`}
+                  />
+                </picture>
+              )}
+            </div>
+          )}
+          {/* <IconButton className={styles.positionRightImg} onClick={playNext} disabled={mediaArray.length <= 1}>
                     <NavigateNextIcon sx={{ color: "#fff" }} />
                 </IconButton> */}
-            </DialogContent>
-            {/* <DialogActions>
+        </DialogContent>
+        {/* <DialogActions>
                 <Typography variant="caption" display="block" align="center">
                     {currentIndex + 1} of {mediaArray.length}
                 </Typography>
             </DialogActions> */}
-        </Dialog>
+      </Dialog>
     );
 };
 

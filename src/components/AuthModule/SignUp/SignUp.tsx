@@ -64,54 +64,59 @@ const SignUp = () => {
 
 
     return (
-        <div id={styles.loginPage}>
-            <div className={styles.bgImage}>
-                <img src="/login-bg.webp" alt="Bg Image" />
+      <div id={styles.loginPage}>
+        <div className={styles.bgImage}>
+          <picture>
+            <img src="/login-bg.webp" alt="Bg Image" />
+          </picture>
+        </div>
+        <form onSubmit={getOtp} className={styles.formCard}>
+          <div className={styles.innerWrap}>
+            <div className={styles.header}>
+              <ImageComponent src="./Logo-color.svg" width="90" height="70" />
+              <span className={styles.content}>
+                <Typography variant="h5">Welcome!</Typography>
+                <Typography component="p">Please enter your details</Typography>
+              </span>
             </div>
-            <form onSubmit={getOtp} className={styles.formCard}>
-                <div className={styles.innerWrap}>
-                    <div className={styles.header}>
-                        <ImageComponent src="./Logo-color.svg" width="90" height="70" />
-                        <span className={styles.content}>
-                            <Typography variant="h5">
-                                Welcome!
-                            </Typography>
-                            <Typography component="p">
-                                Please enter your details
-                            </Typography>
-                        </span>
-                    </div>
-                    <div>
-                        <Typography className={styles.label}>
-                            Login with Mobile Number
-                        </Typography>
-                        <label  ></label>
-                        <TextField
-                            type='tel'
-                            fullWidth
-                            error={Boolean(responseErrorMesaages?.phone)}
-                            helperText={responseErrorMesaages?.phone}
-                            value={mobile}
-                            size="small"
-                            placeholder="9866xxxxxx"
-                            onChange={setMobileNumber}
-                            onKeyPress={handleKeyPress}
-                            className={styles.phoneNo}
-                            onKeyDown={(e: any) => { if (e.key == 'Enter') getOtp(e) }}
-                        />
-                    </div>
-                    
-                    <Button className={styles.cta_button} type='submit' size="large" variant="contained">
-                        {loadingWhileGettingOtp ?
-                            <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                            : "Login"}
-                    </Button>
-                </div>
-            </form>
+            <div>
+              <Typography className={styles.label}>
+                Login with Mobile Number
+              </Typography>
+              <label></label>
+              <TextField
+                type="tel"
+                fullWidth
+                error={Boolean(responseErrorMesaages?.phone)}
+                helperText={responseErrorMesaages?.phone}
+                value={mobile}
+                size="small"
+                placeholder="9866xxxxxx"
+                onChange={setMobileNumber}
+                onKeyPress={handleKeyPress}
+                className={styles.phoneNo}
+                onKeyDown={(e: any) => {
+                  if (e.key == "Enter") getOtp(e);
+                }}
+              />
+            </div>
 
-
-        </div >
-    )
+            <Button
+              className={styles.cta_button}
+              type="submit"
+              size="large"
+              variant="contained"
+            >
+              {loadingWhileGettingOtp ? (
+                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+              ) : (
+                "Login"
+              )}
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
 }
 
 export default SignUp;

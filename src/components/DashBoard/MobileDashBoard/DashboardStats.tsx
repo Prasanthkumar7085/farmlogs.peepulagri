@@ -66,74 +66,117 @@ const DashboardStats = () => {
     }, [router.isReady, accessToken])
 
     return (
-
-        <div className={styles.dashboardstats}>
-            <div className={styles.pageHeader}  >
-                <div style={{ padding: "0.5rem" }}>
-                    <img src="/mobileIcons/logo-mobile-white.svg" alt="" width={"50px"} onClick={() => router.push("/dashboard")} />
-                </div>
-                <div style={{ width: "60%", textAlign: "center" }}>
-                    <h2 className={styles.pageName}>Dashboard</h2>
-                </div>
-            </div>
-            <div className={styles.pageContainer}>
-                <div style={{ padding: "1rem" }}>
-                    <div className={styles.row}>
-                        <div className={styles.farmscard} style={{ background: " #DDD4F2" }}>
-                            <div className={styles.header}>
-                                <div className={styles.container}>
-                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/farms-card-icon.svg" />
-                                </div>
-                                <label className={styles.lable}>Farms</label>
-                            </div>
-                            <p className={styles.total123}>
-                                {data?.length ? data[0]?.data.toLocaleString() : ""}
-                            </p>
-                        </div>
-                        <div className={styles.farmscard} style={{ background: "#D6E7FF" }}>
-                            <div className={styles.header}>
-                                <div className={styles.container}>
-                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/crops-card-icon.svg" />
-                                </div>
-                                <label className={styles.lable}>Crops</label>
-                            </div>
-                            <p className={styles.total123}>
-                                {data?.length ? data[1]?.data.toLocaleString() : ""}
-                            </p>
-                        </div>
-                        <div className={styles.farmscard} style={{ background: "#F0D4D4" }}>
-                            <div className={styles.header}>
-                                <div className={styles.container}>
-                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/images-card-icon.svg" />
-                                </div>
-                                <label className={styles.lable}>Images</label>
-                            </div>
-                            <p className={styles.total123}>
-                                {data?.length ? data[2]?.data.toLocaleString() : ""}
-                            </p>
-                        </div>
-                        <div className={styles.farmscard} style={{ background: "#D1F5E5" }}>
-                            <div className={styles.header}>
-                                <div className={styles.container}>
-                                    <img className={styles.farmicon} alt="" src="/mobileIcons/dashboard/comments-card-icon.svg" />
-                                </div>
-                                <label className={styles.lable}>Comments</label>
-                            </div>
-                            <p className={styles.total123}>
-                                {data?.length ? data[3]?.data.toLocaleString() : ""}
-                            </p>
-
-                        </div>
-                    </div>
-
-                    <div className={styles.gallaryBlock}>
-                        <Typography variant="h4" color="red">Recent Uploads</Typography>
-                        <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
-                    </div>
-                </div>
-            </div>
-            <LoadingComponent loading={loading} />
+      <div className={styles.dashboardstats}>
+        <div className={styles.pageHeader}>
+          <div style={{ padding: "0.5rem" }}>
+            <picture>
+              <img
+                src="/mobileIcons/logo-mobile-white.svg"
+                alt=""
+                width={"50px"}
+                onClick={() => router.push("/dashboard")}
+              />
+            </picture>
+          </div>
+          <div style={{ width: "60%", textAlign: "center" }}>
+            <h2 className={styles.pageName}>Dashboard</h2>
+          </div>
         </div>
+        <div className={styles.pageContainer}>
+          <div style={{ padding: "1rem" }}>
+            <div className={styles.row}>
+              <div
+                className={styles.farmscard}
+                style={{ background: " #DDD4F2" }}
+              >
+                <div className={styles.header}>
+                  <div className={styles.container}>
+                    <picture>
+                      <img
+                        className={styles.farmicon}
+                        alt=""
+                        src="/mobileIcons/dashboard/farms-card-icon.svg"
+                      />
+                    </picture>
+                  </div>
+                  <label className={styles.lable}>Farms</label>
+                </div>
+                <p className={styles.total123}>
+                  {data?.length ? data[0]?.data.toLocaleString() : ""}
+                </p>
+              </div>
+              <div
+                className={styles.farmscard}
+                style={{ background: "#D6E7FF" }}
+              >
+                <div className={styles.header}>
+                  <div className={styles.container}>
+                    <picture>
+                      <img
+                        className={styles.farmicon}
+                        alt=""
+                        src="/mobileIcons/dashboard/crops-card-icon.svg"
+                      />
+                    </picture>
+                  </div>
+                  <label className={styles.lable}>Crops</label>
+                </div>
+                <p className={styles.total123}>
+                  {data?.length ? data[1]?.data.toLocaleString() : ""}
+                </p>
+              </div>
+              <div
+                className={styles.farmscard}
+                style={{ background: "#F0D4D4" }}
+              >
+                <div className={styles.header}>
+                  <div className={styles.container}>
+                    <picture>
+                      <img
+                        className={styles.farmicon}
+                        alt=""
+                        src="/mobileIcons/dashboard/images-card-icon.svg"
+                      />
+                    </picture>
+                  </div>
+                  <label className={styles.lable}>Images</label>
+                </div>
+                <p className={styles.total123}>
+                  {data?.length ? data[2]?.data.toLocaleString() : ""}
+                </p>
+              </div>
+              <div
+                className={styles.farmscard}
+                style={{ background: "#D1F5E5" }}
+              >
+                <div className={styles.header}>
+                  <div className={styles.container}>
+                    <picture>
+                      <img
+                        className={styles.farmicon}
+                        alt=""
+                        src="/mobileIcons/dashboard/comments-card-icon.svg"
+                      />
+                    </picture>
+                  </div>
+                  <label className={styles.lable}>Comments</label>
+                </div>
+                <p className={styles.total123}>
+                  {data?.length ? data[3]?.data.toLocaleString() : ""}
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.gallaryBlock}>
+              <Typography variant="h4" color="red">
+                Recent Uploads
+              </Typography>
+              <LatestImagesComponent data={data?.length ? data[4]?.data : ""} />
+            </div>
+          </div>
+        </div>
+        <LoadingComponent loading={loading} />
+      </div>
     );
 };
 

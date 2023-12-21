@@ -3,55 +3,30 @@ import GoogleMapReact from 'google-map-react';
 import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from "./google-map.module.css";
+import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
+import { useSelector } from 'react-redux';
+import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
+import { toast } from 'sonner';
 const GoogleMapComponent = () => {
 
-    const router = useRouter()
+    const router = useRouter();
+    const [data, setData] = useState<any>();
+    const [loading, setLoading] = useState(true);
+    const accessToken = useSelector(
+        (state: any) => state.auth.userDetails?.access_token
+    );
     const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
-    console.log(userLocation, "pp")
     const [map, setMap] = useState(null);
     const [googleMaps, setGoogleMaps] = useState(null);
     const [polygon, setPolygon] = useState<any>(null);
-    const [polygonCoords, setPolygonCoords] = useState([]);
-    console.log(polygonCoords, "mk")
+    const [polygonCoords, setPolygonCoords] = useState<any>([]);
+    console.log(polygonCoords)
     const drawingManagerRef = React.useRef(null);
     const pathRef = useRef([]);
     const [mapType, setMapType] = useState('roadmap'); // 'roadmap' is the normal map view
 
 
-    useEffect(() => {
-    }, [userLocation]);
 
-    const getTheLocations = () => {
-        // Prepare the data to be sent to Google Geolocation API
-        const requestData = {
-            considerIp: true,
-            wifiAccessPoints: [], // You can add Wi-Fi access points if available
-            cellTowers: [], // You can add cell tower information if available
-            homeMobileCountryCode: 310, // Replace with the appropriate mobile country code
-            homeMobileNetworkCode: 410, // Replace with the appropriate mobile network code
-        };
-
-        // Make a POST request to Google Geolocation API
-        fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAqlzQZ9Ytc07b63uin6ab85mCYuqtcTk8', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData),
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from Google Geolocation API
-                setUserLocation({
-                    lat: data.location.lat,
-                    lng: data.location.lng,
-                });
-            })
-            .catch(error => {
-                console.error('Error getting user location:', error);
-            });
-
-    }
 
     const handleApiLoaded = (map: any, maps: any) => {
         setMap(map);
@@ -79,20 +54,21 @@ const GoogleMapComponent = () => {
                 setPolygonCoords(updatedCoords);
             }
         });
-    };
 
 
-    const toggleMapType = () => {
-        setMapType(mapType === 'roadmap' ? 'satellite' : 'roadmap');
-    };
+        // Create a new polygon
+        const newPolygon = new maps.Polygon({
+            paths: polygonCoords,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+        });
 
-
-    const handlePolygonComplete = (polygon: any) => {
-        const paths = polygon.getPath();
-        const updatedCoords = paths.getArray().map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
-        setPolygon(polygon);
-        setPolygonCoords(updatedCoords);
-        pathRef.current = updatedCoords.slice();
+        // Set the polygon on the map
+        newPolygon.setMap(map);
+        setPolygon(newPolygon);
     };
 
     const undoLastPoint = () => {
@@ -105,6 +81,68 @@ const GoogleMapComponent = () => {
             polygon.setPath(path);
         }
     };
+
+
+    //get the farm details
+    const getFarmDataById = async () => {
+
+        const response: any = await getFarmByIdService(
+            router.query.farm_id as string,
+            accessToken as string
+        );
+
+        if (response?.success) {
+            setData(response?.data);
+            if (response?.data?.geometry?.coordinates?.length) {
+                let updatedArray = response?.data?.geometry?.coordinates.map((item: any) => {
+                    return {
+                        lat: item[0],
+                        lng: item[1]
+                    }
+                })
+                setPolygonCoords(updatedArray)
+
+            }
+            else {
+                setPolygonCoords([])
+            }
+        }
+        setLoading(false);
+    };
+
+
+    //edit the farm details(with the cordinates)
+    const edtiFarm = async () => {
+        let editedData: any = {
+            title: data?.title,
+            area: data?.area,
+            location_id: data?.location_id?._id,
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": polygonCoords.map((obj: any) => Object.values(obj))
+            }
+        };
+
+
+        const response = await editFarmService(
+            editedData,
+            accessToken,
+            router.query.farm_id as string
+        );
+        if (response?.success) {
+            toast.success("Farm cordinates added successfully")
+            router.back()
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        if (router.isReady && accessToken) {
+            getFarmDataById()
+        }
+
+    }, [router.isReady, accessToken])
+
     return (
         <div >
             <div className={styles.header} id="header">
@@ -122,16 +160,12 @@ const GoogleMapComponent = () => {
             <div style={{ display: "flex", justifyContent: "end", marginBottom: "20px" }}>
 
 
-                <div>
-                    <Button onClick={toggleMapType} variant="contained">
-                        {mapType === 'roadmap' ? 'Switch to Satellite' : 'Switch to Roadmap'}
-                    </Button>
-                </div>
+
             </div>
             <div style={{ width: '100%', height: '65vh' }}>
                 <GoogleMapReact
                     bootstrapURLKeys={{
-                        key: 'AIzaSyAqlzQZ9Ytc07b63uin6ab85mCYuqtcTk8',
+                        key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
                         libraries: ['drawing'],
                     }}
                     defaultCenter={{
@@ -139,12 +173,17 @@ const GoogleMapComponent = () => {
                         "lng": 79.8478049
                     }}
                     options={{
-                        mapTypeId: mapType, // Set the initial map type
+                        mapTypeId: mapType,
+                        mapTypeControlOptions: true,
+                        mapTypeControl: true,
+                        streetViewControl: true,
+                        rotateControl: true
                     }}
                     defaultZoom={12}
                     yesIWantToUseGoogleMapApiInternals
                     onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                 />
+
                 {polygonCoords.length === 0 ? "" :
                     <div style={{
                         position: "absolute",
@@ -180,6 +219,7 @@ const GoogleMapComponent = () => {
                     variant="contained"
                     type="submit"
                     disabled={polygonCoords?.length ? false : true}
+                    onClick={edtiFarm}
                 >
                     Submit
                 </Button>

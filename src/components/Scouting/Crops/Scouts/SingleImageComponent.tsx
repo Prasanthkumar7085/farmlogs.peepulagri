@@ -31,7 +31,7 @@ const SingleImageComponent: FC<componentProps> = ({
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
   const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
-
+  const [showMore, setShowMore] = useState<any>(false);
   const tagsDrawerClose = (value: any) => {
     if (value == false) {
       setTagsDrawerEditOpen(false);
@@ -135,9 +135,23 @@ const SingleImageComponent: FC<componentProps> = ({
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: "5px", flexWrap: "wrap" }}>
-        {detailedImage?.tags?.map((item: string) => {
+        {/* {detailedImage?.tags?.map((item: string) => {
           return <Chip label={item} key={item} />;
-        })}
+        })} */}
+
+        {detailedImage?.tags.length > 3 ?
+          <div>
+            {showMore == false ?
+              <div style={{ color: "black", fontStyle: "bold" }}>
+                {detailedImage?.tags.slice(0, 3).join(",") + "..."}<span onClick={() => setShowMore(true)}>Show more</span>
+              </div> :
+              <div>
+                {detailedImage?.tags.join(",")}<span onClick={() => setShowMore(false)}>Show less</span>
+              </div>}
+          </div> :
+          <div>
+            {detailedImage?.tags.join(",")}
+          </div>}
 
       </div>
 

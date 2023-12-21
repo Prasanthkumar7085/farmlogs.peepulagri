@@ -261,7 +261,7 @@ const ViewFarmPage = () => {
             cursor: "pointer"
           }}
             onClick={() => router.push(`/farms/${router.query.farm_id}/map`)}>
-            <Typography>Add map</Typography>
+            <Typography>{data?.geometry?.coordinates?.length ? "View Map" : "Add map"}</Typography>
             <img src={"/google-maps.png"} width={22} height={22} />
           </div>
         </div>

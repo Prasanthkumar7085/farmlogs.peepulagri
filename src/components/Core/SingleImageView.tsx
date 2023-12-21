@@ -130,10 +130,12 @@ const SingleImageView: FC<componentProps> = ({
   const observer: any = useRef();
 
   const lastBookElementRef = useCallback(
+
     (node: any) => {
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
+        console.log("poiuytrew")
         if (entries[0].isIntersecting && hasMore && data.length > 0) {
           getInstaScrollImageDetails(data[data?.length - 1]?._id)
           scrollToLastItem(); // Restore scroll position after new data is loaded
@@ -225,19 +227,19 @@ const SingleImageView: FC<componentProps> = ({
             {(data[0]?.farm_id?.title
               ? data[0]?.farm_id?.title?.length > 10
                 ? data[0]?.farm_id?.title.slice(0, 1).toUpperCase() +
-                  data[0]?.farm_id?.title?.slice(1, 14) +
-                  "..."
+                data[0]?.farm_id?.title?.slice(1, 14) +
+                "..."
                 : data[0]?.farm_id?.title[0].toUpperCase() +
-                  data[0]?.farm_id?.title?.slice(1)
+                data[0]?.farm_id?.title?.slice(1)
               : "") +
               "/" +
               (data[0]?.crop_id?.title
                 ? data[0]?.crop_id?.title?.length > 10
                   ? data[0]?.crop_id?.title.slice(0, 1).toUpperCase() +
-                    data[0]?.crop_id?.title?.slice(1, 14) +
-                    "..."
+                  data[0]?.crop_id?.title?.slice(1, 14) +
+                  "..."
                   : data[0]?.crop_id?.title[0].toUpperCase() +
-                    data[0]?.crop_id?.title?.slice(1)
+                  data[0]?.crop_id?.title?.slice(1)
                 : "")}
           </Typography>
           <div className={styles.headericon} id="header-icon"></div>
@@ -249,26 +251,22 @@ const SingleImageView: FC<componentProps> = ({
         style={{
           overflowY: "auto",
           maxHeight: "calc(100vh - 136px)",
-          scrollSnapType: "y mandatory",
         }}
       >
-        {data?.length
-          ? data.map((image: any, index: any) => {
-              if (data?.length === index + 1 && hasMore == true) {
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      scrollSnapAlign: "start",
-                    }}
-                    ref={lastBookElementRef}
-                  >
-                    <SingleImageComponent
-                      detailedImage={image}
-                      scoutDetails={data}
-                      getImageData={""}
-                    />
-                    {/* <div className={styles.ButtonGrp}>
+        {data?.length ?
+          data.map((image: any, index: any) => {
+            if (data?.length === index + 1 && hasMore == true) {
+              return (
+                <div key={index}
+
+                  ref={lastBookElementRef}
+                >
+                  <SingleImageComponent
+                    detailedImage={image}
+                    scoutDetails={data}
+                    getImageData={""}
+                  />
+                  {/* <div className={styles.ButtonGrp}>
                     <IconButton
                       sx={{ borderRadius: "25px 0 0 25px" }}
                       className={styles.singleBtn}
@@ -298,23 +296,22 @@ const SingleImageView: FC<componentProps> = ({
                       />
                     </IconButton>
                   </div> */}
-                  </div>
-                );
-              } else {
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      scrollSnapAlign: "start",
-                    }}
-                    ref={index === data.length - 10 ? lastItemRef : null}
-                  >
-                    {/* <img
+                </div>
+              )
+            }
+            else {
+              return (
+                <div key={index}
+
+                  ref={
+                    index === data.length - 10 ? lastItemRef : null
+                  }                >
+                  {/* <img
                     src={image?.url}
                     alt={`${image?.key}`}
                     style={{ width: "100%", height: "100%", objectFit: "contain" }}
                   /> */}
-                    {/* <div className={styles.ButtonGrp}>
+                  {/* <div className={styles.ButtonGrp}>
                     <IconButton
                       sx={{ borderRadius: "25px 0 0 25px" }}
                       className={styles.singleBtn}
@@ -344,15 +341,15 @@ const SingleImageView: FC<componentProps> = ({
                       />
                     </IconButton>
                   </div> */}
-                    <SingleImageComponent
-                      detailedImage={image}
-                      scoutDetails={data}
-                      getImageData={""}
-                    />
-                  </div>
-                );
-              }
-            })
+                  <SingleImageComponent
+                    detailedImage={image}
+                    scoutDetails={data}
+                    getImageData={""}
+                  />
+                </div>
+              );
+            }
+          })
           : ""}
       </div>
 

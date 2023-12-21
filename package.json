@@ -17,6 +17,7 @@
     "@mui/material": "^5.14.5",
     "@mui/x-date-pickers": "^6.18.4",
     "@mui/x-date-pickers-pro": "^6.11.1",
+    "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-table": "^8.9.3",
     "@types/node": "20.5.0",

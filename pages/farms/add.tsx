@@ -1,4 +1,5 @@
 import AddFarmForm from "@/components/Scouting/Forms/AddForm";
+import GoogleMapComponent from "@/components/Scouting/Forms/GoogleMapsPolygon/GoogleMapComponent";
 import Header1 from "@/components/Scouting/Header/HeaderComponent";
 import { GetServerSideProps } from "next";
 
@@ -6,7 +7,9 @@ const AddFormPage = () => {
     return (
         <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             {/* <Header1 name={'Add Farm'} /> */}
+            {/* <GoogleMapComponent /> */}
             <AddFarmForm />
+
         </div>
     )
 }

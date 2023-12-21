@@ -29,6 +29,7 @@ const ImageGalleryComponent = () => {
   );
   const cropTitle = useSelector((state: any) => state?.farms?.cropName);
   const farmTitle = useSelector((state: any) => state?.farms?.farmName);
+
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const [, , removeCookie] = useCookies(["userType"]);

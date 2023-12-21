@@ -41,9 +41,8 @@ const SingleImageView: FC<componentProps> = ({
   const [loading, setLoading] = useState<any>(false);
 
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
-
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const tagsDrawerClose = (value: any) => {
     if (value == false) {
@@ -104,8 +103,8 @@ const SingleImageView: FC<componentProps> = ({
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -235,7 +234,7 @@ const SingleImageView: FC<componentProps> = ({
       <div
         style={{
           overflowY: "auto",
-          maxHeight: "calc(100vh - 156px)",
+          maxHeight: "calc(100vh - 136px)",
           scrollSnapType: "y mandatory"
         }}
       >
@@ -245,7 +244,6 @@ const SingleImageView: FC<componentProps> = ({
               return (
                 <div key={index}
                   style={{
-                    height: "calc(100vh - 156px)",
                     scrollSnapAlign: "start"
                   }}
                   ref={lastBookElementRef}
@@ -292,7 +290,6 @@ const SingleImageView: FC<componentProps> = ({
               return (
                 <div key={index}
                   style={{
-                    height: "calc(100vh - 156px)",
                     scrollSnapAlign: "start"
                   }}
                   ref={

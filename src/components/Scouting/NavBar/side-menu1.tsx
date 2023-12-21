@@ -13,8 +13,8 @@ import { useCookies } from "react-cookie";
 const SideMenu1 = ({ toggleDrawer }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const email = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.email
@@ -29,8 +29,8 @@ const SideMenu1 = ({ toggleDrawer }: any) => {
 
   const onLogoutCMenuItemck = () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
 
       router.push("/");
       dispatch(removeUserDetails());

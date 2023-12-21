@@ -1,13 +1,14 @@
 .tablePagination {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.625rem 0.625rem 0.625rem 0.9375rem;
-    color: #000000;
-    margin-right: 5px;
-    border: 1px solid #efefef;
-    box-shadow: none;
-    border-radius: 0;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.625rem 0.625rem 0.625rem 0.9375rem !important;
+    color: #000000 !important;
+    margin-right: 5px !important;
+    border: 1px solid #efefef !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: auto !important;
 }
 
 .tablePagination * {

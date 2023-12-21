@@ -37,7 +37,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
 }) => {
   const router = useRouter();
 
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
   const accessToken = useSelector(
@@ -74,7 +74,6 @@ const NavBarContainer: React.FC<PropTypes> = ({
   const onButtonAddTaskClick = useCallback(() => {
     if (titleName == "Procurment Module") {
       router.push("/procurements/add");
-
     } else {
       router.push("/tasks/add");
     }
@@ -145,7 +144,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
               }}
             />
           </div>
-          {userType !== "farmer" ? (
+          {userType_v2 !== "farmer" ? (
             <Button
               className={styles.filter}
               color="primary"

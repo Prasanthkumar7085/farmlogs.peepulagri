@@ -32,8 +32,8 @@ const ImageGalleryComponent = () => {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [data, setData] = useState<any>([]);
   const [selectedFile, setSelectedFile] = useState<any>([]);
@@ -71,8 +71,6 @@ const ImageGalleryComponent = () => {
     setTempImages(selectedItems);
   }, [selectedItems]);
 
-
-
   // Effect to add scroll event listener when the component mounts
 
   useEffect(() => {
@@ -84,8 +82,8 @@ const ImageGalleryComponent = () => {
   //logout event when the 403 and 401 error codes
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());

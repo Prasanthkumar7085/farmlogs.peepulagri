@@ -30,8 +30,8 @@ const SingleScoutViewDetails = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [data, setData] = useState<any>();
   const [content, setContent] = useState<any>();
@@ -40,17 +40,17 @@ const SingleScoutViewDetails = () => {
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      getSingleScoutDetails()
+      getSingleScoutDetails();
     }
   }, [router.isReady, accessToken]);
-
-
-
 
   const getSingleScoutDetails = async () => {
     setLoading(true);
     try {
-      const response = await getSingleImageDetailsService(router.query.image_id, accessToken);
+      const response = await getSingleImageDetailsService(
+        router.query.image_id,
+        accessToken
+      );
       if (response?.success) {
         setData(response?.data);
       } else if (response?.statusCode == 403) {
@@ -65,8 +65,8 @@ const SingleScoutViewDetails = () => {
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());

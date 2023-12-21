@@ -27,8 +27,8 @@ const AddSummary = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState<any>();

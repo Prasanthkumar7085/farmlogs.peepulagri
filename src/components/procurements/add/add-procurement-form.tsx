@@ -33,18 +33,15 @@ interface ApiProps {
 }
 const AddProcurementForm = () => {
   const dispatch = useDispatch();
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const router = useRouter();
-
   const [title, setTitle] = useState("");
   const [dateOfOperation, setDataOfOperation] = useState<Date | null>(null);
   const [remarks, setRemarks] = useState("");
-
   const [farmOptions, setFarmOptions] = useState([]);
   const [farm, setFarm] = useState<{ title: string; _id: string }[]>([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
@@ -52,15 +49,12 @@ const AddProcurementForm = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [isDisabled, setIsDisabled] = useState(false);
-
   const [editFarms, setEditFarms] = useState<
     { title: string; _id: string }[] | []
   >([]);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
   const [procurementData, setProcurementData] = useState({});
-
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     try {
       let response = await ListAllFarmForDropDownService(
@@ -253,14 +247,13 @@ const AddProcurementForm = () => {
   }, [router.isReady, accessToken, searchString]);
   return (
     <div>
+
+      <AddProcurementHeader />
+
       <form className={styles.addprocurementform}>
-        <div className={styles.formgroup}>
-
-
-          <Card style={{ width: "60%", margin: "auto", height: "90vh" }}>
-            <div style={{ display: 'flex', justifyContent: "space-between" }}>
-              <AddProcurementHeader />
-
+        <Card sx={{ width: "100%" }}>
+          <div style={{ padding: "1rem" }}>
+            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
               {router.query.procurement_id ? (
                 <Button
                   variant="outlined"
@@ -341,11 +334,8 @@ const AddProcurementForm = () => {
                 />
                 : ''}
             </div>
-          </Card>
-
-
-        </div>
-
+          </div>
+        </Card>
 
         <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
           <DialogContent>

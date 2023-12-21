@@ -17,9 +17,11 @@ import addTagService from "../../../lib/services/TagsService/addTagService";
 import { SendOutlined } from "@mui/icons-material";
 
 const TagsTextFeildForImages = ({
+  itemDetails,
   beforeTags,
   TagsDrawerEditOpen,
   getImageBasedTags,
+
 }: any) => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -70,7 +72,7 @@ const TagsTextFeildForImages = ({
     setDeleteTagLoading(true);
     let body = {
       tags: [deletedValue],
-      farm_image_ids: [router.query.image_id],
+      farm_image_ids: [itemDetails?._id ? itemDetails?._id : router.query.image_id as string],
     };
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/farm-images/delete-tags`;
@@ -110,7 +112,7 @@ const TagsTextFeildForImages = ({
     try {
       const response = await addTagService({
         body: {
-          farm_image_ids: [router.query.image_id as string],
+          farm_image_ids: [itemDetails?._id ? itemDetails?._id : router.query.image_id as string],
           tags: [value],
         },
         token: accessToken,
@@ -119,7 +121,7 @@ const TagsTextFeildForImages = ({
         toast.success(response?.message);
         setIsTextFieldOpen(false);
         getImageBasedTags();
-        callAllTagsOrNot ? dropDownTags() : () => {};
+        callAllTagsOrNot ? dropDownTags() : () => { };
       } else {
         toast.error(response?.message);
       }
@@ -156,7 +158,7 @@ const TagsTextFeildForImages = ({
           {isTextFieldOpen && ( // Conditionally render the text field based on the state
             <TextField
               onKeyDown={(event: any) =>
-                event.key === "Tab" ? addTagToImage(newTagValue) : () => {}
+                event.key === "Tab" ? addTagToImage(newTagValue) : () => { }
               }
               size="small"
               fullWidth
@@ -287,7 +289,7 @@ const TagsTextFeildForImages = ({
                         },
                       }}
                       onDelete={() =>
-                        deleteTagLoading ? () => {} : handleDeleteChip(item)
+                        deleteTagLoading ? () => { } : handleDeleteChip(item)
                       }
                       key={index}
                       label={

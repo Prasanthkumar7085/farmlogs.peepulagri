@@ -95,6 +95,7 @@ const EditTagsForSingleAttachment = ({
       </div>
       <div style={{ width: "100%" }}>
         <TagsTextFeildForImages
+          itemDetails={item}
           beforeTags={tagsDetails?.tags}
           TagsDrawerEditOpen={TagsDrawerEditOpen}
           getImageBasedTags={getImageBasedTags}

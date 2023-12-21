@@ -273,7 +273,7 @@ const DrawerComponentForScout = ({
         <CommentForm
           afterCommentAdd={afterCommentAdd}
           scoutDetails={data}
-          attachement={data}
+          attachement={attachement}
         />
 
         <LoadingComponent loading={loading} />

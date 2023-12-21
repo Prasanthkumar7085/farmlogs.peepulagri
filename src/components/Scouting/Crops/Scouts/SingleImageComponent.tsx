@@ -106,33 +106,7 @@ const SingleImageComponent: FC<componentProps> = ({
         />
 
       </div>
-      <div>
-        {" "}
-        <IconButton
-          onClick={() => {
-            captureImageDilogOptions("tag");
-          }}
-        >
-          <Image
-            src={"/add-tag-icon-black.svg"}
-            width={20}
-            height={20}
-            alt="pp"
-          />
-        </IconButton>
-        <IconButton
-          onClick={() => {
-            captureImageDilogOptions("comments");
-          }}
-        >
-          <Image
-            src={"/comment-black-icon.svg"}
-            width={20}
-            height={20}
-            alt="pp"
-          />
-        </IconButton>
-      </div>
+      {/*    */}
 
       <div style={{ display: "flex", alignItems: "center", gap: "5px", flexWrap: "wrap" }}>
         {/* {detailedImage?.tags?.map((item: string) => {
@@ -142,15 +116,88 @@ const SingleImageComponent: FC<componentProps> = ({
         {detailedImage?.tags.length > 3 ?
           <div>
             {showMore == false ?
-              <div style={{ color: "black", fontStyle: "bold" }}>
-                {detailedImage?.tags.slice(0, 3).join(",") + "..."}<span onClick={() => setShowMore(true)}>Show more</span>
+              <div style={{ color: "black", fontStyle: "bold", display: "flex", alignItems: "center", alignSelf: "stretch", justifyContent: "space-between" }}>
+                <div>
+                  {detailedImage?.tags.slice(0, 3).join(",") + "..."}<span onClick={() =>
+                    captureImageDilogOptions("tag")
+                  }>Show more</span>
+                </div>
+                <div>
+                  <IconButton
+                    onClick={() => {
+                      captureImageDilogOptions("comments");
+                    }}
+                  >
+                    <Image
+                      src={"/comment-black-icon.svg"}
+                      width={20}
+                      height={20}
+                      alt="pp"
+                    />
+                  </IconButton>
+                </div>
               </div> :
-              <div>
+              <div >
                 {detailedImage?.tags.join(",")}<span onClick={() => setShowMore(false)}>Show less</span>
               </div>}
           </div> :
-          <div>
-            {detailedImage?.tags.join(",")}
+          <div style={{ color: "black", fontStyle: "bold", }}>
+            {detailedImage?.tags?.length ?
+              <div>
+                <div>
+                  {detailedImage?.tags.join(",")
+                  }<span onClick={() =>
+                    captureImageDilogOptions("tag")
+                  }>Add more</span>
+                </div>
+                <div>
+                  <IconButton
+                    onClick={() => {
+                      captureImageDilogOptions("comments");
+                    }}
+                  >
+                    <Image
+                      src={"/comment-black-icon.svg"}
+                      width={20}
+                      height={20}
+                      alt="pp"
+                    />
+                  </IconButton>
+                </div>
+              </div>
+
+              :
+              <div style={{ color: "black", fontStyle: "bold", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div>
+                  <IconButton
+                    onClick={() => {
+                      captureImageDilogOptions("tag");
+                    }}
+                  >
+                    <Image
+                      src={"/add-tag-icon-black.svg"}
+                      width={20}
+                      height={20}
+                      alt="pp"
+                    />
+                  </IconButton>
+                </div>
+                <div>
+                  <IconButton
+                    onClick={() => {
+                      captureImageDilogOptions("comments");
+                    }}
+                  >
+                    <Image
+                      src={"/comment-black-icon.svg"}
+                      width={20}
+                      height={20}
+                      alt="pp"
+                    />
+                  </IconButton>
+                </div>
+              </div>
+            }
           </div>}
 
       </div>
@@ -175,7 +222,7 @@ const SingleImageComponent: FC<componentProps> = ({
         item={detailedImage ? detailedImage : ""}
       />
       <Toaster closeButton richColors position="top-right" />
-    </div>
+    </div >
   );
 };
 

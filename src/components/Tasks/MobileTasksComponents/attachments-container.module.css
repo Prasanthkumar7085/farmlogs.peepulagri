@@ -1,0 +1,44 @@
+.attachments {
+  cursor: pointer;
+  align-self: stretch;
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.imageIcon {
+  flex: 1;
+  border-radius: 2px;
+  max-width: 100%;
+  overflow: hidden;
+  height: 62px;
+  object-fit: cover;
+}
+.attachmentsrow {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+}
+.attachfile,
+.attachmentscontainer,
+.files {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.attachmentscontainer,
+.files {
+  align-self: stretch;
+  align-items: flex-start;
+  gap: 16px;
+}
+.attachmentscontainer {
+  gap: 12px;
+  text-align: left;
+  font-size: 12px;
+  color: #6a7185;
+  font-family: Inter;
+}

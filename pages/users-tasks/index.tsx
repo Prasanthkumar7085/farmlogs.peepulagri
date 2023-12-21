@@ -1,4 +1,5 @@
 import AllTasks from "@/components/Tasks/MobileTasksComponents/AllTasks";
+import TaskCard from "@/components/Tasks/MobileTasksComponents/task-card";
 
 
 const TaskPage = () => {

@@ -1,0 +1,109 @@
+.arrowDownBold1Icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.title {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.group {
+  width: 196px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+.magnifyingGlass1Icon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.search {
+  border-radius: 60px;
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.funnel1Icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.actions,
+.filter,
+.header,
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.filter {
+  border-radius: 60px;
+  background-color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 8px;
+}
+
+.actions,
+.header,
+.row {
+  align-items: center;
+}
+
+.actions {
+  flex-shrink: 0;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.header,
+.row {
+  align-self: stretch;
+  justify-content: space-between;
+}
+
+.header {
+  border-radius: 0 0 8px 8px;
+  background-color: #45a845;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 16px 44px;
+  text-align: left;
+  font-size: 18px;
+  color: #fff;
+  font-family: Inter;
+}
+
+.searchbar {
+  border: 0;
+  background-color: transparent;
+}

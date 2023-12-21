@@ -10,3 +10,9 @@
     align-items: center !important;
     gap: 0.1rem !important;
 }
+
+.allTasksPage {
+    border-radius: 16px 16px 0px 0px;
+    background: linear-gradient(180deg, #FFF 10.94%, rgba(255, 255, 255, 0.00) 23.44%);
+    margin-top: -2rem;
+}

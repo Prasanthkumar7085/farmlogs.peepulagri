@@ -73,36 +73,60 @@
 }
 
 .tabsgroup {
-  flex: 1;
-  flex-shrink: 0;
-  padding: 0 16px 0 0;
-  gap: 20px;
+  overflow-x: auto;
+  /* gap: 8px; */
   color: #6a7185;
 }
 
 .tabs {
-  align-self: stretch;
-  overflow-x: auto;
-  padding: 0 0 0 16px;
-  gap: 10px;
-  text-align: left;
-  font-size: 14px;
-  color: #45a845;
-  font-family: Inter;
+  padding: 0 16px 0 0;
+
 }
 
 .todoButton {
   text-align: center !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
+  font-size: clamp(12px, 3.25vw, 14px) !important;
+  font-weight: 500 !important;
   font-family: "Inter", sans-serif !important;
   cursor: pointer !important;
+  min-width: inherit !important;
+  color: #6A7185 !important;
+  text-transform: capitalize !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+  padding-inline: 12px !important;
+  margin-top: 0.5rem !important;
+}
 
+.todoButton:nth-last-child(6) {
+  border-right: 1px solid #D0D5DD !important;
+}
+
+.todoButtonActive:nth-last-child(6) {
+  border-right: 1px solid #D0D5DD !important;
 }
 
 .todoButtonActive {
-  color: #05a155 !important;
-  font-size: 16px !important;
   text-align: center !important;
   font-family: "Inter", sans-serif !important;
+  color: #45A845 !important;
+  font-size: clamp(12.5px, 3.25vw, 14px) !important;
+  font-weight: 500 !important;
+  line-height: 100% !important;
+  min-width: inherit !important;
+  text-transform: capitalize !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+  padding-inline: 12px !important;
+  margin-top: 0.5rem !important;
+}
+
+.todoButtonActive:hover {
+  text-align: center !important;
+  font-family: "Inter", sans-serif !important;
+  color: #45A845 !important;
+  font-size: clamp(12.5px, 3.25vw, 14px) !important;
+  font-weight: 500 !important;
+  line-height: 100% !important;
+  min-width: inherit !important;
 }

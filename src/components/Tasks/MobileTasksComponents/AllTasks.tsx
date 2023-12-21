@@ -7,12 +7,12 @@ import getAllTasksService from "../../../../lib/services/TasksService/getAllTask
 import { prepareURLEncodedParamsWithArray } from "../../../../lib/requestUtils/urlEncoderWithArray";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
-import Header1 from "./header1";
 import ListHeader from "./list-header";
 import Tabs from "./tabs";
 import TaskCard from "./task-card";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./all-tasks.module.css";
+import TaskHeader from "./taskHeader";
 
 export interface ApiCallProps {
     page: string | number;
@@ -291,10 +291,12 @@ const AllTasks = () => {
 
     return (
         <div>
-            <Header1 onChangeSearch={onChangeSearch} onUserChange={onUserChange} />
-            <ListHeader onDateChange={onDateChange} />
-            <Tabs onStatusChange={onStatusChange} />
-            <TaskCard data={data} lastBookElementRef={lastBookElementRef} hasMore={hasMore} lastItemRef={lastItemRef} />
+            <TaskHeader onChangeSearch={onChangeSearch} onUserChange={onUserChange} />
+            <div className={styles.allTasksPage}>
+                {/* <ListHeader onDateChange={onDateChange} /> */}
+                <Tabs onStatusChange={onStatusChange} />
+                <TaskCard data={data} lastBookElementRef={lastBookElementRef} hasMore={hasMore} lastItemRef={lastItemRef} />
+            </div>
             <div className="addFormPositionIcon">
                 <IconButton
                     size="large"

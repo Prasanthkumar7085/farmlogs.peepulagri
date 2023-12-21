@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import styles from "./task-card.module.css";
 import ListHeader from "./list-header";
 import Tabs from "./tabs";
-import Header1 from "./header1";
+import Header1 from "./taskHeader";
 import { addSerial } from "@/pipes/addSerial";
 import getAllTasksService from "../../../../lib/services/TasksService/getAllTasksService";
 import { prepareURLEncodedParamsWithArray } from "../../../../lib/requestUtils/urlEncoderWithArray";

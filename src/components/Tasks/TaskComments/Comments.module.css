@@ -1,7 +1,12 @@
 .drawerHeader {
+     padding: 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #fff;
 }
 
 .drawerHeader h6 {
@@ -27,7 +32,7 @@
 /* tack modules attachmentments drawer styles */
 .attachmentDrawer {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 0.5rem;
 }
 

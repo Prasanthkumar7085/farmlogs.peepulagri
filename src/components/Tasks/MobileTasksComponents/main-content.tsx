@@ -1,30 +1,23 @@
-import type { NextPage } from "next";
-import { useState, useCallback } from "react";
-import {
-  Select,
-  InputLabel,
-  MenuItem,
-  FormHelperText,
-  FormControl,
-  Menu,
-  Fade,
-} from "@mui/material";
-import Status1 from "./status1";
-import PortalPopup from "./portal-popup";
-import styles from "./main-content.module.css";
+import { Fade, Menu, MenuItem } from "@mui/material";
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import styles from "./main-content.module.css";
 
-const MainContent = ({ title, onChangeStatus, open, anchorEl, handleClose, status, hasEditAccess, data, handleClick }: any) => {
-
+const MainContent = ({
+  title,
+  onChangeStatus,
+  open,
+  anchorEl,
+  handleClose,
+  status,
+  hasEditAccess,
+  data,
+  handleClick,
+}: any) => {
   const loggedInUserId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
   );
 
-  const [isStatusOpen, setStatusOpen] = useState(false);
-
-  const openStatus = useCallback(() => {
-    setStatusOpen(true);
-  }, []);
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
@@ -32,10 +25,6 @@ const MainContent = ({ title, onChangeStatus, open, anchorEl, handleClose, statu
     { value: "DONE", title: "Done" },
     { value: "OVER-DUE", title: "Over-due" },
   ]);
-
-  const closeStatus = useCallback(() => {
-    setStatusOpen(false);
-  }, []);
 
   return (
     <>
@@ -47,22 +36,20 @@ const MainContent = ({ title, onChangeStatus, open, anchorEl, handleClose, statu
               style={{
                 cursor:
                   status !== "DONE" &&
-                    (loggedInUserId == data?.created_by?._id ||
-                      hasEditAccess)
+                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
                     ? "pointer"
                     : "default",
               }}
               onClick={(e) =>
                 status !== "DONE" &&
-                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                (loggedInUserId == data?.created_by?._id || hasEditAccess)
                   ? handleClick(e)
                   : ""
               }
             >
               {data?.status
-                ? statusOptions?.find(
-                  (item) => item.value == data?.status
-                )?.title
+                ? statusOptions?.find((item) => item.value == data?.status)
+                    ?.title
                 : ""}
             </p>
           </div>
@@ -108,7 +95,7 @@ const MainContent = ({ title, onChangeStatus, open, anchorEl, handleClose, statu
                 }
               )}
           </Menu>
-          <p className={styles.farmname}>SpiceVine Gardens</p>
+          {/* <p className={styles.farmname}>SpiceVine Gardens</p> */}
         </div>
       </div>
       {/* {isStatusOpen && (

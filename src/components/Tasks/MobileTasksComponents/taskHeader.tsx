@@ -31,6 +31,9 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
 
   useEffect(() => {
     if (router.isReady && accessToken) {
+      if (router.query.search_string) {
+        setSearch(router.query.search_string as string);
+      }
       getAllUsers();
     }
   }, [router.isReady, accessToken]);

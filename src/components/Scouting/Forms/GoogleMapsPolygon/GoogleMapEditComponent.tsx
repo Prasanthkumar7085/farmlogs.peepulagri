@@ -7,7 +7,8 @@ import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarm
 import { useSelector } from 'react-redux';
 import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
 import { toast } from 'sonner';
-const GoogleMapComponent = () => {
+import LoadingComponent from '@/components/Core/LoadingComponent';
+const GoogleMapEditComponent = () => {
 
     const router = useRouter();
     const [data, setData] = useState<any>();
@@ -25,7 +26,8 @@ const GoogleMapComponent = () => {
     const [mapType, setMapType] = useState('roadmap'); // 'roadmap' is the normal map view
     const [renderField, setRenderField] = useState(true);
 
-
+    console.log(data, "oiuytrew")
+    console.log(polygonCoords, "poiuytrdfgh")
 
 
     const handleApiLoaded = (map: any, maps: any) => {
@@ -67,6 +69,10 @@ const GoogleMapComponent = () => {
         });
 
         // Set the polygon on the map
+        setRenderField(false);
+        setTimeout(() => {
+            setRenderField(true);
+        }, 0.1);
         newPolygon.setMap(map);
         setPolygon(newPolygon);
     };
@@ -85,14 +91,32 @@ const GoogleMapComponent = () => {
 
     //get the farm details
     const getFarmDataById = async () => {
-
+        setLoading(true)
         const response: any = await getFarmByIdService(
             router.query.farm_id as string,
             accessToken as string
         );
 
         if (response?.success) {
+            console.log(response, "iuytr")
             setData(response?.data);
+            if (response?.data?.geometry?.coordinates?.length) {
+                let updatedArray = response?.data?.geometry?.coordinates.map((item: any) => {
+                    return {
+                        lat: item[0],
+                        lng: item[1]
+                    }
+                })
+                setRenderField(false);
+                setTimeout(() => {
+                    setRenderField(true);
+                }, 0.1);
+                setPolygonCoords(updatedArray)
+
+            }
+            else {
+                setPolygonCoords([])
+            }
         }
         setLoading(false);
     };
@@ -117,7 +141,7 @@ const GoogleMapComponent = () => {
             router.query.farm_id as string
         );
         if (response?.success) {
-            toast.success("Farm coordinates added successfully")
+            toast.success("Farm cordinates added successfully")
             router.back()
         }
         setLoading(false);
@@ -140,7 +164,7 @@ const GoogleMapComponent = () => {
                     onClick={() => router.back()}
                 />
                 <Typography className={styles.viewFarm}>
-                    Add Map
+                    Edit Map
                 </Typography>
                 <div className={styles.headericon} id="header-icon"></div>
             </div>
@@ -149,41 +173,42 @@ const GoogleMapComponent = () => {
 
 
             </div>
-            <div style={{ width: '100%', height: '65vh' }}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{
-                        key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
-                        libraries: ['drawing'],
-                    }}
-                    defaultCenter={{
-                        "lat": 15.1534671,
-                        "lng": 79.8478049
-                    }}
-                    options={{
-                        mapTypeId: mapType,
-                        mapTypeControlOptions: true,
-                        mapTypeControl: true,
-                        streetViewControl: true,
-                        rotateControl: true
-                    }}
-                    defaultZoom={12}
-                    yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-                />
+            {data?._id ?
+                <div style={{ width: '100%', height: '65vh' }}>
+                    <GoogleMapReact
+                        bootstrapURLKeys={{
+                            key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
+                            libraries: ['drawing'],
+                        }}
+                        defaultCenter={{
+                            "lat": polygonCoords[0]?.lat,
+                            "lng": polygonCoords[0]?.lng
+                        }}
+                        options={{
+                            mapTypeId: mapType,
+                            mapTypeControlOptions: true,
+                            mapTypeControl: true,
+                            streetViewControl: true,
+                            rotateControl: true
+                        }}
+                        defaultZoom={19}
+                        yesIWantToUseGoogleMapApiInternals
+                        onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                    />
 
-                {polygonCoords.length === 0 ? "" :
-                    <div style={{
-                        position: "absolute",
-                        top: "72%",
-                        right: "20%",
-                    }}>
-                        <Button onClick={undoLastPoint} variant="outlined"
-                            sx={{ backgroundColor: "orange" }}
-                            disabled={polygonCoords.length === 0}>
-                            <img src={"/undo-icon.png"} width={25} height={25} />  Undo Last Point
-                        </Button>
-                    </div>}
-            </div>
+                    {polygonCoords.length === 0 ? "" :
+                        <div style={{
+                            position: "absolute",
+                            top: "72%",
+                            right: "20%",
+                        }}>
+                            <Button onClick={undoLastPoint} variant="outlined"
+                                sx={{ backgroundColor: "orange" }}
+                                disabled={polygonCoords.length === 0}>
+                                <img src={"/undo-icon.png"} width={25} height={25} />  Undo Last Point
+                            </Button>
+                        </div>}
+                </div> : ""}
             <div style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
@@ -208,12 +233,12 @@ const GoogleMapComponent = () => {
                     disabled={polygonCoords?.length ? false : true}
                     onClick={edtiFarm}
                 >
-                    Submit
+                    Update
                 </Button>
             </div>
-
+            <LoadingComponent loading={loading} />
         </div>
     )
 };
 
-export default GoogleMapComponent;
+export default GoogleMapEditComponent;

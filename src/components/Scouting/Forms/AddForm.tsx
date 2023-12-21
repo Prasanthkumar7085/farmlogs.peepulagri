@@ -211,7 +211,7 @@ const AddFarmForm = () => {
   };
 
   const addInputValue = (e: any, newValue: string) => {
-    setNewLocation(newValue);
+    setNewLocation(newValue.toUpperCase());
   };
 
   const captureResponseDilog = (value: any) => {

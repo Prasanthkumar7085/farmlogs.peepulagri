@@ -4,7 +4,7 @@ import AddTask from "@/components/Tasks/MobileTasksComponents/AddTask/AddTask";
 const AddPage = () => {
 
     return (
-        <div>
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             <AddTask />
         </div>
     );

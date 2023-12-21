@@ -62,25 +62,22 @@
   gap: 4px;
 }
 
-.tabs,
-.tabsgroup,
-.todo {
+
+.tabsgroup {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-
-}
-
-.tabsgroup {
+  padding: 0 1rem;
   overflow-x: auto;
-  /* gap: 8px; */
   color: #6a7185;
+
 }
 
-.tabs {
-  padding: 0 16px 0 0;
-
+@media (min-width:460px) {
+  .tabsgroup {
+    justify-content: space-between !important;
+  }
 }
 
 .todoButton {
@@ -96,6 +93,11 @@
   border-radius: 0 !important;
   padding-inline: 12px !important;
   margin-top: 0.5rem !important;
+}
+
+.todoButton:hover {
+  background-color: #fff !important;
+  color: #45a845 !important;
 }
 
 .todoButton:nth-last-child(6) {
@@ -119,6 +121,7 @@
   border-radius: 0 !important;
   padding-inline: 12px !important;
   margin-top: 0.5rem !important;
+  background-color: #fff !important;
 }
 
 .todoButtonActive:hover {
@@ -129,4 +132,5 @@
   font-weight: 500 !important;
   line-height: 100% !important;
   min-width: inherit !important;
+  background-color: #fff !important;
 }

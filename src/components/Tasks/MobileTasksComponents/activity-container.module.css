@@ -1,0 +1,162 @@
+.activity,
+.dh {
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+
+.activity {
+  cursor: pointer;
+  align-self: stretch;
+  margin-bottom: 70px;
+}
+
+.dh {
+  margin: 0;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.profile {
+  border-radius: 35.12px;
+  background-color: #d94841;
+  width: 19.9px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 5.853658676147461px;
+  box-sizing: border-box;
+}
+
+.danielHamilton {
+  font-weight: 500;
+  font-family: Inter;
+}
+
+.updatedTaskStatus {
+  font-weight: 300;
+}
+
+.done,
+.span,
+.to1 {
+  font-family: Inter;
+}
+
+.done {
+  font-weight: 500;
+  color: #45a845;
+}
+
+.to1 {
+  font-weight: 300;
+}
+
+.to {
+  color: #35353d;
+}
+
+.danielHamiltonUpdatedTaskS {
+  display: block;
+}
+
+.toStart1 {
+  font-weight: 500;
+}
+
+.toStart {
+  display: block;
+  color: #45a845;
+}
+
+.danielHamiltonUpdatedContainer {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  line-height: 140%;
+}
+
+.message {
+  flex: 1;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 14px;
+  color: #35353d;
+}
+
+.activity1,
+.pm {
+  align-self: stretch;
+}
+
+.activity1 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.pm {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+}
+
+.timecontainer {
+  justify-content: center;
+  padding: 0 0 0 24px;
+  text-align: left;
+  font-size: 11px;
+  color: #6a7185;
+}
+
+.activitycard,
+.activitycontainer,
+.timecontainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.activitycard {
+  overflow: hidden;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  font-size: 8.2px;
+  color: #fff;
+}
+
+.activitycontainer {
+  justify-content: flex-start;
+  gap: 12px;
+  text-align: left;
+  font-size: 14px;
+  color: #35353d;
+  font-family: Inter;
+}
+
+.viewLogsBlock {
+  border-top: 1px solid #D0D5DD;
+  padding: 1rem 1rem 0.5rem 1rem;
+}
+
+.viewLogsBtn {
+  color: var(--Red, #D94841) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(12px, 0.72vw, 16px) !important;
+  font-weight: 500 !important;
+  line-height: 100% !important;
+  text-transform: capitalize !important;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}

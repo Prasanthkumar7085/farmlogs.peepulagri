@@ -162,12 +162,14 @@ const VideoDialogForScout = ({
                           alt={`Image alt text ${index}`}
                         />
                       ) : (
-                        <img
-                          className="zoom-image"
-                          src={item.url}
-                          alt={`Image ${index + 1}`}
-                          style={{ transform: `scale(${zoomLevel})` }}
-                        />
+                        <picture>
+                          <img
+                            className="zoom-image"
+                            src={item.url}
+                            alt={`Image ${index + 1}`}
+                            style={{ transform: `scale(${zoomLevel})` }}
+                          />
+                        </picture>
                       )}
                     </>
                   )}

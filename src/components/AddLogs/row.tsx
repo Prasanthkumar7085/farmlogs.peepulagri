@@ -139,55 +139,67 @@ const Row: NextPage<RowType> = ({
         </div>
       </div>
       <div className={styles.bodyCell4}>
-        {showMen && (
-          <div className={styles.men}>
-            <img className={styles.manIcon} alt="" src={man} />
-            <div className={styles.div}>{prop}</div>
-          </div>
-        )}
-        {showWomen && (
-          <div className={styles.women}>
-            <img className={styles.manIcon} alt="" src={women} />
-            <div className={styles.div}>{prop1}</div>
-          </div>
-        )}
-        {showTrackor && (
-          <div className={styles.men}>
-            <img className={styles.manIcon} alt="" src={tractor1} />
-            <div className={styles.div2}>{prop2}</div>
-          </div>
-        )}
-        {showSpray && (
-          <div className={styles.spray}>
-            <img className={styles.manIcon} alt="" src={pesticide1} />
-            <div className={styles.div}>{prop3}</div>
-          </div>
-        )}
+        <picture>
+          {showMen && (
+            <div className={styles.men}>
+              <img className={styles.manIcon} alt="" src={man} />
+              <div className={styles.div}>{prop}</div>
+            </div>
+          )}
+          {showWomen && (
+            <div className={styles.women}>
+              <img className={styles.manIcon} alt="" src={women} />
+              <div className={styles.div}>{prop1}</div>
+            </div>
+          )}
+          {showTrackor && (
+            <div className={styles.men}>
+              <img className={styles.manIcon} alt="" src={tractor1} />
+              <div className={styles.div2}>{prop2}</div>
+            </div>
+          )}
+          {showSpray && (
+            <div className={styles.spray}>
+              <img className={styles.manIcon} alt="" src={pesticide1} />
+              <div className={styles.div}>{prop3}</div>
+            </div>
+          )}
+        </picture>
       </div>
       <div className={styles.bodyCell5}>
-        <img
-          className={styles.trashXmark1Icon}
-          alt=""
-          src="/timehalfpast-1-1.svg"
-        />
-        <div className={styles.data}>{hours}</div>
+        <picture>
+          <img
+            className={styles.trashXmark1Icon}
+            alt=""
+            src="/timehalfpast-1-1.svg"
+          />
+          <div className={styles.data}>{hours}</div>
+        </picture>
       </div>
       <div className={styles.bodyCell6}>
-        <img
-          className={styles.trashXmark1Icon}
-          alt=""
-          src="/timehalfpast-1-11.svg"
-        />
+        <picture>
+          <img
+            className={styles.trashXmark1Icon}
+            alt=""
+            src="/timehalfpast-1-11.svg"
+          />
+        </picture>
         <div className={styles.data}>{hours1}</div>
       </div>
       <div className={styles.bodyCell7}>
-        <img className={styles.trashXmark1Icon} alt="" src={eye11} />
-        <img className={styles.trashXmark1Icon} alt="" src="/pencil-icon.svg" />
-        <img
-          className={styles.trashXmark1Icon}
-          alt=""
-          src="/trast-icon.svg"
-        />
+        <picture>
+          <img className={styles.trashXmark1Icon} alt="" src={eye11} />
+          <img
+            className={styles.trashXmark1Icon}
+            alt=""
+            src="/pencil-icon.svg"
+          />
+          <img
+            className={styles.trashXmark1Icon}
+            alt=""
+            src="/trast-icon.svg"
+          />
+        </picture>
       </div>
     </div>
   );

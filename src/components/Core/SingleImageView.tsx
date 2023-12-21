@@ -211,16 +211,18 @@ const SingleImageView: FC<componentProps> = ({
 
   return (
     <div>
-      <div >
+      <div>
         {/* <div style={{ position: "fixed", width: "100%", zIndex: "1", maxWidth: "500px" }}> */}
 
         <div className={styles.singleImageViewHeader}>
-          <img
-            alt=""
-            src="/iconsiconarrowleft.svg"
-            onClick={() => router.back()}
-            width={"25px"}
-          />
+          <picture>
+            <img
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.back()}
+              width={"25px"}
+            />
+          </picture>
           <Typography>
             {(data[0]?.farm_id?.title
               ? data[0]?.farm_id?.title?.length > 10
@@ -243,7 +245,6 @@ const SingleImageView: FC<componentProps> = ({
           <div className={styles.headericon} id="header-icon"></div>
         </div>
         {/* </div> */}
-
       </div>
 
       <div
@@ -346,16 +347,11 @@ const SingleImageView: FC<componentProps> = ({
                     getImageData={""}
                   />
                 </div>
-              )
+              );
             }
           })
-
-
-          :
-          ""
-        }
+          : ""}
       </div>
-
 
       <DrawerComponentForScout
         openCommentsBox={openCommentsBox}

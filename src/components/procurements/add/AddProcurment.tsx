@@ -4,7 +4,7 @@ import MaterialsRequired from "./materials-required";
 
 const AddProcurmentComponent = () => {
   return (
-    <div style={{ width: "100%", marginTop: "5%" }}>
+    <div style={{ width: "100%", paddingTop: "4rem" }}>
       <AddProcurementForm />
     </div>
   );

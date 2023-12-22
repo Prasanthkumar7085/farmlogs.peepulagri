@@ -5,9 +5,15 @@ import styles from "./attachments-container.module.css";
 import { Drawer } from "@mui/material";
 import { useRouter } from "next/router";
 import AttachmentDrawerTaskmodule from "../AllTasks/TasksTable/AttachmentDrawer";
+import { useSelector } from "react-redux";
 
-const AttachmentsContainer = ({ attachmentData, getAllAttachments }: any) => {
+const AttachmentsContainer = ({ attachmentData, getAllAttachments, status, hasEditAccess, data }: any) => {
   const router = useRouter();
+
+  const loggedInUserId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
+  );
+
   const maxImagesToShow = 6;
 
   const [files, setFiles] = useState([]);
@@ -49,74 +55,79 @@ const AttachmentsContainer = ({ attachmentData, getAllAttachments }: any) => {
         <div className={styles.attachmentsrow}>
           {attachmentData?.length
             ? attachmentData
-                ?.slice(0, maxImagesToShow)
-                .map((item: TaskAttachmentsType | any, index: number) => {
-                  return (
-                    <div key={index}>
-                      <div>
-                        {item?.metadata?.type.includes("pdf") ? (
-                          <img
-                            src="/pdf-icon.png"
-                            className={styles.imageIcon}
-                            alt={""}
-                          />
-                        ) : item?.metadata?.type.includes("csv") ? (
-                          <img
-                            src="/csv-icon.png"
-                            className={styles.imageIcon}
-                            alt={""}
-                          />
-                        ) : item?.metadata?.type ==
-                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                          item?.metadata?.type.includes("xlsx") ? (
-                          <img
-                            src="/google-sheets-icon.webp"
-                            className={styles.imageIcon}
-                            alt={""}
-                          />
-                        ) : item?.metadata?.type.includes("doc") ||
-                          item?.metadata?.type.includes("docx") ? (
-                          <img
-                            src="/doc-icon.webp"
-                            className={styles.imageIcon}
-                            alt={""}
-                          />
-                        ) : item?.metadata?.type.includes("video") ? (
-                          <img
-                            src="/video-icon.png"
-                            className={styles.imageIcon}
-                            alt={""}
-                          />
-                        ) : (
-                          <img
-                            src={
-                              item?.metadata?.type?.includes("image")
-                                ? item.url
-                                : "/other_icon.png"
-                            }
-                            alt={""}
-                            className={styles.imageIcon}
-                          />
-                        )}
-                      </div>
+              ?.slice(0, maxImagesToShow)
+              .map((item: TaskAttachmentsType | any, index: number) => {
+                return (
+                  <div key={index}>
+                    <div>
+                      {item?.metadata?.type.includes("pdf") ? (
+                        <img
+                          src="/pdf-icon.png"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type.includes("csv") ? (
+                        <img
+                          src="/csv-icon.png"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type ==
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                        item?.metadata?.type.includes("xlsx") ? (
+                        <img
+                          src="/google-sheets-icon.webp"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type.includes("doc") ||
+                        item?.metadata?.type.includes("docx") ? (
+                        <img
+                          src="/doc-icon.webp"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type.includes("video") ? (
+                        <img
+                          src="/video-icon.png"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : (
+                        <img
+                          src={
+                            item?.metadata?.type?.includes("image")
+                              ? item.url
+                              : "/other_icon.png"
+                          }
+                          alt={""}
+                          className={styles.imageIcon}
+                        />
+                      )}
                     </div>
-                  );
-                })
+                  </div>
+                );
+              })
             : "No Attachments"}
         </div>
-        <>
-          <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
-          <div>
-            <TasksAttachments
-              taskId={""}
-              disabled={false}
-              setUploadedFiles={setUploadedFiles}
-              multipleFiles={multipleFiles}
-              setMultipleFiles={setMultipleFiles}
-              afterUploadAttachements={afterUploadAttachements}
-            />
-          </div>
-        </>
+        {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
+
+          <>
+            <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
+            <div>
+              <TasksAttachments
+                taskId={""}
+                disabled={status === "DONE"}
+                setUploadedFiles={setUploadedFiles}
+                multipleFiles={multipleFiles}
+                setMultipleFiles={setMultipleFiles}
+                afterUploadAttachements={afterUploadAttachements}
+              />
+            </div>
+          </>
+        ) : (
+          ""
+        )}
       </div>
 
       <AttachmentDrawerTaskmodule

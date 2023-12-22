@@ -1,18 +1,39 @@
 import type { NextPage } from "next";
 import styles from "src/components/Tasks/MobileTasksComponents/assigned-by-container.module.css";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, Button, IconButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import { useSelector } from "react-redux";
 
-const AssignedToContainer = ({ setUsersDrawerOpen, assignee }: any) => {
-    console.log(assignee);
+const AssignedToContainer = ({ setUsersDrawerOpen, assignee, hasEditAccess, data, status }: any) => {
+
+    const loggedInUserId = useSelector(
+        (state: any) => state.auth.userDetails?.user_details?._id
+    );
 
     return (
         <div className={styles.assignedbycontainer}>
             <label className={styles.assignedBy}>Assigned To</label>
-            <IconButton
-                onClick={() => setUsersDrawerOpen(true)}
-            >
-                <AddIcon />Add</IconButton>
+            {loggedInUserId == data?.created_by?._id ||
+                hasEditAccess ? (
+                <Button
+                    disabled={
+                        status === "DONE" &&
+                        !(loggedInUserId == data?.created_by?._id)
+                    }
+                    onClick={() => setUsersDrawerOpen(true)}
+                >
+                    {" "}
+                    <img
+                        src="/viewTaskIcons/plus-icon.svg"
+                        alt=""
+                        width="15px"
+                        height="15px"
+                    />{" "}
+                    Add
+                </Button>
+            ) : (
+                ""
+            )}
             {assignee
                 ? assignee.map(
                     (

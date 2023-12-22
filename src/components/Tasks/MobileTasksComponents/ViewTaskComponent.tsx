@@ -15,6 +15,8 @@ import { Toaster, toast } from "sonner";
 import AssignedToContainer from "./assigned-to-container";
 import MainContent from "./main-content";
 import updateTaskStatusService from "../../../../lib/services/TasksService/updateTaskStatusService";
+import updateTaskService from "../../../../lib/services/TasksService/updateTaskService";
+import moment from "moment";
 
 
 const ViewTaskComponent = () => {
@@ -32,6 +34,8 @@ const ViewTaskComponent = () => {
 
     const [attachmentData, setAttachmentData] = useState<any>();
 
+    const [editField, setEditField] = useState("");
+    const [editFieldOrNot, setEditFieldOrNot] = useState(false);
 
 
     const [data, setData] = useState<TaskResponseTypes | null | any>({});
@@ -39,6 +43,7 @@ const ViewTaskComponent = () => {
     const [deadlineString, setDeadlineString] = useState<Date | string | any>("");
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(true);
+    const [errorMessages, setErrorMessages] = useState({});
     const [hasEditAccess, setHasEditAccess] = useState<boolean | undefined>(false);
     const [status, setStatus] = useState("");
     const [assignedBy, setAssigneeBy] = useState('');
@@ -181,14 +186,99 @@ const ViewTaskComponent = () => {
         setLoading(false);
     };
 
+    const onUpdateField = async ({
+        deadlineProp,
+    }: Partial<{ deadlineProp: string }>) => {
+        setLoading(true);
+        let body = {
+            ...data,
+            assigned_to: userId,
+            farm_id: farmId,
+            deadline: deadlineProp
+                ? deadlineProp
+                : deadlineString
+                    ? moment(deadlineString)
+                        .utcOffset("+05:30")
+                        .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+                    : "",
+            description: description ? description : "",
+            title: title ? title : "",
+            status: status,
+        };
+        const response = await updateTaskService({
+            taskId: data?._id as string,
+            body: body,
+            token: accessToken,
+        });
+        if (response?.success) {
+            toast.success(response?.message);
+            await getTaskById(router.query.task_id as string);
+            setEditFieldOrNot(false);
+            setEditField("");
+        } else {
+            if (response?.errors) {
+                setErrorMessages(response?.errors);
+            }
+        }
+        setLoading(false);
+        // return response;
+    };
+    const [calenderOpen, setCalenderOpen] = useState(false);
+    const handleCalenderOpen = () => setCalenderOpen(true);
+    const handleCalenderClose = () => setCalenderOpen(false);
+
     return (
         <div>
             <ViewtaskHeader />
-            <MainContent title={title} onChangeStatus={onChangeStatus} open={open} anchorEl={anchorEl} handleClose={handleClose} status={status} hasEditAccess={hasEditAccess} data={data} handleClick={handleClick} />
-            <DescriptionContainer description={description} />
-            <AttachmentsContainer attachmentData={attachmentData} getAllAttachments={getAllAttachments} />
+            <MainContent
+                title={title}
+                onChangeStatus={onChangeStatus}
+                open={open}
+                anchorEl={anchorEl}
+                handleClose={handleClose}
+                status={status}
+                hasEditAccess={hasEditAccess}
+                data={data}
+                handleClick={handleClick}
+                editField={editField}
+                editFieldOrNot={editFieldOrNot}
+                setTitle={setTitle}
+                errorMessages={errorMessages}
+                setEditField={setEditField}
+                setEditFieldOrNot={setEditFieldOrNot}
+                onUpdateField={onUpdateField}
+                calenderOpen={calenderOpen}
+                handleCalenderOpen={handleCalenderOpen}
+                handleCalenderClose={handleCalenderClose}
+                deadlineString={deadlineString}
+                setDeadlineString={setDeadlineString}
+            />
+            <DescriptionContainer
+                description={description}
+                data={data}
+                editField={editField}
+                editFieldOrNot={editFieldOrNot}
+                setEditField={setEditField}
+                setEditFieldOrNot={setEditFieldOrNot}
+                onUpdateField={onUpdateField}
+                setDescription={setDescription}
+                status={status}
+            />
+            <AttachmentsContainer
+                data={data}
+                attachmentData={attachmentData}
+                getAllAttachments={getAllAttachments}
+                status={status}
+                hasEditAccess={hasEditAccess}
+            />
             <AssignedByContainer assignedBy={assignedBy} />
-            <AssignedToContainer setUsersDrawerOpen={setUsersDrawerOpen} assignee={assignee} />
+            <AssignedToContainer
+                data={data}
+                setUsersDrawerOpen={setUsersDrawerOpen}
+                assignee={assignee}
+                hasEditAccess={hasEditAccess}
+                status={status}
+            />
             <ActivityContainer />
 
             <Drawer

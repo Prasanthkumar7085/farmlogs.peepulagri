@@ -33,7 +33,7 @@ const GoogleMapComponent = () => {
         const controlDiv = document.createElement('div');
         const controlUI = document.createElement('button');
 
-        controlUI.textContent = 'Pan to Current Location';
+        controlUI.textContent = 'Current Location';
         controlUI.style.backgroundColor = '#fff';
         controlUI.style.border = '1px solid #ccc';
         controlUI.style.padding = '5px';
@@ -89,7 +89,7 @@ const GoogleMapComponent = () => {
             }
         });
 
-        map.controls[maps.ControlPosition.TOP_RIGHT].push(controlDiv);
+        map.controls[maps.ControlPosition.BOTTOM_RIGHT].push(controlDiv);
     };
 
     const createInfoWindow = (map: any) => {

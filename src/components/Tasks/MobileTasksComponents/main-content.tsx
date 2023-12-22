@@ -7,6 +7,7 @@ import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ActivityContainer from "./activity-container";
 const MainContent = ({
   title,
   onChangeStatus,
@@ -45,83 +46,88 @@ const MainContent = ({
   return (
     <>
       <div className={styles.maincontent}>
-        {editField == "title" && editFieldOrNot ? (
-          <div style={{ width: "100%" }}>
-            <TextField
-              placeholder="Enter Title here"
-              sx={{
-                width: "100%",
-                background: "#ffff",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#45A845 !important",
-                  borderRadius: "8px !important",
-                },
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+
+          {editField == "title" && editFieldOrNot ? (
+            <div style={{ width: "100%" }}>
+              <TextField
+                placeholder="Enter Title here"
+                sx={{
+                  width: "100%",
+                  background: "#ffff",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#45A845 !important",
+                    borderRadius: "8px !important",
+                  },
+                }}
+                size="small"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <ErrorMessages errorMessages={errorMessages} keyname="title" />
+            </div>
+          ) : (
+            <div className={styles.titleBlock}>
+              {status !== "DONE" && loggedInUserId == data?.created_by?._id ? (
+                <h6
+                  className={styles.title}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setEditField("title");
+                    setEditFieldOrNot(true);
+                  }}
+                >
+                  {data?.title
+                    ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
+                    : "-"}
+                </h6>
+              ) : (
+                <h6 className={styles.title}>
+                  {data?.title
+                    ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
+                    : "-"}
+                </h6>
+              )}
+            </div>
+          )}
+          {editField == "title" && editFieldOrNot ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                gap: "0.5rem",
               }}
-              size="small"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <ErrorMessages errorMessages={errorMessages} keyname="title" />
-          </div>
-        ) : (
-          <div className={styles.titleBlock}>
-            {status !== "DONE" && loggedInUserId == data?.created_by?._id ? (
-              <h6
-                className={styles.title}
-                style={{ cursor: "pointer" }}
+            >
+              <IconButton
+                sx={{ padding: "0" }}
                 onClick={() => {
-                  setEditField("title");
-                  setEditFieldOrNot(true);
+                  setEditField("");
+                  setEditFieldOrNot(false);
                 }}
               >
-                {data?.title
-                  ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
-                  : "-"}
-              </h6>
-            ) : (
-              <h6 className={styles.title}>
-                {data?.title
-                  ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
-                  : "-"}
-              </h6>
-            )}
-          </div>
-        )}
-        {editField == "title" && editFieldOrNot ? (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              gap: "0.5rem",
-            }}
-          >
-            <IconButton
-              sx={{ padding: "0" }}
-              onClick={() => {
-                setEditField("");
-                setEditFieldOrNot(false);
-              }}
-            >
-              <img src="/viewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
-            </IconButton>
+                <img src="/viewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
+              </IconButton>
 
-            <IconButton
-              sx={{ padding: "0" }}
-              onClick={() => {
-                onUpdateField({});
-              }}
-            >
-              <img
-                src="/viewTaskIcons/confirm-icon.svg"
-                alt=""
-                width={"20px"}
-              />
-            </IconButton>
-          </div>
-        ) : (
-          ""
-        )}
+              <IconButton
+                sx={{ padding: "0" }}
+                onClick={() => {
+                  onUpdateField({});
+                }}
+              >
+                <img
+                  src="/viewTaskIcons/confirm-icon.svg"
+                  alt=""
+                  width={"20px"}
+                />
+              </IconButton>
+            </div>
+          ) : (
+            ""
+          )}
+
+          <ActivityContainer />
+        </div>
 
         <div className={styles.container}>
           <p

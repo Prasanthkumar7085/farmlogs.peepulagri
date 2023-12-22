@@ -625,7 +625,7 @@ const FileUploadComponent = () => {
 
     const script = document.createElement("script");
     // script.src = `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
-    script.src = `${"https://maps.googleapis.com/maps/api/js"}?key=${"AIzaSyAqlzQZ9Ytc07b63uin6ab85mCYuqtcTk8"}&libraries=places`;
+    script.src = `${"https://maps.googleapis.com/maps/api/js"}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
 
     script.onload = () => {
       // Google Maps API loaded successfully
@@ -773,11 +773,11 @@ const FileUploadComponent = () => {
                             (e: any) => e.fileIndex == item.name
                           )?.prieviewUrl
                             ? previewImages.find(
-                                (e: any) => e.fileIndex == item.name
-                              ).prieviewUrl
+                              (e: any) => e.fileIndex == item.name
+                            ).prieviewUrl
                             : item.type == "application/pdf"
-                            ? "/pdf-icon.png"
-                            : "/doc-icon.webp"
+                              ? "/pdf-icon.png"
+                              : "/doc-icon.webp"
                         }
                       />
                       <div className={styles.progressdetails}>
@@ -810,7 +810,7 @@ const FileUploadComponent = () => {
                                 )}
                               </div>
                               {fileProgress[index] == 100 &&
-                              fileProgress[index] !== "fail" ? (
+                                fileProgress[index] !== "fail" ? (
                                 <div className={styles.photojpg}>
                                   <IconButton>
                                     <DoneIcon sx={{ color: "#05A155" }} />
@@ -843,7 +843,7 @@ const FileUploadComponent = () => {
                           </div>
                           <Box sx={{ width: "100%" }}>
                             {fileProgress[index] == 0 &&
-                            fileProgress[index] !== "fail" ? (
+                              fileProgress[index] !== "fail" ? (
                               <LinearProgress />
                             ) : fileProgress[index] !== 100 &&
                               fileProgress[index] !== "fail" ? (
@@ -857,7 +857,7 @@ const FileUploadComponent = () => {
                           </Box>
                         </div>
                         {fileProgress[index] == 100 ||
-                        fileProgress[index] == "fail" ? (
+                          fileProgress[index] == "fail" ? (
                           ""
                         ) : (
                           <div className={styles.uploadstatus}>

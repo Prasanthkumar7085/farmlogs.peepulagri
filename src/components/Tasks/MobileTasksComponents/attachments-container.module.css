@@ -1,5 +1,6 @@
 .attachments {
   line-height: 100%;
+  color: #6A7185;
   font-weight: 500;
   font-size: clamp(12px, 2.5vw, 14px);
   font-family: "Inter", sans-serif;

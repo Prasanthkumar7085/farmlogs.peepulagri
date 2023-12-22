@@ -1,7 +1,7 @@
 .assignedBy {
   color: #6A7185;
   font-family: 'Inter', sans-serif;
-  font-size: clamp(11px, 2.5vw, 12px);
+  font-size: clamp(12px, 2.5vw, 14px);
   font-weight: 500;
   line-height: 100%;
   margin: 0;
@@ -10,7 +10,7 @@
 .assignedToHeading {
   color: #6A7185;
   font-family: 'Inter', sans-serif;
-  font-size: clamp(11px, 2.5vw, 12px);
+  font-size: clamp(12px, 2.5vw, 14px);
   font-weight: 500;
   margin: 0;
 }
@@ -18,13 +18,13 @@
 .assigneeName {
   color: #6A7185;
   font-family: 'Inter', sans-serif;
-  font-size: clamp(11px, 2.5vw, 12px);
+  font-size: clamp(12px, 2.5vw, 12px);
   font-weight: 500;
   line-height: 100%;
   margin: 0;
 }
 
-.assignedbycontiner .profile {
+/* .assignedbycontiner .profile {
   border-radius: 42.64px;
   width: 24.2px;
   flex-shrink: 0;
@@ -34,7 +34,7 @@
   justify-content: center;
   padding: 7.106176853179932px;
   box-sizing: border-box;
-}
+} */
 
 .assignedByName {
   overflow: hidden;

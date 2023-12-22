@@ -217,33 +217,35 @@ const GoogleMapEditComponent = () => {
                             </Button>
                         </div>}
                 </div> : ""}
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gridGap: "1.5rem",
-                marginTop: "1.5rem"
-            }}>
-                <Button
-                    className={styles.back}
-                    name="back"
-                    size="medium"
-                    variant="outlined"
-                    onClick={() => router.back()}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    className={styles.submit}
-                    color="primary"
-                    name="submit"
-                    variant="contained"
-                    type="submit"
-                    disabled={polygonCoords?.length ? false : true}
-                    onClick={edtiFarm}
-                >
-                    Update
-                </Button>
-            </div>
+
+            {loading == false ?
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gridGap: "1.5rem",
+                    marginTop: "1.5rem"
+                }}>
+                    <Button
+                        className={styles.back}
+                        name="back"
+                        size="medium"
+                        variant="outlined"
+                        onClick={() => router.back()}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        className={styles.submit}
+                        color="primary"
+                        name="submit"
+                        variant="contained"
+                        type="submit"
+                        disabled={polygonCoords?.length ? false : true}
+                        onClick={edtiFarm}
+                    >
+                        Update
+                    </Button>
+                </div> : ""}
             <LoadingComponent loading={loading} />
         </div>
     )

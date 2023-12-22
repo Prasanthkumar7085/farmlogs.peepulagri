@@ -477,7 +477,9 @@ const ImageGalleryComponent = () => {
               </IconButton>
               {selectedItems?.length ? (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-
+                  <IconButton onClick={() => handleDownload()}>
+                    <FileDownloadIcon />
+                  </IconButton>
 
                   <IconButton className={styles.selectBtn} onClick={() => setTagsDrawerOpen(true)} sx={{ paddingBlock: "0" }}>
                     <ImageComponent
@@ -496,9 +498,7 @@ const ImageGalleryComponent = () => {
                     />
                   </IconButton>
 
-                  <IconButton onClick={() => handleDownload()}>
-                    <FileDownloadIcon />
-                  </IconButton>
+
                 </div>
               ) : (
                 ""

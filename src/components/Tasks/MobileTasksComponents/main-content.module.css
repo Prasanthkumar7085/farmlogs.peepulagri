@@ -83,3 +83,37 @@
 .titleBlock {
   text-align: left;
 }
+
+.statusMenu {
+  border-radius: 20px !important;
+  box-shadow: 2px 2px 90px 0px #00000033 !important;
+}
+
+.statusMenuItem {
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 0.65vw, 12px);
+  font-weight: 400;
+  line-height: 100%;
+  padding-block: 8px;
+}
+
+.statusMenuItem:hover {
+  border-left: 2px solid #45A845;
+  background: #F7FFFB;
+  color: #45A845;
+}
+
+.statusMenuItemSelected {
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 0.65vw, 12px);
+  font-weight: 500;
+  line-height: 100%;
+  padding-block: 8px;
+  background-color: #D0D5DD;
+}
+
+.statusMenuItemSelected:hover {
+  color: 2px solid #45A845;
+}

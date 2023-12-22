@@ -1,7 +1,11 @@
-import { Fade, Menu, MenuItem } from "@mui/material";
+import { Fade, IconButton, Menu, MenuItem, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./main-content.module.css";
+import ErrorMessages from "@/components/Core/ErrorMessages";
+import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import moment from "moment";
 
 const MainContent = ({
   title,
@@ -13,6 +17,18 @@ const MainContent = ({
   hasEditAccess,
   data,
   handleClick,
+  editField,
+  editFieldOrNot,
+  setTitle,
+  errorMessages,
+  setEditField,
+  setEditFieldOrNot,
+  onUpdateField,
+  calenderOpen,
+  handleCalenderOpen,
+  handleCalenderClose,
+  deadlineString,
+  setDeadlineString
 }: any) => {
   const loggedInUserId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
@@ -29,27 +45,106 @@ const MainContent = ({
   return (
     <>
       <div className={styles.maincontent}>
-        <h2 className={styles.title}>{title}</h2>
+        {editField == "title" && editFieldOrNot ? (
+          <div style={{ width: "100%" }}>
+            <TextField
+              placeholder="Enter Title here"
+              sx={{
+                width: "100%",
+                background: "#ffff",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#45A845 !important",
+                  borderRadius: "8px !important",
+                },
+              }}
+              size="small"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <ErrorMessages
+              errorMessages={errorMessages}
+              keyname="title"
+            />
+          </div>
+        ) : (
+          <div>
+            {status !== "DONE" &&
+              loggedInUserId == data?.created_by?._id ? (
+              <h6
+                className={styles.title}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setEditField("title");
+                  setEditFieldOrNot(true);
+                }}
+              >
+                {data?.title
+                  ? data?.title.slice(0, 1).toUpperCase() +
+                  data?.title.slice(1)
+                  : "-"}
+              </h6>
+            ) : (
+              <h6 className={styles.title}>
+                {data?.title
+                  ? data?.title.slice(0, 1).toUpperCase() +
+                  data?.title.slice(1)
+                  : "-"}
+              </h6>
+            )}
+          </div>
+        )}
+        {editField == "title" && editFieldOrNot ? (
+          <div>
+            <IconButton
+              sx={{ padding: "0" }}
+              onClick={() => {
+                setEditField("");
+                setEditFieldOrNot(false);
+              }}
+            >
+              <img
+                src="/viewTaskIcons/cancel-icon.svg"
+                alt=""
+                width={"20px"}
+              />
+            </IconButton>
+
+            <IconButton
+              sx={{ padding: "0" }}
+              onClick={() => {
+                onUpdateField({});
+              }}
+            >
+              <img
+                src="/viewTaskIcons/confirm-icon.svg"
+                alt=""
+                width={"20px"}
+              />
+            </IconButton>
+          </div>
+        ) : (
+          ""
+        )}
         <div className={styles.container}>
           <div>
             <p
               style={{
                 cursor:
                   status !== "DONE" &&
-                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                    (loggedInUserId == data?.created_by?._id || hasEditAccess)
                     ? "pointer"
                     : "default",
               }}
               onClick={(e) =>
                 status !== "DONE" &&
-                (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
                   ? handleClick(e)
                   : ""
               }
             >
               {data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                    ?.title
+                  ?.title
                 : ""}
             </p>
           </div>
@@ -95,6 +190,71 @@ const MainContent = ({
                 }
               )}
           </Menu>
+          <div className={styles.DatePickerBlock}>
+            <p className={styles.dueDate}>Due Date</p>
+            <div className={styles.datePicker} style={{ display: "flex" }}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <MobileDatePicker
+                  open={calenderOpen}
+                  onOpen={handleCalenderOpen}
+                  onClose={handleCalenderClose}
+                  sx={{
+                    width: "100%",
+                    "& .MuiButtonBase-root": {
+                      paddingRight: "10px !important",
+                    },
+
+                    "& .MuiInputBase-root::before": {
+                      borderBottom: "0 !important",
+                    },
+                    "& .MuiInputBase-root::after": {
+                      borderBottom: "0 !important",
+                    },
+                  }}
+                  disablePast
+                  value={new Date(deadlineString)}
+                  disabled={
+                    status === "DONE" ||
+                    !(loggedInUserId == data?.created_by?._id)
+                  }
+                  onAccept={(newValue: any) => {
+                    let dateNow = new Date();
+                    let dateWithPresentTime = moment(new Date(newValue))
+                      .set({
+                        hour: dateNow.getHours(),
+                        minute: dateNow.getMinutes(),
+                        second: dateNow.getSeconds(),
+                        millisecond: dateNow.getMilliseconds(),
+                      })
+                      .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+                    setDeadlineString(dateWithPresentTime);
+
+                    onUpdateField({ deadlineProp: dateWithPresentTime });
+                  }}
+                  format="dd/MM/yyyy"
+                  slotProps={{
+                    textField: {
+                      variant: "standard",
+                      size: "medium",
+                      color: "primary",
+                    },
+                  }}
+                />
+              </LocalizationProvider>
+              {/* <img
+                onClick={handleCalenderOpen}
+                
+                src="/viewTaskIcons/calender-icon.svg"
+                alt=""
+                style={{
+                  background: "#E9EDF1",
+                  paddingInline: "1rem",
+                  borderRadius: "0 6px 6px 0",
+                }}
+              /> */}
+            </div>
+          </div>
           {/* <p className={styles.farmname}>SpiceVine Gardens</p> */}
         </div>
       </div>

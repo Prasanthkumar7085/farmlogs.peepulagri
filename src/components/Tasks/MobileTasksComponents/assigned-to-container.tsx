@@ -11,7 +11,7 @@ const AssignedToContainer = ({ setUsersDrawerOpen, assignee, hasEditAccess, data
     );
 
     return (
-        <div className={styles.assignedbycontainer}>
+        <div className={styles.assignedTocontainer}>
             <label className={styles.assignedBy}>Assigned To</label>
             {loggedInUserId == data?.created_by?._id ||
                 hasEditAccess ? (

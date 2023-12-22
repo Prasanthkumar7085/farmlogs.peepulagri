@@ -5,26 +5,22 @@ import { Avatar } from "@mui/material";
 const AssignedByContainer = ({ assignedBy }: any) => {
   return (
     <div className={styles.assignedbycontainer}>
-      <label className={styles.assignedBy}>Created by</label>
+      <p className={styles.assignedBy}>Created by</p>
       <div className={styles.persondetails}>
-        <div className={styles.profile}>
-          <h1 className={styles.jd}>
-            <Avatar
-              sx={{
-                fontSize: "6px",
-                width: "18px",
-                height: "18px",
-                background: "#45a845",
-              }}
-            >
-              {assignedBy.split(" ")?.length > 1
-                ? `${assignedBy.split(" ")[0][0]}${assignedBy.split(" ")[1][0]
-                  }`.toUpperCase()
-                : assignedBy.slice(0, 2)?.toUpperCase()}
-            </Avatar>
-          </h1>
-        </div>
-        <p className={styles.johnDukes}>{assignedBy}</p>
+        <Avatar
+          sx={{
+            fontSize: "9px",
+            width: "20px",
+            height: "20px",
+            background: "#45a845",
+          }}
+        >
+          {assignedBy.split(" ")?.length > 1
+            ? `${assignedBy.split(" ")[0][0]}${assignedBy.split(" ")[1][0]
+              }`.toUpperCase()
+            : assignedBy.slice(0, 2)?.toUpperCase()}
+        </Avatar>
+        <p className={styles.assignedByName}>{assignedBy}</p>
       </div>
     </div>
   );

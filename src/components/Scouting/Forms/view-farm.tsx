@@ -264,7 +264,7 @@ const ViewFarmPage = () => {
               router.push(`/farms/${router.query.farm_id}/map/edit`) :
               router.push(`/farms/${router.query.farm_id}/map`)
             }>
-            <Typography>{data?.geometry?.coordinates?.length ? "View Map" : "Add map"}</Typography>
+            <Typography>{data?.geometry?.coordinates?.length ? "View/Edit Map" : "Add map"}</Typography>
             <img src={"/google-maps.png"} width={22} height={22} />
           </div>
         </div>

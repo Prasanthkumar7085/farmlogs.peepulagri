@@ -294,7 +294,7 @@ const AllTasks = () => {
 
   return (
     <div>
-      <TaskHeader onChangeSearch={onChangeSearch} onUserChange={onUserChange} />
+      <TaskHeader onChangeSearch={onChangeSearch} searchString={searchString} onUserChange={onUserChange} getAllTasks={getAllTasks} />
       <div className={styles.allTasksPage}>
         {/* <ListHeader onDateChange={onDateChange} /> */}
         <Tabs onStatusChange={onStatusChange} />

@@ -21,15 +21,20 @@ import styles from "./taskHeader.module.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ClearIcon } from "@mui/x-date-pickers";
 
-const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
+const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }: any) => {
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const userId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
+  );
+
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<Array<userTaskType>>([]);
   const [usersDrawerOpen, setUsersDrawerOpen] = useState<any>(false);
   const [isSearchOpenOrNot, setIsSearchOpenOrNot] = useState(false);
+  const [user, setUser] = useState<userTaskType[] | null>([]);
   const [selectedUsers, setSelectedUsers] = useState<
     { name: string; _id: string }[] | null
   >();
@@ -160,28 +165,79 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
           ) : (
             ""
           )}
-          <Badge
-            badgeContent={selectedUsers?.length}
-            color="success"
+          {!(router.query.is_my_task == "true") ? (
+            <Badge
+              badgeContent={selectedUsers?.length}
+              color="success"
             // sx={{
             //   "& .MuiBadge-badge": {
             //     background: "#fff",
             //     color: "#46a845",
             //   },
             // }}
-          >
-            <div
-              className={styles.filter}
-              onClick={() => setUsersDrawerOpen(true)}
             >
-              <img
-                className={styles.funnel1Icon}
-                alt=""
-                src="/funnel-1@2x.png"
-              />
-            </div>
-          </Badge>
+              <div
+                className={styles.filter}
+                onClick={() => setUsersDrawerOpen(true)}
+              >
+                <img
+                  className={styles.funnel1Icon}
+                  alt=""
+                  src="/funnel-1@2x.png"
+                />
+              </div>
+            </Badge>
+          ) : (
+            ''
+          )}
         </div>
+      </div>
+      <div className={styles.TabButtonGrp}>
+        <Button
+          className={
+            router.query.is_my_task == "true"
+              ? styles.tabButton
+              : styles.tabActiveButton
+          }
+          onClick={() => {
+            if (router.query.is_my_task == "true") {
+              return;
+            }
+            setUser([]);
+            setSelectedUsers([]);
+            onUserChange([userId], true);
+          }}
+        >
+          My Tasks
+        </Button>
+        <Button
+          className={
+            router.query.is_my_task !== "true"
+              ? styles.tabButton
+              : styles.tabActiveButton
+          }
+          onClick={() => {
+            if (!(router.query.is_my_task == "true")) {
+              return;
+            }
+            setUser([]);
+            setSelectedUsers([]);
+
+            getAllTasks({
+              page: router.query.page as string,
+              limit: router.query.limit as string,
+              search_string: searchString,
+              sortBy: router.query.order_by as string,
+              sortType: router.query.order_type as string,
+              selectedFarmId: router.query.farm_id as string,
+              status: router.query.status as string,
+              userId: [],
+              isMyTasks: false,
+            });
+          }}
+        >
+          All Tasks
+        </Button>
       </div>
 
       {/* <div style={{ width: "80%" }}>

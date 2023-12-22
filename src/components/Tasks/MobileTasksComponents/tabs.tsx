@@ -1,7 +1,6 @@
-import type { NextPage } from "next";
-import styles from "./tabs.module.css";
-import { useRouter } from "next/router";
 import { Button } from "@mui/material";
+import { useRouter } from "next/router";
+import styles from "./tabs.module.css";
 
 const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
   const router = useRouter();

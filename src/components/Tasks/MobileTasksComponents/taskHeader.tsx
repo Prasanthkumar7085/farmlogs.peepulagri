@@ -74,13 +74,13 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
       <div className={styles.row}>
         {!isSearchOpenOrNot ? (
           <div className={styles.group}>
-            <IconButton sx={{ padding: "0" }} onClick={() => router.back()}>
+            {/* <IconButton sx={{ padding: "0" }} onClick={() => router.back()}>
               <img
                 className={styles.arrowDownBold1Icon}
                 alt=""
                 src="/arrowdownbold-1@2x.png"
               />
-            </IconButton>
+            </IconButton> */}
             <h1 className={styles.title}>Tasks</h1>
           </div>
         ) : (

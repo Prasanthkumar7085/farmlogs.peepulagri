@@ -211,6 +211,8 @@ const AttachmentDrawerTaskmodule = ({
             borderRadius: "10px",
             overflow: "auto",
             maxHeight: "60%",
+            maxWidth: "500px",
+            margin: "auto"
           },
         }}
       >

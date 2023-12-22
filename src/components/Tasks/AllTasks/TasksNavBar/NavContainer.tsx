@@ -148,31 +148,37 @@ const NavContainer: React.FC<PropTypes> = ({
           <h1 className={styles.taskManagement}>{`Task Management`}</h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <Button
-            ref={targetDivRef}
-            id="demo-positioned-button"
-            aria-controls={filterOpenOrNot ? "demo-positioned-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={filterOpenOrNot ? "true" : undefined}
-            onClick={(e) => {
-              handleClick(e, true);
-            }}
-            variant="contained"
-            className={
-              filtersLength ? styles.activeFilterBtn : styles.filterBtn
-            }
-          >
-            <img
-              src={
-                filtersLength
-                  ? "/viewTaskIcons/filter-sybol-icon-active.svg"
-                  : "/viewTaskIcons/filter-sybol-icon.svg"
+          {!(router.query.is_my_task == "true") ? (
+            <Button
+              ref={targetDivRef}
+              id="demo-positioned-button"
+              aria-controls={
+                filterOpenOrNot ? "demo-positioned-menu" : undefined
               }
-              alt=""
-              width={"14px"}
-            />
-            <span>Filter</span>
-          </Button>
+              aria-haspopup="true"
+              aria-expanded={filterOpenOrNot ? "true" : undefined}
+              onClick={(e) => {
+                handleClick(e, true);
+              }}
+              variant="contained"
+              className={
+                filtersLength ? styles.activeFilterBtn : styles.filterBtn
+              }
+            >
+              <img
+                src={
+                  filtersLength
+                    ? "/viewTaskIcons/filter-sybol-icon-active.svg"
+                    : "/viewTaskIcons/filter-sybol-icon.svg"
+                }
+                alt=""
+                width={"14px"}
+              />
+              <span>Filter</span>
+            </Button>
+          ) : (
+            ""
+          )}
           <TextField
             value={search}
             onChange={(e) => {

@@ -46,10 +46,10 @@ const AttachmentsContainer = ({ attachmentData, getAllAttachments, status, hasEd
       >
         <label className={styles.attachments}>Attachments</label>
         <label
-          className={styles.attachments}
+          className={styles.attachmentView}
           onClick={() => setAttachmentDrawer(true)}
         >
-          View {">>"}{" "}
+          View  All
         </label>
       </div>
       <div className={styles.files}>

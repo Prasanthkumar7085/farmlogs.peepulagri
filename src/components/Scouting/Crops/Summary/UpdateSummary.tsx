@@ -39,7 +39,7 @@ const UpdateSummary = () => {
   const [loading, setLoading] = useState(false);
   const [summaryData, setSummaryData] = useState<any>();
   const [comment, setComment] = useState<any>();
-  const [date, setDate] = useState<any>();
+  const [date, setDate] = useState<any>(null);
   const [dateError, setDateError] = useState<any>();
   const [commentError, setCommentError] = useState<any>();
   const [summaryError, setSummaryError] = useState<any>();
@@ -232,90 +232,90 @@ const UpdateSummary = () => {
     setCommentError("");
     setSummaryError("");
 
-     const originalDate = new Date(date);
-     let dateNow = new Date();
-     if (
-       !(
-         originalDate.getFullYear() == dateNow.getFullYear() &&
-         originalDate.getMonth() == dateNow.getMonth() &&
-         originalDate.getDate() == dateNow.getDate()
-       )
-     ) {
-       dateNow = new Date(
-         originalDate.getFullYear(),
-         originalDate.getMonth(),
-         originalDate.getDate(),
-         23,
-         59,
-         59,
-         999
-       );
-     }
+    const originalDate = new Date(date);
+    let dateNow = new Date();
+    if (
+      !(
+        originalDate.getFullYear() == dateNow.getFullYear() &&
+        originalDate.getMonth() == dateNow.getMonth() &&
+        originalDate.getDate() == dateNow.getDate()
+      )
+    ) {
+      dateNow = new Date(
+        originalDate.getFullYear(),
+        originalDate.getMonth(),
+        originalDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      );
+    }
 
-     try {
-       let body = {
-         farm_id: farmId,
-         content: comment,
-         date: date
-           ? `${originalDate.getFullYear()}-${(originalDate.getMonth() + 1)
-               .toString()
-               .padStart(2, "0")}-${originalDate
-               .getDate()
-               .toString()
-               .padStart(2, "0")}T${dateNow
-               .getHours()
-               .toString()
-               .padStart(2, "0")}:${dateNow
-               .getMinutes()
-               .toString()
-               .padStart(2, "0")}:${dateNow
-               .getSeconds()
-               .toString()
-               .padStart(2, "0")}.${dateNow
-               .getMilliseconds()
-               .toString()
-               .padStart(3, "0")}Z`
-           : "",
-         crop_id: cropId,
-       };
-       let options = {
-         method: "PATCH",
-         headers: new Headers({
-           "content-type": "application/json",
-           authorization: accessToken,
-         }),
-         body: JSON.stringify(body),
-       };
+    try {
+      let body = {
+        farm_id: farmId,
+        content: comment,
+        date: date
+          ? `${originalDate.getFullYear()}-${(originalDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${originalDate
+              .getDate()
+              .toString()
+              .padStart(2, "0")}T${dateNow
+                .getHours()
+                .toString()
+                .padStart(2, "0")}:${dateNow
+                  .getMinutes()
+                  .toString()
+                  .padStart(2, "0")}:${dateNow
+                    .getSeconds()
+                    .toString()
+                    .padStart(2, "0")}.${dateNow
+                      .getMilliseconds()
+                      .toString()
+                      .padStart(3, "0")}Z`
+          : "",
+        crop_id: cropId,
+      };
+      let options = {
+        method: "PATCH",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body),
+      };
 
-       let response: any = await fetch(
-         `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summary/${router.query.summary_id}`,
-         options
-       );
-       let responseData = await response.json();
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summary/${router.query.summary_id}`,
+        options
+      );
+      let responseData = await response.json();
 
-       if (responseData.status == 200) {
-         setSuccess(responseData.message);
-         setShowSuccessAlert(true);
-         router.back();
-         setTimeout(() => {
-           setShowSuccessAlert(false);
-         }, 1500);
-       } else if (responseData.status == 422) {
-         setErrorMessages(responseData.errors);
+      if (responseData.status == 200) {
+        setSuccess(responseData.message);
+        setShowSuccessAlert(true);
+        router.back();
+        setTimeout(() => {
+          setShowSuccessAlert(false);
+        }, 1500);
+      } else if (responseData.status == 422) {
+        setErrorMessages(responseData.errors);
 
-         setDateError(responseData.errors.date);
-         setCommentError(responseData.errors.content);
-         // setSummaryError(responseData.errors.summary);
-         setShowErrorAlert(true);
-         setTimeout(() => {
-           setShowErrorAlert(false);
-         }, 1500);
-       }
-     } catch (err) {
-       console.error(err);
-     } finally {
-       setLoading(false);
-     }
+        setDateError(responseData.errors.date);
+        setCommentError(responseData.errors.content);
+        // setSummaryError(responseData.errors.summary);
+        setShowErrorAlert(true);
+        setTimeout(() => {
+          setShowErrorAlert(false);
+        }, 1500);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -429,7 +429,7 @@ const UpdateSummary = () => {
               format="DD-MM-YYYY"
               onChange={(e) => {
 
-                 setDate(timePipe(e, "YYYY-MM-DD"));
+                setDate(timePipe(e, "YYYY-MM-DD"));
                 setDateError('');
                 setSummaryError('');
                 setErrorMessages('');

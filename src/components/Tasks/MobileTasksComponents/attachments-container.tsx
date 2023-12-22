@@ -6,6 +6,7 @@ import { Drawer } from "@mui/material";
 import { useRouter } from "next/router";
 import AttachmentDrawerTaskmodule from "../AllTasks/TasksTable/AttachmentDrawer";
 import { useSelector } from "react-redux";
+import TasksAttachmentsMobile from "../AddTask/TasksAttachments-mobile";
 
 const AttachmentsContainer = ({ attachmentData, getAllAttachments, status, hasEditAccess, data }: any) => {
   const router = useRouter();
@@ -111,9 +112,8 @@ const AttachmentsContainer = ({ attachmentData, getAllAttachments, status, hasEd
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
 
           <>
-            <h6 className={styles.fileUploadHeading}>Upload Attachment</h6>
-            <div>
-              <TasksAttachments
+            <div style={{ width: "100%" }}>
+              <TasksAttachmentsMobile
                 taskId={""}
                 disabled={status === "DONE"}
                 setUploadedFiles={setUploadedFiles}

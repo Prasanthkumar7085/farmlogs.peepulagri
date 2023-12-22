@@ -50,6 +50,11 @@
   position: relative;
 }
 
+.UpdateFilesMobile {
+  width: 16%;
+  position: relative;
+}
+
 .uploadFiles {
   position: absolute;
   top: 0;
@@ -79,8 +84,32 @@
   gap: .625rem;
 }
 
+.mobileLink {
+  /* background-color: var(--background); */
+  /* box-shadow: var(--shadow-xs); */
+  border-radius: 8px;
+  /* border: 1px dashed #828282; */
+  /* box-sizing: border-box; */
+  /* height: 100px; */
+  /* overflow: hidden; */
+  /* flex-shrink: 0; */
+  /* flex-direction: row; */
+  /* padding: var(--padding-3xs) var(--padding-base); */
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  line-height: 1;
+  gap: .625rem;
+  text-align: center;
+}
+
 .link .icon {
   width: 25px;
+}
+
+.mobileLink .icon {
+  width: 20px;
 }
 
 .link .text {
@@ -91,9 +120,19 @@
   line-height: 160%;
 }
 
+.mobileLink .text {
+  color: #45A845;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 2.5vw, 13px);
+  font-weight: 400;
+  line-height: 160%;
+  white-space: nowrap;
+}
+
 .link .text span {
   color: #232323 !important;
 }
+
 
 .attachments {
   /* border-top: 1px solid var(--stroke); */

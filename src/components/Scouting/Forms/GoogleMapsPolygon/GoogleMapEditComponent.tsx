@@ -36,7 +36,7 @@ const GoogleMapEditComponent = () => {
         const drawingManager = new maps.drawing.DrawingManager({
             drawingControl: true,
             drawingControlOptions: {
-                position: maps.ControlPosition.TOP_CENTER,
+                position: maps.ControlPosition.TOP_LEFT,
                 drawingModes: [maps.drawing.OverlayType.POLYGON],
             },
             polygonOptions: {

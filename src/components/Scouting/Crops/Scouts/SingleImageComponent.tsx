@@ -17,7 +17,7 @@ interface componentProps {
   afterAddingTags: any;
   lastItemRef: any;
 }
-const SingleImageComponent: FC<componentProps> = ({
+const SingleImageComponent: FC<Partial<componentProps>> = ({
   detailedImage,
   scoutDetails,
   afterAddingTags,

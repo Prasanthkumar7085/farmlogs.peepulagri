@@ -413,9 +413,9 @@ const FileUploadComponent = () => {
   };
 
   useEffect(() => {
+    loadMap();
     if (router.query.farm_id && accessToken) {
       dispatch(removeTheFilesFromStore([]));
-      loadMap();
     }
   }, [accessToken, router.query.farm_id]);
 
@@ -622,11 +622,10 @@ const FileUploadComponent = () => {
 
   const loadMap = () => {
     setLoading(true);
-    // Replace 'YOUR_GOOGLE_MAPS_API_KEY' with your actual Google Maps API key
-    // const apiKey = "";
 
     const script = document.createElement("script");
-    script.src = `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
+    // script.src = `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
+    script.src = `${"https://maps.googleapis.com/maps/api/js"}?key=${"AIzaSyAqlzQZ9Ytc07b63uin6ab85mCYuqtcTk8"}&libraries=places`;
 
     script.onload = () => {
       // Google Maps API loaded successfully

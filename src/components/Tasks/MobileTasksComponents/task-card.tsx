@@ -2,9 +2,24 @@ import { Avatar } from "@mui/material";
 import moment from "moment";
 import { useRouter } from "next/router";
 import styles from "./task-card.module.css";
+import { useState } from "react";
 
 const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
   const router = useRouter();
+
+  const [statusOptions] = useState<Array<{ value: string; title: string }>>([
+    { value: "TO-START", title: "To-Start" },
+    { value: "INPROGRESS", title: "In-Progress" },
+    { value: "PENDING", title: "Pending" },
+    { value: "DONE", title: "Done" },
+    { value: "OVER-DUE", title: "Over-due" },
+  ]);
+
+  const getItemTitle = (status: string) => {
+    return statusOptions?.find(
+      (item: { value: string; title: string }) => status == item?.value
+    )?.title;
+  };
 
   return (
     <div className={styles.allTaskCardsBlock}>
@@ -102,7 +117,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
                     </div>
                     <div className={styles.farmdetails}>
                       <h3 className={styles.farmname} id={styles[item.status]}>
-                        {item?.status}
+                        {getItemTitle(item?.status)}
                       </h3>
                       <div className={styles.profile}>
                         <h1 className={styles.jj}>

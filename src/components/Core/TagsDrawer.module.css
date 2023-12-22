@@ -145,6 +145,10 @@
   align-items: center;
   justify-content: space-between;
   padding-block: 0.5rem;
+  position: sticky;
+  top:0;
+  z-index:10;
+  background: #f5f7fa;
 }
 
 .updateTagDrawerHeading p {
@@ -155,6 +159,12 @@
 }
 
 .updateSubmitBtn {
+
+  position: sticky;
+  bottom:0;
+  z-index:10;
+  background: #f5f7fa;
+
   text-transform: capitalize !important;
   border-radius: 8px !important;
   border: 1px solid #d94841 !important;
@@ -163,7 +173,7 @@
   color: var(--White, #FFF) !important;
   font-family: "Inter", sans-serif !important;
   font-size: clamp(14px, 3vw, 14px) !important;
-  font-weight: 500 !important !important;
+  font-weight: 500 !important;
   line-height: 24px !important;
   margin-top: 1rem;
   min-width: inherit !important;

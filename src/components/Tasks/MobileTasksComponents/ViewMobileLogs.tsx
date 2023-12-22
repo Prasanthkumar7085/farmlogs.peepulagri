@@ -97,7 +97,7 @@ const ViewMobileLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
             }}
         >
             <div>
-                <div className={styles.drawerHeader}>
+                <div className={styles.drawerHeaderMobile}>
                     <Typography variant="h5" className={styles.taskViewLogHeading}>
                         <img src="/viewTaskIcons/logs-icon.svg" alt="" width={"14px"} />
 

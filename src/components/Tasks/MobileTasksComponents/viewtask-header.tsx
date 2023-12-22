@@ -10,13 +10,13 @@ const ViewtaskHeader = () => {
   return (
     <header className={styles.header}>
       <div className={styles.actions}>
-        <IconButton
+        <IconButton sx={{ padding: "0" }}
 
           onClick={() => router.back()}
         ><img alt=""
           src="/arrowdownbold-1@2x.png" width="24px" /> </IconButton>
         <p className={styles.headerTitle}>View Task</p>
-        <IconButton
+        <IconButton sx={{ padding: "0" }}
         ><MoreVertIcon sx={{ color: "#fff" }} /></IconButton>
       </div>
 

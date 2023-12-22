@@ -96,3 +96,24 @@
     font-weight: 500 !important;
     line-height: 100%;
 }
+
+.drawerHeaderMobile {
+    padding-block: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drawerHeaderMobile .taskViewLogHeading {
+    font-size: clamp(14px, 3vw, 16px) !important;
+}
+
+
+
+.drawerHeaderMobile img {
+    width: 16px;
+}
+
+.drawerHeaderMobile button svg {
+    font-size: 20px;
+}

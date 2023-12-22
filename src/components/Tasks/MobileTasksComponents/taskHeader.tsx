@@ -1,5 +1,15 @@
 import type { NextPage } from "next";
-import { Autocomplete, Button, Drawer, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  ClickAwayListener,
+  Drawer,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Search } from "@mui/icons-material";
@@ -7,7 +17,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import { useSelector } from "react-redux";
 import { userTaskType } from "@/types/tasksTypes";
-import styles from "./taskHeader.module.css"
+import styles from "./taskHeader.module.css";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { ClearIcon } from "@mui/x-date-pickers";
+
 const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -16,10 +29,11 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<Array<userTaskType>>([]);
   const [usersDrawerOpen, setUsersDrawerOpen] = useState<any>(false);
-
+  const [isSearchOpenOrNot, setIsSearchOpenOrNot] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<
     { name: string; _id: string }[] | null
   >();
+  const [textFieldAutoFocus, setTextFieldAutoFocus] = useState(false);
 
   const getAllUsers = async () => {
     const response = await getAllUsersService({ token: accessToken });
@@ -32,6 +46,7 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
   useEffect(() => {
     if (router.isReady && accessToken) {
       if (router.query.search_string) {
+        setIsSearchOpenOrNot(true);
         setSearch(router.query.search_string as string);
       }
       getAllUsers();
@@ -52,64 +67,170 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
   return (
     <header className={styles.header}>
       <div className={styles.row}>
-        <div className={styles.group}>
-          <IconButton sx={{ padding: "0" }} onClick={() => router.back()}>
-            <img
-              className={styles.arrowDownBold1Icon}
-              alt=""
-              src="/arrowdownbold-1@2x.png"
+        {!isSearchOpenOrNot ? (
+          <div className={styles.group}>
+            <IconButton sx={{ padding: "0" }} onClick={() => router.back()}>
+              <img
+                className={styles.arrowDownBold1Icon}
+                alt=""
+                src="/arrowdownbold-1@2x.png"
+              />
+            </IconButton>
+            <h1 className={styles.title}>Tasks</h1>
+          </div>
+        ) : (
+          <ClickAwayListener onClickAway={() => setTextFieldAutoFocus(false)}>
+            <TextField
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                onChangeSearch(e.target.value);
+              }}
+              color="primary"
+              size="small"
+              placeholder="Search By Title"
+              sx={{
+                width: "90%",
+                borderRadius: "20px",
+                background: "#fff !important",
+                "& .MuiInputBase-root": {
+                  borderRadius: "20px !important",
+                  height: "2.4rem",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderRadius: "20px !important",
+                  borderColor: "#fff !important",
+                },
+                "& .MuiInputBase-input": {
+                  paddingBlock: "11px",
+                },
+              }}
+              variant="outlined"
+              // type="search"
+              autoFocus={textFieldAutoFocus}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <ArrowBackIcon
+                      onClick={() => {
+                        setTextFieldAutoFocus(false);
+                        setIsSearchOpenOrNot((prev) => !prev);
+                        if (search) {
+                          setSearch("");
+                          onChangeSearch("");
+                        }
+                      }}
+                    />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">
+                    {router.query.search_string ? (
+                      <ClearIcon
+                        onClick={() => {
+                          setTextFieldAutoFocus(true);
+                          setSearch("");
+                          onChangeSearch("");
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </InputAdornment>
+                ),
+              }}
             />
-          </IconButton>
-          <h1 className={styles.title}>Tasks</h1>
-        </div>
+          </ClickAwayListener>
+        )}
         <div className={styles.actions}>
-          <div className={styles.search}>
-            <img
-              className={styles.magnifyingGlass1Icon}
-              alt=""
-              src="/magnifyingglass-1@2x.png"
-            />
-          </div>
-          <div className={styles.filter} onClick={() => setUsersDrawerOpen(true)}>
-            <img className={styles.funnel1Icon} alt="" src="/funnel-1@2x.png" />
-          </div>
+          {!isSearchOpenOrNot ? (
+            <div
+              className={styles.search}
+              onClick={() => {
+                setIsSearchOpenOrNot((prev) => !prev);
+                setTextFieldAutoFocus(true);
+              }}
+            >
+              <img
+                className={styles.magnifyingGlass1Icon}
+                alt=""
+                src="/magnifyingglass-1@2x.png"
+              />
+            </div>
+          ) : (
+            ""
+          )}
+          <Badge
+            badgeContent={selectedUsers?.length}
+            color="success"
+            // sx={{
+            //   "& .MuiBadge-badge": {
+            //     background: "#fff",
+            //     color: "#46a845",
+            //   },
+            // }}
+          >
+            <div
+              className={styles.filter}
+              onClick={() => setUsersDrawerOpen(true)}
+            >
+              <img
+                className={styles.funnel1Icon}
+                alt=""
+                src="/funnel-1@2x.png"
+              />
+            </div>
+          </Badge>
         </div>
       </div>
-      <div style={{ width: "100%" }}>
-        <TextField
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            onChangeSearch(e.target.value);
-          }}
-          color="primary"
-          size="small"
-          placeholder="Search By Title"
-          sx={{
-            width: "100%", borderRadius: "20px", background: "#fff !important",
-            '& .MuiInputBase-root': {
-              borderRadius: "20px !important"
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderRadius: "20px !important",
-              borderColor: "#fff !important"
 
-            },
-            '& .MuiInputBase-input': {
-              paddingBlock: "11px"
-            }
-          }}
-          variant="outlined"
-          type="search"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </div>
+      {/* <div style={{ width: "80%" }}>
+        {isSearchOpenOrNot ? (
+          <TextField
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              onChangeSearch(e.target.value);
+            }}
+            color="primary"
+            size="small"
+            placeholder="Search By Title"
+            sx={{
+              width: "100%",
+              borderRadius: "20px",
+              background: "#fff !important",
+              "& .MuiInputBase-root": {
+                borderRadius: "20px !important",
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderRadius: "20px !important",
+                borderColor: "#fff !important",
+              },
+              "& .MuiInputBase-input": {
+                paddingBlock: "11px",
+              },
+            }}
+            variant="outlined"
+            type="search"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <ArrowBackIcon
+                    onClick={() => setIsSearchOpenOrNot((prev) => !prev)}
+                  />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
+          />
+        ) : (
+          ""
+        )}
+      </div> */}
       <Drawer
         anchor={"bottom"}
         open={usersDrawerOpen}
@@ -129,7 +250,7 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
         <div className={styles.updateTagDrawerHeading}>
           <Typography>Select Users</Typography>
           <IconButton
-            sx={{ marginLeft: '95%' }}
+            sx={{ marginLeft: "95%" }}
             onClick={() => {
               setUsersDrawerOpen(false);
             }}
@@ -160,9 +281,7 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
             onChange={(e: any, value: userTaskType[] | []) => {
               setSelectedUsers(value);
               let data: string[] = value?.length
-                ? value?.map(
-                  (item: { _id: string; name: string }) => item._id
-                )
+                ? value?.map((item: { _id: string; name: string }) => item._id)
                 : [];
               onUserChange(data, false);
             }}
@@ -183,33 +302,28 @@ const TaskHeader = ({ onChangeSearch, onUserChange }: any) => {
             )}
           />
         </div>
-        <div style={{ marginLeft: '50%', marginTop: '50%' }}>
-
+        <div style={{ marginLeft: "50%", marginTop: "50%" }}>
           <Button
-            sx={{ marginRight: '50px' }}
-            variant='outlined'
+            sx={{ marginRight: "50px" }}
+            variant="outlined"
             onClick={() => {
               setSelectedUsers([]);
               onUserChange([]);
               setUsersDrawerOpen(false);
             }}
           >
-
             Clear
           </Button>
 
-
           <Button
-            sx={{ marginLeft: '20px' }}
+            sx={{ marginLeft: "20px" }}
             variant="contained"
             onClick={() => {
               setUsersDrawerOpen(false);
             }}
           >
-
             Apply
           </Button>
-
         </div>
       </Drawer>
     </header>

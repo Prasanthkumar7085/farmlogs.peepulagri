@@ -119,11 +119,31 @@
 }
 
 .PENDING {
-  border-left: 3px solid #fb7a02;
+  border-left: 3px solid #fb6602;
 }
 
 .OVER-DUE {
   border-left: 3px solid #D94841;
+}
+
+#DONE {
+  color: #45a845;
+}
+
+#TO-START {
+  color: #57B6F0;
+}
+
+#INPROGRESS {
+  color: #F2A84C;
+}
+
+#PENDING {
+  color: #fb6602;
+}
+
+#OVER-DUE {
+  color: #D94841;
 }
 
 .allTaskCardsBlock {

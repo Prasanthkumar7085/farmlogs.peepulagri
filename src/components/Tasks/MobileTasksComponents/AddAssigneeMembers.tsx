@@ -136,7 +136,7 @@ const AddAssigneeMembers = ({
                 ""
             )}
             {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
-            <div style={{ marginTop: "1rem", display: "flex", flexWrap: "wrap", height: "235px", overflowY: "auto" }}>
+            <div style={{ marginTop: "1rem", height: "235px", overflowY: "auto" }}>
                 {usersArray?.map((user: any) => (
                     <Chip
                         key={user._id}

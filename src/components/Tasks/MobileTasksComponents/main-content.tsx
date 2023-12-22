@@ -129,13 +129,13 @@ const MainContent = ({
             style={{
               cursor:
                 status !== "DONE" &&
-                (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
                   ? "pointer"
                   : "default",
             }}
             onClick={(e) =>
               status !== "DONE" &&
-              (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                (loggedInUserId == data?.created_by?._id || hasEditAccess)
                 ? handleClick(e)
                 : ""
             }
@@ -143,11 +143,11 @@ const MainContent = ({
             <span>
               {data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                    ?.title
+                  ?.title
                 : ""}
             </span>
             {status !== "DONE" &&
-            (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
+              (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
               <KeyboardArrowDownIcon sx={{ fontSize: "1rem" }} />
             ) : (
               ""
@@ -179,6 +179,7 @@ const MainContent = ({
                   },
                   "& .MuiInputBase-input": {
                     padding: "0",
+                    fontSize: "11px"
                   },
                 }}
                 disablePast

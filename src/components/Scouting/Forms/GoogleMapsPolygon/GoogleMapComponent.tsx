@@ -7,6 +7,7 @@ import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarm
 import { useSelector } from 'react-redux';
 import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
 import { toast } from 'sonner';
+import LoadingComponent from '@/components/Core/LoadingComponent';
 const GoogleMapComponent = () => {
 
     const router = useRouter();
@@ -180,6 +181,7 @@ const GoogleMapComponent = () => {
 
     //edit the farm details(with the cordinates)
     const edtiFarm = async () => {
+        setLoading(true)
         let editedData: any = {
             title: data?.title,
             area: data?.area,
@@ -291,7 +293,7 @@ const GoogleMapComponent = () => {
                     Submit
                 </Button>
             </div>
-
+            <LoadingComponent loading={loading} />
         </div>
     )
 };

@@ -26,8 +26,6 @@ const GoogleMapEditComponent = () => {
     const [mapType, setMapType] = useState('roadmap'); // 'roadmap' is the normal map view
     const [renderField, setRenderField] = useState(true);
 
-    console.log(data, "oiuytrew")
-    console.log(polygonCoords, "poiuytrdfgh")
 
 
     const handleApiLoaded = (map: any, maps: any) => {
@@ -36,7 +34,7 @@ const GoogleMapEditComponent = () => {
         const drawingManager = new maps.drawing.DrawingManager({
             drawingControl: true,
             drawingControlOptions: {
-                position: maps.ControlPosition.TOP_CENTER,
+                position: maps.ControlPosition.TOP_LEFT,
                 drawingModes: [maps.drawing.OverlayType.POLYGON],
             },
             polygonOptions: {
@@ -66,6 +64,16 @@ const GoogleMapEditComponent = () => {
             strokeWeight: 2,
             fillColor: '#FF0000',
             fillOpacity: 0.35,
+            editable: true, // Set the polygon as editable
+            draggable: true,
+            map: map // Assuming 'map' is your Google Map instance
+
+        });
+
+        google.maps.event.addListener(newPolygon, 'mouseup', () => {
+            const updatedCoords = newPolygon.getPath().getArray().map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
+            console.log(updatedCoords, "piu");
+            setPolygonCoords(updatedCoords);
         });
 
         // Set the polygon on the map

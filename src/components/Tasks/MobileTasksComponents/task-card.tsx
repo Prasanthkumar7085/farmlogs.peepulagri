@@ -1,26 +1,10 @@
-import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
-import styles from "./task-card.module.css";
-import ListHeader from "./list-header";
-import Tabs from "./tabs";
-import Header1 from "./taskHeader";
-import { addSerial } from "@/pipes/addSerial";
-import getAllTasksService from "../../../../lib/services/TasksService/getAllTasksService";
-import { prepareURLEncodedParamsWithArray } from "../../../../lib/requestUtils/urlEncoderWithArray";
-import { FarmInTaskType } from "@/types/tasksTypes";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { useCookies } from "react-cookie";
 import { Avatar } from "@mui/material";
-import moment from 'moment';
-
-
+import moment from "moment";
+import { useRouter } from "next/router";
+import styles from "./task-card.module.css";
 
 const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
   const router = useRouter();
-
-
-
 
   return (
     <div className={styles.allTaskCardsBlock}>
@@ -117,7 +101,9 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
                       </div>
                     </div>
                     <div className={styles.farmdetails}>
-                      <h3 className={styles.farmname}>SpiceVine Gardens</h3>
+                      <h3 className={styles.farmname} id={styles[item.status]}>
+                        {item?.status}
+                      </h3>
                       <div className={styles.profile}>
                         <h1 className={styles.jj}>
                           <Avatar

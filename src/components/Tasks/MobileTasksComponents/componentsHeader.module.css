@@ -13,7 +13,7 @@
 }
 
 .header {
-  background-color: #fff;
+  /* background-color: #fff; */
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;

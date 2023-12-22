@@ -1,18 +1,26 @@
 .title {
   margin: 0;
-  align-self: stretch;
-  position: relative;
-  font-size: inherit;
-  line-height: 100%;
+  color: #35353D;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 3vw, 16px);
   font-weight: 500;
-  font-family: inherit;
+  line-height: 100%;
 }
 
-.selectstatus {
-  font-family: Inter;
-  font-size: 12px;
-  color: #35353d;
-  cursor: pointer;
+.statusSelect {
+  color: #35353D;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 2.5vw, 12px);
+  font-weight: 400;
+  line-height: 100%;
+  margin: 0;
+  border-radius: 4px;
+  background: var(--Stroke-2, #D0D5DD);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 8px;
 }
 
 .farmname {
@@ -20,15 +28,22 @@
   position: relative;
 }
 
-.container,
+
 .maincontent {
   align-self: stretch;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
-  color: #45a845;
+
+}
+
+.container {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
 .maincontent {
@@ -36,20 +51,22 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 16px;
-  text-align: left;
-  font-size: 16px;
-  color: #35353d;
-  font-family: Inter;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #E9EDF1;
+
 }
 
-.DatePickerBlock {
-  padding: 2rem;
-  padding-right: 0;
-  border-bottom: 1px solid #D0D5DD;
+
+
+.datePicker {
+  background: #D0D5DD;
+  border-radius: 4px;
+  padding: 4px 6px 4px 1rem;
+  width: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 6px;
 }
 
 .dueDate {
@@ -62,12 +79,7 @@
   white-space: nowrap;
 }
 
-.DatePickerBlock {
-  padding: 2rem;
-  padding-right: 0;
-  border-bottom: 1px solid #D0D5DD;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+
+.titleBlock {
+  text-align: left;
 }

@@ -6,7 +6,7 @@ import ErrorMessages from "@/components/Core/ErrorMessages";
 import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
-
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 const MainContent = ({
   title,
   onChangeStatus,
@@ -67,7 +67,7 @@ const MainContent = ({
             />
           </div>
         ) : (
-          <div>
+          <div className={styles.titleBlock}>
             {status !== "DONE" &&
               loggedInUserId == data?.created_by?._id ? (
               <h6
@@ -125,138 +125,141 @@ const MainContent = ({
         ) : (
           ""
         )}
+
         <div className={styles.container}>
-          <div>
-            <p
-              style={{
-                cursor:
-                  status !== "DONE" &&
-                    (loggedInUserId == data?.created_by?._id || hasEditAccess)
-                    ? "pointer"
-                    : "default",
-              }}
-              onClick={(e) =>
+
+          <p
+            className={styles.statusSelect}
+            style={{
+              cursor:
                 status !== "DONE" &&
                   (loggedInUserId == data?.created_by?._id || hasEditAccess)
-                  ? handleClick(e)
-                  : ""
-              }
-            >
+                  ? "pointer"
+                  : "default",
+            }}
+            onClick={(e) =>
+              status !== "DONE" &&
+                (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                ? handleClick(e)
+                : ""
+            }
+          >
+            <span>
+
               {data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
                   ?.title
                 : ""}
-            </p>
-          </div>
-          <Menu
-            id="fade-menu"
-            MenuListProps={{
-              "aria-labelledby": "fade-button",
-            }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            TransitionComponent={Fade}
-            className={styles.statusMenu}
-            PaperProps={{
-              style: {
-                width: "15ch",
-                borderRadius: "20px !important",
-              },
-            }}
-          >
-            {statusOptions?.length &&
-              statusOptions.map(
-                (item: { value: string; title: string }, index: number) => {
-                  if (item.value !== "OVER-DUE")
-                    return (
-                      <MenuItem
-                        disabled={status == item.value}
-                        className={
-                          status == item.value
-                            ? styles.statusMenuItemSelected
-                            : styles.statusMenuItem
-                        }
-                        onClick={() => {
-                          handleClose();
-                          onChangeStatus(item.value);
-                        }}
-                        key={index}
-                        value={item.value}
-                      >
-                        {item.title}
-                      </MenuItem>
-                    );
-                }
-              )}
-          </Menu>
-          <div className={styles.DatePickerBlock}>
-            <p className={styles.dueDate}>Due Date</p>
-            <div className={styles.datePicker} style={{ display: "flex" }}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <MobileDatePicker
-                  open={calenderOpen}
-                  onOpen={handleCalenderOpen}
-                  onClose={handleCalenderClose}
-                  sx={{
-                    width: "100%",
-                    "& .MuiButtonBase-root": {
-                      paddingRight: "10px !important",
-                    },
+            </span>
+            <KeyboardArrowDownIcon sx={{ fontSize: "1rem" }} />
+          </p>
+          {/* <p className={styles.dueDate}>Due Date</p> */}
+          <div className={styles.datePicker} style={{ display: "flex" }}>
+            <img
+              onClick={handleCalenderOpen}
+              src="/viewTaskIcons/calender-icon.svg"
+              alt=""
 
-                    "& .MuiInputBase-root::before": {
-                      borderBottom: "0 !important",
-                    },
-                    "& .MuiInputBase-root::after": {
-                      borderBottom: "0 !important",
-                    },
-                  }}
-                  disablePast
-                  value={new Date(deadlineString)}
-                  disabled={
-                    status === "DONE" ||
-                    !(loggedInUserId == data?.created_by?._id)
+            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <MobileDatePicker
+                open={calenderOpen}
+                onOpen={handleCalenderOpen}
+                onClose={handleCalenderClose}
+                sx={{
+                  width: "100%",
+                  "& .MuiButtonBase-root": {
+                    lineHeight: "0 !important"
+                  },
+
+                  "& .MuiInputBase-root::before": {
+                    borderBottom: "0 !important",
+                  },
+                  "& .MuiInputBase-root::after": {
+                    borderBottom: "0 !important",
+                  },
+                  '& .MuiInputBase-input': {
+                    padding: "0"
                   }
-                  onAccept={(newValue: any) => {
-                    let dateNow = new Date();
-                    let dateWithPresentTime = moment(new Date(newValue))
-                      .set({
-                        hour: dateNow.getHours(),
-                        minute: dateNow.getMinutes(),
-                        second: dateNow.getSeconds(),
-                        millisecond: dateNow.getMilliseconds(),
-                      })
-                      .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-                    setDeadlineString(dateWithPresentTime);
-
-                    onUpdateField({ deadlineProp: dateWithPresentTime });
-                  }}
-                  format="dd/MM/yyyy"
-                  slotProps={{
-                    textField: {
-                      variant: "standard",
-                      size: "medium",
-                      color: "primary",
-                    },
-                  }}
-                />
-              </LocalizationProvider>
-              {/* <img
-                onClick={handleCalenderOpen}
-                
-                src="/viewTaskIcons/calender-icon.svg"
-                alt=""
-                style={{
-                  background: "#E9EDF1",
-                  paddingInline: "1rem",
-                  borderRadius: "0 6px 6px 0",
                 }}
-              /> */}
-            </div>
+                disablePast
+                value={new Date(deadlineString)}
+                disabled={
+                  status === "DONE" ||
+                  !(loggedInUserId == data?.created_by?._id)
+                }
+                onAccept={(newValue: any) => {
+                  let dateNow = new Date();
+                  let dateWithPresentTime = moment(new Date(newValue))
+                    .set({
+                      hour: dateNow.getHours(),
+                      minute: dateNow.getMinutes(),
+                      second: dateNow.getSeconds(),
+                      millisecond: dateNow.getMilliseconds(),
+                    })
+                    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+                  setDeadlineString(dateWithPresentTime);
+
+                  onUpdateField({ deadlineProp: dateWithPresentTime });
+                }}
+                format="dd/MM/yyyy"
+                slotProps={{
+                  textField: {
+                    variant: "standard",
+                    size: "medium",
+                    color: "primary",
+                  },
+                }}
+              />
+            </LocalizationProvider>
+
           </div>
+
           {/* <p className={styles.farmname}>SpiceVine Gardens</p> */}
         </div>
+        <Menu
+          id="fade-menu"
+          MenuListProps={{
+            "aria-labelledby": "fade-button",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+          className={styles.statusMenu}
+          PaperProps={{
+            style: {
+              width: "15ch",
+              borderRadius: "20px !important",
+            },
+          }}
+        >
+          {statusOptions?.length &&
+            statusOptions.map(
+              (item: { value: string; title: string }, index: number) => {
+                if (item.value !== "OVER-DUE")
+                  return (
+                    <MenuItem
+                      disabled={status == item.value}
+                      className={
+                        status == item.value
+                          ? styles.statusMenuItemSelected
+                          : styles.statusMenuItem
+                      }
+                      onClick={() => {
+                        handleClose();
+                        onChangeStatus(item.value);
+                      }}
+                      key={index}
+                      value={item.value}
+                    >
+                      {item.title}
+                    </MenuItem>
+                  );
+              }
+            )}
+        </Menu>
       </div>
       {/* {isStatusOpen && (
         <PortalPopup

@@ -93,7 +93,7 @@ const GoogleMapComponent = () => {
     };
 
     const createInfoWindow = (map: any) => {
-        const infoWindow = new window.google.maps.InfoWindow();
+        const infoWindow = new (window as any).google.maps.InfoWindow();
         infoWindowRef.current = infoWindow;
     };
 

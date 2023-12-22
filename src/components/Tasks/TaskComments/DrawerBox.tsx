@@ -8,8 +8,10 @@ import { Toaster, toast } from "sonner";
 import styles from "./Comments.module.css";
 import CommentFormForTasks from "./comment-formForTasks";
 import ThreadsForTasks from "./threadsforTasks";
+import { useRouter } from "next/router";
 const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -44,7 +46,6 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
-
         const commentsById: any = {};
 
         responseData.data?.forEach((comment: any) => {
@@ -196,11 +197,14 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
 
   return (
     <Drawer
-      anchor="right"
+      anchor={router.pathname?.includes("/users-tasks") ? "bottom" : "right"}
       open={drawerOpen}
       sx={{
         "& .MuiPaper-root": {
           padding: "1rem",
+          borderRadius: router.pathname?.includes("/users-tasks")
+            ? "10px"
+            : "none",
         },
       }}
     >
@@ -218,14 +222,11 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
 
       <div
         className={styles.threadsDrawerTasks}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: 600,
-          padding: "1rem",
-          maxHeight: "500px",
-          overflow: "auto",
-        }}
+        id={
+          router.pathname?.includes("/users-tasks")
+            ? styles.commentDrawerDivWeb
+            : styles.commentDrawerDivMobile
+        }
       >
         <ThreadsForTasks
           farmID={rowDetails?.farm_id?._id}

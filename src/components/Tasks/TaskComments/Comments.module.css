@@ -15,6 +15,23 @@
     font-family: 'Inter', sans-serif !important;
 }
 
+#commentDrawerDivWeb{
+    display: flex;
+    flex-direction: column;
+    min-width:600;
+    padding: 1rem;
+    max-height:500px;
+    overflow: auto;
+}
+#commentDrawerDivMobile{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    padding: 1rem;
+    max-height:500px;
+    overflow: hidden;
+}
+
 .threadsDrawerTasks::-webkit-scrollbar {
     background: transparent;
     width: 5px;

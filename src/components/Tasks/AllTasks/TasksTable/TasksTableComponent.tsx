@@ -449,7 +449,6 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
       <DrawerBoxComponent
         drawerClose={drawerClose}
         rowDetails={rowDetails}
-        setDrawerOpen={setDrawerOpen}
         drawerOpen={drawerOpen}
       />
 

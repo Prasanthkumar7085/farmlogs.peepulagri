@@ -11,10 +11,11 @@ import { ApiCallProps } from "../TasksPageComponent";
 import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
-import AttachmentDrawerTaskmodule from "./AttachmentDrawer";
+
 import Link from "next/link";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import ViewLogs from "../../ViewTask/ViewLogs";
+import AttachmentDrawer from "./AttachmentDrawer";
 
 // interface pageProps {
 //   data: Array<TaskResponseTypes> | any;
@@ -29,11 +30,7 @@ import ViewLogs from "../../ViewTask/ViewLogs";
 //   }: ApiCallProps) => void;
 //   paginationDetails: any;
 // }
-const TasksTableComponent = ({
-  data,
-  getData,
-  paginationDetails,
-}: any) => {
+const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
   const router = useRouter();
 
   const userId = useSelector(
@@ -120,8 +117,8 @@ const TasksTableComponent = ({
       >
         {value?.length
           ? value
-            .map((item: { _id: string; name: string }) => item.name)
-            .join(", ")
+              .map((item: { _id: string; name: string }) => item.name)
+              .join(", ")
           : "*Not Assigned*"}
         {info.getValue()?.assign_to?.length >= 2 ? (
           <div
@@ -456,7 +453,7 @@ const TasksTableComponent = ({
         drawerOpen={drawerOpen}
       />
 
-      <AttachmentDrawerTaskmodule
+      <AttachmentDrawer
         attachmentDrawerClose={attachmentDrawerClose}
         rowDetails={rowDetails}
         setAttachmentDrawer={setAttachmentDrawer}

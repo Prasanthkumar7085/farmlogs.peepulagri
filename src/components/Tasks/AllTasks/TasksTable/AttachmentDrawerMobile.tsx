@@ -2,13 +2,24 @@ import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversatio
 import timePipe from "@/pipes/timePipe";
 import { Close } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
-import { Dialog, IconButton, LinearProgress, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  IconButton,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../TaskComments/Comments.module.css";
 import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import { Toaster, toast } from "sonner";
+import ImageComponent from "@/components/Core/ImageComponent";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import deleteTaskAttachmentService from "../../../../../lib/services/TasksService/deleteTaskAttachmentService";
+import { useRouter } from "next/router";
+
 const AttachmentDrawerMobile = ({
   attachmentDrawerClose,
   rowDetails,
@@ -19,11 +30,16 @@ const AttachmentDrawerMobile = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const router = useRouter();
 
   const [loading, setLoading] = useState<any>();
   const [attachmentData, setAttachmentData] = useState<any>();
   const [singleImageView, setSingleImageView] = useState<any>(false);
   const [imageid, setImageId] = useState<any>();
+  const [selectedItems, setSelectedItems] = useState<any>([]);
+  const [tempImages, setTempImages] = useState(selectedItems);
+  const [longpressActive, setLongPressActive] = useState<any>(false);
+  const [checkBoxOpen, setCheckBoxOpen] = useState<any>(false);
 
   function groupByDate(array: Array<any>) {
     const groupedByDate = array.reduce((result, obj) => {
@@ -37,6 +53,10 @@ const AttachmentDrawerMobile = ({
 
     return Object.values(groupedByDate).reverse();
   }
+
+  useEffect(() => {
+    setTempImages(selectedItems);
+  }, [selectedItems]);
 
   const getAllAttachments = async () => {
     setLoading(true);
@@ -72,6 +92,9 @@ const AttachmentDrawerMobile = ({
     );
   };
   useEffect(() => {
+    setCheckBoxOpen(false);
+    setSelectedItems([]);
+
     if (attachmentdrawer) {
       getAllAttachments();
     } else {
@@ -128,6 +151,85 @@ const AttachmentDrawerMobile = ({
       console.error(err);
     }
   };
+
+  //detele attachmeents
+  const deleteSelectedImages = async () => {
+    setLoading(true);
+
+    let response = await deleteTaskAttachmentService({
+      token: accessToken,
+      taskId: router?.query?.task_id as string,
+      body: { attachment_ids: selectedItems.map((item: any) => item._id) },
+    });
+
+    if (response?.success) {
+      toast.success(response?.message);
+      setSelectedItems([]);
+      getAllAttachments();
+    } else {
+      toast.error(response?.message);
+    }
+    setLoading(false);
+  };
+
+  //checkbox handlechange event
+  const handleChange = (itemId: any) => {
+    const itemIndex = tempImages.findIndex(
+      (ite: any) => ite._id === itemId._id
+    );
+
+    if (itemIndex === -1) {
+      setSelectedItems([...tempImages, itemId]);
+    } else {
+      const updatedItems = tempImages.filter(
+        (item: any) => item._id !== itemId._id
+      );
+      setSelectedItems(updatedItems);
+    }
+  };
+
+  async function handleDownload() {
+    const downloadPromises = selectedItems.map(
+      (item: { url: string; metadata: { original_name: string } }) =>
+        downloadFile(item?.url, item?.metadata?.original_name)
+    );
+    const results = await Promise.allSettled(downloadPromises);
+
+    results.forEach((result) => {
+      if (result.status === "fulfilled") {
+        console.log("Download successful");
+      } else {
+        console.error("Download failed", result.reason);
+      }
+    });
+  }
+
+  async function downloadFile(url: string, nameForDownload: string) {
+    return new Promise(async (resolve: any, reject) => {
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = blobUrl;
+        link.download = nameForDownload || "downloaded_file";
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        window.URL.revokeObjectURL(blobUrl);
+
+        resolve();
+      } catch (error) {
+        console.error("Error downloading file", error);
+        reject(error);
+      }
+    });
+  }
+
   return (
     <div>
       <Drawer
@@ -135,13 +237,73 @@ const AttachmentDrawerMobile = ({
         open={attachmentdrawer}
         sx={{
           "& .MuiPaper-root": {
-            padding: "1rem",
-            minWidth: "100vw",
-            maxWidth: "100vw",
+            borderRadius: "10px",
+            overflow: "auto",
+            maxHeight: "60%",
+            maxWidth: "500px",
+            minHeight: "300px",
+            margin: "auto",
           },
         }}
       >
         <div className={styles.drawerHeader}>
+          <div className={styles.stickyHeader}>
+            {checkBoxOpen ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <IconButton
+                  onClick={() => {
+                    setCheckBoxOpen(false);
+                    setSelectedItems([]);
+                  }}
+                  sx={{ display: attachmentData?.length ? "" : "none" }}
+                  className={styles.selectBtn}
+                >
+                  <img
+                    src="/mobileIcons/scouting/x-light.svg"
+                    alt=""
+                    width="20px"
+                  />
+                </IconButton>
+                {selectedItems?.length ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
+                  >
+                    <IconButton onClick={() => handleDownload()}>
+                      <FileDownloadIcon />
+                    </IconButton>
+
+                    <IconButton
+                      className={styles.selectBtn}
+                      onClick={() => deleteSelectedImages()}
+                      sx={{ paddingBlock: "0" }}
+                    >
+                      <ImageComponent
+                        src={"/mobileIcons/scouting/trash-simple-light.svg"}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </IconButton>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            ) : (
+              <Button
+                className={styles.selectBtn}
+                onClick={() => setCheckBoxOpen(true)}
+                sx={{ display: attachmentData?.length ? "" : "none" }}
+              >
+                Select
+              </Button>
+            )}
+          </div>
+
           <Typography variant="h6">Attachments</Typography>
           <IconButton
             onClick={() => {
@@ -158,6 +320,7 @@ const AttachmentDrawerMobile = ({
             display: "flex",
             flexDirection: "column",
             paddingBlock: "1rem",
+            padding: "0 1rem",
           }}
         >
           {!loading && attachmentData?.length ? (
@@ -167,7 +330,7 @@ const AttachmentDrawerMobile = ({
                   <p className={styles.AttachmentDate}>
                     {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
                   </p>
-                  <div className={styles.attachmentDrawer}>
+                  <div className={styles.attachmentDrawerMobile}>
                     {item?.map((image: any, index: number) => {
                       return (
                         <div
@@ -180,8 +343,47 @@ const AttachmentDrawerMobile = ({
                             height={100}
                             width={100}
                             className={styles.attachmentImg}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              handleChange(image);
+                              setLongPressActive(true);
+                              setCheckBoxOpen(true);
+                            }} // Prevent right-click context menu
+                            onTouchStart={(e) => {
+                              if (e.touches.length > 1) {
+                                e.preventDefault(); // Prevent multi-touch event
+                              }
+                            }}
+                            onClick={() => {
+                              handleChange(image); // Call handleLongPress when long press is detected
+                            }}
                           />
                           <div
+                            style={{
+                              position: "absolute",
+                              top: "2px",
+                              right: "2px",
+                            }}
+                          >
+                            {checkBoxOpen ? (
+                              <input
+                                style={{
+                                  width: "18px",
+                                  height: "18px",
+                                  border: "1px solid #000",
+                                }}
+                                type="checkbox"
+                                checked={tempImages.some(
+                                  (ite: any) => ite._id === image._id
+                                )}
+                                onChange={() => handleChange(image)}
+                                title={image.id}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          {/* <div
                             className={styles.viewIcon}
                             onClick={() => {
                               if (getAcceptedForPreviewImageOrNot(image)) {
@@ -205,7 +407,7 @@ const AttachmentDrawerMobile = ({
                               width={30}
                               alt="view"
                             />
-                          </div>
+                          </div> */}
                         </div>
                       );
                     })}

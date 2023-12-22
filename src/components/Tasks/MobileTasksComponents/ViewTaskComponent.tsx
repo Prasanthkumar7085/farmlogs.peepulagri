@@ -229,7 +229,7 @@ const ViewTaskComponent = () => {
 
     return (
         <div style={{ background: "#fff" }}>
-            <ViewtaskHeader />
+            <ViewtaskHeader data={data} status={status} />
             <div style={{ padding: "1rem", height: "calc(100vh - 160px)", paddingBottom: "6rem", overflowY: "auto" }}>
                 <MainContent
                     title={title}

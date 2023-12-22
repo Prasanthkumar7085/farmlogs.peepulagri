@@ -624,7 +624,6 @@ const FileUploadComponent = () => {
     setLoading(true);
 
     const script = document.createElement("script");
-    // script.src = `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
     script.src = `${"https://maps.googleapis.com/maps/api/js"}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
 
     script.onload = () => {

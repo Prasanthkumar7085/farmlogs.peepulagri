@@ -18,23 +18,18 @@ import updateTaskStatusService from "../../../../lib/services/TasksService/updat
 import updateTaskService from "../../../../lib/services/TasksService/updateTaskService";
 import moment from "moment";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
 const ViewTaskComponent = () => {
   const router = useRouter();
   const id = router.query.task_id;
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
   const loggedInUserId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
   );
-
   const [attachmentData, setAttachmentData] = useState<any>();
-
   const [editField, setEditField] = useState("");
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
-
   const [data, setData] = useState<TaskResponseTypes | null | any>({});
   const [title, setTitle] = useState("");
   const [deadlineString, setDeadlineString] = useState<Date | string | any>("");
@@ -50,19 +45,15 @@ const ViewTaskComponent = () => {
   const [assignee, setAssignee] = useState<any>();
   const [selectedAssignee, setSelectedAssignee] = useState<any | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const [farmId, setFarmId] = useState("");
   const [userId, setUserId] = useState("");
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const open = Boolean(anchorEl);
-
   const getTaskById = async (id: string) => {
     setLoading(true);
     try {
@@ -70,7 +61,6 @@ const ViewTaskComponent = () => {
         taskId: id,
         token: accessToken,
       });
-
       if (response?.success) {
         setData(response?.data);
         setTitle(response?.data?.title ? response?.data?.title : "");
@@ -86,7 +76,6 @@ const ViewTaskComponent = () => {
         setStatus(response?.data?.status ? response?.data?.status : "");
         setAssignee(response?.data?.assign_to);
         setFarmId(response?.data?.farm_id ? response?.data?.farm_id?._id : "");
-
         setHasEditAccess(
           response?.data?.assign_to?.some(
             (item: any) => item?._id == loggedInUserId
@@ -99,13 +88,11 @@ const ViewTaskComponent = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (router.isReady && accessToken) {
       getTaskById(router.query.task_id as string);
     }
   }, [router.isReady, accessToken]);
-
   const getAllAttachments = async () => {
     setLoading(true);
     let options = {
@@ -129,16 +116,13 @@ const ViewTaskComponent = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (router.isReady && accessToken) {
       getAllAttachments();
     }
   }, [router.isReady, accessToken]);
-
   const addAssignee = async () => {
     setLoading(true);
-
     try {
       if (selectedAssignee) {
         let body = {
@@ -152,13 +136,11 @@ const ViewTaskComponent = () => {
           }),
           body: JSON.stringify(body),
         };
-
         let response: any = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}/assignee`,
           options
         );
         let responseData = await response.json();
-
         if (responseData?.success) {
           getTaskById(id as string);
           setUsersDrawerOpen(false);
@@ -175,10 +157,8 @@ const ViewTaskComponent = () => {
       setLoading(false);
     }
   };
-
   const onChangeStatus = async (status: string) => {
     setLoading(true);
-
     const response = await updateTaskStatusService({
       token: accessToken,
       taskId: data?._id as string,
@@ -192,7 +172,6 @@ const ViewTaskComponent = () => {
     }
     setLoading(false);
   };
-
   const onUpdateField = async ({
     deadlineProp,
   }: Partial<{ deadlineProp: string }>) => {
@@ -204,10 +183,10 @@ const ViewTaskComponent = () => {
       deadline: deadlineProp
         ? deadlineProp
         : deadlineString
-          ? moment(deadlineString)
+        ? moment(deadlineString)
             .utcOffset("+05:30")
             .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-          : "",
+        : "",
       description: description ? description : "",
       title: title ? title : "",
       status: status,
@@ -233,7 +212,6 @@ const ViewTaskComponent = () => {
   const [calenderOpen, setCalenderOpen] = useState(false);
   const handleCalenderOpen = () => setCalenderOpen(true);
   const handleCalenderClose = () => setCalenderOpen(false);
-
   return (
     <div style={{ background: "#fff" }}>
       <ViewtaskHeader data={data} status={status} />
@@ -295,12 +273,24 @@ const ViewTaskComponent = () => {
           status={status}
         />
         {/* <ActivityContainer /> */}
-
         <div style={{ paddingTop: "1rem" }}>
-          <Button sx={{ textTransform: "capitalize", border: "1px solid #D94841", color: "#d94841", padding: "5px 10px" ,display:"flex",alignItems:"center",gap:"5px"}}> <img src="/viewTaskIcons/task-table-comments-red.svg" alt="" /> Comments</Button>
+          <Button
+            sx={{
+              textTransform: "capitalize",
+              border: "1px solid #D94841",
+              color: "#d94841",
+              padding: "5px 10px",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+            }}
+          >
+            {" "}
+            <img src="/viewTaskIcons/task-table-comments-red.svg" alt="" />{" "}
+            Comments
+          </Button>
         </div>
       </div>
-
       <Drawer
         anchor={"bottom"}
         open={usersDrawerOpen}
@@ -317,10 +307,24 @@ const ViewTaskComponent = () => {
           },
         }}
       >
-        <div style={{ paddingBlock: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Typography style={{ fontSize: "clamp(14px, 3vw, 16px)", fontFamily: "'Inter', sans-serif", fontWeight: "500" }}>Select Members</Typography>
+        <div
+          style={{
+            paddingBlock: "1rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            style={{
+              fontSize: "clamp(14px, 3vw, 16px)",
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: "500",
+            }}
+          >
+            Select Members
+          </Typography>
           <IconButton
-
             onClick={() => {
               setUsersDrawerOpen(false);
             }}
@@ -328,7 +332,7 @@ const ViewTaskComponent = () => {
             <CloseIcon sx={{ color: "#000" }} />
           </IconButton>
         </div>
-        <div >
+        <div>
           <AddAssigneeMembers
             userId={userId}
             assignee={assignee}
@@ -336,12 +340,22 @@ const ViewTaskComponent = () => {
               setSelectedAssignee(assigned_to);
               setFarmId("");
               setUserId(assigned_to[0]?._id);
-
             }}
           />
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "0.8rem" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "0.8rem",
+            }}
+          >
             <Button
-              sx={{ color: "#05A155", border: "1px solid #05A155", textTransform: "capitalize", fontFamily: "'Inter', sans-serif" }}
+              sx={{
+                color: "#05A155",
+                border: "1px solid #05A155",
+                textTransform: "capitalize",
+                fontFamily: "'Inter', sans-serif",
+              }}
               onClick={() => {
                 addAssignee();
               }}
@@ -355,7 +369,6 @@ const ViewTaskComponent = () => {
       </Drawer>
       <LoadingComponent loading={loading} />
     </div>
-
   );
 };
 export default ViewTaskComponent;

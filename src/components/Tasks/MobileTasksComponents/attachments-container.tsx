@@ -1,12 +1,10 @@
 import { TaskAttachmentsType } from "@/types/tasksTypes";
-import { useState } from "react";
-import TasksAttachments from "../AddTask/TasksAttachments";
-import styles from "./attachments-container.module.css";
-import { Drawer } from "@mui/material";
 import { useRouter } from "next/router";
-import AttachmentDrawerMobile from "../AllTasks/TasksTable/AttachmentDrawerMobile";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import TasksAttachmentsMobile from "../AddTask/TasksAttachments-mobile";
+import AttachmentDrawerMobile from "../AllTasks/TasksTable/AttachmentDrawerMobile";
+import styles from "./attachments-container.module.css";
 
 const AttachmentsContainer = ({
   attachmentData,
@@ -139,6 +137,7 @@ const AttachmentsContainer = ({
         setAttachmentDrawer={setAttachmentDrawer}
         attachmentdrawer={attachmentdrawer}
         direction={"bottom"}
+        getAllAttachmentsInView={getAllAttachments}
       />
 
       {/* <Drawer open={attachmentsOpen}></Drawer> */}

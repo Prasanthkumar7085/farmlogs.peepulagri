@@ -1,30 +1,32 @@
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
+import ImageComponent from "@/components/Core/ImageComponent";
+import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import timePipe from "@/pipes/timePipe";
 import { Close } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import {
   Button,
+  CircularProgress,
   Dialog,
   IconButton,
   LinearProgress,
   Typography,
 } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "../../TaskComments/Comments.module.css";
-import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import { Toaster, toast } from "sonner";
-import ImageComponent from "@/components/Core/ImageComponent";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import deleteTaskAttachmentService from "../../../../../lib/services/TasksService/deleteTaskAttachmentService";
-import { useRouter } from "next/router";
+import styles from "../../TaskComments/Comments.module.css";
 
 const AttachmentDrawerMobile = ({
   attachmentDrawerClose,
   rowDetails,
   attachmentdrawer,
   direction,
+  getAllAttachmentsInView,
 }: any) => {
   const dispatch = useDispatch();
   const accessToken = useSelector(
@@ -40,7 +42,8 @@ const AttachmentDrawerMobile = ({
   const [tempImages, setTempImages] = useState(selectedItems);
   const [longpressActive, setLongPressActive] = useState<any>(false);
   const [checkBoxOpen, setCheckBoxOpen] = useState<any>(false);
-
+  const [deteleLoading, setDeleteLoading] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
   function groupByDate(array: Array<any>) {
     const groupedByDate = array.reduce((result, obj) => {
       const dateKey = obj.createdAt.split("T")[0]; // Extract the date from the timestamp
@@ -84,13 +87,6 @@ const AttachmentDrawerMobile = ({
     }
   };
 
-  const getAcceptedForPreviewImageOrNot = (item: any) => {
-    return !(
-      item?.metadata?.type.includes("pdf") ||
-      item?.metadata?.type.includes("video") ||
-      item?.metadata?.type?.includes("image")
-    );
-  };
   useEffect(() => {
     setCheckBoxOpen(false);
     setSelectedItems([]);
@@ -154,7 +150,7 @@ const AttachmentDrawerMobile = ({
 
   //detele attachmeents
   const deleteSelectedImages = async () => {
-    setLoading(true);
+    setDeleteLoading(true);
 
     let response = await deleteTaskAttachmentService({
       token: accessToken,
@@ -166,10 +162,12 @@ const AttachmentDrawerMobile = ({
       toast.success(response?.message);
       setSelectedItems([]);
       getAllAttachments();
+
+      await getAllAttachmentsInView();
     } else {
       toast.error(response?.message);
     }
-    setLoading(false);
+    setDeleteLoading(false);
   };
 
   //checkbox handlechange event
@@ -189,12 +187,13 @@ const AttachmentDrawerMobile = ({
   };
 
   async function handleDownload() {
+    setDownloadLoading(true);
     const downloadPromises = selectedItems.map(
       (item: { url: string; metadata: { original_name: string } }) =>
         downloadFile(item?.url, item?.metadata?.original_name)
     );
     const results = await Promise.allSettled(downloadPromises);
-
+    setDownloadLoading(false);
     results.forEach((result) => {
       if (result.status === "fulfilled") {
         console.log("Download successful");
@@ -272,21 +271,35 @@ const AttachmentDrawerMobile = ({
                       gap: "0.5rem",
                     }}
                   >
-                    <IconButton onClick={() => handleDownload()}>
-                      <FileDownloadIcon />
-                    </IconButton>
+                    {downloadLoading ? (
+                      <CircularProgress
+                        sx={{ color: "#757575" }}
+                        size="1.2rem"
+                      />
+                    ) : (
+                      <IconButton onClick={() => handleDownload()}>
+                        <FileDownloadIcon />
+                      </IconButton>
+                    )}
 
                     <IconButton
                       className={styles.selectBtn}
                       onClick={() => deleteSelectedImages()}
                       sx={{ paddingBlock: "0" }}
                     >
-                      <ImageComponent
-                        src={"/mobileIcons/scouting/trash-simple-light.svg"}
-                        width={20}
-                        height={20}
-                        alt=""
-                      />
+                      {deteleLoading ? (
+                        <CircularProgress
+                          sx={{ color: "#757575" }}
+                          size="1.2rem"
+                        />
+                      ) : (
+                        <ImageComponent
+                          src={"/mobileIcons/scouting/trash-simple-light.svg"}
+                          width={20}
+                          height={20}
+                          alt=""
+                        />
+                      )}
                     </IconButton>
                   </div>
                 ) : (
@@ -383,31 +396,6 @@ const AttachmentDrawerMobile = ({
                               ""
                             )}
                           </div>
-                          {/* <div
-                            className={styles.viewIcon}
-                            onClick={() => {
-                              if (getAcceptedForPreviewImageOrNot(image)) {
-                                downLoadAttachements(
-                                  image?.url,
-                                  image?.metadata?.original_name
-                                );
-                                return;
-                              }
-                              setSingleImageView(true);
-                              setImageId(image);
-                            }}
-                          >
-                            <img
-                              src={
-                                getAcceptedForPreviewImageOrNot(image)
-                                  ? "/viewTaskIcons/download-white.svg"
-                                  : "/view-icon-task.svg"
-                              }
-                              height={30}
-                              width={30}
-                              alt="view"
-                            />
-                          </div> */}
                         </div>
                       );
                     })}

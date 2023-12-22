@@ -4,11 +4,17 @@ import TasksAttachments from "../AddTask/TasksAttachments";
 import styles from "./attachments-container.module.css";
 import { Drawer } from "@mui/material";
 import { useRouter } from "next/router";
-import AttachmentDrawerTaskmodule from "../AllTasks/TasksTable/AttachmentDrawer";
+import AttachmentDrawerMobile from "../AllTasks/TasksTable/AttachmentDrawerMobile";
 import { useSelector } from "react-redux";
 import TasksAttachmentsMobile from "../AddTask/TasksAttachments-mobile";
 
-const AttachmentsContainer = ({ attachmentData, getAllAttachments, status, hasEditAccess, data }: any) => {
+const AttachmentsContainer = ({
+  attachmentData,
+  getAllAttachments,
+  status,
+  hasEditAccess,
+  data,
+}: any) => {
   const router = useRouter();
 
   const loggedInUserId = useSelector(
@@ -49,68 +55,67 @@ const AttachmentsContainer = ({ attachmentData, getAllAttachments, status, hasEd
           className={styles.attachmentView}
           onClick={() => setAttachmentDrawer(true)}
         >
-          View  All
+          View All
         </label>
       </div>
       <div className={styles.files}>
         <div className={styles.attachmentsrow}>
           {attachmentData?.length
             ? attachmentData
-              .map((item: TaskAttachmentsType | any, index: number) => {
-                return (
-                  <div className={styles.eachImageBlock} key={index}>
-                    {item?.metadata?.type.includes("pdf") ? (
-                      <img
-                        src="/pdf-icon.png"
-                        className={styles.imageIcon}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type.includes("csv") ? (
-                      <img
-                        src="/csv-icon.png"
-                        className={styles.imageIcon}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type ==
-                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                      item?.metadata?.type.includes("xlsx") ? (
-                      <img
-                        src="/google-sheets-icon.webp"
-                        className={styles.imageIcon}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type.includes("doc") ||
-                      item?.metadata?.type.includes("docx") ? (
-                      <img
-                        src="/doc-icon.webp"
-                        className={styles.imageIcon}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type.includes("video") ? (
-                      <img
-                        src="/video-icon.png"
-                        className={styles.imageIcon}
-                        alt={""}
-                      />
-                    ) : (
-                      <img
-                        src={
-                          item?.metadata?.type?.includes("image")
-                            ? item.url
-                            : "/other_icon.png"
-                        }
-                        alt={""}
-                        className={styles.imageIcon}
-                      />
-                    )}
-                  </div>
-
-                );
-              })
+                ?.slice(0, 6)
+                .map((item: TaskAttachmentsType | any, index: number) => {
+                  return (
+                    <div className={styles.eachImageBlock} key={index}>
+                      {item?.metadata?.type.includes("pdf") ? (
+                        <img
+                          src="/pdf-icon.png"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type.includes("csv") ? (
+                        <img
+                          src="/csv-icon.png"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type ==
+                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                        item?.metadata?.type.includes("xlsx") ? (
+                        <img
+                          src="/google-sheets-icon.webp"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type.includes("doc") ||
+                        item?.metadata?.type.includes("docx") ? (
+                        <img
+                          src="/doc-icon.webp"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : item?.metadata?.type.includes("video") ? (
+                        <img
+                          src="/video-icon.png"
+                          className={styles.imageIcon}
+                          alt={""}
+                        />
+                      ) : (
+                        <img
+                          src={
+                            item?.metadata?.type?.includes("image")
+                              ? item.url
+                              : "/other_icon.png"
+                          }
+                          alt={""}
+                          className={styles.imageIcon}
+                        />
+                      )}
+                    </div>
+                  );
+                })
             : "No Attachments"}
         </div>
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
-
           <>
             <div style={{ width: "100%" }}>
               <TasksAttachmentsMobile
@@ -128,7 +133,7 @@ const AttachmentsContainer = ({ attachmentData, getAllAttachments, status, hasEd
         )}
       </div>
 
-      <AttachmentDrawerTaskmodule
+      <AttachmentDrawerMobile
         attachmentDrawerClose={() => setAttachmentDrawer(false)}
         rowDetails={{ _id: router.query.task_id }}
         setAttachmentDrawer={setAttachmentDrawer}

@@ -299,18 +299,18 @@ const ViewTaskComponent = () => {
                     },
                 }}
             >
-                <div>
-                    <Typography>Select Members</Typography>
+                <div style={{ paddingBlock: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <Typography style={{ fontSize: "clamp(14px, 3vw, 16px)", fontFamily: "'Inter', sans-serif", fontWeight: "500" }}>Select Members</Typography>
                     <IconButton
-                        sx={{ marginLeft: '95%' }}
+
                         onClick={() => {
                             setUsersDrawerOpen(false);
                         }}
                     >
-                        <CloseIcon />
+                        <CloseIcon sx={{ color: "#000" }} />
                     </IconButton>
                 </div>
-                <div style={{ padding: "1rem", paddingTop: "0" }}>
+                <div >
                     <AddAssigneeMembers
                         userId={userId}
                         assignee={assignee}
@@ -321,8 +321,9 @@ const ViewTaskComponent = () => {
 
                         }}
                     />
-                    <div >
+                    <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "0.8rem" }}>
                         <Button
+                            sx={{ color: "#05A155", border: "1px solid #05A155", textTransform: "capitalize", fontFamily: "'Inter', sans-serif" }}
                             onClick={() => {
                                 addAssignee();
                             }}

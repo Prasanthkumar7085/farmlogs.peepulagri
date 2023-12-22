@@ -192,53 +192,7 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
           )}
         </div>
       </div>
-      <div className={styles.TabButtonGrp}>
-        <Button
-          className={
-            router.query.is_my_task == "true"
-              ? styles.tabButton
-              : styles.tabActiveButton
-          }
-          onClick={() => {
-            if (router.query.is_my_task == "true") {
-              return;
-            }
-            setUser([]);
-            setSelectedUsers([]);
-            onUserChange([userId], true);
-          }}
-        >
-          My Tasks
-        </Button>
-        <Button
-          className={
-            router.query.is_my_task !== "true"
-              ? styles.tabButton
-              : styles.tabActiveButton
-          }
-          onClick={() => {
-            if (!(router.query.is_my_task == "true")) {
-              return;
-            }
-            setUser([]);
-            setSelectedUsers([]);
 
-            getAllTasks({
-              page: router.query.page as string,
-              limit: router.query.limit as string,
-              search_string: searchString,
-              sortBy: router.query.order_by as string,
-              sortType: router.query.order_type as string,
-              selectedFarmId: router.query.farm_id as string,
-              status: router.query.status as string,
-              userId: [],
-              isMyTasks: false,
-            });
-          }}
-        >
-          All Tasks
-        </Button>
-      </div>
 
       {/* <div style={{ width: "80%" }}>
         {isSearchOpenOrNot ? (

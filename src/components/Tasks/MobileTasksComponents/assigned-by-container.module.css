@@ -87,6 +87,9 @@
   text-transform: capitalize !important;
   font-size: clamp(12px, 2.5vw, 14px) !important;
   font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
 }
 
 .addAssigneeBtn:hover {

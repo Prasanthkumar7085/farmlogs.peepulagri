@@ -136,7 +136,7 @@ const AddAssigneeMembers = ({
                 ""
             )}
             {loading ? <LinearProgress sx={{ height: "2px", color: "blue" }} /> : ""}
-            <div>
+            <div style={{ marginTop: "1rem", display: "flex", flexWrap: "wrap", height: "235px", overflowY: "auto" }}>
                 {usersArray?.map((user: any) => (
                     <Chip
                         key={user._id}
@@ -148,7 +148,7 @@ const AddAssigneeMembers = ({
                             setUsersArray(updatedUsers);
                             onChange(updatedUsers);
                         }}
-                        style={{ marginRight: "5px" }}
+                        style={{ marginRight: "6px", marginBottom: "6px" }}
                     />
                 ))}
             </div>

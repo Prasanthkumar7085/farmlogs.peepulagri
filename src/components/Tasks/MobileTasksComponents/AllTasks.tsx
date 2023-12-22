@@ -1,6 +1,6 @@
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import { FarmInTaskType } from "@/types/tasksTypes";
-import { IconButton } from "@mui/material";
+import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
+import { Button, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -39,6 +39,9 @@ const AllTasks = () => {
   const [searchString, setSearchString] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [selectedFarm, setSelectedFarm] = useState<FarmInTaskType | null>();
+  const userId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
+  );
   const [, , removeCookie] = useCookies(["userType"]);
   const [, , loggedIn] = useCookies(["loggedIn"]);
 
@@ -212,7 +215,7 @@ const AllTasks = () => {
             ? (router.query.assign_to as string[])
             : ([router.query.assign_to] as string[])
           : [],
-      isMyTasks: router.query?.is_my_task as string,
+        isMyTasks: router.query?.is_my_task as string,
       });
     }
   };
@@ -295,6 +298,11 @@ const AllTasks = () => {
     [loading, hasMore]
   );
 
+  const [user, setUser] = useState<userTaskType[] | null>([]);
+  const [selectedUsers, setSelectedUsers] = useState<
+    { name: string; _id: string }[] | null
+  >();
+
   return (
     <div>
       <TaskHeader
@@ -304,6 +312,54 @@ const AllTasks = () => {
         getAllTasks={getAllTasks}
       />
       <div className={styles.allTasksPage}>
+        <div className={styles.TabButtonGrp}>
+          <Button
+            className={
+              router.query.is_my_task !== "true"
+                ? styles.tabActiveButton
+                : styles.tabButton
+            }
+            onClick={() => {
+              if (!(router.query.is_my_task == "true")) {
+                return;
+              }
+              setUser([]);
+              setSelectedUsers([]);
+
+              getAllTasks({
+                page: router.query.page as string,
+                limit: router.query.limit as string,
+                search_string: searchString,
+                sortBy: router.query.order_by as string,
+                sortType: router.query.order_type as string,
+                selectedFarmId: router.query.farm_id as string,
+                status: router.query.status as string,
+                userId: [],
+                isMyTasks: false,
+              });
+            }}
+          >
+            All Tasks
+          </Button>
+          <Button
+            className={
+              router.query.is_my_task == "true"
+                ? styles.tabActiveButton
+                : styles.tabButton
+            }
+            onClick={() => {
+              if (router.query.is_my_task == "true") {
+                return;
+              }
+              setUser([]);
+              setSelectedUsers([]);
+              onUserChange([userId], true);
+            }}
+          >
+            My Tasks
+          </Button>
+
+        </div>
         {/* <ListHeader onDateChange={onDateChange} /> */}
         <Tabs onStatusChange={onStatusChange} />
         <TaskCard

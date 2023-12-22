@@ -11,7 +11,7 @@ const ActivityContainer = () => {
   const [openLogs, setOpenLogs] = useState(false);
   return (
     <div className={styles.activitycontainer}>
-      <label className={styles.activity}><Button
+      <Button className={styles.viewLogsBtn}
 
         onClick={() => setOpenLogs((prev) => !prev)}
       >
@@ -21,7 +21,7 @@ const ActivityContainer = () => {
           alt=""
           width={"15px"}
         />
-      </Button></label>
+      </Button>
       <ViewMobileLogs
         openLogs={openLogs}
         setOpenLogs={setOpenLogs}

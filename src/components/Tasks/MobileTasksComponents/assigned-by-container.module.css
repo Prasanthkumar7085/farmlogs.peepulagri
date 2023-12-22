@@ -1,6 +1,21 @@
 .assignedBy {
-  cursor: pointer;
-  align-self: stretch;
+  color: #6A7185;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 2.5vw, 12px);
+  font-weight: 500;
+  line-height: 100%;
+  margin: 0;
+}
+
+.assignedToHeading {
+  color: #6A7185;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 2.5vw, 12px);
+  font-weight: 500;
+  margin: 0;
+}
+
+.assigneeName {
   color: #6A7185;
   font-family: 'Inter', sans-serif;
   font-size: clamp(11px, 2.5vw, 12px);
@@ -51,4 +66,41 @@
   gap: 12px;
   padding-block: 1rem;
   border-bottom: 1px solid #E9EDF1;
+}
+
+/* assigned to stylings */
+.assignedTocontainer {
+  padding-block: 1rem;
+  border-bottom: 1px solid #E9EDF1;
+}
+
+.assignToHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addAssigneeBtn {
+  padding: 0 !important;
+  min-width: inherit !important;
+  color: #05A155 !important;
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 2.5vw, 14px) !important;
+  font-weight: 500 !important;
+}
+
+.addAssigneeBtn:hover {
+  padding: 0 !important;
+  min-width: inherit !important;
+  color: #05A155 !important;
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 2.5vw, 14px) !important;
+  font-weight: 500 !important;
+}
+
+.allAssignysList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  margin-top: 1rem;
 }

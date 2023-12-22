@@ -3,6 +3,7 @@ import styles from "src/components/Tasks/MobileTasksComponents/assigned-by-conta
 import { Avatar, Button, IconButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector } from "react-redux";
+import Image from "next/image";
 
 const AssignedToContainer = ({ setUsersDrawerOpen, assignee, hasEditAccess, data, status }: any) => {
 
@@ -12,64 +13,65 @@ const AssignedToContainer = ({ setUsersDrawerOpen, assignee, hasEditAccess, data
 
     return (
         <div className={styles.assignedTocontainer}>
-            <label className={styles.assignedBy}>Assigned To</label>
-            {loggedInUserId == data?.created_by?._id ||
-                hasEditAccess ? (
-                <Button
-                    disabled={
-                        status === "DONE" &&
-                        !(loggedInUserId == data?.created_by?._id)
-                    }
-                    onClick={() => setUsersDrawerOpen(true)}
-                >
-                    {" "}
-                    <img
-                        src="/viewTaskIcons/plus-icon.svg"
-                        alt=""
-                        width="15px"
-                        height="15px"
-                    />{" "}
-                    Add
-                </Button>
-            ) : (
-                ""
-            )}
-            {assignee
-                ? assignee.map(
-                    (
-                        item: { _id: string; name: string },
-                        index: number
-                    ) => {
-                        console.log(item);
+            <div className={styles.assignToHeader}>
 
-                        return (
-                            <div className={styles.persondetails} key={index}>
-                                <div className={styles.profile}>
-                                    <h1 className={styles.jd}>
-                                        <Avatar
-                                            sx={{
-                                                fontSize: "6px",
-                                                width: "18px",
-                                                height: "18px",
-                                                background: 'red',
-                                            }}
-                                        >
-                                            {item.name.split(" ")?.length > 1
-                                                ? `${item.name.split(" ")[0][0]}${item.name.split(" ")[1][0]
-                                                    }`.toUpperCase()
-                                                : item.name.slice(0, 2)?.toUpperCase()}
-                                        </Avatar>
-                                    </h1>
+                <p className={styles.assignedToHeading}>Assigned To</p>
+                {loggedInUserId == data?.created_by?._id ||
+                    hasEditAccess ? (
+                    <Button
+                        className={styles.addAssigneeBtn}
+                        disabled={
+                            status === "DONE" &&
+                            !(loggedInUserId == data?.created_by?._id)
+                        }
+                        onClick={() => setUsersDrawerOpen(true)}
+                    >
+                        <Image
+                            src="/viewTaskIcons/plus-icon-green.svg"
+                            alt=""
+                            width={12}
+                            height={12}
+                        />
+                        Add
+                    </Button>
+                ) : (
+                    ""
+                )}
+            </div>
+            <div className={styles.allAssignysList}>
+                {assignee
+                    ? assignee.map(
+                        (
+                            item: { _id: string; name: string },
+                            index: number
+                        ) => {
+                            console.log(item);
+
+                            return (
+                                <div className={styles.persondetails} key={index}>
+                                    <Avatar
+                                        sx={{
+                                            fontSize: "9px",
+                                            width: "20px",
+                                            height: "20px",
+                                            background: 'red',
+                                        }}
+                                    >
+                                        {item.name.split(" ")?.length > 1
+                                            ? `${item.name.split(" ")[0][0]}${item.name.split(" ")[1][0]
+                                                }`.toUpperCase()
+                                            : item.name.slice(0, 2)?.toUpperCase()}
+                                    </Avatar>
+                                    <p className={styles.assigneeName}>
+                                        {item?.name}
+                                    </p>
+
                                 </div>
-                                <p className={styles.johnDukes}>
-                                    {item?.name}
-                                </p>
-
-                            </div>
-                        );
-                    }
-                )
-                : "-"}
+                            );
+                        }
+                    )
+                    : "-"}
+            </div>
 
         </div>
     );

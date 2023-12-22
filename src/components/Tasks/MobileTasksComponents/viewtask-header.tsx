@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Button, Icon, IconButton } from "@mui/material";
+import { Button, Icon, IconButton, Typography } from "@mui/material";
 import styles from "src/components/Tasks/MobileTasksComponents/componentsHeader.module.css";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -11,19 +11,16 @@ const ViewtaskHeader = () => {
     <header className={styles.header}>
       <div className={styles.actions}>
         <IconButton
-          // className={styles.dotsThreeOutlineVerticalFi}
-          // sx={{ width: 24 }}
-          // color="primary"
-          // variant="outlined"
+
           onClick={() => router.back()}
-        ><ArrowBackIcon /> </IconButton>
+        ><img alt=""
+          src="/arrowdownbold-1@2x.png" width="24px" /> </IconButton>
+        <p className={styles.headerTitle}>View Task</p>
         <IconButton
-        // className={styles.dotsThreeOutlineVerticalFi}
-        // sx={{ width: 24 }}
-        // color="primary"
-        // variant="outlined"
-        ><MoreVertIcon /></IconButton>
+        ><MoreVertIcon sx={{ color: "#fff" }} /></IconButton>
       </div>
+
+
     </header>
   );
 };

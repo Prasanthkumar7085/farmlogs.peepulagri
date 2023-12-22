@@ -13,9 +13,18 @@
 }
 
 .header {
-  /* background-color: #fff; */
+  background-color: #45a845;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   padding: 16px 16px 8px;
+}
+
+.headerTitle {
+  margin: 0;
+  font-size: clamp(16px, 3vw, 16px);
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  color: #fff;
+  line-height: 100%;
 }

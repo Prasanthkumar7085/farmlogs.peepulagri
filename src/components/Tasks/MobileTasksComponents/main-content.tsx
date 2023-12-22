@@ -94,7 +94,7 @@ const MainContent = ({
           </div>
         )}
         {editField == "title" && editFieldOrNot ? (
-          <div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem" }}>
             <IconButton
               sx={{ padding: "0" }}
               onClick={() => {
@@ -216,7 +216,6 @@ const MainContent = ({
 
           </div>
 
-          {/* <p className={styles.farmname}>SpiceVine Gardens</p> */}
         </div>
         <Menu
           id="fade-menu"

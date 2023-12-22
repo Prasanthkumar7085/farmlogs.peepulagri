@@ -29,7 +29,7 @@ const DescriptionContainer = ({
   return (
     <div className={styles.descriptioncontainer}>
       <label className={styles.description}>Description</label>
-      <div>
+      <div style={{ width: "100%" }}>
         {editField == "description" && editFieldOrNot ? (
           <TextField
             multiline
@@ -81,7 +81,7 @@ const DescriptionContainer = ({
           </div>
         )}
         {editField == "description" && editFieldOrNot ? (
-          <div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem", width: "100%", marginTop: "1rem" }}>
             <IconButton
               sx={{ padding: "0" }}
               onClick={() => {

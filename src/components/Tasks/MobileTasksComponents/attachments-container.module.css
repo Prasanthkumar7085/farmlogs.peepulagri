@@ -1,7 +1,16 @@
 .attachments {
-
   line-height: 100%;
   font-weight: 500;
+  font-size: clamp(12px, 2.5vw, 14px);
+  font-family: "Inter", sans-serif;
+}
+
+.attachmentView {
+  font-size: clamp(12px, 2.5vw, 14px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #45a845;
+  cursor: pointer;
 }
 
 .imageIcon {

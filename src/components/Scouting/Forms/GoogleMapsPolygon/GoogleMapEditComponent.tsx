@@ -70,7 +70,7 @@ const GoogleMapEditComponent = () => {
 
         });
 
-        google.maps.event.addListener(newPolygon, 'mouseup', () => {
+        maps.event.addListener(newPolygon, 'mouseup', () => {
             const updatedCoords = newPolygon.getPath().getArray().map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
             console.log(updatedCoords, "piu");
             setPolygonCoords(updatedCoords);

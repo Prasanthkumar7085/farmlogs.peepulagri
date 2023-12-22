@@ -62,7 +62,7 @@ const AllTasks = () => {
     createdAt = "",
     status = "ALL",
     userId = [],
-    isMyTasks = false,
+    isMyTasks = "",
   }: Partial<ApiCallProps>) => {
     setLoading(true);
     let queryParams: any = {};
@@ -194,6 +194,7 @@ const AllTasks = () => {
             ? (router.query.assign_to as string[])
             : ([router.query.assign_to] as string[])
           : [],
+        isMyTasks: router.query?.is_my_task as string,
       });
     } else {
       setSelectedFarm(null);
@@ -211,6 +212,7 @@ const AllTasks = () => {
             ? (router.query.assign_to as string[])
             : ([router.query.assign_to] as string[])
           : [],
+      isMyTasks: router.query?.is_my_task as string,
       });
     }
   };
@@ -230,6 +232,7 @@ const AllTasks = () => {
           ? (router.query.assign_to as string[])
           : ([router.query.assign_to] as string[])
         : [],
+      isMyTasks: router.query?.is_my_task as string,
     });
   };
 
@@ -294,7 +297,12 @@ const AllTasks = () => {
 
   return (
     <div>
-      <TaskHeader onChangeSearch={onChangeSearch} searchString={searchString} onUserChange={onUserChange} getAllTasks={getAllTasks} />
+      <TaskHeader
+        onChangeSearch={onChangeSearch}
+        searchString={searchString}
+        onUserChange={onUserChange}
+        getAllTasks={getAllTasks}
+      />
       <div className={styles.allTasksPage}>
         {/* <ListHeader onDateChange={onDateChange} /> */}
         <Tabs onStatusChange={onStatusChange} />

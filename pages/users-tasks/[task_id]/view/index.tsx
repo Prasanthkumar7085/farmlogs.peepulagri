@@ -4,7 +4,7 @@ import ViewTaskComponent from "@/components/Tasks/MobileTasksComponents/ViewTask
 const ViewPage = () => {
 
     return (
-        <div>
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             <ViewTaskComponent />
         </div>
     );

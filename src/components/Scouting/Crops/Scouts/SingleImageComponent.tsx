@@ -1,7 +1,7 @@
 import EditTagsForSingleAttachment from "@/components/Core/EditTagsForSingleAttachment";
 import ImageComponent from "@/components/Core/ImageComponent";
 import ShowMoreInViewAttachmentDetails from "@/components/Core/ShowMoreInViewAttachmentDetails";
-import { Button, Chip, IconButton, Typography } from "@mui/material";
+import { Avatar, Button, Chip, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
@@ -14,12 +14,14 @@ import timePipe from "@/pipes/timePipe";
 interface componentProps {
   detailedImage: any;
   scoutDetails: any;
-  getImageData: any;
+  afterAddingTags: any;
+  lastItemRef: any;
 }
 const SingleImageComponent: FC<componentProps> = ({
   detailedImage,
   scoutDetails,
-  getImageData,
+  afterAddingTags,
+  lastItemRef
 }) => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -35,11 +37,15 @@ const SingleImageComponent: FC<componentProps> = ({
   const tagsDrawerClose = (value: any) => {
     if (value == false) {
       setTagsDrawerEditOpen(false);
+      afterAddingTags(true);
+
     }
   };
   const drawerClose = (value: any) => {
     if (value == false) {
       setOpenCommentsBox(false);
+      afterAddingTags(true);
+
       // setSelectedItems([]);
     }
   };
@@ -80,7 +86,6 @@ const SingleImageComponent: FC<componentProps> = ({
         toast.success(responseData?.message);
         setTagsDrawerEditOpen(false);
         toast.success(responseData?.message);
-        await getImageData();
       } else {
         toast.error(responseData?.message);
       }
@@ -92,10 +97,21 @@ const SingleImageComponent: FC<componentProps> = ({
   };
 
   return (
-    <div style={{ paddingTop: "1rem" }} >
-      <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem" }}>
-        <img src="/viewTaskIcons/calender-icon.svg" alt="icon" />
-        {timePipe(detailedImage?.uploaded_at, "DD MMM YY hh:mm A")}</Typography>
+    <div style={{ paddingTop: "1rem" }}
+      ref={TagsDrawerEditOpen ? lastItemRef : null}>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+        <Avatar>{detailedImage?.uploaded_by?.name.slice(0, 2).toUpperCase()}</Avatar>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+          <div>{detailedImage?.uploaded_by?.name}</div>
+          <div>
+            <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem" }}>
+              <img src="/viewTaskIcons/calender-icon.svg" alt="icon" />
+              {timePipe(detailedImage?.uploaded_at, "DD MMM YY hh:mm A")}</Typography>
+          </div>
+        </div>
+      </div>
+
       <div style={{ height: "60vh", background: "#000" }}>
 
         <img

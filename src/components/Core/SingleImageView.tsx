@@ -184,6 +184,14 @@ const SingleImageView: FC<componentProps> = ({
       getInstaScrollImageDetails(router.query.image_id);
     }
   }, [router.isReady, accessToken, router.query.image_id]);
+
+  const afterAddingTags = async (value: any) => {
+    console.log("sd")
+    if (value) {
+      await getInstaScrollImageDetails(router.query.image_id);
+      scrollToLastItem()
+    }
+  }
   return (
     <div>
       <div>
@@ -241,8 +249,8 @@ const SingleImageView: FC<componentProps> = ({
                   <SingleImageComponent
                     detailedImage={image}
                     scoutDetails={data}
-                    getImageData={""}
-                  />
+                    afterAddingTags={afterAddingTags}
+                    lastItemRef={lastItemRef} />
                   {/* <div className={styles.ButtonGrp}>
                     <IconButton
                       sx={{ borderRadius: "25px 0 0 25px" }}
@@ -322,7 +330,8 @@ const SingleImageView: FC<componentProps> = ({
                   <SingleImageComponent
                     detailedImage={image}
                     scoutDetails={data}
-                    getImageData={""}
+                    afterAddingTags={afterAddingTags}
+                    lastItemRef={lastItemRef}
                   />
                 </div>
               );

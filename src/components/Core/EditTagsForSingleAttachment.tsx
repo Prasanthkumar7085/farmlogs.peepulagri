@@ -107,6 +107,7 @@ const EditTagsForSingleAttachment = ({
         className={styles.updateSubmitBtn}
         onClick={() => {
           setTagsDrawerEditOpen(false);
+          tagsDrawerClose(false)
         }}
       >
         {loading ? (

@@ -145,7 +145,7 @@ const SingleImageView: FC<componentProps> = ({
       );
       const responseData = await response.json();
       if (responseData.success) {
-        if (responseData?.data.length !== 1) {
+        if (responseData?.data.length !== 0) {
           setHasMore(true);
           if (data?.length) {
             let temp = [...data, ...responseData?.data.slice(1,)]
@@ -155,7 +155,7 @@ const SingleImageView: FC<componentProps> = ({
             setData(uniqueObjects);
           }
           else {
-            let temp = [...data, ...responseData?.data]
+            let temp = [...responseData?.data]
             const uniqueObjects = Array.from(
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );

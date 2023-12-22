@@ -228,7 +228,7 @@ const ViewTaskComponent = () => {
     const handleCalenderClose = () => setCalenderOpen(false);
 
     return (
-        <div>
+        <div style={{ background: "#fff" }}>
             <ViewtaskHeader />
             <div style={{ padding: "1rem" }}>
                 <MainContent

@@ -3,14 +3,23 @@
   align-self: stretch;
   position: relative;
 }
+
 .description {
-  cursor: pointer;
-  line-height: 100%;
+  color: #6A7185;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13px, 2.5vw, 14px);
   font-weight: 500;
+  line-height: 100%;
 }
-.preparingLandFor {
+
+.descriptionText {
   margin: 0;
-  font-size: 14px;
+  color: #6A7185;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 2vw, 13px);
+  font-weight: 500;
+  line-height: 100%;
+
   line-height: 140%;
   color: #35353d;
   display: -webkit-inline-box;
@@ -19,6 +28,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+
 .descriptioncontainer {
   align-self: stretch;
   display: flex;
@@ -26,8 +36,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 12px;
-  text-align: left;
-  font-size: 12px;
-  color: #6a7185;
-  font-family: Inter;
+  padding-block: 1rem;
+  border-bottom: 1px solid #E9EDF1;
+
 }

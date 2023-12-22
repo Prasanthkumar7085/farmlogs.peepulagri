@@ -1,26 +1,23 @@
 .attachments {
-  cursor: pointer;
-  align-self: stretch;
-  position: relative;
+
   line-height: 100%;
   font-weight: 500;
 }
+
 .imageIcon {
-  flex: 1;
-  border-radius: 2px;
-  max-width: 100%;
-  overflow: hidden;
-  height: 62px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
+  border-radius: 2px;
 }
+
 .attachmentsrow {
-  align-self: stretch;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+  overflow-x: auto;
+  max-width: 100%;
   gap: 6px;
 }
+
 .attachfile,
 .attachmentscontainer,
 .files {
@@ -29,16 +26,35 @@
   align-items: center;
   justify-content: flex-start;
 }
+
 .attachmentscontainer,
 .files {
   align-self: stretch;
   align-items: flex-start;
   gap: 16px;
 }
+
 .attachmentscontainer {
   gap: 12px;
-  text-align: left;
-  font-size: 12px;
-  color: #6a7185;
-  font-family: Inter;
+  padding-block: 1rem;
+  border-bottom: 1px solid #E9EDF1;
+}
+
+.eachImageBlock {
+
+  /* border-radius: 2px; */
+}
+
+.attachmentsrow::-webkit-scrollbar {
+  background: transparent;
+  width: 3px;
+  height: 3px;
+}
+
+.attachmentsrow::-webkit-scrollbar:hover {
+  opacity: 1;
+}
+
+.attachmentsrow:hover::-webkit-scrollbar-thumb {
+  background: rgb(198, 198, 198);
 }

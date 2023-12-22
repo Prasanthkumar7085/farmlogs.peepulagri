@@ -51,14 +51,13 @@ const DescriptionContainer = ({
             {status !== "DONE" &&
               loggedInUserId == data?.created_by?._id ? (
               <p
-                className={styles.preparingLandFor}
+                className={styles.descriptionText}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   setEditFieldOrNot(true);
                   setEditField("description");
                 }}
               >
-                {" "}
                 {data?.description ? (
                   <Markup
                     content={getDescriptionData(data?.description)}
@@ -68,8 +67,8 @@ const DescriptionContainer = ({
                 )}
               </p>
             ) : (
-              <p className={styles.preparingLandFor}>
-                {" "}
+              <p className={styles.descriptionText}>
+
                 {data?.description ? (
                   <Markup
                     content={getDescriptionData(data?.description)}

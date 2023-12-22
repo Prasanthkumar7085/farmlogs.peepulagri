@@ -61,15 +61,11 @@ const MainContent = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <ErrorMessages
-              errorMessages={errorMessages}
-              keyname="title"
-            />
+            <ErrorMessages errorMessages={errorMessages} keyname="title" />
           </div>
         ) : (
           <div className={styles.titleBlock}>
-            {status !== "DONE" &&
-              loggedInUserId == data?.created_by?._id ? (
+            {status !== "DONE" && loggedInUserId == data?.created_by?._id ? (
               <h6
                 className={styles.title}
                 style={{ cursor: "pointer" }}
@@ -79,22 +75,27 @@ const MainContent = ({
                 }}
               >
                 {data?.title
-                  ? data?.title.slice(0, 1).toUpperCase() +
-                  data?.title.slice(1)
+                  ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
                   : "-"}
               </h6>
             ) : (
               <h6 className={styles.title}>
                 {data?.title
-                  ? data?.title.slice(0, 1).toUpperCase() +
-                  data?.title.slice(1)
+                  ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
                   : "-"}
               </h6>
             )}
           </div>
         )}
         {editField == "title" && editFieldOrNot ? (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: "0.5rem",
+            }}
+          >
             <IconButton
               sx={{ padding: "0" }}
               onClick={() => {
@@ -102,11 +103,7 @@ const MainContent = ({
                 setEditFieldOrNot(false);
               }}
             >
-              <img
-                src="/viewTaskIcons/cancel-icon.svg"
-                alt=""
-                width={"20px"}
-              />
+              <img src="/viewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
             </IconButton>
 
             <IconButton
@@ -127,31 +124,34 @@ const MainContent = ({
         )}
 
         <div className={styles.container}>
-
           <p
             className={styles.statusSelect}
             style={{
               cursor:
                 status !== "DONE" &&
-                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                (loggedInUserId == data?.created_by?._id || hasEditAccess)
                   ? "pointer"
                   : "default",
             }}
             onClick={(e) =>
               status !== "DONE" &&
-                (loggedInUserId == data?.created_by?._id || hasEditAccess)
+              (loggedInUserId == data?.created_by?._id || hasEditAccess)
                 ? handleClick(e)
                 : ""
             }
           >
             <span>
-
               {data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                  ?.title
+                    ?.title
                 : ""}
             </span>
-            <KeyboardArrowDownIcon sx={{ fontSize: "1rem" }} />
+            {status !== "DONE" &&
+            (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
+              <KeyboardArrowDownIcon sx={{ fontSize: "1rem" }} />
+            ) : (
+              ""
+            )}
           </p>
           {/* <p className={styles.dueDate}>Due Date</p> */}
           <div className={styles.datePicker} style={{ display: "flex" }}>
@@ -159,7 +159,6 @@ const MainContent = ({
               onClick={handleCalenderOpen}
               src="/viewTaskIcons/calender-icon.svg"
               alt=""
-
             />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <MobileDatePicker
@@ -169,7 +168,7 @@ const MainContent = ({
                 sx={{
                   width: "100%",
                   "& .MuiButtonBase-root": {
-                    lineHeight: "0 !important"
+                    lineHeight: "0 !important",
                   },
 
                   "& .MuiInputBase-root::before": {
@@ -178,9 +177,9 @@ const MainContent = ({
                   "& .MuiInputBase-root::after": {
                     borderBottom: "0 !important",
                   },
-                  '& .MuiInputBase-input': {
-                    padding: "0"
-                  }
+                  "& .MuiInputBase-input": {
+                    padding: "0",
+                  },
                 }}
                 disablePast
                 value={new Date(deadlineString)}
@@ -213,9 +212,7 @@ const MainContent = ({
                 }}
               />
             </LocalizationProvider>
-
           </div>
-
         </div>
         <Menu
           id="fade-menu"

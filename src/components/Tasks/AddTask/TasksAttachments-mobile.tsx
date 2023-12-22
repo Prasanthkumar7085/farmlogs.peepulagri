@@ -46,23 +46,25 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
-  const [loading, setLoading] = useState<any>();
-  const [imageTypeArray, setImageTypeArray] = useState(['application/pdf',
-    'application/docx',
-    'application/doc',
-    'application/txt',
-    'application/xlsx',
-    'application/csv',
-    'text/plain',
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/svg',
-    'image/webp',
-    'video/webm',
-    'video/mp4',
-    'application/msword',
-    'text/csv']);
+  const [loading, setLoading] = useState(false);
+  const [imageTypeArray, setImageTypeArray] = useState([
+    "application/pdf",
+    "application/docx",
+    "application/doc",
+    "application/txt",
+    "application/xlsx",
+    "application/csv",
+    "text/plain",
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/svg",
+    "image/webp",
+    "video/webm",
+    "video/mp4",
+    "application/msword",
+    "text/csv",
+  ]);
   // let tempFilesStorage: any = [...attachments];
 
   // let previewStorage = [...previewImages];
@@ -79,10 +81,6 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     }
   }, [attachments, previewImages]);
 
-  // useEffect(() => {
-  //   if (tempFilesStorage) {
-  //   }
-  // }, [tempFilesStorage]);
 
   const generateThumbnail = (file: any, index: any) => {
     if (file) {

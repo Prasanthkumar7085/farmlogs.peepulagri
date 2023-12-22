@@ -29,8 +29,14 @@
     background: rgb(198, 198, 198);
 }
 
-/* tack modules attachmentments drawer styles */
+/* task modules attachmentments drawer styles */
 .attachmentDrawer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 0.5rem;
+}
+/* task modules Mobile attachmentments drawer styles */
+.attachmentDrawerMobile {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 0.5rem;

@@ -34,7 +34,7 @@ const SingleImageView: FC<componentProps> = ({
   const [openCommentsBox, setOpenCommentsBox] = useState<any>(false);
   const [showMoreSuggestions, setShowMoreSuggestions] = useState<any>(false);
   const [updateAttachmentLoading, setUpdateAttachmentLoading] = useState(false);
-  const [hasMore, setHasMore] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState<any>(false);
   const [, , removeCookie] = useCookies(["userType_v2"]);
@@ -120,7 +120,7 @@ const SingleImageView: FC<componentProps> = ({
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore && data.length > 0) {
+        if (entries[0].isIntersecting && hasMore) {
           getInstaScrollImageDetails(data[data?.length - 1]?._id)
           scrollToLastItem(); // Restore scroll position after new data is loaded
         }
@@ -140,34 +140,36 @@ const SingleImageView: FC<componentProps> = ({
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/10`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/20`,
         options
       );
       const responseData = await response.json();
       if (responseData.success) {
-        if (responseData?.data.length !== 0) {
-          setHasMore(true);
+        if (responseData?.has_more) {
           if (data?.length) {
-            let temp = [...data, ...responseData?.data.slice(1,)]
+            setHasMore(responseData?.has_more);
+            let temp = [...data, ...responseData?.data]
+            console.log(temp, "oo")
             const uniqueObjects = Array.from(
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );
+            console.log(uniqueObjects, "un")
             setData(uniqueObjects);
           }
           else {
+            setHasMore(responseData?.has_more);
             let temp = [...responseData?.data]
             const uniqueObjects = Array.from(
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );
-            setData(uniqueObjects);
+            setData(temp);
           }
-        } else {
+
+        }
+
+        else {
           setHasMore(false);
-          let temp = [...data, ...responseData?.data]
-          const uniqueObjects = Array.from(
-            temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
-          );
-          setData(uniqueObjects);
+          setData(responseData?.data);
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -186,7 +188,6 @@ const SingleImageView: FC<componentProps> = ({
   }, [router.isReady, accessToken, router.query.image_id]);
 
   const afterAddingTags = async (value: any) => {
-    console.log("sd")
     if (value) {
       await getInstaScrollImageDetails(router.query.image_id);
       scrollToLastItem()
@@ -251,36 +252,7 @@ const SingleImageView: FC<componentProps> = ({
                     scoutDetails={data}
                     afterAddingTags={afterAddingTags}
                     lastItemRef={lastItemRef} />
-                  {/* <div className={styles.ButtonGrp}>
-                    <IconButton
-                      sx={{ borderRadius: "25px 0 0 25px" }}
-                      className={styles.singleBtn}
-                      onClick={() => {
-                        captureImageDilogOptions("tag");
-                      }}
-                    >
-                      <Image
-                        src={"/mobileIcons/scouting/tag-light.svg"}
-                        width={25}
-                        height={25}
-                        alt="pp"
-                      />
-                    </IconButton>
-                    <IconButton
-                      sx={{ borderRadius: "0 25px 25px 0" }}
-                      className={styles.singleBtn}
-                      onClick={() => {
-                        captureImageDilogOptions("comments");
-                      }}
-                    >
-                      <Image
-                        src={"/mobileIcons/scouting/chat-circle-light.svg"}
-                        width={25}
-                        height={25}
-                        alt="pp"
-                      />
-                    </IconButton>
-                  </div> */}
+
                 </div>
               );
             } else {
@@ -290,43 +262,9 @@ const SingleImageView: FC<componentProps> = ({
                   style={{
                     scrollSnapAlign: "start",
                   }}
-                  ref={index === data.length - 10 ? lastItemRef : null}
+                  ref={index === data.length - 9 ? lastItemRef : null}
                 >
-                  {/* <img
-                    src={image?.url}
-                    alt={`${image?.key}`}
-                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                  /> */}
-                  {/* <div className={styles.ButtonGrp}>
-                    <IconButton
-                      sx={{ borderRadius: "25px 0 0 25px" }}
-                      className={styles.singleBtn}
-                      onClick={() => {
-                        captureImageDilogOptions("tag");
-                      }}
-                    >
-                      <Image
-                        src={"/mobileIcons/scouting/tag-light.svg"}
-                        width={25}
-                        height={25}
-                        alt="pp"
-                      />
-                    </IconButton>
-                    <IconButton
-                      sx={{ borderRadius: "0 25px 25px 0" }}
-                      className={styles.singleBtn}
-                      onClick={() => {
-                        captureImageDilogOptions("comments");
-                      }}
-                    >
-                      <Image
-                        src={"/mobileIcons/scouting/chat-circle-light.svg"}
-                        width={25}
-                        height={25}
-                        alt="pp"
-                      />
-                    </IconButton>
-                  </div> */}
+
                   <SingleImageComponent
                     detailedImage={image}
                     scoutDetails={data}

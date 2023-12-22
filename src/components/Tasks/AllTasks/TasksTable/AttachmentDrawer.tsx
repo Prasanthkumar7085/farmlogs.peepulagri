@@ -202,7 +202,7 @@ const AttachmentDrawerTaskmodule = ({
 
 
   return (
-    <div>
+    <div  >
       <Drawer
         anchor={direction}
         open={attachmentdrawer}

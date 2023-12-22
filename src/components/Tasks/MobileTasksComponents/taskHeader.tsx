@@ -374,12 +374,14 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
           <Button
             sx={{ marginLeft: "20px" }}
             variant="contained"
+            disabled={!selectedUsers?.length}
             onClick={() => {
               setUsersDrawerOpen(false);
             }}
           >
             Apply
           </Button>
+
         </div>
       </Drawer>
     </header>

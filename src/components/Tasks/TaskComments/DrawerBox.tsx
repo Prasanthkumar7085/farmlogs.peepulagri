@@ -201,6 +201,12 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       open={drawerOpen}
       sx={{
         "& .MuiPaper-root": {
+          minWidth: router.pathname?.includes("/users-tasks")
+            ? "100px"
+            : "600px",
+          maxWidth: router.pathname?.includes("/users-tasks")
+            ? "100vw"
+            : "600px",
           padding: "1rem",
           borderRadius: router.pathname?.includes("/users-tasks")
             ? "10px"

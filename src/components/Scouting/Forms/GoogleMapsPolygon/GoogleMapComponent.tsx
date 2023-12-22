@@ -6,7 +6,7 @@ import styles from "./google-map.module.css";
 import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
 import { useSelector } from 'react-redux';
 import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
-import { toast } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import LoadingComponent from '@/components/Core/LoadingComponent';
 const GoogleMapComponent = () => {
 
@@ -23,11 +23,14 @@ const GoogleMapComponent = () => {
     const [polygonCoords, setPolygonCoords] = useState<any>([]);
     const drawingManagerRef = React.useRef(null);
     const pathRef = useRef([]);
-    const [mapType, setMapType] = useState('roadmap'); // 'roadmap' is the normal map view
+    const [mapType, setMapType] = useState('satellite'); // 'satellite' is the normal map view
     const [renderField, setRenderField] = useState(true);
     const mapRef: any = useRef(null);
     const infoWindowRef: any = useRef(null);
+    const placesService: any = useRef(null);
 
+    const [searchedPlaces, setSearchedPlaces] = useState<any>([]);
+    const autocompleteRef: any = useRef(null);
 
 
     const addCustomControl = (map: any, maps: any) => {
@@ -106,6 +109,12 @@ const GoogleMapComponent = () => {
         mapRef.current = map;
         addCustomControl(map, maps);
         createInfoWindow(map);
+        placesService.current = new maps.places.PlacesService(map);
+
+        // Create Autocomplete for input field
+        autocompleteRef.current = new maps.places.Autocomplete(document.getElementById('searchInput'));
+        autocompleteRef.current.bindTo('bounds', map);
+        autocompleteRef.current.addListener('place_changed', onPlaceChanged);
 
         const drawingManager = new maps.drawing.DrawingManager({
             drawingControl: true,
@@ -148,6 +157,7 @@ const GoogleMapComponent = () => {
         setPolygon(newPolygon);
     };
 
+    //undo last point
     const undoLastPoint = () => {
         if (googleMaps && polygon) {
             const updatedCoords = [...polygonCoords];
@@ -158,10 +168,6 @@ const GoogleMapComponent = () => {
             polygon.setPath(path);
         }
     };
-
-
-
-
 
 
     //get the farm details
@@ -205,12 +211,66 @@ const GoogleMapComponent = () => {
         setLoading(false);
     };
 
+    //call the single farms details
     useEffect(() => {
         if (router.isReady && accessToken) {
             getFarmDataById()
         }
 
     }, [router.isReady, accessToken])
+
+    //call the places api 
+    useEffect(() => {
+        if (mapRef.current) {
+            const { maps } = window.google;
+
+            // Initialize the PlacesService
+            placesService.current = new maps.places.PlacesService(mapRef.current.map_);
+        }
+    }, []);
+
+
+
+    //dropdown component logic 
+    const onPlaceChanged = () => {
+        const place = autocompleteRef.current.getPlace();
+        if (!place.geometry || !place.geometry.location) {
+            console.error('No place data available');
+            return;
+        }
+
+        setSearchedPlaces([place]);
+        centerMapToPlace(place);
+    };
+
+    const centerMapToPlace = (place: any) => {
+        if (mapRef.current && place && place.geometry && place.geometry.location) {
+            mapRef.current.panTo(place.geometry.location);
+        }
+    };
+
+
+
+
+
+    //drodown marker
+    const Marker = ({ text }: any) => (
+        <div style={{
+            color: 'white',
+            background: 'grey',
+            padding: '5px 10px',
+            display: 'inline-flex',
+            textAlign: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            transform: 'translate(-50%, -50%)'
+        }}>
+            {text}
+        </div>
+    );
+
+
 
     return (
         <div >
@@ -228,14 +288,20 @@ const GoogleMapComponent = () => {
             </div>
             <div style={{ display: "flex", justifyContent: "end", marginBottom: "20px" }}>
 
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search for a place..."
 
+                    style={{ marginBottom: '10px', padding: '5px', width: "90%", margin: "auto" }}
+                />
 
             </div>
             <div style={{ width: '100%', height: '65vh' }}>
                 <GoogleMapReact
                     bootstrapURLKeys={{
                         key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
-                        libraries: ['drawing'],
+                        libraries: ['drawing', "places"],
                     }}
                     defaultCenter={{
                         "lat": 15.1534671,
@@ -251,7 +317,20 @@ const GoogleMapComponent = () => {
                     defaultZoom={12}
                     yesIWantToUseGoogleMapApiInternals
                     onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-                />
+                >
+                    {searchedPlaces.map((place: any) => (
+                        <Marker
+                            key={place.id}
+                            lat={place.geometry.location.lat()}
+                            lng={place.geometry.location.lng()}
+                            text={place.name}
+                        />
+                    ))}
+
+                </GoogleMapReact>
+
+
+
 
                 {polygonCoords.length === 0 ? "" :
                     <div style={{
@@ -294,6 +373,8 @@ const GoogleMapComponent = () => {
                 </Button>
             </div>
             <LoadingComponent loading={loading} />
+            <Toaster richColors position="top-right" closeButton />
+
         </div>
     )
 };

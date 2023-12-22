@@ -6,7 +6,7 @@ import styles from "./google-map.module.css";
 import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
 import { useSelector } from 'react-redux';
 import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
-import { toast } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import LoadingComponent from '@/components/Core/LoadingComponent';
 const GoogleMapEditComponent = () => {
 
@@ -23,14 +23,98 @@ const GoogleMapEditComponent = () => {
     const [polygonCoords, setPolygonCoords] = useState<any>([]);
     const drawingManagerRef = React.useRef(null);
     const pathRef = useRef([]);
-    const [mapType, setMapType] = useState('roadmap'); // 'roadmap' is the normal map view
+    const [mapType, setMapType] = useState('satellite'); // 'satellite' is the normal map view
     const [renderField, setRenderField] = useState(true);
+    const placesService: any = useRef(null);
+    const infoWindowRef: any = useRef(null);
+    const [searchedPlaces, setSearchedPlaces] = useState<any>([]);
+    const autocompleteRef: any = useRef(null);
+    const mapRef: any = useRef(null);
 
+    //get the current location
+    const addCustomControl = (map: any, maps: any) => {
+        const controlDiv = document.createElement('div');
+        const controlUI = document.createElement('button');
 
+        controlUI.textContent = 'Current Location';
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '1px solid #ccc';
+        controlUI.style.padding = '5px';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '10px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to pan to current location';
+        controlDiv.appendChild(controlUI);
+
+        controlUI.addEventListener('click', () => {
+            if (navigator.geolocation && mapRef.current) {
+                const options = {
+                    enableHighAccuracy: true, // Request high accuracy if available
+                    timeout: 5000, // Set a timeout (milliseconds) for the request
+                    maximumAge: 0 // Force a fresh location request
+                };
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const currentPosition = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+
+                        mapRef.current.panTo(currentPosition);
+                        mapRef.current.setZoom(15); // Optionally set the zoom level as needed
+
+                        const infoWindow = infoWindowRef.current;
+                        infoWindow.setPosition(currentPosition);
+                        infoWindow.setContent('Location found.');
+                        infoWindow.open(mapRef.current);
+                    },
+                    (error) => {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                console.error('User denied the request for Geolocation.');
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                console.error('Location information is unavailable.');
+                                break;
+                            case error.TIMEOUT:
+                                console.error('The request to get user location timed out.');
+                                break;
+                            default:
+                                console.error('An unknown error occurred.');
+                                break;
+                        }
+                    },
+                    options // Pass the options to getCurrentPosition
+                );
+            } else {
+                console.error('Geolocation is not supported');
+            }
+        });
+
+        map.controls[maps.ControlPosition.BOTTOM_RIGHT].push(controlDiv);
+    };
+
+    const createInfoWindow = (map: any) => {
+        const infoWindow = new (window as any).google.maps.InfoWindow();
+        infoWindowRef.current = infoWindow;
+    };
 
     const handleApiLoaded = (map: any, maps: any) => {
         setMap(map);
         setGoogleMaps(maps);
+        mapRef.current = map;
+
+        addCustomControl(map, maps);
+        createInfoWindow(map);
+        placesService.current = new maps.places.PlacesService(map);
+
+        // Create Autocomplete for input field
+        autocompleteRef.current = new maps.places.Autocomplete(document.getElementById('searchInput'));
+        autocompleteRef.current.bindTo('bounds', map);
+        autocompleteRef.current.addListener('place_changed', onPlaceChanged);
+
+
         const drawingManager = new maps.drawing.DrawingManager({
             drawingControl: true,
             drawingControlOptions: {
@@ -72,7 +156,6 @@ const GoogleMapEditComponent = () => {
 
         maps.event.addListener(newPolygon, 'mouseup', () => {
             const updatedCoords = newPolygon.getPath().getArray().map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
-            console.log(updatedCoords, "piu");
             setPolygonCoords(updatedCoords);
         });
 
@@ -97,6 +180,56 @@ const GoogleMapEditComponent = () => {
     };
 
 
+
+
+    //call the places api 
+    useEffect(() => {
+        if (mapRef.current) {
+            const { maps } = window.google;
+
+            // Initialize the PlacesService
+            placesService.current = new maps.places.PlacesService(mapRef.current.map_);
+        }
+    }, []);
+
+
+
+    //dropdown component logic 
+    const onPlaceChanged = () => {
+        const place = autocompleteRef.current.getPlace();
+        if (!place.geometry || !place.geometry.location) {
+            console.error('No place data available');
+            return;
+        }
+
+        setSearchedPlaces([place]);
+        centerMapToPlace(place);
+    };
+
+    const centerMapToPlace = (place: any) => {
+        if (mapRef.current && place && place.geometry && place.geometry.location) {
+            mapRef.current.panTo(place.geometry.location);
+        }
+    };
+
+    //drodown marker
+    const Marker = ({ text }: any) => (
+        <div style={{
+            color: 'white',
+            background: 'grey',
+            padding: '5px 10px',
+            display: 'inline-flex',
+            textAlign: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            transform: 'translate(-50%, -50%)'
+        }}>
+            {text}
+        </div>
+    );
+
+
     //get the farm details
     const getFarmDataById = async () => {
         setLoading(true)
@@ -106,7 +239,6 @@ const GoogleMapEditComponent = () => {
         );
 
         if (response?.success) {
-            console.log(response, "iuytr")
             setData(response?.data);
             if (response?.data?.geometry?.coordinates?.length) {
                 let updatedArray = response?.data?.geometry?.coordinates.map((item: any) => {
@@ -178,7 +310,13 @@ const GoogleMapEditComponent = () => {
             </div>
             <div style={{ display: "flex", justifyContent: "end", marginBottom: "20px" }}>
 
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search for a place..."
 
+                    style={{ marginBottom: '10px', padding: '5px', width: "90%", margin: "auto" }}
+                />
 
             </div>
             {data?._id ?
@@ -186,7 +324,7 @@ const GoogleMapEditComponent = () => {
                     <GoogleMapReact
                         bootstrapURLKeys={{
                             key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
-                            libraries: ['drawing'],
+                            libraries: ['drawing', "places"],
                         }}
                         defaultCenter={{
                             "lat": polygonCoords[0]?.lat,
@@ -199,10 +337,19 @@ const GoogleMapEditComponent = () => {
                             streetViewControl: true,
                             rotateControl: true
                         }}
-                        defaultZoom={19}
+                        defaultZoom={16}
                         yesIWantToUseGoogleMapApiInternals
                         onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-                    />
+                    >
+                        {searchedPlaces.map((place: any) => (
+                            <Marker
+                                key={place.id}
+                                lat={place.geometry.location.lat()}
+                                lng={place.geometry.location.lng()}
+                                text={place.name}
+                            />
+                        ))}
+                    </GoogleMapReact>
 
                     {polygonCoords.length === 0 ? "" :
                         <div style={{
@@ -247,6 +394,8 @@ const GoogleMapEditComponent = () => {
                     </Button>
                 </div> : ""}
             <LoadingComponent loading={loading} />
+            <Toaster richColors position="top-right" closeButton />
+
         </div>
     )
 };

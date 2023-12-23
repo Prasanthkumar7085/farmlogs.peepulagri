@@ -27,6 +27,7 @@ const AttachmentDrawerMobile = ({
   attachmentdrawer,
   direction,
   getAllAttachmentsInView,
+  setAttachmentDrawer
 }: any) => {
   const dispatch = useDispatch();
   const accessToken = useSelector(
@@ -77,6 +78,10 @@ const AttachmentDrawerMobile = ({
       );
       let responseData = await response.json();
       if (responseData.status >= 200 && responseData.status <= 300) {
+        if (!responseData?.data?.attachments?.length) {
+          setAttachmentDrawer(false);
+          return
+        }
         let modifiedData = groupByDate(responseData?.data?.attachments);
         setAttachmentData(modifiedData);
       }

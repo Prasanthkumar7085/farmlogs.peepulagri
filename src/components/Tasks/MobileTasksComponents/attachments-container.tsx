@@ -41,77 +41,81 @@ const AttachmentsContainer = ({
 
   return (
     <div className={styles.attachmentscontainer}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <label className={styles.attachments}>Attachments</label>
-        <label
-          className={styles.attachmentView}
-          onClick={() => setAttachmentDrawer(true)}
+      {attachmentData?.length ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
         >
-          View All
-        </label>
-      </div>
+          <label className={styles.attachments}>Attachments</label>
+          <label
+            className={styles.attachmentView}
+            onClick={() => setAttachmentDrawer(true)}
+          >
+            View All
+          </label>
+        </div>
+      ) : (
+        ""
+      )}
       <div className={styles.files}>
         <div className={styles.attachmentsrow}>
           {attachmentData?.length
             ? attachmentData
-                ?.slice(0, 6)
-                .map((item: TaskAttachmentsType | any, index: number) => {
-                  return (
-                    <div className={styles.eachImageBlock} key={index}>
-                      {item?.metadata?.type.includes("pdf") ? (
-                        <img
-                          src="/pdf-icon.png"
-                          className={styles.imageIcon}
-                          alt={""}
-                        />
-                      ) : item?.metadata?.type.includes("csv") ? (
-                        <img
-                          src="/csv-icon.png"
-                          className={styles.imageIcon}
-                          alt={""}
-                        />
-                      ) : item?.metadata?.type ==
-                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                        item?.metadata?.type.includes("xlsx") ? (
-                        <img
-                          src="/google-sheets-icon.webp"
-                          className={styles.imageIcon}
-                          alt={""}
-                        />
-                      ) : item?.metadata?.type.includes("doc") ||
-                        item?.metadata?.type.includes("docx") ? (
-                        <img
-                          src="/doc-icon.webp"
-                          className={styles.imageIcon}
-                          alt={""}
-                        />
-                      ) : item?.metadata?.type.includes("video") ? (
-                        <img
-                          src="/video-icon.png"
-                          className={styles.imageIcon}
-                          alt={""}
-                        />
-                      ) : (
-                        <img
-                          src={
-                            item?.metadata?.type?.includes("image")
-                              ? item.url
-                              : "/other_icon.png"
-                          }
-                          alt={""}
-                          className={styles.imageIcon}
-                        />
-                      )}
-                    </div>
-                  );
-                })
-            : "No Attachments"}
+              ?.slice(0, 6)
+              .map((item: TaskAttachmentsType | any, index: number) => {
+                return (
+                  <div className={styles.eachImageBlock} key={index}>
+                    {item?.metadata?.type.includes("pdf") ? (
+                      <img
+                        src="/pdf-icon.png"
+                        className={styles.imageIcon}
+                        alt={""}
+                      />
+                    ) : item?.metadata?.type.includes("csv") ? (
+                      <img
+                        src="/csv-icon.png"
+                        className={styles.imageIcon}
+                        alt={""}
+                      />
+                    ) : item?.metadata?.type ==
+                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                      item?.metadata?.type.includes("xlsx") ? (
+                      <img
+                        src="/google-sheets-icon.webp"
+                        className={styles.imageIcon}
+                        alt={""}
+                      />
+                    ) : item?.metadata?.type.includes("doc") ||
+                      item?.metadata?.type.includes("docx") ? (
+                      <img
+                        src="/doc-icon.webp"
+                        className={styles.imageIcon}
+                        alt={""}
+                      />
+                    ) : item?.metadata?.type.includes("video") ? (
+                      <img
+                        src="/video-icon.png"
+                        className={styles.imageIcon}
+                        alt={""}
+                      />
+                    ) : (
+                      <img
+                        src={
+                          item?.metadata?.type?.includes("image")
+                            ? item.url
+                            : "/other_icon.png"
+                        }
+                        alt={""}
+                        className={styles.imageIcon}
+                      />
+                    )}
+                  </div>
+                );
+              }) : ''}
+
         </div>
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
           <>

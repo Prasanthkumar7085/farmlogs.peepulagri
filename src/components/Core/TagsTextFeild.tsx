@@ -64,14 +64,14 @@ const TagsTextFeild = ({
 
   const addNewTag = () => {
     toast.dismiss();
-    if (!newTagValue?.trim()) {
+    if (!newTagValue?.trim()?.toLowerCase()) {
       setNewTagValue("");
       return;
     }
     if (
-      tagValue.includes(newTagValue?.trim()) ||
-      tag.includes(newTagValue?.trim()) ||
-      extraTags.includes(newTagValue?.trim())
+      tagValue.includes(newTagValue?.trim()?.toLowerCase()) ||
+      tag.includes(newTagValue?.trim()?.toLowerCase()) ||
+      extraTags.includes(newTagValue?.trim()?.toLowerCase())
     ) {
       setNewTagValue("");
       toast.error("Tag Already Exists");
@@ -80,9 +80,9 @@ const TagsTextFeild = ({
       toast.success("Tag Added Successfully");
     }
     setTag([...tag, newTagValue?.trim()]);
-    setExtraTags([...extraTags, newTagValue?.trim()]);
+    setExtraTags([...extraTags, newTagValue?.trim()?.toLowerCase()]);
     setNewTagValue("");
-    captureTags([...extraTags, newTagValue?.trim()]);
+    captureTags([...extraTags, newTagValue?.trim()?.toLowerCase()]);
     setIsTextFieldOpen(false);
   };
 
@@ -153,7 +153,7 @@ const TagsTextFeild = ({
                         },
                       }}
                       onDelete={() =>
-                        deleteTagLoading ? () => {} : handleDeleteChip(item)
+                        deleteTagLoading ? () => { } : handleDeleteChip(item)
                       }
                       key={index}
                       label={item}

@@ -507,12 +507,14 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
   //     };
   //   }, []);
 
+  console.log("fileProgress", fileProgress);
+
   return (
     <div
       className={styles.attachments}
       style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}
     >
-      <label className={styles.UpdateFilesMobile} >
+      <label className={styles.UpdateFilesMobile}>
         <div
           className={styles.mobileLink}
           style={{ background: "#fff !important", cursor: "pointer" }}
@@ -523,10 +525,8 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
             className={styles.icon}
           />
           <div className={styles.text}>
-
             <span
               style={{
-
                 color: "#232323 !important",
               }}
             >
@@ -563,16 +563,16 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                      .prieviewUrl
+                        .prieviewUrl
                     : item.type.includes("pdf")
-                      ? "/pdf-icon.png"
-                      : item.type.includes("csv")
-                        ? "/csv-icon.png"
-                        : item.type ==
-                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                          item.type.includes("xlsx")
-                          ? "/google-sheets-icon.webp"
-                          : "/doc-icon.webp"
+                    ? "/pdf-icon.png"
+                    : item.type.includes("csv")
+                    ? "/csv-icon.png"
+                    : item.type ==
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                      item.type.includes("xlsx")
+                    ? "/google-sheets-icon.webp"
+                    : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -606,7 +606,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                        fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
@@ -619,7 +619,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                        fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -633,7 +633,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                      fileProgress[index] !== "fail" ? (
+                    fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -677,7 +677,14 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
             variant="contained"
             onClick={() => addTaskAttachements()}
             className={styles.saveBtn}
-            disabled={!tempFilesStorage?.length || loading}
+            disabled={
+              !tempFilesStorage?.length ||
+              loading ||
+              fileProgress.filter(
+                (item: string | number) =>
+                  typeof item == "number" && item != 100
+              )?.length
+            }
           >
             Save
           </Button>

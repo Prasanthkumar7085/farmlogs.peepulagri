@@ -49,12 +49,16 @@ const AttachmentsContainer = ({
         }}
       >
         <label className={styles.attachments}>Attachments</label>
-        <label
-          className={styles.attachmentView}
-          onClick={() => setAttachmentDrawer(true)}
-        >
-          View All
-        </label>
+        {attachmentData?.length ? (
+          <label
+            className={styles.attachmentView}
+            onClick={() => setAttachmentDrawer(true)}
+          >
+            View All
+          </label>
+        ) : (
+          ""
+        )}
       </div>
       <div className={styles.files}>
         <div className={styles.attachmentsrow}>
@@ -111,7 +115,7 @@ const AttachmentsContainer = ({
                     </div>
                   );
                 })
-            : "No Attachments"}
+            : ""}
         </div>
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
           <>

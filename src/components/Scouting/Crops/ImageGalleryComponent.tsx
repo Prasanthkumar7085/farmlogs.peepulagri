@@ -20,6 +20,9 @@ import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
 import NoDataAnimatedComponent from "@/components/Core/NoDataAnimatedComponent";
 import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
+import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
+import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
+
 const ImageGalleryComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -544,7 +547,7 @@ const ImageGalleryComponent = () => {
                         marginBottom: "5px",
                       }}
                     >
-                      {images?.images?.map((image: any, index: any) => {
+                      {images?.images?.map((image: any, index: any) => {                        
                         return (
                           <div
                             style={{ position: "relative", height: "100px" }}
@@ -615,6 +618,17 @@ const ImageGalleryComponent = () => {
                               ) : (
                                 ""
                               )}
+                            </div>
+                            <div
+                              style={{
+                                position: "absolute",
+                                bottom: "2px",
+                                right: "2px",
+                              }}
+                            >
+                              {image?.image_verified ?
+                                <VerifiedRoundedIcon color={"success"} /> :
+                                <ErrorOutlineRoundedIcon color={"warning"} />}
                             </div>
                           </div>
                         );
@@ -715,6 +729,17 @@ const ImageGalleryComponent = () => {
                               ) : (
                                 ""
                               )}
+                            </div>
+                            <div
+                              style={{
+                                position: "absolute",
+                                bottom: "2px",
+                                right: "2px",
+                              }}
+                            >
+                              {image?.image_verified ?
+                                <VerifiedRoundedIcon color={"success"} /> :
+                                <ErrorOutlineRoundedIcon color={"warning"} />}
                             </div>
                           </div>
                         );

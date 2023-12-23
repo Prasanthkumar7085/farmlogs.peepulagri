@@ -205,9 +205,14 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
             ? "100px"
             : "600px",
           maxWidth: router.pathname?.includes("/users-tasks")
-            ? "100vw"
+            ? "500px"
             : "600px",
-          padding: "1rem",
+          margin: router.pathname?.includes("/users-tasks")
+            ? "0 auto"
+            : "inherit",
+          padding: router.pathname?.includes("/users-tasks")
+            ? "0"
+            : "1rem",
           borderRadius: router.pathname?.includes("/users-tasks")
             ? "10px"
             : "none",
@@ -230,8 +235,8 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         className={styles.threadsDrawerTasks}
         id={
           router.pathname?.includes("/users-tasks")
-            ? styles.commentDrawerDivWeb
-            : styles.commentDrawerDivMobile
+            ? styles.commentDrawerDivMobile
+            : styles.commentDrawerDivWeb
         }
       >
         <ThreadsForTasks

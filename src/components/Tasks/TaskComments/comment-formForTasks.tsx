@@ -243,7 +243,11 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
   };
 
   return (
-    <div className={styles.commentform}>
+    <div className={styles.commentform} style={{
+      paddingInline: router.pathname?.includes("/users-tasks")
+        ? "1rem"
+        : "0"
+    }}>
       <TextField
         required={true}
         className={styles.chatBox}

@@ -130,13 +130,24 @@ const SingleImageComponent: FC<Partial<componentProps>> = ({
         })} */}
 
         {detailedImage?.tags.length > 3 ?
-          <div>
+          <div style={{ width: "100%" }}>
             {showMore == false ?
-              <div style={{ color: "black", fontStyle: "bold", display: "flex", alignItems: "center", alignSelf: "stretch", justifyContent: "space-between" }}>
-                <div>
-                  {detailedImage?.tags.slice(0, 3).join(",") + "..."}<span onClick={() =>
-                    captureImageDilogOptions("tag")
-                  }>Show more</span>
+              <div style={{ fontStyle: "bold", display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginTop: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                  <Image
+                    src={"/add-tag-icon-black.svg"}
+                    width={17}
+                    height={17}
+                    alt="pp"
+                  />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <span style={{ wordSpacing: "0.5rem", color: "#000" }}>
+                      {detailedImage?.tags.slice(0, 3).join(" ")}
+                    </span>
+                    <span style={{ color: "rgba(0, 0, 0, 0.60) !important", cursor: "pointer", fontSize: "14px" }} onClick={() =>
+                      captureImageDilogOptions("tag")
+                    }>...Show more</span>
+                  </div>
                 </div>
                 <div>
                   <IconButton
@@ -157,12 +168,12 @@ const SingleImageComponent: FC<Partial<componentProps>> = ({
                 {detailedImage?.tags.join(",")}<span onClick={() => setShowMore(false)}>Show less</span>
               </div>}
           </div> :
-          <div style={{ color: "black", fontStyle: "bold", }}>
+          <div style={{ color: "black", fontStyle: "bold", width: "100%" }}>
             {detailedImage?.tags?.length ?
               <div>
                 <div>
                   {detailedImage?.tags.join(",")
-                  }<span onClick={() =>
+                  }<span style={{ color: "rgba(0, 0, 0, 0.60) !important" }} onClick={() =>
                     captureImageDilogOptions("tag")
                   }>Add more</span>
                 </div>

@@ -90,12 +90,14 @@
   width: 20px;
   height: 20px;
 }
+
 .attachmentContainer {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   width: 100%;
   gap: 0.75rem;
 }
+
 .attachment {
   border-radius: var(--br-9xs);
   background-color: var(--background);
@@ -109,6 +111,7 @@
   color: var(--high-emphasis);
   border: 1px solid var(--background);
 }
+
 .attachment:hover {
   border: 1px solid #efefef
 }
@@ -135,6 +138,7 @@
   color: var(--gray-500);
   column-gap: 0.45rem;
 }
+
 .threadReplies {
   display: flex;
   column-gap: 0.25rem;
@@ -142,10 +146,12 @@
   color: var(--gray-500);
   cursor: pointer;
 }
+
 .reply1:hover,
 .threadReplies:hover {
   color: var(--gray-700);
 }
+
 .reply {
   flex: 1;
   display: flex;
@@ -360,4 +366,5 @@
   column-gap: 0.5rem;
   color: var(--gray-700);
   align-self: center;
-} 
+  margin-top: 1rem;
+}

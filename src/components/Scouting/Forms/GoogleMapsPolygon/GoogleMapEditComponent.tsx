@@ -123,7 +123,7 @@ const GoogleMapEditComponent = () => {
             },
             polygonOptions: {
                 editable: true,
-                draggable: true,
+                draggable: false,
             },
         });
 
@@ -186,7 +186,6 @@ const GoogleMapEditComponent = () => {
     useEffect(() => {
         if (mapRef.current) {
             const { maps } = window.google;
-
             // Initialize the PlacesService
             placesService.current = new maps.places.PlacesService(mapRef.current.map_);
         }
@@ -273,8 +272,7 @@ const GoogleMapEditComponent = () => {
                 "coordinates": polygonCoords.map((obj: any) => Object.values(obj))
             }
         };
-
-
+        
         const response = await editFarmService(
             editedData,
             accessToken,

@@ -92,20 +92,28 @@ const AllSummaryComponents = () => {
       let response = await fetch(url, options);
       let responseData: any = await response.json();
       if (responseData.success) {
+        console.log('111');
         if (responseData?.has_more) {
+          console.log('222');
           if (page !== 1) {
+            console.log('333');
+            
             setHasMore(responseData?.has_more);
 
             let temp = [...data, ...responseData.data];
             const newArray = temp.filter((obj) => obj._id !== deleteID);
             setData(newArray);
           } else {
+            console.log('444');
             setHasMore(responseData?.has_more);
             setData(responseData.data);
           }
         } else {
+          console.log('555');
           setHasMore(false);
-          setData(responseData.data);
+          let temp = [...data, ...responseData.data];
+            const newArray = temp.filter((obj) => obj._id !== deleteID);
+            setData(newArray);
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -122,9 +130,6 @@ const AllSummaryComponents = () => {
     }
   }, [router.isReady, accessToken]);
 
-  const captureDateValue = (fromDate: string, toDate: string) => {
-    setSearchString([fromDate, toDate]);
-  };
 
   //infinite scroll
   //scroll to the last element of the previous calls

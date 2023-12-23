@@ -37,9 +37,10 @@
 
 .allSummaryCardsBlock {
     padding: 0 1rem;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 219px);
     overflow-y: auto;
     margin-top: -2rem;
+    padding-bottom: 1rem;
 }
 
 

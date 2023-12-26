@@ -46,7 +46,7 @@ const MainContent = ({
   return (
     <>
       <div className={styles.maincontent}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", width: "100%", flexDirection: "column", gap: "0.5rem" }}>
 
           {editField == "title" && editFieldOrNot ? (
             <div style={{ width: "100%" }}>
@@ -126,7 +126,6 @@ const MainContent = ({
             ""
           )}
 
-          <ActivityContainer />
         </div>
 
         <div className={styles.container}>
@@ -162,7 +161,10 @@ const MainContent = ({
           {/* <p className={styles.dueDate}>Due Date</p> */}
           <div className={styles.datePicker} style={{ display: "flex" }}>
             <img
-              onClick={handleCalenderOpen}
+              onClick={() => {
+                if (status !== "DONE" &&
+                  (loggedInUserId == data?.created_by?._id)) handleCalenderOpen()
+              }}
               src="/viewTaskIcons/calender-icon.svg"
               alt=""
             />

@@ -284,25 +284,29 @@ const ViewTaskComponent = () => {
           status={status}
         />
 
-        <div style={{ paddingTop: "1rem" }}>
+        <div style={{ paddingTop: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Button
             onClick={() => setDrawerOpen(true)}
             sx={{
-              textTransform: "capitalize",
-              border: "1px solid #D94841",
-              color: "#d94841",
+              textTransform: "capitalize", color: "#d94841",
               padding: "5px 10px",
               display: "flex",
               alignItems: "center",
-              gap: "5px",
+              gap: "0.5rem",
+              fontSize: "clamp(11px, 2vw, 13px)",
+              fontFamily: "'Inter', sans-serif"
             }}
           >
             <img
               src="/viewTaskIcons/task-table-comments-red.svg"
               alt=""
+              width="20px"
+              height={"20px"}
             />
             Comments
           </Button>
+          <ActivityContainer />
+
         </div>
       </div>
       <Drawer

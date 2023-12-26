@@ -36,20 +36,8 @@ const AssignedToContainer = ({
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-  const [assigneeId, setAssigneeId] = useState('');
-  const handleClickAfterLongPress = (id: string) => {
-
-    if (selectedUserIds.includes(id)) {
-      let array = [...selectedUserIds];
-      array.splice(selectedUserIds.indexOf(id), 1);
-      setSelectedUserIds(array);
-      if (!array.length) {
-        setCheckBoxOpen(false);
-      }
-    } else {
-      setSelectedUserIds([...selectedUserIds, id]);
-    }
-  }
+  const [assigneeId, setAssigneeId] = useState("");
+ 
 
   const logout = async () => {
     try {
@@ -132,8 +120,18 @@ const AssignedToContainer = ({
           ? assignee.map(
             (item: { _id: string; name: string }, index: number) => {
               return (
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div className={styles.noselect} id={styles.persondetails} key={index}
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div
+                    className={styles.noselect}
+                    id={styles.persondetails}
+                    key={index}
                   >
                     <Avatar
                       sx={{
@@ -144,25 +142,30 @@ const AssignedToContainer = ({
                       }}
                     >
                       {item.name.split(" ")?.length > 1
-                        ? `${item.name.split(" ")[0][0]}${item.name.split(" ")[1][0]
+                        ? `${item.name.split(" ")[0][0]}${
+                            item.name.split(" ")[1][0]
                           }`.toUpperCase()
                         : item.name.slice(0, 2)?.toUpperCase()}
                     </Avatar>
                     <p className={styles.assigneeName}>{item?.name}</p>
                   </div>
-                  {loggedInUserId == data?.created_by?._id || hasEditAccess ?
-                    <IconButton onClick={() => {
-                      setAssigneeId(item._id)
-                      deleteAssignee(item._id)
-                    }}>
-                      {deleteLoading && assigneeId == item._id ?
-                        <CircularProgress size="1rem" sx={{ color: "black" }} /> :
-                        <HighlightOffIcon />}
+                  {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
+                    <IconButton
+                      onClick={() => {
+                        setAssigneeId(item._id);
+                        deleteAssignee(item._id);
+                      }}
+                    >
+                      {deleteLoading && assigneeId == item._id ? (
+                        <CircularProgress size="1rem" sx={{ color: "black" }} />
+                      ) : (
+                        <HighlightOffIcon />
+                      )}
                     </IconButton>
-                    : ""}
-
+                  ) : (
+                    ""
+                  )}
                 </div>
-
               );
             }
           )

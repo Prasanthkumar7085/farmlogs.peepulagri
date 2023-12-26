@@ -47,41 +47,37 @@ const DescriptionContainer = ({
             placeholder="Enter description here"
           />
         ) : (
-          <div>
-            {status !== "DONE" &&
-              loggedInUserId == data?.created_by?._id ? (
-              <p
-                className={styles.descriptionText}
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setEditFieldOrNot(true);
-                  setEditField("description");
-                }}
-              >
-                {data?.description ? (
-                  <Markup
-                    content={getDescriptionData(data?.description)}
-                  />
-                ) : (
-                  "-"
-                )}
-              </p>
-            ) : (
-              <p className={styles.descriptionText}>
-
-                {data?.description ? (
-                  <Markup
-                    content={getDescriptionData(data?.description)}
-                  />
-                ) : (
-                  "-"
-                )}
-              </p>
-            )}
+          <div
+            onClick={() => {
+              if (
+                status !== "DONE" &&
+                loggedInUserId == data?.created_by?._id
+              ) {
+                setEditFieldOrNot(true);
+                setEditField("description");
+              }
+            }}
+          >
+            <p className={styles.descriptionText} style={{ cursor: "pointer" }}>
+              {data?.description?.trim() ? (
+                <Markup content={getDescriptionData(data?.description)} />
+              ) : (
+                "-"
+              )}
+            </p>
           </div>
         )}
         {editField == "description" && editFieldOrNot ? (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem", width: "100%", marginTop: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: "0.5rem",
+              width: "100%",
+              marginTop: "1rem",
+            }}
+          >
             <IconButton
               sx={{ padding: "0" }}
               onClick={() => {
@@ -89,11 +85,7 @@ const DescriptionContainer = ({
                 setEditFieldOrNot(false);
               }}
             >
-              <img
-                src="/viewTaskIcons/cancel-icon.svg"
-                alt=""
-                width={"20px"}
-              />
+              <img src="/viewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
             </IconButton>
 
             <IconButton

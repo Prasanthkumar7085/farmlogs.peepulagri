@@ -40,10 +40,9 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                       {item?.title
                         ? item?.title?.length > 25
                           ? item?.title?.slice(0, 1).toUpperCase() +
-                          item?.title?.slice(1, 22) +
-                          "..."
-                          : item?.title[0].toUpperCase() +
-                          item?.title?.slice(1)
+                            item?.title?.slice(1, 22) +
+                            "..."
+                          : item?.title[0].toUpperCase() + item?.title?.slice(1)
                         : "ty"}
                     </h2>
                     <div className={styles.duedatecontainer}>
@@ -58,7 +57,9 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                     </div>
                   </div>
                   <div className={styles.farmdetails}>
-                    <h3 className={styles.farmname}>SpiceVine Gardens</h3>
+                    <h3 id={styles[item.status]}>
+                      {getItemTitle(item?.status)}
+                    </h3>
                     <div className={styles.profile}>
                       <h1 className={styles.jj}>
                         <Avatar
@@ -70,11 +71,10 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                           }}
                         >
                           {item?.created_by?.name?.split(" ")?.length > 1
-                            ? `${item?.created_by?.name?.split(" ")[0][0]}${item?.created_by?.name?.split(" ")[1][0]
+                            ? `${item?.created_by?.name?.split(" ")[0][0]}${
+                                item?.created_by?.name?.split(" ")[1][0]
                               }`.toUpperCase()
-                            : item?.created_by?.name
-                              .slice(0, 2)
-                              ?.toUpperCase()}
+                            : item?.created_by?.name.slice(0, 2)?.toUpperCase()}
                         </Avatar>
                       </h1>
                     </div>

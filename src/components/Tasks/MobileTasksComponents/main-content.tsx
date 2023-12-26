@@ -35,19 +35,28 @@ const MainContent = ({
     (state: any) => state.auth.userDetails?.user_details?._id
   );
 
-  const [statusOptions] = useState<Array<{ value: string; title: string }>>([
-    { value: "TO-START", title: "To-Start" },
-    { value: "INPROGRESS", title: "In-Progress" },
-    { value: "PENDING", title: "Pending" },
-    { value: "DONE", title: "Done" },
-    { value: "OVER-DUE", title: "Over-due" },
+  const [statusOptions] = useState<
+    Array<{ value: string; title: string; color: string }>
+  >([
+    { value: "TO-START", title: "To-Start", color: "#57b6f0" },
+    { value: "INPROGRESS", title: "In-Progress", color: "#f2a84c" },
+    { value: "PENDING", title: "Pending", color: "#fb6501" },
+    { value: "DONE", title: "Done", color: "#46a845" },
+    { value: "OVER-DUE", title: "Over-due", color: "#d94841" },
   ]);
 
   return (
     <>
       <div className={styles.maincontent}>
-        <div style={{ display: "flex", justifyContent: "flex-end", width: "100%", flexDirection: "column", gap: "0.5rem" }}>
-
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            width: "100%",
+            flexDirection: "column",
+            gap: "0.5rem",
+          }}
+        >
           {editField == "title" && editFieldOrNot ? (
             <div style={{ width: "100%" }}>
               <TextField
@@ -78,13 +87,15 @@ const MainContent = ({
                   }}
                 >
                   {data?.title
-                    ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
+                    ? data?.title.slice(0, 1).toUpperCase() +
+                      data?.title.slice(1)
                     : "-"}
                 </h6>
               ) : (
                 <h6 className={styles.title}>
                   {data?.title
-                    ? data?.title.slice(0, 1).toUpperCase() + data?.title.slice(1)
+                    ? data?.title.slice(0, 1).toUpperCase() +
+                      data?.title.slice(1)
                     : "-"}
                 </h6>
               )}
@@ -106,7 +117,11 @@ const MainContent = ({
                   setEditFieldOrNot(false);
                 }}
               >
-                <img src="/viewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
+                <img
+                  src="/viewTaskIcons/cancel-icon.svg"
+                  alt=""
+                  width={"20px"}
+                />
               </IconButton>
 
               <IconButton
@@ -125,22 +140,31 @@ const MainContent = ({
           ) : (
             ""
           )}
-
         </div>
 
         <div className={styles.container}>
           <p
             className={styles.statusSelect}
             style={{
+              color: data?.status
+                ? statusOptions?.find((item) => item.value == data?.status)
+                    ?.color
+                : "#d0d5dd",
+              border: `1px solid ${
+                data?.status
+                  ? statusOptions?.find((item) => item.value == data?.status)
+                      ?.color
+                  : "#d0d5dd"
+              }`,
               cursor:
                 status !== "DONE" &&
-                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                (loggedInUserId == data?.created_by?._id || hasEditAccess)
                   ? "pointer"
                   : "default",
             }}
             onClick={(e) =>
               status !== "DONE" &&
-                (loggedInUserId == data?.created_by?._id || hasEditAccess)
+              (loggedInUserId == data?.created_by?._id || hasEditAccess)
                 ? handleClick(e)
                 : ""
             }
@@ -148,11 +172,11 @@ const MainContent = ({
             <span>
               {data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                  ?.title
+                    ?.title
                 : ""}
             </span>
             {status !== "DONE" &&
-              (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
+            (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
               <KeyboardArrowDownIcon sx={{ fontSize: "1rem" }} />
             ) : (
               ""
@@ -162,8 +186,11 @@ const MainContent = ({
           <div className={styles.datePicker} style={{ display: "flex" }}>
             <img
               onClick={() => {
-                if (status !== "DONE" &&
-                  (loggedInUserId == data?.created_by?._id)) handleCalenderOpen()
+                if (
+                  status !== "DONE" &&
+                  loggedInUserId == data?.created_by?._id
+                )
+                  handleCalenderOpen();
               }}
               src="/viewTaskIcons/calender-icon.svg"
               alt=""
@@ -189,7 +216,7 @@ const MainContent = ({
                     padding: "0",
                     fontSize: "12px",
                     fontFamily: "'Inter', sans-serif",
-                    fontWeight: "600"
+                    fontWeight: "600",
                   },
                 }}
                 disablePast

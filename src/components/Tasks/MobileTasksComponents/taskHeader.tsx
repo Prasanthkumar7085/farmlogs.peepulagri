@@ -328,6 +328,7 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
                 background: "#f0fff0",
                 border: "1px solid #05a155",
                 borderRadius: "5px",
+                fontFamily: "'Inter', sans-serif",
                 '& .MuiSvgIcon-root ': {
                   color: "#05A155",
                   fontSize: "1.4rem"

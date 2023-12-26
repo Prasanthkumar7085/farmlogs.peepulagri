@@ -197,7 +197,7 @@ const AttachmentDrawerMobile = ({
       (item: { url: string; metadata: { original_name: string } }) =>
         downloadFile(item?.url, item?.metadata?.original_name)
     );
-    const results = await Promise.allSettled(downloadPromises);
+    const results = await Promise.all(downloadPromises);
     setDownloadLoading(false);
     results.forEach((result) => {
       if (result.status === "fulfilled") {

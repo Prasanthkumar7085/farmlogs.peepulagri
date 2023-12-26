@@ -33,7 +33,7 @@ const AllTasks = () => {
   );
 
   const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [searchString, setSearchString] = useState("");
@@ -362,11 +362,13 @@ const AllTasks = () => {
         </div>
         {/* <ListHeader onDateChange={onDateChange} /> */}
         <Tabs onStatusChange={onStatusChange} />
+
         <TaskCard
           data={data}
           lastBookElementRef={lastBookElementRef}
           hasMore={hasMore}
           lastItemRef={lastItemRef}
+          loading={loading}
         />
       </div>
       <div className="addFormPositionIcon">

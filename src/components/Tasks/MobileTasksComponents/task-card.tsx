@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import styles from "./task-card.module.css";
 import { useState } from "react";
 
-const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
+const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: any) => {
   const router = useRouter();
 
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
@@ -23,8 +23,8 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
 
   return (
     <div className={styles.allTaskCardsBlock}>
-      {data?.length
-        ? data?.map((item: any, index: any) => {
+      {data?.length ? (
+        data?.map((item: any, index: any) => {
           if (data.length === index + 1 && hasMore == true) {
             return (
               <div
@@ -143,12 +143,17 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef }: any) => {
             );
           }
         })
-        : <div style={{ display: "flex", alignItems: "center", flexDirection: "column", height: "calc(100vh - 250px)", justifyContent: "center" }}>
-          <img src="/viewTaskIcons/No-Data-Tasks.svg" alt="" />
-          <p style={{ margin: "0", fontFamily: "'Inter', sans-serif", color: "#000", fontSize: "clamp(14px, 3vw, 16px" }}>
-            No Tasks
-          </p>
-        </div>}
+      )
+        : !loading ? (
+          <div style={{ display: "flex", alignItems: "center", flexDirection: "column", height: "calc(100vh - 250px)", justifyContent: "center" }}>
+            <img src="/viewTaskIcons/No-Data-Tasks.svg" alt="" />
+            <p style={{ margin: "0", fontFamily: "'Inter', sans-serif", color: "#000", fontSize: "clamp(14px, 3vw, 16px" }}>
+              No Tasks
+            </p>
+          </div>) : (
+          ""
+        )}
+
     </div>
   );
 };

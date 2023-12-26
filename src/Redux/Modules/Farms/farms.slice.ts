@@ -10,7 +10,9 @@ export const initialState: Farms.FarmsData = {
   filesList: [],
   cropName: '',
   farmName:"",
-  taskFilterOpen:{}
+  taskFilterOpen:{},
+  summaryFarmTitle:"",
+  summaryCropTitle:""
 };
 
 export const farmsSlice = createSlice({
@@ -50,6 +52,13 @@ export const farmsSlice = createSlice({
     },
     changeTaskFilterUserOpen:(state:any,action:any)=>{
       state.taskFilterOpen = action.payload
+    },
+    setSummaryFarmName:(state:any, action:any) => {
+      state.summaryFarmTitle=action.payload
+    },
+    setSummaryCropName:(state:any, action:any) => {
+      state.summaryCropTitle=action.payload
+
     }
   },
 });
@@ -62,7 +71,9 @@ export const {
   removeTheFilesFromStore,
   removeOneElement,
   setToInitialState,
-  changeTaskFilterUserOpen
+  changeTaskFilterUserOpen,
+  setSummaryFarmName,
+  setSummaryCropName
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
 

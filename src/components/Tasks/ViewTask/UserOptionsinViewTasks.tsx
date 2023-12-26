@@ -118,15 +118,15 @@ const UserOptionsinViewTasks: React.FC<PropsType> = ({
           getOptionDisabled={(option) => {
             let firstOption = assignee?.length
               ? assignee?.some(
-                  (item) =>
-                    item?._id === option?._id && item?.name === option?.name
-                )
+                (item) =>
+                  item?._id === option?._id && item?.name === option?.name
+              )
               : false;
             let secondOption = usersArray?.length
               ? usersArray?.some(
-                  (item: userTaskType) =>
-                    item?._id === option?._id && item?.name === option?.name
-                )
+                (item: userTaskType) =>
+                  item?._id === option?._id && item?.name === option?.name
+              )
               : false;
             return firstOption || secondOption;
           }}

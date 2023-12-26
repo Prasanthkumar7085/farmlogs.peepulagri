@@ -245,29 +245,25 @@ const AttachmentDrawerMobile = ({
             overflow: "auto",
             maxHeight: "60%",
             maxWidth: "500px",
-            minHeight: "300px",
+            minHeight: "400px",
             margin: "auto",
           },
         }}
       >
         <div className={styles.drawerHeader}>
-          <div className={styles.stickyHeader}>
+          {/* <div className={styles.stickyHeader}>
             {checkBoxOpen ? (
               <div style={{ display: "flex", alignItems: "center" }}>
-                <IconButton
+                <Button
                   onClick={() => {
                     setCheckBoxOpen(false);
                     setSelectedItems([]);
                   }}
-                  sx={{ display: attachmentData?.length ? "" : "none" }}
-                  className={styles.selectBtn}
+                  sx={{ display: attachmentData?.length ? "" : "none", color: "#d94841", textTransform: "capitalize", fontSize: "14px", fontFamily: "'Inter',sans-serif" }}
+
                 >
-                  <img
-                    src="/mobileIcons/scouting/x-light.svg"
-                    alt=""
-                    width="20px"
-                  />
-                </IconButton>
+                  Cancel
+                </Button>
                 {selectedItems?.length ? (
                   <div
                     style={{
@@ -313,14 +309,14 @@ const AttachmentDrawerMobile = ({
               </div>
             ) : (
               <Button
-                className={styles.selectBtn}
+
                 onClick={() => setCheckBoxOpen(true)}
-                sx={{ display: attachmentData?.length ? "" : "none" }}
+                sx={{ display: attachmentData?.length ? "" : "none", color: "#05A155", textTransform: "capitalize", fontSize: "14px", fontFamily: "'Inter',sans-serif" }}
               >
                 Select
               </Button>
             )}
-          </div>
+          </div> */}
 
           <Typography variant="h6">Attachments</Typography>
           <IconButton
@@ -345,9 +341,80 @@ const AttachmentDrawerMobile = ({
             attachmentData?.map((item: any, index: any) => {
               return (
                 <div style={{ marginBottom: "1rem" }} key={index}>
-                  <p className={styles.AttachmentDate}>
-                    {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
-                  </p>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "0.5rem" }}>
+
+                    <p className={styles.AttachmentDate}>
+                      {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
+                    </p>
+                    <div className={styles.stickyHeader}>
+                      {checkBoxOpen ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+
+                          {selectedItems?.length ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                              }}
+                            >
+                              {downloadLoading ? (
+                                <CircularProgress
+                                  sx={{ color: "#757575" }}
+                                  size="1.2rem"
+                                />
+                              ) : (
+                                <IconButton sx={{ padding: "0" }} onClick={() => handleDownload()}>
+                                  <FileDownloadIcon />
+                                </IconButton>
+                              )}
+
+                              <IconButton
+
+                                className={styles.selectBtn}
+                                onClick={() => deleteSelectedImages()}
+                                sx={{ padding: "0" }}
+                              >
+                                {deteleLoading ? (
+                                  <CircularProgress
+                                    sx={{ color: "#757575" }}
+                                    size="1.2rem"
+                                  />
+                                ) : (
+                                  <ImageComponent
+                                    src={"/mobileIcons/scouting/trash-simple-light.svg"}
+                                    width={20}
+                                    height={20}
+                                    alt=""
+                                  />
+                                )}
+                              </IconButton>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          <Button
+                            onClick={() => {
+                              setCheckBoxOpen(false);
+                              setSelectedItems([]);
+                            }}
+                            sx={{ display: attachmentData?.length ? "" : "none", color: "#d94841", textTransform: "capitalize", fontSize: "14px", fontFamily: "'Inter',sans-serif" }}
+
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+
+                          onClick={() => setCheckBoxOpen(true)}
+                          sx={{ display: attachmentData?.length ? "" : "none", color: "#05A155", textTransform: "capitalize", fontSize: "14px", fontFamily: "'Inter',sans-serif" }}
+                        >
+                          Select
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                   <div className={styles.attachmentDrawerMobile}>
                     {item?.map((image: any, index: number) => {
                       return (

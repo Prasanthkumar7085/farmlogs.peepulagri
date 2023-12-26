@@ -37,10 +37,9 @@
 
 .allSummaryCardsBlock {
     padding: 0 1rem;
-    height: calc(100vh - 219px);
+    height: calc(100vh - 205px);
     overflow-y: auto;
     margin-top: -2rem;
-    padding-bottom: 1rem;
 }
 
 
@@ -136,6 +135,10 @@
     text-align: left;
     overflow-x: hidden;
 
+}
+
+.summarycard:last-child {
+    margin-bottom: 4rem !important;
 }
 
 /* update summary styles start here */

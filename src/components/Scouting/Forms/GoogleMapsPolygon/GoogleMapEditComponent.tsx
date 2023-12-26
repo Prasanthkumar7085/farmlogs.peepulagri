@@ -272,7 +272,7 @@ const GoogleMapEditComponent = () => {
                 "coordinates": polygonCoords.map((obj: any) => Object.values(obj))
             }
         };
-        
+
         const response = await editFarmService(
             editedData,
             accessToken,
@@ -285,6 +285,13 @@ const GoogleMapEditComponent = () => {
         setLoading(false);
     };
 
+
+    const clearAllPoints = () => {
+        if (googleMaps && polygon) {
+            setPolygonCoords([]);
+            polygon.setPath([]);
+        }
+    }
     useEffect(() => {
         if (router.isReady && accessToken) {
             getFarmDataById()
@@ -354,7 +361,17 @@ const GoogleMapEditComponent = () => {
                             position: "absolute",
                             top: "72%",
                             right: "20%",
+
                         }}>
+                            <Button
+                                onClick={clearAllPoints}
+                                variant="outlined"
+                                sx={{ backgroundColor: "orange" }}
+                                disabled={polygonCoords.length === 0}
+                            >
+                                Clear All Points
+                            </Button>
+
                             <Button onClick={undoLastPoint} variant="outlined"
                                 sx={{ backgroundColor: "orange" }}
                                 disabled={polygonCoords.length === 0}>

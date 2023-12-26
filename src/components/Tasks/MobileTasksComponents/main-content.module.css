@@ -10,7 +10,7 @@
 .statusSelect {
   color: #35353D;
   font-family: 'Inter', sans-serif;
-  font-size: clamp(11px, 2.5vw, 12px);
+  font-size: clamp(12px, 3vw, 13px);
   font-weight: 400;
   line-height: 100%;
   margin: 0;

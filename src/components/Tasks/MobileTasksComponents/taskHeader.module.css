@@ -88,3 +88,32 @@
   text-align: left;
   padding: 1rem 1rem 2rem;
 }
+
+.filterDrawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.filterDrawerHeading {
+  font-size: clamp(16px, 3vw, 16px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #000;
+}
+
+.allSelectedChipsBlock {
+  height: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+
+}
+
+.filterDrawerBtnGrp {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 0.8rem;
+}

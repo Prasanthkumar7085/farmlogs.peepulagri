@@ -16,6 +16,7 @@ import styles from "./summary.module.css";
 import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import AlertComponent from "@/components/Core/AlertComponent";
+import { setSummaryCropName, setSummaryFarmName } from "@/Redux/Modules/Farms";
 
 const AllSummaryComponents = () => {
   const router = useRouter();
@@ -43,6 +44,8 @@ const AllSummaryComponents = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [deleteID, setDeleteID] = useState<any>();
+  const [farmTitle, setFarmTitle] = useState();
+  const [cropTitle, setCropTitle] = useState();
 
   const open = Boolean(anchorEl);
   const handleMenu = (event: any) => {
@@ -92,28 +95,26 @@ const AllSummaryComponents = () => {
       let response = await fetch(url, options);
       let responseData: any = await response.json();
       if (responseData.success) {
-        console.log('111');
-        if (responseData?.has_more) {
-          console.log('222');
-          if (page !== 1) {
-            console.log('333');
-            
-            setHasMore(responseData?.has_more);
+        console.log(responseData.data.crop_id, 'plpl');
 
+        if (responseData?.has_more) {
+          if (page !== 1) {
+            setHasMore(responseData?.has_more);
             let temp = [...data, ...responseData.data];
             const newArray = temp.filter((obj) => obj._id !== deleteID);
             setData(newArray);
           } else {
-            console.log('444');
             setHasMore(responseData?.has_more);
             setData(responseData.data);
           }
+        } else if (page == 1) {
+          setData(responseData?.data)
+          setHasMore(responseData?.has_more)
         } else {
-          console.log('555');
           setHasMore(false);
           let temp = [...data, ...responseData.data];
-            const newArray = temp.filter((obj) => obj._id !== deleteID);
-            setData(newArray);
+          const newArray = temp.filter((obj) => obj._id !== deleteID);
+          setData(newArray);
         }
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -299,6 +300,8 @@ const AllSummaryComponents = () => {
     }
   }, [router.isReady, accessToken]);
 
+
+
   return (
     <div>
       <div className={styles.summaryHeader} id="header">
@@ -428,6 +431,8 @@ const AllSummaryComponents = () => {
                       onClick={(e) => {
                         handleMenu(e);
                         setRowID(item._id);
+                        setFarmTitle(item?.farm_id?.title)
+                        setCropTitle(item?.crop_id?.name)
                       }}
                     >
                       <MoreVertIcon sx={{ fontSize: "1.5rem" }} />
@@ -458,9 +463,9 @@ const AllSummaryComponents = () => {
                             "..."
                             : item?.farm_id?.title[0].toUpperCase() +
                             item?.farm_id?.title?.slice(1)
-                          : "ty"}{" "}
+                          : "ty"}
                         <span>
-                          ({" "}
+                          (
                           {item?.crop_id?.title
                             ? item?.crop_id?.title?.length > 17
                               ? item?.crop_id?.title
@@ -480,6 +485,8 @@ const AllSummaryComponents = () => {
                       onClick={(e) => {
                         handleMenu(e);
                         setRowID(item._id);
+                        setFarmTitle(item?.farm_id?.title);
+                        setCropTitle(item?.crop_id?.title)
                       }}
                     >
                       <MoreVertIcon sx={{ fontSize: "1.5rem" }} />
@@ -544,6 +551,9 @@ const AllSummaryComponents = () => {
           }}
           onClick={() => {
             router.push(`/summary/${rowId}/edit`);
+            dispatch(setSummaryFarmName(farmTitle));
+            dispatch(setSummaryCropName(cropTitle))
+
           }}
         >
           Update

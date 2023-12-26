@@ -185,7 +185,9 @@ const MainContent = ({
                   },
                   "& .MuiInputBase-input": {
                     padding: "0",
-                    fontSize: "11px"
+                    fontSize: "12px",
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: "600"
                   },
                 }}
                 disablePast

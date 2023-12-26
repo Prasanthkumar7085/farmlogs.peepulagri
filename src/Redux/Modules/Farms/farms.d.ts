@@ -6,7 +6,9 @@ declare namespace Farms {
     filesList: any;
     cropName: string;
     farmName:string;
-    taskFilterOpen:any
+    taskFilterOpen:any;
+    summaryFarmTitle:string;
+    summaryCropTitle:string;
   }
 
 }

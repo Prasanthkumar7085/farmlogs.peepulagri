@@ -24,18 +24,24 @@ import { toast } from "sonner";
 import timePipe from "@/pipes/timePipe";
 
 const UpdateSummary = () => {
+
   const router = useRouter();
   const dispatch = useDispatch();
-  const crop_id = router.query.crop_id;
-  const farm_id = router.query.farm_id;
+
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const summaryFarmTitleName = useSelector(
+    (state: any) => state.farms?.summaryFarmTitle
 
+  );
+  const summaryCropTitleName = useSelector(
+    (state: any) => state.farms?.summaryCropTitle
+
+  );
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-
   const [loading, setLoading] = useState(false);
   const [summaryData, setSummaryData] = useState<any>();
   const [comment, setComment] = useState<any>();
@@ -53,6 +59,7 @@ const UpdateSummary = () => {
   const [farmDefaultValue, setFarmDefaultValue] = useState<any>();
   const [cropDefaultValue, setCropDefaultValue] = useState<any>();
   const [errorMessages, setErrorMessages] = useState<any>();
+
   const logout = async () => {
     try {
       removeCookie("userType_v2");
@@ -65,33 +72,6 @@ const UpdateSummary = () => {
     }
   };
 
-  //get the single farm details
-  const getSingleFarmDetails = async (id: any) => {
-    let options = {
-      method: "GET",
-
-      headers: new Headers({
-        "content-type": "application/json",
-        authorization: accessToken,
-      }),
-    };
-    try {
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/${id}`,
-        options
-      );
-
-      let responseData: any = await response.json();
-
-      if (responseData.status == 200) {
-        await getAllFarmsOptions(responseData?.data?.title);
-      } else if (responseData?.statusCode == 403) {
-        await logout();
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   //get one summary details
   const getOneSummaryDetails = async () => {
@@ -109,18 +89,15 @@ const UpdateSummary = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/crops/day-summary/${router.query.summary_id}`,
         options
       );
-
       let responseData: any = await response.json();
-
       if (responseData.status == 200) {
         setComment(responseData?.data?.content);
         setDate(formatDateForInput(responseData?.data?.date));
         setFarmDefaultValue(responseData?.data?.farm_id);
+        console.log(responseData?.data?.farm_id);
         setCropDefaultValue(responseData?.data?.crop_id);
-        getAllCropsOptions("", responseData?.data?.farm_id);
-        setFarmID(responseData?.data?.farm_id);
+        setFarmID(responseData?.data);
         setCropId(responseData?.data?.crop_id);
-        await getSingleFarmDetails(responseData?.data?.farm_id);
         setSummaryData(responseData?.data);
       } else if (responseData?.statusCode == 403) {
         await logout();
@@ -132,98 +109,6 @@ const UpdateSummary = () => {
     }
   };
 
-  //get all farm options api
-  const getAllFarmsOptions = async (searchString = "") => {
-    try {
-      let queryParams: any = {};
-
-      if (searchString) {
-        queryParams["search_string"] = searchString;
-      }
-      let options = {
-        method: "GET",
-        headers: new Headers({
-          authorization: accessToken,
-        }),
-      };
-      let url = prepareURLEncodedParams(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/1/100`,
-        queryParams
-      );
-
-      let response = await fetch(url, options);
-      let responseData: any = await response.json();
-      if (responseData.success) {
-        setFarmOptions(responseData.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  //get all crops
-  const getAllCropsOptions = async (searchString = "", farmId: "") => {
-    try {
-      let queryParams: any = {};
-
-      if (searchString) {
-        queryParams["search_string"] = searchString;
-      }
-      let options = {
-        method: "GET",
-        headers: new Headers({
-          authorization: accessToken,
-        }),
-      };
-      let url = prepareURLEncodedParams(
-        `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmId}/crops/list`,
-        queryParams
-      );
-
-      let response = await fetch(url, options);
-      let responseData: any = await response.json();
-      if (responseData.success) {
-        setCropOptions(responseData.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  //get the search value from the farms dropDown
-  const getFarmsSearchString = (value: any) => {
-    if (value) {
-      getAllFarmsOptions(value);
-    } else {
-      getAllFarmsOptions("");
-    }
-  };
-  const onSelectValueFromFarmsDropDown = (value: any) => {
-    if (value?._id) {
-      getAllCropsOptions("", value?._id);
-      setFarmID(value?._id);
-    } else {
-      getAllFarmsOptions();
-      setFarmID("");
-      setCropOptions([]);
-    }
-  };
-
-  //get the values from the crops drop down
-  const getCropSearchString = (value: any) => {
-    if (value) {
-      getAllCropsOptions(value, "");
-    } else {
-      getAllFarmsOptions("");
-    }
-  };
-  const onSelectValueFromCropsDropDown = (value: any) => {
-    if (value) {
-      setCropId(value?._id);
-      // getAllCropsOptions("", value._id)
-    } else {
-      setCropId("");
-    }
-  };
 
   //update the summary api
   const updateSummary = async () => {
@@ -324,13 +209,6 @@ const UpdateSummary = () => {
     }
   }, [router.isReady, accessToken]);
 
-  const getCurrentDate = () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-    const day = String(currentDate.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
 
   const formatDateForInput = (dateString: any) => {
     const date = new Date(dateString?.slice(0, 10));
@@ -349,62 +227,16 @@ const UpdateSummary = () => {
           src="/iconsiconarrowleft.svg"
           onClick={() => router.back()}
         />
-        <Typography className={styles.viewFarm}>Edit Summary</Typography>
+        <Typography className={styles.viewFarm}>Edit Summary  </Typography>
         <div className={styles.headericon} id="header-icon"></div>
       </div>
-      {/* <Typography variant="caption">Farm</Typography>
 
-            <FarmsDropDown
-                options={farmOptions}
-                label={"title"}
-                onSelectValueFromFarmsDropDown={onSelectValueFromFarmsDropDown}
-                getFarmsSearchString={getFarmsSearchString}
-                farmDefaultValue={farmDefaultValue}
-            />
-            <ErrorMessagesComponent errorMessage={errorMessages?.farm_id} /> */}
-
-      {/* <Typography variant="caption">Crop</Typography>
-
-            <CropsDropDown
-                options={cropOptions}
-                label={"title"}
-                onSelectValueFromCropsDropDown={onSelectValueFromCropsDropDown}
-                getCropSearchString={getCropSearchString}
-                cropDefaultValue={cropDefaultValue}
-            />
-            <ErrorMessagesComponent errorMessage={errorMessages?.crop_id} /> */}
       <div className={styles.updatedSummaryContainer}>
+        <div style={{ textAlign: "center", marginBottom: "0.8rem" }}>
+          <p style={{ margin: "0", fontSize: "14px", fontFamily: "'Inter', sans-serif", color: "#d94841" }}>{summaryFarmTitleName} (<span>{summaryCropTitleName})</span></p>
+        </div>
         <div className={styles.singleFarmBlock}>
           <Typography variant="h6">Date</Typography>
-          {/* <TextField
-                        type='date'
-                        placeholder="Select Date"
-                        color="primary"
-                        variant="outlined"
-                        value={date}
-                        onChange={(e) => {
-                            const selectedDate = new Date(e.target.value);
-                            const currentDate = new Date();
-
-                            if (selectedDate > currentDate) {
-                                setDateError('Date cannot be in the future');
-                                return;
-                            }
-
-                            setDate(e.target.value);
-                            setDateError('');
-                            setSummaryError('');
-                            setErrorMessages('');
-                        }}
-                        inputProps={{ max: getCurrentDate() }}
-                        sx={{
-                            width: "100%", background: "#fff",
-                            '& .MuiOutlinedInput-notchedOutline ': {
-                                border: "1px solid grey !important",
-                                borderRadius: "10px !important"
-                            }
-                        }}
-                    /> */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
 
             <MobileDatePicker sx={{
@@ -469,7 +301,6 @@ const UpdateSummary = () => {
           />
           <ErrorMessagesComponent errorMessage={errorMessages?.content} />
         </div>
-
         <div className={styles.UpdateBtnGrp}>
           <Button
             className={styles.updateCancelBtn}

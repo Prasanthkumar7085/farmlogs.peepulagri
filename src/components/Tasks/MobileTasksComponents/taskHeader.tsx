@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Badge,
   Button,
+  Chip,
   ClickAwayListener,
   Drawer,
   IconButton,
@@ -20,7 +21,6 @@ import { userTaskType } from "@/types/tasksTypes";
 import styles from "./taskHeader.module.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ClearIcon } from "@mui/x-date-pickers";
-
 const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }: any) => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -29,7 +29,6 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
   const userId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
   );
-
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<Array<userTaskType>>([]);
   const [usersDrawerOpen, setUsersDrawerOpen] = useState<any>(false);
@@ -39,7 +38,8 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
     { name: string; _id: string }[] | null
   >();
   const [textFieldAutoFocus, setTextFieldAutoFocus] = useState(false);
-
+  const [usersArray, setUsersArray] = useState<userTaskType[]>([]);
+  const [renderField, setRenderField] = useState(true);
   const getAllUsers = async () => {
     const response = await getAllUsersService({ token: accessToken });
     if (response?.success) {
@@ -47,7 +47,6 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
       setSelectedValue(response?.data);
     }
   };
-
   useEffect(() => {
     if (router.isReady && accessToken) {
       if (router.query.search_string) {
@@ -57,7 +56,6 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
       getAllUsers();
     }
   }, [router.isReady, accessToken]);
-
   const setSelectedValue = (usersData: { name: string; _id: string }[]) => {
     let usersObj = usersData.filter((item: any) =>
       router.query.assign_to?.includes(item?._id)
@@ -68,7 +66,20 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
     }
     setSelectedUsers(usersObj);
   };
-
+  const captureUser = (event: any, selectedObject: any) => {
+    if (selectedObject) {
+      setUsersArray([...usersArray, selectedObject]);
+      setRenderField(false);
+      setTimeout(() => {
+        setRenderField(true);
+      }, 0.1);
+      setSelectedUsers(null);
+    } else {
+      setSelectedUsers(null);
+    }
+  };
+  console.log(usersArray, 'plpl');
+  console.log(selectedUsers, 'plpl');
   return (
     <header className={styles.header}>
       <div className={styles.row}>
@@ -167,14 +178,14 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
           )}
           {!(router.query.is_my_task == "true") ? (
             <Badge
-              badgeContent={selectedUsers?.length}
+              badgeContent={usersArray?.length}
               color="success"
-            // sx={{
-            //   "& .MuiBadge-badge": {
-            //     background: "#fff",
-            //     color: "#46a845",
-            //   },
-            // }}
+              sx={{
+                "& .MuiBadge-badge": {
+                  fontWeight: "600",
+                  fontFamily: "'Inter', sans-serif"
+                },
+              }}
             >
               <div
                 className={styles.filter}
@@ -192,8 +203,6 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
           )}
         </div>
       </div>
-
-
       {/* <div style={{ width: "80%" }}>
         {isSearchOpenOrNot ? (
           <TextField
@@ -249,7 +258,7 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
           "& .MuiPaper-root": {
             height: "400px",
             overflowY: "auto",
-            padding: "0 1rem 1rem",
+            padding: " 1rem 1rem",
             borderRadius: "20px 20px 0 0",
             background: "#F5F7FA",
             maxWidth: "calc(500px - 30px)",
@@ -257,44 +266,32 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
           },
         }}
       >
-        <div className={styles.updateTagDrawerHeading}>
-          <Typography>Select Users</Typography>
-          <IconButton
-            sx={{ marginLeft: "95%" }}
+        <div className={styles.filterDrawerHeader} >
+          <Typography className={styles.filterDrawerHeading} >Select Users</Typography>
+          <IconButton sx={{ padding: "0" }}
             onClick={() => {
               setUsersDrawerOpen(false);
             }}
           >
-            <CloseIcon />
+            <CloseIcon sx={{ color: "#000" }} />
           </IconButton>
         </div>
         <div style={{ width: "100%" }}>
-          <Autocomplete
-            multiple
+          {renderField ? <Autocomplete
             sx={{
-              width: "250px",
-              maxWidth: "250px",
+              width: "100%",
               borderRadius: "4px",
             }}
             id="size-small-outlined-multi"
             size="small"
             fullWidth
             noOptionsText={"No such User"}
-            value={selectedUsers?.length ? selectedUsers : []}
-            isOptionEqualToValue={(option: any, value: any) =>
-              option.name === value.name
-            }
+
             getOptionLabel={(option: any) => {
               return option.name;
             }}
             options={users}
-            onChange={(e: any, value: userTaskType[] | []) => {
-              setSelectedUsers(value);
-              let data: string[] = value?.length
-                ? value?.map((item: { _id: string; name: string }) => item._id)
-                : [];
-              onUserChange(data, false);
-            }}
+            onChange={captureUser}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -310,36 +307,51 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
                 }}
               />
             )}
-          />
+          /> : ""}
         </div>
-        <div style={{ marginLeft: "50%", marginTop: "50%" }}>
+        <div className={styles.allSelectedChipsBlock}>
+          {usersArray?.map((user: any) => (
+            <Chip
+              className={styles.selectedUser}
+              key={user._id}
+              label={user.name}
+              onDelete={() => {
+                const updatedUsers = usersArray.filter(
+                  (selectedUser: any) => selectedUser._id !== user._id
+                );
+                setUsersArray(updatedUsers);
+              }}
+              style={{ marginRight: "5px", marginTop: "5px" }}
+            />
+          ))}
+        </div>
+        <div className={styles.filterDrawerBtnGrp} >
           <Button
-            sx={{ marginRight: "50px" }}
+            sx={{}}
             variant="outlined"
+            disabled={!usersArray?.length}
             onClick={() => {
               setSelectedUsers([]);
               onUserChange([]);
-              setUsersDrawerOpen(false);
+              setUsersArray([]);
             }}
           >
             Clear
           </Button>
-
           <Button
-            sx={{ marginLeft: "20px" }}
+            sx={{}}
             variant="contained"
-            disabled={!selectedUsers?.length}
+            disabled={!usersArray?.length}
             onClick={() => {
+              onUserChange(usersArray.map((item: { _id: string }) => item._id))
               setUsersDrawerOpen(false);
             }}
           >
             Apply
           </Button>
-
         </div>
       </Drawer>
-    </header>
+    </header >
   );
 };
-
 export default TaskHeader;

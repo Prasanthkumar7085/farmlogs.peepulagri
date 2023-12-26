@@ -139,6 +139,20 @@ const AddAssigneeMembers = ({
             <div style={{ marginTop: "1rem", height: "235px", overflowY: "auto" }}>
                 {usersArray?.map((user: any) => (
                     <Chip
+                        sx={{
+                            background: "#f0fff0",
+                            border: "1px solid #05a155",
+                            borderRadius: "5px",
+                            '& .MuiSvgIcon-root ': {
+                                color: "#05A155",
+                                fontSize: "1.4rem"
+                            },
+                            '& .MuiSvgIcon-root:hover ': {
+                                color: "#05A155",
+                                fontSize: "1.4rem"
+
+                            }
+                        }}
                         key={user._id}
                         label={user.name}
                         onDelete={() => {

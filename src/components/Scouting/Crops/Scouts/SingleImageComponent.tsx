@@ -168,14 +168,22 @@ const SingleImageComponent: FC<Partial<componentProps>> = ({
                 {detailedImage?.tags.join(",")}<span onClick={() => setShowMore(false)}>Show less</span>
               </div>}
           </div> :
-          <div style={{ color: "black", fontStyle: "bold", width: "100%" }}>
+          <div style={{ fontStyle: "bold", width: "100%" }}>
             {detailedImage?.tags?.length ?
-              <div>
-                <div>
-                  {detailedImage?.tags.join(",")
-                  }<span style={{ color: "rgba(0, 0, 0, 0.60) !important" }} onClick={() =>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Image
+                    src={"/add-tag-icon-black.svg"}
+                    width={17}
+                    height={17}
+                    alt="pp"
+                  />
+                  <span style={{ color: "#000" }}>
+                    {detailedImage?.tags.join(",")
+                    }</span>
+                  <span style={{ color: "rgba(0, 0, 0, 0.60) !important", cursor: "pointer", fontSize: "14px", marginLeft: "0.5rem" }} onClick={() =>
                     captureImageDilogOptions("tag")
-                  }>Add more</span>
+                  }>...Add more</span>
                 </div>
                 <div>
                   <IconButton

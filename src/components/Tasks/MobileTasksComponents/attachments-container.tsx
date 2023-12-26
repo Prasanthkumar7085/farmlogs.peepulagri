@@ -40,7 +40,8 @@ const AttachmentsContainer = ({
   };
 
   return (
-    <div className={styles.attachmentscontainer}>
+    <div className={styles.attachmentscontainer} style={{ display: loggedInUserId == data?.created_by?._id || hasEditAccess ? "" : "none" }} >
+
       {attachmentData?.length ? (
         <div
           style={{

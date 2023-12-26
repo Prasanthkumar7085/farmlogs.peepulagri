@@ -73,6 +73,8 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
       setTimeout(() => {
         setRenderField(true);
       }, 0.1);
+
+      onUserChange([...usersArray, selectedObject].map((item: { _id: string }) => item._id))
       setSelectedUsers(null);
     } else {
       setSelectedUsers(null);
@@ -178,7 +180,7 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
           )}
           {!(router.query.is_my_task == "true") ? (
             <Badge
-              badgeContent={usersArray?.length}
+              badgeContent={router.query.assign_to ? Array.isArray(router.query?.assign_to) ? router.query.assign_to?.length : 1 : null}
               color="success"
               sx={{
                 "& .MuiBadge-badge": {
@@ -290,6 +292,16 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
             getOptionLabel={(option: any) => {
               return option.name;
             }}
+            getOptionDisabled={(option) => {
+
+              let selectedOption = usersArray?.length
+                ? usersArray?.some(
+                  (item: userTaskType) =>
+                    item?._id === option?._id && item?.name === option?.name
+                )
+                : false;
+              return selectedOption;
+            }}
             options={users}
             onChange={captureUser}
             renderInput={(params) => (
@@ -312,7 +324,20 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
         <div className={styles.allSelectedChipsBlock}>
           {usersArray?.map((user: any) => (
             <Chip
-              className={styles.selectedUser}
+              sx={{
+                background: "#f0fff0",
+                border: "1px solid #05a155",
+                borderRadius: "5px",
+                '& .MuiSvgIcon-root ': {
+                  color: "#05A155",
+                  fontSize: "1.4rem"
+                },
+                '& .MuiSvgIcon-root:hover ': {
+                  color: "#05A155",
+                  fontSize: "1.4rem"
+
+                }
+              }}
               key={user._id}
               label={user.name}
               onDelete={() => {
@@ -327,7 +352,7 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
         </div>
         <div className={styles.filterDrawerBtnGrp} >
           <Button
-            sx={{}}
+            className={!usersArray?.length ? styles.disabledFilterDrawerCancelBtn : styles.filterDrawerCancelBtn}
             variant="outlined"
             disabled={!usersArray?.length}
             onClick={() => {
@@ -339,11 +364,11 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
             Clear
           </Button>
           <Button
-            sx={{}}
+            className={!usersArray?.length ? styles.disabledFilterDrawerApplyBtn : styles.filterDrawerApplyBtn}
             variant="contained"
             disabled={!usersArray?.length}
             onClick={() => {
-              onUserChange(usersArray.map((item: { _id: string }) => item._id))
+
               setUsersDrawerOpen(false);
             }}
           >
@@ -355,3 +380,4 @@ const TaskHeader = ({ onChangeSearch, searchString, onUserChange, getAllTasks }:
   );
 };
 export default TaskHeader;
+

@@ -59,7 +59,7 @@ const ViewTaskComponent = () => {
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
-  const getTaskById = async (id: string) => {
+  const getTaskById = async (id=router.query.task_id as string) => {
     setLoading(true);
     try {
       const response = await getTaskByIdService({
@@ -282,6 +282,7 @@ const ViewTaskComponent = () => {
           assignee={assignee}
           hasEditAccess={hasEditAccess}
           status={status}
+          getTaskById={getTaskById}
         />
 
         <div style={{ paddingTop: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>

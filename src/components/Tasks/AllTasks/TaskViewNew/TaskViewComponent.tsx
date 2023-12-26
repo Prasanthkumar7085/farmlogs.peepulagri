@@ -21,6 +21,7 @@ import UserOptionsinViewTasks from "../../ViewTask/UserOptionsinViewTasks";
 import ViewLogs from "../../ViewTask/ViewLogs";
 import styles from "./TaskViewComponent.module.css";
 import getImageSrcUrl from "@/pipes/getImageSrcUrl";
+import deleteAssigneeInTaskService from "../../../../../lib/services/TasksService/deleteAssigneeInTaskService";
 
 const TaskViewComponent = () => {
   const router = useRouter();
@@ -68,7 +69,7 @@ const TaskViewComponent = () => {
 
   const [downloadImageId, setDownloadImageId] = useState("");
 
-  const id = router.query.task_id;
+  const id = router.query.task_id as string;
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -360,29 +361,16 @@ const TaskViewComponent = () => {
           assign_to: selectedAssigneeIds,
         };
 
-        let options = {
-          method: "DELETE",
-          headers: new Headers({
-            "content-type": "application/json",
-            authorization: accessToken,
-          }),
-          body: JSON.stringify(body),
-        };
+       let response = await deleteAssigneeInTaskService({id:id,token:accessToken,body:body})
 
-        let response: any = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}/assignee`,
-          options
-        );
-        let responseData = await response.json();
-
-        if (responseData?.success) {
+        if (response?.success) {
           setDeleteFieldOrNot(false);
           setDeleteField("");
           setSelectedAssigneeIds([]);
           getTaskById(id as string);
-          toast.success(responseData?.message);
+          toast.success(response?.message);
         } else {
-          toast.error(responseData?.message);
+          toast.error(response?.message);
         }
       }
     } catch (err) {

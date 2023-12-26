@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useCookies } from "react-cookie";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 const AssignedToContainer = ({
   setUsersDrawerOpen,
   assignee,
@@ -19,7 +20,7 @@ const AssignedToContainer = ({
   status,
   getTaskById
 }: any) => {
-  
+
   const router = useRouter();
   const dispatch = useDispatch();
   const loggedInUserId = useSelector(
@@ -35,16 +36,16 @@ const AssignedToContainer = ({
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-
+  const [assigneeId, setAssigneeId] = useState('');
   const handleClickAfterLongPress = (id: string) => {
-   
+
     if (selectedUserIds.includes(id)) {
       let array = [...selectedUserIds];
       array.splice(selectedUserIds.indexOf(id), 1);
       setSelectedUserIds(array);
       if (!array.length) {
         setCheckBoxOpen(false);
-    }
+      }
     } else {
       setSelectedUserIds([...selectedUserIds, id]);
     }
@@ -62,17 +63,17 @@ const AssignedToContainer = ({
     }
   };
 
-  const deleteAssignee = async () => {
+  const deleteAssignee = async (id: string) => {
     setDeleteLoading(true)
     try {
       let body = {
-        assign_to: selectedUserIds,
+        assign_to: [id],
       };
-        const response = await deleteAssigneeInTaskService({id:router.query.task_id as string,token:accessToken,body:body})
+      const response = await deleteAssigneeInTaskService({ id: router.query.task_id as string, token: accessToken, body: body })
       if (response?.success) {
         toast.success(response?.message);
         setCheckBoxOpen(false);
-        getTaskById();  
+        getTaskById();
       } else if (response?.status == 422) {
         toast.error(response?.message);
       } else if (response?.status == 401) {
@@ -81,7 +82,7 @@ const AssignedToContainer = ({
     }
     catch (err) {
       console.error(err);
-      
+
     } finally {
       setDeleteLoading(false)
     }
@@ -109,90 +110,59 @@ const AssignedToContainer = ({
             
           </div>
           : ""} */}
-        {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
-          checkBoxOpen && loggedInUserId == data?.created_by?._id && selectedUserIds?.length ?
-          <div style={{display:"flex"}}>
-          <IconButton onClick={() => {
-          setCheckBoxOpen(false)
-          setSelectedUserIds([])
-        }}>
-          <CancelOutlined sx={{fontSize:"1.2rem"}} />
-          </IconButton>
-          
-          {deleteLoading ?
-            <CircularProgress size="1.2rem" sx={{ color: "black" }} />
-            : <IconButton onClick={() => deleteAssignee()}>
-              <DeleteForever/>
-            </IconButton>}
-          
-        </div> : <Button
-            className={styles.addAssigneeBtn}
-            disabled={
-              status === "DONE"
-            }
-            onClick={() => setUsersDrawerOpen(true)}
-          >
-            <Image
-              src="/viewTaskIcons/plus-icon-green.svg"
-              alt=""
-              width={12}
-              height={12}
-            />
-            Add
-          </Button>
-         
-        ) : (
-          ""
-        )}
+        {loggedInUserId == data?.created_by?._id || hasEditAccess ? (<Button
+          className={styles.addAssigneeBtn}
+          disabled={
+            status === "DONE"
+          }
+          onClick={() => setUsersDrawerOpen(true)}
+        >
+          <Image
+            src="/viewTaskIcons/plus-icon-green.svg"
+            alt=""
+            width={12}
+            height={12}
+          />
+          Add
+        </Button>) : ""}
+
       </div>
       <div className={styles.allAssignysList}>
         {assignee
           ? assignee.map(
             (item: { _id: string; name: string }, index: number) => {
               return (
-                <div className={styles.noselect} id={styles.persondetails} key={index}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    if (loggedInUserId == data?.created_by?._id) {
-                        setCheckBoxOpen(true);
-                        handleClickAfterLongPress(item._id);
-                    }
-                }} // Prevent right-click context menu
-                onTouchStart={(e) => {
-                  if (e.touches.length > 1) {
-                    e.preventDefault(); // Prevent multi-touch event
-                  }
-                  }}
-                  onClick={() => {
-                    if (loggedInUserId == data?.created_by?._id && checkBoxOpen) {
-                      handleClickAfterLongPress(item._id); 
-                    }
-                  }}>
-                  {checkBoxOpen && selectedUserIds.includes(item._id) ?
-                 <Avatar
-                 sx={{
-                   fontSize: "9px",
-                   width: "20px",
-                   height: "20px",
-                   background: "green",
-                 }}
-               >
-                      <CheckIcon sx={{fontSize:"1rem"}} />
-               </Avatar> : <Avatar
-                    sx={{
-                      fontSize: "9px",
-                      width: "20px",
-                      height: "20px",
-                      background: "red",
-                    }}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div className={styles.noselect} id={styles.persondetails} key={index}
                   >
-                    {item.name.split(" ")?.length > 1
-                      ? `${item.name.split(" ")[0][0]}${item.name.split(" ")[1][0]
-                        }`.toUpperCase()
-                      : item.name.slice(0, 2)?.toUpperCase()}
-                  </Avatar>}
-                  <p className={styles.assigneeName}>{item?.name}</p>
+                    <Avatar
+                      sx={{
+                        fontSize: "9px",
+                        width: "20px",
+                        height: "20px",
+                        background: "red",
+                      }}
+                    >
+                      {item.name.split(" ")?.length > 1
+                        ? `${item.name.split(" ")[0][0]}${item.name.split(" ")[1][0]
+                          }`.toUpperCase()
+                        : item.name.slice(0, 2)?.toUpperCase()}
+                    </Avatar>
+                    <p className={styles.assigneeName}>{item?.name}</p>
+                  </div>
+                  {loggedInUserId == data?.created_by?._id || hasEditAccess ?
+                    <IconButton onClick={() => {
+                      setAssigneeId(item._id)
+                      deleteAssignee(item._id)
+                    }}>
+                      {deleteLoading && assigneeId == item._id ?
+                        <CircularProgress size="1rem" sx={{ color: "black" }} /> :
+                        <HighlightOffIcon />}
+                    </IconButton>
+                    : ""}
+
                 </div>
+
               );
             }
           )

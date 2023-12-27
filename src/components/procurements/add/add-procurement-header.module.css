@@ -1,8 +1,7 @@
 .backbutton {
-  background: #05A155 !important;
-  padding: 12px 10px !important;
-  min-width: inherit !important;
-  border-radius: 50% !important;
+  border-radius: 4px;
+  border: 1px solid var(--Stroke, #E9EDF1);
+  background: #FFF;
 }
 
 .backbutton:hover {

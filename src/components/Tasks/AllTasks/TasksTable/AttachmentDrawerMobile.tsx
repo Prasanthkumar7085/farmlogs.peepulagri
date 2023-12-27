@@ -501,6 +501,9 @@ const AttachmentDrawerMobile = ({
           "& .MuiPaper-root": {
             background: "#00000063",
             padding: "1rem",
+            width: "100%",
+            margin: "0 auto",
+            maxWidth: "500px"
           },
         }}
       >
@@ -511,7 +514,7 @@ const AttachmentDrawerMobile = ({
           >
             <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
           </div>
-          <div className={styles.singleImageDialog}>
+          <div style={{ height: "calc(100vh - 50px)" }}>
             {imagePreviewOpen?.metadata?.type?.includes("video") ? (
               <video controls width="100%" height="auto" autoPlay>
                 <source
@@ -521,7 +524,7 @@ const AttachmentDrawerMobile = ({
                 Your browser does not support the video tag.
               </video>
             ) : imagePreviewOpen?.metadata?.type?.includes("image") ? (
-              <img src={imagePreviewOpen?.url} alt="" />
+              <img src={imagePreviewOpen?.url} alt="" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             ) : (
               <iframe src={imagePreviewOpen?.url} width={"100%"} height={"90%"}>
                 <p style={{ background: "white" }}>

@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import deleteTaskAttachmentService from "../../../../../lib/services/TasksService/deleteTaskAttachmentService";
 import styles from "../../TaskComments/Comments.module.css";
+import checkIfAttachmentHasPreviewOrNot from "@/pipes/checkIfAttachmentHasPreviewOrNot";
 
 const AttachmentDrawerMobile = ({
   attachmentDrawerClose,
@@ -27,7 +28,7 @@ const AttachmentDrawerMobile = ({
   attachmentdrawer,
   direction,
   getAllAttachmentsInView,
-  setAttachmentDrawer
+  setAttachmentDrawer,
 }: any) => {
   const dispatch = useDispatch();
   const accessToken = useSelector(
@@ -45,6 +46,8 @@ const AttachmentDrawerMobile = ({
   const [checkBoxOpen, setCheckBoxOpen] = useState<any>(false);
   const [deteleLoading, setDeleteLoading] = useState(false);
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState<any>();
+
   function groupByDate(array: Array<any>) {
     const groupedByDate = array.reduce((result, obj) => {
       const dateKey = obj.createdAt.split("T")[0]; // Extract the date from the timestamp
@@ -80,7 +83,7 @@ const AttachmentDrawerMobile = ({
       if (responseData.status >= 200 && responseData.status <= 300) {
         if (!responseData?.data?.attachments?.length) {
           setAttachmentDrawer(false);
-          return
+          return;
         }
         let modifiedData = groupByDate(responseData?.data?.attachments);
         setAttachmentData(modifiedData);
@@ -102,56 +105,6 @@ const AttachmentDrawerMobile = ({
       setAttachmentData([]);
     }
   }, [attachmentdrawer]);
-
-  const downLoadAttachements = async (file: any, name: string) => {
-    try {
-      if (file) {
-        fetch(file)
-          .then((response) => {
-            // Get the filename from the response headers
-            const contentDisposition = response.headers.get(
-              "content-disposition"
-            );
-            let filename = "downloaded_file"; // Default filename if not found in headers
-            if (name) {
-              filename = name;
-            }
-
-            if (contentDisposition) {
-              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-              if (filenameMatch && filenameMatch.length > 1) {
-                filename = filenameMatch[1];
-              }
-            }
-
-            // Create a URL for the blob
-            return response.blob().then((blob) => ({ blob, filename }));
-          })
-          .then(({ blob, filename }) => {
-            const blobUrl = window.URL.createObjectURL(blob);
-
-            const downloadLink = document.createElement("a");
-            downloadLink.href = blobUrl;
-            downloadLink.download = filename; // Use the obtained filename
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-
-            // Clean up the blob URL
-            window.URL.revokeObjectURL(blobUrl);
-            toast.success("Attachement downloaded successfully");
-          })
-          .catch((error) => {
-            console.error("Error downloading file:", error);
-          });
-        // setAlertMessage("Attachement downloaded successfully")
-        // setAlertType(true)
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   //detele attachmeents
   const deleteSelectedImages = async () => {
@@ -233,6 +186,27 @@ const AttachmentDrawerMobile = ({
       }
     });
   }
+
+  const downloadSingleFile = async (item: any) => {
+    try {
+      const response = await fetch(item.url);
+      const blob = await response.blob();
+
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = blobUrl;
+      link.download = item.metadata.original_name || "downloaded_file";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Error downloading file", error);
+    }
+  };
 
   return (
     <div>
@@ -341,15 +315,20 @@ const AttachmentDrawerMobile = ({
             attachmentData?.map((item: any, index: any) => {
               return (
                 <div style={{ marginBottom: "1rem" }} key={index}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "0.5rem" }}>
-
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingBottom: "0.5rem",
+                    }}
+                  >
                     <p className={styles.AttachmentDate}>
                       {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
                     </p>
                     <div className={styles.stickyHeader}>
                       {checkBoxOpen ? (
                         <div style={{ display: "flex", alignItems: "center" }}>
-
                           {selectedItems?.length ? (
                             <div
                               style={{
@@ -364,13 +343,15 @@ const AttachmentDrawerMobile = ({
                                   size="1.2rem"
                                 />
                               ) : (
-                                <IconButton sx={{ padding: "0" }} onClick={() => handleDownload()}>
+                                <IconButton
+                                  sx={{ padding: "0" }}
+                                  onClick={() => handleDownload()}
+                                >
                                   <FileDownloadIcon />
                                 </IconButton>
                               )}
 
                               <IconButton
-
                                 className={styles.selectBtn}
                                 onClick={() => deleteSelectedImages()}
                                 sx={{ padding: "0" }}
@@ -382,7 +363,9 @@ const AttachmentDrawerMobile = ({
                                   />
                                 ) : (
                                   <ImageComponent
-                                    src={"/mobileIcons/scouting/trash-simple-light.svg"}
+                                    src={
+                                      "/mobileIcons/scouting/trash-simple-light.svg"
+                                    }
                                     width={20}
                                     height={20}
                                     alt=""
@@ -398,17 +381,27 @@ const AttachmentDrawerMobile = ({
                               setCheckBoxOpen(false);
                               setSelectedItems([]);
                             }}
-                            sx={{ display: attachmentData?.length ? "" : "none", color: "#d94841", textTransform: "capitalize", fontSize: "14px", fontFamily: "'Inter',sans-serif" }}
-
+                            sx={{
+                              display: attachmentData?.length ? "" : "none",
+                              color: "#d94841",
+                              textTransform: "capitalize",
+                              fontSize: "14px",
+                              fontFamily: "'Inter',sans-serif",
+                            }}
                           >
                             Cancel
                           </Button>
                         </div>
                       ) : (
                         <Button
-
                           onClick={() => setCheckBoxOpen(true)}
-                          sx={{ display: attachmentData?.length ? "" : "none", color: "#05A155", textTransform: "capitalize", fontSize: "14px", fontFamily: "'Inter',sans-serif" }}
+                          sx={{
+                            display: attachmentData?.length ? "" : "none",
+                            color: "#05A155",
+                            textTransform: "capitalize",
+                            fontSize: "14px",
+                            fontFamily: "'Inter',sans-serif",
+                          }}
                         >
                           Select
                         </Button>
@@ -440,6 +433,16 @@ const AttachmentDrawerMobile = ({
                               }
                             }}
                             onClick={() => {
+                              if (!checkBoxOpen) {
+                                if (checkIfAttachmentHasPreviewOrNot(image)) {
+                                  console.log(image, "response");
+
+                                  setImagePreviewOpen(image);
+                                } else {
+                                  downloadSingleFile(image);
+                                }
+                                return;
+                              }
                               handleChange(image); // Call handleLongPress when long press is detected
                             }}
                           />
@@ -491,8 +494,8 @@ const AttachmentDrawerMobile = ({
         </div>
       </Drawer>
       <Dialog
-        onClose={() => setSingleImageView(false)}
-        open={singleImageView}
+        onClose={() => setImagePreviewOpen(null)}
+        open={!!imagePreviewOpen}
         fullScreen
         sx={{
           "& .MuiPaper-root": {
@@ -504,20 +507,23 @@ const AttachmentDrawerMobile = ({
         <div>
           <div
             style={{ textAlign: "end", cursor: "pointer" }}
-            onClick={() => setSingleImageView(false)}
+            onClick={() => setImagePreviewOpen(null)}
           >
             <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
           </div>
           <div className={styles.singleImageDialog}>
-            {imageid?.metadata?.type?.includes("video") ? (
+            {imagePreviewOpen?.metadata?.type?.includes("video") ? (
               <video controls width="100%" height="auto" autoPlay>
-                <source src={imageid?.url} type={imageid?.type} />
+                <source
+                  src={imagePreviewOpen?.url}
+                  type={imagePreviewOpen?.type}
+                />
                 Your browser does not support the video tag.
               </video>
-            ) : imageid?.metadata?.type?.includes("image") ? (
-              <img src={imageid?.url} alt="" />
+            ) : imagePreviewOpen?.metadata?.type?.includes("image") ? (
+              <img src={imagePreviewOpen?.url} alt="" />
             ) : (
-              <iframe src={imageid?.url} width={"100%"} height={"90%"}>
+              <iframe src={imagePreviewOpen?.url} width={"100%"} height={"90%"}>
                 <p style={{ background: "white" }}>
                   No preview available for this file type.
                 </p>

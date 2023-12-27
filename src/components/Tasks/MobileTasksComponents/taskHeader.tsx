@@ -112,6 +112,7 @@ const TaskHeader = ({
                 width: "90%",
                 borderRadius: "20px",
                 background: "#fff !important",
+                marginRight: "1rem",
                 "& .MuiInputBase-root": {
                   borderRadius: "20px !important",
                   height: "2.4rem",
@@ -305,9 +306,9 @@ const TaskHeader = ({
               getOptionDisabled={(option) => {
                 let selectedOption = usersArray?.length
                   ? usersArray?.some(
-                      (item: userTaskType) =>
-                        item?._id === option?._id && item?.name === option?.name
-                    )
+                    (item: userTaskType) =>
+                      item?._id === option?._id && item?.name === option?.name
+                  )
                   : false;
                 return selectedOption;
               }}

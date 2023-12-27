@@ -21,6 +21,13 @@
   border-radius: 2px;
 }
 
+.iconImg {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
 .attachmentsrow {
   display: flex;
   overflow-x: auto;

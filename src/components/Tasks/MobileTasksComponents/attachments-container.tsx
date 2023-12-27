@@ -9,6 +9,7 @@ import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import checkIfAttachmentHasPreviewOrNot from "@/pipes/checkIfAttachmentHasPreviewOrNot";
 import { Dialog } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { toast } from "sonner";
 
 const AttachmentsContainer = ({
   attachmentData,
@@ -47,6 +48,11 @@ const AttachmentsContainer = ({
   const downloadFile = async (item: any) => {
     try {
       const response = await fetch(item.url);
+      if (response.status == 200) {
+        toast.success("Your file will be downloaded soon")
+      } else {
+        toast.error("File downloading failed")
+      }
       const blob = await response.blob();
 
       const blobUrl = window.URL.createObjectURL(blob);
@@ -106,69 +112,26 @@ const AttachmentsContainer = ({
         >
           {attachmentData?.length
             ? attachmentData
-                ?.slice(0, 6)
-                .map((item: TaskAttachmentsType | any, index: number) => {
-                  return (
-                    <div className={styles.eachImageBlock} key={index}>
-                      <img
-                        src={getImageSrcUrl(item)}
-                        alt={""}
-                        className={styles.imageIcon}
-                        onClick={() => {
-                          if (checkIfAttachmentHasPreviewOrNot(item)) {
-                            setImagePreviewOpen(item);
-                          } else {
-                            downloadFile(item);
-                          }
-                        }}
-                      />
-                      {/* {item?.metadata?.type.includes("pdf") ? (
-                      <img
-                        src="/pdf-icon.png"
-                        className={styles.iconImg}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type.includes("csv") ? (
-                      <img
-                        src="/csv-icon.png"
-                        className={styles.iconImg}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type ==
-                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                      item?.metadata?.type.includes("xlsx") ? (
-                      <img
-                        src="/google-sheets-icon.webp"
-                        className={styles.iconImg}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type.includes("doc") ||
-                      item?.metadata?.type.includes("docx") ? (
-                      <img
-                        src="/doc-icon.webp"
-                        className={styles.iconImg}
-                        alt={""}
-                      />
-                    ) : item?.metadata?.type.includes("video") ? (
-                      <img
-                        src="/video-icon.png"
-                        className={styles.iconImg}
-                        alt={""}
-                      />
-                    ) : (
-                      <img
-                        src={
-                          item?.metadata?.type?.includes("image")
-                            ? item.url
-                            : "/other_icon.png"
+              ?.slice(0, 6)
+              .map((item: TaskAttachmentsType | any, index: number) => {
+                return (
+                  <div className={styles.eachImageBlock} key={index}>
+                    <img
+                      className={checkIfAttachmentHasPreviewOrNot(item) ? styles.imageIcon : styles.iconImg}
+                      src={getImageSrcUrl(item)}
+                      alt={""}
+                      onClick={() => {
+                        if (checkIfAttachmentHasPreviewOrNot(item)) {
+                          setImagePreviewOpen(item);
+                        } else {
+                          downloadFile(item);
                         }
-                        alt={""}
-                        className={styles.imageIcon}
-                      />
-                    )} */}
-                    </div>
-                  );
-                })
+                      }}
+                    />
+
+                  </div>
+                );
+              })
             : ""}
         </div>
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
@@ -208,6 +171,9 @@ const AttachmentsContainer = ({
           "& .MuiPaper-root": {
             background: "#00000063",
             padding: "1rem",
+            width: "100%",
+            margin: "0 auto",
+            maxWidth: "500px"
           },
         }}
       >

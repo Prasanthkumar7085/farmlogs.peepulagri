@@ -95,7 +95,7 @@ const TanStackTableProcurmentComponent = ({
     <div>
       <div>
         <div
-          style={{ overflow: "scroll", height: "75vh" }}
+          style={{ overflow: "scroll", height: "80vh" }}
           className="dataTable-container scrollbar"
         >
           <table

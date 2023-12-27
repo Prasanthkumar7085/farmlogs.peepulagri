@@ -33,7 +33,7 @@ const ListProcurments = () => {
 
     const getAllProcurements = async ({
         page = 1,
-        limit = 10,
+        limit = 15,
         search_string = "",
         sortBy = "",
         sortType = "",
@@ -43,12 +43,12 @@ const ListProcurments = () => {
     }: Partial<ApiCallProps>) => {
         setLoading(true);
         let queryParams: any = {};
-        // if (page) {
-        //     queryParams["page"] = page;
-        // }
-        // if (limit) {
-        //     queryParams["limit"] = limit;
-        // }
+        if (page) {
+            queryParams["page"] = page;
+        }
+        if (limit) {
+            queryParams["limit"] = limit;
+        }
         if (search_string) {
             queryParams["search_string"] = search_string;
         }

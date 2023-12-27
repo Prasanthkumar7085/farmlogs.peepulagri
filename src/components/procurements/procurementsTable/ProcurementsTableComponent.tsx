@@ -5,14 +5,10 @@ import { Toaster, toast } from "sonner";
 import deleteProcurmentByIdService from "../../../../lib/services/ProcurementServices/deleteProcurmentByIdService";
 import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
-import Link from "next/link";
 import TanStackTableProcurmentComponent from "./ProcurementsTanStackTable";
-import { ApiCallProps } from "./ListProcurements";
-import { TaskResponseTypes } from "@/types/tasksTypes";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import { Avatar, Tooltip } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import { setAllFarms } from "@/Redux/Modules/Farms";
 
 
 // interface pageProps {
@@ -214,7 +210,18 @@ const ProcurementsTableComponent = ({
       minWidth: "60px",
       maxWidth: "60px",
     },
-
+    {
+      accessorFn: (row: any) => row.requested_by.name,
+      id: "requested_by.name",
+      cell: (info: any) => (
+        <span style={{ padding: "40px 10px 40px 10px" }}>
+          {info.getValue()}
+        </span>
+      ),
+      header: () => <span>Requested By</span>,
+      footer: (props: any) => props.column.id,
+      width: "150px",
+    },
     {
       accessorFn: (row: any) => row.title,
       id: "title",
@@ -237,7 +244,7 @@ const ProcurementsTableComponent = ({
       ),
       header: () => <span>Date of Operation</span>,
       footer: (props: any) => props.column.id,
-      width: "130px",
+      width: "150px",
     },
     {
       accessorFn: (row: any) => {
@@ -325,14 +332,16 @@ const ProcurementsTableComponent = ({
               }}
             >
               <Tooltip followCursor arrow title="View">
-                <Link href={`/procurements/${info.row.original?._id}`}>
+                <div style={{ cursor: "pointer" }} onClick={() =>
+                  router.push(`/procurements/${info.row.original?._id}`)
+                }>
                   <ImageComponent
                     src="/view-icon.svg"
                     height={17}
                     width={17}
                     alt=""
                   />
-                </Link>
+                </div>
               </Tooltip>
               <Tooltip followCursor arrow title="Edit">
                 <div
@@ -343,8 +352,8 @@ const ProcurementsTableComponent = ({
                 >
                   <ImageComponent
                     src="/pencil-icon.svg"
-                    height={17}
-                    width={17}
+                    height={15}
+                    width={15}
                     alt=""
                   />
                 </div>
@@ -376,7 +385,7 @@ const ProcurementsTableComponent = ({
       ),
       header: () => <span>Actions</span>,
       footer: (props: any) => props.column.id,
-      width: "150px",
+      width: "100px",
     },
   ];
 

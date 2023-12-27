@@ -37,7 +37,7 @@ const AssignedToContainer = ({
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const [assigneeId, setAssigneeId] = useState("");
- 
+
 
   const logout = async () => {
     try {
@@ -64,9 +64,10 @@ const AssignedToContainer = ({
         getTaskById();
       } else if (response?.status == 422) {
         toast.error(response?.message);
-      } else if (response?.status == 401) {
-        logout();
       }
+      //  else if (response?.status == 401) {
+      //   logout();
+      // }
     }
     catch (err) {
       console.error(err);
@@ -142,15 +143,15 @@ const AssignedToContainer = ({
                       }}
                     >
                       {item.name.split(" ")?.length > 1
-                        ? `${item.name.split(" ")[0][0]}${
-                            item.name.split(" ")[1][0]
+                        ? `${item.name.split(" ")[0][0]}${item.name.split(" ")[1][0]
                           }`.toUpperCase()
                         : item.name.slice(0, 2)?.toUpperCase()}
                     </Avatar>
                     <p className={styles.assigneeName}>{item?.name}</p>
                   </div>
-                  {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
+                  {loggedInUserId == data?.created_by?._id || status !== "DONE" ? (
                     <IconButton
+                      disabled={status === "DONE"}
                       onClick={() => {
                         setAssigneeId(item._id);
                         deleteAssignee(item._id);

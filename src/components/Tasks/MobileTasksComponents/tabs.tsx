@@ -21,7 +21,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
         "/tasks/status/count/stats?status=INPROGRESS",
         "/tasks/status/count/stats?status=DONE",
         "/tasks/status/count/stats?status=PENDING",
-        "/tasks/status/count/stats?status=OVERDUE",
+        "/tasks/status/count/stats?status=OVER-DUE",
       ];
 
       let responses = await Promise.allSettled(

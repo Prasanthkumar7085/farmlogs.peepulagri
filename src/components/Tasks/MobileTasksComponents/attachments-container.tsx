@@ -61,8 +61,8 @@ const AttachmentsContainer = ({
       ) : (
         ""
       )}
-      <div className={styles.files}>
-        <div className={styles.attachmentsrow}>
+      <div className={styles.files} style={{ marginTop: attachmentData?.length ? "1rem" : "0 !important" }} >
+        <div className={styles.attachmentsrow} style={{ marginBottom: "12px", display: attachmentData?.length ? "" : "none" }}>
           {attachmentData?.length
             ? attachmentData
               ?.slice(0, 6)

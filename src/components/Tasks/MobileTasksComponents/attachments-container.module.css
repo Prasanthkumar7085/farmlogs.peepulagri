@@ -40,8 +40,6 @@
 .files {
   align-self: stretch;
   align-items: flex-start;
-  gap: 12px;
-  margin-top: 1rem;
 }
 
 .attachmentscontainer {

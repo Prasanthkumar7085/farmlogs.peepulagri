@@ -90,7 +90,7 @@ const ViewtaskHeader = ({ data, status }: any) => {
             horizontal: 'left',
           }}
         >
-          <MenuItem disabled={status === "DONE"} onClick={() => setDialogOpen(true)}>Delete</MenuItem>
+          <MenuItem sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif" }} disabled={status === "DONE"} onClick={() => setDialogOpen(true)}>Delete</MenuItem>
         </Menu>
         <AlertDelete
           open={dialogOpen}

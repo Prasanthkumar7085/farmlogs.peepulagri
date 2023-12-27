@@ -96,7 +96,7 @@ const UpdateSummary = () => {
         setFarmDefaultValue(responseData?.data?.farm_id);
         console.log(responseData?.data?.farm_id);
         setCropDefaultValue(responseData?.data?.crop_id);
-        setFarmID(responseData?.data);
+        setFarmID(responseData?.data?.farm_id);
         setCropId(responseData?.data?.crop_id);
         setSummaryData(responseData?.data);
       } else if (responseData?.statusCode == 403) {

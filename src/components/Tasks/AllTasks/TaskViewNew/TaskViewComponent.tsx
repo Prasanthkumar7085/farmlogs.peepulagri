@@ -22,6 +22,7 @@ import ViewLogs from "../../ViewTask/ViewLogs";
 import styles from "./TaskViewComponent.module.css";
 import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import deleteAssigneeInTaskService from "../../../../../lib/services/TasksService/deleteAssigneeInTaskService";
+import updateTaskDeadlineService from "../../../../../lib/services/TasksService/updateTaskDeadlineService";
 
 const TaskViewComponent = () => {
   const router = useRouter();
@@ -337,6 +338,40 @@ const TaskViewComponent = () => {
     setLoading(false);
     // return response;
   };
+  const onUpdateDeadlineField = async ({
+    deadlineProp,
+  }: Partial<{ deadlineProp: string }>) => {
+    setLoading(true);
+    let body = {
+
+
+      deadline: deadlineProp
+        ? deadlineProp
+        : deadlineString
+          ? moment(deadlineString)
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          : "",
+
+    };
+    const response = await updateTaskDeadlineService({
+      taskId: data?._id as string,
+      body: body,
+      token: accessToken,
+    });
+    if (response?.success) {
+      toast.success(response?.message);
+      await getTaskById(router.query.task_id as string);
+      setEditFieldOrNot(false);
+      setEditField("");
+    } else {
+      if (response?.errors) {
+        setErrorMessages(response?.errors);
+      }
+    }
+    setLoading(false);
+    // return response;
+  };
 
   //select assingee for delete
   const handleAssigneeCheckboxChange = (
@@ -361,7 +396,7 @@ const TaskViewComponent = () => {
           assign_to: selectedAssigneeIds,
         };
 
-       let response = await deleteAssigneeInTaskService({id:id,token:accessToken,body:body})
+        let response = await deleteAssigneeInTaskService({ id: id, token: accessToken, body: body })
 
         if (response?.success) {
           setDeleteFieldOrNot(false);
@@ -843,7 +878,7 @@ const TaskViewComponent = () => {
 
                         setDeadlineString(dateWithPresentTime);
 
-                        onUpdateField({ deadlineProp: dateWithPresentTime });
+                        onUpdateDeadlineField({ deadlineProp: dateWithPresentTime });
                       }}
                       format="dd/MM/yyyy"
                       slotProps={{

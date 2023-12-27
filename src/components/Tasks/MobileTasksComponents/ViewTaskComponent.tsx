@@ -19,6 +19,7 @@ import updateTaskService from "../../../../lib/services/TasksService/updateTaskS
 import moment from "moment";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import DrawerBoxComponent from "../TaskComments/DrawerBox";
+import updateTaskDeadlineService from "../../../../lib/services/TasksService/updateTaskDeadlineService";
 const ViewTaskComponent = () => {
   const router = useRouter();
   const id = router.query.task_id;
@@ -59,7 +60,7 @@ const ViewTaskComponent = () => {
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
-  const getTaskById = async (id=router.query.task_id as string) => {
+  const getTaskById = async (id = router.query.task_id as string) => {
     setLoading(true);
     try {
       const response = await getTaskByIdService({
@@ -215,6 +216,39 @@ const ViewTaskComponent = () => {
     setLoading(false);
     // return response;
   };
+  const onUpdateDeadlineField = async ({
+    deadlineProp,
+  }: Partial<{ deadlineProp: string }>) => {
+    setLoading(true);
+    let body = {
+
+      deadline: deadlineProp
+        ? deadlineProp
+        : deadlineString
+          ? moment(deadlineString)
+            .utcOffset("+05:30")
+            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+          : "",
+
+    };
+    const response = await updateTaskDeadlineService({
+      taskId: data?._id as string,
+      body: body,
+      token: accessToken,
+    });
+    if (response?.success) {
+      toast.success(response?.message);
+      await getTaskById(router.query.task_id as string);
+      setEditFieldOrNot(false);
+      setEditField("");
+    } else {
+      if (response?.errors) {
+        setErrorMessages(response?.errors);
+      }
+    }
+    setLoading(false);
+    // return response;
+  };
   const [calenderOpen, setCalenderOpen] = useState(false);
   const handleCalenderOpen = () => setCalenderOpen(true);
   const handleCalenderClose = () => setCalenderOpen(false);
@@ -251,6 +285,7 @@ const ViewTaskComponent = () => {
           setEditField={setEditField}
           setEditFieldOrNot={setEditFieldOrNot}
           onUpdateField={onUpdateField}
+          onUpdateDeadlineField={onUpdateDeadlineField}
           calenderOpen={calenderOpen}
           handleCalenderOpen={handleCalenderOpen}
           handleCalenderClose={handleCalenderClose}

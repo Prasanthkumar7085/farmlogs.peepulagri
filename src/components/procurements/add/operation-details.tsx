@@ -1,4 +1,4 @@
-import { Chip, TextField, TextareaAutosize } from "@mui/material";
+import { Chip, MenuItem, Select, SelectChangeEvent, TextField, TextareaAutosize } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import type { NextPage } from "next";
@@ -76,6 +76,18 @@ const OperationDetails: NextPage<pagePropTypes> = ({
       : [];
     setEditFarms(data);
   };
+  const [age, setAge] = useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value);
+  };
+  const [options] = useState<Array<{ value: string; title: string }>>([
+    { value: "None", title: "NONE" },
+    { value: "Low", title: "LOW" },
+    { value: "Medium", title: "MEDIUM" },
+    { value: "Hign", title: "HIGH" },
+
+  ]);
 
   return (
     <>
@@ -130,46 +142,66 @@ const OperationDetails: NextPage<pagePropTypes> = ({
             </div>
           </div>
         </div>
-        <div className={styles.selectfarm}>
-          <label className={styles.label}>
-            {`Select Farm `} <strong style={{ color: "red" }}>*</strong>
-          </label>
-          <FarmAutoCompleteInAddProcurement
-            isDisabled={isDisabled}
-            options={farmOptions}
-            onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-            label={"title"}
-            placeholder={"Select Farms here"}
-            defaultValue={defaultValue}
-            optionsLoading={optionsLoading}
-            setOptionsLoading={setOptionsLoading}
-            searchString={searchString}
-            setSearchString={setSearchString}
-            editFarms={editFarms}
-          />
-          <ErrorMessages
-            errorMessages={errorMessages}
-            keyname={"farm_ids"}
-          />
-          <div style={{ display: "flex", }}>
+        <div style={{ display: "flex" }}>
 
-            {router.query.procurement_id && editFarms?.length
-              ? editFarms.map((item, index) => {
-                return (
-                  <div key={index} style={{ display: "flex", }}>
+          <div className={styles.selectfarm}>
+            <label className={styles.label}>
+              {`Select Farm `} <strong style={{ color: "red" }}>*</strong>
+            </label>
+            <FarmAutoCompleteInAddProcurement
+              isDisabled={isDisabled}
+              options={farmOptions}
+              onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+              label={"title"}
+              placeholder={"Select Farms here"}
+              defaultValue={defaultValue}
+              optionsLoading={optionsLoading}
+              setOptionsLoading={setOptionsLoading}
+              searchString={searchString}
+              setSearchString={setSearchString}
+              editFarms={editFarms}
+            />
+            <ErrorMessages
+              errorMessages={errorMessages}
+              keyname={"farm_ids"}
+            />
+            <div style={{ display: "flex", }}>
 
-                    <Chip
-                      label={item.title}
-                      key={item._id}
-                      clickable
-                      disabled={isDisabled}
-                      onDelete={() => deleteEditedFarms(item._id)}
-                    />
-                  </div>
-                );
-              })
-              : ""}
+              {router.query.procurement_id && editFarms?.length
+                ? editFarms.map((item, index) => {
+                  return (
+                    <div key={index} style={{ display: "flex", }}>
+
+                      <Chip
+                        label={item.title}
+                        key={item._id}
+                        clickable
+                        disabled={isDisabled}
+                        onDelete={() => deleteEditedFarms(item._id)}
+                      />
+                    </div>
+                  );
+                })
+                : ""}
+            </div>
           </div>
+          <Select
+            size="small"
+            sx={{
+              width: "100%",
+              background: "#fff",
+              color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
+            }}
+            placeholder="Select Priority"
+          >
+
+            {options?.length && options.map((item: { value: string, title: string }, index: number) => {
+              return (
+                <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
+              )
+            })}
+
+          </Select>
         </div>
         <div className={styles.remarks}>
           <label className={styles.label}>Remarks</label>

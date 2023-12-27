@@ -183,3 +183,17 @@
   border-radius: 50%;
   background-color: #05A155;
 }
+
+/* Procurement module navbar styles */
+.addProcurementBtn {
+  border-radius: 4px !important;
+  background: #05A155 !important;
+  color: #FFF !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(14px, 0.72vw, 16px) !important;
+  font-weight: 500;
+  padding: 4.5px 20px !important;
+  text-transform: capitalize !important;
+  display: flex;
+  align-items: center;
+}

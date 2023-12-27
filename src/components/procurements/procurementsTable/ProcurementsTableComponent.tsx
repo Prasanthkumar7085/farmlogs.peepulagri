@@ -10,7 +10,7 @@ import TanStackTableProcurmentComponent from "./ProcurementsTanStackTable";
 import { ApiCallProps } from "./ListProcurements";
 import { TaskResponseTypes } from "@/types/tasksTypes";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import { Avatar } from "@mui/material";
+import { Avatar, Tooltip } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { setAllFarms } from "@/Redux/Modules/Farms";
 
@@ -324,42 +324,49 @@ const ProcurementsTableComponent = ({
                 justifyContent: "space-evenly",
               }}
             >
-              <Link href={`/procurements/${info.row.original?._id}`}>
-                <ImageComponent
-                  src="/view-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </Link>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  router.push(`/procurements/${info.row.original?._id}/edit`)
-                }
-              >
-                <ImageComponent
-                  src="/pencil-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </div>
-              {userType_v2 !== "farmer" ? (
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setdeleteProcurments(info.row.original?._id);
-                    setDialogOpen(true);
-                  }}
-                >
+              <Tooltip followCursor arrow title="View">
+                <Link href={`/procurements/${info.row.original?._id}`}>
                   <ImageComponent
-                    src="/trast-icon.svg"
+                    src="/view-icon.svg"
                     height={17}
                     width={17}
-                    alt="view"
+                    alt=""
+                  />
+                </Link>
+              </Tooltip>
+              <Tooltip followCursor arrow title="Edit">
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    router.push(`/procurements/${info.row.original?._id}/edit`)
+                  }
+                >
+                  <ImageComponent
+                    src="/pencil-icon.svg"
+                    height={17}
+                    width={17}
+                    alt=""
                   />
                 </div>
+              </Tooltip>
+
+              {userType_v2 !== "farmer" ? (
+                <Tooltip followCursor arrow title="Delete">
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setdeleteProcurments(info.row.original?._id);
+                      setDialogOpen(true);
+                    }}
+                  >
+                    <ImageComponent
+                      src="/trast-icon.svg"
+                      height={17}
+                      width={17}
+                      alt=""
+                    />
+                  </div>
+                </Tooltip>
               ) : (
                 ""
               )}

@@ -4,13 +4,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
-import getAllTasksService from "../../../../lib/services/TasksService/getAllTasksService";
-
 import ImageComponent from "@/components/Core/ImageComponent";
 import getAllProcurementService from "../../../../lib/services/ProcurementServices/getAllProcrumentService";
-import NavBarContainer from "@/components/Tasks/AllTasks/TasksNavBar/NavBarContainer";
 import ProcurementsTableComponent from "./ProcurementsTableComponent";
 import { addSerial } from "@/pipes/addSerial";
+import ProcurementNavBarContainer from "@/components/Tasks/AllTasks/TasksNavBar/NavBarContainerProcurement";
 
 export interface ApiCallProps {
     page: string | number;
@@ -28,7 +26,6 @@ const ListProcurments = () => {
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
-
     const [data, setData] = useState([]);
     const [paginationDetails, setPaginationDetails] = useState();
     const [loading, setLoading] = useState(true);
@@ -184,53 +181,59 @@ const ListProcurments = () => {
     };
 
     return (
-      <div style={{ padding: "1rem 2rem" }}>
-        <NavBarContainer
-          onChangeSearch={onChangeSearch}
-          searchString={searchString}
-          onSelectValueFromDropDown={onSelectValueFromDropDown}
-          selectedFarm={selectedFarm}
-          onStatusChange={onStatusChange}
-          onUserChange={onUserChange}
-          titleName={"Procurment Module"}
-        />
-        {data.length ? (
-          <ProcurementsTableComponent
-            data={data}
-            getData={getAllProcurements}
-            paginationDetails={paginationDetails}
-          />
-        ) : !loading ? (
-          <div
-            style={{
-              justifyContent: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <ImageComponent
-              src="/no-tasks-data.svg"
-              height={500}
-              width={500}
-              alt="no-tasks"
+        <div style={{ padding: "1rem 2rem" }}>
+            <ProcurementNavBarContainer
+                onChangeSearch={onChangeSearch}
+                searchString={searchString}
+                onSelectValueFromDropDown={onSelectValueFromDropDown}
+                selectedFarm={selectedFarm}
+                onStatusChange={onStatusChange}
+                onUserChange={onUserChange}
+                titleName={"Procurment Module"}
             />
-            <div
-              style={{
-                fontSize: "20px",
-                fontWeight: "bold",
-                color: "#a05148",
-              }}
-            >
-              No Procurements
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
+            {data.length ? (
+                <ProcurementsTableComponent
+                    data={data}
+                    getData={getAllProcurements}
+                    paginationDetails={paginationDetails}
+                />
+            ) : !loading ? (
+                <div
+                    style={{
+                        justifyContent: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                    }}
+                >
+                    <ImageComponent
+                        src="/no-tasks-data.svg"
+                        height={500}
+                        width={500}
+                        alt="no-tasks"
+                    />
+                    {/* <ImageComponent
+                            src="/Nodata-animated-img.svg"
+                            height={500}
+                            width={500}
+                            alt="no-tasks"
+                        /> */}
+                    <div
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                            color: "#a05148",
+                        }}
+                    >
+                        No Procurements
+                    </div>
+                </div>
+            ) : (
+                ""
+            )}
 
-        <LoadingComponent loading={loading} />
-      </div>
+            <LoadingComponent loading={loading} />
+        </div>
     );
 };
 

@@ -9,8 +9,6 @@ import {
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsService";
-import FarmAutoCompleteInAddTask from "../../AddTask/FarmAutoCompleteInTasks";
 import styles from "./NavBarContainer.module.css";
 import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from "@mui/icons-material/Add";
@@ -26,7 +24,7 @@ interface PropTypes {
   titleName: any
 }
 
-const NavBarContainer: React.FC<PropTypes> = ({
+const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   onChangeSearch,
   searchString,
   onSelectValueFromDropDown,
@@ -109,7 +107,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
     <>
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
-          <img className={styles.note1Icon} alt="" src="/note-11.svg" />
+          <img className={styles.note1Icon} alt="" src="/support-icon-procurement.svg" />
           <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>
         <div className={styles.headeractions}>
@@ -121,7 +119,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
               value={status ? status : ""}
             />
           </div>
-          <div style={{ width: "25%" }}>
+          <div style={{ width: "30%" }}>
             <TextField
               value={search}
               onChange={(e) => {
@@ -146,7 +144,7 @@ const NavBarContainer: React.FC<PropTypes> = ({
           </div>
           {userType_v2 !== "farmer" ? (
             <Button
-              className={styles.filter}
+              className={styles.addProcurementBtn}
               color="primary"
               size="small"
               variant="contained"
@@ -164,4 +162,4 @@ const NavBarContainer: React.FC<PropTypes> = ({
   );
 };
 
-export default NavBarContainer;
+export default ProcurementNavBarContainer;

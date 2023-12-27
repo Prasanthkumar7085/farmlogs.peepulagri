@@ -66,7 +66,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
     if (+count >= 100000) {
       let remainder = +count % 100000;
       if (remainder) {
-        remainder = Number(String(remainder)[0]);
+        remainder = Number(String(remainder).slice(0, 1));
         return `${Math.floor(count / 100000)}.${remainder}k`;
       }
       return `${Math.floor(count / 100000)}k`;
@@ -75,7 +75,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
     if (+count >= 1000) {
       let remainder = +count % 1000;
       if (remainder) {
-        remainder = Number(String(remainder)[0]);
+        remainder = Number(String(remainder).slice(0, 1));
         return `${Math.floor(count / 1000)}.${remainder}k`;
       }
       return `${Math.floor(count / 1000)}k`;

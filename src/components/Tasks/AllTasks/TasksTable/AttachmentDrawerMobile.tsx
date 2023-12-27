@@ -190,6 +190,11 @@ const AttachmentDrawerMobile = ({
   const downloadSingleFile = async (item: any) => {
     try {
       const response = await fetch(item.url);
+      if (response.status == 200) {
+        toast.success("Your file will be downloaded soon")
+      } else {
+        toast.error("File downloading failed")
+      }
       const blob = await response.blob();
 
       const blobUrl = window.URL.createObjectURL(blob);
@@ -420,7 +425,8 @@ const AttachmentDrawerMobile = ({
                             alt=""
                             height={100}
                             width={100}
-                            className={styles.attachmentImg}
+                            className={checkIfAttachmentHasPreviewOrNot(image) ? styles.attachmentImg : styles.attachmentDocumentImg}
+                            // className={styles.attachmentImg}
                             onContextMenu={(e) => {
                               e.preventDefault();
                               handleChange(image);

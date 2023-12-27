@@ -77,32 +77,6 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     }
   }, []);
 
-  const getAllFarms = async () => {
-    const response = await ListAllFarmForDropDownService("", accessToken);
-    if (response?.success) {
-      setFarmOptions(response?.data);
-      if (router.query.farm_id) {
-        let obj = response?.data?.find(
-          (item: FarmInTaskType) => item?._id == router.query?.farm_id
-        );
-        setSelectedFarmOption(obj);
-      }
-    }
-  };
-  const getAllUsers = async () => {
-    const response = await getAllUsersService({ token: accessToken });
-    if (response?.success) {
-      setUsers(response?.data);
-    }
-  };
-
-  // useEffect(() => {
-  //   if (router.isReady && accessToken) {
-  //     getAllFarms();
-  //     getAllUsers();
-  //   }
-  // }, [router.isReady, accessToken]);
-
   return (
     <>
       <div className={styles.navbarcontainer}>
@@ -163,3 +137,4 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
 };
 
 export default ProcurementNavBarContainer;
+

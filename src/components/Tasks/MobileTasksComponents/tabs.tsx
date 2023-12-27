@@ -66,7 +66,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
     if (+count >= 100000) {
       let remainder = +count % 100000;
       if (remainder) {
-        remainder = Number(String(remainder).slice(0, 1));
+        remainder = Number(String(remainder).slice(0, 2));
         return `${Math.floor(count / 100000)}.${remainder}k`;
       }
       return `${Math.floor(count / 100000)}k`;
@@ -75,7 +75,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
     if (+count >= 1000) {
       let remainder = +count % 1000;
       if (remainder) {
-        remainder = Number(String(remainder).slice(0, 1));
+        remainder = Number(String(remainder).slice(0, 2));
         return `${Math.floor(count / 1000)}.${remainder}k`;
       }
       return `${Math.floor(count / 1000)}k`;
@@ -99,9 +99,10 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       >
         All
         <Chip
+          className={styles.taskCountChip}
           label={getModifiedCount(counts["all"])}
           sx={{
-            height: "15px",
+            height: "20px",
 
             // color: !router.query.status ? "#46a845" : "#6a7185",
             color: "#fff",
@@ -121,9 +122,10 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       >
         To Start
         <Chip
+          className={styles.taskCountChip}
           label={getModifiedCount(counts["to_start"])}
           sx={{
-            height: "15px",
+            height: "20px",
 
             // color: router.query.status == "TO-START" ? "#46a845" : "#6a7185",
             color: "#fff",
@@ -144,9 +146,10 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       >
         Inprogress
         <Chip
+          className={styles.taskCountChip}
           label={getModifiedCount(counts["inprogress"])}
           sx={{
-            height: "15px",
+            height: "20px",
 
             // color: router.query.status == "INPROGRESS" ? "#46a845" : "#6a7185",
             color: "#fff",
@@ -166,9 +169,10 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       >
         Done
         <Chip
+          className={styles.taskCountChip}
           label={getModifiedCount(counts["done"])}
           sx={{
-            height: "15px",
+            height: "20px",
 
             // color: router.query.status == "DONE" ? "#46a845" : "#6a7185",
             color: "#fff",
@@ -187,9 +191,10 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       >
         Pending
         <Chip
+          className={styles.taskCountChip}
           label={getModifiedCount(counts["pending"])}
           sx={{
-            height: "15px",
+            height: "20px",
 
             // color: router.query.status == "PENDING" ? "#46a845" : "#6a7185",
             color: "#fff",
@@ -210,13 +215,17 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
         Overdue
         <Chip
           label={getModifiedCount(counts["overdue"])}
+          className={styles.taskCountChip}
           sx={{
-            height: "15px",
+            height: "20px",
 
             // color: router.query.status == "OVER-DUE" ? "#46a845" : "#6a7185",
             color: "#fff",
             background:
               router.query.status == "OVER-DUE" ? "#46a845" : "#6a7185",
+            '&:hover': {
+              background: "#46a845"
+            }
           }}
         />
       </Button>

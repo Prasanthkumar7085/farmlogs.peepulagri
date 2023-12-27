@@ -134,3 +134,7 @@
   min-width: inherit !important;
   background-color: #fff !important;
 }
+
+.todoButton:hover .taskCountChip {
+  background-color: #45A845 !important;
+}

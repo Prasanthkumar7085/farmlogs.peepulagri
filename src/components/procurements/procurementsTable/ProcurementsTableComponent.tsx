@@ -210,9 +210,9 @@ const ProcurementsTableComponent = ({
       id: "id",
       header: () => <span>S.No</span>,
       footer: (props: any) => props.column.id,
-      width: "50px",
-      minWidth: "50px",
-      maxWidth: "50px",
+      width: "60px",
+      minWidth: "60px",
+      maxWidth: "60px",
     },
 
     {
@@ -237,7 +237,7 @@ const ProcurementsTableComponent = ({
       ),
       header: () => <span>Date of Operation</span>,
       footer: (props: any) => props.column.id,
-      width: "150px",
+      width: "130px",
     },
     {
       accessorFn: (row: any) => {
@@ -247,7 +247,7 @@ const ProcurementsTableComponent = ({
       cell: (info: any) => <FarmTitleComponent info={info} />,
       header: () => <span>Farm Name</span>,
       footer: (props: any) => props.column.id,
-      width: "350px",
+      width: "200px",
     },
     {
       accessorFn: (row: any) => row.point_of_contact?.name,
@@ -272,7 +272,7 @@ const ProcurementsTableComponent = ({
       ),
       header: () => <span>Approved By</span>,
       footer: (props: any) => props.column.id,
-      width: "200px",
+      width: "150px",
     },
 
     {
@@ -297,7 +297,7 @@ const ProcurementsTableComponent = ({
       ),
       header: () => <span>Priority</span>,
       footer: (props: any) => props.column.id,
-      width: "120px",
+      width: "100px",
     },
     // {
     //   accessorFn: (row: any) => row.completed_at,

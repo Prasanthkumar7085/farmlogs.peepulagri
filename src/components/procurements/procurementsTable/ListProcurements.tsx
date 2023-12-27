@@ -22,7 +22,6 @@ export interface ApiCallProps {
 }
 const ListProcurments = () => {
     const router = useRouter();
-
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );

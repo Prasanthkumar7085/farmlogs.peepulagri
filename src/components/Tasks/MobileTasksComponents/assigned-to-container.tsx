@@ -151,6 +151,7 @@ const AssignedToContainer = ({
                   </div>
                   {loggedInUserId == data?.created_by?._id || status !== "DONE" ? (
                     <IconButton
+                      sx={{ padding: "0" }}
                       disabled={status === "DONE"}
                       onClick={() => {
                         setAssigneeId(item._id);
@@ -160,7 +161,7 @@ const AssignedToContainer = ({
                       {deleteLoading && assigneeId == item._id ? (
                         <CircularProgress size="1rem" sx={{ color: "black" }} />
                       ) : (
-                        <HighlightOffIcon />
+                        <HighlightOffIcon sx={{ fontSize: "1.2rem" }} />
                       )}
                     </IconButton>
                   ) : (

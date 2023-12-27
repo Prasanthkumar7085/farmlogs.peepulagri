@@ -1,4 +1,4 @@
-import { Avatar, dividerClasses } from "@mui/material";
+import { Avatar, AvatarGroup, dividerClasses } from "@mui/material";
 import moment from "moment";
 import { useRouter } from "next/router";
 import styles from "./task-card.module.css";
@@ -40,8 +40,8 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                       {item?.title
                         ? item?.title?.length > 25
                           ? item?.title?.slice(0, 1).toUpperCase() +
-                            item?.title?.slice(1, 22) +
-                            "..."
+                          item?.title?.slice(1, 22) +
+                          "..."
                           : item?.title[0].toUpperCase() + item?.title?.slice(1)
                         : "ty"}
                     </h2>
@@ -60,24 +60,33 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                     <h3 id={styles[item.status]}>
                       {getItemTitle(item?.status)}
                     </h3>
-                    <div className={styles.profile}>
-                      <h1 className={styles.jj}>
-                        <Avatar
-                          sx={{
-                            fontSize: "9px",
-                            width: "20px",
-                            height: "20px",
+
+
+                    <AvatarGroup sx={{
+                      '& .MuiAvatar-root': {
+                        fontSize: "10px !important",
+                        width: "22px !important",
+                        height: "22px !important",
+                        background: "#d94841 !important",
+                      }
+                    }} total={item?.assign_to?.length} max={3}>
+                      {item?.assign_to?.map((assignee: any, assigneeindex: any) => {
+                        return (
+                          <Avatar sx={{
+                            fontSize: "10px",
+                            width: "22px",
+                            height: "22px",
                             background: "#d94841",
-                          }}
-                        >
-                          {item?.created_by?.name?.split(" ")?.length > 1
-                            ? `${item?.created_by?.name?.split(" ")[0][0]}${
-                                item?.created_by?.name?.split(" ")[1][0]
-                              }`.toUpperCase()
-                            : item?.created_by?.name.slice(0, 2)?.toUpperCase()}
-                        </Avatar>
-                      </h1>
-                    </div>
+
+                          }} key={assigneeindex} >
+                            {assignee?.name?.split(" ")?.length > 3
+                              ? `${assignee?.name?.split(" ")[0][0]}${assignee?.name?.split(" ")[1][0]}`.toUpperCase()
+                              : assignee?.name.slice(0, 2)?.toUpperCase()}
+                          </Avatar>
+                        );
+                      })}
+                    </AvatarGroup>
+
                   </div>
                 </div>
               </div>
@@ -118,25 +127,30 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                     <h3 className={styles.farmname} id={styles[item.status]}>
                       {getItemTitle(item?.status)}
                     </h3>
-                    <div className={styles.profile}>
-                      <h1 className={styles.jj}>
-                        <Avatar
-                          sx={{
-                            fontSize: "9px",
-                            width: "20px",
-                            height: "20px",
+
+                    <AvatarGroup sx={{
+                      '& .MuiAvatar-root': {
+                        fontSize: "10px !important",
+                        width: "22px !important",
+                        height: "22px !important",
+                        background: "#d94841 !important",
+                      }
+                    }} total={item?.assign_to?.length} max={3}>
+                      {item?.assign_to?.map((assignee: any, assigneeindex: any) => {
+                        return (
+                          <Avatar sx={{
+                            fontSize: "10px",
+                            width: "22px",
+                            height: "22px",
                             background: "#d94841",
-                          }}
-                        >
-                          {item?.created_by?.name?.split(" ")?.length > 1
-                            ? `${item?.created_by?.name?.split(" ")[0][0]}${item?.created_by?.name?.split(" ")[1][0]
-                              }`.toUpperCase()
-                            : item?.created_by?.name
-                              .slice(0, 2)
-                              ?.toUpperCase()}
-                        </Avatar>
-                      </h1>
-                    </div>
+                          }} key={assigneeindex} >
+                            {assignee?.name?.split(" ")?.length > 3
+                              ? `${assignee?.name?.split(" ")[0][0]}${assignee?.name?.split(" ")[1][0]}`.toUpperCase()
+                              : assignee?.name.slice(0, 2)?.toUpperCase()}
+                          </Avatar>
+                        );
+                      })}
+                    </AvatarGroup>
                   </div>
                 </div>
               </div>

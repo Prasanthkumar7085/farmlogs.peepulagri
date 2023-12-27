@@ -5,6 +5,10 @@ import { useSelector } from "react-redux";
 import TasksAttachmentsMobile from "../AddTask/TasksAttachments-mobile";
 import AttachmentDrawerMobile from "../AllTasks/TasksTable/AttachmentDrawerMobile";
 import styles from "./attachments-container.module.css";
+import getImageSrcUrl from "@/pipes/getImageSrcUrl";
+import checkIfAttachmentHasPreviewOrNot from "@/pipes/checkIfAttachmentHasPreviewOrNot";
+import { Dialog } from "@mui/material";
+import { Close } from "@mui/icons-material";
 
 const AttachmentsContainer = ({
   attachmentData,
@@ -25,6 +29,7 @@ const AttachmentsContainer = ({
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
   const [uploadAttachmentsOpen, setUploadAttachmentsOpen] = useState(false);
   const [attachmentdrawer, setAttachmentDrawer] = useState(false);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState<any>();
 
   const setUploadedFiles = (filesUploaded: any) => {
     setFiles(filesUploaded);
@@ -39,9 +44,36 @@ const AttachmentsContainer = ({
     }
   };
 
-  return (
-    <div className={styles.attachmentscontainer} style={{ display: loggedInUserId == data?.created_by?._id || hasEditAccess ? "" : "none" }} >
+  const downloadFile = async (item: any) => {
+    try {
+      const response = await fetch(item.url);
+      const blob = await response.blob();
 
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = blobUrl;
+      link.download = item.metadata.original_name || "downloaded_file";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Error downloading file", error);
+    }
+  };
+  return (
+    <div
+      className={styles.attachmentscontainer}
+      style={{
+        display:
+          loggedInUserId == data?.created_by?._id || hasEditAccess
+            ? ""
+            : "none",
+      }}
+    >
       {attachmentData?.length ? (
         <div
           style={{
@@ -61,15 +93,36 @@ const AttachmentsContainer = ({
       ) : (
         ""
       )}
-      <div className={styles.files} style={{ marginTop: attachmentData?.length ? "1rem" : "0 !important" }} >
-        <div className={styles.attachmentsrow} style={{ marginBottom: "12px", display: attachmentData?.length ? "" : "none" }}>
+      <div
+        className={styles.files}
+        style={{ marginTop: attachmentData?.length ? "1rem" : "0 !important" }}
+      >
+        <div
+          className={styles.attachmentsrow}
+          style={{
+            marginBottom: "12px",
+            display: attachmentData?.length ? "" : "none",
+          }}
+        >
           {attachmentData?.length
             ? attachmentData
-              ?.slice(0, 6)
-              .map((item: TaskAttachmentsType | any, index: number) => {
-                return (
-                  <div className={styles.eachImageBlock} key={index}>
-                    {item?.metadata?.type.includes("pdf") ? (
+                ?.slice(0, 6)
+                .map((item: TaskAttachmentsType | any, index: number) => {
+                  return (
+                    <div className={styles.eachImageBlock} key={index}>
+                      <img
+                        src={getImageSrcUrl(item)}
+                        alt={""}
+                        className={styles.imageIcon}
+                        onClick={() => {
+                          if (checkIfAttachmentHasPreviewOrNot(item)) {
+                            setImagePreviewOpen(item);
+                          } else {
+                            downloadFile(item);
+                          }
+                        }}
+                      />
+                      {/* {item?.metadata?.type.includes("pdf") ? (
                       <img
                         src="/pdf-icon.png"
                         className={styles.iconImg}
@@ -112,11 +165,11 @@ const AttachmentsContainer = ({
                         alt={""}
                         className={styles.imageIcon}
                       />
-                    )}
-                  </div>
-                );
-              }) : ''}
-
+                    )} */}
+                    </div>
+                  );
+                })
+            : ""}
         </div>
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
           <>
@@ -146,6 +199,46 @@ const AttachmentsContainer = ({
       />
 
       {/* <Drawer open={attachmentsOpen}></Drawer> */}
+
+      <Dialog
+        onClose={() => setImagePreviewOpen(null)}
+        open={!!imagePreviewOpen}
+        fullScreen
+        sx={{
+          "& .MuiPaper-root": {
+            background: "#00000063",
+            padding: "1rem",
+          },
+        }}
+      >
+        <div>
+          <div
+            style={{ textAlign: "end", cursor: "pointer" }}
+            onClick={() => setImagePreviewOpen(null)}
+          >
+            <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
+          </div>
+          <div className={styles.singleImageDialog}>
+            {imagePreviewOpen?.metadata?.type?.includes("video") ? (
+              <video controls width="100%" height="auto" autoPlay>
+                <source
+                  src={imagePreviewOpen?.url}
+                  type={imagePreviewOpen?.type}
+                />
+                Your browser does not support the video tag.
+              </video>
+            ) : imagePreviewOpen?.metadata?.type?.includes("image") ? (
+              <img src={imagePreviewOpen?.url} alt="" />
+            ) : (
+              <iframe src={imagePreviewOpen?.url} width={"100%"} height={"90%"}>
+                <p style={{ background: "white" }}>
+                  No preview available for this file type.
+                </p>
+              </iframe>
+            )}
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

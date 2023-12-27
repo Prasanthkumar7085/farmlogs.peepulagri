@@ -135,7 +135,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                         height: "22px !important",
                         background: "#d94841 !important",
                       }
-                    }} total={item?.assign_to?.length} max={3}>
+                    }} total={item?.assign_to?.length} max={5}>
                       {item?.assign_to?.map((assignee: any, assigneeindex: any) => {
                         return (
                           <Avatar sx={{

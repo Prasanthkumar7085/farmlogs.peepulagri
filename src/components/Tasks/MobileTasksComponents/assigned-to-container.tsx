@@ -147,7 +147,15 @@ const AssignedToContainer = ({
                           }`.toUpperCase()
                         : item.name.slice(0, 2)?.toUpperCase()}
                     </Avatar>
-                    <p className={styles.assigneeName}>{item?.name}</p>
+                    <p className={styles.assigneeName}>
+                      {item?.name.length > 15
+                        ? item?.name.slice(0, 1).toUpperCase() +
+                        item?.name.slice(1, 13) +
+                        "..."
+                        : item?.name.slice(0, 1).toUpperCase() +
+                        item?.name.slice(1)}
+
+                    </p>
                   </div>
                   {loggedInUserId == data?.created_by?._id || status !== "DONE" ? (
                     <IconButton

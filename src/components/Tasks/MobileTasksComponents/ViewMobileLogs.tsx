@@ -90,7 +90,7 @@ const ViewMobileLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
                     overflowY: "auto",
                     padding: "0 1rem 1rem",
                     borderRadius: "20px 20px 0 0",
-                    background: "#F5F7FA",
+                    background: "#fff",
                     maxWidth: "calc(500px - 30px)",
                     margin: "0 auto",
                 },
@@ -119,7 +119,7 @@ const ViewMobileLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
                         return (
                             <div className={styles.tasklogViewCard} key={index}>
                                 <div className={styles.taskLogCardHeader}>
-                                    <Avatar sx={{ fontSize: "8px", width: "20px", height: "20px", background: "#6A7185" }} >
+                                    <Avatar sx={{ fontSize: "9px", width: "20px", height: "20px", background: "#d94841" }} >
                                         {item.user_id.name.split(' ')?.length > 1 ? `${item.user_id.name.split(' ')[0][0]}${item.user_id.name.split(' ')[1][0]}`.toUpperCase() : item.user_id.name.slice(0, 2)?.toUpperCase()}
                                     </Avatar>
                                     <div className={styles.taskViewLogTaskName}>{item.user_id.name}</div>                </div>

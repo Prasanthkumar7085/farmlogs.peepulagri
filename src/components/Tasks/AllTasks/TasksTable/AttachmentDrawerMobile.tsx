@@ -200,10 +200,10 @@ const AttachmentDrawerMobile = ({
     const results = await Promise.all(downloadPromises);
     setDownloadLoading(false);
     results.forEach((result) => {
-      if (result.status === "fulfilled") {
+      if (result?.status === "fulfilled") {
         console.log("Download successful");
       } else {
-        console.error("Download failed", result.reason);
+        console.error("Download failed", result?.reason);
       }
     });
   }

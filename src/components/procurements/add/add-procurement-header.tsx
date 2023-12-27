@@ -19,9 +19,10 @@ const AddProcurementHeader: NextPage = () => {
         variant="contained"
         onClick={onBackButtonClick}
       >
-        <img src="/arrow-left-back-white.svg" alt="" width={"18px"} />
+        <img src="/arrow-left-back-white-black.svg" alt="" width={"18px"} />
       </Button>
       <div className={styles.textwrapper}>
+        <p className={styles.backText}>Back To List</p>
         <h2 className={styles.largetext}>Add Procurement</h2>
       </div>
     </div>

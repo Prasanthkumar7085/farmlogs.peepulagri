@@ -92,12 +92,14 @@ const OperationDetails: NextPage<pagePropTypes> = ({
   return (
     <>
       <div className={styles.operationdetails}>
-        <div className={styles.row}>
-          <div className={styles.nameofoperation}>
-            <label className={styles.nameOfOperation}>
+        <div className={styles.row} style={{ gridTemplateColumns: "2fr 1fr" }}>
+          <div className={styles.selectfarm}>
+            <label className={styles.label}>
               Name Of Operation<strong style={{ color: "red" }}>*</strong>
             </label>
             <TextField
+              sx={{ background: "#fff" }}
+              size="small"
               disabled={isDisabled}
               className={styles.inoutbox}
               color="primary"
@@ -110,7 +112,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
             />
             <ErrorMessages errorMessages={errorMessages} keyname={"title"} />
           </div>
-          <div className={styles.dateofoperation}>
+          <div className={styles.selectfarm}>
             <label className={styles.label}>
               Date of Operation<strong style={{ color: "red" }}>*</strong>
             </label>
@@ -118,6 +120,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               <LocalizationProvider dateAdapter={AdapterDateFns}>
 
                 <DatePicker
+                  sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
                   disablePast
                   disabled={isDisabled}
                   label="Select Date "
@@ -127,8 +130,8 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                   }}
                   slotProps={{
                     textField: {
-                      variant: "standard",
-                      size: "medium",
+                      variant: "outlined",
+                      size: "small",
                       color: "primary",
                     },
                   }}
@@ -142,8 +145,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
             </div>
           </div>
         </div>
-        <div style={{ display: "flex" }}>
-
+        <div className={styles.row} style={{ gridTemplateColumns: "2fr 1fr" }}>
           <div className={styles.selectfarm}>
             <label className={styles.label}>
               {`Select Farm `} <strong style={{ color: "red" }}>*</strong>
@@ -161,11 +163,15 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               setSearchString={setSearchString}
               editFarms={editFarms}
             />
+
             <ErrorMessages
               errorMessages={errorMessages}
               keyname={"farm_ids"}
             />
-            <div style={{ display: "flex", }}>
+            <div style={{
+              display: router.query.procurement_id && editFarms?.length
+                ? "flex" : "none"
+            }}>
 
               {router.query.procurement_id && editFarms?.length
                 ? editFarms.map((item, index) => {
@@ -185,27 +191,34 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 : ""}
             </div>
           </div>
-          <Select
-            size="small"
-            sx={{
-              width: "100%",
-              background: "#fff",
-              color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
-            }}
-            placeholder="Select Priority"
-          >
+          <div className={styles.selectfarm}>
+            <label className={styles.label}>
+              {`Priority`} <strong style={{ color: "red" }}>*</strong>
+            </label>
+            <Select
+              size="small"
+              sx={{
+                marginBottom: "8px",
+                width: "100%",
+                background: "#fff",
+                color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
+              }}
+              placeholder="Select Priority"
+            >
 
-            {options?.length && options.map((item: { value: string, title: string }, index: number) => {
-              return (
-                <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
-              )
-            })}
+              {options?.length && options.map((item: { value: string, title: string }, index: number) => {
+                return (
+                  <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
+                )
+              })}
 
-          </Select>
+            </Select>
+          </div>
         </div>
         <div className={styles.remarks}>
           <label className={styles.label}>Remarks</label>
           <TextArea
+            sx={{ background: "#fff" }}
             disabled={isDisabled}
             className={styles.inputbox}
             color="primary"

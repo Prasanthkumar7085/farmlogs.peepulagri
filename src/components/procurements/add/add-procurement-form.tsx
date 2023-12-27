@@ -246,12 +246,11 @@ const AddProcurementForm = () => {
     }
   }, [router.isReady, accessToken, searchString]);
   return (
-    <div>
-
+    <div style={{ paddingTop: "2rem" }}>
       <AddProcurementHeader />
 
       <form className={styles.addprocurementform}>
-        <Card sx={{ width: "100%" }}>
+        <div style={{ width: "100%" }}>
           <div style={{ padding: "1rem" }}>
             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
               {router.query.procurement_id ? (
@@ -294,35 +293,35 @@ const AddProcurementForm = () => {
               setIsDisabled={setIsDisabled}
             />
 
-            <div style={{ marginTop: "50px", marginRight: "20px" }}>
+            <div className={styles.formButtons} >
               {isDisabled ? (
                 ""
               ) : (
-                <div className={styles.modalActions}>
-                  <div className={styles.buttonsgroup}>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      onClick={() => {
-                        router.query.procurement_id
-                          ? deleteProcurement()
-                          : router.back();
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={() => {
-                        router.query.procurement_id
-                          ? updateProcurement()
-                          : addProcurement();
-                      }}
-                    >
-                      {router.query.procurement_id ? "Update" : "Submit"}
-                    </Button>
-                  </div>
+                <div className={styles.procurementFormBtn}>
+                  <Button
+                    className={styles.cancelBtn}
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => {
+                      router.query.procurement_id
+                        ? deleteProcurement()
+                        : router.back();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className={styles.submitBtn}
+                    color="primary"
+                    variant="contained"
+                    onClick={() => {
+                      router.query.procurement_id
+                        ? updateProcurement()
+                        : addProcurement();
+                    }}
+                  >
+                    {router.query.procurement_id ? "Update" : "Submit"}
+                  </Button>
                 </div>
               )}
             </div>
@@ -335,7 +334,7 @@ const AddProcurementForm = () => {
                 : ''}
             </div>
           </div>
-        </Card>
+        </div>
 
         <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
           <DialogContent>

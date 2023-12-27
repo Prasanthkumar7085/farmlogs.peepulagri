@@ -1,26 +1,30 @@
 .backbutton {
-  border-radius: 4px;
-  border: 1px solid var(--Stroke, #E9EDF1);
-  background: #FFF;
+  border-radius: 4px !important;
+  border: 1px solid var(--Stroke, #E9EDF1) !important;
+  background: #FFF !important;
+  padding: 12px 10px !important;
+  min-width: inherit !important;
+  box-shadow: none !important;
 }
 
 .backbutton:hover {
-  background: #05A155 !important;
+  background: #FFF !important;
   padding: 12px 10px !important;
   min-width: inherit !important;
-  border-radius: 50% !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  border: 1px solid var(--Stroke, #E9EDF1) !important;
 }
 
-.largetext,
-.smalltext {
-  align-self: stretch;
-  position: relative;
+.backText {
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(10px, 0.625vw, 14px);
+  font-weight: 400;
   line-height: 100%;
+  margin: 0;
 }
 
-.smalltext {
-  cursor: pointer;
-}
 
 .largetext {
   margin: 0;
@@ -48,12 +52,18 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  gap: 8px;
+  gap: 16px;
   margin-bottom: 0.5rem;
   text-align: left;
   color: #000;
   font-family: 'Inter', sans-serif;
-  width: 60%;
+  width: 50%;
   margin: 0 auto;
   margin-bottom: 0.5rem;
+}
+
+.procurementFormBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

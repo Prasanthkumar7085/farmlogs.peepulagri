@@ -210,11 +210,9 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
           margin: router.pathname?.includes("/users-tasks")
             ? "0 auto"
             : "inherit",
-          padding: router.pathname?.includes("/users-tasks")
-            ? "0"
-            : "1rem",
+          padding: router.pathname?.includes("/users-tasks") ? "0" : "1rem",
           borderRadius: router.pathname?.includes("/users-tasks")
-            ? "10px"
+            ? "10px 10px 0px 0px"
             : "none",
         },
       }}

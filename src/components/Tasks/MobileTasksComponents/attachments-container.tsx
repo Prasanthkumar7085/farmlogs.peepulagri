@@ -112,26 +112,29 @@ const AttachmentsContainer = ({
         >
           {attachmentData?.length
             ? attachmentData
-              ?.slice(0, 6)
-              .map((item: TaskAttachmentsType | any, index: number) => {
-                return (
-                  <div className={styles.eachImageBlock} key={index}>
-                    <img
-                      className={checkIfAttachmentHasPreviewOrNot(item) ? styles.imageIcon : styles.iconImg}
-                      src={getImageSrcUrl(item)}
-                      alt={""}
-                      onClick={() => {
-                        if (checkIfAttachmentHasPreviewOrNot(item)) {
-                          setImagePreviewOpen(item);
-                        } else {
-                          downloadFile(item);
+                ?.slice(0, 6)
+                .map((item: TaskAttachmentsType | any, index: number) => {
+                  return (
+                    <div className={styles.eachImageBlock} key={index}>
+                      <img
+                        className={
+                          checkIfAttachmentHasPreviewOrNot(item)
+                            ? styles.imageIcon
+                            : styles.iconImg
                         }
-                      }}
-                    />
-
-                  </div>
-                );
-              })
+                        src={getImageSrcUrl(item)}
+                        alt={""}
+                        onClick={() => {
+                          if (checkIfAttachmentHasPreviewOrNot(item)) {
+                            setImagePreviewOpen(item);
+                          } else {
+                            downloadFile(item);
+                          }
+                        }}
+                      />
+                    </div>
+                  );
+                })
             : ""}
         </div>
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
@@ -173,7 +176,7 @@ const AttachmentsContainer = ({
             padding: "1rem",
             width: "100%",
             margin: "0 auto",
-            maxWidth: "500px"
+            maxWidth: "500px",
           },
         }}
       >
@@ -184,7 +187,13 @@ const AttachmentsContainer = ({
           >
             <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
           </div>
-          <div style={{ height: "calc(100vh - 50px)" }}>
+          <div
+            style={{
+              height: "88vh",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             {imagePreviewOpen?.metadata?.type?.includes("video") ? (
               <video controls width="100%" height="auto" autoPlay>
                 <source
@@ -194,7 +203,11 @@ const AttachmentsContainer = ({
                 Your browser does not support the video tag.
               </video>
             ) : imagePreviewOpen?.metadata?.type?.includes("image") ? (
-              <img src={imagePreviewOpen?.url} alt="" style={{ height: "100%", width: "100%", objectFit: "contain" }} />
+              <img
+                src={imagePreviewOpen?.url}
+                alt=""
+                style={{ height: "100%", width: "100%", objectFit: "contain" }}
+              />
             ) : (
               <iframe src={imagePreviewOpen?.url} width={"100%"} height={"90%"}>
                 <p style={{ background: "white" }}>

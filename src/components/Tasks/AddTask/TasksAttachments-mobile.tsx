@@ -81,7 +81,6 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     }
   }, [attachments, previewImages]);
 
-
   const generateThumbnail = (file: any, index: any) => {
     if (file) {
       const reader = new FileReader();
@@ -173,22 +172,19 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     });
   };
 
-
   const startUploadEvent = async (
     file: any,
     index: any,
     fileProgressCopy: any,
     setFileProgress: Function
   ) => {
-    let obj =
-    {
-      "farm_id": router.query.farm_id as string,
-      "crop_id": router.query.crop_id,
-      "original_name": file.name,
-      "type": file.type,
-      "size": file.size
-    }
-
+    let obj = {
+      farm_id: router.query.farm_id as string,
+      crop_id: router.query.crop_id,
+      original_name: file.name,
+      type: file.type,
+      size: file.size,
+    };
 
     let options = {
       method: "POST",
@@ -338,7 +334,6 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     fileProgressCopy: any,
     setFileProgress: any
   ) => {
-
     let obj = {
       original_name: item.name,
       type: item.type,
@@ -467,7 +462,8 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
         }),
       };
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router.query.task_id ? router.query.task_id : taskId
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${
+          router.query.task_id ? router.query.task_id : taskId
         }/attachments`,
         options
       );
@@ -490,24 +486,6 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     }
     dispatch(removeTheFilesFromStore([]));
   };
-
-  //   useEffect(() => {
-  //     const confirmationMessage =
-  //       "Are you sure you want to leave this page? Your changes may not be saved.";
-
-  //     const handleBeforeUnload = (e: any) => {
-  //       e.preventDefault();
-  //       e.returnValue = confirmationMessage;
-  //     };
-
-  //     window.addEventListener("beforeunload", handleBeforeUnload);
-
-  //     return () => {
-  //       window.removeEventListener("beforeunload", handleBeforeUnload);
-  //     };
-  //   }, []);
-
-  console.log("fileProgress", fileProgress);
 
   return (
     <div
@@ -563,16 +541,16 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                      .prieviewUrl
+                        .prieviewUrl
                     : item.type.includes("pdf")
-                      ? "/pdf-icon.png"
-                      : item.type.includes("csv")
-                        ? "/csv-icon.png"
-                        : item.type ==
-                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                          item.type.includes("xlsx")
-                          ? "/google-sheets-icon.webp"
-                          : "/doc-icon.webp"
+                    ? "/pdf-icon.png"
+                    : item.type.includes("csv")
+                    ? "/csv-icon.png"
+                    : item.type ==
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                      item.type.includes("xlsx")
+                    ? "/google-sheets-icon.webp"
+                    : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -606,7 +584,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                        fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
@@ -619,7 +597,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                        fileProgress[index] == "fail" ? (
+                      fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -633,7 +611,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                      fileProgress[index] !== "fail" ? (
+                    fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -661,7 +639,10 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
         ))}
 
       {tempFilesStorage?.length ? (
-        <div className={styles.uploadFilesBtnGrp} style={{ marginBottom: "1rem" }}>
+        <div
+          className={styles.uploadFilesBtnGrp}
+          style={{ marginBottom: "1rem" }}
+        >
           {!router.query.task_id ? (
             ""
           ) : (

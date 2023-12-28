@@ -220,7 +220,7 @@ const AttachmentDrawerMobile = ({
         open={attachmentdrawer}
         sx={{
           "& .MuiPaper-root": {
-            borderRadius: "10px",
+            borderRadius: "10px 10px 0px 0px",
             overflow: "auto",
             maxHeight: "60%",
             maxWidth: "500px",
@@ -425,7 +425,11 @@ const AttachmentDrawerMobile = ({
                             alt=""
                             height={100}
                             width={100}
-                            className={checkIfAttachmentHasPreviewOrNot(image) ? styles.attachmentImg : styles.attachmentDocumentImg}
+                            className={
+                              checkIfAttachmentHasPreviewOrNot(image)
+                                ? styles.attachmentImg
+                                : styles.attachmentDocumentImg
+                            }
                             // className={styles.attachmentImg}
                             onContextMenu={(e) => {
                               e.preventDefault();
@@ -509,7 +513,7 @@ const AttachmentDrawerMobile = ({
             padding: "1rem",
             width: "100%",
             margin: "0 auto",
-            maxWidth: "500px"
+            maxWidth: "500px",
           },
         }}
       >
@@ -520,7 +524,13 @@ const AttachmentDrawerMobile = ({
           >
             <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
           </div>
-          <div style={{ height: "calc(100vh - 50px)" }}>
+          <div
+            style={{
+              height: "88vh",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             {imagePreviewOpen?.metadata?.type?.includes("video") ? (
               <video controls width="100%" height="auto" autoPlay>
                 <source
@@ -530,7 +540,11 @@ const AttachmentDrawerMobile = ({
                 Your browser does not support the video tag.
               </video>
             ) : imagePreviewOpen?.metadata?.type?.includes("image") ? (
-              <img src={imagePreviewOpen?.url} alt="" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+              <img
+                src={imagePreviewOpen?.url}
+                alt=""
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
             ) : (
               <iframe src={imagePreviewOpen?.url} width={"100%"} height={"90%"}>
                 <p style={{ background: "white" }}>

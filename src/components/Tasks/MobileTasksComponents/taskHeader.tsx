@@ -88,13 +88,6 @@ const TaskHeader = ({
       <div className={styles.row}>
         {!isSearchOpenOrNot ? (
           <div className={styles.group}>
-            {/* <IconButton sx={{ padding: "0" }} onClick={() => router.back()}>
-              <img
-              className={styles.arrowDownBold1Icon}
-              alt=""
-              src="/arrowdownbold-1@2x.png"
-              />
-            </IconButton> */}
             <h1 className={styles.title}>Tasks</h1>
           </div>
         ) : (
@@ -109,10 +102,12 @@ const TaskHeader = ({
               size="small"
               placeholder="Search By Title"
               sx={{
-                width: "90%",
+                width: "100%",
                 borderRadius: "20px",
                 background: "#fff !important",
-                marginRight: "1rem",
+                marginRight: !(router.query.is_my_task == "true")
+                  ? "1rem"
+                  : "0",
                 "& .MuiInputBase-root": {
                   borderRadius: "20px !important",
                   height: "2.4rem",
@@ -306,9 +301,9 @@ const TaskHeader = ({
               getOptionDisabled={(option) => {
                 let selectedOption = usersArray?.length
                   ? usersArray?.some(
-                    (item: userTaskType) =>
-                      item?._id === option?._id && item?.name === option?.name
-                  )
+                      (item: userTaskType) =>
+                        item?._id === option?._id && item?.name === option?.name
+                    )
                   : false;
                 return selectedOption;
               }}

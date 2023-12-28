@@ -16,7 +16,7 @@ const checkIfAttachmentHasPreviewOrNot = (item: {
   ) {
     return false;
   } else if (item?.metadata?.type.includes("video")) {
-    return false;
+    return true;
   } else if (item?.metadata?.type?.includes("image")) {
     return true;
   } else {

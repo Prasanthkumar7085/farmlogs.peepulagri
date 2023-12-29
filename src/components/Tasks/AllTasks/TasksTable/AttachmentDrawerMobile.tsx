@@ -433,7 +433,7 @@ const AttachmentDrawerMobile = ({
                             height={100}
                             width={100}
                             className={
-                              checkIfAttachmentHasPreviewOrNot(image)
+                              checkIfAttachmentHasPreviewOrNot(image, true)
                                 ? styles.attachmentImg
                                 : styles.attachmentDocumentImg
                             }

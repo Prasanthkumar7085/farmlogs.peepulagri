@@ -110,7 +110,7 @@ const AttachmentsContainer = ({
                   <div className={styles.eachImageBlock} key={index}>
                     <img
                       className={
-                        checkIfAttachmentHasPreviewOrNot(item)
+                        checkIfAttachmentHasPreviewOrNot(item, true)
                           ? styles.imageIcon
                           : styles.iconImg
                       }

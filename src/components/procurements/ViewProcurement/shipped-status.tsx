@@ -18,7 +18,10 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const userDetails = useSelector((state: any) => state.auth.userDetails);
+
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
 
   const onBackButton1Click = useCallback(() => {
     router.back();
@@ -104,18 +107,27 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
         </div>
         <div className={styles.priority}>
           <label className={styles.label}>Status</label>
-          <div
-            className={styles.statuscontainer}
-            onClick={() => {
-              if (data?.status == "PURCHASED") {
-                setTrackingDialogOpen(true);
-              } else {
-                setDialogOpen(true)
-              }
-            }}
-          >
-            <p className={styles.text}>{data?.status ? data?.status : "---"}</p>
-          </div>
+          {userDetails?.user_type == "manager" ?
+            <div
+              className={styles.statuscontainer}
+              onClick={() => {
+                if (data?.status == "PURCHASED") {
+                  setTrackingDialogOpen(true);
+                } else {
+                  setDialogOpen(true)
+                }
+              }}
+            >
+              <p className={styles.text}>{data?.status ? data?.status : "---"}</p>
+            </div> :
+
+            <div
+              className={styles.statuscontainer}
+
+            >
+              <p className={styles.text}>{data?.status ? data?.status : "---"}</p>
+            </div>}
+
         </div>
         <img className={styles.statusrowChild} alt="" src="/line-3@2x.png" />
         {data?.status == "shipped" ? (

@@ -61,7 +61,8 @@ export default function SigninEmail() {
 
         if (
           res?.data?.user_details?.user_type == "agronomist" ||
-          res?.data?.user_details?.user_type == "admin"
+          res?.data?.user_details?.user_type == "admin" ||
+          res?.data?.user_details?.user_type == "manager"
         ) {
           router.push("/scouts");
         } else if (res?.data?.user_details?.user_type == "farmer") {

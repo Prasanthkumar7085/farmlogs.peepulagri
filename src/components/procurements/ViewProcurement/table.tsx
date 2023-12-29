@@ -43,6 +43,9 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
 
   const [materials, setMaterials] = useState<any>([]);
   const [materialDetails, setMaterialsDetails] = useState<any>();
@@ -288,6 +291,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       </TableCell>
                     </>
                     : ''}
+
                   <TableCell>
                     <div
                       style={{
@@ -329,37 +333,42 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                         ""
                       )}
 
-                      <div style={{ cursor: "pointer", display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "block" }}>
-                        {row?.status == "APPROVED" ? (
-                          <Button
-                            variant="outlined"
-                            onClick={() => {
-                              setMaterialId(row?._id);
-                              setMaterialOpen(true)
-                            }
-                            }
-                          >
-                            {row?.price && row?.vendor ? "Edit Purchase" : "Add Purchase"}
+                      {userDetails?.user_type == "admin" || userDetails?.user_type == "manager" ?
+                        <div style={{ cursor: "pointer", display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "block" }}>
+                          {row?.status == "APPROVED" ? (
 
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outlined"
-                            onClick={() => {
-                              if (!row?.price && !row?.vendor) {
-                                onStatusChangeEvent("approve", row?._id)
-                              } else {
+                            <Button
+                              variant="outlined"
+                              disabled={userDetails?.user_type == "manager" ? false : true}
+                              onClick={() => {
                                 setMaterialId(row?._id);
                                 setMaterialOpen(true)
                               }
-                            }
-                            }
-                          >
+                              }
+                            >
+                              {row?.price && row?.vendor ? "Edit Purchase" : "Add Purchase"}
 
-                            {row?.price && row?.vendor ? "Edit Purchase" : "Approve"}
-                          </Button>
-                        )}
-                      </div>
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              disabled={userDetails?.user_type == "manager" ? false : true}
+                              onClick={() => {
+                                if (!row?.price && !row?.vendor) {
+                                  onStatusChangeEvent("approve", row?._id)
+                                } else {
+                                  setMaterialId(row?._id);
+                                  setMaterialOpen(true)
+                                }
+                              }
+                              }
+                            >
+
+                              {row?.price && row?.vendor ? "Edit Purchase" : "Approve"}
+                            </Button>
+                          )}
+                        </div> : ""}
+
                     </div>
                   </TableCell>
                 </TableRow>

@@ -24,7 +24,6 @@ const AttachmentsContainer = ({
     (state: any) => state.auth.userDetails?.user_details?._id
   );
 
-  const maxImagesToShow = 6;
 
   const [files, setFiles] = useState([]);
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
@@ -72,14 +71,7 @@ const AttachmentsContainer = ({
   };
   return (
     <div
-      className={styles.attachmentscontainer}
-      style={{
-        display:
-          loggedInUserId == data?.created_by?._id || hasEditAccess
-            ? ""
-            : "none",
-      }}
-    >
+      className={styles.attachmentscontainer}>
       {attachmentData?.length ? (
         <div
           style={{
@@ -156,6 +148,8 @@ const AttachmentsContainer = ({
       </div>
 
       <AttachmentDrawerMobile
+        hasEditAccess={hasEditAccess}
+        data={data}
         attachmentDrawerClose={() => setAttachmentDrawer(false)}
         rowDetails={{ _id: router.query.task_id }}
         setAttachmentDrawer={setAttachmentDrawer}

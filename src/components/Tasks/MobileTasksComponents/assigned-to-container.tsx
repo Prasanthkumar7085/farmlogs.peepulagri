@@ -161,8 +161,7 @@ const AssignedToContainer = ({
                             item?.name.slice(1)}
                       </p>
                     </div>
-                    {loggedInUserId == data?.created_by?._id ||
-                    status !== "DONE" ? (
+                    {loggedInUserId == data?.created_by?._id  ? (
                       <IconButton
                         sx={{ padding: "0" }}
                         disabled={status === "DONE"}

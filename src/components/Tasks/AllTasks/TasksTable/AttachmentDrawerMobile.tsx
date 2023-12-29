@@ -23,6 +23,8 @@ import styles from "../../TaskComments/Comments.module.css";
 import checkIfAttachmentHasPreviewOrNot from "@/pipes/checkIfAttachmentHasPreviewOrNot";
 
 const AttachmentDrawerMobile = ({
+  hasEditAccess,
+  data,
   attachmentDrawerClose,
   rowDetails,
   attachmentdrawer,
@@ -31,6 +33,10 @@ const AttachmentDrawerMobile = ({
   setAttachmentDrawer,
 }: any) => {
   const dispatch = useDispatch();
+   const loggedInUserId = useSelector(
+     (state: any) => state.auth.userDetails?.user_details?._id
+   );
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -356,7 +362,7 @@ const AttachmentDrawerMobile = ({
                                 </IconButton>
                               )}
 
-                              <IconButton
+                              { loggedInUserId == data?.created_by?._id?<IconButton
                                 className={styles.selectBtn}
                                 onClick={() => deleteSelectedImages()}
                                 sx={{ padding: "0" }}
@@ -376,7 +382,7 @@ const AttachmentDrawerMobile = ({
                                     alt=""
                                   />
                                 )}
-                              </IconButton>
+                              </IconButton>:""}
                             </div>
                           ) : (
                             ""

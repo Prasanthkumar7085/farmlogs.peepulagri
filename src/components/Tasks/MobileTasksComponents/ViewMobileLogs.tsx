@@ -113,7 +113,7 @@ const ViewMobileLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
                 </div>
             </div>
 
-            <div className={styles.taskLogViewCards}>
+            <div className={logsData?.length ? styles.taskLogViewCards : styles.taskLogNoDataCard}>
                 {!logsLoading && logsData?.length ? (
                     logsData.map((item: TasksLogsResponseType, index: number) => {
                         return (

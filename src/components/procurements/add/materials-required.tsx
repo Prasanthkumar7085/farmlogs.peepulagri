@@ -400,16 +400,16 @@ const MaterialsRequired: NextPage = () => {
         </div>
 
         <div className={styles.materialListBlock}>
-          <h4 className={styles.text}>Selected Materials:</h4>
-          <div>
-            <Table>
+          <h4 className={styles.materialLiatHeading}>Required Materials:</h4>
+          <div className={styles.materialListTable}>
+            <Table >
               <TableHead>
                 <TableRow>
-                  <TableCell>S. No.</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Material Procurement (Qty)</TableCell>
-                  <TableCell>Material Availability (Qty)</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>S. No.</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Name</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Material Procurement (Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Material Availability (Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -427,16 +427,16 @@ const MaterialsRequired: NextPage = () => {
                       index: number
                     ) => {
                       return (
-                        <TableRow key={index}>
-                          <TableCell>{index + 1}.</TableCell>
-                          <TableCell>{item.name}</TableCell>
-                          <TableCell>
+                        <TableRow key={index} className={styles.tableBodyRow} >
+                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>{index + 1}.</TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1" }}>{item.name}</TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
                             {item.required_qty ? `${item.required_qty}` : ""}
                             {item.required_units
                               ? `(${item.required_units})`
                               : ""}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1" }}>
                             {item.available_qty
                               ? `${item.available_qty}`
                               : ""}
@@ -444,7 +444,7 @@ const MaterialsRequired: NextPage = () => {
                               ? `(${item.available_units})`
                               : ""}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
                             <IconButton
                               onClick={() => {
                                 setEditAvailableQty(item.available_qty);
@@ -457,7 +457,10 @@ const MaterialsRequired: NextPage = () => {
                                 setEditMaterialOpen(true);
                               }}
                             >
-                              <EditOutlined sx={{ color: "red" }} />
+                              <picture>
+
+                                <img src="/pencil-icon.svg" alt="" width={"15px"} />
+                              </picture>
                             </IconButton>
                             <IconButton
                               onClick={() => {
@@ -465,7 +468,10 @@ const MaterialsRequired: NextPage = () => {
                                 setDeleteMaterialOpen(true);
                               }}
                             >
-                              <DeleteOutline sx={{ color: "red" }} />
+                              <picture>
+
+                                <img src="/trast-icon.svg" alt="" width="15px" />
+                              </picture>
                             </IconButton>
                           </TableCell>
                         </TableRow>
@@ -506,7 +512,7 @@ const MaterialsRequired: NextPage = () => {
         updateLoading={updateLoading}
       />
       <LoadingComponent loading={loading} />
-    </div>
+    </div >
   );
 };
 

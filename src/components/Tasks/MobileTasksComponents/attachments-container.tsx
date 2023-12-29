@@ -189,7 +189,7 @@ const AttachmentsContainer = ({
           </div>
           <div
             style={{
-              height: "calc(100vh - 80px)",
+              height: "calc(100vh - 180px)",
               display: "flex",
               justifyContent: "center",
             }}

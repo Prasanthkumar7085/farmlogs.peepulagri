@@ -274,6 +274,7 @@ const MainContent = ({
                 if (item.value !== "OVER-DUE")
                   return (
                     <MenuItem
+                      sx={{ minHeight: "inherit" }}
                       disabled={status == item.value}
                       className={
                         status == item.value

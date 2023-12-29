@@ -82,12 +82,12 @@ const ViewtaskHeader = ({ data, status }: any) => {
           open={open}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
+            vertical: "bottom",
+            horizontal: "left",
           }}
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
+            vertical: "top",
+            horizontal: "center",
           }}
         >
           <MenuItem sx={{ paddingBlock: "0", fontFamily: "'Inter', sans-serif", minHeight: "inherit" }} disabled={status === "DONE"} onClick={() => setDialogOpen(true)}>Delete</MenuItem>

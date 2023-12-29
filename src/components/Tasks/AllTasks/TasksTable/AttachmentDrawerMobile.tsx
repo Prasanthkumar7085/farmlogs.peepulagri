@@ -236,7 +236,7 @@ const AttachmentDrawerMobile = ({
           },
         }}
       >
-        <div className={styles.drawerHeader}>
+        <div className={styles.drawerHeader} style={{ borderBottom: "1px solid lightgrey " }}>
           {/* <div className={styles.stickyHeader}>
             {checkBoxOpen ? (
               <div style={{ display: "flex", alignItems: "center" }}>

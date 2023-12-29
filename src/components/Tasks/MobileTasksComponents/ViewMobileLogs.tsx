@@ -88,7 +88,6 @@ const ViewMobileLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
                 "& .MuiPaper-root": {
                     height: "400px",
                     overflowY: "auto",
-                    padding: "0 1rem 1rem",
                     borderRadius: "20px 20px 0 0",
                     background: "#fff",
                     maxWidth: "calc(500px - 30px)",
@@ -97,7 +96,7 @@ const ViewMobileLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
             }}
         >
             <div>
-                <div className={styles.drawerHeaderMobile}>
+                <div className={styles.drawerHeaderMobile} style={{ padding: "1rem", paddingBottom: "0.5rem", borderBottom: "1px solid lightgrey" }}>
                     <Typography variant="h5" className={styles.taskViewLogHeading}>
                         <img src="/viewTaskIcons/logs-icon.svg" alt="" width={"14px"} />
 
@@ -113,7 +112,7 @@ const ViewMobileLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
                 </div>
             </div>
 
-            <div className={logsData?.length ? styles.taskLogViewCards : styles.taskLogNoDataCard}>
+            <div style={{ padding: "0 1rem 1rem" }} className={logsData?.length ? styles.taskLogViewCards : styles.taskLogNoDataCard}>
                 {!logsLoading && logsData?.length ? (
                     logsData.map((item: TasksLogsResponseType, index: number) => {
                         return (

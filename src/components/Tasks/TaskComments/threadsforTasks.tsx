@@ -164,7 +164,9 @@ const ThreadsForTasks = ({
                         />
                       </div>
                     ) : (
-                      <p className={styles.theProblemIm}>
+                      <p className={styles.theProblemIm} style={{ fontSize: "clamp(12px, 2vw, 14px) !important" }}
+
+                      >
                         <Markup content={item.content} />
                         <Typography
                           variant="caption"
@@ -503,7 +505,7 @@ const ThreadsForTasks = ({
                                   />
                                 </div>
                               ) : (
-                                <p className={styles.theProblemIm}>
+                                <p className={styles.theProblemIm} style={{ fontSize: "clamp(12px, 2vw, 14px) !important" }}>
                                   <Markup content={row.content} />
                                   {"                     "}
                                   <Typography variant="caption">

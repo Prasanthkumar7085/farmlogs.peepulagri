@@ -217,7 +217,7 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
         },
       }}
     >
-      <div className={styles.drawerHeader}>
+      <div className={styles.drawerHeader} style={{ borderBottom: "1px solid lightgrey" }}>
         <Typography variant="h6">Comments</Typography>
         <IconButton
           onClick={() => {

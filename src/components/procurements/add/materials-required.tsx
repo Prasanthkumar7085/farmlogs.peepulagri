@@ -258,26 +258,24 @@ const MaterialsRequired: NextPage = () => {
 
 
   return (
-    <div style={{ width: "50%", margin: "1rem auto 0", paddingBottom: "3rem" }}>
+    <div style={{ width: "50%", margin: "0 auto 0", paddingBottom: "3rem", background: "#fff" }}>
       <div className={styles.materialsrequired}>
         <div className={styles.heading}>
-          <h2 className={styles.text}>Material Requirements</h2>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", width: "100%" }}>
-
+          <div >
+            <h2 className={styles.text}>Material Requirements</h2>
             <p className={styles.supportingText}>
               You can add List of items here based on requirement
             </p>
-            <div >
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => addMaterial()}
-                className={styles.addMaterialBtn}
-              >
-                <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
-              </Button>
-            </div>
+
           </div>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => addMaterial()}
+            className={styles.addMaterialBtn}
+          >
+            <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
+          </Button>
         </div>
 
         <div className={styles.materialsGrid}>

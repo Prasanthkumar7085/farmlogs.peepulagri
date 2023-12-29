@@ -83,12 +83,58 @@
 .personofcontact .label {
   color: #101828;
   font-family: 'Inter', sans-serif;
-  font-size: clamp(16px, 0.93vw, 20px);
+  font-size: clamp(12px, 0.72vw, 16px);
   font-weight: 500;
   line-height: 100%;
   margin-bottom: 0.5rem;
 }
 
 .personofcontact {
+  padding-block: 0.5rem;
   margin-top: 1.5rem;
+  border-top: 1px solid lightgrey;
+}
+
+.pocSelectBlock {
+  display: grid;
+  grid-template-columns: 250px 60px;
+  align-items: center;
+  grid-column-gap: 1.5rem;
+}
+
+.conformPocbtn {
+  text-transform: capitalize !important;
+  border: 1px solid #05A155 !important;
+  color: #05A155 !important;
+  font-size: clamp(12px, 0.833vw, 16px) !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+.conformPocbtn:hover {
+  text-transform: capitalize !important;
+  border: 1px solid #05A155 !important;
+  color: #05A155 !important;
+  font-size: clamp(12px, 0.833vw, 16px) !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+.removePOCBtn {
+  text-transform: capitalize !important;
+  border: 1px solid #d94841 !important;
+  color: #d94841 !important;
+  font-size: clamp(12px, 0.833vw, 16px) !important;
+  font-family: "Inter", sans-serif !important;
+  padding: 3px 10px !important;
+}
+
+.removePOCBtn:hover {
+  text-transform: capitalize !important;
+  border: 1px solid #d94841 !important;
+  color: #d94841 !important;
+  font-size: clamp(12px, 0.833vw, 16px) !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+.selectedPOC {
+  margin-top: 1rem;
 }

@@ -1,6 +1,7 @@
 import { Cancel, Delete, Edit } from "@mui/icons-material";
 import {
   Autocomplete,
+  Avatar,
   Button,
   Dialog,
   IconButton,
@@ -147,77 +148,104 @@ const POC = ({
     <div>
       <div className={styles.personofcontact}>
         <h3 className={styles.label}>Person of Contact (POC)</h3>
-        {procurementData?.point_of_contact?._id ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <div>{procurementData?.point_of_contact?.name}</div>
+        <div className={styles.pocSelectBlock}>
+          <div >
+
             {procurementData?.point_of_contact?._id ? (
-              <div>
-                <IconButton
-                  onClick={() => {
-                    setShowDeletePOC(true);
-                  }}
-                >
-                  <Delete sx={{ color: "blue" }} />
-                </IconButton>
+              <div
+                className={styles.selectedPOC}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  gap: "2rem"
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <Avatar
+                    sx={{
+                      fontSize: "12px",
+                      width: "30px",
+                      height: "30px",
+                      background: "#45a845",
+                    }}
+                  >
+                    {procurementData?.point_of_contact?.name.split(" ")?.length > 1
+                      ? `${procurementData?.point_of_contact?.name.split(" ")[0][0]}${procurementData?.point_of_contact?.name.split(" ")[1][0]
+                        }`.toUpperCase()
+                      : procurementData?.point_of_contact?.name.slice(0, 2)?.toUpperCase()}
+                  </Avatar>
+                  <div>{procurementData?.point_of_contact?.name}</div>
+                </div>
+                {procurementData?.point_of_contact?._id ? (
+                  <div>
+                    <Button
+                      onClick={() => {
+                        setShowDeletePOC(true);
+                      }}
+                      variant="outlined"
+                      className={styles.removePOCBtn}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
+            ) : (
+              <Autocomplete
+                disablePortal
+                size="small"
+                id="combo-box-demo"
+                options={usersData && usersData?.length ? usersData : []}
+                getOptionLabel={(option: any) =>
+                  option.name ? option.name?.toUpperCase() : ""
+                }
+                renderOption={(props, option) => {
+                  return (
+                    <li {...props} key={option?._id}>
+                      {option?.name}
+                    </li>
+                  );
+                }}
+                value={poc}
+                onChange={(e: any, value: any, reason: any) => {
+                  setPOC(value);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder={"Select POC to this Procurement"}
+                    sx={{ width: "100%", background: "#fff" }}
+                    onChange={(e) => { }}
+                  />
+                )}
+                sx={{
+                  width: "100%",
+                  background: "#fff",
+                  "& .MuiInputBase-input ": {
+                    fontSize: "13px",
+                    fontWeight: "400",
+                    fontFamily: "'inter', sans-serif ",
+                    color: "#000",
+                  },
+                }}
+              />
+            )}
+            {/* <ErrorMessages errorMessages={errors} keyname={"point_of_contact"} /> */}
+          </div>
+          <div>
+
+            {!procurementData?.point_of_contact?._id ? (
+              <Button className={styles.conformPocbtn} variant="outlined" onClick={addPOCtoProcurement}>Confirm</Button>
             ) : (
               ""
             )}
           </div>
-        ) : (
-          <Autocomplete
-            disablePortal
-            size="small"
-            id="combo-box-demo"
-            options={usersData && usersData?.length ? usersData : []}
-            getOptionLabel={(option: any) =>
-              option.name ? option.name?.toUpperCase() : ""
-            }
-            renderOption={(props, option) => {
-              return (
-                <li {...props} key={option?._id}>
-                  {option?.name}
-                </li>
-              );
-            }}
-            value={poc}
-            onChange={(e: any, value: any, reason: any) => {
-              setPOC(value);
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder={"Select POC to this Procurement"}
-                sx={{ width: "100%", background: "#fff" }}
-                onChange={(e) => { }}
-              />
-            )}
-            sx={{
-              width: "30%",
-              background: "#fff",
-              "& .MuiInputBase-input ": {
-                fontSize: "13px",
-                fontWeight: "400",
-                fontFamily: "'inter', sans-serif ",
-                color: "#000",
-              },
-            }}
-          />
-        )}
-        <ErrorMessages errorMessages={errors} keyname={"point_of_contact"} />
+        </div>
 
       </div>
-      {!procurementData?.point_of_contact?._id ? (
-        <Button onClick={addPOCtoProcurement}>Add</Button>
-      ) : (
-        ""
-      )}
 
       <AlertDelete
         open={showDeletePOC}

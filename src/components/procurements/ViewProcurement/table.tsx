@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 import updateMaterialStatusService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialItemStatus";
 import getMaterialsByProcurementIdService from "../../../../lib/services/ProcurementServices/getMaterialsByProcurementIdService";
 import ViewMaterialDrawer from "./ViewMaterialDrawer";
@@ -402,6 +402,8 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         updateMaterialById={updateMaterialById}
         updateLoading={updateLoading}
       />
+      <Toaster richColors closeButton position="top-right" />
+
       {/* <AlertStautsChange open={dialogOpen} statusChange={onStatusChangeEvent} setDialogOpen={setDialogOpen} loading={loading} /> */}
     </div>
   );

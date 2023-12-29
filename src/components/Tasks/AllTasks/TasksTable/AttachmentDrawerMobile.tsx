@@ -526,7 +526,7 @@ const AttachmentDrawerMobile = ({
           </div>
           <div
             style={{
-              height: "calc(100vh - 180px)",
+              height: "calc(100vh - 130px)",
               display: "flex",
               justifyContent: "center",
             }}

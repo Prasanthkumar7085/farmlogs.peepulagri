@@ -256,7 +256,7 @@ const AddProcurementForm = () => {
     <div style={{ paddingTop: "2rem" }}>
       <AddProcurementHeader />
 
-      <form className={styles.addprocurementform}>
+      <form className={styles.addprocurementform} style={{ background: "#fff" }}>
         <div style={{ width: "100%" }}>
           <div style={{ padding: "1rem" }}>
             <div style={{ display: 'flex', justifyContent: "flex-end" }}>

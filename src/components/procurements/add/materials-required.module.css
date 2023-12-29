@@ -20,6 +20,12 @@
   min-width: inherit;
 }
 
+.addMaterialBtn:hover {
+  border: 1px solid #05A155;
+  background: #05A155;
+  color: #FFF;
+}
+
 .materialsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -69,6 +75,7 @@
   font-weight: 400;
   line-height: 100%;
   letter-spacing: -0.154px;
+  margin-top: 0.8rem;
 }
 
 .heading,
@@ -80,8 +87,9 @@
 
 
 .heading {
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .heading,
@@ -172,10 +180,51 @@
 .materialsrequired {
   display: flex;
   flex-direction: column;
-  padding: 0 1rem 0 1rem;
+  padding: 1rem 1rem 0 1rem;
+  border-top: 1px solid lightgrey;
 }
 
 .personofcontact {
   flex: 1;
   gap: 8px;
+}
+
+.materialListheading {
+  color: #A05148;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 0.93vw, 18px);
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.materialListTable {
+  margin-top: 1rem;
+}
+
+.tableHeaderCell {
+  padding-block: 4px;
+  font-size: clamp(12px, 0.72vw, 14px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #6A7185;
+}
+
+.tableBodyRow {
+  background: #F5F7FA;
+}
+
+.tableBodyCell {
+  color: #35353D;
+  padding-block: 0;
+  font-size: clamp(13px, 0.72vw, 15px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+}
+
+.tableBodyCell:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.tableBodyCell:last-child {
+  border-radius: 0 5px 5px 0;
 }

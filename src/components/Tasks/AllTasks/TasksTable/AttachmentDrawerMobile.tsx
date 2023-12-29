@@ -23,6 +23,8 @@ import styles from "../../TaskComments/Comments.module.css";
 import checkIfAttachmentHasPreviewOrNot from "@/pipes/checkIfAttachmentHasPreviewOrNot";
 
 const AttachmentDrawerMobile = ({
+  hasEditAccess,
+  data,
   attachmentDrawerClose,
   rowDetails,
   attachmentdrawer,
@@ -31,6 +33,10 @@ const AttachmentDrawerMobile = ({
   setAttachmentDrawer,
 }: any) => {
   const dispatch = useDispatch();
+  const loggedInUserId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
+  );
+
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -332,28 +338,28 @@ const AttachmentDrawerMobile = ({
                       <FileDownloadIcon />
                     </IconButton>
                   )}
-
-                  <IconButton
-                    className={styles.selectBtn}
-                    onClick={() => deleteSelectedImages()}
-                    sx={{ padding: "0" }}
-                  >
-                    {deteleLoading ? (
-                      <CircularProgress
-                        sx={{ color: "#757575" }}
-                        size="1.2rem"
-                      />
-                    ) : (
-                      <ImageComponent
-                        src={
-                          "/mobileIcons/scouting/trash-simple-light.svg"
-                        }
-                        width={20}
-                        height={20}
-                        alt=""
-                      />
-                    )}
-                  </IconButton>
+                  {loggedInUserId == data?.created_by?._id ?
+                    <IconButton
+                      className={styles.selectBtn}
+                      onClick={() => deleteSelectedImages()}
+                      sx={{ padding: "0" }}
+                    >
+                      {deteleLoading ? (
+                        <CircularProgress
+                          sx={{ color: "#757575" }}
+                          size="1.2rem"
+                        />
+                      ) : (
+                        <ImageComponent
+                          src={
+                            "/mobileIcons/scouting/trash-simple-light.svg"
+                          }
+                          width={20}
+                          height={20}
+                          alt=""
+                        />
+                      )}
+                    </IconButton> : ""}
                 </div>
               ) : (
                 ""

@@ -112,29 +112,29 @@ const AttachmentsContainer = ({
         >
           {attachmentData?.length
             ? attachmentData
-                ?.slice(0, 6)
-                .map((item: TaskAttachmentsType | any, index: number) => {
-                  return (
-                    <div className={styles.eachImageBlock} key={index}>
-                      <img
-                        className={
-                          checkIfAttachmentHasPreviewOrNot(item)
-                            ? styles.imageIcon
-                            : styles.iconImg
+              ?.slice(0, 6)
+              .map((item: TaskAttachmentsType | any, index: number) => {
+                return (
+                  <div className={styles.eachImageBlock} key={index}>
+                    <img
+                      className={
+                        checkIfAttachmentHasPreviewOrNot(item)
+                          ? styles.imageIcon
+                          : styles.iconImg
+                      }
+                      src={getImageSrcUrl(item)}
+                      alt={""}
+                      onClick={() => {
+                        if (checkIfAttachmentHasPreviewOrNot(item)) {
+                          setImagePreviewOpen(item);
+                        } else {
+                          downloadFile(item);
                         }
-                        src={getImageSrcUrl(item)}
-                        alt={""}
-                        onClick={() => {
-                          if (checkIfAttachmentHasPreviewOrNot(item)) {
-                            setImagePreviewOpen(item);
-                          } else {
-                            downloadFile(item);
-                          }
-                        }}
-                      />
-                    </div>
-                  );
-                })
+                      }}
+                    />
+                  </div>
+                );
+              })
             : ""}
         </div>
         {loggedInUserId == data?.created_by?._id || hasEditAccess ? (
@@ -189,7 +189,7 @@ const AttachmentsContainer = ({
           </div>
           <div
             style={{
-              height: "88vh",
+              height: "calc(100vh - 80px)",
               display: "flex",
               justifyContent: "center",
             }}

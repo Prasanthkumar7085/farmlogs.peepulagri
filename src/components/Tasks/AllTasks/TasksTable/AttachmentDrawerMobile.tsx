@@ -58,9 +58,25 @@ const AttachmentDrawerMobile = ({
       return result;
     }, {});
 
-    return Object.values(groupedByDate).reverse();
-  }
+    let temp = Object.keys(groupedByDate).map((date) => {
+      return groupedByDate[date].sort((a: any, b: any) => {
+        // Convert createdAt strings to Date objects for comparison
+        const dateA: any = new Date(a.createdAt);
+        const dateB: any = new Date(b.createdAt);
+        return dateB - dateA;
+      });
+    });
 
+    // Sort the groups by date in descending order
+    temp.sort((groupA, groupB) => {
+      const dateA: any = new Date(groupA[groupA.length - 1].createdAt);
+      const dateB: any = new Date(groupB[groupB.length - 1].createdAt);
+      return dateB - dateA;
+    });
+
+    return Object.values(temp);
+
+  }
   useEffect(() => {
     setTempImages(selectedItems);
   }, [selectedItems]);

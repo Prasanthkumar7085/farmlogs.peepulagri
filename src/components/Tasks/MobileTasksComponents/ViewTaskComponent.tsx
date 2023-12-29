@@ -115,7 +115,7 @@ const ViewTaskComponent = () => {
       );
       let responseData = await response.json();
       if (responseData.status >= 200 && responseData.status <= 300) {
-        setAttachmentData([...responseData?.data?.attachments]);
+        setAttachmentData([...responseData?.data?.attachments]?.reverse());
       }
     } catch (err) {
       console.error(err);

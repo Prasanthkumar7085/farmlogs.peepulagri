@@ -181,6 +181,7 @@ const AttachmentDrawerMobile = ({
 
         resolve();
       } catch (error) {
+        setDownloadLoading(false)
         console.error("Error downloading file", error);
         reject(error);
       }
@@ -307,7 +308,87 @@ const AttachmentDrawerMobile = ({
             <CloseIcon sx={{ color: "#000" }} />
           </IconButton>
         </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+          {checkBoxOpen ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {selectedItems?.length ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  {downloadLoading ? (
+                    <CircularProgress
+                      sx={{ color: "#757575" }}
+                      size="1.2rem"
+                    />
+                  ) : (
+                    <IconButton
+                      sx={{ padding: "0" }}
+                      onClick={() => handleDownload()}
+                    >
+                      <FileDownloadIcon />
+                    </IconButton>
+                  )}
 
+                  <IconButton
+                    className={styles.selectBtn}
+                    onClick={() => deleteSelectedImages()}
+                    sx={{ padding: "0" }}
+                  >
+                    {deteleLoading ? (
+                      <CircularProgress
+                        sx={{ color: "#757575" }}
+                        size="1.2rem"
+                      />
+                    ) : (
+                      <ImageComponent
+                        src={
+                          "/mobileIcons/scouting/trash-simple-light.svg"
+                        }
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    )}
+                  </IconButton>
+                </div>
+              ) : (
+                ""
+              )}
+              <Button
+                onClick={() => {
+                  setCheckBoxOpen(false);
+                  setSelectedItems([]);
+                }}
+                sx={{
+                  display: attachmentData?.length ? "" : "none",
+                  color: "#d94841",
+                  textTransform: "capitalize",
+                  fontSize: "14px",
+                  fontFamily: "'Inter',sans-serif",
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button
+              onClick={() => setCheckBoxOpen(true)}
+              sx={{
+                display: attachmentData?.length ? "" : "none",
+                color: "#05A155",
+                textTransform: "capitalize",
+                fontSize: "14px",
+                fontFamily: "'Inter',sans-serif",
+              }}
+            >
+              Select
+            </Button>
+          )}
+        </div>
         <div
           style={{
             display: "flex",
@@ -331,87 +412,7 @@ const AttachmentDrawerMobile = ({
                     <p className={styles.AttachmentDate}>
                       {timePipe(item[0]?.createdAt, "DD MMM YYYY")}
                     </p>
-                    <div className={styles.stickyHeader}>
-                      {checkBoxOpen ? (
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          {selectedItems?.length ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "0.5rem",
-                              }}
-                            >
-                              {downloadLoading ? (
-                                <CircularProgress
-                                  sx={{ color: "#757575" }}
-                                  size="1.2rem"
-                                />
-                              ) : (
-                                <IconButton
-                                  sx={{ padding: "0" }}
-                                  onClick={() => handleDownload()}
-                                >
-                                  <FileDownloadIcon />
-                                </IconButton>
-                              )}
 
-                              <IconButton
-                                className={styles.selectBtn}
-                                onClick={() => deleteSelectedImages()}
-                                sx={{ padding: "0" }}
-                              >
-                                {deteleLoading ? (
-                                  <CircularProgress
-                                    sx={{ color: "#757575" }}
-                                    size="1.2rem"
-                                  />
-                                ) : (
-                                  <ImageComponent
-                                    src={
-                                      "/mobileIcons/scouting/trash-simple-light.svg"
-                                    }
-                                    width={20}
-                                    height={20}
-                                    alt=""
-                                  />
-                                )}
-                              </IconButton>
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                          <Button
-                            onClick={() => {
-                              setCheckBoxOpen(false);
-                              setSelectedItems([]);
-                            }}
-                            sx={{
-                              display: attachmentData?.length ? "" : "none",
-                              color: "#d94841",
-                              textTransform: "capitalize",
-                              fontSize: "14px",
-                              fontFamily: "'Inter',sans-serif",
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      ) : (
-                        <Button
-                          onClick={() => setCheckBoxOpen(true)}
-                          sx={{
-                            display: attachmentData?.length ? "" : "none",
-                            color: "#05A155",
-                            textTransform: "capitalize",
-                            fontSize: "14px",
-                            fontFamily: "'Inter',sans-serif",
-                          }}
-                        >
-                          Select
-                        </Button>
-                      )}
-                    </div>
                   </div>
                   <div className={styles.attachmentDrawerMobile}>
                     {item?.map((image: any, index: number) => {

@@ -29,19 +29,15 @@ const POC = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-
   const [usersData, setUsersData] = useState([]);
   const [poc, setPOC] = useState<Partial<{ _id: string; name: string }> | null>(
     {}
   );
-
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showDeletePOC, setShowDeletePOC] = useState(false);
@@ -146,8 +142,9 @@ const POC = ({
       getAllUsers();
     }
   }, [router.isReady, accessToken]);
+
   return (
-    <div style={{ marginLeft: "10%" }}>
+    <div>
       <div className={styles.personofcontact}>
         <h3 className={styles.label}>Person of Contact (POC)</h3>
         {procurementData?.point_of_contact?._id ? (

@@ -46,6 +46,9 @@ interface pagePropTypes {
   editFarms?: { title: string; _id: string }[] | [];
   setEditFarms: Dispatch<SetStateAction<{ title: string; _id: string }[] | []>>;
 
+  setPriority: Dispatch<SetStateAction<string>>;
+  priority: string;
+
   isDisabled: boolean;
   setIsDisabled: Dispatch<SetStateAction<boolean>>;
 }
@@ -66,6 +69,8 @@ const OperationDetails: NextPage<pagePropTypes> = ({
   errorMessages,
   editFarms,
   setEditFarms,
+  setPriority,
+  priority,
   isDisabled,
 }) => {
   const router = useRouter();
@@ -82,10 +87,10 @@ const OperationDetails: NextPage<pagePropTypes> = ({
     setAge(event.target.value);
   };
   const [options] = useState<Array<{ value: string; title: string }>>([
-    { value: "None", title: "NONE" },
-    { value: "Low", title: "LOW" },
-    { value: "Medium", title: "MEDIUM" },
-    { value: "Hign", title: "HIGH" },
+    { title: "None", value: "NONE" },
+    { title: "Low", value: "LOW" },
+    { title: "Medium", value: "MEDIUM" },
+    { title: "Hign", value: "HIGH" },
 
   ]);
 
@@ -118,7 +123,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
             </label>
             <div className={styles.datepicker}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-
                 <DatePicker
                   sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
                   disablePast
@@ -204,6 +208,8 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
               }}
               placeholder="Select Priority"
+              onChange={(e: any) => setPriority(e.target.value)}
+              value={priority}
             >
 
               {options?.length && options.map((item: { value: string, title: string }, index: number) => {

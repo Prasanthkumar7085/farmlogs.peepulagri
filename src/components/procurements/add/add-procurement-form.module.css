@@ -78,3 +78,17 @@
   background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%)) !important;
 
 }
+
+/* presonofContact block styles */
+.personofcontact .label {
+  color: #101828;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 0.93vw, 20px);
+  font-weight: 500;
+  line-height: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.personofcontact {
+  margin-top: 1.5rem;
+}

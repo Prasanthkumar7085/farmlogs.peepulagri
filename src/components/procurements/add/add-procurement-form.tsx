@@ -55,6 +55,7 @@ const AddProcurementForm = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [procurementData, setProcurementData] = useState({});
+  const [priority, setPriority] = useState('NONE')
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     try {
       let response = await ListAllFarmForDropDownService(
@@ -98,6 +99,7 @@ const AddProcurementForm = () => {
           ? new Date(dateOfOperation)?.toISOString()
           : "",
         remarks: remarks,
+        priority: priority,
         farm_ids: farm?.length
           ? farm.map((item: { _id: string }) => item._id)
           : [],
@@ -140,6 +142,7 @@ const AddProcurementForm = () => {
           ? new Date(dateOfOperation)?.toISOString()
           : "",
         remarks: remarks,
+        priority: priority,
         farm_ids: [
           ...(farm?.length
             ? farm.map((item: { _id: string }) => item._id)
@@ -196,6 +199,7 @@ const AddProcurementForm = () => {
         setRemarks(response?.data?.remarks);
         setTitle(response?.data?.title);
         setEditFarms(response?.data?.farm_ids);
+        setPriority(response?.data?.priority)
       }
     } catch (err) {
       console.error(err);
@@ -245,6 +249,9 @@ const AddProcurementForm = () => {
       return () => clearTimeout(debounce);
     }
   }, [router.isReady, accessToken, searchString]);
+
+
+
   return (
     <div style={{ paddingTop: "2rem" }}>
       <AddProcurementHeader />
@@ -291,6 +298,8 @@ const AddProcurementForm = () => {
               setEditFarms={setEditFarms}
               isDisabled={isDisabled}
               setIsDisabled={setIsDisabled}
+              priority={priority}
+              setPriority={setPriority}
             />
 
             <div className={styles.formButtons} >

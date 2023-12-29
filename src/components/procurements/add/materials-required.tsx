@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -37,7 +38,7 @@ import FooterActionButtons from "@/components/Tasks/AddTask/footer-action-button
 import updateMaterialsByIdService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
-
+import AddIcon from '@mui/icons-material/Add';
 interface ApiCallService {
   procurement_req_id: string;
   name: string;
@@ -254,62 +255,93 @@ const MaterialsRequired: NextPage = () => {
       getAllProcurementMaterials();
     }
   }, [router.isReady, accessToken]);
+
+
   return (
-    <Card style={{ width: "60%", height: "80vh", marginLeft: "23%", marginTop: "40px" }}>
+    <div style={{ width: "50%", margin: "1rem auto 0", paddingBottom: "3rem" }}>
       <div className={styles.materialsrequired}>
         <div className={styles.heading}>
           <h2 className={styles.text}>Material Requirements</h2>
-          <div className={styles.textAndSupportingText}>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", width: "100%" }}>
+
             <p className={styles.supportingText}>
               You can add List of items here based on requirement
             </p>
-
+            <div >
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => addMaterial()}
+                className={styles.addMaterialBtn}
+              >
+                <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-
-          <div style={{ width: "100%" }}>
+        <div className={styles.materialsGrid}>
+          <div className={styles.eachMaterialBlock} >
             <h6 className={styles.label}>
               Material Name <strong style={{ color: "red" }}>*</strong>
             </h6>
-            <TextField
-              className={styles.input}
-              color="primary"
-              placeholder="Please enter the material title"
-              variant="outlined"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
+            <div style={{ width: "100%" }}>
+              <TextField
+                size="small"
+                placeholder="Please enter the material title"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                sx={{
+                  background: "#fff",
+                  borderRadius: "4px",
+                  width: "100%"
+                }}
+              />
+              {/* <ErrorMessages errorMessages={errorMessages} keyname={"name"} /> */}
+            </div>
           </div>
 
-          <div style={{ width: "100%" }}>
-            <h6>
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
               Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
 
             </h6>
             <div style={{ display: "flex" }}>
               <div >
                 <TextField
-                  className={styles.inputbox}
-                  sx={{ width: "100%" }}
-                  color="primary"
+
+                  size="small"
+                  sx={{
+                    width: "100%", background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 0 1px 1px !important",
+                      borderRadius: "4px 0 0 4px !important"
+                    }
+                  }}
                   placeholder="Enter Procurement Quantity"
                   variant="outlined"
                   type="number"
                   value={requiredQty}
                   onChange={(e: any) => setRequiredQty(e.target.value)}
                 />
-                <ErrorMessages
+                {/* <ErrorMessages
                   errorMessages={errorMessages}
                   keyname={"required_qty"}
-                />
+                /> */}
+
               </div>
-              <FormControl className={styles.dropdown} variant="outlined">
+              <FormControl variant="outlined">
                 <InputLabel color="primary" />
                 <Select
-                  color="primary"
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 1px 1px 0 !important",
+                      borderRadius: "0 4px 4px 0 !important"
+                    }
+                  }}
+                  size="small"
                   defaultValue="Litres"
                   value={requiredUnits}
                   onChange={(e: any) => setRequiredUnits(e.target.value)}
@@ -317,31 +349,45 @@ const MaterialsRequired: NextPage = () => {
                   <MenuItem value="Litres">Litres</MenuItem>
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
-                <FormHelperText />
-                <ErrorMessages
+                {/* <FormHelperText /> */}
+                {/* <ErrorMessages
                   errorMessages={errorMessages}
                   keyname={"required_units"}
-                />
+                /> */}
               </FormControl>
             </div>
           </div>
-          <div style={{ width: "100%" }}>
-            <h6 >
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
               Material Available (Qty)(optional)
             </h6>
             <div style={{ display: "flex" }}>
               <TextField
-                color="primary"
+                size="small"
                 placeholder="Enter Availble Quantity"
                 variant="outlined"
                 type="number"
                 value={availableQty}
                 onChange={(e: any) => setAvailableQty(e.target.value)}
+                sx={{
+                  width: "100%", background: "#fff",
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderWidth: "1px 0 1px 1px !important",
+                    borderRadius: "4px 0 0 4px !important"
+                  }
+                }}
               />
-              <FormControl className={styles.dropdown} variant="outlined">
+              <FormControl variant="outlined">
                 <InputLabel color="primary" />
                 <Select
-                  color="primary"
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 1px 1px 0 !important",
+                      borderRadius: "0 4px 4px 0 !important"
+                    }
+                  }}
+                  size="small"
                   defaultValue="Litres"
                   value={availableUnits}
                   onChange={(e: any) => setAvailableUnits(e.target.value)}
@@ -349,25 +395,14 @@ const MaterialsRequired: NextPage = () => {
                   <MenuItem value="Litres">Litres</MenuItem>
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
-                <FormHelperText />
+                {/* <FormHelperText sx={{ margin: "0" }} /> */}
               </FormControl>
             </div>
           </div>
-          <div >
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => addMaterial()}
-            >
-              Add
-            </Button>
-          </div>
         </div>
 
-        <div>
-          <div>
-            <h4>Selected Materials:</h4>
-          </div>
+        <div className={styles.materialListBlock}>
+          <h4 className={styles.text}>Selected Materials:</h4>
           <div>
             <Table>
               <TableHead>
@@ -473,7 +508,7 @@ const MaterialsRequired: NextPage = () => {
         updateLoading={updateLoading}
       />
       <LoadingComponent loading={loading} />
-    </Card>
+    </div>
   );
 };
 

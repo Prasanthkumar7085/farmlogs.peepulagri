@@ -184,6 +184,8 @@ const FileUploadComponent = () => {
       console.error(err);
     }
   };
+
+
   //start the file upload event
   const startUploadEvent = async (
     file: any,
@@ -288,6 +290,13 @@ const FileUploadComponent = () => {
           const start = currentChunk * chunkSize;
           const end = Math.min(start + chunkSize, file.size);
           const chunk = file.slice(start, end);
+
+          console.log(start, "pl");
+          console.log(end, "plpl");
+          console.log(chunk, "plplp");
+
+          console.log(file, "plplpl");
+
 
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
@@ -655,7 +664,7 @@ const FileUploadComponent = () => {
                     // Parse the data to get the address or other information as needed
                     console.log("Address:", results[0].formatted_address);
                     setLats({ latitude, longitude });
-                    console.log("Location:", { latitude, longitude });
+                    // console.log("Location:", { latitude, longitude });
                   } else {
                     console.error("No results found");
                   }

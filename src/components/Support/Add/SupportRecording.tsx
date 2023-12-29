@@ -182,109 +182,117 @@ const SupportRecording = ({ setAudioDetailsAfterUpload }: any) => {
 
 
     return (
-        <div className={styles.audioControls}>
-            <div className={styles.voiceRecording}>
-                {!permission ? (
-                    <Fab size="small" color="error" aria-label="Get Microphone" onClick={getMicrophonePermission}>
-                        <KeyboardVoiceRoundedIcon />
-                    </Fab>
-                ) : null}
-                {!permission ? (
-                    <Typography color="error">Get Microphone</Typography>
-                ) : null}
-            </div>
-            <div className={styles.voiceRecording}>
-                {permission && recordingStatus === "inactive" ? (
-                    <Fab size="small" color="primary" aria-label="Start Recording" onClick={startRecording}>
-                        <FiberManualRecordRoundedIcon />
-                    </Fab>
-                ) : null}
-                {permission && recordingStatus === "inactive" ? (
-                    <Typography color="primary">Start Recording</Typography>
-                ) : null}
-            </div>
+      <div className={styles.audioControls}>
+        <div className={styles.voiceRecording}>
+          {!permission ? (
+            <Fab
+              size="small"
+              color="error"
+              aria-label="Get Microphone"
+              onClick={getMicrophonePermission}
+            >
+              <KeyboardVoiceRoundedIcon />
+            </Fab>
+          ) : null}
+          {!permission ? (
+            <Typography color="error">Get Microphone</Typography>
+          ) : null}
+        </div>
+        <div className={styles.voiceRecording}>
+          {permission && recordingStatus === "inactive" ? (
+            <Fab
+              size="small"
+              color="primary"
+              aria-label="Start Recording"
+              onClick={startRecording}
+            >
+              <FiberManualRecordRoundedIcon />
+            </Fab>
+          ) : null}
+          {permission && recordingStatus === "inactive" ? (
+            <Typography color="primary">Start Recording</Typography>
+          ) : null}
+        </div>
 
-            <div style={{ display: "flex", gap: "10px" }}>
-                <div className={styles.voiceRecording}>
-                    {recordingStatus === "recording" ? (
-                        isRunning ? <Fab size="small" color="success" aria-label="Stop Recording" onClick={toggleTimer}>
-                            <PauseIcon />
-                        </Fab> :
-                            <Fab size="small" color="primary" aria-label="Stop Recording" onClick={toggleTimer}>
-                                <PlayArrowIcon />
-                            </Fab>
-                    ) : null}
-                </div>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <div className={styles.voiceRecording}>
+            {recordingStatus === "recording" ? (
+              isRunning ? (
+                <Fab
+                  size="small"
+                  color="success"
+                  aria-label="Stop Recording"
+                  onClick={toggleTimer}
+                >
+                  <PauseIcon />
+                </Fab>
+              ) : (
+                <Fab
+                  size="small"
+                  color="primary"
+                  aria-label="Stop Recording"
+                  onClick={toggleTimer}
+                >
+                  <PlayArrowIcon />
+                </Fab>
+              )
+            ) : null}
+          </div>
 
-                <div className={styles.voiceRecording}>
-                    {recordingStatus === "recording" ? (
-                        <Fab size="small" color="error" aria-label="Stop Recording" onClick={stopRecording}>
-                            <StopIcon />
-                        </Fab>
-                    ) : null}
+          <div className={styles.voiceRecording}>
+            {recordingStatus === "recording" ? (
+              <Fab
+                size="small"
+                color="error"
+                aria-label="Stop Recording"
+                onClick={stopRecording}
+              >
+                <StopIcon />
+              </Fab>
+            ) : null}
 
-                    {recordingStatus === "recording" ? (
-                        <Chip label={formattedTime} variant="outlined" />
-                    ) : null}
-                    {recordingStatus === "recording" ? (
-                        <Typography color="success">Stop Recording</Typography>
-                    ) : null}
-                </div>
-            </div>
+            {recordingStatus === "recording" ? (
+              <Chip label={formattedTime} variant="outlined" />
+            ) : null}
+            {recordingStatus === "recording" ? (
+              <Typography color="success">Stop Recording</Typography>
+            ) : null}
+          </div>
+        </div>
 
-
-            <div className={styles.recordedAudio}>
-                {audio ? (
-                    <div>
-                        <audio
-                            src={audio}
-                            controls
-                            controlsList="nodownload"
-                        ></audio>
-                        {/* <a download="recording.mp3" href={audio} type="audio/mpeg" >
+        <div className={styles.recordedAudio}>
+          {audio ? (
+            <div>
+              <audio src={audio} controls controlsList="nodownload"></audio>
+              {/* <a download="recording.mp3" href={audio} type="audio/mpeg" >
                                                   Download Recording
                                               </a> */}
-                    </div>
-                ) : null}
-                {audio ? (
-                    <Button
-                        disabled={!audio}
-                        onClick={() => { loadingOnMicUpload ? "" : removeAudio() }}
-                        size="small"
-                        sx={{ paddingInline: "0", minWidth: "auto" }}
-                    >
-                        {loadingOnMicUpload ?
-                            <CircularProgress size="1.5rem" sx={{ color: "#3462cf" }} />
-                            : 
-                        <DeleteForeverIcon color="error" />
-                        }
-                    </Button>
-
-                ) : null}
-                {/* {audio ? (
-                    <Button
-                        disabled={!audio}
-                        variant="contained"
-                        size="small"
-                        sx={{ width: "100px", fontWeight: "600" }}
-                        onClick={() => { loadingOnMicUpload ? "" : removeAudio() }}
-                    >
-                        {loadingOnMicUpload ?
-                            <CircularProgress size="1.5rem" sx={{ color: " white" }} />
-                            :
-                            <DeleteForeverIcon color="error" />
-                        }
-                    </Button>
-
-                ) : null} */}
             </div>
-            <AlertComponent
-                alertMessage={alertMessage}
-                alertType={alertType}
-                setAlertMessage={setAlertMessage}
-            />
+          ) : null}
+          {audio ? (
+            <Button
+              disabled={!audio}
+              onClick={() => {
+                loadingOnMicUpload ? "" : removeAudio();
+              }}
+              size="small"
+              sx={{ paddingInline: "0", minWidth: "auto" }}
+            >
+              {loadingOnMicUpload ? (
+                <CircularProgress size="1.5rem" sx={{ color: "#3462cf" }} />
+              ) : (
+                <DeleteForeverIcon color="error" />
+              )}
+            </Button>
+          ) : null}
         </div>
-    )
+        <AlertComponent
+          alertMessage={alertMessage}
+          alertType={alertType}
+          setAlertMessage={setAlertMessage}
+        />
+      </div>
+    );
 }
 
 export default SupportRecording;

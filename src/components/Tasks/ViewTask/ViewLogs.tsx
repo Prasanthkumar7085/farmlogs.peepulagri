@@ -109,13 +109,13 @@ const ViewLogs: FC<propType> = ({ openLogs, setOpenLogs, taskId }) => {
         </div>
       </div>
 
-      <div className={styles.taskLogViewCards}>
+      <div className={logsData?.length ? styles.taskLogViewCards : styles.taskLogNoDataCard}>
         {!logsLoading && logsData?.length ? (
           logsData.map((item: TasksLogsResponseType, index: number) => {
             return (
               <div className={styles.tasklogViewCard} key={index}>
                 <div className={styles.taskLogCardHeader}>
-                  <Avatar sx={{ fontSize: "8px", width: "20px", height: "20px", background: "#6A7185" }} >
+                  <Avatar sx={{ fontSize: "8px", width: "20px", height: "20px", background: "#d94841" }} >
                     {item.user_id.name.split(' ')?.length > 1 ? `${item.user_id.name.split(' ')[0][0]}${item.user_id.name.split(' ')[1][0]}`.toUpperCase() : item.user_id.name.slice(0, 2)?.toUpperCase()}
                   </Avatar>
                   <div className={styles.taskViewLogTaskName}>{item.user_id.name}</div>                </div>

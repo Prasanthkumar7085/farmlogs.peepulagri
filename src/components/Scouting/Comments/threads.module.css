@@ -123,9 +123,10 @@
   align-items: flex-start;
   justify-content: center;
   gap: var(--gap-5xs);
-  font-size: var(--text-sm-medium-size);
+  font-size: clamp(12px, 0.833vw, 18px);
   color: var(--color-gray-300);
 }
+
 
 .reply1 {
   display: flex;
@@ -137,6 +138,7 @@
   cursor: pointer;
   color: var(--gray-500);
   column-gap: 0.45rem;
+  font-size: clamp(13px, 0.833vw, 16px) !important;
 }
 
 .threadReplies {

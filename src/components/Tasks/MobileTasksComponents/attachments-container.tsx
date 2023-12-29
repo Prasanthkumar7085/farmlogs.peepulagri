@@ -24,7 +24,6 @@ const AttachmentsContainer = ({
     (state: any) => state.auth.userDetails?.user_details?._id
   );
 
-  const maxImagesToShow = 6;
 
   const [files, setFiles] = useState([]);
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
@@ -72,14 +71,7 @@ const AttachmentsContainer = ({
   };
   return (
     <div
-      className={styles.attachmentscontainer}
-      style={{
-        display:
-          loggedInUserId == data?.created_by?._id || hasEditAccess
-            ? ""
-            : "none",
-      }}
-    >
+      className={styles.attachmentscontainer}>
       {attachmentData?.length ? (
         <div
           style={{
@@ -118,7 +110,7 @@ const AttachmentsContainer = ({
                   <div className={styles.eachImageBlock} key={index}>
                     <img
                       className={
-                        checkIfAttachmentHasPreviewOrNot(item)
+                        checkIfAttachmentHasPreviewOrNot(item, true)
                           ? styles.imageIcon
                           : styles.iconImg
                       }
@@ -156,6 +148,8 @@ const AttachmentsContainer = ({
       </div>
 
       <AttachmentDrawerMobile
+        hasEditAccess={hasEditAccess}
+        data={data}
         attachmentDrawerClose={() => setAttachmentDrawer(false)}
         rowDetails={{ _id: router.query.task_id }}
         setAttachmentDrawer={setAttachmentDrawer}
@@ -189,7 +183,7 @@ const AttachmentsContainer = ({
           </div>
           <div
             style={{
-              height: "calc(100vh - 80px)",
+              height: "calc(100vh - 130px)",
               display: "flex",
               justifyContent: "center",
             }}

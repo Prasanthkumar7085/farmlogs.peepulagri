@@ -7,7 +7,7 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
 import TanStackTableProcurmentComponent from "./ProcurementsTanStackTable";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import { Avatar, Tooltip } from "@mui/material";
+import { Avatar, IconButton, Tooltip } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 
 
@@ -35,6 +35,10 @@ const ProcurementsTableComponent = ({
   );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
+  );
+
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
   );
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -269,18 +273,18 @@ const ProcurementsTableComponent = ({
       width: "150px",
     },
 
-    {
-      accessorFn: (row: any) => row.approved_by?.name,
-      id: "approved_by.name",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
-        </span>
-      ),
-      header: () => <span>Approved By</span>,
-      footer: (props: any) => props.column.id,
-      width: "150px",
-    },
+    // {
+    //   accessorFn: (row: any) => row.approved_by?.name,
+    //   id: "approved_by.name",
+    //   cell: (info: any) => (
+    //     <span style={{ padding: "40px 10px 40px 10px" }}>
+    //       {info.getValue()}
+    //     </span>
+    //   ),
+    //   header: () => <span>Approved By</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "150px",
+    // },
 
     {
       accessorFn: (row: any) => row.status,
@@ -331,8 +335,9 @@ const ProcurementsTableComponent = ({
                 justifyContent: "space-evenly",
               }}
             >
-              <Tooltip followCursor arrow title="View">
-                <div style={{ cursor: "pointer" }} onClick={() =>
+              <Tooltip followCursor arrow title="View"
+              >
+                <IconButton style={{ cursor: "pointer" }} onClick={() =>
                   router.push(`/procurements/${info.row.original?._id}`)
                 }>
                   <ImageComponent
@@ -341,14 +346,22 @@ const ProcurementsTableComponent = ({
                     width={17}
                     alt=""
                   />
-                </div>
+                </IconButton>
               </Tooltip>
-              <Tooltip followCursor arrow title="Edit">
-                <div
+
+              <Tooltip followCursor arrow
+                title={userDetails?._id == info.row.original?.requested_by?._id ? "Edit" : "You dont't have permission for this action"}
+              >
+                <IconButton
                   style={{ cursor: "pointer" }}
-                  onClick={() =>
+                  onClick={() => {
+                    if (
+                      info.row.original?.requested_by?._id !== userDetails?._id
+                    ) {
+                      return;
+                    }
                     router.push(`/procurements/${info.row.original?._id}/edit`)
-                  }
+                  }}
                 >
                   <ImageComponent
                     src="/pencil-icon.svg"
@@ -356,29 +369,41 @@ const ProcurementsTableComponent = ({
                     width={15}
                     alt=""
                   />
-                </div>
+                </IconButton>
               </Tooltip>
 
-              {userType_v2 !== "farmer" ? (
-                <Tooltip followCursor arrow title="Delete">
-                  <div
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setdeleteProcurments(info.row.original?._id);
-                      setDialogOpen(true);
-                    }}
-                  >
-                    <ImageComponent
-                      src="/trast-icon.svg"
-                      height={17}
-                      width={17}
-                      alt=""
-                    />
-                  </div>
-                </Tooltip>
-              ) : (
-                ""
-              )}
+
+              <Tooltip followCursor arrow
+                title={userDetails?._id == info.row.original?.requested_by?._id ? "Delete" : "You dont't have permission for this action"}
+              >
+                <IconButton
+                  style={{ cursor: "pointer" }}
+
+                  onClick={() => {
+                    if (
+                      info.row.original?.requested_by?._id !== userDetails?._id
+                    ) {
+                      return;
+                    }
+                    setdeleteProcurments(info.row.original?._id);
+                    setDialogOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src={
+                      !(
+                        info.row.original?.requested_by?._id !== userDetails?._id
+                      )
+                        ? "/viewTaskIcons/task-table-delete.svg"
+                        : "/viewTaskIcons/task-table-delete-disable.svg"
+                    }
+                    height={17}
+                    width={17}
+                    alt=""
+                  />
+                </IconButton>
+              </Tooltip>
+
             </div>
           }
         </span>

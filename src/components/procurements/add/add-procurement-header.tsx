@@ -23,7 +23,7 @@ const AddProcurementHeader: NextPage = () => {
       </Button>
       <div className={styles.textwrapper}>
         <p className={styles.backText}>Back To List</p>
-        <h2 className={styles.largetext}>Add Procurement</h2>
+        <h2 className={styles.largetext}>{router.query.procurement_id ? "Edit Procurement" : "Add Procurement"}</h2>
       </div>
     </div>
   );

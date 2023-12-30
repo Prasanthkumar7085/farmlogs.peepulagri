@@ -56,7 +56,9 @@ const MaterialsRequired: NextPage = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const details = useSelector((state: any) => state.auth.userDetails);
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
 
   const router = useRouter();
   const [name, setName] = useState("");
@@ -276,6 +278,7 @@ const MaterialsRequired: NextPage = () => {
           >
             <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
           </Button>
+
         </div>
 
         <div className={styles.materialsGrid}>

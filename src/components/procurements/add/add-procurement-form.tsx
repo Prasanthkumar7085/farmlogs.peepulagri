@@ -36,6 +36,13 @@ const AddProcurementForm = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
+
+
+
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const router = useRouter();
@@ -54,7 +61,7 @@ const AddProcurementForm = () => {
   >([]);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [procurementData, setProcurementData] = useState({});
+  const [procurementData, setProcurementData] = useState<any>({});
   const [priority, setPriority] = useState('NONE')
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     try {
@@ -260,7 +267,7 @@ const AddProcurementForm = () => {
         <div style={{ width: "100%" }}>
           <div style={{ padding: "1rem" }}>
             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-              {router.query.procurement_id ? (
+              {router.query.procurement_id && userDetails?._id == procurementData?.requested_by?._id ? (
                 <Button
                   variant="outlined"
                   sx={{ color: "red", borderColor: "red" }}

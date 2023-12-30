@@ -49,6 +49,9 @@ input[type=number] {
     font-family: "Inter", sans-serif !important;
 
 }
+.rs-picker-menu{
+    z-index: 9999!important;
+}
 
 :root {
     /* fonts */

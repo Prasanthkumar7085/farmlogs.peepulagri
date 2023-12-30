@@ -258,7 +258,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                   <TableCell>Price(Rs)</TableCell>
                 </>
                 : ''}
-              <TableCell style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "" }}>Actions</TableCell>
+              <TableCell style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "PURCHASED") ? "none" : "" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

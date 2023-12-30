@@ -319,6 +319,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                         <div style={{ cursor: "pointer" }}>
                           {!row?.price && !row?.vendor ?
                             <IconButton
+                              disabled={userDetails?.user_type == "agronomist" ? false : true}
                               onClick={() => {
                                 setEditMaterialId(row._id);
                                 setEditMaterialOpen(true);
@@ -352,7 +353,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                           ) : (
                             <Button
                               variant="outlined"
-                              disabled={userDetails?.user_type == "manager" ? false : true}
+                              disabled={userDetails?.user_type == "manager" && row?.status == "PURCHASED" ? false : userDetails?.user_type == "admin" && (row?.status == "REJECTED" || row?.status == "PENDING") ? false : true}
                               onClick={() => {
                                 if (!row?.price && !row?.vendor) {
                                   onStatusChangeEvent("approve", row?._id)

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import styles from "./tabs.module.css";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { prepareURLEncodedParamsWithArray } from "../../../../lib/requestUtils/urlEncoderWithArray";
 
 const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
   const getAllStatsCount = async () => {
     try {
       let urls = [
-        "/tasks/status/count/stats",
+        "/tasks/status/count/stats?",
         "/tasks/status/count/stats?status=TO-START",
         "/tasks/status/count/stats?status=INPROGRESS",
         "/tasks/status/count/stats?status=DONE",
@@ -24,10 +25,51 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
         "/tasks/status/count/stats?status=OVER-DUE",
       ];
 
+      let queryParams: any = {};
+
+      if (router.query.page) {
+        queryParams["page"] = router.query.page;
+      }
+      if (router.query.limit) {
+        queryParams["limit"] = router.query.limit;
+      }
+      if (router.query.search_string) {
+        queryParams["search_string"] = router.query.search_string;
+      }
+
+      if (router.query.order_by) {
+        queryParams["sort_by"] = router.query.order_by;
+      }
+      if (router.query.order_type) {
+        queryParams["sort_type"] = router.query.order_type;
+      }
+      if (router.query.farm_id) {
+        queryParams["farm_id"] = router.query.farm_id;
+      }
+      if (router.query.status) {
+        if (router.query.status !== "ALL") {
+          queryParams["status"] = router.query.status;
+        }
+      }
+
+      if (router.query.assign_to) {
+        queryParams["assign_to"] = router.query.assign_to
+          ? Array.isArray(router.query.assign_to)
+            ? (router.query.assign_to as string[])
+            : ([router.query.assign_to] as string[])
+          : [];
+        // queryParams["created_by"] = userId;
+      }
+
+      const paramString = prepareURLEncodedParamsWithArray(
+        "",
+        queryParams
+      );
       let responses = await Promise.allSettled(
         urls.map(async (url) => {
+
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}${url}`,
+            `${process.env.NEXT_PUBLIC_API_URL}${url}${paramString.replace("?", "&")}`,
             {
               method: "GET",
               headers: new Headers({
@@ -86,7 +128,9 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
     if (router.isReady && accessToken) {
       getAllStatsCount();
     }
-  }, [router.isReady, accessToken]);
+
+
+  }, [router.isReady, accessToken, router.query]);
 
   return (
     <div className={styles.tabsgroup}>

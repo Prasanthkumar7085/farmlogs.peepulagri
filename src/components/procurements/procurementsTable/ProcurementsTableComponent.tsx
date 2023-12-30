@@ -9,6 +9,7 @@ import TanStackTableProcurmentComponent from "./ProcurementsTanStackTable";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import { Avatar, IconButton, Tooltip } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
+import DrawerCommentsForProcurment from "./ProcrumentComments/DrawerBoxForProcurment";
 
 
 // interface pageProps {
@@ -404,6 +405,23 @@ const ProcurementsTableComponent = ({
                 </IconButton>
               </Tooltip>
 
+              <Tooltip followCursor arrow title="Comments">
+                <IconButton
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setRowDetails(info.row.original);
+                    setDrawerOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src="/viewTaskIcons/task-table-comments.svg"
+                    height={17}
+                    width={17}
+                    alt="comments"
+                  />
+                </IconButton>
+              </Tooltip>
+
             </div>
           }
         </span>
@@ -437,13 +455,13 @@ const ProcurementsTableComponent = ({
         deleteTitleProp={"Procurement"}
       />
 
-      {/* <DrawerBoxComponent
+      <DrawerCommentsForProcurment
         drawerClose={drawerClose}
         rowDetails={rowDetails}
         setDrawerOpen={setDrawerOpen}
         drawerOpen={drawerOpen}
       />
-
+      {/*
       <AttachmentDrawerTaskmodule
         attachmentDrawerClose={attachmentDrawerClose}
         rowDetails={rowDetails}

@@ -163,7 +163,7 @@ const TaskViewComponent = () => {
       let responseData = await response.json();
       if (responseData.status >= 200 && responseData.status <= 300) {
         // let modifiedData = groupByDate(responseData?.data?.attachments);
-        setAttachmentData([...responseData?.data?.attachments]);
+        setAttachmentData([...responseData?.data?.attachments.reverse()]);
       }
     } catch (err) {
       console.error(err);

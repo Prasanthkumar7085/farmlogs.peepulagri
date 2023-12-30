@@ -128,8 +128,6 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
     if (router.isReady && accessToken) {
       getAllStatsCount();
     }
-
-
   }, [router.isReady, accessToken, router.query]);
 
   return (

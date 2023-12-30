@@ -70,6 +70,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
   // let previewStorage = [...previewImages];
 
   const [tempFilesStorage, setTempFileStorage] = useState<any>([]);
+
   const [previewStorage, setPreviewStorage] = useState<any>([]);
 
   useEffect(() => {
@@ -163,12 +164,12 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
       const bytesToMB = (bytes: any) => {
         return bytes / (1024 * 1024);
       };
-      await fileUploadEvent(item, index, temp, setFileProgress);
-      // if (bytesToMB(item.size) >= 5) {
-      //   await startUploadEvent(item, index, temp, setFileProgress);
-      // } else {
-      //   await fileUploadEvent(item, index, temp, setFileProgress);
-      // }
+      // await fileUploadEvent(item, index, temp, setFileProgress);
+      if (bytesToMB(item.size) >= 5) {
+        await startUploadEvent(item, index, temp, setFileProgress);
+      } else {
+        await fileUploadEvent(item, index, temp, setFileProgress);
+      }
     });
   };
 
@@ -179,8 +180,6 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     setFileProgress: Function
   ) => {
     let obj = {
-      farm_id: router.query.farm_id as string,
-      crop_id: router.query.crop_id,
       original_name: file.name,
       type: file.type,
       size: file.size,
@@ -197,11 +196,20 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/start-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/image/start-upload`,
         options
       );
       let responseData = await response.json();
       if (responseData.success == true) {
+
+        tempFilesStorage.splice(1, 0, {
+          original_name: responseData.data.original_name,
+          type: file.type,
+          size: file.size,
+          path: responseData?.data?.path,
+          key: responseData?.data?.key,
+        });
+        setAttachments(tempFilesStorage);
         await uploadFileintoChuncks(
           responseData.data.upload_id,
           file,
@@ -210,12 +218,6 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
           setFileProgress,
           responseData.data.file_key
         );
-        tempFilesStorage.splice(1, 0, {
-          original_name: responseData.data.original_name,
-          type: file.type,
-          size: file.size,
-        });
-        setAttachments(tempFilesStorage);
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -228,7 +230,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     uploadid: any,
     file: any,
     index: any,
-    fileProgressCopy: number[],
+    fileProgressCopy: any,
     setFileProgress: Function,
     key: any
   ) => {
@@ -254,7 +256,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     try {
       // Send the chunk to the server using a POST request
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/start-upload/presigned-url`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/image/start-upload/presigned-url`,
         options
       );
       let responseData: any = await response.json();
@@ -271,10 +273,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
             method: "PUT",
-            headers: new Headers({
-              "content-type": "application/json",
-              authorization: accessToken,
-            }),
+
             body: chunk,
           });
 
@@ -292,6 +291,8 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
         await mergeFileChuncksEvent(promiseResponseObj, uploadid, key, index);
       }
     } catch (error) {
+      fileProgressCopy[index] = "fail";
+      setFileProgress([...fileProgressCopy]);
       console.error("Error uploading chunk:", error);
     }
   };
@@ -317,11 +318,12 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/image/complete-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/image/complete-upload`,
         options
       );
       let responseData: any = await response.json();
     } catch (err) {
+
       console.error(err);
     }
   };
@@ -433,6 +435,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     dispatch(removeTheFilesFromStore([]));
     setMultipleFiles([]);
     setTempFileStorage([]);
+    setAttachments([])
   };
 
   const addTaskAttachements = async () => {
@@ -462,8 +465,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
         }),
       };
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${
-          router.query.task_id ? router.query.task_id : taskId
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router.query.task_id ? router.query.task_id : taskId
         }/attachments`,
         options
       );
@@ -472,6 +474,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
         afterUploadAttachements(true);
         setMultipleFiles([]);
         setTempFileStorage([]);
+        setAttachments([])
         toast.success(responseData?.message);
         if (taskId) {
           router.back();
@@ -541,16 +544,16 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                        .prieviewUrl
+                      .prieviewUrl
                     : item.type.includes("pdf")
-                    ? "/pdf-icon.png"
-                    : item.type.includes("csv")
-                    ? "/csv-icon.png"
-                    : item.type ==
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                      item.type.includes("xlsx")
-                    ? "/google-sheets-icon.webp"
-                    : "/doc-icon.webp"
+                      ? "/pdf-icon.png"
+                      : item.type.includes("csv")
+                        ? "/csv-icon.png"
+                        : item.type ==
+                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                          item.type.includes("xlsx")
+                          ? "/google-sheets-icon.webp"
+                          : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -584,7 +587,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                      fileProgress[index] !== "fail" ? (
+                        fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
@@ -597,7 +600,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -611,7 +614,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                    fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -638,7 +641,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
           </div>
         ))}
 
-      {tempFilesStorage?.length ? (
+      {attachments?.length ? (
         <div
           className={styles.uploadFilesBtnGrp}
           style={{ marginBottom: "1rem" }}
@@ -659,7 +662,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
             onClick={() => addTaskAttachements()}
             className={styles.saveBtn}
             disabled={
-              !tempFilesStorage?.length ||
+              !attachments?.length ||
               loading ||
               fileProgress.filter(
                 (item: string | number) =>

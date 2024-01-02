@@ -46,11 +46,11 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       if (router.query.farm_id) {
         queryParams["farm_id"] = router.query.farm_id;
       }
-      if (router.query.status) {
-        if (router.query.status !== "ALL") {
-          queryParams["status"] = router.query.status;
-        }
-      }
+      // if (router.query.status) {
+      //   if (router.query.status !== "ALL") {
+      //     queryParams["status"] = router.query.status;
+      //   }
+      // }
 
       if (router.query.assign_to) {
         queryParams["assign_to"] = router.query.assign_to
@@ -61,15 +61,14 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
         // queryParams["created_by"] = userId;
       }
 
-      const paramString = prepareURLEncodedParamsWithArray(
-        "",
-        queryParams
-      );
+      const paramString = prepareURLEncodedParamsWithArray("", queryParams);
       let responses = await Promise.allSettled(
         urls.map(async (url) => {
-
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}${url}${paramString.replace("?", "&")}`,
+            `${process.env.NEXT_PUBLIC_API_URL}${url}${paramString.replace(
+              "?",
+              "&"
+            )}`,
             {
               method: "GET",
               headers: new Headers({

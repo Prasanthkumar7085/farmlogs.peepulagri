@@ -26,6 +26,7 @@ import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
 import getSingleMaterilsService from "../../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import { EditOutlined } from "@mui/icons-material";
 import styles from "./viewProcurementTable.module.css"
+import formatMoney from "@/pipes/formatMoney";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -297,7 +298,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                         <>
                           <TableCell className={styles.tableBodyCell}>{row?.vendor ? row?.vendor : "---"}</TableCell>
                           <TableCell className={styles.tableBodyCell}>
-                            {row?.price ? row?.price : "---"}
+                            {row?.price ? formatMoney(row?.price) : "---"}
                           </TableCell>
                         </>
                         : ''}
@@ -390,7 +391,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
             </Table>
             <div className={styles.TotalAmountBlock}>
               <Typography className={styles.totalAmountTitle}>Total Amount</Typography>
-              <Typography className={styles.totalAmount}>{sumOfPrices(materials)}</Typography>
+              <Typography className={styles.totalAmount}>{formatMoney(sumOfPrices(materials))}</Typography>
             </div>
           </div>
         ) : (

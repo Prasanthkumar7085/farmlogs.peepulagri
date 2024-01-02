@@ -1,7 +1,7 @@
 const formatMoney = (amount: any, currencySymbol = '$') => {
     let rupee = new Intl.NumberFormat('en-IN', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'INR',
     });
     if (amount) {
         return rupee.format(+amount)

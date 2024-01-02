@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import getProcurementByIdService from "../../../../lib/services/ProcurementServices/getProcurementByIdService";
 import ShippedStatus from "./shipped-status";
 import ShippedStatusform from "./shipped-statusform";
-import ViewProcurementTable from "./table";
+import ViewProcurementTable from "./ViewProcerementTable";
 
 const ViewProcurementComponent = () => {
   const router = useRouter();
@@ -44,7 +44,7 @@ const ViewProcurementComponent = () => {
     }
   }, [router.isReady, accessToken]);
   return (
-    <div style={{ width: "50%", margin: "auto", paddingTop: "2rem" }}>
+    <div style={{ width: "80%", margin: "auto", paddingTop: "2rem" }}>
       <ShippedStatus data={data} afterStatusChange={afterStatusChange} />
       <ShippedStatusform data={data} />
       <ViewProcurementTable data={data} afterMaterialStatusChange={afterMaterialStatusChange} />

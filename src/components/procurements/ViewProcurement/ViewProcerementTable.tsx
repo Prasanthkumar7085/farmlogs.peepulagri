@@ -11,6 +11,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -23,7 +24,8 @@ import ViewMaterialDrawer from "./ViewMaterialDrawer";
 import updateMaterialsByIdService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
 import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
 import getSingleMaterilsService from "../../../../lib/services/ProcurementServices/getSingleMaterilsService";
-import { EditOutlined } from "@mui/icons-material"
+import { EditOutlined } from "@mui/icons-material";
+import styles from "./viewProcurementTable.module.css"
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -36,7 +38,6 @@ interface ApiCallService {
 const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
-
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
@@ -240,157 +241,162 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
     return sum;
   }
+  //to captlize the upercase text
+  const capitalizeFirstLetter = (string: any) => {
+    let temp = string.toLowerCase();
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
+  };
   return (
-    <div>
-      <hr />
-      {materials?.length ? (
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Available(Qty)</TableCell>
-              <TableCell>Procurement(Qty)</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Approved By</TableCell>
-              {materialDetails ?
-                <>
-                  <TableCell>Name of Vendor</TableCell>
-                  <TableCell>Price(Rs)</TableCell>
-                </>
-                : ''}
-              <TableCell style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "PURCHASED") ? "none" : "" }}>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {materials?.map((row: any, index: any) => {
-              return (
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  key={index}
-                >
-                  <TableCell>{row?.name ? row?.name : "---"}</TableCell>
-                  <TableCell>
-                    {row?.available_qty
-                      ? row?.available_qty + " " + row.available_units
-                      : "---"}
-                  </TableCell>
-                  <TableCell>
-                    {row?.required_qty
-                      ? row?.required_qty + " " + row.required_units
-                      : "---"}
-                  </TableCell>
-                  <TableCell>{row?.status ? row?.status : "---"}</TableCell>
-                  <TableCell>
-                    {row?.approved_by?.name ? row?.approved_by?.name : "---"}
-                  </TableCell>
+    <div className={styles.materialsBlock} style={{ width: "100%" }}>
+      <p className={styles.materialsBlockHeading}>Required Materials</p>
+      <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
+
+        {materials?.length ? (
+          <div>
+            <Table >
+              <TableHead>
+                <TableRow>
+                  <TableCell className={styles.tableHeaderCell}>Name</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Available(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Procurement(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Status</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Approved By</TableCell>
                   {materialDetails ?
                     <>
-                      <TableCell>{row?.vendor ? row?.vendor : "---"}</TableCell>
-                      <TableCell>
-                        {row?.price ? row?.price : "---"}
-                      </TableCell>
+                      <TableCell className={styles.tableHeaderCell}>Name of Vendor</TableCell>
+                      <TableCell className={styles.tableHeaderCell}>Price(Rs)</TableCell>
                     </>
                     : ''}
-
-                  <TableCell>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      {row?.status !== "APPROVED" ? (
-                        <div style={{ cursor: "pointer" }}>
-                          {!row?.price && row?.status !== "REJECTED" ?
-                            <IconButton
-                              onClick={() =>
-                                onStatusChangeEvent("reject", row?._id)
-                              }
-                            >
-                              <RemoveCircleOutlineIcon />
-                            </IconButton>
-                            : ''}
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                      {row?.status !== "APPROVED" ? (
-                        <div style={{ cursor: "pointer" }}>
-                          {!row?.price && !row?.vendor ?
-                            <IconButton
-                              disabled={userDetails?.user_type == "agronomist" ? false : true}
-                              onClick={() => {
-                                setEditMaterialId(row._id);
-                                setEditMaterialOpen(true);
-                              }}
-                            >
-                              <EditOutlined sx={{ color: "red" }} />
-                            </IconButton>
-                            : ''}
-
-                        </div>
-                      ) : (
-                        ""
-                      )}
-
-                      {userDetails?.user_type == "admin" || userDetails?.user_type == "manager" ?
-                        <div style={{ cursor: "pointer", display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "block" }}>
-                          {row?.status == "APPROVED" ? (
-
-                            <Button
-                              variant="outlined"
-                              disabled={userDetails?.user_type == "manager" ? false : true}
-                              onClick={() => {
-                                setMaterialId(row?._id);
-                                setMaterialOpen(true)
-                              }
-                              }
-                            >
-                              {row?.price && row?.vendor ? "Edit Purchase" : "Add Purchase"}
-
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="outlined"
-                              disabled={userDetails?.user_type == "manager" && row?.status == "PURCHASED" ? false : userDetails?.user_type == "admin" && (row?.status == "REJECTED" || row?.status == "PENDING") ? false : true}
-                              onClick={() => {
-                                if (!row?.price && !row?.vendor) {
-                                  onStatusChangeEvent("approve", row?._id)
-                                } else {
-                                  setMaterialId(row?._id);
-                                  setMaterialOpen(true)
-                                }
-                              }
-                              }
-                            >
-
-                              {row?.price && row?.vendor ? "Edit Purchase" : "Approve"}
-                            </Button>
-                          )}
-                        </div> : ""}
-
-                    </div>
-                  </TableCell>
+                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "PURCHASED") ? "none" : "" }}>Actions</TableCell>
                 </TableRow>
-              );
-            })}
-            <TableRow >
-              <TableCell colSpan={1}></TableCell>
-              <TableCell colSpan={1}></TableCell>
-              <TableCell colSpan={1}></TableCell>
-              <TableCell colSpan={1}></TableCell>
-              <TableCell colSpan={1}></TableCell>
-              <TableCell colSpan={1}>Total</TableCell>
-              <TableCell colSpan={1}>{sumOfPrices(materials)}</TableCell>
+              </TableHead>
+              <TableBody >
+                {materials?.map((row: any, index: any) => {
+                  return (
+                    <TableRow
+                      className={styles.tableBodyRow}
+                      // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      key={index}
+                    >
+                      <TableCell className={styles.tableBodyCell}>{row?.name ? row?.name : "---"}</TableCell>
+                      <TableCell className={styles.tableBodyCell}>
+                        {row?.available_qty
+                          ? row?.available_qty + " " + row.available_units
+                          : "---"}
+                      </TableCell>
+                      <TableCell className={styles.tableBodyCell}>
+                        {row?.required_qty
+                          ? row?.required_qty + " " + row.required_units
+                          : "---"}
+                      </TableCell>
+                      <TableCell className={styles.tableBodyCell}>{row?.status ? capitalizeFirstLetter(row?.status) : "---"}</TableCell>
+                      <TableCell className={styles.tableBodyCell}>
+                        {row?.approved_by?.name ? row?.approved_by?.name : "---"}
+                      </TableCell>
+                      {materialDetails ?
+                        <>
+                          <TableCell className={styles.tableBodyCell}>{row?.vendor ? row?.vendor : "---"}</TableCell>
+                          <TableCell className={styles.tableBodyCell}>
+                            {row?.price ? row?.price : "---"}
+                          </TableCell>
+                        </>
+                        : ''}
 
-            </TableRow>
+                      <TableCell className={styles.tableBodyCell}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          {row?.status !== "APPROVED" ? (
+                            <div style={{ cursor: "pointer" }}>
+                              {!row?.price && row?.status !== "REJECTED" ?
+                                <IconButton
+                                  onClick={() =>
+                                    onStatusChangeEvent("reject", row?._id)
+                                  }
+                                >
+                                  <RemoveCircleOutlineIcon />
+                                </IconButton>
+                                : ''}
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          {row?.status !== "APPROVED" ? (
+                            <div style={{ cursor: "pointer" }}>
+                              {!row?.price && !row?.vendor ?
+                                <IconButton
+                                  disabled={userDetails?.user_type == "agronomist" ? false : true}
+                                  onClick={() => {
+                                    setEditMaterialId(row._id);
+                                    setEditMaterialOpen(true);
+                                  }}
+                                >
+                                  <EditOutlined sx={{ color: "red" }} />
+                                </IconButton>
+                                : ''}
 
-          </TableBody>
-        </Table>
-      ) : (
-        ""
-      )}
+                            </div>
+                          ) : (
+                            ""
+                          )}
+
+                          {userDetails?.user_type == "admin" || userDetails?.user_type == "manager" ?
+                            <div style={{ cursor: "pointer", display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "block" }}>
+                              {row?.status == "APPROVED" ? (
+
+                                <Button
+                                  variant="outlined"
+                                  disabled={userDetails?.user_type == "manager" ? false : true}
+                                  onClick={() => {
+                                    setMaterialId(row?._id);
+                                    setMaterialOpen(true)
+                                  }
+                                  }
+                                >
+                                  {row?.price && row?.vendor ? "Edit Purchase" : "Add Purchase"}
+
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="outlined"
+                                  disabled={userDetails?.user_type == "manager" && row?.status == "PURCHASED" ? false : userDetails?.user_type == "admin" && (row?.status == "REJECTED" || row?.status == "PENDING") ? false : true}
+                                  onClick={() => {
+                                    if (!row?.price && !row?.vendor) {
+                                      onStatusChangeEvent("approve", row?._id)
+                                    } else {
+                                      setMaterialId(row?._id);
+                                      setMaterialOpen(true)
+                                    }
+                                  }
+                                  }
+                                >
+
+                                  {row?.price && row?.vendor ? "Edit Purchase" : "Approve"}
+                                </Button>
+                              )}
+                            </div> : ""}
+
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+
+              </TableBody>
+            </Table>
+            <div className={styles.TotalAmountBlock}>
+              <Typography className={styles.totalAmountTitle}>Total Amount</Typography>
+              <Typography className={styles.totalAmount}>{sumOfPrices(materials)}</Typography>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
 
       <LoadingComponent loading={loading} />
       <ViewMaterialDrawer materialId={materialId} materialOpen={materialOpen} setMaterialOpen={setMaterialOpen} getAllProcurementMaterials={getAllProcurementMaterials} />

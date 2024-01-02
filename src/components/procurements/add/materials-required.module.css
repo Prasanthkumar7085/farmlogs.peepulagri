@@ -194,6 +194,7 @@
   font-size: clamp(16px, 0.93vw, 18px);
   font-weight: 500;
   line-height: 18px;
+  margin: 0;
 }
 
 .materialListTable {
@@ -206,6 +207,7 @@
   font-family: "Inter", sans-serif;
   font-weight: 500;
   color: #6A7185;
+  border: 0;
 }
 
 .tableBodyRow {
@@ -226,6 +228,15 @@
 
 .tableBodyCell:last-child {
   border-radius: 0 5px 5px 0;
+}
+
+.materialListTable table {
+  border-collapse: separate;
+  border-spacing: 0 3px;
+}
+
+.materialListTable table {
+  display: inline-table;
 }
 
 /* edit drawer styles */

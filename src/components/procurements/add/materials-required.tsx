@@ -403,7 +403,7 @@ const MaterialsRequired: NextPage = () => {
         </div>
 
         <div className={styles.materialListBlock}>
-          <h4 className={styles.materialLiatHeading}>Required Materials:</h4>
+          <h4 className={styles.materialListheading}>Required Materials</h4>
           <div className={styles.materialListTable}>
             <Table >
               <TableHead>
@@ -449,6 +449,7 @@ const MaterialsRequired: NextPage = () => {
                           </TableCell>
                           <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
                             <IconButton
+                              sx={{ paddingBlock: "3px" }}
                               onClick={() => {
                                 setEditAvailableQty(item.available_qty);
                                 setEditAvailableUnits(item.available_units);
@@ -466,6 +467,7 @@ const MaterialsRequired: NextPage = () => {
                               </picture>
                             </IconButton>
                             <IconButton
+                              sx={{ paddingBlock: "3px" }}
                               onClick={() => {
                                 setDeleteMaterialId(item._id);
                                 setDeleteMaterialOpen(true);

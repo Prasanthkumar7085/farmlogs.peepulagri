@@ -299,7 +299,7 @@ const MaterialsRequired: NextPage = () => {
                   width: "100%"
                 }}
               />
-              {/* <ErrorMessages errorMessages={errorMessages} keyname={"name"} /> */}
+              <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
             </div>
           </div>
 
@@ -326,10 +326,10 @@ const MaterialsRequired: NextPage = () => {
                   value={requiredQty}
                   onChange={(e: any) => setRequiredQty(e.target.value)}
                 />
-                {/* <ErrorMessages
+                <ErrorMessages
                   errorMessages={errorMessages}
                   keyname={"required_qty"}
-                /> */}
+                />
 
               </div>
               <FormControl variant="outlined">
@@ -351,10 +351,10 @@ const MaterialsRequired: NextPage = () => {
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
                 {/* <FormHelperText /> */}
-                {/* <ErrorMessages
+                <ErrorMessages
                   errorMessages={errorMessages}
                   keyname={"required_units"}
-                /> */}
+                />
               </FormControl>
             </div>
           </div>

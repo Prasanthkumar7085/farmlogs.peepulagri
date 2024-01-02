@@ -238,7 +238,11 @@ const POC = ({
           <div>
 
             {!procurementData?.point_of_contact?._id ? (
-              <Button className={styles.conformPocbtn} variant="outlined" onClick={addPOCtoProcurement}>Confirm</Button>
+              <Button className={styles.conformPocbtn}
+                variant="outlined"
+                onClick={addPOCtoProcurement}
+                disabled={poc?.name ? false : true}
+              >Confirm</Button>
             ) : (
               ""
             )}

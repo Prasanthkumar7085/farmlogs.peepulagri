@@ -4,20 +4,27 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   Autocomplete,
   Badge,
+  Box,
   Button,
   Chip,
   ClickAwayListener,
+  Divider,
   Drawer,
   IconButton,
   InputAdornment,
+  ListItem,
   TextField,
   Typography,
 } from "@mui/material";
 import { ClearIcon } from "@mui/x-date-pickers";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import SortIcon from "@mui/icons-material/Sort";
+
 import styles from "./taskHeader.module.css";
 
 const TaskHeader = ({
@@ -41,6 +48,11 @@ const TaskHeader = ({
   const [textFieldAutoFocus, setTextFieldAutoFocus] = useState(false);
   const [usersArray, setUsersArray] = useState<userTaskType[]>([]);
   const [renderField, setRenderField] = useState(true);
+
+  const [state, setState] = useState(false);
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [sortType, setSortType] = useState("desc");
+  const [dateFilter, setDateFilter] = useState("");
 
   const getAllUsers = async () => {
     const response = await getAllUsersService({ token: accessToken });
@@ -72,7 +84,55 @@ const TaskHeader = ({
       );
     }
   };
+  const toggleDrawer = (open: boolean) => {
+    setState(open);
+  };
+  const sortByMethod = (sortBy: string, sortType: string) => {
+    toggleDrawer(false);
 
+    getAllTasks({
+      page: 1,
+      limit: router.query.limit as string,
+      search_string: searchString,
+      createdAt: dateFilter,
+      sortBy: sortBy,
+      sortType: sortType,
+      selectedFarmId: router.query.farm_id as string,
+      status: router.query.status,
+      userId: router.query.assign_to
+        ? Array.isArray(router.query.assign_to)
+          ? (router.query.assign_to as string[])
+          : ([router.query.assign_to] as string[])
+        : [],
+      isMyTasks: router.query?.is_my_task as string,
+    });
+    setSortBy(sortBy);
+    setSortType(sortType);
+  };
+
+  const sortMethod = (value: number) => {
+    if (sortBy == "createdAt") {
+      if (value == 1 && sortType == "desc") {
+        return true;
+      } else if (value == 2 && sortType == "asc") {
+        return true;
+      }
+    } else if (sortBy == "title") {
+      if (value == 3 && sortType == "asc") {
+        return true;
+      } else if (value == 4 && sortType == "desc") {
+        return true;
+      }
+    } else if (sortBy == "area") {
+      if (value == 5 && sortType == "desc") {
+        return true;
+      } else if (value == 6 && sortType == "asc") {
+        return true;
+      }
+    }
+
+    return false;
+  };
   useEffect(() => {
     if (router.isReady && accessToken) {
       if (router.query.search_string) {
@@ -82,6 +142,127 @@ const TaskHeader = ({
       getAllUsers();
     }
   }, [router.isReady, accessToken]);
+
+  const SortMenu = () => {
+    return (
+      <div className={styles.sortOptions}>
+        <ListItem className={styles.subTitle}>
+          {" "}
+          <SortIcon /> <span>Sort By</span>
+        </ListItem>
+        <ListItem onClick={() => sortByMethod("createdAt", "desc")}>
+          <RadioButtonUncheckedIcon
+            sx={{
+              display: sortMethod(1) ? "none" : "flex",
+              fontSize: "1.25rem",
+            }}
+          />
+          <RadioButtonCheckedIcon
+            sx={{
+              display: sortMethod(1) ? "flex" : "none",
+              color: "#05a155",
+              fontSize: "1.25rem",
+            }}
+          />
+          <div style={{ color: sortMethod(1) ? "#05a155" : "#333333" }}>
+            {"Recent First"}
+          </div>
+        </ListItem>
+        <ListItem onClick={() => sortByMethod("createdAt", "asc")}>
+          <RadioButtonUncheckedIcon
+            sx={{
+              display: sortMethod(2) ? "none" : "flex",
+              fontSize: "1.25rem",
+            }}
+          />
+          <RadioButtonCheckedIcon
+            sx={{
+              display: sortMethod(2) ? "flex" : "none",
+              color: "#05a155",
+              fontSize: "1.25rem",
+            }}
+          />
+          <div style={{ color: sortMethod(2) ? "#05a155" : "#333333" }}>
+            {"Oldest First"}
+          </div>
+        </ListItem>
+        <Divider variant="middle" className={styles.divider} />
+        <ListItem onClick={() => sortByMethod("title", "asc")}>
+          <RadioButtonUncheckedIcon
+            sx={{
+              display: sortMethod(3) ? "none" : "flex",
+              fontSize: "1.25rem",
+            }}
+          />
+          <RadioButtonCheckedIcon
+            sx={{
+              display: sortMethod(3) ? "flex" : "none",
+              color: "#05a155",
+              fontSize: "1.25rem",
+            }}
+          />
+          <div style={{ color: sortMethod(3) ? "#05a155" : "#333333" }}>
+            {"Title (A-Z)"}
+          </div>
+        </ListItem>
+        <ListItem onClick={() => sortByMethod("title", "desc")}>
+          <RadioButtonUncheckedIcon
+            sx={{
+              display: sortMethod(4) ? "none" : "flex",
+              fontSize: "1.25rem",
+            }}
+          />
+          <RadioButtonCheckedIcon
+            sx={{
+              display: sortMethod(4) ? "flex" : "none",
+              color: "#05a155",
+              fontSize: "1.25rem",
+            }}
+          />
+          <div style={{ color: sortMethod(4) ? "#05a155" : "#333333" }}>
+            {"Title (Z-A)"}
+          </div>
+        </ListItem>
+        <Divider variant="middle" className={styles.divider} />
+        <ListItem onClick={() => sortByMethod("deadline", "desc")}>
+          <RadioButtonUncheckedIcon
+            sx={{
+              display: sortMethod(5) ? "none" : "flex",
+              fontSize: "1.25rem",
+            }}
+          />
+          <RadioButtonCheckedIcon
+            sx={{
+              display: sortMethod(5) ? "flex" : "none",
+              color: "#05a155",
+              fontSize: "1.25rem",
+            }}
+          />
+          <div style={{ color: sortMethod(5) ? "#05a155" : "#333333" }}>
+            {"Due Date (Recent first)"}
+          </div>
+        </ListItem>
+        <ListItem onClick={() => sortByMethod("deadline", "asc")}>
+          <RadioButtonUncheckedIcon
+            sx={{
+              display: sortMethod(6) ? "none" : "flex",
+              fontSize: "1.25rem",
+            }}
+          />
+          <RadioButtonCheckedIcon
+            sx={{
+              display: sortMethod(6) ? "flex" : "none",
+              color: "#05a155",
+              fontSize: "1.25rem",
+            }}
+          />
+          <div style={{ color: sortMethod(6) ? "#05a155" : "#333333" }}>
+            {"Due Date (Oldest first)"}
+          </div>
+        </ListItem>
+      </div>
+    );
+  };
 
   return (
     <header className={styles.header}>
@@ -102,7 +283,7 @@ const TaskHeader = ({
               size="small"
               placeholder="Search By Title"
               sx={{
-                width: "100%",
+                width: "85%",
                 borderRadius: "20px",
                 background: "#fff !important",
                 marginRight: !(router.query.is_my_task == "true")
@@ -206,6 +387,12 @@ const TaskHeader = ({
           ) : (
             ""
           )}
+          <IconButton
+            className={styles.sortIconBtn}
+            onClick={() => toggleDrawer(true)}
+          >
+            <img src="/mobileIcons/crops/SortIcon.svg" alt="" width={"24px"} />
+          </IconButton>
         </div>
       </div>
       {/* <div style={{ width: "80%" }}>
@@ -393,6 +580,17 @@ const TaskHeader = ({
           </Button>
         </div>
       </Drawer>
+      <React.Fragment>
+        <Drawer
+          onClose={() => toggleDrawer(false)}
+          anchor={"bottom"}
+          open={state}
+        >
+          <Box>
+            <SortMenu />
+          </Box>
+        </Drawer>
+      </React.Fragment>
     </header>
   );
 };

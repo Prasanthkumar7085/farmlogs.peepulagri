@@ -1,27 +1,57 @@
 .backbutton {
-  align-self: stretch;
-  cursor: pointer;
+  border-radius: 4px !important;
+  border: 1px solid #E9EDF1 !important;
+  background: #FFF !important;
+  min-width: inherit !important;
+  padding: 10px 8px !important;
+  box-shadow: none !important;
+  width: inherit !important;
 }
+
+.backbutton:hover {
+  border-radius: 4px !important;
+  border: 1px solid #E9EDF1 !important;
+  background: #FFF !important;
+  min-width: inherit;
+}
+
 .label,
 .text {
   position: relative;
 }
+
 .label {
-  cursor: pointer;
+  color: #344054;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 16px);
+  font-weight: 400;
   line-height: 20px;
 }
-.text {
+
+.statusBtn {
   margin: 0;
-  line-height: 24px;
+  color: #FFF;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.833vw, 16px);
   font-weight: 600;
+  line-height: 24px;
 }
+
+.priorityBtn {
+  margin: 0;
+  color: #FFF;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11.5px, 0.72vw, 15px);
+  font-weight: 500;
+  line-height: 24px;
+}
+
 .prioritycontainer {
-  border-radius: 16px;
+  border-radius: 20px;
   background-color: #05a155;
-  align-items: flex-end;
-  padding: 5px 15px;
-  color: #fff;
+  padding: 2px 12px;
 }
+
 .priority,
 .prioritycontainer,
 .statuscontainer {
@@ -29,37 +59,39 @@
   flex-direction: row;
   justify-content: flex-start;
 }
+
 .priority {
   align-items: center;
   gap: 8px;
 }
+
 .statuscontainer {
   border-radius: 30px;
-  background-color: #83bf6e;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
-  overflow: hidden;
-  align-items: flex-start;
-  padding: 5px 15px;
+  background-color: #a05148;
+  padding: 2px 12px;
   cursor: pointer;
-  font-size: 16px;
-  color: #fff;
+
 }
+
 .statusrowChild {
   align-self: stretch;
   max-height: 100%;
   width: 1px;
   object-fit: cover;
 }
+
 .statusrowChild,
 .unselected {
   position: relative;
 }
+
 .materialsReceived {
   margin: 0;
   position: relative;
   line-height: 18px;
   font-weight: 500;
 }
+
 .materialsreceivedcheckbox {
   border-radius: 4px;
   background-color: #fff;
@@ -73,6 +105,7 @@
   font-size: 16px;
   color: #35353d;
 }
+
 .materialsreceivedcheckbox,
 .shippedstatus,
 .statusrow {
@@ -80,16 +113,15 @@
   flex-direction: row;
   align-items: center;
 }
+
 .statusrow {
   justify-content: flex-start;
   gap: 16px;
 }
+
 .shippedstatus {
   align-self: stretch;
   justify-content: space-between;
   padding: 0 2px 0 0;
-  text-align: left;
-  font-size: 14px;
-  color: #344154;
-  font-family: Inter;
+  margin-bottom: 1.5rem;
 }

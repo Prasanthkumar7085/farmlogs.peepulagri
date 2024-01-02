@@ -1,10 +1,5 @@
-.farm1 {
-  margin: 0;
-  position: relative;
-  line-height: 24px;
-}
 .farmname {
-  border-radius: 0 0 14px 0;
+  border-radius: 14px 0 16px 0;
   background: linear-gradient(142.18deg, #3462cf, #2b53be);
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
   overflow: hidden;
@@ -13,108 +8,112 @@
   align-items: flex-start;
   justify-content: flex-start;
   padding: 3px 14px;
-  font-size: 16px;
   color: #fff;
-}
-.fertilizersAndSoil {
-  margin: 0;
-  align-self: stretch;
-  flex: 1;
-  position: relative;
-  font-size: inherit;
-  line-height: 150%;
+  font-size: clamp(14px, 0.833vw, 18px);
   font-weight: 400;
-  font-family: inherit;
-  display: flex;
-  align-items: flex-end;
+  line-height: 24px;
+
 }
-.label,
-.text {
-  position: relative;
-}
-.label {
-  flex: 1;
-  line-height: 20px;
+
+.procurementDateLabel {
+  color: #344054;
+  font-size: clamp(12px, 0.72vw, 14px);
   font-weight: 500;
-  display: inline-block;
-  width: 123px;
+  font-family: "Inter", sans-serif !important;
 }
-.text {
+
+.dateBlock {
   margin: 0;
+  color: #35353D;
+  font-size: clamp(13px, 0.83vw, 16px);
+  font-weight: 400;
+  font-family: "Inter", sans-serif !important;
 }
+
 .datecontainer {
   background-color: #f5f7fa;
   flex-direction: row;
   justify-content: flex-start;
   padding: 4px 10px;
-  font-size: 16px;
-  color: #35353d;
+
 }
+
 .datecontainer,
-.inputWithLabel,
+.procurementDate,
 .nameofoperation {
   display: flex;
   align-items: flex-start;
 }
-.inputWithLabel {
+
+.procurementDate {
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
-  font-size: 14px;
-  color: #344154;
+  gap: 3px;
+
 }
+
 .nameofoperation {
   align-self: stretch;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 24px;
-  color: #35353d;
+  margin-bottom: .625rem;
+
 }
-.hemaGanesh,
-.label1 {
-  flex: 1;
-  position: relative;
-  display: inline-block;
-  width: 1310px;
-}
-.label1 {
-  cursor: pointer;
-  line-height: 20px;
-  font-weight: 500;
-}
-.hemaGanesh {
-  margin: 0;
-  font-size: 16px;
+
+.procurementTitle {
+  color: #35353D;
+  font-size: clamp(18px, 1.2vw, 24px);
   font-weight: 400;
-  font-family: inherit;
-  color: #6a7185;
+  line-height: 150%;
+  font-family: "Inter", sans-serif !important;
 }
+
+
+.PointOfContactTitle {
+  color: #344054;
+  font-size: clamp(12px, 0.72vw, 14px);
+  font-weight: 500;
+  line-height: inherit;
+  font-family: "Inter", sans-serif !important;
+}
+
+.contactPersonName {
+  margin: 0;
+  font-size: clamp(14px, 0.83vw, 16px);
+  font-weight: 400;
+  color: #6a7185;
+  line-height: inherit;
+  font-family: "Inter", sans-serif !important;
+}
+
 .pointofcontact {
-  width: 1310px;
-  height: 47px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
 }
+
 .id,
 .information {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
 }
+
 .id {
   background-color: rgba(254, 201, 147, 0.3);
   align-items: flex-start;
   padding: 4px 10px;
 }
+
 .information {
   align-items: center;
   gap: 5px;
   font-size: 16px;
   color: #35353d;
 }
+
 .shippedstatusform,
 .trackingid {
   align-self: stretch;
@@ -124,15 +123,18 @@
   justify-content: center;
   gap: 5px;
 }
+
 .shippedstatusform {
-  border-radius: 4px 4px 0 0;
   background-color: #fff;
-  overflow: hidden;
   justify-content: flex-start;
-  padding: 0 20px 16px;
   gap: 10px;
   text-align: left;
-  font-size: 14px;
-  color: #344154;
-  font-family: Inter;
+  font-family: "Inter", sans-serif !important;
+  border-radius: 16px 16px 0 0;
+  border-top: 3px solid #3462CF;
+}
+
+.procurementDetailsViewCard {
+  padding: 0 1.5rem 1rem;
+  width: 100%;
 }

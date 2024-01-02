@@ -50,45 +50,47 @@ const ShippedStatusform = ({ data }: any) => {
               .join(",") + "....."}
         </div>
       </Tooltip>
-      <div className={styles.nameofoperation}>
-        <h3 className={styles.fertilizersAndSoil}>{data?.title}</h3>
-        <div className={styles.inputWithLabel}>
-          <div className={styles.label}>Date Of Operation</div>
-          <div className={styles.datecontainer}>
-            <p className={styles.text}>
-              {timePipe(data?.date_of_operation, "DD-MM-YYYY")}
-            </p>
+      <div className={styles.procurementDetailsViewCard}>
+        <div className={styles.nameofoperation}>
+          <h3 className={styles.procurementTitle}>{data?.title}</h3>
+          <div className={styles.procurementDate}>
+            <div className={styles.procurementDateLabel}>Date Of Operation</div>
+            <div className={styles.datecontainer}>
+              <p className={styles.dateBlock}>
+                {timePipe(data?.date_of_operation, "DD, MMM YYYY")}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.pointofcontact}>
-        <label className={styles.label1}>Point Of Contact</label>
-        <h3 className={styles.hemaGanesh}>
-          {data?.point_of_contact?.name ? data?.point_of_contact?.name : "----"}
-        </h3>
-      </div>
-      {data?.tracking_details?.tracking_id ?
-        <div className={styles.trackingid}>
-          <Typography variant="h6" color="ThreeDLightShadow">Tracking Details</Typography>
-          <label className={styles.label1}>Tracking ID</label>
-          <div className={styles.information}>
-            <div className={styles.id}>
-              <p className={styles.text}>{data?.tracking_details?.tracking_id}</p>
-            </div>
+        <div className={styles.pointofcontact}>
+          <label className={styles.PointOfContactTitle}>Point Of Contact</label>
+          <h3 className={styles.contactPersonName}>
+            {data?.point_of_contact?.name ? data?.point_of_contact?.name : "----"}
+          </h3>
+        </div>
+        {data?.tracking_details?.tracking_id ?
+          <div className={styles.trackingid}>
+            <Typography variant="h6" color="ThreeDLightShadow">Tracking Details</Typography>
+            <label className={styles.label1}>Tracking ID</label>
+            <div className={styles.information}>
+              <div className={styles.id}>
+                <p className={styles.text}>{data?.tracking_details?.tracking_id}</p>
+              </div>
 
-            {showTooltip ?
-              <Tooltip title="Text copied!" >
-                <Button color="primary" variant="contained">
+              {showTooltip ?
+                <Tooltip title="Text copied!" >
+                  <Button color="primary" variant="contained">
+                    Copy
+                  </Button>
+                </Tooltip> :
+                <Button color="primary" variant="contained" onClick={() => copyTextToClipboard()}>
                   Copy
                 </Button>
-              </Tooltip> :
-              <Button color="primary" variant="contained" onClick={() => copyTextToClipboard()}>
-                Copy
-              </Button>
-            }
-          </div>
+              }
+            </div>
 
-        </div> : ""}
+          </div> : ""}
+      </div>
 
     </div>
   );

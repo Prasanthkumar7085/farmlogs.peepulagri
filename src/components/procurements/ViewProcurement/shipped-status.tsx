@@ -84,6 +84,11 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
   const handleChange = () => {
     setTrackingDialogOpen(true)
   }
+  //to captlize the upercase text
+  const capitalizeFirstLetter = (string: any) => {
+    let temp = string.toLowerCase();
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
+  };
 
   return (
     <div className={styles.shippedstatus}>
@@ -94,14 +99,14 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
         variant="contained"
         onClick={onBackButton1Click}
       >
-        <img src="/arrow-left-back-white.svg" alt="" width={"18px"} />
+        <img src="/arrow-left-back-white-black.svg" alt="" width={"16px"} />
       </Button>
       <div className={styles.statusrow}>
         <div className={styles.priority}>
           <label className={styles.label}>Priority</label>
           <div className={styles.prioritycontainer}>
-            <p className={styles.text}>
-              {data?.priority ? data?.priority : "---"}
+            <p className={styles.priorityBtn}>
+              {data?.priority ? capitalizeFirstLetter(data?.priority) : "---"}
             </p>
           </div>
         </div>
@@ -118,14 +123,13 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
                 }
               }}
             >
-              <p className={styles.text}>{data?.status ? data?.status : "---"}</p>
+              <p className={styles.statusBtn}>
+                {data?.status ? capitalizeFirstLetter(data?.status) : "---"}
+              </p>
             </div> :
-
             <div
-              className={styles.statuscontainer}
-
-            >
-              <p className={styles.text}>{data?.status ? data?.status : "---"}</p>
+              className={styles.statuscontainer}>
+              <p className={styles.statusBtn} style={{ background: "#a05148 !important" }}>{data?.status ? capitalizeFirstLetter(data?.status) : "---"}</p>
             </div>}
 
         </div>

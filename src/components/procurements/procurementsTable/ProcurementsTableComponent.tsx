@@ -169,6 +169,10 @@ const ProcurementsTableComponent = ({
     return (
       <span
         style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "1rem",
           padding: "40px 10px 40px 10px",
           color: value?.length ? "" : "#9a9a9a",
         }}
@@ -180,7 +184,10 @@ const ProcurementsTableComponent = ({
           : "*No Farms*"}
         {info.getValue()?.farm_ids?.length > 2 ? (
           <div
-            style={{ color: "#9a9a9a" }}
+            style={{
+              color: "#9a9a9a",
+
+            }}
             onClick={() => {
               if (viewMoreId) {
                 if (id == viewMoreId) {
@@ -266,7 +273,7 @@ const ProcurementsTableComponent = ({
       id: "point_of_contact.name",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {info.getValue() ? info.getValue() : "-"}
         </span>
       ),
       header: () => <span>POC</span>,

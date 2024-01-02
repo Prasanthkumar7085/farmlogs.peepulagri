@@ -98,7 +98,7 @@ const TrackingDetailsDilog = ({
         addTracking(true)
       }
       if (responseData.status == 422) {
-        setErrorMessages([responseData?.errors])
+        setErrorMessages(responseData?.errors)
       }
 
     }
@@ -132,7 +132,7 @@ const TrackingDetailsDilog = ({
         <div>
           <div
             className={styles.areYouSure}
-          >{`If You want to change status to shipped pleaseadd tracking details `}</div>
+          >{`If You want to change status to shipped please add tracking details `}</div>
           <div className={styles.textfeild} id="farm-name">
             <div className={styles.label}>Service Name</div>
             <TextField
@@ -174,13 +174,15 @@ const TrackingDetailsDilog = ({
                 value={date}
                 onChange={setDate}
                 shouldDisableDate={(date) => isBefore(date, new Date())}
-              />
-              <ErrorMessages
-                errorMessages={errorMessages}
-                keyname="delivery_date"
-              />
-            </Stack>
 
+
+              />
+
+            </Stack>
+            <ErrorMessages
+              errorMessages={errorMessages}
+              keyname="delivery_date"
+            />
             <div className={styles.label}>Contact Number</div>
             <TextField
               sx={{
@@ -203,16 +205,14 @@ const TrackingDetailsDilog = ({
               value={phoneNumber}
               onInput={handleInput}
               onChange={(e: any) => setPhoneNumber(e.target.value)}
+              error={Boolean(errorMessages?.["contact_number"])}
+
               helperText={
-                errorMessages?.find(
-                  (error: any) => error.key === "contact_number"
-                ) && (
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname="contact_number"
-                  />
-                )
+                errorMessages?.["contact_number"]
+                  ? errorMessages?.["contact_number"]
+                  : ""
               }
+
             />
 
             <div

@@ -94,7 +94,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
         variant="contained"
         onClick={onBackButton1Click}
       >
-        <img src="/arrow-left-back-white.svg" alt="" width={"18px"} />
+        <img src="/arrow-left-back-white-black.svg" alt="" width={"16px"} />
       </Button>
       <div className={styles.statusrow}>
         <div className={styles.priority}>

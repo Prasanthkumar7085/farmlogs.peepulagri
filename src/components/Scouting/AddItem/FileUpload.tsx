@@ -142,12 +142,11 @@ const FileUploadComponent = () => {
     }
   };
 
-  //select the when input select
+  //select the file when input select
   const handleFileChange = async (e: any) => {
     setValidations({});
     let copy = [...e.target.files, ...filesFromStore];
     dispatch(storeFilesArray(e.target.files));
-
     setMultipleFiles(copy);
 
     const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array

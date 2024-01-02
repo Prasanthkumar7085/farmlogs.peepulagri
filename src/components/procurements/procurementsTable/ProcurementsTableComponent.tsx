@@ -428,7 +428,7 @@ const ProcurementsTableComponent = ({
       ),
       header: () => <span>Actions</span>,
       footer: (props: any) => props.column.id,
-      width: "100px",
+      width: "120px",
     },
   ];
 

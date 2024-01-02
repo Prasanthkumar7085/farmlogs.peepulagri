@@ -74,8 +74,12 @@ const EditMaterialDrawer: FC<pageProps> = ({
             Material Name <b style={{ color: "red" }}>*</b>
           </label>
           <TextField
-            className={styles.input}
-            color="primary"
+            sx={{
+              background: "#fff",
+              borderRadius: "4px",
+              width: "100%"
+            }}
+            size="small"
             placeholder="Please enter the material title"
             variant="outlined"
             value={editNameValue}
@@ -89,7 +93,14 @@ const EditMaterialDrawer: FC<pageProps> = ({
             <strong style={{ color: "red" }}>*</strong>
           </label>
           <TextField
-            sx={{ width: "100%" }}
+            size="small"
+            sx={{
+              width: "100%", background: "#fff",
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderWidth: "1px 0 1px 1px !important",
+                borderRadius: "4px 0 0 4px !important"
+              }
+            }}
             type="number"
             value={editRequiredQty}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -99,7 +110,13 @@ const EditMaterialDrawer: FC<pageProps> = ({
             InputProps={{
               endAdornment: (
                 <Select
-                  color="primary"
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 1px 1px 0 !important",
+                      borderRadius: "0 4px 4px 0 !important"
+                    }
+                  }}
                   value={editRequiredUnits}
                   onChange={(e: any) => setEditRequiredUnits(e.target.value)}
                 >
@@ -121,9 +138,14 @@ const EditMaterialDrawer: FC<pageProps> = ({
           </label>
           <div className={styles.input1}>
             <TextField
-              className={styles.inputbox}
-              color="primary"
-              placeholder="Enter Availble Quantity"
+              size="small"
+              sx={{
+                width: "100%", background: "#fff",
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderWidth: "1px 0 1px 1px !important",
+                  borderRadius: "4px 0 0 4px !important"
+                }
+              }} placeholder="Enter Availble Quantity"
               variant="outlined"
               type="number"
               value={editAvailableQty}
@@ -131,8 +153,13 @@ const EditMaterialDrawer: FC<pageProps> = ({
               InputProps={{
                 endAdornment: (
                   <Select
-                    color="primary"
-                    value={editAvailableUnits}
+                    sx={{
+                      background: "#fff",
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderWidth: "1px 1px 1px 0 !important",
+                        borderRadius: "0 4px 4px 0 !important"
+                      }
+                    }} value={editAvailableUnits}
                     onChange={(e: any) => setEditAvailableUnits(e.target.value)}
                   >
                     <MenuItem value="Litres">Litres</MenuItem>
@@ -147,36 +174,36 @@ const EditMaterialDrawer: FC<pageProps> = ({
             />
           </div>
         </div>
-        <div className={styles.modalActions}>
-          <div className={styles.buttonsgroup}>
-            <Button
-              color="primary"
-              variant="outlined"
-              onClick={() => {
-                setEditAvailableQty(null);
-                setEditAvailableUnits("");
-                setEditRequiredQty(null);
-                setEditRequiredUnits("");
-                setEditNameValue("");
-                setEditErrorMessages({});
-                setEditMaterialOpen(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => updateMaterialById()}
-            >
-              {updateLoading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-              ) : (
-                "Update"
-              )}
-            </Button>
-          </div>
+        <div className={styles.procurementFormBtn}>
+          <Button
+            className={styles.cancelBtn}
+            variant="outlined"
+            onClick={() => {
+              setEditAvailableQty(null);
+              setEditAvailableUnits("");
+              setEditRequiredQty(null);
+              setEditRequiredUnits("");
+              setEditNameValue("");
+              setEditErrorMessages({});
+              setEditMaterialOpen(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            className={styles.submitBtn}
+
+            variant="contained"
+            onClick={() => updateMaterialById()}
+          >
+            {updateLoading ? (
+              <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+            ) : (
+              "Update"
+            )}
+          </Button>
         </div>
+
       </div>
     </Drawer>
   );

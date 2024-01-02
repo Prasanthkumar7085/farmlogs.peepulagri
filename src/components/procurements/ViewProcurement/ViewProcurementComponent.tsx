@@ -44,7 +44,7 @@ const ViewProcurementComponent = () => {
     }
   }, [router.isReady, accessToken]);
   return (
-    <div style={{ width: "50%", margin: "auto" }}>
+    <div style={{ width: "50%", margin: "auto", paddingTop: "2rem" }}>
       <ShippedStatus data={data} afterStatusChange={afterStatusChange} />
       <ShippedStatusform data={data} />
       <ViewProcurementTable data={data} afterMaterialStatusChange={afterMaterialStatusChange} />

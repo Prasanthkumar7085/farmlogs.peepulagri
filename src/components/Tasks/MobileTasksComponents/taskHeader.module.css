@@ -2,6 +2,26 @@
   width: 21px;
 }
 
+.sortIconBtn {
+  background-color: #fff !important;
+  border-radius: 50% !important;
+  width: 100% !important;
+  padding-block: 6px !important;
+  max-width: 35px !important;
+}
+.sortOptions .divider {
+  margin: 0.5rem 1rem;
+}
+
+
+.sortIconBtn:hover {
+  background-color: #fff !important;
+  border-radius: 50% !important;
+  width: 100% !important;
+  padding-block: 6px !important;
+  max-width: 35px !important;
+}
+
 .title {
   margin: 0;
   font-size: clamp(18px, 4vw, 20px);

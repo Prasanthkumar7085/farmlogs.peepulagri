@@ -333,7 +333,10 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   errorMessages={errorMessages}
                   keyname={"required_qty"}
                 />
-
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_units"}
+                />
               </div>
               <FormControl variant="outlined">
                 <InputLabel color="primary" />
@@ -353,11 +356,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   <MenuItem value="Litres">Litres</MenuItem>
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
-                {/* <FormHelperText /> */}
-                <ErrorMessages
-                  errorMessages={errorMessages}
-                  keyname={"required_units"}
-                />
+
               </FormControl>
             </div>
           </div>
@@ -399,7 +398,6 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   <MenuItem value="Litres">Litres</MenuItem>
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
-                {/* <FormHelperText sx={{ margin: "0" }} /> */}
               </FormControl>
             </div>
           </div>

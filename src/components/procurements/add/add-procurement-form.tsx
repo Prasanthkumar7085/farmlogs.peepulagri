@@ -41,9 +41,6 @@ const AddProcurementForm = () => {
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
   );
-
-
-
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const router = useRouter();

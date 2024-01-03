@@ -199,7 +199,7 @@ const TanStackTableProcurmentComponent = ({
           paginationDetails={paginationDetails}
           capturePageNum={capturePageNum}
           captureRowPerItems={captureRowPerItems}
-          values="Tasks"
+          values="Procurements"
         />
       </div>
     </div>

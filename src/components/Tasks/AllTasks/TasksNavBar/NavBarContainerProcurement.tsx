@@ -51,11 +51,13 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   >();
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
-    { value: "TO-START", title: "To-Start" },
-    { value: "INPROGRESS", title: "In-Progress" },
-    { value: "DONE", title: "Done" },
     { value: "PENDING", title: "Pending" },
-    { value: "OVER-DUE", title: "Over-due" },
+    { value: "APPROVED", title: "Approved" },
+    { value: "PURCHASED", title: "Purchased" },
+    { value: "SHIPPED", title: "Shipped" },
+    { value: "DELIVERED", title: "Delivered" },
+    { value: "COMPLETED", title: "Completed" },
+
   ]);
 
   const setStatusValue = (e: any) => {
@@ -70,7 +72,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
-    if (titleName == "Procurment Module") {
+    if (titleName == "Procurement Module") {
       router.push("/procurements/add");
     } else {
       router.push("/tasks/add");

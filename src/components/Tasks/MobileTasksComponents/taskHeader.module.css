@@ -2,33 +2,25 @@
   width: 21px;
 }
 
-.subTitle{
-  display: flex;
-  justify-content: space-between;
-  
-}
 .sortIconBtn {
-
-  border-radius: 50%;
-  background: #fff;
-  padding: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 23px;
-  height: 23px;
+  border-radius: 60px;
+  background-color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 8px
 }
-.sortIconBtnImage{
-  height: 20px;
-  width: 20px;
+
+.sortIconBtnImage {
+  width: 18px;
 
 }
+
 .sortOptions .divider {
   margin: 0.5rem 1rem;
 }
-
-
-
 
 .title {
   margin: 0;
@@ -184,4 +176,35 @@
   font-size: 12px !important;
   font-family: 'Inter', sans-serif !important;
   text-transform: capitalize !important;
+}
+
+/* sortBy drawer block styles */
+
+.sortOptions .sortOptionsHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #D0D5DD;
+}
+
+.sortOptionHeading {
+  font-size: clamp(14px, 2vw, 16px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #000;
+}
+
+.sortListItemsBlock {
+  padding-block: 0.5rem;
+}
+
+.sortListItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sortListItemTitle {
+  font-size: 14px;
+  font-weight: 500;
 }

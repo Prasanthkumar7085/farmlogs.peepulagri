@@ -211,6 +211,11 @@ const ProcurementsTableComponent = ({
       </span>
     );
   }
+  //to captlize the upercase text
+  const capitalizeFirstLetter = (string: any) => {
+    let temp = string.toLowerCase();
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
+  };
 
   const columns = [
     {
@@ -299,7 +304,7 @@ const ProcurementsTableComponent = ({
       id: "status",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {capitalizeFirstLetter(info.getValue())}
         </span>
       ),
       header: () => <span>Status</span>,
@@ -311,7 +316,7 @@ const ProcurementsTableComponent = ({
       id: "priority",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {capitalizeFirstLetter(info.getValue())}
         </span>
       ),
       header: () => <span>Priority</span>,
@@ -345,7 +350,7 @@ const ProcurementsTableComponent = ({
             >
               <Tooltip followCursor arrow title="View"
               >
-                <IconButton style={{ cursor: "pointer" }} onClick={() =>
+                <IconButton style={{ cursor: "pointer", padding: "0" }} onClick={() =>
                   router.push(`/procurements/${info.row.original?._id}`)
                 }>
                   <ImageComponent
@@ -361,7 +366,7 @@ const ProcurementsTableComponent = ({
                 title={userDetails?._id == info.row.original?.requested_by?._id ? "Edit" : "You dont't have permission for this action"}
               >
                 <IconButton
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", padding: "0" }}
                   onClick={() => {
                     if (
                       info.row.original?.requested_by?._id !== userDetails?._id
@@ -385,7 +390,7 @@ const ProcurementsTableComponent = ({
                 title={userDetails?._id == info.row.original?.requested_by?._id ? "Delete" : "You dont't have permission for this action"}
               >
                 <IconButton
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", padding: "0" }}
 
                   onClick={() => {
                     if (
@@ -414,7 +419,7 @@ const ProcurementsTableComponent = ({
 
               <Tooltip followCursor arrow title="Comments">
                 <IconButton
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", padding: "0" }}
                   onClick={() => {
                     setRowDetails(info.row.original);
                     setDrawerOpen(true);

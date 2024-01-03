@@ -49,17 +49,14 @@ interface ApiCallService {
 }
 const MaterialsRequired: NextPage = () => {
   const dispatch = useDispatch();
-
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
   );
-
   const router = useRouter();
   const [name, setName] = useState("");
   const [requiredQty, setRequiredQty] = useState<null | number | string>(null);
@@ -77,7 +74,6 @@ const MaterialsRequired: NextPage = () => {
   const [editMaterialOpen, setEditMaterialOpen] = useState(false);
   const [editMaterialData, setEditMaterialData] = useState({});
   const [editNameValue, setEditNameValue] = useState<string>("");
-
   const [editRequiredQty, setEditRequiredQty] = useState<
     null | number | string
   >(null);
@@ -86,10 +82,8 @@ const MaterialsRequired: NextPage = () => {
     null | number | string
   >(null);
   const [editAvailableUnits, setEditAvailableUnits] = useState<string>("");
-
   const [updateLoading, setUpdateLoading] = useState(false);
   const [editMaterialId, setEditMaterialId] = useState("");
-
   const [editErrorMessages, setEditErrorMessages] = useState({});
 
   const deleteMaterial = async () => {

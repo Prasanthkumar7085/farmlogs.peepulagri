@@ -371,8 +371,9 @@ const ProcurementsTableComponent = ({
               <Tooltip followCursor arrow
                 title={userDetails?._id == info.row.original?.requested_by?._id ? "Edit" : "You dont't have permission for this action"}
               >
-                <IconButton
+                <div
                   style={{ cursor: "pointer", padding: "0" }}
+
                   onClick={() => {
                     if (
                       info.row.original?.requested_by?._id !== userDetails?._id
@@ -388,7 +389,7 @@ const ProcurementsTableComponent = ({
                     width={15}
                     alt=""
                   />
-                </IconButton>
+                </div>
               </Tooltip>
 
 
@@ -396,7 +397,7 @@ const ProcurementsTableComponent = ({
                 title={userDetails?._id == info.row.original?.requested_by?._id ? "Delete" : "You dont't have permission for this action"}
               >
                 <IconButton
-                  style={{ cursor: "pointer", padding: "0" }}
+                  style={{ padding: "0" }}
 
                   onClick={() => {
                     if (

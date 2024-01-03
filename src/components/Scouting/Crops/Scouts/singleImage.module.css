@@ -314,3 +314,34 @@
   background: #ffffff84;
   overflow: hidden;
 }
+.imageUploadingDetails {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 1;
+  color: #fff !important;
+}
+.imageUploadedTime {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding-block: 0.3rem;
+  font-size: clamp(10px, 1.5vw, 12px);
+    font-family: "Inter", sans-serif;
+      text-shadow: 1px 1px 1px #00000080;
+
+}
+.uploadedByName {
+  font-size: clamp(12px, 2vw, 14px);
+  font-family: "Inter",sans-serif;
+    text-shadow: 1px 1px 1px #00000080;
+}
+.singleImageCommentBtn {
+  background-color: #05A155;
+  min-width: inherit;
+  padding:4px 10px;
+  border-radius: 30px;
+}

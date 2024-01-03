@@ -324,7 +324,10 @@ const MaterialsRequired: NextPage = () => {
                   errorMessages={errorMessages}
                   keyname={"required_qty"}
                 />
-
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_units"}
+                />
               </div>
               <FormControl variant="outlined">
                 <InputLabel color="primary" />
@@ -344,11 +347,7 @@ const MaterialsRequired: NextPage = () => {
                   <MenuItem value="Litres">Litres</MenuItem>
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
-                {/* <FormHelperText /> */}
-                <ErrorMessages
-                  errorMessages={errorMessages}
-                  keyname={"required_units"}
-                />
+
               </FormControl>
             </div>
           </div>
@@ -390,7 +389,6 @@ const MaterialsRequired: NextPage = () => {
                   <MenuItem value="Litres">Litres</MenuItem>
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
-                {/* <FormHelperText sx={{ margin: "0" }} /> */}
               </FormControl>
             </div>
           </div>

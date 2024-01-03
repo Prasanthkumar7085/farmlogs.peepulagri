@@ -17,6 +17,18 @@
   gap: 12px;
 }
 
+.EditSymbolBtn {
+  min-width: inherit !important;
+  padding: 3px 8px !important;
+  border: 1px solid #6A7185 !important;
+}
+
+.EditSymbolBtn:hover {
+  min-width: inherit !important;
+  padding: 3px 8px !important;
+  border: 1px solid #6A7185 !important;
+}
+
 .addprocurementform,
 .modalActions {
   align-self: stretch;

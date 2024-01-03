@@ -127,7 +127,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                   sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
                   disablePast
                   disabled={isDisabled}
-                  label="Select Date "
                   value={dateOfOperation}
                   onChange={(newValue: any) => {
                     setDataOfOperation(newValue);

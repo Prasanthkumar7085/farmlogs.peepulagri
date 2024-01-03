@@ -40,9 +40,6 @@ const AddProcurementForm = () => {
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
   );
-
-
-
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const router = useRouter();
@@ -269,14 +266,14 @@ const AddProcurementForm = () => {
             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
               {router.query.procurement_id && userDetails?._id == procurementData?.requested_by?._id ? (
                 <Button
+                  className={styles.EditSymbolBtn}
                   variant="outlined"
-                  sx={{ color: "red", borderColor: "red" }}
                   onClick={() => setIsDisabled(!isDisabled)}
                 >
                   {router.query.procurement_id && isDisabled ? (
-                    <EditOutlinedIcon />
+                    <EditOutlinedIcon sx={{ color: "#6A7185" }} />
                   ) : (
-                    <CancelOutlinedIcon />
+                    <CancelOutlinedIcon sx={{ color: "#D94841" }} />
                   )}
                 </Button>
               ) : (

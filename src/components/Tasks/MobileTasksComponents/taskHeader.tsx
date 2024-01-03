@@ -111,22 +111,22 @@ const TaskHeader = ({
   };
 
   const sortMethod = (value: number) => {
-    if (sortBy == "createdAt") {
-      if (value == 1 && sortType == "desc") {
+    if (router.query.sort_by == "createdAt") {
+      if (value == 1 && router.query.sort_type == "desc") {
         return true;
-      } else if (value == 2 && sortType == "asc") {
-        return true;
-      }
-    } else if (sortBy == "title") {
-      if (value == 3 && sortType == "asc") {
-        return true;
-      } else if (value == 4 && sortType == "desc") {
+      } else if (value == 2 && router.query.sort_type == "asc") {
         return true;
       }
-    } else if (sortBy == "area") {
-      if (value == 5 && sortType == "desc") {
+    } else if (router.query.sort_by == "title") {
+      if (value == 3 && router.query.sort_type == "asc") {
         return true;
-      } else if (value == 6 && sortType == "asc") {
+      } else if (value == 4 && router.query.sort_type == "desc") {
+        return true;
+      }
+    } else if (router.query.sort_by == "deadline") {
+      if (value == 5 && router.query.sort_type == "desc") {
+        return true;
+      } else if (value == 6 && router.query.sort_type == "asc") {
         return true;
       }
     }
@@ -148,7 +148,19 @@ const TaskHeader = ({
       <div className={styles.sortOptions}>
         <ListItem className={styles.subTitle}>
           {" "}
-          <SortIcon /> <span>Sort By</span>
+          <span
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <SortIcon /> <span>Sort By</span>
+          </span>
+          <IconButton onClick={() => toggleDrawer(false)}>
+            <CloseIcon />
+          </IconButton>
         </ListItem>
         <ListItem onClick={() => sortByMethod("createdAt", "desc")}>
           <RadioButtonUncheckedIcon
@@ -387,61 +399,31 @@ const TaskHeader = ({
           ) : (
             ""
           )}
-          <IconButton
-            className={styles.sortIconBtn}
-            onClick={() => toggleDrawer(true)}
+          <Badge
+            badgeContent={1}
+            color="error"
+            sx={{
+              "& .MuiBadge-badge": {
+                fontWeight: "600",
+                fontFamily: "'Inter', sans-serif",
+              },
+            }}
           >
-            <img src="/mobileIcons/crops/SortIcon.svg" alt="" width={"24px"} />
-          </IconButton>
+            <span
+              className={styles.sortIconBtn}
+              onClick={() => toggleDrawer(true)}
+            >
+              <img
+                src="/mobileIcons/crops/SortIcon.svg"
+                alt=""
+                width={"24px"}
+                className={styles.sortIconBtnImage}
+              />
+            </span>
+          </Badge>
         </div>
       </div>
-      {/* <div style={{ width: "80%" }}>
-        {isSearchOpenOrNot ? (
-          <TextField
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              onChangeSearch(e.target.value);
-            }}
-            color="primary"
-            size="small"
-            placeholder="Search By Title"
-            sx={{
-              width: "100%",
-              borderRadius: "20px",
-              background: "#fff !important",
-              "& .MuiInputBase-root": {
-                borderRadius: "20px !important",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderRadius: "20px !important",
-                borderColor: "#fff !important",
-              },
-              "& .MuiInputBase-input": {
-                paddingBlock: "11px",
-              },
-            }}
-            variant="outlined"
-            type="search"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <ArrowBackIcon
-                    onClick={() => setIsSearchOpenOrNot((prev) => !prev)}
-                  />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-          />
-        ) : (
-          ""
-        )}
-      </div> */}
+
       <Drawer
         anchor={"bottom"}
         open={usersDrawerOpen}

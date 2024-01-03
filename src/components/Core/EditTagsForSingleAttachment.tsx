@@ -84,7 +84,7 @@ const EditTagsForSingleAttachment = ({
       }}
     >
       <div className={styles.updateTagDrawerHeading}>
-        <Typography>Tag Images</Typography>
+        <Typography>Tags</Typography>
         <IconButton
           onClick={() => {
             tagsDrawerClose(false);
@@ -107,7 +107,7 @@ const EditTagsForSingleAttachment = ({
         className={styles.updateSubmitBtn}
         onClick={() => {
           setTagsDrawerEditOpen(false);
-          tagsDrawerClose(false)
+          tagsDrawerClose(false);
         }}
       >
         {loading ? (

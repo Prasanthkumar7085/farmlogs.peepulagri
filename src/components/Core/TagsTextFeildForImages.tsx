@@ -132,20 +132,6 @@ const TagsTextFeildForImages = ({
 
   return (
     <div className={styles.addTagContainer}>
-      <div className={styles.listTags}>
-        <h5
-          style={{
-            paddingBottom: "5px",
-            fontSize: "clamp(13px, 2.5vw, 14px)",
-            fontFamily: "'Inter', sans-serif",
-            fontWeight: "500",
-            color: "#000",
-          }}
-        >
-          Tags
-        </h5>
-      </div>
-
       <div
         style={{
           width: "100%",
@@ -158,7 +144,7 @@ const TagsTextFeildForImages = ({
           {isTextFieldOpen && ( // Conditionally render the text field based on the state
             <TextField
               onKeyDown={(event: any) =>
-                event.key === "Tab" ? addTagToImage(newTagValue) : () => { }
+                event.key === "Tab" ? addTagToImage(newTagValue) : () => {}
               }
               size="small"
               fullWidth
@@ -289,7 +275,7 @@ const TagsTextFeildForImages = ({
                         },
                       }}
                       onDelete={() =>
-                        deleteTagLoading ? () => { } : handleDeleteChip(item)
+                        deleteTagLoading ? () => {} : handleDeleteChip(item)
                       }
                       key={index}
                       label={

@@ -132,7 +132,6 @@ const NavContainer: React.FC<PropTypes> = ({
     let { page, limit, ...rest } = router.query;
     return !Object.keys(rest)?.length;
   };
-  console.log(selectedUsers);
 
   const targetDivRef = useRef(null);
 
@@ -427,8 +426,8 @@ const NavContainer: React.FC<PropTypes> = ({
                 setUser(value);
                 let data: string[] = value?.length
                   ? value?.map(
-                      (item: { _id: string; name: string }) => item._id
-                    )
+                    (item: { _id: string; name: string }) => item._id
+                  )
                   : [];
                 onUserChange(data, false);
               }}

@@ -297,9 +297,7 @@ const TaskHeader = ({
                 width: "90%",
                 borderRadius: "20px",
                 background: "#fff !important",
-                marginRight: !(router.query.is_my_task == "true")
-                  ? "1rem"
-                  : "0",
+                marginRight: "1rem",
                 "& .MuiInputBase-root": {
                   borderRadius: "20px !important",
                   height: "2.4rem",

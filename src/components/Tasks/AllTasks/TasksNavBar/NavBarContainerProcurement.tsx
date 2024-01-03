@@ -5,6 +5,7 @@ import {
   Icon,
   InputAdornment,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -22,6 +23,7 @@ interface PropTypes {
   onStatusChange: (value: string) => void;
   onUserChange: (value: string[] | [], isMyTasks: boolean) => void;
   titleName: any
+  onPriorityChange: any
   getProcruments: any
 }
 
@@ -32,6 +34,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   selectedFarm,
   onStatusChange,
   onUserChange,
+  onPriorityChange,
   titleName,
   getProcruments
 }) => {
@@ -51,10 +54,14 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   const [search, setSearch] = useState("");
   const [farmOptions, setFarmOptions] = useState<Array<FarmInTaskType>>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
-  const [user, setUser] = useState<userTaskType | null>();
+  const [user, setUser] = useState<userTaskType[] | null>([]);
   const [selectedFarmOption, setSelectedFarmOption] = useState<
     FarmInTaskType | null | undefined
   >();
+  const [selectedUsers, setSelectedUsers] = useState<
+    { name: string; _id: string }[] | null
+  >();
+  const [priority, setPriority] = useState("")
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "PENDING", title: "Pending" },
@@ -66,15 +73,33 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
 
   ]);
 
+  const [priorityOptions] = useState<Array<{ value: string; title: string }>>([
+    { value: "None", title: "None" },
+    { value: "Low", title: "Low" },
+    { value: "Medium", title: "Medium" },
+    { value: "High", title: "High" },
+  ]);
+
+
+  //select the status 
   const setStatusValue = (e: any) => {
     onStatusChange(e.target.value);
     setStatus(e.target.value);
   };
 
+  //select the priority
+  const onchnagePriorityValue = (e: any) => {
+    onPriorityChange(e.target.value);
+    setPriority(e.target.value);
+  };
+
+
+
   useEffect(() => {
     setSearch(searchString);
     setSelectedFarmOption(selectedFarm);
     setStatus(router.query.status as string);
+    setPriority(router.query.priority as string)
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
@@ -85,6 +110,31 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     }
   }, []);
 
+  const getAllUsers = async () => {
+    const response = await getAllUsersService({ token: accessToken });
+    if (response?.success) {
+      setUsers(response?.data);
+      setSelectedValue(response?.data);
+    }
+  };
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      getAllUsers();
+    }
+  }, [router.isReady, accessToken]);
+
+  const setSelectedValue = (usersData: { name: string; _id: string }[]) => {
+    let usersObj = usersData.filter((item: any) =>
+      router.query.assign_to?.includes(item?._id)
+    );
+    if (router.query.is_my_task) {
+      setSelectedUsers(null);
+      return;
+    }
+    setSelectedUsers(usersObj);
+  };
+
   return (
     <>
       <div className={styles.navbarcontainer}>
@@ -93,13 +143,59 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
           <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>
         <div className={styles.headeractions}>
-          <div style={{ width: "12%" }}>
-            <SelectComponent
-              options={statusOptions}
-              size="small"
-              onChange={setStatusValue}
-              value={status ? status : ""}
-            />
+          <div style={{ width: "30%" }}>
+            {!(router.query.is_my_task == "true") ? (
+              <Autocomplete
+                sx={{
+                  "& .MuiChip-root": {
+                    background: "#f0fff0",
+                    border: "1px solid #05a155",
+                    borderRadius: "5px",
+                  },
+                }}
+                multiple
+                id="size-small-outlined-multi"
+                size="small"
+                fullWidth
+                noOptionsText={"No such User"}
+                value={selectedUsers?.length ? selectedUsers : []}
+                isOptionEqualToValue={(option: any, value: any) =>
+                  option.name === value.name
+                }
+                getOptionLabel={(option: any) => {
+                  return option.name;
+                }}
+                options={users}
+                onChange={(e, value: userTaskType[] | []) => {
+                  setSelectedUsers(value);
+                  setUser(value);
+                  let data: string[] = value?.length
+                    ? value?.map(
+                      (item: { _id: string; name: string }) => item._id
+                    )
+                    : [];
+                  onUserChange(data, false);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Search by User"
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
+                        backgroundColor: "#fff",
+                        border: "none",
+                        fontFamily: "'Inter', sans-serif ",
+                      },
+                    }}
+                  />
+                )}
+              />
+            ) : (
+              ""
+            )}
           </div>
           <div style={{ width: "30%" }}>
             <TextField
@@ -196,8 +292,30 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
             >
               All Procurements
             </Button>
+
+
           </div>
 
+          <div style={{ display: "flex", width: "30%", justifyContent: "center", gap: "0.8rem" }}>
+            <div style={{ width: "50%" }}>
+              <Typography>Status</Typography>
+              <SelectComponent
+                options={statusOptions}
+                size="small"
+                onChange={setStatusValue}
+                value={status ? status : ""}
+              />
+            </div>
+            <div style={{ width: "50%" }}>
+              <Typography>Priority</Typography>
+              <SelectComponent
+                options={priorityOptions}
+                size="small"
+                onChange={onchnagePriorityValue}
+                value={priority ? priority : ""}
+              />
+            </div>
+          </div>
 
         </div>
       </div>

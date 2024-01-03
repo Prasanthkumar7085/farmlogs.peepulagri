@@ -18,6 +18,7 @@ export interface ApiCallProps {
     sortType: string;
     selectedFarmId: string;
     status: string;
+    priority: string;
     userId: string[];
     isMyTasks: boolean | string;
 }
@@ -40,6 +41,7 @@ const ListProcurments = () => {
         sortType = "",
         selectedFarmId = "",
         status = "ALL",
+        priority = "ALL",
         userId = [],
         isMyTasks = false,
     }: Partial<ApiCallProps>) => {
@@ -66,6 +68,11 @@ const ListProcurments = () => {
         if (status) {
             if (status !== "ALL") {
                 queryParams["status"] = status;
+            }
+        }
+        if (priority) {
+            if (priority !== "ALL") {
+                queryParams["priority"] = priority;
             }
         }
         if (userId?.length) {
@@ -118,6 +125,7 @@ const ListProcurments = () => {
                     sortType: router.query.order_type as string,
                     selectedFarmId: router.query.farm_id as string,
                     status: router.query.status as string,
+                    priority: router.query.priority as string,
                     userId: router.query.requested_by
                         ? Array.isArray(router.query.requested_by)
                             ? (router.query.requested_by as string[])
@@ -149,6 +157,8 @@ const ListProcurments = () => {
                 sortType: router.query.order_type as string,
                 selectedFarmId: value?._id,
                 status: router.query.status as string,
+                priority: router.query.priority as string,
+
                 userId: router.query.requested_by
                     ? Array.isArray(router.query.requested_by)
                         ? (router.query.requested_by as string[])
@@ -166,6 +176,7 @@ const ListProcurments = () => {
                 sortType: router.query.order_type as string,
                 selectedFarmId: "",
                 status: router.query.status as string,
+                priority: router.query.priority as string,
                 userId: router.query.requested_by
                     ? Array.isArray(router.query.requested_by)
                         ? (router.query.requested_by as string[])
@@ -185,6 +196,7 @@ const ListProcurments = () => {
             sortType: router.query.order_type as string,
             selectedFarmId: router.query.farm_id as string,
             status: value,
+            priority: router.query.priority as string,
             userId: router.query.requested_by
                 ? Array.isArray(router.query.requested_by)
                     ? (router.query.requested_by as string[])
@@ -194,6 +206,25 @@ const ListProcurments = () => {
         });
     };
 
+    //priority filter
+    const onPriorityChange = (value: string) => {
+        getAllProcurements({
+            page: 1,
+            limit: router.query.limit as string,
+            search_string: searchString,
+            sortBy: router.query.order_by as string,
+            sortType: router.query.order_type as string,
+            selectedFarmId: router.query.farm_id as string,
+            status: router.query.status as string,
+            priority: value,
+            userId: router.query.requested_by
+                ? Array.isArray(router.query.requested_by)
+                    ? (router.query.requested_by as string[])
+                    : ([router.query.requested_by] as string[])
+                : [],
+            isMyTasks: router.query.is_my_task as string,
+        });
+    }
 
     const onUserChange = async (value: any | [], isMyTasks = false) => {
 
@@ -205,6 +236,7 @@ const ListProcurments = () => {
             sortType: router.query.order_type as string,
             selectedFarmId: router.query.farm_id as string,
             status: router.query.status as string,
+            priority: router.query.priority as string,
             userId: value,
             isMyTasks: isMyTasks,
         });
@@ -218,6 +250,7 @@ const ListProcurments = () => {
                 onSelectValueFromDropDown={onSelectValueFromDropDown}
                 selectedFarm={selectedFarm}
                 onStatusChange={onStatusChange}
+                onPriorityChange={onPriorityChange}
                 onUserChange={onUserChange}
                 titleName={"Procurement Module"}
                 getProcruments={getAllProcurements}

@@ -188,7 +188,7 @@ const ListProcurments = () => {
                 selectedFarm={selectedFarm}
                 onStatusChange={onStatusChange}
                 onUserChange={onUserChange}
-                titleName={"Procurment Module"}
+                titleName={"Procurement Module"}
             />
             {data.length ? (
                 <ProcurementsTableComponent

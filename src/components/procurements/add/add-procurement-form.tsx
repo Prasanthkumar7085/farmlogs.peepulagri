@@ -26,6 +26,7 @@ import styles from "./add-procurement-form.module.css";
 import OperationDetails from "./operation-details";
 import deleteAddProcurementService from "../../../../lib/services/ProcurementServices/deleteAddProcurementService";
 import AddProcurementHeader from "./add-procurement-header";
+import MaterialsRequired from "./materials-required";
 
 interface ApiProps {
   page: number;
@@ -60,6 +61,9 @@ const AddProcurementForm = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [procurementData, setProcurementData] = useState<any>({});
   const [priority, setPriority] = useState('NONE')
+  const [materialCount, setMaterialCount] = useState<any>()
+  const [afterProcurement, setAfterProcurement] = useState<any>(false)
+  console.log(materialCount)
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     try {
       let response = await ListAllFarmForDropDownService(
@@ -115,10 +119,12 @@ const AddProcurementForm = () => {
       });
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
+        setProcurementData(response?.data);
+        setAfterProcurement(true)
 
-        setTimeout(() => {
-          router.push(`/procurements/${response?.data?._id}/edit`);
-        }, 1000);
+        // setTimeout(() => {
+        //   router.push(`/procurements/${response?.data?._id}/edit`);
+        // }, 1000);
       } else if (response.status == 422) {
         setErrorMessages(response?.errors);
       } else if (response.status == 403) {
@@ -165,6 +171,7 @@ const AddProcurementForm = () => {
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
         setFarm([]);
+        setAfterProcurement(true)
         await getProcurementData();
         setIsDisabled(true);
       } else if (response.status == 422) {
@@ -188,7 +195,7 @@ const AddProcurementForm = () => {
     setLoading(true);
     try {
       const response = await getProcurementByIdService({
-        procurementId: router.query.procurement_id as string,
+        procurementId: router.query.procurement_id as string || procurementData?._id,
         accessToken: accessToken,
       });
       if (response?.status == 200 || response?.status == 201) {
@@ -254,6 +261,10 @@ const AddProcurementForm = () => {
     }
   }, [router.isReady, accessToken, searchString]);
 
+  const checkMaterialsListCount = (value: any) => {
+    console.log(value.length)
+    setMaterialCount(value?.length)
+  }
 
 
   return (
@@ -263,66 +274,82 @@ const AddProcurementForm = () => {
       <form className={styles.addprocurementform} style={{ background: "#fff" }}>
         <div style={{ width: "100%" }}>
           <div style={{ padding: "1rem" }}>
-            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-              {router.query.procurement_id && userDetails?._id == procurementData?.requested_by?._id ? (
-                <Button
-                  className={styles.EditSymbolBtn}
-                  variant="outlined"
-                  onClick={() => setIsDisabled(!isDisabled)}
-                >
-                  {router.query.procurement_id && isDisabled ? (
-                    <EditOutlinedIcon sx={{ color: "#6A7185" }} />
-                  ) : (
-                    <CancelOutlinedIcon sx={{ color: "#D94841" }} />
-                  )}
-                </Button>
-              ) : (
-                ""
-              )}
-            </div>
-            <OperationDetails
-              farmOptions={farmOptions}
-              onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-              label={"title"}
-              placeholder={"Select Farm here"}
-              defaultValue={farm}
-              optionsLoading={optionsLoading}
-              setOptionsLoading={setOptionsLoading}
-              searchString={searchString}
-              setSearchString={setSearchString}
-              title={title}
-              setTitle={setTitle}
-              dateOfOperation={dateOfOperation}
-              setDataOfOperation={setDataOfOperation}
-              remarks={remarks}
-              setRemarks={setRemarks}
-              errorMessages={errorMessages}
-              setErrorMessages={setErrorMessages}
-              editFarms={editFarms}
-              setEditFarms={setEditFarms}
-              isDisabled={isDisabled}
-              setIsDisabled={setIsDisabled}
-              priority={priority}
-              setPriority={setPriority}
-            />
+            {/* <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+
+            </div> */}
+            {afterProcurement ?
+              <MaterialsRequired
+                procurementData={procurementData}
+                checkMaterialsListCount={checkMaterialsListCount}
+                getProcurementData={getProcurementData} />
+
+              :
+              <OperationDetails
+                farmOptions={farmOptions}
+                onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+                label={"title"}
+                placeholder={"Select Farm here"}
+                defaultValue={farm}
+                optionsLoading={optionsLoading}
+                setOptionsLoading={setOptionsLoading}
+                searchString={searchString}
+                setSearchString={setSearchString}
+                title={title}
+                setTitle={setTitle}
+                dateOfOperation={dateOfOperation}
+                setDataOfOperation={setDataOfOperation}
+                remarks={remarks}
+                setRemarks={setRemarks}
+                errorMessages={errorMessages}
+                setErrorMessages={setErrorMessages}
+                editFarms={editFarms}
+                setEditFarms={setEditFarms}
+                setIsDisabled={setIsDisabled}
+                priority={priority}
+                setPriority={setPriority}
+              />}
 
             <div className={styles.formButtons} >
-              {isDisabled ? (
-                ""
-              ) : (
-                <div className={styles.procurementFormBtn}>
+
+              <div className={styles.procurementFormBtn}>
+                {afterProcurement && procurementData?._id ?
                   <Button
                     className={styles.cancelBtn}
                     color="primary"
                     variant="outlined"
                     onClick={() => {
-                      router.query.procurement_id
-                        ? deleteProcurement()
-                        : router.back();
+                      setAfterProcurement(false)
+                    }}
+                  >
+                    Prev
+
+                  </Button> :
+
+                  <Button
+                    className={styles.cancelBtn}
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => {
+                      router.back();
                     }}
                   >
                     Cancel
                   </Button>
+                }
+
+                {afterProcurement && procurementData?._id ?
+                  <Button
+                    // className={styles.submitBtn}
+                    variant="contained"
+                    disabled={materialCount >= 1 ? false : true}
+                    onClick={() => {
+                      router.back();
+
+                    }}
+                  >
+                    Submit
+                  </Button>
+                  :
                   <Button
                     className={styles.submitBtn}
                     color="primary"
@@ -333,19 +360,12 @@ const AddProcurementForm = () => {
                         : addProcurement();
                     }}
                   >
-                    {router.query.procurement_id ? "Update" : "Submit"}
-                  </Button>
-                </div>
-              )}
+                    Next
+                  </Button>}
+              </div>
+
             </div>
-            <div>
-              {router.query.procurement_id ?
-                <POC
-                  procurementData={procurementData}
-                  getProcurementData={getProcurementData}
-                />
-                : ''}
-            </div>
+
           </div>
         </div>
 

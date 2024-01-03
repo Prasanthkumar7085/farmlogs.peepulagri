@@ -18,7 +18,8 @@ export interface ApiCallProps {
     sortType: string;
     selectedFarmId: string;
     status: string;
-    userId: string;
+    userId: string[];
+    isMyTasks: boolean | string;
 }
 const ListProcurments = () => {
     const router = useRouter();
@@ -39,7 +40,8 @@ const ListProcurments = () => {
         sortType = "",
         selectedFarmId = "",
         status = "ALL",
-        userId = "",
+        userId = [],
+        isMyTasks = false,
     }: Partial<ApiCallProps>) => {
         setLoading(true);
         let queryParams: any = {};
@@ -66,13 +68,19 @@ const ListProcurments = () => {
                 queryParams["status"] = status;
             }
         }
-        if (userId) {
-            queryParams["assigned_to"] = userId;
+        if (userId?.length) {
+            queryParams["requested_by"] = userId;
+            // queryParams["created_by"] = userId;
         }
+        if (Boolean(isMyTasks)) {
+            queryParams["is_my_task"] = true;
+        }
+
 
         const {
             page: pageCount,
             limit: limitCount,
+            is_my_task,
             ...queryParamsUpdated
         } = queryParams;
 
@@ -110,7 +118,12 @@ const ListProcurments = () => {
                     sortType: router.query.order_type as string,
                     selectedFarmId: router.query.farm_id as string,
                     status: router.query.status as string,
-                    userId: router.query.assigned_to as string,
+                    userId: router.query.requested_by
+                        ? Array.isArray(router.query.requested_by)
+                            ? (router.query.requested_by as string[])
+                            : ([router.query.requested_by] as string[])
+                        : [],
+                    isMyTasks: router.query.is_my_task as string,
                 });
             }, delay);
             return () => clearTimeout(debounce);
@@ -136,7 +149,12 @@ const ListProcurments = () => {
                 sortType: router.query.order_type as string,
                 selectedFarmId: value?._id,
                 status: router.query.status as string,
-                userId: router.query.assigned_to as string,
+                userId: router.query.requested_by
+                    ? Array.isArray(router.query.requested_by)
+                        ? (router.query.requested_by as string[])
+                        : ([router.query.requested_by] as string[])
+                    : [],
+                isMyTasks: router.query.is_my_task as string,
             });
         } else {
             setSelectedFarm(null);
@@ -148,7 +166,12 @@ const ListProcurments = () => {
                 sortType: router.query.order_type as string,
                 selectedFarmId: "",
                 status: router.query.status as string,
-                userId: router.query.assigned_to as string,
+                userId: router.query.requested_by
+                    ? Array.isArray(router.query.requested_by)
+                        ? (router.query.requested_by as string[])
+                        : ([router.query.requested_by] as string[])
+                    : [],
+                isMyTasks: router.query.is_my_task as string,
             });
         }
     };
@@ -162,11 +185,18 @@ const ListProcurments = () => {
             sortType: router.query.order_type as string,
             selectedFarmId: router.query.farm_id as string,
             status: value,
-            userId: router.query.assigned_to as string,
+            userId: router.query.requested_by
+                ? Array.isArray(router.query.requested_by)
+                    ? (router.query.requested_by as string[])
+                    : ([router.query.requested_by] as string[])
+                : [],
+            isMyTasks: router.query.is_my_task as string,
         });
     };
 
-    const onUserChange = async (e: any, value: userTaskType) => {
+
+    const onUserChange = async (value: any | [], isMyTasks = false) => {
+
         getAllProcurements({
             page: 1,
             limit: router.query.limit as string,
@@ -175,7 +205,8 @@ const ListProcurments = () => {
             sortType: router.query.order_type as string,
             selectedFarmId: router.query.farm_id as string,
             status: router.query.status as string,
-            userId: value?._id as string,
+            userId: value,
+            isMyTasks: isMyTasks,
         });
     };
 
@@ -189,6 +220,8 @@ const ListProcurments = () => {
                 onStatusChange={onStatusChange}
                 onUserChange={onUserChange}
                 titleName={"Procurement Module"}
+                getProcruments={getAllProcurements}
+
             />
             {data.length ? (
                 <ProcurementsTableComponent

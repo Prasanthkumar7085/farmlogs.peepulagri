@@ -20,8 +20,9 @@ interface PropTypes {
   onSelectValueFromDropDown: (value: FarmInTaskType, reason: string) => void;
   selectedFarm: FarmInTaskType | null | undefined;
   onStatusChange: (value: string) => void;
-  onUserChange: (e: any, value: userTaskType) => void;
+  onUserChange: (value: string[] | [], isMyTasks: boolean) => void;
   titleName: any
+  getProcruments: any
 }
 
 const ProcurementNavBarContainer: React.FC<PropTypes> = ({
@@ -31,7 +32,8 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   selectedFarm,
   onStatusChange,
   onUserChange,
-  titleName
+  titleName,
+  getProcruments
 }) => {
   const router = useRouter();
 
@@ -40,6 +42,10 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
+  );
+
+  const userId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
   );
 
   const [search, setSearch] = useState("");
@@ -132,6 +138,67 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
           ) : (
             ""
           )}
+
+
+        </div>
+
+      </div>
+      <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingBottom: "1rem",
+          }}
+        >
+          <div className={styles.TabButtonGrp}>
+            <Button
+              className={
+                router.query.is_my_task == "true"
+                  ? styles.tabActiveButton
+                  : styles.tabButton
+              }
+              onClick={() => {
+                if (router.query.is_my_task == "true") {
+                  return;
+                }
+
+                onUserChange([userId], true);
+              }}
+            >
+              My Procurements
+            </Button>
+            <Button
+              className={
+                router.query.is_my_task !== "true"
+                  ? styles.tabActiveButton
+                  : styles.tabButton
+              }
+              onClick={() => {
+                if (!(router.query.is_my_task == "true")) {
+                  return;
+                }
+
+                getProcruments({
+                  page: router.query.page as string,
+                  limit: router.query.limit as string,
+                  search_string: searchString,
+                  sortBy: router.query.order_by as string,
+                  sortType: router.query.order_type as string,
+                  selectedFarmId: router.query.farm_id as string,
+                  status: router.query.status as string,
+                  userId: [],
+                  isMyTasks: false,
+                });
+              }}
+
+            >
+              All Procurements
+            </Button>
+          </div>
+
+
         </div>
       </div>
     </>

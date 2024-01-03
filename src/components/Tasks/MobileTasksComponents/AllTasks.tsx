@@ -68,7 +68,10 @@ const AllTasks = () => {
     isMyTasks = "",
   }: Partial<ApiCallProps>) => {
     setLoading(true);
-    let queryParams: any = {};
+    let queryParams: any = {
+      sort_by: "createdAt",
+      sort_type: "desc",
+    };
     if (page) {
       queryParams["page"] = page;
     }
@@ -151,8 +154,8 @@ const AllTasks = () => {
           limit: router.query.limit as string,
           search_string: searchString,
           createdAt: dateFilter,
-          sortBy: router.query.order_by as string,
-          sortType: router.query.order_type as string,
+          sortBy: router.query.sort_by as string,
+          sortType: router.query.sort_type as string,
           selectedFarmId: router.query.farm_id as string,
           status: router.query.status as string,
           userId: router.query.assign_to

@@ -20,8 +20,9 @@ import ScoutView from "./Scouts/ScoutView";
 import styles from "./crop-card.module.css";
 import NoDataAnimatedComponent from "@/components/Core/NoDataAnimatedComponent";
 import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
-import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
 const ImageGalleryComponent = () => {
   const router = useRouter();
@@ -547,10 +548,13 @@ const ImageGalleryComponent = () => {
                         marginBottom: "5px",
                       }}
                     >
-                      {images?.images?.map((image: any, index: any) => {                        
+                      {images?.images?.map((image: any, index: any) => {
                         return (
                           <div
-                            style={{ position: "relative", height: "100px" }}
+                            style={{
+                              position: "relative",
+                              height: "100px",
+                            }}
                             key={index}
                           >
                             <img
@@ -626,9 +630,11 @@ const ImageGalleryComponent = () => {
                                 right: "2px",
                               }}
                             >
-                              {image?.image_verified ?
-                                <VerifiedRoundedIcon color={"success"} /> :
-                                <ErrorOutlineRoundedIcon color={"warning"} />}
+                              {image?.image_verified ? (
+                                <CheckCircleRoundedIcon color={"success"} />
+                              ) : (
+                                <CancelRoundedIcon color={"error"} />
+                              )}
                             </div>
                           </div>
                         );
@@ -737,9 +743,11 @@ const ImageGalleryComponent = () => {
                                 right: "2px",
                               }}
                             >
-                              {image?.image_verified ?
-                                <VerifiedRoundedIcon color={"success"} /> :
-                                <ErrorOutlineRoundedIcon color={"warning"} />}
+                              {image?.image_verified ? (
+                                <CheckCircleRoundedIcon color={"success"} />
+                              ) : (
+                                <ErrorOutlineRoundedIcon color={"warning"} />
+                              )}
                             </div>
                           </div>
                         );

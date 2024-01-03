@@ -8,7 +8,7 @@ const EditProcurementComponent = () => {
   return (
     <div style={{ paddingBottom: "2rem" }}>
       <AddProcurementForm />
-      <MaterialsRequired />
+      {/* <MaterialsRequired /> */}
     </div>
   );
 };

@@ -49,7 +49,6 @@ interface pagePropTypes {
   setPriority: Dispatch<SetStateAction<string>>;
   priority: string;
 
-  isDisabled: boolean;
   setIsDisabled: Dispatch<SetStateAction<boolean>>;
 }
 const OperationDetails: NextPage<pagePropTypes> = ({
@@ -71,7 +70,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
   setEditFarms,
   setPriority,
   priority,
-  isDisabled,
 }) => {
   const router = useRouter();
 
@@ -105,7 +103,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
             <TextField
               sx={{ background: "#fff" }}
               size="small"
-              disabled={isDisabled}
               className={styles.inoutbox}
               color="primary"
               placeholder="Enter your title here"
@@ -126,7 +123,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 <DatePicker
                   sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
                   disablePast
-                  disabled={isDisabled}
                   label="Select Date "
                   value={dateOfOperation}
                   onChange={(newValue: any) => {
@@ -155,7 +151,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               {`Select Farm `} <strong style={{ color: "red" }}>*</strong>
             </label>
             <FarmAutoCompleteInAddProcurement
-              isDisabled={isDisabled}
               options={farmOptions}
               onSelectFarmFromDropDown={onSelectFarmFromDropDown}
               label={"title"}
@@ -186,7 +181,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                         label={item.title}
                         key={item._id}
                         clickable
-                        disabled={isDisabled}
                         onDelete={() => deleteEditedFarms(item._id)}
                       />
                     </div>
@@ -225,7 +219,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
           <label className={styles.label}>Remarks</label>
           <TextArea
             sx={{ background: "#fff" }}
-            disabled={isDisabled}
             className={styles.inputbox}
             color="primary"
             multiline

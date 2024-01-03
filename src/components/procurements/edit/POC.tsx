@@ -36,7 +36,7 @@ const POC = ({
     (state: any) => state.auth.userDetails?.access_token
   );
   const [usersData, setUsersData] = useState([]);
-  const [poc, setPOC] = useState<Partial<{ _id: string; name: string }> | null>(
+  const [poc, setPOC] = useState<Partial<{ _id: string; name: string }> | any>(
     {}
   );
   const [loading, setLoading] = useState(false);
@@ -65,13 +65,13 @@ const POC = ({
       };
       const response = await addPOCService({
         token: accessToken,
-        procurementId: router.query.procurement_id as string,
+        procurementId: router.query.procurement_id as string || procurementData?._id,
         body: body as { point_of_contact: string },
       });
       if (response?.status == 200 || response?.status == 201) {
-        setPOC(null);
         toast.success(response?.message);
         getProcurementData();
+
       } else if (response?.status == 422) {
         setErrors(response?.errors);
       } else if (response?.status == 401) {
@@ -114,12 +114,13 @@ const POC = ({
       };
       const response = await deletePOCService({
         token: accessToken,
-        procurementId: router.query.procurement_id as string,
+        procurementId: router.query.procurement_id as string || procurementData?._id,
         body: body as { point_of_contact: string },
       });
       if (response?.status == 200 || response?.status == 201) {
         toast.success(response?.message);
         setShowDeletePOC(false);
+        setPOC(null)
         getProcurementData();
       } else if (response?.status == 422) {
         toast.error(response?.message);
@@ -151,7 +152,7 @@ const POC = ({
         <div className={styles.pocSelectBlock}>
           <div >
 
-            {procurementData?.point_of_contact?._id ? (
+            {poc?.name || procurementData?.point_of_contact?._id ? (
               <div
                 className={styles.selectedPOC}
                 style={{
@@ -170,12 +171,13 @@ const POC = ({
                       background: "#45a845",
                     }}
                   >
-                    {procurementData?.point_of_contact?.name.split(" ")?.length > 1
-                      ? `${procurementData?.point_of_contact?.name.split(" ")[0][0]}${procurementData?.point_of_contact?.name.split(" ")[1][0]
+                    {poc?.name?.split(" ")?.length > 1 || procurementData?.point_of_contact?.name.split(" ")?.length > 1
+                      ? `${poc?.name?.split(" ")[0][0]}${poc?.name?.split(" ")[1][0]}`.toUpperCase() ||
+                      `${procurementData?.point_of_contact?.name.split(" ")[0][0]}${procurementData?.point_of_contact?.name.split(" ")[1][0]
                         }`.toUpperCase()
-                      : procurementData?.point_of_contact?.name.slice(0, 2)?.toUpperCase()}
+                      : poc?.name?.slice(0, 2)?.toUpperCase() || procurementData?.point_of_contact?.name.slice(0, 2)?.toUpperCase()}
                   </Avatar>
-                  <div>{procurementData?.point_of_contact?.name}</div>
+                  <div>{poc?.name || procurementData?.point_of_contact?.name}</div>
                 </div>
                 {procurementData?.point_of_contact?._id ? (
                   <div>

@@ -395,7 +395,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
             </div>
           </div>
         ) : (
-          ""
+          <div>No materials added</div>
         )}
       </div>
 

@@ -39,6 +39,7 @@ import updateMaterialsByIdService from "../../../../lib/services/ProcurementServ
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
 import AddIcon from '@mui/icons-material/Add';
+import POC from "../edit/POC";
 interface ApiCallService {
   procurement_req_id: string;
   name: string;
@@ -47,7 +48,7 @@ interface ApiCallService {
   available_qty?: number | null;
   available_units?: string;
 }
-const MaterialsRequired: NextPage = () => {
+const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcurementData }: any) => {
   const dispatch = useDispatch();
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
@@ -131,7 +132,7 @@ const MaterialsRequired: NextPage = () => {
     setErrorMessages({});
     try {
       const body = {
-        procurement_req_id: router.query.procurement_id,
+        procurement_req_id: router.query.procurement_id || procurementData?._id,
         name: name,
         required_qty: requiredQty ? +requiredQty : null,
         required_units: requiredUnits,
@@ -174,10 +175,11 @@ const MaterialsRequired: NextPage = () => {
     try {
       let response = await getMaterialsByProcurementIdService({
         token: accessToken,
-        procurementId: router.query.procurement_id as string,
+        procurementId: router.query.procurement_id as string || procurementData?._id,
       });
       if (response?.status == 200 || response?.status == 201) {
         setMaterials(response?.data);
+        checkMaterialsListCount(response?.data)
       } else if (response?.status == 401) {
         toast.error(response?.message);
       } else if (response?.status == 403) {
@@ -198,7 +200,7 @@ const MaterialsRequired: NextPage = () => {
 
     try {
       const body = {
-        procurement_req_id: router.query.procurement_id,
+        procurement_req_id: router.query.procurement_id || procurementData?._id,
         name: editNameValue,
         required_qty: editRequiredQty ? +editRequiredQty : null,
         required_units: editRequiredUnits,
@@ -254,8 +256,15 @@ const MaterialsRequired: NextPage = () => {
 
 
   return (
-    <div style={{ width: "50%", margin: "0 auto 0", paddingBottom: "3rem", background: "#fff" }}>
+    <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "3rem", background: "#fff" }}>
+      <div>
+        <POC
+          procurementData={procurementData}
+          getProcurementData={getProcurementData}
+        />
+      </div>
       <div className={styles.materialsrequired}>
+
         <div className={styles.heading}>
           <div >
             <h2 className={styles.text}>Material Requirements</h2>

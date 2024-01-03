@@ -59,24 +59,36 @@ const TanStackTableProcurmentComponent = ({
     getData({
       limit: router.query.limit as string,
       page: 1,
-      sortBy: orderBy,
-      sortType: orderType,
       search_string: router.query.search_string as string,
+      sortBy: router.query.order_by as string,
+      sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      priority: router.query.priority as string,
+      userId: router.query.requested_by
+        ? Array.isArray(router.query.requested_by)
+          ? (router.query.requested_by as string[])
+          : ([router.query.requested_by] as string[])
+        : [],
+      isMyTasks: router.query.is_my_task as string,
     });
   };
   const capturePageNum = (value: number) => {
     getData({
       limit: router.query.limit as string,
       page: value,
-      sortBy: router.query.sort_by as string,
-      sortType: router.query.sort_type as string,
       search_string: router.query.search_string as string,
+      sortBy: router.query.order_by as string,
+      sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      priority: router.query.priority as string,
+      userId: router.query.requested_by
+        ? Array.isArray(router.query.requested_by)
+          ? (router.query.requested_by as string[])
+          : ([router.query.requested_by] as string[])
+        : [],
+      isMyTasks: router.query.is_my_task as string,
     });
   };
   const captureRowPerItems = (value: number) => {

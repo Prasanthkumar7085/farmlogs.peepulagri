@@ -126,7 +126,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
 
   const setSelectedValue = (usersData: { name: string; _id: string }[]) => {
     let usersObj = usersData.filter((item: any) =>
-      router.query.assign_to?.includes(item?._id)
+      router.query.requested_by?.includes(item?._id)
     );
     if (router.query.is_my_task) {
       setSelectedUsers(null);

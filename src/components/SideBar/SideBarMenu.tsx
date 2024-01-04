@@ -154,7 +154,7 @@ const SideBarMenu = ({ children }: any) => {
         </aside>
         <div className={styles.main}>{children}</div>
       </div>
-      <div id="mobile-view">
+      {/* <div id="mobile-view">
         {userName == "farmer" ? (
           <div style={{ width: "100%", textAlign: "center" }}>
             <Button
@@ -185,7 +185,7 @@ const SideBarMenu = ({ children }: any) => {
             </Button>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

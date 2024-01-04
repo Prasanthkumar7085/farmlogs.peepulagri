@@ -11,11 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styles from "../SignUp/SignUp.module.css";
 import { useCookies } from "react-cookie";
 import { Toaster, toast } from "sonner";
+import DeviceDetector from "device-detector-js";
 
 export default function SigninEmail() {
   const dispatch = useDispatch();
@@ -29,6 +30,19 @@ export default function SigninEmail() {
   const [errorMessages, setErrorMessages] = useState<any>();
   const [invalid, setInvalid] = useState<any>();
   const router = useRouter();
+  const [deviceType, setDeviceType] = useState<any>()
+
+
+
+  //to know the mobile or desktop
+
+  useEffect(() => {
+    const deviceDetector = new DeviceDetector();
+    const userAgent = navigator.userAgent;
+    const device = deviceDetector.parse(userAgent);
+    console.log(device);
+    setDeviceType(device.device?.type) // This will log the parsed device information
+  }, []);
 
   const signInForm = async (e: any) => {
     e.preventDefault();
@@ -60,12 +74,11 @@ export default function SigninEmail() {
         }
 
         if (
-          res?.data?.user_details?.user_type == "agronomist" ||
-          res?.data?.user_details?.user_type == "admin" ||
-          res?.data?.user_details?.user_type == "manager"
+          deviceType == "desktop"
         ) {
           router.push("/scouts");
-        } else if (res?.data?.user_details?.user_type == "farmer") {
+        }
+        if (deviceType !== "desktop") {
           router.push("/dashboard");
         }
       }

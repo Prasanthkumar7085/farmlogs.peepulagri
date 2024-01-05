@@ -36,6 +36,7 @@ import ErrorMessages from "@/components/Core/ErrorMessages";
 import addProcurementMaterialService from "../../../../lib/services/ProcurementServices/addProcurementMaterialService";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteMaterialByIdService from "../../../../lib/services/ProcurementServices/deleteMaterialByIdService";
+import AddMaterialDrawer from "../MaterialCore/AddMaterialDrawer";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -64,6 +65,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [materialOpen, setMaterialOpen] = useState(false);
   const [editMaterialOpen, setEditMaterialOpen] = useState(false);
+  const [addMaterialOpen, setAddMaterialOpen] = useState(false);
   const [editNameValue, setEditNameValue] = useState<string>("");
 
   const [editRequiredQty, setEditRequiredQty] = useState<
@@ -269,50 +271,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
     return temp.charAt(0).toUpperCase() + temp.slice(1);
   };
 
-  //add materials
-  const addMaterialEvent = async () => {
-    setLoading(true);
-    setErrorMessages({});
-    try {
-      const body = {
-        procurement_req_id: router.query.procurement_id,
-        name: name,
-        required_qty: requiredQty ? +requiredQty : null,
-        required_units: requiredUnits,
-        available_qty: availableQty ? +availableQty : null,
-        available_units: availableUnits,
-      };
-      const response = await addProcurementMaterialService({
-        token: accessToken,
-        body: body as ApiCallService,
-      });
-
-      if (response?.status == 200 || response?.status == 201) {
-        setName("");
-        setRequiredQty("");
-        setRequiredUnits("");
-        setAvailableQty("");
-        setAvailableUnits("");
-
-        toast.success(response?.message);
-        getAllProcurementMaterials();
-      } else if (response?.status == 422) {
-        setErrorMessages(response?.errors);
-      } else if (response?.status == 401) {
-        toast.error(response?.message);
-      } else if (response?.status == 403) {
-        logout();
-      } else {
-        toast.error("Something went wrong");
-        throw response;
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  //delete material  
   const deleteMaterial = async () => {
     setDeleteLoading(true);
 
@@ -341,154 +300,26 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
     }
   };
 
+  //after add the matrials
+  const afterAddingMaterials = (value: any) => {
+    if (value) {
+      getAllProcurementMaterials()
+      setAddMaterialOpen(false)
+    }
+  }
+
   return (
     <div className={styles.materialsBlock} style={{ width: "100%" }}>
       <p className={styles.materialsBlockHeading}>Required Materials</p>
 
-
-
-
-      {addMaterial ?
-        <div className={styles.materialsGrid}>
-          <div className={styles.eachMaterialBlock} >
-            <h6 className={styles.label}>
-              Material Name <strong style={{ color: "red" }}>*</strong>
-            </h6>
-            <div style={{ width: "100%" }}>
-              <TextField
-                size="small"
-                placeholder="Please enter the material title"
-                variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                sx={{
-                  background: "#fff",
-                  borderRadius: "4px",
-                  width: "100%"
-                }}
-              />
-              <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
-            </div>
-          </div>
-
-          <div className={styles.eachMaterialBlock} >
-            <h6 className={styles.label}>
-              Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
-
-            </h6>
-            <div style={{ display: "flex" }}>
-              <div >
-                <TextField
-
-                  size="small"
-                  sx={{
-                    width: "100%", background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderWidth: "1px 0 1px 1px !important",
-                      borderRadius: "4px 0 0 4px !important"
-                    }
-                  }}
-                  placeholder="Enter Procurement Quantity"
-                  variant="outlined"
-                  type="number"
-                  value={requiredQty}
-                  onChange={(e: any) => setRequiredQty(e.target.value)}
-                />
-                <ErrorMessages
-                  errorMessages={errorMessages}
-                  keyname={"required_qty"}
-                />
-                <ErrorMessages
-                  errorMessages={errorMessages}
-                  keyname={"required_units"}
-                />
-              </div>
-              <FormControl variant="outlined">
-                <InputLabel color="primary" />
-                <Select
-                  sx={{
-                    background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "0 4px 4px 0 !important"
-                    }
-                  }}
-                  size="small"
-                  defaultValue="Litres"
-                  value={requiredUnits}
-                  onChange={(e: any) => setRequiredUnits(e.target.value)}
-                >
-                  <MenuItem value="Litres">Litres</MenuItem>
-                  <MenuItem value="Kilograms">Kilograms</MenuItem>
-                </Select>
-
-              </FormControl>
-            </div>
-          </div>
-          <div className={styles.eachMaterialBlock} >
-            <h6 className={styles.label}>
-              Material Available (Qty)(optional)
-            </h6>
-            <div style={{ display: "flex" }}>
-              <TextField
-                size="small"
-                placeholder="Enter Availble Quantity"
-                variant="outlined"
-                type="number"
-                value={availableQty}
-                onChange={(e: any) => setAvailableQty(e.target.value)}
-                sx={{
-                  width: "100%", background: "#fff",
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderWidth: "1px 0 1px 1px !important",
-                    borderRadius: "4px 0 0 4px !important"
-                  }
-                }}
-              />
-              <FormControl variant="outlined">
-                <InputLabel color="primary" />
-                <Select
-                  sx={{
-                    background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "0 4px 4px 0 !important"
-                    }
-                  }}
-                  size="small"
-                  defaultValue="Litres"
-                  value={availableUnits}
-                  onChange={(e: any) => setAvailableUnits(e.target.value)}
-                >
-                  <MenuItem value="Litres">Litres</MenuItem>
-                  <MenuItem value="Kilograms">Kilograms</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-          </div>
-
-        </div> : ""}
-      {addMaterial ?
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button onClick={() => {
-            setAddMaterial(false)
-            setName("");
-            setRequiredQty("");
-            setRequiredUnits("");
-            setAvailableQty("");
-            setAvailableUnits("");
-            setErrorMessages([]);
-          }} variant="outlined">Close</Button>
-          <Button onClick={() => addMaterialEvent()} variant="contained">Add</Button>
-        </div> : ""}
-
-
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
 
-        {addMaterial == false ?
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" onClick={() => setAddMaterial(true)}>Add Materials</Button>
-          </div> : ""}
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button variant="contained" onClick={() => {
+            setAddMaterial(true)
+            setAddMaterialOpen(true);
+          }}>Add Materials</Button>
+        </div>
 
         {materials?.length ? (
           <div>
@@ -669,6 +500,11 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         setEditErrorMessages={setEditErrorMessages}
         updateMaterialById={updateMaterialById}
         updateLoading={updateLoading}
+      />
+      <AddMaterialDrawer
+        addMaterialOpen={addMaterialOpen}
+        afterAddingMaterials={afterAddingMaterials}
+        setAddMaterialOpen={setAddMaterialOpen}
       />
       <Toaster richColors closeButton position="top-right" />
       <AlertDelete

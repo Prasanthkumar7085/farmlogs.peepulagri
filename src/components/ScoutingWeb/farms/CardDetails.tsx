@@ -84,6 +84,7 @@ const CardDetails: FunctionComponent = () => {
           className={styles.iconsiconArrowLeft}
           alt=""
           src="/iconsiconarrowleft.svg"
+
           onClick={() => router.back()}
         />
         <Typography className={styles.viewFarm}>Farm Details</Typography>

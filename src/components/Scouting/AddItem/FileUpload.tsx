@@ -493,7 +493,9 @@ const FileUploadComponent = () => {
         if (tags?.length || description?.length) {
           await addTagsAndCommentsEvent(imagesIdsArray);
         } else {
-          router.back();
+          setTimeout(() => {
+            router.back();
+          }, 500);
           toast.success("Farm Images added successfully");
         }
       }

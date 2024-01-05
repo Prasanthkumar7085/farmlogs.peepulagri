@@ -57,6 +57,20 @@
   padding-top: 1rem;
 }
 
+.materialsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  grid-column-gap: 1rem;
+}
+.eachMaterialBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+
 .TotalAmountBlock {
   display: flex;
   align-items: center;

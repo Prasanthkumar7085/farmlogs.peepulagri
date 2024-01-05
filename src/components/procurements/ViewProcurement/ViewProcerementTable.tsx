@@ -5,12 +5,17 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import {
   Button,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -27,6 +32,10 @@ import getSingleMaterilsService from "../../../../lib/services/ProcurementServic
 import { EditOutlined } from "@mui/icons-material";
 import styles from "./viewProcurementTable.module.css"
 import formatMoney from "@/pipes/formatMoney";
+import ErrorMessages from "@/components/Core/ErrorMessages";
+import addProcurementMaterialService from "../../../../lib/services/ProcurementServices/addProcurementMaterialService";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import deleteMaterialByIdService from "../../../../lib/services/ProcurementServices/deleteMaterialByIdService";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -52,7 +61,6 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const [materials, setMaterials] = useState<any>([]);
   const [materialDetails, setMaterialsDetails] = useState<any>();
   const [materialId, setMaterialId] = useState("");
-  const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [materialOpen, setMaterialOpen] = useState(false);
   const [editMaterialOpen, setEditMaterialOpen] = useState(false);
@@ -69,8 +77,21 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
   const [updateLoading, setUpdateLoading] = useState(false);
   const [editMaterialId, setEditMaterialId] = useState("");
-
+  const [name, setName] = useState("");
+  const [requiredQty, setRequiredQty] = useState<null | number | string>(null);
+  const [requiredUnits, setRequiredUnits] = useState("");
+  const [availableQty, setAvailableQty] = useState<null | number | string>(
+    null
+  );
+  const [availableUnits, setAvailableUnits] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessages, setErrorMessages] = useState({});
   const [editErrorMessages, setEditErrorMessages] = useState({});
+  const [addMaterial, setAddMaterial] = useState<any>(false)
+
+  const [deleteMaterialOpen, setDeleteMaterialOpen] = useState(false);
+  const [deleteMaterialId, setDeleteMaterialId] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   //logout function for 403 error
   const logout = async () => {
@@ -247,10 +268,227 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
     let temp = string.toLowerCase();
     return temp.charAt(0).toUpperCase() + temp.slice(1);
   };
+
+  //add materials
+  const addMaterialEvent = async () => {
+    setLoading(true);
+    setErrorMessages({});
+    try {
+      const body = {
+        procurement_req_id: router.query.procurement_id,
+        name: name,
+        required_qty: requiredQty ? +requiredQty : null,
+        required_units: requiredUnits,
+        available_qty: availableQty ? +availableQty : null,
+        available_units: availableUnits,
+      };
+      const response = await addProcurementMaterialService({
+        token: accessToken,
+        body: body as ApiCallService,
+      });
+
+      if (response?.status == 200 || response?.status == 201) {
+        setName("");
+        setRequiredQty("");
+        setRequiredUnits("");
+        setAvailableQty("");
+        setAvailableUnits("");
+
+        toast.success(response?.message);
+        getAllProcurementMaterials();
+      } else if (response?.status == 422) {
+        setErrorMessages(response?.errors);
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteMaterial = async () => {
+    setDeleteLoading(true);
+
+    try {
+      const response = await deleteMaterialByIdService({
+        materialId: deleteMaterialId,
+        token: accessToken,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        setDeleteMaterialId("");
+        setDeleteMaterialOpen(false);
+        toast.success(response?.message);
+        await getAllProcurementMaterials();
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   return (
     <div className={styles.materialsBlock} style={{ width: "100%" }}>
       <p className={styles.materialsBlockHeading}>Required Materials</p>
+
+
+
+
+      {addMaterial ?
+        <div className={styles.materialsGrid}>
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
+              Material Name <strong style={{ color: "red" }}>*</strong>
+            </h6>
+            <div style={{ width: "100%" }}>
+              <TextField
+                size="small"
+                placeholder="Please enter the material title"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                sx={{
+                  background: "#fff",
+                  borderRadius: "4px",
+                  width: "100%"
+                }}
+              />
+              <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
+            </div>
+          </div>
+
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
+              Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
+
+            </h6>
+            <div style={{ display: "flex" }}>
+              <div >
+                <TextField
+
+                  size="small"
+                  sx={{
+                    width: "100%", background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 0 1px 1px !important",
+                      borderRadius: "4px 0 0 4px !important"
+                    }
+                  }}
+                  placeholder="Enter Procurement Quantity"
+                  variant="outlined"
+                  type="number"
+                  value={requiredQty}
+                  onChange={(e: any) => setRequiredQty(e.target.value)}
+                />
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_qty"}
+                />
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_units"}
+                />
+              </div>
+              <FormControl variant="outlined">
+                <InputLabel color="primary" />
+                <Select
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 1px 1px 0 !important",
+                      borderRadius: "0 4px 4px 0 !important"
+                    }
+                  }}
+                  size="small"
+                  defaultValue="Litres"
+                  value={requiredUnits}
+                  onChange={(e: any) => setRequiredUnits(e.target.value)}
+                >
+                  <MenuItem value="Litres">Litres</MenuItem>
+                  <MenuItem value="Kilograms">Kilograms</MenuItem>
+                </Select>
+
+              </FormControl>
+            </div>
+          </div>
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
+              Material Available (Qty)(optional)
+            </h6>
+            <div style={{ display: "flex" }}>
+              <TextField
+                size="small"
+                placeholder="Enter Availble Quantity"
+                variant="outlined"
+                type="number"
+                value={availableQty}
+                onChange={(e: any) => setAvailableQty(e.target.value)}
+                sx={{
+                  width: "100%", background: "#fff",
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderWidth: "1px 0 1px 1px !important",
+                    borderRadius: "4px 0 0 4px !important"
+                  }
+                }}
+              />
+              <FormControl variant="outlined">
+                <InputLabel color="primary" />
+                <Select
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 1px 1px 0 !important",
+                      borderRadius: "0 4px 4px 0 !important"
+                    }
+                  }}
+                  size="small"
+                  defaultValue="Litres"
+                  value={availableUnits}
+                  onChange={(e: any) => setAvailableUnits(e.target.value)}
+                >
+                  <MenuItem value="Litres">Litres</MenuItem>
+                  <MenuItem value="Kilograms">Kilograms</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </div>
+
+        </div> : ""}
+      {addMaterial ?
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button onClick={() => {
+            setAddMaterial(false)
+            setName("");
+            setRequiredQty("");
+            setRequiredUnits("");
+            setAvailableQty("");
+            setAvailableUnits("");
+            setErrorMessages([]);
+          }} variant="outlined">Close</Button>
+          <Button onClick={() => addMaterialEvent()} variant="contained">Add</Button>
+        </div> : ""}
+
+
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
+
+        {addMaterial == false ?
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button variant="contained" onClick={() => setAddMaterial(true)}>Add Materials</Button>
+          </div> : ""}
 
         {materials?.length ? (
           <div>
@@ -311,26 +549,28 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                             justifyContent: "space-between",
                           }}
                         >
-                          {row?.status !== "APPROVED" ? (
-                            <div style={{ cursor: "pointer" }}>
-                              {!row?.price && row?.status !== "REJECTED" ?
+                          {row?.status !== "PENDING" ? "" :
+                            <>
+                              <div style={{ cursor: "pointer" }}>
                                 <IconButton
-                                  onClick={() =>
-                                    onStatusChangeEvent("reject", row?._id)
+                                  onClick={() => {
+                                    setDeleteMaterialId(row._id)
+                                    setDeleteMaterialOpen(true)
+                                  }
                                   }
                                 >
-                                  <RemoveCircleOutlineIcon />
+                                  <ImageComponent
+                                    src={
+                                      "/viewTaskIcons/task-table-delete.svg"
+                                    }
+                                    height={17}
+                                    width={17}
+                                    alt=""
+                                  />
                                 </IconButton>
-                                : ''}
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                          {row?.status !== "APPROVED" ? (
-                            <div style={{ cursor: "pointer" }}>
-                              {!row?.price && !row?.vendor ?
+                              </div>
+                              <div style={{ cursor: "pointer" }}>
                                 <IconButton
-                                  disabled={userDetails?.user_type == "agronomist" ? false : true}
                                   onClick={() => {
                                     setEditMaterialId(row._id);
                                     setEditMaterialOpen(true);
@@ -338,20 +578,17 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                 >
                                   <EditOutlined sx={{ color: "red" }} />
                                 </IconButton>
-                                : ''}
+                              </div>
+                            </>
+                          }
 
-                            </div>
-                          ) : (
-                            ""
-                          )}
 
                           {userDetails?.user_type == "admin" || userDetails?.user_type == "manager" ?
-                            <div style={{ cursor: "pointer", display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" ? "none" : "block" }}>
-                              {row?.status == "APPROVED" ? (
+                            <>
+                              {row?.status !== "PENDING" ?
 
                                 <Button
                                   variant="outlined"
-                                  disabled={userDetails?.user_type == "manager" ? false : true}
                                   onClick={() => {
                                     setMaterialId(row?._id);
                                     setMaterialOpen(true)
@@ -361,25 +598,39 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                   {row?.price && row?.vendor ? "Edit Purchase" : "Add Purchase"}
 
                                 </Button>
-                              ) : (
+                                :
+                                <div style={{ cursor: "pointer" }}>
+                                  <Button
+                                    variant="outlined"
+                                    onClick={() => {
+                                      onStatusChangeEvent("approve", row?._id)
+                                    }
+                                    }
+                                  >
+                                    Approve
+                                  </Button>
+                                </div>}
+
+
+                              <div style={{ cursor: "pointer" }}>
                                 <Button
                                   variant="outlined"
-                                  disabled={userDetails?.user_type == "manager" && row?.status == "PURCHASED" ? false : userDetails?.user_type == "admin" && (row?.status == "REJECTED" || row?.status == "PENDING") ? false : true}
                                   onClick={() => {
-                                    if (!row?.price && !row?.vendor) {
+                                    if (row?.status == "REJECTED") {
                                       onStatusChangeEvent("approve", row?._id)
-                                    } else {
-                                      setMaterialId(row?._id);
-                                      setMaterialOpen(true)
+
+                                    }
+                                    else {
+                                      onStatusChangeEvent("reject", row?._id)
                                     }
                                   }
                                   }
                                 >
-
-                                  {row?.price && row?.vendor ? "Edit Purchase" : "Approve"}
+                                  {row?.status == "REJECTED" ? "Approve" : "Reject"}
                                 </Button>
-                              )}
-                            </div> : ""}
+                              </div>
+                            </>
+                            : ""}
 
                         </div>
                       </TableCell>
@@ -420,9 +671,15 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         updateLoading={updateLoading}
       />
       <Toaster richColors closeButton position="top-right" />
-
+      <AlertDelete
+        open={deleteMaterialOpen}
+        deleteFarm={deleteMaterial}
+        setDialogOpen={setDeleteMaterialOpen}
+        loading={deleteLoading}
+        deleteTitleProp={"Material"}
+      />
       {/* <AlertStautsChange open={dialogOpen} statusChange={onStatusChangeEvent} setDialogOpen={setDialogOpen} loading={loading} /> */}
-    </div>
+    </div >
   );
 };
 

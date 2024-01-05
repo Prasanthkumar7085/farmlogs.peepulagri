@@ -22,7 +22,7 @@ const GoogleMapComponent = () => {
   const [polygonCoords, setPolygonCoords] = useState<any>([]);
   const drawingManagerRef = React.useRef(null);
   const pathRef = useRef([]);
-  const [mapType, setMapType] = useState("satellite"); // 'satellite' is the normal map view
+  const [mapType, setMapType] = useState("hybrid"); // 'satellite' is the normal map view
   const [renderField, setRenderField] = useState(true);
   const mapRef: any = useRef(null);
   const infoWindowRef: any = useRef(null);
@@ -31,17 +31,25 @@ const GoogleMapComponent = () => {
   const [searchedPlaces, setSearchedPlaces] = useState<any>([]);
   const autocompleteRef: any = useRef(null);
 
+  const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
+
+
+  //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
     const controlDiv = document.createElement("div");
-    const controlUI = document.createElement("button");
+    const controlUI = document.createElement("img");
 
-    controlUI.textContent = "Current Location";
+
+    controlUI.src = "/live-location.png";
     controlUI.style.backgroundColor = "#fff";
     controlUI.style.border = "1px solid #ccc";
     controlUI.style.padding = "5px";
     controlUI.style.cursor = "pointer";
-    controlUI.style.marginBottom = "10px";
     controlUI.style.textAlign = "center";
+    controlUI.style.width = "23px"
+    controlUI.style.height = "23px"
+    controlUI.style.marginBottom = "2rem"
+    controlUI.style.marginLeft = "-70px"
     controlUI.title = "Click to pan to current location";
     controlDiv.appendChild(controlUI);
 
@@ -91,14 +99,54 @@ const GoogleMapComponent = () => {
       }
     });
 
-    map.controls[maps.ControlPosition.BOTTOM_RIGHT].push(controlDiv);
+    map.controls[maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
   };
 
+  //create Info for the google map
   const createInfoWindow = (map: any) => {
     const infoWindow = new (window as any).google.maps.InfoWindow();
     infoWindowRef.current = infoWindow;
   };
 
+  //custom map type event
+  const MapTypeControl = () => {
+    const controlDiv = document.createElement("div");
+
+    const controlUI = document.createElement("div");
+    controlUI.style.display = "flex"
+    controlUI.style.flexDirection = "row"
+    controlUI.style.backgroundColor = "#fff";
+    controlUI.style.border = "2px solid #fff";
+    controlUI.style.borderRadius = "3px";
+    controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+    controlUI.style.cursor = "pointer";
+    controlUI.style.marginBottom = "10px";
+    controlUI.style.textAlign = "center";
+    controlUI.title = "Click to toggle map type";
+    controlDiv.appendChild(controlUI);
+
+    // Create buttons for each map type
+    const types = ["roadmap", "satellite", "hybrid"];
+    types.forEach((type) => {
+      const controlText = document.createElement("div");
+
+      controlText.style.color = "rgb(25,25,25)";
+      controlText.style.fontFamily = "Roboto,Arial,sans-serif";
+      controlText.style.fontSize = "16px";
+      controlText.style.lineHeight = "38px";
+      controlText.style.padding = "0 5px";
+      controlText.innerHTML = type.charAt(0).toUpperCase() + type.slice(1);
+      controlUI.appendChild(controlText);
+
+      controlText.addEventListener("click", () => {
+        setMapType(type);
+      });
+    });
+
+    return controlDiv;
+  };
+
+  //google api running event
   const handleApiLoaded = (map: any, maps: any) => {
     setMap(map);
     setGoogleMaps(maps);
@@ -107,17 +155,47 @@ const GoogleMapComponent = () => {
     createInfoWindow(map);
     placesService.current = new maps.places.PlacesService(map);
 
+    const mapTypeControlDiv: any = document.createElement("div");
+    const mapTypeControl = MapTypeControl();
+    mapTypeControlDiv.index = 1;
+    map.controls[maps.ControlPosition.BOTTOM_CENTER].push(mapTypeControlDiv);
+    mapTypeControlDiv.appendChild(mapTypeControl);
+
+    // Create a container for the custom autocomplete control
+    const customAutocompleteDiv = document.createElement("div");
+    const searchInput = document.createElement("input");
+    searchInput.setAttribute("type", "search");
+    searchInput.setAttribute("id", "searchInput");
+    searchInput.setAttribute("placeholder", "Search for a place...");
+    searchInput.style.marginBottom = "10px";
+    searchInput.style.padding = "10px";
+    searchInput.style.width = "140%";
+    searchInput.style.margin = "auto";
+    searchInput.style.borderRadius = "20px"
+
+    customAutocompleteDiv.appendChild(searchInput);
+    map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
     // Create Autocomplete for input field
-    autocompleteRef.current = new maps.places.Autocomplete(
-      document.getElementById("searchInput")
-    );
-    autocompleteRef.current.bindTo("bounds", map);
-    autocompleteRef.current.addListener("place_changed", onPlaceChanged);
+    const autocomplete = new maps.places.Autocomplete(searchInput);
+    autocomplete.bindTo("bounds", map);
+
+    const onPlaceChanged = () => {
+      const place = autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location) {
+        console.error("No place data available");
+        return;
+      }
+      setSearchedPlaces([place]);
+      centerMapToPlace(place);
+    };
+
+    autocomplete.addListener("place_changed", onPlaceChanged);
+
 
     const drawingManager = new maps.drawing.DrawingManager({
       drawingControl: true,
       drawingControlOptions: {
-        position: maps.ControlPosition.TOP_LEFT,
+        position: maps.ControlPosition.TOP_RIGHT,
         drawingModes: [maps.drawing.OverlayType.POLYGON],
       },
       polygonOptions: {
@@ -155,7 +233,7 @@ const GoogleMapComponent = () => {
     newPolygon.setMap(map);
     setPolygon(newPolygon);
   };
-    
+
 
 
   //undo last point
@@ -171,13 +249,14 @@ const GoogleMapComponent = () => {
       polygon.setPath(path);
     }
   };
-    
-    const clearAllPoints = () => {
-        if (googleMaps && polygon) {
-            setPolygonCoords([]);
-            polygon.setPath([]);
-          }
+
+  //clear all points when the polygon is draw
+  const clearAllPoints = () => {
+    if (googleMaps && polygon) {
+      setPolygonCoords([]);
+      polygon.setPath([]);
     }
+  }
 
   //get the farm details
   const getFarmDataById = async () => {
@@ -226,7 +305,6 @@ const GoogleMapComponent = () => {
     setLatLong({ lat: latitude, long: longitude });
   }
 
-  const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
 
   //call the single farms details
   useEffect(() => {
@@ -248,17 +326,7 @@ const GoogleMapComponent = () => {
     }
   }, []);
 
-  //dropdown component logic
-  const onPlaceChanged = () => {
-    const place = autocompleteRef.current.getPlace();
-    if (!place.geometry || !place.geometry.location) {
-      console.error("No place data available");
-      return;
-    }
 
-    setSearchedPlaces([place]);
-    centerMapToPlace(place);
-  };
 
   const centerMapToPlace = (place: any) => {
     if (mapRef.current && place && place.geometry && place.geometry.location) {
@@ -297,25 +365,8 @@ const GoogleMapComponent = () => {
         <Typography className={styles.viewFarm}>Add Map</Typography>
         <div className={styles.headericon} id="header-icon"></div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          marginBottom: "20px",
-        }}
-      >
-        <input
-          type="search"
-          id="searchInput"
-          placeholder="Search for a place..."
-          style={{
-            marginBottom: "10px",
-            padding: "5px",
-            width: "90%",
-            margin: "auto",
-          }}
-        />
-      </div>
+
+
       <div style={{ width: "100%", height: "65vh" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
@@ -328,8 +379,7 @@ const GoogleMapComponent = () => {
           }}
           options={{
             mapTypeId: mapType,
-            mapTypeControlOptions: true,
-            mapTypeControl: true,
+
             streetViewControl: true,
             rotateControl: true,
           }}
@@ -356,16 +406,16 @@ const GoogleMapComponent = () => {
               top: "72%",
               right: "20%",
             }}
-           >
-             <Button
+          >
+            <Button
               onClick={clearAllPoints}
               variant="outlined"
               sx={{ backgroundColor: "orange" }}
               disabled={polygonCoords.length === 0}
             >
-               Clear All Points
-             </Button>
-                          
+              Clear All Points
+            </Button>
+
             <Button
               onClick={undoLastPoint}
               variant="outlined"

@@ -23,42 +23,49 @@ const GoogleMapEditComponent = () => {
     const [polygonCoords, setPolygonCoords] = useState<any>([]);
     const drawingManagerRef = React.useRef(null);
     const pathRef = useRef([]);
-    const [mapType, setMapType] = useState('satellite'); // 'satellite' is the normal map view
+    const [mapType, setMapType] = useState("hybrid"); // 'satellite' is the normal map view
     const [renderField, setRenderField] = useState(true);
-    const placesService: any = useRef(null);
+    const mapRef: any = useRef(null);
     const infoWindowRef: any = useRef(null);
+    const placesService: any = useRef(null);
+
     const [searchedPlaces, setSearchedPlaces] = useState<any>([]);
     const autocompleteRef: any = useRef(null);
-    const mapRef: any = useRef(null);
+
+    const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
 
     //get the current location
     const addCustomControl = (map: any, maps: any) => {
-        const controlDiv = document.createElement('div');
-        const controlUI = document.createElement('button');
+        const controlDiv = document.createElement("div");
+        const controlUI = document.createElement("img");
 
-        controlUI.textContent = 'Current Location';
-        controlUI.style.backgroundColor = '#fff';
-        controlUI.style.border = '1px solid #ccc';
-        controlUI.style.padding = '5px';
-        controlUI.style.cursor = 'pointer';
-        controlUI.style.marginBottom = '10px';
-        controlUI.style.textAlign = 'center';
-        controlUI.title = 'Click to pan to current location';
+
+        controlUI.src = "/live-location.png";
+        controlUI.style.backgroundColor = "#fff";
+        controlUI.style.border = "1px solid #ccc";
+        controlUI.style.padding = "5px";
+        controlUI.style.cursor = "pointer";
+        controlUI.style.textAlign = "center";
+        controlUI.style.width = "23px"
+        controlUI.style.height = "23px"
+        controlUI.style.marginBottom = "2rem"
+        controlUI.style.marginLeft = "-70px"
+        controlUI.title = "Click to pan to current location";
         controlDiv.appendChild(controlUI);
 
-        controlUI.addEventListener('click', () => {
+        controlUI.addEventListener("click", () => {
             if (navigator.geolocation && mapRef.current) {
                 const options = {
                     enableHighAccuracy: true, // Request high accuracy if available
                     timeout: 5000, // Set a timeout (milliseconds) for the request
-                    maximumAge: 0 // Force a fresh location request
+                    maximumAge: 0, // Force a fresh location request
                 };
 
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const currentPosition = {
                             lat: position.coords.latitude,
-                            lng: position.coords.longitude
+                            lng: position.coords.longitude,
                         };
 
                         mapRef.current.panTo(currentPosition);
@@ -66,38 +73,77 @@ const GoogleMapEditComponent = () => {
 
                         const infoWindow = infoWindowRef.current;
                         infoWindow.setPosition(currentPosition);
-                        infoWindow.setContent('Location found.');
+                        infoWindow.setContent("Location found.");
                         infoWindow.open(mapRef.current);
                     },
                     (error) => {
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
-                                console.error('User denied the request for Geolocation.');
+                                console.error("User denied the request for Geolocation.");
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                console.error('Location information is unavailable.');
+                                console.error("Location information is unavailable.");
                                 break;
                             case error.TIMEOUT:
-                                console.error('The request to get user location timed out.');
+                                console.error("The request to get user location timed out.");
                                 break;
                             default:
-                                console.error('An unknown error occurred.');
+                                console.error("An unknown error occurred.");
                                 break;
                         }
                     },
                     options // Pass the options to getCurrentPosition
                 );
             } else {
-                console.error('Geolocation is not supported');
+                console.error("Geolocation is not supported");
             }
         });
 
-        map.controls[maps.ControlPosition.BOTTOM_RIGHT].push(controlDiv);
+        map.controls[maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
     };
 
+    //create the window for the 
     const createInfoWindow = (map: any) => {
         const infoWindow = new (window as any).google.maps.InfoWindow();
         infoWindowRef.current = infoWindow;
+    };
+
+    //maptype control event
+    const MapTypeControl = () => {
+        const controlDiv = document.createElement("div");
+
+        const controlUI = document.createElement("div");
+        controlUI.style.display = "flex"
+        controlUI.style.flexDirection = "row"
+        controlUI.style.backgroundColor = "#fff";
+        controlUI.style.border = "2px solid #fff";
+        controlUI.style.borderRadius = "3px";
+        controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+        controlUI.style.cursor = "pointer";
+        controlUI.style.marginBottom = "10px";
+        controlUI.style.textAlign = "center";
+        controlUI.title = "Click to toggle map type";
+        controlDiv.appendChild(controlUI);
+
+        // Create buttons for each map type
+        const types = ["roadmap", "satellite", "hybrid"];
+        types.forEach((type) => {
+            const controlText = document.createElement("div");
+
+            controlText.style.color = "rgb(25,25,25)";
+            controlText.style.fontFamily = "Roboto,Arial,sans-serif";
+            controlText.style.fontSize = "16px";
+            controlText.style.lineHeight = "38px";
+            controlText.style.padding = "0 5px";
+            controlText.innerHTML = type.charAt(0).toUpperCase() + type.slice(1);
+            controlUI.appendChild(controlText);
+
+            controlText.addEventListener("click", () => {
+                setMapType(type);
+            });
+        });
+
+        return controlDiv;
     };
 
     const handleApiLoaded = (map: any, maps: any) => {
@@ -109,16 +155,47 @@ const GoogleMapEditComponent = () => {
         createInfoWindow(map);
         placesService.current = new maps.places.PlacesService(map);
 
-        // Create Autocomplete for input field
-        autocompleteRef.current = new maps.places.Autocomplete(document.getElementById('searchInput'));
-        autocompleteRef.current.bindTo('bounds', map);
-        autocompleteRef.current.addListener('place_changed', onPlaceChanged);
+        const mapTypeControlDiv: any = document.createElement("div");
+        const mapTypeControl = MapTypeControl();
+        mapTypeControlDiv.index = 1;
+        map.controls[maps.ControlPosition.BOTTOM_CENTER].push(mapTypeControlDiv);
+        mapTypeControlDiv.appendChild(mapTypeControl);
 
+        // Create a container for the custom autocomplete control
+        const customAutocompleteDiv = document.createElement("div");
+        const searchInput = document.createElement("input");
+        searchInput.setAttribute("type", "search");
+        searchInput.setAttribute("id", "searchInput");
+        searchInput.setAttribute("placeholder", "Search for a place...");
+        searchInput.style.marginBottom = "10px";
+        searchInput.style.padding = "10px";
+        searchInput.style.width = "140%";
+        searchInput.style.margin = "auto";
+        searchInput.style.borderRadius = "20px"
+
+        customAutocompleteDiv.appendChild(searchInput);
+        map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
+        // Create Autocomplete for input field
+        const autocomplete = new maps.places.Autocomplete(searchInput);
+        autocomplete.bindTo("bounds", map);
+
+        const onPlaceChanged = () => {
+            const place = autocomplete.getPlace();
+            if (!place.geometry || !place.geometry.location) {
+                console.error("No place data available");
+                return;
+            }
+
+            setSearchedPlaces([place]);
+            centerMapToPlace(place);
+        };
+
+        autocomplete.addListener("place_changed", onPlaceChanged);
 
         const drawingManager = new maps.drawing.DrawingManager({
             drawingControl: true,
             drawingControlOptions: {
-                position: maps.ControlPosition.TOP_LEFT,
+                position: maps.ControlPosition.TOP_RIGHT,
                 drawingModes: [maps.drawing.OverlayType.POLYGON],
             },
             polygonOptions: {
@@ -191,20 +268,7 @@ const GoogleMapEditComponent = () => {
         }
     }, []);
 
-
-
-    //dropdown component logic 
-    const onPlaceChanged = () => {
-        const place = autocompleteRef.current.getPlace();
-        if (!place.geometry || !place.geometry.location) {
-            console.error('No place data available');
-            return;
-        }
-
-        setSearchedPlaces([place]);
-        centerMapToPlace(place);
-    };
-
+    //center the map when the place was selected
     const centerMapToPlace = (place: any) => {
         if (mapRef.current && place && place.geometry && place.geometry.location) {
             mapRef.current.panTo(place.geometry.location);
@@ -313,17 +377,7 @@ const GoogleMapEditComponent = () => {
                 </Typography>
                 <div className={styles.headericon} id="header-icon"></div>
             </div>
-            <div style={{ display: "flex", justifyContent: "end", marginBottom: "20px" }}>
 
-                <input
-                    type="search"
-                    id="searchInput"
-                    placeholder="Search for a place..."
-
-                    style={{ marginBottom: '10px', padding: '5px', width: "90%", margin: "auto" }}
-                />
-
-            </div>
             {data?._id ?
                 <div style={{ width: '100%', height: '65vh' }}>
                     <GoogleMapReact
@@ -337,8 +391,7 @@ const GoogleMapEditComponent = () => {
                         }}
                         options={{
                             mapTypeId: mapType,
-                            mapTypeControlOptions: true,
-                            mapTypeControl: true,
+
                             streetViewControl: true,
                             rotateControl: true
                         }}

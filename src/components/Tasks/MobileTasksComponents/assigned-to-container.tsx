@@ -1,3 +1,6 @@
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import {
   Avatar,
   Button,
@@ -6,18 +9,13 @@ import {
   IconButton,
 } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styles from "src/components/Tasks/MobileTasksComponents/assigned-by-container.module.css";
-import CheckIcon from "@mui/icons-material/Check";
-import { Cancel, CancelOutlined, DeleteForever } from "@mui/icons-material";
-import deleteAssigneeInTaskService from "../../../../lib/services/TasksService/deleteAssigneeInTaskService";
 import { useRouter } from "next/router";
-import { toast } from "sonner";
+import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import styles from "src/components/Tasks/MobileTasksComponents/assigned-by-container.module.css";
+import deleteAssigneeInTaskService from "../../../../lib/services/TasksService/deleteAssigneeInTaskService";
 const AssignedToContainer = ({
   setUsersDrawerOpen,
   assignee,
@@ -43,6 +41,7 @@ const AssignedToContainer = ({
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const [assigneeId, setAssigneeId] = useState("");
   const [viewPersonId, setViewPersonId] = useState("");
+  const [showAllAssignee, setShowAllAssignees] = useState(false);
 
   const logout = async () => {
     try {
@@ -114,8 +113,9 @@ const AssignedToContainer = ({
       >
         <div className={styles.allAssignysList}>
           {assignee?.length ? (
-            assignee.map(
-              (item: { _id: string; name: string }, index: number) => {
+            assignee
+              ?.slice(0, showAllAssignee ? assignee?.length : 6)
+              .map((item: { _id: string; name: string }, index: number) => {
                 return (
                   <div
                     key={index}
@@ -161,7 +161,7 @@ const AssignedToContainer = ({
                             item?.name.slice(1)}
                       </p>
                     </div>
-                    {loggedInUserId == data?.created_by?._id  ? (
+                    {loggedInUserId == data?.created_by?._id ? (
                       <IconButton
                         sx={{ padding: "0" }}
                         disabled={status === "DONE"}
@@ -184,8 +184,7 @@ const AssignedToContainer = ({
                     )}
                   </div>
                 );
-              }
-            )
+              })
           ) : (
             <div
               style={{
@@ -199,6 +198,33 @@ const AssignedToContainer = ({
           )}
         </div>
       </ClickAwayListener>
+      {assignee?.length > 6 ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            padding: "1.5rem",
+          }}
+        >
+          <div
+            onClick={() => setShowAllAssignees((prev) => !prev)}
+            style={{
+              border: "2px solid #46a845",
+              width: "7em",
+              height: "1.7rem",
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "center",
+              borderRadius: "3rem",
+              cursor: "pointer",
+            }}
+          >
+            {showAllAssignee ? "Show Less" : "Show More"}
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

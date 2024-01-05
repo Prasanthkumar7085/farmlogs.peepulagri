@@ -174,6 +174,22 @@ const CardDetails: FunctionComponent = () => {
               </div>
             </Box>
           </div>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            alignSelf: "stretch",
+            justifyContent: "flex-end",
+            gap: "0.2rem",
+            marginTop: "10px",
+            cursor: "pointer"
+          }}
+            onClick={() => data?.geometry?.coordinates?.length ?
+              router.push(`/farm/${router.query.farm_id}/map/edit`) :
+              router.push(`/farm/${router.query.farm_id}/map`)
+            }>
+            <Typography>{data?.geometry?.coordinates?.length ? "View/Edit Map" : "Add map"}</Typography>
+            <img src={"/google-maps.png"} width={22} height={22} />
+          </div>
         </div>
       ) : (
         ""

@@ -355,19 +355,20 @@ const GoogleMapComponent = () => {
 
   return (
     <div>
-      <div className={styles.header} id="header">
-        <img
-          className={styles.iconsiconArrowLeft}
-          alt=""
-          src="/iconsiconarrowleft.svg"
-          onClick={() => router.back()}
-        />
-        <Typography className={styles.viewFarm}>Add Map</Typography>
-        <div className={styles.headericon} id="header-icon"></div>
-      </div>
+      {router.pathname == `/farm/[farm_id]/map` ? "" :
+        <div className={styles.header} id="header">
+          <img
+            className={styles.iconsiconArrowLeft}
+            alt=""
+            src="/iconsiconarrowleft.svg"
+            onClick={() => router.back()}
+          />
+          <Typography className={styles.viewFarm}>Add Map</Typography>
+          <div className={styles.headericon} id="header-icon"></div>
+        </div>}
 
 
-      <div style={{ width: "100%", height: "65vh" }}>
+      <div style={{ width: '100%', height: router.pathname == `/farm/[farm_id]/map` ? "90vh" : '65vh', marginTop: router.pathname == `/farm/[farm_id]/map/edit` ? "5px" : "" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,

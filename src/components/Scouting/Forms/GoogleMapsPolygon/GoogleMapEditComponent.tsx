@@ -10,6 +10,7 @@ import { Toaster, toast } from 'sonner';
 import LoadingComponent from '@/components/Core/LoadingComponent';
 const GoogleMapEditComponent = () => {
 
+
     const router = useRouter();
     const [data, setData] = useState<any>();
     const [loading, setLoading] = useState(true);
@@ -295,58 +296,75 @@ const GoogleMapEditComponent = () => {
 
     //get the farm details
     const getFarmDataById = async () => {
+
         setLoading(true)
-        const response: any = await getFarmByIdService(
-            router.query.farm_id as string,
-            accessToken as string
-        );
+        try {
+            const response: any = await getFarmByIdService(
+                router.query.farm_id as string,
+                accessToken as string
+            );
 
-        if (response?.success) {
-            setData(response?.data);
-            if (response?.data?.geometry?.coordinates?.length) {
-                let updatedArray = response?.data?.geometry?.coordinates.map((item: any) => {
-                    return {
-                        lat: item[0],
-                        lng: item[1]
-                    }
-                })
-                setRenderField(false);
-                setTimeout(() => {
-                    setRenderField(true);
-                }, 0.1);
-                setPolygonCoords(updatedArray)
+            if (response?.success) {
+                setData(response?.data);
+                if (response?.data?.geometry?.coordinates?.length) {
+                    let updatedArray = response?.data?.geometry?.coordinates.map((item: any) => {
+                        return {
+                            lat: item[0],
+                            lng: item[1]
+                        }
+                    })
+                    setRenderField(false);
+                    setTimeout(() => {
+                        setRenderField(true);
+                    }, 0.1);
+                    setPolygonCoords(updatedArray)
 
-            }
-            else {
-                setPolygonCoords([])
+                }
+                else {
+                    setPolygonCoords([])
+                }
             }
         }
-        setLoading(false);
+        catch (err) {
+            console.error(err)
+        }
+        finally {
+            setLoading(false);
+        }
     };
 
 
     //edit the farm details(with the cordinates)
     const edtiFarm = async () => {
-        let editedData: any = {
-            title: data?.title,
-            area: data?.area,
-            location_id: data?.location_id?._id,
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": polygonCoords.map((obj: any) => Object.values(obj))
-            }
-        };
+        setLoading(true);
 
-        const response = await editFarmService(
-            editedData,
-            accessToken,
-            router.query.farm_id as string
-        );
-        if (response?.success) {
-            toast.success("Farm cordinates added successfully")
-            router.back()
+        try {
+            let editedData: any = {
+                title: data?.title,
+                area: data?.area,
+                location_id: data?.location_id?._id,
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": polygonCoords.map((obj: any) => Object.values(obj))
+                }
+            };
+
+            const response = await editFarmService(
+                editedData,
+                accessToken,
+                router.query.farm_id as string
+            );
+            if (response?.success) {
+                toast.success("Farm cordinates added successfully")
+                router.back()
+            }
         }
-        setLoading(false);
+        catch (err) {
+            console.error(err)
+        }
+        finally {
+            setLoading(false);
+        }
     };
 
 
@@ -365,21 +383,23 @@ const GoogleMapEditComponent = () => {
 
     return (
         <div >
-            <div className={styles.header} id="header">
-                <img
-                    className={styles.iconsiconArrowLeft}
-                    alt=""
-                    src="/iconsiconarrowleft.svg"
-                    onClick={() => router.back()}
-                />
-                <Typography className={styles.viewFarm}>
-                    Edit Map
-                </Typography>
-                <div className={styles.headericon} id="header-icon"></div>
-            </div>
+            {router.pathname == `/farm/[farm_id]/map/edit` ? "" :
+                <div className={styles.header} id="header">
+                    <img
+                        className={styles.iconsiconArrowLeft}
+                        alt=""
+                        src="/iconsiconarrowleft.svg"
+                        onClick={() => router.back()}
+                    />
+                    <Typography className={styles.viewFarm}>
+                        Edit Map
+                    </Typography>
+                    <div className={styles.headericon} id="header-icon"></div>
+                </div>
+            }
 
             {data?._id ?
-                <div style={{ width: '100%', height: '65vh' }}>
+                <div style={{ width: '100%', height: router.pathname == `/farm/[farm_id]/map/edit` ? "90vh" : '65vh', marginTop: router.pathname == `/farm/[farm_id]/map/edit` ? "5px" : "" }}>
                     <GoogleMapReact
                         bootstrapURLKeys={{
                             key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
@@ -395,7 +415,7 @@ const GoogleMapEditComponent = () => {
                             streetViewControl: true,
                             rotateControl: true
                         }}
-                        defaultZoom={16}
+                        defaultZoom={router.pathname == `/farm/[farm_id]/map/edit` ? 20 : 16}
                         yesIWantToUseGoogleMapApiInternals
                         onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                     >

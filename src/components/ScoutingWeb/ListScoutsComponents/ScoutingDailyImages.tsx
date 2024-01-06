@@ -6,7 +6,7 @@ import styles from "../farms/FarmsNavBar.module.css";
 
 interface propTypes {
   item: any;
-  onClickAttachment: (attachmentId: string) => void;
+  onClickAttachment: (attachmentId: string, farmId: string, cropId: string) => void;
 }
 const ScoutingDailyImages: React.FC<propTypes> = ({
   item,
@@ -21,7 +21,7 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
               <div
                 className={styles.singleScoutImg}
                 key={index}
-                onClick={() => onClickAttachment(imageItem._id)}
+                onClick={() => onClickAttachment(imageItem._id, imageItem?.farm_id?._id, imageItem?.crop_id?._id)}
               >
                 <img
                   src={

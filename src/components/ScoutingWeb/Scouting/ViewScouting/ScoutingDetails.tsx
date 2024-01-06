@@ -24,12 +24,14 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 const ScoutingDetails = ({
   loading,
   data,
+  currentIndex,
   content,
   setPreviewImageDialogOpen,
   imageData,
   afterUpdateRecommandations,
   editRecomendationOpen,
   setEditRecomendationOpen,
+
 }: any) => {
   const router = useRouter();
   const [crop, setCrop] = useState<any>();
@@ -45,7 +47,7 @@ const ScoutingDetails = ({
 
   useEffect(() => {
     if (data) {
-      getCropName(data?.crop_id?._id, data?.farm_id?.crops);
+      getCropName(data[currentIndex]?.crop_id?._id, data?.farm_id?.crops);
     }
   }, [data]);
 
@@ -57,7 +59,7 @@ const ScoutingDetails = ({
             <Skeleton width="200px" />
           ) : (
             <p className={styles.startdate}>
-              {timePipe(data?.uploaded_at, "DD MMM YYYY hh:mm A")}
+              {timePipe(data[currentIndex]?.uploaded_at, "DD MMM YYYY hh:mm A")}
             </p>
           )}
           {loading ? (
@@ -65,7 +67,7 @@ const ScoutingDetails = ({
           ) : (
             <h1 className={styles.cropName}>
               <img src="/cropName-icon.svg" alt="" />
-              {data?.crop_id?.title}
+              {data[currentIndex]?.crop_id?.title}
             </h1>
           )}
           <div
@@ -79,7 +81,7 @@ const ScoutingDetails = ({
               {loading ? (
                 <Skeleton width="300px" height="30px" />
               ) : (
-                data?.farm_id.title
+                data[currentIndex]?.farm_id.title
               )}
             </h2>
 
@@ -91,7 +93,7 @@ const ScoutingDetails = ({
               {loading ? (
                 <Skeleton width="300px" height="30px" />
               ) : (
-                " (Uploaded By" + ":" + data?.uploaded_by.name + ")"
+                " (Uploaded By" + ":" + data[currentIndex]?.uploaded_by.name + ")"
               )}
             </Typography>
           </div>
@@ -123,7 +125,7 @@ const ScoutingDetails = ({
           variant="outlined"
         /> */}
       </div>
-      {data?.tags?.length ? (
+      {data[currentIndex]?.tags?.length ? (
         <div
           style={{
             color: "black",
@@ -137,8 +139,8 @@ const ScoutingDetails = ({
             flexDirection: "row",
           }}
         >
-          {data?.tags?.length
-            ? data?.tags?.map((item: string, index: number) => {
+          {data[currentIndex]?.tags?.length
+            ? data[currentIndex]?.tags?.map((item: string, index: number) => {
               return (
                 <Chip
                   icon={<SellIcon sx={{ fontSize: 15 }} color="success" />}
@@ -152,7 +154,7 @@ const ScoutingDetails = ({
             : "No tags  "}
         </div>
       ) : (
-        <div>No tags</div>
+        <div style={{ textAlign: "center" }}>No tags</div>
       )}
       <hr />
 
@@ -160,10 +162,9 @@ const ScoutingDetails = ({
         <Typography variant="h6" className={styles.RecommedationHeading}>
           Comments
         </Typography>
-        <CommentsComponentForWeb scoutDetails={data} attachement={data} />
+        <CommentsComponentForWeb scoutDetails={data[currentIndex]} attachement={data[currentIndex]} />
       </div>
       <Toaster richColors position="top-right" closeButton />
-      <LoadingComponent loading={loading} />
     </div>
   );
 };

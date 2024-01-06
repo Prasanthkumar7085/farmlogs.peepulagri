@@ -98,7 +98,7 @@ const ListScouts: FunctionComponent = () => {
         cropId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
-        farmSearchString:""
+        farmSearchString: ""
       });
 
       return;
@@ -487,9 +487,9 @@ const ListScouts: FunctionComponent = () => {
     return () => clearInterval(debounce);
   }, [searchString]);
 
-  const onClickAttachment = (attachmentId: string) => {
+  const onClickAttachment = (attachmentId: string, farmId: string, cropId: string) => {
     router.push(
-      `/scouts/farm/${router.query.crop_id}/crops/${router.query.crop_id}/${attachmentId}`
+      `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}`
     );
   };
 
@@ -546,25 +546,25 @@ const ListScouts: FunctionComponent = () => {
       <div className={styles.AllScoutsWeb}>
         {data?.length
           ? data.map((item: any, index: any) => {
-              return (
-                <div key={index} className={styles.allScoutingCards}>
-                  <Typography className={styles.postedDate}>
-                    <InsertInvitationIcon />
-                    <span>
-                      {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
-                    </span>
-                  </Typography>
+            return (
+              <div key={index} className={styles.allScoutingCards}>
+                <Typography className={styles.postedDate}>
+                  <InsertInvitationIcon />
+                  <span>
+                    {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
+                  </span>
+                </Typography>
 
-                  <div className={styles.eachDayScouting} key={index}>
-                    <ScoutingDailyImages
-                      item={item}
-                      key={index}
-                      onClickAttachment={onClickAttachment}
-                    />
-                  </div>
+                <div className={styles.eachDayScouting} key={index}>
+                  <ScoutingDailyImages
+                    item={item}
+                    key={index}
+                    onClickAttachment={onClickAttachment}
+                  />
                 </div>
-              );
-            })
+              </div>
+            );
+          })
           : ""}
         {!data?.length && !loading ? (
           <div

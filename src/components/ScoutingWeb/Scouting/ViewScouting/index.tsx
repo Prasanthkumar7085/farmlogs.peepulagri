@@ -3,7 +3,7 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
 import { OnlyImagesType } from "@/types/scoutTypes";
 import SellIcon from "@mui/icons-material/Sell";
-import { Chip, Dialog, Typography } from "@mui/material";
+import { Button, Chip, Dialog, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -32,36 +32,33 @@ const SingleScoutViewDetails = () => {
   );
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [data, setData] = useState<any>();
   const [content, setContent] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [editRecomendationOpen, setEditRecomendationOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState<any>(0)
 
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      getSingleScoutDetails();
-    }
-  }, [router.isReady, accessToken]);
 
-  const getSingleScoutDetails = async () => {
-    setLoading(true);
-    try {
-      const response = await getSingleImageDetailsService(
-        router.query.image_id,
-        accessToken
-      );
-      if (response?.success) {
-        setData(response?.data);
-      } else if (response?.statusCode == 403) {
-        await logout();
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+  // const getSingleScoutDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await getSingleImageDetailsService(
+  //       router.query.image_id,
+  //       accessToken
+  //     );
+  //     if (response?.success) {
+  //       setData(response?.data);
+  //     } else if (response?.statusCode == 403) {
+  //       await logout();
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const logout = async () => {
     try {
@@ -103,7 +100,6 @@ const SingleScoutViewDetails = () => {
       const responseData = await response.json();
       if (responseData?.success == true) {
         setEditRecomendationOpen(false);
-        getSingleScoutDetails();
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -120,6 +116,64 @@ const SingleScoutViewDetails = () => {
     }
   };
 
+
+
+  const getInstaScrollImageDetails = async (lastImage_id: any) => {
+    setLoading(true);
+    let options = {
+      method: "GET",
+      headers: new Headers({
+        authorization: accessToken,
+      }),
+    };
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/20`,
+        options
+      );
+      const responseData = await response.json();
+      if (responseData.success) {
+        if (responseData?.has_more) {
+          if (data?.length) {
+            setHasMore(responseData?.has_more);
+            let temp = [...data, ...responseData?.data]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(uniqueObjects);
+          }
+          else {
+            setHasMore(responseData?.has_more);
+            let temp = [...responseData?.data]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(temp);
+          }
+
+        }
+
+        else {
+          setHasMore(false);
+          setData(responseData?.data);
+        }
+      } else if (responseData?.statusCode == 403) {
+        logout()
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  //call the api
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      getInstaScrollImageDetails(router.query.image_id);
+    }
+  }, [router.isReady, accessToken, router.query.image_id]);
+
+
   return (
 
     <div className={styles.galleryContainer}>
@@ -127,20 +181,31 @@ const SingleScoutViewDetails = () => {
         <div style={{ position: "relative", padding: "1rem" }}>
 
 
+          {data?.length ?
+            <div
+              className={styles.ImageContainBlock}
+              style={{
+                width: "85%",
+                margin: "0 auto",
+                height: "90vh",
+              }}
+            >
 
-          <div
-            className={styles.ImageContainBlock}
-            style={{
-              width: "85%",
-              margin: "0 auto",
-              height: "90vh",
-            }}
-          >
-
-            <>
-              <ReactPanZoom alt={data?.key ? `Image ${data?.key}` : "Image"} image={data?.url} />
-
-              {/* <img
+              <>
+                <ReactPanZoom alt={data?.key ? `Image ${data?.key}` : "Image"} image={data[currentIndex]?.url} />
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", gap: "1.5rem" }}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setCurrentIndex((pre: any) => pre - 1)}
+                    disabled={currentIndex == 0 ? true : false}
+                  >PREV</Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => setCurrentIndex((pre: any) => pre + 1)}
+                    disabled={currentIndex == data?.length - 1 ? true : false}
+                  >Next</Button>
+                </div>
+                {/* <img
                 className="zoom-image"
                 src={data?.url}
                 alt={`Image ${data?.key}`}
@@ -150,25 +215,22 @@ const SingleScoutViewDetails = () => {
                   objectFit: "contain",
                 }}
               /> */}
-            </>
-          </div>
+              </>
+            </div> : ""}
 
 
 
         </div>
       </div>
-      <div className={styles.galleryItemDetails}>
-        <ScoutingDetails
-          setEditRecomendationOpen={setEditRecomendationOpen}
-          editRecomendationOpen={editRecomendationOpen}
-          loading={loading}
-          data={data}
-          content={content}
-          imageData={data}
-          setPreviewImageDialogOpen={""}
-          afterUpdateRecommandations={afterUpdateRecommandations}
-        />
-      </div>
+      {data?.length ?
+        <div className={styles.galleryItemDetails}>
+          <ScoutingDetails
+            loading={loading}
+            data={data}
+            currentIndex={currentIndex}
+
+          />
+        </div> : ''}
     </div>
   );
 };

@@ -64,7 +64,7 @@ const AddMaterialDrawer = ({
                 setAvailableUnits("");
 
                 toast.success(response?.message);
-                afterAddingMaterials()
+                afterAddingMaterials(true)
             } else if (response?.status == 422) {
                 setErrorMessages(response?.errors);
             } else if (response?.status == 401) {

@@ -112,7 +112,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
         </div>
         <div className={styles.priority}>
           <label className={styles.label}>Status</label>
-          {userDetails?.user_type == "manager" ?
+          {userDetails?.user_type == "manager" || userDetails?.user_type == "central_team" ?
             <div
               className={styles.statuscontainer}
               onClick={() => {

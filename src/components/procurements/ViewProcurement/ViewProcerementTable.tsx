@@ -303,8 +303,9 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   //after add the matrials
   const afterAddingMaterials = (value: any) => {
     if (value) {
-      getAllProcurementMaterials()
+      console.log("Fsd")
       setAddMaterialOpen(false)
+      getAllProcurementMaterials()
     }
   }
 
@@ -315,10 +316,12 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="contained" onClick={() => {
-            setAddMaterial(true)
-            setAddMaterialOpen(true);
-          }}>Add Materials</Button>
+          <Button variant="contained"
+            sx={{ display: data?.status == "SHIPPED" ? "none" : "" }}
+            onClick={() => {
+              setAddMaterial(true)
+              setAddMaterialOpen(true);
+            }}>Add Materials</Button>
         </div>
 
         {materials?.length ? (
@@ -372,7 +375,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                         </>
                         : ''}
 
-                      <TableCell className={styles.tableBodyCell}>
+                      <TableCell className={styles.tableBodyCell} style={{ display: data?.status == "SHIPPED" ? "none" : "" }}>
                         <div
                           style={{
                             display: "flex",
@@ -380,7 +383,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                             justifyContent: "space-between",
                           }}
                         >
-                          {row?.status !== "PENDING" ? "" :
+                          {row?.status !== "PENDING" && row?.status !== "REJECTED" ? "" :
                             <>
                               <div style={{ cursor: "pointer" }}>
                                 <IconButton
@@ -414,11 +417,12 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                           }
 
 
-                          {userDetails?.user_type == "admin" || userDetails?.user_type == "manager" ?
+                          {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
                             <>
                               {row?.status !== "PENDING" ?
 
                                 <Button
+                                  sx={{ display: row?.status == "REJECTED" ? "none" : "" }}
                                   variant="outlined"
                                   onClick={() => {
                                     setMaterialId(row?._id);
@@ -446,6 +450,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                               <div style={{ cursor: "pointer" }}>
                                 <Button
                                   variant="outlined"
+                                  sx={{ display: row?.status == "PURCHASED" ? "none" : "" }}
                                   onClick={() => {
                                     if (row?.status == "REJECTED") {
                                       onStatusChangeEvent("approve", row?._id)

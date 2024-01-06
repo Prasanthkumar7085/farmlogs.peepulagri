@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Dialog, TextField } from "@mui/material";
+import { Button, CircularProgress, Dialog, Drawer, TextField } from "@mui/material";
 import styles from "./tracking-details.module.css"
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -112,19 +112,12 @@ const TrackingDetailsDilog = ({
   }
 
   return (
-    <Dialog
+    <Drawer
       open={open}
-      PaperProps={{
-        sx: {
-          "& .css-zw3mfo-MuiModal-root-MuiDialog-root": {
-            zIndex: "100 !important",
-          },
-          borderRadius: "16px",
-          minWidth: "400px",
-          maxWidth: "800px",
-        },
-      }}
+      anchor={"right"}
+
     >
+
       <div className={styles.alertdelete}>
         <picture>
           <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
@@ -299,7 +292,7 @@ const TrackingDetailsDilog = ({
           </Button>
         </div>
       </div>
-    </Dialog>
+    </Drawer>
   );
 };
 

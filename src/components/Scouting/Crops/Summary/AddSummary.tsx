@@ -73,23 +73,23 @@ const AddSummary = () => {
         content: comment,
         date: date
           ? `${originalDate.getFullYear()}-${(originalDate.getMonth() + 1)
-              .toString()
-              .padStart(2, "0")}-${originalDate
+            .toString()
+            .padStart(2, "0")}-${originalDate
               .getDate()
               .toString()
               .padStart(2, "0")}T${dateNow
-              .getHours()
-              .toString()
-              .padStart(2, "0")}:${dateNow
-              .getMinutes()
-              .toString()
-              .padStart(2, "0")}:${dateNow
-              .getSeconds()
-              .toString()
-              .padStart(2, "0")}.${dateNow
-              .getMilliseconds()
-              .toString()
-              .padStart(3, "0")}Z`
+                .getHours()
+                .toString()
+                .padStart(2, "0")}:${dateNow
+                  .getMinutes()
+                  .toString()
+                  .padStart(2, "0")}:${dateNow
+                    .getSeconds()
+                    .toString()
+                    .padStart(2, "0")}.${dateNow
+                      .getMilliseconds()
+                      .toString()
+                      .padStart(3, "0")}Z`
           : "",
       };
 
@@ -277,12 +277,12 @@ const AddSummary = () => {
                 width: "100%",
                 "& .MuiOutlinedInput-notchedOutline ": {
                   borderColor: "grey !important",
-                  borderRadius: "8px !important",
+                  borderRadius: "4px !important",
                   color: "#000",
                 },
                 "& .MuiInputBase-input": {
                   padding: "12px 14px",
-                  borderRadius: "8px !important",
+                  borderRadius: "4px !important",
                   color: "#000",
                   background: "#fff",
                 },
@@ -290,7 +290,7 @@ const AddSummary = () => {
               value={date}
               disableFuture
               format="DD-MM-YYYY"
-              label={"Select Date"}
+
               onChange={(e) => {
                 setDate(timePipe(e, "YYYY-MM-DD"));
                 setErrorMessages("");
@@ -319,13 +319,13 @@ const AddSummary = () => {
             }}
             sx={{
               background: "#fff",
-              borderRadius: "10px !important",
+              borderRadius: "6px !important",
               "& .MuiOutlinedInput-notchedOutline ": {
                 border: "1px solid grey !important",
-                borderRadius: "10px !important",
+                borderRadius: "6px !important",
               },
               "& .MuiInputBase-input": {
-                borderRadius: "10px !important",
+                borderRadius: "6px !important",
               },
             }}
           />

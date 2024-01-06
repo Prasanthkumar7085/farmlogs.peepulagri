@@ -4,12 +4,13 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import {
   Autocomplete,
   Button,
+  CircularProgress,
   LinearProgress,
   TextField,
   Typography
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
@@ -52,12 +53,16 @@ const NewFolderDiloag = ({ open }: any) => {
 
   useEffect(() => {
     // setArea(defaultArea);
-    dropDownCrops();
     if (router.isReady && crop_id) {
       singleCrop();
+      // dropDownCrops();
     }
   }, [open, router.isReady]);
-
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      dropDownCrops();
+    }
+  }, [open, router.isReady, accessToken]);
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
     const allowedCharacters = [
@@ -236,6 +241,7 @@ const NewFolderDiloag = ({ open }: any) => {
           <div style={{ textAlign: "left", width: "100%" }}>
             <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{"Title"}</h4>
           </div>
+
           <Autocomplete
             options={crop?.length ? crop : []}
             value={defaultValue}
@@ -244,6 +250,8 @@ const NewFolderDiloag = ({ open }: any) => {
               setDefaultValue(newValue);
               setErrorMessages("");
             }}
+            loading={optionsLoading}
+
             getOptionLabel={(e) => e.title || e.name}
             renderInput={(params) => (
               <TextField
@@ -253,6 +261,17 @@ const NewFolderDiloag = ({ open }: any) => {
                 size="small"
                 placeholder="Select Crop"
                 variant="outlined"
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {optionsLoading ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderRadius: "8px !important",
@@ -269,7 +288,7 @@ const NewFolderDiloag = ({ open }: any) => {
               />
             )}
           />
-          {optionsLoading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
+          {/* {optionsLoading ? <LinearProgress sx={{ height: "2px" }} /> : ""} */}
         </div>
 
         <div className={styles.frame} style={{ marginTop: "1.5rem" }}>

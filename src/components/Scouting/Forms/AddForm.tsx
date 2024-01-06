@@ -37,10 +37,8 @@ const AddFarmForm = () => {
     _id: string;
   } | null>();
   const [area, setArea] = useState<string>();
-
   const [open, setOpen] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
-
   const [locations, setLocations] = useState<
     Array<{ title: string; _id: string }>
   >([]);
@@ -488,6 +486,7 @@ const AddFarmForm = () => {
           loading={addLocationLoading}
         />
       </form>
+      <LoadingComponent loading={optionsLoading} />
     </div>
   );
 };

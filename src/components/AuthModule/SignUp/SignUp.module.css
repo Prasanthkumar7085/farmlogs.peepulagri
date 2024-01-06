@@ -16,14 +16,16 @@
   height: 100vh;
   width: 100vw;
 }
+
 .bgImage .vectorTop {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  width: calc(320px, 50vw, 1000px)!important;
+  width: calc(320px, 50vw, 1000px) !important;
   right: 1rem;
   margin: 0 auto;
 }
+
 .bgImage .vectorBottom {
   position: absolute;
   bottom: 1rem;
@@ -31,22 +33,26 @@
   right: 1rem;
   margin: 0 auto;
 }
-@media(max-width: 576px){
+
+@media(max-width: 576px) {
   .bgImage .vectorBottom {
     position: absolute;
-  bottom: 1rem;
-  left: inherit;
-  right: 1rem;
-  margin: 0 auto;
+    bottom: 1rem;
+    left: inherit;
+    right: 1rem;
+    margin: 0 auto;
+    width: 300px;
   }
 
 }
+
 .logo {
   margin: -2rem 0 2rem;
   height: auto;
   max-width: 100%;
 }
-@media  (max-width: 576px) {
+
+@media (max-width: 576px) {
   .logo {
     position: fixed;
     top: 80px;
@@ -54,6 +60,7 @@
     max-width: 100px;
   }
 }
+
 /* Login Form Card */
 .formCard {
   position: relative;
@@ -61,7 +68,7 @@
   border-radius: 32.406px;
   padding: 1rem 0rem;
   min-height: 280px;
-  width: clamp(280px, 20vw ,320px);
+  width: clamp(280px, 20vw, 320px);
 }
 
 .formCard .label {
@@ -83,6 +90,7 @@
   border-radius: 10px;
   border-color: var(--stroke);
 }
+
 /* Fields */
 .innerWrap {
   display: flex;
@@ -103,7 +111,7 @@
   max-width: 100%;
 }
 
-.header > div:first-child {
+.header>div:first-child {
   max-width: 120px;
   align-self: center;
 }
@@ -157,7 +165,8 @@
   font-size: clamp(14px, 0.72vw, 18px) !important;
   background-color: var(--color-sienna) !important;
 }
-.signin_button:hover{
+
+.signin_button:hover {
   background-color: var(--color-mediumseagreen-100) !important;
 
 }

@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./comment-form.module.css";
+import { toast } from "sonner";
 
 const CommentForm = ({
   afterCommentAdd,
@@ -110,8 +111,7 @@ const CommentForm = ({
   const getCropsDetails = async () => {
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${
-          router.query.farm_id ? router.query.farm_id : scoutDetails.farm_id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id ? router.query.farm_id : scoutDetails.farm_id
         }/crops/list`,
         { method: "GET" }
       );
@@ -150,8 +150,7 @@ const CommentForm = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${
-          attachement?._id ? attachement?._id : router.query.image_id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id ? attachement?._id : router.query.image_id
         }/comment`,
         options
       );
@@ -161,7 +160,10 @@ const CommentForm = ({
         afterCommentAdd(true);
         setMultipleFiles([]);
         setAttachments([]);
+        toast.success(responseData?.message);
+
         dispatch(removeTheAttachementsFilesFromStore([]));
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }

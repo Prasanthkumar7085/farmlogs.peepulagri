@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
+import { toast } from "sonner";
 
 const DrawerComponentForScout = ({
   drawerClose,
@@ -132,6 +133,8 @@ const DrawerComponentForScout = ({
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -163,6 +166,8 @@ const DrawerComponentForScout = ({
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }

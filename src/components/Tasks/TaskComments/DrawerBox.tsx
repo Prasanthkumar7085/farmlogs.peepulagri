@@ -135,6 +135,8 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       }
     } catch (err) {
       console.error(err);

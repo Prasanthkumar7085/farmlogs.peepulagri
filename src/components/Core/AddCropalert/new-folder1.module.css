@@ -53,10 +53,16 @@
   border: 1px solid #d94841 !important;
   box-shadow: none !important;
   font-size: clamp(15px, 3vw, 16px) !important;
-  padding: 0.5rem 2.5rem;
-  color: #d94841;
+  padding: 0.5rem 2.5rem !important;
+  color: #d94841 !important;
 }
 
+.buttoncancelfolder:hover {
+  text-transform: capitalize !important;
+  border: 1px solid #d94841 !important;
+  box-shadow: none !important;
+  color: #d94841 !important;
+}
 
 .buttoncreatefolder {
   border-radius: 4px !important;

@@ -317,7 +317,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button variant="contained"
-            sx={{ display: data?.status == "SHIPPED" ? "none" : "" }}
+            sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
             onClick={() => {
               setAddMaterial(true)
               setAddMaterialOpen(true);
@@ -375,7 +375,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                         </>
                         : ''}
 
-                      <TableCell className={styles.tableBodyCell} style={{ display: data?.status == "SHIPPED" ? "none" : "" }}>
+                      <TableCell className={styles.tableBodyCell} style={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}>
                         <div
                           style={{
                             display: "flex",

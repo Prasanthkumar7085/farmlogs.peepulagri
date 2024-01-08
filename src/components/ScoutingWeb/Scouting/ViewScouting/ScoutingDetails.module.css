@@ -320,21 +320,21 @@
 }
 
 .prevBtn {
-  background-color: #fff;
+  background-color: #fff !important;
 
 }
 
 .nextBtn {
-  background-color: #fff;
+  background-color: #fff !important;
 }
 
 .prevBtn:hover {
-  background-color: #fff;
+  background-color: #fff !important;
 
 }
 
 .nextBtn:hover {
-  background-color: #fff;
+  background-color: #fff !important;
 }
 
 .disableBtn {

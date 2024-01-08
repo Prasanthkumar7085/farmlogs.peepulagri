@@ -89,7 +89,7 @@ const SingleImageComponent: FC<Partial<componentProps>> = ({
   return (
     <div
       ref={TagsDrawerEditOpen ? lastItemRef : null}>
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", minHeight: "500px" }}>
         <div className={styles.imageUploadingDetails}>
           <Avatar sx={{ color: "#fff", background: "#d94841", width: "22px", height: "22px", fontSize: "10px" }}>{detailedImage?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>

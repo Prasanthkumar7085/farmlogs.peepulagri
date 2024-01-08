@@ -65,10 +65,12 @@ const AddProcurementForm = () => {
   const [afterProcurement, setAfterProcurement] = useState<any>(false)
   console.log(materialCount)
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
+    let location_id = ""
     try {
       let response = await ListAllFarmForDropDownService(
         searchString as string,
-        accessToken
+        accessToken,
+        location_id
       );
       if (response.success) {
         setFarmOptions(response?.data);

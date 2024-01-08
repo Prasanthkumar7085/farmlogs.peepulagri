@@ -561,10 +561,7 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
-    if (reason == "clear") {
-      setLocation({ title: "All", _id: "1" });
-      return;
-    }
+
     if (value) {
       setChanged(true);
       setLocation(value);
@@ -578,6 +575,21 @@ const ListScouts: FunctionComponent = () => {
         cropId: router.query.crop_id as string,
         farmSearchString: router.query.farm_search_string as string,
         location: value?._id
+      });
+    }
+    else {
+      setChanged(true);
+      setLocation(null);
+      getAllExistedScouts({
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        farmId: router.query.farm_id as string,
+        userId: router.query.user_id as string,
+        fromDate: "",
+        toDate: "",
+        cropId: router.query.crop_id as string,
+        farmSearchString: router.query.farm_search_string as string,
+        location: ""
       });
     }
   };

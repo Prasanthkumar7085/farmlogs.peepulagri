@@ -636,7 +636,7 @@ const ListScouts: FunctionComponent = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Search by locations"
+                  placeholder="Search by location"
                   variant="outlined"
                   size="small"
                   sx={{

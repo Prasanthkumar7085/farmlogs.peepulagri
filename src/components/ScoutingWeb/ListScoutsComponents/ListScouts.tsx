@@ -99,7 +99,7 @@ const ListScouts: FunctionComponent = () => {
       setFarm(null);
       setData([]);
 
-      getAllFarms({ clearOrNot: true });
+      getAllFarms({ location_id: router.query.location_id as string, clearOrNot: true });
       getAllExistedScouts({
         // farmSearchString: value?.title,
         page: 1,

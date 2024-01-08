@@ -80,9 +80,10 @@ const ListScouts: FunctionComponent = () => {
     Array<{ title: string; _id: string }>
   >([]);
   const [location, setLocation] = useState<{
-    title: string;
     _id: string;
+    title: string;
   } | null>();
+  console.log(location, "locatioj")
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
 
@@ -119,7 +120,11 @@ const ListScouts: FunctionComponent = () => {
       setFarm(value);
       setCrop(null);
       setPage(1);
-
+      setSettingLocationLoading(true);
+      setLocation(value?.location_id)
+      setTimeout(() => {
+        setSettingLocationLoading(false);
+      }, 1);
       router.push({
         query: { ...router.query, farm_search_string: value?.title },
       });
@@ -435,11 +440,14 @@ const ListScouts: FunctionComponent = () => {
       if (response?.success) {
         setFarmOptions(response?.data);
 
+
+
         if (farmId) {
           let obj =
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == farmId);
           setFarm(obj);
+
           getAllCrops(
             router.query.crop_id as string,
             response?.data[0]?._id as string

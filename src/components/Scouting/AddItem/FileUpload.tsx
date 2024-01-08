@@ -54,6 +54,7 @@ const FileUploadComponent = () => {
   const [validations, setValidations] = useState<any>();
   const [tags, setTags] = useState<any>([]);
   const [lats, setLats] = useState<{ latitude: number; longitude: number }>();
+  // const [deleteLoading, setDeleteLoading] = useState(false);
   // const [accuracy1, setAccuracy1] = useState<number>();
 
   const [, , removeCookie] = useCookies(["userType_v2"]);
@@ -68,23 +69,26 @@ const FileUploadComponent = () => {
   let previewStorage = [...previewImages];
 
   const removeFileAfterAdding = (index: number, file: any) => {
+
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
-
     const fileProgressCopy = [...fileProgress];
     fileProgressCopy.splice(index, 1);
-
     const tempFilesStorageCopy = [...tempFilesStorage];
     const newArray = tempFilesStorageCopy.filter(
       (item: any) => item.original_name !== file.name
     );
     tempFilesStorage = newArray;
     setAttachments(newArray);
-
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
     toast.success("File deleted successfully");
+    // useEffect(() => {
+    //   setTimeout(() => {
+    //     setDeleteLoading(true);
+    //   }, 1);
+    // }, []);
   };
 
   const previewImagesEvent = (file: any, index: any) => {
@@ -703,10 +707,7 @@ const FileUploadComponent = () => {
         />
       ) : (
         <div>
-          {/* <Header1
-            name={"Add Scout"}
-            router={`/farms/${router.query.farm_id}/crops`}
-          /> */}
+
           <div className={styles.header} id="header">
             <img
               className={styles.iconsiconArrowLeft}

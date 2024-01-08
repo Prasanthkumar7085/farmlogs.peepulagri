@@ -17,6 +17,7 @@ import getSingleImageDetailsService from "../../../../../lib/services/ScoutServi
 import ReactPanZoom from "react-image-pan-zoom-rotate";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'; import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { toast } from "sonner";
 interface pageProps {
   onlyImages: Array<OnlyImagesType>;
   previewImageDialogOpen: boolean;
@@ -40,7 +41,7 @@ const SingleScoutViewDetails = () => {
   const [currentIndex, setCurrentIndex] = useState<any>(0)
   const [prevHasMore, setPrevHasMore] = useState<any>(false)
   const [prevData, setPrevData] = useState<any>()
-
+  const [reachedStatus, setReachedStatus] = useState<any>(false)
 
   const logout = async () => {
     try {
@@ -190,8 +191,12 @@ const SingleScoutViewDetails = () => {
       );
       const responseData = await response.json();
       if (responseData.success) {
+        if (responseData?.data?.length == 1) {
+          toast.error("You have reached to end")
+          return
+        }
         if (responseData?.has_more) {
-          if (data?.length) {
+          if (prevData?.length) {
             setPrevHasMore(responseData?.has_more);
             setPrevData([...responseData?.data]);
           }
@@ -262,7 +267,6 @@ const SingleScoutViewDetails = () => {
                         query: {},
                       });
                     }}
-                    disabled={data?.length == 1 ? true : false}
                   >
                     <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: prevHasMore == false ? "grey" : "#000" }} />
                   </Button>
@@ -308,6 +312,7 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
                       getInstaScrollImagePrevDetails(prevData[1]?._id)
+                      setData([])
                       router.push({
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData[1]?._id}/`,
                         query: {},
@@ -323,6 +328,7 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(prevData[0]?._id)
+                      setPrevData([])
                       router.push({
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData[0]?._id}/`,
                         query: {},
@@ -362,6 +368,7 @@ const SingleScoutViewDetails = () => {
 
           />
         </div> : ''}
+
     </div>
   );
 };

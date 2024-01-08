@@ -301,3 +301,44 @@
   padding: 3px 10px;
   border-radius: 4px 0 0 4px;
 }
+
+.imgPrevNextBtnGrp {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.imgPrevNextBtnGrp button {
+  text-transform: capitalize !important;
+  font-family: "Inter", sans-serif !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+}
+
+.prevBtn {
+  border: 1px solid #D94841 !important;
+  color: #D94841 !important;
+  text-transform: capitalize !important;
+  padding: 3px 1.5rem !important;
+  font-size: clamp(14px, 0.833vw, 18px) !important;
+}
+
+.nextBtn {
+  text-transform: capitalize !important;
+  padding: 4px 1.5rem !important;
+  color: #fff !important;
+  background: #D94841 !important;
+  font-size: clamp(14px, 0.833vw, 18px) !important;
+}
+
+.disableBtn {
+  color: grey !important;
+  border: 1px solid #fff !important;
+  text-transform: capitalize !important;
+  font-family: "Inter", sans-serif !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  padding: 3px 1.5rem !important;
+  font-size: clamp(14px, 0.833vw, 18px) !important;
+}

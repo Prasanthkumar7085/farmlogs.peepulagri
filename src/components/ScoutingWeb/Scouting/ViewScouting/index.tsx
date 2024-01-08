@@ -193,13 +193,15 @@ const SingleScoutViewDetails = () => {
 
               <>
                 <ReactPanZoom alt={data?.key ? `Image ${data?.key}` : "Image"} image={data[currentIndex]?.url} />
-                <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", gap: "1.5rem" }}>
+                <div className={styles.imgPrevNextBtnGrp}  >
                   <Button
+                    className={currentIndex == 0 ? styles.disableBtn : styles.prevBtn}
                     variant="outlined"
                     onClick={() => setCurrentIndex((pre: any) => pre - 1)}
                     disabled={currentIndex == 0 ? true : false}
-                  >PREV</Button>
+                  >Prev</Button>
                   <Button
+                    className={currentIndex == data?.length - 1 ? styles.disableBtn : styles.nextBtn}
                     variant="contained"
                     onClick={() => setCurrentIndex((pre: any) => pre + 1)}
                     disabled={currentIndex == data?.length - 1 ? true : false}

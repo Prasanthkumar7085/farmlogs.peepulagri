@@ -79,11 +79,12 @@ const AllCropsComponent = () => {
         query: { search_string: farmsearchstring },
       });
     }
-
+    let location_id = ""
     try {
       let response = await ListAllFarmForDropDownService(
         farmsearchstring,
-        accessToken
+        accessToken,
+        location_id
       );
       if (response?.success == true && response?.data?.length) {
         setFarmOptions(response?.data);

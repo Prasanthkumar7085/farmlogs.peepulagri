@@ -41,25 +41,6 @@ const SingleScoutViewDetails = () => {
 
 
 
-  // const getSingleScoutDetails = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await getSingleImageDetailsService(
-  //       router.query.image_id,
-  //       accessToken
-  //     );
-  //     if (response?.success) {
-  //       setData(response?.data);
-  //     } else if (response?.statusCode == 403) {
-  //       await logout();
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const logout = async () => {
     try {
       removeCookie("userType_v2");
@@ -128,7 +109,7 @@ const SingleScoutViewDetails = () => {
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/100`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/1`,
         options
       );
       const responseData = await response.json();
@@ -137,6 +118,55 @@ const SingleScoutViewDetails = () => {
           if (data?.length) {
             setHasMore(responseData?.has_more);
             let temp = [...data, ...responseData?.data]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(uniqueObjects);
+          }
+          else {
+            setHasMore(responseData?.has_more);
+            let temp = [...responseData?.data]
+            const uniqueObjects = Array.from(
+              temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+            );
+            setData(temp);
+          }
+
+        }
+
+        else {
+          setHasMore(false);
+          setData(responseData?.data);
+        }
+      } else if (responseData?.statusCode == 403) {
+        logout()
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getInstaScrollImagePrevDetails = async (lastImage_id: any) => {
+    setLoading(true);
+    let options = {
+      method: "GET",
+      headers: new Headers({
+        authorization: accessToken,
+      }),
+    };
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/next/1`,
+        options
+      );
+      const responseData = await response.json();
+      if (responseData.success) {
+        if (responseData?.has_more) {
+          if (data?.length) {
+            setHasMore(responseData?.has_more);
+            let temp = [responseData?.data]
             const uniqueObjects = Array.from(
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );
@@ -193,19 +223,34 @@ const SingleScoutViewDetails = () => {
             >
 
               <>
-                <ReactPanZoom alt={data?.key ? `Image ${data?.key}` : "Image"} image={data[currentIndex]?.url} />
+                <ReactPanZoom alt={data[0]?.key ? `Image ${data[0]?.key}` : "Image"} image={data[0]?.url} />
                 <div className={styles.imgPrevNextBtnGrp}  >
                   <Button
                     className={currentIndex == 0 ? styles.disableBtn : styles.prevBtn}
-                    onClick={() => setCurrentIndex((pre: any) => pre - 1)}
+                    onClick={() => {
+                      setCurrentIndex((pre: any) => pre - 1)
+                      getInstaScrollImagePrevDetails(data[0]?._id)
+                      router.push({
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${data[0]?._id}/`,
+                        query: {},
+                      });
+
+                    }}
                     disabled={currentIndex == 0 ? true : false}
                   >
                     <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: currentIndex == 0 ? "grey" : "#000" }} />
                   </Button>
                   <Button
                     className={currentIndex == data?.length - 1 ? styles.disableBtn : styles.nextBtn}
-                    onClick={() => setCurrentIndex((pre: any) => pre + 1)}
-                    disabled={currentIndex == data?.length - 1 ? true : false}
+                    onClick={() => {
+                      setCurrentIndex((pre: any) => pre + 1)
+                      getInstaScrollImagePrevDetails(data[0]?._id)
+                      router.push({
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
+                        query: {},
+                      });
+                    }}
+                    disabled={hasMore ? false : true}
                   >
                     <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: currentIndex == data?.length - 1 ? "grey" : "#000" }} />
                   </Button>

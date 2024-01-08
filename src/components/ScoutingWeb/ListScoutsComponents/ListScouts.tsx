@@ -409,14 +409,18 @@ const ListScouts: FunctionComponent = () => {
   const getAllFarms = async ({
     farmId = "",
     searchString = "",
+    location_id = "",
     searchStringChangeOrNot = false,
     clearOrNot = false,
   }: Partial<{
     farmId: string;
     searchString: string;
+    location_id: string;
     searchStringChangeOrNot: boolean;
     clearOrNot: boolean;
   }>) => {
+
+    console.log(location_id, "kkk")
     try {
       // if (searchString) {
       //   router.push({
@@ -425,7 +429,8 @@ const ListScouts: FunctionComponent = () => {
       // }
       const response = await ListAllFarmForDropDownService(
         searchString,
-        accessToken
+        accessToken,
+        location_id,
       );
       if (response?.success) {
         setFarmOptions(response?.data);
@@ -565,6 +570,11 @@ const ListScouts: FunctionComponent = () => {
     if (value) {
       setChanged(true);
       setLocation(value);
+      getAllFarms({
+        farmId: router.query.farm_id as string,
+        searchString: router.query.farm_search_string as string,
+        location_id: value?._id as string
+      });
       getAllExistedScouts({
         page: router.query.page as string,
         limit: router.query.limit as string,
@@ -580,6 +590,10 @@ const ListScouts: FunctionComponent = () => {
     else {
       setChanged(true);
       setLocation(null);
+      getAllFarms({
+        farmId: router.query.farm_id as string,
+        searchString: router.query.farm_search_string as string,
+      });
       getAllExistedScouts({
         page: router.query.page as string,
         limit: router.query.limit as string,

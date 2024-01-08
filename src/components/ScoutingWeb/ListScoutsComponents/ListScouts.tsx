@@ -11,7 +11,7 @@ import TablePaginationComponentForScouts from "@/components/Core/TablePagination
 import timePipe from "@/pipes/timePipe";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
-import { Button, Tooltip, Typography } from "@mui/material";
+import { Autocomplete, Button, TextField, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -29,6 +29,7 @@ import DaySummaryComponent from "./DaySummaryComponent";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import ScoutingDailyImages from "./ScoutingDailyImages";
 import { errorMonitor } from "events";
+import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 
 interface ApiMethodProps {
   page: string | number;
@@ -39,6 +40,7 @@ interface ApiMethodProps {
   toDate: string;
   cropId: string;
   farmSearchString: string;
+  location: string;
 }
 const ListScouts: FunctionComponent = () => {
   const router = useRouter();
@@ -74,6 +76,15 @@ const ListScouts: FunctionComponent = () => {
 
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [searchString, setSearchString] = useState("");
+  const [locations, setLocations] = useState<
+    Array<{ title: string; _id: string }>
+  >([]);
+  const [location, setLocation] = useState<{
+    title: string;
+    _id: string;
+  } | null>();
+  const [settingLocationLoading, setSettingLocationLoading] = useState(false);
+  const [changed, setChanged] = useState(false);
 
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     setData([]);
@@ -98,7 +109,8 @@ const ListScouts: FunctionComponent = () => {
         cropId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
-        farmSearchString: ""
+        farmSearchString: "",
+        location: router.query.location_id as string
       });
 
       return;
@@ -120,6 +132,8 @@ const ListScouts: FunctionComponent = () => {
         cropId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
+        location: router.query.location_id as string
+
       });
       await getAllCrops("", value?._id);
     } else {
@@ -134,6 +148,8 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: router.query.crop_id as string,
+        location: router.query.location_id as string
+
       });
       await getAllCrops("", "");
     }
@@ -151,6 +167,7 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: value?._id,
+        location: router.query.location_id as string
       });
     } else {
       setCrop(null);
@@ -165,6 +182,7 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: "",
+        location: router.query.location_id as string
       });
     }
   };
@@ -182,6 +200,7 @@ const ListScouts: FunctionComponent = () => {
         fromDate: date1,
         toDate: date2,
         cropId: router.query.crop_id as string,
+        location: router.query.location_id as string
       });
     } else {
       setFromDate("");
@@ -195,6 +214,7 @@ const ListScouts: FunctionComponent = () => {
         cropId: router.query.crop_id as string,
         fromDate: "",
         toDate: "",
+        location: router.query.location_id as string
       });
     }
   };
@@ -210,6 +230,7 @@ const ListScouts: FunctionComponent = () => {
       cropId: router.query.crop_id as string,
       fromDate: router.query.from_date as string,
       toDate: router.query.to_date as string,
+      location: router.query.location_id as string
     });
   };
   const capturePageNum = (value: number) => {
@@ -222,6 +243,7 @@ const ListScouts: FunctionComponent = () => {
       cropId: router.query.crop_id as string,
       fromDate: router.query.from_date as string,
       toDate: router.query.to_date as string,
+      location: router.query.location_id as string
     });
   };
   const logout = async () => {
@@ -244,6 +266,7 @@ const ListScouts: FunctionComponent = () => {
     toDate,
     cropId,
     farmSearchString = router.query.farm_search_string as string,
+    location
   }: Partial<ApiMethodProps>) => {
     // if (!cropId) {
     //   setData([]);
@@ -276,6 +299,9 @@ const ListScouts: FunctionComponent = () => {
       }
       if (farmSearchString) {
         queryParams["farm_search_string"] = farmSearchString;
+      }
+      if (location) {
+        queryParams["location_id"] = location
       }
 
       const {
@@ -322,24 +348,63 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
-  const getAllUsers = async (userId = "") => {
-    const response = await getAllUsersService({ token: accessToken });
+  // const getAllUsers = async (userId = "") => {
+  //   const response = await getAllUsersService({ token: accessToken });
 
-    if (response?.success) {
-      setUserOptions(response?.data);
-      if (userId) {
-        let obj =
-          response?.data?.length &&
-          response?.data?.find(
-            (item: any, index: number) => item._id == userId
+  //   if (response?.success) {
+  //     setUserOptions(response?.data);
+  //     if (userId) {
+  //       let obj =
+  //         response?.data?.length &&
+  //         response?.data?.find(
+  //           (item: any, index: number) => item._id == userId
+  //         );
+
+  //       setUser(obj);
+  //     }
+  //   } else if (response?.statusCode == 403) {
+  //     await logout();
+  //   }
+  // };
+
+
+  const getLocations = async (newLocation = "") => {
+    setOptionsLoading(true);
+    try {
+      const response = await getAllLocationsService(accessToken);
+      if (response?.success) {
+        setLocations(response?.data);
+        if (newLocation) {
+          setSettingLocationLoading(true);
+          const newLocationObject = response?.data?.find(
+            (item: any) => item?._id == newLocation
           );
 
-        setUser(obj);
+          setLocation(newLocationObject);
+          setTimeout(() => {
+            setSettingLocationLoading(false);
+          }, 1);
+        } else {
+          setSettingLocationLoading(true);
+
+          // setLocation({ title: 'All', _id: '1' });
+          setTimeout(() => {
+            setSettingLocationLoading(false);
+          }, 1);
+        }
       }
-    } else if (response?.statusCode == 403) {
-      await logout();
+      if (response?.data?.length) {
+        setLocations([{ title: "All", _id: "1" }, ...response?.data]);
+      } else {
+        setLocations([{ title: "All", _id: "1" }]);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setOptionsLoading(false);
     }
   };
+
 
   const getAllFarms = async ({
     farmId = "",
@@ -460,6 +525,7 @@ const ListScouts: FunctionComponent = () => {
         farmId: router.query.farm_id as string,
         searchString: router.query.farm_search_string as string,
       });
+      getLocations(router.query.location_id as string);
       getAllExistedScouts({
         page: router.query.page as string,
         limit: router.query.limit as string,
@@ -469,6 +535,7 @@ const ListScouts: FunctionComponent = () => {
         toDate: "",
         cropId: router.query.crop_id as string,
         farmSearchString: router.query.farm_search_string as string,
+        location: router.query.location_id as string
       });
     }
   }, [router.isReady, accessToken]);
@@ -493,6 +560,28 @@ const ListScouts: FunctionComponent = () => {
     );
   };
 
+  const onChangeLocation = (e: any, value: any, reason: any) => {
+    if (reason == "clear") {
+      setLocation({ title: "All", _id: "1" });
+      return;
+    }
+    if (value) {
+      setChanged(true);
+      setLocation(value);
+      getAllExistedScouts({
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        farmId: router.query.farm_id as string,
+        userId: router.query.user_id as string,
+        fromDate: "",
+        toDate: "",
+        cropId: router.query.crop_id as string,
+        farmSearchString: router.query.farm_search_string as string,
+        location: value?._id
+      });
+    }
+  };
+
   return (
     <div className={styles.AllScoutsPageWeb}>
       <div className={styles.scoutPageHeader}>
@@ -511,6 +600,46 @@ const ListScouts: FunctionComponent = () => {
             onChangeUser={onChangeUser}
             usersOptions={usersOptions}
           /> */}
+          {!settingLocationLoading ? (
+            <Autocomplete
+              sx={{
+                width: "250px",
+                maxWidth: "250px",
+                borderRadius: "4px",
+              }}
+              id="size-small-outlined-multi"
+              size="small"
+              fullWidth
+              noOptionsText={"No such location"}
+              value={location}
+              isOptionEqualToValue={(option, value) =>
+                option.title === value.title
+              }
+              getOptionLabel={(option: { title: string; _id: string }) =>
+                option.title
+              }
+              options={locations}
+              loading={optionsLoading}
+              onChange={onChangeLocation}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search by locations"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                      backgroundColor: "#fff",
+                      border: "none",
+                    },
+                  }}
+                />
+              )}
+            />
+          ) : (
+            ""
+          )}
           <FarmAutoCompleteInAllScouting
             options={farmOptions}
             onSelectFarmFromDropDown={onSelectFarmFromDropDown}

@@ -128,7 +128,7 @@ const SingleScoutViewDetails = () => {
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/20`,
+        `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/100`,
         options
       );
       const responseData = await response.json();
@@ -205,16 +205,7 @@ const SingleScoutViewDetails = () => {
                     disabled={currentIndex == data?.length - 1 ? true : false}
                   >Next</Button>
                 </div>
-                {/* <img
-                className="zoom-image"
-                src={data?.url}
-                alt={`Image ${data?.key}`}
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  objectFit: "contain",
-                }}
-              /> */}
+
               </>
             </div> : ""}
 

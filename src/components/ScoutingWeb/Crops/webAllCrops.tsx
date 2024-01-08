@@ -65,7 +65,8 @@ const AllCropsWebPage = () => {
 
   const getAllFarms = async () => {
     setLoading(true);
-    const response = await ListAllFarmForDropDownService("", accessToken);
+    let location_id = ""
+    const response = await ListAllFarmForDropDownService("", accessToken, location_id);
     if (response.success) {
       setFarmsData(response?.data);
       let selectedFarm = response?.data.find(

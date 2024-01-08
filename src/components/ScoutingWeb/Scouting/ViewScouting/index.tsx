@@ -271,6 +271,7 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(data[1]?._id)
+                      setPrevData([])
                       router.push({
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[1]?._id}/`,
                         query: {},

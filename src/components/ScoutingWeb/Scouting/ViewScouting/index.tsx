@@ -39,6 +39,7 @@ const SingleScoutViewDetails = () => {
   const [editRecomendationOpen, setEditRecomendationOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<any>(0)
   const [prevHasMore, setPrevHasMore] = useState<any>(false)
+  const [prevData, setPrevData] = useState<any>()
 
 
   const logout = async () => {
@@ -109,11 +110,13 @@ const SingleScoutViewDetails = () => {
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/next/1`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/pre/2`,
         options
       );
       const responseData = await response.json();
       if (responseData.success) {
+        // knowAboutPrevImageDetails(responseData?.data[0]?._id)
+
         if (responseData?.has_more) {
           if (data?.length) {
             setHasMore(responseData?.has_more);
@@ -144,6 +147,34 @@ const SingleScoutViewDetails = () => {
     }
   };
 
+  // const knowAboutPrevImageDetails = async (lastImage_id: any) => {
+  //   setLoading(true);
+  //   let options = {
+  //     method: "GET",
+  //     headers: new Headers({
+  //       authorization: accessToken,
+  //     }),
+  //   };
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/next/2`,
+  //       options
+  //     );
+  //     const responseData = await response.json();
+  //     if (responseData.success) {
+  //       setPrevHasMore(responseData?.has_more)
+  //     }
+
+  //     else if (responseData?.statusCode == 403) {
+  //       logout()
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
   const getInstaScrollImagePrevDetails = async (lastImage_id: any) => {
     setLoading(true);
     let options = {
@@ -154,7 +185,7 @@ const SingleScoutViewDetails = () => {
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/prev/1`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/next/2`,
         options
       );
       const responseData = await response.json();
@@ -162,7 +193,7 @@ const SingleScoutViewDetails = () => {
         if (responseData?.has_more) {
           if (data?.length) {
             setPrevHasMore(responseData?.has_more);
-            setData([...responseData?.data]);
+            setPrevData([...responseData?.data]);
           }
           else {
             setPrevHasMore(responseData?.has_more);
@@ -170,14 +201,14 @@ const SingleScoutViewDetails = () => {
             const uniqueObjects = Array.from(
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );
-            setData(temp);
+            setPrevData(temp);
           }
 
         }
 
         else {
           setPrevHasMore(false);
-          setData(responseData?.data);
+          setPrevData(responseData?.data);
         }
       } else if (responseData?.statusCode == 403) {
         logout()
@@ -193,8 +224,9 @@ const SingleScoutViewDetails = () => {
   useEffect(() => {
     if (router.isReady && accessToken) {
       getInstaScrollImageDetails(router.query.image_id);
+      // knowAboutPrevImageDetails(router.query.image_id)
     }
-  }, [router.isReady, accessToken, router.query.image_id]);
+  }, [router.isReady, accessToken]);
 
 
   return (
@@ -219,31 +251,85 @@ const SingleScoutViewDetails = () => {
                 <ReactPanZoom alt={data[0]?.key ? `Image ${data[0]?.key}` : "Image"} image={data[0]?.url} />
                 <div className={styles.imgPrevNextBtnGrp}  >
                   <Button
-                    className={currentIndex == 0 ? styles.disableBtn : styles.prevBtn}
+                    className={prevHasMore ? styles.disableBtn : styles.prevBtn}
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
                       getInstaScrollImagePrevDetails(data[0]?._id)
-                      // router.push({
-                      //   pathname: `/scouts/farm/${router.query.farm_id}/crops/${data[0]?._id}/`,
-                      //   query: {},
-                      // });
+                      setData([])
 
+                      router.push({
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
+                        query: {},
+                      });
                     }}
-                    disabled={prevHasMore ? false : true}
+                    disabled={data?.length == 1 ? true : false}
                   >
                     <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: prevHasMore == false ? "grey" : "#000" }} />
                   </Button>
                   <Button
-                    className={currentIndex == data?.length - 1 ? styles.disableBtn : styles.nextBtn}
+                    className={hasMore ? styles.disableBtn : styles.nextBtn}
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
-                      getInstaScrollImageDetails(data[0]?._id)
-                      // router.push({
-                      //   pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
-                      //   query: {},
-                      // });
+                      getInstaScrollImageDetails(data[1]?._id)
+                      router.push({
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[1]?._id}/`,
+                        query: {},
+                      });
+
                     }}
-                    disabled={hasMore ? true : false}
+                    disabled={hasMore ? false : true}
+
+                  >
+
+                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: hasMore == false ? "grey" : "#000" }} />
+                  </Button>
+                </div>
+
+              </>
+            </div> : ""}
+
+          {prevData?.length ?
+            <div
+              className={styles.ImageContainBlock}
+              style={{
+                width: "85%",
+                margin: "0 auto",
+                height: "90vh",
+                position: "relative"
+              }}
+            >
+
+              <>
+                <ReactPanZoom alt={prevData[0]?.key ? `Image ${prevData[0]?.key}` : "Image"} image={prevData[1]?.url} />
+                <div className={styles.imgPrevNextBtnGrp}  >
+                  <Button
+                    className={prevHasMore ? styles.disableBtn : styles.prevBtn}
+                    onClick={() => {
+                      setCurrentIndex((pre: any) => pre - 1)
+                      getInstaScrollImagePrevDetails(prevData[1]?._id)
+                      router.push({
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData[1]?._id}/`,
+                        query: {},
+                      });
+
+
+                    }}
+                  >
+                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: prevHasMore == false ? "grey" : "#000" }} />
+                  </Button>
+                  <Button
+                    className={hasMore ? styles.disableBtn : styles.nextBtn}
+                    onClick={() => {
+                      setCurrentIndex((pre: any) => pre + 1)
+                      getInstaScrollImageDetails(prevData[0]?._id)
+                      router.push({
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData[0]?._id}/`,
+                        query: {},
+                      });
+
+                    }}
+                    disabled={hasMore ? false : true}
+
                   >
 
                     <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: hasMore == false ? "grey" : "#000" }} />
@@ -257,11 +343,20 @@ const SingleScoutViewDetails = () => {
 
         </div>
       </div>
-      {data?.length ?
+      {data?.length && router.isReady ?
         <div className={styles.galleryItemDetails}>
           <ScoutingDetails
             loading={loading}
-            data={data}
+            data={data[0]}
+            currentIndex={currentIndex}
+
+          />
+        </div> : ''}
+      {prevData?.length && router.isReady ?
+        <div className={styles.galleryItemDetails}>
+          <ScoutingDetails
+            loading={loading}
+            data={prevData[1]}
             currentIndex={currentIndex}
 
           />

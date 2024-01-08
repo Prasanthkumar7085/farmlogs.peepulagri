@@ -16,7 +16,7 @@ import styles from "./ScoutingDetails.module.css";
 import getSingleImageDetailsService from "../../../../../lib/services/ScoutServices/getSingleScoutService";
 import ReactPanZoom from "react-image-pan-zoom-rotate";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'; import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 interface pageProps {
   onlyImages: Array<OnlyImagesType>;
   previewImageDialogOpen: boolean;
@@ -188,6 +188,7 @@ const SingleScoutViewDetails = () => {
                 width: "85%",
                 margin: "0 auto",
                 height: "90vh",
+                position: "relative"
               }}
             >
 
@@ -196,16 +197,18 @@ const SingleScoutViewDetails = () => {
                 <div className={styles.imgPrevNextBtnGrp}  >
                   <Button
                     className={currentIndex == 0 ? styles.disableBtn : styles.prevBtn}
-                    variant="outlined"
                     onClick={() => setCurrentIndex((pre: any) => pre - 1)}
                     disabled={currentIndex == 0 ? true : false}
-                  >Prev</Button>
+                  >
+                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: currentIndex == 0 ? "grey" : "#000" }} />
+                  </Button>
                   <Button
                     className={currentIndex == data?.length - 1 ? styles.disableBtn : styles.nextBtn}
-                    variant="contained"
                     onClick={() => setCurrentIndex((pre: any) => pre + 1)}
                     disabled={currentIndex == data?.length - 1 ? true : false}
-                  >Next</Button>
+                  >
+                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: currentIndex == data?.length - 1 ? "grey" : "#000" }} />
+                  </Button>
                 </div>
 
               </>

@@ -2,7 +2,8 @@ import { prepareURLEncodedParams } from "../../requestUtils/urlEncoder";
 
 const ListAllFarmForDropDownService = async (
   searchString: string,
-  token: string
+  token: string,
+  location_id: string
 ) => {
   try {
     let options = {
@@ -15,6 +16,10 @@ const ListAllFarmForDropDownService = async (
 
     if (searchString) {
       queryParams["search_string"] = searchString;
+    }
+    if (location_id) {
+      queryParams["location_id"] = location_id;
+
     }
     let url = prepareURLEncodedParams(
       `${process.env.NEXT_PUBLIC_API_URL}/farms/1/20`,

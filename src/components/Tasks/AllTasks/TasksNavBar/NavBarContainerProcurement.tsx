@@ -103,7 +103,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
-    if (titleName == "Procurement Module") {
+    if (titleName == "Procurement") {
       router.push("/procurements/add");
     } else {
       router.push("/tasks/add");
@@ -220,20 +220,17 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
               }}
             />
           </div>
-          {userType_v2 !== "farmer" ? (
-            <Button
-              className={styles.addProcurementBtn}
-              color="primary"
-              size="small"
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={onButtonAddTaskClick}
-            >
-              Add
-            </Button>
-          ) : (
-            ""
-          )}
+          <Button
+            className={styles.addProcurementBtn}
+            color="primary"
+            size="small"
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={onButtonAddTaskClick}
+          >
+            Add
+          </Button>
+
 
 
         </div>

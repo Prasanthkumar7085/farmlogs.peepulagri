@@ -88,7 +88,6 @@ const ListScouts: FunctionComponent = () => {
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
-    console.log(value, "sdfsd")
     setData([]);
     if (reason == "clear") {
       let routerData = { ...router.query };
@@ -122,14 +121,13 @@ const ListScouts: FunctionComponent = () => {
       setFarm(value);
       setCrop(null);
       setPage(1);
-
       setSettingLocationLoading(true);
       setLocation(value?.location_id)
       setTimeout(() => {
         setSettingLocationLoading(false);
       }, 1);
       router.push({
-        query: { ...router.query, farm_search_string: value?.title, location_id: value?.location_id },
+        query: { ...router.query, farm_search_string: value?.title },
       });
       getAllExistedScouts({
         farmSearchString: value?.title,
@@ -140,7 +138,7 @@ const ListScouts: FunctionComponent = () => {
         cropId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
-        location: router.query.location_id as string
+        location: value?.location_id?._id as string
 
       });
       await getAllCrops("", value?._id);

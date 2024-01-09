@@ -252,7 +252,7 @@ const ListProcurments = () => {
                 onStatusChange={onStatusChange}
                 onPriorityChange={onPriorityChange}
                 onUserChange={onUserChange}
-                titleName={"Procurement Module"}
+                titleName={"Procurement"}
                 getProcruments={getAllProcurements}
 
             />

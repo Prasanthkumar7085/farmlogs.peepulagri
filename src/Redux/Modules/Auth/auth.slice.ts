@@ -4,7 +4,8 @@ import { Auth } from "./auth";
 const reducerName = "auth";
 
 export const initialState: Auth.AuthInitial = {
-  userDetails: {}
+  userDetails: {},
+  queryParams: {}
 };
 
 export const authSlice = createSlice({
@@ -16,12 +17,16 @@ export const authSlice = createSlice({
     },
     removeUserDetails: (state: any) => {
       state.userDetails = {}
+    },
+    QueryParamsForScouting: (state: any, action: any) => {
+      state.queryParams = { ...action.payload }
     }
   },
 });
 
 export const {
   setUserDetails,
-  removeUserDetails
+  removeUserDetails,
+  QueryParamsForScouting
 }: any = authSlice.actions;
 export const authSliceReducer = { [reducerName]: authSlice.reducer };

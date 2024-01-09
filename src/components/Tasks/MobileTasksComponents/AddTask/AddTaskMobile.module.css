@@ -1,0 +1,56 @@
+.AddTaskHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #45a845;
+    padding: 1rem;
+}
+
+.pageTitle {
+    font-size: clamp(18px, 3.5vw, 20px);
+    font-family: "Inter", sans-serif;
+    color: #fff;
+}
+
+.addTaskFormContainer {
+    padding: 1rem;
+}
+
+.eachFormBlock {
+    margin-bottom: 1rem;
+}
+
+.eachFormTitle {
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 3vw, 16px);
+    font-weight: 500;
+    line-height: 100%;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+.addTaskBtnGrp {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+}
+
+.addTaskBtnGrp button {
+    margin-top: 2rem;
+    padding-block: 10px !important;
+    border-radius: 4px !important;
+    text-transform: capitalize !important;
+    font-size: clamp(16px, 3vw, 16px) !important;
+    font-family: "Inter", sans-serif !important;
+}
+
+.cancelTaskBtn {
+    border: 1px solid #d94841 !important;
+    color: #d94841 !important;
+}
+
+.addTaskBtn {
+    color: #fff !important;
+    background-color: #d94841 !important;
+}

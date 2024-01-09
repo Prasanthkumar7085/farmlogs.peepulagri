@@ -1,50 +1,34 @@
-import {
-  TextField,
-  Button,
-  Dialog,
-  CircularProgress,
-  Autocomplete,
-  LinearProgress,
-  Typography,
-} from "@mui/material";
-import styles from "./new-folder1.module.css";
-import { useEffect, useState } from "react";
-import SpaIcon from "@mui/icons-material/Spa";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { useCookies } from "react-cookie";
+
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import AlertComponent from "../AlertComponent";
+import {
+  Autocomplete,
+  Button,
+  CircularProgress,
+  LinearProgress,
+  TextField,
+  Typography
+} from "@mui/material";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
 import updateCropService from "../../../../lib/services/CropServices/updateCropService";
+import AlertComponent from "../AlertComponent";
 import LoadingComponent from "../LoadingComponent";
+import styles from "./new-folder1.module.css";
 
-const NewFolderDiloag = ({
-  open,
-  captureResponseDilog,
-  loading,
-  defaultTitle,
-  // errorMessages,
-  defaultArea,
-  itemDetails
-}: any) => {
-
+const NewFolderDiloag = ({ open }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
   const crop_id: any = router.query.crop_id
-  console.log(crop_id);
-
-
   const [title, setTitle] = useState<string | null>(null);
   const [area, setArea] = useState<any>();
   const [crop, setcrop] = useState([]);
   const [cropDetails, setCropDetails] = useState<any>();
-  console.log(cropDetails);
-
-
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [loadingForAdd, setLoadingForAdd] = useState<any>();
   const [errorMessages, setErrorMessages] = useState<any>();
@@ -52,13 +36,13 @@ const NewFolderDiloag = ({
   const [alertType, setAlertType] = useState(false);
 
   const [defaultValue, setDefaultValue] = useState<any>(null);
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -69,12 +53,16 @@ const NewFolderDiloag = ({
 
   useEffect(() => {
     // setArea(defaultArea);
-    dropDownCrops();
     if (router.isReady && crop_id) {
       singleCrop();
+      // dropDownCrops();
     }
   }, [open, router.isReady]);
-
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      dropDownCrops();
+    }
+  }, [open, router.isReady, accessToken]);
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
     const allowedCharacters = [
@@ -101,7 +89,7 @@ const NewFolderDiloag = ({
     let obj = {
       farm_id: router.query.farm_id,
       title: title ? title?.trim() : "",
-      area: + area,
+      area: +area,
     };
     let options = {
       method: "POST",
@@ -137,19 +125,14 @@ const NewFolderDiloag = ({
     let obj = {
       farm_id: router.query.farm_id,
       title: title ? title?.trim() : "",
-      area: + area,
+      area: +area,
     };
     setLoadingForAdd(true);
-    const response = await updateCropService(
-      crop_id,
-      obj,
-      accessToken
-    );
+    const response = await updateCropService(crop_id, obj, accessToken);
     if (response?.success) {
       setAlertMessage(response?.message);
-      setAlertType(true)
-      router.back()
-
+      setAlertType(true);
+      router.back();
     } else if (response?.status == 422) {
       setErrorMessages(response?.errors);
     } else if (response?.statusCode == 403) {
@@ -226,51 +209,49 @@ const NewFolderDiloag = ({
   return (
     <div>
       {crop_id ? (
-        <div className={styles.header} id="header" >
-          <img
-            className={styles.iconsiconArrowLeft}
-            alt=""
-            src="/iconsiconarrowleft.svg"
-            onClick={() => router.back()}
-
-          />
-          <Typography className={styles.viewFarm}>Update Crop</Typography>
-          <div className={styles.headericon} id="header-icon">
-          </div>
+        <div className={styles.header} id="header">
+          <picture>
+            <img
+              className={styles.iconsiconArrowLeft}
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.back()}
+            />
+          </picture>
+          <Typography className={styles.viewFarm}>Edit Crop</Typography>
+          <div className={styles.headericon} id="header-icon"></div>
         </div>
       ) : (
-        <div className={styles.header} id="header" >
-          <img
-            className={styles.iconsiconArrowLeft}
-            alt=""
-            src="/iconsiconarrowleft.svg"
-            onClick={() => router.back()}
-
-          />
+        <div className={styles.header} id="header">
+          <picture>
+            <img
+              className={styles.iconsiconArrowLeft}
+              alt=""
+              src="/iconsiconarrowleft.svg"
+              onClick={() => router.back()}
+            />
+          </picture>
           <Typography className={styles.viewFarm}>Add Crop</Typography>
-          <div className={styles.headericon} id="header-icon">
-          </div>
+          <div className={styles.headericon} id="header-icon"></div>
         </div>
       )}
 
       <div className={styles.newfolder}>
         <div className={styles.frame}>
-
-
           <div style={{ textAlign: "left", width: "100%" }}>
-            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
-              {"Title"}
-              <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
-            </h4>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{"Title"}</h4>
           </div>
+
           <Autocomplete
             options={crop?.length ? crop : []}
             value={defaultValue}
             onChange={(_, newValue: any) => {
               setTitle(newValue?.title || newValue?.name);
               setDefaultValue(newValue);
-              setErrorMessages('')
+              setErrorMessages("");
             }}
+            loading={optionsLoading}
+
             getOptionLabel={(e) => e.title || e.name}
             renderInput={(params) => (
               <TextField
@@ -280,9 +261,26 @@ const NewFolderDiloag = ({
                 size="small"
                 placeholder="Select Crop"
                 variant="outlined"
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {optionsLoading ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderRadius: "8px !important",
+                    borderColor: "grey !important",
+                  },
+                  "& .MuiInputBase-root": {
+                    background: "#fff",
+                    borderRadius: "8px !important",
+                    paddingBlock: "10px !important",
                   },
                 }}
                 error={errorMessages ? errorMessages["title"] : ""}
@@ -290,20 +288,27 @@ const NewFolderDiloag = ({
               />
             )}
           />
-          {optionsLoading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
+          {/* {optionsLoading ? <LinearProgress sx={{ height: "2px" }} /> : ""} */}
         </div>
 
-        <div className={styles.frame}>
+        <div className={styles.frame} style={{ marginTop: "1.5rem" }}>
           <div style={{ textAlign: "left", width: "100%" }}>
-            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>
-              {"Crop Area"}
-              <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
-            </h4>
+            <h4 style={{ margin: "0", paddingBlock: "0.5rem" }}>{"Area"}</h4>
           </div>
           <TextField
             sx={{
               "& .MuiInputBase-root": {
                 background: "#fff",
+                paddingBlock: "5.5px !important",
+                borderRadius: "8px !important",
+                color: "#000",
+                fontFamily: "'Inter', sans-serif",
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderRadius: "8px !important",
+                borderColor: "grey !important",
+                color: "#000",
+                fontFamily: "'Inter', sans-serif",
               },
             }}
             className={styles.input}
@@ -329,7 +334,7 @@ const NewFolderDiloag = ({
             value={area}
             onChange={(e) => {
               setArea(e.target.value);
-              setErrorMessages('')
+              setErrorMessages("");
             }}
             InputProps={{ style: { appearance: "none" } }}
             onKeyDown={(e: any) => {
@@ -344,7 +349,7 @@ const NewFolderDiloag = ({
             size="small"
             variant="outlined"
             onClick={() => {
-              router.back()
+              router.back();
             }}
           >
             Cancel
@@ -359,7 +364,7 @@ const NewFolderDiloag = ({
               onClick={editCrop}
               disabled={optionsLoading || loadingForAdd}
             >
-              Update Crop
+              Submit
             </Button>
           ) : (
             <Button
@@ -371,7 +376,7 @@ const NewFolderDiloag = ({
               onClick={createCrop}
               disabled={optionsLoading || loadingForAdd}
             >
-              Create Crop
+              Submit
             </Button>
           )}
 

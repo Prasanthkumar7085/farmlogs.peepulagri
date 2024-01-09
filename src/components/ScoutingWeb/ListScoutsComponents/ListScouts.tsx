@@ -5,13 +5,13 @@ import {
   SingleScoutResponse,
 } from "@/types/scoutTypes";
 
-import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { QueryParamsForScouting, removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import timePipe from "@/pipes/timePipe";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
-import { Button, Tooltip, Typography } from "@mui/material";
+import { Autocomplete, Button, TextField, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -28,6 +28,8 @@ import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import DaySummaryComponent from "./DaySummaryComponent";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import ScoutingDailyImages from "./ScoutingDailyImages";
+import { errorMonitor } from "events";
+import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 
 interface ApiMethodProps {
   page: string | number;
@@ -37,6 +39,8 @@ interface ApiMethodProps {
   fromDate: string;
   toDate: string;
   cropId: string;
+  farmSearchString: string;
+  location: string;
 }
 const ListScouts: FunctionComponent = () => {
   const router = useRouter();
@@ -46,8 +50,8 @@ const ListScouts: FunctionComponent = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +76,17 @@ const ListScouts: FunctionComponent = () => {
 
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [searchString, setSearchString] = useState("");
-
+  const [locations, setLocations] = useState<
+    Array<{ title: string; _id: string }>
+  >([]);
+  const [location, setLocation] = useState<{
+    _id: string;
+    title: string;
+  } | null>();
+  console.log(location, "locatioj")
+  const [settingLocationLoading, setSettingLocationLoading] = useState(false);
+  const [changed, setChanged] = useState(false);
+  const [queries, setQueries] = useState<any>()
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     setData([]);
     if (reason == "clear") {
@@ -80,47 +94,69 @@ const ListScouts: FunctionComponent = () => {
       delete routerData?.farm_id;
       delete routerData?.crop_id;
       delete routerData?.farm_search_string;
+      delete routerData?.location_id;
 
       router.push({ query: routerData });
       setCrop(null);
       setFarm(null);
       setData([]);
+      setLocation(null)
+      getAllFarms({ location_id: router.query.location_id as string, clearOrNot: true });
+      getAllExistedScouts({
+        // farmSearchString: value?.title,
+        page: 1,
+        limit: router.query.limit as string,
+        userId: router.query.created_by as string,
+        farmId: "",
+        cropId: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
+        farmSearchString: "",
+        location: router.query.location_id as string
+      });
 
-      getAllFarms({ clearOrNot: true });
       return;
     }
     if (value) {
       setFarm(value);
       setCrop(null);
       setPage(1);
-
+      setSettingLocationLoading(true);
+      setLocation(value?.location_id)
+      setTimeout(() => {
+        setSettingLocationLoading(false);
+      }, 1);
       router.push({
         query: { ...router.query, farm_search_string: value?.title },
       });
-      // getAllCropImageList({
-      //   farmSearchString: value?.title,
-      //   page: 1,
-      //   limit: router.query.limit as string,
-      //   userId: router.query.created_by as string,
-      //   farmId: value._id,
-      //   cropId: "",
-      //   fromDate: router.query.from_date as string,
-      //   toDate: router.query.to_date as string,
-      // });
+      getAllExistedScouts({
+        farmSearchString: value?.title,
+        page: 1,
+        limit: router.query.limit as string,
+        userId: router.query.created_by as string,
+        farmId: value._id,
+        cropId: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
+        location: value?.location_id?._id as string
+
+      });
       await getAllCrops("", value?._id);
     } else {
       setFarm(null);
       setCrop(null);
       setPage(1);
-      // getAllCropImageList({
-      //   page: 1,
-      //   limit: router.query.limit as string,
-      //   farmId: "",
-      //   userId: router.query.created_by as string,
-      //   fromDate: router.query.from_date as string,
-      //   toDate: router.query.to_date as string,
-      //   cropId: router.query.crop_id as string,
-      // });
+      getAllExistedScouts({
+        page: 1,
+        limit: router.query.limit as string,
+        farmId: "",
+        userId: router.query.created_by as string,
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
+        cropId: router.query.crop_id as string,
+        location: router.query.location_id as string
+
+      });
       await getAllCrops("", "");
     }
   };
@@ -129,7 +165,7 @@ const ListScouts: FunctionComponent = () => {
     if (value) {
       setCrop(value);
       setPage(1);
-      getAllCropImageList({
+      getAllExistedScouts({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -137,11 +173,14 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: value?._id,
+        location: router.query.location_id as string
       });
     } else {
       setCrop(null);
       setPage(1);
-      getAllCropImageList({
+
+      setLoading(false);
+      getAllExistedScouts({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -149,6 +188,7 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: "",
+        location: router.query.location_id as string
       });
     }
   };
@@ -158,7 +198,7 @@ const ListScouts: FunctionComponent = () => {
       setFromDate(date1);
       setToDate(date2);
       setPage(1);
-      getAllCropImageList({
+      getAllExistedScouts({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -166,12 +206,13 @@ const ListScouts: FunctionComponent = () => {
         fromDate: date1,
         toDate: date2,
         cropId: router.query.crop_id as string,
+        location: router.query.location_id as string
       });
     } else {
       setFromDate("");
       setToDate("");
       setPage(1);
-      getAllCropImageList({
+      getAllExistedScouts({
         page: 1,
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
@@ -179,6 +220,7 @@ const ListScouts: FunctionComponent = () => {
         cropId: router.query.crop_id as string,
         fromDate: "",
         toDate: "",
+        location: router.query.location_id as string
       });
     }
   };
@@ -186,7 +228,7 @@ const ListScouts: FunctionComponent = () => {
   const captureRowPerItems = (value: number) => {
     setPage(1);
     setLimit(value);
-    getAllCropImageList({
+    getAllExistedScouts({
       page: 1,
       limit: value,
       farmId: router.query.farm_id as string,
@@ -194,11 +236,12 @@ const ListScouts: FunctionComponent = () => {
       cropId: router.query.crop_id as string,
       fromDate: router.query.from_date as string,
       toDate: router.query.to_date as string,
+      location: router.query.location_id as string
     });
   };
   const capturePageNum = (value: number) => {
     setPage(value);
-    getAllCropImageList({
+    getAllExistedScouts({
       page: value,
       limit: router.query.limit as string,
       farmId: router.query.farm_id as string,
@@ -206,12 +249,13 @@ const ListScouts: FunctionComponent = () => {
       cropId: router.query.crop_id as string,
       fromDate: router.query.from_date as string,
       toDate: router.query.to_date as string,
+      location: router.query.location_id as string
     });
   };
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -219,7 +263,7 @@ const ListScouts: FunctionComponent = () => {
       console.error(err);
     }
   };
-  const getAllCropImageList = async ({
+  const getAllExistedScouts = async ({
     page = 1,
     limit = 50,
     farmId,
@@ -227,134 +271,208 @@ const ListScouts: FunctionComponent = () => {
     fromDate,
     toDate,
     cropId,
+    farmSearchString = router.query.farm_search_string as string,
+    location
   }: Partial<ApiMethodProps>) => {
+    // if (!cropId) {
+    //   setData([]);
+    //   return;
+    // }
     setLoading(true);
-    if (!cropId) {
-      setData([]);
-      return;
-    }
-    let url = `/crops/${cropId}/images/${page}/${limit}`;
-    let queryParams: any = {};
-    if (page) {
-      queryParams["page"] = page;
-    }
-    if (limit) {
-      queryParams["limit"] = limit;
-    }
+    try {
+      // let url = `/crops/${cropId}/images/${page}/${limit}`;
+      let url = `/farm-images/all/${page}/${limit}`;
+      let queryParams: any = {};
+      if (page) {
+        queryParams["page"] = page;
+      }
+      if (limit) {
+        queryParams["limit"] = limit;
+      }
 
-    if (userId) {
-      queryParams["created_by"] = userId;
-    }
-    if (fromDate && toDate) {
-      queryParams["from_date"] = fromDate;
-      queryParams["to_date"] = toDate;
-    }
-    if (cropId) {
-      queryParams["crop_id"] = cropId;
-    }
-    if (farmId) {
-      queryParams["farm_id"] = farmId;
-    }
-    if (router.query.farm_search_string) {
-      queryParams["farm_search_string"] = router.query.farm_search_string;
-    }
+      if (userId) {
+        queryParams["created_by"] = userId;
+      }
+      if (fromDate && toDate) {
+        queryParams["from_date"] = fromDate;
+        queryParams["to_date"] = toDate;
+      }
+      if (cropId) {
+        queryParams["crop_id"] = cropId;
+      }
+      if (farmId) {
+        queryParams["farm_id"] = farmId;
+      }
+      if (farmSearchString) {
+        queryParams["farm_search_string"] = farmSearchString;
+      }
+      if (location && location != '1') {
+        queryParams["location_id"] = location
+      }
 
-    const { page: pageNum, limit: rowsPerPage, ...restParams } = queryParams;
+      const {
+        page: pageNum,
+        limit: rowsPerPage,
+        farm_search_string,
+        ...restParams
+      } = queryParams;
 
-    router.push({ query: queryParams });
-    url = prepareURLEncodedParams(url, restParams);
-    const response = await getAllExistedScoutsService({
-      url: url,
-      token: accessToken,
-    });
-
-    if (response?.success) {
-      const { data, ...rest } = response;
-      setPaginationDetails(rest);
-      setOnlyImages(response.data);
-      const groupedData: any = {};
-      // Iterate through Data and group objects by uploaded_at date
-      data.forEach((item: any) => {
-        const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
-        if (!groupedData[createdAt]) {
-          groupedData[createdAt] = [item];
-        } else {
-          groupedData[createdAt].push(item);
-        }
+      router.push({ query: queryParams });
+      setQueries(queryParams)
+      url = prepareURLEncodedParams(url, restParams);
+      const response = await getAllExistedScoutsService({
+        url: url,
+        token: accessToken,
       });
-      // Convert the groupedData object into an array
-      const groupedArray = Object.values(groupedData);
-      setData(groupedArray);
+
+      if (response?.success) {
+        const { data, ...rest } = response;
+        setPaginationDetails(rest);
+        setOnlyImages(response.data);
+        const groupedData: any = {};
+        // Iterate through Data and group objects by uploaded_at date
+        data.forEach((item: any) => {
+          const createdAt = timePipe(item.uploaded_at, "DD-MM-YYYY");
+          if (!groupedData[createdAt]) {
+            groupedData[createdAt] = [item];
+          } else {
+            groupedData[createdAt].push(item);
+          }
+        });
+        // Convert the groupedData object into an array
+        const groupedArray = Object.values(groupedData);
+        setData(groupedArray);
+        setLoading(false);
+      } else if (response?.statusCode == 403) {
+        await logout();
+      } else {
+        toast.error("Failed to fetch");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
       setLoading(false);
-    } else if (response?.statusCode == 403) {
-      await logout();
-    } else {
-      toast.error("Failed to fetch");
     }
   };
 
-  const getAllUsers = async (userId = "") => {
-    const response = await getAllUsersService({ token: accessToken });
+  // const getAllUsers = async (userId = "") => {
+  //   const response = await getAllUsersService({ token: accessToken });
 
-    if (response?.success) {
-      setUserOptions(response?.data);
-      if (userId) {
-        let obj =
-          response?.data?.length &&
-          response?.data?.find(
-            (item: any, index: number) => item._id == userId
+  //   if (response?.success) {
+  //     setUserOptions(response?.data);
+  //     if (userId) {
+  //       let obj =
+  //         response?.data?.length &&
+  //         response?.data?.find(
+  //           (item: any, index: number) => item._id == userId
+  //         );
+
+  //       setUser(obj);
+  //     }
+  //   } else if (response?.statusCode == 403) {
+  //     await logout();
+  //   }
+  // };
+
+
+  const getLocations = async (newLocation = "") => {
+    setOptionsLoading(true);
+    try {
+      const response = await getAllLocationsService(accessToken);
+      if (response?.success) {
+        setLocations(response?.data);
+        if (newLocation) {
+          setSettingLocationLoading(true);
+          const newLocationObject = response?.data?.find(
+            (item: any) => item?._id == newLocation
           );
 
-        setUser(obj);
+          setLocation(newLocationObject);
+          setTimeout(() => {
+            setSettingLocationLoading(false);
+          }, 1);
+        } else {
+          setSettingLocationLoading(true);
+
+          // setLocation({ title: 'All', _id: '1' });
+          setTimeout(() => {
+            setSettingLocationLoading(false);
+          }, 1);
+        }
       }
-    } else if (response?.statusCode == 403) {
-      await logout();
+      if (response?.data?.length) {
+        setLocations([{ title: "All", _id: "1" }, ...response?.data]);
+      } else {
+        setLocations([{ title: "All", _id: "1" }]);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setOptionsLoading(false);
     }
   };
+
 
   const getAllFarms = async ({
     farmId = "",
     searchString = "",
+    location_id = "",
     searchStringChangeOrNot = false,
     clearOrNot = false,
   }: Partial<{
     farmId: string;
     searchString: string;
+    location_id: string;
     searchStringChangeOrNot: boolean;
     clearOrNot: boolean;
   }>) => {
+
+    console.log(location_id, "kkk")
     try {
-      if (searchString) {
-        router.push({
-          query: { ...router.query, farm_search_string: searchString },
-        });
-      }
+      // if (searchString) {
+      //   router.push({
+      //     query: { ...router.query, farm_search_string: searchString },
+      //   });
+      // }
       const response = await ListAllFarmForDropDownService(
         searchString,
-        accessToken
+        accessToken,
+        location_id,
       );
       if (response?.success) {
         setFarmOptions(response?.data);
 
-        if (searchStringChangeOrNot) {
-          setFarm(null);
-        } else {
-          if (!clearOrNot) {
-            if (farmId) {
-              let obj =
-                response?.data?.length &&
-                response?.data?.find((item: any) => item._id == farmId);
-              setFarm(obj);
-              getAllCrops(router.query.crop_id as string, farmId);
-            } else {
-              setFarm(response?.data[0]);
-              getAllCrops(
-                router.query.crop_id as string,
-                response?.data[0]?._id as string
-              );
-            }
-          }
+
+
+        if (farmId) {
+          let obj =
+            response?.data?.length &&
+            response?.data?.find((item: any) => item._id == farmId);
+          setFarm(obj);
+          getAllCrops(
+            router.query.crop_id as string,
+            response?.data[0]?._id as string
+          );
         }
+        // if (searchStringChangeOrNot) {
+        //   setFarm(null);
+        // } else {
+        //   if (!clearOrNot) {
+        //     if (farmId) {
+        // let obj =
+        //   response?.data?.length &&
+        //   response?.data?.find((item: any) => item._id == farmId);
+        // setFarm(obj);
+        //       getAllCrops(router.query.crop_id as string, farmId);
+        //     } else {
+        //       setFarm(response?.data[0]);
+        // getAllCrops(
+        //   router.query.crop_id as string,
+        //   response?.data[0]?._id as string
+        // );
+        //     }
+        //   }
+        // }
       } else if (response?.statusCode == 403) {
         await logout();
       }
@@ -363,61 +481,54 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
-  const getAllCrops = async (cropId: string, farmId: string) => {
+  const getAllCrops = async (
+    cropId = router.query.crop_id as string,
+    farmId: string
+  ) => {
     setLoading(true);
     if (!farmId) {
+      setLoading(false);
       return;
     }
-    const response = await ListAllCropsForDropDownServices(farmId, accessToken);
-    if (response?.success) {
-      let data = response?.data;
-      // data = modifyDataToGroup(data);
-      if (!data?.length) {
-        setLoading(false);
-        return;
-      }
-      setCropOptions(data);
-      if (cropId) {
-        let obj = data?.length && data?.find((item: any) => item._id == cropId);
-        setCrop(obj);
-        getAllCropImageList({
-          page: router.query?.page as string,
-          limit: router.query?.limit as string,
-          farmId: farmId,
-          userId: router.query?.created_by as string,
-          fromDate: router.query?.from_date as string,
-          toDate: router.query?.to_date as string,
-          cropId: cropId,
-        });
-      } else {
-        let obj = data?.length ? data[0] : null;
-
-        setCrop(obj);
-        if (obj) {
-          getAllCropImageList({
-            page: router.query?.page as string,
-            limit: router.query?.limit as string,
-            farmId: farmId,
-            userId: router.query?.created_by as string,
-            fromDate: router.query?.from_date as string,
-            toDate: router.query?.to_date as string,
-            cropId: obj._id,
-          });
+    try {
+      const response = await ListAllCropsForDropDownServices(
+        farmId,
+        accessToken
+      );
+      if (response?.success) {
+        let data = response?.data;
+        // data = modifyDataToGroup(data);
+        if (!data?.length) {
+          setLoading(false);
+          setCrop(null);
+          setCropOptions(data);
+          setPaginationDetails({});
+          return;
+        }
+        setCropOptions(data);
+        if (cropId) {
+          let obj =
+            data?.length && data?.find((item: any) => item._id == cropId);
+          setCrop(obj);
         }
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const clearAllFilterAndGetData = async () => {
-    setUser("");
-    setFarm("");
-    setFromDate("");
-    setToDate("");
-    setCrop(null);
-    setPage(1);
-    setLimit(50);
-    await getAllCropImageList({});
-  };
+  // const clearAllFilterAndGetData = async () => {
+  //   setUser("");
+  //   setFarm("");
+  //   setFromDate("");
+  //   setToDate("");
+  //   setCrop(null);
+  //   setPage(1);
+  //   setLimit(50);
+  //   await getAllExistedScouts({});
+  // };
 
   const [mounted, setMounted] = useState(false);
 
@@ -428,24 +539,85 @@ const ListScouts: FunctionComponent = () => {
         farmId: router.query.farm_id as string,
         searchString: router.query.farm_search_string as string,
       });
+      getLocations(router.query.location_id as string);
+      getAllExistedScouts({
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        farmId: router.query.farm_id as string,
+        userId: router.query.user_id as string,
+        fromDate: "",
+        toDate: "",
+        cropId: router.query.crop_id as string,
+        farmSearchString: router.query.farm_search_string as string,
+        location: router.query.location_id as string
+      });
     }
   }, [router.isReady, accessToken]);
 
   useEffect(() => {
-    if (mounted) {
-      setFarm(null);
-      getAllFarms({
-        farmId: router.query.farm_id as string,
-        searchString: searchString,
-        searchStringChangeOrNot: true,
-      });
-    }
+    let debounce = setTimeout(() => {
+      if (mounted) {
+        setFarm(null);
+        getAllFarms({
+          // farmId: router.query.farm_id as string,
+          searchString: searchString,
+          searchStringChangeOrNot: true,
+
+        });
+      }
+    }, 500);
+    return () => clearInterval(debounce);
   }, [searchString]);
 
-  const onClickAttachment = (attachmentId: string) => {
+  const onClickAttachment = (attachmentId: string, farmId: string, cropId: string) => {
+    dispatch(QueryParamsForScouting(queries))
+    console.log(queries, "sdf")
     router.push(
-      `/scouts/farm/${router.query.crop_id}/crops/${router.query.crop_id}/${attachmentId}`
+      `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}`
     );
+  };
+
+  const onChangeLocation = (e: any, value: any, reason: any) => {
+
+    if (value) {
+      setChanged(true);
+      setLocation(value);
+      getAllFarms({
+        farmId: router.query.farm_id as string,
+        searchString: router.query.farm_search_string as string,
+        location_id: value?._id as string
+      });
+      getAllExistedScouts({
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        farmId: router.query.farm_id as string,
+        userId: router.query.user_id as string,
+        fromDate: "",
+        toDate: "",
+        cropId: router.query.crop_id as string,
+        farmSearchString: router.query.farm_search_string as string,
+        location: value?._id
+      });
+    }
+    else {
+      setChanged(true);
+      setLocation(null);
+      getAllFarms({
+        farmId: router.query.farm_id as string,
+        searchString: router.query.farm_search_string as string,
+      });
+      getAllExistedScouts({
+        page: router.query.page as string,
+        limit: router.query.limit as string,
+        farmId: router.query.farm_id as string,
+        userId: router.query.user_id as string,
+        fromDate: "",
+        toDate: "",
+        cropId: router.query.crop_id as string,
+        farmSearchString: router.query.farm_search_string as string,
+        location: ""
+      });
+    }
   };
 
   return (
@@ -466,6 +638,46 @@ const ListScouts: FunctionComponent = () => {
             onChangeUser={onChangeUser}
             usersOptions={usersOptions}
           /> */}
+          {!settingLocationLoading ? (
+            <Autocomplete
+              sx={{
+                width: "250px",
+                maxWidth: "250px",
+                borderRadius: "4px",
+              }}
+              id="size-small-outlined-multi"
+              size="small"
+              fullWidth
+              noOptionsText={"No such location"}
+              value={location}
+              isOptionEqualToValue={(option, value) =>
+                option.title === value.title
+              }
+              getOptionLabel={(option: { title: string; _id: string }) =>
+                option.title
+              }
+              options={locations}
+              loading={optionsLoading}
+              onChange={onChangeLocation}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search by location"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                      backgroundColor: "#fff",
+                      border: "none",
+                    },
+                  }}
+                />
+              )}
+            />
+          ) : (
+            ""
+          )}
           <FarmAutoCompleteInAllScouting
             options={farmOptions}
             onSelectFarmFromDropDown={onSelectFarmFromDropDown}
@@ -521,7 +733,7 @@ const ListScouts: FunctionComponent = () => {
             );
           })
           : ""}
-        {!data?.length && !loading ?
+        {!data?.length && !loading ? (
           <div
             id={styles.noData}
             style={{
@@ -540,7 +752,9 @@ const ListScouts: FunctionComponent = () => {
             />
             <Typography className={styles.subTitle}>No Scoutings</Typography>
           </div>
-          : ""}
+        ) : (
+          ""
+        )}
       </div>
       {/* <SingleScoutViewDetails
         viewAttachmentId={viewAttachmentId}

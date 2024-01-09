@@ -26,15 +26,23 @@ const FarmCard = ({
   return (
     <div className={styles.farmcard}>
       <div className={styles.farmcarddetails}>
-        <img className={styles.farmshapeIcon} alt="" src={'/farmshape2.svg'} />
+        <picture>
+          <img
+            className={styles.farmshapeIcon}
+            alt=""
+            src={"/farmshape2.svg"}
+          />
+        </picture>
         <div className={styles.title}>
           <h4 className={styles.farmname}>{farmName}</h4>
           <p className={styles.acrescount}>{acresCount} acres</p>
         </div>
       </div>
       <div className={styles.duration}>
-        <img className={styles.calendarIcon} alt="" src="/calendaricon.svg" />
-        <div className={styles.para}>{timePipe(createAt, 'DD-MM-YYYY')}</div>
+        <picture>
+          <img className={styles.calendarIcon} alt="" src="/calendaricon.svg" />
+        </picture>
+        <div className={styles.para}>{timePipe(createAt, "DD-MM-YYYY")}</div>
       </div>
       <div className={styles.statsprogress}>
         <div className={styles.logscount}>
@@ -48,11 +56,18 @@ const FarmCard = ({
           </div>
         </div> */}
       </div>
-      <div className={_id == router.query.farm_id ? styles.activebar : styles.default} />
+      <div
+        className={
+          _id == router.query.farm_id ? styles.activebar : styles.default
+        }
+      />
       <div className={styles.progressbar}>
-        <LinearProgress variant="determinate" value={progress} color="success" />
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          color="success"
+        />
       </div>
-
     </div>
   );
 };

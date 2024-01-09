@@ -38,7 +38,7 @@ export const makeStore = ({ isServer }: any) => {
     } else {
 
         const persistConfig = {
-            key: "peepul_agri_v2",
+            key: "peepul_agri_v3",
             version: 1,
             storage: pesistStorage,
             REHYDRATE: false

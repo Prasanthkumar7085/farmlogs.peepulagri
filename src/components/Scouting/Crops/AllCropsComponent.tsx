@@ -3,23 +3,31 @@ import NewFolderDiloag from "@/components/Core/AddCropalert/AddNewFolder";
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import SelectAutoCompleteForFarms from "@/components/Core/selectDropDownForFarms";
-import AddIcon from '@mui/icons-material/Add';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import SortIcon from '@mui/icons-material/Sort';
-import { Box, Divider, Drawer, FormControl, FormHelperText, IconButton, InputLabel, ListItem, Typography } from "@mui/material";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import SortIcon from "@mui/icons-material/Sort";
+import {
+  Box,
+  Divider,
+  Drawer,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputLabel,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
+import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import CropCard from "./CropCard";
 import styles from "./crop-card.module.css";
-import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import { useCookies } from "react-cookie";
+import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
+import SelectAutoCompleteForFarmsCropPage from "@/components/Core/selectDropDownForFarmsCropPage";
 
 const AllCropsComponent = () => {
   const router = useRouter();
@@ -39,7 +47,6 @@ const AllCropsComponent = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [loadingForAdd, setLoadingForAdd] = useState<any>();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [errorMessages, setErrorMessages] = useState([]);
   const [state, setState] = useState({ bottom: false });
   const [sortBy, setSortBy] = useState("createdAt");
@@ -47,21 +54,23 @@ const AllCropsComponent = () => {
 
   const [searchString, setSearchString] = useState("");
   const [optionsLoading, setOptionsLoading] = useState(false);
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
-      await dispatch(removeUserDetails());
-      await dispatch(deleteAllMessages());
     } catch (err: any) {
       console.error(err);
     }
   };
-  const getFarmDetails = async (farmsearchstring: any, id: any) => {
+  const getFarmDetails = async (
+    farmsearchstring: any,
+    id: any,
+    reason = ""
+  ) => {
     setOptionsLoading(true);
 
     if (farmsearchstring) {
@@ -70,15 +79,18 @@ const AllCropsComponent = () => {
         query: { search_string: farmsearchstring },
       });
     }
-
+    let location_id = ""
     try {
       let response = await ListAllFarmForDropDownService(
         farmsearchstring,
-        accessToken
+        accessToken,
+        location_id
       );
       if (response?.success == true && response?.data?.length) {
         setFarmOptions(response?.data);
-        if (id) {
+        if (reason == "clear") {
+          setDefaultValue(null);
+        } else if (id) {
           let selectedObject =
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == id);
@@ -185,11 +197,10 @@ const AllCropsComponent = () => {
 
   useEffect(() => {
     if (router.isReady && router.query.farm_id && accessToken) {
-      let delay = 1000;
+      let delay = 500;
       let debounce = setTimeout(() => {
         dispatch(removeTheFilesFromStore([]));
 
-        console.log(router.isReady, searchString, "reason");
         getFarmDetails(
           searchString ? searchString : router.query?.search_string,
           router.query.farm_id
@@ -202,7 +213,7 @@ const AllCropsComponent = () => {
   const captureFarmName = (selectedObject: any, reason = "") => {
     if (reason && reason == "clear") {
       router.replace(`/farms/${selectedObject?._id}/crops`);
-      getFarmDetails("", router.query.farm_id);
+      getFarmDetails("", router.query.farm_id, reason);
     }
     if (selectedObject && Object.keys(selectedObject).length) {
       setFormId(selectedObject?._id);
@@ -452,7 +463,7 @@ const AllCropsComponent = () => {
             }}
           >
             <InputLabel color="primary" />
-            <SelectAutoCompleteForFarms
+            <SelectAutoCompleteForFarmsCropPage
               setOptionsLoading={setOptionsLoading}
               optionsLoading={optionsLoading}
               options={formOptions}
@@ -513,14 +524,10 @@ const AllCropsComponent = () => {
               })}
             </div>
           ) : !loading ? (
-            <div className={styles.noData}>
-              <Image
-                src="/no-crops-image.svg"
-                alt=""
-                width={120}
-                height={120}
-              />
-              <Typography variant="h4">This farm has no crops</Typography>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 222px)" }}>
+              <NoDataMobileComponent noData={!Boolean(cropOptions?.length)} noDataImg={"/NoDataImages/No_Crops.svg"} />
+              <p className="noSummaryText">No Crops</p>
             </div>
           ) : (
             ""

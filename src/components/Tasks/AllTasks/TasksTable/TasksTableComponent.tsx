@@ -11,10 +11,11 @@ import { ApiCallProps } from "../TasksPageComponent";
 import DrawerBoxComponent from "../../TaskComments/DrawerBox";
 import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
-import AttachmentDrawerTaskmodule from "./AttachmentDrawer";
+
 import Link from "next/link";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import ViewLogs from "../../ViewTask/ViewLogs";
+import AttachmentDrawer from "./AttachmentDrawer";
 
 // interface pageProps {
 //   data: Array<TaskResponseTypes> | any;
@@ -29,15 +30,11 @@ import ViewLogs from "../../ViewTask/ViewLogs";
 //   }: ApiCallProps) => void;
 //   paginationDetails: any;
 // }
-const TasksTableComponent = ({
-  data,
-  getData,
-  paginationDetails,
-}: any) => {
+const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
   const router = useRouter();
 
-  const userType = useSelector(
-    (state: any) => state.auth.userDetails?.user_details?.user_type
+  const userId = useSelector(
+    (state: any) => state.auth.userDetails?.user_details?._id
   );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -72,7 +69,12 @@ const TasksTableComponent = ({
         sortType: router.query.sort_type as string,
         selectedFarmId: router.query.farm_id as string,
         status: router.query.status as string,
-        userId: router.query.assigned_to as string,
+        userId: router.query.assign_to
+          ? Array.isArray(router.query.assign_to)
+            ? (router.query.assign_to as string[])
+            : ([router.query.assign_to] as string[])
+          : [],
+        isMyTasks: router.query.is_my_task as string,
       });
     } else {
       toast.error(response?.message);
@@ -101,10 +103,10 @@ const TasksTableComponent = ({
     let value = info.getValue()?.assign_to;
     let id = info.getValue()?._id;
     value =
-      value?.length > 2
+      value?.length > 1
         ? showAllAssignee && id == viewMoreId
           ? value
-          : value.slice(0, 2)
+          : value.slice(0, 1)
         : value;
     return (
       <span
@@ -115,10 +117,10 @@ const TasksTableComponent = ({
       >
         {value?.length
           ? value
-            .map((item: { _id: string; name: string }) => item.name)
-            .join(", ")
+              .map((item: { _id: string; name: string }) => item.name)
+              .join(", ")
           : "*Not Assigned*"}
-        {info.getValue()?.assign_to?.length > 2 ? (
+        {info.getValue()?.assign_to?.length >= 2 ? (
           <div
             style={{ color: "#9a9a9a", cursor: "pointer" }}
             onClick={() => {
@@ -145,16 +147,24 @@ const TasksTableComponent = ({
   };
   const columns = [
     {
+      accessorFn: (row: any) => row.serial,
+      id: "serial",
+      cell: (info: any) => <span>{info.getValue()}</span>,
+      header: () => <span>S.No</span>,
+      footer: (props: any) => props.column.id,
+      width: "45px",
+    },
+    {
       accessorFn: (row: any) => row.createdAt,
       id: "createdAt",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
+        <span>
+          <p>{timePipe(info.getValue(), "DD MMM YYYY")}</p>
         </span>
       ),
       header: () => <span>Created On</span>,
       footer: (props: any) => props.column.id,
-      width: "120px",
+      width: "110px",
     },
     // {
     //   accessorFn: (row: any) => row?.farm_ids,
@@ -168,6 +178,13 @@ const TasksTableComponent = ({
     //   footer: (props: any) => props.column.id,
     //   width: "200px",
     // },
+    {
+      accessorFn: (row: any) => row?.created_by?.name,
+      id: "created_by",
+      header: () => <span>Created By</span>,
+      footer: (props: any) => props.column.id,
+      width: "120px",
+    },
     {
       accessorFn: (row: any) => {
         return { assign_to: row.assign_to, _id: row._id };
@@ -184,8 +201,10 @@ const TasksTableComponent = ({
       id: "title",
       cell: (info: any) => (
         <Tooltip
+          followCursor
+          arrow
           title={
-            info.getValue()?.length > 34 ? (
+            info.getValue()?.length > 30 ? (
               <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
             ) : (
               ""
@@ -194,63 +213,65 @@ const TasksTableComponent = ({
         >
           <span>
             {info.getValue()
-              ? info.getValue()?.length > 34
+              ? info.getValue()?.length > 30
                 ? (info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
-                  info.getValue().slice(1, 30)
-                  : "") + "....."
+                    ? info.getValue().slice(0, 1).toUpperCase() +
+                      info.getValue().slice(1, 26)
+                    : "") + "....."
                 : info.getValue()
-                  ? info.getValue().slice(0, 1).toUpperCase() +
+                ? info.getValue().slice(0, 1).toUpperCase() +
                   info.getValue().slice(1)
-                  : ""
+                : ""
               : ""}
           </span>
         </Tooltip>
       ),
-      header: () => <span style={{ maxWidth: "400px" }}>Title</span>,
+      header: () => <span>Title</span>,
       footer: (props: any) => props.column.id,
-      width: "250px",
+      width: "200px",
     },
-    {
-      accessorFn: (row: any) => row.description,
-      id: "description",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          <Tooltip
-            title={
-              info.getValue()?.length > 45 ? (
-                <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
-              ) : (
-                ""
-              )
-            }
-          >
-            <span>
-              {info.getValue()
-                ? info.getValue()?.length > 45
-                  ? (info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1, 41)
-                    : "") + "....."
-                  : info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                    info.getValue().slice(1)
-                    : "-"
-                : "-"}
-            </span>
-          </Tooltip>
-        </span>
-      ),
-      header: () => <span>Description</span>,
-      footer: (props: any) => props.column.id,
-      width: "350px",
-    },
+    // {
+    //   accessorFn: (row: any) => row.description,
+    //   id: "description",
+    //   cell: (info: any) => (
+    //     <span >
+    //       <Tooltip
+    //         followCursor
+    //         arrow
+    //         title={
+    //           info.getValue()?.length > 40 ? (
+    //             <div style={{ fontSize: "15px" }}>{info.getValue()}</div>
+    //           ) : (
+    //             ""
+    //           )
+    //         }
+    //       >
+    //         <span>
+    //           {info.getValue()
+    //             ? info.getValue()?.length > 40
+    //               ? (info.getValue()
+    //                 ? info.getValue().slice(0, 1).toUpperCase() +
+    //                 info.getValue().slice(1, 35)
+    //                 : "") + "....."
+    //               : info.getValue()
+    //                 ? info.getValue().slice(0, 1).toUpperCase() +
+    //                 info.getValue().slice(1)
+    //                 : "-"
+    //             : "-"}
+    //         </span>
+    //       </Tooltip>
+    //     </span>
+    //   ),
+    //   header: () => <span>Description</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "300px",
+    // },
     {
       accessorFn: (row: any) => row.deadline,
       id: "deadline",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
+        <span>
+          <p>{timePipe(info.getValue(), "DD MMM YYYY")}</p>
         </span>
       ),
       header: () => <span>Due Date</span>,
@@ -260,104 +281,138 @@ const TasksTableComponent = ({
     {
       accessorFn: (row: any) => row.status,
       id: "status",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {getStatusLabel(info.getValue())}
-        </span>
-      ),
+      cell: (info: any) => <span>{getStatusLabel(info.getValue())}</span>,
       header: () => <span>Status</span>,
       footer: (props: any) => props.column.id,
-      width: "120px",
+      width: "110px",
     },
     {
       // accessorFn: (row: any) => row.description,
       id: "actions",
       cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
+        <span>
           {
             <div
               style={{
                 display: "flex",
                 width: "100%",
                 justifyContent: "space-evenly",
+                alignItems: "center !important",
               }}
             >
-              <Link href={`/tasks/${info.row.original?._id}`}>
-                <ImageComponent
-                  src="/view-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </Link>
-              {/* <div
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  router.push(`/tasks/${info.row.original?._id}/edit`)
+              <Tooltip followCursor arrow title="View">
+                <Link href={`/tasks/${info.row.original?._id}`}>
+                  <ImageComponent
+                    src="/viewTaskIcons/task-table-view.svg"
+                    height={18}
+                    width={18}
+                    alt=""
+                  />
+                </Link>
+              </Tooltip>
+
+              <Tooltip
+                followCursor
+                arrow
+                title={
+                  info.row.original?.status == "DONE" ||
+                  info.row.original?.created_by?._id !== userId
+                    ? "You dont't have permission for this action"
+                    : "Delete"
                 }
               >
-                <ImageComponent
-                  src="/pencil-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </div> */}
-              {userType !== "farmer" ? (
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
+                    if (
+                      info.row.original?.status == "DONE" ||
+                      info.row.original?.created_by?._id !== userId
+                    ) {
+                      return;
+                    }
                     setDeleteTaskId(info.row.original?._id);
                     setDialogOpen(true);
                   }}
                 >
                   <ImageComponent
-                    src="/trast-icon.svg"
+                    src={
+                      !(
+                        info.row.original?.status == "DONE" ||
+                        info.row.original?.created_by?._id !== userId
+                      )
+                        ? "/viewTaskIcons/task-table-delete.svg"
+                        : "/viewTaskIcons/task-table-delete-disable.svg"
+                    }
                     height={17}
                     width={17}
-                    alt="view"
+                    alt=""
                   />
                 </div>
-              ) : (
-                ""
-              )}
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setRowDetails(info.row.original);
-                  setDrawerOpen(true);
-                }}
+              </Tooltip>
+
+              <Tooltip
+                followCursor
+                arrow
+                title={
+                  info.row.original.attachments
+                    ? "Attachments"
+                    : "No Attachments"
+                }
               >
-                <ImageComponent
-                  src="/task-comments.svg"
-                  height={17}
-                  width={17}
-                  alt="comments"
-                />
-              </div>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setRowDetails(info.row.original);
-                  setAttachmentDrawer(true);
-                }}
-              >
-                <ImageComponent
-                  src="/task-table-attachment-icon.svg"
-                  height={17}
-                  width={17}
-                  alt=""
-                />
-              </div>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setOpenLogs((prev) => !prev);
-                  setTaskId(info.row.original?._id);
-                }}
-              >
-                <SummarizeIcon sx={{ color: "#4986f7", fontSize: "1.3rem" }} />
-              </div>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    console.log(info.row.original.attachements, "ooo");
+                    if (info.row.original.attachments) {
+                      setRowDetails(info.row.original);
+                      setAttachmentDrawer(true);
+                    }
+                  }}
+                >
+                  <ImageComponent
+                    src={
+                      info.row.original.attachments
+                        ? "/viewTaskIcons/task-table-attachment.svg"
+                        : "/viewTaskIcons/task-table-attachment-disable.svg"
+                    }
+                    height={15}
+                    width={15}
+                    alt=""
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip followCursor arrow title="Comments">
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setRowDetails(info.row.original);
+                    setDrawerOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src="/viewTaskIcons/task-table-comments.svg"
+                    height={17}
+                    width={17}
+                    alt="comments"
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip followCursor arrow title="Logs">
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setOpenLogs((prev) => !prev);
+                    setTaskId(info.row.original?._id);
+                  }}
+                >
+                  <ImageComponent
+                    src="/viewTaskIcons/logs-icon.svg"
+                    height={14}
+                    width={13}
+                    alt=""
+                  />
+                </div>
+              </Tooltip>
             </div>
           }
         </span>
@@ -394,15 +449,15 @@ const TasksTableComponent = ({
       <DrawerBoxComponent
         drawerClose={drawerClose}
         rowDetails={rowDetails}
-        setDrawerOpen={setDrawerOpen}
         drawerOpen={drawerOpen}
       />
 
-      <AttachmentDrawerTaskmodule
+      <AttachmentDrawer
         attachmentDrawerClose={attachmentDrawerClose}
         rowDetails={rowDetails}
         setAttachmentDrawer={setAttachmentDrawer}
         attachmentdrawer={attachmentdrawer}
+        direction={"right"}
       />
       <ViewLogs openLogs={openLogs} setOpenLogs={setOpenLogs} taskId={taskId} />
 

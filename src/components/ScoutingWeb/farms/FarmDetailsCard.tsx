@@ -46,11 +46,11 @@ const ScoutingFarmDetailsCard = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState("");
@@ -61,8 +61,8 @@ const ScoutingFarmDetailsCard = ({
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -167,7 +167,13 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.totalAcres}>
                     Total <span>(acres)</span>
                   </p>
-                  <p className={styles.text}>{item.area}</p>
+                  <p className={styles.text}>
+                    {item.area
+                      ? item.area?.toString()?.includes(".")
+                        ? (+item.area)?.toFixed(2)
+                        : item.area
+                      : "0"}
+                  </p>
                 </div>
               </div>
 
@@ -178,9 +184,7 @@ const ScoutingFarmDetailsCard = ({
                   src="/farm-date-icon.svg"
                 /> */}
                 <div className={styles.duration}>
-                  <p className={styles.from}>
-                    Location
-                  </p>
+                  <p className={styles.from}>Location</p>
                   <p className={styles.divider}>-</p>
                   <p className={styles.from}>{item?.location_id?.title}</p>
                 </div>
@@ -196,7 +200,6 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.from}>
                     {timePipe(item.createdAt, "DD, MMM YYYY")}
                   </p>
-
                 </div>
               </div>
             </div>
@@ -208,7 +211,7 @@ const ScoutingFarmDetailsCard = ({
               }}
             >
               <div onClick={() => router.push(`/farm/${item?._id}/crops`)}>
-                {userType == "AGRONOMIST" ? (
+                {userType_v2 == "AGRONOMIST" ? (
                   <p className={styles.mobile}>
                     <AccountCircleIcon />
                     <span>{item?.user_id?.full_name}</span>

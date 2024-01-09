@@ -15,16 +15,15 @@ const AddProcurementHeader: NextPage = () => {
     <div className={styles.addprocurementheader}>
       <Button
         className={styles.backbutton}
-        sx={{ width: 40 }}
         color="primary"
         variant="contained"
         onClick={onBackButtonClick}
       >
-        <img src="/arrow-left-back-white.svg" alt="" width={"18px"} />
+        <img src="/arrow-left-back-white-black.svg" alt="" width={"18px"} />
       </Button>
       <div className={styles.textwrapper}>
-        <label className={styles.smalltext}>{`Back to List `}</label>
-        <h2 className={styles.largetext}>Add Procurement</h2>
+        <p className={styles.backText}>Back To List</p>
+        <h2 className={styles.largetext}>{router.query.procurement_id ? "Edit Procurement" : "Add Procurement"}</h2>
       </div>
     </div>
   );

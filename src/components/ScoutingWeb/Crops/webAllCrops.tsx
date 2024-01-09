@@ -35,26 +35,26 @@ const AllCropsWebPage = () => {
 
   const getCropsByFarmId = async (
     farmId: string,
-    orderBy: string,
-    orderType: string
+    sortBy: string,
+    sortType: string
   ) => {
     setLoading(true);
     let queryParamsUrl = "";
     let queryParams: any = {
-      order_by: "createdAt",
-      order_type: "desc",
+      sort_by: "createdAt",
+      sort_type: "desc",
     };
 
-    if (orderBy) {
-      queryParams["order_by"] = orderBy;
+    if (sortBy) {
+      queryParams["sort_by"] = sortBy;
     }
-    if (orderType) {
-      queryParams["order_type"] = orderType;
+    if (sortType) {
+      queryParams["sort_type"] = sortType;
     }
-    // if (Object.keys(queryParams).length) {
-    //   queryParamsUrl = prepareURLEncodedParams("", queryParams);
-    //   router.replace({ pathname: `/farm/${farmId}/crops/list`, query: queryParams });
-    // }
+    if (Object.keys(queryParams).length) {
+      queryParamsUrl = prepareURLEncodedParams("", queryParams);
+      router.replace({ pathname: `/farm/${farmId}/crops`, query: queryParams });
+    }
     const response = await getAllCropsService(farmId, queryParamsUrl, accessToken);
 
     if (response.success) {
@@ -65,19 +65,20 @@ const AllCropsWebPage = () => {
 
   const getAllFarms = async () => {
     setLoading(true);
-    const response = await ListAllFarmForDropDownService("", accessToken);
+    let location_id = ""
+    const response = await ListAllFarmForDropDownService("", accessToken, location_id);
     if (response.success) {
       setFarmsData(response?.data);
       let selectedFarm = response?.data.find(
         (item: FarmDataType) => item._id == router.query.farm_id
       );
       setFarmSelected(selectedFarm);
-      setSortBy(router.query.order_by as string);
-      setSortType(router.query.order_type as string);
+      setSortBy(router.query.sort_by as string);
+      setSortType(router.query.sort_type as string);
       await getCropsByFarmId(
         router.query.farm_id as string,
-        router.query.order_by as string,
-        router.query.order_type as string
+        router.query.sort_by as string,
+        router.query.sort_type as string
       );
     }
     setLoading(false);
@@ -104,8 +105,8 @@ const AllCropsWebPage = () => {
     }
   }, [router.isReady, accessToken]);
 
-  const getColor = (orderBy: string, orderType: string) => {
-    if (orderBy == sortBy && orderType == sortType) {
+  const getColor = (sortBy: string, sortType: string) => {
+    if (router.query.sort_by == sortBy && router.query.sort_type == sortType) {
       return "#dedede";
     }
     return "#ffffff";

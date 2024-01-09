@@ -20,19 +20,15 @@ const FarmsDropDown = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-
     if (farmDefaultValue) {
-
       setDefaultValueSet(
         options && options.find((item: any) => item._id == farmDefaultValue)
       );
-    }
-    else {
+    } else {
       setDefaultValueSet(
         options && options.find((item: any) => item._id == defaultValueSet?._id)
       );
     }
-
   }, [options, farmDefaultValue]);
 
   return (
@@ -70,6 +66,7 @@ const FarmsDropDown = ({
           background: "#fff",
           borderRadius: "24px",
 
+
           "& .MuiInputBase-input ": {
             fontSize: "13px",
             fontWeight: "400",
@@ -80,14 +77,12 @@ const FarmsDropDown = ({
             background: "#fff",
             color: "#000",
             padding: "11px 14px !important",
-            borderRadius: "10px !important"
-
-
+            paddingRight: "50px !important"
           },
           '& .MuiOutlinedInput-notchedOutline ': {
             border: "1px solid grey !important",
-            borderRadius: "10px !important"
-          }
+          },
+
         }}
 
       />

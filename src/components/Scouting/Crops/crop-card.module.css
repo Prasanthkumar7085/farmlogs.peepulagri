@@ -6,7 +6,7 @@
 .viewFarm {
   color: #fff !important;
   font-family: "Inter", sans-serif !important;
-  font-size: clamp(18px, 4vw, 20px) !important;
+  font-size: clamp(14px, 2vw, 16px) !important;
   font-weight: 500 !important;
 }
 
@@ -42,6 +42,7 @@
   border-radius: 50% !important;
   width: 100% !important;
   padding-block: 12px !important;
+  max-width: 50px !important;
 }
 
 .sortIconBtn:hover {
@@ -49,6 +50,7 @@
   border-radius: 50% !important;
   width: 100% !important;
   padding-block: 12px !important;
+  max-width: 50px !important;
 }
 
 .avatharImg {
@@ -93,9 +95,16 @@
 .stickyHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   color: #fff;
   padding: 6px 8px;
+  padding-top: 0.9rem;
+}
+
+.scoutingDate {
+  font-size: clamp(14px, 2.5vw, 15px);
+  padding-left: 0.5rem;
+  font-family: "Inter", sans-serif;
 }
 
 .summaryBtn {
@@ -110,7 +119,7 @@
 
 .stickyHeader .selectBtn {
   padding: 0;
-  font-size: clamp(16px, 3vw, 18px);
+  font-size: clamp(15px, 2.5vw, 16px);
   text-transform: capitalize;
   font-family: "Inter", sans-serif;
   padding: 2px 10px;
@@ -223,8 +232,9 @@
 }
 
 .allCrops {
-  height: calc(100vh - 224px);
-  overflow: scroll;
+  height: calc(100vh - 203px);
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0 0.65rem;
   margin-top: -1.5rem;
 }

@@ -1,6 +1,6 @@
 .areYouSure {
   line-height: 24px;
-  font-size: clamp(12px, 3vw, 14px);
+  font-size: clamp(14px, 3vw, 14px);
   font-weight: 500;
   color: #d32f2f;
   text-align: center;
@@ -9,7 +9,7 @@
 
 
 .thisWillBe {
-  font-size: clamp(12px, 2.5vw, 12px);
+  font-size: clamp(13px, 2.5vw, 12px);
   line-height: 21px;
   text-align: center;
 }

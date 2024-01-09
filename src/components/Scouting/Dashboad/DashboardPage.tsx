@@ -3,7 +3,6 @@ import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import NoFarmDataComponent from "@/components/Core/NoFarmDataComponent";
 import { FarmDataType } from "@/types/farmCardTypes";
-import AddIcon from "@mui/icons-material/Add";
 import { IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -15,6 +14,7 @@ import getAllLocationsService from "../../../../lib/services/Locations/getAllLoc
 import styles from "./DashboardPage.module.css";
 import DashBoardHeader from "./dash-board-header";
 import FarmCard from "./farm-card";
+import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -23,8 +23,8 @@ const DashboardPage = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [farmsData, setFarmsData] = useState<Array<FarmDataType>>([]);
   const [loading, setLoading] = useState(true);
@@ -104,8 +104,8 @@ const DashboardPage = () => {
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -147,7 +147,7 @@ const DashboardPage = () => {
     if (router.isReady && accessToken) {
       await getAllLocations();
     } else {
-      // setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -171,8 +171,6 @@ const DashboardPage = () => {
       router?.query.location ? (router?.query.location as string) : ""
     );
   }, [router?.query.location]);
-
-  console.log(location);
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -206,12 +204,15 @@ const DashboardPage = () => {
           setPage={setPage}
           page={page}
           loading={loading}
-
           getAllFarms={getAllFarms}
           hasMore={hasMore}
         />
       ) : !loading ? (
-        <NoFarmDataComponent noData={!Boolean(farmsData.length)} />
+
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 180px)" }}>
+          <NoDataMobileComponent noData={!Boolean(farmsData.length)} noDataImg={"/NoDataImages/No_Farms.svg"} />
+          <p className="noSummaryText">No Farms</p>
+        </div>
       ) : (
         <div style={{ minHeight: "75vh" }}></div>
       )}

@@ -6,10 +6,9 @@ import POC from "./POC";
 
 const EditProcurementComponent = () => {
   return (
-    <div>
-      <AddProcurementHeader />
+    <div style={{ paddingBottom: "2rem" }}>
       <AddProcurementForm />
-      <MaterialsRequired />
+      {/* <MaterialsRequired /> */}
     </div>
   );
 };

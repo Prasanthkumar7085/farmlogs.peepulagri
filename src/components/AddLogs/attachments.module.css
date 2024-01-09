@@ -4,15 +4,18 @@
   align-self: stretch;
   position: relative;
 }
-.saveBtn{
+
+.saveBtn {
   background-color: #3462cf;
   color: white;
 
 }
-.saveBtn:hover{
+
+.saveBtn:hover {
   background-color: white !important;
   color: #3462cf !important;
 }
+
 .title {
   font-size: inherit;
   line-height: 12px;
@@ -25,6 +28,7 @@
   line-height: 14px;
   color: var(--body);
 }
+
 .header {
   width: 750px;
   display: flex;
@@ -33,17 +37,25 @@
   justify-content: flex-end;
   gap: var(--gap-5xs);
 }
+
 .attachments,
 .link {
   align-self: stretch;
   display: flex;
   justify-content: flex-start;
 }
+
 .UpdateFiles {
   width: 100%;
   position: relative;
 }
-.uploadFiles{
+
+.UpdateFilesMobile {
+  width: 16%;
+  position: relative;
+}
+
+.uploadFiles {
   position: absolute;
   top: 0;
   left: 0;
@@ -51,40 +63,122 @@
   bottom: 0;
   opacity: 0;
 }
+
 .uploadFiles,
 .link {
-  border-radius: var(--br-8xs);
   background-color: var(--background);
   box-shadow: var(--shadow-xs);
-  border: 1px dashed var(--gray-300);
+  border-radius: 8px;
+  border: 1px dashed #828282;
   box-sizing: border-box;
-  height: 70px;
+  height: 100px;
   overflow: hidden;
   flex-shrink: 0;
   flex-direction: row;
   padding: var(--padding-3xs) var(--padding-base);
   align-items: center;
+  justify-content: center;
   width: 100%;
   font-size: 1rem;
   line-height: 1;
-  gap: 1em;
+  gap: .625rem;
 }
-.link .icon {
-  height: var(--padding-5xl);
-  width: var(--padding-5xl);
-}
-.attachments {
-  border-top: 1px solid var(--stroke);
+
+.mobileLink {
+  /* background-color: var(--background); */
+  /* box-shadow: var(--shadow-xs); */
+  border-radius: 8px;
+  /* border: 1px dashed #828282; */
+  /* box-sizing: border-box; */
+  /* height: 100px; */
+  /* overflow: hidden; */
+  /* flex-shrink: 0; */
+  /* flex-direction: row; */
+  /* padding: var(--padding-3xs) var(--padding-base); */
+  align-items: center;
+  display: flex;
   flex-direction: column;
-  padding: var(--padding-13xl) 0;
+  justify-content: flex-start;
+  line-height: 1;
+  gap: .625rem;
+  text-align: center;
+}
+
+.link .icon {
+  width: 25px;
+}
+
+.mobileLink .icon {
+  width: 20px;
+}
+
+.link .text {
+  color: #6A7185;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 14px);
+  font-weight: 400;
+  line-height: 160%;
+}
+
+.mobileLink .text {
+  color: #45A845;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 2.5vw, 13px);
+  font-weight: 400;
+  line-height: 160%;
+  white-space: nowrap;
+}
+
+.link .text span {
+  color: #232323 !important;
+}
+
+
+.attachments {
+  /* border-top: 1px solid var(--stroke); */
+  flex-direction: column;
+  /* padding: var(--padding-13xl) 0; */
   align-items: flex-start;
-  gap: var(--gap-xs);
+  /* gap: var(--gap-xs); */
   text-align: left;
   font-size: var(--font-size-lg);
   color: var(--gray-900);
   font-family: var(--text-sm-medium);
   flex: 1;
 }
+
+.uploadFilesBtnGrp {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 100%;
+}
+
+.uploadFilesBtnGrp .canceleBtn {
+  text-transform: capitalize !important;
+  font-size: clamp(12px, 0.625vw, 14px) !important;
+  color: #35353D !important;
+  border: 1px solid lightgrey !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+.uploadFilesBtnGrp .saveBtn {
+  color: #fff !important;
+  font-size: clamp(12px, 0.625vw, 14px) !important;
+  background-color: #45A845 !important;
+  text-transform: capitalize !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+.uploadFilesBtnGrp .saveBtn:hover {
+  color: #fff !important;
+  font-size: clamp(12px, 0.625vw, 14px) !important;
+  background-color: #45A845 !important;
+  text-transform: capitalize !important;
+  font-family: "Inter", sans-serif !important;
+}
+
 .attachments .attachmentItem {
   display: grid;
   grid-template-columns: 50px auto 40px;
@@ -95,19 +189,23 @@
   padding: 4px;
   border-radius: 10px;
 }
+
 .attachments .attachmentItem p {
   color: var(--gray-700);
   font-size: var(--text-sm-normal-size);
 }
-.attachments .attachmentItem img{
+
+.attachments .attachmentItem img {
   border-radius: 8px;
 }
+
 .table {
   border: 1px solid rgba(0, 0, 0, 0.2);
   min-width: 100%;
   margin-top: .5rem;
   border-radius: 3px;
 }
+
 .table tbody td,
 .table thead th {
   padding-block: 8px;

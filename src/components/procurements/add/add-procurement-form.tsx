@@ -1,48 +1,52 @@
-import type { NextPage } from "next";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   Button,
+  Card,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
 } from "@mui/material";
-import OperationDetails from "./operation-details";
-import MaterialsRequired from "./materials-required";
-import styles from "./add-procurement-form.module.css";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import addProcurementService from "../../../../lib/services/ProcurementServices/addProcurementService";
-import { Toaster, toast } from "sonner";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import { useCookies } from "react-cookie";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import getProcurementByIdService from "../../../../lib/services/ProcurementServices/getProcurementByIdService";
 import updateProcurementService from "../../../../lib/services/ProcurementServices/updateProcurementService";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import POC from "../edit/POC";
+import styles from "./add-procurement-form.module.css";
+import OperationDetails from "./operation-details";
+import deleteAddProcurementService from "../../../../lib/services/ProcurementServices/deleteAddProcurementService";
+import AddProcurementHeader from "./add-procurement-header";
+import MaterialsRequired from "./materials-required";
 
 interface ApiProps {
   page: number;
   searchString: string;
 }
-const AddProcurementForm: NextPage = () => {
+const AddProcurementForm = () => {
   const dispatch = useDispatch();
-
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
-  const router = useRouter();
 
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [dateOfOperation, setDataOfOperation] = useState<Date | null>(null);
   const [remarks, setRemarks] = useState("");
-
   const [farmOptions, setFarmOptions] = useState([]);
   const [farm, setFarm] = useState<{ title: string; _id: string }[]>([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
@@ -50,25 +54,27 @@ const AddProcurementForm: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [isDisabled, setIsDisabled] = useState(false);
-
   const [editFarms, setEditFarms] = useState<
     { title: string; _id: string }[] | []
   >([]);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
-  const [procurementData, setProcurementData] = useState({});
-
+  const [procurementData, setProcurementData] = useState<any>({});
+  const [priority, setPriority] = useState('NONE')
+  const [materialCount, setMaterialCount] = useState<any>()
+  const [afterProcurement, setAfterProcurement] = useState<any>(false)
+  console.log(materialCount)
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
+    let location_id = ""
     try {
       let response = await ListAllFarmForDropDownService(
         searchString as string,
-        accessToken
+        accessToken,
+        location_id
       );
       if (response.success) {
         setFarmOptions(response?.data);
       }
-      console.log(response);
     } catch (err) {
       console.error(err);
     }
@@ -83,8 +89,8 @@ const AddProcurementForm: NextPage = () => {
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -103,6 +109,7 @@ const AddProcurementForm: NextPage = () => {
           ? new Date(dateOfOperation)?.toISOString()
           : "",
         remarks: remarks,
+        priority: priority,
         farm_ids: farm?.length
           ? farm.map((item: { _id: string }) => item._id)
           : [],
@@ -114,11 +121,12 @@ const AddProcurementForm: NextPage = () => {
       });
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
-        console.log(response);
+        setProcurementData(response?.data);
+        setAfterProcurement(true)
 
-        setTimeout(() => {
-          router.push(`/procurements/${response?.data?._id}/edit`);
-        }, 1000);
+        // setTimeout(() => {
+        //   router.push(`/procurements/${response?.data?._id}/edit`);
+        // }, 1000);
       } else if (response.status == 422) {
         setErrorMessages(response?.errors);
       } else if (response.status == 403) {
@@ -146,6 +154,7 @@ const AddProcurementForm: NextPage = () => {
           ? new Date(dateOfOperation)?.toISOString()
           : "",
         remarks: remarks,
+        priority: priority,
         farm_ids: [
           ...(farm?.length
             ? farm.map((item: { _id: string }) => item._id)
@@ -164,6 +173,7 @@ const AddProcurementForm: NextPage = () => {
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
         setFarm([]);
+        setAfterProcurement(true)
         await getProcurementData();
         setIsDisabled(true);
       } else if (response.status == 422) {
@@ -187,7 +197,7 @@ const AddProcurementForm: NextPage = () => {
     setLoading(true);
     try {
       const response = await getProcurementByIdService({
-        procurementId: router.query.procurement_id as string,
+        procurementId: router.query.procurement_id as string || procurementData?._id,
         accessToken: accessToken,
       });
       if (response?.status == 200 || response?.status == 201) {
@@ -202,6 +212,7 @@ const AddProcurementForm: NextPage = () => {
         setRemarks(response?.data?.remarks);
         setTitle(response?.data?.title);
         setEditFarms(response?.data?.farm_ids);
+        setPriority(response?.data?.priority)
       }
     } catch (err) {
       console.error(err);
@@ -215,8 +226,24 @@ const AddProcurementForm: NextPage = () => {
   };
 
   const deleteProcurementApi = async () => {
-    setDeleteLoading(true);
     try {
+      const response = await deleteAddProcurementService({
+        procurementId: router.query.procurement_id,
+        token: accessToken,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.message);
+        router.back();
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else if (response?.status == 403) {
+        logout();
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+
+      setDeleteLoading(true);
     } catch (err) {
       console.error(err);
     } finally {
@@ -235,79 +262,114 @@ const AddProcurementForm: NextPage = () => {
       return () => clearTimeout(debounce);
     }
   }, [router.isReady, accessToken, searchString]);
+
+  const checkMaterialsListCount = (value: any) => {
+    console.log(value.length)
+    setMaterialCount(value?.length)
+  }
+
+
   return (
-    <div>
-      <form className={styles.addprocurementform}>
-        <div className={styles.formgroup}>
-          {router.query.procurement_id ? (
-            <Button
-              variant="outlined"
-              sx={{ color: "red", borderColor: "red" }}
-              onClick={() => setIsDisabled(!isDisabled)}
-            >
-              {router.query.procurement_id && isDisabled ? (
-                <EditOutlinedIcon />
-              ) : (
-                <CancelOutlinedIcon />
-              )}
-            </Button>
-          ) : (
-            ""
-          )}
-          <OperationDetails
-            farmOptions={farmOptions}
-            onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-            label={"title"}
-            placeholder={"Select Farm here"}
-            defaultValue={farm}
-            optionsLoading={optionsLoading}
-            setOptionsLoading={setOptionsLoading}
-            searchString={searchString}
-            setSearchString={setSearchString}
-            title={title}
-            setTitle={setTitle}
-            dateOfOperation={dateOfOperation}
-            setDataOfOperation={setDataOfOperation}
-            remarks={remarks}
-            setRemarks={setRemarks}
-            errorMessages={errorMessages}
-            setErrorMessages={setErrorMessages}
-            editFarms={editFarms}
-            setEditFarms={setEditFarms}
-            isDisabled={isDisabled}
-            setIsDisabled={setIsDisabled}
-          />
-        </div>
-        {isDisabled ? (
-          ""
-        ) : (
-          <div className={styles.modalActions}>
-            <div className={styles.buttonsgroup}>
-              <Button
-                color="primary"
-                variant="outlined"
-                onClick={() => {
-                  router.query.procurement_id
-                    ? deleteProcurement()
-                    : router.back();
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  router.query.procurement_id
-                    ? updateProcurement()
-                    : addProcurement();
-                }}
-              >
-                {router.query.procurement_id ? "Update" : "Submit"}
-              </Button>
+    <div style={{ paddingTop: "2rem" }}>
+      <AddProcurementHeader />
+
+      <form className={styles.addprocurementform} style={{ background: "#fff" }}>
+        <div style={{ width: "100%" }}>
+          <div style={{ padding: "1rem" }}>
+            {/* <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+
+            </div> */}
+            {afterProcurement ?
+              <MaterialsRequired
+                procurementData={procurementData}
+                checkMaterialsListCount={checkMaterialsListCount}
+                getProcurementData={getProcurementData} />
+
+              :
+              <OperationDetails
+                farmOptions={farmOptions}
+                onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+                label={"title"}
+                placeholder={"Select Farm here"}
+                defaultValue={farm}
+                optionsLoading={optionsLoading}
+                setOptionsLoading={setOptionsLoading}
+                searchString={searchString}
+                setSearchString={setSearchString}
+                title={title}
+                setTitle={setTitle}
+                dateOfOperation={dateOfOperation}
+                setDataOfOperation={setDataOfOperation}
+                remarks={remarks}
+                setRemarks={setRemarks}
+                errorMessages={errorMessages}
+                setErrorMessages={setErrorMessages}
+                editFarms={editFarms}
+                setEditFarms={setEditFarms}
+                setIsDisabled={setIsDisabled}
+                priority={priority}
+                setPriority={setPriority}
+              />}
+
+            <div className={styles.formButtons} >
+
+              <div className={styles.procurementFormBtn}>
+                {afterProcurement && procurementData?._id ?
+                  <Button
+                    className={styles.cancelBtn}
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => {
+                      setAfterProcurement(false)
+                    }}
+                  >
+                    Prev
+
+                  </Button> :
+
+                  <Button
+                    className={styles.cancelBtn}
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => {
+                      router.back();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                }
+
+                {afterProcurement && procurementData?._id ?
+                  <Button
+                    // className={styles.submitBtn}
+                    variant="contained"
+                    disabled={materialCount >= 1 ? false : true}
+                    onClick={() => {
+                      router.back();
+
+                    }}
+                  >
+                    Submit
+                  </Button>
+                  :
+                  <Button
+                    className={styles.submitBtn}
+                    color="primary"
+                    variant="contained"
+                    onClick={() => {
+                      router.query.procurement_id
+                        ? updateProcurement()
+                        : addProcurement();
+                    }}
+                  >
+                    Next
+                  </Button>}
+              </div>
+
             </div>
+
           </div>
-        )}
+        </div>
 
         <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
           <DialogContent>
@@ -334,10 +396,7 @@ const AddProcurementForm: NextPage = () => {
         <LoadingComponent loading={loading} />
         <Toaster closeButton richColors position="top-right" />
       </form>
-      <POC
-        procurementData={procurementData}
-        getProcurementData={getProcurementData}
-      />
+
     </div>
   );
 };

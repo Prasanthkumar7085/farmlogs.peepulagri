@@ -5,7 +5,10 @@ declare namespace Farms {
     singleFarm: any;
     filesList: any;
     cropName: string;
-    farmName:string
+    farmName:string;
+    taskFilterOpen:any;
+    summaryFarmTitle:string;
+    summaryCropTitle:string;
   }
 
 }

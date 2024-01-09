@@ -111,7 +111,7 @@ const DashBoardHeader = ({
                   {...params}
                   name="location"
                   size="small"
-                  placeholder="Enter location here"
+                  placeholder="Enter location"
                   fullWidth
                   defaultValue={"All"}
                   // variant="outlined"

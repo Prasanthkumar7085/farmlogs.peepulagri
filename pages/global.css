@@ -18,6 +18,19 @@ body {
     background: linear-gradient(120deg, #05a15609, #d9494109, #d9484109, #05a15609);
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
 .MuiTabs-indicator {
     display: none !important;
 }
@@ -27,6 +40,17 @@ body {
     align-items: center;
     gap: 1rem;
     height: 100%;
+}
+
+.noSummaryText {
+    color: #7b7a7a !important;
+    margin: 0 !important;
+    font-size: clamp(14px, 2.5vw, 16px) !important;
+    font-family: "Inter", sans-serif !important;
+
+}
+.rs-picker-menu{
+    z-index: 9999!important;
 }
 
 :root {
@@ -123,7 +147,7 @@ body {
 .dataTable-container {
     /* background-color: #ffffff; */
     overflow: hidden;
-    border-radius: 10px 10px 0 0;
+    /* border-radius: 10px 10px 0 0; */
 }
 
 .dataTable-container .table {
@@ -143,10 +167,10 @@ body {
 .dataTable-container .thead .cell {
     color: var(--white, #FFF);
     font-family: "Inter", sans-serif;
-    font-size: 14px;
+    font-size: clamp(12px, 0.72vw, 14px);
     font-weight: 600;
     padding: 10px 0 10px 10px;
-    border-right: 1px solid #d8d7d6;
+    /* border-right: 1px solid #d8d7d6; */
     border-bottom: 1px solid #d8d7d6;
 
 }
@@ -155,7 +179,7 @@ body {
     position: sticky;
     right: 0;
     background: var(--color-sienna);
-    border-left: 1px solid #d8d7d6;
+    /* border-left: 1px solid #d8d7d6; */
 }
 
 .dataTable-container .thead .table-row .cell:last-child img {
@@ -176,7 +200,7 @@ body {
 .dataTable-container .tbody .table-row .cell:first-child {
     position: sticky;
     left: 0;
-    box-shadow: -20px 0 20px -35px #000000b3 inset;
+    /* box-shadow: -17px 0 20px -35px #000000b3 inset; */
     background: #fff;
 }
 
@@ -184,21 +208,27 @@ body {
     position: sticky;
     right: 0;
     background: #fff;
-    border-left: 1px solid #d8d7d6;
-    box-shadow: 20px 0 20px -35px #000000b3 inset;
+    /* border-left: 1px solid #d8d7d6; */
+    /* box-shadow: 17px 0 20px -35px #000000b3 inset; */
 }
 
 .dataTable-container .tbody .cell {
     padding: 10px;
-    border-right: 1px solid #d8d7d6;
+    /* border-right: 1px solid #d8d7d6; */
     border-bottom: 1px solid #d8d7d6;
     background-color: #fff;
+    font-size: clamp(12px, 0.72vw, 14px);
 }
 
 .dataTable-container .tbody .cell span {
     padding: 0 !important;
 }
 
+.dataTable-container .tbody .cell span p {
+    margin: 0;
+    color: #6A7185 !important;
+    font-size: clamp(12px, 0.72vw, 15px);
+}
 
 .mapImage {
     width: 100%;

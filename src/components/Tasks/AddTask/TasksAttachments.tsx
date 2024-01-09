@@ -22,6 +22,7 @@ interface PropTypes {
   multipleFiles: any;
   setMultipleFiles: React.Dispatch<React.SetStateAction<any>>;
   afterUploadAttachements: any;
+  disabled: boolean
 }
 const TasksAttachments: React.FC<PropTypes> = ({
   setUploadedFiles,
@@ -29,6 +30,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
   setMultipleFiles,
   afterUploadAttachements,
   taskId,
+  disabled,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -45,7 +47,22 @@ const TasksAttachments: React.FC<PropTypes> = ({
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
   const [loading, setLoading] = useState<any>();
-
+  const [imageTypeArray, setImageTypeArray] = useState(['application/pdf',
+    'application/docx',
+    'application/doc',
+    'application/txt',
+    'application/xlsx',
+    'application/csv',
+    'text/plain',
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/svg',
+    'image/webp',
+    'video/webm',
+    'video/mp4',
+    'application/msword',
+    'text/csv']);
   // let tempFilesStorage: any = [...attachments];
 
   // let previewStorage = [...previewImages];
@@ -157,6 +174,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
     });
   };
 
+
   const startUploadEvent = async (
     file: any,
     index: any,
@@ -164,12 +182,11 @@ const TasksAttachments: React.FC<PropTypes> = ({
     setFileProgress: Function
   ) => {
     let obj = {
-      attachment: {
-        original_name: file.name,
-        type: file.type,
-        source: "tasks",
-      },
+      original_name: file.name,
+      type: file.type,
+      size: file.size,
     };
+
     let options = {
       method: "POST",
       headers: new Headers({
@@ -181,11 +198,20 @@ const TasksAttachments: React.FC<PropTypes> = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/image/start-upload`,
         options
       );
       let responseData = await response.json();
       if (responseData.success == true) {
+
+        tempFilesStorage.splice(1, 0, {
+          original_name: responseData.data.original_name,
+          type: file.type,
+          size: file.size,
+          path: responseData?.data?.path,
+          key: responseData?.data?.key,
+        });
+        setAttachments(tempFilesStorage);
         await uploadFileintoChuncks(
           responseData.data.upload_id,
           file,
@@ -194,14 +220,6 @@ const TasksAttachments: React.FC<PropTypes> = ({
           setFileProgress,
           responseData.data.file_key
         );
-        tempFilesStorage.splice(1, 0, {
-          original_name: responseData.data.original_name,
-          type: file.type,
-          size: file.size,
-          name: responseData.data.name,
-          path: responseData.data.path,
-        });
-        setAttachments(tempFilesStorage);
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -210,12 +228,11 @@ const TasksAttachments: React.FC<PropTypes> = ({
       console.error(err);
     }
   };
-
   const uploadFileintoChuncks = async (
     uploadid: any,
     file: any,
     index: any,
-    fileProgressCopy: number[],
+    fileProgressCopy: any,
     setFileProgress: Function,
     key: any
   ) => {
@@ -233,6 +250,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
       method: "POST",
       headers: new Headers({
         "content-type": "application/json",
+        authorization: accessToken,
       }),
       body: JSON.stringify(obj),
     };
@@ -240,12 +258,12 @@ const TasksAttachments: React.FC<PropTypes> = ({
     try {
       // Send the chunk to the server using a POST request
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/start-upload/presigned-url`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/image/start-upload/presigned-url`,
         options
       );
       let responseData: any = await response.json();
       if (responseData.success == true) {
-        resurls = [...responseData.url];
+        resurls = [...responseData.data];
 
         const promises = [];
 
@@ -253,10 +271,14 @@ const TasksAttachments: React.FC<PropTypes> = ({
           const start = currentChunk * chunkSize;
           const end = Math.min(start + chunkSize, file.size);
           const chunk = file.slice(start, end);
-
+          console.log(start, "Start")
+          console.log(end, "end")
+          console.log(file, "file")
+          console.log(chunk, "chunk")
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
             method: "PUT",
+
             body: chunk,
           });
 
@@ -274,6 +296,8 @@ const TasksAttachments: React.FC<PropTypes> = ({
         await mergeFileChuncksEvent(promiseResponseObj, uploadid, key, index);
       }
     } catch (error) {
+      fileProgressCopy[index] = "fail";
+      setFileProgress([...fileProgressCopy]);
       console.error("Error uploading chunk:", error);
     }
   };
@@ -299,11 +323,12 @@ const TasksAttachments: React.FC<PropTypes> = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/scouts/attachments/complete-upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/image/complete-upload`,
         options
       );
       let responseData: any = await response.json();
     } catch (err) {
+
       console.error(err);
     }
   };
@@ -316,6 +341,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
     fileProgressCopy: any,
     setFileProgress: any
   ) => {
+
     let obj = {
       original_name: item.name,
       type: item.type,
@@ -331,11 +357,18 @@ const TasksAttachments: React.FC<PropTypes> = ({
       }),
     };
 
+    fileProgressCopy[index] = 25;
+    setFileProgress([...fileProgressCopy]);
+
     try {
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/tasks/upload-attachment`,
         options
       );
+
+      fileProgressCopy[index] = 50;
+      setFileProgress([...fileProgressCopy]);
+
       let responseData = await response.json();
       if (responseData.success == true) {
         let preSignedResponse = await fetch(responseData.data.target_url, {
@@ -405,8 +438,9 @@ const TasksAttachments: React.FC<PropTypes> = ({
 
   //cancel upload
   const cancelUpload = () => {
-    setTempFileStorage([]);
+    dispatch(removeTheFilesFromStore([]));
     setMultipleFiles([]);
+    setTempFileStorage([]);
   };
 
   const addTaskAttachements = async () => {
@@ -436,8 +470,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         }),
       };
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${
-          router.query.task_id ? router.query.task_id : taskId
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${router.query.task_id ? router.query.task_id : taskId
         }/attachments`,
         options
       );
@@ -446,7 +479,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
         afterUploadAttachements(true);
         setMultipleFiles([]);
         setTempFileStorage([]);
-        toast.success("Attachement(s) addedd successfully");
+        toast.success(responseData?.message);
         if (taskId) {
           router.back();
         }
@@ -461,58 +494,49 @@ const TasksAttachments: React.FC<PropTypes> = ({
     dispatch(removeTheFilesFromStore([]));
   };
 
-  //   useEffect(() => {
-  //     const confirmationMessage =
-  //       "Are you sure you want to leave this page? Your changes may not be saved.";
-
-  //     const handleBeforeUnload = (e: any) => {
-  //       e.preventDefault();
-  //       e.returnValue = confirmationMessage;
-  //     };
-
-  //     window.addEventListener("beforeunload", handleBeforeUnload);
-
-  //     return () => {
-  //       window.removeEventListener("beforeunload", handleBeforeUnload);
-  //     };
-  //   }, []);
 
   return (
     <div
       className={styles.attachments}
       style={{ borderTop: "0 !important", paddingBlock: "0 1.5rem !important" }}
     >
-      <div className={styles.header}>
-        {!taskId && !router.query.task_id ? (
-          <span style={{ color: "Highlight" }}>
-            You can upload images after submit the task.
-          </span>
-        ) : (
-          ""
-        )}
-        <h4 className={styles.title}>Attachments (or) Images </h4>
-        <p className={styles.description}>
-          You can also drag and drop files to upload them.
-        </p>
-      </div>
-
       <label className={styles.UpdateFiles}>
-        <div className={styles.link} style={{ background: "#fff !important" }}>
-          <AttachmentIcon className={styles.icon} />
-          <span>Select Files</span>
+        <div
+          className={styles.link}
+          style={{ background: "#fff !important", cursor: "pointer" }}
+        >
+          {/* <AttachmentIcon className={styles.icon} /> */}
+          <img
+            src="/viewTaskIcons/image-icon.svg"
+            alt=""
+            className={styles.icon}
+          />
+          <div className={styles.text}>
+            {" "}
+            <span
+              style={{
+                textDecoration: "underline",
+                color: "#232323 !important",
+              }}
+            >
+              Click to upload
+            </span>{" "}
+            {router.pathname.includes("/users-tasks") ? "" : "or drag and drop"}
+          </div>
         </div>
         <input
           className={styles.link}
           type="file"
           multiple
-          disabled={taskId || router.query.task_id ? false : true}
+          disabled={disabled}
           onChange={handleFileChange}
           style={{ display: "none" }}
-          accept="image/*,video/*"
+          accept="image/*,video/*,.doc, .docx, .csv,.xlsx,.msword,.pdf, .txt, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, text/plain"
         />
         <p style={{ color: "red", fontSize: "12px" }}>{noFarmIdMessage}</p>
       </label>
       <ErrorMessagesComponent errorMessage={validations?.attachments} />
+
       {multipleFiles &&
         Array?.from(multipleFiles).map((item: any, index: any) => (
           <div
@@ -528,10 +552,16 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   previewImages.find((e: any) => e.fileIndex == item.name)
                     ?.prieviewUrl
                     ? previewImages.find((e: any) => e.fileIndex == item.name)
-                        .prieviewUrl
-                    : item.type == "application/pdf"
-                    ? "/pdf-icon.png"
-                    : "/doc-icon.webp"
+                      .prieviewUrl
+                    : item.type.includes("pdf")
+                      ? "/pdf-icon.png"
+                      : item.type.includes("csv")
+                        ? "/csv-icon.png"
+                        : item.type ==
+                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                          item.type.includes("xlsx")
+                          ? "/google-sheets-icon.webp"
+                          : "/doc-icon.webp"
                 }
               />
               <div className={styles1.progressdetails}>
@@ -542,6 +572,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         <div
                           className={styles1.photojpg}
                           style={{
+                            fontSize: "14px",
                             color: fileProgress[index] == "fail" ? "red" : "",
                           }}
                         >
@@ -555,13 +586,16 @@ const TasksAttachments: React.FC<PropTypes> = ({
                             Cancelled
                           </div>
                         ) : (
-                          <div className={styles1.photojpg}>
+                          <div
+                            className={styles1.photojpg}
+                            style={{ fontSize: "13px" }}
+                          >
                             {bytesToMB(item.size).toFixed(2)}MB
                           </div>
                         )}
                       </div>
                       {fileProgress[index] == 100 &&
-                      fileProgress[index] !== "fail" ? (
+                        fileProgress[index] !== "fail" ? (
                         <div className={styles1.photojpg}>
                           <DoneIcon sx={{ color: "#05A155" }} />
                           <IconButton
@@ -574,7 +608,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                         ""
                       )}
                       {fileProgress[index] !== 100 ||
-                      fileProgress[index] == "fail" ? (
+                        fileProgress[index] == "fail" ? (
                         <img
                           className={styles1.close41}
                           alt=""
@@ -588,7 +622,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {fileProgress[index] == 0 &&
-                    fileProgress[index] !== "fail" ? (
+                      fileProgress[index] !== "fail" ? (
                       <LinearProgress />
                     ) : fileProgress[index] !== 100 &&
                       fileProgress[index] !== "fail" ? (
@@ -614,34 +648,32 @@ const TasksAttachments: React.FC<PropTypes> = ({
             </div>
           </div>
         ))}
-      <div
-        style={{
-          minHeight: "30px",
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: "10px",
-        }}
-      >
-        {!router.query.task_id ? (
-          ""
-        ) : (
+
+      {tempFilesStorage?.length ? (
+        <div className={styles.uploadFilesBtnGrp}>
+          {!router.query.task_id ? (
+            ""
+          ) : (
+            <Button
+              className={styles.canceleBtn}
+              variant="outlined"
+              onClick={() => cancelUpload()}
+            >
+              Cancel
+            </Button>
+          )}
           <Button
-            className={styles.canceleBtn}
-            variant="outlined"
-            onClick={() => cancelUpload()}
+            variant="contained"
+            onClick={() => addTaskAttachements()}
+            className={styles.saveBtn}
+            disabled={!tempFilesStorage?.length || loading}
           >
-            Cancel
+            Save
           </Button>
-        )}
-        <Button
-          variant="contained"
-          onClick={() => addTaskAttachements()}
-          className={styles.saveBtn}
-          disabled={!tempFilesStorage?.length || loading}
-        >
-          Save
-        </Button>
-      </div>
+        </div>
+      ) : (
+        ""
+      )}
       <LoadingComponent loading={loading} />
     </div>
   );

@@ -8,8 +8,10 @@ import { Toaster, toast } from "sonner";
 import styles from "./Comments.module.css";
 import CommentFormForTasks from "./comment-formForTasks";
 import ThreadsForTasks from "./threadsforTasks";
+import { useRouter } from "next/router";
 const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -44,7 +46,6 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       );
       let responseData = await response.json();
       if (responseData.success == true) {
-
         const commentsById: any = {};
 
         responseData.data?.forEach((comment: any) => {
@@ -134,6 +135,8 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       }
     } catch (err) {
       console.error(err);
@@ -196,15 +199,27 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
 
   return (
     <Drawer
-      anchor="right"
+      anchor={router.pathname?.includes("/users-tasks") ? "bottom" : "right"}
       open={drawerOpen}
       sx={{
         "& .MuiPaper-root": {
-          padding: "1rem",
+          minWidth: router.pathname?.includes("/users-tasks")
+            ? "100px"
+            : "600px",
+          maxWidth: router.pathname?.includes("/users-tasks")
+            ? "500px"
+            : "600px",
+          margin: router.pathname?.includes("/users-tasks")
+            ? "0 auto"
+            : "inherit",
+          padding: router.pathname?.includes("/users-tasks") ? "0" : "1rem",
+          borderRadius: router.pathname?.includes("/users-tasks")
+            ? "10px 10px 0px 0px"
+            : "none",
         },
       }}
     >
-      <div className={styles.drawerHeader}>
+      <div className={styles.drawerHeader} style={{ borderBottom: "1px solid lightgrey" }}>
         <Typography variant="h6">Comments</Typography>
         <IconButton
           onClick={() => {
@@ -218,14 +233,11 @@ const DrawerBoxComponent = ({ drawerClose, rowDetails, drawerOpen }: any) => {
 
       <div
         className={styles.threadsDrawerTasks}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: 600,
-          padding: "1rem",
-          maxHeight: "500px",
-          overflow: "auto",
-        }}
+        id={
+          router.pathname?.includes("/users-tasks")
+            ? styles.commentDrawerDivMobile
+            : styles.commentDrawerDivWeb
+        }
       >
         <ThreadsForTasks
           farmID={rowDetails?.farm_id?._id}

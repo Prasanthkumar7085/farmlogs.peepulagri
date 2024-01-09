@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
+import { toast } from "sonner";
 
 const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const accessToken = useSelector(
@@ -20,18 +21,18 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState<any>();
+  const [loading, setLoading] = useState(true);
   const [afterReply, setAfterReply] = useState<any>();
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [getCommentsLoading, setGetCommentsLoading] = useState(false);
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -61,7 +62,6 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
         options
       );
       let responseData = await response.json();
-      console.log(responseData, "lb");
       if (responseData.success == true) {
         const commentsById: any = {};
 
@@ -106,7 +106,6 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     }
   };
 
-
   //delete comment api
   const deleteComment = async (commnet_id: any) => {
     setLoading(true);
@@ -125,6 +124,8 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -134,7 +135,6 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
       setLoading(false);
     }
   };
-
 
   //update any commnet api event
   const updateComment = async (commnet_id: any, updatedContent: any) => {
@@ -157,6 +157,8 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -213,7 +215,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
         getAllScoutComments();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -233,14 +235,12 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
           attachement={attachement}
           scoutDetails={scoutDetails}
         />
-
       </div>
       <CommentForm
         afterCommentAdd={afterCommentAdd}
         scoutDetails={scoutDetails}
         attachement={attachement}
       />
-
 
       <LoadingComponent loading={loading} />
       <AlertComponent

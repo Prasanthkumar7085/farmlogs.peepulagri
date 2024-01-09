@@ -6,6 +6,7 @@ import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/materia
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 import styles from "src/components/Scouting/Comments/comment-form.module.css";
 
 const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID }: any) => {
@@ -104,6 +105,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/add-comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
+        toast.success("Comment added successfully")
         setComment("")
         afterCommentAdd(true)
         setMultipleFiles([])
@@ -139,6 +141,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}/add-comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
+        toast.success("Reply added successfully")
 
         setComment("")
         afterCommentAdd(true)
@@ -240,7 +243,11 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
   };
 
   return (
-    <div className={styles.commentform}>
+    <div className={styles.commentform} style={{
+      paddingInline: router.pathname?.includes("/users-tasks")
+        ? "1rem"
+        : "0"
+    }}>
       <TextField
         required={true}
         className={styles.chatBox}
@@ -255,15 +262,15 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
           const newValue = e.target.value.replace(/^\s+/, "");
           setComment(newValue);
         }}
-        onKeyDown={(e: any) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            comment &&
-              (replyThreadEvent
-                ? replyThreads(replyThreadEvent)
-                : addComment());
-          }
-        }}
+      // onKeyDown={(e: any) => {
+      //   if (e.key === "Enter" && !e.shiftKey) {
+      //     e.preventDefault();
+      //     comment &&
+      //       (replyThreadEvent
+      //         ? replyThreads(replyThreadEvent)
+      //         : addComment());
+      //   }
+      // }}
       />
 
       {multipleFiles &&
@@ -370,7 +377,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
           </div>
         ))}
       <div className={styles.actions}>
-        <div className={styles.attachments}>
+        {/* <div className={styles.attachments}>
           <div className={styles.link}>
             <label>
               <img className={styles.groupIcon} alt="" src="/group.svg" />
@@ -394,7 +401,7 @@ const CommentFormForTasks = ({ afterCommentAdd, replyThreadEvent, taskId, farmID
               hidden
             />
           </label>
-        </div>
+        </div> */}
 
         <Button
           className={

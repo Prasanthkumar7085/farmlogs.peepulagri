@@ -6,6 +6,7 @@ export interface userTaskType {
   createdAt: string;
   updatedAt: string;
   __v: 0;
+  name:string;
 }
 
 export interface TaskAttachmentsType {
@@ -33,7 +34,7 @@ export interface TaskResponseTypes {
   created_by: {
     _id: string;
     email: string;
-    full_name: string;
+    name: string;
   };
   createdAt: string;
   updatedAt: string;

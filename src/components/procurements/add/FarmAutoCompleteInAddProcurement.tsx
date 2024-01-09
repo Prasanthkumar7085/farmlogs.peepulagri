@@ -14,7 +14,6 @@ interface PropsTypes {
   setOptionsLoading: Dispatch<SetStateAction<boolean>>;
   searchString: string;
   setSearchString: Dispatch<SetStateAction<string>>;
-  isDisabled: boolean;
   editFarms?: { title: string; _id: string }[] | [];
 }
 const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
@@ -26,7 +25,6 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
   optionsLoading,
   setOptionsLoading,
   setSearchString,
-  isDisabled,
   editFarms,
 }) => {
   const router = useRouter();
@@ -48,12 +46,13 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
       {!autoCompleteLoading ? (
         <Autocomplete
           multiple
-          disabled={isDisabled}
           // groupBy={(option) => option?.user_id?.full_name}
           value={defaultValueSet}
           disablePortal
           size="small"
           id="combo-box-demo"
+          sx={{ width: "100%", background: "#fff" }}
+
           options={options && options?.length ? options : []}
           loading={optionsLoading}
           getOptionLabel={(option: any) =>
@@ -90,17 +89,17 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
             />
           )}
 
-          // sx={{
-          //     width: '1000%',
-          //     background: "#fff",
-          //     "& .MuiInputBase-input ": {
-          //         fontSize: "13px",
-          //         fontWeight: "400",
-          //         fontFamily: "'inter', sans-serif ",
-          //         color: "#000",
+        // sx={{
+        //     width: '1000%',
+        //     background: "#fff",
+        //     "& .MuiInputBase-input ": {
+        //         fontSize: "13px",
+        //         fontWeight: "400",
+        //         fontFamily: "'inter', sans-serif ",
+        //         color: "#000",
 
-          //     }
-          // }}
+        //     }
+        // }}
         />
       ) : (
         ""

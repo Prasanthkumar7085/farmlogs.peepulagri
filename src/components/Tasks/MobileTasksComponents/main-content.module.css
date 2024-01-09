@@ -1,0 +1,118 @@
+.title {
+  margin: 0;
+  color: #35353D;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 3vw, 16px);
+  font-weight: 500;
+  line-height: 130%;
+}
+
+.statusSelect {
+  color: #35353D;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 3vw, 13px);
+  font-weight: 400;
+  line-height: 100%;
+  margin: 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 5px 16px;
+}
+
+.farmname {
+  margin: 0;
+  position: relative;
+}
+
+
+.maincontent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.container {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.maincontent {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #E9EDF1;
+
+}
+
+
+
+.datePicker {
+  background: #D0D5DD;
+  border-radius: 4px;
+  padding: 4px 6px 4px 1rem;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dueDate {
+  color: #344054;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13px, 0.83vw, 18px);
+  font-weight: 500;
+  line-height: 130%;
+  margin: 0;
+  white-space: nowrap;
+}
+
+
+.titleBlock {
+  text-align: left;
+}
+
+.statusMenu {
+  border-radius: 20px !important;
+  box-shadow: 2px 2px 90px 0px #00000033 !important;
+}
+
+.statusMenuItem {
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 0.65vw, 12px);
+  font-weight: 400;
+  line-height: 100%;
+  padding-block: 8px;
+}
+
+.statusMenuItem:hover {
+  border-left: 2px solid #45A845;
+  background: #F7FFFB;
+  color: #45A845;
+}
+
+.statusMenuItemSelected {
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 0.65vw, 12px);
+  font-weight: 500;
+  line-height: 100%;
+  padding-block: 8px;
+  background-color: #D0D5DD;
+}
+
+.statusMenuItemSelected:hover {
+  color: 2px solid #45A845;
+}

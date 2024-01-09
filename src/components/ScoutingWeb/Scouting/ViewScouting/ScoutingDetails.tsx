@@ -19,16 +19,19 @@ import style from "../../ListScoutsComponents/DaySummary.module.css";
 import formatText from "../../../../../lib/requestUtils/formatTextToBullets";
 import { useRouter } from "next/router";
 import SellIcon from "@mui/icons-material/Sell";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const ScoutingDetails = ({
   loading,
   data,
+  currentIndex,
   content,
   setPreviewImageDialogOpen,
   imageData,
   afterUpdateRecommandations,
   editRecomendationOpen,
   setEditRecomendationOpen,
+
 }: any) => {
   const router = useRouter();
   const [crop, setCrop] = useState<any>();
@@ -37,10 +40,13 @@ const ScoutingDetails = ({
   const [mainImageData, setMainImageData] = useState<any>();
 
 
-
+  const paramasFromStore = useSelector((state: any) => state.auth.queryParams)
   const getCropName = (cropId: string, crops: any) => {
     setCrop("");
+
   };
+
+  console.log(paramasFromStore, "sdsf")
 
   useEffect(() => {
     if (data) {
@@ -78,7 +84,7 @@ const ScoutingDetails = ({
               {loading ? (
                 <Skeleton width="300px" height="30px" />
               ) : (
-                data?.farm_id.title
+                data?.farm_id?.title
               )}
             </h2>
 
@@ -90,7 +96,7 @@ const ScoutingDetails = ({
               {loading ? (
                 <Skeleton width="300px" height="30px" />
               ) : (
-                " (Uploaded By" + ":" + data?.uploaded_by.name + ")"
+                " (Uploaded By" + ":" + data?.uploaded_by?.name + ")"
               )}
             </Typography>
           </div>
@@ -98,7 +104,12 @@ const ScoutingDetails = ({
         <IconButton
           className={styles.iconDiv}
           // onClick={() => setPreviewImageDialogOpen(false)}
-          onClick={() => router.back()}
+          onClick={() => {
+            router.push({
+              pathname: `/scouts/`,
+              query: { ...paramasFromStore },
+            })
+          }}
         >
           <CloseIcon />
         </IconButton>
@@ -138,20 +149,20 @@ const ScoutingDetails = ({
         >
           {data?.tags?.length
             ? data?.tags?.map((item: string, index: number) => {
-                return (
-                  <Chip
-                    icon={<SellIcon sx={{ fontSize: 15 }} color="success" />}
-                    key={index}
-                    label={item}
-                    className={styles.tagsName}
-                    variant="outlined"
-                  />
-                );
-              })
+              return (
+                <Chip
+                  icon={<SellIcon sx={{ fontSize: 15 }} color="success" />}
+                  key={index}
+                  label={item}
+                  className={styles.tagsName}
+                  variant="outlined"
+                />
+              );
+            })
             : "No tags  "}
         </div>
       ) : (
-        <div>No tags</div>
+        <div style={{ textAlign: "center" }}>No tags</div>
       )}
       <hr />
 

@@ -22,6 +22,12 @@
   box-shadow: none !important;
   color: #000;
 }
+.footerActionButtons .cancelBtn:hover {
+  border: 1px solid var(--gray-300, #D0D5DD) !important;
+  background: var(--White, #FFF) !important;
+  box-shadow: none !important;
+  color: #000 !important;
+}
 
 .submitBtn {
   color: #fff;

@@ -15,8 +15,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req } = context;
   const { cookies } = req;
 
-  if (cookies.loggedIn == "true") {
-    if (cookies.userType == "farmer") {
+  if (cookies.loggedIn_v2 == "true") {
+    if (cookies.userType_v2 == "farmer") {
       return {
         redirect: {
           destination: `/dashboard`,

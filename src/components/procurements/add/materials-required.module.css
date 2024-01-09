@@ -1,17 +1,56 @@
 .supportingText,
 .text {
   margin: 0;
-  align-self: stretch;
-  position: relative;
-  letter-spacing: -0.01em;
-  line-height: 100%;
+
 }
 
-.buttonsgroup{
+.addMaterialBtn {
+  border-radius: 4px;
+  border: 1px solid #05A155;
+  background: #05A155;
+  color: #FFF;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(10px, 0.625vw, 12px);
+  font-weight: 500;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  min-width: inherit;
+}
+
+.addMaterialBtn:hover {
+  border: 1px solid #05A155;
+  background: #05A155;
+  color: #FFF;
+}
+
+.materialsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  grid-column-gap: 1rem;
+}
+
+.eachMaterialBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+
+.materialListBlock {
+  margin-top: 3rem;
+}
+
+.buttonsgroup {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .modalActions {
   align-self: stretch;
   display: flex;
@@ -19,65 +58,77 @@
   align-items: center;
   justify-content: flex-end;
 }
+
 .text {
-  font-size: inherit;
+  color: #101828;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 0.93vw, 20px);
   font-weight: 500;
-  font-family: inherit;
+  line-height: 100%;
+  letter-spacing: -0.198px;
 }
+
 .supportingText {
-  display: flex;
-  align-items: center;
-  width: 1268px;
-  flex-shrink: 0;
+  color: #6A7185;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 16px);
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.154px;
+  margin-top: 0.8rem;
 }
+
 .heading,
 .textAndSupportingText {
   display: flex;
   justify-content: flex-start;
-  gap: 8px;
 }
-.textAndSupportingText {
-  align-self: stretch;
-  flex-direction: row;
-  align-items: center;
-  font-size: 14px;
-  color: #6a7185;
-}
+
+
+
 .heading {
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
+
 .heading,
 .input,
 .label {
   align-self: stretch;
 }
+
 .label {
-  cursor: pointer;
-  position: relative;
-  line-height: 100%;
+  color: #344054;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 16px);
   font-weight: 500;
+  margin: 0;
 }
+
 .input {
   border: 0;
   background-color: transparent;
 }
+
 .inputField {
-  width: 320px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 8px;
 }
+
 .inputbox {
   border: 0;
   background-color: transparent;
   flex: 1;
 }
+
 .dropdown {
   cursor: pointer;
 }
+
 .input1 {
   align-self: stretch;
   border-radius: 8px;
@@ -87,14 +138,16 @@
   overflow: hidden;
   flex-direction: row;
 }
+
 .group,
 .input1,
 .priority,
 .row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
 }
+
 .row {
   align-self: stretch;
   flex-direction: row;
@@ -102,39 +155,132 @@
   font-size: 14px;
   color: #344154;
 }
+
 .group,
 .priority {
   flex-direction: column;
 }
+
 .group {
   align-self: stretch;
   gap: 24px;
 }
+
 .priority {
   width: 465px;
   gap: 8px;
 }
+
 .selectbox {
   align-self: stretch;
   cursor: pointer;
 }
-.materialsrequired,
-.personofcontact {
+
+.materialsrequired {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  padding: 1rem 1rem 0 1rem;
+  border-top: 1px solid lightgrey;
 }
+
 .personofcontact {
   flex: 1;
   gap: 8px;
 }
 
-.materialsrequired {
-  align-self: stretch;
-  gap: 24px;
-  text-align: left;
-  font-size: 18px;
-  color: #101828;
-  font-family: Inter;
+.materialListheading {
+  color: #A05148;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 0.93vw, 18px);
+  font-weight: 500;
+  line-height: 18px;
+  margin: 0;
+}
+
+.materialListTable {
+  margin-top: 1rem;
+}
+
+.tableHeaderCell {
+  padding-block: 4px;
+  font-size: clamp(12px, 0.72vw, 14px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #6A7185;
+  border: 0;
+}
+
+.tableBodyRow {
+  background: #F5F7FA;
+}
+
+.tableBodyCell {
+  color: #35353D;
+  padding-block: 0;
+  font-size: clamp(13px, 0.72vw, 15px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+}
+
+.tableBodyCell:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.tableBodyCell:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.materialListTable table {
+  border-collapse: separate;
+  border-spacing: 0 3px;
+}
+
+.materialListTable table {
+  display: inline-table;
+}
+
+/* edit drawer styles */
+.procurementFormBtn {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.procurementFormBtn button {
+  border-radius: 8px !important;
+  box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(14px, 0.83vw, 18px) !important;
+  font-weight: 500 !important;
+  line-height: 24px !important;
+  text-transform: capitalize !important;
+  padding: 5px 20px !important;
+}
+
+.cancelBtn {
+  border: 1px solid var(--Gray-300, #D0D5DD) !important;
+  background: var(--White, #FFF) !important;
+  color: #344054 !important;
+}
+
+.cancelBtn:hover {
+  border: 1px solid var(--Gray-300, #D0D5DD) !important;
+  background: var(--White, #FFF) !important;
+  color: #344054 !important;
+}
+
+.submitBtn {
+  color: #fff !important;
+  border: 1px solid var(--Blue-Gradient, #3462CF) !important;
+  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%)) !important;
+
+}
+
+.submitBtn:hover {
+  color: #fff !important;
+  border: 1px solid var(--Blue-Gradient, #3462CF) !important;
+  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%)) !important;
+
 }

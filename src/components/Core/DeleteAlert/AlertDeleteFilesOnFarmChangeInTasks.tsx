@@ -17,7 +17,9 @@ const AlertDeleteFilesOnFarmChangeInTasks = ({
       PaperProps={{ sx: { borderRadius: "16px", minWidth: "350px" } }}
     >
       <div className={styles.alertdelete}>
-        <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
+        <picture>
+          <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
+        </picture>
         <div>
           <div
             className={styles.areYouSure}

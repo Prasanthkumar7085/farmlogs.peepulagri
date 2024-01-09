@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Button,
+  Card,
   CircularProgress,
   Drawer,
   FormControl,
@@ -15,6 +16,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -36,7 +38,8 @@ import FooterActionButtons from "@/components/Tasks/AddTask/footer-action-button
 import updateMaterialsByIdService from "../../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
-
+import AddIcon from '@mui/icons-material/Add';
+import POC from "../edit/POC";
 interface ApiCallService {
   procurement_req_id: string;
   name: string;
@@ -45,17 +48,16 @@ interface ApiCallService {
   available_qty?: number | null;
   available_units?: string;
 }
-const MaterialsRequired: NextPage = () => {
+const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcurementData }: any) => {
   const dispatch = useDispatch();
-
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
-
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
-  const details = useSelector((state: any) => state.auth.userDetails);
-
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
   const router = useRouter();
   const [name, setName] = useState("");
   const [requiredQty, setRequiredQty] = useState<null | number | string>(null);
@@ -73,7 +75,6 @@ const MaterialsRequired: NextPage = () => {
   const [editMaterialOpen, setEditMaterialOpen] = useState(false);
   const [editMaterialData, setEditMaterialData] = useState({});
   const [editNameValue, setEditNameValue] = useState<string>("");
-
   const [editRequiredQty, setEditRequiredQty] = useState<
     null | number | string
   >(null);
@@ -82,10 +83,8 @@ const MaterialsRequired: NextPage = () => {
     null | number | string
   >(null);
   const [editAvailableUnits, setEditAvailableUnits] = useState<string>("");
-
   const [updateLoading, setUpdateLoading] = useState(false);
   const [editMaterialId, setEditMaterialId] = useState("");
-
   const [editErrorMessages, setEditErrorMessages] = useState({});
 
   const deleteMaterial = async () => {
@@ -118,8 +117,8 @@ const MaterialsRequired: NextPage = () => {
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -133,7 +132,7 @@ const MaterialsRequired: NextPage = () => {
     setErrorMessages({});
     try {
       const body = {
-        procurement_req_id: router.query.procurement_id,
+        procurement_req_id: router.query.procurement_id || procurementData?._id,
         name: name,
         required_qty: requiredQty ? +requiredQty : null,
         required_units: requiredUnits,
@@ -176,10 +175,11 @@ const MaterialsRequired: NextPage = () => {
     try {
       let response = await getMaterialsByProcurementIdService({
         token: accessToken,
-        procurementId: router.query.procurement_id as string,
+        procurementId: router.query.procurement_id as string || procurementData?._id,
       });
       if (response?.status == 200 || response?.status == 201) {
         setMaterials(response?.data);
+        checkMaterialsListCount(response?.data)
       } else if (response?.status == 401) {
         toast.error(response?.message);
       } else if (response?.status == 403) {
@@ -200,7 +200,7 @@ const MaterialsRequired: NextPage = () => {
 
     try {
       const body = {
-        procurement_req_id: router.query.procurement_id,
+        procurement_req_id: router.query.procurement_id || procurementData?._id,
         name: editNameValue,
         required_qty: editRequiredQty ? +editRequiredQty : null,
         required_units: editRequiredUnits,
@@ -253,127 +253,167 @@ const MaterialsRequired: NextPage = () => {
       getAllProcurementMaterials();
     }
   }, [router.isReady, accessToken]);
+
+
   return (
-    <div style={{ paddingBottom: "5rem" }}>
+    <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "3rem", background: "#fff" }}>
+      <div>
+        <POC
+          procurementData={procurementData}
+          getProcurementData={getProcurementData}
+        />
+      </div>
       <div className={styles.materialsrequired}>
-        <div className={styles.group}>
-          <div className={styles.heading}>
+
+        <div className={styles.heading}>
+          <div >
             <h2 className={styles.text}>Material Requirements</h2>
-            <div className={styles.textAndSupportingText}>
-              <p className={styles.supportingText}>
-                You can add List of items here based on requirement
-              </p>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => addMaterial()}
-              >
-                Add
-              </Button>
-            </div>
+            <p className={styles.supportingText}>
+              You can add List of items here based on requirement
+            </p>
+
           </div>
-          <div className={styles.row}>
-            <div className={styles.inputField}>
-              <label className={styles.label}>
-                Material Name <strong style={{ color: "red" }}>*</strong>
-              </label>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => addMaterial()}
+            className={styles.addMaterialBtn}
+          >
+            <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
+          </Button>
+
+        </div>
+
+        <div className={styles.materialsGrid}>
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
+              Material Name <strong style={{ color: "red" }}>*</strong>
+            </h6>
+            <div style={{ width: "100%" }}>
               <TextField
-                className={styles.input}
-                color="primary"
+                size="small"
                 placeholder="Please enter the material title"
                 variant="outlined"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                sx={{
+                  background: "#fff",
+                  borderRadius: "4px",
+                  width: "100%"
+                }}
               />
               <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
             </div>
+          </div>
 
-            <div className={styles.personofcontact}>
-              <label className={styles.label}>
-                Material Procurement (Qty){" "}
-                <strong style={{ color: "red" }}>*</strong>
-              </label>
-              <div className={styles.input1}>
-                <div style={{ width: "80%" }}>
-                  <TextField
-                    className={styles.inputbox}
-                    sx={{ width: "100%" }}
-                    color="primary"
-                    placeholder="Enter Procurement Quantity"
-                    variant="outlined"
-                    type="number"
-                    value={requiredQty}
-                    onChange={(e: any) => setRequiredQty(e.target.value)}
-                  />
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname={"required_qty"}
-                  />
-                </div>
-                <FormControl className={styles.dropdown} variant="outlined">
-                  <InputLabel color="primary" />
-                  <Select
-                    color="primary"
-                    defaultValue="Litres"
-                    value={requiredUnits}
-                    onChange={(e: any) => setRequiredUnits(e.target.value)}
-                  >
-                    <MenuItem value="Litres">Litres</MenuItem>
-                    <MenuItem value="Kilograms">Kilograms</MenuItem>
-                  </Select>
-                  <FormHelperText />
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname={"required_units"}
-                  />
-                </FormControl>
-              </div>
-            </div>
-            <div className={styles.personofcontact}>
-              <label className={styles.label}>
-                Material Available (Qty)(optional)
-              </label>
-              <div className={styles.input1}>
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
+              Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
+
+            </h6>
+            <div style={{ display: "flex" }}>
+              <div >
                 <TextField
-                  className={styles.inputbox}
-                  color="primary"
-                  placeholder="Enter Availble Quantity"
+
+                  size="small"
+                  sx={{
+                    width: "100%", background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 0 1px 1px !important",
+                      borderRadius: "4px 0 0 4px !important"
+                    }
+                  }}
+                  placeholder="Enter Procurement Quantity"
                   variant="outlined"
                   type="number"
-                  value={availableQty}
-                  onChange={(e: any) => setAvailableQty(e.target.value)}
+                  value={requiredQty}
+                  onChange={(e: any) => setRequiredQty(e.target.value)}
                 />
-                <FormControl className={styles.dropdown} variant="outlined">
-                  <InputLabel color="primary" />
-                  <Select
-                    color="primary"
-                    defaultValue="Litres"
-                    value={availableUnits}
-                    onChange={(e: any) => setAvailableUnits(e.target.value)}
-                  >
-                    <MenuItem value="Litres">Litres</MenuItem>
-                    <MenuItem value="Kilograms">Kilograms</MenuItem>
-                  </Select>
-                  <FormHelperText />
-                </FormControl>
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_qty"}
+                />
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_units"}
+                />
               </div>
+              <FormControl variant="outlined">
+                <InputLabel color="primary" />
+                <Select
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 1px 1px 0 !important",
+                      borderRadius: "0 4px 4px 0 !important"
+                    }
+                  }}
+                  size="small"
+                  defaultValue="Litres"
+                  value={requiredUnits}
+                  onChange={(e: any) => setRequiredUnits(e.target.value)}
+                >
+                  <MenuItem value="Litres">Litres</MenuItem>
+                  <MenuItem value="Kilograms">Kilograms</MenuItem>
+                </Select>
+
+              </FormControl>
+            </div>
+          </div>
+          <div className={styles.eachMaterialBlock} >
+            <h6 className={styles.label}>
+              Material Available (Qty)(optional)
+            </h6>
+            <div style={{ display: "flex" }}>
+              <TextField
+                size="small"
+                placeholder="Enter Availble Quantity"
+                variant="outlined"
+                type="number"
+                value={availableQty}
+                onChange={(e: any) => setAvailableQty(e.target.value)}
+                sx={{
+                  width: "100%", background: "#fff",
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderWidth: "1px 0 1px 1px !important",
+                    borderRadius: "4px 0 0 4px !important"
+                  }
+                }}
+              />
+              <FormControl variant="outlined">
+                <InputLabel color="primary" />
+                <Select
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "1px 1px 1px 0 !important",
+                      borderRadius: "0 4px 4px 0 !important"
+                    }
+                  }}
+                  size="small"
+                  defaultValue="Litres"
+                  value={availableUnits}
+                  onChange={(e: any) => setAvailableUnits(e.target.value)}
+                >
+                  <MenuItem value="Litres">Litres</MenuItem>
+                  <MenuItem value="Kilograms">Kilograms</MenuItem>
+                </Select>
+              </FormControl>
             </div>
           </div>
         </div>
 
-        <div>
-          <div>
-            <h4>Selected Materials:</h4>
-          </div>
-          <div>
-            <Table>
+        <div className={styles.materialListBlock}>
+          <h4 className={styles.materialListheading}>Required Materials</h4>
+          <div className={styles.materialListTable}>
+            <Table >
               <TableHead>
                 <TableRow>
-                  <TableCell>S. No.</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Material Procurement (Qty)</TableCell>
-                  <TableCell>Material Availability (Qty)</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>S. No.</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Name</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Material Procurement (Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Material Availability (Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -391,16 +431,16 @@ const MaterialsRequired: NextPage = () => {
                       index: number
                     ) => {
                       return (
-                        <TableRow key={index}>
-                          <TableCell>{index + 1}.</TableCell>
-                          <TableCell>{item.name}</TableCell>
-                          <TableCell>
+                        <TableRow key={index} className={styles.tableBodyRow} >
+                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>{index + 1}.</TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1" }}>{item.name}</TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
                             {item.required_qty ? `${item.required_qty}` : ""}
                             {item.required_units
                               ? `(${item.required_units})`
                               : ""}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1" }}>
                             {item.available_qty
                               ? `${item.available_qty}`
                               : ""}
@@ -408,8 +448,9 @@ const MaterialsRequired: NextPage = () => {
                               ? `(${item.available_units})`
                               : ""}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
                             <IconButton
+                              sx={{ paddingBlock: "3px" }}
                               onClick={() => {
                                 setEditAvailableQty(item.available_qty);
                                 setEditAvailableUnits(item.available_units);
@@ -421,15 +462,22 @@ const MaterialsRequired: NextPage = () => {
                                 setEditMaterialOpen(true);
                               }}
                             >
-                              <EditOutlined sx={{ color: "red" }} />
+                              <picture>
+
+                                <img src="/pencil-icon.svg" alt="" width={"15px"} />
+                              </picture>
                             </IconButton>
                             <IconButton
+                              sx={{ paddingBlock: "3px" }}
                               onClick={() => {
                                 setDeleteMaterialId(item._id);
                                 setDeleteMaterialOpen(true);
                               }}
                             >
-                              <DeleteOutline sx={{ color: "red" }} />
+                              <picture>
+
+                                <img src="/trast-icon.svg" alt="" width="15px" />
+                              </picture>
                             </IconButton>
                           </TableCell>
                         </TableRow>
@@ -470,7 +518,7 @@ const MaterialsRequired: NextPage = () => {
         updateLoading={updateLoading}
       />
       <LoadingComponent loading={loading} />
-    </div>
+    </div >
   );
 };
 

@@ -1,4 +1,4 @@
-import { Chip, TextField } from "@mui/material";
+import { Chip, MenuItem, Select, SelectChangeEvent, TextField, TextareaAutosize } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import type { NextPage } from "next";
@@ -14,6 +14,7 @@ import ErrorMessages from "@/components/Core/ErrorMessages";
 import FarmAutoCompleteInAddProcurement from "./FarmAutoCompleteInAddProcurement";
 import styles from "./operation-details.module.css";
 import { useRouter } from "next/router";
+import TextArea from '@mui/material/TextField';
 
 interface pagePropTypes {
   farmOptions: string[];
@@ -45,7 +46,9 @@ interface pagePropTypes {
   editFarms?: { title: string; _id: string }[] | [];
   setEditFarms: Dispatch<SetStateAction<{ title: string; _id: string }[] | []>>;
 
-  isDisabled: boolean;
+  setPriority: Dispatch<SetStateAction<string>>;
+  priority: string;
+
   setIsDisabled: Dispatch<SetStateAction<boolean>>;
 }
 const OperationDetails: NextPage<pagePropTypes> = ({
@@ -65,7 +68,8 @@ const OperationDetails: NextPage<pagePropTypes> = ({
   errorMessages,
   editFarms,
   setEditFarms,
-  isDisabled,
+  setPriority,
+  priority,
 }) => {
   const router = useRouter();
 
@@ -75,37 +79,50 @@ const OperationDetails: NextPage<pagePropTypes> = ({
       : [];
     setEditFarms(data);
   };
+  const [age, setAge] = useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value);
+  };
+  const [options] = useState<Array<{ value: string; title: string }>>([
+    { title: "None", value: "NONE" },
+    { title: "Low", value: "LOW" },
+    { title: "Medium", value: "MEDIUM" },
+    { title: "High", value: "HIGH" },
+
+  ]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <>
-        <div className={styles.operationdetails}>
-          <div className={styles.row}>
-            <div className={styles.nameofoperation}>
-              <label className={styles.nameOfOperation}>
-                Name Of Operation<strong style={{ color: "red" }}>*</strong>
-              </label>
-              <TextField
-                disabled={isDisabled}
-                className={styles.inoutbox}
-                color="primary"
-                placeholder="Enter your title here"
-                variant="outlined"
-                value={title}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setTitle(e.target.value)
-                }
-              />
-              <ErrorMessages errorMessages={errorMessages} keyname={"title"} />
-            </div>
-            <div className={styles.dateofoperation}>
-              <label className={styles.label}>
-                Date of Operation<strong style={{ color: "red" }}>*</strong>
-              </label>
-              <div className={styles.datepicker}>
+    <>
+      <div className={styles.operationdetails}>
+        <div className={styles.row} style={{ gridTemplateColumns: "2fr 1fr" }}>
+          <div className={styles.selectfarm}>
+            <label className={styles.label}>
+              Name Of Operation<strong style={{ color: "red" }}>*</strong>
+            </label>
+            <TextField
+              sx={{ background: "#fff" }}
+              size="small"
+              className={styles.inoutbox}
+              color="primary"
+              placeholder="Enter your title here"
+              variant="outlined"
+              value={title}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
+            />
+            <ErrorMessages errorMessages={errorMessages} keyname={"title"} />
+          </div>
+          <div className={styles.selectfarm}>
+            <label className={styles.label}>
+              Date of Operation<strong style={{ color: "red" }}>*</strong>
+            </label>
+            <div className={styles.datepicker}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
+                  sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
                   disablePast
-                  disabled={isDisabled}
                   label="Select Date "
                   value={dateOfOperation}
                   onChange={(newValue: any) => {
@@ -113,71 +130,106 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                   }}
                   slotProps={{
                     textField: {
-                      variant: "standard",
-                      size: "medium",
+                      variant: "outlined",
+                      size: "small",
                       color: "primary",
                     },
                   }}
                 />
-                <ErrorMessages
-                  errorMessages={errorMessages}
-                  keyname={"date_of_operation"}
-                />
-              </div>
-            </div>
-          </div>
-          <div className={styles.column}>
-            <div className={styles.selectfarm}>
-              <label className={styles.label}>
-                {`Select Farm `} <strong style={{ color: "red" }}>*</strong>
-              </label>
-              <FarmAutoCompleteInAddProcurement
-                isDisabled={isDisabled}
-                options={farmOptions}
-                onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-                label={"title"}
-                placeholder={"Select Farm here"}
-                defaultValue={defaultValue}
-                optionsLoading={optionsLoading}
-                setOptionsLoading={setOptionsLoading}
-                searchString={searchString}
-                setSearchString={setSearchString}
-                editFarms={editFarms}
-              />
+              </LocalizationProvider>
+
               <ErrorMessages
                 errorMessages={errorMessages}
-                keyname={"farm_ids"}
-              />
-              {router.query.procurement_id && editFarms?.length
-                ? editFarms.map((item) => {
-                    return (
-                      <Chip
-                        label={item.title}
-                        key={item._id}
-                        clickable
-                        disabled={isDisabled}
-                        onDelete={() => deleteEditedFarms(item._id)}
-                      />
-                    );
-                  })
-                : ""}
-            </div>
-            <div className={styles.remarks}>
-              <label className={styles.nameOfOperation}>Remarks</label>
-              <TextField
-                disabled={isDisabled}
-                className={styles.inputbox}
-                color="primary"
-                defaultValue="Enter your remarks here"
-                variant="outlined"
-                multiline
-                value={remarks}
-                onChange={(e) => setRemarks(e.target.value)}
+                keyname={"date_of_operation"}
               />
             </div>
           </div>
         </div>
-        {/* {isDropdown1Open && (
+        <div className={styles.row} style={{ gridTemplateColumns: "2fr 1fr" }}>
+          <div className={styles.selectfarm}>
+            <label className={styles.label}>
+              {`Select Farm `} <strong style={{ color: "red" }}>*</strong>
+            </label>
+            <FarmAutoCompleteInAddProcurement
+              options={farmOptions}
+              onSelectFarmFromDropDown={onSelectFarmFromDropDown}
+              label={"title"}
+              placeholder={"Select Farms here"}
+              defaultValue={defaultValue}
+              optionsLoading={optionsLoading}
+              setOptionsLoading={setOptionsLoading}
+              searchString={searchString}
+              setSearchString={setSearchString}
+              editFarms={editFarms}
+            />
+
+            <ErrorMessages
+              errorMessages={errorMessages}
+              keyname={"farm_ids"}
+            />
+            <div style={{
+              display: router.query.procurement_id && editFarms?.length
+                ? "flex" : "none"
+            }}>
+
+              {router.query.procurement_id && editFarms?.length
+                ? editFarms.map((item, index) => {
+                  return (
+                    <div key={index} style={{ display: "flex", }}>
+
+                      <Chip
+                        label={item.title}
+                        key={item._id}
+                        clickable
+                        onDelete={() => deleteEditedFarms(item._id)}
+                      />
+                    </div>
+                  );
+                })
+                : ""}
+            </div>
+          </div>
+          <div className={styles.selectfarm}>
+            <label className={styles.label}>
+              {`Priority`} <strong style={{ color: "red" }}>*</strong>
+            </label>
+            <Select
+              size="small"
+              sx={{
+                marginBottom: "8px",
+                width: "100%",
+                background: "#fff",
+                color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
+              }}
+              placeholder="Select Priority"
+              onChange={(e: any) => setPriority(e.target.value)}
+              value={priority}
+            >
+
+              {options?.length && options.map((item: { value: string, title: string }, index: number) => {
+                return (
+                  <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
+                )
+              })}
+
+            </Select>
+          </div>
+        </div>
+        <div className={styles.remarks}>
+          <label className={styles.label}>Remarks</label>
+          <TextArea
+            sx={{ background: "#fff" }}
+            className={styles.inputbox}
+            color="primary"
+            multiline
+            minRows={5}
+            placeholder="Enter your remarks here"
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+          />
+        </div>
+      </div>
+      {/* {isDropdown1Open && (
           <PortalPopup
             overlayColor="rgba(113, 113, 113, 0.3)"
             placement="Centered"
@@ -186,8 +238,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
             <Dropdown onClose={closeDropdown1} />
           </PortalPopup>
         )} */}
-      </>
-    </LocalizationProvider>
+    </>
   );
 };
 

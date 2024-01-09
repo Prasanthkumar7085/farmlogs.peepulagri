@@ -1,0 +1,140 @@
+.p {
+  margin: 0;
+  position: relative;
+  line-height: 70%;
+  font-weight: 500;
+}
+
+.all,
+.count {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.count {
+  border-radius: 30px;
+  background-color: #45a845;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3px 7px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.all {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.tabsChild {
+  position: relative;
+  width: 0;
+  height: 15px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.toDo {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.count1 {
+  border-radius: 30px;
+  background-color: #6a7185;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 7px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.todo {
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+
+.tabsgroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 1rem;
+  overflow-x: auto;
+  color: #6a7185;
+
+}
+
+@media (min-width:460px) {
+  .tabsgroup {
+    justify-content: space-between !important;
+  }
+}
+
+.todoButton {
+  text-align: center !important;
+  font-size: clamp(12px, 3.25vw, 14px) !important;
+  font-weight: 500 !important;
+  font-family: "Inter", sans-serif !important;
+  cursor: pointer !important;
+  min-width: inherit !important;
+  color: #6A7185 !important;
+  text-transform: capitalize !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+  padding-inline: 12px !important;
+  margin-top: 0.5rem !important;
+}
+
+.todoButton:hover {
+  background-color: #fff !important;
+  color: #45a845 !important;
+}
+
+.todoButton:nth-last-child(6) {
+  border-right: 1px solid #D0D5DD !important;
+}
+
+.todoButtonActive:nth-last-child(6) {
+  border-right: 1px solid #D0D5DD !important;
+}
+
+.todoButtonActive {
+  text-align: center !important;
+  font-family: "Inter", sans-serif !important;
+  color: #45A845 !important;
+  font-size: clamp(12.5px, 3.25vw, 14px) !important;
+  font-weight: 500 !important;
+  line-height: 100% !important;
+  min-width: inherit !important;
+  text-transform: capitalize !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+  padding-inline: 12px !important;
+  margin-top: 0.5rem !important;
+  background-color: #fff !important;
+}
+
+.todoButtonActive:hover {
+  text-align: center !important;
+  font-family: "Inter", sans-serif !important;
+  color: #45A845 !important;
+  font-size: clamp(12.5px, 3.25vw, 14px) !important;
+  font-weight: 500 !important;
+  line-height: 100% !important;
+  min-width: inherit !important;
+  background-color: #fff !important;
+}
+
+.todoButton:hover .taskCountChip {
+  background-color: #45A845 !important;
+}

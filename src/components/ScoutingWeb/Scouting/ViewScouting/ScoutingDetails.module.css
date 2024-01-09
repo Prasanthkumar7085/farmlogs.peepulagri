@@ -43,7 +43,6 @@
 .suggestions {
   padding: 20px;
   display: flex;
-  word-wrap: break-word !important;
   word-break: break-all !important;
   max-width: 400px !important;
 }
@@ -301,4 +300,45 @@
   background-color: rgba(0, 0, 0, 0.75);
   padding: 3px 10px;
   border-radius: 4px 0 0 4px;
+}
+
+.imgPrevNextBtnGrp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+}
+
+.imgPrevNextBtnGrp button {
+  text-transform: capitalize !important;
+  font-family: "Inter", sans-serif !important;
+  border-radius: 80px !important;
+  font-weight: 500 !important;
+  min-width: inherit !important;
+}
+
+.prevBtn {
+  background-color: #fff !important;
+
+}
+
+.nextBtn {
+  background-color: #fff !important;
+}
+
+.prevBtn:hover {
+  background-color: #fff !important;
+
+}
+
+.nextBtn:hover {
+  background-color: #fff !important;
+}
+
+.disableBtn {
+  color: grey !important;
+  min-width: inherit !important;
+
 }

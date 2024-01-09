@@ -37,7 +37,7 @@
 
 .allSummaryCardsBlock {
     padding: 0 1rem;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 205px);
     overflow-y: auto;
     margin-top: -2rem;
 }
@@ -112,11 +112,12 @@
 
 .chilliBeingA {
     margin: 0;
-    font-size: clamp(12px, 3vw, 16px);
+    font-size: clamp(13px, 2.5vw, 16px);
     line-height: 140%;
     color: #000;
     font-weight: 400;
     font-family: "Inter", sans-serif;
+
 }
 
 .summarycard {
@@ -132,16 +133,21 @@
     padding: 16px;
     gap: 10px;
     text-align: left;
+    overflow-x: hidden;
 
+}
+
+.summarycard:last-child {
+    margin-bottom: 4rem !important;
 }
 
 /* update summary styles start here */
 .updatedSummaryContainer {
-    padding: 2rem 1rem 1rem;
+    padding: 1.5rem 1rem 1rem;
 }
 
 .updatedSummaryContainer h6 {
-    font-size: clamp(14px, 3.5vw, 18px);
+    font-size: clamp(14px, 3.5vw, 16px);
     font-family: "Inter", sans-serif;
     font-weight: 500;
     color: #000;
@@ -150,21 +156,21 @@
 }
 
 .singleFarmBlock {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .UpdateBtnGrp {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 1.5rem;
-    margin-top: 3rem;
+    margin-top: 2.5rem;
 }
 
 .UpdateBtnGrp button {
     padding-block: 10px !important;
     border-radius: 4px !important;
     text-transform: capitalize !important;
-    font-size: clamp(16px, 4vw, 20px) !important;
+    font-size: clamp(16px, 3vw, 16px) !important;
     font-family: "Inter", sans-serif !important;
 }
 
@@ -181,3 +187,11 @@
 }
 
 /* update summary styles ends here */
+
+
+.menuListSummary ul li {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    font-family: "Inter", sans-serif !important;
+
+}

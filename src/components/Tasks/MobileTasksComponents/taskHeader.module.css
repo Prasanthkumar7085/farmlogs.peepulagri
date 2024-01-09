@@ -1,0 +1,210 @@
+.arrowDownBold1Icon {
+  width: 21px;
+}
+
+.sortIconBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 60px;
+  background-color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 8px
+}
+
+.sortIconBtnImage {
+  width: 18px;
+
+}
+
+.sortOptions .divider {
+  margin: 0.5rem 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(18px, 4vw, 20px);
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  color: #fff;
+  line-height: 100%;
+}
+
+.group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.magnifyingGlass1Icon {
+  width: 20px;
+
+}
+
+.search {
+  border-radius: 60px;
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.funnel1Icon {
+  width: 16px;
+
+}
+
+.actions,
+.filter,
+.header,
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.row {
+  padding-bottom: 1rem;
+}
+
+.filter {
+  border-radius: 60px;
+  background-color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 8px;
+}
+
+.actions,
+.header,
+.row {
+  align-items: center;
+}
+
+.actions {
+  flex-shrink: 0;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.header,
+.row {
+  align-self: stretch;
+  justify-content: space-between;
+}
+
+.header {
+  background-color: #45a845;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  padding: 1rem 1rem 2rem;
+}
+
+.filterDrawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.filterDrawerHeading {
+  font-size: clamp(16px, 3vw, 16px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #000;
+}
+
+.allSelectedChipsBlock {
+  height: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+
+}
+
+.filterDrawerBtnGrp {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 0.8rem;
+}
+
+.filterDrawerCancelBtn {
+  color: #d94841 !important;
+  border: 1px solid #d94841 !important;
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  text-transform: capitalize !important;
+}
+
+.disabledFilterDrawerCancelBtn {
+  text-transform: capitalize !important;
+}
+
+.disabledFilterDrawerApplyBtn {
+  text-transform: capitalize !important;
+}
+
+.filterDrawerCancelBtn:hover {
+  color: #d94841 !important;
+  border: 1px solid #d94841 !important;
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  text-transform: capitalize !important;
+}
+
+.filterDrawerApplyBtn {
+  background-color: #d94841 !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  text-transform: capitalize !important;
+}
+
+.filterDrawerApplyBtn:hover {
+  background-color: #d94841 !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  text-transform: capitalize !important;
+}
+
+/* sortBy drawer block styles */
+
+.sortOptions .sortOptionsHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #D0D5DD;
+}
+
+.sortOptionHeading {
+  font-size: clamp(14px, 2vw, 16px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #000;
+}
+
+.sortListItemsBlock {
+  padding-block: 0.5rem;
+}
+
+.sortListItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sortListItemTitle {
+  font-size: 14px;
+  font-weight: 500;
+}

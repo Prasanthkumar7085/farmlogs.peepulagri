@@ -5,8 +5,8 @@
 .viewFarm {
     color: #fff !important;
     font-family: "Inter", sans-serif !important;
-    font-size: clamp(20px, 5vw, 24px) !important;
-    font-weight: 600 !important;
+    font-size: clamp(18px, 4vw, 20px) !important;
+    font-weight: 400 !important;
 }
 
 
@@ -115,11 +115,11 @@
 }
 
 .uploadimage {
-    border: 1px dashed #4a86f7;
+    border: 1px dashed #A05148;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 5px;
 }
 
 .addscoutdetails {
@@ -272,7 +272,6 @@
 .back {
     border-radius: 6px !important;
     border: 1px solid #d94841 !important;
-    background: #FFF !important;
     box-shadow: 4px 4px 10px 0px #0202460a !important;
     padding: 8px 20px !important;
     color: #d94841 !important;
@@ -294,7 +293,10 @@
     font-weight: 400 !important;
     text-transform: capitalize !important;
 }
+.submit:hover {
+        background: #d94841 !important;
 
+}
 .buttons,
 .footeractionbuttons {
     align-self: stretch;

@@ -3,7 +3,6 @@ import {
   removeTheFilesFromStore,
   storeFilesArray,
 } from "@/Redux/Modules/Farms";
-import AlertComponent from "@/components/Core/AlertComponent";
 import ErrorMessagesComponent from "@/components/Core/ErrorMessagesComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import TagsTextFeild from "@/components/Core/TagsTextFeild";
@@ -14,7 +13,6 @@ import DoneIcon from "@mui/icons-material/Done";
 import {
   Box,
   Button,
-  Icon,
   IconButton,
   LinearProgress,
   TextField,
@@ -23,11 +21,12 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import getAllFarmsService from "../../../../lib/services/FarmsService/getAllFarmsService";
-import Header1 from "../Header/HeaderComponent";
+import { Toaster, toast } from "sonner";
 import Camera from "./Camera";
 import styles from "./add-scout.module.css";
-import { Toaster, toast } from "sonner";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { useCookies } from "react-cookie";
 
 interface propsTypesTagAndComment {
   url: string;
@@ -54,6 +53,12 @@ const FileUploadComponent = () => {
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [validations, setValidations] = useState<any>();
   const [tags, setTags] = useState<any>([]);
+  const [lats, setLats] = useState<{ latitude: number; longitude: number }>();
+  // const [deleteLoading, setDeleteLoading] = useState(false);
+  // const [accuracy1, setAccuracy1] = useState<number>();
+
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -64,22 +69,26 @@ const FileUploadComponent = () => {
   let previewStorage = [...previewImages];
 
   const removeFileAfterAdding = (index: number, file: any) => {
+
     const selectedFilesCopy = [...multipleFiles];
     selectedFilesCopy.splice(index, 1);
-
     const fileProgressCopy = [...fileProgress];
     fileProgressCopy.splice(index, 1);
-
     const tempFilesStorageCopy = [...tempFilesStorage];
     const newArray = tempFilesStorageCopy.filter(
       (item: any) => item.original_name !== file.name
     );
     tempFilesStorage = newArray;
     setAttachments(newArray);
-
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
+    toast.success("File deleted successfully");
+    // useEffect(() => {
+    //   setTimeout(() => {
+    //     setDeleteLoading(true);
+    //   }, 1);
+    // }, []);
   };
 
   const previewImagesEvent = (file: any, index: any) => {
@@ -137,12 +146,11 @@ const FileUploadComponent = () => {
     }
   };
 
-  //select the when input select
+  //select the file when input select
   const handleFileChange = async (e: any) => {
     setValidations({});
     let copy = [...e.target.files, ...filesFromStore];
     dispatch(storeFilesArray(e.target.files));
-
     setMultipleFiles(copy);
 
     const fileProgressCopy = [...new Array(e.target.files?.length).fill(0)]; // Create a copy of the progress array
@@ -168,6 +176,19 @@ const FileUploadComponent = () => {
     });
   };
 
+  const logout = async () => {
+    try {
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
+      router.push("/");
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
+
+
   //start the file upload event
   const startUploadEvent = async (
     file: any,
@@ -175,15 +196,17 @@ const FileUploadComponent = () => {
     fileProgressCopy: any,
     setFileProgress: Function
   ) => {
-    let obj =
-    {
-      "farm_id": router.query.farm_id as string,
-      "crop_id": router.query.crop_id,
-      "original_name": file.name,
-      "type": file.type,
-      "size": file.size
-    }
-
+    let obj = {
+      farm_id: router.query.farm_id as string,
+      crop_id: router.query.crop_id,
+      original_name: file.name,
+      type: file.type,
+      size: file.size,
+      geometry: {
+        type: "Polygon",
+        coordinates: [[lats?.latitude, lats?.longitude, 0]],
+      },
+    };
 
     let options = {
       method: "POST",
@@ -215,6 +238,8 @@ const FileUploadComponent = () => {
           size: file.size,
         });
         setAttachments(tempFilesStorage);
+      } else if (response.status == 401) {
+        await logout();
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -268,6 +293,13 @@ const FileUploadComponent = () => {
           const start = currentChunk * chunkSize;
           const end = Math.min(start + chunkSize, file.size);
           const chunk = file.slice(start, end);
+
+          console.log(start, "pl");
+          console.log(end, "plpl");
+          console.log(chunk, "plplp");
+
+          console.log(file, "plplpl");
+
 
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
@@ -323,6 +355,10 @@ const FileUploadComponent = () => {
         options
       );
       let responseData: any = await response.json();
+      if (responseData?.success) {
+      } else if (response.status == 401) {
+        await logout();
+      }
     } catch (err) {
       console.error(err);
     }
@@ -336,11 +372,15 @@ const FileUploadComponent = () => {
     setFileProgress: any
   ) => {
     let obj = {
-      "farm_id": router.query.farm_id,
-      "crop_id": router.query.crop_id,
-      "original_name": item.name,
-      "type": item.type,
-      "size": item.size
+      farm_id: router.query.farm_id,
+      crop_id: router.query.crop_id,
+      original_name: item.name,
+      type: item.type,
+      size: item.size,
+      geometry: {
+        type: "Polygon",
+        coordinates: [[lats?.latitude, lats?.longitude, 0]],
+      },
     };
 
     let options: any = {
@@ -370,9 +410,11 @@ const FileUploadComponent = () => {
           type: item.type,
           size: item.size,
           path: responseData?.data?.path,
-          key: responseData?.data?.key
+          key: responseData?.data?.key,
         });
         setAttachments(tempFilesStorage);
+      } else if (response.status == 401) {
+        await logout();
       } else {
         fileProgressCopy[index] = "fail";
         setFileProgress([...fileProgressCopy]);
@@ -383,26 +425,27 @@ const FileUploadComponent = () => {
   };
 
   useEffect(() => {
+    loadMap();
     if (router.query.farm_id && accessToken) {
       dispatch(removeTheFilesFromStore([]));
     }
   }, [accessToken, router.query.farm_id]);
 
-  useEffect(() => {
-    const confirmationMessage =
-      "Are you sure you want to leave this page? Your changes may not be saved.";
+  // useEffect(() => {
+  //   const confirmationMessage =
+  //     "Are you sure you want to leave this page? Your changes may not be saved.";
 
-    const handleBeforeUnload = (e: any) => {
-      e.preventDefault();
-      e.returnValue = confirmationMessage;
-    };
+  //   const handleBeforeUnload = (e: any) => {
+  //     e.preventDefault();
+  //     e.returnValue = confirmationMessage;
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
   const addScoutDetails = async () => {
     let imagesIdsArray: any = [];
@@ -422,6 +465,8 @@ const FileUploadComponent = () => {
               type: file?.type,
             },
             tags: [],
+
+            coordinates: [lats?.latitude, lats?.longitude, 0],
           };
 
           let options: any = {
@@ -443,20 +488,19 @@ const FileUploadComponent = () => {
           } else if (responseData?.status == 422) {
             setValidations(responseData?.errors);
             isExecuted = false;
+          } else if (response.status == 401) {
+            await logout();
           }
         })
       );
       if (isExecuted) {
         if (tags?.length || description?.length) {
           await addTagsAndCommentsEvent(imagesIdsArray);
-        }
-        else {
-          toast.success("FarmImages added successfully");
+        } else {
           setTimeout(() => {
-            setLoading(false);
-            router.back()
-          }, 2000);
-
+            router.back();
+          }, 500);
+          toast.success("Farm Images added successfully");
         }
       }
     } catch (err) {
@@ -531,8 +575,6 @@ const FileUploadComponent = () => {
 
   //add tags api
   const addTagsAndCommentsEvent = async (imagesArray: string[]) => {
-    console.log(imagesArray, tags, description);
-
     try {
       let urls = [
         {
@@ -570,7 +612,9 @@ const FileUploadComponent = () => {
             );
             let responseData = await response.json();
             if (responseData.success) {
-              toast.success(responseData?.message);
+              // toast.success(responseData?.message);
+            } else if (response.status == 401) {
+              await logout();
             } else {
               success = false;
               toast.error(responseData?.message);
@@ -580,11 +624,77 @@ const FileUploadComponent = () => {
         })
       );
       if (success) {
-        router.back()
+        toast.success("Farm Images added successfully");
+        router.back();
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const loadMap = () => {
+    setLoading(true);
+
+    const script = document.createElement("script");
+    script.src = `${"https://maps.googleapis.com/maps/api/js"}?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
+
+    script.onload = () => {
+      // Google Maps API loaded successfully
+      const geocoder = new (window as any).google.maps.Geocoder();
+
+      // Use the geocoder to get the user's location
+      if (navigator.geolocation) {
+        const geolocationOptions = {
+          enableHighAccuracy: true,
+          maximumAge: 0, // Forces the device to get a new location
+          timeout: 10000, // Set a timeout for getting the location
+        };
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            console.log(position);
+
+            const { latitude, longitude, accuracy } = position.coords;
+            const latLng = new (window as any).google.maps.LatLng(
+              latitude,
+              longitude
+            );
+
+            geocoder.geocode(
+              { location: latLng },
+              (results: any, status: any) => {
+                if (status === "OK") {
+                  if (results[0]) {
+                    // Parse the data to get the address or other information as needed
+                    console.log("Address:", results[0].formatted_address);
+                    setLats({ latitude, longitude });
+                    // console.log("Location:", { latitude, longitude });
+                  } else {
+                    console.error("No results found");
+                  }
+                } else {
+                  console.error("Geocoder failed due to:", status);
+                }
+              }
+            );
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          },
+          geolocationOptions
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    script.onerror = () => {
+      console.error("Error loading Google Maps API.");
+    };
+
+    document.head.appendChild(script);
+    setLoading(false);
   };
 
   return (
@@ -597,10 +707,7 @@ const FileUploadComponent = () => {
         />
       ) : (
         <div>
-          {/* <Header1
-            name={"Add Scout"}
-            router={`/farms/${router.query.farm_id}/crops`}
-          /> */}
+
           <div className={styles.header} id="header">
             <img
               className={styles.iconsiconArrowLeft}
@@ -609,133 +716,130 @@ const FileUploadComponent = () => {
               onClick={() => router.back()}
             />
             <Typography className={styles.viewFarm}>Add Scout</Typography>
-            <div className={styles.headericon} id="header-icon">
-            </div>
+            <div className={styles.headericon} id="header-icon"></div>
           </div>
 
-          <div className={styles.addscout} id="add-scout">
-            <div className={styles.scoutdetails} id="scout-details">
-              <div className={styles.addscoutdetails} id="add-scout-details">
-                <div className={styles.farmselection} id="images">
-                  <div className={styles.inputField}>
-                    <div className={styles.label1}></div>
-                  </div>
-
+          <div
+            style={{
+              overflowY: "auto",
+              maxHeight: "calc(105vh - 156px)",
+            }}
+          >
+            <div className={styles.addscout} id="add-scout">
+              <div className={styles.scoutdetails} id="scout-details">
+                <div className={styles.addscoutdetails} id="add-scout-details">
                   <div className={styles.farmselection} id="images">
                     <div className={styles.inputField}>
-                      <div className={styles.label1}>
-                        Images
-                        <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
-                      </div>
+                      <div className={styles.label1}></div>
                     </div>
-                    <div className={styles.imagesupload} id="images-upload">
-                      {/* <div className={styles.captureimage} id="capture-image">
-                        <div className={styles.camera}>
-                          <img
-                            className={styles.camera1Icon}
-                            alt=""
-                            src="/camera-1.svg"
-                            onClick={() => setOpenCamera(true)}
-                          />
 
-                          <div className={styles.capture}> Capture </div>
+                    <div className={styles.farmselection} id="images">
+                      <div className={styles.inputField}>
+                        <div className={styles.label1}>
+                          Images
+                          <strong style={{ color: "rgb(228 12 15)" }}>*</strong>
                         </div>
-                      </div> */}
-                      <div id="capture-image">
-                        <div className={styles.uploadimage}>
-                          <label>
-                            <img alt="" src="/upload-image-icon.svg" />
-                            <input
-                              type="file"
-                              alt="images-upload"
-                              accept="image/*, video/*"
-                              multiple
-                              onChange={handleFileChange}
-                              hidden
-                            />
-                          </label>
+                      </div>
+                      <div className={styles.imagesupload} id="images-upload">
+                        <div id="capture-image">
+                          <div className={styles.uploadimage}>
+                            <label>
+                              <img alt="" src="/upload-image-icon.svg" />
+                              <input
+                                type="file"
+                                alt="images-upload"
+                                accept="image/*"
+                                multiple
+                                onChange={handleFileChange}
+                                hidden
+                              />
+                            </label>
 
-                          <div className={styles.capture}> Upload </div>
+                            <div className={styles.capture}> Upload </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <ErrorMessagesComponent
-              errorMessage={validations?.farm_image_ids}
-            />
-            {multipleFiles &&
-              Array?.from(multipleFiles).map((item: any, index: any) => (
-                <div
-                  className={styles.uploadprogress}
-                  id="upload-progress"
-                  key={index}
-                >
-                  <div className={styles.progress} id="progress">
-                    <img
-                      className={styles.image21}
-                      alt=""
-                      src={
-                        previewImages.find((e: any) => e.fileIndex == item.name)
-                          ?.prieviewUrl
-                          ? previewImages.find(
+              <ErrorMessagesComponent
+                errorMessage={validations?.farm_image_ids}
+              />
+
+              {multipleFiles &&
+                Array?.from(multipleFiles).map((item: any, index: any) => (
+                  <div
+                    className={styles.uploadprogress}
+                    id="upload-progress"
+                    key={index}
+                  >
+                    <div className={styles.progress} id="progress">
+                      <img
+                        className={styles.image21}
+                        alt=""
+                        src={
+                          previewImages.find(
                             (e: any) => e.fileIndex == item.name
-                          ).prieviewUrl
-                          : item.type == "application/pdf"
-                            ? "/pdf-icon.png"
-                            : "/doc-icon.webp"
-                      }
-                    />
-                    <div className={styles.progressdetails}>
-                      <div className={styles.uploaddetails}>
-                        <div className={styles.uploadcontroller}>
-                          <div className={styles.uploadname}>
-                            <div className={styles.uploadItem}>
-                              <div
-                                className={styles.photojpg}
-                                style={{
-                                  color:
-                                    fileProgress[index] == "fail" ? "red" : "",
-                                }}
-                              >
-                                {item.name?.length > 25
-                                  ? item.name?.slice(0, 22) + "..."
-                                  : item.name}
-                              </div>
-                              {fileProgress[index] == "fail" ? (
+                          )?.prieviewUrl
+                            ? previewImages.find(
+                              (e: any) => e.fileIndex == item.name
+                            ).prieviewUrl
+                            : item.type == "application/pdf"
+                              ? "/pdf-icon.png"
+                              : "/doc-icon.webp"
+                        }
+                      />
+                      <div className={styles.progressdetails}>
+                        <div className={styles.uploaddetails}>
+                          <div className={styles.uploadcontroller}>
+                            <div className={styles.uploadname}>
+                              <div className={styles.uploadItem}>
                                 <div
                                   className={styles.photojpg}
-                                  style={{ color: "red" }}
+                                  style={{
+                                    color:
+                                      fileProgress[index] == "fail"
+                                        ? "red"
+                                        : "",
+                                  }}
                                 >
-                                  Cancelled
+                                  {item.name?.length > 25
+                                    ? item.name?.slice(0, 22) + "..."
+                                    : item.name}
+                                </div>
+                                {fileProgress[index] == "fail" ? (
+                                  <div
+                                    className={styles.photojpg}
+                                    style={{ color: "red" }}
+                                  >
+                                    Cancelled
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              {fileProgress[index] == 100 &&
+                                fileProgress[index] !== "fail" ? (
+                                <div className={styles.photojpg}>
+                                  <IconButton>
+                                    <DoneIcon sx={{ color: "#05A155" }} />
+                                  </IconButton>
+                                  <IconButton
+                                    onClick={() =>
+                                      removeFileAfterAdding(index, item)
+                                    }
+                                  >
+                                    <DeleteForeverIcon
+                                      sx={{ color: "#820707" }}
+                                    />
+                                  </IconButton>
                                 </div>
                               ) : (
                                 ""
                               )}
                             </div>
-                            {fileProgress[index] == 100 &&
-                              fileProgress[index] !== "fail" ? (
-                              <div className={styles.photojpg}>
-                                <IconButton>
-                                  <DoneIcon sx={{ color: "#05A155" }} />
-                                </IconButton>
-                                <IconButton
-                                  onClick={() =>
-                                    removeFileAfterAdding(index, item)
-                                  }
-                                >
-                                  <DeleteForeverIcon
-                                    sx={{ color: "#820707" }}
-                                  />
-                                </IconButton>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                          {fileProgress[index] !== 100 ||
+                            {/* {fileProgress[index] !== 100 ||
                             fileProgress[index] == "fail" ? (
                             <img
                               className={styles.close41}
@@ -745,102 +849,111 @@ const FileUploadComponent = () => {
                             />
                           ) : (
                             ""
-                          )}
-                        </div>
-                        <Box sx={{ width: "100%" }}>
-                          {fileProgress[index] == 0 &&
-                            fileProgress[index] !== "fail" ? (
-                            <LinearProgress />
-                          ) : fileProgress[index] !== 100 &&
-                            fileProgress[index] !== "fail" ? (
-                            <LinearProgress
-                              variant="determinate"
-                              value={fileProgress[index]}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </Box>
-                      </div>
-                      {fileProgress[index] == 100 ||
-                        fileProgress[index] == "fail" ? (
-                        ""
-                      ) : (
-                        <div className={styles.uploadstatus}>
-                          <div className={styles.completed}>
-                            {fileProgress[index]?.toFixed(2) + "%"}
+                          )} */}
                           </div>
+                          <Box sx={{ width: "100%" }}>
+                            {fileProgress[index] == 0 &&
+                              fileProgress[index] !== "fail" ? (
+                              <LinearProgress />
+                            ) : fileProgress[index] !== 100 &&
+                              fileProgress[index] !== "fail" ? (
+                              <LinearProgress
+                                variant="determinate"
+                                value={fileProgress[index]}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
                         </div>
-                      )}
+                        {fileProgress[index] == 100 ||
+                          fileProgress[index] == "fail" ? (
+                          ""
+                        ) : (
+                          <div className={styles.uploadstatus}>
+                            <div className={styles.completed}>
+                              {fileProgress[index]?.toFixed(2) + "%"}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            <div className={styles.scoutdescription} id="scout-description">
-              <div className={styles.descriptionblock}>
-                <div className={styles.addscoutdetails}>
-                  <div className={styles.inputField}>
-                    <div style={{ width: "100%" }} className={styles.input}>
-                      <TagsTextFeild captureTags={captureTags} />
-                    </div>
-                    <div
-                      className={styles.farmselection}
-                      id="input-description"
-                    >
-                      <div className={styles.label1}>Comments</div>
-                      <TextField
-                        className={styles.input}
-                        color="primary"
-                        name="desciption"
-                        id="description"
-                        minRows={4}
-                        maxRows={4}
-                        placeholder="Enter your comment here"
-                        fullWidth={true}
-                        variant="outlined"
-                        multiline
-                        value={description}
-                        onChange={(e) => {
-                          setDescription(e.target.value);
-                          setValidations({});
-                        }}
-                        sx={{ background: "#fff" }}
-                      />
-                      <ErrorMessagesComponent
-                        errorMessage={validations?.description}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.footeractionbuttons} id="footer-buttons">
-                  <div className={styles.buttons} id="buttons">
-                    <Button
-                      className={styles.back}
-                      sx={{ width: 130 }}
-                      color="primary"
-                      name="back"
-                      id="back"
-                      size="large"
-                      variant="outlined"
-                      onClick={() => router.back()}
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      className={styles.submit}
+                ))}
 
-                      name="submit"
-                      id="submit"
-                      size="large"
-                      variant="contained"
-                      disabled={!tempFilesStorage.length}
-                      onClick={() => addScoutDetails()}
-                      endIcon={<Icon>arrow_forward_sharp</Icon>}
+              <div className={styles.scoutdescription} id="scout-description">
+                {multipleFiles?.length ? (
+                  <div className={styles.descriptionblock}>
+                    <div className={styles.addscoutdetails}>
+                      <div className={styles.inputField}>
+                        <div style={{ width: "100%" }} className={styles.input}>
+                          <TagsTextFeild captureTags={captureTags} />
+                        </div>
+                        <div
+                          className={styles.farmselection}
+                          id="input-description"
+                        >
+                          <div className={styles.label1}>Comments</div>
+                          <TextField
+                            className={styles.input}
+                            color="primary"
+                            name="desciption"
+                            id="description"
+                            minRows={4}
+                            maxRows={4}
+                            placeholder="Enter your comment here"
+                            fullWidth={true}
+                            variant="outlined"
+                            multiline
+                            value={description}
+                            onChange={(e) => {
+                              const newValue = e.target.value.replace(/^\s+/, "");
+                              setDescription(newValue);
+                              setValidations({});
+                            }}
+                            sx={{ background: "#fff" }}
+                          />
+                          <ErrorMessagesComponent
+                            errorMessage={validations?.description}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={styles.footeractionbuttons}
+                      id="footer-buttons"
                     >
-                      Submit
-                    </Button>
+                      <div className={styles.buttons} id="buttons">
+                        <Button
+                          className={styles.back}
+                          sx={{ width: 130 }}
+                          color="primary"
+                          name="back"
+                          id="back"
+                          size="large"
+                          variant="outlined"
+                          onClick={() => router.back()}
+                        >
+                          Go Back
+                        </Button>
+                        <Button
+                          className={styles.submit}
+                          name="submit"
+                          id="submit"
+                          size="large"
+                          variant="contained"
+                          disabled={!tempFilesStorage.length || loading}
+                          onClick={() => addScoutDetails()}
+                        >
+                          Submit
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

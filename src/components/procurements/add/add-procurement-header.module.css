@@ -1,40 +1,70 @@
 .backbutton {
-  align-self: stretch;
-  cursor: pointer;
+  border-radius: 4px !important;
+  border: 1px solid var(--Stroke, #E9EDF1) !important;
+  background: #FFF !important;
+  padding: 12px 10px !important;
+  min-width: inherit !important;
+  box-shadow: none !important;
 }
-.largetext,
-.smalltext {
-  align-self: stretch;
-  position: relative;
+
+.backbutton:hover {
+  background: #FFF !important;
+  padding: 12px 10px !important;
+  min-width: inherit !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  border: 1px solid var(--Stroke, #E9EDF1) !important;
+}
+
+.backText {
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(10px, 0.625vw, 14px);
+  font-weight: 400;
   line-height: 100%;
+  margin: 0;
 }
-.smalltext {
-  cursor: pointer;
-}
+
+
 .largetext {
   margin: 0;
-  font-size: 24px;
+  font-size: clamp(20px, 1vw, 22px);
   font-weight: 400;
-  font-family: inherit;
+  font-family: "Inter", sans-serif;
   color: #a05148;
+  line-height: 100%;
 }
+
 .addprocurementheader,
 .textwrapper {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .textwrapper {
   flex: 1;
   flex-direction: column;
   gap: 4px;
 }
+
 .addprocurementheader {
   align-self: stretch;
+  display: flex;
+  align-items: center;
   flex-direction: row;
   gap: 16px;
+  margin-bottom: 0.5rem;
   text-align: left;
-  font-size: 12px;
   color: #000;
-  font-family: Inter;
+  font-family: 'Inter', sans-serif;
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 0.5rem;
+}
+
+.procurementFormBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

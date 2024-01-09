@@ -54,6 +54,7 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
           getOptionLabel={(option: any) =>
             option[label] ? option[label]?.toUpperCase() : ""
           }
+          // onClose={() => setSearchString("")}
           renderOption={(props, option) => {
             return (
               <li {...props} key={option?._id}>

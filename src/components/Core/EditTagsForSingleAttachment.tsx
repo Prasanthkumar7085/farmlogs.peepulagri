@@ -4,16 +4,16 @@ import {
   CircularProgress,
   Drawer,
   IconButton,
-  TextField,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import TagsTextFeild from "./TagsTextFeild";
-import styles from "./TagsDrawer.module.css";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import styles from "./TagsDrawer.module.css";
+import TagsTextFeildForImages from "./TagsTextFeildForImages";
 const EditTagsForSingleAttachment = ({
+  setTagsDrawerEditOpen,
   TagsDrawerEditOpen,
   tagsDrawerClose,
   item,
@@ -28,14 +28,11 @@ const EditTagsForSingleAttachment = ({
 
   const [description, setDescription] = useState<any>("");
   const [tags, setTags] = useState<any>([]);
-  const [tagsDetails, setTagsDetails] = useState<Partial<{ tags: string[] }>>();
-
-  const captureTags = (array: any) => {
-    if (array) {
-      setTags(array);
-    }
-    console.log(array);
-  };
+  const [tagsDetails, setTagsDetails] = useState<
+    Partial<{ tags: string[] }> | any
+  >({
+    tags: [],
+  });
 
   const getImageBasedTags = async () => {
     let options = {
@@ -46,7 +43,7 @@ const EditTagsForSingleAttachment = ({
     };
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/${router.query.image_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/tags/${item?._id}`,
         options
       );
       const responseData = await response.json();
@@ -54,16 +51,13 @@ const EditTagsForSingleAttachment = ({
         setTagsDetails(responseData?.data);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
-
-  console.log(tagsDetails, "asdf");
 
   useEffect(() => {
     if (TagsDrawerEditOpen) {
       setDescription(item?.description);
-      setTags(item ? item?.tags : []);
       getImageBasedTags();
     } else {
       setTags([]);
@@ -71,8 +65,6 @@ const EditTagsForSingleAttachment = ({
       setTagsDetails({});
     }
   }, [TagsDrawerEditOpen]);
-
-  console.log(item?.tags, tagsDetails, "asdf");
 
   return (
     <Drawer
@@ -92,7 +84,7 @@ const EditTagsForSingleAttachment = ({
       }}
     >
       <div className={styles.updateTagDrawerHeading}>
-        <Typography>Tag Images</Typography>
+        <Typography>Tags</Typography>
         <IconButton
           onClick={() => {
             tagsDrawerClose(false);
@@ -102,30 +94,26 @@ const EditTagsForSingleAttachment = ({
         </IconButton>
       </div>
       <div style={{ width: "100%" }}>
-        <TagsTextFeild
-          captureTags={captureTags}
-          tags={tags}
+        <TagsTextFeildForImages
+          itemDetails={item}
           beforeTags={tagsDetails?.tags}
           TagsDrawerEditOpen={TagsDrawerEditOpen}
+          getImageBasedTags={getImageBasedTags}
         />
       </div>
 
       <Button
         variant="contained"
+        className={styles.updateSubmitBtn}
         onClick={() => {
-          captureTagsDetailsEdit([...tags, ...item.tags], description);
+          setTagsDrawerEditOpen(false);
+          tagsDrawerClose(false);
         }}
-        disabled={loading || !(tags?.length || description?.length)}
-        className={
-          loading || !(tags?.length || description?.length)
-            ? styles.updateSubmitBtnDisabled
-            : styles.updateSubmitBtn
-        }
       >
         {loading ? (
           <CircularProgress size="1.5rem" sx={{ color: "white" }} />
         ) : (
-          "Submit"
+          "Close"
         )}
       </Button>
     </Drawer>

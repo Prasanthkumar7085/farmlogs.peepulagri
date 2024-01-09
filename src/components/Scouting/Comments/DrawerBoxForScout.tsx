@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
+import { toast } from "sonner";
 
 const DrawerComponentForScout = ({
   drawerClose,
@@ -33,8 +34,8 @@ const DrawerComponentForScout = ({
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
   const [loadingThreads, setLoadingThreads] = useState(true);
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   useEffect(() => {
     if ((router.isReady, accessToken, attachement && openCommentsBox == true)) {
@@ -45,8 +46,8 @@ const DrawerComponentForScout = ({
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -70,7 +71,6 @@ const DrawerComponentForScout = ({
         options
       );
       let responseData = await response.json();
-      console.log(responseData, "lb");
       if (responseData.success == true) {
         const commentsById: any = {};
 
@@ -133,6 +133,8 @@ const DrawerComponentForScout = ({
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -164,6 +166,8 @@ const DrawerComponentForScout = ({
       let responseData = await response.json();
       if (responseData.success == true) {
         getAllScoutComments();
+        toast.success(responseData?.message);
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -231,7 +235,12 @@ const DrawerComponentForScout = ({
     <Drawer
       anchor={"bottom"}
       open={openCommentsBox}
-      sx={{ zIndex: "1300 !important" }}
+      sx={{
+        zIndex: "1300 !important",
+        '& .MuiPaper-root': {
+          width: "100%", maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0 "
+        }
+      }}
     >
       <div
         style={{
@@ -269,7 +278,7 @@ const DrawerComponentForScout = ({
         <CommentForm
           afterCommentAdd={afterCommentAdd}
           scoutDetails={data}
-          attachement={data}
+          attachement={attachement}
         />
 
         <LoadingComponent loading={loading} />

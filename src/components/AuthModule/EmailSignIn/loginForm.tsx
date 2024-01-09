@@ -11,16 +11,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styles from "../SignUp/SignUp.module.css";
 import { useCookies } from "react-cookie";
 import { Toaster, toast } from "sonner";
+import DeviceDetector from "device-detector-js";
 
 export default function SigninEmail() {
   const dispatch = useDispatch();
-  const [, userType] = useCookies(["userType"]);
-  const [, loggedIn] = useCookies(["loggedIn"]);
+  const [, userType_v2] = useCookies(["userType_v2"]);
+  const [, loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [email, setEmail] = useState<any>();
   const [password, setPassword] = useState<any>();
@@ -29,6 +30,19 @@ export default function SigninEmail() {
   const [errorMessages, setErrorMessages] = useState<any>();
   const [invalid, setInvalid] = useState<any>();
   const router = useRouter();
+  const [deviceType, setDeviceType] = useState<any>()
+
+
+
+  //to know the mobile or desktop
+
+  useEffect(() => {
+    const deviceDetector = new DeviceDetector();
+    const userAgent = navigator.userAgent;
+    const device = deviceDetector.parse(userAgent);
+    console.log(device);
+    setDeviceType(device.device?.type) // This will log the parsed device information
+  }, []);
 
   const signInForm = async (e: any) => {
     e.preventDefault();
@@ -52,16 +66,19 @@ export default function SigninEmail() {
       );
       const res = await response.json();
       if (response.status == 200 || response.status == 201) {
-        loggedIn("loggedIn", "true");
-        userType("userType", res?.data?.user_details?.user_type);
+        loggedIn_v2("loggedIn_v2", "true");
+        userType_v2("userType_v2", res?.data?.user_details?.user_type);
 
         if ("data" in res) {
           dispatch(setUserDetails(res?.data));
         }
 
-        if (res?.data?.user_details?.user_type == "agronomist" || res?.data?.user_details?.user_type == "admin") {
+        if (
+          deviceType == "desktop"
+        ) {
           router.push("/scouts");
-        } else if (res?.data?.user_details?.user_type == "farmer") {
+        }
+        if (deviceType !== "desktop") {
           router.push("/dashboard");
         }
       }

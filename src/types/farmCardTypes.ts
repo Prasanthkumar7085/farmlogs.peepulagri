@@ -13,7 +13,7 @@ export interface FarmCardTypes {
 
 interface Geometrytype {
   type: string;
-  coordinates: Array<Array<Array<Array<number>>>>;
+  geometry: any;
   _id: string;
 }
 
@@ -24,7 +24,7 @@ export interface FarmDataType {
   area: number;
   created_at: string;
   crops: Array<CropTypeInFarms>;
-  geometry: Geometrytype;
+  geometry: any;
   logCount: number;
   slug: string;
   location_id: {

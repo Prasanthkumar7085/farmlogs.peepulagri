@@ -42,7 +42,8 @@ const TanStackTableComponent = ({
     if (
       header.id == "actions" ||
       header.id == "farm_id.title" ||
-      header.id == "assigned_to"
+      header.id == "assigned_to" ||
+      header.id == "serial"
     ) {
       return;
     }
@@ -64,7 +65,12 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      userId: router.query.assign_to
+        ? Array.isArray(router.query.assign_to)
+          ? (router.query.assign_to as string[])
+          : ([router.query.assign_to] as string[])
+        : [],
+      isMyTasks: router.query.is_my_task as string,
     });
   };
   const capturePageNum = (value: number) => {
@@ -76,7 +82,12 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      userId: router.query.assign_to
+        ? Array.isArray(router.query.assign_to)
+          ? (router.query.assign_to as string[])
+          : ([router.query.assign_to] as string[])
+        : [],
+      isMyTasks: router.query.is_my_task as string,
     });
   };
   const captureRowPerItems = (value: number) => {
@@ -88,7 +99,12 @@ const TanStackTableComponent = ({
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
-      userId: router.query.assigned_to as string,
+      userId: router.query.assign_to
+        ? Array.isArray(router.query.assign_to)
+          ? (router.query.assign_to as string[])
+          : ([router.query.assign_to] as string[])
+        : [],
+      isMyTasks: router.query.is_my_task as string,
     });
   };
   return (
@@ -109,7 +125,7 @@ const TanStackTableComponent = ({
                 height: "32px",
                 position: "sticky",
                 top: "0px",
-                zIndex: "2"
+                zIndex: "2",
               }}
             >
               {table.getHeaderGroups().map((headerGroup) => (
@@ -154,7 +170,7 @@ const TanStackTableComponent = ({
                                   alt="image"
                                 />
                               )
-                            ) : header.id == "farm_id.title" ||
+                            ) : header.id == "serial" ||
                               header.id == "assigned_to" ? (
                               ""
                             ) : (
@@ -175,7 +191,6 @@ const TanStackTableComponent = ({
             </thead>
             <tbody className="tbody">
               {table.getFilteredRowModel().rows.map((row) => {
-
                 return (
                   <tr className="table-row" key={row.id}>
                     {row.getVisibleCells().map((cell) => {

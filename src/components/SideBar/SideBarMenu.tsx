@@ -27,8 +27,8 @@ const SideBarMenu = ({ children }: any) => {
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -42,13 +42,6 @@ const SideBarMenu = ({ children }: any) => {
         !router.pathname.includes("/scouts"),
       toolTitle: "Farms",
     },
-    // {
-    //   src: "/support-icon.svg",
-    //   link: "/procurements",
-    //   isVisible: true,
-    //   active: router.pathname.includes("/procurements"),
-    //   toolTitle: "Procurements",
-    // },
     // {
     //   src: "/timeline-icon.svg",
     //   link: "/timeline",
@@ -64,11 +57,18 @@ const SideBarMenu = ({ children }: any) => {
       toolTitle: "Scouts",
     },
     // {
-    //   src: "/tasks-menu-icon.svg",
+    //   src: "/viewTaskIcons/task-symbol-icon-sidenav.svg",
     //   link: "/tasks",
     //   isVisible: userName !== "ADMIN",
     //   active: router.pathname.includes("/tasks"),
     //   toolTitle: "Tasks",
+    // },
+    // {
+    //   src: "/support-icon.svg",
+    //   link: "/procurements",
+    //   isVisible: true,
+    //   active: router.pathname.includes("/procurements"),
+    //   toolTitle: "Procurements",
     // },
     // { src: '/calendaricon.svg', link: "/" },
     // { src: '/graph-icon.svg', link: "/" },
@@ -76,8 +76,8 @@ const SideBarMenu = ({ children }: any) => {
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -154,7 +154,7 @@ const SideBarMenu = ({ children }: any) => {
         </aside>
         <div className={styles.main}>{children}</div>
       </div>
-      <div id="mobile-view">
+      {/* <div id="mobile-view">
         {userName == "farmer" ? (
           <div style={{ width: "100%", textAlign: "center" }}>
             <Button
@@ -185,7 +185,7 @@ const SideBarMenu = ({ children }: any) => {
             </Button>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

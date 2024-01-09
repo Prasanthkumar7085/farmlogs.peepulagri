@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./comment-form.module.css";
+import { toast } from "sonner";
 
 const CommentForm = ({
   afterCommentAdd,
@@ -35,8 +36,8 @@ const CommentForm = ({
     (state: any) => state.conversation?.attachmentsFilesList
   );
 
-  const [, , removeCookie] = useCookies(["userType"]);
-  const [, , loggedIn] = useCookies(["loggedIn"]);
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
   const [comment, setComment] = useState<any>();
   const [multipleFiles, setMultipleFiles] = useState<any>([]);
@@ -110,9 +111,7 @@ const CommentForm = ({
   const getCropsDetails = async () => {
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id
-          ? router.query.farm_id
-          : scoutDetails.farm_id
+        `${process.env.NEXT_PUBLIC_API_URL}/farm/${router.query.farm_id ? router.query.farm_id : scoutDetails.farm_id
         }/crops/list`,
         { method: "GET" }
       );
@@ -151,7 +150,8 @@ const CommentForm = ({
     };
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id ? attachement?._id : router.query.image_id}/comment`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id ? attachement?._id : router.query.image_id
+        }/comment`,
         options
       );
       let responseData = await response.json();
@@ -160,7 +160,10 @@ const CommentForm = ({
         afterCommentAdd(true);
         setMultipleFiles([]);
         setAttachments([]);
+        toast.success(responseData?.message);
+
         dispatch(removeTheAttachementsFilesFromStore([]));
+
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -173,8 +176,8 @@ const CommentForm = ({
 
   const logout = async () => {
     try {
-      removeCookie("userType");
-      loggedIn("loggedIn");
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
       router.push("/");
       await dispatch(removeUserDetails());
       await dispatch(deleteAllMessages());
@@ -320,15 +323,15 @@ const CommentForm = ({
           const newValue = e.target.value.replace(/^\s+/, "");
           setComment(newValue);
         }}
-        onKeyDown={(e: any) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            comment &&
-              (replyThreadEvent
-                ? replyThreads(replyThreadEvent)
-                : addComment());
-          }
-        }}
+      // onKeyDown={(e: any) => {
+      //   if (e.key === "Enter" && !e.shiftKey) {
+      //     e.preventDefault();
+      //     comment &&
+      //       (replyThreadEvent
+      //         ? replyThreads(replyThreadEvent)
+      //         : addComment());
+      //   }
+      // }}
       />
 
       {multipleFiles &&

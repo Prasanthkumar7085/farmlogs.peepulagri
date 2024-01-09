@@ -12,20 +12,39 @@ interface pagePropsType {
 }
 const AlertImagesDelete = ({ open, deleteImagesEvent, setDialogOpen, loading }: pagePropsType) => {
   return (
-    <Dialog open={open} PaperProps={{ sx: { borderRadius: "16px", minWidth: "350px" } }}>
+    <Dialog
+      open={open}
+      PaperProps={{ sx: { borderRadius: "16px", minWidth: "350px" } }}
+    >
       <div className={styles.alertdelete}>
-        <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
+        <picture>
+          <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
+        </picture>
         <div>
-          <div className={styles.areYouSure}>{`Are you sure  Want To Delete `}</div>
-          <div className={styles.thisWillBe}>This Will Be deleted Permanently</div>
+          <div
+            className={styles.areYouSure}
+          >{`Are you sure  Want To Delete `}</div>
+          <div className={styles.thisWillBe}>
+            This Will Be deleted Permanently
+          </div>
         </div>
         <div className={styles.buttons}>
-          <Button className={styles.buttoncancel} onClick={() => setDialogOpen(false)}>
+          <Button
+            className={styles.buttoncancel}
+            onClick={() => setDialogOpen(false)}
+          >
             <div className={styles.text}>Cancel</div>
           </Button>
-          <Button className={styles.buttongotit} onClick={() => deleteImagesEvent()}>
+          <Button
+            className={styles.buttongotit}
+            onClick={() => deleteImagesEvent()}
+          >
             <div className={styles.text}>
-              {loading ? <CircularProgress size="1.5rem" sx={{ color: "white" }} /> : 'Delete'}
+              {loading ? (
+                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+              ) : (
+                "Delete"
+              )}
             </div>
           </Button>
         </div>

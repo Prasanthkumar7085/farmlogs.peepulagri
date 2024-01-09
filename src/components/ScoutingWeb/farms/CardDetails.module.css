@@ -229,6 +229,7 @@
 
 .iconsiconArrowLeft {
   width: 20px;
+  cursor: pointer;
 }
 
 .viewFarm {
@@ -242,6 +243,7 @@
 .header {
   display: flex;
   align-items: center;
+
 }
 
 .headericon {

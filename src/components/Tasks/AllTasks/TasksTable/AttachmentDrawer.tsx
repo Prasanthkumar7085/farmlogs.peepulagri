@@ -1,4 +1,3 @@
-
 import { removeTheAttachementsFilesFromStore } from "@/Redux/Modules/Conversations";
 import timePipe from "@/pipes/timePipe";
 import { Close } from "@mui/icons-material";
@@ -8,10 +7,13 @@ import Drawer from "@mui/material/Drawer";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../TaskComments/Comments.module.css";
-const AttachmentDrawerTaskmodule = ({
+import getImageSrcUrl from "@/pipes/getImageSrcUrl";
+import { Toaster, toast } from "sonner";
+const AttachmentDrawer = ({
   attachmentDrawerClose,
   rowDetails,
   attachmentdrawer,
+  direction,
 }: any) => {
   const dispatch = useDispatch();
   const accessToken = useSelector(
@@ -61,6 +63,14 @@ const AttachmentDrawerTaskmodule = ({
       setLoading(false);
     }
   };
+
+  const getAcceptedForPreviewImageOrNot = (item: any) => {
+    return !(
+      item?.metadata?.type.includes("pdf") ||
+      item?.metadata?.type.includes("video") ||
+      item?.metadata?.type?.includes("image")
+    );
+  };
   useEffect(() => {
     if (attachmentdrawer) {
       getAllAttachments();
@@ -69,16 +79,65 @@ const AttachmentDrawerTaskmodule = ({
     }
   }, [attachmentdrawer]);
 
+  const downLoadAttachements = async (file: any, name: string) => {
+    try {
+      if (file) {
+        fetch(file)
+          .then((response) => {
+            // Get the filename from the response headers
+            const contentDisposition = response.headers.get(
+              "content-disposition"
+            );
+            let filename = "downloaded_file"; // Default filename if not found in headers
+            if (name) {
+              filename = name;
+            }
+
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (filenameMatch && filenameMatch.length > 1) {
+                filename = filenameMatch[1];
+              }
+            }
+
+            // Create a URL for the blob
+            return response.blob().then((blob) => ({ blob, filename }));
+          })
+          .then(({ blob, filename }) => {
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            // Clean up the blob URL
+            window.URL.revokeObjectURL(blobUrl);
+            toast.success("Attachement downloaded successfully");
+          })
+          .catch((error) => {
+            console.error("Error downloading file:", error);
+          });
+        // setAlertMessage("Attachement downloaded successfully")
+        // setAlertType(true)
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div>
       <Drawer
-        anchor="right"
+        anchor={direction}
         open={attachmentdrawer}
         sx={{
           "& .MuiPaper-root": {
-            padding: "1rem",
-            minWidth: "600px",
-            maxWidth: "600px",
+            overflow: "auto",
+            maxWidth: "500px",
+            minWidth: "500px",
           },
         }}
       >
@@ -99,6 +158,7 @@ const AttachmentDrawerTaskmodule = ({
             display: "flex",
             flexDirection: "column",
             paddingBlock: "1rem",
+            padding: "0 1rem",
           }}
         >
           {!loading && attachmentData?.length ? (
@@ -115,32 +175,33 @@ const AttachmentDrawerTaskmodule = ({
                           key={index}
                           className={styles.taskModuleAttachmentBlock}
                         >
-                          {image?.type?.includes("video") ? (
-                            <img
-                              src={"/videoimg.png"}
-                              alt=""
-                              height={100}
-                              width={100}
-                              className={styles.attachmentImg}
-                            />
-                          ) : (
-                            <img
-                              src={image?.url}
-                              alt=""
-                              height={100}
-                              width={100}
-                              className={styles.attachmentImg}
-                            />
-                          )}
+                          <img
+                            src={getImageSrcUrl(image)}
+                            alt=""
+                            height={100}
+                            width={100}
+                            className={styles.attachmentImg}
+                          />
                           <div
                             className={styles.viewIcon}
                             onClick={() => {
+                              if (getAcceptedForPreviewImageOrNot(image)) {
+                                downLoadAttachements(
+                                  image?.url,
+                                  image?.metadata?.original_name
+                                );
+                                return;
+                              }
                               setSingleImageView(true);
                               setImageId(image);
                             }}
                           >
                             <img
-                              src="/view-icon-task.svg"
+                              src={
+                                getAcceptedForPreviewImageOrNot(image)
+                                  ? "/viewTaskIcons/download-white.svg"
+                                  : "/view-icon-task.svg"
+                              }
                               height={30}
                               width={30}
                               alt="view"
@@ -187,18 +248,25 @@ const AttachmentDrawerTaskmodule = ({
             <Close sx={{ color: "#fff", fontSize: "2.5rem" }} />
           </div>
           <div className={styles.singleImageDialog}>
-            {imageid?.type?.includes("video") ? (
+            {imageid?.metadata?.type?.includes("video") ? (
               <video controls width="100%" height="auto" autoPlay>
                 <source src={imageid?.url} type={imageid?.type} />
                 Your browser does not support the video tag.
               </video>
-            ) : (
+            ) : imageid?.metadata?.type?.includes("image") ? (
               <img src={imageid?.url} alt="" />
+            ) : (
+              <iframe src={imageid?.url} width={"100%"} height={"90%"}>
+                <p style={{ background: "white" }}>
+                  No preview available for this file type.
+                </p>
+              </iframe>
             )}
           </div>
         </div>
       </Dialog>
+      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 };
-export default AttachmentDrawerTaskmodule;
+export default AttachmentDrawer;

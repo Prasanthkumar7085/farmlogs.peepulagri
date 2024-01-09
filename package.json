@@ -17,6 +17,7 @@
     "@mui/material": "^5.14.5",
     "@mui/x-date-pickers": "^6.18.4",
     "@mui/x-date-pickers-pro": "^6.11.1",
+    "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-table": "^8.9.3",
     "@types/node": "20.5.0",
@@ -32,7 +33,9 @@
     "ckeditor5": "^40.0.0",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
+    "device-detector-js": "^3.0.3",
     "eslint-config-next": "^13.4.17",
+    "google-map-react": "^2.2.1",
     "interweave": "^13.1.0",
     "moment": "^2.29.4",
     "next": "^13.5.6",
@@ -59,6 +62,7 @@
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.2",
     "react-responsive-carousel": "^3.2.23",
+    "react-spring": "^9.7.3",
     "react-swipeable": "^7.0.1",
     "react-table": "^7.8.0",
     "react-touch-drag-slider": "^2.2.5",
@@ -71,11 +75,14 @@
     "sass": "^1.68.0",
     "sonner": "^1.0.3",
     "typescript": "5.1.6",
+    "uuid": "^9.0.1",
     "yet-another-react-lightbox": "^3.12.2"
   },
   "devDependencies": {
+    "@types/google-map-react": "^2.1.10",
     "@types/react-image-gallery": "^1.2.1",
     "@types/react-modal": "^3.16.1",
+    "@types/uuid": "^9.0.7",
     "eslint": "^8.47.0"
   }
 }

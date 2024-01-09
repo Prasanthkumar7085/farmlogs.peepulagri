@@ -24,7 +24,9 @@ const SupportPage = () => {
     const router = useRouter();
     const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
 
-    const userType = useSelector((state: any) => state.auth.userDetails?.user_details?.user_type);
+    const userType_v2 = useSelector(
+      (state: any) => state.auth.userDetails?.user_details?.user_type
+    );
 
     const [searchString, setSearchString] = useState<string>('');
     const [page, setPage] = useState<string | number>(1);
@@ -264,28 +266,64 @@ const SupportPage = () => {
     }, [searchString]);
 
     return (
-        <div className={styles.supportDashboard}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3 className={styles.title}>Support</h3>
-                <div className={styles.tableFilters}>
-                    <SearchComponent
-                        onChange={(value: string) => setSearchString(value)}
-                        placeholder={'Search By Query Name'}
-                        setSearchString={setSearchString}
-                        searchString={searchString}
-                        value={searchString}
-                    />
-                    <SelectComponent options={statusOptions} size="small" onChange={onStatusChange} value={router.query.status ? router.query.status : ''} />
-                    {userType == 'ADMIN' ? "" : <ButtonComponent variant="contained" icon={<AddIcon />} title='ADD' onClick={() => router.push('/support/add')} />}
-                </div>
-            </div>
-            <SupportDataTable data={data} loading={loading} deleteSupport={deleteSupport} appliedSort={appliedSort} />
-            {!loading && data?.length ? <TablePaginationComponent paginationDetails={paginationDetails} capturePageNum={onPageChange} captureRowPerItems={onLimitChange} values='Queries' /> : ""}
-            <LoadingComponent loading={loading} />
-            <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
-            <DeleteDialogCompoennt deleteContent={deleteContent} deleteDialogOpen={deleteDialogOpen} confirmDelete={confirmDelete} />
+      <div className={styles.supportDashboard}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h3 className={styles.title}>Support</h3>
+          <div className={styles.tableFilters}>
+            <SearchComponent
+              onChange={(value: string) => setSearchString(value)}
+              placeholder={"Search By Query Name"}
+              setSearchString={setSearchString}
+              searchString={searchString}
+              value={searchString}
+            />
+            <SelectComponent
+              options={statusOptions}
+              size="small"
+              onChange={onStatusChange}
+              value={router.query.status ? router.query.status : ""}
+            />
+            {userType_v2 == "ADMIN" ? (
+              ""
+            ) : (
+              <ButtonComponent
+                variant="contained"
+                icon={<AddIcon />}
+                title="ADD"
+                onClick={() => router.push("/support/add")}
+              />
+            )}
+          </div>
         </div>
-    )
+        <SupportDataTable
+          data={data}
+          loading={loading}
+          deleteSupport={deleteSupport}
+          appliedSort={appliedSort}
+        />
+        {!loading && data?.length ? (
+          <TablePaginationComponent
+            paginationDetails={paginationDetails}
+            capturePageNum={onPageChange}
+            captureRowPerItems={onLimitChange}
+            values="Queries"
+          />
+        ) : (
+          ""
+        )}
+        <LoadingComponent loading={loading} />
+        <AlertComponent
+          alertMessage={alertMessage}
+          alertType={alertType}
+          setAlertMessage={setAlertMessage}
+        />
+        <DeleteDialogCompoennt
+          deleteContent={deleteContent}
+          deleteDialogOpen={deleteDialogOpen}
+          confirmDelete={confirmDelete}
+        />
+      </div>
+    );
 }
 
 

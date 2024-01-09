@@ -1,0 +1,53 @@
+.moveTo {
+  flex: 1;
+  position: relative;
+  line-height: 100%;
+}
+.component11,
+.component113,
+.component12 {
+  align-self: stretch;
+  border-radius: 4px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.component11 {
+  padding: 6px 0 6px 12px;
+  color: #45a845;
+}
+.component113,
+.component12 {
+  padding: 10px 0 10px 12px;
+}
+.component113 {
+  padding: 10px 0 12px 12px;
+}
+.component11Parent,
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.component11Parent {
+  align-self: stretch;
+  justify-content: flex-start;
+  gap: 4px;
+}
+.status {
+  position: relative;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.2);
+  width: 235px;
+  overflow: hidden;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+  text-align: left;
+  font-size: 13px;
+  color: #000;
+  font-family: Inter;
+}

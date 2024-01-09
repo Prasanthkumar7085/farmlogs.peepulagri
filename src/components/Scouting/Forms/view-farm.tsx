@@ -1,45 +1,48 @@
-import type { NextPage } from "next";
-import styles from "./view-farm.module.css";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
-import { FarmDataType } from "@/types/farmCardTypes";
-import timePipe from "@/pipes/timePipe";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import { useSelector } from "react-redux";
-import { Box, Menu, MenuItem, Typography } from "@mui/material";
-import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
 import AlertComponent from "@/components/Core/AlertComponent";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import timePipe from "@/pipes/timePipe";
+import { FarmDataType } from "@/types/farmCardTypes";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { Box, Menu, MenuItem, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
+import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
+import styles from "./view-farm.module.css";
 
 const ViewFarmPage = () => {
   const router = useRouter();
   const [data, setData] = useState<FarmDataType>();
   const [loading, setLoading] = useState(true);
-  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
-  const [statsData, setStatsData] = useState<any>([])
+  const [statsData, setStatsData] = useState<any>([]);
 
   const getFarmDataById = async () => {
     setLoading(true);
 
-    const response: any = await getFarmByIdService(router.query.farm_id as string, accessToken as string);
+    const response: any = await getFarmByIdService(
+      router.query.farm_id as string,
+      accessToken as string
+    );
 
     if (response?.success) {
       setData(response?.data);
     }
     setLoading(false);
-  }
+  };
 
   const getStatsCount = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       let urls = [
         `${process.env.NEXT_PUBLIC_API_URL}/farms/${router.query.farm_id}/crops-count`,
@@ -66,17 +69,13 @@ const ViewFarmPage = () => {
         if (result.status === "rejected") {
         }
       });
-      console.log(tempResult, "klo")
-      setStatsData(tempResult)
+      setStatsData(tempResult);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
-
-    }
-  }
+  };
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -94,14 +93,16 @@ const ViewFarmPage = () => {
   const deleteFarm = async () => {
     setLoading(true);
     handleClose();
-    const response = await deleteFarmService(router.query.farm_id as string, accessToken);
+    const response = await deleteFarmService(
+      router.query.farm_id as string,
+      accessToken
+    );
     if (response?.success) {
       setAlertMessage(response?.message);
       setAlertType(true);
       setTimeout(() => {
         router.back();
       }, 600);
-
     } else {
       setAlertMessage(response?.message);
       setAlertType(false);
@@ -120,22 +121,34 @@ const ViewFarmPage = () => {
           onClick={() => router.back()}
         />
         <Typography className={styles.viewFarm}>Farm Details</Typography>
-        <div className={styles.headericon} id="header-icon" onClick={handleClick}>
-        </div>
-
+        <div
+          className={styles.headericon}
+          id="header-icon"
+          onClick={handleClick}
+        ></div>
       </div>
       {!loading ? (
         <div className={styles.viewFarmDetailsCard}>
           <div className={styles.overViewBtns}>
-            <div className={styles.farmOverView} style={{ background: "#D94841" }}>
+            <div
+              className={styles.farmOverView}
+              style={{ background: "#D94841" }}
+            >
               <img src="/mobileIcons/farms/Crop.svg" alt="" width={"24px"} />
               <div className={styles.overViewText}>
                 <h6>{statsData[0]?.data}</h6>
                 <span>Crops</span>
               </div>
             </div>
-            <div className={styles.farmOverView} style={{ background: "#05A155" }}>
-              <img src="/mobileIcons/farms/image-fill.svg" alt="" width={"24px"} />
+            <div
+              className={styles.farmOverView}
+              style={{ background: "#05A155" }}
+            >
+              <img
+                src="/mobileIcons/farms/image-fill.svg"
+                alt=""
+                width={"24px"}
+              />
               <div className={styles.overViewText}>
                 <h6>{statsData[1]?.data}</h6>
                 <span>Images</span>
@@ -144,82 +157,135 @@ const ViewFarmPage = () => {
           </div>
           <div className={styles.viewfarmCard} id="view-farm">
             <Box className={styles.farmdetailsblock}>
-              <div className={styles.iconBlock} >
+              <div className={styles.iconBlock}>
                 <div onClick={handleClick}>
-                  < MoreHorizIcon sx={{ fontSize: "2rem" }} />
+                  <MoreHorizIcon sx={{ fontSize: "2rem" }} />
                 </div>
                 <Menu
                   id="basic-menu"
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
-
                   sx={{
-                    '& .MuiMenuItem-root': {
-                      display: "flex", alignItems: "center", gap: "0.5rem",
+                    "& .MuiMenuItem-root": {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
                       minHeight: "inherit",
+                      fontFamily: "'Inter', sans-serif",
 
-                    }
+                    },
                   }}
                 >
-                  <MenuItem sx={{ borderBottom: "1px solid #B4C1D6" }} onClick={() => { handleClose(); router.push(`/farms/${router.query.farm_id}/edit`) }}> <ModeEditOutlinedIcon sx={{ fontSize: "16px" }} />Edit</MenuItem>
-                  <MenuItem onClick={() => { setDialogOpen(true); setAnchorEl(null) }}><DeleteOutlinedIcon sx={{ fontSize: "16px" }} />Delete</MenuItem>
-
+                  <MenuItem
+                    sx={{ borderBottom: "1px solid #B4C1D6" }}
+                    onClick={() => {
+                      handleClose();
+                      router.push(`/farms/${router.query.farm_id}/edit`);
+                    }}
+                  >
+                    {" "}
+                    Edit
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setDialogOpen(true);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    Delete
+                  </MenuItem>
                 </Menu>
-              </div>
-              <div className={styles.eachFarmDetails} >
-                <div className={styles.detailsHeading}>
-                  <img src="/mobileIcons/farms/farm-view-mobile.svg" alt="" width={"20px"} />
-                  <span>Title</span>
-                </div>
-                <div className={styles.aboutFarm}>
-                  {data?.title}
-                </div>
               </div>
               <div className={styles.eachFarmDetails}>
                 <div className={styles.detailsHeading}>
-                  <img src="/mobileIcons/farms/field-icon.svg" alt="" width={"20px"} />
+                  <img
+                    src="/mobileIcons/farms/farm-view-mobile.svg"
+                    alt=""
+                    width={"20px"}
+                  />
+                  <span>Title</span>
+                </div>
+                <div className={styles.aboutFarm}>{data?.title}</div>
+              </div>
+              <div className={styles.eachFarmDetails}>
+                <div className={styles.detailsHeading}>
+                  <img
+                    src="/mobileIcons/farms/field-icon.svg"
+                    alt=""
+                    width={"20px"}
+                  />
                   <span> Acres</span>
-
                 </div>
                 <div className={styles.aboutFarm}>
                   {data?.area ? Math.floor(data?.area * 100) / 100 : ""}
                 </div>
-
               </div>
-              <div className={styles.eachFarmDetails} >
+              <div className={styles.eachFarmDetails}>
                 <div className={styles.detailsHeading}>
-                  <img src="/mobileIcons/farms/map-pin-line-view.svg" alt="" width={"20px"} />
-                  <span>  Location</span>
-
+                  <img
+                    src="/mobileIcons/farms/map-pin-line-view.svg"
+                    alt=""
+                    width={"20px"}
+                  />
+                  <span> Location</span>
                 </div>
                 <div className={styles.aboutFarm}>
-                  {data?.location_id?.title ? ' ' + data?.location_id?.title : " N/A"}
+                  {data?.location_id?.title
+                    ? " " + data?.location_id?.title
+                    : " N/A"}
                 </div>
-
               </div>
-              <div className={styles.eachFarmDetails} >
+              <div className={styles.eachFarmDetails}>
                 <div className={styles.detailsHeading}>
-                  <img src="/mobileIcons/farms/calendar-blank.svg" alt="" width={"20px"} />
+                  <img
+                    src="/mobileIcons/farms/calendar-blank.svg"
+                    alt=""
+                    width={"20px"}
+                  />
                   <span>Created On</span>
-
                 </div>
                 <div className={styles.aboutFarm}>
-                  {timePipe(data?.createdAt as string, 'DD, MMM YYYY')}
+                  {timePipe(data?.createdAt as string, "DD, MMM YYYY")}
                 </div>
-
               </div>
             </Box>
           </div>
+          {/* <div style={{
+            display: "flex",
+            alignItems: "center",
+            alignSelf: "stretch",
+            justifyContent: "end",
+            gap: "0.2rem",
+            marginTop: "10px",
+            cursor: "pointer"
+          }}
+            onClick={() => data?.geometry?.coordinates?.length ?
+              router.push(`/farms/${router.query.farm_id}/map/edit`) :
+              router.push(`/farms/${router.query.farm_id}/map`)
+            }>
+            <Typography>{data?.geometry?.coordinates?.length ? "View/Edit Map" : "Add map"}</Typography>
+            <img src={"/google-maps.png"} width={22} height={22} />
+          </div> */}
         </div>
       ) : (
         ""
       )}
-      <AlertComponent alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} mobile={true} />
+      <AlertComponent
+        alertMessage={alertMessage}
+        alertType={alertType}
+        setAlertMessage={setAlertMessage}
+        mobile={true}
+      />
 
       <LoadingComponent loading={loading} />
-      <AlertDelete open={dialogOpen} deleteFarm={deleteFarm} setDialogOpen={setDialogOpen} loading={loading} deleteTitleProp={"Farm"} />
-
+      <AlertDelete
+        open={dialogOpen}
+        deleteFarm={deleteFarm}
+        setDialogOpen={setDialogOpen}
+        loading={loading}
+        deleteTitleProp={"Farm"}
+      />
     </div>
   );
 };

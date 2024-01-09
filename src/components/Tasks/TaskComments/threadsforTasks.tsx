@@ -127,7 +127,7 @@ const ThreadsForTasks = ({
                   </Avatar>
                 ) : (
                   <Avatar sx={{ bgcolor: "green" }}>
-                    {item?.commented_by?.name?.slice(0, 2)}
+                    {item?.commented_by?.name?.slice(0, 2)?.toUpperCase()}
                   </Avatar>
                 )}
                 <div className={styles.messagebox}>
@@ -136,12 +136,13 @@ const ThreadsForTasks = ({
                       {userDetails?.user_details?.user_type ==
                         item?.commented_by?.user_type
                         ? "You"
-                        : item?.commented_by?.user_type !== userDetails?.user_details?.user_type
+                        : item?.commented_by?.user_type !==
+                          userDetails?.user_details?.user_type
                           ? item.commented_by?.name
                           : item?.user_type}
                     </h4>
                     <p className={styles.aug20231030am}>
-                      {timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}
+                      {timePipe(item.updatedAt, "DD-MM-YYYY hh:mm A")}
                     </p>
                   </div>
                   <div className={styles.paragraph}>
@@ -163,7 +164,9 @@ const ThreadsForTasks = ({
                         />
                       </div>
                     ) : (
-                      <p className={styles.theProblemIm}>
+                      <p className={styles.theProblemIm} style={{ fontSize: "clamp(12px, 2vw, 14px) !important" }}
+
+                      >
                         <Markup content={item.content} />
                         <Typography
                           variant="caption"
@@ -175,83 +178,85 @@ const ThreadsForTasks = ({
                     )}
                     <div className={styles.attachmentContainer}>
                       {item.attachments?.length !== 0
-                        ? item?.attachments?.map((file: any, indexfile: any) => {
-                          return (
-                            <div
-                              className={styles.attachment}
-                              key={indexfile}
-                            >
-                              <div className={styles.row}>
-                                <div className={styles.icon}>
-                                  <img
-                                    className={styles.groupIcon}
-                                    alt=""
-                                    src={
-                                      file.type.includes("image")
-                                        ? "/group2.svg"
-                                        : file.type.includes("application")
-                                          ? "/pdf-icon.png"
-                                          : file.type.includes("video")
-                                            ? "/videoimg.png"
-                                            : "/doc-icon.webp"
-                                    }
-                                  />
-                                  <img
-                                    className={styles.groupIcon1}
-                                    alt=""
-                                    src="/group3.svg"
-                                  />
-                                </div>
-                                <div className={styles.imageName}>
-                                  {file?.original_name?.slice(0, 9)}...
-                                </div>
-                              </div>
+                        ? item?.attachments?.map(
+                          (file: any, indexfile: any) => {
+                            return (
                               <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
+                                className={styles.attachment}
+                                key={indexfile}
                               >
-                                <IconButton
-                                  onClick={() =>
-                                    downLoadAttachements(
-                                      file,
-                                      item.user[0]._id
-                                    )
-                                  }
+                                <div className={styles.row}>
+                                  <div className={styles.icon}>
+                                    <img
+                                      className={styles.groupIcon}
+                                      alt=""
+                                      src={
+                                        file.type.includes("image")
+                                          ? "/group2.svg"
+                                          : file.type.includes("application")
+                                            ? "/pdf-icon.png"
+                                            : file.type.includes("video")
+                                              ? "/videoimg.png"
+                                              : "/doc-icon.webp"
+                                      }
+                                    />
+                                    <img
+                                      className={styles.groupIcon1}
+                                      alt=""
+                                      src="/group3.svg"
+                                    />
+                                  </div>
+                                  <div className={styles.imageName}>
+                                    {file?.original_name?.slice(0, 9)}...
+                                  </div>
+                                </div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
                                 >
-                                  <img
-                                    className={styles.download11}
-                                    alt=""
-                                    src="/download-1-1.svg"
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                </IconButton>
-                                {userDetails?.user_details?.user_type ==
-                                  item?.commented_by?.user_type ? (
                                   <IconButton
                                     onClick={() =>
-                                      afterDeleteAttachements(
-                                        file._id,
-                                        item._id
+                                      downLoadAttachements(
+                                        file,
+                                        item.user[0]._id
                                       )
                                     }
                                   >
-                                    <Image
-                                      alt="Delete"
-                                      height={20}
-                                      width={20}
-                                      src="/farm-delete-icon.svg"
-                                      style={{ borderRadius: "5%" }}
+                                    <img
+                                      className={styles.download11}
+                                      alt=""
+                                      src="/download-1-1.svg"
+                                      style={{ cursor: "pointer" }}
                                     />
                                   </IconButton>
-                                ) : (
-                                  ""
-                                )}
+                                  {userDetails?.user_details?.user_type ==
+                                    item?.commented_by?.user_type ? (
+                                    <IconButton
+                                      onClick={() =>
+                                        afterDeleteAttachements(
+                                          file._id,
+                                          item._id
+                                        )
+                                      }
+                                    >
+                                      <Image
+                                        alt="Delete"
+                                        height={20}
+                                        width={20}
+                                        src="/farm-delete-icon.svg"
+                                        style={{ borderRadius: "5%" }}
+                                      />
+                                    </IconButton>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })
+                            );
+                          }
+                        )
                         : ""}
                     </div>
                   </div>
@@ -463,7 +468,8 @@ const ThreadsForTasks = ({
                                   {userDetails?.user_details?.user_type ==
                                     row?.commented_by?.user_type
                                     ? "You"
-                                    : row?.commented_by?.user_type !== userDetails?.user_details?.user_type
+                                    : row?.commented_by?.user_type !==
+                                      userDetails?.user_details?.user_type
                                       ? row?.commented_by?.name
                                       : row?.commented_by?.user_type}
                                 </h4>
@@ -499,7 +505,7 @@ const ThreadsForTasks = ({
                                   />
                                 </div>
                               ) : (
-                                <p className={styles.theProblemIm}>
+                                <p className={styles.theProblemIm} style={{ fontSize: "clamp(12px, 2vw, 14px) !important" }}>
                                   <Markup content={row.content} />
                                   {"                     "}
                                   <Typography variant="caption">

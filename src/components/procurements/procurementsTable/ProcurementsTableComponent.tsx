@@ -5,14 +5,11 @@ import { Toaster, toast } from "sonner";
 import deleteProcurmentByIdService from "../../../../lib/services/ProcurementServices/deleteProcurmentByIdService";
 import ImageComponent from "@/components/Core/ImageComponent";
 import timePipe from "@/pipes/timePipe";
-import Link from "next/link";
 import TanStackTableProcurmentComponent from "./ProcurementsTanStackTable";
-import { ApiCallProps } from "./ListProcurements";
-import { TaskResponseTypes } from "@/types/tasksTypes";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton, Tooltip } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import { setAllFarms } from "@/Redux/Modules/Farms";
+import DrawerCommentsForProcurment from "./ProcrumentComments/DrawerBoxForProcurment";
 
 
 // interface pageProps {
@@ -34,11 +31,15 @@ const ProcurementsTableComponent = ({
 }: any) => {
   const router = useRouter();
 
-  const userType = useSelector(
+  const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
+  );
+
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
   );
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -69,11 +70,17 @@ const ProcurementsTableComponent = ({
         page: router.query.page as string,
         limit: router.query.limit as string,
         search_string: router.query.search_string as string,
-        sortBy: router.query.sort_by as string,
-        sortType: router.query.sort_type as string,
+        sortBy: router.query.order_by as string,
+        sortType: router.query.order_type as string,
         selectedFarmId: router.query.farm_id as string,
         status: router.query.status as string,
-        userId: router.query.assigned_to as string,
+        priority: router.query.priority as string,
+        userId: router.query.requested_by
+          ? Array.isArray(router.query.requested_by)
+            ? (router.query.requested_by as string[])
+            : ([router.query.requested_by] as string[])
+          : [],
+        isMyTasks: router.query.is_my_task as string,
       });
     } else {
       toast.error(response?.message);
@@ -168,6 +175,10 @@ const ProcurementsTableComponent = ({
     return (
       <span
         style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "1rem",
           padding: "40px 10px 40px 10px",
           color: value?.length ? "" : "#9a9a9a",
         }}
@@ -179,7 +190,10 @@ const ProcurementsTableComponent = ({
           : "*No Farms*"}
         {info.getValue()?.farm_ids?.length > 2 ? (
           <div
-            style={{ color: "#9a9a9a" }}
+            style={{
+              color: "#9a9a9a",
+
+            }}
             onClick={() => {
               if (viewMoreId) {
                 if (id == viewMoreId) {
@@ -203,6 +217,11 @@ const ProcurementsTableComponent = ({
       </span>
     );
   }
+  //to captlize the upercase text
+  const capitalizeFirstLetter = (string: any) => {
+    let temp = string.toLowerCase();
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
+  };
 
   const columns = [
     {
@@ -210,11 +229,22 @@ const ProcurementsTableComponent = ({
       id: "id",
       header: () => <span>S.No</span>,
       footer: (props: any) => props.column.id,
-      width: "50px",
-      minWidth: "50px",
-      maxWidth: "50px",
+      width: "60px",
+      minWidth: "60px",
+      maxWidth: "60px",
     },
-
+    {
+      accessorFn: (row: any) => row.requested_by.name,
+      id: "requested_by.name",
+      cell: (info: any) => (
+        <span style={{ padding: "40px 10px 40px 10px" }}>
+          {info.getValue()}
+        </span>
+      ),
+      header: () => <span>Requested By</span>,
+      footer: (props: any) => props.column.id,
+      width: "150px",
+    },
     {
       accessorFn: (row: any) => row.title,
       id: "title",
@@ -232,7 +262,7 @@ const ProcurementsTableComponent = ({
       id: "date_of_operation",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
+          {timePipe(info.getValue(), "DD-MM-YYYY hh:mm A")}
         </span>
       ),
       header: () => <span>Date of Operation</span>,
@@ -247,50 +277,40 @@ const ProcurementsTableComponent = ({
       cell: (info: any) => <FarmTitleComponent info={info} />,
       header: () => <span>Farm Name</span>,
       footer: (props: any) => props.column.id,
-      width: "350px",
+      width: "200px",
     },
     {
       accessorFn: (row: any) => row.point_of_contact?.name,
       id: "point_of_contact.name",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {info.getValue() ? info.getValue() : "-"}
         </span>
       ),
       header: () => <span>POC</span>,
       footer: (props: any) => props.column.id,
       width: "150px",
     },
-    {
-      accessorFn: (row: any) => {
-        return { materials_required: row.materials_required, _id: row._id };
-      },
-      id: "materials_required",
-      cell: (info: any) => <MaterialAssignedComponent info={info} />,
-      header: () => <span>Materials Required</span>,
-      footer: (props: any) => props.column.id,
-      width: "200px",
-    },
 
-    {
-      accessorFn: (row: any) => row.approved_by?.name,
-      id: "approved_by.name",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
-        </span>
-      ),
-      header: () => <span>Approved By</span>,
-      footer: (props: any) => props.column.id,
-      width: "200px",
-    },
+    // {
+    //   accessorFn: (row: any) => row.approved_by?.name,
+    //   id: "approved_by.name",
+    //   cell: (info: any) => (
+    //     <span style={{ padding: "40px 10px 40px 10px" }}>
+    //       {info.getValue()}
+    //     </span>
+    //   ),
+    //   header: () => <span>Approved By</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "150px",
+    // },
 
     {
       accessorFn: (row: any) => row.status,
       id: "status",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {capitalizeFirstLetter(info.getValue())}
         </span>
       ),
       header: () => <span>Status</span>,
@@ -302,25 +322,25 @@ const ProcurementsTableComponent = ({
       id: "priority",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {info.getValue()}
+          {capitalizeFirstLetter(info.getValue())}
         </span>
       ),
       header: () => <span>Priority</span>,
       footer: (props: any) => props.column.id,
-      width: "120px",
+      width: "100px",
     },
-    {
-      accessorFn: (row: any) => row.completed_at,
-      id: "completed_at",
-      cell: (info: any) => (
-        <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
-        </span>
-      ),
-      header: () => <span>Day of Closing</span>,
-      footer: (props: any) => props.column.id,
-      width: "120px",
-    },
+    // {
+    //   accessorFn: (row: any) => row.completed_at,
+    //   id: "completed_at",
+    //   cell: (info: any) => (
+    //     <span style={{ padding: "40px 10px 40px 10px" }}>
+    //       {timePipe(info.getValue(), "DD-MM-YYYY")}
+    //     </span>
+    //   ),
+    //   header: () => <span>Day of Closing</span>,
+    //   footer: (props: any) => props.column.id,
+    //   width: "120px",
+    // },
     {
       // accessorFn: (row: any) => row.description,
       id: "actions",
@@ -334,52 +354,100 @@ const ProcurementsTableComponent = ({
                 justifyContent: "space-evenly",
               }}
             >
-              <Link href={`/procurements/${info.row.original?._id}`}>
-                <ImageComponent
-                  src="/view-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </Link>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  router.push(`/procurements/${info.row.original?._id}/edit`)
-                }
+              <Tooltip followCursor arrow title="View"
               >
-                <ImageComponent
-                  src="/pencil-icon.svg"
-                  height={17}
-                  width={17}
-                  alt="view"
-                />
-              </div>
-              {userType !== "farmer" ? (
+                <IconButton style={{ cursor: "pointer", padding: "0" }} onClick={() =>
+                  router.push(`/procurements/${info.row.original?._id}`)
+                }>
+                  <ImageComponent
+                    src="/view-icon.svg"
+                    height={17}
+                    width={17}
+                    alt=""
+                  />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip followCursor arrow
+                title={userDetails?._id == info.row.original?.requested_by?._id ? "Edit" : "You dont't have permission for this action"}
+              >
                 <div
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", padding: "0" }}
+
                   onClick={() => {
+                    if (
+                      info.row.original?.requested_by?._id !== userDetails?._id
+                    ) {
+                      return;
+                    }
+                    router.push(`/procurements/${info.row.original?._id}/edit`)
+                  }}
+                >
+                  <ImageComponent
+                    src="/pencil-icon.svg"
+                    height={15}
+                    width={15}
+                    alt=""
+                  />
+                </div>
+              </Tooltip>
+
+
+              <Tooltip followCursor arrow
+                title={userDetails?._id == info.row.original?.requested_by?._id ? "Delete" : "You dont't have permission for this action"}
+              >
+                <IconButton
+                  style={{ padding: "0" }}
+
+                  onClick={() => {
+                    if (
+                      info.row.original?.requested_by?._id !== userDetails?._id
+                    ) {
+                      return;
+                    }
                     setdeleteProcurments(info.row.original?._id);
                     setDialogOpen(true);
                   }}
                 >
                   <ImageComponent
-                    src="/trast-icon.svg"
+                    src={
+                      !(
+                        info.row.original?.requested_by?._id !== userDetails?._id
+                      )
+                        ? "/viewTaskIcons/task-table-delete.svg"
+                        : "/viewTaskIcons/task-table-delete-disable.svg"
+                    }
                     height={17}
                     width={17}
-                    alt="view"
+                    alt=""
                   />
-                </div>
-              ) : (
-                ""
-              )}
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip followCursor arrow title="Comments">
+                <IconButton
+                  style={{ cursor: "pointer", padding: "0" }}
+                  onClick={() => {
+                    setRowDetails(info.row.original);
+                    setDrawerOpen(true);
+                  }}
+                >
+                  <ImageComponent
+                    src="/viewTaskIcons/task-table-comments.svg"
+                    height={17}
+                    width={17}
+                    alt="comments"
+                  />
+                </IconButton>
+              </Tooltip>
+
             </div>
           }
         </span>
       ),
       header: () => <span>Actions</span>,
       footer: (props: any) => props.column.id,
-      width: "150px",
+      width: "120px",
     },
   ];
 
@@ -406,13 +474,13 @@ const ProcurementsTableComponent = ({
         deleteTitleProp={"Procurement"}
       />
 
-      {/* <DrawerBoxComponent
+      <DrawerCommentsForProcurment
         drawerClose={drawerClose}
         rowDetails={rowDetails}
         setDrawerOpen={setDrawerOpen}
         drawerOpen={drawerOpen}
       />
-
+      {/*
       <AttachmentDrawerTaskmodule
         attachmentDrawerClose={attachmentDrawerClose}
         rowDetails={rowDetails}

@@ -1,81 +1,62 @@
-.nameOfOperation {
-  cursor: pointer;
-  align-self: stretch;
-  position: relative;
-  line-height: 100%;
-  font-weight: 500;
-}
 .inoutbox {
   border: 0;
-  background-color: transparent;
-  align-self: stretch;
+  background-color: #fff;
+  width: 100%;
 }
-.nameofoperation {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 8px;
-}
+
 .label {
-  cursor: pointer;
-  position: relative;
-  line-height: 100%;
+  margin-bottom: 0.5rem;
+  color: #344054;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 16px);
+  font-style: normal;
   font-weight: 500;
+  line-height: 20px;
 }
+
 .datepicker {
   align-self: stretch;
   flex: 1;
 }
-.dateofoperation {
-  width: 280px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 8px;
-}
+
+
+
 .dateofoperation,
 .dropdown,
 .row {
   align-self: stretch;
 }
+
 .row {
-  display: flex;
-  flex-direction: row;
+  display: grid;
   align-items: flex-start;
-  justify-content: flex-start;
-  gap: 24px;
+  grid-column-gap: 16px;
 }
+
 .dropdown {
   cursor: pointer;
 }
+
 .selectfarm {
-  width: 280px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 8px;
+  margin-bottom: 1rem;
 }
+
 .inputbox {
   align-self: stretch;
 }
-.column,
-.operationdetails,
+
 .remarks {
-  align-self: stretch;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 8px;
 }
+
 .column,
 .operationdetails {
   gap: 24px;
 }
+
 .operationdetails {
   text-align: left;
   font-size: 14px;

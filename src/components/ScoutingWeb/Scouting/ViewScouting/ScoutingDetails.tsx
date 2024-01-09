@@ -81,7 +81,7 @@ const ScoutingDetails = ({
               {loading ? (
                 <Skeleton width="300px" height="30px" />
               ) : (
-                data?.farm_id.title
+                data?.farm_id?.title
               )}
             </h2>
 
@@ -93,7 +93,7 @@ const ScoutingDetails = ({
               {loading ? (
                 <Skeleton width="300px" height="30px" />
               ) : (
-                " (Uploaded By" + ":" + data?.uploaded_by.name + ")"
+                " (Uploaded By" + ":" + data?.uploaded_by?.name + ")"
               )}
             </Typography>
           </div>

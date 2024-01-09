@@ -268,10 +268,10 @@ const SingleScoutViewDetails = () => {
                       });
                     }}
                   >
-                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: prevHasMore == false ? "grey" : "#000" }} />
+                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: "red" }} />
                   </Button>
                   <Button
-                    className={hasMore ? styles.disableBtn : styles.nextBtn}
+                    className={hasMore ? styles.prevBtn : styles.prevBtn}
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(data[1]?._id)
@@ -286,7 +286,7 @@ const SingleScoutViewDetails = () => {
 
                   >
 
-                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: hasMore == false ? "grey" : "#000" }} />
+                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: "red" }} />
                   </Button>
                 </div>
 
@@ -302,32 +302,32 @@ const SingleScoutViewDetails = () => {
             >
 
               <>
-                <ReactPanZoom alt={prevData[0]?.key ? `Image ${prevData[0]?.key}` : "Image"} image={prevData[1]?.url} />
+                <ReactPanZoom alt={prevData?.length ? prevData[0]?.key : "" ? `Image ${prevData?.length ? prevData[0]?.key : ""}` : "Image"} image={prevData?.length ? prevData[1]?.url : ''} />
                 <div className={styles.imgPrevNextBtnGrp}  >
                   <Button
-                    className={prevHasMore ? styles.disableBtn : styles.prevBtn}
+                    className={prevHasMore ? styles.nextBtn : styles.prevBtn}
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
-                      getInstaScrollImagePrevDetails(prevData[1]?._id)
+                      getInstaScrollImagePrevDetails(prevData?.length ? prevData[1]?._id : "")
                       setData([])
                       router.push({
-                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData[1]?._id}/`,
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[1]?._id : ""}/`,
                         query: {},
                       });
 
 
                     }}
                   >
-                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: prevHasMore == false ? "grey" : "#000" }} />
+                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: "red" }} />
                   </Button>
                   <Button
-                    className={hasMore ? styles.disableBtn : styles.nextBtn}
+                    className={hasMore ? styles.nextBtn : styles.nextBtn}
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
-                      getInstaScrollImageDetails(prevData[0]?._id)
+                      getInstaScrollImageDetails(prevData?.length ? prevData[0]?._id : "")
                       setPrevData([])
                       router.push({
-                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData[0]?._id}/`,
+                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[0]?._id : ""}/`,
                         query: {},
                       });
 
@@ -336,7 +336,7 @@ const SingleScoutViewDetails = () => {
 
                   >
 
-                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: hasMore == false ? "grey" : "#000" }} />
+                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: "red" }} />
                   </Button>
                 </div>
 
@@ -361,7 +361,7 @@ const SingleScoutViewDetails = () => {
         <div className={styles.galleryItemDetails}>
           <ScoutingDetails
             loading={loading}
-            data={prevData[1]}
+            data={prevData?.length ? prevData[1] : ""}
             currentIndex={currentIndex}
 
           />

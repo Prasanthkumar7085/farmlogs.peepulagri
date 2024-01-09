@@ -88,18 +88,20 @@ const ListScouts: FunctionComponent = () => {
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
+    console.log(value, "sdfsd")
     setData([]);
     if (reason == "clear") {
       let routerData = { ...router.query };
       delete routerData?.farm_id;
       delete routerData?.crop_id;
       delete routerData?.farm_search_string;
+      delete routerData?.location_id;
 
       router.push({ query: routerData });
       setCrop(null);
       setFarm(null);
       setData([]);
-
+      setLocation(null)
       getAllFarms({ location_id: router.query.location_id as string, clearOrNot: true });
       getAllExistedScouts({
         // farmSearchString: value?.title,
@@ -120,13 +122,14 @@ const ListScouts: FunctionComponent = () => {
       setFarm(value);
       setCrop(null);
       setPage(1);
+
       setSettingLocationLoading(true);
       setLocation(value?.location_id)
       setTimeout(() => {
         setSettingLocationLoading(false);
       }, 1);
       router.push({
-        query: { ...router.query, farm_search_string: value?.title },
+        query: { ...router.query, farm_search_string: value?.title, location_id: value?.location_id },
       });
       getAllExistedScouts({
         farmSearchString: value?.title,
@@ -448,7 +451,6 @@ const ListScouts: FunctionComponent = () => {
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == farmId);
           setFarm(obj);
-
           getAllCrops(
             router.query.crop_id as string,
             response?.data[0]?._id as string
@@ -562,6 +564,7 @@ const ListScouts: FunctionComponent = () => {
           // farmId: router.query.farm_id as string,
           searchString: searchString,
           searchStringChangeOrNot: true,
+
         });
       }
     }, 500);

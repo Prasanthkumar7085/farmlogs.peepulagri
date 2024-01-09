@@ -291,10 +291,7 @@ const SingleScoutViewDetails = () => {
                 </div>
 
               </>
-            </div> : ""}
-
-          {prevData?.length ?
-            <div
+            </div> : <div
               className={styles.ImageContainBlock}
               style={{
                 width: "85%",
@@ -344,7 +341,9 @@ const SingleScoutViewDetails = () => {
                 </div>
 
               </>
-            </div> : ""}
+            </div>}
+
+
 
 
 
@@ -358,8 +357,7 @@ const SingleScoutViewDetails = () => {
             currentIndex={currentIndex}
 
           />
-        </div> : ''}
-      {prevData?.length && router.isReady ?
+        </div> :
         <div className={styles.galleryItemDetails}>
           <ScoutingDetails
             loading={loading}
@@ -367,7 +365,8 @@ const SingleScoutViewDetails = () => {
             currentIndex={currentIndex}
 
           />
-        </div> : ''}
+        </div>}
+
 
     </div>
   );

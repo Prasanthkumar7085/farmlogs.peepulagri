@@ -234,6 +234,9 @@ const SingleScoutViewDetails = () => {
   }, [router.isReady, accessToken]);
 
 
+  console.log(data, "data")
+  console.log(prevData, "prevdata")
+
   return (
 
     <div className={styles.galleryContainer}>
@@ -253,20 +256,21 @@ const SingleScoutViewDetails = () => {
             >
 
               <>
-                <ReactPanZoom alt={data[0]?.key ? `Image ${data[0]?.key}` : "Image"} image={data[0]?.url} />
+                <ReactPanZoom alt={data[0]?.key ? `Image ${data[0]?.key}` : ""} image={data[0]?.url} />
                 <div className={styles.imgPrevNextBtnGrp}  >
                   <Button
                     className={prevHasMore ? styles.disableBtn : styles.prevBtn}
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
                       getInstaScrollImagePrevDetails(data[0]?._id)
-                      setData([])
-
                       router.push({
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
                         query: {},
                       });
+                      setData([])
+
                     }}
+                    disabled={loading ? true : false}
                   >
                     <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: "red" }} />
                   </Button>
@@ -275,14 +279,15 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(data[1]?._id)
-                      setPrevData([])
                       router.push({
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[1]?._id}/`,
                         query: {},
                       });
+                      setPrevData([])
+
 
                     }}
-                    disabled={hasMore ? false : true}
+                    disabled={loading ? true : false}
 
                   >
 
@@ -291,7 +296,8 @@ const SingleScoutViewDetails = () => {
                 </div>
 
               </>
-            </div> : <div
+            </div> :
+            <div
               className={styles.ImageContainBlock}
               style={{
                 width: "85%",
@@ -309,14 +315,17 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
                       getInstaScrollImagePrevDetails(prevData?.length ? prevData[1]?._id : "")
-                      setData([])
                       router.push({
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[1]?._id : ""}/`,
                         query: {},
                       });
+                      setData([])
+
 
 
                     }}
+                    disabled={loading ? true : false}
+
                   >
                     <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: "red" }} />
                   </Button>
@@ -325,14 +334,15 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(prevData?.length ? prevData[0]?._id : "")
-                      setPrevData([])
                       router.push({
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[0]?._id : ""}/`,
                         query: {},
                       });
+                      setPrevData([])
+
 
                     }}
-                    disabled={hasMore ? false : true}
+                    disabled={loading ? true : false}
 
                   >
 

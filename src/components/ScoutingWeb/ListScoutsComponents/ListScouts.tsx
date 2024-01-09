@@ -5,7 +5,7 @@ import {
   SingleScoutResponse,
 } from "@/types/scoutTypes";
 
-import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { QueryParamsForScouting, removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import timePipe from "@/pipes/timePipe";
@@ -86,7 +86,7 @@ const ListScouts: FunctionComponent = () => {
   console.log(location, "locatioj")
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
-
+  const [queries, setQueries] = useState<any>()
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     setData([]);
     if (reason == "clear") {
@@ -317,6 +317,7 @@ const ListScouts: FunctionComponent = () => {
       } = queryParams;
 
       router.push({ query: queryParams });
+      setQueries(queryParams)
       url = prepareURLEncodedParams(url, restParams);
       const response = await getAllExistedScoutsService({
         url: url,
@@ -568,6 +569,8 @@ const ListScouts: FunctionComponent = () => {
   }, [searchString]);
 
   const onClickAttachment = (attachmentId: string, farmId: string, cropId: string) => {
+    dispatch(QueryParamsForScouting(queries))
+    console.log(queries, "sdf")
     router.push(
       `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}`
     );

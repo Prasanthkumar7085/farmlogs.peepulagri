@@ -22,6 +22,7 @@ declare namespace Auth {
 
   export interface AuthInitial {
     userDetails: Partial<UserDetails>;
+    queryParams: any;
   }
 
 }

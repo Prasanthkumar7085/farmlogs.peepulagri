@@ -88,7 +88,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
     { title: "None", value: "NONE" },
     { title: "Low", value: "LOW" },
     { title: "Medium", value: "MEDIUM" },
-    { title: "Hign", value: "HIGH" },
+    { title: "High", value: "HIGH" },
 
   ]);
 

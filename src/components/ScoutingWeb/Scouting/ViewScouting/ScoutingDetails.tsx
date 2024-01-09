@@ -40,10 +40,13 @@ const ScoutingDetails = ({
   const [mainImageData, setMainImageData] = useState<any>();
 
 
-
+  const paramasFromStore = useSelector((state: any) => state.auth.queryParams)
   const getCropName = (cropId: string, crops: any) => {
     setCrop("");
+
   };
+
+  console.log(paramasFromStore, "sdsf")
 
   useEffect(() => {
     if (data) {
@@ -101,7 +104,12 @@ const ScoutingDetails = ({
         <IconButton
           className={styles.iconDiv}
           // onClick={() => setPreviewImageDialogOpen(false)}
-          onClick={() => router.back()}
+          onClick={() => {
+            router.push({
+              pathname: `/scouts/`,
+              query: { ...paramasFromStore },
+            })
+          }}
         >
           <CloseIcon />
         </IconButton>

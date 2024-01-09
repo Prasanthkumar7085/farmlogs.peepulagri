@@ -5,6 +5,7 @@
     max-width: 500px !important;
     margin: 0 auto !important;
     background-color: #ccebcc !important;
+    z-index: 1 !important;
 }
 
 .navButtonList button {

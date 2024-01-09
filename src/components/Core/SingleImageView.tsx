@@ -234,6 +234,7 @@ const SingleImageView: FC<componentProps> = ({
           overflowY: "auto",
           maxHeight: "calc(100vh - 136px)",
           scrollSnapType: "y mandatory",
+          paddingBottom: "1rem"
         }}
       >
         {data?.length

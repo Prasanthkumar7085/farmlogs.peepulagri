@@ -907,7 +907,8 @@ const FileUploadComponent = () => {
                             multiline
                             value={description}
                             onChange={(e) => {
-                              setDescription(e.target.value);
+                              const newValue = e.target.value.replace(/^\s+/, "");
+                              setDescription(newValue);
                               setValidations({});
                             }}
                             sx={{ background: "#fff" }}

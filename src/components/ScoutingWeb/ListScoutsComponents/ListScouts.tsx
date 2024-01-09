@@ -306,7 +306,7 @@ const ListScouts: FunctionComponent = () => {
       if (farmSearchString) {
         queryParams["farm_search_string"] = farmSearchString;
       }
-      if (location) {
+      if (location && location != '1') {
         queryParams["location_id"] = location
       }
 

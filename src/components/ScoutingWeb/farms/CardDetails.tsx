@@ -175,7 +175,7 @@ const CardDetails: FunctionComponent = () => {
               </div>
             </Box>
           </div>
-          <div style={{
+          {/* <div style={{
             display: "flex",
             alignItems: "center",
             alignSelf: "stretch",
@@ -190,7 +190,7 @@ const CardDetails: FunctionComponent = () => {
             }>
             <Typography>{data?.geometry?.coordinates?.length ? "View/Edit Map" : "Add map"}</Typography>
             <img src={"/google-maps.png"} width={22} height={22} />
-          </div>
+          </div> */}
         </div>
       ) : (
         ""

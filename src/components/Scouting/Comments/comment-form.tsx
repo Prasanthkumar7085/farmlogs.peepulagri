@@ -323,15 +323,15 @@ const CommentForm = ({
           const newValue = e.target.value.replace(/^\s+/, "");
           setComment(newValue);
         }}
-        onKeyDown={(e: any) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            comment &&
-              (replyThreadEvent
-                ? replyThreads(replyThreadEvent)
-                : addComment());
-          }
-        }}
+      // onKeyDown={(e: any) => {
+      //   if (e.key === "Enter" && !e.shiftKey) {
+      //     e.preventDefault();
+      //     comment &&
+      //       (replyThreadEvent
+      //         ? replyThreads(replyThreadEvent)
+      //         : addComment());
+      //   }
+      // }}
       />
 
       {multipleFiles &&

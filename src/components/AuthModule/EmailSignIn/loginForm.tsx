@@ -88,9 +88,12 @@ export default function SigninEmail() {
         throw res;
       } else if (response.status === 401) {
         setInvalid(res.message);
+      } else {
+        toast.error(res.message || 'Error while login')
       }
     } catch (err) {
       console.error(err);
+      toast.error('Error while login')
     } finally {
       setLoading(false);
     }
@@ -219,6 +222,8 @@ export default function SigninEmail() {
           </Button>
         </div>
       </form>
+
+      <Toaster closeButton richColors position="top-right"/>
     </div>
   );
 }

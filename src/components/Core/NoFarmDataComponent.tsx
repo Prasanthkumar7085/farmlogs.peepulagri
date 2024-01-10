@@ -9,12 +9,13 @@ const NoFarmDataComponent = ({ noData }: { noData: Boolean }) => {
     <React.Fragment>
       {noData ? (
         <div className={styles.NoDataBlockImage}>
-          <Lottie
+          {/* <Lottie
             loop
             animationData={noFarmData}
             play
             style={{ width: 300, height: 300 }}
-          />
+          /> */}
+          No Data
         </div>
       ) : (
         ""

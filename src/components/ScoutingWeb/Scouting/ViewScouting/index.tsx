@@ -160,33 +160,6 @@ const SingleScoutViewDetails = () => {
     }
   };
 
-  // const knowAboutPrevImageDetails = async (lastImage_id: any) => {
-  //   setLoading(true);
-  //   let options = {
-  //     method: "GET",
-  //     headers: new Headers({
-  //       authorization: accessToken,
-  //     }),
-  //   };
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/next/2`,
-  //       options
-  //     );
-  //     const responseData = await response.json();
-  //     if (responseData.success) {
-  //       setPrevHasMore(responseData?.has_more)
-  //     }
-
-  //     else if (responseData?.statusCode == 403) {
-  //       logout()
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   const getInstaScrollImagePrevDetails = async (lastImage_id: any) => {
     setLoading(true);
@@ -196,9 +169,18 @@ const SingleScoutViewDetails = () => {
         authorization: accessToken,
       }),
     };
+
+    let url;
+    if (router.query.farm_id || router.query.crop_id) {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/next/2`
+    }
+    else {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/next/2`
+    }
+
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/next/2`,
+        url,
         options
       );
       const responseData = await response.json();

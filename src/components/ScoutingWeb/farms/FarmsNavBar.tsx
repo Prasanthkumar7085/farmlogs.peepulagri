@@ -59,7 +59,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         userId: user as string,
         page: 1,
         limit: router.query.limit as string,
-        sortBy: router.query.order_by as string,
+        sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
       });
     }

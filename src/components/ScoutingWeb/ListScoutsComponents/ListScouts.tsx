@@ -96,13 +96,12 @@ const ListScouts: FunctionComponent = () => {
       delete routerData?.crop_id;
       delete routerData?.farm_search_string;
       delete routerData?.location_id;
-      console.log(routerData, "routrData")
       router.push({ query: routerData });
       setCrop(null);
       setFarm(null);
       setData([]);
       setLocation(null)
-      getAllFarms({ location_id: router.query.location_id as string, clearOrNot: true });
+      getAllFarms({ clearOrNot: true });
       getAllExistedScouts({
         // farmSearchString: value?.title,
         page: 1,

@@ -95,8 +95,7 @@ const AllFarmsPage = () => {
     try {
       let url = `farms/${page}/${limit}`;
       let queryParam: any = {
-        sort_by: "createdAt",
-        sort_type: "desc",
+
       };
       if (page) {
         queryParam["page"] = page;
@@ -112,14 +111,11 @@ const AllFarmsPage = () => {
       }
       if (search_string) {
         queryParam["search_string"] = search_string;
-        delete queryParam["sort_by"];
-        delete queryParam["sort_type"];
+
       }
 
       if (location != 1 && location) {
         queryParam["location_id"] = location;
-        delete queryParam["sort_by"];
-        delete queryParam["sort_type"];
       }
 
       if (userId) {
@@ -170,7 +166,7 @@ const AllFarmsPage = () => {
     // getCropsByFarmId(router.query.farm_id as string, sortBy, sortType);
     getFarmsData({
       search_string: router.query.search_string as string,
-      location: router.query.location as string,
+      location: router.query.location_id as string,
       userId: router.query.user_id as string,
       page: 1,
       limit: router.query.limit as string,

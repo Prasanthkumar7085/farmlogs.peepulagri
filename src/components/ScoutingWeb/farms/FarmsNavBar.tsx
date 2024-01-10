@@ -51,8 +51,11 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       return;
     }
     if (value) {
+
       setChanged(true);
       setLocation(value);
+
+
       getFarmsData({
         search_string: search,
         location: value?._id as string,
@@ -99,7 +102,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           userId: router.query.user_id as string,
           page: router.query.page as string,
           limit: router.query.limit as string,
-          sortBy: router.query.order_by as string,
+          sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
         });
       }, delay);
@@ -168,7 +171,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         userId: value._id as string,
         page: 1,
         limit: router.query.limit as string,
-        sortBy: router.query.order_by as string,
+        sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
       });
     } else {
@@ -179,7 +182,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
         userId: "",
         page: 1,
         limit: router.query.limit as string,
-        sortBy: router.query.order_by as string,
+        sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
       });
     }

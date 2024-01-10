@@ -100,7 +100,7 @@ const ListScouts: FunctionComponent = () => {
       setCrop(null);
       setFarm(null);
       setData([]);
-      setLocation(null)
+
       getAllFarms({ clearOrNot: true });
       getAllExistedScouts({
         // farmSearchString: value?.title,
@@ -112,7 +112,7 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         farmSearchString: "",
-        location: ""
+        location: router.query.location_id as string
       });
 
       return;

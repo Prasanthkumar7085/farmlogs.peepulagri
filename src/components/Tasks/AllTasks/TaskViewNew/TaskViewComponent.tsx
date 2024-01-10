@@ -61,7 +61,6 @@ const TaskViewComponent = () => {
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
-    { value: "PENDING", title: "Pending" },
     { value: "DONE", title: "Done" },
     { value: "OVER-DUE", title: "Over-due" },
   ]);
@@ -442,6 +441,7 @@ const TaskViewComponent = () => {
           getTaskById(id as string);
           setEditFieldOrNot(false);
           setEditField("");
+          setSelectedAssignee([])
           toast.success(responseData?.message);
         } else if (responseData?.status == 422) {
           toast.error(responseData?.errors?.assign_to);
@@ -596,7 +596,11 @@ const TaskViewComponent = () => {
                   minRows={4}
                   maxRows={4}
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={(e) => {
+                    const newValue = e.target.value.replace(/^\s+/, "");
+
+                    setDescription(newValue)
+                  }}
                   sx={{
                     width: "100%",
                     "& .MuiOutlinedInput-notchedOutline": {
@@ -648,6 +652,7 @@ const TaskViewComponent = () => {
                     onClick={() => {
                       setEditField("");
                       setEditFieldOrNot(false);
+                      setDescription("")
                     }}
                   >
                     <img
@@ -662,6 +667,7 @@ const TaskViewComponent = () => {
                     onClick={() => {
                       onUpdateField({});
                     }}
+                    disabled={description ? false : true}
                   >
                     <img
                       src="/viewTaskIcons/confirm-icon.svg"
@@ -1163,7 +1169,7 @@ const TaskViewComponent = () => {
                 addAssignee();
                 handleAssignyClose();
               }}
-              disabled={!selectedAssignee?.length}
+              disabled={selectedAssignee?.length ? false : true}
               variant="outlined"
               className={
                 !selectedAssignee?.length

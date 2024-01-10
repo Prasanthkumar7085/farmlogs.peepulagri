@@ -354,7 +354,11 @@ const TaskForm = () => {
                         fullWidth={true}
                         variant="outlined"
                         value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        onChange={(e) => {
+                          const newValue = e.target.value.replace(/^\s+/, "");
+
+                          setDescription(newValue)
+                        }}
                       />
                     </div>
                   </Grid>

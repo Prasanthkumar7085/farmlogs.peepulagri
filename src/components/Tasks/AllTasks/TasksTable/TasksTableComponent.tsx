@@ -117,8 +117,8 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
       >
         {value?.length
           ? value
-              .map((item: { _id: string; name: string }) => item.name)
-              .join(", ")
+            .map((item: { _id: string; name: string }) => item.name)
+            .join(", ")
           : "*Not Assigned*"}
         {info.getValue()?.assign_to?.length >= 2 ? (
           <div
@@ -215,13 +215,13 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
             {info.getValue()
               ? info.getValue()?.length > 30
                 ? (info.getValue()
-                    ? info.getValue().slice(0, 1).toUpperCase() +
-                      info.getValue().slice(1, 26)
-                    : "") + "....."
+                  ? info.getValue().slice(0, 1).toUpperCase() +
+                  info.getValue().slice(1, 26)
+                  : "") + "....."
                 : info.getValue()
-                ? info.getValue().slice(0, 1).toUpperCase() +
+                  ? info.getValue().slice(0, 1).toUpperCase() +
                   info.getValue().slice(1)
-                : ""
+                  : ""
               : ""}
           </span>
         </Tooltip>
@@ -316,8 +316,8 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
                 arrow
                 title={
                   info.row.original?.status == "DONE" ||
-                  info.row.original?.created_by?._id !== userId
-                    ? "You dont't have permission for this action"
+                    info.row.original?.created_by?._id !== userId
+                    ? "You don't have permission for this action"
                     : "Delete"
                 }
               >
@@ -362,7 +362,7 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                  
+
                     if (info.row.original.attachments) {
                       setRowDetails(info.row.original);
                       setAttachmentDrawer(true);

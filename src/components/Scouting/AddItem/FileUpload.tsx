@@ -54,6 +54,8 @@ const FileUploadComponent = () => {
   const [validations, setValidations] = useState<any>();
   const [tags, setTags] = useState<any>([]);
   const [lats, setLats] = useState<{ latitude: number; longitude: number }>();
+  const [removeloading, setRemoveLoading] = useState<any>(false)
+
   // const [deleteLoading, setDeleteLoading] = useState(false);
   // const [accuracy1, setAccuracy1] = useState<number>();
 
@@ -83,6 +85,11 @@ const FileUploadComponent = () => {
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
+    setRemoveLoading(true)
+    setTimeout(() => {
+      setRemoveLoading(false)
+
+    }, 2)
     toast.success("File deleted successfully");
     // useEffect(() => {
     //   setTimeout(() => {
@@ -646,7 +653,7 @@ const FileUploadComponent = () => {
         };
         navigator.geolocation.getCurrentPosition(
           (position) => {
-          
+
 
             const { latitude, longitude, accuracy } = position.coords;
             const latLng = new (window as any).google.maps.LatLng(
@@ -661,7 +668,7 @@ const FileUploadComponent = () => {
                   if (results[0]) {
                     // Parse the data to get the address or other information as needed
                     setLats({ latitude, longitude });
-                  
+
                   } else {
                     console.error("No results found");
                   }
@@ -737,14 +744,16 @@ const FileUploadComponent = () => {
                           <div className={styles.uploadimage}>
                             <label>
                               <img alt="" src="/upload-image-icon.svg" />
-                              <input
-                                type="file"
-                                alt="images-upload"
-                                accept="image/*"
-                                multiple
-                                onChange={handleFileChange}
-                                hidden
-                              />
+                              {removeloading == false ?
+
+                                <input
+                                  type="file"
+                                  alt="images-upload"
+                                  accept="image/*"
+                                  multiple
+                                  onChange={handleFileChange}
+                                  hidden
+                                /> : ""}
                             </label>
 
                             <div className={styles.capture}> Upload </div>

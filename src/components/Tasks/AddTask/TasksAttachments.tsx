@@ -63,6 +63,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
     'video/mp4',
     'application/msword',
     'text/csv']);
+  const [removeloading, setRemoveLoading] = useState<any>(false)
   // let tempFilesStorage: any = [...attachments];
 
   // let previewStorage = [...previewImages];
@@ -271,7 +272,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
           const start = currentChunk * chunkSize;
           const end = Math.min(start + chunkSize, file.size);
           const chunk = file.slice(start, end);
-       
+
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
             method: "PUT",
@@ -425,6 +426,12 @@ const TasksAttachments: React.FC<PropTypes> = ({
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
+    setRemoveLoading(true)
+    setTimeout(() => {
+      setRemoveLoading(false)
+
+    }, 2)
+
   };
 
   useEffect(() => {
@@ -438,6 +445,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
     dispatch(removeTheFilesFromStore([]));
     setMultipleFiles([]);
     setTempFileStorage([]);
+    setAttachments([])
   };
 
   const addTaskAttachements = async () => {
@@ -521,15 +529,16 @@ const TasksAttachments: React.FC<PropTypes> = ({
             {router.pathname.includes("/users-tasks") ? "" : "or drag and drop"}
           </div>
         </div>
-        <input
-          className={styles.link}
-          type="file"
-          multiple
-          disabled={disabled}
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-          accept="image/*,video/*,.doc, .docx, .csv,.xlsx,.msword,.pdf, .txt, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, text/plain"
-        />
+        {removeloading == false ?
+          <input
+            className={styles.link}
+            type="file"
+            multiple
+            disabled={disabled}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+            accept="image/*,video/*,.doc, .docx, .csv,.xlsx,.msword,.pdf, .txt, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, text/plain"
+          /> : ""}
         <p style={{ color: "red", fontSize: "12px" }}>{noFarmIdMessage}</p>
       </label>
       <ErrorMessagesComponent errorMessage={validations?.attachments} />
@@ -604,17 +613,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
                       ) : (
                         ""
                       )}
-                      {fileProgress[index] !== 100 ||
-                        fileProgress[index] == "fail" ? (
-                        <img
-                          className={styles1.close41}
-                          alt=""
-                          src="/close-icon.svg"
-                          onClick={() => removeFileAfterAdding(index, item)}
-                        />
-                      ) : (
-                        ""
-                      )}
+
                     </div>
                   </div>
                   <Box sx={{ width: "100%" }}>

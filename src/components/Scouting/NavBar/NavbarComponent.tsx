@@ -69,29 +69,29 @@ export default function ScoutingHeader({ children }: any) {
             Farms
           </Button>
 
-          {/* <Button
-              className={
-                router.pathname.includes("/users-tasks")
-                  ? styles.navButtonActive
-                  : styles.navButton
-              }
-              onClick={() => router.push("/users-tasks")}
-            >
-              {router.pathname.includes("/users-tasks") ? (
-                <img
-                  src="/mobileIcons/navTabs/Task filled.svg"
-                  alt=""
-                  width={"25px"}
-                />
-              ) : (
-                <img
-                  src="/mobileIcons/navTabs/Task.svg"
-                  alt=""
-                  width={"25px"}
-                />
-              )}{" "}
-              Tasks
-            </Button> */}
+          <Button
+            className={
+              router.pathname.includes("/users-tasks")
+                ? styles.navButtonActive
+                : styles.navButton
+            }
+            onClick={() => router.push("/users-tasks")}
+          >
+            {router.pathname.includes("/users-tasks") ? (
+              <img
+                src="/mobileIcons/navTabs/Task filled.svg"
+                alt=""
+                width={"25px"}
+              />
+            ) : (
+              <img
+                src="/mobileIcons/navTabs/Task.svg"
+                alt=""
+                width={"25px"}
+              />
+            )}{" "}
+            Tasks
+          </Button>
 
           <Button
             className={

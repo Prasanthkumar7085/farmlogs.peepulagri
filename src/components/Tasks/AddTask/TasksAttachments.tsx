@@ -271,10 +271,7 @@ const TasksAttachments: React.FC<PropTypes> = ({
           const start = currentChunk * chunkSize;
           const end = Math.min(start + chunkSize, file.size);
           const chunk = file.slice(start, end);
-          console.log(start, "Start")
-          console.log(end, "end")
-          console.log(file, "file")
-          console.log(chunk, "chunk")
+       
           // promises.push(axios.put(resurls[currentChunk], chunk))
           let response: any = await fetch(resurls[currentChunk], {
             method: "PUT",

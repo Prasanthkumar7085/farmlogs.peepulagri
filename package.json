@@ -63,6 +63,7 @@
     "react-redux": "^8.1.2",
     "react-responsive-carousel": "^3.2.23",
     "react-spring": "^9.7.3",
+    "react-svg": "^16.1.32",
     "react-swipeable": "^7.0.1",
     "react-table": "^7.8.0",
     "react-touch-drag-slider": "^2.2.5",

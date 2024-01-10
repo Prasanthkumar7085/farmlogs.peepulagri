@@ -18,12 +18,7 @@ import ReactPanZoom from "react-image-pan-zoom-rotate";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'; import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { toast } from "sonner";
-interface pageProps {
-  onlyImages: Array<OnlyImagesType>;
-  previewImageDialogOpen: boolean;
-  setPreviewImageDialogOpen: Dispatch<SetStateAction<boolean>>;
-  viewAttachmentId: string;
-}
+
 const SingleScoutViewDetails = () => {
 
   const dispatch = useDispatch();
@@ -36,7 +31,7 @@ const SingleScoutViewDetails = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [data, setData] = useState<any>();
   const [content, setContent] = useState<any>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [editRecomendationOpen, setEditRecomendationOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<any>(0)
   const [prevHasMore, setPrevHasMore] = useState<any>(false)
@@ -101,7 +96,7 @@ const SingleScoutViewDetails = () => {
 
 
 
-  const getInstaScrollImageDetails = async (lastImage_id: any) => {
+  const getInstaScrollImageDetails = async (lastImage_id: string) => {
     setLoading(true);
     let options = {
       method: "GET",
@@ -123,10 +118,12 @@ const SingleScoutViewDetails = () => {
         options
       );
       const responseData = await response.json();
+      
       if (responseData.success) {
         if (responseData?.data?.length == 1) {
-          toast.error("You have reached to end")
-          return
+          setLoading(false);   
+          toast.error("You have reached to end");
+          // return;
         }
         // knowAboutPrevImageDetails(responseData?.data[0]?._id)
 
@@ -215,7 +212,7 @@ const SingleScoutViewDetails = () => {
 
         }
       } else if (responseData?.statusCode == 403) {
-        logout()
+        logout();
       }
     } catch (err) {
       console.error(err);
@@ -227,13 +224,9 @@ const SingleScoutViewDetails = () => {
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      getInstaScrollImageDetails(router.query.image_id);
-
-      // knowAboutPrevImageDetails(router.query.image_id)
+      getInstaScrollImageDetails(router.query.image_id as string);
     }
   }, [router.isReady, accessToken]);
-
-
 
 
   return (
@@ -264,7 +257,7 @@ const SingleScoutViewDetails = () => {
                       getInstaScrollImagePrevDetails(data[0]?._id)
                       if (router.query.farm_id || router.query.crop_id) {
                         router.push({
-                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
+                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}?location_id${router.query.location_id}`,
                           query: {},
                         });
                       }
@@ -288,7 +281,7 @@ const SingleScoutViewDetails = () => {
                       getInstaScrollImageDetails(data[1]?._id)
                       if (router.query.farm_id || router.query.crop_id) {
                         router.push({
-                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[1]?._id}/`,
+                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[1]?._id}?location_id${router.query.location_id}`,
                           query: {},
                         });
                       }
@@ -386,11 +379,6 @@ const SingleScoutViewDetails = () => {
 
               </>
             </div>}
-
-
-
-
-
         </div>
       </div>
       {data?.length && router.isReady ?
@@ -407,7 +395,6 @@ const SingleScoutViewDetails = () => {
             loading={loading}
             data={prevData?.length ? prevData[1] : ""}
             currentIndex={currentIndex}
-
           />
         </div>}
 

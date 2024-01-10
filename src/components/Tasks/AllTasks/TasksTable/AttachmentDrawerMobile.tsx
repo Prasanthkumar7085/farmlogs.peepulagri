@@ -176,7 +176,7 @@ const AttachmentDrawerMobile = ({
     setDownloadLoading(false);
     results.forEach((result) => {
       if (result?.status === "fulfilled") {
-        console.log("Download successful");
+      
       } else {
         console.error("Download failed", result?.reason);
       }
@@ -468,8 +468,6 @@ const AttachmentDrawerMobile = ({
                             onClick={() => {
                               if (!checkBoxOpen) {
                                 if (checkIfAttachmentHasPreviewOrNot(image)) {
-                                  console.log(image, "response");
-
                                   setImagePreviewOpen(image);
                                 } else {
                                   downloadSingleFile(image);

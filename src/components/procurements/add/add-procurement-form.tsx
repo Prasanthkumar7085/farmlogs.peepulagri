@@ -63,7 +63,7 @@ const AddProcurementForm = () => {
   const [priority, setPriority] = useState('NONE')
   const [materialCount, setMaterialCount] = useState<any>()
   const [afterProcurement, setAfterProcurement] = useState<any>(false)
-  console.log(materialCount)
+  
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     let location_id = ""
     try {
@@ -264,7 +264,7 @@ const AddProcurementForm = () => {
   }, [router.isReady, accessToken, searchString]);
 
   const checkMaterialsListCount = (value: any) => {
-    console.log(value.length)
+    
     setMaterialCount(value?.length)
   }
 

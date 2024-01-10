@@ -9,12 +9,12 @@ const NoDataAnimatedComponent = ({ noData }: { noData: Boolean }) => {
       {noData ? (
         <div>
           No Data
-          {/* <Lottie
+          <Lottie
             loop
             animationData={noFarmData}
             play
             style={{ width: 300, height: 300 }}
-          /> */}
+          />
         </div>
       ) : (
         ""

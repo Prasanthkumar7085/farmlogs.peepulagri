@@ -569,11 +569,11 @@ const ListScouts: FunctionComponent = () => {
     return () => clearInterval(debounce);
   }, [searchString]);
 
-  const onClickAttachment = (attachmentId: string, farmId: string, cropId: string) => {
+  const onClickAttachment = (attachmentId: string, farmId: string, cropId: string,location_id:string) => {
     dispatch(QueryParamsForScouting(queries))
-    if (router.query.farm_id || router.query.crop_id) {
+    if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
       router.push(
-        `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}`
+        `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}?location_id=${router.query.location_id}`
       );
     }
     else {

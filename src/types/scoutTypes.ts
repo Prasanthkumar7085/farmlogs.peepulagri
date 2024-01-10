@@ -24,8 +24,8 @@ export interface ScoutAttachmentDetails {
   _id: string;
   url: string;
   tn_url: string;
-  farm_id: { _id: any },
-  crop_id: { _id: any },
+  farm_id: { _id: string,location_id:string },
+  crop_id: { _id: string },
   key: string;
 }
 

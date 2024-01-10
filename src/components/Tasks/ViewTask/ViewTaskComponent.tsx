@@ -36,13 +36,6 @@ const getTaskById = async (id: string) => {
 
   if (response?.success) {
     setData(response?.data);
-
-    console.log(
-      response?.data?.assign_to?.some(
-        (item: any) => item?._id == loggedInUserId
-      )
-    );
-
     setHasEditAccess(
       response?.data?.assign_to?.some(
         (item: any) => item?._id == loggedInUserId

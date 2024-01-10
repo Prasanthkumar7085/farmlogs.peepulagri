@@ -95,7 +95,7 @@ const AllSummaryComponents = () => {
       let response = await fetch(url, options);
       let responseData: any = await response.json();
       if (responseData.success) {
-        console.log(responseData.data.crop_id, 'plpl');
+      
 
         if (responseData?.has_more) {
           if (page !== 1) {

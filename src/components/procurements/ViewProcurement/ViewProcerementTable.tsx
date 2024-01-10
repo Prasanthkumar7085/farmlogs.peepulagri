@@ -303,7 +303,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   //after add the matrials
   const afterAddingMaterials = (value: any) => {
     if (value) {
-      console.log("Fsd")
+      
       setAddMaterialOpen(false)
       getAllProcurementMaterials()
     }

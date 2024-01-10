@@ -94,7 +94,7 @@ const UpdateSummary = () => {
         setComment(responseData?.data?.content);
         setDate(formatDateForInput(responseData?.data?.date));
         setFarmDefaultValue(responseData?.data?.farm_id);
-        console.log(responseData?.data?.farm_id);
+       
         setCropDefaultValue(responseData?.data?.crop_id);
         setFarmID(responseData?.data?.farm_id);
         setCropId(responseData?.data?.crop_id);

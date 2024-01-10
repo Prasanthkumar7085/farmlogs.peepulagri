@@ -15,7 +15,6 @@ export default Dashboard;
 //   const { cookies } = req;
 
 //   const isMobile = /iPhone|iPad|iPod|Android/i.test(req.headers["user-agent"]);
-//   console.log("kiopkjoimhiuhn", req.headers["user-agent"]);
 
 //   //   if (isMobile) {
 //   //     return {

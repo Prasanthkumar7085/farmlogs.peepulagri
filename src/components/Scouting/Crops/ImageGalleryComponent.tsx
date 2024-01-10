@@ -623,7 +623,7 @@ const ImageGalleryComponent = () => {
                                 ""
                               )}
                             </div>
-                            <div
+                            {/* <div
                               style={{
                                 position: "absolute",
                                 bottom: "2px",
@@ -635,7 +635,7 @@ const ImageGalleryComponent = () => {
                               ) : (
                                 <CancelRoundedIcon color={"error"} />
                               )}
-                            </div>
+                            </div> */}
                           </div>
                         );
                       })}

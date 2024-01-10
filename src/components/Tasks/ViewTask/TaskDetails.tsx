@@ -33,7 +33,6 @@ const TaskDetails: React.FC<PropsType> = ({
   getTaskById,
   hasEditAccess,
 }) => {
-  console.log(hasEditAccess, "fdsa");
 
   const router = useRouter();
   const id = router.query.task_id;

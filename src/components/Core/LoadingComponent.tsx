@@ -581,13 +581,12 @@ const LoadingComponent = ({ loading }: { loading: Boolean }) => {
       }}
       open={Boolean(loading)}
     >
-      {/* <Lottie
+      <Lottie
         loop
         animationData={animationData}
         play
         style={{ width: 100, height: 100 }}
-      /> */}
-      <CircularProgress />
+      />
       Loading...
     </Backdrop>
   );

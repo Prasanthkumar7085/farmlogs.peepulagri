@@ -362,7 +362,7 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    console.log(info.row.original.attachements, "ooo");
+                  
                     if (info.row.original.attachments) {
                       setRowDetails(info.row.original);
                       setAttachmentDrawer(true);

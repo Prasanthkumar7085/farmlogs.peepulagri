@@ -149,11 +149,11 @@ const SingleImageView: FC<componentProps> = ({
           if (data?.length) {
             setHasMore(responseData?.has_more);
             let temp = [...data, ...responseData?.data]
-            console.log(temp, "oo")
+           
             const uniqueObjects = Array.from(
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );
-            console.log(uniqueObjects, "un")
+           
             setData(uniqueObjects);
           }
           else {

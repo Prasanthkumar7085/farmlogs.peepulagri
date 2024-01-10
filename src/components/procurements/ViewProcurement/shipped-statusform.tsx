@@ -19,7 +19,7 @@ const ShippedStatusform = ({ data }: any) => {
   const copyTextToClipboard = () => {
     navigator.clipboard.writeText(data?.tracking_details?.tracking_id)
       .then(() => {
-        console.log("Text copied")
+       
         setShowTooltip(true);
         setTimeout(() => {
           setShowTooltip(false);

@@ -90,18 +90,18 @@ const ListScouts: FunctionComponent = () => {
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     setData([]);
     if (reason == "clear") {
+      console.log("sdfsd")
       let routerData = { ...router.query };
       delete routerData?.farm_id;
       delete routerData?.crop_id;
       delete routerData?.farm_search_string;
       delete routerData?.location_id;
-
       router.push({ query: routerData });
       setCrop(null);
       setFarm(null);
       setData([]);
       setLocation(null)
-      getAllFarms({ location_id: router.query.location_id as string, clearOrNot: true });
+      getAllFarms({ clearOrNot: true });
       getAllExistedScouts({
         // farmSearchString: value?.title,
         page: 1,
@@ -112,7 +112,7 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         farmSearchString: "",
-        location: router.query.location_id as string
+        location: ""
       });
 
       return;

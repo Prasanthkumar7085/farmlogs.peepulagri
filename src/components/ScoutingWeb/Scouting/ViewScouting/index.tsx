@@ -116,6 +116,10 @@ const SingleScoutViewDetails = () => {
       );
       const responseData = await response.json();
       if (responseData.success) {
+        if (responseData?.data?.length == 1) {
+          toast.error("You have reached to end")
+          return
+        }
         // knowAboutPrevImageDetails(responseData?.data[0]?._id)
 
         if (responseData?.has_more) {
@@ -199,6 +203,7 @@ const SingleScoutViewDetails = () => {
           if (prevData?.length) {
             setPrevHasMore(responseData?.has_more);
             setPrevData([...responseData?.data]);
+            setData([])
           }
           else {
             setPrevHasMore(responseData?.has_more);
@@ -207,6 +212,8 @@ const SingleScoutViewDetails = () => {
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );
             setPrevData(temp);
+            setData([])
+
           }
 
         }
@@ -214,6 +221,8 @@ const SingleScoutViewDetails = () => {
         else {
           setPrevHasMore(false);
           setPrevData(responseData?.data);
+          setData([])
+
         }
       } else if (responseData?.statusCode == 403) {
         logout()
@@ -234,8 +243,7 @@ const SingleScoutViewDetails = () => {
   }, [router.isReady, accessToken]);
 
 
-  console.log(data, "data")
-  console.log(prevData, "prevdata")
+
 
   return (
 
@@ -267,7 +275,6 @@ const SingleScoutViewDetails = () => {
                         pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
                         query: {},
                       });
-                      setData([])
 
                     }}
                     disabled={loading ? true : false}

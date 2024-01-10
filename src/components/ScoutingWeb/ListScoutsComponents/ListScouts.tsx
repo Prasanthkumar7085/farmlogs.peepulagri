@@ -83,14 +83,14 @@ const ListScouts: FunctionComponent = () => {
     _id: string;
     title: string;
   } | null>();
-  console.log(location, "locatioj")
+
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     setData([]);
     if (reason == "clear") {
-      console.log("sdfsd")
+
       let routerData = { ...router.query };
       delete routerData?.farm_id;
       delete routerData?.crop_id;
@@ -101,7 +101,7 @@ const ListScouts: FunctionComponent = () => {
       setFarm(null);
       setData([]);
 
-      getAllFarms({ clearOrNot: true });
+      getAllFarms({ clearOrNot: true,location_id:router.query.location_id as string });
       getAllExistedScouts({
         // farmSearchString: value?.title,
         page: 1,
@@ -427,7 +427,7 @@ const ListScouts: FunctionComponent = () => {
     clearOrNot: boolean;
   }>) => {
 
-    console.log(location_id, "kkk")
+
     try {
       // if (searchString) {
       //   router.push({
@@ -589,39 +589,44 @@ const ListScouts: FunctionComponent = () => {
     if (value) {
       setChanged(true);
       setLocation(value);
+      setFarm(null);
+      setCrop(null)
       getAllFarms({
-        farmId: router.query.farm_id as string,
-        searchString: router.query.farm_search_string as string,
+        farmId: '',
+        searchString: '',
         location_id: value?._id as string
       });
       getAllExistedScouts({
         page: router.query.page as string,
         limit: router.query.limit as string,
-        farmId: router.query.farm_id as string,
+        farmId: '',
         userId: router.query.user_id as string,
         fromDate: "",
         toDate: "",
         cropId: router.query.crop_id as string,
-        farmSearchString: router.query.farm_search_string as string,
+        farmSearchString: '',
         location: value?._id
       });
     }
     else {
+      setFarm(null);
+      setCrop(null)
       setChanged(true);
       setLocation(null);
       getAllFarms({
-        farmId: router.query.farm_id as string,
-        searchString: router.query.farm_search_string as string,
+        farmId: '',
+        searchString: '',
+        location_id:""
       });
       getAllExistedScouts({
         page: router.query.page as string,
         limit: router.query.limit as string,
-        farmId: router.query.farm_id as string,
+        farmId: '',
         userId: router.query.user_id as string,
         fromDate: "",
         toDate: "",
         cropId: router.query.crop_id as string,
-        farmSearchString: router.query.farm_search_string as string,
+        farmSearchString: '',
         location: ""
       });
     }

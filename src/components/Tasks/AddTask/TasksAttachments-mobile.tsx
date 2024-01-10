@@ -47,6 +47,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
   const [noFarmIdMessage, setNoFarmIdMessage] = useState<string>("");
   const [validations, setValidations] = useState<any>();
   const [loading, setLoading] = useState(false);
+  const [removeloading, setRemoveLoading] = useState<any>(false)
   const [imageTypeArray, setImageTypeArray] = useState([
     "application/pdf",
     "application/docx",
@@ -422,6 +423,11 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     setMultipleFiles(selectedFilesCopy);
     setFileProgress(fileProgressCopy);
     dispatch(removeOneElement(index));
+    setRemoveLoading(true)
+    setTimeout(() => {
+      setRemoveLoading(false)
+
+    }, 2)
   };
 
   useEffect(() => {
@@ -516,15 +522,17 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
             {router.pathname.includes("/users-tasks") ? "" : "or drag and drop"}
           </div>
         </div>
-        <input
-          className={styles.mobileLink}
-          type="file"
-          multiple
-          disabled={disabled}
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-          accept="image/*,video/*,.doc, .docx, .csv,.xlsx,.msword,.pdf, .txt, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, text/plain"
-        />
+        {removeloading == false ?
+          <input
+            className={styles.mobileLink}
+            type="file"
+            multiple
+            disabled={disabled}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+            accept="image/*,video/*,.doc, .docx, .csv,.xlsx,.msword,.pdf, .txt, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, text/plain"
+          />
+          : ""}
         <p style={{ color: "red", fontSize: "12px" }}>{noFarmIdMessage}</p>
       </label>
       <ErrorMessagesComponent errorMessage={validations?.attachments} />
@@ -599,17 +607,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
                       ) : (
                         ""
                       )}
-                      {fileProgress[index] !== 100 ||
-                        fileProgress[index] == "fail" ? (
-                        <img
-                          className={styles1.close41}
-                          alt=""
-                          src="/close-icon.svg"
-                          onClick={() => removeFileAfterAdding(index, item)}
-                        />
-                      ) : (
-                        ""
-                      )}
+
                     </div>
                   </div>
                   <Box sx={{ width: "100%" }}>

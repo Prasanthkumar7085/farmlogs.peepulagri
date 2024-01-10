@@ -36,7 +36,10 @@ const DescriptionContainer = ({
             minRows={4}
             maxRows={4}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value.replace(/^\s+/, "");
+              setDescription(newValue)
+            }}
             sx={{
               width: "100%",
               "& .MuiOutlinedInput-notchedOutline": {
@@ -83,6 +86,7 @@ const DescriptionContainer = ({
               onClick={() => {
                 setEditField("");
                 setEditFieldOrNot(false);
+                setDescription("")
               }}
             >
               <img src="/viewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />
@@ -93,6 +97,7 @@ const DescriptionContainer = ({
               onClick={() => {
                 onUpdateField({});
               }}
+              disabled={description ? false : true}
             >
               <img
                 src="/viewTaskIcons/confirm-icon.svg"

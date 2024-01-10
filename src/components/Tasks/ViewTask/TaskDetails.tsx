@@ -61,7 +61,6 @@ const TaskDetails: React.FC<PropsType> = ({
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
     { value: "DONE", title: "Done" },
-    { value: "PENDING", title: "Pending" },
     // { value: "OVER-DUE", title: "Over-due" },
   ]);
   const [farmId, setFarmId] = useState("");
@@ -261,7 +260,7 @@ const TaskDetails: React.FC<PropsType> = ({
                 <h1 className={styles.landPreparation}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                      data?.title.slice(1)
+                    data?.title.slice(1)
                     : "-"}
                 </h1>
               )}
@@ -291,7 +290,7 @@ const TaskDetails: React.FC<PropsType> = ({
               ) : (
                 <>
                   {status !== "DONE" &&
-                  loggedInUserId == data?.created_by?._id ? (
+                    loggedInUserId == data?.created_by?._id ? (
                     <IconButton
                       onClick={() => {
                         setEditFieldOrNot(true);
@@ -406,7 +405,7 @@ const TaskDetails: React.FC<PropsType> = ({
               ) : (
                 <>
                   {status !== "DONE" &&
-                  loggedInUserId == data?.created_by?._id ? (
+                    loggedInUserId == data?.created_by?._id ? (
                     <IconButton
                       onClick={() => {
                         setEditFieldOrNot(true);
@@ -457,8 +456,8 @@ const TaskDetails: React.FC<PropsType> = ({
               >
                 <div>
                   {deleteField == "assignee" &&
-                  deleteFieldOrNot &&
-                  hasEditAccess ? (
+                    deleteFieldOrNot &&
+                    hasEditAccess ? (
                     <div className={styles.iconBlock}>
                       <IconButton
                         onClick={() => {
@@ -488,7 +487,7 @@ const TaskDetails: React.FC<PropsType> = ({
                     !(editField == "assignee" && editFieldOrNot) ? (
                     <>
                       {status !== "DONE" &&
-                      loggedInUserId == data?.created_by?._id ? (
+                        loggedInUserId == data?.created_by?._id ? (
                         <IconButton
                           onClick={() => {
                             setDeleteFieldOrNot(true);
@@ -531,8 +530,8 @@ const TaskDetails: React.FC<PropsType> = ({
                   ) : !(deleteField == "assignee" && deleteFieldOrNot) ? (
                     <>
                       {status !== "DONE" &&
-                      (loggedInUserId == data?.created_by?._id ||
-                        hasEditAccess) ? (
+                        (loggedInUserId == data?.created_by?._id ||
+                          hasEditAccess) ? (
                         <IconButton
                           onClick={() => {
                             setEditFieldOrNot(true);
@@ -579,24 +578,24 @@ const TaskDetails: React.FC<PropsType> = ({
               <div className={styles.allAsigneeGrp}>
                 {data?.assign_to
                   ? data?.assign_to.map(
-                      (item: { _id: string; name: string }, index: number) => {
-                        return (
-                          <div key={index} className={styles.singleAsignee}>
-                            {deleteField == "assignee" && deleteFieldOrNot ? (
-                              <input
-                                type="checkbox"
-                                onChange={(e) =>
-                                  handleAssigneeCheckboxChange(e, item._id)
-                                }
-                              />
-                            ) : (
-                              ""
-                            )}
-                            {item.name},
-                          </div>
-                        );
-                      }
-                    )
+                    (item: { _id: string; name: string }, index: number) => {
+                      return (
+                        <div key={index} className={styles.singleAsignee}>
+                          {deleteField == "assignee" && deleteFieldOrNot ? (
+                            <input
+                              type="checkbox"
+                              onChange={(e) =>
+                                handleAssigneeCheckboxChange(e, item._id)
+                              }
+                            />
+                          ) : (
+                            ""
+                          )}
+                          {item.name},
+                        </div>
+                      );
+                    }
+                  )
                   : "-"}
               </div>
             </div>
@@ -673,7 +672,10 @@ const TaskDetails: React.FC<PropsType> = ({
               minRows={4}
               maxRows={4}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                const newValue = e.target.value.replace(/^\s+/, "");
+                setDescription(newValue)
+              }}
               sx={{ width: "100%", background: "#f5f7fa" }}
               placeholder="Enter description here"
             />

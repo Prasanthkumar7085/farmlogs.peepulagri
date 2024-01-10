@@ -10,7 +10,6 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
-    { value: "PENDING", title: "Pending" },
     { value: "DONE", title: "Done" },
     { value: "OVER-DUE", title: "Over-due" },
   ]);

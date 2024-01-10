@@ -151,6 +151,7 @@ const ViewTaskComponent = () => {
         if (responseData?.success) {
           getTaskById(id as string);
           setUsersDrawerOpen(false);
+          setSelectedAssignee("")
           toast.success(responseData?.message);
         } else if (responseData?.status == 422) {
           toast.error(responseData?.errors?.assign_to);
@@ -413,7 +414,7 @@ const ViewTaskComponent = () => {
               onClick={() => {
                 addAssignee();
               }}
-              disabled={!selectedAssignee?.length}
+              disabled={selectedAssignee?.length ? false : true}
               variant="outlined"
             >
               Confirm

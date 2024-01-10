@@ -40,7 +40,6 @@ const MainContent = ({
   >([
     { value: "TO-START", title: "To-Start", color: "#57b6f0" },
     { value: "INPROGRESS", title: "In-Progress", color: "#f2a84c" },
-    { value: "PENDING", title: "Pending", color: "#fb6501" },
     { value: "DONE", title: "Done", color: "#46a845" },
     { value: "OVER-DUE", title: "Over-due", color: "#d94841" },
   ]);

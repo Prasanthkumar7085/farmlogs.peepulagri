@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "sonner";
 import styles from "./TagsTextFeild.module.css";
+import { SendOutlined } from "@mui/icons-material";
 
 const TagsTextFeild = ({
   captureTags,
@@ -191,7 +192,12 @@ const TagsTextFeild = ({
               className={styles.tagsBox}
               placeholder="Enter Tags"
               value={newTagValue}
-              onChange={(e) => setNewTagValue(e.target.value)}
+              onChange={(e) => {
+                const newValue = e.target.value.replace(/^\s+/, "");
+
+                setNewTagValue(newValue)
+              }
+              }
               sx={{
                 "& .MuiInputBase-root": {
                   background: "#fff",
@@ -263,38 +269,36 @@ const TagsTextFeild = ({
             <AddIcon />
           </IconButton>
         )}
+
+
+
         {isTextFieldOpen && (
-          <IconButton
-            sx={{
-              color: "#d94841",
-              border: "1px solid #d9484",
-              borderRadius: "4px",
-            }}
-            onClick={() => {
-              toast.dismiss();
-              setIsTextFieldOpen(false);
-            }}
-          >
-            <ClearIcon />
-          </IconButton>
+          <div style={{ display: "flex " }}>
+            <IconButton
+              sx={{
+                color: "#d94841",
+                border: "1px solid #d9484",
+                borderRadius: "4px",
+              }}
+              onClick={() => setIsTextFieldOpen(false)}
+            >
+              <ClearIcon />
+            </IconButton>
+            <IconButton
+              className={
+                newTagValue ? styles.addNewTagBtn : styles.addNewTagBtnDisabled
+              }
+              sx={{ background: "#d94841" }}
+              disabled={!newTagValue}
+              onClick={() => addNewTag()}
+            >
+              <SendOutlined sx={{ color: "white" }} />
+            </IconButton>
+          </div>
         )}
       </div>
 
-      {isTextFieldOpen && ( // Conditionally render the submit button based on the state
-        <Button
-          disabled={!newTagValue?.trim()?.length}
-          className={
-            newTagValue?.trim()?.length
-              ? styles.addNewTagBtn
-              : styles.addNewTagBtnDisabled
-          }
-          sx={{ background: "#d94841" }}
-          variant="contained"
-          onClick={addNewTag}
-        >
-          Add
-        </Button>
-      )}
+
       {loading ? <LinearProgress sx={{ height: "2px" }} /> : ""}
 
       <div>

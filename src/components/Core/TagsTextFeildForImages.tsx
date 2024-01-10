@@ -144,7 +144,7 @@ const TagsTextFeildForImages = ({
           {isTextFieldOpen && ( // Conditionally render the text field based on the state
             <TextField
               onKeyDown={(event: any) =>
-                event.key === "Tab" ? addTagToImage(newTagValue) : () => {}
+                event.key === "Tab" ? addTagToImage(newTagValue) : () => { }
               }
               size="small"
               fullWidth
@@ -152,7 +152,10 @@ const TagsTextFeildForImages = ({
               className={styles.tagsBox}
               placeholder="Enter Tags"
               value={newTagValue}
-              onChange={(e) => setNewTagValue(e.target.value)}
+              onChange={(e) => {
+                const newValue = e.target.value.replace(/^\s+/, "");
+                setNewTagValue(newValue)
+              }}
               sx={{
                 "& .MuiInputBase-root": {
                   background: "#fff",
@@ -275,7 +278,7 @@ const TagsTextFeildForImages = ({
                         },
                       }}
                       onDelete={() =>
-                        deleteTagLoading ? () => {} : handleDeleteChip(item)
+                        deleteTagLoading ? () => { } : handleDeleteChip(item)
                       }
                       key={index}
                       label={

@@ -124,7 +124,8 @@ const SingleScoutViewDetails = () => {
       );
       const responseData = await response.json();
       if (responseData.success) {
-        if (responseData?.data?.length == 1) {
+        console.log(responseData?.data, "data")
+        if (responseData?.data?.length == 1 && responseData?.has_more == false) {
           toast.error("You have reached to end")
           return
         }
@@ -185,7 +186,7 @@ const SingleScoutViewDetails = () => {
       );
       const responseData = await response.json();
       if (responseData.success) {
-        if (responseData?.data?.length == 1) {
+        if (responseData?.data?.length == 1 && responseData?.has_more == false) {
           toast.error("You have reached to end")
           return
         }

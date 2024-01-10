@@ -571,10 +571,17 @@ const ListScouts: FunctionComponent = () => {
 
   const onClickAttachment = (attachmentId: string, farmId: string, cropId: string) => {
     dispatch(QueryParamsForScouting(queries))
-    console.log(queries, "sdf")
-    router.push(
-      `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}`
-    );
+    if (router.query.farm_id || router.query.crop_id) {
+      router.push(
+        `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}`
+      );
+    }
+    else {
+      router.push(
+        `/scouts/${attachmentId}`
+      );
+    }
+
   };
 
   const onChangeLocation = (e: any, value: any, reason: any) => {

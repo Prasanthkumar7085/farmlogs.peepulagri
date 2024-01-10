@@ -109,9 +109,17 @@ const SingleScoutViewDetails = () => {
         authorization: accessToken,
       }),
     };
+    let url;
+    if (router.query.farm_id || router.query.crop_id) {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/crops/${router.query.crop_id}/images/${lastImage_id}/pre/2`
+    }
+    else {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/pre/2`
+    }
     try {
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${lastImage_id}/pre/2`,
+        url,
         options
       );
       const responseData = await response.json();
@@ -238,6 +246,7 @@ const SingleScoutViewDetails = () => {
   useEffect(() => {
     if (router.isReady && accessToken) {
       getInstaScrollImageDetails(router.query.image_id);
+
       // knowAboutPrevImageDetails(router.query.image_id)
     }
   }, [router.isReady, accessToken]);
@@ -271,10 +280,19 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
                       getInstaScrollImagePrevDetails(data[0]?._id)
-                      router.push({
-                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
-                        query: {},
-                      });
+                      if (router.query.farm_id || router.query.crop_id) {
+                        router.push({
+                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[0]?._id}/`,
+                          query: {},
+                        });
+                      }
+                      else {
+                        router.push({
+                          pathname: `/scouts/${data[0]?._id}/`,
+                          query: {},
+                        });
+                      }
+
 
                     }}
                     disabled={loading ? true : false}
@@ -286,10 +304,19 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(data[1]?._id)
-                      router.push({
-                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[1]?._id}/`,
-                        query: {},
-                      });
+                      if (router.query.farm_id || router.query.crop_id) {
+                        router.push({
+                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${data[1]?._id}/`,
+                          query: {},
+                        });
+                      }
+                      else {
+                        router.push({
+                          pathname: `/scouts/${data[1]?._id}/`,
+                          query: {},
+                        });
+                      }
+
                       setPrevData([])
 
 
@@ -322,10 +349,19 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
                       getInstaScrollImagePrevDetails(prevData?.length ? prevData[1]?._id : "")
-                      router.push({
-                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[1]?._id : ""}/`,
-                        query: {},
-                      });
+                      if (router.query.farm_id || router.query.crop_id) {
+                        router.push({
+                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[1]?._id : ""}/`,
+                          query: {},
+                        });
+                      }
+                      else {
+                        router.push({
+                          pathname: `/scouts/${prevData?.length ? prevData[1]?._id : ""}/`,
+                          query: {},
+                        });
+                      }
+
                       setData([])
 
 
@@ -341,10 +377,19 @@ const SingleScoutViewDetails = () => {
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(prevData?.length ? prevData[0]?._id : "")
-                      router.push({
-                        pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[0]?._id : ""}/`,
-                        query: {},
-                      });
+                      if (router.query.farm_id || router.query.crop_id) {
+                        router.push({
+                          pathname: `/scouts/farm/${router.query.farm_id}/crops/${router.query.crop_id}/${prevData?.length ? prevData[0]?._id : ""}/`,
+                          query: {},
+                        });
+                      }
+                      else {
+                        router.push({
+                          pathname: `/scouts/${prevData?.length ? prevData[0]?._id : ""}/`,
+                          query: {},
+                        });
+                      }
+
                       setPrevData([])
 
 

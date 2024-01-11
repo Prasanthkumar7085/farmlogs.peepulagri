@@ -69,7 +69,7 @@ export default function ScoutingHeader({ children }: any) {
             Farms
           </Button>
 
-          {/* <Button
+          <Button
             className={
               router.pathname.includes("/users-tasks")
                 ? styles.navButtonActive
@@ -91,7 +91,7 @@ export default function ScoutingHeader({ children }: any) {
               />
             )}{" "}
             Tasks
-          </Button> */}
+          </Button>
 
           <Button
             className={

@@ -74,7 +74,6 @@ const NavContainer: React.FC<PropTypes> = ({
     { value: "TO-START", title: "To-Start" },
     { value: "INPROGRESS", title: "In-Progress" },
     { value: "DONE", title: "Done" },
-    { value: "PENDING", title: "Pending" },
     { value: "OVER-DUE", title: "Over-due" },
   ]);
   const [selectedUsers, setSelectedUsers] = useState<

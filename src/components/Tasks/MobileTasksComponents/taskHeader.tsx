@@ -139,9 +139,17 @@ const TaskHeader = ({
         setIsSearchOpenOrNot(true);
         setSearch(router.query.search_string as string);
       }
+
       getAllUsers();
     }
   }, [router.isReady, accessToken]);
+
+  useEffect(() => {
+    if (!router.query.is_my_task) {
+      onUserChange([]);
+      setUsersArray([]);
+    }
+  }, [router.query.is_my_task])
 
   const SortMenuMobile = () => {
     return (

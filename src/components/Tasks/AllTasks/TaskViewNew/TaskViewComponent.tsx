@@ -35,6 +35,8 @@ const TaskViewComponent = () => {
 
   const [editField, setEditField] = useState("");
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
+  console.log(editField, "edit")
+  console.log(editFieldOrNot, "editdsf")
   const [title, setTitle] = useState("");
   const [deadlineString, setDeadlineString] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
@@ -84,6 +86,7 @@ const TaskViewComponent = () => {
   };
   const handleAssignyClose = () => {
     setAnchorAssignyEl(null);
+    setSelectedAssignee(null)
   };
 
   const accessToken = useSelector(
@@ -293,6 +296,8 @@ const TaskViewComponent = () => {
     });
     if (response?.success) {
       toast.success(response?.message);
+      setEditFieldOrNot(false)
+      setEditField("")
       await getTaskById(router.query.task_id as string);
     } else {
       toast.error(response?.message);
@@ -325,10 +330,13 @@ const TaskViewComponent = () => {
       token: accessToken,
     });
     if (response?.success) {
-      toast.success(response?.message);
-      await getTaskById(router.query.task_id as string);
       setEditFieldOrNot(false);
       setEditField("");
+      getTaskById(router.query.task_id as string);
+
+      setSelectedAssignee([])
+      toast.success(response?.message);
+
     } else {
       if (response?.errors) {
         setErrorMessages(response?.errors);
@@ -612,7 +620,7 @@ const TaskViewComponent = () => {
                 />
               ) : (
                 <div>
-                  {status !== "DONE" &&
+                  {status !== "DONE" ||
                     loggedInUserId == data?.created_by?._id ? (
                     <p
                       className={styles.descriptionText}
@@ -944,7 +952,7 @@ const TaskViewComponent = () => {
                       <Button
                         className={styles.addAssignyBtn}
                         disabled={
-                          status === "DONE" &&
+                          status == "DONE" ||
                           !(loggedInUserId == data?.created_by?._id)
                         }
                         onClick={handleAssignyClick}

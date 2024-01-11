@@ -111,6 +111,37 @@
   margin-top: 1rem;
 }
 
+.AllScoutsLeftWebPage{
+  height: calc(100vh - 115px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 1rem;
+  width: 50%;
+}
+.AllScoutsLeftWebPage::-webkit-scrollbar {
+  background: transparent;
+  width: 5px;
+  height: 3px;
+}
+.AllScoutsRightWebPage {
+  height: calc(100vh - 115px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 1rem;
+  width: 50%;
+  box-shadow: 0px 0px 12px 12px #0000001c;
+  background-color: #fff;
+  border-radius: 7px;
+}
+.AllScoutsRightWebPage::-webkit-scrollbar {
+  background: transparent;
+  width: 5px;
+  height: 3px;
+}
+.AllScoutsRightClose {
+  display: "none";
+}
+
 .allFarms::-webkit-scrollbar {
   width: 4px;
   height: 0px;
@@ -313,6 +344,11 @@
 .allScoutImgContainer {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  grid-gap: 0.5rem;
+}
+.allScoutImgFlexContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 0.5rem;
 }
 

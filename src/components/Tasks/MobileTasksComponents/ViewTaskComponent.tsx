@@ -174,6 +174,8 @@ const ViewTaskComponent = () => {
     });
     if (response?.success) {
       toast.success(response?.message);
+      setEditFieldOrNot(false);
+      setEditField("");
       await getTaskById(router.query.task_id as string);
     } else {
       toast.error(response?.message);
@@ -382,6 +384,7 @@ const ViewTaskComponent = () => {
           <IconButton
             onClick={() => {
               setUsersDrawerOpen(false);
+              setSelectedAssignee([])
             }}
           >
             <CloseIcon sx={{ color: "#000" }} />

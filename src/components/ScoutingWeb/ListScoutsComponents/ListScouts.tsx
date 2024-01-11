@@ -30,6 +30,7 @@ import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import ScoutingDailyImages from "./ScoutingDailyImages";
 import { errorMonitor } from "events";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
+import GoogleImageView from "./GoogleImageView";
 
 interface ApiMethodProps {
   page: string | number;
@@ -83,6 +84,8 @@ const ListScouts: FunctionComponent = () => {
     _id: string;
     title: string;
   } | null>();
+  const [imageDetails, setImageDetails] = useState<any>()
+  const [rightBarOpen, setRightBarOpen] = useState<any>(false)
 
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
@@ -101,7 +104,7 @@ const ListScouts: FunctionComponent = () => {
       setFarm(null);
       setData([]);
 
-      getAllFarms({ clearOrNot: true,location_id:router.query.location_id as string });
+      getAllFarms({ clearOrNot: true, location_id: router.query.location_id as string });
       getAllExistedScouts({
         // farmSearchString: value?.title,
         page: 1,
@@ -569,18 +572,20 @@ const ListScouts: FunctionComponent = () => {
     return () => clearInterval(debounce);
   }, [searchString]);
 
-  const onClickAttachment = (attachmentId: string, farmId: string, cropId: string,location_id:string) => {
+  const onClickAttachment = (attachment: string, farmId: string, cropId: string, location_id: string) => {
     dispatch(QueryParamsForScouting(queries))
-    if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
-      router.push(
-        `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}?location_id=${router.query.location_id}`
-      );
-    }
-    else {
-      router.push(
-        `/scouts/${attachmentId}`
-      );
-    }
+    setRightBarOpen(true)
+    setImageDetails(attachment)
+    // if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
+    //   router.push(
+    //     `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}?location_id=${router.query.location_id}`
+    //   );
+    // }
+    // else {
+    //   router.push(
+    //     `/scouts/${attachmentId}`
+    //   );
+    // }
 
   };
 
@@ -616,7 +621,7 @@ const ListScouts: FunctionComponent = () => {
       getAllFarms({
         farmId: '',
         searchString: '',
-        location_id:""
+        location_id: ""
       });
       getAllExistedScouts({
         page: router.query.page as string,
@@ -722,58 +727,69 @@ const ListScouts: FunctionComponent = () => {
           </Button> */}
         </div>
       </div>
-      <div className={styles.AllScoutsWeb}>
-        {data?.length
-          ? data.map((item: any, index: any) => {
-            return (
-              <div key={index} className={styles.allScoutingCards}>
-                <Typography className={styles.postedDate}>
-                  <InsertInvitationIcon />
-                  <span>
-                    {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
-                  </span>
-                </Typography>
 
-                <div className={styles.eachDayScouting} key={index}>
-                  <ScoutingDailyImages
-                    item={item}
-                    key={index}
-                    onClickAttachment={onClickAttachment}
-                  />
+      <div style={{ display: "flex", flexDirection: "row" }}>
+
+        <div className={rightBarOpen ? styles.AllScoutsLeftWebPage : styles.AllScoutsWeb}>
+          {data?.length
+            ? data.map((item: any, index: any) => {
+              return (
+                <div key={index} className={styles.allScoutingCards}>
+                  <Typography className={styles.postedDate}>
+                    <InsertInvitationIcon />
+                    <span>
+                      {timePipe(item[0].uploaded_at, "ddd, MMM D, YYYY")}
+                    </span>
+                  </Typography>
+
+                  <div className={styles.eachDayScouting} key={index}>
+                    <ScoutingDailyImages
+                      item={item}
+                      key={index}
+                      onClickAttachment={onClickAttachment}
+                      rightBarOpen={rightBarOpen}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })
-          : ""}
-        {!data?.length && !loading ? (
-          <div
-            id={styles.noData}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "calc(100vh - 150px)",
-            }}
-          >
-            <ImageComponent
-              src="/emty-folder-image.svg"
-              alt="empty folder"
-              width={200}
-              height={150}
+              );
+            })
+            : ""}
+          {!data?.length && !loading ? (
+            <div
+              id={styles.noData}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "calc(100vh - 150px)",
+              }}
+            >
+              <ImageComponent
+                src="/emty-folder-image.svg"
+                alt="empty folder"
+                width={200}
+                height={150}
+              />
+              <Typography className={styles.subTitle}>No Scoutings</Typography>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+
+        {rightBarOpen ?
+          <div className={rightBarOpen ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
+            <GoogleImageView
+              rightBarOpen={rightBarOpen}
+              setRightBarOpen={setRightBarOpen}
+              imageDetails={imageDetails}
+
             />
-            <Typography className={styles.subTitle}>No Scoutings</Typography>
-          </div>
-        ) : (
-          ""
-        )}
+          </div> : ""}
+
       </div>
-      {/* <SingleScoutViewDetails
-        viewAttachmentId={viewAttachmentId}
-        onlyImages={onlyImages}
-        previewImageDialogOpen={previewImageDialogOpen}
-        setPreviewImageDialogOpen={setPreviewImageDialogOpen}
-      /> */}
+
       <DaySummaryComponent
         openDaySummary={openDaySummary}
         setOpenDaySummary={setOpenDaySummary}

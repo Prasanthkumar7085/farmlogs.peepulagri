@@ -21,7 +21,6 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
         "/tasks/status/count/stats?status=TO-START",
         "/tasks/status/count/stats?status=INPROGRESS",
         "/tasks/status/count/stats?status=DONE",
-        "/tasks/status/count/stats?status=PENDING",
         "/tasks/status/count/stats?status=OVER-DUE",
       ];
 
@@ -85,7 +84,6 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
         "to_start",
         "inprogress",
         "done",
-        "pending",
         "overdue",
       ];
 
@@ -221,7 +219,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
           }}
         />
       </Button>
-      <Button
+      {/* <Button
         sx={{ display: "flex", gap: "5px" }}
         className={
           router.query.status === "PENDING"
@@ -243,7 +241,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
               router.query.status == "PENDING" ? "#46a845" : "#6a7185",
           }}
         />
-      </Button>
+      </Button> */}
       <Button
         sx={{ display: "flex", gap: "5px" }}
         className={

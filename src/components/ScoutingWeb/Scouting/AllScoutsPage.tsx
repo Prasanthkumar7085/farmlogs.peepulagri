@@ -33,6 +33,7 @@ const AllScoutsWebPage = () => {
   const [openDaySummary, setOpenDaySummary] = useState(false);
   const [seletectedItemDetails, setSelectedItemDetails] =
     useState<SingleScoutResponse>();
+  const [rightBarOpen, setRightBarOpen] = useState<any>(false)
 
   const unWindImages = (data: Array<SingleScoutResponse>) => {
     let array: any = [];
@@ -131,27 +132,35 @@ const AllScoutsWebPage = () => {
       <ScoutsNavBarWeb />
       {data?.length
         ? data.map((item: any, index: any) => {
-            return (
-              <div key={index}>
-                <Typography
-                  style={{ fontWeight: "bold", position: "sticky", top: "0px" }}
-                >
-                  {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
-                </Typography>
-                {item.map((row: any, rowIndex: any) => {
-                  let cropObj = row.farm_id.crops.find(
-                    (ite: any) => ite._id == row.crop_id
-                  );
-                  let cropName = cropObj?.title;
+          return (
+            <div key={index}>
+              <Typography
+                style={{ fontWeight: "bold", position: "sticky", top: "0px" }}
+              >
+                {timePipe(item[0].createdAt, "ddd, MMM D, YYYY")}
+              </Typography>
+              {item.map((row: any, rowIndex: any) => {
+                let cropObj = row.farm_id.crops.find(
+                  (ite: any) => ite._id == row.crop_id
+                );
+                let cropName = cropObj?.title;
 
-                  return (
-                    <div className={styles.eachDayScouting} key={rowIndex}>
+                return (
+                  <div className={styles.eachDayScouting} key={rowIndex}>
+                    <div
+                      className={styles.scoutDay}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <div
-                        className={styles.scoutDay}
                         style={{
                           display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
-                          justifyContent: "space-between",
+                          gap: "30px",
                         }}
                       >
                         <div
@@ -159,7 +168,8 @@ const AllScoutsWebPage = () => {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            gap: "30px",
+                            gap: "20px",
+                            position: "sticky",
                           }}
                         >
                           <div
@@ -167,88 +177,81 @@ const AllScoutsWebPage = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              gap: "20px",
-                              position: "sticky",
                             }}
                           >
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              {row.created_by.full_name}
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <img
-                                className={styles.farmsIcon}
-                                alt="Farm Shape"
-                                src="/farmshape2.svg"
-                              />
-                              {row.farm_id.title}
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <img src="/cropName-icon.svg" alt="" />
-                              {cropName}
-                            </div>
+                            {row.created_by.full_name}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              className={styles.farmsIcon}
+                              alt="Farm Shape"
+                              src="/farmshape2.svg"
+                            />
+                            {row.farm_id.title}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img src="/cropName-icon.svg" alt="" />
+                            {cropName}
                           </div>
                         </div>
-                        {row?.suggestions ? (
-                          <div
-                            className={styles.summaryBtn}
-                            style={{
-                              color: "#F2A84C",
-                            }}
-                            onClick={() => {
-                              setOpenDaySummary(true);
-                              setSelectedItemDetails(row);
-                            }}
-                          >
-                            <SuggestionsIcon /> Recommandations
-                          </div>
-                        ) : (
-                          <div
-                            className={styles.summaryBtn}
-                            onClick={() => {
-                              setOpenDaySummary(true);
-                              setSelectedItemDetails(row);
-                            }}
-                          >
-                            <SummaryIcon />{" "}
-                            <span
-                              style={{
-                                color: row?.summary ? "#05A155" : "red",
-                              }}
-                            >
-                              Summary
-                            </span>
-                          </div>
-                        )}
                       </div>
-                      <ScoutingDailyImages
-                        item={row}
-                        key={rowIndex}
-                        onClickAttachment={onClickAttachment}
-                      />
+                      {row?.suggestions ? (
+                        <div
+                          className={styles.summaryBtn}
+                          style={{
+                            color: "#F2A84C",
+                          }}
+                          onClick={() => {
+                            setOpenDaySummary(true);
+                            setSelectedItemDetails(row);
+                          }}
+                        >
+                          <SuggestionsIcon /> Recommandations
+                        </div>
+                      ) : (
+                        <div
+                          className={styles.summaryBtn}
+                          onClick={() => {
+                            setOpenDaySummary(true);
+                            setSelectedItemDetails(row);
+                          }}
+                        >
+                          <SummaryIcon />{" "}
+                          <span
+                            style={{
+                              color: row?.summary ? "#05A155" : "red",
+                            }}
+                          >
+                            Summary
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  );
-                })}
-              </div>
-            );
-          })
+                    <ScoutingDailyImages
+                      item={row}
+                      key={rowIndex}
+                      onClickAttachment={onClickAttachment}
+                      rightBarOpen={rightBarOpen}
+
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })
         : ""}
       {/* <SingleScoutViewDetails
         viewAttachmentId={viewAttachmentId}

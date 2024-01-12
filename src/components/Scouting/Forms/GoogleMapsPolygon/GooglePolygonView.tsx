@@ -150,44 +150,6 @@ const GoogleMapViewComponent = () => {
         mapRef.current = map;
         addCustomControl(map, maps);
         createInfoWindow(map);
-        placesService.current = new maps.places.PlacesService(map);
-
-        const mapTypeControlDiv: any = document.createElement("div");
-        const mapTypeControl = MapTypeControl();
-        mapTypeControlDiv.index = 1;
-        map.controls[maps.ControlPosition.BOTTOM_CENTER].push(mapTypeControlDiv);
-        mapTypeControlDiv.appendChild(mapTypeControl);
-
-        // Create a container for the custom autocomplete control
-        const customAutocompleteDiv = document.createElement("div");
-        const searchInput = document.createElement("input");
-        searchInput.setAttribute("type", "search");
-        searchInput.setAttribute("id", "searchInput");
-        searchInput.setAttribute("placeholder", "Search for a place...");
-        searchInput.style.marginBottom = "10px";
-        searchInput.style.padding = "10px";
-        searchInput.style.width = "140%";
-        searchInput.style.margin = "auto";
-        searchInput.style.borderRadius = "20px"
-
-        customAutocompleteDiv.appendChild(searchInput);
-        map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
-        // Create Autocomplete for input field
-        const autocomplete = new maps.places.Autocomplete(searchInput);
-        autocomplete.bindTo("bounds", map);
-
-        const onPlaceChanged = () => {
-            const place = autocomplete.getPlace();
-            if (!place.geometry || !place.geometry.location) {
-                console.error("No place data available");
-                return;
-            }
-            setSearchedPlaces([place]);
-            centerMapToPlace(place);
-        };
-
-        autocomplete.addListener("place_changed", onPlaceChanged);
-
 
         const drawingManager = new maps.drawing.DrawingManager({
             drawingControl: false,
@@ -347,7 +309,7 @@ const GoogleMapViewComponent = () => {
         <div>
 
             {data?._id ?
-                <div style={{ width: '100%', height: router.pathname == `/farm/[farm_id]/map/edit` ? "90vh" : '65vh', marginTop: router.pathname == `/farm/[farm_id]/map/edit` ? "5px" : "" }}>
+                <div style={{ width: '100%', height: router.pathname == `/farms/[farm_id]` ? "30vh" : '65vh', marginTop: router.pathname == `/farm/[farm_id]/map/edit` ? "5px" : "" }}>
                     <GoogleMapReact
                         bootstrapURLKeys={{
                             key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
@@ -360,7 +322,6 @@ const GoogleMapViewComponent = () => {
                         options={{
                             mapTypeId: mapType,
 
-                            streetViewControl: true,
                             rotateControl: true
                         }}
                         defaultZoom={17}

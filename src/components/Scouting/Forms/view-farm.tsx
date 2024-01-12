@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
 import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
 import styles from "./view-farm.module.css";
+import GoogleMapViewComponent from "./GoogleMapsPolygon/GooglePolygonView";
 
 const ViewFarmPage = () => {
   const router = useRouter();
@@ -112,7 +113,7 @@ const ViewFarmPage = () => {
 
   // Crop.svg
   return (
-    <div>
+    <div >
       <div className={styles.header} id="header">
         <img
           className={styles.iconsiconArrowLeft}
@@ -251,7 +252,7 @@ const ViewFarmPage = () => {
               </div>
             </Box>
           </div>
-          {/* <div style={{
+          <div style={{
             display: "flex",
             alignItems: "center",
             alignSelf: "stretch",
@@ -264,9 +265,13 @@ const ViewFarmPage = () => {
               router.push(`/farms/${router.query.farm_id}/map/edit`) :
               router.push(`/farms/${router.query.farm_id}/map`)
             }>
-            <Typography>{data?.geometry?.coordinates?.length ? "View/Edit Map" : "Add map"}</Typography>
+            <Typography>{data?.geometry?.coordinates?.length ? "Edit Map" : "Add map"}</Typography>
             <img src={"/google-maps.png"} width={22} height={22} />
-          </div> */}
+          </div>
+          <div style={{ marginTop: "20px", height: "40vh" }}>
+            <GoogleMapViewComponent />
+          </div>
+
         </div>
       ) : (
         ""

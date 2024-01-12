@@ -144,6 +144,12 @@
 }
 .viewFarmDetailsCard {
   margin: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items:center ;
+justify-content: space-between;
+gap: 1.5rem;
+box-shadow: 4px 2px 9px 0px ;
 }
 
 .viewfarmCard {
@@ -151,6 +157,9 @@
   border: 1px solid #DEDEDE;
   background: #FFF;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .farmdetailsblock {
@@ -243,6 +252,7 @@
 .header {
   display: flex;
   align-items: center;
+    width: 100%;
 
 }
 

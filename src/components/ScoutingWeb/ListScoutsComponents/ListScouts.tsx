@@ -91,6 +91,7 @@ const ListScouts: FunctionComponent = () => {
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
+    setRightBarOpen(false)
     setData([]);
     if (reason == "clear") {
 
@@ -165,6 +166,7 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const onSelectCropFromDropDown = (value: any, reason: string) => {
+    setRightBarOpen(false)
     if (value) {
       setCrop(value);
       setPage(1);
@@ -281,6 +283,7 @@ const ListScouts: FunctionComponent = () => {
     //   setData([]);
     //   return;
     // }
+    setRightBarOpen(false)
     setLoading(true);
     try {
       // let url = `/crops/${cropId}/images/${page}/${limit}`;
@@ -590,7 +593,7 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
-
+    setRightBarOpen(false)
     if (value) {
       setChanged(true);
       setLocation(value);

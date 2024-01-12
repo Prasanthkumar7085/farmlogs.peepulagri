@@ -37,6 +37,7 @@ import addProcurementMaterialService from "../../../../lib/services/ProcurementS
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteMaterialByIdService from "../../../../lib/services/ProcurementServices/deleteMaterialByIdService";
 import AddMaterialDrawer from "../MaterialCore/AddMaterialDrawer";
+import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -303,9 +304,54 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   //after add the matrials
   const afterAddingMaterials = (value: any) => {
     if (value) {
-      
+
       setAddMaterialOpen(false)
       getAllProcurementMaterials()
+    }
+  }
+
+  //approve all function
+  const approveAllMaterials = async () => {
+    setLoading(true)
+    try {
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${router.query.procurement_id}/approve-materials`;
+      const options = {
+        method: "PATCH",
+        headers: new Headers({
+          authorization: accessToken,
+        }),
+      };
+
+      const response = await fetch(url, options)
+      const responseData = await response.json()
+      if (responseData?.success) {
+        toast.success(responseData?.message);
+        await procurementStatusChange("APPROVED")
+        await getAllProcurementMaterials()
+
+      }
+
+    }
+    catch (err) {
+      console.error(err)
+    }
+    finally {
+      setLoading(false)
+
+    }
+  }
+
+  //overall status change
+  const procurementStatusChange = async (status: string) => {
+    try {
+      const response = await updateStatusService({
+        procurement_id: data?._id,
+        status: status,
+        accessToken,
+      });
+    }
+    catch (err) {
+      console.error(err)
     }
   }
 
@@ -315,13 +361,20 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
 
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="contained"
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
+          <Button variant="outlined"
             sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
             onClick={() => {
               setAddMaterial(true)
               setAddMaterialOpen(true);
             }}>Add Materials</Button>
+          {data?.status == "APPROVED" ? "" :
+            <Button variant="contained"
+              sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
+              onClick={() => {
+                approveAllMaterials()
+
+              }}>Approve All</Button>}
         </div>
 
         {materials?.length ? (
@@ -476,10 +529,12 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
               </TableBody>
             </Table>
-            <div className={styles.TotalAmountBlock}>
-              <Typography className={styles.totalAmountTitle}>Total Amount</Typography>
-              <Typography className={styles.totalAmount}>{formatMoney(sumOfPrices(materials))}</Typography>
-            </div>
+            {materials?.some((obj: any) => obj.hasOwnProperty('price') && obj.price !== null && obj.price !== undefined && obj.price !== "")
+              ?
+              <div className={styles.TotalAmountBlock}>
+                <Typography className={styles.totalAmountTitle}>Total Amount</Typography>
+                <Typography className={styles.totalAmount}>{formatMoney(sumOfPrices(materials))}</Typography>
+              </div> : ""}
           </div>
         ) : (
           <div>No materials added</div>

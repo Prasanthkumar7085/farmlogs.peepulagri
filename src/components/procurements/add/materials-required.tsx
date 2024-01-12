@@ -254,6 +254,10 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
     }
   }, [router.isReady, accessToken]);
 
+  const handleInput = (event: any) => {
+    const value = event.target.value.replace(/\D/g, '');
+    event.target.value = value.slice(0, 20);
+  };
 
   return (
     <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "3rem", background: "#fff" }}>
@@ -273,14 +277,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
             </p>
 
           </div>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => addMaterial()}
-            className={styles.addMaterialBtn}
-          >
-            <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
-          </Button>
+
 
         </div>
 
@@ -323,10 +320,10 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                       borderRadius: "4px 0 0 4px !important"
                     }
                   }}
-                  placeholder="Enter Procurement Quantity"
+                  placeholder="Procurement Quantity"
                   variant="outlined"
-                  type="number"
                   value={requiredQty}
+                  onInput={handleInput}
                   onChange={(e: any) => setRequiredQty(e.target.value)}
                 />
                 <ErrorMessages
@@ -345,7 +342,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                     background: "#fff",
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "0 4px 4px 0 !important"
+                      borderRadius: "1px 4px 4px 0 !important"
                     }
                   }}
                   size="small"
@@ -369,8 +366,8 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                 size="small"
                 placeholder="Enter Availble Quantity"
                 variant="outlined"
-                type="number"
                 value={availableQty}
+                onInput={handleInput}
                 onChange={(e: any) => setAvailableQty(e.target.value)}
                 sx={{
                   width: "100%", background: "#fff",
@@ -401,8 +398,18 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
               </FormControl>
             </div>
           </div>
-        </div>
 
+        </div>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => addMaterial()}
+            className={styles.addMaterialBtn}
+          >
+            <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
+          </Button>
+        </div>
         <div className={styles.materialListBlock}>
           <h4 className={styles.materialListheading}>Required Materials</h4>
           <div className={styles.materialListTable}>

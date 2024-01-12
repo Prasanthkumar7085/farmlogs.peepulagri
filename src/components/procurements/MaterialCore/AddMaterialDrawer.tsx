@@ -81,6 +81,11 @@ const AddMaterialDrawer = ({
         }
     };
 
+    //for enteer only the numbeers
+    const handleInput = (event: any) => {
+        const value = event.target.value.replace(/\D/g, '');
+        event.target.value = value.slice(0, 20);
+    };
     return (
         <Drawer anchor={"right"} open={addMaterialOpen}>
             <div style={{ width: "300px", padding: ".5rem 1.5rem" }}>
@@ -126,7 +131,7 @@ const AddMaterialDrawer = ({
                                 borderRadius: "4px 0 0 4px !important"
                             }
                         }}
-                        type="number"
+                        onInput={handleInput}
                         value={requiredQty}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                             setRequiredQty(e.target.value)
@@ -172,7 +177,7 @@ const AddMaterialDrawer = ({
                                 }
                             }} placeholder="Enter Availble Quantity"
                             variant="outlined"
-                            type="number"
+                            onInput={handleInput}
                             value={availableQty}
                             onChange={(e: any) => setAvailableQty(e.target.value)}
                             InputProps={{

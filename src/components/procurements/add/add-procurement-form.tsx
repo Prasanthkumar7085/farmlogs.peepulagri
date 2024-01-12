@@ -63,7 +63,7 @@ const AddProcurementForm = () => {
   const [priority, setPriority] = useState('NONE')
   const [materialCount, setMaterialCount] = useState<any>()
   const [afterProcurement, setAfterProcurement] = useState<any>(false)
-  
+
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
     let location_id = ""
     try {
@@ -166,7 +166,7 @@ const AddProcurementForm = () => {
       };
 
       const response = await updateProcurementService({
-        procurementId: router.query.procurement_id as string,
+        procurementId: router.query.procurement_id as string || procurementData?._id,
         body: data,
         token: accessToken,
       });
@@ -264,7 +264,7 @@ const AddProcurementForm = () => {
   }, [router.isReady, accessToken, searchString]);
 
   const checkMaterialsListCount = (value: any) => {
-    
+
     setMaterialCount(value?.length)
   }
 
@@ -357,7 +357,7 @@ const AddProcurementForm = () => {
                     color="primary"
                     variant="contained"
                     onClick={() => {
-                      router.query.procurement_id
+                      router.query.procurement_id || procurementData?._id
                         ? updateProcurement()
                         : addProcurement();
                     }}

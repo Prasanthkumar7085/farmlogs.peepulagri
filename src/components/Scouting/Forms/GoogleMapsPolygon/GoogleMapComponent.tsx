@@ -290,8 +290,8 @@ const GoogleMapComponent = () => {
       router.query.farm_id as string
     );
     if (response?.success) {
-      toast.success("Farm coordinates added successfully");
       router.back();
+      toast.success("Farm coordinates added successfully");
     }
     setLoading(false);
   };
@@ -404,8 +404,8 @@ const GoogleMapComponent = () => {
           <div
             style={{
               position: "absolute",
-              top: "72%",
-              right: "20%",
+              top: "22%",
+              right: "25%",
             }}
           >
             <Button
@@ -414,7 +414,7 @@ const GoogleMapComponent = () => {
               sx={{ backgroundColor: "orange" }}
               disabled={polygonCoords.length === 0}
             >
-              Clear All Points
+              <img src={"/blue-delete.png"} width={25} height={25} />      Clear
             </Button>
 
             <Button
@@ -423,8 +423,8 @@ const GoogleMapComponent = () => {
               sx={{ backgroundColor: "orange" }}
               disabled={polygonCoords.length === 0}
             >
-              <img src={"/undo-icon.png"} width={25} height={25} /> Undo Last
-              Point
+              <img src={"/undo-icon.png"} width={25} height={25} /> Undo
+
             </Button>
           </div>
         )}

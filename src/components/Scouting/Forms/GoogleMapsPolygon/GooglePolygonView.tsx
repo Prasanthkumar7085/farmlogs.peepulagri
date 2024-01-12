@@ -157,10 +157,7 @@ const GoogleMapViewComponent = () => {
                 position: maps.ControlPosition.TOP_RIGHT,
                 drawingModes: [maps.drawing.OverlayType.POLYGON],
             },
-            polygonOptions: {
-                editable: false,
-                draggable: false,
-            },
+
         });
 
         drawingManager.setMap(map);

@@ -432,8 +432,8 @@ const GoogleMapEditComponent = () => {
                     {polygonCoords.length === 0 ? "" :
                         <div style={{
                             position: "absolute",
-                            top: "72%",
-                            right: "20%",
+                            top: "22%",
+                            right: "25%",
 
                         }}>
                             <Button
@@ -442,13 +442,13 @@ const GoogleMapEditComponent = () => {
                                 sx={{ backgroundColor: "orange" }}
                                 disabled={polygonCoords.length === 0}
                             >
-                                Clear All Points
+                                <img src={"/blue-delete.png"} width={25} height={25} />      Clear
                             </Button>
 
                             <Button onClick={undoLastPoint} variant="outlined"
                                 sx={{ backgroundColor: "orange" }}
                                 disabled={polygonCoords.length === 0}>
-                                <img src={"/undo-icon.png"} width={25} height={25} />  Undo Last Point
+                                <img src={"/undo-icon.png"} width={25} height={25} />  Undo
                             </Button>
                         </div>}
                 </div> : ""}

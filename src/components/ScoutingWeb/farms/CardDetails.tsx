@@ -99,10 +99,10 @@ const CardDetails: FunctionComponent = () => {
         !loading ? (
 
           <div className={styles.viewFarmDetailsCard}>
-            <div style={{ display: data?.geometry?.coordinates?.length ? "block" : "none", width: "50%" }}>
+            <div style={{ display: data?.geometry?.coordinates?.length ? "block" : "none", width: "60%" }}>
               <GoogleMapViewComponent />
             </div>
-            <div style={{ display: "flex", flexDirection: "column", width: data?.geometry?.coordinates?.length ? "50%" : "100%" }}>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", width: data?.geometry?.coordinates?.length ? "40%" : "100%" }}>
               <div className={styles.overViewBtns}>
                 <div
                   className={styles.farmOverView}

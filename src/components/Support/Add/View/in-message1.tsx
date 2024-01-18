@@ -42,12 +42,12 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
 
 
   const getSrc = (item: any) => {
-    if (item.file_name.includes('.wav'))
+    if (item.file_name.includes('.wav'))  
       return '/audio.svg'
     else if (item.file_name.includes('.pdf'))
       return '/pdf.svg'
     else return item.downloadUrl
-  } 
+  }
   return (
     <div className={styles.inMessage}>
       {data?.reply_to_message_id?.full_name == 'admin' ?
@@ -69,11 +69,11 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
           </p>
           {data?.attachments?.length ?
             <div className={styles.attachment}>
-                <div className={styles.row}>
-                  <div className={styles.icon}>
+              <div className={styles.row}>
+                <div className={styles.icon}>
                   <ImageComponent height={10} width={10} className={styles.groupIcon} alt="" src="/group.svg" />
                   <ImageComponent height={10} width={10} className={styles.groupIcon1} alt="" src="/group2.svg" />
-                  </div>
+                </div>
                 <Button className={styles.imageName} onClick={() => {
                   if (attachmentImages && attachmentImages?.length) {
                     setAttachmentImages([]);
@@ -83,9 +83,9 @@ const InMessage = ({ data }: { data: SupportMessageType }) => {
                 }}>
                   {attachmentImages && attachmentImages?.length ? "Hide Images" : (getImagesLoading ? <CircularProgress size={'1rem'} /> : "View Images")}
                 </Button>
-                </div>
-
               </div>
+
+            </div>
             : ""}
         </div>
         <div className={styles.attachmentsGroup}>

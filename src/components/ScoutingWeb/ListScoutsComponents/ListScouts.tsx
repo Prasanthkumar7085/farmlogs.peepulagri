@@ -731,7 +731,7 @@ const ListScouts: FunctionComponent = () => {
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
 
         <div className={rightBarOpen ? styles.AllScoutsLeftWebPage : styles.AllScoutsWeb}>
           {data?.length

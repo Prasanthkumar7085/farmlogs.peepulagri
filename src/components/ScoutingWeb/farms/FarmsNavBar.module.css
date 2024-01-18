@@ -346,7 +346,6 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 0.5rem;
-  padding: 0 1rem;
 }
 .allScoutImgFlexContainer {
   display: grid;
@@ -387,7 +386,7 @@
 }
 
 .scoutPageHeader h4 {
-  color: #05A155;
+  color:  #FE3143;
   font-family: "Inter", sans-serif;
   font-size: clamp(20px, 1.25vw, 24px);
   font-weight: 400;

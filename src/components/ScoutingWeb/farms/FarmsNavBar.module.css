@@ -130,8 +130,9 @@
   margin-top: 1rem;
   width: 50%;
   background-color: var(--white, #ffffff);
-  border-radius: 7px;
-  box-shadow: 4px 4px 13px 0px rgba(0, 0, 0, 0.17);
+  border-radius: 0px;
+  border: 1px solid #E9EDF1;
+  border-bottom: 0;
 }
 .AllScoutsRightWebPage::-webkit-scrollbar {
   background: transparent;
@@ -200,7 +201,7 @@
 }
 
 .AllScoutsWeb .allScoutingCards {
-  padding: 0 1.5rem;
+  padding: 0;
 }
 
 .filterBlock {
@@ -345,6 +346,7 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 0.5rem;
+  padding: 0 1rem;
 }
 .allScoutImgFlexContainer {
   display: grid;
@@ -356,7 +358,7 @@
   flex-grow: 1;
   flex-shrink: 1;
   height: 150px;
-  border-radius: 3px;
+  border-radius: 0;
   background-color: #f5f5f5;
   cursor: pointer;
 }
@@ -421,7 +423,7 @@
   /* border-top: 1px solid #efefef !important; */
   border-bottom: 1px solid #efefef !important;
   z-index: 100 !important;
-  padding: 0.65rem 1.5rem !important;
+  padding: 0.65rem 0 !important;
   margin: 0 -1.5rem 1rem !important;
 }
 

@@ -156,7 +156,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
 
             <div style={{ display: "flex", justifyContent: "flex-end", borderBottom: "1px solid #E9EDF1", padding: "0.75rem 1rem", marginBlockEnd: "1rem" }}>
                 <Button variant="outlined"
-                    className={styles.viewScoutingBtn}
+                    className={styles.viewScoutingBtn}  
                     onClick={() => {
                         if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
                             router.push(
@@ -202,14 +202,14 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                         : ""}
                 </div>}
 
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
                 <Button variant="outlined"
                     disabled={has_more ? false : true}
-                    sx={{ borderRadius: "20px", border: "1px solid green", color: "black" }}
+                    sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
                     onClick={() => {
                         getInstaScrollImageDetails(data[data?.length - 1]?._id)
                     }}
-                >{has_more ? "Load More!" : "No More Images"}</Button>
+                >{has_more ? "Load More" : "No More Images"}</Button>
             </div>
 
         </div>

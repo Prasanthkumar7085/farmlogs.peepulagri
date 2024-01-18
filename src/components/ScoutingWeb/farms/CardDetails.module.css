@@ -13,12 +13,14 @@
   gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
-.iconDiv{
-  border:1px solid #c0c0c0;
+
+.iconDiv {
+  border: 1px solid #c0c0c0;
   padding: 5px;
   border-radius: 3px;
   background-color: #fff;
 }
+
 .viewScoutingHeader h5 {
   margin: 0;
   color: #170F49;
@@ -33,17 +35,20 @@
   font-weight: 500;
   font-family: inherit;
 }
+
 .userDetails {
   font-size: 20px;
   line-height: 20px;
   font-weight: 500;
   font-family: inherit;
 }
+
 .dateandtime {
   font-size: 16px;
   line-height: 100%;
   color: #6a7185;
 }
+
 .textwrapper {
   align-self: stretch;
   height: 44px;
@@ -53,25 +58,29 @@
   justify-content: flex-start;
   gap: 8px;
 }
+
 .heading {
   margin: 0;
   position: relative;
   font-size: inherit;
-  line-height: 18px;
+  line-height: 1;
   font-weight: 500;
   font-family: inherit;
 }
+
 .acres,
 .heading,
 .lable {
   align-self: stretch;
 }
+
 .acres {
   margin: 0;
   position: relative;
   line-height: 18px;
   color: #a05148;
 }
+
 .lable {
   display: flex;
   flex-direction: column;
@@ -79,6 +88,7 @@
   justify-content: center;
   gap: 8px;
 }
+
 .locatorIcon {
   position: absolute;
   top: calc(50% - 14px);
@@ -86,6 +96,7 @@
   width: 56px;
   height: 65.33px;
 }
+
 .maplocation {
   align-self: stretch;
   position: relative;
@@ -95,9 +106,11 @@
   background-repeat: no-repeat;
   background-position: top;
 }
+
 .latitude407128N {
   color: #6a7185;
 }
+
 .text {
   margin: 0;
   align-self: stretch;
@@ -105,6 +118,7 @@
   line-height: 140%;
   font-weight: 500;
 }
+
 .cardDetails,
 .landMark,
 .landdetails,
@@ -114,10 +128,12 @@
   flex-direction: column;
   align-items: flex-start;
 }
+
 .mapdetails {
   margin: 0;
   justify-content: center;
 }
+
 .cardDetails,
 .landMark,
 .landdetails {
@@ -126,12 +142,14 @@
   font-size: 16px;
   color: #000;
 }
+
 .cardDetails,
 .landdetails {
   padding: 0 0 48px;
   font-size: 18px;
   color: #101828;
 }
+
 .cardDetails {
   border-radius: 8px;
   background-color: #fff;
@@ -141,15 +159,16 @@
   font-size: 24px;
   color: #344054;
   font-family: "Inter", sans-serif;
+  width: 100%;
 }
+
 .viewFarmDetailsCard {
-  margin: 1rem;
   display: flex;
-  flex-direction: row;
-  align-items:center ;
-justify-content: space-between;
-gap: 1.5rem;
-box-shadow: 4px 2px 9px 0px ;
+  justify-content: space-between;
+  gap: 2rem;
+  background-color: #ffffff;
+  width: calc(100% - 1.25rem);
+  padding-right: 2rem;
 }
 
 .viewfarmCard {
@@ -171,7 +190,7 @@ box-shadow: 4px 2px 9px 0px ;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 1rem;
   border-bottom: 1px solid #d3d3d3;
-  padding-block: 1.5rem;
+  padding-block: 0.75rem 1rem;
 }
 
 .eachFarmDetails:last-child {
@@ -179,8 +198,8 @@ box-shadow: 4px 2px 9px 0px ;
 }
 
 .detailsHeading {
-  color: #000;
-  font-size: clamp(16px, 3.5vw, 20px);
+  color: var(--gap-base);
+  font-size: clamp(16px, 1vw, 20px);
   font-family: "Inter", sans-serif;
   font-weight: 400;
   display: flex;
@@ -190,7 +209,7 @@ box-shadow: 4px 2px 9px 0px ;
 
 .aboutFarm {
   color: #000;
-  font-size: clamp(16px, 3.5vw, 20px);
+  font-size: clamp(16px, 1vw, 20px);
   font-family: "Inter", sans-serif;
   font-weight: 400;
 }
@@ -199,35 +218,41 @@ box-shadow: 4px 2px 9px 0px ;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-block: 2rem;
+  margin: 1rem 0;
   gap: 1rem;
 }
 
 .farmOverView {
-  display: flex;
+  display: grid;
+  grid-template-columns: 2rem 1fr;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.8rem;
-  border-radius: 90px;
-  width: 35%;
-  padding-block: 12px;
+  padding: 0 1rem;
+  border-radius: 2rem;
+  padding-block: 0.75em;
+  width: 100%;
 }
 
 .overViewText h6 {
   margin: 0;
   font-weight: 400;
-  font-size: clamp(16px, 3.5vw, 20px);
+  font-size: clamp(16px, 2vw, 24px);
   font-family: "Inter", sans-serif;
 }
 
 .overViewText span {
-  font-size: clamp(12px, 2.5vw, 14px);
+  font-size: clamp(12px, 1vw, 16px);
   font-family: "Inter", sans-serif;
 }
 
 .overViewText {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
+  gap: 1em;
+  max-width: 100%;
 }
 
 
@@ -252,8 +277,10 @@ box-shadow: 4px 2px 9px 0px ;
 .header {
   display: flex;
   align-items: center;
-    width: 100%;
-
+  justify-content: flex-start;
+  background-color: #45A845;
+  justify-content: space-between;
+  padding: 10px 1rem;
 }
 
 .headericon {
@@ -269,10 +296,4 @@ box-shadow: 4px 2px 9px 0px ;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-}
-
-.header {
-  background-color: #45A845;
-  justify-content: space-between;
-  padding: 10px 1rem;
 }

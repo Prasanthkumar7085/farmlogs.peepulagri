@@ -393,7 +393,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       <TableCell className={styles.tableHeaderCell}>Price(Rs)</TableCell>
                     </>
                     : ''}
-                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "PURCHASED") ? "none" : "" }}>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody >

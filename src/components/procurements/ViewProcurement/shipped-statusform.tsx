@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Button, Tooltip, Typography } from "@mui/material";
+import { Avatar, Button, Chip, Tooltip, Typography } from "@mui/material";
 import styles from "./shipped-statusform.module.css";
 import timePipe from "@/pipes/timePipe";
 import { useState } from "react";
@@ -15,11 +15,12 @@ import { useState } from "react";
 const ShippedStatusform = ({ data }: any) => {
 
   const [showTooltip, setShowTooltip] = useState<any>(false);
+  const [showMore, setShowMore] = useState<boolean>(false)
 
   const copyTextToClipboard = () => {
     navigator.clipboard.writeText(data?.tracking_details?.tracking_id)
       .then(() => {
-       
+
         setShowTooltip(true);
         setTimeout(() => {
           setShowTooltip(false);
@@ -34,22 +35,7 @@ const ShippedStatusform = ({ data }: any) => {
 
   return (
     <div className={styles.shippedstatusform}>
-      <Tooltip
-        title={data?.farm_ids
-          ?.map((item: any, index: any) => item.title)
-          .join(",")}
-      >
-        <div className={styles.farmname}>
-          {data?.farm_ids.length < 3
-            ? data?.farm_ids
-              ?.map((item: any, index: any) => item.title)
-              .join(",")
-            : data?.farm_ids
-              .slice(0, 2)
-              ?.map((item: any, index: any) => item.title)
-              .join(",") + "....."}
-        </div>
-      </Tooltip>
+
       <div className={styles.procurementDetailsViewCard}>
         <div className={styles.nameofoperation}>
           <h3 className={styles.procurementTitle}>{data?.title}</h3>
@@ -62,6 +48,80 @@ const ShippedStatusform = ({ data }: any) => {
             </div>
           </div>
         </div>
+        <div className={styles.pointofcontact}>
+          <label className={styles.PointOfContactTitle}>Farm Name</label>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {showMore == false ?
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                {data?.farm_ids.length < 10
+                  ? data?.farm_ids
+                    ?.map((item: any, index: any) => (
+                      <Chip
+                        size="small"
+                        color="success"
+                        key={index}
+                        label={item.title}
+                      />
+
+                    ))
+                  : data?.farm_ids
+                    .slice(0, 9)
+                    ?.map((item: any, index: any) => (
+                      <Chip
+                        size="small"
+                        color="success"
+                        key={index}
+                        label={item.title}
+                      />
+
+                    ))
+                }
+
+              </div> :
+              data?.farm_ids
+                ?.map((item: any, index: any) => (
+                  <Chip
+                    size="small"
+                    color="success"
+                    key={index}
+                    label={item.title}
+                  />
+
+                ))
+            }
+
+            <div
+              style={{ display: data?.farm_ids.length >= 10 ? "block" : "none" }}>
+              {showMore == true ? <Avatar
+                onClick={() => setShowMore(false)}
+
+                sx={{ width: 24, height: 24, fontSize: "12px" }}
+              >-</Avatar> :
+                <Avatar
+                  onClick={() => setShowMore(true)}
+
+                  sx={{ width: 24, height: 24, fontSize: "12px" }}
+                >+{data?.farm_ids.length - 2}</Avatar>}
+            </div>
+          </div>
+        </div>
+        {/* <Tooltip
+          title={data?.farm_ids
+            ?.map((item: any, index: any) => item.title)
+            .join(",")}
+        >
+          <div className={styles.farmname}>
+            {data?.farm_ids.length < 3
+              ? data?.farm_ids
+                ?.map((item: any, index: any) => item.title)
+                .join(",")
+              : data?.farm_ids
+                .slice(0, 2)
+                ?.map((item: any, index: any) => item.title)
+                .join(",") + "....."}
+          </div>
+        </Tooltip> */}
         <div className={styles.pointofcontact}>
           <label className={styles.PointOfContactTitle}>Point Of Contact</label>
           <h3 className={styles.contactPersonName}>
@@ -92,7 +152,7 @@ const ShippedStatusform = ({ data }: any) => {
           </div> : ""}
       </div>
 
-    </div>
+    </div >
   );
 };
 

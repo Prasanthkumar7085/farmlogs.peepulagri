@@ -35,7 +35,7 @@ const DescriptionContainer = ({
             multiline
             minRows={4}
             maxRows={4}
-            value={description}
+            value={description || data?.description}
             onChange={(e) => {
               const newValue = e.target.value.replace(/^\s+/, "");
               setDescription(newValue)
@@ -87,6 +87,7 @@ const DescriptionContainer = ({
                 setEditField("");
                 setEditFieldOrNot(false);
                 setDescription("")
+
               }}
             >
               <img src="/viewTaskIcons/cancel-icon.svg" alt="" width={"20px"} />

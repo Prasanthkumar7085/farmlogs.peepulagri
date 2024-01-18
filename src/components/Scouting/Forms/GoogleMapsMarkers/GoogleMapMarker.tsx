@@ -8,15 +8,14 @@ import { useSelector } from 'react-redux';
 import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
 import { Toaster, toast } from 'sonner';
 import LoadingComponent from '@/components/Core/LoadingComponent';
-const GoogleMapEditComponent = () => {
-
-
+const GoogleMapMarkerComponent = () => {
     const router = useRouter();
     const [data, setData] = useState<any>();
     const [loading, setLoading] = useState(true);
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
+    const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
     const [map, setMap] = useState(null);
     const [googleMaps, setGoogleMaps] = useState(null);
     const [polygon, setPolygon] = useState<any>(null);
@@ -30,11 +29,12 @@ const GoogleMapEditComponent = () => {
     const placesService: any = useRef(null);
 
     const [searchedPlaces, setSearchedPlaces] = useState<any>([]);
-    const [renderMap, setRenderMap] = useState<any>(false)
-    const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
-    const [polygonMarker, setPlygonMarker] = useState<any>()
+    const autocompleteRef: any = useRef(null);
 
-    //get the current location
+    const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
+
+
+    //add custom control for the live location button
     const addCustomControl = (map: any, maps: any) => {
         const controlDiv = document.createElement("div");
         const controlUI = document.createElement("img");
@@ -102,13 +102,13 @@ const GoogleMapEditComponent = () => {
         map.controls[maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
     };
 
-    //create the window for the 
+    //create Info for the google map
     const createInfoWindow = (map: any) => {
         const infoWindow = new (window as any).google.maps.InfoWindow();
         infoWindowRef.current = infoWindow;
     };
 
-    //maptype control event
+    //custom map type event
     const MapTypeControl = () => {
         const controlDiv = document.createElement("div");
 
@@ -146,27 +146,11 @@ const GoogleMapEditComponent = () => {
         return controlDiv;
     };
 
-    //create marker 
-    const createMarker = (map: any, maps: any, position: { lat: number, lng: number }, title: string) => {
-        const marker = new maps.Marker({
-            position: position,
-            map: map,
-            title: title,
-        });
-
-        marker.addListener("click", () => {
-            console.log("Marker clicked!");
-        });
-
-        return marker;
-    };
-
-    //google api event
+    //google api running event
     const handleApiLoaded = (map: any, maps: any) => {
         setMap(map);
         setGoogleMaps(maps);
         mapRef.current = map;
-
         addCustomControl(map, maps);
         createInfoWindow(map);
         placesService.current = new maps.places.PlacesService(map);
@@ -185,7 +169,7 @@ const GoogleMapEditComponent = () => {
         searchInput.setAttribute("placeholder", "Search for a place...");
         searchInput.style.marginBottom = "10px";
         searchInput.style.padding = "10px";
-        searchInput.style.width = "140%";
+        searchInput.style.width = "200%";
         searchInput.style.margin = "auto";
         searchInput.style.borderRadius = "20px"
 
@@ -201,15 +185,15 @@ const GoogleMapEditComponent = () => {
                 console.error("No place data available");
                 return;
             }
-
             setSearchedPlaces([place]);
             centerMapToPlace(place);
         };
 
         autocomplete.addListener("place_changed", onPlaceChanged);
 
+
         const drawingManager = new maps.drawing.DrawingManager({
-            drawingControl: polygonCoords?.length ? false : true,
+            drawingControl: true,
             drawingControlOptions: {
                 position: maps.ControlPosition.TOP_RIGHT,
                 drawingModes: [maps.drawing.OverlayType.POLYGON],
@@ -223,188 +207,95 @@ const GoogleMapEditComponent = () => {
         drawingManager.setMap(map);
         drawingManagerRef.current = drawingManager;
 
-        maps.event.addListener(drawingManager, 'overlaycomplete', (event: any) => {
-            if (event.type === 'polygon') {
+        maps.event.addListener(drawingManager, "overlaycomplete", (event: any) => {
+            if (event.type === "polygon") {
                 const paths = event.overlay.getPath().getArray();
-                const updatedCoords = paths.map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
+                const updatedCoords = paths.map((coord: any) => ({
+                    lat: coord.lat(),
+                    lng: coord.lng(),
+                }));
                 setPolygon(event.overlay);
                 setPolygonCoords(updatedCoords);
             }
         });
 
-
         // Create a new polygon
         const newPolygon = new maps.Polygon({
             paths: polygonCoords,
-            strokeColor: '#FF0000',
+            strokeColor: "#FF0000",
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: '#FF0000',
+            fillColor: "#FF0000",
             fillOpacity: 0.35,
-            editable: true, // Set the polygon as editable
-            draggable: true,
-            map: map // Assuming 'map' is your Google Map instance
-
-        });
-
-        maps.event.addListener(newPolygon, 'mouseup', () => {
-            const updatedCoords = newPolygon.getPath().getArray().map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
-            setPolygonCoords(updatedCoords);
         });
 
         // Set the polygon on the map
-        setRenderField(false);
-        setTimeout(() => {
-            setRenderField(true);
-        }, 0.1);
         newPolygon.setMap(map);
         setPolygon(newPolygon);
-
-        const markerPosition = { lat: polygonCoords[0].lat, lng: polygonCoords[0].lng }; // Replace with your desired coordinates
-        const markerTitle = "Hello World!";
-        const marker = createMarker(map, maps, markerPosition, markerTitle);
-
-
     };
 
-    //undo the last point of the polygon
+
+
+    //undo last point
     const undoLastPoint = () => {
         if (googleMaps && polygon) {
             const updatedCoords = [...polygonCoords];
             updatedCoords.pop(); // Remove the last point from the copied coordinates
             setPolygonCoords(updatedCoords);
 
-            const path = updatedCoords.map((coord: any) => new (googleMaps as any).LatLng(coord.lat, coord.lng));
+            const path = updatedCoords.map(
+                (coord: any) => new (googleMaps as any).LatLng(coord.lat, coord.lng)
+            );
             polygon.setPath(path);
         }
     };
 
-
-
-
-    //call the places api 
-    useEffect(() => {
-        if (mapRef.current) {
-            const { maps } = window.google;
-            // Initialize the PlacesService
-            placesService.current = new maps.places.PlacesService(mapRef.current.map_);
-        }
-    }, []);
-
-    //center the map when the place was selected
-    const centerMapToPlace = (place: any) => {
-        console.log(place, "placeewr")
-        if (mapRef.current && place && place.geometry && place.geometry.location) {
-            mapRef.current.panTo(place.geometry.location);
-        }
-    };
-
-    const calculateCenterOfPolygon = (coordinates: any) => {
-        if (coordinates.length === 0) {
-            return null; // Handle empty array case
-        }
-
-        // Calculate average latitude and longitude
-        const avgLat = coordinates.reduce((sum: any, coord: any) => sum + coord.lat, 0) / coordinates.length;
-        const avgLng = coordinates.reduce((sum: any, coord: any) => sum + coord.lng, 0) / coordinates.length;
-
-        return { lat: avgLat, lng: avgLng };
-    };
-
-
-
-    //get the farm details
-    const getFarmDataById = async () => {
-
-        setLoading(true)
-        try {
-            const response: any = await getFarmByIdService(
-                router.query.farm_id as string,
-                accessToken as string
-            );
-
-            if (response?.success) {
-                setData(response?.data);
-                if (response?.data?.geometry?.coordinates?.length) {
-                    let updatedArray = response?.data?.geometry?.coordinates.map((item: any) => {
-                        return {
-                            lat: item[0],
-                            lng: item[1]
-                        }
-                    })
-                    const centerPoint = calculateCenterOfPolygon(response?.data?.geometry?.coordinates);
-                    setPlygonMarker(centerPoint)
-                    setRenderField(false);
-                    setTimeout(() => {
-                        setRenderField(true);
-                    }, 0.1);
-                    setPolygonCoords(updatedArray)
-
-                }
-                else {
-                    setPolygonCoords([])
-                }
-            }
-        }
-        catch (err) {
-            console.error(err)
-        }
-        finally {
-            setLoading(false);
-        }
-    };
-
-
-    //edit the farm details(with the cordinates)
-    const edtiFarm = async () => {
-        setLoading(true);
-
-        try {
-            let editedData: any = {
-                title: data?.title,
-                area: data?.area,
-                location_id: data?.location_id?._id,
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": polygonCoords.map((obj: any) => Object.values(obj))
-                }
-            };
-
-            const response = await editFarmService(
-                editedData,
-                accessToken,
-                router.query.farm_id as string
-            );
-            if (response?.success) {
-                toast.success("Farm cordinates added successfully")
-                router.back()
-            }
-        }
-        catch (err) {
-            console.error(err)
-        }
-        finally {
-            setLoading(false);
-        }
-    };
-
-
-    //cleat all the polygon points
+    //clear all points when the polygon is draw
     const clearAllPoints = () => {
         if (googleMaps && polygon) {
             setPolygonCoords([]);
             polygon.setPath([]);
         }
-        setLoading(true)
-        setRenderMap(true)
-        setTimeout(() => {
-            setRenderMap(false)
-            setLoading(false)
-
-        }, 2000)
     }
 
-    //get the current location
+    //get the farm details
+    const getFarmDataById = async () => {
+        const response: any = await getFarmByIdService(
+            router.query.farm_id as string,
+            accessToken as string
+        );
+
+        if (response?.success) {
+            setData(response?.data);
+        }
+        setLoading(false);
+    };
+
+    //edit the farm details(with the cordinates)
+    const edtiFarm = async () => {
+        setLoading(true);
+        let editedData: any = {
+            title: data?.title,
+            area: data?.area,
+            location_id: data?.location_id?._id,
+            geometry: {
+                type: "Polygon",
+                coordinates: polygonCoords.map((obj: any) => Object.values(obj)),
+            },
+        };
+
+        const response = await editFarmService(
+            editedData,
+            accessToken,
+            router.query.farm_id as string
+        );
+        if (response?.success) {
+            router.back();
+            toast.success("Farm coordinates added successfully");
+        }
+        setLoading(false);
+    };
+
     const getCoords = async () => {
         navigator.geolocation.getCurrentPosition(showPosition);
     };
@@ -413,112 +304,124 @@ const GoogleMapEditComponent = () => {
         const longitude = position.coords.longitude;
         setLatLong({ lat: latitude, long: longitude });
     }
+
+
+    //call the single farms details
     useEffect(() => {
         if (router.isReady && accessToken) {
-            getCoords()
-            getFarmDataById()
+            getCoords();
+            getFarmDataById();
         }
+    }, [router.isReady, accessToken]);
 
-    }, [router.isReady, accessToken])
+    //call the places api
+    useEffect(() => {
+        if (mapRef.current) {
+            const { maps } = window.google;
+
+            // Initialize the PlacesService
+            placesService.current = new maps.places.PlacesService(
+                mapRef.current.map_
+            );
+        }
+    }, []);
+
+
+
+    const centerMapToPlace = (place: any) => {
+        if (mapRef.current && place && place.geometry && place.geometry.location) {
+            mapRef.current.panTo(place.geometry.location);
+        }
+    };
+
+    //drodown marker
+    const Marker = ({ text }: any) => (
+        <div
+            style={{
+                color: "white",
+                background: "grey",
+                padding: "5px 10px",
+                display: "inline-flex",
+                textAlign: "center",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "50%",
+                transform: "translate(-50%, -50%)",
+            }}
+        >
+            {text}
+        </div>
+    );
 
     return (
-        <div >
-            {router.pathname == `/farm/[farm_id]/map/edit` ? "" :
-                <div className={styles.header} id="header">
-                    <img
-                        className={styles.iconsiconArrowLeft}
-                        alt=""
-                        src="/iconsiconarrowleft.svg"
-                        onClick={() => router.back()}
-                    />
-                    <Typography className={styles.viewFarm}>
-                        Edit Map
-                    </Typography>
-                    <div className={styles.headericon} id="header-icon"></div>
-                </div>
-            }
+        <div>
 
-            {data?._id && renderMap == false ?
-                <div style={{ width: '100%', height: router.pathname == `/farm/[farm_id]/map/edit` ? "90vh" : '65vh', marginTop: router.pathname == `/farm/[farm_id]/map/edit` ? "5px" : "" }}>
-                    <GoogleMapReact
-                        bootstrapURLKeys={{
-                            key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
-                            libraries: ['drawing', "places"],
-                        }}
-                        defaultCenter={{
-                            "lat": polygonCoords[0]?.lat ? polygonCoords[0]?.lat : latLong?.lat,
-                            "lng": polygonCoords[0]?.lng ? polygonCoords[0]?.lng : latLong?.long
-                        }}
-                        options={{
-                            mapTypeId: mapType,
+            <div style={{ width: '100%', height: "100vh", marginTop: "5px" }}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{
+                        key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
+                        libraries: ["drawing", "places"],
+                    }}
+                    defaultCenter={{
+                        lat: latLong?.lat ? latLong?.lat : 15.1534671,
+                        lng: latLong?.long ? latLong?.long : 79.8478049,
+                    }}
+                    options={{
+                        mapTypeId: mapType,
 
-                            streetViewControl: true,
-                            rotateControl: true
-                        }}
-                        defaultZoom={router.pathname == `/farm/[farm_id]/map/edit` ? 20 : 16}
-                        yesIWantToUseGoogleMapApiInternals
-                        onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-                    >
+                        streetViewControl: true,
+                        rotateControl: true,
+                    }}
+                    defaultZoom={12}
+                    yesIWantToUseGoogleMapApiInternals
+                    onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                >
+                    {searchedPlaces.map((place: any) => (
+                        <Marker
+                            key={place.id}
+                            lat={place.geometry.location.lat()}
+                            lng={place.geometry.location.lng()}
+                            text={place.name}
+                        />
+                    ))}
+                </GoogleMapReact>
 
-                    </GoogleMapReact>
-
-                    {polygonCoords.length === 0 ? "" :
-                        <div style={{
+                {polygonCoords.length === 0 ? (
+                    ""
+                ) : (
+                    <div
+                        style={{
                             position: "absolute",
                             top: "22%",
                             right: "25%",
-
-                        }}>
-                            <Button
-                                onClick={clearAllPoints}
-                                variant="outlined"
-                                sx={{ backgroundColor: "orange" }}
-                                disabled={polygonCoords.length === 0}
-                            >
-                                <img src={"/blue-delete.png"} width={25} height={25} />      Clear
-                            </Button>
-
-                            <Button onClick={undoLastPoint} variant="outlined"
-                                sx={{ backgroundColor: "orange" }}
-                                disabled={polygonCoords.length === 0}>
-                                <img src={"/undo-icon.png"} width={25} height={25} />  Undo
-                            </Button>
-                        </div>}
-                </div> : ""}
-
-            {loading == false ?
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gridGap: "1.5rem",
-                    marginTop: "1.5rem"
-                }}>
-                    <Button
-                        className={styles.back}
-                        name="back"
-                        size="medium"
-                        variant="outlined"
-                        onClick={() => router.back()}
+                        }}
                     >
-                        Cancel
-                    </Button>
-                    <Button
-                        className={styles.submit}
-                        color="primary"
-                        name="submit"
-                        variant="contained"
-                        type="submit"
-                        disabled={polygonCoords?.length ? false : true}
-                        onClick={edtiFarm}
-                    >
-                        Update
-                    </Button>
-                </div> : ""}
+                        <Button
+                            onClick={clearAllPoints}
+                            variant="outlined"
+                            sx={{ backgroundColor: "orange" }}
+                            disabled={polygonCoords.length === 0}
+                        >
+                            <img src={"/blue-delete.png"} width={25} height={25} />      Clear
+                        </Button>
+
+                        <Button
+                            onClick={undoLastPoint}
+                            variant="outlined"
+                            sx={{ backgroundColor: "orange" }}
+                            disabled={polygonCoords.length === 0}
+                        >
+                            <img src={"/undo-icon.png"} width={25} height={25} /> Undo
+
+                        </Button>
+                    </div>
+                )}
+            </div>
+
             <LoadingComponent loading={loading} />
             <Toaster richColors position="top-right" closeButton />
-
         </div>
-    )
+    );
 };
 
-export default GoogleMapEditComponent;
+export default GoogleMapMarkerComponent;

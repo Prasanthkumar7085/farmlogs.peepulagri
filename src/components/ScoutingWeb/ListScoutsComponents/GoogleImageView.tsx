@@ -12,6 +12,7 @@ import { useCookies } from "react-cookie";
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkeleton";
 const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) => {
 
     const accessToken = useSelector(
@@ -105,7 +106,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
                 <div className={styles.imageUploadingDetails}>
-                    <Avatar sx={{ color: "#fff", background: "#d94841", width: "22px", height: "22px", fontSize: "10px" }}>{"R"}</Avatar>
+                    <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{"R"}</Avatar>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                         <div className={styles.uploadedByName}>{"RAJU"}</div>
                         <div>
@@ -126,15 +127,15 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                         }}>
                         <KeyboardArrowLeftIcon />
                     </IconButton>
-                    <IconButton onClick={() => {
-                        if ((data?.length - 1) == imageIndex) {
-                            getInstaScrollImageDetails(data[imageIndex]?._id)
-                        }
-                        else {
+                    <IconButton
+                        disabled={imageIndex == data?.length ? true : false}
+
+                        onClick={() => {
+
                             setImageIndex((prev: any) => prev + 1)
                             setSelectedItemDetails(data[imageIndex])
-                        }
-                    }}>
+
+                        }}>
                         <KeyboardArrowRightIcon />
                     </IconButton>
                     <IconButton onClick={() => setRightBarOpen(false)}>
@@ -172,36 +173,36 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
             </div>
 
             <hr></hr>
+            {loading ? <GoogleViewSkeleton /> :
+                <div className={styles.allScoutImgContainer}>
+                    {data?.length
+                        ? data?.map(
+                            (imageItem: any, index: number) => {
 
-            <div className={styles.allScoutImgContainer}>
-                {data?.length
-                    ? data?.map(
-                        (imageItem: any, index: number) => {
 
-
-                            return (
-                                <div
-                                    className={styles.singleScoutImgIngalley}
-                                    key={index}
-                                    onClick={() => {
-                                        setImageIndex(index)
-                                        setSelectedItemDetails(imageItem)
-                                    }}
-                                >
-                                    <img
-                                        src={
-                                            imageItem?.url
-                                        }
-                                        height={100}
-                                        width={100}
-                                        alt={imageItem.key}
-                                    />
-                                </div>
-                            );
-                        }
-                    )
-                    : ""}
-            </div>
+                                return (
+                                    <div
+                                        className={styles.singleScoutImgIngalley}
+                                        key={index}
+                                        onClick={() => {
+                                            setImageIndex(index)
+                                            setSelectedItemDetails(imageItem)
+                                        }}
+                                    >
+                                        <img
+                                            src={
+                                                imageItem?.url
+                                            }
+                                            height={100}
+                                            width={100}
+                                            alt={imageItem.key}
+                                        />
+                                    </div>
+                                );
+                            }
+                        )
+                        : ""}
+                </div>}
 
             <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                 <Button variant="outlined"

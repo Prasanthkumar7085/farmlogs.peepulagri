@@ -156,6 +156,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           statusChange={onStatusChangeEvent}
           setDialogOpen={setDialogOpen}
           loading={loading}
+
         />}
       <TrackingDetailsDilog
         open={openTrackingDilog}

@@ -93,7 +93,12 @@ const AddMaterialDrawer = ({
                     <h3>Add Material</h3>
                     <IconButton
                         onClick={() => {
-
+                            setName("");
+                            setRequiredQty("");
+                            setRequiredUnits("");
+                            setAvailableQty("");
+                            setAvailableUnits("");
+                            setAddMaterialOpen(false)
                         }}
                     >
                         <Clear />

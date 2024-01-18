@@ -368,13 +368,13 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               setAddMaterial(true)
               setAddMaterialOpen(true);
             }}>Add Materials</Button>
-          {data?.status == "APPROVED" ? "" :
+          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" ? "" :
             <Button variant="contained"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
               onClick={() => {
                 approveAllMaterials()
 
-              }}>Approve All</Button>}
+              }}>Approve Materials</Button>}
         </div>
 
         {materials?.length ? (

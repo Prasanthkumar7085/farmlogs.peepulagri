@@ -129,9 +129,9 @@
   overflow-x: hidden;
   margin-top: 1rem;
   width: 50%;
-  box-shadow: 0px 0px 12px 12px #0000001c;
-  background-color: #fff;
+  background-color: var(--white, #ffffff);
   border-radius: 7px;
+  box-shadow: 4px 4px 13px 0px rgba(0, 0, 0, 0.17);
 }
 .AllScoutsRightWebPage::-webkit-scrollbar {
   background: transparent;
@@ -357,7 +357,6 @@
   flex-shrink: 1;
   height: 150px;
   border-radius: 3px;
-  box-shadow: 0 0 2px 0 #0000000d;
   background-color: #f5f5f5;
   cursor: pointer;
 }
@@ -371,7 +370,7 @@
 
 /* AllScoutspage agrologin */
 .AllScoutsPageWeb {
-  width: calc(100% - 4rem);
+  width: calc(100% - 2rem);
   padding: 1rem;
   background-color: var(--white, #ffffff);
   /* background-color: var(--background, #F5F7FA); */

@@ -103,7 +103,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
     return (
         <div >
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div className={styles.viewImgInfoHeader}>
 
                 <div className={styles.imageUploadingDetails}>
                     <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{"R"}</Avatar>
@@ -117,7 +117,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                     </div>
                 </div>
 
-                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title}/{selectedImage?._id ? selectedImage?.crop_id?.slug : imageDetails?.crop_id?.slug}</Typography>
+                <Typography variant="subtitle1">{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title}/{selectedImage?._id ? selectedImage?.crop_id?.slug : imageDetails?.crop_id?.slug}</Typography>
                 <div>
                     <IconButton
                         disabled={imageIndex == 0 ? true : false}
@@ -144,7 +144,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                 </div>
 
             </div>
-            <hr></hr>
 
             <div className={styles.singleScoutImg}>
                 <img
@@ -155,9 +154,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                 />
             </div>
 
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px", }}>
+            <div style={{ display: "flex", justifyContent: "flex-end", borderBottom: "1px solid #E9EDF1", padding: "0.75rem 1rem", marginBlockEnd: "1rem" }}>
                 <Button variant="outlined"
-                    sx={{ borderRadius: "20px", backgroundColor: "gray", color: "black" }}
+                    className={styles.viewScoutingBtn}
                     onClick={() => {
                         if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
                             router.push(
@@ -172,7 +171,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                     }}><RemoveRedEyeIcon />View Image</Button>
             </div>
 
-            <hr></hr>
             {loading ? <GoogleViewSkeleton /> :
                 <div className={styles.allScoutImgContainer}>
                     {data?.length

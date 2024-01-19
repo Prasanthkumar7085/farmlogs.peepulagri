@@ -13,6 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkeleton";
+import SouthIcon from '@mui/icons-material/South';
 const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) => {
 
     const accessToken = useSelector(
@@ -119,9 +120,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
             <div className={styles.viewImgInfoHeader}>
 
                 <div className={styles.imageUploadingDetails}>
-                    <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{"R"}</Avatar>
+                    <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                        <div className={styles.uploadedByName}>{"RAJU"}</div>
+                        <div className={styles.uploadedByName}>{selectedImage?._id ? selectedImage?.uploaded_by?.name : imageDetails?.uploaded_by?.name}</div>
                         <div>
                             <Typography variant="caption" className={styles.imageUploadedTime} >
                                 {/* <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={15} height={15} /> */}
@@ -223,7 +224,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                         getInstaScrollImageDetails(data[data?.length - 1]?._id)
                         setSelectedItemDetails(data[data?.length - 1])
                     }}
-                >{has_more ? "Load More" : "No More Images"}</Button>
+                >{has_more ? <>Load More< SouthIcon fontSize="small" /></> : "No More Images"}</Button>
             </div>
 
         </div>

@@ -167,12 +167,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                     onClick={() => {
                         if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
                             router.push(
-                                `/scouts/farm/${router.query.crop_id}/crops/${router.query.crop_id}/${imageDetails?._id}?location_id=${router.query.location_id}`
+                                `/scouts/farm/${router.query.crop_id}/crops/${router.query.crop_id}/${selectedImage?._id ? selectedImage?._id : imageDetails?._id}?location_id=${router.query.location_id}`
                             );
                         }
                         else {
                             router.push(
-                                `/scouts/${imageDetails?._id}`
+                                `/scouts/${selectedImage?._id ? selectedImage?._id : imageDetails?._id}`
                             );
                         }
                     }}><RemoveRedEyeIcon />View Image</Button>

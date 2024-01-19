@@ -22,7 +22,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
     const router = useRouter();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false)
-    const [data, setData] = useState<any>()
+    const [data, setData] = useState<any>([])
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>()
     const [imageIndex, setImageIndex] = useState<any>(0)
@@ -89,7 +89,13 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
 
                 else {
                     setHasMore(false);
-                    setData(responseData?.data);
+                    let temp = [...data, ...responseData?.data]
+                    console.log(temp, "dfsdd")
+                    const uniqueObjects = Array.from(
+                        temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+                    );
+
+                    setData(uniqueObjects);
                 }
             } else if (responseData?.statusCode == 403) {
                 await logout();
@@ -215,6 +221,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                     sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
                     onClick={() => {
                         getInstaScrollImageDetails(data[data?.length - 1]?._id)
+                        setSelectedItemDetails(data[data?.length - 1])
                     }}
                 >{has_more ? "Load More" : "No More Images"}</Button>
             </div>

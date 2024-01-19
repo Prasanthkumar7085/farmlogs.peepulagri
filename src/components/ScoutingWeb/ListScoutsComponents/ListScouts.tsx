@@ -577,9 +577,11 @@ const ListScouts: FunctionComponent = () => {
   }, [searchString]);
 
   const onClickAttachment = (attachment: string, farmId: string, cropId: string, location_id: string) => {
+
     dispatch(QueryParamsForScouting(queries))
     setRightBarOpen(true)
     setImageDetails(attachment)
+
     // if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
     //   router.push(
     //     `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}?location_id=${router.query.location_id}`
@@ -788,6 +790,8 @@ const ListScouts: FunctionComponent = () => {
               rightBarOpen={rightBarOpen}
               setRightBarOpen={setRightBarOpen}
               imageDetails={imageDetails}
+              setImageDetails={setImageDetails}
+
 
             />
           </div> : ""}

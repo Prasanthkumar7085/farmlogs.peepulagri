@@ -95,6 +95,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const [deleteMaterialOpen, setDeleteMaterialOpen] = useState(false);
   const [deleteMaterialId, setDeleteMaterialId] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [rejectDilogOpen, setRejectDilogOpen] = useState<boolean>()
 
   //logout function for 403 error
   const logout = async () => {
@@ -362,13 +363,17 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
-          <Button variant="outlined"
-            sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
-            onClick={() => {
-              setAddMaterial(true)
-              setAddMaterialOpen(true);
-            }}>Add Materials</Button>
-          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" ? "" :
+          {data?.status == "APPROVED" ?
+            "" :
+            <Button variant="outlined"
+              sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
+              onClick={() => {
+                setAddMaterial(true)
+                setAddMaterialOpen(true)
+              }}>Add Materials</Button>
+          }
+
+          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || loading ? "" :
             <Button variant="contained"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
               onClick={() => {

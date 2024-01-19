@@ -4,7 +4,7 @@ import Image from "next/image";
 import timePipe from "@/pipes/timePipe";
 import { useRouter } from "next/router";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
@@ -14,7 +14,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkeleton";
 import SouthIcon from '@mui/icons-material/South';
-const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) => {
+const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails }: any) => {
 
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
@@ -27,6 +27,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>(imageDetails)
     const [imageIndex, setImageIndex] = useState<any>(0)
+    console.log(selectedImage, "sdfsd")
+    console.log(imageIndex, "indez")
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
@@ -48,11 +50,19 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
         }
     }, [imageIndex])
 
-
+    const ItemRef = useRef<HTMLDivElement>(null);
+    const scrollToItem = () => {
+        if (ItemRef.current) {
+            ItemRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest",
+            });
+        }
+    };
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {
-        setSelectedItemDetails(null)
         setLoading(true);
         let options = {
             method: "GET",
@@ -62,7 +72,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
         };
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${imageDetails.crop_id?._id}/images/${lastImage_id}/pre/12`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${selectedImage?.crop_id?._id || imageDetails.crop_id?._id}/images/${1}/${data?.length + 12}`,
                 options
             );
             const responseData = await response.json();
@@ -75,6 +85,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                         const uniqueObjects = Array.from(
                             temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                         );
+
 
                         setData(uniqueObjects);
                     }
@@ -108,7 +119,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
         }
     };
 
-    const getAllImagesDetails = async (lastImage_id: any) => {
+    const getAllImagesDetails = async (limit: any, image: any) => {
+
         setLoading(true);
         let options = {
             method: "GET",
@@ -118,7 +130,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
         };
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${imageDetails.crop_id?._id}/images/${lastImage_id}/pre/12`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${image?.crop_id?._id || imageDetails.crop_id?._id}/images/${1}/${limit ? limit : 12}`,
                 options
             );
             const responseData = await response.json();
@@ -130,8 +142,15 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                 const uniqueObjects = Array.from(
                     temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                 );
+                if (limit) {
+                    const removeSelectedImage = uniqueObjects.filter((item: any, index) => item._id !== image?._id)
+                    setData(removeSelectedImage);
+                }
+                else {
+                    const removeSelectedImage = uniqueObjects.filter((item: any, index) => item._id !== imageDetails?._id)
+                    setData(removeSelectedImage);
+                }
 
-                setData(uniqueObjects);
 
             }
 
@@ -144,12 +163,10 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
     }
 
     useEffect(() => {
-        setSelectedItemDetails(null)
 
         if (imageDetails?._id) {
-            getAllImagesDetails(imageDetails?._id)
-
-
+            setSelectedItemDetails(null)
+            getAllImagesDetails("", "")
         }
     }, [imageDetails?._id])
 
@@ -158,7 +175,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
 
             <div className={styles.viewImgInfoHeader}>
 
-                <div className={styles.imageUploadingDetails}>
+                <div className={styles.imageUploadingDetails} ref={ItemRef}>
                     <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                         <div className={styles.uploadedByName}>{selectedImage?._id ? selectedImage?.uploaded_by?.name : imageDetails?.uploaded_by?.name}</div>
@@ -177,6 +194,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                         onClick={() => {
                             setImageIndex((prev: any) => prev - 1)
                             setSelectedItemDetails(data[imageIndex])
+
                         }}>
                         <KeyboardArrowLeftIcon />
                     </IconButton>
@@ -185,8 +203,16 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
 
                         onClick={() => {
 
-                            setImageIndex((prev: any) => prev + 1)
-                            setSelectedItemDetails(data[imageIndex])
+                            if (selectedImage?._id) {
+                                setImageIndex((prev: any) => prev + 1)
+                                setSelectedItemDetails(data[imageIndex])
+
+                            }
+                            else {
+                                setImageIndex(0)
+                                setSelectedItemDetails(data[0])
+                            }
+
 
                         }}>
                         <KeyboardArrowRightIcon />
@@ -248,8 +274,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                                         className={styles.singleScoutImgIngalley}
                                         key={index}
                                         onClick={() => {
+                                            scrollToItem()
                                             setImageIndex(index)
                                             setSelectedItemDetails(imageItem)
+                                            setImageDetails(null)
+                                            getAllImagesDetails(data?.length + 1, imageItem)
                                         }}
                                     >
                                         <img
@@ -272,8 +301,13 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                     disabled={has_more ? false : true}
                     sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
                     onClick={() => {
-                        getInstaScrollImageDetails(data[data?.length - 1]?._id)
-                        setSelectedItemDetails(data[imageIndex])
+                        if (selectedImage?._id) {
+                            setSelectedItemDetails(data[imageIndex])
+                            getInstaScrollImageDetails("")
+                        } else {
+                            getInstaScrollImageDetails("")
+
+                        }
                     }}
                 >{has_more ? <>Load More< SouthIcon fontSize="small" /></> : "No More Images"}</Button>
             </div>

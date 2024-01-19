@@ -102,7 +102,7 @@ const ShippedStatusform = ({ data }: any) => {
                   onClick={() => setShowMore(true)}
 
                   sx={{ width: 24, height: 24, fontSize: "12px" }}
-                >+{data?.farm_ids.length - 2}</Avatar>}
+                >+{data?.farm_ids.length - 9}</Avatar>}
             </div>
           </div>
         </div>

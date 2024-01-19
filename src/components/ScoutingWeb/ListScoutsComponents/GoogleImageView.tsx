@@ -26,6 +26,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>()
     const [imageIndex, setImageIndex] = useState<any>(0)
+    console.log(imageIndex, "index")
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
@@ -40,6 +41,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
             console.error(err);
         }
     };
+
+    useEffect(() => {
+        if (data?.length) {
+            setSelectedItemDetails(data[imageIndex])
+        }
+    }, [imageIndex])
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {
@@ -120,7 +127,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                 <Typography variant="subtitle1">{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title}/{selectedImage?._id ? selectedImage?.crop_id?.slug : imageDetails?.crop_id?.slug}</Typography>
                 <div>
                     <IconButton
-                        disabled={imageIndex == 0 ? true : false}
+                        disabled={loading || imageIndex == 0 ? true : false}
                         onClick={() => {
                             setImageIndex((prev: any) => prev - 1)
                             setSelectedItemDetails(data[imageIndex])
@@ -128,7 +135,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                         <KeyboardArrowLeftIcon />
                     </IconButton>
                     <IconButton
-                        disabled={imageIndex == data?.length ? true : false}
+                        disabled={loading || imageIndex == data?.length - 1 ? true : false}
 
                         onClick={() => {
 
@@ -156,7 +163,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
 
             <div style={{ display: "flex", justifyContent: "flex-end", borderBottom: "1px solid #E9EDF1", padding: "0.75rem 1rem", marginBlockEnd: "1rem" }}>
                 <Button variant="outlined"
-                    className={styles.viewScoutingBtn}  
+                    className={styles.viewScoutingBtn}
                     onClick={() => {
                         if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
                             router.push(

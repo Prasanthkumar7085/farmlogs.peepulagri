@@ -184,8 +184,8 @@ const GoogleMapViewComponent = () => {
             strokeWeight: 2,
             fillColor: '#FF0000',
             fillOpacity: 0.35,
-            editable: true, // Set the polygon as editable
-            draggable: true,
+            editable: false, // Set the polygon as editable
+            draggable: false,
             map: map // Assuming 'map' is your Google Map instance
 
         });

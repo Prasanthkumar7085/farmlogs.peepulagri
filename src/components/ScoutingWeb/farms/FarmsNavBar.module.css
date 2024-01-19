@@ -130,9 +130,10 @@
   margin-top: 1rem;
   width: 50%;
   background-color: var(--white, #ffffff);
-  border-radius: 0px;
+  border-radius: 10px;
   border: 1px solid #E9EDF1;
   border-bottom: 0;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(0, 0, 0, 0.2);
 }
 .AllScoutsRightWebPage::-webkit-scrollbar {
   background: transparent;

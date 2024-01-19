@@ -31,6 +31,7 @@ import ScoutingDailyImages from "./ScoutingDailyImages";
 import { errorMonitor } from "events";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import GoogleImageView from "./GoogleImageView";
+import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
 
 interface ApiMethodProps {
   page: string | number;
@@ -799,12 +800,13 @@ const ListScouts: FunctionComponent = () => {
         seletectedItemDetails={seletectedItemDetails}
       />
       {!loading ? (
-        <TablePaginationComponentForScouts
+        <TablePaginationComponent
           paginationDetails={paginationDetails}
           capturePageNum={capturePageNum}
           captureRowPerItems={captureRowPerItems}
           values="Scouts"
         />
+
       ) : (
         ""
       )}

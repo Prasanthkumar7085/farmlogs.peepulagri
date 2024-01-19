@@ -25,9 +25,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
     const [loading, setLoading] = useState<boolean>(false)
     const [data, setData] = useState<any>([])
     const [has_more, setHasMore] = useState<any>()
-    const [selectedImage, setSelectedItemDetails] = useState<any>()
+    const [selectedImage, setSelectedItemDetails] = useState<any>(imageDetails)
     const [imageIndex, setImageIndex] = useState<any>(0)
-    console.log(imageIndex, "index")
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
@@ -48,6 +47,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
             setSelectedItemDetails(data[imageIndex])
         }
     }, [imageIndex])
+
+
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {
@@ -91,7 +92,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                 else {
                     setHasMore(false);
                     let temp = [...data, ...responseData?.data]
-                    console.log(temp, "dfsdd")
                     const uniqueObjects = Array.from(
                         temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                     );
@@ -108,9 +108,48 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
         }
     };
 
+    const getAllImagesDetails = async (lastImage_id: any) => {
+        setLoading(true);
+        let options = {
+            method: "GET",
+            headers: new Headers({
+                authorization: accessToken,
+            }),
+        };
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${imageDetails.crop_id?._id}/images/${lastImage_id}/pre/9`,
+                options
+            );
+            const responseData = await response.json();
+            if (responseData.success) {
+
+                setHasMore(responseData?.has_more);
+                let temp = [...responseData?.data]
+
+                const uniqueObjects = Array.from(
+                    temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
+                );
+
+                setData(uniqueObjects);
+
+            }
+
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
+        setSelectedItemDetails(null)
+
         if (imageDetails?._id) {
-            getInstaScrollImageDetails(imageDetails?._id)
+            getAllImagesDetails(imageDetails?._id)
+
+
         }
     }, [imageDetails?._id])
 
@@ -222,7 +261,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                     sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
                     onClick={() => {
                         getInstaScrollImageDetails(data[data?.length - 1]?._id)
-                        setSelectedItemDetails(data[data?.length - 1])
+                        setSelectedItemDetails(data[imageIndex])
                     }}
                 >{has_more ? <>Load More< SouthIcon fontSize="small" /></> : "No More Images"}</Button>
             </div>

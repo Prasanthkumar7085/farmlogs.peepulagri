@@ -605,8 +605,8 @@ const ListScouts: FunctionComponent = () => {
         location_id: value?._id as string
       });
       getAllExistedScouts({
-        page: router.query.page as string,
-        limit: router.query.limit as string,
+        page: 1,
+        limit: 50,
         farmId: '',
         userId: router.query.user_id as string,
         fromDate: "",
@@ -627,8 +627,8 @@ const ListScouts: FunctionComponent = () => {
         location_id: ""
       });
       getAllExistedScouts({
-        page: router.query.page as string,
-        limit: router.query.limit as string,
+        page: 1,
+        limit: 50,
         farmId: '',
         userId: router.query.user_id as string,
         fromDate: "",
@@ -757,30 +757,30 @@ const ListScouts: FunctionComponent = () => {
               );
             })
             : ""}
-          {!data?.length && !loading ? (
-            <div
-              id={styles.noData}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "calc(100vh - 150px)",
-              }}
-            >
-              <ImageComponent
-                src="/emty-folder-image.svg"
-                alt="empty folder"
-                width={200}
-                height={150}
-              />
-              <Typography className={styles.subTitle}>No Scoutings</Typography>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
 
+        </div>
+        {!data?.length && !loading ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "auto"
+
+            }}
+          >
+            <ImageComponent
+              src="/emty-folder-image.svg"
+              alt="empty folder"
+              width={200}
+              height={150}
+            />
+            <Typography className={styles.subTitle}>No Scoutings</Typography>
+          </div>
+        ) : (
+          ""
+        )}
         {rightBarOpen ?
           <div className={rightBarOpen ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
             <GoogleImageView

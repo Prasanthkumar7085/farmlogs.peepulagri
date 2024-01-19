@@ -62,7 +62,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
         };
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${imageDetails.crop_id?._id}/images/${lastImage_id}/pre/9`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${imageDetails.crop_id?._id}/images/${lastImage_id}/pre/12`,
                 options
             );
             const responseData = await response.json();
@@ -118,7 +118,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
         };
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/crops/${imageDetails.crop_id?._id}/images/${lastImage_id}/pre/9`,
+                `${process.env.NEXT_PUBLIC_API_URL}/crops/${imageDetails.crop_id?._id}/images/${lastImage_id}/pre/12`,
                 options
             );
             const responseData = await response.json();
@@ -164,8 +164,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails }: any) =
                         <div className={styles.uploadedByName}>{selectedImage?._id ? selectedImage?.uploaded_by?.name : imageDetails?.uploaded_by?.name}</div>
                         <div>
                             <Typography variant="caption" className={styles.imageUploadedTime} >
-                                {/* <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={15} height={15} /> */}
-                                {timePipe(selectedImage?.uploaded_at ? selectedImage?.uploaded_at : imageDetails?.uploaded_at, "DD MMM YY hh:mm A")}</Typography>
+                                <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={15} height={15} />
+                                {timePipe(selectedImage?.uploaded_at ? selectedImage?.uploaded_at : imageDetails?.uploaded_at, "DD MMM YYYY hh:mm A")}</Typography>
                         </div>
                     </div>
                 </div>

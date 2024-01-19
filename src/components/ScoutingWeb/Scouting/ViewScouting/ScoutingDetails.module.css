@@ -317,24 +317,27 @@
   border-radius: 80px !important;
   font-weight: 500 !important;
   min-width: inherit !important;
+  padding:5px !important;
 }
 
 .prevBtn {
-  background-color: #fff !important;
-
+  background-color: rgba(0, 0, 0, 0.20)!important;
+    border: 2px solid #fff !important;
 }
 
 .nextBtn {
-  background-color: #fff !important;
+  background-color: rgba(0, 0, 0, 0.20) !important;
+    border: 2px solid #fff !important
+    ;
 }
-
 .prevBtn:hover {
-  background-color: #fff !important;
-
+  background-color: rgba(0, 0, 0, 0.20) !important;
+  border: 2px solid #fff !important;
 }
 
 .nextBtn:hover {
-  background-color: #fff !important;
+  background-color: rgba(0, 0, 0, 0.20) !important;
+  border: 2px solid #fff !important;
 }
 
 .disableBtn {

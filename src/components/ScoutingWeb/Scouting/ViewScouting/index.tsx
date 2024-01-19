@@ -36,6 +36,7 @@ const SingleScoutViewDetails = () => {
   const [currentIndex, setCurrentIndex] = useState<any>(0)
   const [prevHasMore, setPrevHasMore] = useState<any>(false)
   const [prevData, setPrevData] = useState<any>()
+
   const [reachedStatus, setReachedStatus] = useState<any>(false)
 
   const logout = async () => {
@@ -122,7 +123,7 @@ const SingleScoutViewDetails = () => {
       if (responseData.success) {
         if (responseData?.data?.length == 1) {
           setLoading(false);
-          toast.error("You have reached to end");
+          // toast.error("You have reached to end");
           // return;
         }
         // knowAboutPrevImageDetails(responseData?.data[0]?._id)
@@ -278,7 +279,7 @@ const SingleScoutViewDetails = () => {
                     }}
                     disabled={loading || (prevHasMore == false && prevData.length == 1) ? true : false}
                   >
-                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: "red" }} />
+                    <KeyboardArrowLeftIcon sx={{ fontSize: "2.2rem", color: "#fff" }} />
                   </Button>
                   <Button
                     className={(hasMore == false && data?.length == 1) ? styles.disableBtn : styles.prevBtn}
@@ -307,7 +308,7 @@ const SingleScoutViewDetails = () => {
 
 
 
-                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: "red" }} />
+                    <KeyboardArrowRightIcon sx={{ fontSize: "2.2rem", color: "#fff" }} />
                   </Button>
                 </div>
 
@@ -330,7 +331,7 @@ const SingleScoutViewDetails = () => {
                 <ReactPanZoom alt={prevData?.length ? prevData[0]?.key : "" ? `Image ${prevData?.length ? prevData[0]?.key : ""}` : "Image"} image={prevData?.length ? prevData[1]?.url : ''} />
                 <div className={styles.imgPrevNextBtnGrp}  >
                   <Button
-                    className={(prevHasMore == false && prevData?.length == 1) ? styles.disableBtn : styles.prevBtn}
+                    className={prevHasMore == false ? styles.disableBtn : styles.prevBtn}
                     onClick={() => {
                       setCurrentIndex((pre: any) => pre - 1)
                       getInstaScrollImagePrevDetails(prevData?.length ? prevData[1]?._id : "")
@@ -351,10 +352,10 @@ const SingleScoutViewDetails = () => {
 
 
                     }}
-                    disabled={loading || (prevHasMore == false && prevData?.length == 1) ? true : false}
+                    disabled={loading || prevHasMore == false ? true : false}
 
                   >
-                    <KeyboardArrowLeftIcon sx={{ fontSize: "2rem", color: "red" }} />
+                    <KeyboardArrowLeftIcon sx={{ fontSize: "2.2rem", color: "#fff" }} />
                   </Button>
                   <Button
                     className={hasMore ? styles.nextBtn : styles.nextBtn}
@@ -381,7 +382,7 @@ const SingleScoutViewDetails = () => {
 
                   >
 
-                    <KeyboardArrowRightIcon sx={{ fontSize: "2rem", color: "red" }} />
+                    <KeyboardArrowRightIcon sx={{ fontSize: "2.2rem", color: "#fff" }} />
                   </Button>
                 </div>
 

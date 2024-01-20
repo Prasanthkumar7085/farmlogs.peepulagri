@@ -26,9 +26,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [data, setData] = useState<any>([])
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>(imageDetails)
+
+    console.log(selectedImage, "sdfd")
     const [imageIndex, setImageIndex] = useState<any>(0)
-    console.log(selectedImage, "sdfsd")
-    console.log(imageIndex, "indez")
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
@@ -302,9 +302,10 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
                     onClick={() => {
                         if (selectedImage?._id) {
-                            setSelectedItemDetails(data[imageIndex])
+                            setSelectedItemDetails(selectedImage)
                             getInstaScrollImageDetails("")
                         } else {
+                            setSelectedItemDetails(data[imageIndex])
                             getInstaScrollImageDetails("")
 
                         }

@@ -262,11 +262,14 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
     }
   }, [editMaterialOpen])
 
+
+  //calculate the sumof prices
   const sumOfPrices = (details: any) => {
     const sum = details.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.price, 0);
 
     return sum;
   }
+
   //to captlize the upercase text
   const capitalizeFirstLetter = (string: any) => {
     let temp = string.toLowerCase();
@@ -332,7 +335,16 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         const responseData = await response.json();
         if (response.ok) {
           toast.success(responseData?.message)
+
+          const rejectedData = materials.filter((item: any, index: number) => item?.status == "REJECTED");
+
+
+          if (rejectedData.length == materials.length - 1) {
+            procurementStatusChange("PENDING")
+          }
+
           getAllProcurementMaterials()
+
         } else {
           return { message: 'Something Went Wrong', status: 500, details: responseData }
         }

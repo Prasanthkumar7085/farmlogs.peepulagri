@@ -63,6 +63,8 @@ const RejectReasonDilog = ({ dialog, setRejectDilogOpen, afterRejectingMaterial,
                     <Button className="successBtn" onClick={() => {
                         afterRejectingMaterial(remarks)
                         setRejectDilogOpen(false)
+                        setRemarks('')
+
 
                     }} >{rejectLoading ?
                         <ImageComponent src='/loading-blue.svg' width={30} height={30} alt='loading' />

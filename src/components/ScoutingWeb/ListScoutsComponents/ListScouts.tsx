@@ -327,8 +327,15 @@ const ListScouts: FunctionComponent = () => {
 
       } = queryParams;
 
-      let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
-      router.push({ query: temp });
+      if (paramasFromStore?.image_id) {
+        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
+        router.push({ query: temp });
+      }
+      else {
+        let temp = { ...queryParams }
+        router.push({ query: temp });
+      }
+
       setQueries(queryParams)
       url = prepareURLEncodedParams(url, restParams);
       const response = await getAllExistedScoutsService({
@@ -586,7 +593,14 @@ const ListScouts: FunctionComponent = () => {
     setImageDetails(attachment);
     let temp = { ...queries, view: true, image_id: attachment?._id }
     dispatch(QueryParamsForScouting(temp))
-    router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id } });
+    if (attachment?._id) {
+      router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id } });
+
+    }
+    else {
+      router.replace({ pathname: "/scouts", query: { ...router.query } });
+
+    }
 
 
     // if (router.query.farm_id || router.query.crop_id || router.query.location_id) {

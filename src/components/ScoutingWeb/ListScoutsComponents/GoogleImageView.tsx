@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { use, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { QueryParamsForScouting, removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import { useCookies } from "react-cookie";
 import CloseIcon from '@mui/icons-material/Close';
@@ -55,7 +55,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         if (ItemRef.current) {
             ItemRef.current.scrollIntoView({
                 behavior: "smooth",
-                block: "start",
                 inline: "nearest",
             });
         }
@@ -180,6 +179,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                 );
                 setData(uniqueObjects)
+                scrollToItem()
+
                 if (limit) {
                     const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == image?._id)
                     setImageIndex(selectedImageIndex);
@@ -217,9 +218,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     return (
         <div >
 
-            <div className={styles.viewImgInfoHeader}>
+            <div className={styles.viewImgInfoHeader} ref={ItemRef}>
 
-                <div className={styles.imageUploadingDetails} ref={ItemRef}>
+                <div className={styles.imageUploadingDetails} >
                     <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                         <div className={styles.uploadedByName}>{selectedImage?._id ? selectedImage?.uploaded_by?.name : imageDetails?.uploaded_by?.name}</div>
@@ -266,6 +267,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         let routerData = { ...router.query };
                         delete routerData?.image_id;
                         delete routerData?.view;
+                        dispatch(QueryParamsForScouting(routerData))
                         router.push({ query: routerData });
 
                     }}>
@@ -325,14 +327,15 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                         className={styles.singleScoutImgIngalley}
                                         key={index}
                                         onClick={() => {
-                                            scrollToItem()
                                             setImageIndex(index)
                                             setSelectedItemDetails(imageItem)
                                             setImageDetails(null)
                                             getAllImagesDetails(data?.length + 1, imageItem)
                                             router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id } });
 
+
                                         }}
+                                        style={{ border: imageItem?._id == (selectedImage?._id || imageDetails?._id) ? "1px solid black" : "" }}
                                     >
                                         <img
                                             src={

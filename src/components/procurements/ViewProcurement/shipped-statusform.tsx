@@ -193,23 +193,47 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
         {data?.tracking_details?.tracking_id ?
           <div className={styles.trackingid}>
             <Typography variant="h6" color="ThreeDLightShadow">Tracking Details</Typography>
-            <label className={styles.label1}>Tracking ID</label>
-            <div className={styles.information}>
-              <div className={styles.id}>
-                <p className={styles.text}>{data?.tracking_details?.tracking_id}</p>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: "4.5rem" }}>
+              <div className={styles.information}>
+                <label className={styles.label1}>Service Name</label>
+
+                <Typography variant="body2">{data?.tracking_details?.service_name}</Typography>
               </div>
 
-              {showTooltip ?
-                <Tooltip title="Text copied!" >
-                  <Button color="primary" variant="contained">
-                    Copy
-                  </Button>
-                </Tooltip> :
-                <Button color="primary" variant="contained" onClick={() => copyTextToClipboard()}>
-                  Copy
-                </Button>
-              }
+              <div className={styles.information}>
+                <label className={styles.label1}>Contact Number</label>
+
+                <Typography variant="body2">{data?.tracking_details?.contact_number}</Typography>
+              </div>
+
+              <div className={styles.information}>
+                <label className={styles.label1}>Delivery Date</label>
+
+                <Typography variant="body2">{timePipe(data?.tracking_details?.delivery_date, "DD-MM-YYYY hh:mm A")}</Typography>
+              </div>
+
+              <div className={styles.information}>
+                <label className={styles.label1}>Tracking Id</label>
+
+                <Typography variant="body2">{data?.tracking_details?.tracking_id}
+                  {showTooltip ?
+                    <Tooltip title="Text copied!" >
+                      <Button color="primary" variant="contained">
+                        Copy
+                      </Button>
+                    </Tooltip> :
+                    <Button color="primary" variant="contained" onClick={() => copyTextToClipboard()}>
+                      Copy
+                    </Button>
+                  }</Typography>
+              </div>
+
             </div>
+            {/* <div className={styles.id}>
+                jn
+              </div> */}
+
+
 
           </div> :
           ""}

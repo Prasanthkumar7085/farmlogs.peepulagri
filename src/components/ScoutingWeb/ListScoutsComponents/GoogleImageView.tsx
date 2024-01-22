@@ -237,6 +237,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     <IconButton
                         disabled={loading || imageIndex == 0 ? true : false}
                         onClick={() => {
+                            let routerData = { ...router.query, view: true, image_id: data[imageIndex]?._id }
+
+                            dispatch(QueryParamsForScouting(routerData))
                             setImageIndex((prev: any) => prev - 1)
                             setSelectedItemDetails(data[imageIndex])
 
@@ -251,7 +254,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             if (selectedImage?._id) {
                                 setImageIndex((prev: any) => prev + 1)
                                 setSelectedItemDetails(data[imageIndex])
-
                             }
                             else {
                                 setImageIndex(0)
@@ -303,11 +305,15 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     className={styles.viewScoutingBtn}
                     onClick={() => {
                         if (router.query.farm_id || router.query.crop_id || router.query.location_id || selectedImage?._id) {
+                            let routerData = { ...router.query, view: true, image_id: selectedImage?._id }
+                            dispatch(QueryParamsForScouting(routerData))
                             router.push(
                                 `/scouts/farm/${router.query.farm_id || selectedImage?.farm_id?._id}/crops/${router.query.crop_id || selectedImage?.crop_id?._id}/${selectedImage?._id}?location_id=${router.query.location_id || ""}`
                             );
                         }
                         else {
+                            let routerData = { ...router.query, view: true, image_id: selectedImage?._id ? selectedImage?._id : imageDetails?._id }
+                            dispatch(QueryParamsForScouting(routerData))
                             router.push(
                                 `/scouts/${selectedImage?._id ? selectedImage?._id : imageDetails?._id}`
                             );
@@ -332,6 +338,10 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             setImageDetails(null)
                                             getAllImagesDetails(data?.length + 1, imageItem)
                                             router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id } });
+
+                                            let routerData = { ...router.query, view: true, image_id: imageItem?._id }
+
+                                            dispatch(QueryParamsForScouting(routerData))
 
 
                                         }}

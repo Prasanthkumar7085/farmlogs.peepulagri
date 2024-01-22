@@ -46,7 +46,7 @@ const ViewProcurementComponent = () => {
   return (
     <div style={{ width: "80%", margin: "auto", paddingTop: "2rem" }}>
       <ShippedStatus data={data} afterStatusChange={afterStatusChange} />
-      <ShippedStatusform data={data} />
+      <ShippedStatusform data={data} afterStatusChange={afterStatusChange} />
       <ViewProcurementTable data={data} afterMaterialStatusChange={afterMaterialStatusChange} />
     </div>
   );

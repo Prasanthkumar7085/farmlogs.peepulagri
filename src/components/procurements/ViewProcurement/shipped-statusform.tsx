@@ -1,8 +1,12 @@
 import type { NextPage } from "next";
-import { Avatar, Button, Chip, Tooltip, Typography } from "@mui/material";
+import { Avatar, Button, ButtonBase, Chip, Tooltip, Typography } from "@mui/material";
 import styles from "./shipped-statusform.module.css";
 import timePipe from "@/pipes/timePipe";
 import { useState } from "react";
+import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDetailsDilog";
+import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 // type ShippedStatusformType = {
 //   fARM1?: string;
@@ -12,11 +16,19 @@ import { useState } from "react";
 //   text1?: string;
 // };
 
-const ShippedStatusform = ({ data }: any) => {
+const ShippedStatusform = ({ data, afterStatusChange }: any) => {
+
+
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
+
 
   const [showTooltip, setShowTooltip] = useState<any>(false);
   const [showMore, setShowMore] = useState<boolean>(false)
-
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [openTrackingDilog, setTrackingDialogOpen] = useState<any>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const copyTextToClipboard = () => {
     navigator.clipboard.writeText(data?.tracking_details?.tracking_id)
       .then(() => {
@@ -29,6 +41,56 @@ const ShippedStatusform = ({ data }: any) => {
       .catch(err => {
         console.error('Unable to copy text: ', err);
       });
+
+  };
+
+
+  const addTracking = (value: any) => {
+    if (value == true) {
+      setDialogOpen(true)
+      onStatusChangeEvent()
+    }
+  }
+
+
+  const onStatusChangeEvent = async () => {
+
+    setLoading(true);
+    try {
+      let changedStatus: any;
+      if (data?.status == "PENDING") {
+        changedStatus = "APPROVED";
+      }
+      if (data?.status == "APPROVED") {
+        changedStatus = "PURCHASED";
+      }
+      if (data?.status == "PURCHASED") {
+        changedStatus = "SHIPPED";
+      }
+      if (data?.status == "SHIPPED") {
+        changedStatus = "DELIVERED";
+      }
+      if (data?.status == "DELIVERED") {
+        changedStatus = "COMPLETED";
+      }
+      const response = await updateStatusService({
+        procurement_id: data?._id,
+        status: changedStatus,
+        accessToken,
+      });
+
+      if (response.success) {
+        setDialogOpen(false);
+        afterStatusChange(true)
+        toast.success(response?.message)
+
+
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
 
   };
 
@@ -149,9 +211,22 @@ const ShippedStatusform = ({ data }: any) => {
               }
             </div>
 
+          </div> :
+          ""}
+        {data?.status == "PURCHASED" ?
+          <div className={styles.trackingid}>
+            <Typography variant="h6" color="ThreeDLightShadow">Tracking Details</Typography>
+            <Button variant="outlined" onClick={() => {
+              setTrackingDialogOpen(true)
+            }}>+Add Tracking Details</Button>
           </div> : ""}
       </div>
-
+      <TrackingDetailsDilog
+        open={openTrackingDilog}
+        addTracking={addTracking}
+        setTrackingDialogOpen={setTrackingDialogOpen}
+        loading={false}
+      />
     </div >
   );
 };

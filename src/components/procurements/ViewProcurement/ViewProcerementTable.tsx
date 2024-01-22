@@ -127,6 +127,17 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       }
       if (response?.data) {
         afterMaterialStatusChange(true)
+
+        const allPurchaseOrNot = response?.data.every((obj: any) => obj.hasOwnProperty('price') && obj.price !== null);
+
+
+        if (allPurchaseOrNot) {
+          procurementStatusChange("PURCHASED")
+          afterMaterialStatusChange(true)
+
+        }
+
+
         {
           response?.data.map((data: any) => {
 
@@ -317,7 +328,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   //after rejecting material
   const afterRejectingMaterial = async (value: any) => {
     if (value) {
-      setRejectLoading(true)
+      setLoading(true)
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/materials/${selectedRow}/${"reject"}`;
 
@@ -353,7 +364,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         console.error(err);
       }
       finally {
-        setRejectLoading(false)
+        setLoading(false)
       }
     }
 
@@ -410,7 +421,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
-          {data?.status == "APPROVED" ?
+          {data?.status !== "APPROVED" ?
             "" :
             <Button variant="outlined"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
@@ -420,7 +431,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               }}>Add Materials</Button>
           }
 
-          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading ? "" :
+          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading || materials[0]?.price ? "" :
             <Button variant="contained"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
               onClick={() => {

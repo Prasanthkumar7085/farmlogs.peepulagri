@@ -70,20 +70,14 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
 
   };
 
-  const addTracking = (value: any) => {
-    if (value == true) {
-      setDialogOpen(true)
-    }
-  }
 
 
   const onMaterialsReceivedCheckboxClick = useCallback(() => {
+    onStatusChangeEvent()
     // Please sync "Procurement Module/View/Delivered" to the project
   }, []);
 
-  const handleChange = () => {
-    setTrackingDialogOpen(true)
-  }
+
   //to captlize the upercase text
   const capitalizeFirstLetter = (string: any) => {
     let temp = string.toLowerCase();
@@ -134,7 +128,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
 
         </div>
         <img className={styles.statusrowChild} alt="" src="/line-3@2x.png" />
-        {data?.status == "shipped" ? (
+        {data?.status == "SHIPPED" && userDetails?._id == data.requested_by?._id ? (
           <div
             className={styles.materialsreceivedcheckbox}
             onClick={onMaterialsReceivedCheckboxClick}
@@ -150,20 +144,8 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           ""
         )}
       </div>
-      {data?.status == "COMPLETED" ?
-        "" : <AlertStautsChange
-          open={dialogOpen}
-          statusChange={onStatusChangeEvent}
-          setDialogOpen={setDialogOpen}
-          loading={loading}
 
-        />}
-      <TrackingDetailsDilog
-        open={openTrackingDilog}
-        addTracking={addTracking}
-        setTrackingDialogOpen={setTrackingDialogOpen}
-        loading={loading}
-      />
+
 
     </div>
   );

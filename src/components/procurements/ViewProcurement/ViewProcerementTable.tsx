@@ -38,6 +38,7 @@ import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteMaterialByIdService from "../../../../lib/services/ProcurementServices/deleteMaterialByIdService";
 import AddMaterialDrawer from "../MaterialCore/AddMaterialDrawer";
 import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
+import RejectReasonDilog from "@/components/Core/RejectReasonDilog";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -80,13 +81,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
   const [updateLoading, setUpdateLoading] = useState(false);
   const [editMaterialId, setEditMaterialId] = useState("");
-  const [name, setName] = useState("");
-  const [requiredQty, setRequiredQty] = useState<null | number | string>(null);
-  const [requiredUnits, setRequiredUnits] = useState("");
-  const [availableQty, setAvailableQty] = useState<null | number | string>(
-    null
-  );
-  const [availableUnits, setAvailableUnits] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [editErrorMessages, setEditErrorMessages] = useState({});
@@ -95,7 +90,9 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   const [deleteMaterialOpen, setDeleteMaterialOpen] = useState(false);
   const [deleteMaterialId, setDeleteMaterialId] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [rejectDilogOpen, setRejectDilogOpen] = useState<boolean>()
+  const [rejectDilogOpen, setRejectDilogOpen] = useState<boolean>(false)
+  const [selectedRow, setSelectedRow] = useState<any>()
+  const [rejectLoading, setRejectLoading] = useState<any>(false)
 
   //logout function for 403 error
   const logout = async () => {
@@ -178,6 +175,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
   }, [router.isReady, accessToken]);
 
+  //update material by id event
   const updateMaterialById = async () => {
     setUpdateLoading(true);
 
@@ -222,6 +220,8 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
     }
   };
 
+
+  //get the single material
   const getSingleMaterials = async () => {
     setUpdateLoading(true);
     try {
@@ -311,6 +311,41 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
     }
   }
 
+  //after rejecting material
+  const afterRejectingMaterial = async (value: any) => {
+    if (value) {
+      setRejectLoading(true)
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/materials/${selectedRow}/${"reject"}`;
+
+        const options = {
+          method: "PATCH",
+          body: JSON.stringify({
+            reason: value
+          }),
+          headers: new Headers({
+            'content-type': 'application/json',
+            'authorization': accessToken
+          }),
+        }
+        const response: any = await fetch(url, options);
+        const responseData = await response.json();
+        if (response.ok) {
+          toast.success(responseData?.message)
+          getAllProcurementMaterials()
+        } else {
+          return { message: 'Something Went Wrong', status: 500, details: responseData }
+        }
+
+      } catch (err: any) {
+        console.error(err);
+      }
+      finally {
+        setRejectLoading(false)
+      }
+    }
+
+  }
   //approve all function
   const approveAllMaterials = async () => {
     setLoading(true)
@@ -373,7 +408,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               }}>Add Materials</Button>
           }
 
-          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || loading ? "" :
+          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading ? "" :
             <Button variant="contained"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
               onClick={() => {
@@ -496,7 +531,21 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                   <Button
                                     variant="outlined"
                                     onClick={() => {
-                                      onStatusChangeEvent("approve", row?._id)
+                                      const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
+                                      // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      const lengthOfFilteredData = filteredData.length;
+
+                                      if (lengthOfFilteredData == exceptRejectedData.length - 1) {
+                                        onStatusChangeEvent("approve", row?._id)
+                                        approveAllMaterials()
+
+                                      }
+                                      else {
+                                        onStatusChangeEvent("approve", row?._id)
+                                      }
+
+
                                     }
                                     }
                                   >
@@ -511,11 +560,23 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                   sx={{ display: row?.status == "PURCHASED" ? "none" : "" }}
                                   onClick={() => {
                                     if (row?.status == "REJECTED") {
-                                      onStatusChangeEvent("approve", row?._id)
+                                      const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
+                                      // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      const lengthOfFilteredData = filteredData.length;
+
+                                      if (lengthOfFilteredData == exceptRejectedData.length - 1) {
+                                        onStatusChangeEvent("approve", row?._id)
+                                        approveAllMaterials()
+                                      }
+                                      else {
+                                        onStatusChangeEvent("approve", row?._id)
+                                      }
 
                                     }
                                     else {
-                                      onStatusChangeEvent("reject", row?._id)
+                                      setRejectDilogOpen(true)
+                                      setSelectedRow(row?._id)
                                     }
                                   }
                                   }
@@ -578,6 +639,12 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         setDialogOpen={setDeleteMaterialOpen}
         loading={deleteLoading}
         deleteTitleProp={"Material"}
+      />
+      <RejectReasonDilog
+        dialog={rejectDilogOpen}
+        setRejectDilogOpen={setRejectDilogOpen}
+        afterRejectingMaterial={afterRejectingMaterial}
+        rejectLoading={rejectLoading}
       />
       {/* <AlertStautsChange open={dialogOpen} statusChange={onStatusChangeEvent} setDialogOpen={setDialogOpen} loading={loading} /> */}
     </div >

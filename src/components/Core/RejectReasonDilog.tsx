@@ -9,72 +9,28 @@ import DialogTitle from '@mui/material/DialogTitle';
 import React, { ChangeEvent, useEffect, useState } from "react";
 import ImageComponent from './ImageComponent';
 import AlertComponent from './AlertComponent';
+import updateMaterialStatusService from '../../../lib/services/ProcurementServices/MaterialService/updateMaterialItemStatus';
+import { useSelector } from 'react-redux';
 
-const RejectReasonDilog = ({ data, dialog, onDilogCloseClick, editRemark }: any) => {
+const RejectReasonDilog = ({ dialog, setRejectDilogOpen, afterRejectingMaterial, rejectLoading }: any) => {
 
-    const [remarks, setRemarks] = useState<string>(data?.remarks)
+    const [remarks, setRemarks] = useState<string>()
     const [validations, setValidations] = useState<any>()
     const [loading, setLoading] = useState<any>()
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
 
-    useEffect(() => {
-        console.log(data?.remarks);
-
-        setRemarks(data?.remarks)
-    }, [data?.remarks, dialog])
+    const accessToken = useSelector(
+        (state: any) => state.auth.userDetails?.access_token
+    );
 
     const handleClose = () => {
         setRemarks('')
-        onDilogCloseClick("close")
+        setRejectDilogOpen(false)
     };
-    const addDataFeilds = () => {
-        onDilogCloseClick("submit")
-    }
 
-    const addRemarks = async () => {
-        setLoading(true)
-        let body: any = {
-            remarks: remarks
-        }
 
-        try {
-            if (remarks || data?.remarks) {
-                let res = await fetch(`/api/clients/updateRemarksOneClient?id=${data?.id}`, { method: "PUT", body: JSON.stringify(body) })
-                let responseData = await res.json()
-                if (responseData?.success == true) {
-                    if (editRemark == true) {
-                        setAlertMessage("Remark Updated Successfully");
-                        setAlertType(true);
-                    }
-                    else {
-                        setAlertMessage("Remark Added Successfully");
-                        setAlertType(true);
-                    }
-                    setLoading(false)
-                    setRemarks("")
-                    handleClose()
-                    addDataFeilds()
-                }
-                else {
-                    setAlertMessage(responseData.message);
-                    setAlertType(false);
-                    setLoading(false)
-                    handleClose()
 
-                }
-            }
-            else {
-                setValidations("Remarks Required");
-                setLoading(false)
-
-            }
-
-        }
-        catch (err) {
-            console.log(err)
-        }
-    }
     return (
         <>
             <Dialog open={Boolean(dialog)} sx={{
@@ -85,7 +41,7 @@ const RejectReasonDilog = ({ data, dialog, onDilogCloseClick, editRemark }: any)
                 }
             }}>
                 <DialogTitle style={{ color: "#00435D" }}>
-                    {editRemark == true ? "Edit Remark" : "Add Remark"}
+                    {"Add Remark"}
                 </DialogTitle>
                 <DialogContent>
 
@@ -94,10 +50,10 @@ const RejectReasonDilog = ({ data, dialog, onDilogCloseClick, editRemark }: any)
                         size="small"
                         multiline
                         minRows={3}
-                        placeholder={editRemark == true ? "Edit Remarks" : "Add Remarks"}
+                        placeholder={"Add Remarks"}
                         style={{ width: "100%", marginTop: "10px" }}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setRemarks(e.target.value)}
-                        onKeyDown={(e: any) => e.key == 'Enter' ? addRemarks() : ""}
+                        onKeyDown={(e: any) => e.key == 'Enter' ? afterRejectingMaterial() : ""}
                     />
                     {validations ? <Typography variant='caption' color="error">{validations}</Typography> : ""}
 
@@ -105,8 +61,10 @@ const RejectReasonDilog = ({ data, dialog, onDilogCloseClick, editRemark }: any)
                 <DialogActions sx={{ padding: "20px 24px" }}>
                     <Button className="cancelBtn" onClick={handleClose}>Cancel</Button>
                     <Button className="successBtn" onClick={() => {
-                        addRemarks()
-                    }} >{loading ?
+                        afterRejectingMaterial(remarks)
+                        setRejectDilogOpen(false)
+
+                    }} >{rejectLoading ?
                         <ImageComponent src='/loading-blue.svg' width={30} height={30} alt='loading' />
                         : 'Proceed'}</Button>
                 </DialogActions>

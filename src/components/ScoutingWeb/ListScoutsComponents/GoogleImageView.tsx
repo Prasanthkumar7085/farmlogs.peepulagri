@@ -26,8 +26,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [data, setData] = useState<any>([])
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>(imageDetails)
-
-    console.log(selectedImage, "sdfd")
+    console.log(selectedImage, "asfd")
     const [imageIndex, setImageIndex] = useState<any>(0)
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
@@ -50,6 +49,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         }
     }, [imageIndex])
 
+
     const ItemRef = useRef<HTMLDivElement>(null);
     const scrollToItem = () => {
         if (ItemRef.current) {
@@ -60,6 +60,43 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             });
         }
     };
+
+
+    //get the single image details
+    const getTheSingleImageDetails = async () => {
+        setLoading(true);
+        let options = {
+            method: "GET",
+            headers: new Headers({
+                authorization: accessToken,
+            }),
+        };
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${router.query.image_id}`,
+                options
+            );
+            const responseData = await response.json();
+            if (responseData.success) {
+                setSelectedItemDetails(responseData?.data)
+                await getAllImagesDetails("", responseData?.data)
+
+            }
+
+        }
+        catch (err) {
+            console.error(err)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (router.isReady && router.query.image_id) {
+            getTheSingleImageDetails()
+        }
+    }, [router.isReady])
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {
@@ -142,13 +179,18 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                 const uniqueObjects = Array.from(
                     temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                 );
+                setData(uniqueObjects)
                 if (limit) {
-                    const removeSelectedImage = uniqueObjects.filter((item: any, index) => item._id !== image?._id)
-                    setData(removeSelectedImage);
+                    const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == image?._id)
+                    setImageIndex(selectedImageIndex);
+                }
+                else if (router.query.image_id) {
+                    const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == router.query.image_id)
+                    setImageIndex(selectedImageIndex);
                 }
                 else {
-                    const removeSelectedImage = uniqueObjects.filter((item: any, index) => item._id !== imageDetails?._id)
-                    setData(removeSelectedImage);
+                    const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == imageDetails?._id)
+                    setImageIndex(selectedImageIndex);
                 }
 
 
@@ -169,6 +211,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             getAllImagesDetails("", "")
         }
     }, [imageDetails?._id])
+
+
 
     return (
         <div >
@@ -217,7 +261,14 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         }}>
                         <KeyboardArrowRightIcon />
                     </IconButton>
-                    <IconButton onClick={() => setRightBarOpen(false)}>
+                    <IconButton onClick={() => {
+                        setRightBarOpen(false)
+                        let routerData = { ...router.query };
+                        delete routerData?.image_id;
+                        delete routerData?.view;
+                        router.push({ query: routerData });
+
+                    }}>
                         <CloseIcon />
                     </IconButton>
                 </div>
@@ -279,6 +330,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             setSelectedItemDetails(imageItem)
                                             setImageDetails(null)
                                             getAllImagesDetails(data?.length + 1, imageItem)
+                                            router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id } });
+
                                         }}
                                     >
                                         <img

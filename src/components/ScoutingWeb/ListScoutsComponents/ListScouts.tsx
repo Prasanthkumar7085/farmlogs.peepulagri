@@ -51,6 +51,7 @@ const ListScouts: FunctionComponent = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+  const paramasFromStore = useSelector((state: any) => state.auth.queryParams);
 
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
@@ -321,10 +322,13 @@ const ListScouts: FunctionComponent = () => {
         page: pageNum,
         limit: rowsPerPage,
         farm_search_string,
+
         ...restParams
+
       } = queryParams;
 
-      router.push({ query: queryParams });
+      let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
+      router.push({ query: temp });
       setQueries(queryParams)
       url = prepareURLEncodedParams(url, restParams);
       const response = await getAllExistedScoutsService({
@@ -576,11 +580,14 @@ const ListScouts: FunctionComponent = () => {
     return () => clearInterval(debounce);
   }, [searchString]);
 
-  const onClickAttachment = (attachment: string, farmId: string, cropId: string, location_id: string) => {
+  const onClickAttachment = (attachment: any, farmId: string, cropId: string, location_id: string) => {
 
-    dispatch(QueryParamsForScouting(queries))
     setRightBarOpen(true)
-    setImageDetails(attachment)
+    setImageDetails(attachment);
+    let temp = { ...queries, view: true, image_id: attachment?._id }
+    dispatch(QueryParamsForScouting(temp))
+    router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id } });
+
 
     // if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
     //   router.push(
@@ -736,7 +743,7 @@ const ListScouts: FunctionComponent = () => {
 
       <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
 
-        <div className={rightBarOpen ? styles.AllScoutsLeftWebPage : styles.AllScoutsWeb}>
+        <div className={rightBarOpen || router.query.view ? styles.AllScoutsLeftWebPage : styles.AllScoutsWeb}>
           {data?.length
             ? data.map((item: any, index: any) => {
               return (
@@ -784,12 +791,12 @@ const ListScouts: FunctionComponent = () => {
         ) : (
           ""
         )}
-        {rightBarOpen ?
-          <div className={rightBarOpen ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
+        {rightBarOpen || router.query.view ?
+          <div className={rightBarOpen || router.query.view ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
             <GoogleImageView
               rightBarOpen={rightBarOpen}
               setRightBarOpen={setRightBarOpen}
-              imageDetails={imageDetails}
+              imageDetails={imageDetails || router.query.image_id}
               setImageDetails={setImageDetails}
 
 

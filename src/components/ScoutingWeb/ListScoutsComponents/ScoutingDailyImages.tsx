@@ -3,6 +3,7 @@ import {
   SingleScoutResponse,
 } from "@/types/scoutTypes";
 import styles from "../farms/FarmsNavBar.module.css";
+import { useRouter } from "next/router";
 
 interface propTypes {
   item: any;
@@ -16,8 +17,10 @@ const ScoutingDailyImages: React.FC<propTypes> = ({
   rightBarOpen
 }) => {
 
+  const router = useRouter();
+
   return (
-    <div className={rightBarOpen ? styles.allScoutImgFlexContainer : styles.allScoutImgContainer}>
+    <div className={rightBarOpen || router.query.view ? styles.allScoutImgFlexContainer : styles.allScoutImgContainer}>
       {item?.length
         ? item?.map(
           (imageItem: ScoutAttachmentDetails, index: number) => {

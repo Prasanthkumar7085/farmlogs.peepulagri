@@ -98,7 +98,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         if (router.isReady && router.query.image_id) {
             getTheSingleImageDetails()
         }
-    }, [router.isReady])
+    }, [router.isReady, router.query.image_id, accessToken])
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {

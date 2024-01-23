@@ -31,6 +31,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [imageIndex, setImageIndex] = useState<any>(0)
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
+    const [loading1, setLoading1] = useState<boolean>(false)
 
     const logout = async () => {
         try {
@@ -94,13 +95,14 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
     useEffect(() => {
         if (router.isReady && router.query.image_id) {
+            console.log("get the sing")
             getTheSingleImageDetails()
         }
     }, [router.isReady])
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {
-        setLoading(true);
+        setLoading1(true);
         let options = {
             method: "GET",
             headers: new Headers({
@@ -152,7 +154,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         } catch (err) {
             console.error(err);
         } finally {
-            setLoading(false);
+            setLoading1(false);
         }
     };
 
@@ -186,12 +188,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == image?._id)
                     setImageIndex(selectedImageIndex);
                 }
-                else if (router.query.image_id) {
-                    const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == router.query.image_id)
+                else if (imageDetails?._id) {
+                    const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == imageDetails?._id)
                     setImageIndex(selectedImageIndex);
                 }
                 else {
-                    const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == imageDetails?._id)
+                    const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == router.query.image_id)
                     setImageIndex(selectedImageIndex);
                 }
 
@@ -209,7 +211,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     useEffect(() => {
 
         if (imageDetails?._id) {
-            console.log("sfdsfdsfEFFEW")
             setSelectedItemDetails(null)
 
             getAllImagesDetails("", "")
@@ -292,7 +293,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         setImageDetails(null)
                         setSelectedItemDetails(null)
 
-                    }}>
+                    }}
+                    // sx={{ position: "absolute", right: 9, top: "12%" }}
+                    >
                         <CloseIcon />
                     </IconButton>
                 </div>
@@ -380,7 +383,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             }
                         )
                         : ""}
+
                 </div>}
+            {loading1 ? <GoogleViewSkeleton /> : ""}
 
             <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
                 <Button variant="outlined"

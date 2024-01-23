@@ -124,6 +124,10 @@ const ListScouts: FunctionComponent = () => {
       return;
     }
     if (value) {
+      let routerData = { ...router.query };
+      delete routerData?.image_id;
+      delete routerData?.view;
+      dispatch(QueryParamsForScouting(routerData))
       setFarm(value);
       setCrop(null);
       setPage(1);
@@ -327,7 +331,7 @@ const ListScouts: FunctionComponent = () => {
 
       } = queryParams;
 
-      if (paramasFromStore?.image_id) {
+      if (paramasFromStore?.image_id && !Object.keys(restParams)?.length) {
         let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
         router.push({ query: temp });
       }
@@ -639,6 +643,10 @@ const ListScouts: FunctionComponent = () => {
         farmSearchString: '',
         location: value?._id
       });
+      let routerData = { ...router.query };
+      delete routerData?.image_id;
+      delete routerData?.view;
+      dispatch(QueryParamsForScouting(routerData))
     }
     else {
       setFarm(null);

@@ -27,7 +27,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [data, setData] = useState<any>([])
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>()
-    console.log(selectedImage, "asfd")
     const [imageIndex, setImageIndex] = useState<any>(0)
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
@@ -57,10 +56,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         if (ItemRef.current) {
             ItemRef.current.scrollIntoView({
                 behavior: "smooth",
+                block: "start",
                 inline: "nearest",
             });
         }
     };
+
 
 
     //get the single image details
@@ -95,7 +96,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
     useEffect(() => {
         if (router.isReady && router.query.image_id) {
-            console.log("get the sing")
             getTheSingleImageDetails()
         }
     }, [router.isReady])
@@ -159,8 +159,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     };
 
     const getAllImagesDetails = async (limit: any, image: any) => {
-
-        setLoading(true);
+        if (!image?._id) {
+            setLoading(true)
+        }
         let options = {
             method: "GET",
             headers: new Headers({
@@ -177,12 +178,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
                 setHasMore(responseData?.has_more);
                 let temp = [...responseData?.data]
+                scrollToItem()
 
                 const uniqueObjects = Array.from(
                     temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                 );
                 setData(uniqueObjects)
-                scrollToItem()
 
                 if (limit) {
                     const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == image?._id)
@@ -221,9 +222,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
     return (
-        <div >
-
-            <div className={styles.viewImgInfoHeader} ref={ItemRef}>
+        <div ref={ItemRef} >
+            <div className={styles.viewImgInfoHeader} >
 
                 <div className={styles.imageUploadingDetails} >
                     <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
@@ -289,10 +289,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         delete routerData?.view;
                         dispatch(QueryParamsForScouting(routerData))
                         router.push({ query: routerData });
-                        setImageIndex(0)
-                        setImageDetails(null)
-                        setSelectedItemDetails(null)
-
+                        setImageDetails(null);
                     }}
                     // sx={{ position: "absolute", right: 9, top: "12%" }}
                     >
@@ -359,13 +356,13 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             setImageIndex(index)
                                             setSelectedItemDetails(imageItem)
                                             setImageDetails(null)
+
                                             getAllImagesDetails(data?.length, imageItem)
                                             router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id } });
 
                                             let routerData = { ...router.query, view: true, image_id: imageItem?._id }
 
                                             dispatch(QueryParamsForScouting(routerData))
-
 
                                         }}
                                         style={{ border: imageItem?._id == (selectedImage?._id || imageDetails?._id) ? "1px solid black" : "" }}

@@ -125,6 +125,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                   disablePast
                   label="Select Date "
                   value={dateOfOperation}
+                  format="dd/MM/yyyy"
                   onChange={(newValue: any) => {
                     setDataOfOperation(newValue);
                   }}

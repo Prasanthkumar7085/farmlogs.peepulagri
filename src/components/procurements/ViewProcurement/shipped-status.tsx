@@ -9,6 +9,7 @@ import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDeta
 import { toast } from "sonner";
 
 const ShippedStatus = ({ data, afterStatusChange }: any) => {
+  console.log(data, "sd")
   const router = useRouter();
   const [status, setStauts] = useState<any>();
   const [loading, setLoading] = useState<any>(false);
@@ -72,10 +73,9 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
 
 
 
-  const onMaterialsReceivedCheckboxClick = useCallback(() => {
+  const onMaterialsReceivedCheckboxClick = () => {
     onStatusChangeEvent()
-    // Please sync "Procurement Module/View/Delivered" to the project
-  }, []);
+  }
 
 
   //to captlize the upercase text

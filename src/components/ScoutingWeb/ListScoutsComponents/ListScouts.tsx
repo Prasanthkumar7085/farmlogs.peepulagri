@@ -810,7 +810,7 @@ const ListScouts: FunctionComponent = () => {
             <GoogleImageView
               rightBarOpen={rightBarOpen}
               setRightBarOpen={setRightBarOpen}
-              imageDetails={imageDetails || router.query.image_id}
+              imageDetails={imageDetails}
               setImageDetails={setImageDetails}
 
 

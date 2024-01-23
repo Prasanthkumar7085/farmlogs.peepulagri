@@ -16,6 +16,7 @@ import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkele
 import SouthIcon from '@mui/icons-material/South';
 const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails }: any) => {
 
+    console.log(imageDetails, "pdfo")
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
@@ -25,7 +26,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [loading, setLoading] = useState<boolean>(false)
     const [data, setData] = useState<any>([])
     const [has_more, setHasMore] = useState<any>()
-    const [selectedImage, setSelectedItemDetails] = useState<any>(imageDetails)
+    const [selectedImage, setSelectedItemDetails] = useState<any>()
     console.log(selectedImage, "asfd")
     const [imageIndex, setImageIndex] = useState<any>(0)
     const [, , removeCookie] = useCookies(["userType_v2"]);
@@ -208,10 +209,13 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     useEffect(() => {
 
         if (imageDetails?._id) {
+            console.log("sfdsfdsfEFFEW")
             setSelectedItemDetails(null)
+
             getAllImagesDetails("", "")
         }
     }, [imageDetails?._id])
+
 
 
 
@@ -237,11 +241,16 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     <IconButton
                         disabled={loading || imageIndex == 0 ? true : false}
                         onClick={() => {
+                            setImageDetails(null)
+
                             let routerData = { ...router.query, view: true, image_id: data[imageIndex]?._id }
 
                             dispatch(QueryParamsForScouting(routerData))
-                            setImageIndex((prev: any) => prev - 1)
-                            setSelectedItemDetails(data[imageIndex])
+
+                            setImageIndex((prev: any) => Math.max(prev - 1, 0));
+                            setSelectedItemDetails(data[imageIndex]);
+                            // router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: data[imageIndex]?._id } });
+
 
                         }}>
                         <KeyboardArrowLeftIcon />
@@ -252,10 +261,18 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         onClick={() => {
 
                             if (selectedImage?._id) {
-                                setImageIndex((prev: any) => prev + 1)
-                                setSelectedItemDetails(data[imageIndex])
+                                setImageDetails(null)
+
+                                // router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: selectedImage?._id } });
+
+                                setImageIndex((prev: any) => Math.min(prev + 1, data.length - 1));
+                                setSelectedItemDetails(selectedImage);
                             }
                             else {
+                                setImageDetails(null)
+
+                                // router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: data[0]?._id } });
+
                                 setImageIndex(0)
                                 setSelectedItemDetails(data[0])
                             }
@@ -271,6 +288,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         delete routerData?.view;
                         dispatch(QueryParamsForScouting(routerData))
                         router.push({ query: routerData });
+                        setImageIndex(0)
+                        setImageDetails(null)
+                        setSelectedItemDetails(null)
 
                     }}>
                         <CloseIcon />
@@ -336,7 +356,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             setImageIndex(index)
                                             setSelectedItemDetails(imageItem)
                                             setImageDetails(null)
-                                            getAllImagesDetails(data?.length + 1, imageItem)
+                                            getAllImagesDetails(data?.length, imageItem)
                                             router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id } });
 
                                             let routerData = { ...router.query, view: true, image_id: imageItem?._id }

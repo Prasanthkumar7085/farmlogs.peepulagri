@@ -262,7 +262,7 @@ const ProcurementsTableComponent = ({
       id: "date_of_operation",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY hh:mm A")}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Date of Operation</span>,

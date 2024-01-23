@@ -342,7 +342,8 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                     background: "#fff",
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "1px 4px 4px 0 !important"
+                      borderRadius: "1px 4px 4px 0 !important",
+
                     }
                   }}
                   size="small"

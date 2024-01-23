@@ -376,11 +376,7 @@ const ProcurementsTableComponent = ({
                   style={{ cursor: "pointer", padding: "0" }}
                   disabled={(userDetails?._id == info.row.original?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") && info.row.original?.status == "PENDING" ? false : true}
                   onClick={() => {
-                    if (
-                      info.row.original?.requested_by?._id !== userDetails?._id
-                    ) {
-                      return;
-                    }
+
                     router.push(`/procurements/${info.row.original?._id}/edit`)
                   }}
                 >
@@ -399,11 +395,7 @@ const ProcurementsTableComponent = ({
                   style={{ padding: "0" }}
 
                   onClick={() => {
-                    if (
-                      info.row.original?.requested_by?._id !== userDetails?._id
-                    ) {
-                      return;
-                    }
+
                     setdeleteProcurments(info.row.original?._id);
                     setDialogOpen(true);
                   }}

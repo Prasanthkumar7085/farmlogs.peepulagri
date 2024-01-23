@@ -421,15 +421,14 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
-          {data?.status !== "APPROVED" ?
-            "" :
+          {data?.status == "PENDING" ?
             <Button variant="outlined"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
               onClick={() => {
                 setAddMaterial(true)
                 setAddMaterialOpen(true)
-              }}>Add Materials</Button>
-          }
+              }}>Add Materials</Button> : ""}
+
 
           {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading || materials[0]?.price ? "" :
             <Button variant="contained"

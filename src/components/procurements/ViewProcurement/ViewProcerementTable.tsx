@@ -39,6 +39,7 @@ import deleteMaterialByIdService from "../../../../lib/services/ProcurementServi
 import AddMaterialDrawer from "../MaterialCore/AddMaterialDrawer";
 import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
 import RejectReasonDilog from "@/components/Core/RejectReasonDilog";
+import Image from "next/image";
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -424,10 +425,13 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
           {data?.status == "PENDING" ?
             <Button variant="outlined"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
+              className={styles.addMaterialBtn}
               onClick={() => {
                 setAddMaterial(true)
                 setAddMaterialOpen(true)
-              }}>Add Materials</Button> : ""}
+              }}>
+              <Image src="/viewProcurement/view-procurement-add-icon.svg" alt="" width={10} height={10} />
+              Add Materials</Button> : ""}
 
 
           {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading || materials[0]?.price ? "" :

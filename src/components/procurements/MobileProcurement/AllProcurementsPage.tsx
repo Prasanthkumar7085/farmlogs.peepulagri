@@ -201,4 +201,3 @@ const MobileAllProcurements = () => {
 }
 
 export default MobileAllProcurements;
-//vayyaribhama ne hamsa nadaka endhuke thondhara thondhara thondhara mudhulagumma endhari mundhara repake na gundela dhada dhada e bulli ne peru lilli jaaripoke jamurela thulli jampandula unnave bulli 

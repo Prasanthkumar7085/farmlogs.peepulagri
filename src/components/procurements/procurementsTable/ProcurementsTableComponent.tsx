@@ -360,9 +360,9 @@ const ProcurementsTableComponent = ({
                   router.push(`/procurements/${info.row.original?._id}`)
                 }>
                   <ImageComponent
-                    src="/view-icon.svg"
-                    height={17}
-                    width={17}
+                    src="/viewTaskIcons/task-table-view.svg"
+                    height={18}
+                    width={18}
                     alt=""
                   />
                 </IconButton>
@@ -380,7 +380,15 @@ const ProcurementsTableComponent = ({
                     router.push(`/procurements/${info.row.original?._id}/edit`)
                   }}
                 >
-                  <CreateIcon />
+                  <ImageComponent
+                    src={
+                      "/viewTaskIcons/table-edit-icon.svg"
+
+                    }
+                    height={15}
+                    width={15}
+                    alt=""
+                  />
                 </IconButton>
               </Tooltip>
 
@@ -400,8 +408,17 @@ const ProcurementsTableComponent = ({
                     setDialogOpen(true);
                   }}
                 >
-                  <DeleteIcon />
-                </IconButton>
+                  <ImageComponent
+                    src={(userDetails?._id == info.row.original?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") && info.row.original?.status == "PENDING" ?
+                      "/viewTaskIcons/task-table-delete.svg" : "/viewTaskIcons/task-table-delete-disable.svg"
+
+
+                    }
+                    height={17}
+                    width={17}
+                    alt=""
+                  />                </IconButton>
+
               </Tooltip>
 
               <Tooltip followCursor arrow title="Comments">

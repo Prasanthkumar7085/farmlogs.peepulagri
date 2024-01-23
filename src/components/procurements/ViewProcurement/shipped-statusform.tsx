@@ -120,8 +120,12 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
                   ? data?.farm_ids
                     ?.map((item: any, index: any) => (
                       <Chip
-                        size="small"
-                        color="success"
+                        sx={{
+                          color: "#000", fontSize: "clamp(12px, 0.72vw, 14px)", fontFamily: "'Inter', sans-serif", background: "#CBFFE6", padding: "2px 8px", height: "inherit", minWidth: "inherit",
+                          '& .MuiChip-label': {
+                            paddingInline: "0"
+                          }
+                        }}
                         key={index}
                         label={item.title}
                       />
@@ -185,7 +189,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
           </div>
         </Tooltip> */}
         <div className={styles.pointofcontact}>
-          <label className={styles.PointOfContactTitle}>Point Of Contact</label>
+          <label className={styles.PointOfContactTitle}>Person Of Contact</label>
           <h3 className={styles.contactPersonName}>
             {data?.point_of_contact?.name ? data?.point_of_contact?.name : "----"}
           </h3>

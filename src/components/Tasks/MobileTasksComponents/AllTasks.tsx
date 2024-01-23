@@ -11,6 +11,7 @@ import styles from "./all-tasks.module.css";
 import Tabs from "./tabs";
 import TaskCard from "./task-card";
 import TaskHeader from "./taskHeader";
+import Image from "next/image";
 
 export interface ApiCallProps {
   page: string | number;
@@ -383,7 +384,7 @@ const AllTasks = () => {
             router.push("/users-tasks/add");
           }}
         >
-          <img src="/mobileIcons/navTabs/Add Task.svg" alt="" width={"25px"} />
+          <Image src="/mobileIcons/navTabs/Add Task.svg" alt="" width={25} height={25} />
           <span>Add Task</span>
         </IconButton>
       </div>

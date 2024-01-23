@@ -25,6 +25,8 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+
+
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
@@ -49,8 +51,9 @@ input[type=number] {
     font-family: "Inter", sans-serif !important;
 
 }
-.rs-picker-menu{
-    z-index: 9999!important;
+
+.rs-picker-menu {
+    z-index: 9999 !important;
 }
 
 :root {

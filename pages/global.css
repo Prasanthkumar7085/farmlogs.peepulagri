@@ -146,6 +146,17 @@ input[type=number] {
     font-weight: 500;
 }
 
+/* tracking details procurement date picker styles */
+#tracking-details-datePicker .rs-picker-toggle {
+    border-radius: 8px !important;
+    border-color: #D0D5DD !important;
+}
+
+#tracking-details-datePicker .rs-picker-toggle-active {
+    border-color: #D0D5DD !important;
+    box-shadow: none !important;
+}
+
 /* box-shadow: 0px 0px 0px 1px #d1cdcc; */
 .dataTable-container {
     /* background-color: #ffffff; */

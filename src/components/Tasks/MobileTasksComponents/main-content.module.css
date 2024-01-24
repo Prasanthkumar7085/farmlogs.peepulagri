@@ -61,9 +61,10 @@
   background: #D0D5DD;
   border-radius: 4px;
   padding: 4px 6px 4px 1rem;
-  width: 100px;
+  width: fit-content;
   display: flex;
   align-items: center;
+  font-size: clamp(10px,0.65vw,12px);
   justify-content: center;
   gap: 6px;
 }

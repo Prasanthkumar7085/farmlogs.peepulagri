@@ -74,6 +74,32 @@ export default function ScoutingHeader({ children }: any) {
 
           </Button>
 
+
+
+          <Button
+            className={
+              router.pathname.includes("/summary")
+                ? styles.navButtonActive
+                : styles.navButton
+            }
+            onClick={() => router.push("/summary")}
+          >
+            {router.pathname.includes("/summary") ? (
+              <Image
+                src="/mobileIcons/navTabs/list-dashes-fill.svg"
+                width={23}
+                height={23}
+                alt=""
+              />
+            ) : (
+              <Image
+                src="/mobileIcons/navTabs/summary-mobile.svg"
+                alt=""
+                width={20}
+                height={20}
+              />
+            )}
+          </Button>
           <Button
             className={
               router.pathname.includes("/users-tasks")
@@ -100,33 +126,7 @@ export default function ScoutingHeader({ children }: any) {
 
           </Button>
 
-          <Button
-            className={
-              router.pathname.includes("/summary")
-                ? styles.navButtonActive
-                : styles.navButton
-            }
-            onClick={() => router.push("/summary")}
-          >
-            {router.pathname.includes("/summary") ? (
-              <Image
-                src="/mobileIcons/navTabs/list-dashes-fill.svg"
-                width={23}
-                height={23}
-                alt=""
-              />
-            ) : (
-              <Image
-                src="/mobileIcons/navTabs/summary-mobile.svg"
-                alt=""
-                width={20}
-                height={20}
-              />
-            )}
-          </Button>
-
-
-          <Button
+          {/* <Button
             className={
               router.pathname.includes("/users-procurements")
                 ? styles.navButtonActive
@@ -150,7 +150,7 @@ export default function ScoutingHeader({ children }: any) {
               />
             )}
 
-          </Button>
+          </Button> */}
           <Button
             className={
               router.pathname.includes("/profile")

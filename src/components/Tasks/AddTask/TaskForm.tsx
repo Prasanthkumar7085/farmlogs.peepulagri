@@ -3,7 +3,7 @@ import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
 import { Button, Grid, TextField, Typography } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+// import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -18,6 +18,10 @@ import FooterActionButtons from "./footer-action-buttons";
 import { removeTheFilesFromStore } from "@/Redux/Modules/Farms";
 import TasksAttachments from "./TasksAttachments";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { DatePicker } from "rsuite";
+import "rsuite/dist/rsuite.css";
+import { addDays, isBefore, startOfDay } from "date-fns";
+
 const TaskForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -144,6 +148,12 @@ const TaskForm = () => {
     }
   };
 
+  const currentDate = new Date();
+  const todayStart = startOfDay(currentDate); // Set the time to midnight
+  const isDisabledDate = (date: any) => {
+    // Disable dates in the past
+    return date < addDays(new Date(), -1);
+  };
   // const removeFiles = () => {
   //   setFiles([]);
   //   setFilestoNullOnFarmChange(true);
@@ -154,23 +164,22 @@ const TaskForm = () => {
   //   }, 100);
   // };
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <>
-        <div className={styles.form}>
-          <div className={styles.header}>
-            <div className={styles.backButton} onClick={() => router.back()}>
-              <img src="/arrow-left-back.svg" alt="" width={"18px"} />
-            </div>
-            <div className={styles.textwrapper}>
-              <p className={styles.caption}>Back to List</p>
-              <h1 className={styles.header}>Add Task</h1>
-            </div>
+    <>
+      <div className={styles.form}>
+        <div className={styles.header}>
+          <div className={styles.backButton} onClick={() => router.back()}>
+            <img src="/arrow-left-back.svg" alt="" width={"18px"} />
           </div>
-          <div style={{ width: "100%" }}>
-            <div className={styles.formBlcok}>
-              <form className={styles.formfields}>
-                <Grid container rowSpacing={2}>
-                  {/* <Grid item xs={12}>
+          <div className={styles.textwrapper}>
+            <p className={styles.caption}>Back to List</p>
+            <h1 className={styles.header}>Add Task</h1>
+          </div>
+        </div>
+        <div style={{ width: "100%" }}>
+          <div className={styles.formBlcok}>
+            <form className={styles.formfields}>
+              <Grid container rowSpacing={2}>
+                {/* <Grid item xs={12}>
                 <Grid container columnSpacing={2}>
                   <Grid item xs={6} className={styles.selectfarm}>
                     <label className={styles.lable}>
@@ -245,35 +254,35 @@ const TaskForm = () => {
                   </Grid>
                 </Grid>
               </Grid> */}
-                  <Grid item xs={12}>
-                    <Grid container columnSpacing={2}>
-                      <Grid item xs={8}>
-                        <div className={styles.selectfarm}>
-                          <h4 className={styles.title}>
-                            Title<span style={{ color: "red" }}>*</span>
-                          </h4>
-                          <TextField
-                            className={styles.inoutbox}
-                            color="primary"
-                            placeholder="Enter your task title here"
-                            required={true}
-                            fullWidth={true}
-                            size="small"
-                            variant="outlined"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                          />
-                          <ErrorMessages
-                            errorMessages={errorMessages}
-                            keyname="title"
-                          />
-                        </div>
-                      </Grid>
-                      <Grid item xs={4} className={styles.selectfarm}>
-                        <label className={styles.lable}>
-                          Deadline<span style={{ color: "red" }}>*</span>
-                        </label>
-                        <DatePicker
+                <Grid item xs={12}>
+                  <Grid container columnSpacing={2}>
+                    <Grid item xs={8}>
+                      <div className={styles.selectfarm}>
+                        <h4 className={styles.title}>
+                          Title<span style={{ color: "red" }}>*</span>
+                        </h4>
+                        <TextField
+                          className={styles.inoutbox}
+                          color="primary"
+                          placeholder="Enter your task title here"
+                          required={true}
+                          fullWidth={true}
+                          size="small"
+                          variant="outlined"
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                        />
+                        <ErrorMessages
+                          errorMessages={errorMessages}
+                          keyname="title"
+                        />
+                      </div>
+                    </Grid>
+                    <Grid item xs={4} className={styles.selectfarm}>
+                      <label className={styles.lable}>
+                        Deadline<span style={{ color: "red" }}>*</span>
+                      </label>
+                      {/* <DatePicker
                           value={deadline}
                           disablePast
                           format="dd/MM/yyyy"
@@ -313,20 +322,60 @@ const TaskForm = () => {
                               color: "primary",
                             },
                           }}
-                        />
-                        {error && (
-                          <Typography variant="body2" color="error">
-                            {error}
-                          </Typography>
-                        )}
+                        /> */}
+                      <DatePicker
+                        format="dd-MM-yyyy HH:mm "
+                        shouldDisableDate={isDisabledDate}
+                        size="lg"
+                        editable={false}
+                        placeholder={"Select date"}
+                        shouldDisableHour={hour => hour < new Date().getHours()}
+                        shouldDisableMinute={minute => minute < new Date().getMinutes()}
+                        ranges={[{ label: 'Now', value: new Date() }]}
+                        style={{ width: 260 }}
+                        onChange={(newValue: any) => {
+                          let dateNow = new Date();
+                          let dateWithPresentTime = moment(new Date(newValue))
+                            .set({
+                              hour: dateNow.getHours(),
+                              minute: dateNow.getMinutes(),
+                              second: dateNow.getSeconds(),
+                              millisecond: dateNow.getMilliseconds(),
+                            })
+                            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-                        <ErrorMessages
-                          errorMessages={errorMessages}
-                          keyname="deadline"
-                        />
-                      </Grid>
+                          setDeadlineString(dateWithPresentTime);
+                          setDeadline(newValue);
+                        }}
+                        locale={{
+                          sunday: 'Su',
+                          monday: 'Mo',
+                          tuesday: 'Tu',
+                          wednesday: 'We',
+                          thursday: 'Th',
+                          friday: 'Fr',
+                          saturday: 'Sa',
+                          ok: 'OK',
+                          today: 'Today',
+                          yesterday: 'Yesterday',
+                          hours: 'Hours',
+                          minutes: 'Minutes',
+                          seconds: 'Seconds'
+                        }}
+                      />
+                      {error && (
+                        <Typography variant="body2" color="error">
+                          {error}
+                        </Typography>
+                      )}
 
-                      {/* <Grid item xs={4}>
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname="deadline"
+                      />
+                    </Grid>
+
+                    {/* <Grid item xs={4}>
                     <div className={styles.selectfarm}>
                       <h4 className={styles.title}>
                         Status<span style={{ color: "red" }}></span>
@@ -339,39 +388,39 @@ const TaskForm = () => {
                       />
                     </div>
                   </Grid> */}
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className={styles.selectfarm}>
-                      <label className={styles.lable}>Description</label>
-                      <TextField
-                        multiline
-                        minRows={4}
-                        maxRows={4}
-                        className={styles.inoutbox}
-                        color="primary"
-                        placeholder="Enter your task description here"
-                        fullWidth={true}
-                        variant="outlined"
-                        value={description}
-                        onChange={(e) => {
-                          const newValue = e.target.value.replace(/^\s+/, "");
-
-                          setDescription(newValue)
-                        }}
-                      />
-                    </div>
                   </Grid>
                 </Grid>
-              </form>
-              <div style={{ marginTop: "1.5rem" }}>
-                <FooterActionButtons addTask={addTask} />
-              </div>
-              {/* {taskId ? <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                <Grid item xs={12}>
+                  <div className={styles.selectfarm}>
+                    <label className={styles.lable}>Description</label>
+                    <TextField
+                      multiline
+                      minRows={4}
+                      maxRows={4}
+                      className={styles.inoutbox}
+                      color="primary"
+                      placeholder="Enter your task description here"
+                      fullWidth={true}
+                      variant="outlined"
+                      value={description}
+                      onChange={(e) => {
+                        const newValue = e.target.value.replace(/^\s+/, "");
+
+                        setDescription(newValue)
+                      }}
+                    />
+                  </div>
+                </Grid>
+              </Grid>
+            </form>
+            <div style={{ marginTop: "1.5rem" }}>
+              <FooterActionButtons addTask={addTask} />
+            </div>
+            {/* {taskId ? <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                 <Button onClick={() => router.back()} variant="contained" className={styles.goBackBtn}><ArrowBackIcon />Go Back</Button>
               </div> :
                 <FooterActionButtons addTask={addTask} />} */}
-              {/* {taskId ?
+            {/* {taskId ?
                 <TasksAttachments
                   taskId={taskId}
                   setUploadedFiles={setUploadedFiles}
@@ -379,10 +428,9 @@ const TaskForm = () => {
                   setMultipleFiles={setMultipleFiles}
                   afterUploadAttachements={afterUploadAttachements}
                 /> : ""} */}
-            </div>
           </div>
         </div>
-      </>
+      </div>
       <AlertComponent
         alertMessage={alertMessage}
         alertType={alertType}
@@ -395,7 +443,9 @@ const TaskForm = () => {
         deleteFiles={removeFiles}
         setDialogOpen={setDeleteFilesDialogOpen}
       /> */}
-    </LocalizationProvider>
+    </>
+
+
   );
 };
 

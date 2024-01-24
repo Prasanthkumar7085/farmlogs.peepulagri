@@ -3,8 +3,7 @@ import ErrorMessages from "@/components/Core/ErrorMessages";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmInTaskType, userTaskType } from "@/types/tasksTypes";
 import { Button, Grid, TextField, Typography } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+// simport { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -16,6 +15,10 @@ import addTaskService from "../../../../../lib/services/TasksService/addTaskServ
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import styles from "./AddTaskMobile.module.css";
+import { addDays, startOfDay } from "date-fns";
+import { DatePicker } from "rsuite";
+import "rsuite/dist/rsuite.css";
+
 const AddTask = () => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -142,6 +145,13 @@ const AddTask = () => {
         }
     };
 
+    const currentDate = new Date();
+    const todayStart = startOfDay(currentDate); // Set the time to midnight
+    const isDisabledDate = (date: any) => {
+        // Disable dates in the past
+        return date < addDays(new Date(), -1);
+    };
+
     // const removeFiles = () => {
     //   setFiles([]);
     //   setFilestoNullOnFarmChange(true);
@@ -206,7 +216,7 @@ const AddTask = () => {
                     <h4 className={styles.eachFormTitle}>
                         Deadline<span style={{ color: "red" }}>*</span>
                     </h4>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <MobileDatePicker
                             value={deadline}
                             disablePast
@@ -258,7 +268,42 @@ const AddTask = () => {
                                 },
                             }}
                         />
-                    </LocalizationProvider>
+                    </LocalizationProvider> */}
+                    <DatePicker
+                        format="dd-MM-yyyy HH:mm "
+                        shouldDisableDate={isDisabledDate}
+                        size="lg"
+                        editable={false}
+                        placeholder={"Select date"}
+                        shouldDisableHour={hour => hour < new Date().getHours()}
+                        shouldDisableMinute={minute => minute < new Date().getMinutes()}
+                        ranges={[{ label: 'Now', value: new Date() }]}
+                        style={{ width: "100%" }}
+                        onChange={(newValue: any) => {
+                            const originalDate = new Date(newValue);
+                            const utcDate = originalDate.toUTCString();
+                            setDeadline(utcDate);
+                            let temp = new Date(utcDate).toISOString()
+                            setDeadlineString(temp);
+                            setDeadline(newValue);
+                        }}
+
+                        locale={{
+                            sunday: 'Su',
+                            monday: 'Mo',
+                            tuesday: 'Tu',
+                            wednesday: 'We',
+                            thursday: 'Th',
+                            friday: 'Fr',
+                            saturday: 'Sa',
+                            ok: 'OK',
+                            today: 'Today',
+                            yesterday: 'Yesterday',
+                            hours: 'Hours',
+                            minutes: 'Minutes',
+                            seconds: 'Seconds'
+                        }}
+                    />
                     {error && (
                         <Typography variant="body2" color="error">
                             {error}

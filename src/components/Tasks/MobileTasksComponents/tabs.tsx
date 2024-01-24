@@ -21,7 +21,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
         "/tasks/status/count/stats?status=TO-START",
         "/tasks/status/count/stats?status=INPROGRESS",
         "/tasks/status/count/stats?status=DONE",
-        "/tasks/status/count/stats?status=OVER-DUE",
+        "/tasks/status/count/stats?overdue=true",
       ];
 
       let queryParams: any = {};

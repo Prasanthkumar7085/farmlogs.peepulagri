@@ -83,7 +83,7 @@ const TaskForm = () => {
       assigned_to: user?._id,
       farm_id: defaultValue?._id,
       categories: [],
-      deadline: deadlineString ? deadlineString : "",
+      deadline: deadlineString ? new Date(deadlineString).toISOString() : "",
       description: description ? description : "",
       title: title ? title : "",
       attachments: files,
@@ -334,19 +334,14 @@ const TaskForm = () => {
                         ranges={[{ label: 'Now', value: new Date() }]}
                         style={{ width: 260 }}
                         onChange={(newValue: any) => {
-                          let dateNow = new Date();
-                          let dateWithPresentTime = moment(new Date(newValue))
-                            .set({
-                              hour: dateNow.getHours(),
-                              minute: dateNow.getMinutes(),
-                              second: dateNow.getSeconds(),
-                              millisecond: dateNow.getMilliseconds(),
-                            })
-                            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-                          setDeadlineString(dateWithPresentTime);
+                          const originalDate = new Date(newValue);
+                          const utcDate = originalDate.toUTCString();
+                          setDeadline(utcDate);
+                          let temp = new Date(utcDate).toISOString()
+                          setDeadlineString(temp);
                           setDeadline(newValue);
                         }}
+
                         locale={{
                           sunday: 'Su',
                           monday: 'Mo',

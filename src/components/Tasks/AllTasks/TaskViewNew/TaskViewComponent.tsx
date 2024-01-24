@@ -920,7 +920,7 @@ const TaskViewComponent = () => {
                     shouldDisableDate={isDisabledDate}
                     size="lg"
                     editable={false}
-                    value={new Date(deadlineString)}
+                    value={data?.deadline ? new Date(data?.deadline) : new Date()}
                     placeholder={"Select date"}
                     shouldDisableHour={hour => hour < new Date().getHours()}
                     shouldDisableMinute={minute => minute < new Date().getMinutes()}
@@ -931,19 +931,10 @@ const TaskViewComponent = () => {
                       !(loggedInUserId == data?.created_by?._id)
                     }
                     onChange={(newValue: any) => {
-                      let dateNow = new Date();
-                      let dateWithPresentTime = moment(new Date(newValue))
-                        .set({
-                          hour: dateNow.getHours(),
-                          minute: dateNow.getMinutes(),
-                          second: dateNow.getSeconds(),
-                          millisecond: dateNow.getMilliseconds(),
-                        })
-                        .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-                      setDeadlineString(dateWithPresentTime);
-
-                      onUpdateDeadlineField({ deadlineProp: dateWithPresentTime });
+                      const originalDate = new Date(newValue);
+                      const utcDate = originalDate.toUTCString();
+                      setDeadlineString(utcDate);
+                      onUpdateDeadlineField({ deadlineProp: new Date(utcDate).toISOString() });
                     }}
                   />
                   <img

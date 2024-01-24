@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Avatar, Button, ButtonBase, Chip, Tooltip, Typography } from "@mui/material";
+import { Avatar, Button, ButtonBase, Chip, IconButton, Tooltip, Typography } from "@mui/material";
 import styles from "./shipped-statusform.module.css";
 import timePipe from "@/pipes/timePipe";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDeta
 import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 // type ShippedStatusformType = {
 //   fARM1?: string;
@@ -196,8 +197,8 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
         </div>
         {data?.tracking_details?.tracking_id ?
           <div className={styles.trackingid}>
-            <Typography variant="h6" color="ThreeDLightShadow">Tracking Details</Typography>
-            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: "4.5rem" }}>
+            <Typography variant="h6" className={styles.trackingBlockHeading}>Tracking Details</Typography>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: "3rem" }}>
               <div className={styles.information}>
                 <label className={styles.label1}>Service Name</label>
 
@@ -213,22 +214,22 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
               <div className={styles.information}>
                 <label className={styles.label1}>Delivery Date</label>
 
-                <Typography variant="body2">{timePipe(data?.tracking_details?.delivery_date, "DD-MM-YYYY hh:mm A")}</Typography>
+                <Typography variant="body2">{timePipe(data?.tracking_details?.delivery_date, "DD MMM YYYY hh:mm A")}</Typography>
               </div>
 
               <div className={styles.information}>
                 <label className={styles.label1}>Tracking Id</label>
 
-                <Typography variant="body2">{data?.tracking_details?.tracking_id}
+                <Typography sx={{ display: "flex", alignItems: "center" }} variant="body2">{data?.tracking_details?.tracking_id}
                   {showTooltip ?
                     <Tooltip title="Text copied!" >
-                      <Button color="primary" variant="contained">
-                        Copy
-                      </Button>
+                      <IconButton  >
+                        <ContentCopyIcon sx={{ fontSize: "1.2rem" }} />
+                      </IconButton>
                     </Tooltip> :
-                    <Button color="primary" variant="contained" onClick={() => copyTextToClipboard()}>
-                      Copy
-                    </Button>
+                    <IconButton onClick={() => copyTextToClipboard()}>
+                      <ContentCopyIcon sx={{ fontSize: "1.2rem" }} />
+                    </IconButton>
                   }</Typography>
               </div>
 
@@ -243,10 +244,10 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
           ""}
         {data?.status == "PURCHASED" ?
           <div className={styles.trackingid}>
-            <Typography variant="h6" color="ThreeDLightShadow">Tracking Details</Typography>
-            <Button variant="outlined" onClick={() => {
+            <Typography variant="h6" className={styles.trackingBlockHeading}>Tracking Details</Typography>
+            <Button className={styles.addTrackingDetailsBtn} variant="text" onClick={() => {
               setTrackingDialogOpen(true)
-            }}>+Add Tracking Details</Button>
+            }}>+ Add Tracking Details</Button>
           </div> : ""}
       </div>
       <TrackingDetailsDilog

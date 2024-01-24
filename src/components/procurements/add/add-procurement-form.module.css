@@ -98,13 +98,12 @@
   font-size: clamp(12px, 0.72vw, 16px);
   font-weight: 500;
   line-height: 100%;
+  margin: 0;
   margin-bottom: 0.5rem;
 }
 
 .personofcontact {
-  padding-block: 0.5rem;
-  margin-top: 1.5rem;
-  border-top: 1px solid lightgrey;
+  padding: 1rem 1.5rem;
 }
 
 .pocSelectBlock {

@@ -68,11 +68,27 @@
 
 
 .PointOfContactTitle {
-  color: #344054;
-  font-size: clamp(12px, 0.72vw, 14px);
-  font-weight: 500;
+  color: #344054 !important;
+  font-size: clamp(14px, 0.83vw, 16px);
+  font-weight: 500 !important;
   line-height: inherit;
   font-family: "Inter", sans-serif !important;
+}
+
+.label1 {
+  color: #6A7185 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(12px, 0.72vw, 14px) !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
+}
+
+.information p {
+  color: #35353D !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(14px, 0.83vw, 16px) !important;
+  font-weight: 400 !important;
+  line-height: 24px !important;
 }
 
 .contactPersonName {
@@ -107,10 +123,17 @@
 }
 
 .information {
-  align-items: center;
+  align-items: flex-start;
   gap: 5px;
-  font-size: 16px;
-  color: #35353d;
+}
+
+.addTrackingDetailsBtn {
+  color: #F2A84C !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(12px, 0.72vw, 15px) !important;
+  font-weight: 500 !important;
+  line-height: 100% !important;
+  text-transform: capitalize !important;
 }
 
 .shippedstatusform,
@@ -121,6 +144,14 @@
   align-items: flex-start;
   justify-content: center;
   gap: 5px;
+}
+
+.trackingBlockHeading {
+  color: #35353D !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(15px, 0.93vw, 18px) !important;
+  font-weight: 500;
+  line-height: 20px;
 }
 
 .shippedstatusform {

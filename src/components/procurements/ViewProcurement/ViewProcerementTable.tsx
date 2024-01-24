@@ -417,11 +417,11 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
   return (
     <div className={styles.materialsBlock} style={{ width: "100%" }}>
-      <p className={styles.materialsBlockHeading}>Required Materials</p>
+      <div className={styles.materialHeader}>
 
-      <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+          <p className={styles.materialsBlockHeading}>Material Requirements</p>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
           {data?.status == "PENDING" ?
             <Button variant="outlined"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
@@ -431,18 +431,25 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                 setAddMaterialOpen(true)
               }}>
               <Image src="/viewProcurement/view-procurement-add-icon.svg" alt="" width={10} height={10} />
-              Add Materials</Button> : ""}
+              Add Material</Button> : ""}
 
-
-          {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading || materials[0]?.price ? "" :
-            <Button variant="contained"
-              sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
-              onClick={() => {
-                approveAllMaterials()
-
-              }}>Approve Materials</Button>}
         </div>
+        {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading || materials[0]?.price ? "" :
+          <Button className={styles.aprroveMaterialBtn} variant="text"
+            sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
+            onClick={() => {
+              approveAllMaterials()
 
+            }}> <ImageComponent
+              src={
+                "/viewProcurement/procurement-approve-icon.svg"
+              }
+              height={14}
+              width={14}
+              alt=""
+            /> Approve Materials</Button>}
+      </div>
+      <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
         {materials?.length ? (
           <div>
             <Table >
@@ -465,6 +472,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               <TableBody >
                 {materials?.map((row: any, index: any) => {
                   return (
+
                     <TableRow
                       className={styles.tableBodyRow}
                       // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -499,50 +507,60 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "space-between",
+                            justifyContent: "space-evenly",
                           }}
                         >
                           {row?.status !== "PENDING" && row?.status !== "REJECTED" ? "" :
                             <>
-                              <div style={{ cursor: "pointer" }}>
-                                <IconButton
-                                  onClick={() => {
-                                    setDeleteMaterialId(row._id)
-                                    setDeleteMaterialOpen(true)
+                              <IconButton
+                                onClick={() => {
+                                  setEditMaterialId(row._id);
+                                  setEditMaterialOpen(true);
+                                }}
+                              >
+                                <ImageComponent
+                                  src={
+                                    "/viewProcurement/procurement-edit-icon.svg"
                                   }
+                                  height={15}
+                                  width={15}
+                                  alt=""
+                                />                                </IconButton>
+
+                              <IconButton
+                                onClick={() => {
+                                  setDeleteMaterialId(row._id)
+                                  setDeleteMaterialOpen(true)
+                                }
+                                }
+                              >
+                                <ImageComponent
+                                  src={
+                                    "/viewProcurement/procurement-delete-icon.svg"
                                   }
-                                >
-                                  <ImageComponent
-                                    src={
-                                      "/viewTaskIcons/task-table-delete.svg"
-                                    }
-                                    height={17}
-                                    width={17}
-                                    alt=""
-                                  />
-                                </IconButton>
-                              </div>
-                              <div style={{ cursor: "pointer" }}>
-                                <IconButton
-                                  onClick={() => {
-                                    setEditMaterialId(row._id);
-                                    setEditMaterialOpen(true);
-                                  }}
-                                >
-                                  <EditOutlined sx={{ color: "red" }} />
-                                </IconButton>
-                              </div>
+                                  height={15}
+                                  width={15}
+                                  alt=""
+                                />
+                              </IconButton>
+
+
                             </>
                           }
-
-
                           {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
                             <>
                               {row?.status !== "PENDING" ?
-
                                 <Button
-                                  sx={{ display: row?.status == "REJECTED" ? "none" : "" }}
-                                  variant="outlined"
+                                  className={styles.addPurchaseBtn}
+                                  variant="contained"
+                                  sx={{
+                                    display: row?.status == "REJECTED" ? "none" : "", background: row?.price && row?.vendor ? "#D94841" : "#56CCF2",
+                                    "&:hover": {
+                                      background: row?.price && row?.vendor ? "#D94841" : "#56CCF2",
+                                    },
+
+                                  }}
+
                                   onClick={() => {
                                     setMaterialId(row?._id);
                                     setMaterialOpen(true)
@@ -554,8 +572,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                 </Button>
                                 :
                                 <div style={{ cursor: "pointer" }}>
-                                  <Button
-                                    variant="outlined"
+                                  <IconButton
                                     onClick={() => {
                                       const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
                                       // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
@@ -575,14 +592,21 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                     }
                                     }
                                   >
-                                    Approve
-                                  </Button>
+                                    <ImageComponent
+                                      src={
+                                        "/viewProcurement/procurement-approve-icon.svg"
+                                      }
+                                      height={19}
+                                      width={19}
+                                      alt=""
+                                    />
+                                  </IconButton>
                                 </div>}
 
 
                               <div style={{ cursor: "pointer" }}>
-                                <Button
-                                  variant="outlined"
+                                <IconButton
+
                                   sx={{ display: row?.status == "PURCHASED" ? "none" : "" }}
                                   onClick={() => {
                                     if (row?.status == "REJECTED") {
@@ -607,8 +631,22 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                   }
                                   }
                                 >
-                                  {row?.status == "REJECTED" ? "Approve" : "Reject"}
-                                </Button>
+                                  {row?.status == "REJECTED" ? <ImageComponent
+                                    src={
+                                      "/viewProcurement/procurement-approve-icon.svg"
+                                    }
+                                    height={19}
+                                    width={19}
+                                    alt=""
+                                  /> : <ImageComponent
+                                    src={
+                                      "/viewProcurement/procurement-reject-icon.svg"
+                                    }
+                                    height={17}
+                                    width={17}
+                                    alt=""
+                                  />}
+                                </IconButton>
                               </div>
                             </>
                             : ""}
@@ -616,17 +654,24 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                         </div>
                       </TableCell>
                     </TableRow>
+
                   );
                 })}
+                {materials?.some((obj: any) => obj.hasOwnProperty('price') && obj.price !== null && obj.price !== undefined && obj.price !== "")
+                  ?
+                  <TableRow className={styles.tableBodyRow}>
+                    <TableCell colSpan={6} className={styles.tableBodyCell} sx={{ textAlign: "end" }}>
+                      <Typography className={styles.totalAmountTitle} >Total Amount</Typography>
+
+                    </TableCell>
+                    <TableCell colSpan={7} className={styles.tableBodyCell}>
+                      <Typography className={styles.totalAmount}>{formatMoney(sumOfPrices(materials))}</Typography>
+                    </TableCell>
+                  </TableRow> : ""}
 
               </TableBody>
             </Table>
-            {materials?.some((obj: any) => obj.hasOwnProperty('price') && obj.price !== null && obj.price !== undefined && obj.price !== "")
-              ?
-              <div className={styles.TotalAmountBlock}>
-                <Typography className={styles.totalAmountTitle}>Total Amount</Typography>
-                <Typography className={styles.totalAmount}>{formatMoney(sumOfPrices(materials))}</Typography>
-              </div> : ""}
+
           </div>
         ) : (
           <div>No materials added</div>

@@ -10,7 +10,12 @@ const SelectComponent = ({ options, ...rest }: any) => {
             sx={{
                 width: "100%",
                 background: "#fff",
-                color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
+                color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif",
+                '& .MuiSelect-select': {
+                    fontSize: "clamp(.75rem, 0.72vw, 1rem)",
+                    paddingBlock: "8px !important"
+
+                }
             }}
             displayEmpty
             {...rest}

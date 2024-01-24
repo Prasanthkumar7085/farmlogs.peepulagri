@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import styles from "./footer.module.css";
 import { useRouter } from 'next/router';
 import { Button } from "@mui/material";
+import Image from 'next/image';
 
 export default function ScoutingHeader({ children }: any) {
   const router = useRouter()
@@ -30,19 +31,21 @@ export default function ScoutingHeader({ children }: any) {
             onClick={() => router.push("/dashboard")}
           >
             {router.pathname.includes("/dashboard") ? (
-              <img
+              <Image
                 src="/mobileIcons/navTabs/house-fill.svg"
                 alt=""
-                width={"25px"}
+                width={23}
+                height={23}
               />
             ) : (
-              <img
+              <Image
                 src="/mobileIcons/navTabs/dashboard-mobile.svg"
                 alt=""
-                width={"25px"}
+                width={20}
+                height={20}
               />
-            )}{" "}
-            Dashboard
+            )}
+
           </Button>
 
           <Button
@@ -54,44 +57,24 @@ export default function ScoutingHeader({ children }: any) {
             onClick={() => router.push("/farms")}
           >
             {router.pathname.includes("/farms") ? (
-              <img
+              <Image
                 src="/mobileIcons/navTabs/farms-mobile-active.svg"
                 alt=""
-                width={"25px"}
+                width={23}
+                height={23}
               />
             ) : (
-              <img
+              <Image
                 src="/mobileIcons/navTabs/farms-mobile.svg"
                 alt=""
-                width={"25px"}
+                width={20}
+                height={20}
               />
-            )}{" "}
-            Farms
+            )}
+
           </Button>
 
-          <Button
-            className={
-              router.pathname.includes("/users-tasks")
-                ? styles.navButtonActive
-                : styles.navButton
-            }
-            onClick={() => router.push("/users-tasks")}
-          >
-            {router.pathname.includes("/users-tasks") ? (
-              <img
-                src="/mobileIcons/navTabs/Task filled.svg"
-                alt=""
-                width={"25px"}
-              />
-            ) : (
-              <img
-                src="/mobileIcons/navTabs/Task.svg"
-                alt=""
-                width={"25px"}
-              />
-            )}{" "}
-            Tasks
-          </Button>
+
 
           <Button
             className={
@@ -102,21 +85,72 @@ export default function ScoutingHeader({ children }: any) {
             onClick={() => router.push("/summary")}
           >
             {router.pathname.includes("/summary") ? (
-              <img
+              <Image
                 src="/mobileIcons/navTabs/list-dashes-fill.svg"
-                width={"25px"}
+                width={23}
+                height={23}
                 alt=""
               />
             ) : (
-              <img
+              <Image
                 src="/mobileIcons/navTabs/summary-mobile.svg"
                 alt=""
-                width={"25px"}
+                width={20}
+                height={20}
               />
-            )}{" "}
-            Summary
+            )}
+          </Button>
+          <Button
+            className={
+              router.pathname.includes("/users-tasks")
+                ? styles.navButtonActive
+                : styles.navButton
+            }
+            onClick={() => router.push("/users-tasks")}
+          >
+            {router.pathname.includes("/users-tasks") ? (
+              <Image
+                src="/mobileIcons/navTabs/Task filled.svg"
+                alt=""
+                width={23}
+                height={23}
+              />
+            ) : (
+              <Image
+                src="/mobileIcons/navTabs/Task.svg"
+                alt=""
+                width={20}
+                height={20}
+              />
+            )}
+
           </Button>
 
+          {/* <Button
+            className={
+              router.pathname.includes("/users-procurements")
+                ? styles.navButtonActive
+                : styles.navButton
+            }
+            onClick={() => router.push("/users-procurements")}
+          >
+            {router.pathname.includes("/users-procurements") ? (
+              <Image
+                src="/mobileIcons/navTabs/procurement-active-icon.svg"
+                alt=""
+                width={23}
+                height={23}
+              />
+            ) : (
+              <Image
+                src="/mobileIcons/navTabs/procurement-icon.svg"
+                alt=""
+                width={20}
+                height={20}
+              />
+            )}
+
+          </Button> */}
           <Button
             className={
               router.pathname.includes("/profile")
@@ -126,19 +160,21 @@ export default function ScoutingHeader({ children }: any) {
             onClick={() => router.push("/profile/user")}
           >
             {router.pathname.includes("/profile") ? (
-              <img
+              <Image
                 src="/mobileIcons/navTabs/user-fill.svg"
                 alt=""
-                width={"25px"}
+                width={23}
+                height={23}
               />
             ) : (
               <img
                 src="/mobileIcons/navTabs/profile-mobile.svg"
                 alt=""
-                width={"25px"}
+                width={20}
+                height={20}
               />
             )}
-            Profile
+
           </Button>
         </div>
       </Paper>

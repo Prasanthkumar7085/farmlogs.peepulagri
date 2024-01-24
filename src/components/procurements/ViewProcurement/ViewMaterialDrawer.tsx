@@ -106,15 +106,15 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
 
     return (
         <Drawer anchor={"right"} open={materialOpen}>
-            <div style={{ width: "300px", padding: ".5rem 1.5rem" }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <h3>{materials?.price && materials?.vendor ? "Edit Purchase" : "Add Purchase"}</h3>
+            <div className={styles.addMaterialDrawer} >
+                <div className={styles.drawerHeaderBlock} >
+                    <h3 className={styles.drawerHeading}>{materials?.price && materials?.vendor ? "Edit Purchase" : "Add Purchase"}</h3>
                     <IconButton
                         onClick={() => {
                             setMaterialOpen(false);
                         }}
                     >
-                        <Clear />
+                        <Clear sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }} />
                     </IconButton>
                 </div>
                 <div className={styles.inputField}>
@@ -123,29 +123,45 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                     </label>
                     <TextField
                         className={styles.input}
-                        color="primary"
                         placeholder="Please enter the material title"
                         disabled
+                        size="small"
                         variant="outlined"
                         value={materials?.name}
                     />
 
                 </div>
-                <div>
+                <div className={styles.inputField}>
                     <label className={styles.label}>
                         Material Procurement (Qty){" "}
                         <strong style={{ color: "red" }}>*</strong>
                     </label>
                     <TextField
-                        sx={{ width: "100%" }}
-                        type="number"
+                        sx={{
+                            width: "100%", background: "#fff",
+                            '& .MuiInputBase-root': {
+                                paddingRight: "0 !important"
+                            },
+                            '& .MuiOutlinedInput-root': {
+                                paddingRight: "0 !important"
+                            }
+                        }} type="number"
                         disabled
+                        size="small"
                         // defaultValue={materials?.required_qty + " " + materials?.required_units}
                         value={materials?.required_qty}
                         InputProps={{
                             endAdornment: (
                                 <Select
-                                    color="primary"
+                                    sx={{
+                                        background: "#fff",
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderWidth: "1px 1px 1px 0 !important",
+                                            borderRadius: "1px 4px 4px 0 !important",
+
+                                        }
+                                    }}
+                                    size="small"
                                     disabled
                                     value={materials?.required_units}
 
@@ -159,50 +175,62 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                     />
                 </div>
 
-                <div className={styles.personofcontact}>
+                <div className={styles.inputField}>
                     <label className={styles.label}>
                         Material Available (Qty)(optional)
                     </label>
-                    <div className={styles.input1}>
-                        <TextField
-                            className={styles.inputbox}
-                            color="primary"
-                            variant="outlined"
-                            disabled
-                            type="number"
+                    <TextField
+                        disabled
+                        sx={{
+                            width: "100%", background: "#fff",
+                            '& .MuiInputBase-root': {
+                                paddingRight: "0 !important"
+                            },
+                            '& .MuiOutlinedInput-root': {
+                                paddingRight: "0 !important"
+                            }
+                        }}
+                        type="number"
+                        size="small"
+                        value={materials?.available_qty}
+                        InputProps={{
+                            endAdornment: (
+                                <Select
+                                    sx={{
+                                        background: "#fff",
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderWidth: "1px 1px 1px 0 !important",
+                                            borderRadius: "1px 4px 4px 0 !important",
 
-                            value={materials?.available_qty}
-                            InputProps={{
-                                endAdornment: (
-                                    <Select
-                                        color="primary"
-                                        disabled
-                                        value={materials?.available_units}
+                                        }
+                                    }}
+                                    size="small"
+                                    disabled
+                                    value={materials?.available_units}
 
-                                    >
-                                        <MenuItem value="Litres">Litres</MenuItem>
-                                        <MenuItem value="Kilograms">Kilograms</MenuItem>
-                                    </Select>
-                                ),
-                            }}
-                        />
+                                >
+                                    <MenuItem value="Litres">Litres</MenuItem>
+                                    <MenuItem value="Kilograms">Kilograms</MenuItem>
+                                </Select>
+                            ),
+                        }}
+                    />
 
-                    </div>
                 </div>
                 <div className={styles.inputField}>
                     <label className={styles.label}>
                         Name Of Vendor <b style={{ color: "red" }}>*</b>
                     </label>
                     <TextField
-                        className={styles.input}
-                        color="primary"
-                        placeholder="Enter Name Of Vendor"
+                        size="small" placeholder="Enter Name Of Vendor"
                         variant="outlined"
+                        sx={{ width: "100%" }}
                         value={nameVendor}
                         onChange={(e) => {
                             setNameVendor(e.target.value)
                         }}
                     />
+
                     <ErrorMessages
                         errorMessages={errorMessages}
                         keyname={"vendor"}
@@ -213,8 +241,8 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         Price (Rs) <b style={{ color: "red" }}>*</b>
                     </label>
                     <TextField
-                        className={styles.input}
-                        color="primary"
+                        size="small"
+                        sx={{ width: "100%" }}
                         placeholder="Enter Price Details Here"
                         variant="outlined"
                         type='number'
@@ -228,34 +256,32 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         keyname={"price"}
                     />
                 </div>
-                <div className={styles.modalActions}>
-                    <div className={styles.buttonsgroup}>
-                        <Button
-                            color="primary"
-                            variant="outlined"
-                            onClick={() => {
+                <div className={styles.drawerBtngroup}>
+                    <Button
+                        className={styles.cancelBtn}
+                        variant="outlined"
+                        onClick={() => {
 
-                                setMaterialOpen(false);
-                            }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={() => {
-                                if (materials?.price && materials?.vendor) {
-                                    addMaterial();
-                                } else {
-                                    addMaterial();
-                                }
-                            }}
-                        >
-                            {materials?.price && materials?.vendor ? "Update" : "Submit"}
-                        </Button>
-                    </div>
+                            setMaterialOpen(false);
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        className={styles.submitBtn}
+                        variant="contained"
+                        onClick={() => {
+                            if (materials?.price && materials?.vendor) {
+                                addMaterial();
+                            } else {
+                                addMaterial();
+                            }
+                        }}
+                    >
+                        {materials?.price && materials?.vendor ? "Update" : "Submit"}
+                    </Button>
                 </div>
-                            <LoadingComponent loading={loading}/>
+                <LoadingComponent loading={loading} />
 
             </div>
         </Drawer>

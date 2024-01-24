@@ -25,6 +25,8 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+
+
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
@@ -49,8 +51,9 @@ input[type=number] {
     font-family: "Inter", sans-serif !important;
 
 }
-.rs-picker-menu{
-    z-index: 9999!important;
+
+.rs-picker-menu {
+    z-index: 9999 !important;
 }
 
 :root {
@@ -160,7 +163,7 @@ input[type=number] {
 
 .dataTable-container .thead {
     border-bottom: 1px solid var(--stroke, #E9EDF1);
-    background: var(--color-sienna);
+    background: #D94841;
     text-align: left;
 }
 
@@ -178,7 +181,7 @@ input[type=number] {
 .dataTable-container .thead .table-row .cell:last-child {
     position: sticky;
     right: 0;
-    background: var(--color-sienna);
+    background: #D94841;
     /* border-left: 1px solid #d8d7d6; */
 }
 
@@ -190,7 +193,7 @@ input[type=number] {
 .dataTable-container .thead .table-row .cell:first-child {
     position: sticky;
     left: 0;
-    background: var(--color-sienna);
+    background: #D94841;
 }
 
 .dataTable-container .tbody .table-row:hover {

@@ -37,7 +37,7 @@ const TaskForm = () => {
     setLoading(true);
     let body = {
       categories: [],
-      deadline: deadlineString ? deadlineString : "",
+      deadline: deadlineString ? new Date(deadlineString).toISOString() : "",
       description: description ? description : "",
       title: title ? title : "",
     };

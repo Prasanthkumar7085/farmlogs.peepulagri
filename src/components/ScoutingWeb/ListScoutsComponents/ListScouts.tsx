@@ -479,7 +479,8 @@ const ListScouts: FunctionComponent = () => {
 
 
 
-        if (farmId) {
+        if (farmId || router.query.farm_id) {
+
           let obj =
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == farmId);
@@ -573,6 +574,7 @@ const ListScouts: FunctionComponent = () => {
       getAllFarms({
         farmId: router.query.farm_id as string,
         searchString: router.query.farm_search_string as string,
+        location_id: router.query.location_id as string
       });
       getLocations(router.query.location_id as string);
       getAllExistedScouts({

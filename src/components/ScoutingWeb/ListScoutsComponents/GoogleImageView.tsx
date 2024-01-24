@@ -388,22 +388,23 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             {loading1 ? <GoogleViewSkeleton /> : ""}
 
             <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
-                <Button variant="outlined"
-                    disabled={has_more ? false : true}
-                    sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
-                    onClick={() => {
-                        if (selectedImage?._id) {
-                            setSelectedItemDetails(selectedImage)
-                            getInstaScrollImageDetails("")
+                {has_more ?
+                    <Button variant="outlined"
+                        disabled={has_more ? false : true}
+                        sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
+                        onClick={() => {
+                            if (selectedImage?._id) {
+                                setSelectedItemDetails(selectedImage)
+                                getInstaScrollImageDetails("")
 
-                        } else {
-                            setSelectedItemDetails(data[imageIndex])
-                            getInstaScrollImageDetails("")
+                            } else {
+                                setSelectedItemDetails(data[imageIndex])
+                                getInstaScrollImageDetails("")
 
 
-                        }
-                    }}
-                >{has_more ? <>Load More< SouthIcon fontSize="small" /></> : ""}</Button>
+                            }
+                        }}
+                    > <>Load More< SouthIcon fontSize="small" /></> </Button> : ""}
             </div>
 
         </div>

@@ -64,6 +64,7 @@
   width: 170px;
   display: flex;
   align-items: center;
+  font-size: clamp(10px,0.65vw,12px);
   justify-content: center;
   gap: 6px;
 }

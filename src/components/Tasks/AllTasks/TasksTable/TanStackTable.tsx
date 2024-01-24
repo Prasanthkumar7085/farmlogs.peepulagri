@@ -195,7 +195,7 @@ const TanStackTableComponent = ({
                   <tr className="table-row" key={row.id} >
                     {row.getVisibleCells().map((cell) => {
                       return (
-                        <td className="cell" key={cell.id} style={{ backgroundColor: row?.original?.isOverdue ? "#d947451a" : "" }}>
+                        <td className="cell" key={cell.id} style={{ backgroundColor: row?.original?.isOverdue ? "#FCEFEE" : "" }}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

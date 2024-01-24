@@ -91,14 +91,14 @@ const MainContent = ({
                 >
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                      data?.title.slice(1)
+                    data?.title.slice(1)
                     : "-"}
                 </h6>
               ) : (
                 <h6 className={styles.title}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                      data?.title.slice(1)
+                    data?.title.slice(1)
                     : "-"}
                 </h6>
               )}
@@ -151,23 +151,22 @@ const MainContent = ({
             style={{
               color: data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                    ?.color
+                  ?.color
                 : "#d0d5dd",
-              border: `1px solid ${
-                data?.status
-                  ? statusOptions?.find((item) => item.value == data?.status)
-                      ?.color
-                  : "#d0d5dd"
-              }`,
+              border: `1px solid ${data?.status
+                ? statusOptions?.find((item) => item.value == data?.status)
+                  ?.color
+                : "#d0d5dd"
+                }`,
               cursor:
                 status !== "DONE" &&
-                (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
                   ? "pointer"
                   : "default",
             }}
             onClick={(e) =>
               status !== "DONE" &&
-              (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                (loggedInUserId == data?.created_by?._id || hasEditAccess)
                 ? handleClick(e)
                 : ""
             }
@@ -175,11 +174,11 @@ const MainContent = ({
             <span>
               {data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                    ?.title
+                  ?.title
                 : ""}
             </span>
             {status !== "DONE" &&
-            (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
+              (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
               <KeyboardArrowDownIcon sx={{ fontSize: "1rem" }} />
             ) : (
               ""
@@ -231,15 +230,15 @@ const MainContent = ({
                 onAccept={(newValue: any) => {
                   let dateNow = new Date(newValue);
 
-                 setDeadlineString(
-                   new Date(dateNow?.toUTCString())?.toISOString()
-                 );
+                  setDeadlineString(
+                    new Date(dateNow?.toUTCString())?.toISOString()
+                  );
 
-                 onUpdateDeadlineField({
-                   deadlineProp: new Date(
-                     dateNow?.toUTCString()
-                   )?.toISOString(),
-                 });
+                  onUpdateDeadlineField({
+                    deadlineProp: new Date(
+                      dateNow?.toUTCString()
+                    )?.toISOString(),
+                  });
                 }}
                 format="dd/MM/yyyy hh:mm aa"
                 slotProps={{
@@ -311,3 +310,15 @@ const MainContent = ({
 };
 
 export default MainContent;
+
+
+
+
+
+
+
+
+
+
+
+

@@ -127,31 +127,30 @@
 }
 
 .tabButton {
-  background-color: #F0FFF0 !important;
-  border: 1px solid #05A155 !important;
-  color: #05A155 !important;
-  padding: 5px 20px !important;
-  border-radius: 20px !important;
-  font-size: clamp(13px, 0.72vw, 16px) !important;
+  border-bottom: 1px solid #05A155 !important;
+  color: #6a718599 !important;
+  padding: 3px 10px !important;
+  border-radius: 0 !important;
+  font-size: clamp(12px, 0.72vw, 14px) !important;
   text-transform: capitalize !important;
   font-family: 'Inter', sans-serif !important;
 }
 
 .tabButton:hover {
-  background-color: #F0FFF0 !important;
-  border: 1px solid #05A155 !important;
-  color: #05A155 !important;
+  border-bottom: 1px solid #05A155 !important;
+  color: #6a718599 !important;
+  background: transparent !important;
 }
 
 .tabActiveButton {
-  font-size: clamp(13px, 0.72vw, 16px) !important;
+  font-size: clamp(12px, 0.72vw, 14px) !important;
   text-transform: capitalize !important;
   font-family: 'Inter', sans-serif !important;
   background-color: #05A155 !important;
   border: 1px solid #05A155 !important;
   color: #fff !important;
-  padding: 5px 20px !important;
-  border-radius: 20px !important;
+  padding: 3px 10px !important;
+  border-radius: 0 !important;
 }
 
 .tabActiveButton:hover {

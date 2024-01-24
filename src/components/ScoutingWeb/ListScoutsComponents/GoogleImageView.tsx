@@ -343,7 +343,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             let routerData = { ...router.query, view: true, image_id: selectedImage?._id }
                             dispatch(QueryParamsForScouting(routerData))
                             router.push(
-                                `/scouts/farm/${router.query.farm_id || selectedImage?.farm_id?._id}/crops/${router.query.crop_id || selectedImage?.crop_id?._id}/${selectedImage?._id}?location_id=${router.query.location_id || ""}`
+                                `/scouts/farm/${router.query.farm_id || selectedImage?.farm_id?._id || imageDetails?.crop_id?._id}/crops/${router.query.crop_id || selectedImage?.crop_id?._id || imageDetails?.crop_id?._id}/${selectedImage?._id || imageDetails?._id}?location_id=${router.query.location_id || ""}`
                             );
                         }
                         else {

@@ -332,7 +332,7 @@ const ListScouts: FunctionComponent = () => {
 
       } = queryParams;
 
-      if (paramasFromStore?.image_id) {
+      if (paramasFromStore?.view) {
         let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id, view_limit: paramasFromStore?.view_limit }
         router.push({ query: temp });
       }
@@ -667,7 +667,7 @@ const ListScouts: FunctionComponent = () => {
         userId: router.query.user_id as string,
         fromDate: "",
         toDate: "",
-        cropId: router.query.crop_id as string,
+        cropId: "",
         farmSearchString: '',
         location: ""
       });

@@ -1,15 +1,11 @@
 import ImageComponent from "@/components/Core/ImageComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import {
-  ScoutAttachmentDetails,
   SingleScoutResponse,
 } from "@/types/scoutTypes";
-
 import { QueryParamsForScouting, removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import TablePaginationComponentForScouts from "@/components/Core/TablePaginationComponentForScouts";
 import timePipe from "@/pipes/timePipe";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import { Autocomplete, Button, TextField, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -21,14 +17,11 @@ import { prepareURLEncodedParams } from "../../../../lib/requestUtils/urlEncoder
 import ListAllCropsForDropDownServices from "../../../../lib/services/CropServices/ListAllCropsForDropDownServices";
 import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllExistedScoutsService from "../../../../lib/services/ScoutServices/AllScoutsServices/getAllExistedScoutsService";
-import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 import styles from "../farms/FarmsNavBar.module.css";
 import CropAutoCompleteFoScouts from "./CropAutoCompleteFoScouts";
-import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
 import DaySummaryComponent from "./DaySummaryComponent";
 import FarmAutoCompleteInAllScouting from "./FarmAutoCompleteInAllScouting";
 import ScoutingDailyImages from "./ScoutingDailyImages";
-import { errorMonitor } from "events";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import GoogleImageView from "./GoogleImageView";
 import TablePaginationComponent from "@/components/Core/TablePaginationComponent";

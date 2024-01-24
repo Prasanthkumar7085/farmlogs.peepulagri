@@ -232,26 +232,25 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         }
     }, [imageDetails?._id])
 
-
-
-
     return (
-        <div ref={ItemRef} >
+        <div style={{ padding: "1rem" }} ref={ItemRef} >
             <div className={styles.viewImgInfoHeader} >
-
                 <div className={styles.imageUploadingDetails} >
-                    <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
+                    <Avatar sx={{ color: "#fff", background: "#d94841", width: "20px", height: "20px", fontSize: "9px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                         <div className={styles.uploadedByName}>{selectedImage?._id ? selectedImage?.uploaded_by?.name : imageDetails?.uploaded_by?.name}</div>
                         <div>
                             <Typography variant="caption" className={styles.imageUploadedTime} >
-                                <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={15} height={15} />
-                                {timePipe(selectedImage?.uploaded_at ? selectedImage?.uploaded_at : imageDetails?.uploaded_at, "DD MMM YYYY hh:mm A")}</Typography>
+                                <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={13} height={13} />
+                                <span>
+                                    {timePipe(selectedImage?.uploaded_at ? selectedImage?.uploaded_at : imageDetails?.uploaded_at, "DD MMM YYYY hh:mm A")}
+                                </span>
+                            </Typography>
                         </div>
                     </div>
                 </div>
 
-                <Typography variant="subtitle1">{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title}/{selectedImage?._id ? selectedImage?.crop_id?.title : imageDetails?.crop_id?.title}</Typography>
+                <Typography variant="subtitle1" className={styles.imagesTitle}>{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title}/{selectedImage?._id ? selectedImage?.crop_id?.title : imageDetails?.crop_id?.title}</Typography>
                 <div>
                     <IconButton
                         disabled={loading || imageIndex == 0 ? true : false}
@@ -268,7 +267,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
                         }}>
-                        <KeyboardArrowLeftIcon />
+                        <KeyboardArrowLeftIcon sx={{ color: "#333", fontSize: "2rem" }} />
                     </IconButton>
                     <IconButton
                         disabled={loading || imageIndex == data?.length - 1 ? true : false}
@@ -294,7 +293,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
                         }}>
-                        <KeyboardArrowRightIcon />
+                        <KeyboardArrowRightIcon sx={{ color: '#333', fontSize: "2rem" }} />
                     </IconButton>
                     <IconButton onClick={() => {
                         setRightBarOpen(false)
@@ -308,7 +307,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     }}
                     // sx={{ position: "absolute", right: 9, top: "12%" }}
                     >
-                        <CloseIcon />
+                        <CloseIcon sx={{ color: "#333" }} />
                     </IconButton>
                 </div>
 
@@ -324,7 +323,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end", borderBottom: "1px solid #E9EDF1", padding: "0.75rem 1rem", marginBlockEnd: "1rem" }}>
-                <Button variant="outlined"
+                <Button variant="contained"
                     className={styles.viewScoutingBtn}
                     onClick={() => {
                         if (router.query.farm_id || router.query.crop_id || router.query.location_id || selectedImage?._id || imageDetails?._id) {
@@ -341,7 +340,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                 `/scouts/${selectedImage?._id ? selectedImage?._id : imageDetails?._id}`
                             );
                         }
-                    }}><RemoveRedEyeIcon />View Image</Button>
+                    }}>
+                    <Image src="/scouting/view-more-icon.svg" alt="" width={17} height={17} />
+                    View Image</Button>
             </div>
 
             {loading ? <GoogleViewSkeleton /> :
@@ -349,8 +350,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     {data?.length
                         ? data?.map(
                             (imageItem: any, index: number) => {
-
-
                                 return (
                                     <div
                                         className={styles.singleScoutImgIngalley}
@@ -368,7 +367,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             dispatch(QueryParamsForScouting(routerData))
 
                                         }}
-                                        style={{ border: imageItem?._id == (selectedImage?._id || imageDetails?._id) ? "1px solid black" : "" }}
+                                        style={{ border: imageItem?._id == (selectedImage?._id || imageDetails?._id) ? "1px solid #b1b3b9" : "" }}
                                     >
                                         <img
                                             src={
@@ -386,25 +385,28 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
                 </div>}
             {loading1 ? <GoogleViewSkeleton /> : ""}
+            {has_more ?
+                <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
+                    <Button className={styles.loadingBtn} variant="outlined"
+                        disabled={has_more ? false : true}
 
-            <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
-                <Button variant="outlined"
-                    disabled={has_more ? false : true}
-                    sx={{ borderRadius: "20px", border: "1px solid var(--color-mediumseagreen-100)", color: "var(--color-mediumseagreen-100)" }}
-                    onClick={() => {
-                        if (selectedImage?._id) {
-                            setSelectedItemDetails(selectedImage)
-                            getInstaScrollImageDetails("")
+                        onClick={() => {
+                            if (selectedImage?._id) {
+                                setSelectedItemDetails(selectedImage)
+                                getInstaScrollImageDetails("")
 
-                        } else {
-                            setSelectedItemDetails(data[imageIndex])
-                            getInstaScrollImageDetails("")
+                            } else {
+                                setSelectedItemDetails(data[imageIndex])
+                                getInstaScrollImageDetails("")
 
 
-                        }
-                    }}
-                >{has_more ? <>Load More< SouthIcon fontSize="small" /></> : ""}</Button>
-            </div>
+                            }
+                        }}
+                    >Load More
+                        <Image src="/scouting/view-more-down-arrow-icon.svg" alt="" width={13} height={13} />
+                    </Button>
+                </div>
+                : ""}
 
         </div>
     )

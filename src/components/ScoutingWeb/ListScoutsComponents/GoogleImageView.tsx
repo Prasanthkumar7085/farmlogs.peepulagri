@@ -95,10 +95,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     }
 
     useEffect(() => {
-        if (router.isReady && router.query.image_id && !selectedImage?._id) {
+        if (router.isReady && router.query.image_id && !selectedImage?._id && !imageDetails?._id) {
+            console.log("qeqeqw")
             getTheSingleImageDetails()
         }
-    }, [router.isReady, router.query.image_id, accessToken, selectedImage?._id])
+    }, [router.isReady, router.query.image_id, accessToken, selectedImage?._id, imageDetails?._id])
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {
@@ -213,7 +214,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
         if (imageDetails?._id) {
             setSelectedItemDetails(null)
-
+            console.log("fsd")
             getAllImagesDetails("", "")
         }
     }, [imageDetails?._id])
@@ -316,7 +317,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     src={selectedImage?.url ? selectedImage?.url : imageDetails?.url}
                     width={100}
                     height={100}
-                    alt="image"
+                    alt="Loding..."
                 />
             </div>
 

@@ -270,9 +270,9 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
       accessorFn: (row: any) => row.deadline,
       id: "deadline",
       cell: (info: any) => (
-        <span>
-          <p style={{ backgroundColor: "red" }}>{timePipe(info.getValue(), "DD MMM YYYY")}</p>
-        </span>
+        <p style={{ color: "red" }}>
+          {timePipe(info.getValue(), "DD MMM YYYY")}
+        </p>
       ),
       header: () => <span>Due Date</span>,
       footer: (props: any) => props.column.id,

@@ -139,7 +139,12 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                     <TextField
                         sx={{
                             width: "100%", background: "#fff",
-
+                            '& .MuiInputBase-root': {
+                                paddingRight: "0 !important"
+                            },
+                            '& .MuiOutlinedInput-root': {
+                                paddingRight: "0 !important"
+                            }
                         }} type="number"
                         disabled
                         size="small"
@@ -176,7 +181,15 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                     </label>
                     <TextField
                         disabled
-                        sx={{ width: "100%", background: "#fff" }}
+                        sx={{
+                            width: "100%", background: "#fff",
+                            '& .MuiInputBase-root': {
+                                paddingRight: "0 !important"
+                            },
+                            '& .MuiOutlinedInput-root': {
+                                paddingRight: "0 !important"
+                            }
+                        }}
                         type="number"
                         size="small"
                         value={materials?.available_qty}
@@ -217,6 +230,7 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                             setNameVendor(e.target.value)
                         }}
                     />
+
                     <ErrorMessages
                         errorMessages={errorMessages}
                         keyname={"vendor"}
@@ -242,32 +256,30 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         keyname={"price"}
                     />
                 </div>
-                <div className={styles.modalActions}>
-                    <div className={styles.buttonsgroup}>
-                        <Button
-                            color="primary"
-                            variant="outlined"
-                            onClick={() => {
+                <div className={styles.drawerBtngroup}>
+                    <Button
+                        className={styles.cancelBtn}
+                        variant="outlined"
+                        onClick={() => {
 
-                                setMaterialOpen(false);
-                            }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={() => {
-                                if (materials?.price && materials?.vendor) {
-                                    addMaterial();
-                                } else {
-                                    addMaterial();
-                                }
-                            }}
-                        >
-                            {materials?.price && materials?.vendor ? "Update" : "Submit"}
-                        </Button>
-                    </div>
+                            setMaterialOpen(false);
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        className={styles.submitBtn}
+                        variant="contained"
+                        onClick={() => {
+                            if (materials?.price && materials?.vendor) {
+                                addMaterial();
+                            } else {
+                                addMaterial();
+                            }
+                        }}
+                    >
+                        {materials?.price && materials?.vendor ? "Update" : "Submit"}
+                    </Button>
                 </div>
                 <LoadingComponent loading={loading} />
 

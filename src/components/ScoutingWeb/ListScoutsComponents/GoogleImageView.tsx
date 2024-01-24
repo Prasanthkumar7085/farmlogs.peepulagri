@@ -16,7 +16,6 @@ import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkele
 import SouthIcon from '@mui/icons-material/South';
 const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails }: any) => {
 
-    console.log(imageDetails, "pdfo")
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
@@ -81,7 +80,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             const responseData = await response.json();
             if (responseData.success) {
                 setSelectedItemDetails(responseData?.data)
-                await getAllImagesDetails("", responseData?.data)
+                await getAllImagesDetails(router.query.view_limit, responseData?.data)
 
             }
 
@@ -96,7 +95,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
     useEffect(() => {
         if (router.isReady && router.query.image_id && !selectedImage?._id && !imageDetails?._id) {
-            console.log("qeqeqw")
             getTheSingleImageDetails()
         }
     }, [router.isReady, router.query.image_id, accessToken, selectedImage?._id, imageDetails?._id])
@@ -117,6 +115,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             );
             const responseData = await response.json();
             if (responseData.success) {
+
                 if (responseData?.has_more) {
                     if (data?.length) {
                         setHasMore(responseData?.has_more);
@@ -128,6 +127,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
                         setData(uniqueObjects);
+                        router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length } });
+
+                        let routerData = { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length }
+
+                        dispatch(QueryParamsForScouting(routerData))
                     }
                     else {
                         setHasMore(responseData?.has_more);
@@ -136,6 +140,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                         );
                         setData(temp);
+                        router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: selectedImage?._id, view_limit: temp?.length } });
+
+                        let routerData = { ...router.query, view: true, image_id: selectedImage?._id, view_limit: temp?.length }
+
+                        dispatch(QueryParamsForScouting(routerData))
                     }
 
                 }
@@ -148,6 +157,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     );
 
                     setData(uniqueObjects);
+                    router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length } });
+
+                    let routerData = { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length }
+
+                    dispatch(QueryParamsForScouting(routerData))
                 }
             } else if (responseData?.statusCode == 403) {
                 await logout();
@@ -214,7 +228,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
         if (imageDetails?._id) {
             setSelectedItemDetails(null)
-            console.log("fsd")
             getAllImagesDetails("", "")
         }
     }, [imageDetails?._id])
@@ -288,6 +301,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         let routerData = { ...router.query };
                         delete routerData?.image_id;
                         delete routerData?.view;
+                        delete routerData?.view_limit;
                         dispatch(QueryParamsForScouting(routerData))
                         router.push({ query: routerData });
                         setImageDetails(null);
@@ -359,9 +373,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             setImageDetails(null)
 
                                             getAllImagesDetails(data?.length, imageItem)
-                                            router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id } });
+                                            router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id, view_limit: data?.length } });
 
-                                            let routerData = { ...router.query, view: true, image_id: imageItem?._id }
+                                            let routerData = { ...router.query, view: true, image_id: imageItem?._id, view_limit: data?.length }
 
                                             dispatch(QueryParamsForScouting(routerData))
 
@@ -393,9 +407,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         if (selectedImage?._id) {
                             setSelectedItemDetails(selectedImage)
                             getInstaScrollImageDetails("")
+
                         } else {
                             setSelectedItemDetails(data[imageIndex])
                             getInstaScrollImageDetails("")
+
 
                         }
                     }}

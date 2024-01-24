@@ -127,6 +127,7 @@ const ListScouts: FunctionComponent = () => {
       let routerData = { ...router.query };
       delete routerData?.image_id;
       delete routerData?.view;
+      delete routerData?.view_limit;
       dispatch(QueryParamsForScouting(routerData))
       setFarm(value);
       setCrop(null);
@@ -331,8 +332,8 @@ const ListScouts: FunctionComponent = () => {
 
       } = queryParams;
 
-      if (paramasFromStore?.image_id && !Object.keys(restParams)?.length) {
-        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
+      if (paramasFromStore?.image_id) {
+        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id, view_limit: paramasFromStore?.view_limit }
         router.push({ query: temp });
       }
       else {
@@ -595,10 +596,10 @@ const ListScouts: FunctionComponent = () => {
 
     setRightBarOpen(true)
     setImageDetails(attachment);
-    let temp = { ...queries, view: true, image_id: attachment?._id }
+    let temp = { ...queries, view: true, image_id: attachment?._id, view_limit: 12 }
     dispatch(QueryParamsForScouting(temp))
     if (attachment?._id) {
-      router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id } });
+      router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id, view_limit: 12 } });
 
     }
     else {
@@ -646,6 +647,7 @@ const ListScouts: FunctionComponent = () => {
       let routerData = { ...router.query };
       delete routerData?.image_id;
       delete routerData?.view;
+      delete routerData?.view_limit;
       dispatch(QueryParamsForScouting(routerData))
     }
     else {

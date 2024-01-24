@@ -80,7 +80,6 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     { value: "High", title: "High" },
   ]);
 
-
   //select the status 
   const setStatusValue = (e: any) => {
     onStatusChange(e.target.value);
@@ -92,8 +91,6 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     onPriorityChange(e.target.value);
     setPriority(e.target.value);
   };
-
-
 
   useEffect(() => {
     setSearch(searchString);
@@ -143,83 +140,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
           <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>
         <div className={styles.headeractions}>
-          <div style={{ width: "30%" }}>
-            {!(router.query.is_my_task == "true") ? (
-              <Autocomplete
-                sx={{
-                  "& .MuiChip-root": {
-                    background: "#f0fff0",
-                    border: "1px solid #05a155",
-                    borderRadius: "5px",
-                  },
-                }}
-                multiple
-                id="size-small-outlined-multi"
-                size="small"
-                fullWidth
-                noOptionsText={"No such User"}
-                value={selectedUsers?.length ? selectedUsers : []}
-                isOptionEqualToValue={(option: any, value: any) =>
-                  option.name === value.name
-                }
-                getOptionLabel={(option: any) => {
-                  return option.name;
-                }}
-                options={users}
-                onChange={(e, value: userTaskType[] | []) => {
-                  setSelectedUsers(value);
-                  setUser(value);
-                  let data: string[] = value?.length
-                    ? value?.map(
-                      (item: { _id: string; name: string }) => item._id
-                    )
-                    : [];
-                  onUserChange(data, false);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="Search by User"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
-                        backgroundColor: "#fff",
-                        border: "none",
-                        fontFamily: "'Inter', sans-serif ",
-                      },
-                    }}
-                  />
-                )}
-              />
-            ) : (
-              ""
-            )}
-          </div>
-          <div style={{ width: "30%" }}>
-            <TextField
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                onChangeSearch(e.target.value);
-              }}
-              className={styles.searchbar}
-              color="primary"
-              size="small"
-              placeholder="Search By Title"
-              sx={{ width: "100%", background: "#fff !important" }}
-              variant="outlined"
-              type="search"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Icon>search_sharp</Icon>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
+
           <Button
             className={styles.addProcurementBtn}
             color="primary"
@@ -240,7 +161,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-end",
             justifyContent: "space-between",
             paddingBottom: "1rem",
           }}
@@ -293,8 +214,98 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
 
           </div>
 
-          <div style={{ display: "flex", width: "30%", justifyContent: "center", gap: "0.8rem" }}>
-            <div style={{ width: "50%" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 150px 150px", gridColumnGap: "1rem", width: "70%", alignItems: "flex-end" }}>
+            <div>
+              {!(router.query.is_my_task == "true") ? (
+                <Autocomplete
+                  sx={{
+                    "& .MuiChip-root": {
+                      background: "#f0fff0",
+                      border: "1px solid #05a155",
+                      borderRadius: "5px",
+                    },
+                  }}
+                  multiple
+                  id="size-small-outlined-multi"
+                  size="small"
+                  fullWidth
+                  noOptionsText={"No such User"}
+                  value={selectedUsers?.length ? selectedUsers : []}
+                  isOptionEqualToValue={(option: any, value: any) =>
+                    option.name === value.name
+                  }
+                  getOptionLabel={(option: any) => {
+                    return option.name;
+                  }}
+                  options={users}
+                  onChange={(e, value: userTaskType[] | []) => {
+                    setSelectedUsers(value);
+                    setUser(value);
+                    let data: string[] = value?.length
+                      ? value?.map(
+                        (item: { _id: string; name: string }) => item._id
+                      )
+                      : [];
+                    onUserChange(data, false);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Search by User"
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        "& .MuiInputBase-root": {
+                          fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
+                          backgroundColor: "#fff",
+                          border: "none",
+                          fontFamily: "'Inter', sans-serif ",
+                        },
+                      }}
+                    />
+                  )}
+                />
+              ) : (
+                ""
+              )}
+            </div>
+            <div >
+              <TextField
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  onChangeSearch(e.target.value);
+                }}
+                className={styles.searchbar}
+                color="primary"
+                size="small"
+                placeholder="Search By Title"
+                sx={{
+                  width: "100%",
+                  "& .MuiInputBase-root": {
+                    fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
+                    backgroundColor: "#fff",
+                    border: "none",
+                    borderRadius: "4px !important",
+
+                    fontFamily: "'Inter', sans-serif ",
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: "4px !important"
+                  }
+                }}
+                variant="outlined"
+                type="search"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon>search_sharp</Icon>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </div>
+            <div >
               <Typography>Status</Typography>
               <SelectComponent
                 options={statusOptions}
@@ -303,7 +314,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                 value={status ? status : ""}
               />
             </div>
-            <div style={{ width: "50%" }}>
+            <div >
               <Typography>Priority</Typography>
               <SelectComponent
                 options={priorityOptions}

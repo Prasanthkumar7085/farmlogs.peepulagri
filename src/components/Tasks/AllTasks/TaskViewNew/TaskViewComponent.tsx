@@ -23,9 +23,13 @@ import styles from "./TaskViewComponent.module.css";
 import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import deleteAssigneeInTaskService from "../../../../../lib/services/TasksService/deleteAssigneeInTaskService";
 import updateTaskDeadlineService from "../../../../../lib/services/TasksService/updateTaskDeadlineService";
-import { DatePicker } from "rsuite";
 import { addDays, startOfDay } from "date-fns";
 import "rsuite/dist/rsuite.css";
+import {
+  DateTimePicker,
+  LocalizationProvider,
+  MobileDateTimePicker,
+} from "@mui/x-date-pickers";
 
 const TaskViewComponent = () => {
   const router = useRouter();
@@ -38,8 +42,8 @@ const TaskViewComponent = () => {
 
   const [editField, setEditField] = useState("");
   const [editFieldOrNot, setEditFieldOrNot] = useState(false);
-  console.log(editField, "edit")
-  console.log(editFieldOrNot, "editdsf")
+  console.log(editField, "edit");
+  console.log(editFieldOrNot, "editdsf");
   const [title, setTitle] = useState("");
   const [deadlineString, setDeadlineString] = useState<Date | string | any>("");
   const [description, setDescription] = useState("");
@@ -89,7 +93,7 @@ const TaskViewComponent = () => {
   };
   const handleAssignyClose = () => {
     setAnchorAssignyEl(null);
-    setSelectedAssignee(null)
+    setSelectedAssignee(null);
   };
 
   const accessToken = useSelector(
@@ -198,7 +202,6 @@ const TaskViewComponent = () => {
   };
   //download attachment
   const downLoadAttachements = async (file: any, name: string, id: string) => {
-
     setDownloadImageId(id);
     try {
       if (file) {
@@ -299,8 +302,8 @@ const TaskViewComponent = () => {
     });
     if (response?.success) {
       toast.success(response?.message);
-      setEditFieldOrNot(false)
-      setEditField("")
+      setEditFieldOrNot(false);
+      setEditField("");
       await getTaskById(router.query.task_id as string);
     } else {
       toast.error(response?.message);
@@ -319,10 +322,10 @@ const TaskViewComponent = () => {
       deadline: deadlineProp
         ? deadlineProp
         : deadlineString
-          ? moment(deadlineString)
+        ? moment(deadlineString)
             .utcOffset("+05:30")
             .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-          : "",
+        : "",
       description: description ? description : "",
       title: title ? title : "",
       status: status,
@@ -337,9 +340,8 @@ const TaskViewComponent = () => {
       setEditField("");
       getTaskById(router.query.task_id as string);
 
-      setSelectedAssignee([])
+      setSelectedAssignee([]);
       toast.success(response?.message);
-
     } else {
       if (response?.errors) {
         setErrorMessages(response?.errors);
@@ -353,16 +355,13 @@ const TaskViewComponent = () => {
   }: Partial<{ deadlineProp: string }>) => {
     setLoading(true);
     let body = {
-
-
       deadline: deadlineProp
         ? deadlineProp
         : deadlineString
-          ? moment(deadlineString)
+        ? moment(deadlineString)
             .utcOffset("+05:30")
             .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-          : "",
-
+        : "",
     };
     const response = await updateTaskDeadlineService({
       taskId: data?._id as string,
@@ -406,7 +405,11 @@ const TaskViewComponent = () => {
           assign_to: selectedAssigneeIds,
         };
 
-        let response = await deleteAssigneeInTaskService({ id: id, token: accessToken, body: body })
+        let response = await deleteAssigneeInTaskService({
+          id: id,
+          token: accessToken,
+          body: body,
+        });
 
         if (response?.success) {
           setDeleteFieldOrNot(false);
@@ -452,7 +455,7 @@ const TaskViewComponent = () => {
           getTaskById(id as string);
           setEditFieldOrNot(false);
           setEditField("");
-          setSelectedAssignee([])
+          setSelectedAssignee([]);
           toast.success(responseData?.message);
         } else if (responseData?.status == 422) {
           toast.error(responseData?.errors?.assign_to);
@@ -471,14 +474,12 @@ const TaskViewComponent = () => {
   const handleCalenderOpen = () => setCalenderOpen(true);
   const handleCalenderClose = () => setCalenderOpen(false);
 
-
   const currentDate = new Date();
   const todayStart = startOfDay(currentDate); // Set the time to midnight
   const isDisabledDate = (date: any) => {
     // Disable dates in the past
     return date < addDays(new Date(), -1);
   };
-
 
   return (
     <div className={styles.taskViewPage}>
@@ -518,7 +519,7 @@ const TaskViewComponent = () => {
               ) : (
                 <div>
                   {status !== "DONE" &&
-                    loggedInUserId == data?.created_by?._id ? (
+                  loggedInUserId == data?.created_by?._id ? (
                     <h6
                       className={styles.farmTitle}
                       style={{ cursor: "pointer" }}
@@ -529,14 +530,14 @@ const TaskViewComponent = () => {
                     >
                       {data?.title
                         ? data?.title.slice(0, 1).toUpperCase() +
-                        data?.title.slice(1)
+                          data?.title.slice(1)
                         : "-"}
                     </h6>
                   ) : (
                     <h6 className={styles.farmTitle}>
                       {data?.title
                         ? data?.title.slice(0, 1).toUpperCase() +
-                        data?.title.slice(1)
+                          data?.title.slice(1)
                         : "-"}
                     </h6>
                   )}
@@ -581,20 +582,20 @@ const TaskViewComponent = () => {
                   style={{
                     cursor:
                       status !== "DONE" &&
-                        (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                      (loggedInUserId == data?.created_by?._id || hasEditAccess)
                         ? "pointer"
                         : "default",
                   }}
                   onClick={(e) =>
                     status !== "DONE" &&
-                      (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                    (loggedInUserId == data?.created_by?._id || hasEditAccess)
                       ? handleClick(e)
                       : ""
                   }
                 >
                   {data?.status
                     ? statusOptions?.find((item) => item.value == data?.status)
-                      ?.title
+                        ?.title
                     : ""}
                 </p>
 
@@ -618,7 +619,7 @@ const TaskViewComponent = () => {
                   onChange={(e) => {
                     const newValue = e.target.value.replace(/^\s+/, "");
 
-                    setDescription(newValue)
+                    setDescription(newValue);
                   }}
                   sx={{
                     width: "100%",
@@ -632,7 +633,7 @@ const TaskViewComponent = () => {
               ) : (
                 <div>
                   {status !== "DONE" ||
-                    loggedInUserId == data?.created_by?._id ? (
+                  loggedInUserId == data?.created_by?._id ? (
                     <p
                       className={styles.descriptionText}
                       style={{ cursor: "pointer" }}
@@ -671,7 +672,7 @@ const TaskViewComponent = () => {
                     onClick={() => {
                       setEditField("");
                       setEditFieldOrNot(false);
-                      setDescription("")
+                      setDescription("");
                     }}
                   >
                     <img
@@ -756,104 +757,104 @@ const TaskViewComponent = () => {
                 <div className={styles.allAttachmentsBlock}>
                   {attachmentData?.length
                     ? attachmentData?.map(
-                      (item: TaskAttachmentsType | any, index: number) => {
-                        return (
-                          <div
-                            key={index}
-                            className={styles.singleAttachmentBlock}
-                          >
-                            <div className={styles.tumblineBlock}>
-                              <div className={styles.checkbox}>
-                                {loggedInUserId == data?.created_by?._id ? (
-                                  <Checkbox
-                                    sx={{
-                                      "& .MuiSvgIcon-root": {
-                                        fontSize: 18,
-                                      },
-                                    }}
-                                    disabled={
-                                      status === "DONE" &&
-                                      loggedInUserId == data?.created_by?._id
-                                    }
-                                    onChange={(e) =>
-                                      selectImagesForDelete(e, item)
-                                    }
-                                    checked={selectedAttachmentIds.includes(
-                                      item?._id
-                                    )}
-                                  />
-                                ) : (
-                                  ""
-                                )}
+                        (item: TaskAttachmentsType | any, index: number) => {
+                          return (
+                            <div
+                              key={index}
+                              className={styles.singleAttachmentBlock}
+                            >
+                              <div className={styles.tumblineBlock}>
+                                <div className={styles.checkbox}>
+                                  {loggedInUserId == data?.created_by?._id ? (
+                                    <Checkbox
+                                      sx={{
+                                        "& .MuiSvgIcon-root": {
+                                          fontSize: 18,
+                                        },
+                                      }}
+                                      disabled={
+                                        status === "DONE" &&
+                                        loggedInUserId == data?.created_by?._id
+                                      }
+                                      onChange={(e) =>
+                                        selectImagesForDelete(e, item)
+                                      }
+                                      checked={selectedAttachmentIds.includes(
+                                        item?._id
+                                      )}
+                                    />
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                <img
+                                  src={getImageSrcUrl(item)}
+                                  className={styles.thumbnailImg}
+                                  alt={""}
+                                  onClick={() => {
+                                    window.open(item.url);
+                                  }}
+                                />
                               </div>
-                              <img
-                                src={getImageSrcUrl(item)}
-                                className={styles.thumbnailImg}
-                                alt={""}
+
+                              <div
+                                className={styles.imgTitle}
+                                style={{
+                                  cursor: "pointer",
+                                  width: "25%",
+                                }}
                                 onClick={() => {
                                   window.open(item.url);
                                 }}
-                              />
-                            </div>
+                              >
+                                {" "}
+                                {item?.metadata?.original_name?.length > 15
+                                  ? item?.metadata?.original_name.slice(0, 13) +
+                                    "..." +
+                                    item?.metadata?.original_name?.split(".")[
+                                      item?.metadata?.original_name?.split(".")
+                                        ?.length - 1
+                                    ]
+                                  : item?.metadata?.original_name}
+                              </div>
 
-                            <div
-                              className={styles.imgTitle}
-                              style={{
-                                cursor: "pointer",
-                                width: "25%",
-                              }}
-                              onClick={() => {
-                                window.open(item.url);
-                              }}
-                            >
-                              {" "}
-                              {item?.metadata?.original_name?.length > 15
-                                ? item?.metadata?.original_name.slice(0, 13) +
-                                "..." +
-                                item?.metadata?.original_name?.split(".")[
-                                item?.metadata?.original_name?.split(".")
-                                  ?.length - 1
-                                ]
-                                : item?.metadata?.original_name}
-                            </div>
-
-                            <div className={styles.uploadedDate}>
-                              {timePipe(
-                                item?.createdAt,
-                                "DD MMM YYYY hh:mm A"
-                              )}
-                            </div>
-                            <div
-                              style={{ width: "5%" }}
-                              onClick={() => {
-                                downLoadAttachements(
-                                  item.url,
-                                  item?.metadata?.original_name,
-                                  item?._id
-                                );
-                              }}
-                            >
-                              <picture>
-                                {downloadImageId == item?._id ? (
-                                  <CircularProgress
-                                    size="1rem"
-                                    sx={{ color: "green" }}
-                                  />
-                                ) : (
-                                  <img
-                                    style={{
-                                      cursor: "pointer",
-                                    }}
-                                    src="/viewTaskIcons/download.svg"
-                                    alt=""
-                                  />
+                              <div className={styles.uploadedDate}>
+                                {timePipe(
+                                  item?.createdAt,
+                                  "DD MMM YYYY hh:mm A"
                                 )}
-                              </picture>
+                              </div>
+                              <div
+                                style={{ width: "5%" }}
+                                onClick={() => {
+                                  downLoadAttachements(
+                                    item.url,
+                                    item?.metadata?.original_name,
+                                    item?._id
+                                  );
+                                }}
+                              >
+                                <picture>
+                                  {downloadImageId == item?._id ? (
+                                    <CircularProgress
+                                      size="1rem"
+                                      sx={{ color: "green" }}
+                                    />
+                                  ) : (
+                                    <img
+                                      style={{
+                                        cursor: "pointer",
+                                      }}
+                                      src="/viewTaskIcons/download.svg"
+                                      alt=""
+                                    />
+                                  )}
+                                </picture>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      }
-                    )
+                          );
+                        }
+                      )
                     : "No Attachements"}
                 </div>
               </div>
@@ -915,7 +916,62 @@ const TaskViewComponent = () => {
                       }}
                     />
                   </LocalizationProvider> */}
-                  <DatePicker
+
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <MobileDateTimePicker
+                      open={calenderOpen}
+                      onOpen={handleCalenderOpen}
+                      onClose={handleCalenderClose}
+                      sx={{
+                        width: "100%",
+                        "& .MuiButtonBase-root": {
+                          lineHeight: "0 !important",
+                        },
+
+                        "& .MuiInputBase-root::before": {
+                          borderBottom: "0 !important",
+                        },
+                        "& .MuiInputBase-root::after": {
+                          borderBottom: "0 !important",
+                        },
+                        "& .MuiInputBase-input": {
+                          padding: "0",
+                          fontSize: "12px",
+                          fontFamily: "'Inter', sans-serif",
+                          fontWeight: "600",
+                        },
+                      }}
+                      disablePast
+                      value={new Date(deadlineString)}
+                      disabled={
+                        status === "DONE" ||
+                        !(loggedInUserId == data?.created_by?._id)
+                      }
+                      onAccept={(newValue: any) => {
+                        let dateNow = new Date(newValue);
+
+                        setDeadlineString(
+                          new Date(dateNow?.toUTCString())?.toISOString()
+                        );
+
+                        onUpdateDeadlineField({
+                          deadlineProp: new Date(
+                            dateNow?.toUTCString()
+                          )?.toISOString(),
+                        });
+                      }}
+                      format="dd/MM/yyyy hh:mm aa"
+                      slotProps={{
+                        textField: {
+                          variant: "standard",
+                          size: "medium",
+                          color: "primary",
+                        },
+                      }}
+                    />
+                  </LocalizationProvider>
+
+                  {/* <DateTimePicker
                     format="dd-MM-yyyy HH:mm "
                     shouldDisableDate={isDisabledDate}
                     size="lg"
@@ -945,7 +1001,7 @@ const TaskViewComponent = () => {
 
                       onUpdateDeadlineField({ deadlineProp: dateWithPresentTime });
                     }}
-                  />
+                  /> */}
                   <img
                     onClick={handleCalenderOpen}
                     src="/viewTaskIcons/calender-icon.svg"
@@ -970,7 +1026,8 @@ const TaskViewComponent = () => {
                     }}
                   >
                     {data?.created_by?.name?.split(" ")?.length > 1
-                      ? `${data?.created_by?.name?.split(" ")[0][0]}${data?.created_by?.name?.split(" ")[1][0]
+                      ? `${data?.created_by?.name?.split(" ")[0][0]}${
+                          data?.created_by?.name?.split(" ")[1][0]
                         }`.toUpperCase()
                       : data?.created_by?.name.slice(0, 2)?.toUpperCase()}
                   </Avatar>
@@ -990,7 +1047,7 @@ const TaskViewComponent = () => {
                     }}
                   >
                     {loggedInUserId == data?.created_by?._id ||
-                      hasEditAccess ? (
+                    hasEditAccess ? (
                       <Button
                         className={styles.addAssignyBtn}
                         disabled={
@@ -1012,7 +1069,7 @@ const TaskViewComponent = () => {
                       ""
                     )}
                     {status !== "DONE" &&
-                      loggedInUserId == data?.created_by?._id ? (
+                    loggedInUserId == data?.created_by?._id ? (
                       <div>
                         {selectedAssigneeIds?.length ? (
                           <Button
@@ -1048,63 +1105,64 @@ const TaskViewComponent = () => {
                   <div className={styles.allAssignysBlock}>
                     {data?.assign_to
                       ? data?.assign_to.map(
-                        (
-                          item: { _id: string; name: string },
-                          index: number
-                        ) => {
-                          return (
-                            <div
-                              key={index}
-                              className={styles.singleAssignyBlock}
-                            >
-                              <div className={styles.checkbox}>
-                                {loggedInUserId == data?.created_by?._id ? (
-                                  <Checkbox
+                          (
+                            item: { _id: string; name: string },
+                            index: number
+                          ) => {
+                            return (
+                              <div
+                                key={index}
+                                className={styles.singleAssignyBlock}
+                              >
+                                <div className={styles.checkbox}>
+                                  {loggedInUserId == data?.created_by?._id ? (
+                                    <Checkbox
+                                      sx={{
+                                        "& .MuiSvgIcon-root": {
+                                          fontSize: 18,
+                                        },
+                                      }}
+                                      disabled={
+                                        status === "DONE" &&
+                                        loggedInUserId == data?.created_by?._id
+                                      }
+                                      onChange={(e) =>
+                                        handleAssigneeCheckboxChange(
+                                          e,
+                                          item._id
+                                        )
+                                      }
+                                      checked={selectedAssigneeIds.includes(
+                                        item?._id
+                                      )}
+                                    />
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                <div className={styles.assingyNameBlock}>
+                                  <Avatar
                                     sx={{
-                                      "& .MuiSvgIcon-root": {
-                                        fontSize: 18,
-                                      },
+                                      fontSize: "6px",
+                                      width: "18px",
+                                      height: "18px",
+                                      background: "#6A7185",
                                     }}
-                                    disabled={
-                                      status === "DONE" &&
-                                      loggedInUserId == data?.created_by?._id
-                                    }
-                                    onChange={(e) =>
-                                      handleAssigneeCheckboxChange(
-                                        e,
-                                        item._id
-                                      )
-                                    }
-                                    checked={selectedAssigneeIds.includes(
-                                      item?._id
-                                    )}
-                                  />
-                                ) : (
-                                  ""
-                                )}
+                                  >
+                                    {item.name.split(" ")?.length > 1
+                                      ? `${item.name.split(" ")[0][0]}${
+                                          item.name.split(" ")[1][0]
+                                        }`.toUpperCase()
+                                      : item.name.slice(0, 2)?.toUpperCase()}
+                                  </Avatar>
+                                  <p className={styles.assignedByFullName}>
+                                    {item.name}
+                                  </p>
+                                </div>
                               </div>
-                              <div className={styles.assingyNameBlock}>
-                                <Avatar
-                                  sx={{
-                                    fontSize: "6px",
-                                    width: "18px",
-                                    height: "18px",
-                                    background: "#6A7185",
-                                  }}
-                                >
-                                  {item.name.split(" ")?.length > 1
-                                    ? `${item.name.split(" ")[0][0]}${item.name.split(" ")[1][0]
-                                      }`.toUpperCase()
-                                    : item.name.slice(0, 2)?.toUpperCase()}
-                                </Avatar>
-                                <p className={styles.assignedByFullName}>
-                                  {item.name}
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        }
-                      )
+                            );
+                          }
+                        )
                       : "-"}
                   </div>
                 ) : (
@@ -1236,6 +1294,6 @@ const TaskViewComponent = () => {
       <Toaster closeButton richColors position="top-right" />
     </div>
   );
-}
+};
 
 export default TaskViewComponent;

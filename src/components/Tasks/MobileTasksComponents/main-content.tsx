@@ -3,10 +3,14 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./main-content.module.css";
 import ErrorMessages from "@/components/Core/ErrorMessages";
-import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  MobileDatePicker,
+  MobileDateTimePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 const MainContent = ({
   title,
   onChangeStatus,
@@ -29,7 +33,7 @@ const MainContent = ({
   handleCalenderClose,
   deadlineString,
   setDeadlineString,
-  onUpdateDeadlineField
+  onUpdateDeadlineField,
 }: any) => {
   const loggedInUserId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
@@ -87,14 +91,14 @@ const MainContent = ({
                 >
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                    data?.title.slice(1)
+                      data?.title.slice(1)
                     : "-"}
                 </h6>
               ) : (
                 <h6 className={styles.title}>
                   {data?.title
                     ? data?.title.slice(0, 1).toUpperCase() +
-                    data?.title.slice(1)
+                      data?.title.slice(1)
                     : "-"}
                 </h6>
               )}
@@ -147,22 +151,23 @@ const MainContent = ({
             style={{
               color: data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                  ?.color
+                    ?.color
                 : "#d0d5dd",
-              border: `1px solid ${data?.status
-                ? statusOptions?.find((item) => item.value == data?.status)
-                  ?.color
-                : "#d0d5dd"
-                }`,
+              border: `1px solid ${
+                data?.status
+                  ? statusOptions?.find((item) => item.value == data?.status)
+                      ?.color
+                  : "#d0d5dd"
+              }`,
               cursor:
                 status !== "DONE" &&
-                  (loggedInUserId == data?.created_by?._id || hasEditAccess)
+                (loggedInUserId == data?.created_by?._id || hasEditAccess)
                   ? "pointer"
                   : "default",
             }}
             onClick={(e) =>
               status !== "DONE" &&
-                (loggedInUserId == data?.created_by?._id || hasEditAccess)
+              (loggedInUserId == data?.created_by?._id || hasEditAccess)
                 ? handleClick(e)
                 : ""
             }
@@ -170,11 +175,11 @@ const MainContent = ({
             <span>
               {data?.status
                 ? statusOptions?.find((item) => item.value == data?.status)
-                  ?.title
+                    ?.title
                 : ""}
             </span>
             {status !== "DONE" &&
-              (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
+            (loggedInUserId == data?.created_by?._id || hasEditAccess) ? (
               <KeyboardArrowDownIcon sx={{ fontSize: "1rem" }} />
             ) : (
               ""
@@ -194,7 +199,7 @@ const MainContent = ({
               alt=""
             />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <MobileDatePicker
+              <MobileDateTimePicker
                 open={calenderOpen}
                 onOpen={handleCalenderOpen}
                 onClose={handleCalenderClose}
@@ -224,21 +229,19 @@ const MainContent = ({
                   !(loggedInUserId == data?.created_by?._id)
                 }
                 onAccept={(newValue: any) => {
-                  let dateNow = new Date();
-                  let dateWithPresentTime = moment(new Date(newValue))
-                    .set({
-                      hour: dateNow.getHours(),
-                      minute: dateNow.getMinutes(),
-                      second: dateNow.getSeconds(),
-                      millisecond: dateNow.getMilliseconds(),
-                    })
-                    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+                  let dateNow = new Date(newValue);
 
-                  setDeadlineString(dateWithPresentTime);
+                 setDeadlineString(
+                   new Date(dateNow?.toUTCString())?.toISOString()
+                 );
 
-                  onUpdateDeadlineField({ deadlineProp: dateWithPresentTime });
+                 onUpdateDeadlineField({
+                   deadlineProp: new Date(
+                     dateNow?.toUTCString()
+                   )?.toISOString(),
+                 });
                 }}
-                format="dd/MM/yyyy"
+                format="dd/MM/yyyy hh:mm aa"
                 slotProps={{
                   textField: {
                     variant: "standard",

@@ -16,7 +16,6 @@ import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkele
 import SouthIcon from '@mui/icons-material/South';
 const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails }: any) => {
 
-    console.log(imageDetails, "pdfo")
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
@@ -27,7 +26,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [data, setData] = useState<any>([])
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>()
-    console.log(selectedImage, "asfd")
     const [imageIndex, setImageIndex] = useState<any>(0)
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
@@ -57,10 +55,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         if (ItemRef.current) {
             ItemRef.current.scrollIntoView({
                 behavior: "smooth",
+                block: "start",
                 inline: "nearest",
             });
         }
     };
+
 
 
     //get the single image details
@@ -80,7 +80,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             const responseData = await response.json();
             if (responseData.success) {
                 setSelectedItemDetails(responseData?.data)
-                await getAllImagesDetails("", responseData?.data)
+                await getAllImagesDetails(router.query.view_limit, responseData?.data)
 
             }
 
@@ -94,11 +94,10 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     }
 
     useEffect(() => {
-        if (router.isReady && router.query.image_id) {
-            console.log("get the sing")
+        if (router.isReady && router.query.image_id && !selectedImage?._id && !imageDetails?._id) {
             getTheSingleImageDetails()
         }
-    }, [router.isReady])
+    }, [router.isReady, router.query.image_id, accessToken, selectedImage?._id, imageDetails?._id])
 
     //event for the get related images
     const getInstaScrollImageDetails = async (lastImage_id: any) => {
@@ -116,6 +115,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             );
             const responseData = await response.json();
             if (responseData.success) {
+
                 if (responseData?.has_more) {
                     if (data?.length) {
                         setHasMore(responseData?.has_more);
@@ -127,6 +127,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
                         setData(uniqueObjects);
+                        router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length } });
+
+                        let routerData = { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length }
+
+                        dispatch(QueryParamsForScouting(routerData))
                     }
                     else {
                         setHasMore(responseData?.has_more);
@@ -135,6 +140,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                         );
                         setData(temp);
+                        router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: selectedImage?._id, view_limit: temp?.length } });
+
+                        let routerData = { ...router.query, view: true, image_id: selectedImage?._id, view_limit: temp?.length }
+
+                        dispatch(QueryParamsForScouting(routerData))
                     }
 
                 }
@@ -147,6 +157,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     );
 
                     setData(uniqueObjects);
+                    router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length } });
+
+                    let routerData = { ...router.query, view: true, image_id: selectedImage?._id, view_limit: uniqueObjects?.length }
+
+                    dispatch(QueryParamsForScouting(routerData))
                 }
             } else if (responseData?.statusCode == 403) {
                 await logout();
@@ -159,8 +174,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     };
 
     const getAllImagesDetails = async (limit: any, image: any) => {
-
-        setLoading(true);
+        if (!image?._id) {
+            setLoading(true)
+        }
         let options = {
             method: "GET",
             headers: new Headers({
@@ -177,12 +193,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
                 setHasMore(responseData?.has_more);
                 let temp = [...responseData?.data]
+                scrollToItem()
 
                 const uniqueObjects = Array.from(
                     temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
                 );
                 setData(uniqueObjects)
-                scrollToItem()
 
                 if (limit) {
                     const selectedImageIndex = uniqueObjects.findIndex((item: any, index) => item._id == image?._id)
@@ -212,7 +228,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
         if (imageDetails?._id) {
             setSelectedItemDetails(null)
-
             getAllImagesDetails("", "")
         }
     }, [imageDetails?._id])
@@ -221,9 +236,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
     return (
-        <div >
-
-            <div className={styles.viewImgInfoHeader} ref={ItemRef}>
+        <div ref={ItemRef} >
+            <div className={styles.viewImgInfoHeader} >
 
                 <div className={styles.imageUploadingDetails} >
                     <Avatar sx={{ color: "#fff", background: "#d94841", width: "33px", height: "33px", fontSize: "10px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
@@ -287,12 +301,10 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         let routerData = { ...router.query };
                         delete routerData?.image_id;
                         delete routerData?.view;
+                        delete routerData?.view_limit;
                         dispatch(QueryParamsForScouting(routerData))
                         router.push({ query: routerData });
-                        setImageIndex(0)
-                        setImageDetails(null)
-                        setSelectedItemDetails(null)
-
+                        setImageDetails(null);
                     }}
                     // sx={{ position: "absolute", right: 9, top: "12%" }}
                     >
@@ -319,7 +331,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     src={selectedImage?.url ? selectedImage?.url : imageDetails?.url}
                     width={100}
                     height={100}
-                    alt="image"
+                    alt="Loding..."
                 />
             </div>
 
@@ -331,7 +343,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             let routerData = { ...router.query, view: true, image_id: selectedImage?._id }
                             dispatch(QueryParamsForScouting(routerData))
                             router.push(
-                                `/scouts/farm/${router.query.farm_id || selectedImage?.farm_id?._id}/crops/${router.query.crop_id || selectedImage?.crop_id?._id}/${selectedImage?._id}?location_id=${router.query.location_id || ""}`
+                                `/scouts/farm/${router.query.farm_id || selectedImage?.farm_id?._id || imageDetails?.crop_id?._id}/crops/${router.query.crop_id || selectedImage?.crop_id?._id || imageDetails?.crop_id?._id}/${selectedImage?._id || imageDetails?._id}?location_id=${router.query.location_id || ""}`
                             );
                         }
                         else {
@@ -359,13 +371,13 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             setImageIndex(index)
                                             setSelectedItemDetails(imageItem)
                                             setImageDetails(null)
-                                            getAllImagesDetails(data?.length, imageItem)
-                                            router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id } });
 
-                                            let routerData = { ...router.query, view: true, image_id: imageItem?._id }
+                                            getAllImagesDetails(data?.length, imageItem)
+                                            router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: imageItem?._id, view_limit: data?.length } });
+
+                                            let routerData = { ...router.query, view: true, image_id: imageItem?._id, view_limit: data?.length }
 
                                             dispatch(QueryParamsForScouting(routerData))
-
 
                                         }}
                                         style={{ border: imageItem?._id == (selectedImage?._id || imageDetails?._id) ? "1px solid black" : "" }}
@@ -395,13 +407,15 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         if (selectedImage?._id) {
                             setSelectedItemDetails(selectedImage)
                             getInstaScrollImageDetails("")
+
                         } else {
                             setSelectedItemDetails(data[imageIndex])
                             getInstaScrollImageDetails("")
 
+
                         }
                     }}
-                >{has_more ? <>Load More< SouthIcon fontSize="small" /></> : "No More Images"}</Button>
+                >{has_more ? <>Load More< SouthIcon fontSize="small" /></> : ""}</Button>
             </div>
 
         </div>

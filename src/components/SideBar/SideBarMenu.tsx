@@ -1,4 +1,4 @@
-import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { QueryParamsForScouting, removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import LogoutIcon from '@mui/icons-material/Logout';
 import NorthWestIcon from '@mui/icons-material/NorthWest';
@@ -96,7 +96,11 @@ const SideBarMenu = ({ children }: any) => {
               src="/logo.svg"
               width={20}
               height={20}
-              onClick={() => router.push("/farm")}
+              onClick={() => {
+                router.push("/farm")
+                dispatch(QueryParamsForScouting(""))
+
+              }}
             />
             <List>
               {menuListItems.map((item: any, index: number) => {
@@ -106,7 +110,10 @@ const SideBarMenu = ({ children }: any) => {
                       <Tooltip title={item?.toolTitle} placement="right">
                         <Link href={item?.link}>
                           <ListItemButton
-                            // onClick={() => router.push(item?.link)}
+                            onClick={() => {
+                              dispatch(QueryParamsForScouting(""))
+
+                            }}
                             className={
                               item?.active
                                 ? styles.activeMenuItem
@@ -138,7 +145,10 @@ const SideBarMenu = ({ children }: any) => {
 
             <button
               className={styles.profile}
-              onClick={() => router.push("/profile")}
+              onClick={() => {
+                router.push("/profile")
+                dispatch(QueryParamsForScouting(""))
+              }}
             >
               <div className={styles.profile1}>
                 <Image

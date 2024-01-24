@@ -43,6 +43,7 @@ interface ApiMethodProps {
   cropId: string;
   farmSearchString: string;
   location: string;
+  image_view: boolean;
 }
 const ListScouts: FunctionComponent = () => {
   const router = useRouter();
@@ -118,17 +119,14 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         farmSearchString: "",
-        location: router.query.location_id as string
+        location: router.query.location_id as string,
+        image_view: false
+
       });
 
       return;
     }
     if (value) {
-      let routerData = { ...router.query };
-      delete routerData?.image_id;
-      delete routerData?.view;
-      delete routerData?.view_limit;
-      dispatch(QueryParamsForScouting(routerData))
       setFarm(value);
       setCrop(null);
       setPage(1);
@@ -149,7 +147,9 @@ const ListScouts: FunctionComponent = () => {
         cropId: "",
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
-        location: value?.location_id?._id as string
+        location: value?.location_id?._id as string,
+        image_view: false
+
 
       });
       await getAllCrops("", value?._id);
@@ -165,7 +165,9 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: router.query.crop_id as string,
-        location: router.query.location_id as string
+        location: router.query.location_id as string,
+        image_view: false
+
 
       });
       await getAllCrops("", "");
@@ -185,7 +187,9 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: value?._id,
-        location: router.query.location_id as string
+        location: router.query.location_id as string,
+        image_view: false
+
       });
     } else {
       setCrop(null);
@@ -200,7 +204,9 @@ const ListScouts: FunctionComponent = () => {
         fromDate: router.query.from_date as string,
         toDate: router.query.to_date as string,
         cropId: "",
-        location: router.query.location_id as string
+        location: router.query.location_id as string,
+        image_view: false
+
       });
     }
   };
@@ -284,7 +290,8 @@ const ListScouts: FunctionComponent = () => {
     toDate,
     cropId,
     farmSearchString = router.query.farm_search_string as string,
-    location
+    location,
+    image_view = false
   }: Partial<ApiMethodProps>) => {
     // if (!cropId) {
     //   setData([]);
@@ -332,12 +339,17 @@ const ListScouts: FunctionComponent = () => {
 
       } = queryParams;
 
-      if (paramasFromStore?.view) {
+      if (image_view) {
+        console.log("Dsfsd")
         let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id, view_limit: paramasFromStore?.view_limit }
         router.push({ query: temp });
       }
       else {
+        console.log('Fds')
         let temp = { ...queryParams }
+        delete temp?.image_id;
+        delete temp?.view;
+        delete temp?.view_limit;
         router.push({ query: temp });
       }
 
@@ -572,7 +584,8 @@ const ListScouts: FunctionComponent = () => {
         toDate: "",
         cropId: router.query.crop_id as string,
         farmSearchString: router.query.farm_search_string as string,
-        location: router.query.location_id as string
+        location: router.query.location_id as string,
+        image_view: router.query.view ? true : false
       });
     }
   }, [router.isReady, accessToken]);
@@ -607,22 +620,12 @@ const ListScouts: FunctionComponent = () => {
 
     }
 
-
-    // if (router.query.farm_id || router.query.crop_id || router.query.location_id) {
-    //   router.push(
-    //     `/scouts/farm/${router.query.crop_id || farmId}/crops/${router.query.crop_id || cropId}/${attachmentId}?location_id=${router.query.location_id}`
-    //   );
-    // }
-    // else {
-    //   router.push(
-    //     `/scouts/${attachmentId}`
-    //   );
-    // }
-
   };
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
-    setRightBarOpen(false)
+
+    dispatch(QueryParamsForScouting(""))
+
     if (value) {
       setChanged(true);
       setLocation(value);
@@ -642,13 +645,10 @@ const ListScouts: FunctionComponent = () => {
         toDate: "",
         cropId: router.query.crop_id as string,
         farmSearchString: '',
-        location: value?._id
+        location: value?._id,
+        image_view: false
       });
-      let routerData = { ...router.query };
-      delete routerData?.image_id;
-      delete routerData?.view;
-      delete routerData?.view_limit;
-      dispatch(QueryParamsForScouting(routerData))
+
     }
     else {
       setFarm(null);
@@ -669,7 +669,8 @@ const ListScouts: FunctionComponent = () => {
         toDate: "",
         cropId: "",
         farmSearchString: '',
-        location: ""
+        location: "",
+        image_view: false
       });
     }
   };

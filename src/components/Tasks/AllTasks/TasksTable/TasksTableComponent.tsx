@@ -68,7 +68,7 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
         selectedFarmId: router.query.farm_id as string,
-        status: router.query.status as string,
+        status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
         userId: router.query.assign_to
           ? Array.isArray(router.query.assign_to)
             ? (router.query.assign_to as string[])
@@ -149,7 +149,7 @@ const TasksTableComponent = ({ data, getData, paginationDetails }: any) => {
     {
       accessorFn: (row: any) => row.serial,
       id: "serial",
-      cell: (info: any) => <span>{info.getValue()}</span>,
+      cell: (info: any) => <span >{info.getValue()}</span>,
       header: () => <span>S.No</span>,
       footer: (props: any) => props.column.id,
       width: "45px",

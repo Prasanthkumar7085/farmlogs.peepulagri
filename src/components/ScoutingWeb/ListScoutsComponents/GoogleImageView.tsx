@@ -313,25 +313,13 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                 </div>
 
             </div>
-            {/* <div style={{ display: "flex", alignItems: "center", flexDirection: "row", gap: "0.5rem" }}>
-                <img
-                    src="/mobileIcons/singleImage-tag-icon.svg"
-                    height={10}
-                    width={10}
-                />
-                {selectedImage?.tags?.length ? selectedImage?.tags.map((item: any, index: number) => {
-                    return (
-                        <Typography variant="caption" key={index}>#{item},</Typography>
-                    )
-                }) : ""}
-            </div> */}
 
             <div className={styles.singleScoutImg}>
                 <img
                     src={selectedImage?.url ? selectedImage?.url : imageDetails?.url}
                     width={100}
                     height={100}
-                    alt="Loding..."
+                    alt="Loading..."
                 />
             </div>
 
@@ -339,11 +327,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                 <Button variant="outlined"
                     className={styles.viewScoutingBtn}
                     onClick={() => {
-                        if (router.query.farm_id || router.query.crop_id || router.query.location_id || selectedImage?._id) {
-                            let routerData = { ...router.query, view: true, image_id: selectedImage?._id }
+                        if (router.query.farm_id || router.query.crop_id || router.query.location_id || selectedImage?._id || imageDetails?._id) {
+                            let routerData = { ...router.query, view: true, image_id: selectedImage?._id ? selectedImage?._id : imageDetails?._id }
                             dispatch(QueryParamsForScouting(routerData))
                             router.push(
-                                `/scouts/farm/${router.query.farm_id || selectedImage?.farm_id?._id || imageDetails?.crop_id?._id}/crops/${router.query.crop_id || selectedImage?.crop_id?._id || imageDetails?.crop_id?._id}/${selectedImage?._id || imageDetails?._id}?location_id=${router.query.location_id || ""}`
+                                `/scouts/${selectedImage?._id ? selectedImage?._id : imageDetails?._id}`
                             );
                         }
                         else {

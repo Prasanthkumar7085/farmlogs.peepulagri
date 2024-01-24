@@ -95,7 +95,7 @@ const NavContainer: React.FC<PropTypes> = ({
   useEffect(() => {
     setSearch(searchString);
     setSelectedFarmOption(selectedFarm);
-    setStatus(router.query.status as string);
+    setStatus(router.query.overdue ? "OVER-DUE" : router.query.status as string,);
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {

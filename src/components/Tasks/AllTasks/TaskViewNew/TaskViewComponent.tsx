@@ -4,7 +4,7 @@ import timePipe from "@/pipes/timePipe";
 import { TaskAttachmentsType, TaskResponseTypes } from "@/types/tasksTypes";
 import CloseIcon from "@mui/icons-material/Close";
 import { Avatar, Button, Card, Checkbox, CircularProgress, Fade, IconButton, Menu, MenuItem, TextField } from "@mui/material";
-import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+// import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Markup } from "interweave";
 import moment from "moment";
@@ -23,6 +23,9 @@ import styles from "./TaskViewComponent.module.css";
 import getImageSrcUrl from "@/pipes/getImageSrcUrl";
 import deleteAssigneeInTaskService from "../../../../../lib/services/TasksService/deleteAssigneeInTaskService";
 import updateTaskDeadlineService from "../../../../../lib/services/TasksService/updateTaskDeadlineService";
+import { DatePicker } from "rsuite";
+import { addDays, startOfDay } from "date-fns";
+import "rsuite/dist/rsuite.css";
 
 const TaskViewComponent = () => {
   const router = useRouter();
@@ -469,6 +472,14 @@ const TaskViewComponent = () => {
   const handleCalenderClose = () => setCalenderOpen(false);
 
 
+  const currentDate = new Date();
+  const todayStart = startOfDay(currentDate); // Set the time to midnight
+  const isDisabledDate = (date: any) => {
+    // Disable dates in the past
+    return date < addDays(new Date(), -1);
+  };
+
+
   return (
     <div className={styles.taskViewPage}>
       <div>
@@ -855,7 +866,7 @@ const TaskViewComponent = () => {
               <div className={styles.DatePickerBlock}>
                 <p className={styles.dueDate}>Due Date</p>
                 <div className={styles.datePicker} style={{ display: "flex" }}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <MobileDatePicker
                       open={calenderOpen}
                       onOpen={handleCalenderOpen}
@@ -903,7 +914,38 @@ const TaskViewComponent = () => {
                         },
                       }}
                     />
-                  </LocalizationProvider>
+                  </LocalizationProvider> */}
+                  <DatePicker
+                    format="dd-MM-yyyy HH:mm "
+                    shouldDisableDate={isDisabledDate}
+                    size="lg"
+                    editable={false}
+                    value={new Date(deadlineString)}
+                    placeholder={"Select date"}
+                    shouldDisableHour={hour => hour < new Date().getHours()}
+                    shouldDisableMinute={minute => minute < new Date().getMinutes()}
+                    ranges={[{ label: 'Now', value: new Date() }]}
+                    style={{ width: 260 }}
+                    disabled={
+                      status === "DONE" ||
+                      !(loggedInUserId == data?.created_by?._id)
+                    }
+                    onChange={(newValue: any) => {
+                      let dateNow = new Date();
+                      let dateWithPresentTime = moment(new Date(newValue))
+                        .set({
+                          hour: dateNow.getHours(),
+                          minute: dateNow.getMinutes(),
+                          second: dateNow.getSeconds(),
+                          millisecond: dateNow.getMilliseconds(),
+                        })
+                        .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+                      setDeadlineString(dateWithPresentTime);
+
+                      onUpdateDeadlineField({ deadlineProp: dateWithPresentTime });
+                    }}
+                  />
                   <img
                     onClick={handleCalenderOpen}
                     src="/viewTaskIcons/calender-icon.svg"

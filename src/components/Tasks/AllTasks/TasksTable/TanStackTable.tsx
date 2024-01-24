@@ -64,7 +64,7 @@ const TanStackTableComponent = ({
       sortType: orderType,
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
-      status: router.query.status as string,
+      status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
       userId: router.query.assign_to
         ? Array.isArray(router.query.assign_to)
           ? (router.query.assign_to as string[])
@@ -81,7 +81,7 @@ const TanStackTableComponent = ({
       sortType: router.query.sort_type as string,
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
-      status: router.query.status as string,
+      status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
       userId: router.query.assign_to
         ? Array.isArray(router.query.assign_to)
           ? (router.query.assign_to as string[])
@@ -98,7 +98,7 @@ const TanStackTableComponent = ({
       sortType: router.query.sort_type as string,
       search_string: router.query.search_string as string,
       selectedFarmId: router.query.farm_id as string,
-      status: router.query.status as string,
+      status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
       userId: router.query.assign_to
         ? Array.isArray(router.query.assign_to)
           ? (router.query.assign_to as string[])
@@ -192,10 +192,10 @@ const TanStackTableComponent = ({
             <tbody className="tbody">
               {table.getFilteredRowModel().rows.map((row) => {
                 return (
-                  <tr className="table-row" key={row.id}>
+                  <tr className="table-row" key={row.id} >
                     {row.getVisibleCells().map((cell) => {
                       return (
-                        <td className="cell" key={cell.id}>
+                        <td className="cell" key={cell.id} style={{ backgroundColor: row?.original?.isOverdue ? "#d947451a" : "" }}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

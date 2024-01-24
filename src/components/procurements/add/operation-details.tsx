@@ -123,7 +123,6 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                 <DatePicker
                   sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
                   disablePast
-                  label="Select Date "
                   value={dateOfOperation}
                   format="dd/MM/yyyy"
                   onChange={(newValue: any) => {

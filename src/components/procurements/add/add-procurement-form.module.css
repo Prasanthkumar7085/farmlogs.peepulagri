@@ -52,6 +52,7 @@
   justify-content: flex-end;
   margin-top: 2rem;
   gap: 1rem;
+  padding: 0 1rem 1rem;
 }
 
 .procurementFormBtn button {
@@ -62,13 +63,13 @@
   font-weight: 500 !important;
   line-height: 24px !important;
   text-transform: capitalize !important;
-  padding: 5px 20px;
 }
 
 .cancelBtn {
   border: 1px solid var(--Gray-300, #D0D5DD) !important;
   background: var(--White, #FFF) !important;
   color: #344054 !important;
+  padding: 6px 20px !important;
 }
 
 .cancelBtn:hover {
@@ -79,16 +80,16 @@
 
 .submitBtn {
   color: #fff !important;
-  border: 1px solid var(--Blue-Gradient, #3462CF) !important;
-  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%)) !important;
+  border: 1px solid #D94841 !important;
+  background: #D94841 !important;
+  padding: 6px 60px !important;
 
 }
 
 .submitBtn:hover {
   color: #fff !important;
-  border: 1px solid var(--Blue-Gradient, #3462CF) !important;
-  background: var(--Blue-Gradient, linear-gradient(142deg, #3462CF 0%, #2B53BE 97.71%)) !important;
-
+  border: 1px solid #D94841 !important;
+  background: #D94841 !important;
 }
 
 /* presonofContact block styles */

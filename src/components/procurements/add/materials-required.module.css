@@ -29,7 +29,8 @@
 .materialsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  align-items: flex-start;
+  align-items: flex-end;
+
   margin-top: 1.5rem;
   grid-column-gap: 1rem;
 }
@@ -90,8 +91,8 @@
 
 .text {
   color: #101828;
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(16px, 0.93vw, 20px);
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(15px, 0.93vw, 18px);
   font-weight: 500;
   line-height: 100%;
   letter-spacing: -0.198px;
@@ -104,7 +105,7 @@
   font-weight: 400;
   line-height: 100%;
   letter-spacing: -0.154px;
-  margin-top: 0.8rem;
+  margin-top: 0.4rem;
 }
 
 .heading,
@@ -206,7 +207,8 @@
 .materialsrequired {
   display: flex;
   flex-direction: column;
-  padding: 1rem 1rem 0 1rem;
+  padding-top: 1rem;
+  margin-inline: 1rem;
   border-top: 1px solid lightgrey;
 }
 
@@ -224,7 +226,8 @@
   margin: 0;
 }
 
-.materialListTable {
+#materialListTable {
+  overflow: auto;
   margin-top: 1rem;
 }
 

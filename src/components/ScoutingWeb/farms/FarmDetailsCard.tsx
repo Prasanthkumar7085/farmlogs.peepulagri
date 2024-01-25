@@ -14,6 +14,7 @@ import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmService";
 import styles from "./FarmDetailsCard.module.css";
+import Image from "next/image";
 
 interface PageProps {
   data: any;
@@ -149,7 +150,7 @@ const ScoutingFarmDetailsCard = ({
                 <div className={styles.farmName}>
                   <img
                     className={styles.farmsIcon}
-                    alt="Farm Shape"
+                    alt=""
                     src="/farmshape2.svg"
                   />
                   <h2
@@ -164,46 +165,68 @@ const ScoutingFarmDetailsCard = ({
                   </h2>
                 </div>
                 <div className={styles.landdetails}>
-                  <p className={styles.totalAcres}>
-                    Total <span>(acres)</span>
-                  </p>
-                  <p className={styles.text}>
-                    {item.area
-                      ? item.area?.toString()?.includes(".")
-                        ? (+item.area)?.toFixed(2)
-                        : item.area
-                      : "0"}
-                  </p>
+                  <div className={styles.acresBlock}>
+                    <Image src="/scouting/acres-icon.svg" alt="" width={15} height={15} />
+                    <p className={styles.text}>
+                      {item.area
+                        ? item.area?.toString()?.includes(".")
+                          ? (+item.area)?.toFixed(2)
+                          : item.area
+                        : "0"} <span>Acres</span>
+                    </p>
+                  </div>
+
+                  <div className={styles.timeline}>
+                    <Image
+                      alt=""
+                      src="/scouting/farm-calender-icon.svg"
+                      width={16}
+                      height={16}
+                    />
+                    <p className={styles.from}>
+                      {timePipe(item.createdAt, "DD, MMM YYYY")}
+                    </p>
+
+                  </div>
                 </div>
               </div>
 
               <div className={styles.timeline}>
-                {/* <img
-                  className={styles.calendarIcon}
-                  alt=""
-                  src="/farm-date-icon.svg"
-                /> */}
                 <div className={styles.duration}>
-                  <p className={styles.from}>Location</p>
-                  <p className={styles.divider}>-</p>
-                  <p className={styles.from}>{item?.location_id?.title}</p>
+                  <Image src="/location-3-1-11.svg" alt="" width={15} height={15} />
+                  <p className={styles.locationTitle}>{item?.location_id?.title}</p>
+                </div>
+                <div className={styles.actionbuttons}>
+                  <IconButton
+                    className={styles.view}
+                    onClick={() => onViewClick(item._id)}
+                  >
+                    <Image
+                      src="/mobileIcons/farms/info-black-icon.svg"
+                      width={25}
+                      height={25}
+                      alt=""
+                    />
+                  </IconButton>
+                  {/* <IconButton className={styles.edit}>
+                  <img
+                    className={styles.trashXmark1Icon}
+                    alt=""
+                    src="/edit-farm-icon.svg"
+                  />
+                </IconButton> */}
+                  {/* <IconButton className={styles.delete} onClick={() => { setDeleteDialogOpen(true); setDeleteId(item._id)}}>
+                  <img
+                    className={styles.trashXmark1Icon}
+                    alt=""
+                    src="/farm-delete-icon.svg"
+                  />
+                </IconButton> */}
                 </div>
               </div>
 
-              <div className={styles.timeline}>
-                <img
-                  className={styles.calendarIcon}
-                  alt=""
-                  src="/farm-date-icon.svg"
-                />
-                <div className={styles.duration}>
-                  <p className={styles.from}>
-                    {timePipe(item.createdAt, "DD, MMM YYYY")}
-                  </p>
-                </div>
-              </div>
             </div>
-            <div
+            {/* <div
               style={{
                 width: "100%",
                 display: "flex",
@@ -220,33 +243,8 @@ const ScoutingFarmDetailsCard = ({
                   ""
                 )}
               </div>
-              <div className={styles.actionbuttons}>
-                <IconButton
-                  className={styles.view}
-                  onClick={() => onViewClick(item._id)}
-                >
-                  <img
-                    src="/mobileIcons/farms/info.svg"
-                    width={25}
-                    alt="image"
-                  />
-                </IconButton>
-                {/* <IconButton className={styles.edit}>
-                  <img
-                    className={styles.trashXmark1Icon}
-                    alt=""
-                    src="/edit-farm-icon.svg"
-                  />
-                </IconButton> */}
-                {/* <IconButton className={styles.delete} onClick={() => { setDeleteDialogOpen(true); setDeleteId(item._id)}}>
-                  <img
-                    className={styles.trashXmark1Icon}
-                    alt=""
-                    src="/farm-delete-icon.svg"
-                  />
-                </IconButton> */}
-              </div>
-            </div>
+
+            </div> */}
           </div>
         );
       })}

@@ -51,7 +51,7 @@ const ScoutingDetails = ({
                 color="indigo"
               >
                 {loading ? (
-                  <Skeleton width="300px" height="30px" />
+                  <Skeleton width="100px" height="30px" />
                 ) : (
                   data?.uploaded_by?.name
                 )}
@@ -75,7 +75,7 @@ const ScoutingDetails = ({
           <h2 className={styles.farmname}>
             <Image src="/mobileIcons/farms/farm-view-mobile.svg" alt="" width={15} height={15} />
             {loading ? (
-              <Skeleton width="300px" height="30px" />
+              <Skeleton width="100px" height="30px" />
             ) : (
               data?.farm_id?.title
             )}
@@ -85,7 +85,7 @@ const ScoutingDetails = ({
 
             <span>
               {loading ? (
-                <Skeleton width="200px" height="30px" />
+                <Skeleton width="100px" height="30px" />
               ) : (
                 data?.crop_id?.title
               )}

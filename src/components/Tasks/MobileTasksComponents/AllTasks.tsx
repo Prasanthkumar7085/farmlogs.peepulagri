@@ -96,7 +96,11 @@ const AllTasks = () => {
     }
     if (status) {
       if (status !== "ALL") {
-        queryParams["status"] = status;
+        if (status == "OVER-DUE") {
+          queryParams["overdue"] = true
+        } else {
+          queryParams["status"] = status;
+        }
       }
     }
 
@@ -158,7 +162,7 @@ const AllTasks = () => {
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
           selectedFarmId: router.query.farm_id as string,
-          status: router.query.status as string,
+          status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
           userId: router.query.assign_to
             ? Array.isArray(router.query.assign_to)
               ? (router.query.assign_to as string[])
@@ -195,7 +199,7 @@ const AllTasks = () => {
         sortBy: router.query.order_by as string,
         sortType: router.query.order_type as string,
         selectedFarmId: value?._id,
-        status: router.query.status as string,
+        status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
         userId: router.query.assign_to
           ? Array.isArray(router.query.assign_to)
             ? (router.query.assign_to as string[])
@@ -213,7 +217,7 @@ const AllTasks = () => {
         sortBy: router.query.order_by as string,
         sortType: router.query.order_type as string,
         selectedFarmId: "",
-        status: router.query.status as string,
+        status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
         userId: router.query.assign_to
           ? Array.isArray(router.query.assign_to)
             ? (router.query.assign_to as string[])
@@ -252,7 +256,7 @@ const AllTasks = () => {
       sortBy: router.query.order_by as string,
       sortType: router.query.order_type as string,
       selectedFarmId: router.query.farm_id as string,
-      status: router.query.status as string,
+      status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
       userId: value,
       isMyTasks: isMyTasks,
     });
@@ -286,7 +290,7 @@ const AllTasks = () => {
             sortBy: router.query.order_by as string,
             sortType: router.query.order_type as string,
             selectedFarmId: router.query.farm_id as string,
-            status: router.query.status as string,
+            status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
             userId: router.query.assign_to
               ? Array.isArray(router.query.assign_to)
                 ? (router.query.assign_to as string[])

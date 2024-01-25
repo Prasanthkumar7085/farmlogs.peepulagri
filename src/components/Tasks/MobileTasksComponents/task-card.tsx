@@ -111,13 +111,13 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                           item?.title?.slice(1)
                         : "ty"}
                     </h2>
-                    <div className={styles.duedatecontainer}>
+                    <div className={styles.duedatecontainer} style={{ backgroundColor: item?.isOverdue ? "#ffd5d2" : "GrayText", padding: '4px 6px 4px 6px', borderRadius: "4px" }}>
                       <img
                         className={styles.calendarBlank1Icon}
                         alt=""
-                        src="/calendarblank-1@2x.png"
+                        src={item?.isOverdue ? "/mobileIcons/Calender_Red.svg" : "/viewTaskIcons/calender-icon.svg"}
                       />
-                      <p className={styles.duedate}>
+                      <p className={styles.duedate} style={{ color: item?.isOverdue ? "red" : "black" }}>
                         {moment(item.deadline).format("DD-MM-YYYY")}
                       </p>
                     </div>

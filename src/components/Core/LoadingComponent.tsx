@@ -581,12 +581,14 @@ const LoadingComponent = ({ loading }: { loading: Boolean }) => {
       }}
       open={Boolean(loading)}
     >
-      <Lottie
+      {/* <Lottie
         loop
         animationData={animationData}
         play
         style={{ width: 100, height: 100 }}
-      />
+      /> */}
+      <object type="image/svg+xml" data={"/loading-new.svg"} width={100} height={100}>svg-animation</object>
+
       Loading...
     </Backdrop>
   );

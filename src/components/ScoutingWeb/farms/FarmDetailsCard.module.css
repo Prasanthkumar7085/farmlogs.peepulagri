@@ -7,9 +7,15 @@
   margin: 0;
   color: #35353D;
   font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 1vw, 22px);
+  font-size: clamp(14px, 0.93vw, 20px);
   font-weight: 500;
   line-height: 100%;
+}
+
+.acresBlock {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .farmName {
@@ -34,12 +40,21 @@
 }
 
 .text {
-  color: #6A7185;
-  font-family: "Inter", sans-serif;
-  font-size: clamp(18px, 1vw, 24px);
+  color: #45A845;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 0.83vw, 16px);
   font-weight: 400;
   line-height: 100%;
   margin: 0;
+
+}
+
+.text span {
+  color: #45A845;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(10px, 0.625vw, 12px);
+  font-weight: 400;
+  line-height: 100%;
 }
 
 .landdetails {
@@ -77,9 +92,9 @@
 }
 
 .from {
-  color: #35353D;
+  color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(13px, 0.72vw, 18px);
+  font-size: clamp(11.5px, 0.72vw, 14px);
   font-weight: 400;
   line-height: 100%;
   letter-spacing: 0;
@@ -108,9 +123,8 @@
   flex: 1;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 8px;
+  align-items: center;
+  gap: 5px;
 }
 
 .container,
@@ -119,13 +133,20 @@
   display: flex;
 }
 
+.locationTitle {
+  color: #6A7185;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 14px);
+  font-weight: 400;
+  line-height: 130%;
+}
 
 .timeline {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
-  font-size: 24px;
+  gap: 4px;
+
 }
 
 .container {
@@ -133,12 +154,11 @@
   align-items: flex-end;
   justify-content: center;
   gap: 16px;
-  padding-bottom: 24px;
 }
 
 .edit,
 .view {
-  border-radius: 4px;
+  border-radius: 50%;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -147,7 +167,7 @@
 }
 
 .view {
-  background-color: #305cc81a !important;
+  background-color: #F5F7FA !important;
 }
 
 .edit {
@@ -199,23 +219,22 @@
   font-size: 20px;
   color: #35353d;
   font-family: "Inter", sans-serif;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.85);
-  border: none;
   overflow: hidden;
-  border: 1px solid #f2f8f9;
+  border-radius: 8px;
+  border: 1px solid #E9EDF1;
+  background: #FFF;
 }
 
 .farmdetailscard:hover {
   transition: all 0.2s ease-out;
-  box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.1);
-  top: -3px;
-  border: 1px solid rgba(38, 38, 38, 0.1);
-  background-color: white;
+  transform: scale(1.001);
+  border-radius: 8px;
+  border: 1px solid #E9EDF1;
+  background: #FFF;
+  box-shadow: 4px 6px 20px 0px rgba(44, 44, 44, 0.10);
 }
 
 .farmCardGridContainer {
-
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 1rem;

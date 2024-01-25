@@ -250,7 +250,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     </div>
                 </div>
 
-                <Typography variant="subtitle1" className={styles.imagesTitle}>{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title}/{selectedImage?._id ? selectedImage?.crop_id?.title : imageDetails?.crop_id?.title}</Typography>
+                <Typography variant="subtitle1" className={styles.imagesTitle}>{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title} / {selectedImage?._id ? selectedImage?.crop_id?.title : imageDetails?.crop_id?.title}</Typography>
                 <div>
                     <IconButton
                         disabled={loading || imageIndex == 0 ? true : false}

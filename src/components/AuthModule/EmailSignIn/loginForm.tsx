@@ -40,7 +40,7 @@ export default function SigninEmail() {
     const deviceDetector = new DeviceDetector();
     const userAgent = navigator.userAgent;
     const device = deviceDetector.parse(userAgent);
-    
+
     setDeviceType(device.device?.type) // This will log the parsed device information
   }, []);
 
@@ -81,7 +81,7 @@ export default function SigninEmail() {
         if (deviceType !== "desktop") {
           router.push("/dashboard");
         }
-      }else if (response.status == 422) {
+      } else if (response.status == 422) {
         setErrorMessages(res.errors);
         setLoading(false);
         throw res;
@@ -222,7 +222,7 @@ export default function SigninEmail() {
         </div>
       </form>
 
-      <Toaster closeButton richColors position="top-right"/>
+      <Toaster closeButton richColors position="top-right" />
     </div>
   );
 }

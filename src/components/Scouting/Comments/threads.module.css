@@ -171,13 +171,13 @@
 
 .edit1 {
   margin: 0;
-  position: relative;
   line-height: 100%;
   cursor: pointer;
-  color: var(--body) !important;
+  color: #6A7185 !important;
   text-transform: capitalize !important;
-  font-size: var(--text-sm-medium-size) !important;
+  font-size: clamp(12px, 0.72vw, 14px) !important;
   font-family: 'Inter', sans-serif !important;
+  text-decoration: underline;
 
 }
 
@@ -230,7 +230,6 @@
   justify-content: flex-start;
   padding: 1rem 0 0.5rem;
   gap: var(--gap-5xs);
-  margin-bottom: 0.6rem;
 }
 
 .repliedcontainerChild {

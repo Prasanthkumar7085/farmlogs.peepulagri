@@ -119,11 +119,11 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
             return (
               <div className={styles.inMessage} key={index}>
                 {item?.commented_by?.user_type == "farmer" ? (
-                  <Avatar sx={{ bgcolor: "chocolate" }}>
+                  <Avatar sx={{ bgcolor: "#D94841", height: "20px", width: "21px", fontSize: "7px" }}>
                     {item?.commented_by?.name?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 ) : (
-                  <Avatar sx={{ bgcolor: "green" }}>
+                  <Avatar sx={{ bgcolor: "green", height: "20px", width: "21px", fontSize: "7px" }}>
                     {item?.commented_by?.name?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 )}

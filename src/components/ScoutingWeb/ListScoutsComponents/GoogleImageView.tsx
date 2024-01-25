@@ -267,7 +267,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
                         }}>
-                        <KeyboardArrowLeftIcon sx={{ color: "#333", fontSize: "2rem" }} />
+                        <KeyboardArrowLeftIcon sx={{ fontSize: "2rem" }} />
                     </IconButton>
                     <IconButton
                         disabled={loading || imageIndex == data?.length - 1 ? true : false}
@@ -293,7 +293,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
                         }}>
-                        <KeyboardArrowRightIcon sx={{ color: '#333', fontSize: "2rem" }} />
+                        <KeyboardArrowRightIcon sx={{ fontSize: "2rem" }} />
                     </IconButton>
                     <IconButton onClick={() => {
                         setRightBarOpen(false)
@@ -367,7 +367,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                                             dispatch(QueryParamsForScouting(routerData))
 
                                         }}
-                                        style={{ border: imageItem?._id == (selectedImage?._id || imageDetails?._id) ? "1px solid #b1b3b9" : "" }}
+                                        style={{ border: imageItem?._id == (selectedImage?._id || imageDetails?._id) ? "2px solid #b1b3b9" : "" }}
                                     >
                                         <img
                                             src={

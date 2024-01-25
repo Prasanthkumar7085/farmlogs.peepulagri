@@ -576,18 +576,18 @@ const LoadingComponent = ({ loading }: { loading: Boolean }) => {
         gap: "10px",
         flexDirection: "column",
         color: "green",
-        backgroundColor: "rgba(256, 256, 256, 0.7)",
+        backgroundColor: "rgba(256, 256, 256, 0.8)",
         zIndex: (theme: any) => theme.zIndex.drawer + 1,
       }}
       open={Boolean(loading)}
     >
-      <Lottie
+      {/* <Lottie
         loop
         animationData={animationData}
         play
         style={{ width: 100, height: 100 }}
-      />
-      Loading...
+      /> */}
+      <object type="image/svg+xml" data={"/loading-new.svg"} width={150} height={150}>svg-animation</object>
     </Backdrop>
   );
 };

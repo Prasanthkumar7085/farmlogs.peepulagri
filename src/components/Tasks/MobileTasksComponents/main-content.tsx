@@ -3,16 +3,14 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./main-content.module.css";
 import ErrorMessages from "@/components/Core/ErrorMessages";
-// import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  MobileDatePicker,
+  MobileDateTimePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { DatePicker } from "rsuite";
-import { addDays, startOfDay } from "date-fns";
-import "rsuite/dist/rsuite.css";
-import timePipe from "@/pipes/timePipe";
-import Image from "next/image";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 const MainContent = ({
   title,
   onChangeStatus,
@@ -35,7 +33,7 @@ const MainContent = ({
   handleCalenderClose,
   deadlineString,
   setDeadlineString,
-  onUpdateDeadlineField
+  onUpdateDeadlineField,
 }: any) => {
   const loggedInUserId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
@@ -49,14 +47,6 @@ const MainContent = ({
     { value: "DONE", title: "Done", color: "#46a845" },
     { value: "OVER-DUE", title: "Over-due", color: "#d94841" },
   ]);
-  const [openCelender, setCelender] = useState<any>(false)
-
-  const currentDate = new Date();
-  const todayStart = startOfDay(currentDate); // Set the time to midnight
-  const isDisabledDate = (date: any) => {
-    // Disable dates in the past
-    return date < addDays(new Date(), -1);
-  };
 
   return (
     <>
@@ -155,7 +145,6 @@ const MainContent = ({
           )}
         </div>
 
-
         <div className={styles.container}>
           <p
             className={styles.statusSelect}
@@ -195,39 +184,73 @@ const MainContent = ({
               ""
             )}
           </p>
-
           {/* <p className={styles.dueDate}>Due Date</p> */}
-          {openCelender ?
-            "" :
-            <div className={styles.datePicker} style={{ display: "flex" }}>
-              <Image
-                width={15}
-                height={15}
-                onClick={() => {
-                  if (
-                    status !== "DONE" &&
-                    loggedInUserId == data?.created_by?._id
-                  )
-                    handleCalenderOpen();
-                  setCelender(true)
-                }}
-                src="/viewTaskIcons/calender-icon.svg"
-                alt=""
-              />
-
-
-
-              <p onClick={() => {
+          <div className={styles.datePicker} style={{ display: "flex" }}>
+            <img
+              onClick={() => {
                 if (
                   status !== "DONE" &&
                   loggedInUserId == data?.created_by?._id
                 )
                   handleCalenderOpen();
-                setCelender(true)
-              }
-              }>{timePipe(data?.deadline, "DD-MM-YYYY hh:mm A")}</p>
+              }}
+              src="/viewTaskIcons/calender-icon.svg"
+              alt=""
+            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <MobileDateTimePicker
+                open={calenderOpen}
+                onOpen={handleCalenderOpen}
+                onClose={handleCalenderClose}
+                sx={{
+                  width: "100%",
+                  "& .MuiButtonBase-root": {
+                    lineHeight: "0 !important",
+                  },
 
-            </div>}
+                  "& .MuiInputBase-root::before": {
+                    borderBottom: "0 !important",
+                  },
+                  "& .MuiInputBase-root::after": {
+                    borderBottom: "0 !important",
+                  },
+                  "& .MuiInputBase-input": {
+                    padding: "0",
+                    fontSize: "12px",
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: "600",
+                  },
+                }}
+                disablePast
+                value={new Date(deadlineString)}
+                disabled={
+                  status === "DONE" ||
+                  !(loggedInUserId == data?.created_by?._id)
+                }
+                onAccept={(newValue: any) => {
+                  let dateNow = new Date(newValue);
+
+                  setDeadlineString(
+                    new Date(dateNow?.toUTCString())?.toISOString()
+                  );
+
+                  onUpdateDeadlineField({
+                    deadlineProp: new Date(
+                      dateNow?.toUTCString()
+                    )?.toISOString(),
+                  });
+                }}
+                format="dd/MM/yyyy hh:mm aa"
+                slotProps={{
+                  textField: {
+                    variant: "standard",
+                    size: "medium",
+                    color: "primary",
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </div>
         </div>
         <Menu
           id="fade-menu"
@@ -272,63 +295,6 @@ const MainContent = ({
               }
             )}
         </Menu>
-
-        {openCelender ? <div className={styles.datePicker} style={{ display: "flex", width: "100%" }}>
-
-          <DatePicker
-            format="dd-MM-yyyy HH:mm "
-            shouldDisableDate={isDisabledDate}
-            disabled={
-              status === "DONE" ||
-              !(loggedInUserId == data?.created_by?._id)
-            }
-            size="lg"
-            style={{ width: '100%' }}
-            editable={false}
-            value={data?.deadline ? new Date(data?.deadline) : new Date()}
-            placeholder={"Select date"}
-            shouldDisableHour={hour => hour < new Date().getHours()}
-            shouldDisableMinute={minute => minute < new Date().getMinutes()}
-            ranges={[{ label: 'Now', value: new Date() }]}
-            onChange={(newValue: any) => {
-              const originalDate = new Date(newValue);
-              const utcDate = originalDate.toUTCString();
-              setDeadlineString(utcDate);
-              onUpdateDeadlineField({ deadlineProp: new Date(utcDate).toISOString() });
-              setCelender(false)
-            }}
-            placement="bottomEnd"
-            locale={{
-              sunday: 'Su',
-              monday: 'Mo',
-              tuesday: 'Tu',
-              wednesday: 'We',
-              thursday: 'Th',
-              friday: 'Fr',
-              saturday: 'Sa',
-              ok: 'OK',
-              today: 'Today',
-              yesterday: 'Yesterday',
-              hours: 'Hours',
-              minutes: 'Minutes',
-              seconds: 'Seconds'
-            }}
-          />
-          <IconButton
-            sx={{ padding: "0" }}
-            onClick={() => {
-              setCelender(false)
-            }}
-          >
-            <img
-              src="/viewTaskIcons/cancel-icon.svg"
-              alt=""
-              width={"20px"}
-            />
-          </IconButton>
-
-        </div> : ""}
-
       </div>
       {/* {isStatusOpen && (
         <PortalPopup
@@ -344,3 +310,15 @@ const MainContent = ({
 };
 
 export default MainContent;
+
+
+
+
+
+
+
+
+
+
+
+

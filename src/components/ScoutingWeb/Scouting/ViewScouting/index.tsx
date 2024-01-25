@@ -121,14 +121,15 @@ const SingleScoutViewDetails = () => {
       const responseData = await response.json();
 
       if (responseData.success) {
-        if (responseData?.data?.length == 1) {
+        if (responseData?.data?.length == 1 && responseData?.has_more == false) {
           setLoading(false);
-          // toast.error("You have reached to end");
-          // return;
+          toast.error("You have reached to end");
+          return;
         }
         // knowAboutPrevImageDetails(responseData?.data[0]?._id)
 
         if (responseData?.has_more) {
+
           if (data?.length) {
             setHasMore(responseData?.has_more);
             setData([...responseData?.data]);
@@ -194,6 +195,7 @@ const SingleScoutViewDetails = () => {
           return
         }
         if (responseData?.has_more) {
+
           if (prevData?.length) {
             setPrevHasMore(responseData?.has_more);
             setPrevData([...responseData?.data]);
@@ -284,6 +286,7 @@ const SingleScoutViewDetails = () => {
                   <Button
                     className={styles.prevBtn}
                     onClick={() => {
+                      console.log("dfsds")
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(data[1]?._id)
                       if (router.query.farm_id || router.query.crop_id) {
@@ -360,6 +363,7 @@ const SingleScoutViewDetails = () => {
                   <Button
                     className={styles.prevBtn}
                     onClick={() => {
+                      console.log("Asd")
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(prevData?.length ? prevData[0]?._id : "")
                       if (router.query.farm_id || router.query.crop_id) {

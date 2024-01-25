@@ -273,12 +273,9 @@ const AddProcurementForm = () => {
     <div style={{ paddingTop: "2rem" }}>
       <AddProcurementHeader />
 
-      <form className={styles.addprocurementform} style={{ background: "#fff" }}>
+      <form className={styles.addprocurementform} style={{ background: "#fff", borderRadius: "12px" }}>
         <div style={{ width: "100%" }}>
           <div style={{ padding: "1rem" }}>
-            {/* <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-
-            </div> */}
             {afterProcurement ?
               <MaterialsRequired
                 procurementData={procurementData}
@@ -325,8 +322,8 @@ const AddProcurementForm = () => {
                   >
                     Prev
 
-                  </Button> :
-
+                  </Button>
+                  :
                   <Button
                     className={styles.cancelBtn}
                     color="primary"
@@ -341,12 +338,11 @@ const AddProcurementForm = () => {
 
                 {afterProcurement && procurementData?._id ?
                   <Button
-                    // className={styles.submitBtn}
                     variant="contained"
+                    className={styles.submitBtn}
                     disabled={materialCount >= 1 ? false : true}
                     onClick={() => {
                       router.back();
-
                     }}
                   >
                     Submit
@@ -354,7 +350,6 @@ const AddProcurementForm = () => {
                   :
                   <Button
                     className={styles.submitBtn}
-                    color="primary"
                     variant="contained"
                     onClick={() => {
                       router.query.procurement_id || procurementData?._id
@@ -402,3 +397,6 @@ const AddProcurementForm = () => {
 };
 
 export default AddProcurementForm;
+//
+
+

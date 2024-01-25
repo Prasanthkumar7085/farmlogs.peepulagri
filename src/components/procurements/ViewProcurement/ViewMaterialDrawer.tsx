@@ -24,14 +24,11 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
-
     const [loading, setLoading] = useState(false);
     const [materials, setMaterials] = useState<any>();
     const [nameVendor, setNameVendor] = useState('');
     const [price, setPrice] = useState<any>();
     const [errorMessages, setErrorMessages] = useState({});
-
-
     const getSingleMaterials = async () => {
         setLoading(true);
         try {

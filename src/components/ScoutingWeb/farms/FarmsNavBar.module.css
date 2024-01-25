@@ -111,35 +111,38 @@
   margin-top: 1rem;
 }
 
-.AllScoutsLeftWebPage{
+.AllScoutsLeftWebPage {
   height: calc(100vh - 115px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
   width: 50%;
 }
+
 .AllScoutsLeftWebPage::-webkit-scrollbar {
   background: transparent;
   width: 5px;
   height: 3px;
 }
+
 .AllScoutsRightWebPage {
   height: calc(100vh - 115px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
   width: 50%;
-  background-color: var(--white, #ffffff);
-  border-radius: 10px;
-  border: 1px solid #E9EDF1;
   border-bottom: 0;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 4px 4px 13px 0px rgba(0, 0, 0, 0.17);
 }
+
 .AllScoutsRightWebPage::-webkit-scrollbar {
   background: transparent;
   width: 5px;
   height: 3px;
 }
+
 .AllScoutsRightClose {
   display: "none";
 }
@@ -348,6 +351,7 @@
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 0.5rem;
 }
+
 .allScoutImgFlexContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -387,7 +391,7 @@
 }
 
 .scoutPageHeader h4 {
-  color:  #FE3143;
+  color: #FE3143;
   font-family: "Inter", sans-serif;
   font-size: clamp(20px, 1.25vw, 24px);
   font-weight: 400;

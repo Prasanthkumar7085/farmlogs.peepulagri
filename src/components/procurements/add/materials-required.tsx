@@ -260,7 +260,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
   };
 
   return (
-    <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "3rem", background: "#fff" }}>
+    <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "0rem", background: "#fff" }}>
       <div>
         <POC
           procurementData={procurementData}
@@ -401,7 +401,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
           </div>
 
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1rem" }}>
           <Button
             color="primary"
             variant="contained"
@@ -413,15 +413,16 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
         </div>
         <div className={styles.materialListBlock}>
           <h4 className={styles.materialListheading}>Required Materials</h4>
-          <div className={styles.materialListTable}>
+          <div id={styles.materialListTable} className="scrollbar"
+          >
             <Table >
               <TableHead>
                 <TableRow>
-                  <TableCell className={styles.tableHeaderCell}>S. No.</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Name</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Material Procurement (Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Material Availability (Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px" }}>S. No.</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px" }}>Name</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Material Procurement (Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Material Availability (Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -492,7 +493,11 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                       );
                     }
                   )
-                  : "No Materials"}
+                  : <TableRow>
+                    <TableCell colSpan={3} sx={{ borderBottom: "0", textAlign: "end" }}>
+                      No Materials
+                    </TableCell>
+                  </TableRow>}
               </TableBody>
             </Table>
           </div>

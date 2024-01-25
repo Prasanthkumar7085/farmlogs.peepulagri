@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Dialog, Drawer, TextField } from "@mui/material";
+import { Button, CircularProgress, Dialog, Drawer, IconButton, TextField } from "@mui/material";
 import styles from "./tracking-details.module.css"
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
+import { Clear } from "@mui/icons-material";
 
 
 interface pagePropsType {
@@ -44,8 +45,6 @@ const TrackingDetailsDilog = ({
     watch,
     formState: { errors },
   } = useForm();
-
-
   //event call after the form submit
   const onSubmitClick = async (data: any) => {
     setErrorMessages({});
@@ -59,7 +58,7 @@ const TrackingDetailsDilog = ({
   };
 
 
-  const Datestyles = { width: 555, display: 'block', marginBottom: 10, zIndex: 1500 };
+  const Datestyles = { width: "100%", display: 'block', marginBottom: 10, zIndex: 1500 };
 
   //function to generate the uuid randomly
   const generateUUID = () => {
@@ -117,145 +116,161 @@ const TrackingDetailsDilog = ({
       anchor={"right"}
 
     >
-
-      <div className={styles.alertdelete}>
-        <picture>
-          <img className={styles.infoIcon} alt="" src="/info-icon.svg" />
-        </picture>
-        <div>
-          <div
-            className={styles.areYouSure}
-          >{`If You want to change status to shipped please add tracking details `}</div>
-          <div className={styles.textfeild} id="farm-name">
-            <div className={styles.label}>Service Name</div>
-            <TextField
-              sx={{
-                "& .MuiInputBase-root": {
-                  background: "#fff",
-                },
-                "& .MuiInputBase-input": {
-                  padding: "11.5px 14px",
-                  height: "inherit",
-                  fontFamily: "'Inter', sans-serif",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "grey !important",
-                },
-              }}
-              value={service_name}
-              onChange={(e) => setServiceName(e.target.value)}
-              name="service_name"
-              fullWidth
-              className={styles.inputfarmname}
-              size="small"
-              placeholder="Service Name"
-              variant="outlined"
-              error={Boolean(errorMessages?.["service_name"])}
-              helperText={
-                errorMessages?.["service_name"]
-                  ? errorMessages?.["service_name"]
-                  : ""
-              }
-            />
-            <div className={styles.label}>Delivery Date</div>
-            <Stack direction="column" alignItems="flex-start">
-              <DatePicker
-                editable={false}
-                size="lg"
-                style={Datestyles}
-                placeholder="DD-MM-YYYY"
-                value={date}
-                onChange={setDate}
-                shouldDisableDate={(date) => isBefore(date, new Date())}
-
-
-              />
-
-            </Stack>
-            <ErrorMessages
-              errorMessages={errorMessages}
-              keyname="delivery_date"
-            />
-            <div className={styles.label}>Contact Number</div>
-            <TextField
-              sx={{
-                "& .MuiInputBase-root": {
-                  background: "#fff",
-                },
-                "& .MuiInputBase-input": {
-                  padding: "11.5px 14px",
-                  height: "inherit",
-                  fontFamily: "'Inter', sans-serif",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "grey !important",
-                },
-              }}
-              size="small"
-              className={styles.inputfarmname}
-              fullWidth
-              placeholder="Contact Number"
-              value={phoneNumber}
-              onInput={handleInput}
-              onChange={(e: any) => setPhoneNumber(e.target.value)}
-              error={Boolean(errorMessages?.["contact_number"])}
-
-              helperText={
-                errorMessages?.["contact_number"]
-                  ? errorMessages?.["contact_number"]
-                  : ""
-              }
-
-            />
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignSelf: "stretch",
-                alignItems: "center",
-              }}
-            >
-              <div className={styles.label}>Tracking Id</div>
-              <div>
-                <Button variant="text" onClick={generateUUID}>
-                  Generate Id
-                </Button>
-              </div>
-            </div>
-            <TextField
-              sx={{
-                "& .MuiInputBase-root": {
-                  background: "#fff",
-                },
-                "& .MuiInputBase-input": {
-                  padding: "11.5px 14px",
-                  height: "inherit",
-                  fontFamily: "'Inter', sans-serif",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "grey !important",
-                },
-              }}
-              fullWidth
-              disabled
-              value={trackingId}
-              className={styles.inputfarmname}
-              size="small"
-              placeholder="Tracking Id"
-              variant="outlined"
-              error={Boolean(errorMessages?.["tracking_id"])}
-              helperText={
-                errorMessages?.["tracking_id"]
-                  ? errorMessages?.["tracking_id"]
-                  : ""
-              }
-            />
-          </div>
+      <div className={styles.addTrackingDetailsDrawer}>
+        <div className={styles.drawerHeader}>
+          <h6 className={styles.drawerHeading}>Add Tracking Details</h6>
+          <IconButton
+            onClick={() => {
+              setTrackingDialogOpen(false)
+            }}
+          >
+            <Clear sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }} />
+          </IconButton>
         </div>
-        <div className={styles.buttons}>
+        <div className={styles.eachFormField}>
+
+          <p className={styles.label}>Service Name</p>
+          <TextField
+            sx={{
+              "& .MuiInputBase-root": {
+                background: "#fff",
+              },
+              "& .MuiInputBase-input": {
+                padding: "8px 14px",
+                height: "inherit",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(12px, 0.72vw, 14px)",
+                borderRadius: "8px !important"
+
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#D0D5DD !important",
+                borderWidth: "1px !important",
+                borderRadius: "8px !important"
+              },
+            }}
+            value={service_name}
+            onChange={(e) => setServiceName(e.target.value)}
+            name="service_name"
+            fullWidth
+            size="small"
+            placeholder="Service Name"
+            variant="outlined"
+            error={Boolean(errorMessages?.["service_name"])}
+            helperText={
+              errorMessages?.["service_name"]
+                ? errorMessages?.["service_name"]
+                : ""
+            }
+          />
+        </div>
+        <div className={styles.eachFormField} id="tracking-details-datePicker">
+          <p className={styles.label}>Delivery Date</p>
+          <DatePicker
+            editable={false}
+            size="lg"
+            style={Datestyles}
+            placeholder="DD-MM-YYYY"
+            value={date}
+            onChange={setDate}
+            shouldDisableDate={(date) => isBefore(date, new Date())}
+          />
+
+          <ErrorMessages
+            errorMessages={errorMessages}
+            keyname="delivery_date"
+          />
+        </div>
+        <div className={styles.eachFormField}>
+
+          <p className={styles.label}>Contact Number</p>
+          <TextField
+            sx={{
+              "& .MuiInputBase-root": {
+                background: "#fff",
+              },
+              "& .MuiInputBase-input": {
+                padding: "8px 14px",
+                height: "inherit",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(12px, 0.72vw, 14px)",
+                borderRadius: "8px !important"
+
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#D0D5DD !important",
+                borderWidth: "1px !important",
+                borderRadius: "8px !important"
+              },
+            }}
+            size="small"
+            fullWidth
+            placeholder="Contact Number"
+            value={phoneNumber}
+            onInput={handleInput}
+            onChange={(e: any) => setPhoneNumber(e.target.value)}
+            error={Boolean(errorMessages?.["contact_number"])}
+
+            helperText={
+              errorMessages?.["contact_number"]
+                ? errorMessages?.["contact_number"]
+                : ""
+            }
+
+          />
+        </div>
+        <div className={styles.eachFormField}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignSelf: "stretch",
+              alignItems: "center",
+            }}
+          >
+            <p className={styles.label}>Tracking Id</p>
+            <div>
+              <Button className={styles.generateIdBtn} variant="text" onClick={generateUUID}>
+                Generate Id
+              </Button>
+            </div>
+          </div>
+          <TextField
+            sx={{
+              "& .MuiInputBase-root": {
+                background: "#fff",
+              },
+              "& .MuiInputBase-input": {
+                padding: "8px 14px",
+                height: "inherit",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(12px, 0.72vw, 14px)",
+                borderRadius: "8px !important"
+
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#D0D5DD !important",
+                borderWidth: "1px !important",
+                borderRadius: "8px !important"
+              },
+            }}
+            fullWidth
+            disabled
+            value={trackingId}
+            size="small"
+            placeholder="Tracking Id"
+            variant="outlined"
+            error={Boolean(errorMessages?.["tracking_id"])}
+            helperText={
+              errorMessages?.["tracking_id"]
+                ? errorMessages?.["tracking_id"]
+                : ""
+            }
+          />
+        </div>
+        <div className={styles.drawerBtnGrp}>
           <Button
-            className={styles.buttoncancel}
+            className={styles.buttonCancel}
             onClick={() => {
               setTrackingDialogOpen(false)
               setServiceName("")
@@ -269,7 +284,7 @@ const TrackingDetailsDilog = ({
             <div className={styles.text}>Cancel</div>
           </Button>
           <Button
-            className={styles.buttongotit}
+            className={styles.buttonSubmit}
             variant="contained"
             color="info"
             size="small"
@@ -286,7 +301,7 @@ const TrackingDetailsDilog = ({
               {trackingLoading ? (
                 <CircularProgress size="1.3rem" sx={{ color: "white" }} />
               ) : (
-                "Done"
+                "Submit"
               )}
             </div>
           </Button>

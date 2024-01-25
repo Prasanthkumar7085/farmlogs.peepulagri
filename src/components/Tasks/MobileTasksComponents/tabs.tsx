@@ -132,7 +132,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       <Button
         sx={{ display: "flex", gap: "5px" }}
         className={
-          !router.query.status ? styles.todoButtonActive : styles.todoButton
+          !router.query.status && !router.query.overdue ? styles.todoButtonActive : styles.todoButton
         }
         onClick={() => onStatusChange("ALL")}
       >
@@ -145,7 +145,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
 
             // color: !router.query.status ? "#46a845" : "#6a7185",
             color: "#fff",
-            background: !router.query.status ? "#46a845" : "#6a7185",
+            background: !router.query.status && !router.query.overdue ? "#46a845" : "#6a7185",
             // border: !router.query.status ? "1px solid #46a845 " : "default",
           }}
         />
@@ -245,7 +245,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
       <Button
         sx={{ display: "flex", gap: "5px" }}
         className={
-          router.query.status === "OVER-DUE"
+          router.query.overdue
             ? styles.todoButtonActive
             : styles.todoButton
         }
@@ -261,7 +261,7 @@ const Tabs = ({ onStatusChange }: { onStatusChange: (value: any) => void }) => {
             // color: router.query.status == "OVER-DUE" ? "#46a845" : "#6a7185",
             color: "#fff",
             background:
-              router.query.status == "OVER-DUE" ? "#46a845" : "#6a7185",
+              router.query.overdue ? "#46a845" : "#6a7185",
             '&:hover': {
               background: "#46a845"
             }

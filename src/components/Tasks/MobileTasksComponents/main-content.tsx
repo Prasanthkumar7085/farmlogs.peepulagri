@@ -185,16 +185,17 @@ const MainContent = ({
             )}
           </p>
           {/* <p className={styles.dueDate}>Due Date</p> */}
-          <div className={styles.datePicker} style={{ display: "flex" }}>
+          <div className={styles.datePicker} style={{ display: "flex", backgroundColor: data?.isOverdue ? "#ffd5d2" : "" }}
+          >
             <img
               onClick={() => {
                 if (
                   status !== "DONE" &&
-                  loggedInUserId == data?.created_by?._id
+                  loggedInUserId == data?.created_by?._id && data?.isOverdue == false
                 )
                   handleCalenderOpen();
               }}
-              src="/viewTaskIcons/calender-icon.svg"
+              src={data?.isOverdue ? "/mobileIcons/Calender_Red.svg" : "/viewTaskIcons/calender-icon.svg"}
               alt=""
             />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -225,7 +226,7 @@ const MainContent = ({
                 value={new Date(deadlineString)}
                 disabled={
                   status === "DONE" ||
-                  !(loggedInUserId == data?.created_by?._id)
+                  !(loggedInUserId == data?.created_by?._id) || data?.isOverdue
                 }
                 onAccept={(newValue: any) => {
                   let dateNow = new Date(newValue);
@@ -295,7 +296,7 @@ const MainContent = ({
               }
             )}
         </Menu>
-      </div>
+      </div >
       {/* {isStatusOpen && (
         <PortalPopup
           overlayColor="rgba(113, 113, 113, 0.3)"

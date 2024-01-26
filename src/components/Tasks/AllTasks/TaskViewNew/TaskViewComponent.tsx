@@ -209,30 +209,17 @@ const TaskViewComponent = () => {
         fetch(url)
           .then((response) => {
             // Get the filename from the response headers
-            const contentDisposition = response.headers.get(
-              "content-disposition"
-            );
-            let filename = "downloaded_file"; // Default filename if not found in headers
-            if (name) {
-              filename = name;
-            }
 
-            if (contentDisposition) {
-              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-              if (filenameMatch && filenameMatch.length > 1) {
-                filename = filenameMatch[1];
-              }
-            }
 
             // Create a URL for the blob
-            return response.blob().then((blob) => ({ blob, filename }));
+            return response.blob().then((blob) => ({ blob, name }));
           })
-          .then(({ blob, filename }) => {
+          .then(({ blob, name }) => {
             const blobUrl = window.URL.createObjectURL(blob);
 
             const downloadLink = document.createElement("a");
             downloadLink.href = blobUrl;
-            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.download = name; // Use the obtained filename
             downloadLink.style.display = "none";
             document.body.appendChild(downloadLink);
             downloadLink.click();
@@ -320,13 +307,7 @@ const TaskViewComponent = () => {
       ...data,
       assigned_to: userId,
       farm_id: farmId,
-      deadline: deadlineProp
-        ? deadlineProp
-        : deadlineString
-          ? moment(deadlineString)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-          : "",
+      deadline: deadlineProp,
       description: description ? description : "",
       title: title ? title : "",
       status: status,
@@ -1006,7 +987,7 @@ const TaskViewComponent = () => {
                       }
                     }}
 
-                    checked={selectedAssigneeIds.length ? true : false}
+                    checked={selectedAssigneeIds.length == data?.assign_to?.length ? true : false}
 
                   />Select all</p>
                   <div

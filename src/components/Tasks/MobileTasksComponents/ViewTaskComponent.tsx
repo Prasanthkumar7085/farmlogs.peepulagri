@@ -190,13 +190,7 @@ const ViewTaskComponent = () => {
       ...data,
       assigned_to: userId,
       farm_id: farmId,
-      deadline: deadlineProp
-        ? deadlineProp
-        : deadlineString
-          ? moment(deadlineString)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-          : "",
+      deadline: deadlineProp,
       description: description ? description : "",
       title: title ? title : "",
       status: status,

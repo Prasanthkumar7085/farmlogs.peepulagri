@@ -535,7 +535,7 @@ const ListScouts: FunctionComponent = () => {
           return;
         }
         setCropOptions(data);
-        if (cropId) {
+        if (cropId || router.query.crop_id) {
           let obj =
             data?.length && data?.find((item: any) => item._id == cropId);
           setCrop(obj);
@@ -787,30 +787,29 @@ const ListScouts: FunctionComponent = () => {
               );
             })
             : ""}
+          {!data?.length && !loading ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "10%"
 
+              }}
+            >
+              <ImageComponent
+                src="/emty-folder-image.svg"
+                alt="empty folder"
+                width={200}
+                height={150}
+              />
+              <Typography className={styles.subTitle}>No Scoutings</Typography>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
-        {!data?.length && !loading ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              margin: "auto"
 
-            }}
-          >
-            <ImageComponent
-              src="/emty-folder-image.svg"
-              alt="empty folder"
-              width={200}
-              height={150}
-            />
-            <Typography className={styles.subTitle}>No Scoutings</Typography>
-          </div>
-        ) : (
-          ""
-        )}
         {rightBarOpen || router.query.view ?
           <div className={rightBarOpen || router.query.view ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
             <GoogleImageView

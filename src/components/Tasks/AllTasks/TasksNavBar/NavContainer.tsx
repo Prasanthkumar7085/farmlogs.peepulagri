@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import styles from "./NavBarContainer.module.css";
 import { changeTaskFilterUserOpen } from "@/Redux/Modules/Farms";
+import { prepareURLEncodedParamsWithArray } from "../../../../../lib/requestUtils/urlEncoderWithArray";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -36,6 +37,7 @@ const NavContainer: React.FC<PropTypes> = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [filterAnchorEl, setFilterAnchorEl] = useState<any>(null);
+  const [counts, setCounts] = useState<any>({});
 
   const open = Boolean(anchorEl);
   const handleClick = (event: any | null, filterOrNot = false) => {
@@ -70,12 +72,7 @@ const NavContainer: React.FC<PropTypes> = ({
     FarmInTaskType | null | undefined
   >();
   const [status, setStatus] = useState("");
-  const [statusOptions] = useState<Array<{ value: string; title: string }>>([
-    { value: "TO-START", title: "To-Start" },
-    { value: "INPROGRESS", title: "In-Progress" },
-    { value: "DONE", title: "Done" },
-    { value: "OVER-DUE", title: "Over-due" },
-  ]);
+
   const [selectedUsers, setSelectedUsers] = useState<
     { name: string; _id: string }[] | null
   >();
@@ -109,6 +106,133 @@ const NavContainer: React.FC<PropTypes> = ({
       setSelectedValue(response?.data);
     }
   };
+
+  //get all the stats count
+  const getAllStatsCount = async () => {
+    try {
+      let urls = [
+        "/tasks/status/count/stats?",
+        "/tasks/status/count/stats?status=TO-START",
+        "/tasks/status/count/stats?status=INPROGRESS",
+        "/tasks/status/count/stats?status=DONE",
+        "/tasks/status/count/stats?overdue=true",
+      ];
+
+      let queryParams: any = {};
+
+      if (router.query.page) {
+        queryParams["page"] = router.query.page;
+      }
+      if (router.query.limit) {
+        queryParams["limit"] = router.query.limit;
+      }
+      if (router.query.search_string) {
+        queryParams["search_string"] = router.query.search_string;
+      }
+
+      if (router.query.order_by) {
+        queryParams["sort_by"] = router.query.order_by;
+      }
+      if (router.query.order_type) {
+        queryParams["sort_type"] = router.query.order_type;
+      }
+      if (router.query.farm_id) {
+        queryParams["farm_id"] = router.query.farm_id;
+      }
+      // if (router.query.status) {
+      //   if (router.query.status !== "ALL") {
+      //     queryParams["status"] = router.query.status;
+      //   }
+      // }
+
+      if (router.query.assign_to) {
+        queryParams["assign_to"] = router.query.assign_to
+          ? Array.isArray(router.query.assign_to)
+            ? (router.query.assign_to as string[])
+            : ([router.query.assign_to] as string[])
+          : [];
+        // queryParams["created_by"] = userId;
+      }
+
+      const paramString = prepareURLEncodedParamsWithArray("", queryParams);
+      let responses = await Promise.allSettled(
+        urls.map(async (url) => {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}${url}${paramString.replace(
+              "?",
+              "&"
+            )}`,
+            {
+              method: "GET",
+              headers: new Headers({
+                authorization: accessToken,
+              }),
+            }
+          );
+          return response.json();
+        })
+      );
+
+      const statusTitles = [
+        "all",
+        "to_start",
+        "inprogress",
+        "done",
+        "overdue",
+      ];
+
+      let data: any = {};
+      responses?.map((item: any, index: number) => {
+        if (item.status == "fulfilled") {
+          data = { ...data, [statusTitles[index]]: item?.value?.data };
+        } else {
+          return 0;
+        }
+      });
+      setCounts(data);
+      setStatusOptions([{ value: "TO-START", title: `To-Start (${getModifiedCount(data["to_start"])})` },
+      { value: "INPROGRESS", title: `In-Progress (${getModifiedCount(data["inprogress"])})` },
+      { value: "DONE", title: `Done (${getModifiedCount(data["done"])})` },
+      { value: "OVER-DUE", title: `Over-due (${getModifiedCount(data["overdue"])})` },])
+    } catch (err) {
+      console.error();
+    }
+  };
+
+  const getModifiedCount = (count: number) => {
+    if (+count >= 100000) {
+      let remainder = +count % 100000;
+      if (remainder) {
+        remainder = Number(String(remainder).slice(0, 2));
+        return `${Math.floor(count / 100000)}.${remainder}k`;
+      }
+      return `${Math.floor(count / 100000)}k`;
+    }
+
+    if (+count >= 1000) {
+      let remainder = +count % 1000;
+      if (remainder) {
+        remainder = Number(String(remainder).slice(0, 2));
+        return `${Math.floor(count / 1000)}.${remainder}k`;
+      }
+      return `${Math.floor(count / 1000)}k`;
+    }
+    return count;
+
+  };
+
+  const [statusOptions, setStatusOptions] = useState<Array<{ value: string; title: string }>>([
+    { value: "TO-START", title: `To-Start` },
+    { value: "INPROGRESS", title: `In-Progress` },
+    { value: "DONE", title: `Done` },
+    { value: "OVER-DUE", title: `Over-due` },
+  ]);
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      getAllStatsCount();
+    }
+  }, [router.isReady, accessToken, router.query]);
+
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -354,6 +478,7 @@ const NavContainer: React.FC<PropTypes> = ({
               size="small"
               onChange={setStatusValue}
               value={status ? status : ""}
+              countsValues={counts}
             />
             {/* <Button
               onClick={() => {

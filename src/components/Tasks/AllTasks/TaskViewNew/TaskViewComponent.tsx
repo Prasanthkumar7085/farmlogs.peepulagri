@@ -203,6 +203,7 @@ const TaskViewComponent = () => {
   const downLoadAttachements = async (file: any, name: string, id: string) => {
     setDownloadImageId(id);
     let url = `${file}?not-from-cache-please`
+
     try {
       if (file) {
         fetch(url)

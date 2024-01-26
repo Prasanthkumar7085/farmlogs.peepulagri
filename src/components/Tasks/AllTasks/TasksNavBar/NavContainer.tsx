@@ -284,12 +284,12 @@ const NavContainer: React.FC<PropTypes> = ({
               }}
               variant="contained"
               className={
-                filtersLength ? styles.activeFilterBtn : styles.filterBtn
+                router.query.assign_to ? styles.activeFilterBtn : styles.filterBtn
               }
             >
               <img
                 src={
-                  filtersLength
+                  router.query.assign_to
                     ? "/viewTaskIcons/filter-sybol-icon-active.svg"
                     : "/viewTaskIcons/filter-sybol-icon.svg"
                 }
@@ -534,6 +534,16 @@ const NavContainer: React.FC<PropTypes> = ({
               fullWidth
               noOptionsText={"No such User"}
               value={selectedUsers?.length ? selectedUsers : []}
+              getOptionDisabled={(option) => {
+                let firstOption = selectedUsers?.length
+                  ? selectedUsers?.some(
+                    (item) =>
+                      item?._id === option?._id && item?.name === option?.name
+                  )
+                  : false;
+
+                return firstOption
+              }}
               isOptionEqualToValue={(option: any, value: any) =>
                 option.name === value.name
               }

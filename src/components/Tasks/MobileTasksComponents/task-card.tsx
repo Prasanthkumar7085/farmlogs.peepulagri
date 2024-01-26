@@ -111,7 +111,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                           item?.title?.slice(1)
                         : "ty"}
                     </h2>
-                    <div className={styles.duedatecontainer} style={{ backgroundColor: item?.isOverdue ? "#ffd5d2" : "GrayText", padding: '4px 6px 4px 6px', borderRadius: "4px" }}>
+                    <div className={styles.duedatecontainer} style={{ backgroundColor: item?.isOverdue ? "#ffd5d2" : "lightgrey", padding: '4px 6px 4px 6px', borderRadius: "4px" }}>
                       <img
                         className={styles.calendarBlank1Icon}
                         alt=""

@@ -1,3 +1,4 @@
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import { Avatar, AvatarGroup } from "@mui/material";
 import moment from "moment";
 import Image from "next/image";
@@ -149,6 +150,7 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
                     </div>) : (
                     ""
                 )}
+            <LoadingComponent loading={loading} />
 
         </div>
     );

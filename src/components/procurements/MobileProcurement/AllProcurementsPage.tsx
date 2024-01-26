@@ -166,7 +166,7 @@ const MobileAllProcurements = () => {
                 if (entries[0].isIntersecting && hasMore && data.length > 0) {
                     setPage((prevPageNumber) => prevPageNumber + 1);
                     getAllProcurements({
-                        page: 1,
+                        page: page + 1,
                         limit: router.query.limit as string,
                         search_string: searchString,
                         sortBy: router.query.order_by as string,

@@ -427,7 +427,7 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     setTimeout(() => {
       setRemoveLoading(false)
 
-    }, 2)
+    }, 200)
   };
 
   useEffect(() => {
@@ -442,6 +442,11 @@ const TasksAttachmentsMobile: React.FC<PropTypes> = ({
     setMultipleFiles([]);
     setTempFileStorage([]);
     setAttachments([])
+    setRemoveLoading(true)
+    setTimeout(() => {
+      setRemoveLoading(false)
+
+    }, 200)
   };
 
   const addTaskAttachements = async () => {

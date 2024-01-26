@@ -478,10 +478,12 @@ const ListScouts: FunctionComponent = () => {
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == farmId);
           setFarm(obj);
+          console.log(obj, "dsf")
           getAllCrops(
             router.query.crop_id as string,
             response?.data[0]?._id as string
           );
+          getLocations(obj?.location_id?._id)
         }
         // if (searchStringChangeOrNot) {
         //   setFarm(null);

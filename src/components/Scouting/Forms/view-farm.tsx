@@ -252,7 +252,7 @@ const ViewFarmPage = () => {
               </div>
             </Box>
           </div>
-          <div style={{
+          {/* <div style={{
             display: "flex",
             alignItems: "center",
             alignSelf: "stretch",
@@ -267,10 +267,10 @@ const ViewFarmPage = () => {
             }>
             <Typography>{data?.geometry?.coordinates?.length ? "Edit Map" : "Add map"}</Typography>
             <img src={"/google-maps.png"} width={22} height={22} />
-          </div>
-          <div style={{ marginTop: "20px", height: "40vh" }}>
+          </div> */}
+          {/* <div style={{ marginTop: "20px", height: "40vh" }}>
             <GoogleMapViewComponent />
-          </div>
+          </div> */}
 
         </div>
       ) : (

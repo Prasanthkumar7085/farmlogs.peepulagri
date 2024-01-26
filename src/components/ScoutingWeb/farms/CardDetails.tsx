@@ -81,7 +81,7 @@ const CardDetails: FunctionComponent = () => {
   return (
     <div style={{
       maxWidth: "100%",
-      padding: data?.geometry?.coordinates?.length ? "5% 10% 5% 10%" : "5% 20% 5% 20%",
+      padding: "5% 20% 5% 20%",
 
     }}>
       <div className={styles.header} id="header">
@@ -99,10 +99,10 @@ const CardDetails: FunctionComponent = () => {
         !loading ? (
 
           <div className={styles.viewFarmDetailsCard}>
-            <div style={{ display: data?.geometry?.coordinates?.length ? "block" : "none", width: "60%" }}>
+            {/* <div style={{ display: data?.geometry?.coordinates?.length ? "block" : "none", width: "60%" }}>
               <GoogleMapViewComponent />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", width: data?.geometry?.coordinates?.length ? "40%" : "100%" }}>
+            </div> */}
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", margin: "auto", width: "60%" }}>
               <div className={styles.overViewBtns}>
                 <div
                   className={styles.farmOverView}
@@ -186,7 +186,7 @@ const CardDetails: FunctionComponent = () => {
                   </div>
                 </Box>
               </div>
-              <div style={{
+              {/* <div style={{
                 display: "flex",
                 alignItems: "center",
                 alignSelf: "stretch",
@@ -201,7 +201,7 @@ const CardDetails: FunctionComponent = () => {
                 }>
                 <Typography>{data?.geometry?.coordinates?.length ? "Edit Map" : "Add Map"}</Typography>
                 <img src={"/google-maps.png"} width={22} height={22} />
-              </div>
+              </div> */}
             </div>
 
           </div>

@@ -293,7 +293,6 @@ const GoogleMapEditComponent = () => {
 
     //center the map when the place was selected
     const centerMapToPlace = (place: any) => {
-        console.log(place, "placeewr")
         if (mapRef.current && place && place.geometry && place.geometry.location) {
             mapRef.current.panTo(place.geometry.location);
         }

@@ -333,12 +333,10 @@ const ListScouts: FunctionComponent = () => {
       } = queryParams;
 
       if (image_view) {
-        console.log("Dsfsd")
         let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id, view_limit: paramasFromStore?.view_limit }
         router.push({ query: temp });
       }
       else {
-        console.log('Fds')
         let temp = { ...queryParams }
         delete temp?.image_id;
         delete temp?.view;
@@ -478,7 +476,6 @@ const ListScouts: FunctionComponent = () => {
             response?.data?.length &&
             response?.data?.find((item: any) => item._id == farmId);
           setFarm(obj);
-          console.log(obj, "dsf")
           getAllCrops(
             router.query.crop_id as string,
             response?.data[0]?._id as string

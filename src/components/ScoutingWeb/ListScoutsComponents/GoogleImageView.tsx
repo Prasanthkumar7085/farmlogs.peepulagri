@@ -1,4 +1,4 @@
-import { Avatar, Button, IconButton, Typography } from "@mui/material";
+import { Avatar, Button, IconButton, Skeleton, Typography } from "@mui/material";
 import styles from "./googleImageview.module.css";
 import Image from "next/image";
 import timePipe from "@/pipes/timePipe";
@@ -236,21 +236,26 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         <div style={{ padding: "1rem" }} ref={ItemRef} >
             <div className={styles.viewImgInfoHeader} >
                 <div className={styles.imageUploadingDetails} >
-                    <Avatar sx={{ color: "#fff", background: "#d94841", width: "20px", height: "20px", fontSize: "9px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>
+                    {loading ? <Skeleton variant="circular" width={20} height={20} /> :
+
+                        <Avatar sx={{ color: "#fff", background: "#d94841", width: "20px", height: "20px", fontSize: "9px" }}>{selectedImage?._id ? selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase() : imageDetails?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>}
+
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                        <div className={styles.uploadedByName}>{selectedImage?._id ? selectedImage?.uploaded_by?.name : imageDetails?.uploaded_by?.name}</div>
-                        <div>
-                            <Typography variant="caption" className={styles.imageUploadedTime} >
-                                <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={13} height={13} />
-                                <span>
-                                    {timePipe(selectedImage?.uploaded_at ? selectedImage?.uploaded_at : imageDetails?.uploaded_at, "DD MMM YYYY hh:mm A")}
-                                </span>
-                            </Typography>
-                        </div>
+                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={150} /> :
+                            <div className={styles.uploadedByName}>{selectedImage?._id ? selectedImage?.uploaded_by?.name : imageDetails?.uploaded_by?.name}</div>}
+                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={180} /> :
+                            <div>
+                                <Typography variant="caption" className={styles.imageUploadedTime} >
+                                    <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={13} height={13} />
+                                    <span>
+                                        {timePipe(selectedImage?.uploaded_at ? selectedImage?.uploaded_at : imageDetails?.uploaded_at, "DD MMM YYYY hh:mm A")}
+                                    </span>
+                                </Typography>
+                            </div>}
                     </div>
                 </div>
-
-                <Typography variant="subtitle1" className={styles.imagesTitle}>{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title} / {selectedImage?._id ? selectedImage?.crop_id?.title : imageDetails?.crop_id?.title}</Typography>
+                {loading ? <Skeleton variant="text" sx={{ fontSize: '2rem', }} width={180} /> :
+                    <Typography variant="subtitle1" className={styles.imagesTitle}>{selectedImage?._id ? selectedImage?.farm_id?.title : imageDetails?.farm_id?.title} / {selectedImage?._id ? selectedImage?.crop_id?.title : imageDetails?.crop_id?.title}</Typography>}
                 <div>
                     <IconButton
                         disabled={loading || imageIndex == 0 ? true : false}
@@ -314,12 +319,13 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             </div>
 
             <div className={styles.singleScoutImg}>
-                <img
-                    src={selectedImage?.url ? selectedImage?.url : imageDetails?.url}
-                    width={100}
-                    height={100}
-                    alt="Loading..."
-                />
+                {loading ? <Skeleton variant="rounded" width={700} height={350} animation="wave" /> :
+                    <img
+                        src={selectedImage?.url ? selectedImage?.url : imageDetails?.url}
+                        width={100}
+                        height={100}
+                        alt="Loading..."
+                    />}
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end", borderBottom: "1px solid #E9EDF1", padding: "0.75rem 1rem", marginBlockEnd: "1rem" }}>

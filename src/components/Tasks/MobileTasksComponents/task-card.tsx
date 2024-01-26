@@ -44,13 +44,13 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                           : item?.title[0].toUpperCase() + item?.title?.slice(1)
                         : "ty"}
                     </h2>
-                    <div className={styles.duedatecontainer}>
+                    <div className={styles.duedatecontainer} style={{ backgroundColor: item?.isOverdue ? "#ffd5d2" : "lightgray", padding: '4px 6px 4px 6px', borderRadius: "4px" }}>
                       <img
                         className={styles.calendarBlank1Icon}
                         alt=""
                         src="/calendarblank-1@2x.png"
                       />
-                      <p className={styles.duedate}>
+                      <p className={styles.duedate} style={{ color: item?.isOverdue ? "red" : "black" }}>
                         {moment(item.deadline).format("DD-MM-YYYY")}
                       </p>
                     </div>
@@ -111,7 +111,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                           item?.title?.slice(1)
                         : "ty"}
                     </h2>
-                    <div className={styles.duedatecontainer} style={{ backgroundColor: item?.isOverdue ? "#ffd5d2" : "lightgrey", padding: '4px 6px 4px 6px', borderRadius: "4px" }}>
+                    <div className={styles.duedatecontainer} style={{ backgroundColor: item?.isOverdue ? "#ffd5d2" : "lightgray", padding: '4px 6px 4px 6px', borderRadius: "4px" }}>
                       <img
                         className={styles.calendarBlank1Icon}
                         alt=""

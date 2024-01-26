@@ -127,16 +127,19 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         throw response;
       }
       if (response?.data) {
-        afterMaterialStatusChange(true)
 
         const allPurchaseOrNot = response?.data.every((obj: any) => obj.hasOwnProperty('price') && obj.price !== null);
+        const allApprovedOrNot = response?.data.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
 
 
         if (allPurchaseOrNot) {
           procurementStatusChange("PURCHASED")
           afterMaterialStatusChange(true)
+        }
+        if (allApprovedOrNot) {
 
         }
+        afterMaterialStatusChange(true)
 
 
         {
@@ -434,7 +437,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               Add Material</Button> : ""}
 
         </div>
-        {data?.status == "APPROVED" || userDetails?.user_type == "agronomist" || userDetails?.user_type == "farmer" || loading || materials[0]?.price ? "" :
+        {data?.status == "PENDING" && userDetails?.user_type == "central_team" ?
           <Button className={styles.aprroveMaterialBtn} variant="text"
             sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
             onClick={() => {
@@ -447,7 +450,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               height={14}
               width={14}
               alt=""
-            /> Approve Materials</Button>}
+            /> Approve Materials</Button> : ""}
       </div>
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
         {materials?.length ? (
@@ -607,7 +610,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                               <div style={{ cursor: "pointer" }}>
                                 <IconButton
 
-                                  sx={{ display: row?.status == "PURCHASED" ? "none" : "" }}
+                                  sx={{ display: row?.approved_by?.name ? "none" : "" }}
                                   onClick={() => {
                                     if (row?.status == "REJECTED") {
                                       const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");

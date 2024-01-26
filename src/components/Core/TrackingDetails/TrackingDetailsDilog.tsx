@@ -122,6 +122,10 @@ const TrackingDetailsDilog = ({
           <IconButton
             onClick={() => {
               setTrackingDialogOpen(false)
+              setServiceName("")
+              setPhoneNumber("")
+              setDate(null)
+              setTrackingId("")
             }}
           >
             <Clear sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }} />

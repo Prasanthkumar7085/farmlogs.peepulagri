@@ -202,18 +202,19 @@ const TaskViewComponent = () => {
   //download attachment
   const downLoadAttachements = async (file: any, name: string, id: string) => {
     setDownloadImageId(id);
-    let url = `${file}?not-from-cache-please`
+    let url = `${file}`
 
     try {
       if (file) {
-        fetch(url)
-          .then((response) => {
-            // Get the filename from the response headers
+        fetch(url, {
+          cache: 'no-store' // Ensure that the request doesn't use the cache
+        }).then((response) => {
+          // Get the filename from the response headers
 
 
-            // Create a URL for the blob
-            return response.blob().then((blob) => ({ blob, name }));
-          })
+          // Create a URL for the blob
+          return response.blob().then((blob) => ({ blob, name }));
+        })
           .then(({ blob, name }) => {
             const blobUrl = window.URL.createObjectURL(blob);
 

@@ -184,11 +184,13 @@ const AttachmentDrawerMobile = ({
   }
 
   async function downloadFile(url: string, nameForDownload: string) {
-    let urlImage = `${url}?not-from-cache-please`
+    let urlImage = `${url}`
 
     try {
       if (url) {
-        fetch(urlImage)
+        fetch(urlImage, {
+          cache: 'no-store' // Ensure that the request doesn't use the cache
+        })
           .then((response) => {
             // Get the filename from the response headers
             const contentDisposition = response.headers.get(

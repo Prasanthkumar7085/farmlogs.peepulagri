@@ -99,7 +99,7 @@ const ViewTaskComponent = () => {
     if (router.isReady && accessToken) {
       getTaskById(router.query.task_id as string);
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken, editFieldOrNot]);
   const getAllAttachments = async () => {
     setLoading(true);
     let options = {

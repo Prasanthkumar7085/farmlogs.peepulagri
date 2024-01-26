@@ -136,17 +136,17 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
           procurementStatusChange("PURCHASED")
           afterMaterialStatusChange(true)
         }
-        if (allApprovedOrNot) {
-
+        else if (allApprovedOrNot) {
+          procurementStatusChange("APPROVED")
+          afterMaterialStatusChange(true)
+        } else {
+          afterMaterialStatusChange(true)
         }
-        afterMaterialStatusChange(true)
 
 
         {
           response?.data.map((data: any) => {
-
             setMaterialsDetails(data.status);
-
           })
         }
       }
@@ -577,21 +577,20 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                 <div style={{ cursor: "pointer" }}>
                                   <IconButton
                                     onClick={() => {
-                                      const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
-                                      // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      const lengthOfFilteredData = filteredData.length;
+                                      // const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
+                                      // // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      // const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      // const lengthOfFilteredData = filteredData.length;
 
-                                      if (lengthOfFilteredData == exceptRejectedData.length - 1) {
-                                        onStatusChangeEvent("approve", row?._id)
-                                        approveAllMaterials()
+                                      // if (lengthOfFilteredData == exceptRejectedData.length - 1) {
+                                      //   onStatusChangeEvent("approve", row?._id)
+                                      //   approveAllMaterials()
 
-                                      }
-                                      else {
-                                        onStatusChangeEvent("approve", row?._id)
-                                      }
-
-
+                                      // }
+                                      // else {
+                                      //   onStatusChangeEvent("approve", row?._id)
+                                      // }
+                                      onStatusChangeEvent("approve", row?._id)
                                     }
                                     }
                                   >
@@ -613,19 +612,19 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                   sx={{ display: row?.approved_by?.name ? "none" : "" }}
                                   onClick={() => {
                                     if (row?.status == "REJECTED") {
-                                      const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
-                                      // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      const lengthOfFilteredData = filteredData.length;
+                                      // const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
+                                      // // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      // const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
+                                      // const lengthOfFilteredData = filteredData.length;
 
-                                      if (lengthOfFilteredData == exceptRejectedData.length - 1) {
-                                        onStatusChangeEvent("approve", row?._id)
-                                        approveAllMaterials()
-                                      }
-                                      else {
-                                        onStatusChangeEvent("approve", row?._id)
-                                      }
-
+                                      // if (lengthOfFilteredData == exceptRejectedData.length - 1) {
+                                      //   onStatusChangeEvent("approve", row?._id)
+                                      //   approveAllMaterials()
+                                      // }
+                                      // else {
+                                      //   onStatusChangeEvent("approve", row?._id)
+                                      // }
+                                      onStatusChangeEvent("approve", row?._id)
                                     }
                                     else {
                                       setRejectDilogOpen(true)

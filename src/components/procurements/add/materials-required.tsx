@@ -308,7 +308,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
               Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
 
             </h6>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div >
                 <TextField
 
@@ -320,7 +320,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                       borderRadius: "4px 0 0 4px !important"
                     }
                   }}
-                  placeholder="Procurement Quantity"
+                  placeholder="Required"
                   variant="outlined"
                   value={requiredQty}
                   onInput={handleInput}
@@ -335,7 +335,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   keyname={"required_units"}
                 />
               </div>
-              <FormControl variant="outlined">
+              <FormControl variant="outlined" sx={{ width: "100%" }}>
                 <InputLabel color="primary" />
                 <Select
                   sx={{
@@ -365,7 +365,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
             <div style={{ display: "flex" }}>
               <TextField
                 size="small"
-                placeholder="Enter Availble Quantity"
+                placeholder="Availble"
                 variant="outlined"
                 value={availableQty}
                 onInput={handleInput}
@@ -378,7 +378,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   }
                 }}
               />
-              <FormControl variant="outlined">
+              <FormControl variant="outlined" sx={{ width: "100%" }}>
                 <InputLabel color="primary" />
                 <Select
                   sx={{

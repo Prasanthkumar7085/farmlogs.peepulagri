@@ -380,7 +380,7 @@ const ProcurementsTableComponent = ({
                     router.push(`/procurements/${info.row.original?._id}/edit`)
                   }}
                 >
-                  <ImageComponent
+                  {/* <ImageComponent
                     src={
                       "/viewTaskIcons/table-edit-icon.svg"
 
@@ -388,7 +388,8 @@ const ProcurementsTableComponent = ({
                     height={15}
                     width={15}
                     alt=""
-                  />
+                  /> */}
+                  <CreateIcon />
                 </IconButton>
               </Tooltip>
 

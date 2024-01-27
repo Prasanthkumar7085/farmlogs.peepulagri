@@ -168,7 +168,6 @@ const CropCard = ({
   };
   const setToStorage = async (title: string) => {
     await dispatch(setCropTitleTemp(title));
-    router.push(`/farms/${router.query.farm_id}/crops/${itemDetails._id}`);
   };
 
   let colorsArray = [

@@ -7,6 +7,7 @@ interface PropsTypes {
   farm: string;
   placeholder: string;
   defaultValue: any | null | undefined;
+  cropOptionsLoading: boolean;
 }
 const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
   options,
@@ -14,6 +15,7 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
   farm,
   placeholder,
   defaultValue,
+  cropOptionsLoading
 }) => {
   const [defaultValueSet, setDefaultValueSet] = useState(defaultValue);
   const [autoCompleteLoading, setAutoCompleteLoading] = useState(false);
@@ -44,6 +46,7 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
               </li>
             );
           }}
+          loading={cropOptionsLoading}
           onChange={(e: any, value: any, reason: any) => {
             if (value) {
               onSelectFarmFromDropDown(value, reason);
@@ -61,17 +64,17 @@ const CropAutoCompleteFoScouts: React.FC<PropsTypes> = ({
             />
           )}
 
-          // sx={{
-          //     width: '1000%',
-          //     background: "#fff",
-          //     "& .MuiInputBase-input ": {
-          //         fontSize: "13px",
-          //         fontWeight: "400",
-          //         fontFamily: "'inter', sans-serif ",
-          //         color: "#000",
+        // sx={{
+        //     width: '1000%',
+        //     background: "#fff",
+        //     "& .MuiInputBase-input ": {
+        //         fontSize: "13px",
+        //         fontWeight: "400",
+        //         fontFamily: "'inter', sans-serif ",
+        //         color: "#000",
 
-          //     }
-          // }}
+        //     }
+        // }}
         />
       ) : (
         ""

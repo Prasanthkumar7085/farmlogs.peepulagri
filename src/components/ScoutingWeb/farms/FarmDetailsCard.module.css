@@ -182,6 +182,7 @@
 .actionbuttons,
 .delete {
   display: flex;
+  gap: 0.5rem;
 }
 
 .delete {
@@ -194,7 +195,7 @@
 
 .actionbuttons {
   justify-content: flex-end;
-  gap: 8px;
+  gap: 10px;
 }
 
 .mobile {

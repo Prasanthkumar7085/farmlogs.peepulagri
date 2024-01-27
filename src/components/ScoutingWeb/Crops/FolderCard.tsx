@@ -19,11 +19,15 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
   const onFolderStructureContainerClick = useCallback((crop: CropTypeResponse) => {
 
     dispatch(setCropTitleTemp(crop?.title));
-    router.push(`/scouts?farm_id=${router.query.farm_id}&crop_id=${crop?._id}`);
   }, []);
 
   return (
-    <div style={{ display: "flex", gap: "1.9rem" }}>
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(4, 1fr)",
+      gridGap: " 0.9rem",
+      padding: "0.1rem"
+    }}>
       {cropsData.map((item: CropTypeResponse, index: number) => {
         return (
           // <div
@@ -92,7 +96,10 @@ const FolderStructure = ({ cropsData, loading }: pageProps) => {
           //   </div>
           // </div>
           <div className={styles.cropCard} key={index}
-            onClick={() => onFolderStructureContainerClick(item)} >
+            onClick={() => {
+              onFolderStructureContainerClick(item)
+              router.push(`/scouts?farm_id=${router.query.farm_id}&crop_id=${item?._id}`);
+            }} >
 
             <img className={styles.imageIcon} alt="" src={item?.url ? item?.url : "/mobileIcons/crops/No_Image.svg"} />
             <div className={styles.detailscontainer}>

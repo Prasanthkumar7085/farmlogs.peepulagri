@@ -101,7 +101,6 @@ const ScoutingFarmDetailsCard = ({
 
   const setToStorage = async (item: any) => {
     await dispatch(setFarmTitleTemp(item?.title));
-    router.push(`/farm/${item?._id}/crops`);
   };
 
   let colorsArray = [
@@ -141,6 +140,10 @@ const ScoutingFarmDetailsCard = ({
             className={styles.farmdetailscard}
             key={index}
             style={{ cursor: "pointer" }}
+            onClick={() => {
+              router.push(`/farm/${item?._id}/crops`);
+
+            }}
           >
             <div
               className={styles.container}
@@ -184,7 +187,7 @@ const ScoutingFarmDetailsCard = ({
                       height={16}
                     />
                     <p className={styles.from}>
-                      {timePipe(item.createdAt, "DD, MMM YYYY")}
+                      {timePipe(item.createdAt, "DD, MMM YYYY hh:mm A")}
                     </p>
 
                   </div>
@@ -197,6 +200,19 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.locationTitle}>{item?.location_id?.title}</p>
                 </div>
                 <div className={styles.actionbuttons}>
+                  {/* <IconButton
+                    className={styles.view}
+                    onClick={() => {
+                      router.push(`/farm/${item?._id}/crops`);
+                    }}
+                  >
+                    <Image
+                      src="/mobileIcons/farms/plant-black-icon.svg"
+                      width={25}
+                      height={25}
+                      alt=""
+                    />
+                  </IconButton> */}
                   <IconButton
                     className={styles.view}
                     onClick={() => onViewClick(item._id)}

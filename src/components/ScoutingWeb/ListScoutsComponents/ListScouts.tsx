@@ -60,6 +60,7 @@ const ListScouts: FunctionComponent = () => {
   const [farm, setFarm] = useState<any>();
   const [cropOptions, setCropOptions] = useState([]);
   const [crop, setCrop] = useState<any>();
+  const [cropOptionsLoading, setCropOptionsLoading] = useState<boolean>(false)
   const [paginationDetails, setPaginationDetails] = useState<any>();
 
   const [fromDate, setFromDate] = useState("");
@@ -86,6 +87,7 @@ const ListScouts: FunctionComponent = () => {
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
+  //select the drop down and get the farm value
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     setRightBarOpen(false)
     setData([]);
@@ -102,6 +104,7 @@ const ListScouts: FunctionComponent = () => {
       setData([]);
 
       getAllFarms({ clearOrNot: true, location_id: router.query.location_id as string });
+      await getAllCrops("", "");
       getAllExistedScouts({
         // farmSearchString: value?.title,
         page: 1,
@@ -131,6 +134,7 @@ const ListScouts: FunctionComponent = () => {
       router.push({
         query: { ...router.query, farm_search_string: value?.title },
       });
+      await getAllCrops("", value?._id);
       getAllExistedScouts({
         farmSearchString: value?.title,
         page: 1,
@@ -145,7 +149,6 @@ const ListScouts: FunctionComponent = () => {
 
 
       });
-      await getAllCrops("", value?._id);
     } else {
       setFarm(null);
       setCrop(null);
@@ -167,6 +170,7 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
+  //get the crop object
   const onSelectCropFromDropDown = (value: any, reason: string) => {
     setRightBarOpen(false)
     if (value) {
@@ -236,6 +240,7 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
+  //get the limit value
   const captureRowPerItems = (value: number) => {
     setPage(1);
     setLimit(value);
@@ -250,6 +255,7 @@ const ListScouts: FunctionComponent = () => {
       location: router.query.location_id as string
     });
   };
+  //get the page value
   const capturePageNum = (value: number) => {
     setPage(value);
     getAllExistedScouts({
@@ -478,7 +484,7 @@ const ListScouts: FunctionComponent = () => {
           setFarm(obj);
           getAllCrops(
             router.query.crop_id as string,
-            response?.data[0]?._id as string
+            obj?._id as string
           );
           getLocations(obj?.location_id?._id)
         }
@@ -513,21 +519,21 @@ const ListScouts: FunctionComponent = () => {
     cropId = router.query.crop_id as string,
     farmId: string
   ) => {
-    setLoading(true);
+    setCropOptionsLoading(true);
     if (!farmId) {
-      setLoading(false);
+      setCropOptionsLoading(false);
       return;
     }
     try {
       const response = await ListAllCropsForDropDownServices(
-        farmId,
+        farmId as string,
         accessToken
       );
       if (response?.success) {
         let data = response?.data;
         // data = modifyDataToGroup(data);
         if (!data?.length) {
-          setLoading(false);
+          setCropOptionsLoading(false);
           setCrop(null);
           setCropOptions(data);
           setPaginationDetails({});
@@ -543,7 +549,7 @@ const ListScouts: FunctionComponent = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setCropOptionsLoading(false);
     }
   };
 
@@ -744,6 +750,7 @@ const ListScouts: FunctionComponent = () => {
             farm={farm}
             placeholder={"Select Crop here"}
             defaultValue={crop}
+            cropOptionsLoading={cropOptionsLoading}
           />
           {/* <DateRangePickerForAllScouts
             onDateFilterChange={onDateFilterChange}

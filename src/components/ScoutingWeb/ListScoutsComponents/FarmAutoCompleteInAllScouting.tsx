@@ -76,6 +76,7 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
               {...params}
               placeholder={placeholder}
               sx={{ width: "100%", background: "#fff" }}
+              value={searchString}
               onChange={(e) => {
                 setOptionsLoading(true);
                 setSearchString(e.target.value);
@@ -83,17 +84,17 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
             />
           )}
 
-          // sx={{
-          //     width: '1000%',
-          //     background: "#fff",
-          //     "& .MuiInputBase-input ": {
-          //         fontSize: "13px",
-          //         fontWeight: "400",
-          //         fontFamily: "'inter', sans-serif ",
-          //         color: "#000",
+        // sx={{
+        //     width: '1000%',
+        //     background: "#fff",
+        //     "& .MuiInputBase-input ": {
+        //         fontSize: "13px",
+        //         fontWeight: "400",
+        //         fontFamily: "'inter', sans-serif ",
+        //         color: "#000",
 
-          //     }
-          // }}
+        //     }
+        // }}
         />
       ) : (
         ""

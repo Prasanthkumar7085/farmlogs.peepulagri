@@ -1004,7 +1004,7 @@ const TaskViewComponent = () => {
                         className={styles.addAssignyBtn}
                         disabled={
                           status == "DONE" ||
-                          !(loggedInUserId == data?.created_by?._id) || selectedAssigneeIds.length == data?.assign_to?.length
+                          !(loggedInUserId == data?.created_by?._id) || (selectedAssigneeIds.length == data?.assign_to?.length && data?.assign_to?.length !== 0)
                         }
                         onClick={handleAssignyClick}
                       >

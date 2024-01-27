@@ -140,10 +140,7 @@ const ScoutingFarmDetailsCard = ({
             className={styles.farmdetailscard}
             key={index}
             style={{ cursor: "pointer" }}
-            onClick={() => {
-              router.push(`/farm/${item?._id}/crops`);
 
-            }}
           >
             <div
               className={styles.container}
@@ -200,7 +197,7 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.locationTitle}>{item?.location_id?.title}</p>
                 </div>
                 <div className={styles.actionbuttons}>
-                  {/* <IconButton
+                  <IconButton
                     className={styles.view}
                     onClick={() => {
                       router.push(`/farm/${item?._id}/crops`);
@@ -212,55 +209,24 @@ const ScoutingFarmDetailsCard = ({
                       height={25}
                       alt=""
                     />
-                  </IconButton> */}
+                  </IconButton>
                   <IconButton
-                    className={styles.view}
-                    onClick={() => onViewClick(item._id)}
+                    className={styles.farmViewBtn}
+                    onClick={() => router.push(`/farm/${item?._id}`)
+                    }
                   >
                     <Image
-                      src="/mobileIcons/farms/info-black-icon.svg"
+                      src="/mobileIcons/farms/info.svg"
                       width={25}
                       height={25}
                       alt=""
                     />
                   </IconButton>
-                  {/* <IconButton className={styles.edit}>
-                  <img
-                    className={styles.trashXmark1Icon}
-                    alt=""
-                    src="/edit-farm-icon.svg"
-                  />
-                </IconButton> */}
-                  {/* <IconButton className={styles.delete} onClick={() => { setDeleteDialogOpen(true); setDeleteId(item._id)}}>
-                  <img
-                    className={styles.trashXmark1Icon}
-                    alt=""
-                    src="/farm-delete-icon.svg"
-                  />
-                </IconButton> */}
+
                 </div>
               </div>
 
             </div>
-            {/* <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <div onClick={() => router.push(`/farm/${item?._id}/crops`)}>
-                {userType_v2 == "AGRONOMIST" ? (
-                  <p className={styles.mobile}>
-                    <AccountCircleIcon />
-                    <span>{item?.user_id?.full_name}</span>
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-
-            </div> */}
           </div>
         );
       })}

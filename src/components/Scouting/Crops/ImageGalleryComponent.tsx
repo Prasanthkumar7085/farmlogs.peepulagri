@@ -434,16 +434,16 @@ const ImageGalleryComponent = () => {
           {(farmTitle
             ? farmTitle?.length > 10
               ? farmTitle.slice(0, 1).toUpperCase() +
-                farmTitle?.slice(1, 14) +
-                "..."
+              farmTitle?.slice(1, 14) +
+              "..."
               : farmTitle[0].toUpperCase() + farmTitle?.slice(1)
             : "") +
             "/" +
             (cropTitle
               ? cropTitle?.length > 10
                 ? cropTitle.slice(0, 1).toUpperCase() +
-                  cropTitle?.slice(1, 14) +
-                  "..."
+                cropTitle?.slice(1, 14) +
+                "..."
                 : cropTitle[0].toUpperCase() + cropTitle?.slice(1)
               : "")}
         </Typography>
@@ -531,99 +531,99 @@ const ImageGalleryComponent = () => {
       >
         {data?.length
           ? data.map((images: any, indexAttachment: any) => {
-              if (data.length === indexAttachment + 1) {
-                return (
-                  <div key={indexAttachment} ref={lastBookElementRef}>
-                    <Typography
-                      variant="caption"
-                      className={styles.scoutingDate}
-                    >
-                      {timePipe(images.date, "DD MMM YYYY")}
-                    </Typography>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(4, 1fr)",
-                        gridGap: "1px",
-                        marginBottom: "5px",
-                      }}
-                    >
-                      {images?.images?.map((image: any, index: any) => {
-                        return (
+            if (data.length === indexAttachment + 1) {
+              return (
+                <div key={indexAttachment} ref={lastBookElementRef}>
+                  <Typography
+                    variant="caption"
+                    className={styles.scoutingDate}
+                  >
+                    {timePipe(images.date, "DD MMM YYYY")}
+                  </Typography>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gridGap: "1px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {images?.images?.map((image: any, index: any) => {
+                      return (
+                        <div
+                          style={{
+                            position: "relative",
+                            height: "100px",
+                          }}
+                          key={index}
+                        >
+                          <img
+                            className="your-image-class"
+                            key={index}
+                            src={
+                              image.type?.slice(0, 2) == "vi"
+                                ? "/Play-button.svg"
+                                : image.url
+                            }
+                            alt=""
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              top: "0",
+                              right: "0",
+                            }}
+                            onClick={() => {
+                              if (
+                                !longpressActive ||
+                                tagsCheckBoxOpen == false
+                              ) {
+                                router.push(
+                                  `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                                );
+                              } else {
+                                handleChange(image); // Call handleLongPress when long press is detected
+                              }
+                            }}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              setTagsCheckBoxOpen(true);
+                              handleChange(image);
+                              setScoutId(image._id); // Adjust the timeout duration as needed
+                              setLongPressActive(true);
+                            }} // Prevent right-click context menu
+                            onTouchStart={(e) => {
+                              if (e.touches.length > 1) {
+                                e.preventDefault(); // Prevent multi-touch event
+                              }
+                            }}
+                          />
                           <div
                             style={{
-                              position: "relative",
-                              height: "100px",
+                              position: "absolute",
+                              top: "2px",
+                              right: "2px",
                             }}
-                            key={index}
                           >
-                            <img
-                              className="your-image-class"
-                              key={index}
-                              src={
-                                image.type?.slice(0, 2) == "vi"
-                                  ? "/Play-button.svg"
-                                  : image.url
-                              }
-                              alt=""
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                top: "0",
-                                right: "0",
-                              }}
-                              onClick={() => {
-                                if (
-                                  !longpressActive ||
-                                  tagsCheckBoxOpen == false
-                                ) {
-                                  router.push(
-                                    `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                                  );
-                                } else {
-                                  handleChange(image); // Call handleLongPress when long press is detected
-                                }
-                              }}
-                              onContextMenu={(e) => {
-                                e.preventDefault();
-                                setTagsCheckBoxOpen(true);
-                                handleChange(image);
-                                setScoutId(image._id); // Adjust the timeout duration as needed
-                                setLongPressActive(true);
-                              }} // Prevent right-click context menu
-                              onTouchStart={(e) => {
-                                if (e.touches.length > 1) {
-                                  e.preventDefault(); // Prevent multi-touch event
-                                }
-                              }}
-                            />
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "2px",
-                                right: "2px",
-                              }}
-                            >
-                              {tagsCheckBoxOpen ? (
-                                <input
-                                  style={{
-                                    width: "18px",
-                                    height: "18px",
-                                    border: "1px solid #000",
-                                  }}
-                                  type="checkbox"
-                                  checked={tempImages.some(
-                                    (ite: any) => ite._id === image._id
-                                  )}
-                                  onChange={() => handleChange(image)}
-                                  title={image.id}
-                                />
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                            {/* <div
+                            {tagsCheckBoxOpen ? (
+                              <input
+                                style={{
+                                  width: "18px",
+                                  height: "18px",
+                                  border: "1px solid #000",
+                                }}
+                                type="checkbox"
+                                checked={tempImages.some(
+                                  (ite: any) => ite._id === image._id
+                                )}
+                                onChange={() => handleChange(image)}
+                                title={image.id}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          {/* <div
                               style={{
                                 position: "absolute",
                                 bottom: "2px",
@@ -636,107 +636,107 @@ const ImageGalleryComponent = () => {
                                 <CancelRoundedIcon color={"error"} />
                               )}
                             </div> */}
-                          </div>
-                        );
-                      })}
-                    </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              } else {
-                return (
-                  <div
-                    key={indexAttachment}
-                    ref={
-                      indexAttachment === data.length - 50 ? lastItemRef : null
-                    }
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  key={indexAttachment}
+                  ref={
+                    indexAttachment === data.length - 50 ? lastItemRef : null
+                  }
+                >
+                  <Typography
+                    variant="caption"
+                    className={styles.scoutingDate}
                   >
-                    <Typography
-                      variant="caption"
-                      className={styles.scoutingDate}
-                    >
-                      {timePipe(images.date, "DD MMM YYYY")}
-                    </Typography>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(4, 1fr)",
-                        gridGap: "1px",
-                        marginBottom: "5px",
-                      }}
-                    >
-                      {images?.images?.map((image: any, index: any) => {
-                        return (
-                          <div
-                            style={{ position: "relative", height: "100px" }}
+                    {timePipe(images.date, "DD MMM YYYY")}
+                  </Typography>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gridGap: "1px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {images?.images?.map((image: any, index: any) => {
+                      return (
+                        <div
+                          style={{ position: "relative", height: "100px" }}
+                          key={index}
+                        >
+                          <img
+                            className="your-image-class"
                             key={index}
-                          >
-                            <img
-                              className="your-image-class"
-                              key={index}
-                              src={
-                                image.type?.slice(0, 2) == "vi"
-                                  ? "/Play-button.svg"
-                                  : image.url
+                            src={
+                              image.type?.slice(0, 2) == "vi"
+                                ? "/Play-button.svg"
+                                : image.url
+                            }
+                            alt=""
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              top: "0",
+                              right: "0",
+                            }}
+                            onClick={() => {
+                              if (
+                                !longpressActive ||
+                                tagsCheckBoxOpen == false
+                              ) {
+                                router.push(
+                                  `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
+                                );
+                              } else {
+                                handleChange(image); // Call handleLongPress when long press is detected
                               }
-                              alt=""
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                top: "0",
-                                right: "0",
-                              }}
-                              onClick={() => {
-                                if (
-                                  !longpressActive ||
-                                  tagsCheckBoxOpen == false
-                                ) {
-                                  router.push(
-                                    `/farms/${router.query.farm_id}/crops/${router.query.crop_id}/view/${image?._id}`
-                                  );
-                                } else {
-                                  handleChange(image); // Call handleLongPress when long press is detected
-                                }
-                              }}
-                              onContextMenu={(e) => {
-                                e.preventDefault();
-                                setTagsCheckBoxOpen(true);
-                                handleChange(image);
-                                setScoutId(image._id); // Adjust the timeout duration as needed
-                                setLongPressActive(true);
-                              }} // Prevent right-click context menu
-                              onTouchStart={(e) => {
-                                if (e.touches.length > 1) {
-                                  e.preventDefault(); // Prevent multi-touch event
-                                }
-                              }}
-                            />
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "2px",
-                                right: "2px",
-                              }}
-                            >
-                              {tagsCheckBoxOpen ? (
-                                <input
-                                  style={{
-                                    width: "18px",
-                                    height: "18px",
-                                    border: "1px solid #000",
-                                  }}
-                                  type="checkbox"
-                                  checked={tempImages.some(
-                                    (ite: any) => ite._id === image._id
-                                  )}
-                                  onChange={() => handleChange(image)}
-                                  title={image.id}
-                                />
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                            <div
+                            }}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              setTagsCheckBoxOpen(true);
+                              handleChange(image);
+                              setScoutId(image._id); // Adjust the timeout duration as needed
+                              setLongPressActive(true);
+                            }} // Prevent right-click context menu
+                            onTouchStart={(e) => {
+                              if (e.touches.length > 1) {
+                                e.preventDefault(); // Prevent multi-touch event
+                              }
+                            }}
+                          />
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "2px",
+                              right: "2px",
+                            }}
+                          >
+                            {tagsCheckBoxOpen ? (
+                              <input
+                                style={{
+                                  width: "18px",
+                                  height: "18px",
+                                  border: "1px solid #000",
+                                }}
+                                type="checkbox"
+                                checked={tempImages.some(
+                                  (ite: any) => ite._id === image._id
+                                )}
+                                onChange={() => handleChange(image)}
+                                title={image.id}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          {/* <div
                               style={{
                                 position: "absolute",
                                 bottom: "2px",
@@ -748,15 +748,15 @@ const ImageGalleryComponent = () => {
                               ) : (
                                 <ErrorOutlineRoundedIcon color={"warning"} />
                               )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                            </div> */}
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              }
-            })
+                </div>
+              );
+            }
+          })
           : ""}
       </div>
       {data?.length == 0 && !loading && (

@@ -591,16 +591,18 @@ const ListScouts: FunctionComponent = () => {
   }, [router.isReady, accessToken]);
 
   useEffect(() => {
+    let debounce = setTimeout(() => {
+      if (mounted) {
+        setFarm(null);
+        getAllFarms({
+          // farmId: router.query.farm_id as string,
+          searchString: searchString,
+          searchStringChangeOrNot: true,
 
-    setFarm(null);
-    getAllFarms({
-      // farmId: router.query.farm_id as string,
-      searchString: searchString,
-      searchStringChangeOrNot: true,
-
-    });
-
-
+        });
+      }
+    }, 500);
+    return () => clearInterval(debounce);
   }, [searchString]);
 
   const onClickAttachment = (attachment: any, farmId: string, cropId: string, location_id: string) => {

@@ -7,7 +7,7 @@ import timePipe from "@/pipes/timePipe";
 import { FarmDataType } from "@/types/farmCardTypes";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
@@ -197,19 +197,23 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.locationTitle}>{item?.location_id?.title}</p>
                 </div>
                 <div className={styles.actionbuttons}>
-                  <IconButton
-                    className={styles.view}
+                  <Button
+                    variant="text"
+
                     onClick={() => {
                       router.push(`/farm/${item?._id}/crops`);
                     }}
+                    sx={{ backgroundColor: "rgba(52, 98, 207, 0.04)", textTransform: "none" }}
                   >
-                    <Image
+
+                    View Crops
+                    {/* <Image
                       src="/mobileIcons/farms/plant-black-icon.svg"
-                      width={25}
-                      height={25}
+                      width={15}
+                      height={15}
                       alt=""
-                    />
-                  </IconButton>
+                    /> */}
+                  </Button>
                   <IconButton
                     className={styles.farmViewBtn}
                     onClick={() => router.push(`/farm/${item?._id}`)

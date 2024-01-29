@@ -106,7 +106,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
             <div className={styles.procurementDateLabel}>Date Of Operation</div>
             <div className={styles.datecontainer}>
               <p className={styles.dateBlock}>
-                {timePipe(data?.date_of_operation, "DD, MMM YYYY")}
+                {timePipe(data?.date_of_operation, "DD, MMM YYYY  hh:mm A")}
               </p>
             </div>
           </div>

@@ -49,7 +49,7 @@ const AddMaterialDrawer = ({
                 required_qty: requiredQty ? +requiredQty : null,
                 required_units: requiredUnits,
                 available_qty: availableQty ? +availableQty : null,
-                available_units: availableUnits,
+                available_units: requiredUnits,
             };
             const response = await addProcurementMaterialService({
                 token: accessToken,
@@ -194,8 +194,8 @@ const AddMaterialDrawer = ({
                                                 borderWidth: "1px 1px 1px 0 !important",
                                                 borderRadius: "0 4px 4px 0 !important"
                                             }
-                                        }} value={availableUnits}
-                                        onChange={(e: any) => setAvailableUnits(e.target.value)}
+                                        }} value={requiredUnits}
+                                        onChange={(e: any) => setRequiredUnits(e.target.value)}
                                     >
                                         <MenuItem value="Litres">Litres</MenuItem>
                                         <MenuItem value="Kilograms">Kilograms</MenuItem>

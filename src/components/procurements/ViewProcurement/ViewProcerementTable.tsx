@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -129,17 +130,13 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       if (response?.data) {
 
         const allPurchaseOrNot = response?.data.every((obj: any) => obj.hasOwnProperty('price') && obj.price !== null);
-        const allApprovedOrNot = response?.data.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
 
 
         if (allPurchaseOrNot) {
-          procurementStatusChange("PURCHASED")
-          afterMaterialStatusChange(true)
+          await procurementStatusChange("PURCHASED")
+          await afterMaterialStatusChange(true)
         }
-        else if (allApprovedOrNot) {
-          procurementStatusChange("APPROVED")
-          afterMaterialStatusChange(true)
-        } else {
+        else {
           afterMaterialStatusChange(true)
         }
 
@@ -469,7 +466,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       <TableCell className={styles.tableHeaderCell}>Price(Rs)</TableCell>
                     </>
                     : ''}
-                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "" }}>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "PURCHASED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody >
@@ -515,20 +512,23 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                         >
                           {row?.status !== "PENDING" && row?.status !== "REJECTED" ? "" :
                             <>
-                              <IconButton
-                                onClick={() => {
-                                  setEditMaterialId(row._id);
-                                  setEditMaterialOpen(true);
-                                }}
-                              >
-                                <ImageComponent
-                                  src={
-                                    "/viewProcurement/procurement-edit-icon.svg"
-                                  }
-                                  height={15}
-                                  width={15}
-                                  alt=""
-                                />                                </IconButton>
+                              <Tooltip title={"Edit"}>
+                                <IconButton
+                                  onClick={() => {
+                                    setEditMaterialId(row._id);
+                                    setEditMaterialOpen(true);
+                                  }}
+                                >
+                                  <ImageComponent
+                                    src={
+                                      "/viewProcurement/procurement-edit-icon.svg"
+                                    }
+                                    height={15}
+                                    width={15}
+                                    alt=""
+                                  />
+                                </IconButton>
+                              </Tooltip>
 
                               <IconButton
                                 onClick={() => {
@@ -574,36 +574,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
                                 </Button>
                                 :
-                                <div style={{ cursor: "pointer" }}>
-                                  <IconButton
-                                    onClick={() => {
-                                      // const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
-                                      // // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      // const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      // const lengthOfFilteredData = filteredData.length;
-
-                                      // if (lengthOfFilteredData == exceptRejectedData.length - 1) {
-                                      //   onStatusChangeEvent("approve", row?._id)
-                                      //   approveAllMaterials()
-
-                                      // }
-                                      // else {
-                                      //   onStatusChangeEvent("approve", row?._id)
-                                      // }
-                                      onStatusChangeEvent("approve", row?._id)
-                                    }
-                                    }
-                                  >
-                                    <ImageComponent
-                                      src={
-                                        "/viewProcurement/procurement-approve-icon.svg"
-                                      }
-                                      height={19}
-                                      width={19}
-                                      alt=""
-                                    />
-                                  </IconButton>
-                                </div>}
+                                ""}
 
 
                               <div style={{ cursor: "pointer" }}>
@@ -612,18 +583,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                   sx={{ display: row?.approved_by?.name ? "none" : "" }}
                                   onClick={() => {
                                     if (row?.status == "REJECTED") {
-                                      // const exceptRejectedData = materials.filter((item: any, index: number) => item?.status !== "REJECTED");
-                                      // // const hasApprovedBy = exceptRejectedData.every((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      // const filteredData = exceptRejectedData.filter((obj: any) => obj.hasOwnProperty('approved_by') && obj.approved_by !== null);
-                                      // const lengthOfFilteredData = filteredData.length;
 
-                                      // if (lengthOfFilteredData == exceptRejectedData.length - 1) {
-                                      //   onStatusChangeEvent("approve", row?._id)
-                                      //   approveAllMaterials()
-                                      // }
-                                      // else {
-                                      //   onStatusChangeEvent("approve", row?._id)
-                                      // }
                                       onStatusChangeEvent("approve", row?._id)
                                     }
                                     else {

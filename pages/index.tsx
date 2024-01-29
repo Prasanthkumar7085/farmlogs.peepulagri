@@ -16,28 +16,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const userAgent = headers['user-agent'];
 
-  if (!(cookies.loggedIn_v2 == "true")) {
-    return {
-      redirect: {
-        destination: `/`,
-        permanent: false,
-      },
-    };
-  } else if (cookies.userType_v2 == "agronomist" || cookies.userType_v2 == "admin") {
-    return {
-      redirect: {
-        destination: `/scouts`,
-        permanent: false,
-      },
-    };
-  } else if (userAgent.includes("Mobile")) {
-    return {
-      redirect: {
-        destination: `/dashboard`,
-        permanent: false,
-      },
-    };
-  } else {
+  if (cookies.loggedIn_v2 == "true") {
+    if (userAgent.includes("Mobile")) {
+      return {
+        redirect: {
+          destination: `/dashboard`,
+          permanent: false,
+        },
+      };
+    }
     return {
       redirect: {
         destination: `/scouts`,
@@ -45,8 +32,48 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       },
     };
   }
-
   return {
     props: {},
   };
 };
+// export const getServerSideProps: GetServerSideProps = async (context: any) => {
+//   const { req } = context;
+//   const { headers, cookies } = req;
+
+//   const userAgent = headers['user-agent'];
+
+//   if (!(cookies.loggedIn_v2 == "true")) {
+//     return {
+//       redirect: {
+//         destination: `/`,
+//         permanent: false,
+//       },
+//     };
+//   } else if (cookies.userType_v2 == "agronomist" || cookies.userType_v2 == "admin") {
+//     return {
+//       redirect: {
+//         destination: `/scouts`,
+//         permanent: false,
+//       },
+//     };
+//   } else if (userAgent.includes("Mobile")) {
+//     return {
+//       redirect: {
+//         destination: `/dashboard`,
+//         permanent: false,
+//       },
+//     };
+//   } else {
+//     return {
+//       redirect: {
+//         destination: `/scouts`,
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: {},
+//   };
+// };
+

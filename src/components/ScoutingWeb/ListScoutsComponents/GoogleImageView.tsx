@@ -14,8 +14,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkeleton";
 import SouthIcon from '@mui/icons-material/South';
-const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails, data }: any) => {
-
+const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails, data, getAllExistedScouts, hasMore, setOnlyImages }: any) => {
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
@@ -141,19 +140,47 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     </Typography>}
                 <div>
                     <IconButton
-                        disabled={loading || imageIndex == 0 ? true : false}
+                        disabled={loading || (imageIndex == 0 && router.query.page as string == "1") ? true : false}
                         onClick={() => {
+                            // if (imageIndex == 0) {
+                            //     setOnlyImages([])
+                            //     getAllExistedScouts({
+                            //         page: +(router.query.page as string) - 1,
+                            //         limit: router.query.limit as string,
+                            //         farmId: router.query.farm_id as string,
+                            //         userId: router.query.created_by as string,
+                            //         cropId: router.query.crop_id as string,
+                            //         fromDate: router.query.from_date as string,
+                            //         toDate: router.query.to_date as string,
+                            //         location: router.query.location_id as string,
+                            //         image_view: true
+                            //     });
+                            // }
                             setChangeImage(true)
-
                             setImageIndex((prev: any) => prev - 1);
                         }}>
                         <KeyboardArrowLeftIcon sx={{ fontSize: "2rem" }} />
                     </IconButton>
                     <IconButton
-                        disabled={loading || imageIndex == data?.length - 1 ? true : false}
+                        disabled={loading || hasMore == false ? true : false}
                         onClick={() => {
+                            // if (imageIndex == data?.length - 1) {
+                            //     setOnlyImages([])
+                            //     getAllExistedScouts({
+                            //         page: +(router.query.page as string) + 1,
+                            //         limit: router.query.limit as string,
+                            //         farmId: router.query.farm_id as string,
+                            //         userId: router.query.created_by as string,
+                            //         cropId: router.query.crop_id as string,
+                            //         fromDate: router.query.from_date as string,
+                            //         toDate: router.query.to_date as string,
+                            //         location: router.query.location_id as string,
+                            //         image_view: true
+                            //     });
+                            // } else {
                             setChangeImage(true)
                             setImageIndex((prev: any) => prev + 1);
+
                         }}>
                         <KeyboardArrowRightIcon sx={{ fontSize: "2rem" }} />
                     </IconButton>

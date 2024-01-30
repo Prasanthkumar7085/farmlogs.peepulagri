@@ -73,7 +73,7 @@ const ListScouts: FunctionComponent = () => {
   const [openDaySummary, setOpenDaySummary] = useState(false);
   const [seletectedItemDetails, setSelectedItemDetails] =
     useState<SingleScoutResponse>();
-
+  const [hasMore, setHasMore] = useState<boolean>()
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [searchString, setSearchString] = useState("");
   const [locations, setLocations] = useState<
@@ -85,10 +85,12 @@ const ListScouts: FunctionComponent = () => {
   } | null>();
   const [imageDetails, setImageDetails] = useState<any>()
   const [rightBarOpen, setRightBarOpen] = useState<any>(false)
-
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
+  const [rendering, setRendering] = useState<boolean>(false)
+
+
   //select the drop down and get the farm value
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     dispatch(QueryParamsForScouting(""))
@@ -132,9 +134,7 @@ const ListScouts: FunctionComponent = () => {
       setTimeout(() => {
         setSettingLocationLoading(false);
       }, 1);
-      router.push({
-        query: { ...router.query, farm_search_string: value?.title },
-      });
+
       await getAllExistedScouts({
         farmSearchString: value?.title,
         page: 1,
@@ -342,7 +342,7 @@ const ListScouts: FunctionComponent = () => {
       } = queryParams;
 
       if (image_view) {
-        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
+        let temp = { ...queryParams, view: router?.query?.view, image_id: router?.query?.image_id }
         router.push({ query: temp });
       }
       else {
@@ -362,6 +362,7 @@ const ListScouts: FunctionComponent = () => {
       });
 
       if (response?.success) {
+        setHasMore(response?.has_more)
         const { data, ...rest } = response;
         setPaginationDetails(rest);
         setOnlyImages(response.data);
@@ -593,7 +594,6 @@ const ListScouts: FunctionComponent = () => {
       });
     }
   }, [router.isReady, accessToken]);
-
   useEffect(() => {
     let debounce = setTimeout(() => {
       if (mounted) {
@@ -829,6 +829,9 @@ const ListScouts: FunctionComponent = () => {
               imageDetails={imageDetails}
               setImageDetails={setImageDetails}
               data={onlyImages}
+              getAllExistedScouts={getAllExistedScouts}
+              hasMore={hasMore}
+              setOnlyImages={setOnlyImages}
 
 
 

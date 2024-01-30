@@ -302,8 +302,8 @@ const ListScouts: FunctionComponent = () => {
     setLoading(true);
     try {
       // let url = `/crops/${cropId}/images/${page}/${limit}`;
-      let url = `/farm-images/all/${page}/${limit}?include=tags`;
-      let queryParams: any = {};
+      let url = `/farm-images/all/${page}/${limit}`;
+      let queryParams: any = { "include": "tags" };
       if (page) {
         queryParams["page"] = page;
       }
@@ -335,7 +335,6 @@ const ListScouts: FunctionComponent = () => {
         page: pageNum,
         limit: rowsPerPage,
         farm_search_string,
-
         ...restParams
 
       } = queryParams;
@@ -582,8 +581,8 @@ const ListScouts: FunctionComponent = () => {
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
         userId: router.query.user_id as string,
-        fromDate: "",
-        toDate: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
         cropId: router.query.crop_id as string,
         farmSearchString: router.query.farm_search_string as string,
         location: router.query.location_id as string,
@@ -611,10 +610,10 @@ const ListScouts: FunctionComponent = () => {
 
     setRightBarOpen(true)
     setImageDetails(attachment);
-    let temp = { ...queries, view: true, image_id: attachment?._id, view_limit: 12 }
+    let temp = { ...queries, view: true, image_id: attachment?._id }
     dispatch(QueryParamsForScouting(temp))
     if (attachment?._id) {
-      router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id, view_limit: 12 } });
+      router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id } });
 
     }
     else {
@@ -643,8 +642,8 @@ const ListScouts: FunctionComponent = () => {
         limit: 50,
         farmId: '',
         userId: router.query.user_id as string,
-        fromDate: "",
-        toDate: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
         cropId: router.query.crop_id as string,
         farmSearchString: '',
         location: value?._id,
@@ -667,8 +666,8 @@ const ListScouts: FunctionComponent = () => {
         limit: 50,
         farmId: '',
         userId: router.query.user_id as string,
-        fromDate: "",
-        toDate: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
         cropId: "",
         farmSearchString: '',
         location: "",

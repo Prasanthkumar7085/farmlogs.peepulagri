@@ -81,6 +81,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         if (data?.length) {
             setSelectedItemDetails(data[imageIndex])
             setImageDetails(data[imageIndex])
+
         }
     }, [imageIndex])
 
@@ -101,9 +102,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         <Avatar sx={{ color: "#fff", background: "#d94841", width: "20px", height: "20px", fontSize: "9px" }}>{selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>}
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={150} /> :
+                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={120} /> :
                             <div className={styles.uploadedByName}>{selectedImage?.uploaded_by?.name}</div>}
-                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={180} /> :
+                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={130} /> :
                             <div>
                                 <Typography variant="caption" className={styles.imageUploadedTime} >
                                     <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={13} height={13} />

@@ -81,9 +81,9 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         if (data?.length) {
             setSelectedItemDetails(data[imageIndex])
             setImageDetails(data[imageIndex])
-
         }
     }, [imageIndex])
+
 
     useEffect(() => {
         if (router.isReady && router.query.image_id) {
@@ -141,6 +141,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         dispatch(QueryParamsForScouting(routerData))
                         router.push({ query: routerData });
                         setImageDetails(null);
+                        setSelectedItemDetails(null)
                     }}
                     // sx={{ position: "absolute", right: 9, top: "12%" }}
                     >

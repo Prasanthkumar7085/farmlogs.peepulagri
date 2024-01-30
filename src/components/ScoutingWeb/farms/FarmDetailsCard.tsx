@@ -139,7 +139,6 @@ const ScoutingFarmDetailsCard = ({
           <div
             className={styles.farmdetailscard}
             key={index}
-            style={{ cursor: "pointer" }}
 
           >
             <div

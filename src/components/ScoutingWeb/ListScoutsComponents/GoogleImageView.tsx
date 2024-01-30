@@ -84,6 +84,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         }
     }, [imageIndex])
 
+    useEffect(() => {
+        if (imageDetails?._id == router.query.image_id as string) {
+            getTheSingleImageDetails()
+
+        }
+    }, [imageDetails?._id])
 
     useEffect(() => {
         if (router.isReady && router.query.image_id) {

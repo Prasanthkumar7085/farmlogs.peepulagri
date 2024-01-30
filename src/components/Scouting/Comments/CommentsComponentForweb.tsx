@@ -41,8 +41,10 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     }
   };
   useEffect(() => {
-    if (scoutDetails && attachement) {
-      getAllScoutComments();
+    if (scoutDetails || attachement || router.query.image_id) {
+      if (accessToken) {
+        getAllScoutComments();
+      }
     }
   }, [scoutDetails, attachement, accessToken, router.query.image_id]);
 

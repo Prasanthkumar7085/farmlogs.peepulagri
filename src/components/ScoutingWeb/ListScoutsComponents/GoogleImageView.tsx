@@ -83,12 +83,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             dispatch(QueryParamsForScouting(routerData))
             setSelectedItemDetails(data[imageIndex])
             setImageDetails(data[imageIndex])
-
         }
     }, [imageIndex])
 
     useEffect(() => {
-        if (imageDetails?._id == router.query.image_id as string && router.isReady && accessToken) {
+        if ((imageDetails?._id == router.query.image_id as string) && accessToken && selectedImage?._id && router.isReady) {
             getTheSingleImageDetails()
 
         }

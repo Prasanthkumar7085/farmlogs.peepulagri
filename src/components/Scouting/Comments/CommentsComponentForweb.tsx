@@ -21,7 +21,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [afterReply, setAfterReply] = useState<any>();
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
@@ -51,7 +51,6 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     let options = {
       method: "GET",
       headers: new Headers({
-        "content-type": "application/json",
         authorization: accessToken,
       }),
     };

@@ -40,7 +40,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
   const [alertType, setAlertType] = useState(false);
 
   const downLoadAttachements = async (file: any, userId: any) => {
-    setLoading(true);
+    setLoading1(true);
     let body = {
       attachment: {
         name: file.name,
@@ -109,7 +109,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setLoading1(false);
     }
   };
 

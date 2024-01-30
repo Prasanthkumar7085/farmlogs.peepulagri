@@ -92,7 +92,6 @@ const ListScouts: FunctionComponent = () => {
   //select the drop down and get the farm value
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     dispatch(QueryParamsForScouting(""))
-    setRightBarOpen(false)
     setData([]);
     if (reason == "clear") {
 
@@ -136,8 +135,7 @@ const ListScouts: FunctionComponent = () => {
       router.push({
         query: { ...router.query, farm_search_string: value?.title },
       });
-      await getAllCrops("", value?._id);
-      getAllExistedScouts({
+      await getAllExistedScouts({
         farmSearchString: value?.title,
         page: 1,
         limit: router.query.limit as string,
@@ -148,9 +146,9 @@ const ListScouts: FunctionComponent = () => {
         toDate: router.query.to_date as string,
         location: value?.location_id?._id as string,
         image_view: false
-
-
       });
+      await getAllCrops("", value?._id);
+
     } else {
       setFarm(null);
       setCrop(null);

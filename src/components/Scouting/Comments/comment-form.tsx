@@ -457,8 +457,8 @@ const CommentForm = ({
             </div>
           </div>
         ))}
-      <div className={styles.actions}>
-        {/* <div className={styles.attachments}>
+      {/* <div className={styles.actions}>
+        <div className={styles.attachments}>
           <div className={styles.link}>
             <label>
               <img
@@ -491,9 +491,9 @@ const CommentForm = ({
               hidden
             />
           </label>
-        </div> */}
+        </div>
 
-        {/* <Button
+        <Button
           className={
             comment && !loading ? styles.sendbutton : styles.sendbuttonDisable
           }
@@ -504,8 +504,8 @@ const CommentForm = ({
           }
         >
           {loading ? "Sending..." : "Send"}
-        </Button> */}
-      </div>
+        </Button>
+      </div> */}
     </div>
   );
 };

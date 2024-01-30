@@ -821,7 +821,7 @@ const ListScouts: FunctionComponent = () => {
           )}
         </div>
 
-        {rightBarOpen || router.query.view ?
+        {(rightBarOpen || router.query.view) && onlyImages?.length ?
           <div className={rightBarOpen || router.query.view ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
             <GoogleImageView
               rightBarOpen={rightBarOpen}
@@ -834,7 +834,7 @@ const ListScouts: FunctionComponent = () => {
 
             />
           </div> : ""}
-        {rightBarOpen || router.query.view ?
+        {(rightBarOpen || router.query.view) && onlyImages?.length ?
           <div className={rightBarOpen || router.query.view ? styles.AllScoutsComments : styles.AllScoutsCommentsClose}>
             <ScoutingComments
               rightBarOpen={rightBarOpen}

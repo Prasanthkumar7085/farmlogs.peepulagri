@@ -6,7 +6,7 @@ import {
 import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./CommentsComponent.module.css";
@@ -44,7 +44,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     if (scoutDetails && attachement) {
       getAllScoutComments();
     }
-  }, [scoutDetails, attachement]);
+  }, [scoutDetails, attachement, accessToken, router.query.image_id]);
 
   const getAllScoutComments = async () => {
     setLoading(true);
@@ -58,7 +58,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     try {
       let response = await fetch(
         // `${process.env.NEXT_PUBLIC_API_URL}/scouts/${scoutDetails?._id}/attachments/${attachement?._id}/comments/all`,
-        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id}/comments`,
+        `${process.env.NEXT_PUBLIC_API_URL}/farm-images/${attachement?._id || router.query.image_id}/comments`,
         options
       );
       let responseData = await response.json();
@@ -169,12 +169,13 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
     }
   };
   //adding comment then call the get all api
-  const afterCommentAdd = (value: any) => {
+  const afterCommentAdd = async (value: any) => {
     if (value == true) {
-      getAllScoutComments();
+      await getAllScoutComments();
       setAfterReply(true);
     }
   };
+
 
   //delete comment
   const afterDeleteComment = (value: any) => {
@@ -220,6 +221,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className={styles.CommentsBlock}>

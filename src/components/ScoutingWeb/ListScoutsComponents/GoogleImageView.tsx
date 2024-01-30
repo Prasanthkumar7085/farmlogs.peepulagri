@@ -79,8 +79,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
     useEffect(() => {
         if (data?.length && changeImage) {
+            let routerData = { ...router.query, view: true, image_id: data[imageIndex]?._id }
+            dispatch(QueryParamsForScouting(routerData))
             setSelectedItemDetails(data[imageIndex])
             setImageDetails(data[imageIndex])
+
         }
     }, [imageIndex])
 
@@ -89,7 +92,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             getTheSingleImageDetails()
 
         }
-    }, [imageDetails?._id])
+    }, [imageDetails?._id, accessToken])
 
     useEffect(() => {
         if (router.isReady && router.query.image_id) {
@@ -128,6 +131,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         disabled={loading || imageIndex == 0 ? true : false}
                         onClick={() => {
                             setChangeImage(true)
+
                             setImageIndex((prev: any) => prev - 1);
                         }}>
                         <KeyboardArrowLeftIcon sx={{ fontSize: "2rem" }} />

@@ -18,8 +18,8 @@
 }
 
 .allThreads {
-    /* height: calc(100vh - 416px);
-    overflow-y: scroll; */
+    height: calc(100vh - 310px);
+    overflow-y: scroll;
 }
 
 /* scrollbar styles */

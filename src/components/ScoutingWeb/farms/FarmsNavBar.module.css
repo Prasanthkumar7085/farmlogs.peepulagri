@@ -117,7 +117,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
-  width: 50%;
+  width: 40%;
 }
 
 .AllScoutsLeftWebPage::-webkit-scrollbar {
@@ -131,7 +131,19 @@
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
-  width: 50%;
+  width: 40%;
+  border-bottom: 0;
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 4px 4px 13px 0px rgba(0, 0, 0, 0.17);
+}
+
+.AllScoutsComments {
+  height: calc(100vh - 115px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 1rem;
+  width: 30%;
   border-bottom: 0;
   border-radius: 8px;
   background: #FFF;
@@ -147,7 +159,9 @@
 .AllScoutsRightClose {
   display: "none";
 }
-
+.AllScoutsCommentsClose {
+  display: "none";
+}
 .allFarms::-webkit-scrollbar {
   width: 4px;
   height: 0px;
@@ -380,6 +394,7 @@
   width: calc(100% - 2rem);
   padding: 1rem;
   background-color: var(--white, #ffffff);
+  margin: auto;
   /* background-color: var(--background, #F5F7FA); */
 }
 
@@ -404,7 +419,7 @@
 .allScoutsFilterBlock {
   width: auto;
   display: grid;
-  grid-template-columns: 250px 250px 250px;
+  grid-template-columns: 250px 250px 250px 250px;
   grid-column-gap: 1rem;
 }
 

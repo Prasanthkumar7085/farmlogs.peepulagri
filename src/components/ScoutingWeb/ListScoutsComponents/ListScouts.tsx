@@ -25,6 +25,8 @@ import ScoutingDailyImages from "./ScoutingDailyImages";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import GoogleImageView from "./GoogleImageView";
 import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
+import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
+import ScoutingComments from "./ScoutingComments/ScoutingComments";
 
 interface ApiMethodProps {
   page: string | number;
@@ -300,7 +302,7 @@ const ListScouts: FunctionComponent = () => {
     setLoading(true);
     try {
       // let url = `/crops/${cropId}/images/${page}/${limit}`;
-      let url = `/farm-images/all/${page}/${limit}`;
+      let url = `/farm-images/all/${page}/${limit}?include=tags`;
       let queryParams: any = {};
       if (page) {
         queryParams["page"] = page;
@@ -688,6 +690,9 @@ const ListScouts: FunctionComponent = () => {
           Scouting
         </Typography>
         <div className={styles.allScoutsFilterBlock}>
+          <DateRangePickerForAllScouts
+            onDateFilterChange={onDateFilterChange}
+          />
           {/* <UserDropDownForScouts
             user={user}
             onChangeUser={onChangeUser}
@@ -752,9 +757,7 @@ const ListScouts: FunctionComponent = () => {
             defaultValue={crop}
             cropOptionsLoading={cropOptionsLoading}
           />
-          {/* <DateRangePickerForAllScouts
-            onDateFilterChange={onDateFilterChange}
-          /> */}
+
           {/* <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
@@ -819,6 +822,19 @@ const ListScouts: FunctionComponent = () => {
         {rightBarOpen || router.query.view ?
           <div className={rightBarOpen || router.query.view ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
             <GoogleImageView
+              rightBarOpen={rightBarOpen}
+              setRightBarOpen={setRightBarOpen}
+              imageDetails={imageDetails}
+              setImageDetails={setImageDetails}
+              data={onlyImages}
+
+
+
+            />
+          </div> : ""}
+        {rightBarOpen || router.query.view ?
+          <div className={rightBarOpen || router.query.view ? styles.AllScoutsComments : styles.AllScoutsCommentsClose}>
+            <ScoutingComments
               rightBarOpen={rightBarOpen}
               setRightBarOpen={setRightBarOpen}
               imageDetails={imageDetails}

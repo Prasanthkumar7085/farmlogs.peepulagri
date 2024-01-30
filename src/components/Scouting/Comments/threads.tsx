@@ -13,7 +13,14 @@ import styles from "./threads.module.css";
 import ChatIcon from '@mui/icons-material/Chat';
 import { Markup } from "interweave";
 
-const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComment, afterReply, afterDeleteAttachements, loadingThreads, scoutDetails, attachement }: any) => {
+const Threads = ({ details, afterCommentAdd, afterDeleteComment,
+  afterUpdateComment,
+  afterReply,
+  afterDeleteAttachements,
+  loadingThreads,
+  setLoading,
+  scoutDetails,
+  attachement }: any) => {
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -28,7 +35,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
   const [editMode, setEditMode] = useState<any>([]);
   const [editComment, setEditComment] = useState<any>();
   const [isReplies, setIsReplies] = useState<any>(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading1] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(false);
 
@@ -162,10 +169,13 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
                       </div>
                     ) : (
                       <p className={styles.theProblemIm}>
-                        <Markup content={item.content} />
+                        <Markup content={item.content}
+                          noWrap={false}
+                          disableLineBreaks={false}
+                        />
                         <Typography
                           variant="caption"
-                          sx={{ wordBreak: "break-word" }}
+                          sx={{ wordBreak: "break-word", }}
                         >
                           {item.createdAt == item.updatedAt ? "" : "(edited)"}
                         </Typography>
@@ -682,7 +692,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           }
         })
       ) : loadingThreads ? (
-        <div style={{ marginRight: "120px" }}>
+        <div className={styles.inMessageSkelton}>
           <Box sx={{ width: 300 }}>
             <div style={{ display: "flex" }}>
               <Skeleton variant="circular" width={40} height={40} />
@@ -715,7 +725,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment, afterUpdateComm
           <ChatIcon /> No Comments
         </div>
       )}
-      <LoadingComponent loading={loading} />
+      <LoadingComponent loading={loadingThreads} />
       <AlertComponent
         alertMessage={alertMessage}
         alertType={alertType}

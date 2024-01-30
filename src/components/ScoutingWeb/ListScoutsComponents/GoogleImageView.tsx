@@ -1,4 +1,4 @@
-import { Avatar, Button, Chip, IconButton, Skeleton, Typography } from "@mui/material";
+import { Avatar, Button, Chip, IconButton, Skeleton, Tooltip, Typography } from "@mui/material";
 import styles from "./googleImageview.module.css";
 import Image from "next/image";
 import timePipe from "@/pipes/timePipe";
@@ -124,7 +124,21 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     </div>
                 </div>
                 {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={150} /> :
-                    <Typography variant="subtitle1" className={styles.imagesTitle}>{selectedImage?.farm_id?.title} / {selectedImage?.crop_id?.title}</Typography>}
+                    <Typography variant="subtitle1" className={styles.imagesTitle}>
+                        <Tooltip title={selectedImage?.farm_id?.title}>
+                            {selectedImage?.farm_id?.title.length > 10
+                                ? selectedImage?.farm_id?.title.slice(0, 1).toUpperCase() +
+                                selectedImage?.farm_id?.title.slice(1, 7) +
+                                "..."
+                                : selectedImage?.farm_id?.title.slice(0, 1).toUpperCase() +
+                                selectedImage?.farm_id?.title.slice(1)}</Tooltip> / <Tooltip title={selectedImage?.crop_id?.title}>{selectedImage?.crop_id?.title.length > 10
+                                    ? selectedImage?.crop_id?.title.slice(0, 1).toUpperCase() +
+                                    selectedImage?.crop_id?.title.slice(1, 7) +
+                                    "..."
+                                    : selectedImage?.crop_id?.title.slice(0, 1).toUpperCase() +
+                                    selectedImage?.crop_id?.title.slice(1)}</Tooltip>
+
+                    </Typography>}
                 <div>
                     <IconButton
                         disabled={loading || imageIndex == 0 ? true : false}

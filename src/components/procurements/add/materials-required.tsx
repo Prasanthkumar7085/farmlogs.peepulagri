@@ -308,24 +308,52 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
               Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
 
             </h6>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div >
-                <TextField
+            <div >
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
 
-                  size="small"
-                  sx={{
-                    width: "100%", background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderWidth: "1px 0 1px 1px !important",
-                      borderRadius: "4px 0 0 4px !important"
-                    }
-                  }}
-                  placeholder="Required"
-                  variant="outlined"
-                  value={requiredQty}
-                  onInput={handleInput}
-                  onChange={(e: any) => setRequiredQty(e.target.value)}
-                />
+                <div >
+                  <TextField
+
+                    size="small"
+                    sx={{
+                      width: "100%", background: "#fff",
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderWidth: "1px 0 1px 1px !important",
+                        borderRadius: "4px 0 0 4px !important"
+                      }
+                    }}
+                    placeholder="Required"
+                    variant="outlined"
+                    value={requiredQty}
+                    onInput={handleInput}
+                    onChange={(e: any) => setRequiredQty(e.target.value)}
+                  />
+
+                </div>
+                <FormControl variant="outlined" sx={{ width: "100%" }}>
+                  <InputLabel color="primary" />
+                  <Select
+                    sx={{
+                      background: "#fff",
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderWidth: "1px 1px 1px 0 !important",
+                        borderRadius: "1px 4px 4px 0 !important",
+
+                      }
+                    }}
+                    size="small"
+                    defaultValue="Litres"
+                    value={requiredUnits}
+                    onChange={(e: any) => setRequiredUnits(e.target.value)}
+                  >
+                    <MenuItem value="Litres">Litres</MenuItem>
+                    <MenuItem value="Kilograms">Kilograms</MenuItem>
+                  </Select>
+
+                </FormControl>
+              </div>
+              <div style={{ display: 'flex', flexWrap: "wrap" }}>
+
                 <ErrorMessages
                   errorMessages={errorMessages}
                   keyname={"required_qty"}
@@ -335,27 +363,6 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   keyname={"required_units"}
                 />
               </div>
-              <FormControl variant="outlined" sx={{ width: "100%" }}>
-                <InputLabel color="primary" />
-                <Select
-                  sx={{
-                    background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "1px 4px 4px 0 !important",
-
-                    }
-                  }}
-                  size="small"
-                  defaultValue="Litres"
-                  value={requiredUnits}
-                  onChange={(e: any) => setRequiredUnits(e.target.value)}
-                >
-                  <MenuItem value="Litres">Litres</MenuItem>
-                  <MenuItem value="Kilograms">Kilograms</MenuItem>
-                </Select>
-
-              </FormControl>
             </div>
           </div>
           <div className={styles.eachMaterialBlock} >

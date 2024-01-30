@@ -6,7 +6,7 @@ import timePipe from "@/pipes/timePipe";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Avatar, Box, Button, Chip, IconButton, Skeleton, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./comment-form";
 import styles from "./threads.module.css";
@@ -40,7 +40,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
   const [alertType, setAlertType] = useState(false);
 
   const downLoadAttachements = async (file: any, userId: any) => {
-    setLoading(true);
+    setLoading1(true);
     let body = {
       attachment: {
         name: file.name,
@@ -109,9 +109,22 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setLoading1(false);
     }
   };
+
+  const lastCommentRef = useRef<any>(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [details]);
+
+  const scrollToBottom = () => {
+    if (lastCommentRef.current) {
+      lastCommentRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
 
   return (
     <div className={styles.threads} >
@@ -124,7 +137,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
             const timeDifferenceInMinutes =
               timeDifferenceInMilliseconds / (1000 * 60);
             return (
-              <div className={styles.inMessage} key={index}>
+              <div className={styles.inMessage} key={index} ref={index === details.length - 1 ? lastCommentRef : null}>
                 {item?.commented_by?.user_type == "farmer" ? (
                   <Avatar sx={{ bgcolor: "#D94841", height: "20px", width: "21px", fontSize: "7px" }}>
                     {item?.commented_by?.name?.slice(0, 2).toUpperCase()}

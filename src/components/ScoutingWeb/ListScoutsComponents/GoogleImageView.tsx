@@ -79,20 +79,23 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
     useEffect(() => {
         if (data?.length && changeImage) {
+            let routerData = { ...router.query, view: true, image_id: data[imageIndex]?._id }
+            dispatch(QueryParamsForScouting(routerData))
             setSelectedItemDetails(data[imageIndex])
             setImageDetails(data[imageIndex])
+
         }
     }, [imageIndex])
 
     useEffect(() => {
-        if (imageDetails?._id == router.query.image_id as string) {
+        if (imageDetails?._id == router.query.image_id as string && router.isReady && accessToken) {
             getTheSingleImageDetails()
 
         }
-    }, [imageDetails?._id])
+    }, [imageDetails?._id, accessToken, router.isReady])
 
     useEffect(() => {
-        if (router.isReady && router.query.image_id) {
+        if (router.isReady && router.query.image_id && accessToken) {
             setSelectedItemDetails(null)
             getTheSingleImageDetails()
         }
@@ -128,6 +131,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         disabled={loading || imageIndex == 0 ? true : false}
                         onClick={() => {
                             setChangeImage(true)
+
                             setImageIndex((prev: any) => prev - 1);
                         }}>
                         <KeyboardArrowLeftIcon sx={{ fontSize: "2rem" }} />

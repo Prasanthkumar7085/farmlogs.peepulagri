@@ -91,7 +91,7 @@ const ListScouts: FunctionComponent = () => {
   const [queries, setQueries] = useState<any>()
   //select the drop down and get the farm value
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
-    setRightBarOpen(false)
+    dispatch(QueryParamsForScouting(""))
     setData([]);
     if (reason == "clear") {
 
@@ -119,7 +119,6 @@ const ListScouts: FunctionComponent = () => {
         farmSearchString: "",
         location: router.query.location_id as string,
         image_view: false
-
       });
 
       return;
@@ -136,8 +135,7 @@ const ListScouts: FunctionComponent = () => {
       router.push({
         query: { ...router.query, farm_search_string: value?.title },
       });
-      await getAllCrops("", value?._id);
-      getAllExistedScouts({
+      await getAllExistedScouts({
         farmSearchString: value?.title,
         page: 1,
         limit: router.query.limit as string,
@@ -148,9 +146,9 @@ const ListScouts: FunctionComponent = () => {
         toDate: router.query.to_date as string,
         location: value?.location_id?._id as string,
         image_view: false
-
-
       });
+      await getAllCrops("", value?._id);
+
     } else {
       setFarm(null);
       setCrop(null);
@@ -211,6 +209,8 @@ const ListScouts: FunctionComponent = () => {
   };
 
   const onDateFilterChange = (date1: string, date2: string) => {
+    dispatch(QueryParamsForScouting(""))
+
     if (date1 && date2) {
       setFromDate(date1);
       setToDate(date2);
@@ -223,7 +223,9 @@ const ListScouts: FunctionComponent = () => {
         fromDate: date1,
         toDate: date2,
         cropId: router.query.crop_id as string,
-        location: router.query.location_id as string
+        location: router.query.location_id as string,
+        image_view: false
+
       });
     } else {
       setFromDate("");
@@ -340,10 +342,11 @@ const ListScouts: FunctionComponent = () => {
       } = queryParams;
 
       if (image_view) {
-        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id, view_limit: paramasFromStore?.view_limit }
+        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
         router.push({ query: temp });
       }
       else {
+        setRightBarOpen(false)
         let temp = { ...queryParams }
         delete temp?.image_id;
         delete temp?.view;

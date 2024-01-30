@@ -25,11 +25,11 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [loading, setLoading] = useState<boolean>(false)
     const [has_more, setHasMore] = useState<any>()
     const [selectedImage, setSelectedItemDetails] = useState<any>()
-    console.log(selectedImage, "asdfsf")
     const [imageIndex, setImageIndex] = useState<any>(0)
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
     const [loading1, setLoading1] = useState<boolean>(false)
+    const [changeImage, setChangeImage] = useState<any>(false)
 
     const logout = async () => {
         try {
@@ -78,7 +78,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
 
     useEffect(() => {
-        if (data?.length) {
+        if (data?.length && changeImage) {
             setSelectedItemDetails(data[imageIndex])
             setImageDetails(data[imageIndex])
         }
@@ -127,6 +127,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     <IconButton
                         disabled={loading || imageIndex == 0 ? true : false}
                         onClick={() => {
+                            setChangeImage(true)
                             setImageIndex((prev: any) => prev - 1);
                         }}>
                         <KeyboardArrowLeftIcon sx={{ fontSize: "2rem" }} />
@@ -134,6 +135,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     <IconButton
                         disabled={loading || imageIndex == data?.length - 1 ? true : false}
                         onClick={() => {
+                            setChangeImage(true)
                             setImageIndex((prev: any) => prev + 1);
                         }}>
                         <KeyboardArrowRightIcon sx={{ fontSize: "2rem" }} />
@@ -147,7 +149,6 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         dispatch(QueryParamsForScouting(routerData))
                         router.push({ query: routerData });
                         setImageDetails(null);
-                        setSelectedItemDetails(null)
                     }}
                     // sx={{ position: "absolute", right: 9, top: "12%" }}
                     >

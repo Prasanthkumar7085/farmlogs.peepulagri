@@ -105,14 +105,14 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         <div style={{ padding: "1rem", }}  >
             <div className={styles.viewImgInfoHeader} >
                 <div className={styles.imageUploadingDetails} >
-                    {loading ? <Skeleton variant="circular" width={20} height={20} /> :
+                    {loading || !selectedImage?._id ? <Skeleton variant="circular" width={20} height={20} /> :
 
                         <Avatar sx={{ color: "#fff", background: "#d94841", width: "20px", height: "20px", fontSize: "9px" }}>{selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>}
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={120} /> :
+                        {loading || !selectedImage?._id ? <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={120} /> :
                             <div className={styles.uploadedByName}>{selectedImage?.uploaded_by?.name}</div>}
-                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={130} /> :
+                        {loading || !selectedImage?._id ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={130} /> :
                             <div>
                                 <Typography variant="caption" className={styles.imageUploadedTime} >
                                     <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={13} height={13} />
@@ -123,7 +123,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             </div>}
                     </div>
                 </div>
-                {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={150} /> :
+                {loading || !selectedImage?._id ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={150} /> :
                     <Typography variant="subtitle1" className={styles.imagesTitle}>
                         <Tooltip title={selectedImage?.farm_id?.title}>
                             {selectedImage?.farm_id?.title.length > 10
@@ -176,7 +176,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             </div>
 
             <div className={styles.singleScoutImg}>
-                {loading ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
+                {loading || !selectedImage?._id ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
                     <img
                         src={selectedImage?.url}
                         width={100}

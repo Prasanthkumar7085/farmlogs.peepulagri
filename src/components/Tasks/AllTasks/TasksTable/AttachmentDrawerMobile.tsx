@@ -176,7 +176,7 @@ const AttachmentDrawerMobile = ({
     setDownloadLoading(false);
     results.forEach((result) => {
       if (result?.status === "fulfilled") {
-      
+
       } else {
         console.error("Download failed", result?.reason);
       }
@@ -184,30 +184,59 @@ const AttachmentDrawerMobile = ({
   }
 
   async function downloadFile(url: string, nameForDownload: string) {
-    return new Promise(async (resolve: any, reject) => {
-      try {
-        const response = await fetch(url);
-        const blob = await response.blob();
+    let urlImage = `${url}`
 
-        const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
+    try {
+      if (url) {
+        fetch(urlImage, {
+          cache: 'no-store' // Ensure that the request doesn't use the cache
+        })
+          .then((response) => {
+            // Get the filename from the response headers
+            const contentDisposition = response.headers.get(
+              "content-disposition"
+            );
+            let filename = "downloaded_file"; // Default filename if not found in headers
+            if (nameForDownload) {
+              filename = nameForDownload;
+            }
 
-        link.href = blobUrl;
-        link.download = nameForDownload || "downloaded_file";
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (filenameMatch && filenameMatch.length > 1) {
+                filename = filenameMatch[1];
+              }
+            }
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+            // Create a URL for the blob
+            return response.blob().then((blob) => ({ blob, filename }));
+          })
+          .then(({ blob, filename }) => {
+            const blobUrl = window.URL.createObjectURL(blob);
 
-        window.URL.revokeObjectURL(blobUrl);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
 
-        resolve();
-      } catch (error) {
-        setDownloadLoading(false)
-        console.error("Error downloading file", error);
-        reject(error);
+            // Clean up the blob URL
+            window.URL.revokeObjectURL(blobUrl);
+            toast.success("Attachement downloaded successfully");
+          })
+          .catch((error) => {
+            console.error("Error downloading file:", error);
+          });
+        // setAlertMessage("Attachement downloaded successfully")
+        // setAlertType(true)
       }
-    });
+    } catch (err) {
+      console.error(err);
+    } finally {
+
+    }
   }
 
   const downloadSingleFile = async (item: any) => {

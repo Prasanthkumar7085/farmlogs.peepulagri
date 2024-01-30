@@ -65,10 +65,10 @@ const ScoutingDetails = ({
               )}
             </div>
           </div>
-          <div className={styles.loactionBlock}>
+          {/* <div className={styles.loactionBlock}>
             <Image src="/location-3-1-11.svg" alt="" width={15} height={15} />
             <p className={styles.createdLocation}>Location</p>
-          </div>
+          </div> */}
 
         </div>
         <div className={styles.farmDetailsBlock} >

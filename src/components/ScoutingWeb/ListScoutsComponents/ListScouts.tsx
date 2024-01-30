@@ -25,6 +25,8 @@ import ScoutingDailyImages from "./ScoutingDailyImages";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import GoogleImageView from "./GoogleImageView";
 import TablePaginationComponent from "@/components/Core/TablePaginationComponent";
+import DateRangePickerForAllScouts from "./DateRangePickerForAllScouts";
+import ScoutingComments from "./ScoutingComments/ScoutingComments";
 
 interface ApiMethodProps {
   page: string | number;
@@ -60,6 +62,7 @@ const ListScouts: FunctionComponent = () => {
   const [farm, setFarm] = useState<any>();
   const [cropOptions, setCropOptions] = useState([]);
   const [crop, setCrop] = useState<any>();
+  const [cropOptionsLoading, setCropOptionsLoading] = useState<boolean>(false)
   const [paginationDetails, setPaginationDetails] = useState<any>();
 
   const [fromDate, setFromDate] = useState("");
@@ -86,6 +89,7 @@ const ListScouts: FunctionComponent = () => {
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
+  //select the drop down and get the farm value
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     setRightBarOpen(false)
     setData([]);
@@ -102,6 +106,7 @@ const ListScouts: FunctionComponent = () => {
       setData([]);
 
       getAllFarms({ clearOrNot: true, location_id: router.query.location_id as string });
+      await getAllCrops("", "");
       getAllExistedScouts({
         // farmSearchString: value?.title,
         page: 1,
@@ -131,6 +136,7 @@ const ListScouts: FunctionComponent = () => {
       router.push({
         query: { ...router.query, farm_search_string: value?.title },
       });
+      await getAllCrops("", value?._id);
       getAllExistedScouts({
         farmSearchString: value?.title,
         page: 1,
@@ -145,7 +151,6 @@ const ListScouts: FunctionComponent = () => {
 
 
       });
-      await getAllCrops("", value?._id);
     } else {
       setFarm(null);
       setCrop(null);
@@ -167,6 +172,7 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
+  //get the crop object
   const onSelectCropFromDropDown = (value: any, reason: string) => {
     setRightBarOpen(false)
     if (value) {
@@ -236,6 +242,7 @@ const ListScouts: FunctionComponent = () => {
     }
   };
 
+  //get the limit value
   const captureRowPerItems = (value: number) => {
     setPage(1);
     setLimit(value);
@@ -250,6 +257,7 @@ const ListScouts: FunctionComponent = () => {
       location: router.query.location_id as string
     });
   };
+  //get the page value
   const capturePageNum = (value: number) => {
     setPage(value);
     getAllExistedScouts({
@@ -295,7 +303,7 @@ const ListScouts: FunctionComponent = () => {
     try {
       // let url = `/crops/${cropId}/images/${page}/${limit}`;
       let url = `/farm-images/all/${page}/${limit}`;
-      let queryParams: any = {};
+      let queryParams: any = { "include": "tags" };
       if (page) {
         queryParams["page"] = page;
       }
@@ -327,18 +335,15 @@ const ListScouts: FunctionComponent = () => {
         page: pageNum,
         limit: rowsPerPage,
         farm_search_string,
-
         ...restParams
 
       } = queryParams;
 
       if (image_view) {
-        console.log("Dsfsd")
         let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id, view_limit: paramasFromStore?.view_limit }
         router.push({ query: temp });
       }
       else {
-        console.log('Fds')
         let temp = { ...queryParams }
         delete temp?.image_id;
         delete temp?.view;
@@ -480,8 +485,9 @@ const ListScouts: FunctionComponent = () => {
           setFarm(obj);
           getAllCrops(
             router.query.crop_id as string,
-            response?.data[0]?._id as string
+            obj?._id as string
           );
+          getLocations(obj?.location_id?._id)
         }
         // if (searchStringChangeOrNot) {
         //   setFarm(null);
@@ -514,28 +520,28 @@ const ListScouts: FunctionComponent = () => {
     cropId = router.query.crop_id as string,
     farmId: string
   ) => {
-    setLoading(true);
+    setCropOptionsLoading(true);
     if (!farmId) {
-      setLoading(false);
+      setCropOptionsLoading(false);
       return;
     }
     try {
       const response = await ListAllCropsForDropDownServices(
-        farmId,
+        farmId as string,
         accessToken
       );
       if (response?.success) {
         let data = response?.data;
         // data = modifyDataToGroup(data);
         if (!data?.length) {
-          setLoading(false);
+          setCropOptionsLoading(false);
           setCrop(null);
           setCropOptions(data);
           setPaginationDetails({});
           return;
         }
         setCropOptions(data);
-        if (cropId) {
+        if (cropId || router.query.crop_id) {
           let obj =
             data?.length && data?.find((item: any) => item._id == cropId);
           setCrop(obj);
@@ -544,7 +550,7 @@ const ListScouts: FunctionComponent = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setCropOptionsLoading(false);
     }
   };
 
@@ -575,8 +581,8 @@ const ListScouts: FunctionComponent = () => {
         limit: router.query.limit as string,
         farmId: router.query.farm_id as string,
         userId: router.query.user_id as string,
-        fromDate: "",
-        toDate: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
         cropId: router.query.crop_id as string,
         farmSearchString: router.query.farm_search_string as string,
         location: router.query.location_id as string,
@@ -604,10 +610,10 @@ const ListScouts: FunctionComponent = () => {
 
     setRightBarOpen(true)
     setImageDetails(attachment);
-    let temp = { ...queries, view: true, image_id: attachment?._id, view_limit: 12 }
+    let temp = { ...queries, view: true, image_id: attachment?._id }
     dispatch(QueryParamsForScouting(temp))
     if (attachment?._id) {
-      router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id, view_limit: 12 } });
+      router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: attachment?._id } });
 
     }
     else {
@@ -636,8 +642,8 @@ const ListScouts: FunctionComponent = () => {
         limit: 50,
         farmId: '',
         userId: router.query.user_id as string,
-        fromDate: "",
-        toDate: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
         cropId: router.query.crop_id as string,
         farmSearchString: '',
         location: value?._id,
@@ -660,8 +666,8 @@ const ListScouts: FunctionComponent = () => {
         limit: 50,
         farmId: '',
         userId: router.query.user_id as string,
-        fromDate: "",
-        toDate: "",
+        fromDate: router.query.from_date as string,
+        toDate: router.query.to_date as string,
         cropId: "",
         farmSearchString: '',
         location: "",
@@ -683,6 +689,9 @@ const ListScouts: FunctionComponent = () => {
           Scouting
         </Typography>
         <div className={styles.allScoutsFilterBlock}>
+          <DateRangePickerForAllScouts
+            onDateFilterChange={onDateFilterChange}
+          />
           {/* <UserDropDownForScouts
             user={user}
             onChangeUser={onChangeUser}
@@ -745,10 +754,9 @@ const ListScouts: FunctionComponent = () => {
             farm={farm}
             placeholder={"Select Crop here"}
             defaultValue={crop}
+            cropOptionsLoading={cropOptionsLoading}
           />
-          {/* <DateRangePickerForAllScouts
-            onDateFilterChange={onDateFilterChange}
-          /> */}
+
           {/* <Button
             onClick={clearAllFilterAndGetData}
             disabled={Object.keys(router.query)?.length <= 2}
@@ -787,33 +795,45 @@ const ListScouts: FunctionComponent = () => {
               );
             })
             : ""}
+          {!data?.length && !loading ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "10%"
 
+              }}
+            >
+              <ImageComponent
+                src="/emty-folder-image.svg"
+                alt="empty folder"
+                width={200}
+                height={150}
+              />
+              <Typography className={styles.subTitle}>No Scoutings</Typography>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
-        {!data?.length && !loading ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              margin: "auto"
 
-            }}
-          >
-            <ImageComponent
-              src="/emty-folder-image.svg"
-              alt="empty folder"
-              width={200}
-              height={150}
-            />
-            <Typography className={styles.subTitle}>No Scoutings</Typography>
-          </div>
-        ) : (
-          ""
-        )}
         {rightBarOpen || router.query.view ?
           <div className={rightBarOpen || router.query.view ? styles.AllScoutsRightWebPage : styles.AllScoutsRightClose}>
             <GoogleImageView
+              rightBarOpen={rightBarOpen}
+              setRightBarOpen={setRightBarOpen}
+              imageDetails={imageDetails}
+              setImageDetails={setImageDetails}
+              data={onlyImages}
+
+
+
+            />
+          </div> : ""}
+        {rightBarOpen || router.query.view ?
+          <div className={rightBarOpen || router.query.view ? styles.AllScoutsComments : styles.AllScoutsCommentsClose}>
+            <ScoutingComments
               rightBarOpen={rightBarOpen}
               setRightBarOpen={setRightBarOpen}
               imageDetails={imageDetails}

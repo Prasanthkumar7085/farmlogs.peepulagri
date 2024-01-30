@@ -36,6 +36,7 @@
 
 .theProblemIm {
   margin: 0;
+  word-break: break-all;
 }
 
 .groupIcon {
@@ -232,6 +233,14 @@
   gap: var(--gap-5xs);
 }
 
+.inMessageSkelton {
+  align-self: stretch;
+  background-color: var(--white);
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem 0 0.5rem;
+  gap: var(--gap-5xs);
+}
 .repliedcontainerChild {
   position: relative;
   width: 12px;

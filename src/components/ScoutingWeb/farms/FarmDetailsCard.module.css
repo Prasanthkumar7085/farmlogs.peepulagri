@@ -169,6 +169,15 @@
 .view {
   background-color: #F5F7FA !important;
 }
+.farmViewBtn {
+        position: absolute !important;
+          right: 0 !important;
+          top: 0 !important;
+          padding: 5px !important;
+          border-radius: 0 7px 0 12.8px !important;
+          background: #e6f5eb !important;
+          box-shadow: 1.339px 1.339px 10.044px 0 #ffffff1a !important;
+}
 
 .edit {
   background-color: #6a71851a !important;
@@ -182,6 +191,7 @@
 .actionbuttons,
 .delete {
   display: flex;
+  gap: 0.5rem;
 }
 
 .delete {
@@ -194,7 +204,7 @@
 
 .actionbuttons {
   justify-content: flex-end;
-  gap: 8px;
+  gap: 10px;
 }
 
 .mobile {
@@ -225,7 +235,7 @@
   background: #FFF;
 }
 
-.farmdetailscard:hover {
+.farmdetailscard{
   transition: all 0.2s ease-out;
   transform: scale(1.001);
   border-radius: 8px;

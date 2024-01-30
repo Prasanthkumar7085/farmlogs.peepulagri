@@ -286,7 +286,6 @@ const SingleScoutViewDetails = () => {
                   <Button
                     className={styles.prevBtn}
                     onClick={() => {
-                      console.log("dfsds")
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(data[1]?._id)
                       if (router.query.farm_id || router.query.crop_id) {
@@ -363,7 +362,6 @@ const SingleScoutViewDetails = () => {
                   <Button
                     className={styles.prevBtn}
                     onClick={() => {
-                      console.log("Asd")
                       setCurrentIndex((pre: any) => pre + 1)
                       getInstaScrollImageDetails(prevData?.length ? prevData[0]?._id : "")
                       if (router.query.farm_id || router.query.crop_id) {

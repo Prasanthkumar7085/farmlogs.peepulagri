@@ -33,16 +33,15 @@ export default function SigninEmail() {
   const [deviceType, setDeviceType] = useState<any>()
 
 
-
   //to know the mobile or desktop
 
-  useEffect(() => {
-    const deviceDetector = new DeviceDetector();
-    const userAgent = navigator.userAgent;
-    const device = deviceDetector.parse(userAgent);
+  // useEffect(() => {
+  //   const deviceDetector = new DeviceDetector();
+  //   const userAgent = navigator.userAgent;
+  //   const device = deviceDetector.parse(userAgent);
 
-    setDeviceType(device.device?.type) // This will log the parsed device information
-  }, []);
+  //   setDeviceType(device.device?.type) // This will log the parsed device information
+  // }, []);
 
   const signInForm = async (e: any) => {
     e.preventDefault();
@@ -66,6 +65,10 @@ export default function SigninEmail() {
       );
       const res = await response.json();
       if (response.status == 200 || response.status == 201) {
+        const userAgent = navigator.userAgent;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+
+
         loggedIn_v2("loggedIn_v2", "true");
         userType_v2("userType_v2", res?.data?.user_details?.user_type);
 
@@ -73,14 +76,13 @@ export default function SigninEmail() {
           dispatch(setUserDetails(res?.data));
         }
 
-        if (
-          deviceType == "desktop"
-        ) {
-          router.push("/scouts");
-        }
-        if (deviceType !== "desktop") {
+        if (isMobile) {
           router.push("/dashboard");
+        } else {
+          router.push("/scouts");
+
         }
+
       } else if (response.status == 422) {
         setErrorMessages(res.errors);
         setLoading(false);

@@ -138,6 +138,7 @@ const TaskForm = () => {
                           }}
                           slotProps={{
                             textField: {
+                              placeholder: "Select date",
                               variant: "standard",
                               size: "small",
                               color: "primary",

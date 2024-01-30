@@ -223,7 +223,7 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
 
   return (
     <div className={styles.CommentsBlock}>
-      <div className={styles.allThreads}>
+      <div className={styles.allThreads} >
         <Threads
           details={data}
           afterCommentAdd={afterCommentAdd}
@@ -232,22 +232,20 @@ const CommentsComponentForWeb = ({ attachement, scoutDetails }: any) => {
           afterReply={afterReply}
           afterDeleteAttachements={afterDeleteAttachements}
           loadingThreads={loading}
+          setLoading={setLoading}
           attachement={attachement}
           scoutDetails={scoutDetails}
         />
       </div>
-      <CommentForm
-        afterCommentAdd={afterCommentAdd}
-        scoutDetails={scoutDetails}
-        attachement={attachement}
-      />
+      <div >
+        <CommentForm
+          afterCommentAdd={afterCommentAdd}
+          scoutDetails={scoutDetails}
+          attachement={attachement}
+        />
+      </div>
 
-      <LoadingComponent loading={loading} />
-      <AlertComponent
-        alertMessage={alertMessage}
-        alertType={alertType}
-        setAlertMessage={setAlertMessage}
-      />
+
     </div>
   );
 };

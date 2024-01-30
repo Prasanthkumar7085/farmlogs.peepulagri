@@ -51,7 +51,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                         src="/calendarblank-1@2x.png"
                       />
                       <p className={styles.duedate} style={{ color: item?.isOverdue ? "red" : "black" }}>
-                        {moment(item.deadline).format("DD-MM-YYYY")}
+                        {moment(item.deadline).format("DD-MM-YYYY hh:mm A")}
                       </p>
                     </div>
                   </div>
@@ -118,7 +118,7 @@ const TaskCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: a
                         src={item?.isOverdue ? "/mobileIcons/Calender_Red.svg" : "/viewTaskIcons/calender-icon.svg"}
                       />
                       <p className={styles.duedate} style={{ color: item?.isOverdue ? "red" : "black" }}>
-                        {moment(item.deadline).format("DD-MM-YYYY")}
+                        {moment(item.deadline).format("DD-MM-YYYY hh:mm A")}
                       </p>
                     </div>
                   </div>

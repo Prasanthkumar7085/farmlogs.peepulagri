@@ -446,6 +446,11 @@ const TasksAttachments: React.FC<PropTypes> = ({
     setMultipleFiles([]);
     setTempFileStorage([]);
     setAttachments([])
+    setRemoveLoading(true)
+    setTimeout(() => {
+      setRemoveLoading(false)
+
+    }, 200)
   };
 
   const addTaskAttachements = async () => {

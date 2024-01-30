@@ -35,7 +35,7 @@ const DescriptionContainer = ({
             multiline
             minRows={4}
             maxRows={4}
-            value={description || data?.description}
+            value={description}
             onChange={(e) => {
               const newValue = e.target.value.replace(/^\s+/, "");
               setDescription(newValue)

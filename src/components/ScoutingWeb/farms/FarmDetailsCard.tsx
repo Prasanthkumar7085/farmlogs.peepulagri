@@ -7,7 +7,7 @@ import timePipe from "@/pipes/timePipe";
 import { FarmDataType } from "@/types/farmCardTypes";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
@@ -101,7 +101,6 @@ const ScoutingFarmDetailsCard = ({
 
   const setToStorage = async (item: any) => {
     await dispatch(setFarmTitleTemp(item?.title));
-    router.push(`/farm/${item?._id}/crops`);
   };
 
   let colorsArray = [
@@ -140,7 +139,7 @@ const ScoutingFarmDetailsCard = ({
           <div
             className={styles.farmdetailscard}
             key={index}
-            style={{ cursor: "pointer" }}
+
           >
             <div
               className={styles.container}
@@ -184,7 +183,7 @@ const ScoutingFarmDetailsCard = ({
                       height={16}
                     />
                     <p className={styles.from}>
-                      {timePipe(item.createdAt, "DD, MMM YYYY")}
+                      {timePipe(item.createdAt, "DD, MMM YYYY hh:mm A")}
                     </p>
 
                   </div>
@@ -197,54 +196,40 @@ const ScoutingFarmDetailsCard = ({
                   <p className={styles.locationTitle}>{item?.location_id?.title}</p>
                 </div>
                 <div className={styles.actionbuttons}>
+                  <Button
+                    variant="text"
+
+                    onClick={() => {
+                      router.push(`/farm/${item?._id}/crops`);
+                    }}
+                    sx={{ backgroundColor: "rgba(52, 98, 207, 0.04)", textTransform: "none" }}
+                  >
+
+                    View Crops
+                    {/* <Image
+                      src="/mobileIcons/farms/plant-black-icon.svg"
+                      width={15}
+                      height={15}
+                      alt=""
+                    /> */}
+                  </Button>
                   <IconButton
-                    className={styles.view}
-                    onClick={() => onViewClick(item._id)}
+                    className={styles.farmViewBtn}
+                    onClick={() => router.push(`/farm/${item?._id}`)
+                    }
                   >
                     <Image
-                      src="/mobileIcons/farms/info-black-icon.svg"
+                      src="/mobileIcons/farms/info.svg"
                       width={25}
                       height={25}
                       alt=""
                     />
                   </IconButton>
-                  {/* <IconButton className={styles.edit}>
-                  <img
-                    className={styles.trashXmark1Icon}
-                    alt=""
-                    src="/edit-farm-icon.svg"
-                  />
-                </IconButton> */}
-                  {/* <IconButton className={styles.delete} onClick={() => { setDeleteDialogOpen(true); setDeleteId(item._id)}}>
-                  <img
-                    className={styles.trashXmark1Icon}
-                    alt=""
-                    src="/farm-delete-icon.svg"
-                  />
-                </IconButton> */}
+
                 </div>
               </div>
 
             </div>
-            {/* <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <div onClick={() => router.push(`/farm/${item?._id}/crops`)}>
-                {userType_v2 == "AGRONOMIST" ? (
-                  <p className={styles.mobile}>
-                    <AccountCircleIcon />
-                    <span>{item?.user_id?.full_name}</span>
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-
-            </div> */}
           </div>
         );
       })}

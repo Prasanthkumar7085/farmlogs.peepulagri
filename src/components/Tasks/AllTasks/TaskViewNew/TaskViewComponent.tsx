@@ -171,7 +171,7 @@ const TaskViewComponent = () => {
       let responseData = await response.json();
       if (responseData.status >= 200 && responseData.status <= 300) {
         // let modifiedData = groupByDate(responseData?.data?.attachments);
-        setAttachmentData([...responseData?.data?.attachments.reverse()]);
+        setAttachmentData([...responseData?.data?.attachments]);
       }
     } catch (err) {
       console.error(err);
@@ -202,35 +202,25 @@ const TaskViewComponent = () => {
   //download attachment
   const downLoadAttachements = async (file: any, name: string, id: string) => {
     setDownloadImageId(id);
+    let url = `${file}`
+
     try {
       if (file) {
-        fetch(file)
-          .then((response) => {
-            // Get the filename from the response headers
-            const contentDisposition = response.headers.get(
-              "content-disposition"
-            );
-            let filename = "downloaded_file"; // Default filename if not found in headers
-            if (name) {
-              filename = name;
-            }
+        fetch(url, {
+          cache: 'no-store' // Ensure that the request doesn't use the cache
+        }).then((response) => {
+          // Get the filename from the response headers
 
-            if (contentDisposition) {
-              const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-              if (filenameMatch && filenameMatch.length > 1) {
-                filename = filenameMatch[1];
-              }
-            }
 
-            // Create a URL for the blob
-            return response.blob().then((blob) => ({ blob, filename }));
-          })
-          .then(({ blob, filename }) => {
+          // Create a URL for the blob
+          return response.blob().then((blob) => ({ blob, name }));
+        })
+          .then(({ blob, name }) => {
             const blobUrl = window.URL.createObjectURL(blob);
 
             const downloadLink = document.createElement("a");
             downloadLink.href = blobUrl;
-            downloadLink.download = filename; // Use the obtained filename
+            downloadLink.download = name; // Use the obtained filename
             downloadLink.style.display = "none";
             document.body.appendChild(downloadLink);
             downloadLink.click();
@@ -318,13 +308,7 @@ const TaskViewComponent = () => {
       ...data,
       assigned_to: userId,
       farm_id: farmId,
-      deadline: deadlineProp
-        ? deadlineProp
-        : deadlineString
-          ? moment(deadlineString)
-            .utcOffset("+05:30")
-            .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-          : "",
+      deadline: deadlineProp,
       description: description ? description : "",
       title: title ? title : "",
       status: status,
@@ -1004,7 +988,7 @@ const TaskViewComponent = () => {
                       }
                     }}
 
-                    checked={selectedAssigneeIds.length ? true : false}
+                    checked={selectedAssigneeIds.length == data?.assign_to?.length ? true : false}
 
                   />Select all</p>
                   <div
@@ -1020,7 +1004,7 @@ const TaskViewComponent = () => {
                         className={styles.addAssignyBtn}
                         disabled={
                           status == "DONE" ||
-                          !(loggedInUserId == data?.created_by?._id)
+                          !(loggedInUserId == data?.created_by?._id) || (selectedAssigneeIds.length == data?.assign_to?.length && data?.assign_to?.length !== 0)
                         }
                         onClick={handleAssignyClick}
                       >

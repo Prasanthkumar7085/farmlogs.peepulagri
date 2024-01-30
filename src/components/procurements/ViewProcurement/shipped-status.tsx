@@ -9,7 +9,6 @@ import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDeta
 import { toast } from "sonner";
 
 const ShippedStatus = ({ data, afterStatusChange }: any) => {
-  console.log(data, "sd")
   const router = useRouter();
   const [status, setStauts] = useState<any>();
   const [loading, setLoading] = useState<any>(false);

@@ -149,11 +149,11 @@ const SingleImageView: FC<componentProps> = ({
           if (data?.length) {
             setHasMore(responseData?.has_more);
             let temp = [...data, ...responseData?.data]
-           
+
             const uniqueObjects = Array.from(
               temp.reduce((acc, obj) => acc.set(obj._id, obj), new Map()).values()
             );
-           
+
             setData(uniqueObjects);
           }
           else {
@@ -243,9 +243,7 @@ const SingleImageView: FC<componentProps> = ({
               return (
                 <div
                   key={index}
-                  style={{
-                    scrollSnapAlign: "start",
-                  }}
+
                   ref={lastBookElementRef}
                 >
                   <SingleImageComponent

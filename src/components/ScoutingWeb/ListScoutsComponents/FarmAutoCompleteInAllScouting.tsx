@@ -54,10 +54,7 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
           getOptionLabel={(option: any) =>
             option[label] ? option[label]?.toUpperCase() : ""
           }
-          inputValue={searchString}
-          onInputChange={(e, newInputValue) => {
-            setSearchString(newInputValue);
-          }}
+
           // onClose={() => setSearchString("")}
           renderOption={(props, option) => {
             return (
@@ -81,7 +78,10 @@ const FarmAutoCompleteInAllScouting: React.FC<PropsTypes> = ({
               placeholder={placeholder}
               sx={{ width: "100%", background: "#fff" }}
               value={searchString}
-
+              onChange={(e) => {
+                setOptionsLoading(true);
+                setSearchString(e.target.value);
+              }}
             />
           )}
 

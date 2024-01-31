@@ -58,21 +58,21 @@ const CommentForm = ({
   useEffect(() => {
     setComment("")
   }, [attachement?._id])
-  useEffect(() => {
-    const confirmationMessage =
-      "Are you sure you want to leave this page? Your changes may not be saved.";
+  // useEffect(() => {
+  //   const confirmationMessage =
+  //     "Are you sure you want to leave this page? Your changes may not be saved.";
 
-    const handleBeforeUnload = (e: any) => {
-      e.preventDefault();
-      e.returnValue = confirmationMessage;
-    };
+  //   const handleBeforeUnload = (e: any) => {
+  //     e.preventDefault();
+  //     e.returnValue = confirmationMessage;
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
   //convert the kb into mb
   const bytesToMB = (bytes: any) => {

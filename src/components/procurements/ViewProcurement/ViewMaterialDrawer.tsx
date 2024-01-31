@@ -216,12 +216,14 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                 </div>
                 <div className={styles.inputField}>
                     <label className={styles.label}>
-                        Name Of Vendor <b style={{ color: "red" }}>*</b>
+                        Vendor Details <b style={{ color: "red" }}>*</b>
                     </label>
                     <TextField
                         size="small" placeholder="Enter Name Of Vendor"
                         variant="outlined"
-                        sx={{ width: "100%" }}
+                        rows={5}
+                        multiline
+                        sx={{ width: "100%", height: "40%" }}
                         value={nameVendor}
                         onChange={(e) => {
                             setNameVendor(e.target.value)

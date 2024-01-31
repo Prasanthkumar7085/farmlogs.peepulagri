@@ -76,6 +76,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     }
 
 
+
+
     useEffect(() => {
         if (data?.length && changeImage) {
             let routerData = { ...router.query, view: true, image_id: data[imageIndex]?._id }
@@ -141,21 +143,24 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                 <div>
                     <IconButton
                         disabled={loading || (imageIndex == 0 && router.query.page as string == "1") ? true : false}
-                        onClick={() => {
-                            // if (imageIndex == 0) {
-                            //     setOnlyImages([])
-                            //     getAllExistedScouts({
-                            //         page: +(router.query.page as string) - 1,
-                            //         limit: router.query.limit as string,
-                            //         farmId: router.query.farm_id as string,
-                            //         userId: router.query.created_by as string,
-                            //         cropId: router.query.crop_id as string,
-                            //         fromDate: router.query.from_date as string,
-                            //         toDate: router.query.to_date as string,
-                            //         location: router.query.location_id as string,
-                            //         image_view: true
-                            //     });
-                            // }
+                        onClick={async () => {
+                            if (imageIndex == 0) {
+                                setOnlyImages([])
+                                await getAllExistedScouts({
+                                    page: +(router.query.page as string) - 1,
+                                    limit: router.query.limit as string,
+                                    farmId: router.query.farm_id as string,
+                                    userId: router.query.created_by as string,
+                                    cropId: router.query.crop_id as string,
+                                    fromDate: router.query.from_date as string,
+                                    toDate: router.query.to_date as string,
+                                    location: router.query.location_id as string,
+                                    image_view: true,
+                                    pageChange: true,
+                                    pageDirection: "prev"
+
+                                });
+                            }
                             setChangeImage(true)
                             setImageIndex((prev: any) => prev - 1);
                         }}>
@@ -163,24 +168,28 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     </IconButton>
                     <IconButton
                         disabled={loading || hasMore == false ? true : false}
-                        onClick={() => {
-                            // if (imageIndex == data?.length - 1) {
-                            //     setOnlyImages([])
-                            //     getAllExistedScouts({
-                            //         page: +(router.query.page as string) + 1,
-                            //         limit: router.query.limit as string,
-                            //         farmId: router.query.farm_id as string,
-                            //         userId: router.query.created_by as string,
-                            //         cropId: router.query.crop_id as string,
-                            //         fromDate: router.query.from_date as string,
-                            //         toDate: router.query.to_date as string,
-                            //         location: router.query.location_id as string,
-                            //         image_view: true
-                            //     });
-                            // } else {
-                            setChangeImage(true)
-                            setImageIndex((prev: any) => prev + 1);
+                        onClick={async () => {
+                            if (imageIndex == data?.length - 1) {
+                                setOnlyImages([])
+                                await getAllExistedScouts({
+                                    page: +(router.query.page as string) + 1,
+                                    limit: router.query.limit as string,
+                                    farmId: router.query.farm_id as string,
+                                    userId: router.query.created_by as string,
+                                    cropId: router.query.crop_id as string,
+                                    fromDate: router.query.from_date as string,
+                                    toDate: router.query.to_date as string,
+                                    location: router.query.location_id as string,
+                                    image_view: true,
+                                    pageChange: true,
+                                    pageDirection: "next"
 
+                                });
+
+                            } else {
+                                setChangeImage(true)
+                                setImageIndex((prev: any) => prev + 1);
+                            }
                         }}>
                         <KeyboardArrowRightIcon sx={{ fontSize: "2rem" }} />
                     </IconButton>

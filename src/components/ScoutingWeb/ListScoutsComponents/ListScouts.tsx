@@ -39,6 +39,8 @@ interface ApiMethodProps {
   farmSearchString: string;
   location: string;
   image_view: boolean;
+  pageChange: boolean;
+  pageDirection: string;
 }
 const ListScouts: FunctionComponent = () => {
   const router = useRouter();
@@ -69,7 +71,7 @@ const ListScouts: FunctionComponent = () => {
   const [toDate, setToDate] = useState("");
   const [viewAttachmentId, setViewAttachmentId] = useState("");
   const [previewImageDialogOpen, setPreviewImageDialogOpen] = useState(false);
-  const [onlyImages, setOnlyImages] = useState([]);
+  const [onlyImages, setOnlyImages] = useState<any>([]);
   const [openDaySummary, setOpenDaySummary] = useState(false);
   const [seletectedItemDetails, setSelectedItemDetails] =
     useState<SingleScoutResponse>();
@@ -294,7 +296,9 @@ const ListScouts: FunctionComponent = () => {
     cropId,
     farmSearchString = router.query.farm_search_string as string,
     location,
-    image_view = false
+    image_view = false,
+    pageChange = false,
+    pageDirection
   }: Partial<ApiMethodProps>) => {
     // if (!cropId) {
     //   setData([]);
@@ -340,8 +344,7 @@ const ListScouts: FunctionComponent = () => {
         ...restParams
 
       } = queryParams;
-
-      if (image_view) {
+      if (image_view && pageChange == false) {
         let temp = { ...queryParams, view: router?.query?.view, image_id: router?.query?.image_id }
         router.push({ query: temp });
       }
@@ -366,6 +369,14 @@ const ListScouts: FunctionComponent = () => {
         const { data, ...rest } = response;
         setPaginationDetails(rest);
         setOnlyImages(response.data);
+        if (pageChange && pageDirection == "next") {
+          let temp = { ...queryParams, view: true, image_id: response?.data[0]?._id }
+          router.push({ query: temp });
+        }
+        if (pageChange && pageDirection == "prev") {
+          let temp = { ...queryParams, view: true, image_id: response?.data[response?.data?.length - 1]?._id }
+          router.push({ query: temp });
+        }
         const groupedData: any = {};
         // Iterate through Data and group objects by uploaded_at date
         data.forEach((item: any) => {
@@ -678,6 +689,9 @@ const ListScouts: FunctionComponent = () => {
       });
     }
   };
+
+
+
 
   return (
     <div className={styles.AllScoutsPageWeb}>

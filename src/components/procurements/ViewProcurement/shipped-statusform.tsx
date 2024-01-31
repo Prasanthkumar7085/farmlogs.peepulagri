@@ -24,6 +24,9 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
 
   const [showTooltip, setShowTooltip] = useState<any>(false);
   const [showMore, setShowMore] = useState<boolean>(false)
@@ -242,7 +245,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
 
           </div> :
           ""}
-        {data?.status == "PURCHASED" ?
+        {data?.status == "PURCHASED" && userDetails?.user_type == "central_team" ?
           <div className={styles.trackingid}>
             <Typography variant="h6" className={styles.trackingBlockHeading}>Tracking Details</Typography>
             <Button className={styles.addTrackingDetailsBtn} variant="text" onClick={() => {

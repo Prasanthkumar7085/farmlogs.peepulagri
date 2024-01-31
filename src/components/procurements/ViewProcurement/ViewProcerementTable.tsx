@@ -41,6 +41,7 @@ import AddMaterialDrawer from "../MaterialCore/AddMaterialDrawer";
 import updateStatusService from "../../../../lib/services/ProcurementServices/updateStatusService";
 import RejectReasonDilog from "@/components/Core/RejectReasonDilog";
 import Image from "next/image";
+import InfoIcon from '@mui/icons-material/Info';
 
 interface ApiCallService {
   procurement_req_id: string;
@@ -466,7 +467,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       <TableCell className={styles.tableHeaderCell}>Price(Rs)</TableCell>
                     </>
                     : ''}
-                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "PURCHASED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "" }}>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "PURCHASED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody >
@@ -489,7 +490,13 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                           ? row?.required_qty + " " + row.required_units
                           : "---"}
                       </TableCell>
-                      <TableCell className={styles.tableBodyCell}>{row?.status ? capitalizeFirstLetter(row?.status) : "---"}</TableCell>
+                      <TableCell className={styles.tableBodyCell}>
+                        {row?.status ? capitalizeFirstLetter(row?.status) : "---"}
+                        {row?.status == "REJECTED" ?
+                          <Tooltip title={row?.reason}>
+                            <InfoIcon />
+                          </Tooltip>
+                          : ""}</TableCell>
                       <TableCell className={styles.tableBodyCell}>
                         {row?.approved_by?.name ? row?.approved_by?.name : "---"}
                       </TableCell>

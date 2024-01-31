@@ -102,6 +102,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     }, [router.isReady, router.query.image_id, accessToken])
 
 
+
+
     return (
         <div style={{ padding: "1rem", }}  >
             <div className={styles.viewImgInfoHeader} >

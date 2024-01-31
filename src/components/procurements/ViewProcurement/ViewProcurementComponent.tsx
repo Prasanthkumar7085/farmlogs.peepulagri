@@ -109,9 +109,14 @@ const ViewProcurementComponent = () => {
     const { active, completed, className } = props;
 
     const icons: { [index: string]: React.ReactElement } = {
-      0: <PendingActionsIcon />,
-      1: <GroupAddIcon />,
-      2: <VideoLabelIcon />,
+      0: <img src="./pending.svg" />,
+      1: <img src="/pending.svg" />,
+      2: <img src="/approved.svg" />,
+      3: <img src="/purchased.svg" />,
+      4: <img src="/shipped.svg" />,
+      5: <img src="/completed.svg" />,
+
+
     };
 
     return (

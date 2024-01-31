@@ -5,7 +5,7 @@ import CommentsComponentForWeb from "@/components/Scouting/Comments/CommentsComp
 const ScoutingComments = ({ imageDetails }: any) => {
     return (
         <div>
-            <div className={styles.RecommedationBlock}>
+            <div className={styles.RecommedationBlock} style={{ paddingTop: "1rem" }}>
                 <Typography variant="h6" className={styles.RecommedationHeading}>
                     <Image src="/chat-scout-icon.svg" alt="" width={12} height={12} />
                     Comments

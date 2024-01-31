@@ -103,7 +103,7 @@ const ProfilePage = () => {
           <Typography variant="h5" className={styles.header}>
             My Profile
           </Typography>
-          <div
+          {/* <div
             style={{
               border: "1px solid #D94841",
               padding: "5px",
@@ -149,7 +149,7 @@ const ProfilePage = () => {
                 onChange={handleChange}
               />
             </label>
-          </div>
+          </div> */}
         </div>
         <Grid container className={styles.content}>
           <Grid item xs={12} className={styles.contentGrid}>

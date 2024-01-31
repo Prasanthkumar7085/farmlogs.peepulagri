@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
@@ -257,7 +258,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
 
   const handleInput = (event: any) => {
     const value = event.target.value.replace(/\D/g, '');
-    event.target.value = value.slice(0, 20);
+    event.target.value = value.slice(1, 20);
   };
 
   return (
@@ -439,7 +440,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                     (
                       item: {
                         _id: string;
-                        name: string;
+                        name: any;
                         required_qty: number;
                         required_units: string;
                         available_qty: number | null;
@@ -450,7 +451,16 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                       return (
                         <TableRow key={index} className={styles.tableBodyRow} >
                           <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>{index + 1}.</TableCell>
-                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1" }}>{item.name}</TableCell>
+                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1", whiteSpace: "nowrap" }}>
+                            <Tooltip title={item?.name ? item?.name : ""}>
+                              {item?.name?.length > 20
+                                ? item?.name?.slice(0, 1).toUpperCase() +
+                                item?.name?.slice(1, 15) +
+                                "..."
+                                : item?.name?.slice(0, 1).toUpperCase() +
+                                item?.name?.slice(1)}
+                            </Tooltip>
+                          </TableCell>
                           <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
                             {item.required_qty ? `${item.required_qty}` : ""}
                             {item.required_units

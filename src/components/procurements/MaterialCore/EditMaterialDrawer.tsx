@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
 
-import styles from "../add/materials-required.module.css";
+import styles from "./addMaterial.module.css";
 import { NextPage } from "next";
 
 interface pageProps {
@@ -52,10 +52,10 @@ const EditMaterialDrawer: FC<pageProps> = ({
 }) => {
   return (
     <Drawer anchor={"right"} open={editMaterialOpen}>
-      <div style={{ width: "300px", padding: ".5rem 1.5rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h3>Edit Material</h3>
-          <IconButton
+      <div className={styles.drawerBlock} >
+        <div className={styles.drawerHeadingBlock}>
+          <h3 className={styles.drawerHeading}>Edit Material</h3>
+          <IconButton sx={{ padding: "0" }}
             onClick={() => {
               setEditAvailableQty(null);
               setEditAvailableUnits("");
@@ -69,15 +69,21 @@ const EditMaterialDrawer: FC<pageProps> = ({
             <Clear />
           </IconButton>
         </div>
-        <div className={styles.inputField}>
-          <label className={styles.label}>
+        <div className={styles.eachInputField}>
+          <label className={styles.inputLabel}>
             Material Name <b style={{ color: "red" }}>*</b>
           </label>
           <TextField
             sx={{
               background: "#fff",
-              borderRadius: "4px",
-              width: "100%"
+              width: "100%",
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: "8px 8px !important"
+              },
+              '& .MuiInputBase-input': {
+                fontSize: "clamp(12px, 0.72vw, 14px)",
+                fontFamily: "'Inter', sans-serif"
+              }
             }}
             size="small"
             placeholder="Please enter the material title"
@@ -87,8 +93,8 @@ const EditMaterialDrawer: FC<pageProps> = ({
           />
           <ErrorMessages errorMessages={editErrorMessages} keyname={"name"} />
         </div>
-        <div>
-          <label className={styles.label}>
+        <div className={styles.eachInputField}>
+          <label className={styles.inputLabel}>
             Material Procurement (Qty){" "}
             <strong style={{ color: "red" }}>*</strong>
           </label>
@@ -97,8 +103,11 @@ const EditMaterialDrawer: FC<pageProps> = ({
             sx={{
               width: "100%", background: "#fff",
               '& .MuiOutlinedInput-notchedOutline': {
-                borderWidth: "1px 0 1px 1px !important",
-                borderRadius: "4px 0 0 4px !important"
+                borderRadius: "8px 8px !important"
+              },
+              '& .MuiInputBase-input': {
+                fontSize: "clamp(12px, 0.72vw, 14px)",
+                fontFamily: "'Inter', sans-serif"
               }
             }}
             type="number"
@@ -113,8 +122,8 @@ const EditMaterialDrawer: FC<pageProps> = ({
                   sx={{
                     background: "#fff",
                     '& .MuiOutlinedInput-notchedOutline': {
-                      borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "0 4px 4px 0 !important"
+                      borderWidth: "0 1px 1px 0 !important",
+                      borderRadius: "0 8px 8px 0 !important"
                     }
                   }}
                   value={editRequiredUnits}
@@ -132,47 +141,48 @@ const EditMaterialDrawer: FC<pageProps> = ({
           />
         </div>
 
-        <div className={styles.personofcontact}>
-          <label className={styles.label}>
+        <div className={styles.eachInputField}>
+          <label className={styles.inputLabel}>
             Material Available (Qty)(optional)
           </label>
-          <div className={styles.input1}>
-            <TextField
-              size="small"
-              sx={{
-                width: "100%", background: "#fff",
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderWidth: "1px 0 1px 1px !important",
-                  borderRadius: "4px 0 0 4px !important"
-                }
-              }} placeholder="Enter Availble Quantity"
-              variant="outlined"
-              type="number"
-              value={editAvailableQty}
-              onChange={(e: any) => setEditAvailableQty(e.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <Select
-                    sx={{
-                      background: "#fff",
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderWidth: "1px 1px 1px 0 !important",
-                        borderRadius: "0 4px 4px 0 !important"
-                      }
-                    }} value={editAvailableUnits}
-                    onChange={(e: any) => setEditAvailableUnits(e.target.value)}
-                  >
-                    <MenuItem value="Litres">Litres</MenuItem>
-                    <MenuItem value="Kilograms">Kilograms</MenuItem>
-                  </Select>
-                ),
-              }}
-            />
-            <ErrorMessages
-              errorMessages={editErrorMessages}
-              keyname={"required_units"}
-            />
-          </div>
+          <TextField
+            size="small"
+            sx={{
+              width: "100%", background: "#fff",
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: "8px 8px !important"
+              },
+              '& .MuiInputBase-input': {
+                fontSize: "clamp(12px, 0.72vw, 14px)",
+                fontFamily: "'Inter', sans-serif"
+              }
+            }} placeholder="Enter Availble Quantity"
+            variant="outlined"
+            type="number"
+            value={editAvailableQty}
+            onChange={(e: any) => setEditAvailableQty(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <Select
+                  sx={{
+                    background: "#fff",
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderWidth: "0 1px 1px 0 !important",
+                      borderRadius: "0 8px 8px 0 !important"
+                    }
+                  }} value={editAvailableUnits}
+                  onChange={(e: any) => setEditAvailableUnits(e.target.value)}
+                >
+                  <MenuItem value="Litres">Litres</MenuItem>
+                  <MenuItem value="Kilograms">Kilograms</MenuItem>
+                </Select>
+              ),
+            }}
+          />
+          <ErrorMessages
+            errorMessages={editErrorMessages}
+            keyname={"required_units"}
+          />
         </div>
         <div className={styles.procurementFormBtn}>
           <Button

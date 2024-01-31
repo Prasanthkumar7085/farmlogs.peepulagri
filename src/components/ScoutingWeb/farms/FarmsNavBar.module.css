@@ -98,7 +98,7 @@
 }
 
 .allFarms {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 166px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
@@ -106,7 +106,7 @@
 }
 
 .AllScoutsWeb {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 166px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
@@ -116,7 +116,7 @@
 }
 
 .AllScoutsLeftWebPage {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 166px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
@@ -133,7 +133,7 @@
 }
 
 .AllScoutsRightWebPage {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 166px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
@@ -145,7 +145,7 @@
 }
 
 .AllScoutsComments {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 166px);
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 1rem;
@@ -153,7 +153,7 @@
   border-bottom: 0;
   border-radius: 8px;
   background: #FFF;
-    padding-inline: 1rem;
+  padding-inline: 1rem;
   /* box-shadow: 4px 4px 13px 0px rgba(0, 0, 0, 0.17); */
 }
 
@@ -425,9 +425,10 @@
 }
 
 .allScoutsFilterBlock {
-  width: auto;
+  width: 70%;
+  max-width: 1200px;
   display: grid;
-  grid-template-columns: 250px 250px 250px 250px;
+  grid-template-columns: auto auto auto auto;
   grid-column-gap: 1rem;
 
 }

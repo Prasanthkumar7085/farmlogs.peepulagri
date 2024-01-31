@@ -428,7 +428,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
   });
 
   return (
-    <div className={styles.materialsBlock} style={{ width: "97%", }}>
+    <div className={styles.materialsBlock} style={{ width: "100%", }}>
       <div className={styles.materialHeader}>
 
         <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
@@ -463,7 +463,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       </div>
       <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
         {materials?.length ? (
-          <div>
+          <div style={{ padding: "0 1rem " }}>
             <Table >
               <TableHead>
                 <TableRow>

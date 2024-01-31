@@ -15,6 +15,7 @@ import styles from "./CommentsComponent.module.css";
 import CommentForm from "./comment-form";
 import Threads from "./threads";
 import { toast } from "sonner";
+import CommentFormForMobile from "./comment-formMobile";
 
 const DrawerComponentForScout = ({
   drawerClose,
@@ -275,12 +276,11 @@ const DrawerComponentForScout = ({
             scoutDetails={scoutDetails}
           />
         </div>
-        <CommentForm
+        <CommentFormForMobile
           afterCommentAdd={afterCommentAdd}
           scoutDetails={data}
           attachement={attachement}
         />
-
         <LoadingComponent loading={loading} />
         <AlertComponent
           alertMessage={alertMessage}

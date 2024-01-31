@@ -258,7 +258,16 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                         }
                     </div>
                 ) : (
-                    <div style={{ textAlign: "center" }}>No tags</div>
+                    <div style={{ textAlign: "center" }}>
+                        <Image
+                            src={"/NoTags.svg"}
+                            width={30}
+                            height={30}
+                            alt="tags"
+                        />
+                        <p>No tags</p>
+
+                    </div>
                 )}
             </div>
         </div>

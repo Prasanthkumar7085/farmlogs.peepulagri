@@ -29,6 +29,7 @@ const DateRangePickerForAllScouts = ({ onDateFilterChange }: pageProps) => {
     <div >
       <Stack style={{ width: "100%" }}>
         <DateRangePicker
+          editable={false}
           style={{ width: "100%" }}
           disabledDate={(date: any) => {
             return date.getTime() > new Date().getTime();

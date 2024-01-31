@@ -55,6 +55,9 @@ input[type=number] {
 .rs-picker-menu {
     z-index: 9999 !important;
 }
+.rs-picker-daterange-header{
+    display: none;
+}
 
 :root {
     /* fonts */

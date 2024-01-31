@@ -159,7 +159,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
                           : item?.user_type}
                     </h4>
                     <p className={styles.aug20231030am}>
-                      {timePipe(item.updatedAt, "DD-MM-YYYY hh.mm a")}
+                      {timePipe(item.updatedAt, "DD-MM-YYYY hh:mm a")}
                     </p>
                   </div>
                   <div className={styles.paragraph}>

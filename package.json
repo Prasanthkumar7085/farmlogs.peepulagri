@@ -74,7 +74,7 @@
     "redux-persist": "^6.0.0",
     "rsuite": "^5.37.4",
     "sass": "^1.68.0",
-    "sonner": "^1.0.3",
+    "sonner": "^1.4.0",
     "typescript": "5.1.6",
     "uuid": "^9.0.1",
     "yet-another-react-lightbox": "^3.12.2"

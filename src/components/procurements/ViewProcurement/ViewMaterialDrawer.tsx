@@ -101,6 +101,28 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
         }
     }, [materialOpen])
 
+    //for enteer only the numbeers
+    const handleInput = (event: any) => {
+        // Remove non-digit characters except for decimal point
+        let value = event.target.value.replace(/[^\d.]/g, '');
+
+        // Ensure only one decimal point exists
+        const decimalCount = value.split('.').length - 1;
+        if (decimalCount > 1) {
+            // If more than one decimal point, remove extra ones
+            const parts = value.split('.');
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        // Ensure negative sign is not the first character
+        if (value.startsWith('-')) {
+            value = value.slice(1);
+        }
+
+        // Limit length to 50 characters
+        event.target.value = value.slice(0, 50);
+    };
+
     return (
         <Drawer anchor={"right"} open={materialOpen}>
             <div className={styles.addMaterialDrawer} >
@@ -216,12 +238,14 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                 </div>
                 <div className={styles.inputField}>
                     <label className={styles.label}>
-                        Name Of Vendor <b style={{ color: "red" }}>*</b>
+                        Vendor Details <b style={{ color: "red" }}>*</b>
                     </label>
                     <TextField
                         size="small" placeholder="Enter Name Of Vendor"
                         variant="outlined"
-                        sx={{ width: "100%" }}
+                        rows={5}
+                        multiline
+                        sx={{ width: "100%", height: "40%" }}
                         value={nameVendor}
                         onChange={(e) => {
                             setNameVendor(e.target.value)
@@ -242,11 +266,12 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         sx={{ width: "100%" }}
                         placeholder="Enter Price Details Here"
                         variant="outlined"
-                        type='number'
+                        onInput={handleInput}
                         value={price}
                         onChange={(e) => {
                             setPrice(e.target.value)
                         }}
+
                     />
                     <ErrorMessages
                         errorMessages={errorMessages}

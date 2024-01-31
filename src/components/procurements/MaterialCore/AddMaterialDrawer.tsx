@@ -81,9 +81,26 @@ const AddMaterialDrawer = ({
 
     //for enteer only the numbeers
     const handleInput = (event: any) => {
-        const value = event.target.value.replace(/\D/g, '');
-        event.target.value = value.slice(0, 20);
+        // Remove non-digit characters except for decimal point
+        let value = event.target.value.replace(/[^\d.]/g, '');
+
+        // Ensure only one decimal point exists
+        const decimalCount = value.split('.').length - 1;
+        if (decimalCount > 1) {
+            // If more than one decimal point, remove extra ones
+            const parts = value.split('.');
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        // Ensure negative sign is not the first character
+        if (value.startsWith('-')) {
+            value = value.slice(1);
+        }
+
+        // Limit length to 50 characters
+        event.target.value = value.slice(0, 50);
     };
+
     return (
         <Drawer anchor={"right"} open={addMaterialOpen}>
             <div style={{ width: "300px", padding: ".5rem 1.5rem" }}>
@@ -156,12 +173,19 @@ const AddMaterialDrawer = ({
                                     <MenuItem value="Litres">Litres</MenuItem>
                                     <MenuItem value="Kilograms">Kilograms</MenuItem>
                                 </Select>
+
                             ),
                         }}
+
                     />
+
                     <ErrorMessages
                         errorMessages={errorMessages}
                         keyname={"required_qty"}
+                    />
+                    <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname={"required_units"}
                     />
                 </div>
 
@@ -201,10 +225,7 @@ const AddMaterialDrawer = ({
                                 ),
                             }}
                         />
-                        <ErrorMessages
-                            errorMessages={errorMessages}
-                            keyname={"required_units"}
-                        />
+
                     </div>
                 </div>
                 <div className={styles.procurementFormBtn}>

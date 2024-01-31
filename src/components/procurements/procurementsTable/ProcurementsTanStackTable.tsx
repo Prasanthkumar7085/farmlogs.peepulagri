@@ -42,7 +42,9 @@ const TanStackTableProcurmentComponent = ({
     if (
       header.id == "actions" ||
       header.id == "farm_id.title" ||
-      header.id == "assigned_to"
+      header.id == "assigned_to" ||
+      header.id == "status" ||
+      header.id == "priority"
     ) {
       return;
     }
@@ -60,8 +62,8 @@ const TanStackTableProcurmentComponent = ({
       limit: router.query.limit as string,
       page: 1,
       search_string: router.query.search_string as string,
-      sortBy: router.query.order_by as string,
-      sortType: router.query.order_type as string,
+      sortBy: orderBy,
+      sortType: orderType,
       selectedFarmId: router.query.farm_id as string,
       status: router.query.status as string,
       priority: router.query.priority as string,
@@ -173,7 +175,7 @@ const TanStackTableProcurmentComponent = ({
                                 />
                               )
                             ) : header.id == "farm_id.title" ||
-                              header.id == "assigned_to" ? (
+                              header.id == "status" || header.id == "priority" ? (
                               ""
                             ) : (
                               <ImageComponent

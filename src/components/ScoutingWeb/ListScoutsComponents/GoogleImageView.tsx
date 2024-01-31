@@ -14,8 +14,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkeleton";
 import SouthIcon from '@mui/icons-material/South';
-const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails, data }: any) => {
-
+const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails, data, getAllExistedScouts, hasMore, setOnlyImages }: any) => {
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
@@ -77,6 +76,8 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     }
 
 
+
+
     useEffect(() => {
         if (data?.length && changeImage) {
             let routerData = { ...router.query, view: true, image_id: data[imageIndex]?._id }
@@ -101,18 +102,20 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     }, [router.isReady, router.query.image_id, accessToken])
 
 
+
+
     return (
         <div style={{ padding: "1rem", }}  >
             <div className={styles.viewImgInfoHeader} >
                 <div className={styles.imageUploadingDetails} >
-                    {loading ? <Skeleton variant="circular" width={20} height={20} /> :
+                    {loading || !selectedImage?._id ? <Skeleton variant="circular" width={20} height={20} /> :
 
                         <Avatar sx={{ color: "#fff", background: "#d94841", width: "20px", height: "20px", fontSize: "9px" }}>{selectedImage?.uploaded_by?.name.slice(0, 1).toUpperCase()}</Avatar>}
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={120} /> :
+                        {loading || !selectedImage?._id ? <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={120} /> :
                             <div className={styles.uploadedByName}>{selectedImage?.uploaded_by?.name}</div>}
-                        {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={130} /> :
+                        {loading || !selectedImage?._id ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={130} /> :
                             <div>
                                 <Typography variant="caption" className={styles.imageUploadedTime} >
                                     <Image src="/mobileIcons/image-uploading-clock-icon.svg" alt="icon" width={13} height={13} />
@@ -123,7 +126,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                             </div>}
                     </div>
                 </div>
-                {loading ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={150} /> :
+                {loading || !selectedImage?._id ? <Skeleton variant="text" sx={{ fontSize: '1rem', }} width={150} /> :
                     <Typography variant="subtitle1" className={styles.imagesTitle}>
                         <Tooltip title={selectedImage?.farm_id?.title}>
                             {selectedImage?.farm_id?.title.length > 10
@@ -141,19 +144,54 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
                     </Typography>}
                 <div>
                     <IconButton
-                        disabled={loading || imageIndex == 0 ? true : false}
-                        onClick={() => {
-                            setChangeImage(true)
+                        disabled={loading || (imageIndex == 0 && router.query.page as string == "1") ? true : false}
+                        onClick={async () => {
+                            if (imageIndex == 0) {
+                                setOnlyImages([])
+                                await getAllExistedScouts({
+                                    page: +(router.query.page as string) - 1,
+                                    limit: router.query.limit as string,
+                                    farmId: router.query.farm_id as string,
+                                    userId: router.query.created_by as string,
+                                    cropId: router.query.crop_id as string,
+                                    fromDate: router.query.from_date as string,
+                                    toDate: router.query.to_date as string,
+                                    location: router.query.location_id as string,
+                                    image_view: true,
+                                    pageChange: true,
+                                    pageDirection: "prev"
 
+                                });
+                            }
+                            setChangeImage(true)
                             setImageIndex((prev: any) => prev - 1);
                         }}>
                         <KeyboardArrowLeftIcon sx={{ fontSize: "2rem" }} />
                     </IconButton>
                     <IconButton
-                        disabled={loading || imageIndex == data?.length - 1 ? true : false}
-                        onClick={() => {
-                            setChangeImage(true)
-                            setImageIndex((prev: any) => prev + 1);
+                        disabled={loading || hasMore == false ? true : false}
+                        onClick={async () => {
+                            if (imageIndex == data?.length - 1) {
+                                setOnlyImages([])
+                                await getAllExistedScouts({
+                                    page: +(router.query.page as string) + 1,
+                                    limit: router.query.limit as string,
+                                    farmId: router.query.farm_id as string,
+                                    userId: router.query.created_by as string,
+                                    cropId: router.query.crop_id as string,
+                                    fromDate: router.query.from_date as string,
+                                    toDate: router.query.to_date as string,
+                                    location: router.query.location_id as string,
+                                    image_view: true,
+                                    pageChange: true,
+                                    pageDirection: "next"
+
+                                });
+
+                            } else {
+                                setChangeImage(true)
+                                setImageIndex((prev: any) => prev + 1);
+                            }
                         }}>
                         <KeyboardArrowRightIcon sx={{ fontSize: "2rem" }} />
                     </IconButton>
@@ -176,7 +214,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
             </div>
 
             <div className={styles.singleScoutImg}>
-                {loading ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
+                {loading || !selectedImage?._id ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
                     <img
                         src={selectedImage?.url}
                         width={100}

@@ -41,6 +41,7 @@ import getAllUsersService from "../../../../lib/services/Users/getAllUsersServic
 import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
 import AddIcon from '@mui/icons-material/Add';
 import POC from "../edit/POC";
+import Image from "next/image";
 interface ApiCallService {
   procurement_req_id: string;
   name: string;
@@ -512,7 +513,12 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   )
                   : <TableRow>
                     <TableCell colSpan={3} sx={{ borderBottom: "0", textAlign: "end" }}>
-                      No Materials
+                      <Image
+                        src={"/NoMaterialsImage.svg"}
+                        height={150}
+                        width={150}
+                        alt="no materials"
+                      />
                     </TableCell>
                   </TableRow>}
               </TableBody>

@@ -39,6 +39,8 @@ interface ApiMethodProps {
   farmSearchString: string;
   location: string;
   image_view: boolean;
+  pageChange: boolean;
+  pageDirection: string;
 }
 const ListScouts: FunctionComponent = () => {
   const router = useRouter();
@@ -69,11 +71,11 @@ const ListScouts: FunctionComponent = () => {
   const [toDate, setToDate] = useState("");
   const [viewAttachmentId, setViewAttachmentId] = useState("");
   const [previewImageDialogOpen, setPreviewImageDialogOpen] = useState(false);
-  const [onlyImages, setOnlyImages] = useState([]);
+  const [onlyImages, setOnlyImages] = useState<any>([]);
   const [openDaySummary, setOpenDaySummary] = useState(false);
   const [seletectedItemDetails, setSelectedItemDetails] =
     useState<SingleScoutResponse>();
-
+  const [hasMore, setHasMore] = useState<boolean>()
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [searchString, setSearchString] = useState("");
   const [locations, setLocations] = useState<
@@ -85,10 +87,12 @@ const ListScouts: FunctionComponent = () => {
   } | null>();
   const [imageDetails, setImageDetails] = useState<any>()
   const [rightBarOpen, setRightBarOpen] = useState<any>(false)
-
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [queries, setQueries] = useState<any>()
+  const [rendering, setRendering] = useState<boolean>(false)
+
+
   //select the drop down and get the farm value
   const onSelectFarmFromDropDown = async (value: any, reason: string) => {
     dispatch(QueryParamsForScouting(""))
@@ -132,9 +136,7 @@ const ListScouts: FunctionComponent = () => {
       setTimeout(() => {
         setSettingLocationLoading(false);
       }, 1);
-      router.push({
-        query: { ...router.query, farm_search_string: value?.title },
-      });
+
       await getAllExistedScouts({
         farmSearchString: value?.title,
         page: 1,
@@ -294,7 +296,9 @@ const ListScouts: FunctionComponent = () => {
     cropId,
     farmSearchString = router.query.farm_search_string as string,
     location,
-    image_view = false
+    image_view = false,
+    pageChange = false,
+    pageDirection
   }: Partial<ApiMethodProps>) => {
     // if (!cropId) {
     //   setData([]);
@@ -340,9 +344,8 @@ const ListScouts: FunctionComponent = () => {
         ...restParams
 
       } = queryParams;
-
-      if (image_view) {
-        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore?.image_id }
+      if (image_view && pageChange == false) {
+        let temp = { ...queryParams, view: router?.query?.view, image_id: router?.query?.image_id }
         router.push({ query: temp });
       }
       else {
@@ -362,9 +365,21 @@ const ListScouts: FunctionComponent = () => {
       });
 
       if (response?.success) {
+        setHasMore(response?.has_more)
         const { data, ...rest } = response;
         setPaginationDetails(rest);
         setOnlyImages(response.data);
+        if (pageChange && pageDirection == "next") {
+          let temp = { ...queryParams, view: true, image_id: response?.data[0]?._id }
+          router.push({ query: temp });
+          setImageDetails(response?.data[0])
+        }
+        if (pageChange && pageDirection == "prev") {
+          let temp = { ...queryParams, view: true, image_id: response?.data[response?.data?.length - 1]?._id }
+          router.push({ query: temp });
+          setImageDetails(response?.data[response?.data?.length - 1])
+
+        }
         const groupedData: any = {};
         // Iterate through Data and group objects by uploaded_at date
         data.forEach((item: any) => {
@@ -593,7 +608,6 @@ const ListScouts: FunctionComponent = () => {
       });
     }
   }, [router.isReady, accessToken]);
-
   useEffect(() => {
     let debounce = setTimeout(() => {
       if (mounted) {
@@ -678,6 +692,9 @@ const ListScouts: FunctionComponent = () => {
       });
     }
   };
+
+
+
 
   return (
     <div className={styles.AllScoutsPageWeb}>
@@ -829,6 +846,9 @@ const ListScouts: FunctionComponent = () => {
               imageDetails={imageDetails}
               setImageDetails={setImageDetails}
               data={onlyImages}
+              getAllExistedScouts={getAllExistedScouts}
+              hasMore={hasMore}
+              setOnlyImages={setOnlyImages}
 
 
 

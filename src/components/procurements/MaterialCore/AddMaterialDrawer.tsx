@@ -23,11 +23,9 @@ const AddMaterialDrawer = ({
 }: any) => {
 
     const router = useRouter()
-
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
-
     const [name, setName] = useState("");
     const [requiredQty, setRequiredQty] = useState<null | number | string>(null);
     const [requiredUnits, setRequiredUnits] = useState("");

@@ -372,10 +372,13 @@ const ListScouts: FunctionComponent = () => {
         if (pageChange && pageDirection == "next") {
           let temp = { ...queryParams, view: true, image_id: response?.data[0]?._id }
           router.push({ query: temp });
+          setImageDetails(response?.data[0])
         }
         if (pageChange && pageDirection == "prev") {
           let temp = { ...queryParams, view: true, image_id: response?.data[response?.data?.length - 1]?._id }
           router.push({ query: temp });
+          setImageDetails(response?.data[response?.data?.length - 1])
+
         }
         const groupedData: any = {};
         // Iterate through Data and group objects by uploaded_at date

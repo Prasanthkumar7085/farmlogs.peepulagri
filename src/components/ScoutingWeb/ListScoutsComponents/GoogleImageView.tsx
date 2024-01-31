@@ -80,7 +80,7 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
     useEffect(() => {
         if (data?.length && changeImage) {
-            router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: data[imageIndex]?._id } });
+            // router.replace({ pathname: "/scouts", query: { ...router.query, view: true, image_id: data[imageIndex]?._id } });
             dispatch(QueryParamsForScouting({ ...router.query, view: true, image_id: data[imageIndex]?._id }))
             setSelectedItemDetails(data[imageIndex])
             setImageDetails(data[imageIndex])

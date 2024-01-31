@@ -345,7 +345,7 @@ const ListScouts: FunctionComponent = () => {
 
       } = queryParams;
       if (image_view && pageChange == false) {
-        let temp = { ...queryParams, view: router?.query?.view, image_id: router?.query?.image_id }
+        let temp = { ...queryParams, view: paramasFromStore?.view, image_id: paramasFromStore.image_id }
         router.push({ query: temp });
       }
       else {
@@ -373,10 +373,13 @@ const ListScouts: FunctionComponent = () => {
           let temp = { ...queryParams, view: true, image_id: response?.data[0]?._id }
           router.push({ query: temp });
           setImageDetails(response?.data[0])
+          dispatch(QueryParamsForScouting(temp))
+
         }
         if (pageChange && pageDirection == "prev") {
           let temp = { ...queryParams, view: true, image_id: response?.data[response?.data?.length - 1]?._id }
           router.push({ query: temp });
+          dispatch(QueryParamsForScouting(temp))
           setImageDetails(response?.data[response?.data?.length - 1])
 
         }

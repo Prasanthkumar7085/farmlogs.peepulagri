@@ -720,8 +720,8 @@ const ListScouts: FunctionComponent = () => {
           {!settingLocationLoading ? (
             <Autocomplete
               sx={{
-                width: "250px",
-                maxWidth: "250px",
+                width: "100%",
+
                 borderRadius: "4px",
               }}
               id="size-small-outlined-multi"
@@ -789,7 +789,7 @@ const ListScouts: FunctionComponent = () => {
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+      <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
 
         <div className={rightBarOpen || router.query.view ? styles.AllScoutsLeftWebPage : styles.AllScoutsWeb}>
           {data?.length

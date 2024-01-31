@@ -17,7 +17,7 @@
 }
 
 .allThreads {
-    height: calc(100vh - 315px);
+    height: calc(100vh - 330px);
     overflow-y: scroll;
 }
 

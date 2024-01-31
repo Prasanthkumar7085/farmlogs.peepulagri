@@ -166,6 +166,13 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
                     {editMode[0] == true && editMode[1] == item._id ? (
                       <div style={{ width: "100%" }}>
                         <TextField
+                          sx={{
+
+                            '& .MuiInputBase-root': {
+                              fontSize: "clamp(12px, 0.72vw, 14px)",
+                              fontFamily: "'Inter', sans-serif"
+                            }
+                          }}
                           className={styles.chatBox}
                           color="primary"
                           rows={2}
@@ -373,6 +380,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
                               {editMode[0] == true &&
                                 editMode[1] == item._id ? (
                                 <Button
+                                  sx={{ minWidth: "inherit", padding: "0" }}
                                   className={styles.edit1}
                                   disabled={editComment ? false : true}
                                   onClick={() => {
@@ -401,6 +409,8 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
                           <div className={styles.edit}>
                             <div className={styles.editChild} />
                             <Button
+                              sx={{ minWidth: "inherit", padding: "0" }}
+
                               className={styles.edit1}
                               onClick={() => {
                                 setEditMode([false, item._id]);

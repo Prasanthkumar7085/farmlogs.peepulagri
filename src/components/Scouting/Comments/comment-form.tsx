@@ -56,6 +56,9 @@ const CommentForm = ({
   }, []);
 
   useEffect(() => {
+    setComment("")
+  }, [attachement?._id])
+  useEffect(() => {
     const confirmationMessage =
       "Are you sure you want to leave this page? Your changes may not be saved.";
 

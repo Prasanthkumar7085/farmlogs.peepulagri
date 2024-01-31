@@ -28,62 +28,64 @@ const TablePaginationComponent = ({ paginationDetails, capturePageNum, captureRo
   );
 
   return (
-    <Card className={styles.tablePagination}>
-      <div>
-        <Typography variant="caption" className={styles.label}>
-          {values} Per Page
-        </Typography>
+    <Card className={styles.tablePagenationBlock}>
+      <div className={styles.tablePagination} >
+        <div>
+          <Typography variant="caption" className={styles.label}>
+            {values} Per Page
+          </Typography>
 
-        <Select
-          value={noOfRows}
-          onChange={handlePagerowChange}
-          defaultValue={router?.query?.limit ? router?.query?.limit : 15}
-          sx={{
-            height: "25px !important",
-            borderRadius: "3px !important",
-            fontSize: "11px",
-            border: "none",
-          }}
-        >
-          {limitOptions.map((item: number) => (
-            <MenuItem value={item} key={item}>
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
-      </div>
-      <div>
-        <Typography variant="caption">
-          {" "}
-          {(paginationDetails?.page == 1
-            ? 1
-            : (paginationDetails?.page - 1) * paginationDetails?.limit + 1) +
-            " - " +
-            (paginationDetails?.page == paginationDetails?.total_pages
-              ? paginationDetails?.total
-              : paginationDetails?.total < paginationDetails?.limit
+          <Select
+            value={noOfRows}
+            onChange={handlePagerowChange}
+            defaultValue={router?.query?.limit ? router?.query?.limit : 15}
+            sx={{
+              height: "25px !important",
+              borderRadius: "3px !important",
+              fontSize: "11px",
+              border: "none",
+            }}
+          >
+            {limitOptions.map((item: number) => (
+              <MenuItem value={item} key={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+        <div>
+          <Typography variant="caption">
+            {" "}
+            {(paginationDetails?.page == 1
+              ? 1
+              : (paginationDetails?.page - 1) * paginationDetails?.limit + 1) +
+              " - " +
+              (paginationDetails?.page == paginationDetails?.total_pages
                 ? paginationDetails?.total
-                : paginationDetails?.page * paginationDetails?.limit)}{" "}
-          of {paginationDetails?.total} {values}
-        </Typography>
-      </div>
+                : paginationDetails?.total < paginationDetails?.limit
+                  ? paginationDetails?.total
+                  : paginationDetails?.page * paginationDetails?.limit)}{" "}
+            of {paginationDetails?.total} {values}
+          </Typography>
+        </div>
 
-      <Pagination
-        shape="rounded"
-        sx={{
-          "& .MuiButtonBase-root": {
-            height: "25px !important",
-            // width: "25px !important",
-            minWidth: "inherit",
-          },
-        }}
-        page={paginationDetails?.page}
-        count={paginationDetails?.total_pages}
-        onChange={(event: any, value: any) => {
-          capturePageNum(value);
-          setPageNum(+value);
-        }}
-      />
+        <Pagination
+          shape="rounded"
+          sx={{
+            "& .MuiButtonBase-root": {
+              height: "25px !important",
+              // width: "25px !important",
+              minWidth: "inherit",
+            },
+          }}
+          page={paginationDetails?.page}
+          count={paginationDetails?.total_pages}
+          onChange={(event: any, value: any) => {
+            capturePageNum(value);
+            setPageNum(+value);
+          }}
+        />
+      </div>
     </Card>
   );
 }

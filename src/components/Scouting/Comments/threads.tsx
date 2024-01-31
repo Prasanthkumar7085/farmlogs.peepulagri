@@ -126,6 +126,12 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
   };
 
 
+  useEffect(() => {
+    setEditMode([false, ""]);
+    setEditComment("");
+  }, [attachement?._id])
+
+
   return (
     <div className={styles.threads} >
       {details?.length ? (
@@ -376,32 +382,32 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
                         ) : (
                           <div className={styles.edit}>
                             <div className={styles.editChild} />
-                            <div>
-                              {editMode[0] == true &&
-                                editMode[1] == item._id ? (
-                                <Button
-                                  sx={{ minWidth: "inherit", padding: "0" }}
-                                  className={styles.edit1}
-                                  disabled={editComment ? false : true}
-                                  onClick={() => {
-                                    setEditMode([false, item._id]);
-                                    afterUpdateComment(item._id, editComment);
-                                  }}
-                                >
-                                  Update
-                                </Button>
-                              ) : (
-                                <p
-                                  className={styles.edit1}
-                                  onClick={() => {
-                                    setEditMode([true, item._id]);
-                                    setEditComment(item.content);
-                                  }}
-                                >
-                                  Edit
-                                </p>
-                              )}
-                            </div>
+                            {editMode[0] == true &&
+                              editMode[1] == item._id ? (
+                              <Button
+                                sx={{ minWidth: "inherit", padding: "0" }}
+                                className={styles.edit1}
+                                disabled={editComment ? false : true}
+                                onClick={() => {
+                                  setEditMode([false, item._id]);
+                                  afterUpdateComment(item._id, editComment);
+                                  setEditComment("")
+                                }}
+                              >
+                                Update
+                              </Button>
+                            ) : (
+                              <p
+                                className={styles.edit1}
+                                onClick={() => {
+                                  setEditMode([true, item._id]);
+                                  setEditComment(item.content);
+                                }}
+                              >
+                                Edit
+                              </p>
+                            )}
+
                           </div>
                         )}
 
@@ -415,6 +421,7 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
                               onClick={() => {
                                 setEditMode([false, item._id]);
                                 setEditComment("");
+
                               }}
                             >
                               Close

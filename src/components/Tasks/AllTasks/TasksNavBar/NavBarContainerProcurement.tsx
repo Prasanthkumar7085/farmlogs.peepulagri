@@ -50,6 +50,10 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   const userId = useSelector(
     (state: any) => state.auth.userDetails?.user_details?._id
   );
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
+
 
   const [search, setSearch] = useState("");
   const [farmOptions, setFarmOptions] = useState<Array<FarmInTaskType>>();
@@ -308,21 +312,21 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
 
 
           </div>
+          {userDetails?.user_type == "central_team" ? "" :
+            <div className={styles.headeractions}>
 
-          <div className={styles.headeractions}>
+              <Button
+                className={styles.addProcurementBtn}
+                color="primary"
+                size="small"
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={onButtonAddTaskClick}
+              >
+                Add
+              </Button>
 
-            <Button
-              className={styles.addProcurementBtn}
-              color="primary"
-              size="small"
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={onButtonAddTaskClick}
-            >
-              Add
-            </Button>
-
-          </div>
+            </div>}
 
         </div>
       </div>

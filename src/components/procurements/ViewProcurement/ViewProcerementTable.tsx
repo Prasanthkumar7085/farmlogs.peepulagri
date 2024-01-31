@@ -17,7 +17,10 @@ import {
   TableRow,
   TextField,
   Tooltip,
+  TooltipProps,
   Typography,
+  styled,
+  tooltipClasses,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -416,8 +419,16 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
     }
   }
 
+  const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))({
+    [`& .${tooltipClasses.tooltip}`]: {
+      maxWidth: 200,
+    },
+  });
+
   return (
-    <div className={styles.materialsBlock} style={{ width: "100%" }}>
+    <div className={styles.materialsBlock} style={{ width: "97%", }}>
       <div className={styles.materialHeader}>
 
         <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
@@ -463,7 +474,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                   <TableCell className={styles.tableHeaderCell}>Approved By</TableCell>
                   {materialDetails ?
                     <>
-                      <TableCell className={styles.tableHeaderCell}>Name of Vendor</TableCell>
+                      <TableCell className={styles.tableHeaderCell}>Vendor Details</TableCell>
                       <TableCell className={styles.tableHeaderCell}>Price(Rs)</TableCell>
                     </>
                     : ''}
@@ -502,7 +513,16 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       </TableCell>
                       {materialDetails ?
                         <>
-                          <TableCell className={styles.tableBodyCell}>{row?.vendor ? row?.vendor : "---"}</TableCell>
+                          <TableCell className={styles.tableBodyCell}>
+                            {row?.vendor?.length ?
+                              <CustomWidthTooltip title={row?.vendor} >
+                                {row?.vendor?.length > 20
+                                  ? row?.vendor.slice(0, 1).toUpperCase() +
+                                  row?.vendor.slice(1, 20) +
+                                  "..."
+                                  : row?.vendor.slice(0, 1).toUpperCase() +
+                                  row?.vendor.slice(1)}</CustomWidthTooltip> : "---"}
+                          </TableCell>
                           <TableCell className={styles.tableBodyCell}>
                             {row?.price ? formatMoney(row?.price) : "---"}
                           </TableCell>
@@ -536,23 +556,25 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                   />
                                 </IconButton>
                               </Tooltip>
+                              <Tooltip title={"Delete"}>
 
-                              <IconButton
-                                onClick={() => {
-                                  setDeleteMaterialId(row._id)
-                                  setDeleteMaterialOpen(true)
-                                }
-                                }
-                              >
-                                <ImageComponent
-                                  src={
-                                    "/viewProcurement/procurement-delete-icon.svg"
+                                <IconButton
+                                  onClick={() => {
+                                    setDeleteMaterialId(row._id)
+                                    setDeleteMaterialOpen(true)
                                   }
-                                  height={15}
-                                  width={15}
-                                  alt=""
-                                />
-                              </IconButton>
+                                  }
+                                >
+                                  <ImageComponent
+                                    src={
+                                      "/viewProcurement/procurement-delete-icon.svg"
+                                    }
+                                    height={15}
+                                    width={15}
+                                    alt=""
+                                  />
+                                </IconButton>
+                              </Tooltip >
 
 
                             </>
@@ -585,40 +607,43 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
 
                               <div style={{ cursor: "pointer" }}>
-                                <IconButton
+                                <Tooltip title={row?.status == "REJECTED" ? "Approve" : "Reject"}>
+                                  <IconButton
 
-                                  sx={{ display: row?.approved_by?.name ? "none" : "" }}
-                                  onClick={() => {
-                                    if (row?.status == "REJECTED") {
+                                    sx={{ display: row?.approved_by?.name ? "none" : "" }}
+                                    onClick={() => {
+                                      if (row?.status == "REJECTED") {
 
-                                      onStatusChangeEvent("approve", row?._id)
+                                        onStatusChangeEvent("approve", row?._id)
+                                      }
+                                      else {
+                                        setRejectDilogOpen(true)
+                                        setSelectedRow(row?._id)
+                                      }
                                     }
-                                    else {
-                                      setRejectDilogOpen(true)
-                                      setSelectedRow(row?._id)
                                     }
-                                  }
-                                  }
-                                >
-                                  {row?.status == "REJECTED" ? <ImageComponent
-                                    src={
-                                      "/viewProcurement/procurement-approve-icon.svg"
-                                    }
-                                    height={19}
-                                    width={19}
-                                    alt=""
-                                  /> : <ImageComponent
-                                    src={
-                                      "/viewProcurement/procurement-reject-icon.svg"
-                                    }
-                                    height={17}
-                                    width={17}
-                                    alt=""
-                                  />}
-                                </IconButton>
+                                  >
+                                    {row?.status == "REJECTED" ? <ImageComponent
+                                      src={
+                                        "/viewProcurement/procurement-approve-icon.svg"
+                                      }
+                                      height={19}
+                                      width={19}
+                                      alt=""
+                                    /> : <ImageComponent
+                                      src={
+                                        "/viewProcurement/procurement-reject-icon.svg"
+                                      }
+                                      height={17}
+                                      width={17}
+                                      alt=""
+                                    />}
+                                  </IconButton>
+                                </Tooltip>
                               </div>
                             </>
                             : ""}
+
 
                         </div>
                       </TableCell>
@@ -643,7 +668,14 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
           </div>
         ) : (
-          <div>No materials added</div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Image
+              src={"/NoMaterialsImage.svg"}
+              height={250}
+              width={250}
+              alt="no materials"
+            />
+          </div>
         )}
       </div>
 

@@ -151,7 +151,7 @@ const AddProcurementForm = () => {
       let data = {
         title: title,
         date_of_operation: dateOfOperation
-          ? new Date(dateOfOperation)?.toISOString()
+          ? new Date(dateOfOperation)?.toUTCString()
           : "",
         remarks: remarks,
         priority: priority,

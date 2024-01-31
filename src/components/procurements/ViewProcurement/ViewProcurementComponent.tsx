@@ -117,6 +117,7 @@ const ViewProcurementComponent = () => {
       5: <img src="/completed.svg" />,
 
 
+
     };
 
     return (
@@ -132,18 +133,19 @@ const ViewProcurementComponent = () => {
 
   return (
     <div style={{ width: "90%", margin: "auto", paddingTop: "2rem" }}>
-      <Stack sx={{ width: '70%', margin: "auto" }} spacing={4}>
+      {data?.status ?
+        <Stack sx={{ width: '70%', margin: "auto" }} spacing={4}>
 
-        <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
-          {steps.map((label, index) => (
-            <Step key={label}>
-              <StepLabel StepIconComponent={ColorlibStepIcon}>
-                {label}
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </Stack>
+          <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+            {steps.map((label, index) => (
+              <Step key={label}>
+                <StepLabel StepIconComponent={ColorlibStepIcon}>
+                  {label}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Stack> : ""}
       <ShippedStatus data={data} afterStatusChange={afterStatusChange} />
       <ShippedStatusform data={data} afterStatusChange={afterStatusChange} />
       <ViewProcurementTable data={data} afterMaterialStatusChange={afterMaterialStatusChange} />

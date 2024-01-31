@@ -174,7 +174,7 @@ const TrackingDetailsDilog = ({
             editable={false}
             size="lg"
             style={Datestyles}
-            placeholder="DD-MM-YYYY"
+            placeholder="Select date"
             value={date}
             onChange={setDate}
             shouldDisableDate={(date) => isBefore(date, new Date())}

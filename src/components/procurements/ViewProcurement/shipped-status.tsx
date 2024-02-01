@@ -137,8 +137,11 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
             className={styles.materialsreceivedcheckbox}
             onClick={onMaterialsReceivedCheckboxClick}
           >
-            <FormControlLabel
-              className={styles.unselected}
+            <FormControlLabel sx={{
+              marginLeft: "0 !important", marginRight: "0 !important", '& .MuiButtonBase-root': {
+                padding: "0 !important"
+              }
+            }}
               label=""
               control={<Checkbox color="primary" />}
             />

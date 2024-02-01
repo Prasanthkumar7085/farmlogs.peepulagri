@@ -8,14 +8,11 @@ import ViewProcurementTable from "./ViewProcerementTable";
 import { styled } from '@mui/material/styles';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import Check from '@mui/icons-material/Check';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { StepIconProps } from '@mui/material/StepIcon';
 import { Stack, Stepper } from "@mui/material";
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import Image from "next/image";
+
 const ViewProcurementComponent = () => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -54,30 +51,27 @@ const ViewProcurementComponent = () => {
     }
   }, [router.isReady, accessToken]);
 
-
-
-
   const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
-      top: 22,
+      top: 15,
     },
     [`&.${stepConnectorClasses.active}`]: {
       [`& .${stepConnectorClasses.line}`]: {
-        backgroundImage:
-          'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+        backgroundColor:
+          '#05A155',
       },
     },
     [`&.${stepConnectorClasses.completed}`]: {
       [`& .${stepConnectorClasses.line}`]: {
-        backgroundImage:
-          'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+        backgroundColor:
+          '#05A155',
       },
     },
     [`& .${stepConnectorClasses.line}`]: {
       height: 3,
       border: 0,
       backgroundColor:
-        theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#eaeaf0',
+        theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#fff',
       borderRadius: 1,
     },
   }));
@@ -85,23 +79,23 @@ const ViewProcurementComponent = () => {
   const ColorlibStepIconRoot = styled('div')<{
     ownerState: { completed?: boolean; active?: boolean };
   }>(({ theme, ownerState }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#ccc',
+    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#fff',
     zIndex: 1,
     color: '#fff',
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
     display: 'flex',
     borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     ...(ownerState.active && {
-      backgroundImage:
-        'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+      backgroundColor:
+        '#05A155',
       boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
     }),
     ...(ownerState.completed && {
-      backgroundImage:
-        'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+      backgroundColor:
+        '#05A155',
     }),
   }));
 
@@ -109,15 +103,13 @@ const ViewProcurementComponent = () => {
     const { active, completed, className } = props;
 
     const icons: { [index: string]: React.ReactElement } = {
-      0: <img src="./pending.svg" />,
-      1: <img src="/pending.svg" />,
-      2: <img src="/approved.svg" />,
-      3: <img src="/purchased.svg" />,
-      4: <img src="/shipped.svg" />,
-      5: <img src="/completed.svg" />,
-
-
-
+      0: <Image src="/viewProcurement/tracking-icons/pending.svg" alt="" height={15} width={15} />,
+      1: <Image src="/viewProcurement/tracking-icons/pending.svg" alt="" height={15} width={15} />,
+      2: <Image src="/viewProcurement/tracking-icons/approved.svg" alt="" height={15} width={15} />,
+      3: <Image src="/viewProcurement/tracking-icons/purchased.svg" alt="" height={15} width={15} />,
+      4: <Image src="/viewProcurement/tracking-icons/shipped.svg" alt="" height={15} width={15} />,
+      5: <Image src="/viewProcurement/tracking-icons/completed.svg" alt="" height={15} width={15} />,
+      6: <Image src="/viewProcurement/tracking-icons/completed.svg" alt="" height={15} width={15} />,
     };
 
     return (
@@ -132,9 +124,17 @@ const ViewProcurementComponent = () => {
   const activeStep = data ? steps.indexOf(data.status) : 0;
 
   return (
-    <div style={{ width: "90%", margin: "auto", paddingTop: "2rem" }}>
+    <div style={{ width: "90%", margin: "auto", paddingTop: "1rem" }}>
       {data?.status ?
-        <Stack sx={{ width: '70%', margin: "auto" }} spacing={4}>
+        <Stack sx={{
+          width: '50%', margin: "0 auto 1rem", '& .MuiStepLabel-label': {
+            color: "#000",
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "clamp(10px, 0.625vw, 13px)",
+            fontWeight: "500",
+            marginTop: "6px"
+          }
+        }} spacing={4}>
 
           <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
             {steps.map((label, index) => (

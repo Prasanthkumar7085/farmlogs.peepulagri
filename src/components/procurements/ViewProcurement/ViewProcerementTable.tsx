@@ -467,18 +467,18 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
             <Table >
               <TableHead>
                 <TableRow>
-                  <TableCell className={styles.tableHeaderCell}>Name</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Available(Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Procurement(Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Status</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Approved By</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px", whiteSpace: "nowrap" }}>Name</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px", whiteSpace: "nowrap" }}>Available(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px", whiteSpace: "nowrap" }}>Procurement(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Status</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Approved By</TableCell>
                   {materialDetails ?
                     <>
-                      <TableCell className={styles.tableHeaderCell}>Vendor Details</TableCell>
-                      <TableCell className={styles.tableHeaderCell}>Price(Rs)</TableCell>
+                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Vendor Details</TableCell>
+                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px", whiteSpace: "nowrap" }}>Price(Rs)</TableCell>
                     </>
                     : ''}
-                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "PURCHASED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "" }}>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || data?.status == "PURCHASED" || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "", minWidth: "120px" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody >
@@ -490,7 +490,17 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       key={index}
                     >
-                      <TableCell className={styles.tableBodyCell}>{row?.name ? row?.name : "---"}</TableCell>
+                      <TableCell className={styles.tableBodyCell}>
+                        <Tooltip title={row?.name ? row?.name : ""}>
+                          {row?.name ? row?.name?.length > 20
+                            ? row?.name?.slice(0, 1).toUpperCase() +
+                            row?.name?.slice(1, 15) +
+                            "..."
+                            : row?.name?.slice(0, 1).toUpperCase() +
+                            row?.name?.slice(1) : "----"}
+                        </Tooltip>
+
+                      </TableCell>
                       <TableCell className={styles.tableBodyCell}>
                         {row?.available_qty
                           ? row?.available_qty + " " + row.available_units

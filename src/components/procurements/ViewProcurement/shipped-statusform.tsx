@@ -245,7 +245,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
 
           </div> :
           ""}
-        {data?.status == "PURCHASED" && userDetails?.user_type == "central_team" ?
+        {data?.status == "PURCHASED" && userDetails?.user_type == "central_team" && !data?.tracking_details?.service_name ?
           <div className={styles.trackingid}>
             <Typography variant="h6" className={styles.trackingBlockHeading}>Tracking Details</Typography>
             <Button className={styles.addTrackingDetailsBtn} variant="text" onClick={() => {

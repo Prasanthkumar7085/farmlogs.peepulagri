@@ -473,18 +473,18 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
             <Table >
               <TableHead>
                 <TableRow>
-                  <TableCell className={styles.tableHeaderCell}>Name</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Available(Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Procurement(Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Status</TableCell>
-                  <TableCell className={styles.tableHeaderCell}>Approved By</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px", whiteSpace: "nowrap" }}>Name</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px", whiteSpace: "nowrap" }}>Available(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px", whiteSpace: "nowrap" }}>Procurement(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Status</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Approved By</TableCell>
                   {materialDetails ?
                     <>
-                      <TableCell className={styles.tableHeaderCell}>Vendor Details</TableCell>
-                      <TableCell className={styles.tableHeaderCell}>Price(Rs)</TableCell>
+                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Vendor Details</TableCell>
+                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px", whiteSpace: "nowrap" }}>Price(Rs)</TableCell>
                     </>
                     : ''}
-                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || (data?.status == "PURCHASED" && userDetails?.user_type !== "central_team") || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "" }}>Actions</TableCell>
+                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || (data?.status == "PURCHASED" || userDetails?.user_type == "central_team") || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "", minWidth: "120px" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody >
@@ -497,17 +497,16 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       key={index}
                     >
                       <TableCell className={styles.tableBodyCell}>
-                        {row?.name?.length ?
-                          <CustomWidthTooltip title={row?.name} >
-                            {row?.name?.length > 20
-                              ? row?.name.slice(0, 1).toUpperCase() +
-                              row?.name.slice(1, 20) +
-                              "..."
-                              : row?.name.slice(0, 1).toUpperCase() +
-                              row?.name.slice(1)}</CustomWidthTooltip> : "---"}
+                        <Tooltip title={row?.name ? row?.name : ""}>
+                          {row?.name ? row?.name?.length > 20
+                            ? row?.name?.slice(0, 1).toUpperCase() +
+                            row?.name?.slice(1, 15) +
+                            "..."
+                            : row?.name?.slice(0, 1).toUpperCase() +
+                            row?.name?.slice(1) : "----"}
+                        </Tooltip>
+
                       </TableCell>
-
-
                       <TableCell className={styles.tableBodyCell}>
                         {row?.available_qty
                           ? row?.available_qty + " " + row.available_units
@@ -528,23 +527,25 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       <TableCell className={styles.tableBodyCell}>
                         {row?.approved_by?.name ? row?.approved_by?.name : "---"}
                       </TableCell>
-                      {materialDetails ?
-                        <>
-                          <TableCell className={styles.tableBodyCell}>
-                            {row?.vendor?.length ?
-                              <CustomWidthTooltip title={row?.vendor} >
-                                {row?.vendor?.length > 20
-                                  ? row?.vendor.slice(0, 1).toUpperCase() +
-                                  row?.vendor.slice(1, 20) +
-                                  "..."
-                                  : row?.vendor.slice(0, 1).toUpperCase() +
-                                  row?.vendor.slice(1)}</CustomWidthTooltip> : "---"}
-                          </TableCell>
-                          <TableCell className={styles.tableBodyCell}>
-                            {row?.price ? formatMoney(row?.price) : "---"}
-                          </TableCell>
-                        </>
-                        : ''}
+                      {
+                        materialDetails ?
+                          <>
+                            <TableCell className={styles.tableBodyCell}>
+                              {row?.vendor?.length ?
+                                <CustomWidthTooltip title={row?.vendor} >
+                                  {row?.vendor?.length > 20
+                                    ? row?.vendor.slice(0, 1).toUpperCase() +
+                                    row?.vendor.slice(1, 20) +
+                                    "..."
+                                    : row?.vendor.slice(0, 1).toUpperCase() +
+                                    row?.vendor.slice(1)}</CustomWidthTooltip> : "---"}
+                            </TableCell>
+                            <TableCell className={styles.tableBodyCell}>
+                              {row?.price ? formatMoney(row?.price) : "---"}
+                            </TableCell>
+                          </>
+                          : ''
+                      }
 
                       <TableCell className={styles.tableBodyCell} style={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}>
                         <div
@@ -664,183 +665,187 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
 
                         </div>
                       </TableCell>
-                    </TableRow>
+                    </TableRow >
 
                   );
                 })}
-                {materials?.some((obj: any) => obj.hasOwnProperty('price') && obj.price !== null && obj.price !== undefined && obj.price !== "")
-                  ?
-                  <TableRow className={styles.tableBodyRow}>
-                    <TableCell colSpan={6} className={styles.tableBodyCell} sx={{ textAlign: "end" }}>
-                      <Typography className={styles.totalAmountTitle} >Total Amount</Typography>
+                {
+                  materials?.some((obj: any) => obj.hasOwnProperty('price') && obj.price !== null && obj.price !== undefined && obj.price !== "")
+                    ?
+                    <TableRow className={styles.tableBodyRow}>
+                      <TableCell colSpan={6} className={styles.tableBodyCell} sx={{ textAlign: "end" }}>
+                        <Typography className={styles.totalAmountTitle} >Total Amount</Typography>
 
-                    </TableCell>
-                    <TableCell colSpan={7} className={styles.tableBodyCell}>
-                      <Typography className={styles.totalAmount}>{formatMoney(sumOfPrices(materials))}</Typography>
-                    </TableCell>
-                  </TableRow> : ""}
-
-                {rejectedMaterials?.map((row: any, index: any) => {
-                  return (
-
-                    <TableRow
-                      className={styles.tableBodyRow}
-                      // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                      key={index}
-                    >
-                      <TableCell className={styles.tableBodyCell}>
-                        {row?.name?.length ?
-                          <CustomWidthTooltip title={row?.name} >
-                            {row?.name?.length > 20
-                              ? row?.name.slice(0, 1).toUpperCase() +
-                              row?.name.slice(1, 20) +
-                              "..."
-                              : row?.name.slice(0, 1).toUpperCase() +
-                              row?.name.slice(1)}</CustomWidthTooltip> : "---"}
                       </TableCell>
-
-
-                      <TableCell className={styles.tableBodyCell}>
-                        {row?.available_qty
-                          ? row?.available_qty + " " + row.available_units
-                          : "---"}
+                      <TableCell colSpan={7} className={styles.tableBodyCell}>
+                        <Typography className={styles.totalAmount}>{formatMoney(sumOfPrices(materials))}</Typography>
                       </TableCell>
-                      <TableCell className={styles.tableBodyCell}>
-                        {row?.required_qty
-                          ? row?.required_qty + " " + row.required_units
-                          : "---"}
-                      </TableCell>
-                      <TableCell className={styles.tableBodyCell}>
-                        {row?.status ? capitalizeFirstLetter(row?.status) : "---"}
-                        {row?.status == "REJECTED" ?
-                          <Tooltip title={row?.reason}>
-                            <InfoIcon />
-                          </Tooltip>
-                          : ""}</TableCell>
-                      <TableCell className={styles.tableBodyCell}>
-                        {row?.approved_by?.name ? row?.approved_by?.name : "---"}
-                      </TableCell>
-                      {materialDetails ?
-                        <>
-                          <TableCell className={styles.tableBodyCell}>
-                            {row?.vendor?.length ?
-                              <CustomWidthTooltip title={row?.vendor} >
-                                {row?.vendor?.length > 20
-                                  ? row?.vendor.slice(0, 1).toUpperCase() +
-                                  row?.vendor.slice(1, 20) +
-                                  "..."
-                                  : row?.vendor.slice(0, 1).toUpperCase() +
-                                  row?.vendor.slice(1)}</CustomWidthTooltip> : "---"}
-                          </TableCell>
-                          <TableCell className={styles.tableBodyCell}>
-                            {row?.price ? formatMoney(row?.price) : "---"}
-                          </TableCell>
-                        </>
-                        : ''}
+                    </TableRow> : ""
+                }
 
-                      <TableCell className={styles.tableBodyCell} style={{ display: data?.tracking_details?.tracking_id || data?.status == "PURCHASED" ? "none" : "" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-evenly",
-                          }}
-                        >
-                          {row?.status !== "PENDING" && row?.status !== "REJECTED" ? "" :
-                            <>
-                              <Tooltip title={"Edit"}>
-                                <IconButton
-                                  onClick={() => {
-                                    setEditMaterialId(row._id);
-                                    setEditMaterialOpen(true);
-                                  }}
-                                >
-                                  <ImageComponent
-                                    src={
-                                      "/viewProcurement/procurement-edit-icon.svg"
-                                    }
-                                    height={15}
-                                    width={15}
-                                    alt=""
-                                  />
-                                </IconButton>
-                              </Tooltip>
-                              <Tooltip title={"Delete"}>
+                {
+                  rejectedMaterials?.map((row: any, index: any) => {
+                    return (
 
-                                <IconButton
-                                  onClick={() => {
-                                    setDeleteMaterialId(row._id)
-                                    setDeleteMaterialOpen(true)
-                                  }
-                                  }
-                                >
-                                  <ImageComponent
-                                    src={
-                                      "/viewProcurement/procurement-delete-icon.svg"
-                                    }
-                                    height={15}
-                                    width={15}
-                                    alt=""
-                                  />
-                                </IconButton>
-                              </Tooltip >
+                      <TableRow
+                        className={styles.tableBodyRow}
+                        // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                        key={index}
+                      >
+                        <TableCell className={styles.tableBodyCell}>
+                          {row?.name?.length ?
+                            <CustomWidthTooltip title={row?.name} >
+                              {row?.name?.length > 20
+                                ? row?.name.slice(0, 1).toUpperCase() +
+                                row?.name.slice(1, 20) +
+                                "..."
+                                : row?.name.slice(0, 1).toUpperCase() +
+                                row?.name.slice(1)}</CustomWidthTooltip> : "---"}
+                        </TableCell>
 
 
-                            </>
-                          }
-                          {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
-                            <>
-                              <div style={{ cursor: "pointer", display: data?.status == "PURCHASED" ? "none" : "" }}>
-                                <Tooltip title={row?.status == "REJECTED" ? "Approve" : "Reject"}>
+                        <TableCell className={styles.tableBodyCell}>
+                          {row?.available_qty
+                            ? row?.available_qty + " " + row.available_units
+                            : "---"}
+                        </TableCell>
+                        <TableCell className={styles.tableBodyCell}>
+                          {row?.required_qty
+                            ? row?.required_qty + " " + row.required_units
+                            : "---"}
+                        </TableCell>
+                        <TableCell className={styles.tableBodyCell}>
+                          {row?.status ? capitalizeFirstLetter(row?.status) : "---"}
+                          {row?.status == "REJECTED" ?
+                            <Tooltip title={row?.reason}>
+                              <InfoIcon />
+                            </Tooltip>
+                            : ""}</TableCell>
+                        <TableCell className={styles.tableBodyCell}>
+                          {row?.approved_by?.name ? row?.approved_by?.name : "---"}
+                        </TableCell>
+                        {materialDetails ?
+                          <>
+                            <TableCell className={styles.tableBodyCell}>
+                              {row?.vendor?.length ?
+                                <CustomWidthTooltip title={row?.vendor} >
+                                  {row?.vendor?.length > 20
+                                    ? row?.vendor.slice(0, 1).toUpperCase() +
+                                    row?.vendor.slice(1, 20) +
+                                    "..."
+                                    : row?.vendor.slice(0, 1).toUpperCase() +
+                                    row?.vendor.slice(1)}</CustomWidthTooltip> : "---"}
+                            </TableCell>
+                            <TableCell className={styles.tableBodyCell}>
+                              {row?.price ? formatMoney(row?.price) : "---"}
+                            </TableCell>
+                          </>
+                          : ''}
+
+                        <TableCell className={styles.tableBodyCell} style={{ display: data?.tracking_details?.tracking_id || data?.status == "PURCHASED" ? "none" : "" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-evenly",
+                            }}
+                          >
+                            {row?.status !== "PENDING" && row?.status !== "REJECTED" ? "" :
+                              <>
+                                <Tooltip title={"Edit"}>
                                   <IconButton
-
-                                    sx={{ display: row?.approved_by?.name ? "none" : "" }}
                                     onClick={() => {
-                                      if (row?.status == "REJECTED") {
+                                      setEditMaterialId(row._id);
+                                      setEditMaterialOpen(true);
+                                    }}
+                                  >
+                                    <ImageComponent
+                                      src={
+                                        "/viewProcurement/procurement-edit-icon.svg"
+                                      }
+                                      height={15}
+                                      width={15}
+                                      alt=""
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title={"Delete"}>
 
-                                        onStatusChangeEvent("approve", row?._id)
-                                      }
-                                      else {
-                                        setRejectDilogOpen(true)
-                                        setSelectedRow(row?._id)
-                                      }
+                                  <IconButton
+                                    onClick={() => {
+                                      setDeleteMaterialId(row._id)
+                                      setDeleteMaterialOpen(true)
                                     }
                                     }
                                   >
-                                    {row?.status == "REJECTED" ? <ImageComponent
+                                    <ImageComponent
                                       src={
-                                        "/viewProcurement/procurement-approve-icon.svg"
+                                        "/viewProcurement/procurement-delete-icon.svg"
                                       }
-                                      height={19}
-                                      width={19}
+                                      height={15}
+                                      width={15}
                                       alt=""
-                                    /> : <ImageComponent
-                                      src={
-                                        "/viewProcurement/procurement-reject-icon.svg"
-                                      }
-                                      height={17}
-                                      width={17}
-                                      alt=""
-                                    />}
+                                    />
                                   </IconButton>
-                                </Tooltip>
-                              </div>
-                            </>
-                            : ""}
+                                </Tooltip >
 
 
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                              </>
+                            }
+                            {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
+                              <>
+                                <div style={{ cursor: "pointer", display: data?.status == "PURCHASED" ? "none" : "" }}>
+                                  <Tooltip title={row?.status == "REJECTED" ? "Approve" : "Reject"}>
+                                    <IconButton
 
-                  );
-                })}
-              </TableBody>
-            </Table>
+                                      sx={{ display: row?.approved_by?.name ? "none" : "" }}
+                                      onClick={() => {
+                                        if (row?.status == "REJECTED") {
 
-          </div>
+                                          onStatusChangeEvent("approve", row?._id)
+                                        }
+                                        else {
+                                          setRejectDilogOpen(true)
+                                          setSelectedRow(row?._id)
+                                        }
+                                      }
+                                      }
+                                    >
+                                      {row?.status == "REJECTED" ? <ImageComponent
+                                        src={
+                                          "/viewProcurement/procurement-approve-icon.svg"
+                                        }
+                                        height={19}
+                                        width={19}
+                                        alt=""
+                                      /> : <ImageComponent
+                                        src={
+                                          "/viewProcurement/procurement-reject-icon.svg"
+                                        }
+                                        height={17}
+                                        width={17}
+                                        alt=""
+                                      />}
+                                    </IconButton>
+                                  </Tooltip>
+                                </div>
+                              </>
+                              : ""}
+
+
+                          </div>
+                        </TableCell>
+                      </TableRow>
+
+                    );
+                  })
+                }
+              </TableBody >
+            </Table >
+
+          </div >
         ) : (
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          loading == false && <div style={{ display: "flex", justifyContent: "center" }}>
             <Image
               src={"/NoMaterialsImage.svg"}
               height={250}
@@ -849,7 +854,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
             />
           </div>
         )}
-      </div>
+      </div >
 
       <LoadingComponent loading={loading} />
       <ViewMaterialDrawer materialId={materialId} materialOpen={materialOpen} setMaterialOpen={setMaterialOpen} getAllProcurementMaterials={getAllProcurementMaterials} />

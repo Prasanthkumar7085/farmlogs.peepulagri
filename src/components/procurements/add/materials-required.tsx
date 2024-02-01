@@ -414,6 +414,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
           <Button
             color="primary"
             variant="contained"
+            disabled={loading ? true : false}
             onClick={() => addMaterial()}
             className={styles.addMaterialBtn}
           >

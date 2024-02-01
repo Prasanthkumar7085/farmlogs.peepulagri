@@ -59,3 +59,211 @@
     align-items: center !important;
     gap: 0.5rem !important;
 }
+
+
+.imageIcon {
+    width: 134px;
+    position: relative;
+    border-radius: 50%;
+    height: 134px;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.camera1Icon {
+    width: 20px;
+    position: relative;
+    height: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.container,
+.uploadimage {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.uploadimage {
+    margin: 0 !important;
+    position: absolute;
+    top: 110px;
+    left: 95.5px;
+    border-radius: 60px;
+    background-color: #45a845;
+    padding: 6px;
+    z-index: 1;
+}
+
+.container {
+    border-radius: 180px;
+    border: 2px solid #d9d9d9;
+    padding: 4px;
+    position: relative;
+    gap: 10px;
+}
+
+.mittalAakarshana {
+    align-self: stretch;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.centralTeam,
+.mittalAakarshana {
+    margin: 0;
+    position: relative;
+    font-weight: 500;
+}
+
+.name,
+.role {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.role {
+    border-radius: 4px;
+    background-color: #ffecd4;
+    flex-direction: row;
+    padding: 4px 8px;
+    font-size: 14px;
+    color: #ff8d00;
+}
+
+.name {
+    align-self: stretch;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lable1 {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 500;
+}
+
+.lable,
+.phone {
+    position: relative;
+}
+
+.lable {
+    width: 49px;
+    height: 19px;
+}
+
+.phone {
+    margin: 0;
+    font-size: inherit;
+    font-weight: 400;
+    font-family: inherit;
+    color: #35353d;
+}
+
+.phonedetails {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lable3 {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 8.16%;
+    font-weight: 500;
+}
+
+.contactdetails,
+.profiledetailscontainer {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 24px;
+}
+
+.contactdetails {
+    align-items: flex-start;
+    font-size: 16px;
+    color: #888fa3;
+}
+
+.profiledetailscontainer {
+    align-items: center;
+}
+
+.editProfile {
+    margin: 0;
+    flex: 1;
+    position: relative;
+}
+
+.editprofile {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.optionscontainerChild {
+    align-self: stretch;
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.logout,
+.optionscontainer,
+.profile {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.logout {
+    align-self: stretch;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    color: #d94841;
+}
+
+.optionscontainer,
+.profile {
+    flex-direction: column;
+}
+
+.optionscontainer {
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px solid #d0d5dd;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 16px;
+    text-align: left;
+    font-size: 16px;
+    color: #000;
+}
+
+.profile {
+    width: 100%;
+    align-items: center;
+    gap: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #35353d;
+    font-family: Inter;
+    margin-top: 30px;
+}

@@ -156,11 +156,11 @@ const Threads = ({ details, afterCommentAdd, afterDeleteComment,
                 <div className={styles.messagebox}>
                   <div className={styles.userdetails}>
                     <h4 className={styles.jack}>
-                      {userDetails?.user_details?.user_type ==
-                        item?.commented_by?.user_type
+                      {userDetails?.user_details?._id ==
+                        item?.commented_by?._id
                         ? "You"
-                        : item?.commented_by?.user_type !==
-                          userDetails?.user_details?.user_type
+                        : item?.commented_by?._id !==
+                          userDetails?.user_details?._id
                           ? item.commented_by?.name
                           : item?.user_type}
                     </h4>

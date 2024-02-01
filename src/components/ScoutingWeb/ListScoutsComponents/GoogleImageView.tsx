@@ -14,6 +14,9 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkeleton";
 import SouthIcon from '@mui/icons-material/South';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import ReactPanZoom from "react-image-pan-zoom-rotate";
 const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails, data, getAllExistedScouts, hasMore, setOnlyImages }: any) => {
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
@@ -101,6 +104,31 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
         }
     }, [router.isReady, router.query.image_id, accessToken])
 
+
+    const [isFullScreen, setIsFullScreen] = useState(false);
+
+    const toggleFullScreen = () => {
+        const elem: any = document.getElementById('image-container');
+
+        if (!document.fullscreenElement &&
+            !document.fullscreenElement && !document.fullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            }
+            setIsFullScreen(true);
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+            setIsFullScreen(false);
+        }
+    };
 
 
 
@@ -213,14 +241,21 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
             </div>
 
-            <div className={styles.singleScoutImg}>
+            <div className={styles.singleScoutImg} id="image-container" style={{ position: "relative" }}>
+
                 {loading || !selectedImage?._id ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
                     <img
                         src={selectedImage?.url}
                         width={100}
                         height={100}
                         alt="Loading..."
-                    />}
+                    />
+                }
+                <IconButton
+                    onClick={toggleFullScreen} sx={{ position: "absolute", top: isFullScreen ? "90%" : "90%", right: isFullScreen ? "2%" : "2%" }}>
+                    {isFullScreen ? <FullscreenExitIcon fontSize="large" /> :
+                        <FullscreenIcon fontSize="large" />}
+                </IconButton>
             </div>
 
             <div className={styles.tagsBlock}>

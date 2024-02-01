@@ -105,10 +105,10 @@ const ViewProcurementComponent = () => {
     const icons: { [index: string]: React.ReactElement } = {
       0: <Image src="/viewProcurement/tracking-icons/pending.svg" alt="" height={15} width={15} />,
       1: <Image src="/viewProcurement/tracking-icons/pending.svg" alt="" height={15} width={15} />,
-      2: <Image src="/viewProcurement/tracking-icons/approved.svg" alt="" height={15} width={15} />,
-      3: <Image src="/viewProcurement/tracking-icons/purchased.svg" alt="" height={15} width={15} />,
-      4: <Image src="/viewProcurement/tracking-icons/shipped.svg" alt="" height={15} width={15} />,
-      5: <Image src="/viewProcurement/tracking-icons/completed.svg" alt="" height={15} width={15} />,
+      2: <Image src="/viewProcurement/tracking-icons/Approved.svg" alt="" height={15} width={15} />,
+      3: <Image src="/viewProcurement/tracking-icons/Purchase.svg" alt="" height={15} width={15} />,
+      4: <Image src="/viewProcurement/tracking-icons/Shipped.svg" alt="" height={15} width={15} />,
+      5: <Image src="/viewProcurement/tracking-icons/Delivered.svg" alt="" height={15} width={15} />,
       6: <Image src="/viewProcurement/tracking-icons/completed.svg" alt="" height={15} width={15} />,
     };
 

@@ -258,7 +258,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
 
   const handleInput = (event: any) => {
     const value = event.target.value.replace(/\D/g, '');
-    event.target.value = value.slice(1, 20);
+    event.target.value = value.slice(0, 20);
   };
 
   return (

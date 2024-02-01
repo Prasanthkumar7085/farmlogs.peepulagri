@@ -158,8 +158,6 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           setDialogOpen={setDialogOpen}
           loading={loading}
         /> : ""}
-
-
     </div>
   );
 };

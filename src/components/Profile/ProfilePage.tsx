@@ -1,17 +1,26 @@
 import { Avatar, Button, Grid, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingComponent from "../Core/LoadingComponent";
 import styles from "./ProfilePage.module.css";
 import Image from "next/image";
-import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import editProfileService from "../../../lib/services/AuthServices/editProfileService";
 import ErrorMessages from "../Core/ErrorMessages";
+import { useCookies } from "react-cookie";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import UpdatePasswordPage from "./UpdatePasswordPage";
+import UpdatePasswordPagefWeb from "./UpdatePasswordPageWeb";
+import UpdatePasswordPageWeb from "./UpdatePasswordPageWeb";
+
 
 const ProfilePage = () => {
+
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -23,6 +32,23 @@ const ProfilePage = () => {
   const [email, setEmail] = useState<any>()
   const [phone, setPhone] = useState<any>()
   const [errorMessages, setErrorMessages] = useState<any>({});
+  const [changePassword, setChangePassword] = useState<boolean>(false)
+
+
+  const [, , removeCookie] = useCookies(["userType_v2"]);
+  const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
+
+  const logout = async () => {
+    try {
+      removeCookie("userType_v2");
+      loggedIn_v2("loggedIn_v2");
+      router.push("/");
+      await dispatch(removeUserDetails());
+      await dispatch(deleteAllMessages());
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
 
   //get the details of user
   const getProfile = async () => {
@@ -53,7 +79,6 @@ const ProfilePage = () => {
   };
 
   const handleChange = (e: any) => {
-    console.log(e.target.files[0])
     uploadProfile(e.target.files[0])
   }
   //upload profile  api event
@@ -220,7 +245,7 @@ const ProfilePage = () => {
           </div>
           <div className={styles.textfieldsgroup}>
             <div className={styles.eachDetailGrp}>
-              <label className={styles.lable1}>First Name<span style={{ color: "red" }}>*</span></label>
+              <label className={styles.lable1}>Full Name<span style={{ color: "red" }}>*</span></label>
               <TextField
                 fullWidth
                 placeholder="Full Name"
@@ -234,6 +259,19 @@ const ProfilePage = () => {
                 keyname={"name"}
               />
             </div>
+
+            <div className={styles.eachDetailGrp}>
+              <label className={styles.lable1}>User Type</label>
+              <TextField
+                fullWidth
+                disabled
+                placeholder="User Type"
+                variant="outlined"
+                sx={{ "& .MuiInputBase-root": { height: "38px" } }}
+                value={data?.user_type}
+              />
+            </div>
+
             <div className={styles.eachDetailGrp}>
               <label className={styles.lable1}>Email<span style={{ color: "red" }}>*</span></label>
               <TextField
@@ -249,8 +287,9 @@ const ProfilePage = () => {
                 keyname={"email"}
               />
             </div>
+
             <div className={styles.eachDetailGrp}>
-              <label className={styles.lable1}>Phone</label>
+              <label className={styles.lable1}>Mobile Number</label>
               <TextField
                 fullWidth
                 placeholder="Phone Number"
@@ -265,17 +304,9 @@ const ProfilePage = () => {
                 keyname={"phone"}
               />
             </div>
-            <div className={styles.eachDetailGrp}>
-              <label className={styles.lable1}>User Type</label>
-              <TextField
-                fullWidth
-                disabled
-                placeholder="User Type"
-                variant="outlined"
-                sx={{ "& .MuiInputBase-root": { height: "38px" } }}
-                value={data?.user_type}
-              />
-            </div>
+
+
+
           </div>
         </section> :
           <section className={styles.profileDetailsViewBlock}>
@@ -314,16 +345,31 @@ const ProfilePage = () => {
               </div>
             </div>
           </section>}
+        { }
         <div className={styles.password}>
           <div className={styles.passwordBlock}>
             <h2 className={styles.heading1}>Password</h2>
-            <Button variant="outlined" className={styles.changePasswordBtn}>Change Password</Button>
+            {changePassword ?
+              <div style={{ width: "100%" }}>
+                <UpdatePasswordPageWeb setChangePassword={setChangePassword} />
+              </div>
+
+              :
+              <Button variant="outlined" className={styles.changePasswordBtn} onClick={() => setChangePassword(true)}>Change Password</Button>}
           </div>
         </div>
+
         <div className={styles.logoutBtnBlock}>
-          <Button variant="outlined" className={styles.logoutBtn}> <Image src="/profile/sign-out-icon.svg" alt="" width={15} height={15} /> <span>LogOut</span> </Button>
+          <Button variant="outlined"
+            className={styles.logoutBtn}
+            onClick={() => {
+              logout()
+
+            }}
+          > <Image src="/profile/sign-out-icon.svg" alt="" width={15} height={15} /> <span>LogOut</span> </Button>
         </div>
       </main>
+      <Toaster closeButton richColors position="top-right" />
 
       <LoadingComponent loading={loading} />
     </div>

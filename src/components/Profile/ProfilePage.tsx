@@ -345,7 +345,7 @@ const ProfilePage = () => {
               </div>
             </div>
           </section>}
-        { }
+
         <div className={styles.password}>
           <div className={styles.passwordBlock}>
             <h2 className={styles.heading1}>Password</h2>

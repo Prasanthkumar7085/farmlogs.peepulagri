@@ -33,8 +33,6 @@ export default function UpdatePasswordPageWeb({ setChangePassword }: any) {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const dispatch = useDispatch();
-
-
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
@@ -114,18 +112,19 @@ export default function UpdatePasswordPageWeb({ setChangePassword }: any) {
             <form noValidate onSubmit={Updatepassword} style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "2.5rem", }}>
                 <div className={styles.singleFarmBlock}>
                     <TextField
-                        placeholder="Password"
+                        placeholder="New Password"
+                        name="new password"
                         sx={{
-                            "& .MuiInputBase-root": {
-                                background: "#fff",
-                            },
+                            // "& .MuiInputBase-root": {
+                            //     background: "",
+                            // },
                             "& .MuiInputBase-input": {
-                                padding: "11.5px 14px",
+                                padding: "8px 14px",
                                 height: "inherit",
                                 fontFamily: "'Inter', sans-serif",
                             },
                             "& .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "grey !important",
+                                borderColor: "#B4C1D6 !important",
                             },
                             width: "100%"
                         }}
@@ -152,18 +151,19 @@ export default function UpdatePasswordPageWeb({ setChangePassword }: any) {
                 <div className={styles.singleFarmBlock}>
                     <TextField
                         placeholder="Confirm Password"
+                        name="confirm password"
                         sx={{
                             width: "100%",
-                            "& .MuiInputBase-root": {
-                                background: "#fff",
-                            },
+                            // "& .MuiInputBase-root": {
+                            //     background: "#fff",
+                            // },
                             "& .MuiInputBase-input": {
-                                padding: "11.5px 14px",
+                                padding: "8px 14px",
                                 height: "inherit",
                                 fontFamily: "'Inter', sans-serif",
                             },
                             "& .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "grey !important",
+                                borderColor: "#B4C1D6 !important",
                             },
                         }}
                         size="small"
@@ -197,12 +197,11 @@ export default function UpdatePasswordPageWeb({ setChangePassword }: any) {
                         ""
                     )}
                 </div>
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "1.5rem" }}>
+                <div className={styles.buttonGrp}>
                     <Button
-                        className={styles.update_Btn}
+                        className={styles.cancelBtn}
                         variant="outlined"
                         fullWidth
-
                         onClick={() => {
                             setChangePassword(false)
                         }}
@@ -210,7 +209,7 @@ export default function UpdatePasswordPageWeb({ setChangePassword }: any) {
                         Cancel
                     </Button>
                     <Button
-                        className={styles.submit}
+                        className={styles.saveBtn}
                         variant="contained"
                         fullWidth
                         type="submit"
@@ -218,6 +217,7 @@ export default function UpdatePasswordPageWeb({ setChangePassword }: any) {
                         Update
                     </Button>
                 </div>
+
             </form>
             <LoadingComponent loading={loading} />
 

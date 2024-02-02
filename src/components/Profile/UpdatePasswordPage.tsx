@@ -107,6 +107,7 @@ export default function UpdatePasswordPage() {
           onClick={() => router.push("/dashboard")}
         />
         <Typography className={styles.headerTitle}>Update Password</Typography>
+        <IconButton></IconButton>
       </div>
       <div className={styles.updatedPasswordContainer}>
         <form noValidate onSubmit={Updatepassword}>

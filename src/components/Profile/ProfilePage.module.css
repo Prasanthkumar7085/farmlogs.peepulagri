@@ -95,14 +95,14 @@
 }
 
 .editBtn {
-    border-radius: 4px;
-    border: 1px solid #6A7185;
-    text-transform: capitalize;
-    color: #35353D;
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(13px, 0.83vw, 16px);
-    font-weight: 500;
-    letter-spacing: 0;
+    border-radius: 4px!important;
+    border: 1px solid #6A7185 !important;
+    text-transform: capitalize !important;
+    color: #35353D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(13px, 0.83vw, 16px) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
 }
 
 .editBtn:hover {

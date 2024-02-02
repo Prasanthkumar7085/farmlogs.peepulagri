@@ -80,8 +80,7 @@
   object-fit: cover;
 }
 
-.statusrowChild,
-.unselected {
+.statusrowChild {
   position: relative;
 }
 
@@ -90,6 +89,8 @@
   position: relative;
   line-height: 18px;
   font-weight: 500;
+  font-size: clamp(13px, 0.8vw, 18px);
+  font-family: 'Inter', sans-serif;
 }
 
 .materialsreceivedcheckbox {
@@ -97,9 +98,8 @@
   background-color: #fff;
   border: 1px solid #d0d5dd;
   box-sizing: border-box;
-  height: 34px;
   justify-content: center;
-  padding: 10px;
+  padding: 5px 10px;
   gap: 6px;
   cursor: pointer;
   font-size: 16px;
@@ -123,5 +123,5 @@
   align-self: stretch;
   justify-content: space-between;
   padding: 0 2px 0 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }

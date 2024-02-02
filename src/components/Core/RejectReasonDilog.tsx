@@ -11,19 +11,17 @@ import ImageComponent from './ImageComponent';
 import AlertComponent from './AlertComponent';
 import updateMaterialStatusService from '../../../lib/services/ProcurementServices/MaterialService/updateMaterialItemStatus';
 import { useSelector } from 'react-redux';
+import styles from "./RejectReasonDialog.module.css"
 
 const RejectReasonDilog = ({ dialog, setRejectDilogOpen, afterRejectingMaterial, rejectLoading }: any) => {
-
     const [remarks, setRemarks] = useState<string>()
     const [validations, setValidations] = useState<any>()
     const [loading, setLoading] = useState<any>()
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
-
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
-
     const handleClose = () => {
         setRemarks('')
         setRejectDilogOpen(false)
@@ -40,8 +38,8 @@ const RejectReasonDilog = ({ dialog, setRejectDilogOpen, afterRejectingMaterial,
                     maxWidth: "800px !important",
                 }
             }}>
-                <DialogTitle style={{ color: "#00435D" }}>
-                    {"Add Remark"}
+                <DialogTitle className={styles.dialogHeading} >
+                    {"Reason"}
                 </DialogTitle>
                 <DialogContent>
 
@@ -50,17 +48,22 @@ const RejectReasonDilog = ({ dialog, setRejectDilogOpen, afterRejectingMaterial,
                         size="small"
                         multiline
                         minRows={3}
-                        placeholder={"Add Remarks"}
-                        style={{ width: "100%", marginTop: "10px" }}
+                        placeholder={"Write"}
+                        sx={{
+                            width: "100%", marginTop: "4px", '& .MuiOutlinedInput-notchedOutline': {
+                                borderColor: "#A6AAB6 !important",
+                                borderRadius: "10px !important"
+                            }
+                        }}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setRemarks(e.target.value)}
                         onKeyDown={(e: any) => e.key == 'Enter' ? afterRejectingMaterial() : ""}
                     />
                     {validations ? <Typography variant='caption' color="error">{validations}</Typography> : ""}
 
                 </DialogContent>
-                <DialogActions sx={{ padding: "20px 24px" }}>
-                    <Button className="cancelBtn" onClick={handleClose}>Cancel</Button>
-                    <Button className="successBtn" onClick={() => {
+                <DialogActions className={styles.dialogBtnGrp}>
+                    <Button className={styles.cancelBtn} onClick={handleClose}>Cancel</Button>
+                    <Button className={styles.submitBtn} onClick={() => {
                         afterRejectingMaterial(remarks)
                         setRejectDilogOpen(false)
                         setRemarks('')

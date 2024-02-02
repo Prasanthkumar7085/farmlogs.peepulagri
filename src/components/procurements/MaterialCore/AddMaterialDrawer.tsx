@@ -172,7 +172,7 @@ const AddMaterialDrawer = ({
                                     sx={{
                                         background: "#fff",
                                         '& .MuiOutlinedInput-notchedOutline': {
-                                            borderWidth: "0 1px 1px 0 !important",
+                                            borderWidth: "0  !important",
                                             borderRadius: "0 8px 8px 0 !important"
                                         }
                                     }}
@@ -223,7 +223,7 @@ const AddMaterialDrawer = ({
                                     sx={{
                                         background: "#fff",
                                         '& .MuiOutlinedInput-notchedOutline': {
-                                            borderWidth: "0 1px 1px 0 !important",
+                                            borderWidth: "0 !important",
                                             borderRadius: "0 8px 8px 0 !important"
                                         }
                                     }} value={requiredUnits}

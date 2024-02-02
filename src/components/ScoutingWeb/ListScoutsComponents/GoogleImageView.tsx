@@ -14,6 +14,11 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import GoogleViewSkeleton from "@/components/Core/Skeletons/GoogleImageViewSkeleton";
 import SouthIcon from '@mui/icons-material/South';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import ReactPanZoom from "react-image-pan-zoom-rotate";
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImageDetails, data, getAllExistedScouts, hasMore, setOnlyImages }: any) => {
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
@@ -29,6 +34,12 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
     const [loading1, setLoading1] = useState<boolean>(false)
     const [changeImage, setChangeImage] = useState<any>(false)
+    const [isFullScreen, setIsFullScreen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
 
     const logout = async () => {
         try {
@@ -102,6 +113,95 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
     }, [router.isReady, router.query.image_id, accessToken])
 
 
+
+
+
+    const toggleFullScreen = () => {
+        const elem: any = document.getElementById('image-container');
+
+        if (!document.fullscreenElement &&
+            !document.fullscreenElement && !document.fullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            }
+            setIsFullScreen(true);
+            setDragStart({ x: 0, y: 0 })
+            setDragOffset({ x: 0, y: 0 });
+            setIsDragging(false)
+            setZoomLevel(1)
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+
+            setIsFullScreen(false);
+            setDragStart({ x: 0, y: 0 })
+            setDragOffset({ x: 0, y: 0 });
+            setIsDragging(false)
+            setZoomLevel(1)
+
+        }
+    };
+
+
+
+    const handleZoomIn = () => {
+        setZoomLevel(zoomLevel + 0.1);
+    };
+
+    const handleZoomOut = () => {
+        setZoomLevel(zoomLevel - 0.1);
+    };
+
+
+    const handleMouseWheel = (event: any) => {
+        event.preventDefault();
+        const newZoomLevel = zoomLevel + (event.deltaY * -0.01);
+        setZoomLevel(Math.min(Math.max(0.5, newZoomLevel), 3)); // Limit zoom between 0.5x and 3x
+    };
+
+
+    const handleMouseDown = (event: any) => {
+        setIsDragging(true);
+        setDragStart({ x: event.clientX, y: event.clientY });
+    };
+
+    const handleMouseMove = (event: any) => {
+        if (isDragging) {
+            const offsetX = event.clientX - dragStart.x;
+            const offsetY = event.clientY - dragStart.y;
+            setDragOffset({ x: dragOffset.x + offsetX, y: dragOffset.y + offsetY });
+            setDragStart({ x: event.clientX, y: event.clientY });
+        }
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    useEffect(() => {
+        const fullscreenChangeHandler = () => {
+            setIsFullScreen(!!document.fullscreenElement || !!document.fullscreenElement || !!document.fullscreenElement || !!document.fullscreenElement);
+        };
+
+        document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+        document.addEventListener('webkitfullscreenchange', fullscreenChangeHandler);
+        document.addEventListener('mozfullscreenchange', fullscreenChangeHandler);
+        document.addEventListener('MSFullscreenChange', fullscreenChangeHandler);
+
+        return () => {
+            document.removeEventListener('fullscreenchange', fullscreenChangeHandler);
+            document.removeEventListener('webkitfullscreenchange', fullscreenChangeHandler);
+            document.removeEventListener('mozfullscreenchange', fullscreenChangeHandler);
+            document.removeEventListener('MSFullscreenChange', fullscreenChangeHandler);
+        };
+    }, []);
 
 
     return (
@@ -213,15 +313,63 @@ const GoogleImageView = ({ rightBarOpen, setRightBarOpen, imageDetails, setImage
 
             </div>
 
-            <div className={styles.singleScoutImg}>
-                {loading || !selectedImage?._id ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
-                    <img
-                        src={selectedImage?.url}
-                        width={100}
-                        height={100}
-                        alt="Loading..."
-                    />}
-            </div>
+            {isFullScreen ?
+
+                <div className={styles.singleScoutImg} id="image-container" style={{
+                    position: "relative", cursor: isDragging ? "grabbing" : "grab",
+                    userSelect: "none"
+
+                }}
+                    onWheel={handleMouseWheel}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                >
+
+                    {loading || !selectedImage?._id ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
+                        <img
+                            src={selectedImage?.url}
+                            width={100}
+                            height={100}
+                            style={{
+                                transform: `scale(${zoomLevel}) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
+                                transition: 'transform 0.5s ease-in-out'
+                            }}
+                            alt="Loading..."
+                        />
+                    }
+                    <IconButton
+                        onClick={toggleFullScreen} sx={{ position: "absolute", top: isFullScreen ? "90%" : "90%", right: isFullScreen ? "2%" : "2%" }}>
+                        {isFullScreen ? <FullscreenExitIcon fontSize="large" /> :
+                            <FullscreenIcon fontSize="large" />}
+                    </IconButton>
+                    <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+                        <Tooltip title={"Zoom In"}>
+                            <IconButton onClick={handleZoomIn}><ZoomInIcon fontSize="large" /></IconButton>
+                        </Tooltip>
+                        <Tooltip title={"Zoom Out"}>
+                            <IconButton onClick={handleZoomOut}><ZoomOutIcon fontSize="large" /></IconButton>
+                        </Tooltip>
+                    </div>
+                </div> :
+
+                <div className={styles.singleScoutImg} id="image-container" style={{ position: "relative" }}>
+
+                    {loading || !selectedImage?._id ? <Skeleton variant="rounded" width={470} height={350} animation="wave" /> :
+                        <img
+                            src={selectedImage?.url}
+                            width={100}
+                            height={100}
+                            alt="Loading..."
+                        />
+                    }
+                    <IconButton
+                        onClick={toggleFullScreen} sx={{ position: "absolute", top: isFullScreen ? "90%" : "90%", right: isFullScreen ? "2%" : "2%" }}>
+                        {isFullScreen ? <FullscreenExitIcon fontSize="large" /> :
+                            <FullscreenIcon fontSize="large" />}
+                    </IconButton>
+                </div>
+            }
 
             <div className={styles.tagsBlock}>
                 <p className={styles.tagHeading}>

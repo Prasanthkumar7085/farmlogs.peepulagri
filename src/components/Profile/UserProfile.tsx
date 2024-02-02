@@ -60,6 +60,8 @@ const UserProfile = () => {
     }
   };
 
+
+  //to change the profile pic event
   const handleChange = (e: any) => {
     console.log(e.target.files[0])
     uploadProfile(e.target.files[0])
@@ -117,9 +119,15 @@ const UserProfile = () => {
 
 
 
-  //
+  //to capitalize the first letter
+  const capitalizeFirstLetter = (string: any) => {
+    let temp = string.toLowerCase();
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
+  };
+
+
   return (
-    <div>
+    <>
       <div className={styles.summaryHeader} id="header">
         <img
           src="/mobileIcons/logo-mobile-white.svg"
@@ -130,93 +138,81 @@ const UserProfile = () => {
         <Typography className={styles.viewFarm}>Profile</Typography>
         <div className={styles.headericon} id="header-icon"></div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "1rem",
-          paddingTop: "5rem",
-          gap: "6rem",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              border: "1px solid #D94841",
-              padding: "5px",
-              borderRadius: "50%",
-              width: "130px",
-            }}
-          >
-            {data?.url ?
-              <Image
-                src={data?.url}
-                width={130}
-                height={130}
-                alt="profile"
-                style={{
-                  borderRadius: "50%",
-                  width: "130px",
-                  fontWeight: "700",
-                  fontSize: "2.4rem",
-                }}
-              /> :
-              <Avatar
-                alt="Remy Sharp"
-                sx={{
-                  width: 130,
-                  height: 130,
-                  fontWeight: "700",
-                  fontSize: "2.4rem",
-                  color: "#D94841",
-                  background: "#f5e7d6",
-                }}
-              >
-                {data?.name.slice(0, 1)}
+      <div className={styles.profile} >
 
-              </Avatar>}
-
-            <label style={{ position: "absolute", right: "34%", top: "27%", backgroundColor: "whitesmoke" }}>
-              <CameraAltIcon />
-              <input
-                type="file"
-                alt="images-upload"
-                accept="image/*"
-                hidden
-                onChange={handleChange}
-              />
-            </label>
+        <div className={styles.profiledetailscontainer}>
+          <div className={styles.profiledetailscontainer}>
+            <div className={styles.container}>
+              <img className={styles.imageIcon} alt="" src={data?.url} />
+              <div className={styles.uploadimage}>
+                <label >
+                  <img className={styles.camera1Icon} alt="" src="/camera-1.svg" />
+                  <input
+                    type="file"
+                    alt="images-upload"
+                    accept="image/*"
+                    hidden
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
+            </div>
+            <div className={styles.name}>
+              <h1 className={styles.mittalAakarshana}> {data?.name ? capitalizeFirstLetter(data?.name) : "-"}</h1>
+              <div className={styles.role}>
+                <p className={styles.centralTeam}>{data?.user_type ? capitalizeFirstLetter(data?.user_type) : "-"}</p>
+              </div>
+            </div>
           </div>
-          <div className={styles.userDetails}>
-            <Typography variant="h6">
-              {data?.name ? data?.name : "-"}
-            </Typography>
-            <Typography>{data?.email ? data?.email : "-"}</Typography>
+          <div className={styles.contactdetails}>
+            <div className={styles.phonedetails}>
+              <div className={styles.lable}>
+                <label className={styles.lable1}>Phone</label>
+              </div>
+              <h2 className={styles.phone}>{data?.phone ? data?.phone : "-"}</h2>
+            </div>
+            <div className={styles.phonedetails}>
+              <div className={styles.lable}>
+                <label className={styles.lable3}>Email</label>
+              </div>
+              <h2 className={styles.phone}>{data?.email ? data?.email : "-"}</h2>
+            </div>
           </div>
         </div>
-        <Button
-          fullWidth
-          className={styles.logOutBtn}
-          variant="outlined"
-          onClick={logout}
-        >
+        <div className={styles.optionscontainer}>
+          <div className={styles.editprofile} onClick={() => {
+            router.push("/profile/user/edit")
+          }}>
+            <img className={styles.camera1Icon} alt="" src="/editicon.svg" />
+            <p className={styles.editProfile}>Edit Profile</p>
+          </div>
           <img
-            src="/mobileIcons/summary/sign-out-light.svg"
+            className={styles.optionscontainerChild}
             alt=""
-            width={"20px"}
-          />{" "}
-          Log out
-        </Button>
+            src="/line-30@2x.png"
+          />
+          <div className={styles.editprofile} onClick={() => {
+            router.push("/profile/update-password")
+          }}>
+            <img className={styles.camera1Icon} alt="" src="/passwordicon.svg" />
+            <p className={styles.editProfile}>{`Change Password `}</p>
+          </div>
+          <img
+            className={styles.optionscontainerChild}
+            alt=""
+            src="/line-30@2x.png"
+          />
+          <div className={styles.logout} onClick={() => {
+            logout()
+
+          }}>
+            <img className={styles.camera1Icon} alt="" src="/logouticon.svg" />
+            <p className={styles.editProfile}>Log Out</p>
+          </div>
+        </div>
+        <LoadingComponent loading={loading} />
       </div>
-      <LoadingComponent loading={loading} />
-    </div>
+    </>
   );
 };
 export default UserProfile;

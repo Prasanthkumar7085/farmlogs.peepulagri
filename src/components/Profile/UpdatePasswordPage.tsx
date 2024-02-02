@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./ProfilePage.module.css";
+import styles from "./updateProfile.module.css";
 export default function UpdatePasswordPage() {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -96,29 +96,36 @@ export default function UpdatePasswordPage() {
   };
 
   return (
-    <div className={styles.updatePasswordPage}>
-      <Card className={styles.formCard}>
-        <div className={styles.cardHeader}>
-          <Button
-            sx={{ justifyContent: "flex-start !important" }}
-            onClick={() => router.back()}
-          >
-            <KeyboardBackspaceIcon />
-          </Button>
-          <Typography variant="h5" sx={{ whiteSpace: "nowrap" }}>
-            Update Password
-          </Typography>
-        </div>
+    <>
+      <div className={styles.summaryHeader} id="header">
+        <img
+          src="/mobileIcons/logo-mobile-white.svg"
+          alt=""
+          width={"50px"}
+          onClick={() => router.push("/dashboard")}
+        />
+        <Typography className={styles.headerTitle}>Update Password</Typography>
+      </div>
+      <div className={styles.updatedPasswordContainer}>
         <form noValidate onSubmit={Updatepassword}>
-          <div className={styles.inputfield}>
+          <div className={styles.singleFarmBlock}>
             <TextField
               placeholder="Password"
               sx={{
-                width: "100%",
                 "& .MuiInputBase-root": {
                   background: "#fff",
                 },
+                "& .MuiInputBase-input": {
+                  padding: "11.5px 14px",
+                  height: "inherit",
+                  fontFamily: "'Inter', sans-serif",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "grey !important",
+                },
+                width: "100%"
               }}
+
               size="small"
               type={showPassword ? "text" : "password"}
               value={password}
@@ -138,13 +145,21 @@ export default function UpdatePasswordPage() {
             />
             <ErrorMessagesComponent errorMessage={errorMessages?.password} />
           </div>
-          <div className={styles.inputfield}>
+          <div className={styles.singleFarmBlock}>
             <TextField
               placeholder="Confirm Password"
               sx={{
                 width: "100%",
                 "& .MuiInputBase-root": {
                   background: "#fff",
+                },
+                "& .MuiInputBase-input": {
+                  padding: "11.5px 14px",
+                  height: "inherit",
+                  fontFamily: "'Inter', sans-serif",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "grey !important",
                 },
               }}
               size="small"
@@ -178,17 +193,30 @@ export default function UpdatePasswordPage() {
               ""
             )}
           </div>
-          <Button
-            className={styles.update_Btn}
-            variant="contained"
-            fullWidth
-            type="submit"
-          >
-            Update
-          </Button>
+          <div className={styles.buttons}>
+            <Button
+              className={styles.update_Btn}
+              variant="outlined"
+              fullWidth
+
+              onClick={() => {
+                router.back()
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className={styles.submit}
+              variant="contained"
+              fullWidth
+              type="submit"
+            >
+              Update
+            </Button>
+          </div>
         </form>
-      </Card>
+      </div>
       <LoadingComponent loading={loading} />
-    </div>
+    </>
   );
 }

@@ -1,0 +1,63 @@
+.summaryHeader {
+    display: flex;
+    align-items: center;
+    background-color: #f5e7d6;
+}
+
+.headericon {
+    width: 32px;
+    text-align: end;
+}
+
+.summaryHeader {
+    flex-direction: row;
+    padding: 0.5rem;
+    background-color: #05A155;
+
+}
+.headerTitle {
+    color: #fff !important;
+    font-family: "Inter", sans-serif !important;
+    font-size: clamp(18px, 4.5vw, 20px) !important;
+    font-weight: 400 !important;
+    margin:auto;
+}
+.form{
+    margin-top: 10%;
+}
+
+/* update summary styles start here */
+.updatedPasswordContainer {
+    padding: 1.5rem 1rem 1rem;
+}
+
+.updatedPasswordContainer h6 {
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 4px;
+
+}
+.singleFarmBlock {
+    margin-bottom: 1rem;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.submit {
+    border-radius: 4px !important;
+    border: 1px solid #d94841 !important;
+    background: #d94841 !important;
+    box-shadow: 4px 4px 10px 0px #0202460d !important;
+    color: #FFF !important;
+    font-family: "Inter", sans-serif !important;
+    font-size: clamp(15px, 3.5vw, 16px) !important;
+    font-weight: 500 !important;
+    text-transform: capitalize !important;
+}

@@ -6,77 +6,341 @@
 
 
 }
+.backgroundimageIcon {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 1500px;
+    height: 185px;
+    object-fit: contain;
+}
 
-.profilePageCard{
-    border: 2px solid #9a9a9a;
-    border-radius: 1rem;
-    padding: 2rem 1.5rem;
+.banner {
+    width: 1500px;
+    position: relative;
+    height: 178px;
+}
+
+.profileimageChild {
+    width: 164px;
+    position: relative;
+    border-radius: 50%;
+    height: 164px;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.camera1Icon {
+    width: 24px;
+    position: relative;
+    height: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profileimage,
+.uploadaction {
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.uploadaction {
+    margin: 0 !important;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(69, 168, 69, 0.9);
+    flex-direction: row;
+    padding: 4px 70px;
+    z-index: 1;
+}
+
+.profileimage {
+    border-radius: 500px;
     background-color: #fff;
+    flex-direction: column;
+    position: relative;
 }
-.header{
-    font-size: auto;
-    font-weight: bold;
-    margin-left: 30px;
-}
-.content{
-    padding: 1rem .5rem 0rem ;
+
+.header,
+.profileimagecontainer {
+    align-self: stretch;
     display: flex;
     flex-direction: column;
-    gap:.3rem
-}
-.contentGrid{
-    border-radius: .5rem;
-    background-color: #f5f7fa;
-    display: flex;
-    align-items:center;
-    padding: .5rem 1rem;
-}
-.heading{
-    font-family: Inter;
-    min-width: 15rem;
-    color:#a05148;
-    font-weight: bold;
-}
-.value{
-    font-family: Inter;
 }
 
-.updatePasswordPage {
-    width: 35%;
-    margin: 0 auto;
-    max-width: 650px;
-    height: 100vh;
-    display: flex;
+.profileimagecontainer {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 48px;
+    margin-top: -132px;
+}
+
+.header {
     align-items: center;
     justify-content: center;
 }
 
-.formCard {
-    padding: 2rem;
-    width: 100%;
+.heading1 {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: inherit;
+    line-height: 100%;
+    font-weight: 500;
+    font-family: inherit;
 }
 
-.formCard .cardHeader {
+.heading {
+    flex: 1;
+    position: relative;
+    height: 24px;
+}
+
+.row {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lable1 {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 100%;
+    font-weight: 500;
+}
+
+.content,
+.lable {
+    align-self: stretch;
+    position: relative;
+}
+
+.lable {
+    height: 14px;
+}
+
+.content {
+    margin: 0;
+    font-size: 18px;
+    color: #35353d;
+}
+
+.fullname {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.content1,
+.content3 {
+    margin: 0;
+    align-self: stretch;
+    position: relative;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ff8d00;
+}
+
+.content3 {
+    font-size: 18px;
+    line-height: 100%;
+    color: #35353d;
+}
+
+.component19,
+.detailsgroup {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 24px;
+    font-size: 14px;
+    color: #6a7185;
+}
+
+.component19 {
+    border-radius: 16px;
+    background-color: #f5f7fa;
+    flex-direction: column;
+    padding: 40px;
+    gap: 48px;
+    text-align: left;
+    font-size: 24px;
+    color: #35353d;
+    font-family: Inter;
+}
+
+.heading2 {
+    width: 150px;
+    position: relative;
+    height: 24px;
+}
+
+.row1 {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.asterisk1Icon {
+    width: 16px;
+    position: relative;
+    height: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.password1 {
+    border-radius: 4px;
+    border: 1px solid #000;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 12px 24px;
+    gap: 4px;
+}
+
+.vectorIcon {
+    width: 18.7px;
+    position: relative;
+    height: 12.5px;
+}
+
+.eye,
+.passwordcontainergroup {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 1rem;
-    margin-bottom: 2rem;
 }
 
-.formCard .cardHeader button {
-    padding: 0 !important;
-    min-width: inherit !important;
+.eye {
+    border-radius: 4px;
+    background-color: #35353d;
+    overflow: hidden;
+    flex-direction: column;
+    padding: 11px 12px;
 }
 
-.formCard .inputfield {
-    margin-bottom: 1.5rem;
+.passwordcontainergroup {
+    flex-direction: row;
+    gap: 8px;
 }
 
-.formCard .update_Btn {
-    text-transform: capitalize !important;
-    font-size: clamp(16px, 0.83vw, 20px);
-    font-family: 'Inter', sans-serif;
-    margin-top: 1rem;
+.changePasswordaction {
+    position: relative;
+    line-height: 100%;
+    font-weight: 500;
+}
 
+.content4,
+.password {
+    align-self: stretch;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.content4 {
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+    font-size: 16px;
+    color: #d94841;
+}
+
+.password {
+    border-radius: 16px;
+    background-color: #f9fbfd;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px;
+    gap: 32px;
+}
+
+.cancel {
+    position: relative;
+}
+
+.buttonsgroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.inputbox {
+    border: 0;
+    background-color: transparent;
+    align-self: stretch;
+    font-family: Inter;
+    font-size: 16px;
+    color: #35353d;
+}
+
+.component191,
+.textfieldsgroup {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 32px;
+    font-size: 14px;
+    color: #6a7185;
+}
+
+.component191 {
+    border-radius: 16px;
+    background-color: #f5f7fa;
+    flex-direction: column;
+    padding: 40px;
+    gap: 21px;
+    text-align: left;
+    font-size: 24px;
+    color: #35353d;
+    font-family: Inter;
+}
+
+.details,
+.profilecontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 23px;
+}
+
+.details {
+    align-self: stretch;
+    padding: 0 48px;
+    text-align: left;
+    font-size: 24px;
+    color: #35353d;
+    font-family: Inter;
+}
+
+.profilecontainer {
+    width: 80%;
+    margin: 0 auto;
+    border-radius: 24px;
+    background-color: #fff;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin-top: 40px;
 }

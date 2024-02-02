@@ -16,7 +16,8 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./updateProfile.module.css";
+import styles from "./UpdatePasswordMobile.module.css"
+import Image from "next/image";
 export default function UpdatePasswordPage() {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -98,10 +99,11 @@ export default function UpdatePasswordPage() {
   return (
     <>
       <div className={styles.summaryHeader} id="header">
-        <img
+        <Image
           src="/mobileIcons/logo-mobile-white.svg"
           alt=""
-          width={"50px"}
+          width={50}
+          height={50}
           onClick={() => router.push("/dashboard")}
         />
         <Typography className={styles.headerTitle}>Update Password</Typography>
@@ -110,13 +112,14 @@ export default function UpdatePasswordPage() {
         <form noValidate onSubmit={Updatepassword}>
           <div className={styles.singleFarmBlock}>
             <TextField
-              placeholder="Password"
+              placeholder="New Password"
+              name="password"
               sx={{
                 "& .MuiInputBase-root": {
                   background: "#fff",
                 },
                 "& .MuiInputBase-input": {
-                  padding: "11.5px 14px",
+                  padding: "12px 14px",
                   height: "inherit",
                   fontFamily: "'Inter', sans-serif",
                 },
@@ -148,13 +151,14 @@ export default function UpdatePasswordPage() {
           <div className={styles.singleFarmBlock}>
             <TextField
               placeholder="Confirm Password"
+              name="confirm password"
               sx={{
                 width: "100%",
                 "& .MuiInputBase-root": {
                   background: "#fff",
                 },
                 "& .MuiInputBase-input": {
-                  padding: "11.5px 14px",
+                  padding: "12px 14px",
                   height: "inherit",
                   fontFamily: "'Inter', sans-serif",
                 },
@@ -193,9 +197,9 @@ export default function UpdatePasswordPage() {
               ""
             )}
           </div>
-          <div className={styles.buttons}>
+          <div className={styles.buttonGrp}>
             <Button
-              className={styles.update_Btn}
+              className={styles.cancelBtn}
               variant="outlined"
               fullWidth
 
@@ -206,7 +210,7 @@ export default function UpdatePasswordPage() {
               Cancel
             </Button>
             <Button
-              className={styles.submit}
+              className={styles.saveBtn}
               variant="contained"
               fullWidth
               type="submit"

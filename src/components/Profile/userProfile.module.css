@@ -195,6 +195,7 @@
     align-items: flex-start;
     font-size: 16px;
     color: #888fa3;
+    padding-inline: 2rem;
 }
 
 .profiledetailscontainer {

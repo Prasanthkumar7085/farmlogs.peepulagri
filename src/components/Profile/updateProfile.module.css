@@ -15,49 +15,75 @@
     background-color: #05A155;
 
 }
+
 .headerTitle {
     color: #fff !important;
     font-family: "Inter", sans-serif !important;
     font-size: clamp(18px, 4.5vw, 20px) !important;
     font-weight: 400 !important;
-    margin:auto;
+    margin: auto;
 }
-.form{
+
+.form {
     margin-top: 10%;
 }
 
 /* update summary styles start here */
-.updatedPasswordContainer {
-    padding: 1.5rem 1rem 1rem;
-}
+/* .updatedPasswordContainer {
+} */
 
-.updatedPasswordContainer h6 {
+/* .updatedPasswordContainer h6 {
     font-size: clamp(14px, 3.5vw, 16px);
     font-family: "Inter", sans-serif;
     font-weight: 500;
     color: #000;
     margin-bottom: 4px;
 
-}
-.singleFarmBlock {
+} */
+/* .singleFarmBlock {
     margin-bottom: 1rem;
+} */
+.buttonGrp {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2rem;
 }
 
-.buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.submit {
-    border-radius: 4px !important;
-    border: 1px solid #d94841 !important;
-    background: #d94841 !important;
-    box-shadow: 4px 4px 10px 0px #0202460d !important;
-    color: #FFF !important;
-    font-family: "Inter", sans-serif !important;
-    font-size: clamp(15px, 3.5vw, 16px) !important;
+.buttonGrp button {
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(13px, 0.83vw, 16px) !important;
     font-weight: 500 !important;
+    line-height: 24px !important;
     text-transform: capitalize !important;
+    border-radius: 8px !important;
+    min-width: inherit !important;
+}
+
+.buttonGrp .cancelBtn {
+    color: #344054 !important;
+    letter-spacing: 0 !important;
+    border: 1px solid #344054 !important;
+    padding: 4px 15px !important;
+}
+
+.buttonGrp .cancelBtn:hover {
+    color: #344054 !important;
+    letter-spacing: 0 !important;
+    background-color: transparent !important;
+    border: 1px solid #344054 !important;
+
+}
+
+.buttonGrp .saveBtn {
+    background-color: #45A845 !important;
+    color: #fff !important;
+    padding: 5px 15px !important;
+}
+
+.buttonGrp .saveBtn:hover {
+    background-color: #45A845 !important;
+    color: #fff !important;
+
 }

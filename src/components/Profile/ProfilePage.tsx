@@ -158,22 +158,27 @@ const ProfilePage = () => {
     <div className={styles.profilecontainer}>
       <div className={styles.header}>
         <div className={styles.banner}>
-          <img
-            className={styles.backgroundimageIcon}
-            alt=""
-            src="/backgroundimage@2x.png"
-          />
+          <picture>
+            <img
+              className={styles.backgroundimageIcon}
+              alt=""
+              src="/backgroundimage@2x.png"
+            />
+          </picture>
         </div>
         <div className={styles.profileimagecontainer}>
           <div className={styles.profileimage}>
-            <img
+            <Image
+              height={130}
+              width={130}
               className={styles.profileimageChild}
               alt=""
               src={data?.url}
             />
+
             <div className={styles.uploadaction}>
               <label >
-                <img className={styles.camera1Icon} alt="" src="/camera-1.svg" />
+                <Image className={styles.camera1Icon} height={20} width={20} alt="" src="/camera-1.svg" />
                 <input
                   type="file"
                   alt="images-upload"
@@ -187,18 +192,14 @@ const ProfilePage = () => {
         </div>
       </div>
       <main className={styles.details}>
-        {editProfile ? <section className={styles.component191}>
-          <div className={styles.row}>
-            <div className={styles.heading}>
-              <h2 className={styles.heading1}>Edit Personal info</h2>
-            </div>
-            <div className={styles.buttonsgroup}>
+        {editProfile ? <section className={styles.profileDetailsEditBlock}>
+          <div className={styles.sectionHeaderBlock}>
+            <h2 className={styles.heading1}>Edit Personal info</h2>
+            <div className={styles.buttonGrp}>
               <Button
-                className={styles.cancel}
+                className={styles.cancelBtn}
                 disableElevation={true}
-                color="primary"
                 variant="text"
-                sx={{ borderRadius: "0px 0px 0px 0px" }}
                 onClick={() => {
                   setEditProfile(false)
                 }}
@@ -206,10 +207,9 @@ const ProfilePage = () => {
                 Cancel
               </Button>
               <Button
+                className={styles.saveBtn}
                 disableElevation={true}
-                color="primary"
                 variant="contained"
-                sx={{ borderRadius: "0px 0px 0px 0px" }}
                 onClick={() => {
                   editProfileEvent()
                 }}
@@ -219,16 +219,13 @@ const ProfilePage = () => {
             </div>
           </div>
           <div className={styles.textfieldsgroup}>
-            <div className={styles.fullname}>
-              <div className={styles.lable}>
-                <label className={styles.lable1}>First Name<span style={{ color: "red" }}>*</span></label>
-              </div>
+            <div className={styles.eachDetailGrp}>
+              <label className={styles.lable1}>First Name<span style={{ color: "red" }}>*</span></label>
               <TextField
-                className={styles.inputbox}
-                color="primary"
-                placeholder="Badri"
+                fullWidth
+                placeholder="Full Name"
                 variant="outlined"
-                sx={{ "& .MuiInputBase-root": { height: "49px" } }}
+                sx={{ "& .MuiInputBase-root": { height: "38px" } }}
                 value={full_name}
                 onChange={(e) => setFullName(e.target.value)}
               />
@@ -237,16 +234,13 @@ const ProfilePage = () => {
                 keyname={"name"}
               />
             </div>
-            <div className={styles.fullname}>
-              <div className={styles.lable}>
-                <label className={styles.lable1}>Email<span style={{ color: "red" }}>*</span></label>
-              </div>
+            <div className={styles.eachDetailGrp}>
+              <label className={styles.lable1}>Email<span style={{ color: "red" }}>*</span></label>
               <TextField
-                className={styles.inputbox}
-                color="primary"
-                placeholder="Badri"
+                fullWidth
+                placeholder="Email"
                 variant="outlined"
-                sx={{ "& .MuiInputBase-root": { height: "49px" } }}
+                sx={{ "& .MuiInputBase-root": { height: "38px" } }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -255,16 +249,13 @@ const ProfilePage = () => {
                 keyname={"email"}
               />
             </div>
-            <div className={styles.fullname}>
-              <div className={styles.lable}>
-                <label className={styles.lable1}>Phone</label>
-              </div>
+            <div className={styles.eachDetailGrp}>
+              <label className={styles.lable1}>Phone</label>
               <TextField
-                className={styles.inputbox}
-                color="primary"
-                placeholder="Badri"
+                fullWidth
+                placeholder="Phone Number"
                 variant="outlined"
-                sx={{ "& .MuiInputBase-root": { height: "49px" } }}
+                sx={{ "& .MuiInputBase-root": { height: "38px" } }}
                 value={phone}
                 onInput={handleInput}
                 onChange={(e) => setPhone(e.target.value)}
@@ -274,123 +265,66 @@ const ProfilePage = () => {
                 keyname={"phone"}
               />
             </div>
-            <div className={styles.fullname}>
-              <div className={styles.lable}>
-                <label className={styles.lable1}>User Type</label>
-              </div>
+            <div className={styles.eachDetailGrp}>
+              <label className={styles.lable1}>User Type</label>
               <TextField
-                className={styles.inputbox}
-                color="primary"
+                fullWidth
                 disabled
+                placeholder="User Type"
                 variant="outlined"
-                sx={{ "& .MuiInputBase-root": { height: "46px" } }}
+                sx={{ "& .MuiInputBase-root": { height: "38px" } }}
                 value={data?.user_type}
               />
             </div>
           </div>
         </section> :
-          <section className={styles.component19}>
-            <div className={styles.row}>
-              <div className={styles.heading}>
-                <h2 className={styles.heading1}>Personal info</h2>
-              </div>
+          <section className={styles.profileDetailsViewBlock}>
+            <div className={styles.sectionHeaderBlock}>
+              <h2 className={styles.heading1}>Personal info</h2>
               <Button
                 disableElevation={true}
-                color="primary"
                 variant="outlined"
-                sx={{ borderRadius: "0px 0px 0px 0px" }}
                 onClick={() => {
                   getProfile();
                   setEditProfile(true)
                 }}
+                startIcon={<Image src="/profile/edit-icon.svg" alt="" width={15} height={15} />}
+                className={styles.editBtn}
               >
                 Edit Details
               </Button>
             </div>
             <div className={styles.detailsgroup}>
-              <div className={styles.fullname}>
-                <div className={styles.lable}>
-                  <label className={styles.lable1}>Full Name</label>
-                </div>
-                <p className={styles.content}>{capitalizeFirstLetter(data?.name)}</p>
+              <div className={styles.eachDetailGrp}>
+                <label className={styles.lable1}>Full Name</label>
+
+                <p className={styles.content} style={{ color: "#35353D" }}>{capitalizeFirstLetter(data?.name)}</p>
               </div>
-              <div className={styles.fullname}>
-                <div className={styles.lable}>
-                  <label className={styles.lable1}>Role</label>
-                </div>
-                <p className={styles.content1}>{capitalizeFirstLetter(data?.user_type)}</p>
+              <div className={styles.eachDetailGrp}>
+                <label className={styles.lable1}>Role</label>
+                <p className={styles.content} style={{ color: "#FF8D00" }}>{capitalizeFirstLetter(data?.user_type)}</p>
               </div>
-              <div className={styles.fullname}>
-                <div className={styles.lable}>
-                  <label className={styles.lable1}>Email</label>
-                </div>
-                <p className={styles.content}>{data?.email}</p>
+              <div className={styles.eachDetailGrp}>
+                <label className={styles.lable1}>Email</label>
+                <p className={styles.content} style={{ color: "#35353D" }}>{data?.email}</p>
               </div>
-              <div className={styles.fullname}>
-                <div className={styles.lable}>
-                  <label className={styles.lable1}>Mobile Number</label>
-                </div>
-                <p className={styles.content3}>{data?.phone}</p>
+              <div className={styles.eachDetailGrp}>
+                <label className={styles.lable1}>Mobile Number</label>
+                <p className={styles.content} style={{ color: "#35353D", fontWeight: 500 }}>{data?.phone}</p>
               </div>
             </div>
           </section>}
-
         <div className={styles.password}>
-          <div className={styles.row1}>
-            <div className={styles.heading2}>
-              <h2 className={styles.heading1}>Password</h2>
-            </div>
-          </div>
-          <div className={styles.content4}>
-            <div className={styles.passwordcontainergroup}>
-              <div className={styles.password1}>
-                <img
-                  className={styles.asterisk1Icon}
-                  alt=""
-                  src="/asterisk-1.svg"
-                />
-                <img
-                  className={styles.asterisk1Icon}
-                  alt=""
-                  src="/asterisk-1.svg"
-                />
-                <img
-                  className={styles.asterisk1Icon}
-                  alt=""
-                  src="/asterisk-1.svg"
-                />
-                <img
-                  className={styles.asterisk1Icon}
-                  alt=""
-                  src="/asterisk-1.svg"
-                />
-                <img
-                  className={styles.asterisk1Icon}
-                  alt=""
-                  src="/asterisk-1.svg"
-                />
-                <img
-                  className={styles.asterisk1Icon}
-                  alt=""
-                  src="/asterisk-1.svg"
-                />
-                <img
-                  className={styles.asterisk1Icon}
-                  alt=""
-                  src="/asterisk-1.svg"
-                />
-              </div>
-              <div className={styles.eye}>
-                <img className={styles.vectorIcon} alt="" src="/vector1.svg" />
-              </div>
-            </div>
-            <div className={styles.changePasswordaction}>Change Password</div>
+          <div className={styles.passwordBlock}>
+            <h2 className={styles.heading1}>Password</h2>
+            <Button variant="outlined" className={styles.changePasswordBtn}>Change Password</Button>
           </div>
         </div>
-
-
-
+        <div className={styles.logoutBtnBlock}>
+          <Button variant="outlined" className={styles.logoutBtn}> <Image src="/profile/sign-out-icon.svg" alt="" width={15} height={15} /> <span>LogOut</span> </Button>
+        </div>
       </main>
+
       <LoadingComponent loading={loading} />
     </div>
   );

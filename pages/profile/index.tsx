@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 
 const Profile = () => {
   return (
-    <div>
+    <div style={{ paddingTop: "4.5rem" }}>
       <ProfilePage />
     </div>
   );

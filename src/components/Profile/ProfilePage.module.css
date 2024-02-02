@@ -1,39 +1,27 @@
-.profilePage {
-    width: 50vw;
-    margin: 0 auto;
-    padding-top: 3rem;
-    max-width: 650px;
-
-
-}
 .backgroundimageIcon {
     position: absolute;
     top: -7px;
     left: 0;
-    width: 1500px;
-    height: 185px;
+    width: 100%;
+    height: 160px;
     object-fit: contain;
 }
 
 .banner {
-    width: 1500px;
+    width: 100%;
     position: relative;
-    height: 178px;
+    height: 150px;
 }
 
 .profileimageChild {
-    width: 164px;
     position: relative;
     border-radius: 50%;
-    height: 164px;
     object-fit: cover;
     z-index: 0;
 }
 
 .camera1Icon {
-    width: 24px;
     position: relative;
-    height: 24px;
     overflow: hidden;
     flex-shrink: 0;
 }
@@ -53,7 +41,7 @@
     left: 0;
     background-color: rgba(69, 168, 69, 0.9);
     flex-direction: row;
-    padding: 4px 70px;
+    padding: 4px 54px;
     z-index: 1;
 }
 
@@ -75,7 +63,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     padding: 0 48px;
-    margin-top: -132px;
+    margin-top: -105px;
 }
 
 .header {
@@ -85,22 +73,14 @@
 
 .heading1 {
     margin: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: inherit;
-    line-height: 100%;
+    color: #35353D;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(20px, 1.2vw, 24px);
     font-weight: 500;
-    font-family: inherit;
+    line-height: 100%;
 }
 
-.heading {
-    flex: 1;
-    position: relative;
-    height: 24px;
-}
-
-.row {
+.sectionHeaderBlock {
     align-self: stretch;
     display: flex;
     flex-direction: row;
@@ -108,32 +88,44 @@
     justify-content: space-between;
 }
 
-.lable1 {
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    line-height: 100%;
+.editBtn {
+    border-radius: 4px;
+    border: 1px solid #6A7185;
+    text-transform: capitalize;
+    color: #35353D;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(13px, 0.83vw, 16px);
     font-weight: 500;
+    letter-spacing: 0;
 }
 
-.content,
-.lable {
-    align-self: stretch;
-    position: relative;
+.editBtn:hover {
+    border: 1px solid #6A7185;
+    background-color: transparent !important;
+
 }
 
-.lable {
-    height: 14px;
+.lable1 {
+    color: #6A7185;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 0.72vw, 14px);
+    font-weight: 500;
+    line-height: 100%;
 }
 
 .content {
+    align-self: stretch;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 0.93vw, 18px);
+    font-weight: 400;
     margin: 0;
-    font-size: 18px;
-    color: #35353d;
 }
 
-.fullname {
+
+
+
+
+.eachDetailGrp {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -142,23 +134,8 @@
     gap: 8px;
 }
 
-.content1,
-.content3 {
-    margin: 0;
-    align-self: stretch;
-    position: relative;
-    font-size: 16px;
-    font-weight: 500;
-    color: #ff8d00;
-}
 
-.content3 {
-    font-size: 18px;
-    line-height: 100%;
-    color: #35353d;
-}
-
-.component19,
+.profileDetailsViewBlock,
 .detailsgroup {
     align-self: stretch;
     display: flex;
@@ -170,147 +147,104 @@
     color: #6a7185;
 }
 
-.component19 {
+.profileDetailsViewBlock {
     border-radius: 16px;
-    background-color: #f5f7fa;
+    background-color: #F9FBFD;
     flex-direction: column;
-    padding: 40px;
-    gap: 48px;
+    padding: 1.875rem;
+    gap: 36px;
     text-align: left;
-    font-size: 24px;
-    color: #35353d;
-    font-family: Inter;
+    font-family: 'Inter', sans-serif !important;
 }
 
-.heading2 {
-    width: 150px;
-    position: relative;
-    height: 24px;
-}
-
-.row1 {
-    align-self: stretch;
+.passwordBlock {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.asterisk1Icon {
-    width: 16px;
-    position: relative;
-    height: 16px;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.password1 {
-    border-radius: 4px;
-    border: 1px solid #000;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 12px 24px;
-    gap: 4px;
-}
-
-.vectorIcon {
-    width: 18.7px;
-    position: relative;
-    height: 12.5px;
-}
-
-.eye,
-.passwordcontainergroup {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.eye {
-    border-radius: 4px;
-    background-color: #35353d;
-    overflow: hidden;
     flex-direction: column;
-    padding: 11px 12px;
+    gap: 25px;
+
 }
 
-.passwordcontainergroup {
-    flex-direction: row;
-    gap: 8px;
+.changePasswordBtn {
+    border-radius: 4px !important;
+    border: 1px solid #45A845 !important;
+    color: #45A845 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(13px, 0.72vw, 16px) !important;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+    text-transform: capitalize !important;
+    padding: 9px 20px !important;
+    letter-spacing: 0 !important;
 }
 
-.changePasswordaction {
-    position: relative;
-    line-height: 100%;
-    font-weight: 500;
-}
-
-.content4,
 .password {
     align-self: stretch;
     display: flex;
-    justify-content: flex-start;
-}
-
-.content4 {
-    flex-direction: row;
-    align-items: center;
-    gap: 18px;
-    font-size: 16px;
-    color: #d94841;
-}
-
-.password {
     border-radius: 16px;
     background-color: #f9fbfd;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 40px;
-    gap: 32px;
+    padding: 36px;
+
 }
 
-.cancel {
-    position: relative;
-}
-
-.buttonsgroup {
+.buttonGrp {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: 16px;
+    gap: 5px;
 }
 
-.inputbox {
-    border: 0;
-    background-color: transparent;
-    align-self: stretch;
-    font-family: Inter;
-    font-size: 16px;
-    color: #35353d;
+.buttonGrp button {
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(13px, 0.83vw, 16px) !important;
+    font-weight: 500 !important;
+    line-height: 24px !important;
+    text-transform: capitalize !important;
+    border-radius: 8px !important;
+    min-width: inherit !important;
 }
 
-.component191,
+.buttonGrp .cancelBtn {
+    color: #344054 !important;
+    letter-spacing: 0 !important;
+}
+
+.buttonGrp .cancelBtn:hover {
+    color: #344054 !important;
+    letter-spacing: 0 !important;
+    background-color: transparent !important;
+}
+
+.buttonGrp .saveBtn {
+    background-color: #45A845 !important;
+    color: #fff !important;
+    padding: 4px 15px !important;
+}
+
+.buttonGrp .saveBtn:hover {
+    background-color: #45A845 !important;
+    color: #fff !important;
+
+}
+
+.profileDetailsEditBlock,
 .textfieldsgroup {
     align-self: stretch;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 32px;
+    gap: 25px;
     font-size: 14px;
     color: #6a7185;
 }
 
-.component191 {
+.profileDetailsEditBlock {
     border-radius: 16px;
-    background-color: #f5f7fa;
+    background-color: #F9FBFD;
     flex-direction: column;
-    padding: 40px;
-    gap: 21px;
+    padding: 32px;
+    gap: 16px;
     text-align: left;
     font-size: 24px;
     color: #35353d;
@@ -328,19 +262,38 @@
 
 .details {
     align-self: stretch;
-    padding: 0 48px;
+    padding: 0 36px 36px;
     text-align: left;
-    font-size: 24px;
-    color: #35353d;
-    font-family: Inter;
+    font-family: 'Inter', sans-serif;
 }
 
 .profilecontainer {
-    width: 80%;
+    width: 82%;
     margin: 0 auto;
     border-radius: 24px;
     background-color: #fff;
     overflow: hidden;
     box-sizing: border-box;
-    margin-top: 40px;
+}
+
+.logoutBtnBlock {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.logoutBtnBlock .logoutBtn {
+    border-radius: 4px;
+    border: 1px solid #D94841;
+    text-transform: capitalize;
+    color: #D94841;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(13px, 0.83vw, 16px);
+    font-weight: 500;
+    line-height: 100%;
+    padding: 9px 19px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }

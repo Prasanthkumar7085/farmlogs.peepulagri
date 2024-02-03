@@ -139,10 +139,9 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       if (response?.data) {
 
         const filteredData = response?.data.filter((obj: any) => obj.status !== "REJECTED" && obj.hasOwnProperty('price'));
-
         const allPurchaseOrNot = filteredData.every((obj: any) => obj.hasOwnProperty('price') && obj.price !== null);
 
-        if (allPurchaseOrNot) {
+        if (allPurchaseOrNot && filteredData?.length) {
           await procurementStatusChange("PURCHASED")
           await afterMaterialStatusChange(true)
         }
@@ -467,21 +466,21 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               alt=""
             /> Approve Materials</Button> : ""}
       </div>
-      <div style={{ width: "100%", overflow: "auto", background: "#fff" }}>
-        {materials?.length ? (
-          <div style={{ padding: "0 1rem " }}>
+      <div style={{ width: "100% !important", overflow: "auto !important", background: "#fff !important" }}>
+        {materials?.length || rejectedMaterials?.length ? (
+          <div style={{ padding: "0 1rem !important" }}>
             <Table >
               <TableHead>
                 <TableRow>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px", whiteSpace: "nowrap" }}>Name</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px", whiteSpace: "nowrap" }}>Available(Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px", whiteSpace: "nowrap" }}>Procurement(Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Status</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Approved By</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px !important", whiteSpace: "nowrap !important" }}>Name</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px !important", whiteSpace: "nowrap !important" }}>Available(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px !important", whiteSpace: "nowrap !important" }}>Procurement(Qty)</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px !important", whiteSpace: "nowrap !important" }}>Status</TableCell>
+                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px !important", whiteSpace: "nowrap !important" }}>Approved By</TableCell>
                   {materialDetails ?
                     <>
-                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Vendor Details</TableCell>
-                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px", whiteSpace: "nowrap" }}>Price(Rs)</TableCell>
+                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px !important", whiteSpace: "nowrap !important" }}>Vendor Details</TableCell>
+                      <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px !important", whiteSpace: "nowrap !important" }}>Price(Rs)</TableCell>
                     </>
                     : ''}
                   <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || (data?.status == "PURCHASED" || userDetails?.user_type == "central_team") || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "", minWidth: "120px" }}>Actions</TableCell>
@@ -855,6 +854,14 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
           </div>
         )}
       </div >
+
+      <hr>
+      </hr>
+      {data?.remarks ?
+        <div className={styles.remarks}>
+          <label className={styles.remarksLabel}>Remarks</label>
+          <Typography className={styles.remarksText}>{data?.remarks}</Typography>
+        </div> : ""}
 
       <LoadingComponent loading={loading} />
       <ViewMaterialDrawer materialId={materialId} materialOpen={materialOpen} setMaterialOpen={setMaterialOpen} getAllProcurementMaterials={getAllProcurementMaterials} />

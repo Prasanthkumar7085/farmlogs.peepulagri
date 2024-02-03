@@ -235,6 +235,14 @@ const AddMaterialDrawer = ({
                             ),
                         }}
                     />
+                    <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname={"available_qty"}
+                    />
+                    <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname={"available_units"}
+                    />
                 </div>
                 <div className={styles.procurementFormBtn}>
                     <Button

@@ -28,8 +28,10 @@ const AlertStautsChange = ({
           <div
             className={styles.areYouSure}
           >{`Are you sure  Want To change status `}</div>
+
           <div className={styles.thisWillBe}>
-            This Will Be Changed Permanently
+
+            From Delivered to Completed
           </div>
         </div>
         <div className={styles.buttons}>

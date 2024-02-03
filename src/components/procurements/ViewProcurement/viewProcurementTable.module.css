@@ -1,57 +1,57 @@
 .tableHeaderCell {
-  padding-block: 4px;
-  font-size: clamp(12px, 0.72vw, 14px);
-  font-family: "Inter", sans-serif;
-  font-weight: 500;
-  color: #6A7185;
-  line-height: inherit;
-  border: 0;
+  padding-block: 4px !important;
+  font-size: clamp(12px, 0.72vw, 14px) !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 500 !important;
+  color: #6A7185 !important;
+  line-height: inherit !important;
+  border: 0 !important;
 }
 
 .tableBodyRow {
-  background: #F5F7FA;
+  background: #F5F7FA !important;
 }
 
 .tableBodyCell {
-  color: #35353D;
-  padding-block: 4px;
-  font-size: clamp(13px, 0.72vw, 15px);
-  font-family: "Inter", sans-serif;
-  font-weight: 500;
-  border: 0;
-  border-right: 1px solid #E9EDF1;
+  color: #35353D !important;
+  padding-block: 4px !important;
+  font-size: clamp(13px, 0.72vw, 15px)!important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 500 !important;
+  border: 0 !important;
+  border-right: 1px solid #E9EDF1!important;
 }
 
 .tableBodyCell:first-child {
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px 0 0 5px !important;
 }
 
 .tableBodyCell:last-child {
-  border-radius: 0 5px 5px 0;
-  border: 0;
+  border-radius: 0 5px 5px 0 !important;
+  border: 0 !important;
 }
 
 .materialsBlock table {
-  border-collapse: separate;
-  border-spacing: 0 3px;
-  margin-top: 1.5rem;
+  border-collapse: separate !important;
+  border-spacing: 0 3px !important;
+  margin-top: 1.5rem !important;
 }
 
 .materialsBlock table {
-  display: inline-table;
+  display: inline-table !important;
 }
 
 .materialsBlock {
-  background: #fff;
+  background: #fff !important;
 }
 
 .materialsBlockHeading {
-  color: #35353D;
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(15px, 0.93vw, 18px);
-  font-weight: 500;
-  line-height: 18px;
-  margin: 0;
+  color: #35353D !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(15px, 0.93vw, 18px) !important;
+  font-weight: 500 !important;
+  line-height: 18px !important;
+  margin: 0 !important;
 }
 
 .materialHeader {
@@ -59,7 +59,7 @@
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid #E9EDF1;
-  padding: 1rem 1rem 0;
+  padding: 1rem 1rem 0 !important;
 }
 
 .materialsGrid {

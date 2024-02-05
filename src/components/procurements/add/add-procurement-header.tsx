@@ -4,9 +4,10 @@ import { Button, Icon } from "@mui/material";
 import styles from "./add-procurement-header.module.css";
 import { useRouter } from "next/router";
 
-const AddProcurementHeader: NextPage = () => {
+const AddProcurementHeader = ({ materialCount }: any) => {
   const router = useRouter();
   const onBackButtonClick = useCallback(() => {
+
     // Please sync "table" to the project
     router.back();
   }, []);
@@ -18,6 +19,7 @@ const AddProcurementHeader: NextPage = () => {
         color="primary"
         variant="contained"
         onClick={onBackButtonClick}
+        disabled={materialCount >= 1 ? true : false}
       >
         <img src="/arrow-left-back-white-black.svg" alt="" width={"18px"} />
       </Button>

@@ -124,6 +124,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                   sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
                   disablePast
                   value={dateOfOperation}
+
                   format="dd/MM/yyyy"
                   onChange={(newValue: any) => {
                     setDataOfOperation(newValue);
@@ -131,6 +132,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
                   slotProps={{
                     textField: {
                       variant: "outlined",
+                      placeholder: "Select Date",
                       size: "small",
                       color: "primary",
                     },

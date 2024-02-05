@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Tooltip,
 } from "@mui/material";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -271,7 +272,7 @@ const AddProcurementForm = () => {
 
   return (
     <div style={{ paddingTop: "2rem" }}>
-      <AddProcurementHeader />
+      <AddProcurementHeader materialCount={materialCount} />
 
       <form className={styles.addprocurementform} style={{ background: "#fff", borderRadius: "12px" }}>
         <div style={{ width: "100%" }}>
@@ -329,7 +330,7 @@ const AddProcurementForm = () => {
                     color="primary"
                     variant="outlined"
                     onClick={() => {
-                      router.back();
+                      setDeleteOpen(true)
                     }}
                   >
                     Cancel

@@ -109,7 +109,7 @@ export default function UpdatePasswordPageWeb({ setChangePassword }: any) {
     return (
 
         <div className={styles.updatedPasswordContainer}>
-            <form noValidate onSubmit={Updatepassword} style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "2.5rem", }}>
+            <form noValidate onSubmit={Updatepassword} style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gridColumnGap: "2.5rem", alignItems: "flex-start", width: "75%" }}>
                 <div className={styles.singleFarmBlock}>
                     <TextField
                         placeholder="New Password"

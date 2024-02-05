@@ -9,9 +9,10 @@ import ProcurementCard from "./ProcurementCard";
 import { useCookies } from "react-cookie";
 import ProcurementHeader from "./ProcurementHeader";
 import Tabs from "@/components/Tasks/MobileTasksComponents/tabs";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import styles from "./all-procurement.module.css";
 import ProcurementTabs from "./ProcurementTabs";
+import Image from "next/image";
 
 const MobileAllProcurements = () => {
     const router = useRouter();
@@ -333,7 +334,19 @@ const MobileAllProcurements = () => {
                     lastItemRef={lastItemRef}
                     loading={loading} />
             </div>
-
+            <div className="addFormPositionIcon">
+                <IconButton
+                    size="large"
+                    className={styles.AddTaskBtn}
+                    aria-label="add to shopping cart"
+                    onClick={() => {
+                        router.push("/users-procurements/add");
+                    }}
+                >
+                    <Image src="/procurement-1.svg" alt="" width={25} height={25} />
+                    <span>Add Procurement</span>
+                </IconButton>
+            </div>
         </div>
     );
 }

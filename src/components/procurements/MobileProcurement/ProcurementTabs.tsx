@@ -17,11 +17,14 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
     const getAllStatsCount = async () => {
         try {
             let urls = [
-                "/tasks/status/count/stats?",
-                "/tasks/status/count/stats?status=TO-START",
-                "/tasks/status/count/stats?status=INPROGRESS",
-                "/tasks/status/count/stats?status=DONE",
-                "/tasks/status/count/stats?overdue=true",
+                "/procurement-requests/stats/count/procurement-requests?",
+                "/procurement-requests/stats/count/procurement-requests?status=PENDING",
+                "/procurement-requests/stats/count/procurement-requests?status=APPROVED",
+                "/procurement-requests/stats/count/procurement-requests?status=PURCHASED",
+                "/procurement-requests/stats/count/procurement-requests?status=SHIPPED",
+                "/procurement-requests/stats/count/procurement-requests?status=DELIVERED",
+                "/procurement-requests/stats/count/procurement-requests?status=COMPLETED",
+
             ];
 
             let queryParams: any = {};
@@ -51,11 +54,11 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
             //   }
             // }
 
-            if (router.query.assign_to) {
-                queryParams["assign_to"] = router.query.assign_to
-                    ? Array.isArray(router.query.assign_to)
-                        ? (router.query.assign_to as string[])
-                        : ([router.query.assign_to] as string[])
+            if (router.query.requested_by) {
+                queryParams["requested_by"] = router.query.requested_by
+                    ? Array.isArray(router.query.requested_by)
+                        ? (router.query.requested_by as string[])
+                        : ([router.query.requested_by] as string[])
                     : [];
                 // queryParams["created_by"] = userId;
             }
@@ -81,10 +84,12 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
 
             const statusTitles = [
                 "all",
-                "to_start",
-                "inprogress",
-                "done",
-                "overdue",
+                "pending",
+                "approved",
+                "purchased",
+                "shipped",
+                "delivered",
+                "completed"
             ];
 
             let data = {};
@@ -106,9 +111,9 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
             let remainder = +count % 100000;
             if (remainder) {
                 remainder = Number(String(remainder).slice(0, 2));
-                return `${Math.floor(count / 100000)}.${remainder}k`;
+                return `${Math.floor(count / 100000)}.${remainder}L`;
             }
-            return `${Math.floor(count / 100000)}k`;
+            return `${Math.floor(count / 100000)}L`;
         }
 
         if (+count >= 1000) {
@@ -121,6 +126,7 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
         }
         return count;
     };
+
     useEffect(() => {
         if (router.isReady && accessToken) {
             getAllStatsCount();
@@ -153,23 +159,23 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
             <Button
                 sx={{ display: "flex", gap: "5px" }}
                 className={
-                    router.query.status === "TO-START"
+                    router.query.status === "PENDING"
                         ? styles.todoButtonActive
                         : styles.todoButton
                 }
-                onClick={() => onStatusChange("TO-START")}
+                onClick={() => onStatusChange("PENDING")}
             >
                 Pending
                 <Chip
                     className={styles.taskCountChip}
-                    label={getModifiedCount(counts["to_start"])}
+                    label={getModifiedCount(counts["pending"])}
                     sx={{
                         height: "20px",
 
                         // color: router.query.status == "TO-START" ? "#46a845" : "#6a7185",
                         color: "#fff",
                         background:
-                            router.query.status == "TO-START" ? "#46a845" : "#6a7185",
+                            router.query.status == "PENDING" ? "#46a845" : "#6a7185",
                     }}
                 />
             </Button>
@@ -177,45 +183,45 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
             <Button
                 sx={{ display: "flex", gap: "5px" }}
                 className={
-                    router.query.status === "INPROGRESS"
+                    router.query.status === "APPROVED"
                         ? styles.todoButtonActive
                         : styles.todoButton
                 }
-                onClick={() => onStatusChange("INPROGRESS")}
+                onClick={() => onStatusChange("APPROVED")}
             >
                 Approved
                 <Chip
                     className={styles.taskCountChip}
-                    label={getModifiedCount(counts["inprogress"])}
+                    label={getModifiedCount(counts["approved"])}
                     sx={{
                         height: "20px",
 
                         // color: router.query.status == "INPROGRESS" ? "#46a845" : "#6a7185",
                         color: "#fff",
                         background:
-                            router.query.status == "INPROGRESS" ? "#46a845" : "#6a7185",
+                            router.query.status == "APPROVED" ? "#46a845" : "#6a7185",
                     }}
                 />
             </Button>
             <Button
                 sx={{ display: "flex", gap: "5px" }}
                 className={
-                    router.query.status === "DONE"
+                    router.query.status === "PURCHASED"
                         ? styles.todoButtonActive
                         : styles.todoButton
                 }
-                onClick={() => onStatusChange("DONE")}
+                onClick={() => onStatusChange("PURCHASED")}
             >
                 Purchased
                 <Chip
                     className={styles.taskCountChip}
-                    label={getModifiedCount(counts["done"])}
+                    label={getModifiedCount(counts["purchased"])}
                     sx={{
                         height: "20px",
 
                         // color: router.query.status == "DONE" ? "#46a845" : "#6a7185",
                         color: "#fff",
-                        background: router.query.status == "DONE" ? "#46a845" : "#6a7185",
+                        background: router.query.status == "PURCHASED" ? "#46a845" : "#6a7185",
                     }}
                 />
             </Button>
@@ -223,15 +229,15 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
             <Button
                 sx={{ display: "flex", gap: "5px" }}
                 className={
-                    router.query.overdue
+                    router.query.status == "SHIPPED"
                         ? styles.todoButtonActive
                         : styles.todoButton
                 }
-                onClick={() => onStatusChange("OVER-DUE")}
+                onClick={() => onStatusChange("SHIPPED")}
             >
                 Shipped
                 <Chip
-                    label={getModifiedCount(counts["overdue"])}
+                    label={getModifiedCount(counts["shipped"])}
                     className={styles.taskCountChip}
                     sx={{
                         height: "20px",
@@ -239,7 +245,7 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
                         // color: router.query.status == "OVER-DUE" ? "#46a845" : "#6a7185",
                         color: "#fff",
                         background:
-                            router.query.overdue ? "#46a845" : "#6a7185",
+                            router.query.status == "SHIPPED" ? "#46a845" : "#6a7185",
                         '&:hover': {
                             background: "#46a845"
                         }
@@ -250,44 +256,44 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
             <Button
                 sx={{ display: "flex", gap: "5px" }}
                 className={
-                    router.query.status === "DONE"
+                    router.query.status === "DELIVERED"
                         ? styles.todoButtonActive
                         : styles.todoButton
                 }
-                onClick={() => onStatusChange("DONE")}
+                onClick={() => onStatusChange("DELIVERED")}
             >
                 Delivered
                 <Chip
                     className={styles.taskCountChip}
-                    label={getModifiedCount(counts["done"])}
+                    label={getModifiedCount(counts["delivered"])}
                     sx={{
                         height: "20px",
 
                         // color: router.query.status == "DONE" ? "#46a845" : "#6a7185",
                         color: "#fff",
-                        background: router.query.status == "DONE" ? "#46a845" : "#6a7185",
+                        background: router.query.status == "DELIVERED" ? "#46a845" : "#6a7185",
                     }}
                 />
             </Button>
             <Button
                 sx={{ display: "flex", gap: "5px" }}
                 className={
-                    router.query.status === "DONE"
+                    router.query.status === "COMPLETED"
                         ? styles.todoButtonActive
                         : styles.todoButton
                 }
-                onClick={() => onStatusChange("DONE")}
+                onClick={() => onStatusChange("COMPLETED")}
             >
                 Completed
                 <Chip
                     className={styles.taskCountChip}
-                    label={getModifiedCount(counts["done"])}
+                    label={getModifiedCount(counts["completed"])}
                     sx={{
                         height: "20px",
 
                         // color: router.query.status == "DONE" ? "#46a845" : "#6a7185",
                         color: "#fff",
-                        background: router.query.status == "DONE" ? "#46a845" : "#6a7185",
+                        background: router.query.status == "COMPLETED" ? "#46a845" : "#6a7185",
                     }}
                 />
             </Button>

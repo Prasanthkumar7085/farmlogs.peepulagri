@@ -10,7 +10,7 @@ import { Toaster, toast } from "sonner";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteAddProcurementService from "../../../../../lib/services/ProcurementServices/deleteAddProcurementService";
 
-const ViewProcurementHeader = ({ data, status }: any) => {
+const ViewProcurementHeader = ({ title, data, status }: any) => {
   const router = useRouter();
 
   const userId = useSelector(
@@ -58,14 +58,14 @@ const ViewProcurementHeader = ({ data, status }: any) => {
     setAnchorEl(null);
   };
   return (
-    <header className={styles.header}>
+    <header className={styles.header} style={{ width: "100%" }}>
       <div className={styles.actions}>
         <IconButton sx={{ padding: "0" }}
 
           onClick={() => router.back()}
         ><img alt=""
           src="/arrowdownbold-1@2x.png" width="24px" /> </IconButton>
-        <p className={styles.headerTitle}>View</p>
+        <p className={styles.headerTitle}>{title}</p>
         {loggedInUserId == data?.created_by?._id ? (
           <IconButton sx={{ padding: "0" }}
             onClick={handleClick}

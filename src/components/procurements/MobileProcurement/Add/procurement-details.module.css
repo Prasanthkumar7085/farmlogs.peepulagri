@@ -1,0 +1,117 @@
+.procurementiconred {
+  width: 1.25rem;
+  position: relative;
+  height: 1.25rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.count,
+.heading {
+  position: relative;
+  line-height: 100%;
+}
+
+.count {
+  margin: 0;
+}
+
+.countcontainer,
+.headingandcount,
+.headingcontainer,
+.listofitems {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.countcontainer {
+  border-radius: 30px;
+  background-color: #ffe1e0;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.headingandcount,
+.headingcontainer,
+.listofitems {
+  gap: 0.75rem;
+}
+
+.headingandcount {
+  flex: 1;
+}
+
+.headingcontainer,
+.listofitems {
+  align-self: stretch;
+}
+
+.listofitems {
+  margin: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 0.75rem;
+}
+
+.amount,
+.total {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  line-height: 100%;
+}
+
+.total {
+  font-size: inherit;
+  text-transform: capitalize;
+  font-weight: 400;
+  font-family: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amount {
+  text-align: right;
+}
+
+.datatable,
+.totalamount,
+.yourprocurementdetails {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.totalamount {
+  background-color: #7ac761;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.75rem;
+  gap: 2.75rem;
+}
+
+.datatable,
+.yourprocurementdetails {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.datatable {
+  border-radius: 8px;
+  background-color: #f0ffeb;
+  overflow: hidden;
+  padding: 0.75rem 0 0;
+  font-size: 0.88rem;
+  color: #fff;
+}
+
+.yourprocurementdetails {
+  text-align: left;
+  font-size: 1rem;
+  color: #d94841;
+  font-family: Inter;
+}

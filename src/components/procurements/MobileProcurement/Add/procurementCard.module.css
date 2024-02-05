@@ -1,0 +1,55 @@
+.materialname,
+.procurement {
+    margin: 0;
+    position: relative;
+    line-height: 100%;
+}
+
+.materialname {
+    align-self: stretch;
+    font-size: inherit;
+    text-transform: capitalize;
+    font-weight: 400;
+    font-family: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.procurement {
+    width: 275px;
+    flex: 1;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.materialdetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.price {
+    margin: 0;
+    position: relative;
+    line-height: 100%;
+}
+
+.procurementdetails {
+    border-bottom: 1px solid rgba(50, 148, 50, 0.1);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6px 0 12px;
+    gap: 16px;
+    text-align: left;
+    font-size: 14px;
+    color: #35353d;
+    font-family: Inter;
+    align-self: stretch;
+}

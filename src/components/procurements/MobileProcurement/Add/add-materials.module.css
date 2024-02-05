@@ -1,0 +1,117 @@
+.description,
+.heading {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-family: Inter;
+  text-align: left;
+}
+.heading {
+  font-size: 1rem;
+  line-height: 1.13rem;
+  font-weight: 500;
+  color: #101828;
+}
+.description {
+  font-size: 0.88rem;
+  line-height: 130%;
+  color: #6a7185;
+}
+.textwrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.addmaterials,
+.formfieldscontainer,
+.group,
+.materialformfields,
+.textAndSupportingText {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.addmaterials,
+.formfieldscontainer,
+.group,
+.materialformfields {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.addmaterials,
+.formfieldscontainer,
+.materialformfields {
+  gap: 1rem;
+}
+.addmaterials,
+.formfieldscontainer {
+  align-items: center;
+}
+.addmaterials {
+  margin: 0;
+  background-color: #fff;
+  overflow-y: auto;
+  padding: 0.5rem 1rem;
+  gap: 2rem;
+}
+.icon {
+  width: 27px;
+  position: relative;
+  height: 27px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.required,
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.row {
+  width: 363px;
+  align-items: flex-start;
+}
+
+.required {
+  align-items: center;
+}
+
+.label {
+  cursor: pointer;
+  flex: 1;
+  position: relative;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.input,
+.lable {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.lable {
+  align-self: stretch;
+  flex-direction: row;
+  align-items: center;
+}
+
+.input {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  font-size: 14px;
+  color: #344154;
+  font-family: Inter;
+}

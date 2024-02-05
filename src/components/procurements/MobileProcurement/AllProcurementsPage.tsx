@@ -203,28 +203,29 @@ const MobileAllProcurements = () => {
 
 
     useEffect(() => {
-        let delay = 500;
-        let debounce = setTimeout(() => {
-            getAllProcurements({
-                page: 1,
-                limit: router.query.limit as string,
-                search_string: searchString,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
-                selectedFarmId: router.query.farm_id as string,
-                status: router.query.status as string,
-                priority: router.query.priority as string,
-                userId: router.query.requested_by
-                    ? Array.isArray(router.query.requested_by)
-                        ? (router.query.requested_by as string[])
-                        : ([router.query.requested_by] as string[])
-                    : [],
-                isMyProcurements: router.query.is_my_procurement as string,
-            });
-        }, delay);
-        return () => clearTimeout(debounce);
-
-    }, [searchString]);
+        if (router.isReady && accessToken) {
+            let delay = 500;
+            let debounce = setTimeout(() => {
+                getAllProcurements({
+                    page: 1,
+                    limit: router.query.limit as string,
+                    search_string: searchString,
+                    sortBy: router.query.order_by as string,
+                    sortType: router.query.order_type as string,
+                    selectedFarmId: router.query.farm_id as string,
+                    status: router.query.status as string,
+                    priority: router.query.priority as string,
+                    userId: router.query.requested_by
+                        ? Array.isArray(router.query.requested_by)
+                            ? (router.query.requested_by as string[])
+                            : ([router.query.requested_by] as string[])
+                        : [],
+                    isMyProcurements: router.query.is_my_procurement as string,
+                });
+            }, delay);
+            return () => clearTimeout(debounce);
+        }
+    }, [searchString, accessToken, router.isReady]);
 
     //on change the search string event
     const onChangeSearch = (search: string) => {

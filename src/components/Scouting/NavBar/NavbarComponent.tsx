@@ -126,7 +126,7 @@ export default function ScoutingHeader({ children }: any) {
 
           </Button>
 
-          {/* <Button
+          <Button
             className={
               router.pathname.includes("/users-procurements")
                 ? styles.navButtonActive
@@ -150,7 +150,7 @@ export default function ScoutingHeader({ children }: any) {
               />
             )}
 
-          </Button> */}
+          </Button>
           <Button
             className={
               router.pathname.includes("/profile")

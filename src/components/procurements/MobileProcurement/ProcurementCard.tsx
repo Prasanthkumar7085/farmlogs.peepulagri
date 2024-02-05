@@ -3,137 +3,100 @@ import { Avatar, AvatarGroup } from "@mui/material";
 import moment from "moment";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import styles from "./procurement-card.module.css";
 
 const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: any) => {
     const router = useRouter();
 
     return (
-        <div >
-            <div>
-                hello
-            </div>
+        <div className={styles.allProcurementContainer}>
             {data?.length ? (
                 data?.map((item: any, index: any) => {
                     if (data.length === index + 1 && hasMore == true) {
                         return (
-                            <div
-
-
+                            <div className={styles.procurementcard}
                                 onClick={() => router.push(`/users-tasks/${item._id}/view`)}
                                 key={index}
-                                ref={lastBookElementRef}
-                            >
-                                <div >
-                                    <div >
-                                        <h2 >
-                                            {item?.title
-                                                ? item?.title?.length > 25
-                                                    ? item?.title?.slice(0, 1).toUpperCase() +
-                                                    item?.title?.slice(1, 22) +
-                                                    "..."
-                                                    : item?.title[0].toUpperCase() + item?.title?.slice(1)
-                                                : "ty"}
-                                        </h2>
-                                        <div >
-                                            <Image
-                                                width={25}
-                                                height={25}
-                                                alt=""
-                                                src="/calendarblank-1@2x.png"
-                                            />
-                                            <p >
-                                                {moment(item.deadline).format("DD-MM-YYYY")}
+                                ref={lastBookElementRef}>
+                                <div className={styles.detailscontainer}>
+                                    <div className={styles.datestatus}>
+                                        <div className={styles.date}>
+                                            <p className={styles.duedate}>  {moment(item.deadline).format("DD-MM-YYYY")}
                                             </p>
                                         </div>
+                                        <div className={styles.status}>
+                                            <p className={styles.duedate}>{item.status}</p>
+                                        </div>
                                     </div>
-                                    <div >
-                                        <AvatarGroup sx={{
-                                            '& .MuiAvatar-root': {
-                                                fontSize: "10px !important",
-                                                width: "22px !important",
-                                                height: "22px !important",
-                                                background: "#d94841 !important",
-                                            }
-                                        }} total={item?.assign_to?.length} max={3}>
-                                            {item?.assign_to?.map((assignee: any, assigneeindex: any) => {
-                                                return (
-                                                    <Avatar sx={{
-                                                        fontSize: "10px",
-                                                        width: "22px",
-                                                        height: "22px",
-                                                        background: "#d94841",
-
-                                                    }} key={assigneeindex} >
-                                                        {assignee?.name?.split(" ")?.length > 3
-                                                            ? `${assignee?.name?.split(" ")[0][0]}${assignee?.name?.split(" ")[1][0]}`.toUpperCase()
-                                                            : assignee?.name.slice(0, 2)?.toUpperCase()}
-                                                    </Avatar>
-                                                );
-                                            })}
-                                        </AvatarGroup>
-
+                                    <div className={styles.container}>
+                                        <div className={styles.title}>
+                                            <h1 className={styles.fertilizersAndSoil}>
+                                                {item?.title
+                                                    ? item?.title?.length > 25
+                                                        ? item?.title?.slice(0, 1).toUpperCase() +
+                                                        item?.title?.slice(1, 22) +
+                                                        "..."
+                                                        : item?.title[0].toUpperCase() +
+                                                        item?.title?.slice(1)
+                                                    : ""}
+                                            </h1>
+                                            <div className={styles.requiredmaterialscount}>
+                                                <p className={styles.p}>10</p>
+                                            </div>
+                                        </div>
+                                        <div className={styles.row}>
+                                            <div className={styles.column}>
+                                                <p className={styles.farmname}>HeatHarvest Farms</p>
+                                                <div className={styles.prioritycontainer}>
+                                                    <p className={styles.duedate}>{item.priority}</p>
+                                                </div>
+                                            </div>
+                                            <div className={styles.profile} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         );
                     } else {
                         return (
-                            <div
-
+                            <div className={styles.procurementcard}
                                 onClick={() => router.push(`/users-tasks/${item._id}/view`)}
                                 key={index}
-                                ref={index === data.length - 15 ? lastItemRef : null}
-                            >
-                                <div >
-                                    <div >
-                                        <h2 >
-                                            {item?.title
-                                                ? item?.title?.length > 25
-                                                    ? item?.title?.slice(0, 1).toUpperCase() +
-                                                    item?.title?.slice(1, 22) +
-                                                    "..."
-                                                    : item?.title[0].toUpperCase() +
-                                                    item?.title?.slice(1)
-                                                : "ty"}
-                                        </h2>
-                                        <div >
-                                            <Image
-                                                width={15}
-                                                height={15}
-                                                alt=""
-                                                src="/calendarblank-1@2x.png"
-                                            />
-                                            <p >
-                                                {moment(item.deadline).format("DD-MM-YYYY")}
-                                            </p>
+                                ref={index === data.length - 15 ? lastItemRef : null}>
+                                <div className={styles.detailscontainer}>
+                                    <div className={styles.datestatus}>
+                                        <div className={styles.date}>
+                                            <p className={styles.duedate}> {moment(item.deadline).format("DD-MM-YYYY")}</p>
+                                        </div>
+                                        <div className={styles.status}>
+                                            <p className={styles.duedate}>{item.status}</p>
                                         </div>
                                     </div>
-                                    <div >
-
-
-                                        <AvatarGroup sx={{
-                                            '& .MuiAvatar-root': {
-                                                fontSize: "10px !important",
-                                                width: "22px !important",
-                                                height: "22px !important",
-                                                background: "#d94841 !important",
-                                            }
-                                        }} total={item?.assign_to?.length} max={5}>
-                                            {item?.assign_to?.map((assignee: any, assigneeindex: any) => {
-                                                return (
-                                                    <Avatar sx={{
-                                                        fontSize: "10px",
-                                                        width: "22px",
-                                                        height: "22px",
-                                                        background: "#d94841",
-                                                    }} key={assigneeindex} >
-                                                        {assignee?.name?.split(" ")?.length > 3
-                                                            ? `${assignee?.name?.split(" ")[0][0]}${assignee?.name?.split(" ")[1][0]}`.toUpperCase()
-                                                            : assignee?.name.slice(0, 2)?.toUpperCase()}
-                                                    </Avatar>
-                                                );
-                                            })}
-                                        </AvatarGroup>
+                                    <div className={styles.container}>
+                                        <div className={styles.title}>
+                                            <h1 className={styles.fertilizersAndSoil}>
+                                                {item?.title
+                                                    ? item?.title?.length > 25
+                                                        ? item?.title?.slice(0, 1).toUpperCase() +
+                                                        item?.title?.slice(1, 22) +
+                                                        "..."
+                                                        : item?.title[0].toUpperCase() +
+                                                        item?.title?.slice(1)
+                                                    : ""}
+                                            </h1>
+                                            <div className={styles.requiredmaterialscount}>
+                                                <p className={styles.p}>10</p>
+                                            </div>
+                                        </div>
+                                        <div className={styles.row}>
+                                            <div className={styles.column}>
+                                                <p className={styles.farmname}>HeatHarvest Farms</p>
+                                                <div className={styles.prioritycontainer}>
+                                                    <p className={styles.duedate}>{item.priority}</p>
+                                                </div>
+                                            </div>
+                                            <div className={styles.profile} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

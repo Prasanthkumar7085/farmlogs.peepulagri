@@ -7,6 +7,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ApiCallProps } from "../procurementsTable/ListProcurements";
 import ProcurementCard from "./ProcurementCard";
 import { useCookies } from "react-cookie";
+import ProcurementHeader from "./ProcurementHeader";
+import Tabs from "@/components/Tasks/MobileTasksComponents/tabs";
+import { Button } from "@mui/material";
+import styles from "./all-procurement.module.css";
+import ProcurementTabs from "./ProcurementTabs";
 
 const MobileAllProcurements = () => {
     const router = useRouter();
@@ -23,6 +28,16 @@ const MobileAllProcurements = () => {
     const [hasMore, setHasMore] = useState(true);
     const [, , removeCookie] = useCookies(["userType"]);
     const [, , loggedIn] = useCookies(["loggedIn"]);
+    const [dateFilter, setDateFilter] = useState("");
+    const userId = useSelector(
+        (state: any) => state.auth.userDetails?.user_details?._id
+    );
+    const [user, setUser] = useState<any>([]);
+    const [selectedUsers, setSelectedUsers] = useState<
+        { name: string; _id: string }[] | null
+    >();
+
+    //logout event
     const logout = async () => {
         try {
             removeCookie("userType");
@@ -33,6 +48,7 @@ const MobileAllProcurements = () => {
         }
     };
 
+    //get all procurements api
     const getAllProcurements = async ({
         page = 1,
         limit = 15,
@@ -43,7 +59,7 @@ const MobileAllProcurements = () => {
         status = "ALL",
         priority = "ALL",
         userId = [],
-        isMyTasks = false,
+        isMyProcurements = false,
     }: any) => {
         setLoading(true);
         let queryParams: any = {};
@@ -79,15 +95,15 @@ const MobileAllProcurements = () => {
             queryParams["requested_by"] = userId;
             // queryParams["created_by"] = userId;
         }
-        if (Boolean(isMyTasks)) {
-            queryParams["is_my_task"] = true;
+        if (Boolean(isMyProcurements)) {
+            queryParams["is_my_procurement"] = true;
         }
 
 
         const {
             page: pageCount,
             limit: limitCount,
-            is_my_task,
+            is_my_procurement,
             ...queryParamsUpdated
         } = queryParams;
 
@@ -118,34 +134,9 @@ const MobileAllProcurements = () => {
         }
         setLoading(false)
     }
-    useEffect(() => {
-        if (router.isReady && accessToken) {
-            let delay = 500;
-            let debounce = setTimeout(() => {
-                getAllProcurements({
-                    page: 1,
-                    limit: router.query.limit as string,
-                    search_string: searchString,
-                    sortBy: router.query.order_by as string,
-                    sortType: router.query.order_type as string,
-                    selectedFarmId: router.query.farm_id as string,
-                    status: router.query.status as string,
-                    priority: router.query.priority as string,
-                    userId: router.query.requested_by
-                        ? Array.isArray(router.query.requested_by)
-                            ? (router.query.requested_by as string[])
-                            : ([router.query.requested_by] as string[])
-                        : [],
-                    isMyTasks: router.query.is_my_task as string,
-                });
-            }, delay);
-            return () => clearTimeout(debounce);
-        }
-    }, [searchString, router.isReady, accessToken]);
 
-
+    //scoll to the last element after next page api call
     const lastItemRef = useRef<HTMLDivElement>(null);
-
     const scrollToLastItem = () => {
         if (lastItemRef.current) {
             lastItemRef.current.scrollIntoView({
@@ -157,7 +148,7 @@ const MobileAllProcurements = () => {
     };
     const observer: any = useRef();
 
-
+    //to get the last element in the Dom
     const lastBookElementRef = useCallback(
         (node: any) => {
             if (loading) return;
@@ -179,7 +170,7 @@ const MobileAllProcurements = () => {
                                 ? (router.query.requested_by as string[])
                                 : ([router.query.requested_by] as string[])
                             : [],
-                        isMyTasks: router.query.is_my_task as string,
+                        isMyProcurements: router.query.is_my_procurement as string,
                     });
                     scrollToLastItem(); // Restore scroll position after new data is loaded
                 }
@@ -189,13 +180,159 @@ const MobileAllProcurements = () => {
         [loading, hasMore]
     );
 
+    useEffect(() => {
+        if (router.isReady && accessToken) {
+            getAllProcurements({
+                page: 1,
+                limit: router.query.limit as string,
+                search_string: searchString,
+                sortBy: router.query.order_by as string,
+                sortType: router.query.order_type as string,
+                selectedFarmId: router.query.farm_id as string,
+                status: router.query.status as string,
+                priority: router.query.priority as string,
+                userId: router.query.requested_by
+                    ? Array.isArray(router.query.requested_by)
+                        ? (router.query.requested_by as string[])
+                        : ([router.query.requested_by] as string[])
+                    : [],
+                isMyProcurements: router.query.is_my_procurement as string,
+            });
+        }
+    }, [router.isReady, accessToken]);
+
+
+    useEffect(() => {
+        let delay = 500;
+        let debounce = setTimeout(() => {
+            getAllProcurements({
+                page: 1,
+                limit: router.query.limit as string,
+                search_string: searchString,
+                sortBy: router.query.order_by as string,
+                sortType: router.query.order_type as string,
+                selectedFarmId: router.query.farm_id as string,
+                status: router.query.status as string,
+                priority: router.query.priority as string,
+                userId: router.query.requested_by
+                    ? Array.isArray(router.query.requested_by)
+                        ? (router.query.requested_by as string[])
+                        : ([router.query.requested_by] as string[])
+                    : [],
+                isMyProcurements: router.query.is_my_procurement as string,
+            });
+        }, delay);
+        return () => clearTimeout(debounce);
+
+    }, [searchString]);
+
+    //on change the search string event
+    const onChangeSearch = (search: string) => {
+        setSearchString(search);
+    };
+
+    //userdropdown onChange event
+    const onUserChange = async (value: string[] | [], isMyProcurements = false) => {
+        getAllProcurements({
+            page: 1,
+            limit: router.query.limit as string,
+            search_string: searchString,
+            createdAt: dateFilter,
+            sortBy: router.query.order_by as string,
+            sortType: router.query.order_type as string,
+            selectedFarmId: router.query.farm_id as string,
+            status: router.query.overdue ? "OVER-DUE" : router.query.status as string,
+            userId: value,
+            isMyProcurements: isMyProcurements,
+        });
+    };
+
+    //status onChange Event
+    const onStatusChange = async (value: any) => {
+        getAllProcurements({
+            page: 1,
+            limit: router.query.limit as string,
+            search_string: searchString,
+            createdAt: dateFilter,
+            sortBy: router.query.order_by as string,
+            sortType: router.query.order_type as string,
+            selectedFarmId: router.query.farm_id as string,
+            status: value,
+            userId: router.query.assign_to
+                ? Array.isArray(router.query.assign_to)
+                    ? (router.query.assign_to as string[])
+                    : ([router.query.assign_to] as string[])
+                : [],
+            isMyProcurements: router.query?.is_my_procurement as string,
+        });
+    };
+
     return (
         <div>
-            <ProcurementCard data={data}
-                lastBookElementRef={lastBookElementRef}
-                hasMore={hasMore}
-                lastItemRef={lastItemRef}
-                loading={loading} />
+            <ProcurementHeader
+                onChangeSearch={onChangeSearch}
+                searchString={searchString}
+                onUserChange={onUserChange}
+                getAllTasks={getAllProcurements}
+            />
+            <div className={styles.allTasksPage}>
+                <div className={styles.TabButtonGrp}>
+                    <Button
+                        className={
+                            router.query.is_my_procurement !== "true"
+                                ? styles.tabActiveButton
+                                : styles.tabButton
+                        }
+                        onClick={() => {
+                            if (!(router.query.is_my_procurement == "true")) {
+                                return;
+                            }
+                            setUser([]);
+                            setSelectedUsers([]);
+
+                            getAllProcurements({
+                                page: router.query.page as string,
+                                limit: router.query.limit as string,
+                                search_string: searchString,
+                                sortBy: router.query.order_by as string,
+                                sortType: router.query.order_type as string,
+                                selectedFarmId: router.query.farm_id as string,
+                                status: router.query.status as string,
+                                userId: [],
+                                isMyProcurements: false,
+                            });
+                        }}
+                    >
+                        All Procurements
+                    </Button>
+                    <Button
+                        className={
+                            router.query.is_my_procurement == "true"
+                                ? styles.tabActiveButton
+                                : styles.tabButton
+                        }
+                        onClick={() => {
+                            if (router.query.is_my_procurement == "true") {
+                                return;
+                            }
+                            setUser([]);
+                            setSelectedUsers([]);
+                            onUserChange([userId], true);
+                        }}
+                    >
+                        My Procurements
+                    </Button>
+
+                </div>
+                <ProcurementTabs onStatusChange={onStatusChange} />
+
+                <ProcurementCard data={data}
+                    lastBookElementRef={lastBookElementRef}
+                    hasMore={hasMore}
+                    lastItemRef={lastItemRef}
+                    loading={loading} />
+            </div>
+
         </div>
     );
 }

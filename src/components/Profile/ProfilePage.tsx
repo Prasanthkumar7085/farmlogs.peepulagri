@@ -198,7 +198,7 @@ const ProfilePage = () => {
               width={130}
               className={styles.profileimageChild}
               alt=""
-              src={data?.url}
+              src={data?.url ? data?.url : "/mirchi-profile.jpg"}
             />
 
             <div className={styles.uploadaction}>

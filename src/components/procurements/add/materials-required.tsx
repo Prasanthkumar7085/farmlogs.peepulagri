@@ -302,7 +302,26 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
     };
   }, []);
 
+  const getModifiedCount = (count: number) => {
+    if (+count >= 100000) {
+      let remainder = +count % 100000;
+      if (remainder) {
+        remainder = Number(String(remainder).slice(0, 2));
+        return `${Math.floor(count / 100000)}.${remainder}L`;
+      }
+      return `${Math.floor(count / 100000)}L`;
+    }
 
+    if (+count >= 1000) {
+      let remainder = +count % 1000;
+      if (remainder) {
+        remainder = Number(String(remainder).slice(0, 2));
+        return `${Math.floor(count / 1000)}.${remainder}k`;
+      }
+      return `${Math.floor(count / 1000)}k`;
+    }
+    return count;
+  };
 
   return (
     <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "0rem", background: "#fff" }}>
@@ -358,6 +377,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
 
                 <div >
                   <TextField
+                    autoComplete="false"
 
                     size="small"
                     sx={{
@@ -506,14 +526,15 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                             </Tooltip>
                           </TableCell>
                           <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
-                            {item.required_qty ? `${item.required_qty}` : ""}
+
+                            {item.required_qty ? getModifiedCount(+item.required_qty) : ""}
                             {item.required_units
                               ? `(${item.required_units})`
                               : ""}
                           </TableCell>
                           <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1" }}>
                             {item.available_qty
-                              ? `${item.available_qty}`
+                              ? getModifiedCount(+item.required_qty)
                               : ""}
                             {item.available_units
                               ? `(${item.available_units})`

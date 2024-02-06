@@ -43,6 +43,10 @@ import AddIcon from '@mui/icons-material/Add';
 import POC from "../edit/POC";
 import Image from "next/image";
 import deleteProcurmentByIdService from "../../../../lib/services/ProcurementServices/deleteProcurmentByIdService";
+
+import Modal from 'react-modal';
+
+
 interface ApiCallService {
   procurement_req_id: string;
   name: string;
@@ -285,7 +289,6 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
       // Chrome requires returnValue to be set
       e.returnValue = '';
       // Show confirmation dialog
-      deleteProcurment()
 
       const confirmationMessage = 'Are you sure you want to leave this page?';
       e.returnValue = confirmationMessage; // Gecko, Trident, Chrome 34+
@@ -295,10 +298,12 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
 
     // Add event listener when component mounts
     window.addEventListener('beforeunload', confirmExit);
+    deleteProcurment()
 
     // Remove event listener when component unmounts
     return () => {
       window.removeEventListener('beforeunload', confirmExit);
+
     };
   }, []);
 

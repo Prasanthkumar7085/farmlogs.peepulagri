@@ -1,5 +1,4 @@
 import { Chip, MenuItem, Select, SelectChangeEvent, TextField, TextareaAutosize } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import type { NextPage } from "next";
 import {
@@ -15,6 +14,9 @@ import FarmAutoCompleteInAddProcurement from "./FarmAutoCompleteInAddProcurement
 import styles from "./operation-details.module.css";
 import { useRouter } from "next/router";
 import TextArea from '@mui/material/TextField';
+import { DatePicker } from "rsuite";
+import "rsuite/dist/rsuite.css";
+import { isBefore, startOfDay } from "date-fns";
 
 interface pagePropTypes {
   farmOptions: string[];
@@ -119,26 +121,20 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               Date of Operation<strong style={{ color: "red" }}>*</strong>
             </label>
             <div className={styles.datepicker}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  sx={{ background: "#fff", width: "100%", marginBottom: "4px" }}
-                  disablePast
-                  value={dateOfOperation}
 
-                  format="dd/MM/yyyy"
-                  onChange={(newValue: any) => {
-                    setDataOfOperation(newValue);
-                  }}
-                  slotProps={{
-                    textField: {
-                      variant: "outlined",
-                      placeholder: "Select Date",
-                      size: "small",
-                      color: "primary",
-                    },
-                  }}
-                />
-              </LocalizationProvider>
+              <DatePicker
+                style={{ background: "#fff", width: "100%", marginBottom: "4px" }}
+                value={dateOfOperation}
+                editable={false}
+                shouldDisableDate={(date) => isBefore(date, startOfDay(new Date()))}
+                placeholder={"Select Date"}
+                format="dd/MM/yyyy"
+                onChange={(newValue: any) => {
+                  setDataOfOperation(newValue);
+                }}
+
+              />
+
 
               <ErrorMessages
                 errorMessages={errorMessages}

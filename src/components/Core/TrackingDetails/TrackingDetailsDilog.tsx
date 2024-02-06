@@ -1,7 +1,7 @@
 import { Button, CircularProgress, Dialog, Drawer, IconButton, TextField } from "@mui/material";
 import styles from "./tracking-details.module.css"
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorMessages from "../ErrorMessages";
 import { DatePicker, Stack } from 'rsuite';
 import "rsuite/dist/rsuite.css";
@@ -11,6 +11,8 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 import { Clear } from "@mui/icons-material";
+import getProcurementByIdService from "../../../../lib/services/ProcurementServices/getProcurementByIdService";
+import LoadingComponent from "../LoadingComponent";
 
 
 interface pagePropsType {
@@ -24,6 +26,7 @@ const TrackingDetailsDilog = ({
   addTracking,
   setTrackingDialogOpen,
   loading,
+
 }: pagePropsType) => {
 
   const router = useRouter()
@@ -34,7 +37,8 @@ const TrackingDetailsDilog = ({
   const [service_name, setServiceName] = useState<any>()
   const [trackingId, setTrackingId] = useState<any>()
   const [trackingLoading, setTrackingLoading] = useState<any>(false)
-
+  const [data, setData] = useState<any>()
+  const [loading1, setLoading1] = useState<any>(false)
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -51,6 +55,41 @@ const TrackingDetailsDilog = ({
 
   };
 
+  const getProcurementById = async () => {
+    setLoading1(true)
+    try {
+      const response = await getProcurementByIdService({
+        procurementId: router.query.procurement_id as string,
+        accessToken: accessToken,
+      });
+      if (response.status == 200 || response.status == 201) {
+        setData(response?.data);
+        setTrackingId(data?.tracking_details?.tracking_id)
+        setServiceName(data?.tracking_details?.service_name)
+
+        setPhoneNumber(data?.tracking_details?.contact_number)
+        if (data?.tracking_details?.delivery_date) {
+          setDate(new Date(data?.tracking_details?.delivery_date))
+
+        } else {
+          setDate(null)
+
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    finally {
+      setLoading1(false)
+
+    }
+  };
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      getProcurementById()
+    }
+  }, [router.isReady, accessToken, open])
   //only allow the number and (mobile number validation)
   const handleInput = (event: any) => {
     const value = event.target.value.replace(/\D/g, '');
@@ -118,7 +157,10 @@ const TrackingDetailsDilog = ({
     >
       <div className={styles.addTrackingDetailsDrawer}>
         <div className={styles.drawerHeader}>
-          <h6 className={styles.drawerHeading}>Add Tracking Details</h6>
+          <h6 className={styles.drawerHeading}>
+            {data?.tracking_details?._id ?
+              "Edit Tracking Details" : "Add Tracking Details"}
+          </h6>
           <IconButton
             onClick={() => {
               setTrackingDialogOpen(false)
@@ -175,6 +217,7 @@ const TrackingDetailsDilog = ({
             size="lg"
             style={Datestyles}
             placeholder="Select date"
+            format="dd-MM-yyy"
             value={date}
             onChange={setDate}
             shouldDisableDate={(date) => isBefore(date, new Date())}
@@ -305,12 +348,13 @@ const TrackingDetailsDilog = ({
               {trackingLoading ? (
                 <CircularProgress size="1.3rem" sx={{ color: "white" }} />
               ) : (
-                "Submit"
+                data?.tracking_details?._id ? "Update" : "Submit"
               )}
             </div>
           </Button>
         </div>
       </div>
+      <LoadingComponent loading={loading1} />
     </Drawer>
   );
 };

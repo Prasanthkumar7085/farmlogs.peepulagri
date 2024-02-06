@@ -200,7 +200,17 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
         </div>
         {data?.tracking_details?.tracking_id ?
           <div className={styles.trackingid}>
-            <Typography variant="h6" className={styles.trackingBlockHeading}>Tracking Details</Typography>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+              <Typography variant="h6" className={styles.trackingBlockHeading}>Tracking Details
+              </Typography>
+
+              {data?.tracking_details?._id && userDetails?.user_type == "central_team" && data?.status !== "DELIVERED" && data?.status !== "COMPLETED" ?
+                <div className={styles.trackingid}>
+                  <Button className={styles.addTrackingDetailsBtn} variant="text" onClick={() => {
+                    setTrackingDialogOpen(true)
+                  }}>+ Edit Tracking Details</Button>
+                </div> : ""}
+            </div>
             <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: "3rem" }}>
               <div className={styles.information}>
                 <label className={styles.label1}>Service Name</label>
@@ -252,6 +262,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
               setTrackingDialogOpen(true)
             }}>+ Add Tracking Details</Button>
           </div> : ""}
+
       </div>
       <TrackingDetailsDilog
         open={openTrackingDilog}

@@ -439,7 +439,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
           <p className={styles.materialsBlockHeading}>Material Requirements</p>
 
-          {data?.status == "PENDING" ?
+          {data?.status == "PENDING" && (userDetails?._id == data?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") ?
             <Button variant="outlined"
               sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
               className={styles.addMaterialBtn}
@@ -483,7 +483,8 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px !important", whiteSpace: "nowrap !important" }}>Price(Rs)</TableCell>
                     </>
                     : ''}
-                  <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || (data?.status == "PURCHASED" || userDetails?.user_type == "central_team") || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "", minWidth: "120px" }}>Actions</TableCell>
+                  {(userDetails?._id == data?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") ?
+                    <TableCell className={styles.tableHeaderCell} style={{ display: data?.status == "APPROVED" || data?.status == "SHIPPED" || data?.status == "DELIVERED" || (data?.status == "PURCHASED" || userDetails?.user_type == "central_team") || data?.status == "COMPLETED" || (userDetails?.user_type == "agronomist" && data?.status == "APPROVED") ? "none" : "", minWidth: "120px" }}>Actions</TableCell> : ""}
                 </TableRow>
               </TableHead>
               <TableBody >
@@ -546,7 +547,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                           : ''
                       }
 
-                      <TableCell className={styles.tableBodyCell} style={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}>
+                      <TableCell className={styles.tableBodyCell} style={{ display: data?.tracking_details?.tracking_id || !(userDetails?._id == data?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") ? "none" : "" }}>
                         <div
                           style={{
                             display: "flex",

@@ -29,8 +29,6 @@ const ProcurementCard = ({ item, setEditMaterialId,
             setSelectedItems([])
         }
     }, [selectMaterial])
-
-
     return (
 
         <div className={styles.procurementdetails} >

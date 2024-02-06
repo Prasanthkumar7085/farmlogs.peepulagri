@@ -279,28 +279,39 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
   };
 
   useEffect(() => {
-    const confirmationMessage =
-      "Are you sure you want to leave this page? Your changes may not be saved.";
-
-    const handleBeforeUnload = (e: any) => {
+    const confirmExit = (e: any) => {
+      // Cancel the event
       e.preventDefault();
-      e.returnValue = confirmationMessage;
+      // Chrome requires returnValue to be set
+      e.returnValue = '';
+      // Show confirmation dialog
+      deleteProcurment()
+
+      const confirmationMessage = 'Are you sure you want to leave this page?';
+      e.returnValue = confirmationMessage; // Gecko, Trident, Chrome 34+
+      return confirmationMessage; // Gecko, WebKit, Chrome <34
+
     };
 
-    const handleUnload = async (e: any) => {
-      e.preventDefault();
+    // Add event listener when component mounts
+    window.addEventListener('beforeunload', confirmExit);
 
-      await deleteProcurment();
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("unload", handleUnload);
-
+    // Remove event listener when component unmounts
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("unload", handleUnload);
+      window.removeEventListener('beforeunload', confirmExit);
     };
   }, []);
+
+  const handleReload = () => {
+    deleteMaterial()
+    // Call your API here if user confirms
+    console.log('Reloading page...');
+  };
+
+  const handleCancelReload = () => {
+    // Do nothing if user cancels
+    console.log('Reload cancelled.');
+  };
 
   const getModifiedCount = (count: number) => {
     if (+count >= 100000) {

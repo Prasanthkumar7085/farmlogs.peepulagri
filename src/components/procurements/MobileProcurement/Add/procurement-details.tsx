@@ -38,7 +38,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
 
 
   return (
-    <div className={styles.yourprocurementdetails}>
+    <div className={styles.yourprocurementdetails} >
       {selectMaterial ?
         <div className={styles.headingcontainer}>
           <IconButton onClick={() => {
@@ -122,6 +122,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
             {materials.map((item: any, index: any) => {
               return (
                 <ProcurementDetailsCard
+                  key={index}
                   item={item}
                   setEditMaterialId={setEditMaterialId}
                   setOpenMaterialDrawer={setOpenMaterialDrawer}

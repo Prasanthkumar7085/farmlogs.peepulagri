@@ -12,7 +12,7 @@ import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector
 import { StepIconProps } from '@mui/material/StepIcon';
 import { Stack, Stepper } from "@mui/material";
 import Image from "next/image";
-
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 const ViewProcurementComponent = () => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -108,7 +108,7 @@ const ViewProcurementComponent = () => {
       1: <Image src="/viewProcurement/tracking-icons/pending-icon.svg" alt="" height={15} width={15} />,
       2: <Image src="/viewProcurement/tracking-icons/approved-icon.svg" alt="" height={15} width={15} />,
       3: <Image src="/viewProcurement/tracking-icons/Purchase.svg" alt="" height={15} width={15} />,
-      4: <Image src="./viewProcurement/tracking-icons/Shipped.svg" alt="" height={15} width={15} />,
+      4: <LocalShippingIcon sx={{ color: "black", opacity: "0.7" }} />,
       5: <Image src="/viewProcurement/tracking-icons/Delivered.svg" alt="" height={15} width={15} />,
       6: <Image src="/viewProcurement/tracking-icons/completed-icon.svg" alt="" height={15} width={15} />,
     };

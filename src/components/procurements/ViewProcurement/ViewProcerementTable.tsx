@@ -451,7 +451,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
               Add Material</Button> : ""}
 
         </div>
-        {data?.status == "PENDING" && userDetails?.user_type == "central_team" ?
+        {data?.status == "PENDING" && userDetails?.user_type == "central_team" && materials?.length ?
           <Button className={styles.aprroveMaterialBtn} variant="text"
             sx={{ display: data?.tracking_details?.tracking_id ? "none" : "" }}
             onClick={() => {

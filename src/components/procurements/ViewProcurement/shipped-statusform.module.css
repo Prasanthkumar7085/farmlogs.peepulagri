@@ -20,7 +20,7 @@
   font-size: clamp(12px, 0.72vw, 14px);
   font-weight: 500;
   font-family: "Inter", sans-serif !important;
-  
+
 }
 
 .dateBlock {
@@ -36,7 +36,6 @@
   flex-direction: row;
   justify-content: flex-start;
   padding: 4px 10px;
-  margin-right: 50px !important;
 
 }
 
@@ -51,6 +50,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 3px;
+  margin-right: 50px !important;
 
 }
 

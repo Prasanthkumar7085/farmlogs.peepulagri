@@ -101,13 +101,14 @@ const ViewProcurementComponent = () => {
 
   function ColorlibStepIcon(props: StepIconProps) {
     const { active, completed, className } = props;
-
+    //for completed step use this icon
+    // <Image src="/viewProcurement/tracking-icons/completed.svg" alt="" width={15} height={15}/>
     const icons: { [index: string]: React.ReactElement } = {
       0: <Image src="/viewProcurement/tracking-icons/pending.svg" alt="" height={15} width={15} />,
       1: <Image src="/viewProcurement/tracking-icons/pending-icon.svg" alt="" height={15} width={15} />,
       2: <Image src="/viewProcurement/tracking-icons/approved-icon.svg" alt="" height={15} width={15} />,
       3: <Image src="/viewProcurement/tracking-icons/Purchase.svg" alt="" height={15} width={15} />,
-      4: <Image src="./viewProcurement/tracking-icons/Shipped.svg" alt="" height={15} width={15} />,
+      4: <Image src="/viewProcurement/tracking-icons/Shipped.svg" alt="" height={15} width={15} />,
       5: <Image src="/viewProcurement/tracking-icons/Delivered.svg" alt="" height={15} width={15} />,
       6: <Image src="/viewProcurement/tracking-icons/completed-icon.svg" alt="" height={15} width={15} />,
     };

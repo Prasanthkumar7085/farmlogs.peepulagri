@@ -513,7 +513,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       </TableCell>
                       <TableCell className={styles.tableBodyCell}>
                         {row?.required_qty
-                          ? row?.required_qty + " " + row.required_units
+                          ? row?.required_qty.toFixed(2) + " " + row.required_units
                           : "---"}
                       </TableCell>
                       <TableCell className={styles.tableBodyCell}>

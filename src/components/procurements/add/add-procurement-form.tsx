@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Tooltip,
 } from "@mui/material";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -329,7 +330,13 @@ const AddProcurementForm = () => {
                     color="primary"
                     variant="outlined"
                     onClick={() => {
-                      router.back();
+                      if (procurementData?._id || router.query.procurement_id) {
+                        setDeleteOpen(true)
+
+                      }
+                      else {
+                        router.back()
+                      }
                     }}
                   >
                     Cancel
@@ -342,6 +349,7 @@ const AddProcurementForm = () => {
                     className={styles.submitBtn}
                     disabled={materialCount >= 1 ? false : true}
                     onClick={() => {
+
                       router.back();
                     }}
                   >

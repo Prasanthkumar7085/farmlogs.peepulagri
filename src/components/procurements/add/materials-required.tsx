@@ -42,6 +42,7 @@ import EditMaterialDrawer from "../MaterialCore/EditMaterialDrawer";
 import AddIcon from '@mui/icons-material/Add';
 import POC from "../edit/POC";
 import Image from "next/image";
+import deleteProcurmentByIdService from "../../../../lib/services/ProcurementServices/deleteProcurmentByIdService";
 interface ApiCallService {
   procurement_req_id: string;
   name: string;
@@ -260,6 +261,48 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
     const value = event.target.value.replace(/\D/g, '');
     event.target.value = value.slice(0, 20);
   };
+
+  const deleteProcurment = async () => {
+    setDeleteLoading(true);
+
+    const response = await deleteProcurmentByIdService({
+      procurmentId: procurementData?._id,
+      token: accessToken,
+    });
+    if (response?.success) {
+      toast.success(response?.message);
+      router.push("/procurements")
+    } else {
+      toast.error(response?.message);
+    }
+    setDeleteLoading(false);
+  };
+
+  useEffect(() => {
+    const confirmationMessage =
+      "Are you sure you want to leave this page? Your changes may not be saved.";
+
+    const handleBeforeUnload = (e: any) => {
+      e.preventDefault();
+      e.returnValue = confirmationMessage;
+    };
+
+    const handleUnload = async (e: any) => {
+      e.preventDefault();
+
+      await deleteProcurment();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
+    };
+  }, []);
+
+
 
   return (
     <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "0rem", background: "#fff" }}>

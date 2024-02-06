@@ -41,7 +41,6 @@ const ThreadsForProcurement = ({
     (state: any) => state.auth.userDetails?.access_token
   );
   const userDetails = useSelector((state: any) => state.auth.userDetails);
-
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -133,11 +132,11 @@ const ThreadsForProcurement = ({
                 <div className={styles.messagebox}>
                   <div className={styles.userdetails}>
                     <h4 className={styles.jack}>
-                      {userDetails?.user_details?.user_type ==
-                        item?.commented_by?.user_type
+                      {userDetails?.user_details?._id ==
+                        item?.commented_by?._id
                         ? "You"
-                        : item?.commented_by?.user_type !==
-                          userDetails?.user_details?.user_type
+                        : item?.commented_by?._id !==
+                          userDetails?.user_details?._id
                           ? item.commented_by?.name
                           : item?.user_type}
                     </h4>
@@ -465,11 +464,11 @@ const ThreadsForProcurement = ({
                             <div className={styles.userName}>
                               <div className={styles.userdetails1}>
                                 <h4 className={styles.jack}>
-                                  {userDetails?.user_details?.user_type ==
-                                    row?.commented_by?.user_type
+                                  {userDetails?.user_details?._id ==
+                                    row?.commented_by?._id
                                     ? "You"
-                                    : row?.commented_by?.user_type !==
-                                      userDetails?.user_details?.user_type
+                                    : row?.commented_by?._id !==
+                                      userDetails?.user_details?._id
                                       ? row?.commented_by?.name
                                       : row?.commented_by?.user_type}
                                 </h4>

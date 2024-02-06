@@ -172,7 +172,7 @@ const POC = ({
                     }}
                   >
                     {poc?.name?.split(" ")?.length > 1 || procurementData?.point_of_contact?.name.split(" ")?.length > 1
-                      ? `${poc?.name?.split(" ")[0][0]}${poc?.name?.split(" ")[1][0]}`.toUpperCase() ||
+                      ? poc?.name?.slice(0, 2)?.toUpperCase() ||
                       `${procurementData?.point_of_contact?.name.split(" ")[0][0]}${procurementData?.point_of_contact?.name.split(" ")[1][0]
                         }`.toUpperCase()
                       : poc?.name?.slice(0, 2)?.toUpperCase() || procurementData?.point_of_contact?.name.slice(0, 2)?.toUpperCase()}

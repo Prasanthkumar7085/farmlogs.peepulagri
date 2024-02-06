@@ -271,7 +271,7 @@ const AddProcurementForm = () => {
 
   return (
     <div style={{ paddingTop: "2rem" }}>
-      <AddProcurementHeader />
+      <AddProcurementHeader afterProcurement={afterProcurement} />
 
       <form className={styles.addprocurementform} style={{ background: "#fff", borderRadius: "12px" }}>
         <div style={{ width: "100%" }}>

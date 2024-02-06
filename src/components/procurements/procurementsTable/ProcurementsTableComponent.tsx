@@ -223,6 +223,7 @@ const ProcurementsTableComponent = ({
     return temp.charAt(0).toUpperCase() + temp.slice(1);
   };
 
+
   const columns = [
     {
       accessorFn: (row: any) => row.serial,
@@ -262,7 +263,7 @@ const ProcurementsTableComponent = ({
       id: "date_of_operation",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY")}
+          {timePipe(info.getValue(), "DD-MM-YYYY hh:mm A")}
         </span>
       ),
       header: () => <span>Date of Operation</span>,
@@ -291,20 +292,6 @@ const ProcurementsTableComponent = ({
       footer: (props: any) => props.column.id,
       width: "150px",
     },
-
-    // {
-    //   accessorFn: (row: any) => row.approved_by?.name,
-    //   id: "approved_by.name",
-    //   cell: (info: any) => (
-    //     <span style={{ padding: "40px 10px 40px 10px" }}>
-    //       {info.getValue()}
-    //     </span>
-    //   ),
-    //   header: () => <span>Approved By</span>,
-    //   footer: (props: any) => props.column.id,
-    //   width: "150px",
-    // },
-
     {
       accessorFn: (row: any) => row.status,
       id: "status",

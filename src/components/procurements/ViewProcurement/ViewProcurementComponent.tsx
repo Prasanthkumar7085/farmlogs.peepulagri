@@ -107,7 +107,7 @@ const ViewProcurementComponent = () => {
       1: <Image src="/viewProcurement/tracking-icons/pending-icon.svg" alt="" height={15} width={15} />,
       2: <Image src="/viewProcurement/tracking-icons/approved-icon.svg" alt="" height={15} width={15} />,
       3: <Image src="/viewProcurement/tracking-icons/Purchase.svg" alt="" height={15} width={15} />,
-      4: <Image src="/viewProcurement/tracking-icons/Shipped.svg" alt="" height={15} width={15} />,
+      4: <Image src="./viewProcurement/tracking-icons/Shipped.svg" alt="" height={15} width={15} />,
       5: <Image src="/viewProcurement/tracking-icons/Delivered.svg" alt="" height={15} width={15} />,
       6: <Image src="/viewProcurement/tracking-icons/completed-icon.svg" alt="" height={15} width={15} />,
     };

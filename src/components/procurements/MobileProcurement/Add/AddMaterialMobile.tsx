@@ -261,7 +261,11 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
             </form>
             <div style={{ marginTop: "30px" }}>
                 {materials?.length ?
-                    <ProcurementDetailsMobile materials={materials} />
+                    <ProcurementDetailsMobile
+                        materials={materials}
+                        procurementData={procurementData}
+                        getAllProcurementMaterials={getAllProcurementMaterials}
+                    />
                     : ""}
             </div>
 

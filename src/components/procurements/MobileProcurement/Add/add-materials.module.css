@@ -9,7 +9,7 @@
 .heading {
   font-size: 1rem;
   line-height: 1.13rem;
-  font-weight: 500;
+  font-weight: 500; 
   color: #101828;
 }
 .description {
@@ -114,4 +114,21 @@
   font-size: 14px;
   color: #344154;
   font-family: Inter;
+}
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+.submit {
+  border-radius: 4px !important;
+  border: 1px solid #d94841 !important;
+  background: #d94841 !important;
+  box-shadow: 4px 4px 10px 0px #0202460d !important;
+  color: #FFF !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(15px, 3.5vw, 16px) !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
 }

@@ -20,6 +20,7 @@ import VendorDetails from "./VendorDetails";
 import TrackingDetails from "./TrackingDetails";
 import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import styles from "./ViewProcurementMobile.module.css";
 
 const ViewMobileProcurement = () => {
     const router = useRouter();
@@ -194,64 +195,65 @@ const ViewMobileProcurement = () => {
     return (
         <div >
             <ViewProcurementHeader title={"View Procurement"} />
-            {data?.status ?
-                <Stack sx={{
-                    marginTop: "6%"
-                    ,
-                    '& .MuiStepLabel-label': {
-                        color: "#000",
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: "clamp(10px, 0.625vw, 13px)",
-                        fontWeight: "500",
-                        marginTop: "6px"
-                    }
-                }} spacing={4}>
+            <div className={styles.viewProcurementPage}>
 
-                    <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
-                        {steps.map((label, index) => (
-                            <Step key={label}>
-                                <StepLabel StepIconComponent={ColorlibStepIcon}>
-                                </StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                </Stack> : ""
-            }
-            <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", gap: "0.5rem" }}>
-                <ViewProucrementMobileDetails data={data}
-                    materials={materials}
-                />
-            </div>
-
-            <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", }}>
-                {materials?.length || rejectedMaterials?.length ?
-                    <ProcurementDetailsMobile
-                        materials={materials}
-                        procurementData={data}
-                        getAllProcurementMaterials={getAllProcurementMaterials}
-                        rejectedMaterials={rejectedMaterials}
-                    />
-                    : ""}
-            </div>
-            <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", }}>
-                {materials?.some((obj: any) => obj.hasOwnProperty('vendor') && obj.price !== null && obj.price !== undefined && obj.price !== "") ?
-                    <VendorDetails
-                        procurementData={data}
-                        materials={materials}
-
-                    />
-                    : ""}
-            </div>
-            <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", }}>
-                {data?.status == "PURCHASED" || data?.tracking_details?._id ?
-                    <TrackingDetails
-                        procurementData={data}
-                        materials={materials}
-                        procurementStatusChange={procurementStatusChange}
-                        getAllProcurementMaterials={getAllProcurementMaterials
+                {data?.status ?
+                    <Stack sx={{
+                        '& .MuiStepLabel-label': {
+                            color: "#000",
+                            fontFamily: "'Inter', sans-serif",
+                            fontSize: "clamp(10px, 0.625vw, 13px)",
+                            fontWeight: "500",
+                            marginTop: "6px"
                         }
+                    }} spacing={4}>
+
+                        <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+                            {steps.map((label, index) => (
+                                <Step key={label}>
+                                    <StepLabel StepIconComponent={ColorlibStepIcon}>
+                                    </StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    </Stack> : ""
+                }
+                <div className={styles.procurementDetailsBlock} >
+                    <ViewProucrementMobileDetails data={data}
+                        materials={materials}
                     />
-                    : ""}
+                </div>
+
+                <div className={styles.procurementDetailsBlock} >
+                    {materials?.length || rejectedMaterials?.length ?
+                        <ProcurementDetailsMobile
+                            materials={materials}
+                            procurementData={data}
+                            getAllProcurementMaterials={getAllProcurementMaterials}
+                            rejectedMaterials={rejectedMaterials}
+                        />
+                        : ""}
+                </div>
+                <div className={styles.vendarDetailsBlock} >
+                    {materials?.some((obj: any) => obj.hasOwnProperty('vendor') && obj.price !== null && obj.price !== undefined && obj.price !== "") ?
+                        <VendorDetails
+                            procurementData={data}
+                            materials={materials}
+
+                        />
+                        : ""}
+                </div>
+                <div className={styles.trackingDetailsBlock} >
+                    {data?.status == "PURCHASED" || data?.tracking_details?._id ?
+                        <TrackingDetails
+                            procurementData={data}
+                            materials={materials}
+                            procurementStatusChange={procurementStatusChange}
+                            getAllProcurementMaterials={getAllProcurementMaterials
+                            }
+                        />
+                        : ""}
+                </div>
             </div>
             <LoadingComponent loading={loading} />
         </div >

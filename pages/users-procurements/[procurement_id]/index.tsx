@@ -2,7 +2,9 @@ import ViewMobileProcurement from "@/components/procurements/MobileProcurement/V
 
 const ViewMobileProcurementPage = () => {
     return (
-        <ViewMobileProcurement />
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
+            <ViewMobileProcurement />
+        </div>
     )
 }
 export default ViewMobileProcurementPage;

@@ -343,7 +343,7 @@ const MobileAllProcurements = () => {
                         router.push("/users-procurements/add");
                     }}
                 >
-                    <Image src="/procurement-1.svg" alt="" width={25} height={25} />
+                    <Image src="/mobileIcons/procurement/add-procurement-icon.svg" alt="" width={25} height={25} />
                     <span>Add Procurement</span>
                 </IconButton>
             </div>

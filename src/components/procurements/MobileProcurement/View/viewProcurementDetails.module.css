@@ -1,29 +1,68 @@
-.procurementtitle{
-color: var(--Title, #35353D);
+.procurementtitle {
+    color: #35353D;
     font-feature-settings: 'clig' off, 'liga' off;
-    font-family: Inter;
-    font-size: 16px;
-    font-style: normal;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 3vw, 16px);
     font-weight: 400;
     line-height: 120%;
-    /* 19.2px */
 }
-.priority{
+
+.priority {
     display: flex;
-        padding: 6px 18px;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        border-radius: 30px;
-            background: var(--Orange, #F2A84C);
+    padding: 4px 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 30px;
+    background: #F2A84C;
+    color: #fff;
+    font-size: clamp(12px, 2vw, 13px);
 }
-.dateOfClosing{
-    color: var(--Red, #D94841);
-        /* Text sm/Medium */
-        font-family: Inter;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 20px;
-        /* 142.857% */
+
+.dateOfClosing {
+    color: #D94841;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 3vw, 14px);
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.procurementTitleBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.procurementFarmBlock {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    margin-top: 0.5rem;
+}
+
+.procurementClosingDateBlock {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.procurementClosingDateBlock img {
+    margin-top: 2px;
+}
+
+.procurementClosingDateBlock .dateBlock {
+    display: flex;
+    flex-direction: column;
+}
+
+.approvedByBlock {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    margin-top: 1rem;
+}
+
+.approvedByBlock img {
+    margin-top: 2px;
 }

@@ -9,13 +9,17 @@ import MobileViewMaterialDrawer from "@/components/Core/MobileViewMaterialDrawer
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import RejectedReasonDrawer from "../../MaterialCore/RejectReasonDrawer";
 import { toast } from "sonner";
+import InfoIcon from '@mui/icons-material/Info';
+import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
+import RejectedTextDrawer from "../../MaterialCore/RejectTextDrawer";
 
 const ProcurementCard = ({ procurementData, item,
     selectMaterial,
     onStatusChangeEvent,
     getAllProcurementMaterials,
     procurementStatusChange,
-    materials
+    materials,
+    collectMaterialsForDelete
 }: any) => {
 
 
@@ -23,9 +27,11 @@ const ProcurementCard = ({ procurementData, item,
         (state: any) => state.auth.userDetails?.access_token
     );
 
-
+    const [rejectedReasonTextOpen, setRejectReasonTextOpen] = useState<boolean>(false)
+    const [reasonText, setReasonText] = useState<boolean>(false)
     const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>()
     const [editMaterialId, setEditMaterialId] = useState("");
+    const [editMaterialOpen, setEditMaterialOpen] = useState<boolean>()
     const [selectedItems, setSelectedItems] = useState<any>([]);
     const [tempItems, setTempItems] = useState(selectedItems);
     const [materialId, setMaterialId] = useState("");
@@ -45,11 +51,14 @@ const ProcurementCard = ({ procurementData, item,
 
         if (itemIndex === -1) {
             setSelectedItems([...selectedItems, itemId]);
+            collectMaterialsForDelete([...selectedItems, itemId?._id])
+
         } else {
             const updatedItems = selectedItems.filter(
                 (item: any) => item._id !== itemId._id
             );
             setSelectedItems(updatedItems);
+            collectMaterialsForDelete(updatedItems)
         }
     };
 
@@ -132,16 +141,31 @@ const ProcurementCard = ({ procurementData, item,
                     Procurement : {item.required_qty} {item.required_units}
                 </p>
             </div>
-            <p className={styles.price} >
+            <p className={styles.price} style={{ display: item.status == "REJECTED" || !item.price ? "none" : "" }}
+            >
                 {formatMoney(item?.price)}
             </p>
             {item?.status !== "PENDING" && item?.status !== "REJECTED" ? "" :
-                <IconButton className={styles.iconButton} onClick={() => {
-                    setOpenMaterialDrawer(true)
-                    setEditMaterialId(item?._id)
-                }}>
+                <IconButton
+                    sx={{ display: item.status == "REJECTED" ? "none" : "" }}
+                    className={styles.iconButton} onClick={() => {
+                        setEditMaterialOpen(true)
+                        setEditMaterialId(item?._id)
+
+                    }}>
                     <Image src="/pencil-simple-line 1.svg" alt="edit" width={13} height={13} /> Edit
                 </IconButton>}
+
+            {item?.status == "REJECTED" ?
+                <IconButton
+                    onClick={() => {
+                        setRejectReasonTextOpen(true)
+                        setEditMaterialId(item?._id)
+                        setReasonText(item)
+
+                    }}>
+                    <InfoIcon />
+                </IconButton> : ""}
 
             {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
                 <>
@@ -220,6 +244,20 @@ const ProcurementCard = ({ procurementData, item,
                 setRejectDilogOpen={setRejectDilogOpen}
                 afterRejectingMaterial={afterRejectingMaterial}
                 rejectLoading={loading}
+            />
+            <RejectedTextDrawer
+                rejectedReasonText={rejectedReasonTextOpen}
+                setRejectReasonTextOpen={setRejectReasonTextOpen}
+                reasonText={reasonText}
+            />
+
+            <MobileAddMaterialDrawer
+                openMaterialDrawer={editMaterialOpen}
+                setOpenMaterialDrawer={setEditMaterialOpen}
+                procurementData={procurementData}
+                getAllProcurementMaterials={getAllProcurementMaterials}
+                editMaterialId={editMaterialId}
+                setEditMaterialId={setEditMaterialId}
             />
 
         </div>

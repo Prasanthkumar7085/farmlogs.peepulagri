@@ -1,8 +1,9 @@
 import ImageComponent from "@/components/Core/ImageComponent";
-import { Button, Drawer, Typography } from "@mui/material"
+import { Button, CircularProgress, Drawer, IconButton, Typography } from "@mui/material"
 import TextArea from '@mui/material/TextField';
 import { ChangeEvent, useState } from "react";
-import styles from "/src/components/Core/RejectReasonDialog.module.css"
+import styles from "./rejectedMaterialDrawer.module.css"
+import { Clear } from "@mui/icons-material";
 
 
 const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMaterial, rejectLoading }: any) => {
@@ -16,36 +17,87 @@ const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMateri
         <>
             <Drawer open={Boolean(dialog)}
                 anchor={"bottom"}
+                sx={{
+                    zIndex: "1300 !important",
+                    '& .MuiPaper-root': {
+                        width: "100%", maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0 ",
+                        minHeight: "40%"
+                    }
+                }}
             >
-
-
-                <TextArea
-                    value={remarks}
-                    size="small"
-                    multiline
-                    minRows={3}
-                    placeholder={"Write"}
-                    sx={{
-                        width: "100%", marginTop: "4px", '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: "#A6AAB6 !important",
-                            borderRadius: "10px !important"
-                        }
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "0.5rem",
+                        borderBottom: "1px solid #dddddd",
                     }}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setRemarks(e.target.value)}
-                    onKeyDown={(e: any) => e.key == 'Enter' ? afterRejectingMaterial() : ""}
-                />
-                {validations ? <Typography variant='caption' color="error">{validations}</Typography> : ""}
+                >
+                    <Typography className={styles.CommentsTitle}>{"Reason"}</Typography>
+                    <IconButton
+                        onClick={() => {
+                            setRejectDilogOpen(false);
+                            setRemarks("")
+                        }}
+                    >
+                        <Clear />
+                    </IconButton>
+                </div>
+                <div style={{ marginTop: "40px" }}>
+                    <TextArea
+                        value={remarks}
+                        size="small"
+                        multiline
+                        minRows={3}
+                        placeholder={"Write"}
+                        sx={{
+                            width: "100%", marginTop: "4px", '& .MuiOutlinedInput-notchedOutline': {
+                                borderColor: "#A6AAB6 !important",
+                                borderRadius: "10px !important"
+                            }
+                        }}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setRemarks(e.target.value)}
+                        onKeyDown={(e: any) => e.key == 'Enter' ? afterRejectingMaterial() : ""}
+                    />
+                    {validations ? <Typography variant='caption' color="error">{validations}</Typography> : ""}
+                </div>
 
-                <Button className={styles.cancelBtn} onClick={() => setRejectDilogOpen(false)}>Cancel</Button>
-                <Button className={styles.submitBtn} onClick={() => {
-                    afterRejectingMaterial(remarks)
-                    setRejectDilogOpen(false)
-                    setRemarks('')
+                <div className={styles.procurementFormBtn}>
+                    <Button
+                        className={styles.cancelBtn}
+                        variant="outlined"
+                        onClick={() => {
+                            setRejectDilogOpen(false)
+                            setRemarks("")
 
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        className={styles.submitBtn}
 
-                }} >{rejectLoading ?
-                    <ImageComponent src='/loading-blue.svg' width={30} height={30} alt='loading' />
-                    : 'Proceed'}</Button>
+                        variant="contained"
+                        onClick={() => {
+                            if (remarks) {
+                                afterRejectingMaterial(remarks)
+                                setRejectDilogOpen(false)
+                                setRemarks('')
+                            } else {
+                                setValidations("Reason is Required")
+                            }
+
+                        }}
+                    >
+                        {rejectLoading ? (
+                            <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                        ) : (
+                            "Submit"
+                        )}
+                    </Button>
+                </div>
+
             </Drawer>
 
         </>

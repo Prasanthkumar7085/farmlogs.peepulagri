@@ -175,7 +175,7 @@ const ViewMobileProcurement = () => {
             1: <Image src="/viewProcurement/tracking-icons/pending-icon.svg" alt="" height={15} width={15} />,
             2: <Image src="/viewProcurement/tracking-icons/approved-icon.svg" alt="" height={15} width={15} />,
             3: <Image src="/viewProcurement/tracking-icons/Purchase.svg" alt="" height={15} width={15} />,
-            4: <LocalShippingIcon sx={{ color: "black", opacity: "0.7" }} />,
+            4: <LocalShippingIcon sx={{ color: "black", opacity: "0.7", fontSize: 'small' }} />,
             5: <Image src="/viewProcurement/tracking-icons/Delivered.svg" alt="" height={15} width={15} />,
             6: <Image src="/viewProcurement/tracking-icons/completed-icon.svg" alt="" height={15} width={15} />,
         };
@@ -194,29 +194,29 @@ const ViewMobileProcurement = () => {
     return (
         <div >
             <ViewProcurementHeader title={"View Procurement"} />
-            {/* <div >
-                {data?.status ?
-                    <Stack sx={{
-                        width: '50%', '& .MuiStepLabel-label': {
-                            color: "#000",
-                            fontFamily: "'Inter', sans-serif",
-                            fontSize: "clamp(10px, 0.625vw, 13px)",
-                            fontWeight: "500",
-                            marginTop: "6px"
-                        }
-                    }} spacing={4}>
+            {data?.status ?
+                <Stack sx={{
+                    marginTop: "6%"
+                    ,
+                    '& .MuiStepLabel-label': {
+                        color: "#000",
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: "clamp(10px, 0.625vw, 13px)",
+                        fontWeight: "500",
+                        marginTop: "6px"
+                    }
+                }} spacing={4}>
 
-                        <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
-                            {steps.map((label, index) => (
-                                <Step key={label}>
-                                    <StepLabel StepIconComponent={ColorlibStepIcon}>
-                                        {label}
-                                    </StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>
-                    </Stack> : ""}
-            </div> */}
+                    <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+                        {steps.map((label, index) => (
+                            <Step key={label}>
+                                <StepLabel StepIconComponent={ColorlibStepIcon}>
+                                </StepLabel>
+                            </Step>
+                        ))}
+                    </Stepper>
+                </Stack> : ""
+            }
             <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", gap: "0.5rem" }}>
                 <ViewProucrementMobileDetails data={data}
                     materials={materials}
@@ -247,7 +247,10 @@ const ViewMobileProcurement = () => {
                     <TrackingDetails
                         procurementData={data}
                         materials={materials}
-                        procurementStatusChange={procurementStatusChange} />
+                        procurementStatusChange={procurementStatusChange}
+                        getAllProcurementMaterials={getAllProcurementMaterials
+                        }
+                    />
                     : ""}
             </div>
             <LoadingComponent loading={loading} />

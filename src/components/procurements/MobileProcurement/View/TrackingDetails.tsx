@@ -4,8 +4,9 @@ import styles from "./trackingDetails.module.css";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDetailsDilog";
+import AddTrackingDetailsMobile from "@/components/Core/TrackingDetails/AddTrackingDetailsMobile";
 
-const TrackingDetails = ({ procurementData, materials, procurementStatusChange }: any) => {
+const TrackingDetails = ({ procurementData, materials, procurementStatusChange, getAllProcurementMaterials }: any) => {
 
     const userDetails = useSelector(
         (state: any) => state.auth.userDetails?.user_details
@@ -46,12 +47,13 @@ const TrackingDetails = ({ procurementData, materials, procurementStatusChange }
 
             </div>
 
-            <TrackingDetailsDilog
+            <AddTrackingDetailsMobile
                 open={openTrackingDilog}
                 addTracking={""}
                 procurementStatusChange={procurementStatusChange}
                 setTrackingDialogOpen={setTrackingDialogOpen}
                 loading={false}
+                getAllProcurementMaterials={getAllProcurementMaterials}
             />
         </div>
     );

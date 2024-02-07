@@ -140,7 +140,7 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
 
 
     return (
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", maxHeight: "calc(100vh - 190px)", overflowY: "auto" }} className="scrollbar">
             <form className={styles.addmaterials}>
                 <div className={styles.formfieldscontainer}>
                     <POCMobile

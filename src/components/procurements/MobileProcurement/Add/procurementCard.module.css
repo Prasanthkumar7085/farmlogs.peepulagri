@@ -52,17 +52,28 @@
     font-family: Inter;
     align-self: stretch;
 }
-.iconButton{
-    border-radius: 4px;
- border: 1px solid rgba(0, 0, 0, 0.10);
-        background: rgba(255, 255, 255, 0.90);
-        color: var(--Red, #D94841);
-        
-            font-family: Inter;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 100%;
-            /* 14px */
-            text-transform: capitalize;
+
+.procurementdetails:last-child {
+    border-bottom: 0px solid rgba(50, 148, 50, 0.1);
+}
+
+.iconButton {
+    border-radius: 4px !important;
+    border: 1px solid #0000001a !important;
+    background: #ffffffe6 !important;
+    color: #D94841 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 3vw, 14px) !important;
+    font-weight: 400;
+    line-height: 100%;
+    text-transform: capitalize !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.iconButton:hover {
+    border: 1px solid #0000001a !important;
+    background: #ffffffe6 !important;
+    color: #D94841 !important;
 }

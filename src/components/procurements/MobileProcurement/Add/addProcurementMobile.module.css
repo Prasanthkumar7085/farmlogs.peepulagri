@@ -36,11 +36,9 @@
 
 .addprocurment {
     margin: auto 0;
-    /* background-color: #fff; */
     align-items: center;
     padding: 1rem;
-    gap: 2rem;
-    /* width: 100%; */
+    gap: 0.5rem;
 }
 
 .buttonsgroup {
@@ -65,7 +63,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     gap: 1rem;
     width: 100%;
 }

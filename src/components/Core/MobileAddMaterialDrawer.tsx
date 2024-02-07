@@ -186,10 +186,6 @@ const MobileAddMaterialDrawer = ({
         }
     }, [editMaterialId, openMaterialDrawer, accessToken])
 
-
-
-
-
     const handleInput = (event: any) => {
         const value = event.target.value.replace(/\D/g, '');
         event.target.value = value.slice(0, 20);
@@ -212,12 +208,13 @@ const MobileAddMaterialDrawer = ({
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    padding: "0.5rem",
+                    padding: "0.5rem 1rem",
                     borderBottom: "1px solid #dddddd",
                 }}
             >
-                <Typography >{"Add Material"}</Typography>
+                <Typography sx={{ fontSize: "14px", fontFamily: "'Inter', sans-serif", color: "#000", fontWeight: "500" }}>{"Add Material"}</Typography>
                 <IconButton
+                    sx={{ paddingInline: "0" }}
                     onClick={() => {
                         setOpenMaterialDrawer(false);
                         setAvailableQty("");
@@ -232,7 +229,7 @@ const MobileAddMaterialDrawer = ({
                     <CloseIcon />
                 </IconButton>
             </div>
-            <form className={styles.addmaterials}>
+            <form className={styles.addmaterials} style={{ padding: "1rem" }}>
                 <div className={styles.formfieldscontainer}>
 
                     <div className={styles.materialformfields}>
@@ -342,9 +339,9 @@ const MobileAddMaterialDrawer = ({
 
                 </div>
 
-                <div className={styles.buttons}>
+                <div className={styles.buttons} style={{ width: "100%", marginTop: "0" }}>
                     <Button
-                        className={styles.back}
+                        className={styles.cancel}
                         name="back"
                         size="medium"
                         variant="outlined"

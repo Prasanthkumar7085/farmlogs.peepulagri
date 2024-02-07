@@ -119,9 +119,11 @@ const ProcurementCard = ({ procurementData, item,
                     {selectMaterial ? (
                         <input
                             style={{
-                                width: "18px",
-                                height: "18px",
+                                width: "15px",
+                                height: "15px",
                                 border: "1px solid #000",
+                                marginBlock: "0",
+                                marginRight: "0.5rem"
                             }}
                             type="checkbox"
                             checked={selectedItems.some(

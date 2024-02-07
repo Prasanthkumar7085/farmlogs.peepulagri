@@ -10,6 +10,8 @@ import { useSelector } from "react-redux";
 import addProcurementMaterialService from "../../../../../lib/services/ProcurementServices/addProcurementMaterialService";
 import ErrorMessages from "@/components/Core/ErrorMessages";
 import ProcurementDetailsMobile from "./procurement-details";
+import POCMobile from "../../edit/POC-mobile";
+import Image from "next/image";
 
 
 interface ApiCallService {
@@ -138,10 +140,10 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
 
 
     return (
-        <div >
+        <div style={{ width: "100%" }}>
             <form className={styles.addmaterials}>
                 <div className={styles.formfieldscontainer}>
-                    <POC
+                    <POCMobile
                         procurementData={procurementData}
                         getProcurementData={getProcurementData}
                     />
@@ -158,18 +160,17 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                                 variant="contained"
                                 disabled={loading ? true : false}
                                 onClick={() => addMaterial()}
-                                className={styles.addMaterialBtn}
+                                className={styles.addMaterialBtnMobile}
                             >
                                 <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
                             </Button>
                         </div>
                         <div className={styles.materialformfields}>
-                            <div className={styles.lable} >
+
+                            <div style={{ width: "100%" }}>
                                 <label className={styles.label} >
                                     {"Material Name"}
                                 </label>
-                            </div>
-                            <div style={{ width: "100%" }}>
                                 <TextField
                                     size="small"
                                     placeholder="Please enter the material title"
@@ -179,67 +180,61 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                                     sx={{
                                         background: "#fff",
                                         borderRadius: "4px",
-                                        width: "100%"
+                                        width: "100%",
+                                        marginTop: "0.4rem"
                                     }}
                                 />
                                 <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
                             </div>
                             <div className={styles.group}>
                                 <div className={styles.required} >
-                                    <img className={styles.icon} alt="" src={"/procurement-1.svg"} />
+                                    <Image alt="" src={"/procurement-1.svg"} width={30} height={30} />
                                     <div className={styles.row} >
-                                        <TextField
+                                        <div>
 
-                                            size="small"
-                                            sx={{
-                                                width: "100%", background: "#fff",
+                                            <TextField
 
-                                            }}
-                                            placeholder="Required"
-                                            variant="outlined"
-                                            value={requiredQty}
-                                            onInput={handleInput}
-                                            onChange={(e: any) => setRequiredQty(e.target.value)}
-                                        />
-
-                                        <FormControl variant="outlined" sx={{ width: "100%" }}>
-                                            <InputLabel color="primary" />
-                                            <Select
+                                                size="small"
                                                 sx={{
-                                                    background: "#fff",
+                                                    width: "100%", background: "#fff",
 
                                                 }}
-                                                size="small"
-                                                defaultValue="Litres"
-                                                value={requiredUnits}
-                                                onChange={(e: any) => setRequiredUnits(e.target.value)}
-                                            >
-                                                <MenuItem value="Litres">Litres</MenuItem>
-                                                <MenuItem value="Kilograms">Kilograms</MenuItem>
-                                            </Select>
-
-                                        </FormControl>
-
-                                    </div>
-
-
-                                </div>
-                                <div className={styles.group} style={{ marginLeft: "40PX", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                    <div className={styles.required} >
-                                        <div className={styles.row} >
+                                                placeholder="Required"
+                                                variant="outlined"
+                                                value={requiredQty}
+                                                onInput={handleInput}
+                                                onChange={(e: any) => setRequiredQty(e.target.value)}
+                                            />
                                             <ErrorMessages errorMessages={errorMessages} keyname={"required_qty"} />
 
+                                        </div>
+                                        <div>
 
+                                            <FormControl variant="outlined" sx={{ width: "100%" }}>
+                                                <InputLabel color="primary" />
+                                                <Select
+                                                    sx={{
+                                                        background: "#fff",
+
+                                                    }}
+                                                    size="small"
+                                                    defaultValue="Litres"
+                                                    value={requiredUnits}
+                                                    onChange={(e: any) => setRequiredUnits(e.target.value)}
+                                                >
+                                                    <MenuItem value="Litres">Litres</MenuItem>
+                                                    <MenuItem value="Kilograms">Kilograms</MenuItem>
+                                                </Select>
+
+                                            </FormControl>
                                             <ErrorMessages errorMessages={errorMessages} keyname={"required_units"} />
 
-
                                         </div>
-
-
                                     </div>
                                 </div>
+
                                 <div className={styles.required} >
-                                    <img className={styles.icon} alt="" src={"/approved-1.svg"} />
+                                    <Image alt="" src={"/approved-1.svg"} width={30} height={30} />
                                     <div className={styles.row} >
                                         <TextField
 

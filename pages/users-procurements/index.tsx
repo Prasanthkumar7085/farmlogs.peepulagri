@@ -2,7 +2,7 @@ import MobileAllProcurements from "@/components/procurements/MobileProcurement/A
 
 const UserProcurements = () => {
     return (
-        <div>
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
             <MobileAllProcurements />
         </div>
     );

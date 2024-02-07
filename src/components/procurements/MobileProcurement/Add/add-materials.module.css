@@ -6,17 +6,20 @@
   font-family: Inter;
   text-align: left;
 }
+
 .heading {
   font-size: 1rem;
   line-height: 1.13rem;
-  font-weight: 500; 
+  font-weight: 500;
   color: #101828;
 }
+
 .description {
   font-size: 0.88rem;
   line-height: 130%;
   color: #6a7185;
 }
+
 .textwrapper {
   flex: 1;
   display: flex;
@@ -25,6 +28,7 @@
   justify-content: flex-end;
   gap: 0.5rem;
 }
+
 .addmaterials,
 .formfieldscontainer,
 .group,
@@ -37,6 +41,7 @@
   justify-content: flex-start;
   gap: 0.5rem;
 }
+
 .addmaterials,
 .formfieldscontainer,
 .group,
@@ -44,22 +49,24 @@
   flex-direction: column;
   align-items: flex-start;
 }
+
 .addmaterials,
 .formfieldscontainer,
 .materialformfields {
   gap: 1rem;
 }
+
 .addmaterials,
 .formfieldscontainer {
   align-items: center;
 }
+
 .addmaterials {
   margin: 0;
-  background-color: #fff;
   overflow-y: auto;
-  padding: 0.5rem 1rem;
   gap: 2rem;
 }
+
 .icon {
   width: 27px;
   position: relative;
@@ -68,28 +75,26 @@
   flex-shrink: 0;
 }
 
-.required,
-.row {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 8px;
-  align-self: stretch;
-}
+
 
 .row {
-  width: 363px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-column-gap: 0.5rem;
+  align-items: center;
 }
+
 
 .required {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-column-gap: 0.5rem;
   align-items: center;
+  width: 100%;
 }
 
 .label {
   cursor: pointer;
-  flex: 1;
-  position: relative;
   line-height: 20px;
   font-weight: 500;
 }
@@ -115,12 +120,14 @@
   color: #344154;
   font-family: Inter;
 }
+
 .buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1.5rem;
   margin-top: 1.5rem;
 }
+
 .submit {
   border-radius: 4px !important;
   border: 1px solid #d94841 !important;
@@ -131,4 +138,27 @@
   font-size: clamp(15px, 3.5vw, 16px) !important;
   font-weight: 500 !important;
   text-transform: capitalize !important;
+}
+
+/* mobile add procurement styles */
+.addMaterialBtnMobile {
+  border-radius: 4px !important;
+  border: 1px solid #05A155 !important;
+  background: #05A155 !important;
+  color: #FFF !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(12px, 3vw, 14px) !important;
+  font-weight: 600 !important;
+  text-transform: capitalize !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  padding: 2px 8px !important;
+  box-shadow: none !important;
+}
+
+.addMaterialBtnMobile:hover {
+  background: #05A155 !important;
+  color: #FFF !important;
+  box-shadow: none !important;
 }

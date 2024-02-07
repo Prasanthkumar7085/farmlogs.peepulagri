@@ -2,7 +2,9 @@ import AddProcurementMobile from "@/components/procurements/MobileProcurement/Ad
 
 const AddProcurementMobilePage = () => {
     return (
-        <AddProcurementMobile />
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
+            <AddProcurementMobile />
+        </div>
     )
 }
 export default AddProcurementMobilePage;

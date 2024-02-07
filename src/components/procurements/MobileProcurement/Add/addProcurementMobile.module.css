@@ -36,21 +36,23 @@
 
 .addprocurment {
     margin: auto 0;
-    background-color: #fff;
+    /* background-color: #fff; */
     align-items: center;
-    padding: 0.2rem 1rem;
+    padding: 1rem;
     gap: 2rem;
-    width: 100%;
+    /* width: 100%; */
 }
+
 .buttonsgroup {
     flex-direction: row;
     gap: 12px;
 }
+
 .cancelBtn {
-    border: 1px solid var(--Gray-300, #D0D5DD) !important;
-    background: var(--White, #FFF) !important;
-    color: #344054 !important;
-    padding: 6px 20px !important;
+    border-radius: 4px;
+    border: 1px solid #D94841 !important;
+    color: #D94841 !important;
+    padding: 8px 20px !important;
 }
 
 .cancelBtn:hover {
@@ -58,30 +60,32 @@
     background: var(--White, #FFF) !important;
     color: #344054 !important;
 }
+
 .procurementFormBtn {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-    justify-content: flex-end;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     gap: 1rem;
-    padding: 0 1rem 1rem;
+    width: 100%;
 }
 
 .procurementFormBtn button {
-    border-radius: 8px !important;
+    border-radius: 4px !important;
     box-shadow: 8px 8px 24px 0px rgba(2, 2, 70, 0.15) !important;
     font-family: 'Inter', sans-serif !important;
     font-size: clamp(14px, 0.83vw, 18px) !important;
     font-weight: 500 !important;
     line-height: 24px !important;
     text-transform: capitalize !important;
+    box-shadow: none !important;
 }
 
 .submitBtn {
     color: #fff !important;
     border: 1px solid #D94841 !important;
     background: #D94841 !important;
-    padding: 6px 60px !important;
+    padding: 8px 60px !important;
 
 }
 

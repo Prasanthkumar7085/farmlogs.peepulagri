@@ -107,6 +107,7 @@
   padding: 1rem 1.5rem;
 }
 
+
 .pocSelectBlock {
   display: grid;
   grid-template-columns: 250px 60px;
@@ -149,4 +150,35 @@
 
 .selectedPOC {
   margin-top: 1rem;
+}
+
+/* mobile stylings add procurement POC component */
+.personofcontactMobile .labelMobile {
+  color: #101828;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 16px);
+  font-weight: 500;
+  line-height: 100%;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+
+
+.personofcontactMobile {
+  padding: 1rem 0 0.5rem !important;
+}
+
+.pocSelectBlockMobile {
+  display: grid;
+  /* grid-template-columns: auto 80px; */
+  align-items: center;
+  grid-column-gap: 1.5rem;
+}
+
+.selectedPOCMobile {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
 }

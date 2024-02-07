@@ -236,10 +236,15 @@ const AddProcurementMobile = () => {
                     <div className={styles.formfieds}>
                         <div className={styles.dateofoperation}>
                             <div className={styles.lable}>
-                                <label className={styles.label}>Name of Operation</label>
+                                <label className={styles.label}>Name of Operation <span style={{ color: "red" }}>*</span> </label>
                             </div>
                             <TextField
-                                sx={{ width: "100%" }}
+                                sx={{
+                                    width: "100%",
+                                    '& .MuiInputBase-root': {
+                                        backgroundColor: "#fff !important"
+                                    }
+                                }}
                                 size="small"
                                 placeholder="Enter Title"
                                 value={title}
@@ -252,7 +257,7 @@ const AddProcurementMobile = () => {
                         </div>
                         <div className={styles.dateofoperation}>
                             <div className={styles.lable}>
-                                <label className={styles.label}>Date of Operation</label>
+                                <label className={styles.label}>Date of Operation <span style={{ color: "red" }}>*</span></label>
                             </div>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DatePicker
@@ -280,7 +285,7 @@ const AddProcurementMobile = () => {
                         </div>
                         <div style={{ width: "100%" }} >
                             <div className={styles.lable}>
-                                <label className={styles.label}>Select Farms</label>
+                                <label className={styles.label}>Select Farms <span style={{ color: "red" }}>*</span></label>
                             </div>
                             <FarmAutoCompleteInAddProcurement
                                 options={farmOptions}
@@ -301,7 +306,7 @@ const AddProcurementMobile = () => {
                         </div>
                         <div className={styles.dateofoperation}>
                             <div className={styles.lable}>
-                                <label className={styles.label}>Priority</label>
+                                <label className={styles.label}>Priority <span style={{ color: "red" }}>*</span></label>
                             </div>
                             <Select
                                 size="small"
@@ -318,7 +323,7 @@ const AddProcurementMobile = () => {
 
                                 {options?.length && options.map((item: { value: string, title: string }, index: number) => {
                                     return (
-                                        <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
+                                        <MenuItem sx={{ minHeight: "inherit !important", fontSize: "clamp(12px, 2.5vw, 14px)", fontFamily: "'Inter', sans-serif", color: "#000" }} key={index} value={item.value}>{item.title}</MenuItem>
                                     )
                                 })}
 

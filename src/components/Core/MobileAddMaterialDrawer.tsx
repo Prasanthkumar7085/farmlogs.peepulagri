@@ -236,11 +236,9 @@ const MobileAddMaterialDrawer = ({
                 <div className={styles.formfieldscontainer}>
 
                     <div className={styles.materialformfields}>
-                        <div className={styles.lable} >
-                            <label className={styles.label} >
-                                {"Material Name"}
-                            </label>
-                        </div>
+                        <label className={styles.label} >
+                            {"Material Name"}
+                        </label>
                         <div style={{ width: "100%" }}>
                             <TextField
                                 size="small"

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDetailsDilog";
 import AddTrackingDetailsMobile from "@/components/Core/TrackingDetails/AddTrackingDetailsMobile";
+import Image from "next/image";
 
 const TrackingDetails = ({ procurementData, materials, procurementStatusChange, getAllProcurementMaterials }: any) => {
 
@@ -17,7 +18,7 @@ const TrackingDetails = ({ procurementData, materials, procurementStatusChange, 
     return (
         <div className={styles.trackingdetails}>
             <div className={styles.titletracking}>
-                <img className={styles.trackingicon} alt="" src="/component-30.svg" />
+                <Image alt="" src="/mobileIcons/procurement/tracking-icon.svg" height={20} width={20} />
                 <h2 className={styles.title}>Tracking Details</h2>
             </div>
 
@@ -31,7 +32,7 @@ const TrackingDetails = ({ procurementData, materials, procurementStatusChange, 
                     </div> : ""}
 
                 {procurementData?.tracking_details?.tracking_id ?
-                    <div className={styles.detailscontainer} >
+                    <div  >
                         <label className={styles.lablesmall} >
                             {"sd"}
                         </label>
@@ -55,7 +56,7 @@ const TrackingDetails = ({ procurementData, materials, procurementStatusChange, 
                 loading={false}
                 getAllProcurementMaterials={getAllProcurementMaterials}
             />
-        </div>
+        </div >
     );
 };
 

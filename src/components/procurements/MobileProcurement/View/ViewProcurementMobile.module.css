@@ -1,0 +1,36 @@
+.viewProcurementPage {
+    padding: 1.5rem 1rem 1rem;
+    max-height: calc(100vh - 92px);
+    overflow-Y: auto;
+}
+
+.procurementDetailsBlock {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+
+}
+
+.procurementDetailsBlock {
+    margin-top: 30px;
+    display: flex;
+    flex-Direction: column;
+    justify-content: center;
+
+}
+
+.vendarDetailsBlock {
+    margin-top: 30px;
+    display: flex;
+    flex-Direction: column;
+    justify-content: center;
+}
+
+.trackingDetailsBlock {
+    margin-top: 30px;
+    display: flex;
+    flex-Direction: column;
+    justify-content: center;
+}

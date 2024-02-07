@@ -12,6 +12,7 @@ import ErrorMessages from "@/components/Core/ErrorMessages";
 import ProcurementDetailsMobile from "./procurement-details";
 import POCMobile from "../../edit/POC-mobile";
 import Image from "next/image";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 
 interface ApiCallService {
@@ -243,7 +244,7 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                                                 width: "100%", background: "#fff",
 
                                             }}
-                                            placeholder="Required"
+                                            placeholder="Availble"
                                             variant="outlined"
                                             value={availableQty}
                                             onInput={handleInput}
@@ -287,7 +288,7 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                     />
                     : ""}
             </div>
-
+            <LoadingComponent loading={loading} />
         </div>
     )
 }

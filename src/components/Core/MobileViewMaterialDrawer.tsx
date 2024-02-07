@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import getSingleMaterilsService from "../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import updateMaterialsByIdService from "../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
 import addMaterialParchaseService from "../../../lib/services/ProcurementServices/addMaterialPurchaseService";
+import ImageComponent from "./ImageComponent";
 
 
 interface ApiCallService {
@@ -311,52 +312,48 @@ const MobileViewMaterialDrawer = ({
                                 </div>
                             </div>
 
-                            <div className={styles.required} >
-                                <div  >
-                                    <label className={styles.label}>
-                                        Vendor Details <b style={{ color: "red" }}>*</b>
-                                    </label>
-                                    <TextField
-                                        size="small" placeholder="Enter Name Of Vendor"
-                                        variant="outlined"
-                                        rows={5}
-                                        multiline
-                                        sx={{ width: "100%", height: "40%" }}
-                                        value={nameVendor}
-                                        onChange={(e) => {
-                                            setNameVendor(e.target.value)
-                                        }}
-                                    />
+                            <div style={{ width: "100%", marginTop: "20px" }}>
+                                <label className={styles.label}>
+                                    Vendor Details <b style={{ color: "red" }}>*</b>
+                                </label>
+                                <TextField
+                                    size="small" placeholder="Enter Name Of Vendor"
+                                    variant="outlined"
+                                    rows={5}
+                                    multiline
+                                    sx={{ width: "100%", height: "40%" }}
+                                    value={nameVendor}
+                                    onChange={(e) => {
+                                        setNameVendor(e.target.value)
+                                    }}
+                                />
 
-                                    <ErrorMessages
-                                        errorMessages={errorMessages}
-                                        keyname={"vendor"}
-                                    />
-                                </div>
+                                <ErrorMessages
+                                    errorMessages={errorMessages}
+                                    keyname={"vendor"}
+                                />
                             </div>
 
-                            <div className={styles.required} >
-                                <div >
-                                    <label className={styles.label}>
-                                        Price (Rs) <b style={{ color: "red" }}>*</b>
-                                    </label>
-                                    <TextField
-                                        size="small"
-                                        sx={{ width: "100%" }}
-                                        placeholder="Enter Price Details Here"
-                                        variant="outlined"
-                                        onInput={handleInput}
-                                        value={price}
-                                        onChange={(e) => {
-                                            setPrice(e.target.value)
-                                        }}
+                            <div style={{ width: "100%" }}>
+                                <label className={styles.label}>
+                                    Price (Rs) <b style={{ color: "red" }}>*</b>
+                                </label>
+                                <TextField
+                                    size="small"
+                                    sx={{ width: "100%" }}
+                                    placeholder="Enter Price Details Here"
+                                    variant="outlined"
+                                    onInput={handleInput}
+                                    value={price}
+                                    onChange={(e) => {
+                                        setPrice(e.target.value)
+                                    }}
 
-                                    />
-                                    <ErrorMessages
-                                        errorMessages={errorMessages}
-                                        keyname={"price"}
-                                    />
-                                </div>
+                                />
+                                <ErrorMessages
+                                    errorMessages={errorMessages}
+                                    keyname={"price"}
+                                />
                             </div>
 
 
@@ -399,12 +396,15 @@ const MobileViewMaterialDrawer = ({
 
                         }}
                     >
-                        {loading ? "Sumbiting" : "Submit"}
+
+                        {loading ?
+                            <ImageComponent src='/loading-blue.svg' width={30} height={30} alt='loading' />
+                            : 'Submit'}
                     </Button>
                 </div>
                 {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
             </form>
-        </Drawer>
+        </Drawer >
     )
 }
 export default MobileViewMaterialDrawer;

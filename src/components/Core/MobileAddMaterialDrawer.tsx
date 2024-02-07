@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import getSingleMaterilsService from "../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import updateMaterialsByIdService from "../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
+import LoadingComponent from "./LoadingComponent";
 
 
 interface ApiCallService {
@@ -147,7 +148,7 @@ const MobileAddMaterialDrawer = ({
 
     //get the single material
     const getSingleMaterials = async () => {
-        setUpdateLoading(true);
+        setLoading(true);
         try {
             let response = await getSingleMaterilsService({
                 token: accessToken,
@@ -169,7 +170,7 @@ const MobileAddMaterialDrawer = ({
         } catch (err) {
             console.error(err);
         } finally {
-            setUpdateLoading(false);
+            setLoading(false);
         }
     };
 
@@ -212,7 +213,7 @@ const MobileAddMaterialDrawer = ({
                     borderBottom: "1px solid #dddddd",
                 }}
             >
-                <Typography sx={{ fontSize: "14px", fontFamily: "'Inter', sans-serif", color: "#000", fontWeight: "500" }}>{"Add Material"}</Typography>
+                <Typography sx={{ fontSize: "14px", fontFamily: "'Inter', sans-serif", color: "#000", fontWeight: "500" }}>{editMaterialId ? "Edit Material" : "Add Material"}</Typography>
                 <IconButton
                     sx={{ paddingInline: "0" }}
                     onClick={() => {
@@ -379,6 +380,7 @@ const MobileAddMaterialDrawer = ({
                         )}                    </Button>
                 </div>
                 {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
+                <LoadingComponent loading={loading} />
             </form>
         </Drawer>
     )

@@ -22,7 +22,6 @@ const ProcurementCard = ({ procurementData, item,
     collectMaterialsForDelete
 }: any) => {
 
-
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
@@ -44,24 +43,26 @@ const ProcurementCard = ({ procurementData, item,
         (state: any) => state.auth.userDetails?.user_details
     );
 
+    useEffect(() => {
+        setTempItems(selectedItems);
+    }, [selectedItems]);
+
+
     const handleChange = (itemId: any) => {
-        const itemIndex = selectedItems.findIndex(
+        const itemIndex = tempItems.findIndex(
             (ite: any) => ite._id === itemId._id
         );
 
         if (itemIndex === -1) {
-            setSelectedItems([...selectedItems, itemId]);
-            collectMaterialsForDelete([...selectedItems, itemId?._id])
-
+            setSelectedItems([...tempItems, itemId])
         } else {
-            const updatedItems = selectedItems.filter(
+            const updatedItems = tempItems.filter(
                 (item: any) => item._id !== itemId._id
             );
             setSelectedItems(updatedItems);
-            collectMaterialsForDelete(updatedItems)
+
         }
     };
-
     const afterRejectingMaterial = async (value: any) => {
         if (value) {
             setLoading(true)
@@ -126,10 +127,12 @@ const ProcurementCard = ({ procurementData, item,
                                 marginRight: "0.5rem"
                             }}
                             type="checkbox"
-                            checked={selectedItems.some(
+                            checked={tempItems.some(
                                 (ite: any) => ite._id === item._id
                             )}
-                            onChange={() => handleChange(item)}
+                            onChange={() => {
+                                handleChange(item)
+                            }}
                             title={item.id}
                         />
                     ) : (
@@ -147,9 +150,11 @@ const ProcurementCard = ({ procurementData, item,
             >
                 {formatMoney(item?.price)}
             </p>
+
             {item?.status !== "PENDING" && item?.status !== "REJECTED" ? "" :
                 <IconButton
                     sx={{ display: item.status == "REJECTED" ? "none" : "" }}
+                    disabled={selectMaterial ? true : false}
                     className={styles.iconButton} onClick={() => {
                         setEditMaterialOpen(true)
                         setEditMaterialId(item?._id)
@@ -171,7 +176,7 @@ const ProcurementCard = ({ procurementData, item,
 
             {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
                 <>
-                    {item?.status !== "PENDING" ?
+                    {item?.status !== "PENDING" && item?.status !== "REJECTED" ?
                         <IconButton
                             className={styles.iconButton}
                             sx={{
@@ -189,7 +194,7 @@ const ProcurementCard = ({ procurementData, item,
                             }
                             }
                         >
-                            <CurrencyRupeeIcon />  {item?.price && item?.vendor ? "Edit " : "Add "}
+                            <CurrencyRupeeIcon />  {item?.price && item?.vendor ? "Edit " : "Pay "}
 
                         </IconButton>
                         :

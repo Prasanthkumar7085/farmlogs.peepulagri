@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
 import { useRouter } from "next/router";
 import deleteMaterialsService from "../../../../../lib/services/ProcurementServices/MaterialService/deleteMaterialsService";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcurementMaterials, rejectedMaterials }: any) => {
 
   const router = useRouter();
@@ -22,7 +23,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
   const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>()
   const [editMaterialId, setEditMaterialId] = useState("");
   const [selectMaterial, setSelectMaterial] = useState<any>()
-  const [selectedItems, setSelectedItems] = useState<any>([])
+  const [selectedItems, setSelectedItems] = useState<any>()
 
   const [loading, setLoading] = useState<boolean>(false)
   const userDetails = useSelector(
@@ -102,6 +103,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
       const response = await deleteMaterialsService({ accessToken, materials_ids })
       if (response.success) {
         toast.success(response.message)
+        await getAllProcurementMaterials()
       }
     }
     catch (err) {
@@ -116,7 +118,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
   //collect materails
   const collectMaterialsForDelete = (value: any) => {
     if (value) {
-      setSelectedItems(value)
+      setSelectedItems(value);
     }
   }
 
@@ -168,7 +170,6 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
             </div>
 
           </div>
-          {selectMaterial}
           <IconButton
             sx={{ display: materials[0]?.approved_by?.name ? "none" : "" }}
 
@@ -193,11 +194,11 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               horizontal: "center",
             }}
           >
-            {/* <MenuItem
+            <MenuItem
               onClick={() => setOpenMaterialDrawer(true)}
-              sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
+              sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit", }}
             >+ Add Material
-            </MenuItem> */}
+            </MenuItem>
             <MenuItem sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit", display: "flex", alignItems: "center", gap: '0.4rem', fontSize: "clamp(12px, 2vw, 14px)", fontWeight: "500", padding: "0 8px" }}
               onClick={() => {
                 setSelectMaterial(true)
@@ -290,6 +291,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
         editMaterialId={editMaterialId}
         setEditMaterialId={setEditMaterialId}
       />
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

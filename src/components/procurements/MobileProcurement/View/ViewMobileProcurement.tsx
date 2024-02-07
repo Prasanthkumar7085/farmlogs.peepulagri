@@ -234,7 +234,7 @@ const ViewMobileProcurement = () => {
                     : ""}
             </div>
             <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", }}>
-                {materials?.length ?
+                {materials?.some((obj: any) => obj.hasOwnProperty('vendor') && obj.price !== null && obj.price !== undefined && obj.price !== "") ?
                     <VendorDetails
                         procurementData={data}
                         materials={materials}
@@ -243,7 +243,7 @@ const ViewMobileProcurement = () => {
                     : ""}
             </div>
             <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", }}>
-                {materials?.length ?
+                {data?.status == "PURCHASED" || data?.tracking_details?._id ?
                     <TrackingDetails
                         procurementData={data}
                         materials={materials}

@@ -6,7 +6,7 @@ const deleteMaterialsService = async ({ accessToken, materials_ids, }: { accessT
         const options = {
             method: "DELETE",
             body: JSON.stringify({
-                materials_ids: materials_ids
+                "material_ids": materials_ids
             }),
             headers: new Headers({
                 'content-type': 'application/json',

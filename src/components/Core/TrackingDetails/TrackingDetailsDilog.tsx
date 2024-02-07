@@ -212,7 +212,6 @@ const TrackingDetailsDilog = ({
             editable={false}
             size="lg"
             style={Datestyles}
-            placement="topStart"
             placeholder="Select date"
             format="dd-MM-yyy"
             value={date}

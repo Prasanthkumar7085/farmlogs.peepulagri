@@ -83,7 +83,7 @@ const ViewMobileProcurement = () => {
                 const filteredData = response?.data.filter((obj: any) => obj.status !== "REJECTED" && obj.hasOwnProperty('price'));
                 const allPurchaseOrNot = filteredData.every((obj: any) => obj.hasOwnProperty('price') && obj.price !== null);
 
-                if (allPurchaseOrNot && filteredData?.length) {
+                if (allPurchaseOrNot && filteredData?.length && data?.status == "APPROVED") {
                     await procurementStatusChange("PURCHASED")
                     await afterMaterialStatusChange(true)
                 }

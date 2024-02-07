@@ -130,9 +130,10 @@ const AddTrackingDetailsMobile = ({
             );
             let responseData = await response.json();
             if (responseData.success) {
-                setTrackingDialogOpen(false)
                 await procurementStatusChange("SHIPPED")
                 await getAllProcurementMaterials()
+                setTrackingDialogOpen(false)
+
                 toast.success(responseData?.message)
                 addTracking(true)
             }

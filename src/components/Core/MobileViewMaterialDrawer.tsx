@@ -1,4 +1,4 @@
-import { Button, Drawer, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, Drawer, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "/src/components/procurements/MobileProcurement/Add/add-materials.module.css";
 import ErrorMessages from "./ErrorMessages";
@@ -398,7 +398,7 @@ const MobileViewMaterialDrawer = ({
                     >
 
                         {loading ?
-                            <ImageComponent src='/loading-blue.svg' width={30} height={30} alt='loading' />
+                            <CircularProgress size="1.3rem" sx={{ color: "white" }} />
                             : 'Submit'}
                     </Button>
                 </div>

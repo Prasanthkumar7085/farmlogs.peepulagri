@@ -2,7 +2,7 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@m
 import POC from "../../edit/POC";
 import styles from "./add-materials.module.css";
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 import getMaterialsByProcurementIdService from "../../../../../lib/services/ProcurementServices/getMaterialsByProcurementIdService";
@@ -82,6 +82,11 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
         }
     };
 
+    useEffect(() => {
+        if (router.isReady && accessToken) {
+            getAllProcurementMaterials();
+        }
+    }, [router.isReady, accessToken]);
 
     const addMaterial = async () => {
         setLoading(true);
@@ -129,6 +134,7 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
         const value = event.target.value.replace(/\D/g, '');
         event.target.value = value.slice(0, 20);
     };
+    console.log(materials, "DSf0")
 
 
     return (
@@ -195,6 +201,7 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                                             onInput={handleInput}
                                             onChange={(e: any) => setRequiredQty(e.target.value)}
                                         />
+
                                         <FormControl variant="outlined" sx={{ width: "100%" }}>
                                             <InputLabel color="primary" />
                                             <Select
@@ -212,6 +219,23 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                                             </Select>
 
                                         </FormControl>
+
+                                    </div>
+
+
+                                </div>
+                                <div className={styles.group} style={{ marginLeft: "40PX", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                                    <div className={styles.required} >
+                                        <div className={styles.row} >
+                                            <ErrorMessages errorMessages={errorMessages} keyname={"required_qty"} />
+
+
+                                            <ErrorMessages errorMessages={errorMessages} keyname={"required_units"} />
+
+
+                                        </div>
+
+
                                     </div>
                                 </div>
                                 <div className={styles.required} >

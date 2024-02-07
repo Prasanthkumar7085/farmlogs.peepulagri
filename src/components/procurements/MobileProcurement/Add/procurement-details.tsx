@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
 import { useRouter } from "next/router";
-const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcurementMaterials }: any) => {
+const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcurementMaterials, rejectedMaterials }: any) => {
 
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -79,6 +79,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
         toast.success(responseData?.message);
         await procurementStatusChange("APPROVED")
         await getAllProcurementMaterials()
+        handleClose()
 
       }
 
@@ -112,13 +113,15 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
           }}>
             <Image src={"/viewTaskIcons/task-table-delete.svg"} alt="delete" height={15} width={15} />
           </IconButton>
+          {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
+            <IconButton
+              sx={{ display: procurementData?.status == "APPROVED" ? "none" : "" }}
+              onClick={(e) => {
+                handleClick(e)
 
-          <IconButton onClick={(e) => {
-            handleClick(e)
-
-          }}>
-            <Image src={"/viewProcurement/procurement-reject-icon.svg"} alt="delete" height={15} width={15} />
-          </IconButton>
+              }}>
+              <Image src={"/viewProcurement/procurement-reject-icon.svg"} alt="delete" height={15} width={15} />
+            </IconButton> : ""}
         </div>
         :
         <div className={styles.headingcontainer}>
@@ -175,6 +178,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               </MenuItem> : ""}
           </Menu>
         </div>}
+
       {materials?.length ?
 
         <div className={styles.datatable}>
@@ -190,6 +194,8 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
                   selectMaterial={selectMaterial}
                   openMaterialDrawer={openMaterialDrawer}
                   getAllProcurementMaterials={getAllProcurementMaterials}
+                  procurementStatusChange={procurementStatusChange}
+                  materials={materials}
 
                 />
 
@@ -205,7 +211,40 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               <h3 className={styles.total}>Total</h3>
               <p className={styles.amount}>{formatMoney(sumOfPrices(materials))}</p>
             </div> : ""}
+
+
         </div> : ""}
+      {rejectedMaterials?.length ?
+
+        <div className={styles.datatable}>
+          <ul className={styles.listofitems}>
+            {rejectedMaterials.map((item: any, index: any) => {
+              return (
+                <ProcurementDetailsCard
+                  key={index}
+                  procurementData={procurementData}
+                  item={item}
+                  setEditMaterialId={setEditMaterialId}
+                  setOpenMaterialDrawer={setOpenMaterialDrawer}
+                  selectMaterial={selectMaterial}
+                  openMaterialDrawer={openMaterialDrawer}
+                  getAllProcurementMaterials={getAllProcurementMaterials}
+                  procurementStatusChange={procurementStatusChange}
+                  materials={materials}
+
+                />
+
+              )
+            })
+            }
+
+
+          </ul>
+
+
+
+        </div> : ""}
+
       <MobileAddMaterialDrawer
         openMaterialDrawer={openMaterialDrawer}
         setOpenMaterialDrawer={setOpenMaterialDrawer}

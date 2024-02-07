@@ -7,12 +7,22 @@ import ImageComponent from "@/components/Core/ImageComponent";
 import { useSelector } from "react-redux";
 import MobileViewMaterialDrawer from "@/components/Core/MobileViewMaterialDrawer";
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import RejectedReasonDrawer from "../../MaterialCore/RejectReasonDrawer";
+import { toast } from "sonner";
 
 const ProcurementCard = ({ procurementData, item,
     selectMaterial,
     onStatusChangeEvent,
-    getAllProcurementMaterials
+    getAllProcurementMaterials,
+    procurementStatusChange,
+    materials
 }: any) => {
+
+
+    const accessToken = useSelector(
+        (state: any) => state.auth.userDetails?.access_token
+    );
+
 
     const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>()
     const [editMaterialId, setEditMaterialId] = useState("");
@@ -23,7 +33,7 @@ const ProcurementCard = ({ procurementData, item,
     const [materialOpen, setMaterialOpen] = useState(false);
     const [rejectDilogOpen, setRejectDilogOpen] = useState<boolean>(false)
     const [selectedRow, setSelectedRow] = useState<any>()
-
+    const [loading, setLoading] = useState<boolean>(false)
     const userDetails = useSelector(
         (state: any) => state.auth.userDetails?.user_details
     );
@@ -42,6 +52,50 @@ const ProcurementCard = ({ procurementData, item,
             setSelectedItems(updatedItems);
         }
     };
+
+    const afterRejectingMaterial = async (value: any) => {
+        if (value) {
+            setLoading(true)
+            try {
+                const url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/materials/${selectedRow}/${"reject"}`;
+
+                const options = {
+                    method: "PATCH",
+                    body: JSON.stringify({
+                        reason: value
+                    }),
+                    headers: new Headers({
+                        'content-type': 'application/json',
+                        'authorization': accessToken
+                    }),
+                }
+                const response: any = await fetch(url, options);
+                const responseData = await response.json();
+                if (response.ok) {
+                    toast.success(responseData?.message)
+
+                    const rejectedData = materials.filter((item: any, index: number) => item?.status == "REJECTED");
+
+
+                    if (rejectedData.length == materials.length - 1) {
+                        procurementStatusChange("PENDING")
+                    }
+
+                    getAllProcurementMaterials()
+
+                } else {
+                    return { message: 'Something Went Wrong', status: 500, details: responseData }
+                }
+
+            } catch (err: any) {
+                console.error(err);
+            }
+            finally {
+                setLoading(false)
+            }
+        }
+
+    }
 
     useEffect(() => {
         if (selectMaterial == false) {
@@ -126,7 +180,7 @@ const ProcurementCard = ({ procurementData, item,
                                     onStatusChangeEvent("approve", item?._id)
                                 }
                                 else {
-                                    setOpenMaterialDrawer(true)
+                                    setRejectDilogOpen(true)
                                     setSelectedRow(item?._id)
                                 }
                             }
@@ -159,6 +213,13 @@ const ProcurementCard = ({ procurementData, item,
                 editMaterialId={editMaterialId}
                 setEditMaterialId={setEditMaterialId}
                 getAllProcurementMaterials={getAllProcurementMaterials}
+            />
+
+            <RejectedReasonDrawer
+                dialog={rejectDilogOpen}
+                setRejectDilogOpen={setRejectDilogOpen}
+                afterRejectingMaterial={afterRejectingMaterial}
+                rejectLoading={loading}
             />
 
         </div>

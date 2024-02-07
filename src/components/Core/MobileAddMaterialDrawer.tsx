@@ -1,4 +1,4 @@
-import { Button, Drawer, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, Drawer, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "/src/components/procurements/MobileProcurement/Add/add-materials.module.css";
 import ErrorMessages from "./ErrorMessages";
@@ -292,6 +292,17 @@ const MobileAddMaterialDrawer = ({
                                     </FormControl>
                                 </div>
                             </div>
+                            <div className={styles.group} style={{ marginLeft: "40px" }}>
+                                <div className={styles.required} >
+                                    <div className={styles.row} >
+
+                                        <ErrorMessages errorMessages={errorMessages} keyname={"required_qty"} />
+                                        <ErrorMessages errorMessages={errorMessages} keyname={"required_units"} />
+
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className={styles.required} >
                                 <img className={styles.icon} alt="" src={"/approved-1.svg"} />
                                 <div className={styles.row} >
@@ -302,7 +313,7 @@ const MobileAddMaterialDrawer = ({
                                             width: "100%", background: "#fff",
 
                                         }}
-                                        placeholder="Required"
+                                        placeholder="Availble"
                                         variant="outlined"
                                         value={availableQty}
                                         onInput={handleInput}
@@ -366,8 +377,11 @@ const MobileAddMaterialDrawer = ({
                             }
                         }}
                     >
-                        Submit
-                    </Button>
+                        {loading ? (
+                            <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                        ) : (
+                            "Submit"
+                        )}                    </Button>
                 </div>
                 {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
             </form>

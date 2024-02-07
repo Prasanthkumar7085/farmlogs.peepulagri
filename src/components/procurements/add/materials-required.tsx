@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
-import { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
@@ -282,41 +282,9 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
     setDeleteLoading(false);
   };
 
-  // useEffect(() => {
-  //   const confirmExit = (e: any) => {
-  //     // Cancel the event
-  //     e.preventDefault();
-  //     // Chrome requires returnValue to be set
-  //     e.returnValue = '';
-  //     // Show confirmation dialog
 
-  //     const confirmationMessage = 'Are you sure you want to leave this page?';
-  //     e.returnValue = confirmationMessage; // Gecko, Trident, Chrome 34+
-  //     return confirmationMessage; // Gecko, WebKit, Chrome <34
 
-  //   };
 
-  //   // Add event listener when component mounts
-  //   window.addEventListener('beforeunload', confirmExit);
-  //   deleteProcurment()
-
-  //   // Remove event listener when component unmounts
-  //   return () => {
-  //     window.removeEventListener('beforeunload', confirmExit);
-
-  //   };
-  // }, []);
-
-  const handleReload = () => {
-    deleteMaterial()
-    // Call your API here if user confirms
-    console.log('Reloading page...');
-  };
-
-  const handleCancelReload = () => {
-    // Do nothing if user cancels
-    console.log('Reload cancelled.');
-  };
 
   const getModifiedCount = (count: number) => {
     if (+count >= 100000) {
@@ -341,6 +309,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
 
   return (
     <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "0rem", background: "#fff" }}>
+
       <div>
         <POC
           procurementData={procurementData}

@@ -217,15 +217,18 @@ const ViewMobileProcurement = () => {
                     </Stack> : ""}
             </div> */}
             <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", gap: "0.5rem" }}>
-                <ViewProucrementMobileDetails data={data} />
+                <ViewProucrementMobileDetails data={data}
+                    materials={materials}
+                />
             </div>
 
             <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", justifyContent: "center", }}>
-                {materials?.length ?
+                {materials?.length || rejectedMaterials?.length ?
                     <ProcurementDetailsMobile
                         materials={materials}
                         procurementData={data}
                         getAllProcurementMaterials={getAllProcurementMaterials}
+                        rejectedMaterials={rejectedMaterials}
                     />
                     : ""}
             </div>

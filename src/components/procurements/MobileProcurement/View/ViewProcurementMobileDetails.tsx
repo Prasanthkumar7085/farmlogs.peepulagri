@@ -1,7 +1,7 @@
 import { Chip, Typography } from "@mui/material";
 import styles from "./viewProcurementDetails.module.css";
 import Image from "next/image";
-const ViewProucrementMobileDetails = ({ data }: any) => {
+const ViewProucrementMobileDetails = ({ data, materials }: any) => {
     return (
         <div >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -17,7 +17,7 @@ const ViewProucrementMobileDetails = ({ data }: any) => {
 
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <Typography className={styles.dateOfClosing}>Date of Closing</Typography>
-                    <Typography >22-01-2024</Typography>
+                    <Typography >{"------"}</Typography>
 
                 </div>
 
@@ -27,7 +27,7 @@ const ViewProucrementMobileDetails = ({ data }: any) => {
 
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <Typography className={styles.dateOfClosing}>Approved by</Typography>
-                    <Typography >-----</Typography>
+                    <Typography >{materials[0]?.approved_by && data?.status == "APPROVED" ? materials[0]?.approved_by : "---"}</Typography>
 
                 </div>
 

@@ -1,0 +1,32 @@
+.procurementFormBtn {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-column-gap: 1rem;
+    margin-top: 3rem;
+}
+
+.procurementFormBtn .cancelBtn {
+    border: 1px solid #D0D5DD !important;
+    color: #344054 !important;
+    background-color: #fff !important;
+}
+
+.procurementFormBtn .cancelBtn:hover {
+    border: 1px solid #D0D5DD !important;
+    color: #344054 !important;
+    background-color: #fff !important;
+}
+
+.procurementFormBtn .submitBtn {
+    background-color: #D94841 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+
+}
+
+.procurementFormBtn .submitBtn:hover {
+    background-color: #D94841 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+
+}

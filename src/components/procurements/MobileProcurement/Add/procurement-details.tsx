@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
 import { useRouter } from "next/router";
+import deleteMaterialsService from "../../../../../lib/services/ProcurementServices/MaterialService/deleteMaterialsService";
 const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcurementMaterials, rejectedMaterials }: any) => {
 
   const router = useRouter();
@@ -22,6 +23,8 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
   const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>()
   const [editMaterialId, setEditMaterialId] = useState("");
   const [selectMaterial, setSelectMaterial] = useState<any>()
+  const [selectedItems, setSelectedItems] = useState<any>([])
+
   const [loading, setLoading] = useState<boolean>(false)
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
@@ -93,6 +96,31 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
     }
   }
 
+  //delete array of materials
+  const deleteMaterials = async (materials_ids: any) => {
+    setLoading(true)
+    try {
+      const response = await deleteMaterialsService({ accessToken, materials_ids })
+      if (response.success) {
+        toast.success(response.message)
+      }
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false)
+
+    }
+  }
+
+  //collect materails
+  const collectMaterialsForDelete = (value: any) => {
+    if (value) {
+      setSelectedItems(value)
+    }
+  }
+
 
 
   return (
@@ -109,10 +137,12 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
 
           </div>
           <IconButton onClick={(e) => {
-
+            deleteMaterials(selectedItems)
           }}>
             <Image src={"/viewTaskIcons/task-table-delete.svg"} alt="delete" height={15} width={15} />
           </IconButton>
+
+
           {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
             <IconButton
               sx={{ display: procurementData?.status == "APPROVED" ? "none" : "" }}
@@ -138,10 +168,13 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
 
           </div>
           {selectMaterial}
-          <IconButton onClick={(e) => {
-            handleClick(e)
+          <IconButton
+            sx={{ display: materials[0]?.approved_by?.name ? "none" : "" }}
 
-          }}>
+            onClick={(e) => {
+              handleClick(e)
+
+            }}>
             <MoreVertIcon />
           </IconButton>
           <Menu
@@ -196,6 +229,8 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
                   getAllProcurementMaterials={getAllProcurementMaterials}
                   procurementStatusChange={procurementStatusChange}
                   materials={materials}
+                  collectMaterialsForDelete={collectMaterialsForDelete}
+
 
                 />
 
@@ -216,7 +251,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
         </div> : ""}
       {rejectedMaterials?.length ?
 
-        <div className={styles.datatable}>
+        <div className={styles.datatable} style={{ backgroundColor: "#ffc6c6" }}>
           <ul className={styles.listofitems}>
             {rejectedMaterials.map((item: any, index: any) => {
               return (
@@ -231,7 +266,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
                   getAllProcurementMaterials={getAllProcurementMaterials}
                   procurementStatusChange={procurementStatusChange}
                   materials={materials}
-
+                  collectMaterialsForDelete={collectMaterialsForDelete}
                 />
 
               )

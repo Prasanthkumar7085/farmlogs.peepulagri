@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import VendorDetails from "./VendorDetails";
 import TrackingDetails from "./TrackingDetails";
 import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const ViewMobileProcurement = () => {
     const router = useRouter();
@@ -249,6 +250,7 @@ const ViewMobileProcurement = () => {
                         procurementStatusChange={procurementStatusChange} />
                     : ""}
             </div>
+            <LoadingComponent loading={loading} />
         </div >
 
     )

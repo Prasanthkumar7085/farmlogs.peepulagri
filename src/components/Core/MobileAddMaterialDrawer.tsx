@@ -103,7 +103,7 @@ const MobileAddMaterialDrawer = ({
         }
     };
     const updateMaterialById = async () => {
-        setUpdateLoading(true);
+        setLoading(true);
 
         try {
             const body = {
@@ -130,7 +130,7 @@ const MobileAddMaterialDrawer = ({
                 toast.success(response?.message);
                 getAllProcurementMaterials();
             } else if (response?.status == 422) {
-                setEditErrorMessages(response?.errors);
+                setErrorMessages(response?.errors);
             } else if (response?.status == 401) {
                 toast.error(response?.message);
             } else {
@@ -140,7 +140,7 @@ const MobileAddMaterialDrawer = ({
         } catch (err) {
             console.error(err);
         } finally {
-            setUpdateLoading(false);
+            setLoading(false);
         }
     };
 

@@ -27,7 +27,7 @@ const ViewProucrementMobileDetails = ({ data, materials }: any) => {
 
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <Typography className={styles.dateOfClosing}>Approved by</Typography>
-                    <Typography >{materials[0]?.approved_by && data?.status == "APPROVED" ? materials[0]?.approved_by : "---"}</Typography>
+                    <Typography >{materials[0]?.approved_by?.name ? materials[0]?.approved_by?.name : "---"}</Typography>
 
                 </div>
 

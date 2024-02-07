@@ -193,6 +193,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
             </label>
             <Select
               size="small"
+
               sx={{
                 marginBottom: "8px",
                 width: "100%",
@@ -211,6 +212,10 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               })}
 
             </Select>
+            <ErrorMessages
+              errorMessages={errorMessages}
+              keyname={"priority"}
+            />
           </div>
         </div>
         <div className={styles.remarks}>

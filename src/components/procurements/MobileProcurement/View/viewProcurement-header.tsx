@@ -58,7 +58,7 @@ const ViewProcurementHeader = ({ title, data, status }: any) => {
     setAnchorEl(null);
   };
   return (
-    <header className={styles.header} style={{ width: "100%" }}>
+    <header className={styles.header}>
       <div className={styles.actions}>
         <IconButton sx={{ padding: "0" }}
 

@@ -1,0 +1,29 @@
+.procurementtitle{
+color: var(--Title, #35353D);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+    /* 19.2px */
+}
+.priority{
+    display: flex;
+        padding: 6px 18px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 30px;
+            background: var(--Orange, #F2A84C);
+}
+.dateOfClosing{
+    color: var(--Red, #D94841);
+        /* Text sm/Medium */
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+        /* 142.857% */
+}

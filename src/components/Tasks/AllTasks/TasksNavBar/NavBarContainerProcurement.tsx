@@ -181,7 +181,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    placeholder="Search by User"
+                    placeholder="Search by Requested User"
                     variant="outlined"
                     size="small"
                     sx={{
@@ -209,7 +209,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
               className={styles.searchbar}
               color="primary"
               size="small"
-              placeholder="Search By Title"
+              placeholder="Search By Operation Title"
               sx={{
                 width: "100%",
                 "& .MuiInputBase-root": {
@@ -276,7 +276,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                 if (router.query.is_my_task == "true") {
                   return;
                 }
-
+                setSelectedUsers(null)
                 onUserChange([userId], true);
               }}
             >

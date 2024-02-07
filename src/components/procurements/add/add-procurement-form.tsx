@@ -61,7 +61,7 @@ const AddProcurementForm = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [procurementData, setProcurementData] = useState<any>({});
-  const [priority, setPriority] = useState('NONE')
+  const [priority, setPriority] = useState('')
   const [materialCount, setMaterialCount] = useState<any>()
   const [afterProcurement, setAfterProcurement] = useState<any>(false)
 

@@ -10,15 +10,26 @@ import React, { useState } from "react";
 import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 import CloseIcon from '@mui/icons-material/Close';
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
+import { useRouter } from "next/router";
 const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcurementMaterials }: any) => {
 
-
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>()
   const [editMaterialId, setEditMaterialId] = useState("");
   const [selectMaterial, setSelectMaterial] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
 
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,6 +44,52 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
     const sum = details.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.price, 0);
 
     return sum;
+  }
+
+
+  //overall status change
+  const procurementStatusChange = async (status: string) => {
+    try {
+      const response = await updateStatusService({
+        procurement_id: router.query.procurement_id as string,
+        status: status,
+        accessToken,
+      });
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
+
+  //approve all function
+  const approveAllMaterials = async () => {
+    setLoading(true)
+    try {
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${router.query.procurement_id}/approve-materials`;
+      const options = {
+        method: "PATCH",
+        headers: new Headers({
+          authorization: accessToken,
+        }),
+      };
+
+      const response = await fetch(url, options)
+      const responseData = await response.json()
+      if (responseData?.success) {
+        toast.success(responseData?.message);
+        await procurementStatusChange("APPROVED")
+        await getAllProcurementMaterials()
+
+      }
+
+    }
+    catch (err) {
+      console.error(err)
+    }
+    finally {
+      setLoading(false)
+
+    }
   }
 
 
@@ -111,8 +168,11 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               }}>
               Select
             </MenuItem>
-
-            <MenuItem sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}>Delete</MenuItem>
+            {procurementData?.status == "PENDING" && userDetails?.user_type == "central_team" && materials?.length ?
+              <MenuItem sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
+                onClick={() => approveAllMaterials()}
+              >Approve Materials
+              </MenuItem> : ""}
           </Menu>
         </div>}
       {materials?.length ?
@@ -123,10 +183,14 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               return (
                 <ProcurementDetailsCard
                   key={index}
+                  procurementData={procurementData}
                   item={item}
                   setEditMaterialId={setEditMaterialId}
                   setOpenMaterialDrawer={setOpenMaterialDrawer}
                   selectMaterial={selectMaterial}
+                  openMaterialDrawer={openMaterialDrawer}
+                  getAllProcurementMaterials={getAllProcurementMaterials}
+
                 />
 
               )
@@ -139,7 +203,6 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
 
             <div className={styles.totalamount}>
               <h3 className={styles.total}>Total</h3>
-              ?
               <p className={styles.amount}>{formatMoney(sumOfPrices(materials))}</p>
             </div> : ""}
         </div> : ""}

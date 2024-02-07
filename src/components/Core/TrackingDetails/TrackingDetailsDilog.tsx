@@ -15,19 +15,15 @@ import getProcurementByIdService from "../../../../lib/services/ProcurementServi
 import LoadingComponent from "../LoadingComponent";
 
 
-interface pagePropsType {
-  open: boolean;
-  addTracking: any;
-  setTrackingDialogOpen: (newValue: boolean) => void;
-  loading: boolean;
-}
+
 const TrackingDetailsDilog = ({
   open,
   addTracking,
+  procurementStatusChange,
   setTrackingDialogOpen,
   loading,
 
-}: pagePropsType) => {
+}: any) => {
 
   const router = useRouter()
 
@@ -152,7 +148,7 @@ const TrackingDetailsDilog = ({
   return (
     <Drawer
       open={open}
-      anchor={"right"}
+      anchor={router.pathname.includes("/users-procurements") ? "bottom" : "right"}
 
     >
       <div className={styles.addTrackingDetailsDrawer}>
@@ -216,6 +212,7 @@ const TrackingDetailsDilog = ({
             editable={false}
             size="lg"
             style={Datestyles}
+            placement="topStart"
             placeholder="Select date"
             format="dd-MM-yyy"
             value={date}
@@ -336,7 +333,15 @@ const TrackingDetailsDilog = ({
             color="info"
             size="small"
             disabled={loading}
-            onClick={() => addTrackingDetails()}
+            onClick={() => {
+              if (router.pathname.includes("/users-procurements")) {
+                procurementStatusChange("SHIPPED")
+              }
+              else {
+                addTrackingDetails()
+              }
+            }
+            }
             sx={{
               "&.Mui-disabled": {
                 background: "#c62828",

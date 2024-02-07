@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import getSingleMaterilsService from "../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import updateMaterialsByIdService from "../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
+import addMaterialParchaseService from "../../../lib/services/ProcurementServices/addMaterialPurchaseService";
 
 
 interface ApiCallService {
@@ -22,7 +23,7 @@ interface ApiCallService {
 }
 
 
-const MobileAddMaterialDrawer = ({
+const MobileViewMaterialDrawer = ({
     openMaterialDrawer,
     setOpenMaterialDrawer, procurementData,
     getAllProcurementMaterials,
@@ -41,6 +42,9 @@ const MobileAddMaterialDrawer = ({
     const [availableQty, setAvailableQty] = useState<null | number | string>(
         null
     );
+    const [nameVendor, setNameVendor] = useState('');
+    const [price, setPrice] = useState<any>();
+
     const [availableUnits, setAvailableUnits] = useState("");
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState({});
@@ -58,7 +62,6 @@ const MobileAddMaterialDrawer = ({
     const [editAvailableQty, setEditAvailableQty] = useState<
         null | number | string
     >(null);
-    const [editAvailableUnits, setEditAvailableUnits] = useState<string>("");
     const [updateLoading, setUpdateLoading] = useState(false);
     const [editErrorMessages, setEditErrorMessages] = useState({});
 
@@ -67,27 +70,23 @@ const MobileAddMaterialDrawer = ({
         setErrorMessages({});
         try {
             const body = {
-                procurement_req_id: router.query.procurement_id || procurementData?._id,
-                name: name,
-                required_qty: requiredQty ? +requiredQty : null,
-                required_units: requiredUnits,
-                available_qty: availableQty ? +availableQty : null,
-                available_units: requiredUnits,
+                price: +price,
+                vendor: nameVendor
             };
-            const response = await addProcurementMaterialService({
+            const response = await addMaterialParchaseService({
                 token: accessToken,
-                body: body as ApiCallService,
+                body: body,
+                id: editMaterialId
             });
 
             if (response?.status == 200 || response?.status == 201) {
-                setName("");
-                setRequiredQty("");
-                setRequiredUnits("");
-                setAvailableQty("");
-                setAvailableUnits("");
-                setOpenMaterialDrawer(false)
+
+
                 toast.success(response?.message);
-                await getAllProcurementMaterials()
+                setOpenMaterialDrawer(false)
+                getAllProcurementMaterials();
+                setNameVendor('');
+                setPrice('');
             } else if (response?.status == 422) {
                 setErrorMessages(response?.errors);
             } else if (response?.status == 401) {
@@ -102,47 +101,7 @@ const MobileAddMaterialDrawer = ({
             setLoading(false);
         }
     };
-    const updateMaterialById = async () => {
-        setUpdateLoading(true);
 
-        try {
-            const body = {
-                procurement_req_id: router.query.procurement_id || procurementData?._id,
-                name: name,
-                required_qty: requiredQty ? +requiredQty : null,
-                required_units: requiredUnits,
-                available_qty: availableQty ? +availableQty : null,
-                available_units: requiredUnits,
-            };
-            const response = await updateMaterialsByIdService({
-                token: accessToken,
-                materialId: editMaterialId,
-                body: body as ApiCallService,
-            });
-            if (response?.status == 200 || response?.status == 201) {
-                setName("");
-                setRequiredQty("");
-                setRequiredUnits("");
-                setAvailableQty("");
-                setAvailableUnits("");
-                setEditMaterialId("")
-                setOpenMaterialDrawer(false)
-                toast.success(response?.message);
-                getAllProcurementMaterials();
-            } else if (response?.status == 422) {
-                setEditErrorMessages(response?.errors);
-            } else if (response?.status == 401) {
-                toast.error(response?.message);
-            } else {
-                toast.error("Something went wrong");
-                throw response;
-            }
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setUpdateLoading(false);
-        }
-    };
 
 
     //get the single material
@@ -159,6 +118,8 @@ const MobileAddMaterialDrawer = ({
                 setRequiredQty(response?.data?.required_qty);
                 setRequiredUnits(response?.data?.required_units);
                 setName(response?.data?.name);
+                setPrice(response?.data?.price)
+                setNameVendor(response?.data?.vendor)
             } else if (response?.status == 401) {
                 toast.error(response?.message);
             } else {
@@ -177,22 +138,41 @@ const MobileAddMaterialDrawer = ({
     useEffect(() => {
         if (editMaterialId && accessToken) {
             getSingleMaterials();
-        } else {
+        }
+        else {
             setAvailableQty("");
             setAvailableUnits("");
             setRequiredQty("");
             setRequiredUnits("");
             setName("");
+            setPrice("")
+            setNameVendor("")
         }
-    }, [editMaterialId, openMaterialDrawer, accessToken])
+    }, [editMaterialId, accessToken])
 
 
 
 
 
     const handleInput = (event: any) => {
-        const value = event.target.value.replace(/\D/g, '');
-        event.target.value = value.slice(0, 20);
+        // Remove non-digit characters except for decimal point
+        let value = event.target.value.replace(/[^\d.]/g, '');
+
+        // Ensure only one decimal point exists
+        const decimalCount = value.split('.').length - 1;
+        if (decimalCount > 1) {
+            // If more than one decimal point, remove extra ones
+            const parts = value.split('.');
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        // Ensure negative sign is not the first character
+        if (value.startsWith('-')) {
+            value = value.slice(1);
+        }
+
+        // Limit length to 50 characters
+        event.target.value = value.slice(0, 50);
     };
 
 
@@ -216,7 +196,7 @@ const MobileAddMaterialDrawer = ({
                     borderBottom: "1px solid #dddddd",
                 }}
             >
-                <Typography >{"Add Material"}</Typography>
+                <Typography >{"Add Purchase "}</Typography>
                 <IconButton
                     onClick={() => {
                         setOpenMaterialDrawer(false);
@@ -244,6 +224,7 @@ const MobileAddMaterialDrawer = ({
                         <div style={{ width: "100%" }}>
                             <TextField
                                 size="small"
+                                disabled
                                 placeholder="Please enter the material title"
                                 variant="outlined"
                                 value={name}
@@ -261,7 +242,7 @@ const MobileAddMaterialDrawer = ({
                                 <img className={styles.icon} alt="" src={"/procurement-1.svg"} />
                                 <div className={styles.row} >
                                     <TextField
-
+                                        disabled
                                         size="small"
                                         sx={{
                                             width: "100%", background: "#fff",
@@ -276,6 +257,7 @@ const MobileAddMaterialDrawer = ({
                                     <FormControl variant="outlined" sx={{ width: "100%" }}>
                                         <InputLabel color="primary" />
                                         <Select
+                                            disabled
                                             sx={{
                                                 background: "#fff",
 
@@ -296,7 +278,7 @@ const MobileAddMaterialDrawer = ({
                                 <img className={styles.icon} alt="" src={"/approved-1.svg"} />
                                 <div className={styles.row} >
                                     <TextField
-
+                                        disabled
                                         size="small"
                                         sx={{
                                             width: "100%", background: "#fff",
@@ -311,6 +293,7 @@ const MobileAddMaterialDrawer = ({
                                     <FormControl variant="outlined" sx={{ width: "100%" }}>
                                         <InputLabel color="primary" />
                                         <Select
+                                            disabled
                                             sx={{
                                                 background: "#fff",
 
@@ -327,6 +310,57 @@ const MobileAddMaterialDrawer = ({
                                     </FormControl>
                                 </div>
                             </div>
+
+                            <div className={styles.required} >
+                                <div  >
+                                    <label className={styles.label}>
+                                        Vendor Details <b style={{ color: "red" }}>*</b>
+                                    </label>
+                                    <TextField
+                                        size="small" placeholder="Enter Name Of Vendor"
+                                        variant="outlined"
+                                        rows={5}
+                                        multiline
+                                        sx={{ width: "100%", height: "40%" }}
+                                        value={nameVendor}
+                                        onChange={(e) => {
+                                            setNameVendor(e.target.value)
+                                        }}
+                                    />
+
+                                    <ErrorMessages
+                                        errorMessages={errorMessages}
+                                        keyname={"vendor"}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={styles.required} >
+                                <div >
+                                    <label className={styles.label}>
+                                        Price (Rs) <b style={{ color: "red" }}>*</b>
+                                    </label>
+                                    <TextField
+                                        size="small"
+                                        sx={{ width: "100%" }}
+                                        placeholder="Enter Price Details Here"
+                                        variant="outlined"
+                                        onInput={handleInput}
+                                        value={price}
+                                        onChange={(e) => {
+                                            setPrice(e.target.value)
+                                        }}
+
+                                    />
+                                    <ErrorMessages
+                                        errorMessages={errorMessages}
+                                        keyname={"price"}
+                                    />
+                                </div>
+                            </div>
+
+
+
                         </div>
 
                     </div>
@@ -348,6 +382,7 @@ const MobileAddMaterialDrawer = ({
                             setRequiredUnits("");
                             setName("");
                             setEditMaterialId("")
+
                         }}
                     >
                         Cancel
@@ -357,16 +392,14 @@ const MobileAddMaterialDrawer = ({
                         color="primary"
                         name="submit"
                         variant="contained"
+                        disabled={loading ? true : false}
                         onClick={() => {
-                            if (editMaterialId) {
-                                updateMaterialById()
-                            }
-                            else {
-                                addMaterial()
-                            }
+
+                            addMaterial()
+
                         }}
                     >
-                        Submit
+                        {loading ? "Sumbiting" : "Submit"}
                     </Button>
                 </div>
                 {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
@@ -374,4 +407,4 @@ const MobileAddMaterialDrawer = ({
         </Drawer>
     )
 }
-export default MobileAddMaterialDrawer;
+export default MobileViewMaterialDrawer;

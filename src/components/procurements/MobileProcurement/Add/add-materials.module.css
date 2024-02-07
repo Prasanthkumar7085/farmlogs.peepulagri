@@ -140,6 +140,28 @@
   text-transform: capitalize !important;
 }
 
+.submit:hover {
+  border: 1px solid #d94841 !important;
+  background: #d94841 !important;
+  color: #FFF !important;
+}
+
+.cancel {
+  border-radius: 4px !important;
+  border: 1px solid #d94841 !important;
+  color: #d94841 !important;
+  box-shadow: 4px 4px 10px 0px #0202460d !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(15px, 3.5vw, 16px) !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
+}
+
+.cancel:hover {
+  border: 1px solid #d94841 !important;
+  color: #d94841 !important;
+}
+
 /* mobile add procurement styles */
 .addMaterialBtnMobile {
   border-radius: 4px !important;

@@ -2,8 +2,7 @@ import type { NextPage } from "next";
 import { Button, Icon, IconButton, Menu, MenuItem } from "@mui/material";
 import ProcurementDetails from "./procurement-details";
 import styles from "./procurement-details.module.css";
-import ProcurementCard from "../ProcurementCard";
-import ProcurementDetailsCard from "./ProcurementCard";
+import DoneIcon from '@mui/icons-material/Done'; import ProcurementDetailsCard from "./ProcurementCard";
 import formatMoney from "@/pipes/formatMoney";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React, { useState } from "react";
@@ -127,7 +126,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
     <div className={styles.yourprocurementdetails} >
       {selectMaterial ?
         <div className={styles.headingcontainer}>
-          <IconButton onClick={() => {
+          <IconButton sx={{ padding: "0" }} onClick={() => {
             setSelectMaterial(false)
           }}>
             <CloseIcon />
@@ -136,10 +135,10 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
 
 
           </div>
-          <IconButton onClick={(e) => {
+          <IconButton sx={{ padding: "0" }} onClick={(e) => {
             deleteMaterials(selectedItems)
           }}>
-            <Image src={"/viewTaskIcons/task-table-delete.svg"} alt="delete" height={15} width={15} />
+            <Image src={"/viewTaskIcons/task-table-delete.svg"} alt="delete" height={17} width={17} />
           </IconButton>
 
 
@@ -155,10 +154,12 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
         </div>
         :
         <div className={styles.headingcontainer}>
-          <img
+          <Image
             className={styles.procurementiconred}
             alt=""
             src="/procurement-red.svg"
+            height={20}
+            width={20}
           />
           <div className={styles.headingandcount}>
             <div className={styles.heading}>{`Your Procurement `}</div>
@@ -175,7 +176,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               handleClick(e)
 
             }}>
-            <MoreVertIcon />
+            <Image src="/mobileIcons/procurement/menu-icon-width-box.svg" alt="" width={20} height={20} />
           </IconButton>
           <Menu
             id="demo-positioned-menu"
@@ -192,16 +193,17 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               horizontal: "center",
             }}
           >
-            <MenuItem
+            {/* <MenuItem
               onClick={() => setOpenMaterialDrawer(true)}
               sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
             >+ Add Material
-            </MenuItem>
-            <MenuItem sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
+            </MenuItem> */}
+            <MenuItem sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit", display: "flex", alignItems: "center", gap: '0.4rem', fontSize: "clamp(12px, 2vw, 14px)", fontWeight: "500", padding: "0 8px" }}
               onClick={() => {
                 setSelectMaterial(true)
 
               }}>
+              <DoneIcon sx={{ fontSize: "1.2rem" }} />
               Select
             </MenuItem>
             {procurementData?.status == "PENDING" && userDetails?.user_type == "central_team" && materials?.length ?

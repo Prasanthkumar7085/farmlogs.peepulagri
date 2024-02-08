@@ -166,7 +166,7 @@ const TrackingDetailsDilog = ({
               setPhoneNumber("");
               setDate(null);
               setTrackingId("");
-              setErrorMessages(null);
+              setErrorMessages([]);
             }}
           >
             <Clear
@@ -330,7 +330,7 @@ const TrackingDetailsDilog = ({
               setDate(null);
               setPhoneNumber("");
               setTrackingId("");
-              setErrorMessages(null);
+              setErrorMessages([]);
             }}
             size="small"
           >

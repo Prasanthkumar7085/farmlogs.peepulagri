@@ -131,6 +131,7 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                     <IconButton
                         onClick={() => {
                             setMaterialOpen(false);
+                            setErrorMessages({});
                         }}
                     >
                         <Clear sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }} />
@@ -285,6 +286,8 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         onClick={() => {
 
                             setMaterialOpen(false);
+                                                        setErrorMessages({});
+
                         }}
                     >
                         Cancel

@@ -220,7 +220,10 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
             userDetails?.user_type == "agronomist" ||
             userDetails?._id == procurementData?.requested_by?._id ? (
               <MenuItem
-                onClick={() => setOpenMaterialDrawer(true)}
+                onClick={() => {
+                  setOpenMaterialDrawer(true);
+                  handleClose();
+                }}
                 sx={{
                   fontFamily: "'Inter', sans-serif",
                   minHeight: "inherit",
@@ -245,6 +248,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               }}
               onClick={() => {
                 setSelectMaterial(true);
+                handleClose();
               }}
             >
               <DoneIcon sx={{ fontSize: "1.2rem" }} />
@@ -256,7 +260,10 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
             router.query.procurement_id ? (
               <MenuItem
                 sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
-                onClick={() => approveAllMaterials()}
+                onClick={() => {
+                  approveAllMaterials();
+                  handleClose();
+                }}
               >
                 Approve Materials
               </MenuItem>

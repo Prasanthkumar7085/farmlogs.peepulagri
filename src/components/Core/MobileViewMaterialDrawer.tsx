@@ -173,7 +173,7 @@ const MobileViewMaterialDrawer = ({
         }
 
         // Limit length to 50 characters
-        event.target.value = value.slice(0, 50);
+        event.target.value = value.slice(0, 10);
     };
 
 

@@ -158,7 +158,13 @@ const ProcurementCard = ({
         ""
       ) : (
         <IconButton
-          sx={{ display: item.status == "REJECTED" ? "none !important" : "" }}
+          sx={{
+            display:
+              procurementData?.status == "PURCHASED" ||
+              procurementData?.tracking_details?._id
+                ? "none !important"
+                : "",
+          }}
           disabled={selectMaterial ? true : false}
           className={styles.iconButton}
           onClick={() => {

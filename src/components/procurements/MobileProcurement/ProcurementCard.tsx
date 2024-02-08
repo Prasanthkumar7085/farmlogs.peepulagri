@@ -202,7 +202,7 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
                 fontSize: "clamp(14px, 3vw, 16px",
               }}
             >
-              No Tasks
+              No Procurements
             </p>
           </div>
         ) : (

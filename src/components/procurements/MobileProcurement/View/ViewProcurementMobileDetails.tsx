@@ -68,13 +68,18 @@ const ViewProucrementMobileDetails = ({
       </span>
     );
   };
+  //to captlize the upercase text
+  const capitalizeFirstLetter = (string: any) => {
+    let temp = string.toLowerCase();
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
+  };
   return (
     <div>
       <div className={styles.procurementTitleBlock}>
         <Typography className={styles.procurementtitle}>
           {data?.title}
         </Typography>
-        <p className={styles.priority}>{data?.priority}</p>
+        <p className={styles.priority}>{capitalizeFirstLetter(data?.priority)}</p>
       </div>
       <div className={styles.procurementFarmBlock}>
         <Image src="/Outline.svg" width={16} height={16} alt="icon" />
@@ -95,7 +100,7 @@ const ViewProucrementMobileDetails = ({
             Date of Closing
           </Typography>
           {data?.status == "SHIPPED" &&
-          userDetails?._id == data.requested_by?._id ? (
+            userDetails?._id == data.requested_by?._id ? (
             <Button
               variant="contained"
               onClick={async () => {

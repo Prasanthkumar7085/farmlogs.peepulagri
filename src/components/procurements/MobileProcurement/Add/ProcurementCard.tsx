@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import InfoIcon from '@mui/icons-material/Info';
 import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 import RejectedTextDrawer from "../../MaterialCore/RejectTextDrawer";
+import { useRouter } from "next/router";
 
 const ProcurementCard = ({
   procurementData,
@@ -26,6 +27,8 @@ const ProcurementCard = ({
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+
+  const router = useRouter();
 
   const [rejectedReasonTextOpen, setRejectReasonTextOpen] =
     useState<boolean>(false);
@@ -232,7 +235,12 @@ const ProcurementCard = ({
             }}
           >
             <IconButton
-              sx={{ display: item?.approved_by?.name ? "none" : "" }}
+              sx={{
+                display:
+                  item?.approved_by?.name || !router.query.procurement_id
+                    ? "none"
+                    : "",
+              }}
               onClick={() => {
                 if (item?.status == "REJECTED") {
                   onStatusChangeEvent("approve", item?._id);

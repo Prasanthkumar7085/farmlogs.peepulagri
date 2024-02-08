@@ -307,7 +307,16 @@ const ViewMobileProcurement = () => {
                 rejectedMaterials={rejectedMaterials}
               />
             ) : (
-              ""
+              loading == false && (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <Image
+                    src={"/NoMaterialsImage.svg"}
+                    height={250}
+                    width={250}
+                    alt="no materials"
+                  />
+                </div>
+              )
             )}
           </div>
           <div className={styles.vendarDetailsBlock}>

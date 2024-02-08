@@ -17,6 +17,14 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
     const FarmTitleComponent = (info: any) => {
       let value = info?.farm_ids;
       let id = info?._id;
+
+      if (!value || value.length === 0) {
+        return <span>*No Farms*</span>;
+      }
+
+      const visibleTitles = value.slice(0, 2);
+      const hiddenTitlesCount = value.length - visibleTitles.length;
+
       return (
         <span
           style={{
@@ -24,59 +32,33 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
             flexDirection: "row",
             alignItems: "center",
             gap: "1rem",
-            color: value?.length ? "" : "#9a9a9a",
+            color: value.length > 2 ? "" : "#9a9a9a",
           }}
         >
-          {value?.length
-            ? value
-                .map((item: { _id: string; title: string }) => item.title)
-                .join(", ")
-            : "*No Farms*"}
-          {value?.length > 2 ? (
+          {visibleTitles
+            .map((item: { _id: string; title: string }) => item.title)
+            .join(",")}
+          {value.length > 2 && (
             <div
               style={{
                 color: "#9a9a9a",
               }}
               onClick={() => {
-                if (viewMoreId) {
-                  if (id == viewMoreId) {
-                    setShowAllFarms((prev) => !prev);
-                    setViewMoreId("");
-                  } else {
-                    setViewMoreId(id);
-                  }
-                } else {
-                  setViewMoreId(id);
-                  setShowAllFarms((prev) => !prev);
-                }
+                setShowAllFarms((prev) => !prev);
+                setViewMoreId((prev) => (prev === id ? "" : id));
               }}
             >
-              {showAllFarms && id == viewMoreId ? (
-                <Avatar
-                  sx={{
-                    bgcolor: deepOrange[500],
-                    width: 24,
-                    height: 24,
-                    fontSize: "10px",
-                  }}
-                >
-                  -
-                </Avatar>
-              ) : (
-                <Avatar
-                  sx={{
-                    bgcolor: deepOrange[500],
-                    width: 24,
-                    height: 24,
-                    fontSize: "10px",
-                  }}
-                >
-                  +{value?.length - 2}
-                </Avatar>
-              )}
+              <Avatar
+                sx={{
+                  bgcolor: deepOrange[500],
+                  width: 24,
+                  height: 24,
+                  fontSize: "10px",
+                }}
+              >
+                +{hiddenTitlesCount}
+              </Avatar>
             </div>
-          ) : (
-            ""
           )}
         </span>
       );

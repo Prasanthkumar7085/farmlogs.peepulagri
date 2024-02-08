@@ -1,9 +1,11 @@
-import { Button, Chip, Typography } from "@mui/material";
+import { Avatar, Button, Chip, Typography } from "@mui/material";
 import styles from "./viewProcurementDetails.module.css";
 import Image from "next/image";
 import capitalizeFirstLetter from "@/pipes/capitalizeFirstLetter";
 import { useSelector } from "react-redux";
 import timePipe from "@/pipes/timePipe";
+import { deepOrange } from "@mui/material/colors";
+import { useState } from "react";
 const ViewProucrementMobileDetails = ({
   data,
   materials,
@@ -13,7 +15,59 @@ const ViewProucrementMobileDetails = ({
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
   );
+  const [showAllFarms, setShowAllFarms] = useState(false);
 
+  const [viewMoreId, setViewMoreId] = useState("");
+
+  const FarmTitleComponent = (info: any) => {
+    let value = info?.farm_ids;
+    let id = info?._id;
+
+    if (!value || value.length === 0) {
+      return <span>*No Farms*</span>;
+    }
+
+    const visibleTitles = showAllFarms ? value : value.slice(0, 2);
+    const hiddenTitlesCount = value.length - visibleTitles.length;
+
+    return (
+      <span
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "1rem",
+          color: value.length > 2 ? "" : "#9a9a9a",
+        }}
+      >
+        {visibleTitles
+          .map((item: { _id: string; title: string }) => item.title)
+          .join(", ")}
+        {value.length > 2 && (
+          <div
+            style={{
+              color: "#9a9a9a",
+            }}
+            onClick={() => {
+              setShowAllFarms((prev) => !prev);
+              setViewMoreId((prev) => (prev === id ? "" : id));
+            }}
+          >
+            <Avatar
+              sx={{
+                bgcolor: deepOrange[500],
+                width: 24,
+                height: 24,
+                fontSize: "10px",
+              }}
+            >
+              {hiddenTitlesCount == 0 ? "-" : "+" + hiddenTitlesCount}
+            </Avatar>
+          </div>
+        )}
+      </span>
+    );
+  };
   return (
     <div>
       <div className={styles.procurementTitleBlock}>
@@ -25,7 +79,7 @@ const ViewProucrementMobileDetails = ({
       <div className={styles.procurementFarmBlock}>
         <Image src="/Outline.svg" width={16} height={16} alt="icon" />
         <Typography className={styles.procurementtitle}>
-          {data?.farm_ids[0]?.title}
+          {FarmTitleComponent(data)}
         </Typography>
       </div>
       <div className={styles.procurementClosingDateBlock}>

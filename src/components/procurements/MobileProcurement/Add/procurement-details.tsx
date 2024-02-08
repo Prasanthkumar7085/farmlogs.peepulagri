@@ -125,36 +125,55 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
 
 
   return (
-    <div className={styles.yourprocurementdetails} >
-      {selectMaterial ?
+    <div className={styles.yourprocurementdetails}>
+      {selectMaterial ? (
         <div className={styles.headingcontainer}>
-          <IconButton sx={{ padding: "0" }} onClick={() => {
-            setSelectMaterial(false)
-          }}>
+          <IconButton
+            sx={{ padding: "0" }}
+            onClick={() => {
+              setSelectMaterial(false);
+              handleClose();
+            }}
+          >
             <CloseIcon />
           </IconButton>
-          <div className={styles.headingandcount}>
-
-
-          </div>
-          <IconButton sx={{ padding: "0" }} onClick={(e) => {
-            deleteMaterials(selectedItems)
-          }}>
-            <Image src={"/viewTaskIcons/task-table-delete.svg"} alt="delete" height={17} width={17} />
+          <div className={styles.headingandcount}></div>
+          <IconButton
+            sx={{ padding: "0" }}
+            onClick={(e) => {
+              deleteMaterials(selectedItems);
+            }}
+          >
+            <Image
+              src={"/viewTaskIcons/task-table-delete.svg"}
+              alt="delete"
+              height={17}
+              width={17}
+            />
           </IconButton>
 
-
-          {userDetails?.user_type == "central_team" || userDetails?.user_type == "manager" ?
+          {userDetails?.user_type == "central_team" ||
+          userDetails?.user_type == "manager" ? (
             <IconButton
-              sx={{ display: procurementData?.status == "APPROVED" ? "none" : "" }}
+              sx={{
+                display: procurementData?.status == "APPROVED" ? "none" : "",
+              }}
               onClick={(e) => {
-                handleClick(e)
-
-              }}>
-              <Image src={"/viewProcurement/procurement-reject-icon.svg"} alt="delete" height={15} width={15} />
-            </IconButton> : ""}
+                handleClick(e);
+              }}
+            >
+              <Image
+                src={"/viewProcurement/procurement-reject-icon.svg"}
+                alt="delete"
+                height={15}
+                width={15}
+              />
+            </IconButton>
+          ) : (
+            ""
+          )}
         </div>
-        :
+      ) : (
         <div className={styles.headingcontainer}>
           <Image
             className={styles.procurementiconred}
@@ -168,16 +187,19 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
             <div className={styles.countcontainer}>
               <p className={styles.count}>{materials?.length}</p>
             </div>
-
           </div>
           <IconButton
             sx={{ display: materials[0]?.approved_by?.name ? "none" : "" }}
-
             onClick={(e) => {
-              handleClick(e)
-
-            }}>
-            <Image src="/mobileIcons/procurement/menu-icon-width-box.svg" alt="" width={20} height={20} />
+              handleClick(e);
+            }}
+          >
+            <Image
+              src="/mobileIcons/procurement/menu-icon-width-box.svg"
+              alt=""
+              width={20}
+              height={20}
+            />
           </IconButton>
           <Menu
             id="demo-positioned-menu"
@@ -194,29 +216,58 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
               horizontal: "center",
             }}
           >
+            {userDetails?.user_type == "central_team" ||
+            userDetails?.user_type == "agronomist" ||
+            userDetails?._id == procurementData?.requested_by?._id ? (
+              <MenuItem
+                onClick={() => setOpenMaterialDrawer(true)}
+                sx={{
+                  fontFamily: "'Inter', sans-serif",
+                  minHeight: "inherit",
+                  display: router.query.procurement_id ? "" : "none",
+                }}
+              >
+                + Add Material
+              </MenuItem>
+            ) : (
+              ""
+            )}
             <MenuItem
-              onClick={() => setOpenMaterialDrawer(true)}
-              sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit", }}
-            >+ Add Material
-            </MenuItem>
-            <MenuItem sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit", display: "flex", alignItems: "center", gap: '0.4rem', fontSize: "clamp(12px, 2vw, 14px)", fontWeight: "500", padding: "0 8px" }}
+              sx={{
+                fontFamily: "'Inter', sans-serif",
+                minHeight: "inherit",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                fontSize: "clamp(12px, 2vw, 14px)",
+                fontWeight: "500",
+                padding: "0 8px",
+              }}
               onClick={() => {
-                setSelectMaterial(true)
-
-              }}>
+                setSelectMaterial(true);
+              }}
+            >
               <DoneIcon sx={{ fontSize: "1.2rem" }} />
               Select
             </MenuItem>
-            {procurementData?.status == "PENDING" && userDetails?.user_type == "central_team" && materials?.length ?
-              <MenuItem sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
+            {procurementData?.status == "PENDING" &&
+            userDetails?.user_type == "central_team" &&
+            materials?.length &&
+            router.query.procurement_id ? (
+              <MenuItem
+                sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
                 onClick={() => approveAllMaterials()}
-              >Approve Materials
-              </MenuItem> : ""}
+              >
+                Approve Materials
+              </MenuItem>
+            ) : (
+              ""
+            )}
           </Menu>
-        </div>}
+        </div>
+      )}
 
-      {materials?.length ?
-
+      {materials?.length ? (
         <div className={styles.datatable}>
           <ul className={styles.listofitems}>
             {materials.map((item: any, index: any) => {
@@ -233,28 +284,35 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
                   procurementStatusChange={procurementStatusChange}
                   materials={materials}
                   collectMaterialsForDelete={collectMaterialsForDelete}
-
-
                 />
-
-              )
-            })
-            }
-
-
+              );
+            })}
           </ul>
-          {materials?.some((obj: any) => obj.hasOwnProperty('price') && obj.price !== null && obj.price !== undefined && obj.price !== "") ?
-
+          {materials?.some(
+            (obj: any) =>
+              obj.hasOwnProperty("price") &&
+              obj.price !== null &&
+              obj.price !== undefined &&
+              obj.price !== ""
+          ) ? (
             <div className={styles.totalamount}>
               <h3 className={styles.total}>Total</h3>
-              <p className={styles.amount}>{formatMoney(sumOfPrices(materials))}</p>
-            </div> : ""}
-
-
-        </div> : ""}
-      {rejectedMaterials?.length ?
-
-        <div className={styles.datatable} style={{ backgroundColor: "#ffc6c6" }}>
+              <p className={styles.amount}>
+                {formatMoney(sumOfPrices(materials))}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        ""
+      )}
+      {rejectedMaterials?.length ? (
+        <div
+          className={styles.datatable}
+          style={{ backgroundColor: "#ffc6c6" }}
+        >
           <ul className={styles.listofitems}>
             {rejectedMaterials.map((item: any, index: any) => {
               return (
@@ -271,17 +329,13 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
                   materials={materials}
                   collectMaterialsForDelete={collectMaterialsForDelete}
                 />
-
-              )
-            })
-            }
-
-
+              );
+            })}
           </ul>
-
-
-
-        </div> : ""}
+        </div>
+      ) : (
+        ""
+      )}
 
       <MobileAddMaterialDrawer
         openMaterialDrawer={openMaterialDrawer}

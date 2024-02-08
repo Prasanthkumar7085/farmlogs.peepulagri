@@ -148,30 +148,36 @@ const TrackingDetailsDilog = ({
   return (
     <Drawer
       open={open}
-      anchor={router.pathname.includes("/users-procurements") ? "bottom" : "right"}
-
+      anchor={
+        router.pathname.includes("/users-procurements") ? "bottom" : "right"
+      }
     >
       <div className={styles.addTrackingDetailsDrawer}>
         <div className={styles.drawerHeader}>
           <h6 className={styles.drawerHeading}>
-            {data?.tracking_details?._id ?
-              "Edit Tracking Details" : "Add Tracking Details"}
+            {data?.tracking_details?._id
+              ? "Edit Tracking Details"
+              : "Add Tracking Details"}
           </h6>
           <IconButton
             onClick={() => {
-              setTrackingDialogOpen(false)
-              setServiceName("")
-              setPhoneNumber("")
-              setDate(null)
-              setTrackingId("")
+              setTrackingDialogOpen(false);
+              setServiceName("");
+              setPhoneNumber("");
+              setDate(null);
+              setTrackingId("");
+              setErrorMessages(null);
             }}
           >
-            <Clear sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }} />
+            <Clear
+              sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }}
+            />
           </IconButton>
         </div>
         <div className={styles.eachFormField}>
-
-          <p className={styles.label}>Service Name</p>
+          <p className={styles.label}>
+            Service Name<b style={{ color: "red" }}>*</b>
+          </p>
           <TextField
             sx={{
               "& .MuiInputBase-root": {
@@ -182,13 +188,12 @@ const TrackingDetailsDilog = ({
                 height: "inherit",
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "clamp(12px, 0.72vw, 14px)",
-                borderRadius: "8px !important"
-
+                borderRadius: "8px !important",
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#D0D5DD !important",
                 borderWidth: "1px !important",
-                borderRadius: "8px !important"
+                borderRadius: "8px !important",
               },
             }}
             value={service_name}
@@ -207,7 +212,9 @@ const TrackingDetailsDilog = ({
           />
         </div>
         <div className={styles.eachFormField} id="tracking-details-datePicker">
-          <p className={styles.label}>Delivery Date</p>
+          <p className={styles.label}>
+            Delivery Date<b style={{ color: "red" }}>*</b>
+          </p>
           <DatePicker
             editable={false}
             size="lg"
@@ -225,8 +232,9 @@ const TrackingDetailsDilog = ({
           />
         </div>
         <div className={styles.eachFormField}>
-
-          <p className={styles.label}>Contact Number</p>
+          <p className={styles.label}>
+            Contact Number<b style={{ color: "red" }}>*</b>
+          </p>
           <TextField
             sx={{
               "& .MuiInputBase-root": {
@@ -237,13 +245,12 @@ const TrackingDetailsDilog = ({
                 height: "inherit",
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "clamp(12px, 0.72vw, 14px)",
-                borderRadius: "8px !important"
-
+                borderRadius: "8px !important",
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#D0D5DD !important",
                 borderWidth: "1px !important",
-                borderRadius: "8px !important"
+                borderRadius: "8px !important",
               },
             }}
             size="small"
@@ -253,13 +260,11 @@ const TrackingDetailsDilog = ({
             onInput={handleInput}
             onChange={(e: any) => setPhoneNumber(e.target.value)}
             error={Boolean(errorMessages?.["contact_number"])}
-
             helperText={
               errorMessages?.["contact_number"]
                 ? errorMessages?.["contact_number"]
                 : ""
             }
-
           />
         </div>
         <div className={styles.eachFormField}>
@@ -271,9 +276,15 @@ const TrackingDetailsDilog = ({
               alignItems: "center",
             }}
           >
-            <p className={styles.label}>Tracking Id</p>
+            <p className={styles.label}>
+              Tracking Id<b style={{ color: "red" }}>*</b>
+            </p>
             <div>
-              <Button className={styles.generateIdBtn} variant="text" onClick={generateUUID}>
+              <Button
+                className={styles.generateIdBtn}
+                variant="text"
+                onClick={generateUUID}
+              >
                 Generate Id
               </Button>
             </div>
@@ -288,13 +299,12 @@ const TrackingDetailsDilog = ({
                 height: "inherit",
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "clamp(12px, 0.72vw, 14px)",
-                borderRadius: "8px !important"
-
+                borderRadius: "8px !important",
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#D0D5DD !important",
                 borderWidth: "1px !important",
-                borderRadius: "8px !important"
+                borderRadius: "8px !important",
               },
             }}
             fullWidth
@@ -315,12 +325,12 @@ const TrackingDetailsDilog = ({
           <Button
             className={styles.buttonCancel}
             onClick={() => {
-              setTrackingDialogOpen(false)
-              setServiceName("")
-              setDate(null)
-              setPhoneNumber("")
-              setTrackingId("")
-
+              setTrackingDialogOpen(false);
+              setServiceName("");
+              setDate(null);
+              setPhoneNumber("");
+              setTrackingId("");
+              setErrorMessages(null);
             }}
             size="small"
           >
@@ -334,13 +344,11 @@ const TrackingDetailsDilog = ({
             disabled={loading}
             onClick={() => {
               if (router.pathname.includes("/users-procurements")) {
-                procurementStatusChange("SHIPPED")
+                procurementStatusChange("SHIPPED");
+              } else {
+                addTrackingDetails();
               }
-              else {
-                addTrackingDetails()
-              }
-            }
-            }
+            }}
             sx={{
               "&.Mui-disabled": {
                 background: "#c62828",
@@ -351,8 +359,10 @@ const TrackingDetailsDilog = ({
             <div className={styles.text}>
               {trackingLoading ? (
                 <CircularProgress size="1.3rem" sx={{ color: "white" }} />
+              ) : data?.tracking_details?._id ? (
+                "Update"
               ) : (
-                data?.tracking_details?._id ? "Update" : "Submit"
+                "Submit"
               )}
             </div>
           </Button>

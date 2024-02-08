@@ -50,12 +50,34 @@ const EditMaterialDrawer: FC<pageProps> = ({
   updateMaterialById,
   updateLoading,
 }) => {
+
+  const handleInput = (event: any) => {
+    // Remove non-digit characters except for decimal point
+    let value = event.target.value.replace(/[^\d.]/g, "");
+
+    // Ensure only one decimal point exists
+    const decimalCount = value.split(".").length - 1;
+    if (decimalCount > 1) {
+      // If more than one decimal point, remove extra ones
+      const parts = value.split(".");
+      value = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    // Ensure negative sign is not the first character
+    if (value.startsWith("-")) {
+      value = value.slice(1);
+    }
+
+    // Limit length to 50 characters
+    event.target.value = value.slice(0, 10);
+  };
   return (
     <Drawer anchor={"right"} open={editMaterialOpen}>
-      <div className={styles.drawerBlock} >
+      <div className={styles.drawerBlock}>
         <div className={styles.drawerHeadingBlock}>
           <h3 className={styles.drawerHeading}>Edit Material</h3>
-          <IconButton sx={{ padding: "0" }}
+          <IconButton
+            sx={{ padding: "0" }}
             onClick={() => {
               setEditAvailableQty(null);
               setEditAvailableUnits("");
@@ -77,13 +99,13 @@ const EditMaterialDrawer: FC<pageProps> = ({
             sx={{
               background: "#fff",
               width: "100%",
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: "8px 8px !important"
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderRadius: "8px 8px !important",
               },
-              '& .MuiInputBase-input': {
+              "& .MuiInputBase-input": {
                 fontSize: "clamp(12px, 0.72vw, 14px)",
-                fontFamily: "'Inter', sans-serif"
-              }
+                fontFamily: "'Inter', sans-serif",
+              },
             }}
             size="small"
             placeholder="Please enter the material title"
@@ -101,16 +123,17 @@ const EditMaterialDrawer: FC<pageProps> = ({
           <TextField
             size="small"
             sx={{
-              width: "100%", background: "#fff",
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: "8px 8px !important"
+              width: "100%",
+              background: "#fff",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderRadius: "8px 8px !important",
               },
-              '& .MuiInputBase-input': {
+              "& .MuiInputBase-input": {
                 fontSize: "clamp(12px, 0.72vw, 14px)",
-                fontFamily: "'Inter', sans-serif"
-              }
+                fontFamily: "'Inter', sans-serif",
+              },
             }}
-            type="number"
+            onInput={handleInput}
             value={editRequiredQty}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEditRequiredQty(e.target.value)
@@ -121,10 +144,10 @@ const EditMaterialDrawer: FC<pageProps> = ({
                 <Select
                   sx={{
                     background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
+                    "& .MuiOutlinedInput-notchedOutline": {
                       borderWidth: "0 !important",
-                      borderRadius: "0 8px 8px 0 !important"
-                    }
+                      borderRadius: "0 8px 8px 0 !important",
+                    },
                   }}
                   value={editRequiredUnits}
                   onChange={(e: any) => setEditRequiredUnits(e.target.value)}
@@ -148,17 +171,19 @@ const EditMaterialDrawer: FC<pageProps> = ({
           <TextField
             size="small"
             sx={{
-              width: "100%", background: "#fff",
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: "8px 8px !important"
+              width: "100%",
+              background: "#fff",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderRadius: "8px 8px !important",
               },
-              '& .MuiInputBase-input': {
+              "& .MuiInputBase-input": {
                 fontSize: "clamp(12px, 0.72vw, 14px)",
-                fontFamily: "'Inter', sans-serif"
-              }
-            }} placeholder="Enter Availble Quantity"
+                fontFamily: "'Inter', sans-serif",
+              },
+            }}
+            placeholder="Enter Availble Quantity"
             variant="outlined"
-            type="number"
+            onInput={handleInput}
             value={editAvailableQty}
             onChange={(e: any) => setEditAvailableQty(e.target.value)}
             InputProps={{
@@ -166,11 +191,12 @@ const EditMaterialDrawer: FC<pageProps> = ({
                 <Select
                   sx={{
                     background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
+                    "& .MuiOutlinedInput-notchedOutline": {
                       borderWidth: "0  !important",
-                      borderRadius: "0 8px 8px 0 !important"
-                    }
-                  }} value={editAvailableUnits}
+                      borderRadius: "0 8px 8px 0 !important",
+                    },
+                  }}
+                  value={editAvailableUnits}
                   onChange={(e: any) => setEditAvailableUnits(e.target.value)}
                 >
                   <MenuItem value="Litres">Litres</MenuItem>
@@ -181,7 +207,7 @@ const EditMaterialDrawer: FC<pageProps> = ({
           />
           <ErrorMessages
             errorMessages={editErrorMessages}
-            keyname={"required_units"}
+            keyname={"available_qty"}
           />
         </div>
         <div className={styles.procurementFormBtn}>
@@ -202,7 +228,6 @@ const EditMaterialDrawer: FC<pageProps> = ({
           </Button>
           <Button
             className={styles.submitBtn}
-
             variant="contained"
             onClick={() => updateMaterialById()}
           >
@@ -213,7 +238,6 @@ const EditMaterialDrawer: FC<pageProps> = ({
             )}
           </Button>
         </div>
-
       </div>
     </Drawer>
   );

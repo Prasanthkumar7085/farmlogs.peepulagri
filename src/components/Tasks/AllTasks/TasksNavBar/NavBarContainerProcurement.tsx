@@ -4,11 +4,12 @@ import {
   Button,
   Icon,
   InputAdornment,
+  Menu,
   TextField,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./NavBarContainer.module.css";
 import SelectComponent from "@/components/Core/SelectComponent";
@@ -22,9 +23,9 @@ interface PropTypes {
   selectedFarm: FarmInTaskType | null | undefined;
   onStatusChange: (value: string) => void;
   onUserChange: (value: string[] | [], isMyTasks: boolean) => void;
-  titleName: any
-  onPriorityChange: any
-  getProcruments: any
+  titleName: any;
+  onPriorityChange: any;
+  getProcruments: any;
 }
 
 const ProcurementNavBarContainer: React.FC<PropTypes> = ({
@@ -36,7 +37,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   onUserChange,
   onPriorityChange,
   titleName,
-  getProcruments
+  getProcruments,
 }) => {
   const router = useRouter();
 
@@ -53,8 +54,11 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
   );
+  const filterOpenOrNot = useSelector(
+    (state: any) => state?.farms?.taskFilterOpen
+  );
 
-
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [search, setSearch] = useState("");
   const [farmOptions, setFarmOptions] = useState<Array<FarmInTaskType>>();
   const [users, setUsers] = useState<Array<userTaskType>>([]);
@@ -62,10 +66,19 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
   const [selectedFarmOption, setSelectedFarmOption] = useState<
     FarmInTaskType | null | undefined
   >();
-  const [selectedUsers, setSelectedUsers] = useState<
-    { name: string; _id: string }[] | null
-  >();
-  const [priority, setPriority] = useState("")
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event: any | null, filterOrNot = false) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const targetDivRef = useRef(null);
+
+  const [selectedUsers, setSelectedUsers] = useState<any>();
+  const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
   const [statusOptions] = useState<Array<{ value: string; title: string }>>([
     { value: "PENDING", title: "Pending" },
@@ -74,7 +87,6 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     { value: "SHIPPED", title: "Shipped" },
     { value: "DELIVERED", title: "Delivered" },
     { value: "COMPLETED", title: "Completed" },
-
   ]);
 
   const [priorityOptions] = useState<Array<{ value: string; title: string }>>([
@@ -84,7 +96,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     { value: "High", title: "High" },
   ]);
 
-  //select the status 
+  //select the status
   const setStatusValue = (e: any) => {
     onStatusChange(e.target.value);
     setStatus(e.target.value);
@@ -100,7 +112,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     setSearch(searchString);
     setSelectedFarmOption(selectedFarm);
     setStatus(router.query.status as string);
-    setPriority(router.query.priority as string)
+    setPriority(router.query.priority as string);
   }, [searchString, selectedFarm, router.query.status]);
 
   const onButtonAddTaskClick = useCallback(() => {
@@ -140,66 +152,151 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     <>
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
-          <img className={styles.note1Icon} alt="" src="/support-icon-procurement.svg" />
+          <img
+            className={styles.note1Icon}
+            alt=""
+            src="/support-icon-procurement.svg"
+          />
           <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 150px 150px", gridColumnGap: "1rem", width: "70%", alignItems: "flex-end" }}>
-          <div>
-            {!(router.query.is_my_task == "true") ? (
-              <Autocomplete
-                sx={{
-                  "& .MuiChip-root": {
-                    background: "#f0fff0",
-                    border: "1px solid #05a155",
-                    borderRadius: "5px",
-                  },
-                }}
-                multiple
-                id="size-small-outlined-multi"
-                size="small"
-                fullWidth
-                noOptionsText={"No such User"}
-                value={selectedUsers?.length ? selectedUsers : []}
-                isOptionEqualToValue={(option: any, value: any) =>
-                  option.name === value.name
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 150px 150px",
+            gridColumnGap: "1rem",
+            width: "70%",
+            alignItems: "flex-end",
+          }}
+        >
+          {!(router.query.is_my_task == "true") ? (
+            <Button
+              ref={targetDivRef}
+              id="demo-positioned-button"
+              aria-controls={
+                filterOpenOrNot ? "demo-positioned-menu" : undefined
+              }
+              aria-haspopup="true"
+              aria-expanded={filterOpenOrNot ? "true" : undefined}
+              onClick={(e) => {
+                handleClick(e, true);
+              }}
+              variant="contained"
+              className={
+                router.query.requested_by && router.query.is_my_task
+                  ? styles.activeFilterBtn
+                  : styles.filterBtn
+              }
+            >
+              <img
+                src={
+                  router.query.requested_by && router.query.is_my_task
+                    ? "/viewTaskIcons/filter-sybol-icon-active.svg"
+                    : "/viewTaskIcons/filter-sybol-icon.svg"
                 }
-                getOptionLabel={(option: any) => {
-                  return option.name;
-                }}
-                options={users}
-                onChange={(e, value: userTaskType[] | []) => {
-                  setSelectedUsers(value);
-                  setUser(value);
-                  let data: string[] = value?.length
-                    ? value?.map(
-                      (item: { _id: string; name: string }) => item._id
-                    )
-                    : [];
-                  onUserChange(data, false);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="Search by Requested User"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
-                        backgroundColor: "#fff",
-                        border: "none",
-                        fontFamily: "'Inter', sans-serif ",
-                      },
-                    }}
-                  />
-                )}
+                alt=""
+                width={"14px"}
               />
-            ) : (
-              ""
-            )}
-          </div>
-          <div >
+              <span>
+                Requested by Filter
+                {selectedUsers?.length ? (
+                  <span className={styles.count}>
+                    + {selectedUsers?.length}
+                  </span>
+                ) : (
+                  ""
+                )}
+              </span>
+            </Button>
+          ) : (
+            ""
+          )}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+            PaperProps={{
+              style: {
+                width: "28ch",
+                padding: "1rem",
+              },
+            }}
+          >
+            <div>
+              {!(router.query.is_my_task == "true") ? (
+                <Autocomplete
+                  sx={{
+                    "& .MuiChip-root": {
+                      background: "#f0fff0",
+                      border: "1px solid #05a155",
+                      borderRadius: "5px",
+                    },
+                  }}
+                  multiple
+                  id="size-small-outlined-multi"
+                  size="small"
+                  fullWidth
+                  noOptionsText={"No such User"}
+                  value={selectedUsers?.length ? selectedUsers : []}
+                  getOptionDisabled={(option) => {
+                    let firstOption = selectedUsers?.length
+                      ? selectedUsers?.some(
+                          (item: any) =>
+                            item?._id === option?._id &&
+                            item?.name === option?.name
+                        )
+                      : false;
+
+                    return firstOption;
+                  }}
+                  isOptionEqualToValue={(option: any, value: any) =>
+                    option.name === value.name
+                  }
+                  getOptionLabel={(option: any) => {
+                    return option.name;
+                  }}
+                  options={users}
+                  onChange={(e, value: userTaskType[] | []) => {
+                    if (!value?.length) {
+                      setAnchorEl(null);
+                    }
+
+                    setSelectedUsers(value);
+                    setUser(value);
+                    let data: string[] = value?.length
+                      ? value?.map(
+                          (item: { _id: string; name: string }) => item._id
+                        )
+                      : [];
+                    onUserChange(data, false);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Search by User"
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        "& .MuiInputBase-root": {
+                          fontSize: "clamp(.875rem, 0.833vw, 1.125rem)",
+                          backgroundColor: "#fff",
+                          border: "none",
+                          fontFamily: "'Inter', sans-serif ",
+                        },
+                      }}
+                    />
+                  )}
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          </Menu>
+          <div>
             <TextField
               value={search}
               onChange={(e) => {
@@ -220,9 +317,9 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
 
                   fontFamily: "'Inter', sans-serif ",
                 },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderRadius: "4px !important"
-                }
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderRadius: "4px !important",
+                },
               }}
               variant="outlined"
               type="search"
@@ -235,7 +332,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
               }}
             />
           </div>
-          <div >
+          <div>
             <Typography>Status</Typography>
             <SelectComponent
               options={statusOptions}
@@ -244,7 +341,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
               value={status ? status : ""}
             />
           </div>
-          <div >
+          <div>
             <Typography>Priority</Typography>
             <SelectComponent
               options={priorityOptions}
@@ -276,7 +373,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                 if (router.query.is_my_task == "true") {
                   return;
                 }
-                setSelectedUsers(null)
+                setSelectedUsers(null);
                 onUserChange([userId], true);
               }}
             >
@@ -308,20 +405,16 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                       : ([router.query.requested_by] as string[])
                     : [],
                   isMyTasks: false,
-
-
                 });
               }}
-
             >
               All Procurements
             </Button>
-
-
           </div>
-          {userDetails?.user_type == "central_team" ? "" :
+          {userDetails?.user_type == "central_team" ? (
+            ""
+          ) : (
             <div className={styles.headeractions}>
-
               <Button
                 className={styles.addProcurementBtn}
                 color="primary"
@@ -332,9 +425,8 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
               >
                 Add
               </Button>
-
-            </div>}
-
+            </div>
+          )}
         </div>
       </div>
     </>

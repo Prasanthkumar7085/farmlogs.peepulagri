@@ -79,7 +79,7 @@ const ViewProucrementMobileDetails = ({
         <Typography className={styles.procurementtitle}>
           {data?.title}
         </Typography>
-        <p className={styles.priority}>{capitalizeFirstLetter(data?.priority)}</p>
+        <p className={styles.priority}>{data?.priority}</p>
       </div>
       <div className={styles.procurementFarmBlock}>
         <Image src="/Outline.svg" width={16} height={16} alt="icon" />

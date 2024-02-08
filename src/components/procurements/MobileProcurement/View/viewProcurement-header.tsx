@@ -57,6 +57,8 @@ const ViewProcurementHeader = ({ title, data, status }: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
   return (
     <header className={styles.header}>
       <div className={styles.actions}>
@@ -66,7 +68,7 @@ const ViewProcurementHeader = ({ title, data, status }: any) => {
         ><img alt=""
           src="/arrowdownbold-1@2x.png" width="24px" /> </IconButton>
         <p className={styles.headerTitle}>{title}</p>
-        {loggedInUserId == data?.created_by?._id ? (
+        {loggedInUserId !== data?.created_by?._id ? (
           <IconButton sx={{ padding: "0" }}
             onClick={handleClick}
           ><MoreVertIcon sx={{ color: "#fff" }} /></IconButton>

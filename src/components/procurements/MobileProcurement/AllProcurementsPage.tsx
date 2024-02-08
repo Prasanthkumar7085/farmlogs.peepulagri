@@ -20,9 +20,9 @@ const MobileAllProcurements = () => {
         (state: any) => state.auth.userDetails?.access_token
     );
     const userDetails = useSelector(
-      (state: any) => state.auth.userDetails?.user_details
+        (state: any) => state.auth.userDetails?.user_details
     );
-    
+
     const [data, setData] = useState<any>();
     const [page, setPage] = useState(1);
 
@@ -58,8 +58,8 @@ const MobileAllProcurements = () => {
         page = 1,
         limit = 15,
         search_string = "",
-        sortBy = "",
-        sortType = "",
+        sortBy = "createdAt",
+        sortType = "desc",
         selectedFarmId = "",
         status = "ALL",
         priority = "ALL",
@@ -274,94 +274,94 @@ const MobileAllProcurements = () => {
     };
 
     return (
-      <div>
-        <ProcurementHeader
-          onChangeSearch={onChangeSearch}
-          searchString={searchString}
-          onUserChange={onUserChange}
-          getAllTasks={getAllProcurements}
-        />
-        <div className={styles.allTasksPage}>
-          <div className={styles.TabButtonGrp}>
-            <Button
-              className={
-                router.query.is_my_procurement !== "true"
-                  ? styles.tabActiveButton
-                  : styles.tabButton
-              }
-              onClick={() => {
-                if (!(router.query.is_my_procurement == "true")) {
-                  return;
-                }
-                setUser([]);
-                setSelectedUsers([]);
+        <div>
+            <ProcurementHeader
+                onChangeSearch={onChangeSearch}
+                searchString={searchString}
+                onUserChange={onUserChange}
+                getAllTasks={getAllProcurements}
+            />
+            <div className={styles.allTasksPage}>
+                <div className={styles.TabButtonGrp}>
+                    <Button
+                        className={
+                            router.query.is_my_procurement !== "true"
+                                ? styles.tabActiveButton
+                                : styles.tabButton
+                        }
+                        onClick={() => {
+                            if (!(router.query.is_my_procurement == "true")) {
+                                return;
+                            }
+                            setUser([]);
+                            setSelectedUsers([]);
 
-                getAllProcurements({
-                  page: router.query.page as string,
-                  limit: router.query.limit as string,
-                  search_string: searchString,
-                  sortBy: router.query.order_by as string,
-                  sortType: router.query.order_type as string,
-                  selectedFarmId: router.query.farm_id as string,
-                  status: router.query.status as string,
-                  userId: [],
-                  isMyProcurements: false,
-                });
-              }}
-            >
-              All Procurements
-            </Button>
-            <Button
-              className={
-                router.query.is_my_procurement == "true"
-                  ? styles.tabActiveButton
-                  : styles.tabButton
-              }
-              onClick={() => {
-                if (router.query.is_my_procurement == "true") {
-                  return;
-                }
-                setUser([]);
-                setSelectedUsers([]);
-                onUserChange([userId], true);
-              }}
-            >
-              My Procurements
-            </Button>
-          </div>
-          <ProcurementTabs onStatusChange={onStatusChange} />
+                            getAllProcurements({
+                                page: router.query.page as string,
+                                limit: router.query.limit as string,
+                                search_string: searchString,
+                                sortBy: router.query.order_by as string,
+                                sortType: router.query.order_type as string,
+                                selectedFarmId: router.query.farm_id as string,
+                                status: router.query.status as string,
+                                userId: [],
+                                isMyProcurements: false,
+                            });
+                        }}
+                    >
+                        All Procurements
+                    </Button>
+                    <Button
+                        className={
+                            router.query.is_my_procurement == "true"
+                                ? styles.tabActiveButton
+                                : styles.tabButton
+                        }
+                        onClick={() => {
+                            if (router.query.is_my_procurement == "true") {
+                                return;
+                            }
+                            setUser([]);
+                            setSelectedUsers([]);
+                            onUserChange([userId], true);
+                        }}
+                    >
+                        My Procurements
+                    </Button>
+                </div>
+                <ProcurementTabs onStatusChange={onStatusChange} />
 
-          <ProcurementCard
-            data={data}
-            lastBookElementRef={lastBookElementRef}
-            hasMore={hasMore}
-            lastItemRef={lastItemRef}
-            loading={loading}
-          />
+                <ProcurementCard
+                    data={data}
+                    lastBookElementRef={lastBookElementRef}
+                    hasMore={hasMore}
+                    lastItemRef={lastItemRef}
+                    loading={loading}
+                />
+            </div>
+            {userDetails?.user_type == "central_team" ? (
+                ""
+            ) : (
+                <div className="addFormPositionIcon">
+                    <IconButton
+                        size="large"
+                        className={styles.AddTaskBtn}
+                        aria-label="add to shopping cart"
+                        onClick={() => {
+                            router.push("/users-procurements/add");
+                        }}
+                    >
+                        <Image
+                            src="/mobileIcons/procurement/add-procurement-icon.svg"
+                            alt=""
+                            width={25}
+                            height={25}
+                        />
+                        <span>Add Procurement</span>
+                    </IconButton>
+                </div>
+            )}
         </div>
-        {userDetails?.user_type == "central_team" ? (
-          ""
-        ) : (
-          <div className="addFormPositionIcon">
-            <IconButton
-              size="large"
-              className={styles.AddTaskBtn}
-              aria-label="add to shopping cart"
-              onClick={() => {
-                router.push("/users-procurements/add");
-              }}
-            >
-              <Image
-                src="/mobileIcons/procurement/add-procurement-icon.svg"
-                alt=""
-                width={25}
-                height={25}
-              />
-              <span>Add Procurement</span>
-            </IconButton>
-          </div>
-        )}
-      </div>
     );
 }
 

@@ -48,26 +48,7 @@ const TrackingDetails = ({
       </div>
 
       <div className={styles.detailscontainer}>
-        {procurementData?.status == "PURCHASED" &&
-          userDetails?.user_type == "central_team" &&
-          !procurementData?.tracking_details?.service_name ? (
-          <div className={styles.trackingid}>
-            <Typography variant="h6" className={styles.trackingBlockHeading}>
-              Tracking Details
-            </Typography>
-            <Button
-              className={styles.addTrackingDetailsBtn}
-              variant="text"
-              onClick={() => {
-                setTrackingDialogOpen(true);
-              }}
-            >
-              + Add Tracking Details
-            </Button>
-          </div>
-        ) : (
-          ""
-        )}
+
 
         {procurementData?.tracking_details?.tracking_id ? (
           <div style={{ width: "100%" }}>
@@ -114,6 +95,21 @@ const TrackingDetails = ({
 
             <Image src="/mobileIcons/procurement/no-tracking-details.png" alt="" width={160} height={105} />
             <p>no tracking details Added Yet</p>
+            {procurementData?.status == "PURCHASED" &&
+              userDetails?.user_type == "central_team" &&
+              !procurementData?.tracking_details?.service_name ? (
+              <Button
+                className={styles.addTrackingDetailsBtn}
+                variant="text"
+                onClick={() => {
+                  setTrackingDialogOpen(true);
+                }}
+              >
+                + Add Tracking Details
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
 
 

@@ -259,7 +259,7 @@ const ViewMobileProcurement = () => {
 
   return (
     <div>
-      <ViewProcurementHeader title={"View Procurement"} />
+      <ViewProcurementHeader data={data} title={"View Procurement"} />
       <div className={styles.viewProcurementPage}>
         {data?.status ? (
           <Stack

@@ -227,7 +227,11 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
                 sx={{
                   fontFamily: "'Inter', sans-serif",
                   minHeight: "inherit",
-                  display: router.query.procurement_id ? "" : "none",
+                  display:
+                    router.query.procurement_id &&
+                    !router.pathname.includes("edit")
+                      ? ""
+                      : "none",
                 }}
               >
                 + Add Material

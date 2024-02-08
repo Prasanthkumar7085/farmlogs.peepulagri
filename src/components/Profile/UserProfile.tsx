@@ -129,10 +129,11 @@ const UserProfile = () => {
   return (
     <>
       <div className={styles.summaryHeader} id="header">
-        <img
+        <Image
           src="/mobileIcons/logo-mobile-white.svg"
           alt=""
-          width={"50px"}
+          width={50}
+          height={50}
           onClick={() => router.push("/dashboard")}
         />
         <Typography className={styles.viewFarm}>Profile</Typography>
@@ -143,10 +144,10 @@ const UserProfile = () => {
         <div className={styles.profiledetailscontainer}>
           <div className={styles.profiledetailscontainer}>
             <div className={styles.container}>
-              <img className={styles.imageIcon} alt="" src={data?.url} />
+              <Image className={styles.imageIcon} width={140} height={140} alt="" src={data?.url} />
               <div className={styles.uploadimage}>
-                <label >
-                  <img className={styles.camera1Icon} alt="" src="/camera-1.svg" />
+                <label style={{ height: "20px" }}>
+                  <Image alt="" src="/camera-1.svg" width={20} height={20} />
                   <input
                     type="file"
                     alt="images-upload"
@@ -183,30 +184,34 @@ const UserProfile = () => {
           <div className={styles.editprofile} onClick={() => {
             router.push("/profile/user/edit")
           }}>
-            <img className={styles.camera1Icon} alt="" src="/editicon.svg" />
+            <Image className={styles.camera1Icon} width={20} height={20} alt="" src="/editicon.svg" />
             <p className={styles.editProfile}>Edit Profile</p>
           </div>
-          <img
+          <Image
             className={styles.optionscontainerChild}
             alt=""
             src="/line-30@2x.png"
+            width={100}
+            height={1}
           />
           <div className={styles.editprofile} onClick={() => {
             router.push("/profile/update-password")
           }}>
-            <img className={styles.camera1Icon} alt="" src="/passwordicon.svg" />
+            <Image className={styles.camera1Icon} width={20} height={20} alt="" src="/passwordicon.svg" />
             <p className={styles.editProfile}>{`Change Password `}</p>
           </div>
-          <img
+          <Image
             className={styles.optionscontainerChild}
             alt=""
             src="/line-30@2x.png"
+            width={100}
+            height={1}
           />
           <div className={styles.logout} onClick={() => {
             logout()
 
           }}>
-            <img className={styles.camera1Icon} alt="" src="/logouticon.svg" />
+            <Image className={styles.camera1Icon} width={20} height={20} alt="" src="/logouticon.svg" />
             <p className={styles.editProfile}>Log Out</p>
           </div>
         </div>

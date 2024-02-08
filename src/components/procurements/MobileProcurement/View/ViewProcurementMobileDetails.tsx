@@ -70,8 +70,8 @@ const ViewProucrementMobileDetails = ({
   };
   //to captlize the upercase text
   const capitalizeFirstLetter = (string: any) => {
-    let temp = string.toLowerCase();
-    return temp.charAt(0).toUpperCase() + temp.slice(1);
+    let temp = string?.toLowerCase();
+    return temp?.charAt(0).toUpperCase() + temp?.slice(1);
   };
   return (
     <div>
@@ -102,6 +102,7 @@ const ViewProucrementMobileDetails = ({
           {data?.status == "SHIPPED" &&
             userDetails?._id == data.requested_by?._id ? (
             <Button
+              className={styles.materialRecievedBtn}
               variant="contained"
               onClick={async () => {
                 await procurementStatusChange("DELIVERED");
@@ -113,6 +114,7 @@ const ViewProucrementMobileDetails = ({
           ) : data?.status == "DELIVERED" &&
             userDetails?.user_type == "central_team" ? (
             <Button
+              className={styles.materialRecievedBtn}
               variant="contained"
               onClick={async () => {
                 await procurementStatusChange("COMPLETED");
@@ -139,7 +141,7 @@ const ViewProucrementMobileDetails = ({
         />
 
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <Typography className={styles.dateOfClosing}>Approved by</Typography>
+          <Typography className={styles.approvedBy}>Approved by</Typography>
           <Typography>
             {materials[0]?.approved_by?.name
               ? materials[0]?.approved_by?.name

@@ -32,6 +32,14 @@
     line-height: 20px;
 }
 
+.approvedBy {
+    color: #45A845;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 3vw, 14px);
+    font-weight: 500;
+    line-height: 20px;
+}
+
 .procurementTitleBlock {
     display: flex;
     align-items: center;
@@ -70,4 +78,23 @@
 
 .approvedByBlock img {
     margin-top: 2px;
+}
+
+.materialRecievedBtn {
+    border-radius: 2px !important;
+    background: #45A845 !important;
+    color: #FFF !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 2.5vw, 15px) !important;
+    font-weight: 400 !important;
+    text-transform: capitalize !important;
+    padding: 2px 20px !important;
+    box-shadow: none !important;
+}
+
+.materialRecievedBtn:hover {
+    border-radius: 2px !important;
+    background: #45A845 !important;
+    color: #FFF !important;
+    box-shadow: none !important;
 }

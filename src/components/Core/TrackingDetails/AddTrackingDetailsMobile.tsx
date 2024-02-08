@@ -19,166 +19,174 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 
 const AddTrackingDetailsMobile = ({
-    open,
-    addTracking,
-    procurementStatusChange,
-    setTrackingDialogOpen,
-    loading,
-    getAllProcurementMaterials
+  open,
+  addTracking,
+  procurementStatusChange,
+  setTrackingDialogOpen,
+  loading,
+  getAllProcurementMaterials
 
 }: any) => {
 
-    const router = useRouter()
+  const router = useRouter()
 
-    const [errorMessages, setErrorMessages] = useState<any>([])
-    const [phoneNumber, setPhoneNumber] = useState<any>()
-    const [date, setDate] = useState<any>()
-    const [service_name, setServiceName] = useState<any>()
-    const [trackingId, setTrackingId] = useState<any>()
-    const [trackingLoading, setTrackingLoading] = useState<any>(false)
-    const [data, setData] = useState<any>()
-    const [loading1, setLoading1] = useState<any>(false)
-    const accessToken = useSelector(
-        (state: any) => state.auth.userDetails?.access_token
-    );
+  const [errorMessages, setErrorMessages] = useState<any>([])
+  const [phoneNumber, setPhoneNumber] = useState<any>()
+  const [date, setDate] = useState<any>()
+  const [service_name, setServiceName] = useState<any>()
+  const [trackingId, setTrackingId] = useState<any>()
+  const [trackingLoading, setTrackingLoading] = useState<any>(false)
+  const [data, setData] = useState<any>()
+  const [loading1, setLoading1] = useState<any>(false)
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm();
-    //event call after the form submit
-    const onSubmitClick = async (data: any) => {
-        setErrorMessages({});
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  //event call after the form submit
+  const onSubmitClick = async (data: any) => {
+    setErrorMessages({});
 
-    };
+  };
 
-    const getProcurementById = async () => {
-        setLoading1(true)
-        try {
-            const response = await getProcurementByIdService({
-                procurementId: router.query.procurement_id as string,
-                accessToken: accessToken,
-            });
-            if (response.status == 200 || response.status == 201) {
-                setData(response?.data);
-                setTrackingId(data?.tracking_details?.tracking_id)
-                setServiceName(data?.tracking_details?.service_name)
+  const getProcurementById = async () => {
+    setLoading1(true)
+    try {
+      const response = await getProcurementByIdService({
+        procurementId: router.query.procurement_id as string,
+        accessToken: accessToken,
+      });
+      if (response.status == 200 || response.status == 201) {
+        setData(response?.data);
+        setTrackingId(data?.tracking_details?.tracking_id)
+        setServiceName(data?.tracking_details?.service_name)
 
-                setPhoneNumber(data?.tracking_details?.contact_number)
-                if (data?.tracking_details?.delivery_date) {
-                    setDate(new Date(data?.tracking_details?.delivery_date))
+        setPhoneNumber(data?.tracking_details?.contact_number)
+        if (data?.tracking_details?.delivery_date) {
+          setDate(new Date(data?.tracking_details?.delivery_date))
 
-                } else {
-                    setDate(null)
-
-                }
-            }
-        } catch (err) {
-            console.error(err);
-        }
-        finally {
-            setLoading1(false)
+        } else {
+          setDate(null)
 
         }
-    };
-
-    useEffect(() => {
-        if (router.isReady && accessToken) {
-            getProcurementById()
-        }
-    }, [router.isReady, accessToken, open])
-    //only allow the number and (mobile number validation)
-    const handleInput = (event: any) => {
-        const value = event.target.value.replace(/\D/g, '');
-        event.target.value = value.slice(0, 10);
-    };
-
-
-    const Datestyles = { width: "100%", display: 'block', marginBottom: 10, zIndex: 1500 };
-
-    //function to generate the uuid randomly
-    const generateUUID = () => {
-        const newUUID = uuidv4(); // Generate UUID
-        setTrackingId(newUUID); // Update state with the generated UUID
-    };
-
-    //add tracking details eveent
-    const addTrackingDetails = async () => {
-
-        setTrackingLoading(true)
-        let body = {
-            "service_name": service_name,
-            "delivery_date": date,
-            "contact_number": phoneNumber,
-            "tracking_id": trackingId
-        }
-        try {
-            let options = {
-                method: "POST",
-                headers: new Headers({
-                    "content-type": "application/json",
-                    authorization: accessToken,
-                }),
-                body: JSON.stringify(body),
-            };
-
-            let response: any = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${router.query.procurement_id}/tracking-details`,
-                options
-            );
-            let responseData = await response.json();
-            if (responseData.success) {
-                await procurementStatusChange("SHIPPED")
-                await getAllProcurementMaterials()
-                setTrackingDialogOpen(false)
-
-                toast.success(responseData?.message)
-                addTracking(true)
-            }
-            if (responseData.status == 422) {
-                setErrorMessages(responseData?.errors)
-            }
-
-        }
-        catch (err) {
-            console.error(err)
-        }
-        finally {
-            setTrackingLoading(false)
-
-        }
+      }
+    } catch (err) {
+      console.error(err);
     }
+    finally {
+      setLoading1(false)
 
-    return (
-      <Drawer
-        open={open}
-        anchor={
-          router.pathname.includes("/users-procurements") ? "bottom" : "right"
+    }
+  };
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      getProcurementById()
+    }
+  }, [router.isReady, accessToken, open])
+  //only allow the number and (mobile number validation)
+  const handleInput = (event: any) => {
+    const value = event.target.value.replace(/\D/g, '');
+    event.target.value = value.slice(0, 10);
+  };
+
+
+  const Datestyles = { width: "100%", display: 'block', marginBottom: 10, zIndex: 1500 };
+
+  //function to generate the uuid randomly
+  const generateUUID = () => {
+    const newUUID = uuidv4(); // Generate UUID
+    setTrackingId(newUUID); // Update state with the generated UUID
+  };
+
+  //add tracking details eveent
+  const addTrackingDetails = async () => {
+
+    setTrackingLoading(true)
+    let body = {
+      "service_name": service_name,
+      "delivery_date": date,
+      "contact_number": phoneNumber,
+      "tracking_id": trackingId
+    }
+    try {
+      let options = {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body),
+      };
+
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${router.query.procurement_id}/tracking-details`,
+        options
+      );
+      let responseData = await response.json();
+      if (responseData.success) {
+        await procurementStatusChange("SHIPPED")
+        await getAllProcurementMaterials()
+        setTrackingDialogOpen(false)
+
+        toast.success(responseData?.message)
+        addTracking(true)
+      }
+      if (responseData.status == 422) {
+        setErrorMessages(responseData?.errors)
+      }
+
+    }
+    catch (err) {
+      console.error(err)
+    }
+    finally {
+      setTrackingLoading(false)
+
+    }
+  }
+
+  return (
+    <Drawer
+      open={open}
+      anchor={
+        router.pathname.includes("/users-procurements") ? "bottom" : "right"
+      }
+      sx={{
+        '& .MuiPaper-root': {
+          width: router.pathname.includes("/users-procurements") ? "100%" : "", maxWidth: router.pathname.includes("/users-procurements") ? "500px" : "", margin: router.pathname.includes("/users-procurements") ? "0 auto" : "", borderRadius: router.pathname.includes("/users-procurements") ? "20px 20px 0 0 " : ""
         }
-      >
-        <div className={styles.addTrackingDetailsDrawer}>
-          <div className={styles.drawerHeader}>
-            <h6 className={styles.drawerHeading}>
-              {data?.tracking_details?._id
-                ? "Edit Tracking Details"
-                : "Add Tracking Details"}
-            </h6>
-            <IconButton
-              onClick={() => {
-                setTrackingDialogOpen(false);
-                setServiceName("");
-                setPhoneNumber("");
-                setDate(null);
-                setTrackingId("");
-              }}
-            >
-              <Clear
-                sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }}
-              />
-            </IconButton>
-          </div>
+      }}
+    >
+      <div className={router.pathname.includes("/users-procurements") ? styles.addTrackingDetailMobile : styles.addTrackingDetailsDrawer}>
+
+
+        <div className={styles.drawerHeader}>
+          <h6 className={styles.drawerHeading}>
+            {data?.tracking_details?._id
+              ? "Edit Tracking Details"
+              : "Add Tracking Details"}
+          </h6>
+          <IconButton
+            onClick={() => {
+              setTrackingDialogOpen(false);
+              setServiceName("");
+              setPhoneNumber("");
+              setDate(null);
+              setTrackingId("");
+            }}
+          >
+            <Clear
+              sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }}
+            />
+          </IconButton>
+        </div>
+        <div className={styles.mobileDrawerFieldGroup}>
           <div className={styles.eachFormField}>
             <p className={styles.label}>Service Name</p>
             <TextField
@@ -376,9 +384,10 @@ const AddTrackingDetailsMobile = ({
             </Button>
           </div>
         </div>
-        <LoadingComponent loading={loading1} />
-      </Drawer>
-    );
+      </div>
+      <LoadingComponent loading={loading1} />
+    </Drawer>
+  );
 };
 
 export default AddTrackingDetailsMobile;

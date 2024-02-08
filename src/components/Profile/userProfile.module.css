@@ -67,6 +67,7 @@
     border-radius: 50%;
     height: 134px;
     object-fit: cover;
+    object-position: top;
     z-index: 0;
 }
 
@@ -215,12 +216,14 @@
     align-items: flex-start;
     justify-content: flex-start;
     gap: 10px;
+    cursor: pointer;
 }
 
 .optionscontainerChild {
     align-self: stretch;
     position: relative;
     max-width: 100%;
+    width: 100%;
     overflow: hidden;
     max-height: 100%;
     object-fit: cover;
@@ -239,6 +242,7 @@
     align-items: flex-start;
     gap: 10px;
     color: #d94841;
+    cursor: pointer;
 }
 
 .optionscontainer,

@@ -159,3 +159,26 @@
     line-height: 100%;
     text-transform: capitalize;
 }
+
+.addTrackingDetailsBtn {
+    border-radius: 8px !important;
+    border: 1px solid #6A7185 !important;
+    background: transparent !important;
+    color: #6A7185 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 2vw, 14px) !important;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+    text-transform: capitalize !important;
+    margin-top: 1.5rem !important;
+    padding: 6px 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+}
+
+.addTrackingDetailsBtn:hover {
+    border: 1px solid #6A7185 !important;
+    background: transparent !important;
+    color: #6A7185 !important;
+}

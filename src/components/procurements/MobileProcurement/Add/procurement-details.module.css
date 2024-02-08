@@ -112,3 +112,14 @@
   color: #d94841;
   font-family: Inter;
 }
+
+.signleMenuItem {
+  font-family: 'Inter', sans-serif !important;
+  min-height: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  font-size: clamp(12px, 2vw, 14px) !important;
+  font-weight: 500 !important;
+  padding: 4px 8px !important;
+}

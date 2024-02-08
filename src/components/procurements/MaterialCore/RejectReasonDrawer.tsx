@@ -21,21 +21,14 @@ const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMateri
                     zIndex: "1300 !important",
                     '& .MuiPaper-root': {
                         width: "100%", maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0 ",
-                        minHeight: "40%"
+                        minHeight: "30%"
                     }
                 }}
             >
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: "0.5rem",
-                        borderBottom: "1px solid #dddddd",
-                    }}
-                >
+                <div className={styles.drawerHeader}              >
                     <Typography className={styles.CommentsTitle}>{"Reason"}</Typography>
                     <IconButton
+                        sx={{ padding: "0" }}
                         onClick={() => {
                             setRejectDilogOpen(false);
                             setRemarks("")
@@ -44,7 +37,7 @@ const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMateri
                         <Clear />
                     </IconButton>
                 </div>
-                <div style={{ marginTop: "40px" }}>
+                <div className={styles.textfieldBlock} >
                     <TextArea
                         value={remarks}
                         size="small"

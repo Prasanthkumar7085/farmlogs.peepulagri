@@ -16,6 +16,8 @@ import { useRouter } from "next/router";
 import deleteMaterialsService from "../../../../../lib/services/ProcurementServices/MaterialService/deleteMaterialsService";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { removeItems } from "@/Redux/Modules/Otp";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import AddIcon from "@mui/icons-material/Add";
 const ProcurementDetailsMobile = ({
   materials,
   procurementData,
@@ -159,7 +161,7 @@ const ProcurementDetailsMobile = ({
           </IconButton>
 
           {userDetails?.user_type == "central_team" ||
-          userDetails?.user_type == "manager" ? (
+            userDetails?.user_type == "manager" ? (
             <IconButton
               sx={{
                 display: procurementData?.status == "APPROVED" ? "none" : "",
@@ -223,13 +225,15 @@ const ProcurementDetailsMobile = ({
             }}
           >
             {userDetails?.user_type == "central_team" ||
-            userDetails?.user_type == "agronomist" ||
-            userDetails?._id == procurementData?.requested_by?._id ? (
+              userDetails?.user_type == "agronomist" ||
+              userDetails?._id == procurementData?.requested_by?._id ? (
               <MenuItem
                 onClick={() => {
                   setOpenMaterialDrawer(true);
                   handleClose();
                 }}
+                className={styles.signleMenuItem}
+
                 sx={{
                   fontFamily: "'Inter', sans-serif",
                   minHeight: "inherit",
@@ -240,22 +244,14 @@ const ProcurementDetailsMobile = ({
                       : "none",
                 }}
               >
-                + Add Material
+                <AddIcon sx={{ fontSize: "1.2rem" }} /> Add Material
               </MenuItem>
             ) : (
               ""
             )}
             <MenuItem
-              sx={{
-                fontFamily: "'Inter', sans-serif",
-                minHeight: "inherit",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.4rem",
-                fontSize: "clamp(12px, 2vw, 14px)",
-                fontWeight: "500",
-                padding: "0 8px",
-              }}
+              className={styles.signleMenuItem}
+
               onClick={() => {
                 setSelectMaterial(true);
                 handleClose();
@@ -265,16 +261,18 @@ const ProcurementDetailsMobile = ({
               Select
             </MenuItem>
             {procurementData?.status == "PENDING" &&
-            userDetails?.user_type == "central_team" &&
-            materials?.length &&
-            router.query.procurement_id ? (
+              userDetails?.user_type == "central_team" &&
+              materials?.length &&
+              router.query.procurement_id ? (
               <MenuItem
-                sx={{ fontFamily: "'Inter', sans-serif", minHeight: "inherit" }}
+                className={styles.signleMenuItem}
+
                 onClick={() => {
                   approveAllMaterials();
                   handleClose();
                 }}
               >
+                <CheckCircleOutlineOutlinedIcon sx={{ fontSize: "1.2rem" }} />
                 Approve Materials
               </MenuItem>
             ) : (

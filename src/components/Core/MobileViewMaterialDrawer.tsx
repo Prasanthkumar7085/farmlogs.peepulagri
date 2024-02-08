@@ -4,14 +4,12 @@ import styles from "/src/components/procurements/MobileProcurement/Add/add-mater
 import ErrorMessages from "./ErrorMessages";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import addProcurementMaterialService from "../../../lib/services/ProcurementServices/addProcurementMaterialService";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import getSingleMaterilsService from "../../../lib/services/ProcurementServices/getSingleMaterilsService";
-import updateMaterialsByIdService from "../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
 import addMaterialParchaseService from "../../../lib/services/ProcurementServices/addMaterialPurchaseService";
-import ImageComponent from "./ImageComponent";
+import Image from "next/image";
 
 
 interface ApiCallService {
@@ -188,15 +186,7 @@ const MobileViewMaterialDrawer = ({
                 }
             }}
         >
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "0.5rem",
-                    borderBottom: "1px solid #dddddd",
-                }}
-            >
+            <div className={styles.addPurchaseDrawerHeader}           >
                 <Typography >{"Add Purchase "}</Typography>
                 <IconButton
                     onClick={() => {
@@ -213,16 +203,15 @@ const MobileViewMaterialDrawer = ({
                     <CloseIcon />
                 </IconButton>
             </div>
-            <form className={styles.addmaterials}>
+            <form className={styles.addmaterials} style={{ padding: "1rem" }}>
                 <div className={styles.formfieldscontainer}>
 
                     <div className={styles.materialformfields}>
-                        <div className={styles.lable} >
+
+                        <div style={{ width: "100%" }}>
                             <label className={styles.label} >
                                 {"Material Name"}
                             </label>
-                        </div>
-                        <div style={{ width: "100%" }}>
                             <TextField
                                 size="small"
                                 disabled
@@ -233,14 +222,14 @@ const MobileViewMaterialDrawer = ({
                                 sx={{
                                     background: "#fff",
                                     borderRadius: "4px",
-                                    width: "100%"
+                                    width: "100%", marginTop: "5px"
                                 }}
                             />
                             <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
                         </div>
                         <div className={styles.group}>
                             <div className={styles.required} >
-                                <img className={styles.icon} alt="" src={"/procurement-1.svg"} />
+                                <Image className={styles.icon} width={25} height={25} alt="" src={"/procurement-1.svg"} />
                                 <div className={styles.row} >
                                     <TextField
                                         disabled
@@ -276,7 +265,7 @@ const MobileViewMaterialDrawer = ({
                                 </div>
                             </div>
                             <div className={styles.required} >
-                                <img className={styles.icon} alt="" src={"/approved-1.svg"} />
+                                <Image className={styles.icon} width={25} height={25} alt="" src={"/approved-1.svg"} />
                                 <div className={styles.row} >
                                     <TextField
                                         disabled
@@ -312,7 +301,7 @@ const MobileViewMaterialDrawer = ({
                                 </div>
                             </div>
 
-                            <div style={{ width: "100%", marginTop: "20px" }}>
+                            <div style={{ width: "100%", marginTop: "10px" }}>
                                 <label className={styles.label}>
                                     Vendor Details <b style={{ color: "red" }}>*</b>
                                 </label>
@@ -321,7 +310,7 @@ const MobileViewMaterialDrawer = ({
                                     variant="outlined"
                                     rows={5}
                                     multiline
-                                    sx={{ width: "100%", height: "40%" }}
+                                    sx={{ width: "100%", height: "30%", marginTop: "5px" }}
                                     value={nameVendor}
                                     onChange={(e) => {
                                         setNameVendor(e.target.value)
@@ -334,13 +323,13 @@ const MobileViewMaterialDrawer = ({
                                 />
                             </div>
 
-                            <div style={{ width: "100%" }}>
+                            <div style={{ width: "100%", marginTop: "10px" }}>
                                 <label className={styles.label}>
                                     Price (Rs) <b style={{ color: "red" }}>*</b>
                                 </label>
                                 <TextField
                                     size="small"
-                                    sx={{ width: "100%" }}
+                                    sx={{ width: "100%", marginTop: "5px" }}
                                     placeholder="Enter Price Details Here"
                                     variant="outlined"
                                     onInput={handleInput}
@@ -366,7 +355,7 @@ const MobileViewMaterialDrawer = ({
 
                 <div className={styles.buttons}>
                     <Button
-                        className={styles.back}
+                        className={styles.cancel}
                         name="back"
                         size="medium"
                         variant="outlined"

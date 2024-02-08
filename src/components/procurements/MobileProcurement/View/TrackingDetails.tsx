@@ -8,7 +8,7 @@ import AddTrackingDetailsMobile from "@/components/Core/TrackingDetails/AddTrack
 import Image from "next/image";
 import timePipe from "@/pipes/timePipe";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-
+import AddIcon from '@mui/icons-material/Add';
 const TrackingDetails = ({
   procurementData,
   materials,
@@ -98,14 +98,15 @@ const TrackingDetails = ({
             {procurementData?.status == "PURCHASED" &&
               userDetails?.user_type == "central_team" &&
               !procurementData?.tracking_details?.service_name ? (
+
               <Button
                 className={styles.addTrackingDetailsBtn}
-                variant="text"
+                variant="outlined"
                 onClick={() => {
                   setTrackingDialogOpen(true);
                 }}
               >
-                + Add Tracking Details
+                <AddIcon sx={{ fontSize: "1.2rem" }} /> Add Tracking Details
               </Button>
             ) : (
               ""

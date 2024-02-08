@@ -14,48 +14,46 @@ const RejectedTextDrawer = ({ rejectedReasonText, setRejectReasonTextOpen, reaso
 
 
     return (
-        <>
-            <Drawer open={Boolean(rejectedReasonText)}
-                anchor={"bottom"}
-                sx={{
-                    zIndex: "1300 !important",
-                    '& .MuiPaper-root': {
-                        width: "100%", maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0 ",
-                        minHeight: "40%"
-                    }
-                }}
+      <>
+        <Drawer
+          open={Boolean(rejectedReasonText)}
+          anchor={"bottom"}
+          sx={{
+            zIndex: "1300 !important",
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "500px",
+              margin: "0 auto",
+              borderRadius: "20px 20px 0 0 ",
+              minHeight: "40%",
+            },
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0.5rem",
+              borderBottom: "1px solid #dddddd",
+              background: "#FF9A1A",
+            }}
+          >
+            <Typography className={styles.CommentsTitle}>{"Reason"}</Typography>
+            <IconButton
+              onClick={() => {
+                setRejectReasonTextOpen(false);
+                setRemarks("");
+              }}
             >
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: "0.5rem",
-                        borderBottom: "1px solid #dddddd",
-                        background: "#FF9A1A"
-
-
-                    }}
-                >
-                    <Typography className={styles.CommentsTitle}>{"Reason"}</Typography>
-                    <IconButton
-                        onClick={() => {
-                            setRejectReasonTextOpen(false);
-                            setRemarks("")
-                        }}
-                    >
-                        <KeyboardArrowDownIcon />
-                    </IconButton>
-                </div>
-                <div style={{ marginTop: "40px" }}>
-                    {reasonText?.reason}
-                </div>
-
-
-            </Drawer>
-
-        </>
-
-    )
+              <KeyboardArrowDownIcon />
+            </IconButton>
+          </div>
+          <div style={{ marginTop: "40px", whiteSpace: "pre-line" }}>
+            {reasonText?.reason}
+          </div>
+        </Drawer>
+      </>
+    );
 }
 export default RejectedTextDrawer;

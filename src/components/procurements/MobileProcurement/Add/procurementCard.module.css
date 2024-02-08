@@ -67,7 +67,7 @@
     font-weight: 400;
     line-height: 100%;
     text-transform: capitalize !important;
-    display: flex !important;
+    display: flex ;
     align-items: center !important;
     gap: 4px !important;
 }

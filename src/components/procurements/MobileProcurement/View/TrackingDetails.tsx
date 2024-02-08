@@ -49,8 +49,8 @@ const TrackingDetails = ({
 
       <div className={styles.detailscontainer}>
         {procurementData?.status == "PURCHASED" &&
-        userDetails?.user_type == "central_team" &&
-        !procurementData?.tracking_details?.service_name ? (
+          userDetails?.user_type == "central_team" &&
+          !procurementData?.tracking_details?.service_name ? (
           <div className={styles.trackingid}>
             <Typography variant="h6" className={styles.trackingBlockHeading}>
               Tracking Details
@@ -70,33 +70,53 @@ const TrackingDetails = ({
         )}
 
         {procurementData?.tracking_details?.tracking_id ? (
-          <div>
-            <label className={styles.lablesmall}>Service Name</label>
-            <p className={styles.details}>
-              {procurementData?.tracking_details?.service_name}
-            </p>
-            <div></div>
-            <label className={styles.lablesmall}>Contact Number</label>
-            <p className={styles.details}>
-              {procurementData?.tracking_details?.contact_number}
-            </p>
-            <label className={styles.lablesmall}>Delivery Date</label>
-            <p className={styles.details}>
-              {timePipe(
-                procurementData?.tracking_details?.delivery_date,
-                "DD-MM-YYYY"
-              )}
-            </p>
-            <label className={styles.lablesmall}>Tracking Id</label>
-            <p className={styles.details}>
-              {procurementData?.tracking_details?.tracking_id}{" "}
-              <IconButton onClick={() => copyTextToClipboard()}>
-                <ContentCopyIcon sx={{ fontSize: "1.2rem" }} />
-              </IconButton>
-            </p>
+          <div style={{ width: "100%" }}>
+            <div className={styles.eachTrackingDetail}>
+
+              <label className={styles.trackingTitle}>Service Name</label>
+              <p className={styles.details}>
+                {procurementData?.tracking_details?.service_name}
+              </p>
+            </div>
+            <div className={styles.middileBlock}>
+
+              <div className={styles.eachTrackingDetail}>
+
+                <label className={styles.trackingTitle}>Contact Number</label>
+                <p className={styles.details}>
+                  {procurementData?.tracking_details?.contact_number}
+                </p>
+              </div>
+              <div className={styles.eachTrackingDetail}>
+
+                <label className={styles.trackingTitle}>Delivery Date</label>
+                <p className={styles.details}>
+                  {timePipe(
+                    procurementData?.tracking_details?.delivery_date,
+                    "DD-MM-YYYY"
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className={styles.eachTrackingDetail}>
+
+              <label className={styles.trackingTitle}>Tracking Id</label>
+              <p className={styles.details} style={{ color: "#35353D" }}>
+                {procurementData?.tracking_details?.tracking_id}
+                <IconButton onClick={() => copyTextToClipboard()}>
+                  <ContentCopyIcon sx={{ fontSize: "1.2rem" }} />
+                </IconButton>
+              </p>
+            </div>
           </div>
         ) : (
-          "---"
+          <div className={styles.noTrackingDetailsBlock}>
+
+            <Image src="/mobileIcons/procurement/no-tracking-details.png" alt="" width={160} height={105} />
+            <p>no tracking details Added Yet</p>
+          </div>
+
+
         )}
       </div>
 

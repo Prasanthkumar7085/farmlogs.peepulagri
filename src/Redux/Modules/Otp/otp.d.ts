@@ -1,7 +1,8 @@
 declare namespace Otp {
 
   export interface OtpData {
-    resendOtpIn: number
+    resendOtpIn: number;
+    selectedItems: Array;
   }
 
 }

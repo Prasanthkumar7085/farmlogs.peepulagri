@@ -9,29 +9,39 @@ import React, { useState } from "react";
 import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 import CloseIcon from '@mui/icons-material/Close';
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
 import { useRouter } from "next/router";
 import deleteMaterialsService from "../../../../../lib/services/ProcurementServices/MaterialService/deleteMaterialsService";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcurementMaterials, rejectedMaterials }: any) => {
-
+import { removeItems } from "@/Redux/Modules/Otp";
+const ProcurementDetailsMobile = ({
+  materials,
+  procurementData,
+  getAllProcurementMaterials,
+  rejectedMaterials,
+}: any) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>()
+  const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>();
   const [editMaterialId, setEditMaterialId] = useState("");
-  const [selectMaterial, setSelectMaterial] = useState<any>()
-  const [selectedItems, setSelectedItems] = useState<any>()
+  const [selectMaterial, setSelectMaterial] = useState<any>();
+  const [selectedItems, setSelectedItems] = useState<any>();
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
   );
 
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
+  );
+
+  const selectedItemsFromStore = useSelector(
+    (state: any) => state.otp.selectedItems
   );
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -41,14 +51,15 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
     setAnchorEl(null);
   };
 
-
   //calculate the sum of the prices
   const sumOfPrices = (details: any) => {
-    const sum = details.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.price, 0);
+    const sum = details.reduce(
+      (accumulator: any, currentValue: any) => accumulator + currentValue.price,
+      0
+    );
 
     return sum;
-  }
-
+  };
 
   //overall status change
   const procurementStatusChange = async (status: string) => {
@@ -58,15 +69,14 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
         status: status,
         accessToken,
       });
+    } catch (err) {
+      console.error(err);
     }
-    catch (err) {
-      console.error(err)
-    }
-  }
+  };
 
   //approve all function
   const approveAllMaterials = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       let url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${router.query.procurement_id}/approve-materials`;
       const options = {
@@ -76,53 +86,46 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
         }),
       };
 
-      const response = await fetch(url, options)
-      const responseData = await response.json()
+      const response = await fetch(url, options);
+      const responseData = await response.json();
       if (responseData?.success) {
         toast.success(responseData?.message);
-        await procurementStatusChange("APPROVED")
-        await getAllProcurementMaterials()
-        handleClose()
-
+        await procurementStatusChange("APPROVED");
+        await getAllProcurementMaterials();
+        handleClose();
       }
-
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-    catch (err) {
-      console.error(err)
-    }
-    finally {
-      setLoading(false)
-
-    }
-  }
+  };
 
   //delete array of materials
   const deleteMaterials = async (materials_ids: any) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const response = await deleteMaterialsService({ accessToken, materials_ids })
+      const response = await deleteMaterialsService({
+        accessToken,
+        materials_ids,
+      });
       if (response.success) {
-        toast.success(response.message)
-        await getAllProcurementMaterials()
+        toast.success(response.message);
+        await getAllProcurementMaterials();
       }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
-
-    }
-  }
+  };
 
   //collect materails
   const collectMaterialsForDelete = (value: any) => {
     if (value) {
       setSelectedItems(value);
     }
-  }
-
-
+  };
 
   return (
     <div className={styles.yourprocurementdetails}>
@@ -133,6 +136,7 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
             onClick={() => {
               setSelectMaterial(false);
               handleClose();
+              dispatch(removeItems([]));
             }}
           >
             <CloseIcon />
@@ -141,7 +145,9 @@ const ProcurementDetailsMobile = ({ materials, procurementData, getAllProcuremen
           <IconButton
             sx={{ padding: "0" }}
             onClick={(e) => {
-              deleteMaterials(selectedItems);
+              deleteMaterials(
+                selectedItemsFromStore.map((item: any) => item._id)
+              );
             }}
           >
             <Image

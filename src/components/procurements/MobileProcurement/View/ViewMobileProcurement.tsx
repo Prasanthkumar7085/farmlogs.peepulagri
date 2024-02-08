@@ -8,9 +8,9 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { StepIconProps } from '@mui/material/StepIcon';
-import { Stack, Stepper } from "@mui/material";
+import { Button, Stack, Stepper } from "@mui/material";
 import Image from "next/image";
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ViewProucrementMobileDetails from "./ViewProcurementMobileDetails";
 import AddMaterialMobile from "../Add/AddMaterialMobile";
 import ProcurementDetailsMobile from "../Add/procurement-details";
@@ -21,6 +21,7 @@ import TrackingDetails from "./TrackingDetails";
 import updateStatusService from "../../../../../lib/services/ProcurementServices/updateStatusService";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./ViewProcurementMobile.module.css";
+import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 
 const ViewMobileProcurement = () => {
   const router = useRouter();
@@ -30,8 +31,9 @@ const ViewMobileProcurement = () => {
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [materials, setMaterials] = useState([]);
-  const [rejectedMaterials, setRejectedMaterial] = useState<any>()
-
+  const [rejectedMaterials, setRejectedMaterial] = useState<any>();
+  const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>();
+  const [editMaterialId, setEditMaterialId] = useState("");
   //overall status change
   const procurementStatusChange = async (status: string) => {
     setLoading(true);
@@ -87,8 +89,7 @@ const ViewMobileProcurement = () => {
       }
       if (response?.data) {
         const filteredData = response?.data.filter(
-          (obj: any) =>
-            obj.status !== "REJECTED" && obj.hasOwnProperty("price")
+          (obj: any) => obj.status !== "REJECTED" && obj.hasOwnProperty("price")
         );
         const allPurchaseOrNot = filteredData.every(
           (obj: any) => obj.hasOwnProperty("price") && obj.price !== null
@@ -308,13 +309,27 @@ const ViewMobileProcurement = () => {
             />
           ) : (
             loading == false && (
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
                 <Image
                   src={"/NoMaterialsImage.svg"}
                   height={250}
                   width={250}
                   alt="no materials"
                 />
+                <Button
+                  onClick={() => {
+                    setOpenMaterialDrawer(true);
+                  }}
+                >
+                  Add Material
+                </Button>
               </div>
             )
           )}
@@ -345,8 +360,16 @@ const ViewMobileProcurement = () => {
           )}
         </div>
       </div>
+      <MobileAddMaterialDrawer
+        openMaterialDrawer={openMaterialDrawer}
+        setOpenMaterialDrawer={setOpenMaterialDrawer}
+        procurementData={data}
+        getAllProcurementMaterials={getAllProcurementMaterials}
+        editMaterialId={editMaterialId}
+        setEditMaterialId={setEditMaterialId}
+      />
       <LoadingComponent loading={loading} />
     </div>
   );
-}
+};
 export default ViewMobileProcurement;

@@ -4,15 +4,16 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import formatMoney from "@/pipes/formatMoney";
 import ImageComponent from "@/components/Core/ImageComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MobileViewMaterialDrawer from "@/components/Core/MobileViewMaterialDrawer";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import RejectedReasonDrawer from "../../MaterialCore/RejectReasonDrawer";
 import { toast } from "sonner";
-import InfoIcon from '@mui/icons-material/Info';
+import InfoIcon from "@mui/icons-material/Info";
 import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 import RejectedTextDrawer from "../../MaterialCore/RejectTextDrawer";
 import { useRouter } from "next/router";
+import { addItems, removeItems } from "@/Redux/Modules/Otp";
 
 const ProcurementCard = ({
   procurementData,
@@ -29,14 +30,13 @@ const ProcurementCard = ({
   );
 
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const [rejectedReasonTextOpen, setRejectReasonTextOpen] =
     useState<boolean>(false);
   const [reasonText, setReasonText] = useState<boolean>(false);
   const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>();
   const [editMaterialId, setEditMaterialId] = useState("");
   const [editMaterialOpen, setEditMaterialOpen] = useState<boolean>();
-  const [selectedItems, setSelectedItems] = useState([]);
   const [tempItems, setTempItems] = useState();
   const [materialId, setMaterialId] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -48,21 +48,21 @@ const ProcurementCard = ({
     (state: any) => state.auth.userDetails?.user_details
   );
 
-  const handleChange = (itemId: any) => {
-    setSelectedItems((prevSelectedItems: any) => {
-      const itemIndex = prevSelectedItems.findIndex(
-        (ite: any) => ite._id === itemId._id
-      );
+  const selectedItems = useSelector((state: any) => state.otp.selectedItems);
 
-      if (itemIndex === -1) {
-        // If the item does not exist, add it to selectedItems
-        return [...prevSelectedItems, itemId];
-      } else {
-        // If the item already exists, don't modify the array
-        return prevSelectedItems;
-      }
-    });
+  const handleChange = (itemId: any) => {
+    const itemIndex = selectedItems?.findIndex(
+      (item: any) => item._id === itemId._id
+    );
+    if (itemIndex === -1) {
+      dispatch(addItems(itemId));
+    } else {
+      let temp = [...selectedItems];
+      temp.splice(itemIndex, 1);
+      dispatch(removeItems(temp));
+    }
   };
+
   const afterRejectingMaterial = async (value: any) => {
     if (value) {
       setLoading(true);
@@ -110,12 +110,6 @@ const ProcurementCard = ({
     }
   };
 
-  useEffect(() => {
-    if (selectMaterial == false) {
-      setSelectedItems([]);
-    }
-  }, [selectMaterial]);
-
   return (
     <div className={styles.procurementdetails}>
       <div className={styles.materialdetails}>
@@ -130,7 +124,7 @@ const ProcurementCard = ({
                 marginRight: "0.5rem",
               }}
               type="checkbox"
-              checked={selectedItems.some((ite: any) => ite._id === item._id)}
+              checked={selectedItems?.some((ite: any) => ite._id === item._id)}
               onChange={() => {
                 handleChange(item);
               }}

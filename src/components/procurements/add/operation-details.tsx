@@ -201,22 +201,24 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               router.query.procurement_id && editFarms?.length
                 ? "flex"
                 : "none",
-            marginTop: "10px",
+            marginBottom: "10px",
+            flexWrap: "wrap",
+            width: "65%"
           }}
         >
           {router.query.procurement_id && editFarms?.length
             ? editFarms.map((item, index) => {
-                return (
-                  <div key={index} style={{ display: "flex" }}>
-                    <Chip
-                      label={item.title}
-                      key={item._id}
-                      clickable
-                      onDelete={() => deleteEditedFarms(item._id)}
-                    />
-                  </div>
-                );
-              })
+              return (
+                <div key={index} style={{ display: "flex", marginRight: "5px", marginBottom: "5px" }}>
+                  <Chip
+                    label={item.title}
+                    key={item._id}
+                    clickable
+                    onDelete={() => deleteEditedFarms(item._id)}
+                  />
+                </div>
+              );
+            })
             : ""}
         </div>
         <div className={styles.remarks}>

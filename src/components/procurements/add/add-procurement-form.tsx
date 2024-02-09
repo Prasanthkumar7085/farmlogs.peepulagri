@@ -1,18 +1,7 @@
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import {
-  Button,
-  Card,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Tooltip,
-} from "@mui/material";
-import type { NextPage } from "next";
+import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -22,7 +11,6 @@ import ListAllFarmForDropDownService from "../../../../lib/services/FarmsService
 import addProcurementService from "../../../../lib/services/ProcurementServices/addProcurementService";
 import getProcurementByIdService from "../../../../lib/services/ProcurementServices/getProcurementByIdService";
 import updateProcurementService from "../../../../lib/services/ProcurementServices/updateProcurementService";
-import POC from "../edit/POC";
 import styles from "./add-procurement-form.module.css";
 import OperationDetails from "./operation-details";
 import deleteAddProcurementService from "../../../../lib/services/ProcurementServices/deleteAddProcurementService";

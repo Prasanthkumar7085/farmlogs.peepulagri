@@ -14,8 +14,8 @@ import { useSelector } from "react-redux";
 import styles from "./NavBarContainer.module.css";
 import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from "@mui/icons-material/Add";
-import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
+import Image from "next/image";
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -152,10 +152,12 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
     <>
       <div className={styles.navbarcontainer}>
         <div className={styles.pagetitle}>
-          <img
+          <Image
             className={styles.note1Icon}
             alt=""
             src="/support-icon-procurement.svg"
+            width={15}
+            height={15}
           />
           <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>
@@ -163,9 +165,9 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr 150px 150px",
+            gridTemplateColumns: "auto 1fr 150px 150px",
             gridColumnGap: "1rem",
-            width: "70%",
+            width: "60%",
             alignItems: "flex-end",
           }}
         >
@@ -188,15 +190,15 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                   : styles.filterBtn
               }
             >
-              <img
+              <Image
                 src={
                   router.query.requested_by && router.query.is_my_task
                     ? "/viewTaskIcons/filter-sybol-icon-active.svg"
                     : "/viewTaskIcons/filter-sybol-icon.svg"
                 }
                 alt=""
-                width={"14px"}
-                height={"14px"}
+                width={14}
+                height={14}
               />
               <span>Requested by Filter</span>
               <span>
@@ -247,10 +249,10 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                   getOptionDisabled={(option) => {
                     let firstOption = selectedUsers?.length
                       ? selectedUsers?.some(
-                          (item: any) =>
-                            item?._id === option?._id &&
-                            item?.name === option?.name
-                        )
+                        (item: any) =>
+                          item?._id === option?._id &&
+                          item?.name === option?.name
+                      )
                       : false;
 
                     return firstOption;
@@ -271,8 +273,8 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                     setUser(value);
                     let data: string[] = value?.length
                       ? value?.map(
-                          (item: { _id: string; name: string }) => item._id
-                        )
+                        (item: { _id: string; name: string }) => item._id
+                      )
                       : [];
                     onUserChange(data, false);
                   }}

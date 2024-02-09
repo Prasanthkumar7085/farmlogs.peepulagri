@@ -25,6 +25,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./ViewProcurementMobile.module.css";
 import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 import { removeItems } from "@/Redux/Modules/Otp";
+import RemarksBlock from "./RemarksBlock";
 
 const ViewMobileProcurement = () => {
   const router = useRouter();
@@ -338,6 +339,13 @@ const ViewMobileProcurement = () => {
                 </Button>
               </div>
             )
+          )}
+        </div>
+        <div className={styles.vendarDetailsBlock}>
+          {data?.remarks ? (
+            <RemarksBlock procurementData={data} materials={materials} />
+          ) : (
+            ""
           )}
         </div>
         <div className={styles.vendarDetailsBlock}>

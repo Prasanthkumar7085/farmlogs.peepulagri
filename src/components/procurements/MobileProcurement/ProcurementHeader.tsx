@@ -339,7 +339,9 @@ const ProcurementHeader = ({
           ) : (
             ""
           )}
-          {!(router.query.is_my_task == "true") ? (
+          {router.query.is_my_procurement ? (
+            ""
+          ) : (
             <Badge
               badgeContent={
                 router.query.requested_by
@@ -360,6 +362,7 @@ const ProcurementHeader = ({
                 className={styles.filter}
                 onClick={() => setUsersDrawerOpen(true)}
               >
+                {" "}
                 <img
                   className={styles.funnel1Icon}
                   alt=""
@@ -367,8 +370,6 @@ const ProcurementHeader = ({
                 />
               </div>
             </Badge>
-          ) : (
-            ""
           )}
           <Badge
             badgeContent={1}
@@ -441,9 +442,9 @@ const ProcurementHeader = ({
               getOptionDisabled={(option) => {
                 let selectedOption = usersArray?.length
                   ? usersArray?.some(
-                    (item: userTaskType) =>
-                      item?._id === option?._id && item?.name === option?.name
-                  )
+                      (item: userTaskType) =>
+                        item?._id === option?._id && item?.name === option?.name
+                    )
                   : false;
                 return selectedOption;
               }}
@@ -539,13 +540,13 @@ const ProcurementHeader = ({
           anchor={"bottom"}
           open={state}
           sx={{
-            '& .MuiPaper-root': {
+            "& .MuiPaper-root": {
               overflowY: "auto",
-              borderRadius: '20px 20px 0 0',
-              background: '#F5F7FA',
-              maxWidth: '500px',
-              margin: ' 0 auto',
-            }
+              borderRadius: "20px 20px 0 0",
+              background: "#F5F7FA",
+              maxWidth: "500px",
+              margin: " 0 auto",
+            },
           }}
         >
           <Box>

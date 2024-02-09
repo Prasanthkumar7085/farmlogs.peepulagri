@@ -308,8 +308,14 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
   };
 
   return (
-    <div style={{ width: "100%", margin: "0 auto 0", paddingBottom: "0rem", background: "#fff" }}>
-
+    <div
+      style={{
+        width: "100%",
+        margin: "0 auto 0",
+        paddingBottom: "0rem",
+        background: "#fff",
+      }}
+    >
       <div>
         <POC
           procurementData={procurementData}
@@ -317,60 +323,55 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
         />
       </div>
       <div className={styles.materialsrequired}>
-
         <div className={styles.heading}>
-          <div >
+          <div>
             <h2 className={styles.text}>Material Requirements</h2>
             <p className={styles.supportingText}>
               You can add List of items here based on requirement
             </p>
-
           </div>
-
-
         </div>
 
         <div className={styles.materialsGrid}>
-          <div className={styles.eachMaterialBlock} >
+          <div className={styles.eachMaterialBlock}>
             <h6 className={styles.label}>
               Material Name <strong style={{ color: "red" }}>*</strong>
             </h6>
             <div style={{ width: "100%" }}>
               <TextField
                 size="small"
-                placeholder="Please enter the material title"
+                placeholder="Enter the material title"
                 variant="outlined"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 sx={{
                   background: "#fff",
                   borderRadius: "4px",
-                  width: "100%"
+                  width: "100%",
                 }}
               />
               <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
             </div>
           </div>
 
-          <div className={styles.eachMaterialBlock} >
+          <div className={styles.eachMaterialBlock}>
             <h6 className={styles.label}>
-              Material Procurement (Qty) <strong style={{ color: "red" }}>*</strong>
-
+              Material Procurement (Qty){" "}
+              <strong style={{ color: "red" }}>*</strong>
             </h6>
-            <div >
+            <div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-
-                <div >
+                <div>
                   <TextField
                     autoComplete="false"
-
                     size="small"
                     sx={{
-                      width: "100%", background: "#fff",
-                      '& .MuiOutlinedInput-notchedOutline': {
+                      width: "100%",
+                      background: "#fff",
+                      "& .MuiOutlinedInput-notchedOutline": {
                         borderWidth: "1px 0 1px 1px !important",
-                        borderRadius: "4px 0 0 4px !important"
-                      }
+                        borderRadius: "4px 0 0 4px !important",
+                      },
                     }}
                     placeholder="Required"
                     variant="outlined"
@@ -378,18 +379,16 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                     onInput={handleInput}
                     onChange={(e: any) => setRequiredQty(e.target.value)}
                   />
-
                 </div>
                 <FormControl variant="outlined" sx={{ width: "100%" }}>
                   <InputLabel color="primary" />
                   <Select
                     sx={{
                       background: "#fff",
-                      '& .MuiOutlinedInput-notchedOutline': {
+                      "& .MuiOutlinedInput-notchedOutline": {
                         borderWidth: "1px 1px 1px 0 !important",
                         borderRadius: "1px 4px 4px 0 !important",
-
-                      }
+                      },
                     }}
                     size="small"
                     defaultValue="Litres"
@@ -399,11 +398,9 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                     <MenuItem value="Litres">Litres</MenuItem>
                     <MenuItem value="Kilograms">Kilograms</MenuItem>
                   </Select>
-
                 </FormControl>
               </div>
-              <div style={{ display: 'flex', flexWrap: "wrap" }}>
-
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
                 <ErrorMessages
                   errorMessages={errorMessages}
                   keyname={"required_qty"}
@@ -415,10 +412,8 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
               </div>
             </div>
           </div>
-          <div className={styles.eachMaterialBlock} >
-            <h6 className={styles.label}>
-              Material Available (Qty)(optional)
-            </h6>
+          <div className={styles.eachMaterialBlock}>
+            <h6 className={styles.label}>Material Available (Qty)(optional)</h6>
             <div style={{ display: "flex" }}>
               <TextField
                 size="small"
@@ -428,11 +423,12 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                 onInput={handleInput}
                 onChange={(e: any) => setAvailableQty(e.target.value)}
                 sx={{
-                  width: "100%", background: "#fff",
-                  '& .MuiOutlinedInput-notchedOutline': {
+                  width: "100%",
+                  background: "#fff",
+                  "& .MuiOutlinedInput-notchedOutline": {
                     borderWidth: "1px 0 1px 1px !important",
-                    borderRadius: "4px 0 0 4px !important"
-                  }
+                    borderRadius: "4px 0 0 4px !important",
+                  },
                 }}
               />
               <FormControl variant="outlined" sx={{ width: "100%" }}>
@@ -440,10 +436,10 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                 <Select
                   sx={{
                     background: "#fff",
-                    '& .MuiOutlinedInput-notchedOutline': {
+                    "& .MuiOutlinedInput-notchedOutline": {
                       borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "0 4px 4px 0 !important"
-                    }
+                      borderRadius: "0 4px 4px 0 !important",
+                    },
                   }}
                   size="small"
                   defaultValue="Litres"
@@ -456,9 +452,14 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
               </FormControl>
             </div>
           </div>
-
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1rem" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "1rem",
+          }}
+        >
           <Button
             color="primary"
             variant="contained"
@@ -466,26 +467,50 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
             onClick={() => addMaterial()}
             className={styles.addMaterialBtn}
           >
-            <AddIcon sx={{ fontSize: "1.2rem" }} />  Add
+            <AddIcon sx={{ fontSize: "1.2rem" }} /> Add
           </Button>
         </div>
         <div className={styles.materialListBlock}>
           <h4 className={styles.materialListheading}>Required Materials</h4>
-          <div id={styles.materialListTable} className="scrollbar"
-          >
-            <Table >
+          <div id={styles.materialListTable} className="scrollbar">
+            <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "50px" }}>S. No.</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px" }}>Name</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Material Procurement (Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "100px", whiteSpace: "nowrap" }}>Material Availability (Qty)</TableCell>
-                  <TableCell className={styles.tableHeaderCell} sx={{ minWidth: "80px" }}>Actions</TableCell>
+                  <TableCell
+                    className={styles.tableHeaderCell}
+                    sx={{ minWidth: "50px" }}
+                  >
+                    S. No.
+                  </TableCell>
+                  <TableCell
+                    className={styles.tableHeaderCell}
+                    sx={{ minWidth: "80px" }}
+                  >
+                    Name
+                  </TableCell>
+                  <TableCell
+                    className={styles.tableHeaderCell}
+                    sx={{ minWidth: "100px", whiteSpace: "nowrap" }}
+                  >
+                    Material Procurement (Qty)
+                  </TableCell>
+                  <TableCell
+                    className={styles.tableHeaderCell}
+                    sx={{ minWidth: "100px", whiteSpace: "nowrap" }}
+                  >
+                    Material Availability (Qty)
+                  </TableCell>
+                  <TableCell
+                    className={styles.tableHeaderCell}
+                    sx={{ minWidth: "80px" }}
+                  >
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {materials.length
-                  ? materials.map(
+                {materials.length ? (
+                  materials.map(
                     (
                       item: {
                         _id: string;
@@ -498,26 +523,44 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                       index: number
                     ) => {
                       return (
-                        <TableRow key={index} className={styles.tableBodyRow} >
-                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>{index + 1}.</TableCell>
-                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1", whiteSpace: "nowrap" }}>
+                        <TableRow key={index} className={styles.tableBodyRow}>
+                          <TableCell
+                            className={styles.tableBodyCell}
+                            style={{ borderBlock: "1px solid #E9EDF1" }}
+                          >
+                            {index + 1}.
+                          </TableCell>
+                          <TableCell
+                            className={styles.tableBodyCell}
+                            style={{
+                              border: "1px solid #E9EDF1",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
                             <Tooltip title={item?.name ? item?.name : ""}>
                               {item?.name?.length > 20
                                 ? item?.name?.slice(0, 1).toUpperCase() +
-                                item?.name?.slice(1, 15) +
-                                "..."
+                                  item?.name?.slice(1, 15) +
+                                  "..."
                                 : item?.name?.slice(0, 1).toUpperCase() +
-                                item?.name?.slice(1)}
+                                  item?.name?.slice(1)}
                             </Tooltip>
                           </TableCell>
-                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
-
-                            {item.required_qty ? getModifiedCount(+item.required_qty) : ""}
+                          <TableCell
+                            className={styles.tableBodyCell}
+                            style={{ borderBlock: "1px solid #E9EDF1" }}
+                          >
+                            {item.required_qty
+                              ? getModifiedCount(+item.required_qty)
+                              : ""}
                             {item.required_units
                               ? `(${item.required_units})`
                               : ""}
                           </TableCell>
-                          <TableCell className={styles.tableBodyCell} style={{ border: "1px solid #E9EDF1" }}>
+                          <TableCell
+                            className={styles.tableBodyCell}
+                            style={{ border: "1px solid #E9EDF1" }}
+                          >
                             {item.available_qty
                               ? getModifiedCount(+item.required_qty)
                               : ""}
@@ -525,7 +568,10 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                               ? `(${item.available_units})`
                               : ""}
                           </TableCell>
-                          <TableCell className={styles.tableBodyCell} style={{ borderBlock: "1px solid #E9EDF1" }}>
+                          <TableCell
+                            className={styles.tableBodyCell}
+                            style={{ borderBlock: "1px solid #E9EDF1" }}
+                          >
                             <IconButton
                               sx={{ paddingBlock: "3px" }}
                               onClick={() => {
@@ -540,8 +586,11 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                               }}
                             >
                               <picture>
-
-                                <img src="/pencil-icon.svg" alt="" width={"15px"} />
+                                <img
+                                  src="/pencil-icon.svg"
+                                  alt=""
+                                  width={"15px"}
+                                />
                               </picture>
                             </IconButton>
                             <IconButton
@@ -552,8 +601,11 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                               }}
                             >
                               <picture>
-
-                                <img src="/trast-icon.svg" alt="" width="15px" />
+                                <img
+                                  src="/trast-icon.svg"
+                                  alt=""
+                                  width="15px"
+                                />
                               </picture>
                             </IconButton>
                           </TableCell>
@@ -561,8 +613,12 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                       );
                     }
                   )
-                  : <TableRow>
-                    <TableCell colSpan={3} sx={{ borderBottom: "0", textAlign: "end" }}>
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      sx={{ borderBottom: "0", textAlign: "end" }}
+                    >
                       <Image
                         src={"/NoMaterialsImage.svg"}
                         height={150}
@@ -570,7 +626,8 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                         alt="no materials"
                       />
                     </TableCell>
-                  </TableRow>}
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </div>
@@ -604,7 +661,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
         updateLoading={updateLoading}
       />
       <LoadingComponent loading={loading} />
-    </div >
+    </div>
   );
 };
 

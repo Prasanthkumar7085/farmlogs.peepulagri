@@ -254,7 +254,7 @@ const ProcurementsTableComponent = ({
           {info.getValue()}
         </span>
       ),
-      header: () => <span>Operation Name</span>,
+      header: () => <span>Operation Title</span>,
       footer: (props: any) => props.column.id,
       width: "220px",
     },
@@ -341,11 +341,13 @@ const ProcurementsTableComponent = ({
                 justifyContent: "space-evenly",
               }}
             >
-              <Tooltip followCursor arrow title="View"
-              >
-                <IconButton style={{ cursor: "pointer", padding: "0" }} onClick={() =>
-                  router.push(`/procurements/${info.row.original?._id}`)
-                }>
+              <Tooltip followCursor arrow title="View">
+                <IconButton
+                  style={{ cursor: "pointer", padding: "0" }}
+                  onClick={() =>
+                    router.push(`/procurements/${info.row.original?._id}`)
+                  }
+                >
                   <ImageComponent
                     src="/viewTaskIcons/task-table-view.svg"
                     height={18}
@@ -355,16 +357,30 @@ const ProcurementsTableComponent = ({
                 </IconButton>
               </Tooltip>
 
-              <Tooltip followCursor arrow
-                title={(userDetails?._id == info.row.original?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") && info.row.original?.status == "PENDING"
-                  ? "Edit" : "You dont't have permission for this action"}
+              <Tooltip
+                followCursor
+                arrow
+                title={
+                  (userDetails?._id == info.row.original?.requested_by?._id ||
+                    userDetails?.user_type == "agronomist" ||
+                    userDetails?.user_type == "central_team") &&
+                  info.row.original?.status == "PENDING"
+                    ? "Edit"
+                    : "You dont't have permission for this action"
+                }
               >
                 <IconButton
                   style={{ cursor: "pointer", padding: "0" }}
-                  disabled={(userDetails?._id == info.row.original?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") && info.row.original?.status == "PENDING" ? false : true}
+                  disabled={
+                    (userDetails?._id == info.row.original?.requested_by?._id ||
+                      userDetails?.user_type == "agronomist" ||
+                      userDetails?.user_type == "central_team") &&
+                    info.row.original?.status == "PENDING"
+                      ? false
+                      : true
+                  }
                   onClick={() => {
-
-                    router.push(`/procurements/${info.row.original?._id}/edit`)
+                    router.push(`/procurements/${info.row.original?._id}/edit`);
                   }}
                 >
                   {/* <ImageComponent
@@ -380,33 +396,48 @@ const ProcurementsTableComponent = ({
                 </IconButton>
               </Tooltip>
 
-
-              <Tooltip followCursor arrow
-                title={(userDetails?._id == info.row.original?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") && info.row.original?.status == "PENDING"
-                  ? "Delete" : "You dont't have permission for this action"}
+              <Tooltip
+                followCursor
+                arrow
+                title={
+                  (userDetails?._id == info.row.original?.requested_by?._id ||
+                    userDetails?.user_type == "agronomist" ||
+                    userDetails?.user_type == "central_team") &&
+                  info.row.original?.status == "PENDING"
+                    ? "Delete"
+                    : "You dont't have permission for this action"
+                }
               >
                 <IconButton
-                  disabled={(userDetails?._id == info.row.original?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") && info.row.original?.status == "PENDING" ? false : true}
-
+                  disabled={
+                    (userDetails?._id == info.row.original?.requested_by?._id ||
+                      userDetails?.user_type == "agronomist" ||
+                      userDetails?.user_type == "central_team") &&
+                    info.row.original?.status == "PENDING"
+                      ? false
+                      : true
+                  }
                   style={{ padding: "0" }}
-
                   onClick={() => {
-
                     setdeleteProcurments(info.row.original?._id);
                     setDialogOpen(true);
                   }}
                 >
                   <ImageComponent
-                    src={(userDetails?._id == info.row.original?.requested_by?._id || userDetails?.user_type == "agronomist" || userDetails?.user_type == "central_team") && info.row.original?.status == "PENDING" ?
-                      "/viewTaskIcons/task-table-delete.svg" : "/viewTaskIcons/task-table-delete-disable.svg"
-
-
+                    src={
+                      (userDetails?._id ==
+                        info.row.original?.requested_by?._id ||
+                        userDetails?.user_type == "agronomist" ||
+                        userDetails?.user_type == "central_team") &&
+                      info.row.original?.status == "PENDING"
+                        ? "/viewTaskIcons/task-table-delete.svg"
+                        : "/viewTaskIcons/task-table-delete-disable.svg"
                     }
                     height={17}
                     width={17}
                     alt=""
-                  />                </IconButton>
-
+                  />{" "}
+                </IconButton>
               </Tooltip>
 
               <Tooltip followCursor arrow title="Comments">
@@ -425,7 +456,6 @@ const ProcurementsTableComponent = ({
                   />
                 </IconButton>
               </Tooltip>
-
             </div>
           }
         </span>

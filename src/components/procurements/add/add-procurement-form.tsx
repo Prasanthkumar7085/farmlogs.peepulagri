@@ -111,7 +111,7 @@ const AddProcurementForm = () => {
           ? new Date(dateOfOperation)?.toISOString()
           : "",
         remarks: remarks,
-        priority: priority,
+        priority: priority ? priority : "NONE",
         farm_ids: farm?.length
           ? farm.map((item: { _id: string }) => item._id)
           : [],
@@ -156,7 +156,7 @@ const AddProcurementForm = () => {
           ? new Date(dateOfOperation)?.toUTCString()
           : "",
         remarks: remarks,
-        priority: priority,
+        priority: priority ? priority : "NONE",
         farm_ids: [
           ...(farm?.length
             ? farm.map((item: { _id: string }) => item._id)
@@ -325,7 +325,7 @@ const AddProcurementForm = () => {
                       setAfterProcurement(false);
                     }}
                   >
-                    Prev
+                    Previous
                   </Button>
                 ) : (
                   <Button
@@ -347,7 +347,11 @@ const AddProcurementForm = () => {
                 {afterProcurement && procurementData?._id ? (
                   <Button
                     variant="contained"
-                    className={styles.submitBtn}
+                    className={
+                      router.query.procurement_id || procurementData?._id
+                        ? styles.disBtn
+                        : styles.submitBtn
+                    }
                     disabled={materialCount >= 1 ? false : true}
                     onClick={() => {
                       router.back();

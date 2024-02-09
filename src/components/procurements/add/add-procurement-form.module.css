@@ -91,7 +91,15 @@
   border: 1px solid #D94841 !important;
   background: #D94841 !important;
 }
+.disBtn {
+  color: #fff !important;
+  padding: 6px 60px !important;
 
+}
+
+.disBtn:hover {
+  color: #fff !important;
+}
 /* presonofContact block styles */
 .personofcontact .label {
   color: #101828;

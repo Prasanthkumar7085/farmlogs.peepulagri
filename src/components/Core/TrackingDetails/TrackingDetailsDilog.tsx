@@ -204,12 +204,8 @@ const TrackingDetailsDilog = ({
             placeholder="Service Name"
             variant="outlined"
             error={Boolean(errorMessages?.["service_name"])}
-            helperText={
-              errorMessages?.["service_name"]
-                ? errorMessages?.["service_name"]
-                : ""
-            }
           />
+          <ErrorMessages errorMessages={errorMessages} keyname="service_name" />
         </div>
         <div className={styles.eachFormField} id="tracking-details-datePicker">
           <p className={styles.label}>
@@ -260,11 +256,10 @@ const TrackingDetailsDilog = ({
             onInput={handleInput}
             onChange={(e: any) => setPhoneNumber(e.target.value)}
             error={Boolean(errorMessages?.["contact_number"])}
-            helperText={
-              errorMessages?.["contact_number"]
-                ? errorMessages?.["contact_number"]
-                : ""
-            }
+          />
+          <ErrorMessages
+            errorMessages={errorMessages}
+            keyname="contact_number"
           />
         </div>
         <div className={styles.eachFormField}>
@@ -314,12 +309,8 @@ const TrackingDetailsDilog = ({
             placeholder="Tracking Id"
             variant="outlined"
             error={Boolean(errorMessages?.["tracking_id"])}
-            helperText={
-              errorMessages?.["tracking_id"]
-                ? errorMessages?.["tracking_id"]
-                : ""
-            }
           />
+          <ErrorMessages errorMessages={errorMessages} keyname="tracking_id" />
         </div>
         <div className={styles.drawerBtnGrp}>
           <Button

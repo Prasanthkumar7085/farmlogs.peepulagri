@@ -87,11 +87,9 @@ const OperationDetails: NextPage<pagePropTypes> = ({
     setAge(event.target.value);
   };
   const [options] = useState<Array<{ value: string; title: string }>>([
-    { title: "None", value: "NONE" },
     { title: "Low", value: "LOW" },
     { title: "Medium", value: "MEDIUM" },
     { title: "High", value: "HIGH" },
-
   ]);
 
   return (
@@ -100,7 +98,7 @@ const OperationDetails: NextPage<pagePropTypes> = ({
         <div className={styles.row} style={{ gridTemplateColumns: "2fr 1fr" }}>
           <div className={styles.selectfarm}>
             <label className={styles.label}>
-              Name Of Operation<strong style={{ color: "red" }}>*</strong>
+              Title Of Operation<strong style={{ color: "red" }}>*</strong>
             </label>
             <TextField
               sx={{ background: "#fff" }}
@@ -121,20 +119,23 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               Date of Operation<strong style={{ color: "red" }}>*</strong>
             </label>
             <div className={styles.datepicker}>
-
               <DatePicker
-                style={{ background: "#fff", width: "100%", marginBottom: "4px" }}
+                style={{
+                  background: "#fff",
+                  width: "100%",
+                  marginBottom: "4px",
+                }}
                 value={dateOfOperation}
                 editable={false}
-                shouldDisableDate={(date) => isBefore(date, startOfDay(new Date()))}
+                shouldDisableDate={(date) =>
+                  isBefore(date, startOfDay(new Date()))
+                }
                 placeholder={"Select Date"}
                 format="dd/MM/yyyy"
                 onChange={(newValue: any) => {
                   setDataOfOperation(newValue);
                 }}
-
               />
-
 
               <ErrorMessages
                 errorMessages={errorMessages}
@@ -161,62 +162,62 @@ const OperationDetails: NextPage<pagePropTypes> = ({
               editFarms={editFarms}
             />
 
-            <ErrorMessages
-              errorMessages={errorMessages}
-              keyname={"farm_ids"}
-            />
-            <div style={{
-              display: router.query.procurement_id && editFarms?.length
-                ? "flex" : "none"
-            }}>
-
-              {router.query.procurement_id && editFarms?.length
-                ? editFarms.map((item, index) => {
-                  return (
-                    <div key={index} style={{ display: "flex", }}>
-
-                      <Chip
-                        label={item.title}
-                        key={item._id}
-                        clickable
-                        onDelete={() => deleteEditedFarms(item._id)}
-                      />
-                    </div>
-                  );
-                })
-                : ""}
-            </div>
+            <ErrorMessages errorMessages={errorMessages} keyname={"farm_ids"} />
           </div>
           <div className={styles.selectfarm}>
-            <label className={styles.label}>
-              {`Priority`} <strong style={{ color: "red" }}>*</strong>
-            </label>
+            <label className={styles.label}>{`Priority`}</label>
             <Select
               size="small"
-
               sx={{
                 marginBottom: "8px",
                 width: "100%",
                 background: "#fff",
-                color: "#6A7185", fontWeight: "300", fontFamily: "'Inter',sans-serif", fontSize: "13.5px"
+                color: "#6A7185",
+                fontWeight: "300",
+                fontFamily: "'Inter',sans-serif",
+                fontSize: "13.5px",
               }}
               placeholder="Select Priority"
               onChange={(e: any) => setPriority(e.target.value)}
               value={priority}
             >
-
-              {options?.length && options.map((item: { value: string, title: string }, index: number) => {
-                return (
-                  <MenuItem key={index} value={item.value}>{item.title}</MenuItem>
-                )
-              })}
-
+              {options?.length &&
+                options.map(
+                  (item: { value: string; title: string }, index: number) => {
+                    return (
+                      <MenuItem key={index} value={item.value}>
+                        {item.title}
+                      </MenuItem>
+                    );
+                  }
+                )}
             </Select>
-            <ErrorMessages
-              errorMessages={errorMessages}
-              keyname={"priority"}
-            />
+            <ErrorMessages errorMessages={errorMessages} keyname={"priority"} />
           </div>
+        </div>
+        <div
+          style={{
+            display:
+              router.query.procurement_id && editFarms?.length
+                ? "flex"
+                : "none",
+            marginTop: "10px",
+          }}
+        >
+          {router.query.procurement_id && editFarms?.length
+            ? editFarms.map((item, index) => {
+                return (
+                  <div key={index} style={{ display: "flex" }}>
+                    <Chip
+                      label={item.title}
+                      key={item._id}
+                      clickable
+                      onDelete={() => deleteEditedFarms(item._id)}
+                    />
+                  </div>
+                );
+              })
+            : ""}
         </div>
         <div className={styles.remarks}>
           <label className={styles.label}>Remarks</label>

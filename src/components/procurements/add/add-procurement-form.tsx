@@ -28,6 +28,7 @@ import OperationDetails from "./operation-details";
 import deleteAddProcurementService from "../../../../lib/services/ProcurementServices/deleteAddProcurementService";
 import AddProcurementHeader from "./add-procurement-header";
 import MaterialsRequired from "./materials-required";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 
 interface ApiProps {
   page: number;
@@ -61,12 +62,12 @@ const AddProcurementForm = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [procurementData, setProcurementData] = useState<any>({});
-  const [priority, setPriority] = useState('')
-  const [materialCount, setMaterialCount] = useState<any>()
-  const [afterProcurement, setAfterProcurement] = useState<any>(false)
+  const [priority, setPriority] = useState("");
+  const [materialCount, setMaterialCount] = useState<any>();
+  const [afterProcurement, setAfterProcurement] = useState<any>(false);
 
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
-    let location_id = ""
+    let location_id = "";
     try {
       let response = await ListAllFarmForDropDownService(
         searchString as string,
@@ -123,7 +124,7 @@ const AddProcurementForm = () => {
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
         setProcurementData(response?.data);
-        setAfterProcurement(true)
+        setAfterProcurement(true);
 
         // setTimeout(() => {
         //   router.push(`/procurements/${response?.data?._id}/edit`);
@@ -167,14 +168,15 @@ const AddProcurementForm = () => {
       };
 
       const response = await updateProcurementService({
-        procurementId: router.query.procurement_id as string || procurementData?._id,
+        procurementId:
+          (router.query.procurement_id as string) || procurementData?._id,
         body: data,
         token: accessToken,
       });
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.message);
         setFarm([]);
-        setAfterProcurement(true)
+        setAfterProcurement(true);
         await getProcurementData();
         setIsDisabled(true);
       } else if (response.status == 422) {
@@ -198,7 +200,8 @@ const AddProcurementForm = () => {
     setLoading(true);
     try {
       const response = await getProcurementByIdService({
-        procurementId: router.query.procurement_id as string || procurementData?._id,
+        procurementId:
+          (router.query.procurement_id as string) || procurementData?._id,
         accessToken: accessToken,
       });
       if (response?.status == 200 || response?.status == 201) {
@@ -213,7 +216,7 @@ const AddProcurementForm = () => {
         setRemarks(response?.data?.remarks);
         setTitle(response?.data?.title);
         setEditFarms(response?.data?.farm_ids);
-        setPriority(response?.data?.priority)
+        setPriority(response?.data?.priority);
       }
     } catch (err) {
       console.error(err);
@@ -265,25 +268,26 @@ const AddProcurementForm = () => {
   }, [router.isReady, accessToken, searchString]);
 
   const checkMaterialsListCount = (value: any) => {
-
-    setMaterialCount(value?.length)
-  }
-
+    setMaterialCount(value?.length);
+  };
 
   return (
     <div style={{ paddingTop: "2rem" }}>
       <AddProcurementHeader afterProcurement={afterProcurement} />
 
-      <form className={styles.addprocurementform} style={{ background: "#fff", borderRadius: "12px" }}>
+      <form
+        className={styles.addprocurementform}
+        style={{ background: "#fff", borderRadius: "12px" }}
+      >
         <div style={{ width: "100%" }}>
           <div style={{ padding: "1rem" }}>
-            {afterProcurement ?
+            {afterProcurement ? (
               <MaterialsRequired
                 procurementData={procurementData}
                 checkMaterialsListCount={checkMaterialsListCount}
-                getProcurementData={getProcurementData} />
-
-              :
+                getProcurementData={getProcurementData}
+              />
+            ) : (
               <OperationDetails
                 farmOptions={farmOptions}
                 onSelectFarmFromDropDown={onSelectFarmFromDropDown}
@@ -307,55 +311,51 @@ const AddProcurementForm = () => {
                 setIsDisabled={setIsDisabled}
                 priority={priority}
                 setPriority={setPriority}
-              />}
+              />
+            )}
 
-            <div className={styles.formButtons} >
-
+            <div className={styles.formButtons}>
               <div className={styles.procurementFormBtn}>
-                {afterProcurement && procurementData?._id ?
+                {afterProcurement && procurementData?._id ? (
                   <Button
                     className={styles.cancelBtn}
                     color="primary"
                     variant="outlined"
                     onClick={() => {
-                      setAfterProcurement(false)
+                      setAfterProcurement(false);
                     }}
                   >
                     Prev
-
                   </Button>
-                  :
+                ) : (
                   <Button
                     className={styles.cancelBtn}
                     color="primary"
                     variant="outlined"
                     onClick={() => {
                       if (procurementData?._id || router.query.procurement_id) {
-                        setDeleteOpen(true)
-
-                      }
-                      else {
-                        router.back()
+                        setDeleteOpen(true);
+                      } else {
+                        router.back();
                       }
                     }}
                   >
                     Cancel
                   </Button>
-                }
+                )}
 
-                {afterProcurement && procurementData?._id ?
+                {afterProcurement && procurementData?._id ? (
                   <Button
                     variant="contained"
                     className={styles.submitBtn}
                     disabled={materialCount >= 1 ? false : true}
                     onClick={() => {
-
                       router.back();
                     }}
                   >
                     Submit
                   </Button>
-                  :
+                ) : (
                   <Button
                     className={styles.submitBtn}
                     variant="contained"
@@ -366,40 +366,24 @@ const AddProcurementForm = () => {
                     }}
                   >
                     Next
-                  </Button>}
+                  </Button>
+                )}
               </div>
-
             </div>
-
           </div>
         </div>
 
-        <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
-          <DialogContent>
-            <h4>Do you want to delete the Procurement?</h4>
-          </DialogContent>
-          <DialogActions>
-            <div>
-              <Button variant="outlined" onClick={() => setDeleteOpen(false)}>
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => deleteProcurementApi()}
-              >
-                {deleteLoading ? (
-                  <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                ) : (
-                  "Yes! Delete"
-                )}
-              </Button>
-            </div>
-          </DialogActions>
-        </Dialog>
+        <AlertDelete
+          open={deleteOpen}
+          deleteFarm={deleteProcurementApi}
+          setDialogOpen={setDeleteOpen}
+          loading={deleteLoading}
+          deleteTitleProp={"Procurement"}
+        />
+
         <LoadingComponent loading={loading} />
         <Toaster closeButton richColors position="top-right" />
       </form>
-
     </div>
   );
 };

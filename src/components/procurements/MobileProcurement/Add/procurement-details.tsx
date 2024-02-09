@@ -18,6 +18,7 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import { removeItems } from "@/Redux/Modules/Otp";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import AddIcon from "@mui/icons-material/Add";
+import updateMaterialStatusService from "../../../../../lib/services/ProcurementServices/MaterialService/updateMaterialItemStatus";
 const ProcurementDetailsMobile = ({
   materials,
   procurementData,
@@ -129,6 +130,28 @@ const ProcurementDetailsMobile = ({
     }
   };
 
+  const onStatusChangeEvent = async (changedStatus: any, material_id: any) => {
+    setLoading(true);
+    try {
+      const response = await updateMaterialStatusService({
+        material_id: material_id,
+        status: changedStatus,
+        accessToken,
+      });
+
+      if (response.success) {
+        getAllProcurementMaterials();
+        toast.success(response?.message);
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.yourprocurementdetails}>
       {selectMaterial ? (
@@ -146,6 +169,7 @@ const ProcurementDetailsMobile = ({
           <div className={styles.headingandcount}></div>
           <IconButton
             sx={{ padding: "0" }}
+            disabled={selectedItemsFromStore?.length ? false : true}
             onClick={(e) => {
               deleteMaterials(
                 selectedItemsFromStore.map((item: any) => item._id)
@@ -153,15 +177,19 @@ const ProcurementDetailsMobile = ({
             }}
           >
             <Image
-              src={"/viewTaskIcons/task-table-delete.svg"}
+              src={
+                selectedItemsFromStore?.length
+                  ? "/viewTaskIcons/task-table-delete.svg"
+                  : "/viewTaskIcons/task-table-delete-disable.svg"
+              }
               alt="delete"
               height={17}
               width={17}
             />
           </IconButton>
 
-          {userDetails?.user_type == "central_team" ||
-            userDetails?.user_type == "manager" ? (
+          {/* {userDetails?.user_type == "central_team" ||
+          userDetails?.user_type == "manager" ? (
             <IconButton
               sx={{
                 display: procurementData?.status == "APPROVED" ? "none" : "",
@@ -179,7 +207,7 @@ const ProcurementDetailsMobile = ({
             </IconButton>
           ) : (
             ""
-          )}
+          )} */}
         </div>
       ) : (
         <div className={styles.headingcontainer}>
@@ -197,7 +225,9 @@ const ProcurementDetailsMobile = ({
             </div>
           </div>
           <IconButton
-            sx={{ display: materials[0]?.approved_by?.name ? "none" : "" }}
+            sx={{
+              display: materials[0]?.approved_by?.name ? "none!important" : "",
+            }}
             onClick={(e) => {
               handleClick(e);
             }}
@@ -225,15 +255,14 @@ const ProcurementDetailsMobile = ({
             }}
           >
             {userDetails?.user_type == "central_team" ||
-              userDetails?.user_type == "agronomist" ||
-              userDetails?._id == procurementData?.requested_by?._id ? (
+            userDetails?.user_type == "agronomist" ||
+            userDetails?._id == procurementData?.requested_by?._id ? (
               <MenuItem
                 onClick={() => {
                   setOpenMaterialDrawer(true);
                   handleClose();
                 }}
                 className={styles.signleMenuItem}
-
                 sx={{
                   fontFamily: "'Inter', sans-serif",
                   minHeight: "inherit",
@@ -241,7 +270,7 @@ const ProcurementDetailsMobile = ({
                     router.query.procurement_id &&
                     !router.pathname.includes("edit")
                       ? ""
-                      : "none",
+                      : "none !important",
                 }}
               >
                 <AddIcon sx={{ fontSize: "1.2rem" }} /> Add Material
@@ -251,7 +280,6 @@ const ProcurementDetailsMobile = ({
             )}
             <MenuItem
               className={styles.signleMenuItem}
-
               onClick={() => {
                 setSelectMaterial(true);
                 handleClose();
@@ -261,12 +289,20 @@ const ProcurementDetailsMobile = ({
               Select
             </MenuItem>
             {procurementData?.status == "PENDING" &&
-              userDetails?.user_type == "central_team" &&
-              materials?.length &&
-              router.query.procurement_id ? (
+            userDetails?.user_type == "central_team" &&
+            materials?.length &&
+            router.query.procurement_id ? (
               <MenuItem
                 className={styles.signleMenuItem}
-
+                sx={{
+                  fontFamily: "'Inter', sans-serif",
+                  minHeight: "inherit",
+                  display:
+                    router.query.procurement_id &&
+                    !router.pathname.includes("edit")
+                      ? ""
+                      : "none !important",
+                }}
                 onClick={() => {
                   approveAllMaterials();
                   handleClose();
@@ -299,6 +335,7 @@ const ProcurementDetailsMobile = ({
                   procurementStatusChange={procurementStatusChange}
                   materials={materials}
                   collectMaterialsForDelete={collectMaterialsForDelete}
+                  onStatusChangeEvent={onStatusChangeEvent}
                 />
               );
             })}
@@ -343,6 +380,7 @@ const ProcurementDetailsMobile = ({
                   procurementStatusChange={procurementStatusChange}
                   materials={materials}
                   collectMaterialsForDelete={collectMaterialsForDelete}
+                  onStatusChangeEvent={onStatusChangeEvent}
                 />
               );
             })}

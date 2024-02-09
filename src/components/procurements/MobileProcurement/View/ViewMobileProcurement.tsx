@@ -1,13 +1,15 @@
 import { useRouter } from "next/router";
 import ViewProcurementHeader from "./viewProcurement-header";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import getProcurementByIdService from "../../../../../lib/services/ProcurementServices/getProcurementByIdService";
-import { styled } from '@mui/material/styles';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import { StepIconProps } from '@mui/material/StepIcon';
+import { styled } from "@mui/material/styles";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
+import { StepIconProps } from "@mui/material/StepIcon";
 import { Button, Stack, Stepper } from "@mui/material";
 import Image from "next/image";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -22,9 +24,11 @@ import updateStatusService from "../../../../../lib/services/ProcurementServices
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import styles from "./ViewProcurementMobile.module.css";
 import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
+import { removeItems } from "@/Redux/Modules/Otp";
 
 const ViewMobileProcurement = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -129,6 +133,7 @@ const ViewMobileProcurement = () => {
     if (router.isReady && accessToken) {
       getProcurementById();
       getAllProcurementMaterials();
+      dispatch(removeItems([]));
     }
   }, [router.isReady, accessToken]);
 

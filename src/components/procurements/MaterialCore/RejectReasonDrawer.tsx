@@ -32,6 +32,7 @@ const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMateri
                         onClick={() => {
                             setRejectDilogOpen(false);
                             setRemarks("")
+                            setValidations("");
                         }}
                     >
                         <Clear />
@@ -63,6 +64,8 @@ const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMateri
                         onClick={() => {
                             setRejectDilogOpen(false)
                             setRemarks("")
+                               setValidations("");
+
 
                         }}
                     >

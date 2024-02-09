@@ -314,12 +314,21 @@ const AddProcurementMobile = () => {
                     router.query.procurement_id && editFarms?.length
                       ? "flex"
                       : "none",
+                  flexWrap: "wrap",
+                  marginTop: "10px",
                 }}
               >
                 {router.query.procurement_id && editFarms?.length
                   ? editFarms.map((item, index) => {
                       return (
-                        <div key={index} style={{ display: "flex" }}>
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                            marginBottom: "5px",
+                            marginRight: "5px",
+                          }}
+                        >
                           <Chip
                             label={item.title}
                             key={item._id}

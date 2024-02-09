@@ -197,6 +197,7 @@ const MobileViewMaterialDrawer = ({
                         setRequiredUnits("");
                         setName("");
                         setEditMaterialId("")
+                        setErrorMessages({});
 
                     }}
                 >
@@ -368,6 +369,8 @@ const MobileViewMaterialDrawer = ({
                             setRequiredUnits("");
                             setName("");
                             setEditMaterialId("")
+                                                    setErrorMessages({});
+
 
                         }}
                     >

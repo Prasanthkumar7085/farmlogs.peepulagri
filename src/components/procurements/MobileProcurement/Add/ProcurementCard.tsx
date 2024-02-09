@@ -229,7 +229,10 @@ const ProcurementCard = ({
               cursor: "pointer",
               display:
                 procurementData?.status == "PURCHASED" ||
-                procurementData?.tracking_details?._id
+                procurementData?.tracking_details?._id ||
+                router.pathname.includes("edit") ||
+                item?.approved_by?.name ||
+                !router.query.procurement_id
                   ? "none"
                   : "",
             }}
@@ -238,9 +241,10 @@ const ProcurementCard = ({
               sx={{
                 display:
                   item?.approved_by?.name || !router.query.procurement_id
-                    ? "none"
+                    ? "none important"
                     : "",
               }}
+              disabled={selectMaterial ? true : false}
               onClick={() => {
                 if (item?.status == "REJECTED") {
                   onStatusChangeEvent("approve", item?._id);

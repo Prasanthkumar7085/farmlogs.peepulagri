@@ -199,14 +199,16 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
               />
               <span>
                 Requested by Filter
-                {selectedUsers?.length ? (
-                  <span className={styles.count}>
-                    + {selectedUsers?.length}
-                  </span>
-                ) : (
-                  ""
-                )}
+
+
               </span>
+              <span>  {selectedUsers?.length ? (
+                <span className={styles.count}>
+                  + {selectedUsers?.length}
+                </span>
+              ) : (
+                ""
+              )}</span>
             </Button>
           ) : (
             ""
@@ -245,10 +247,10 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                   getOptionDisabled={(option) => {
                     let firstOption = selectedUsers?.length
                       ? selectedUsers?.some(
-                          (item: any) =>
-                            item?._id === option?._id &&
-                            item?.name === option?.name
-                        )
+                        (item: any) =>
+                          item?._id === option?._id &&
+                          item?.name === option?.name
+                      )
                       : false;
 
                     return firstOption;
@@ -269,8 +271,8 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                     setUser(value);
                     let data: string[] = value?.length
                       ? value?.map(
-                          (item: { _id: string; name: string }) => item._id
-                        )
+                        (item: { _id: string; name: string }) => item._id
+                      )
                       : [];
                     onUserChange(data, false);
                   }}

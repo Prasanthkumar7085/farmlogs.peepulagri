@@ -323,6 +323,7 @@ const ViewMobileProcurement = () => {
                   width={250}
                   alt="no materials"
                 />
+
                 <Button
                   onClick={() => {
                     setOpenMaterialDrawer(true);

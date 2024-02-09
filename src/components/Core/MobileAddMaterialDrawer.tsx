@@ -298,18 +298,23 @@ const MobileAddMaterialDrawer = ({
                     </FormControl>
                   </div>
                 </div>
-                <div className={styles.group} style={{ marginLeft: "40px" }}>
-                  <div className={styles.required}>
-                    <div className={styles.row}>
-                      <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"required_qty"}
-                      />
-                      <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"required_units"}
-                      />
-                    </div>
+                <div
+                  style={{
+                    marginLeft: "40px",
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                  }}
+                >
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname={"required_qty"}
+                  />
+                  <div style={{ marginLeft: "30%" }}>
+                    <ErrorMessages
+                      errorMessages={errorMessages}
+                      keyname={"required_units"}
+                    />
                   </div>
                 </div>
 
@@ -346,20 +351,22 @@ const MobileAddMaterialDrawer = ({
                   </div>
                 </div>
                 <div
-                  className={styles.group}
-                  style={{ marginLeft: "40px", width: "100%" }}
+                  style={{
+                    marginLeft: "40px",
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                  }}
                 >
-                  <div className={styles.required}>
-                    <div className={styles.row}>
-                      <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"available_qty"}
-                      />
-                      <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"available_units"}
-                      />
-                    </div>
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname={"available_qty"}
+                  />
+                  <div style={{ marginLeft: "30%" }}>
+                    <ErrorMessages
+                      errorMessages={errorMessages}
+                      keyname={"available_units"}
+                    />
                   </div>
                 </div>
               </div>

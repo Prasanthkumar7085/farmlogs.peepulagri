@@ -4,6 +4,8 @@ import Image from "next/image";
 
 const VendorDetails = ({ procurementData,
     materials }: any) => {
+
+
     return (
         <section className={styles.vendordetails}>
             <div className={styles.titlevendor}>
@@ -11,7 +13,7 @@ const VendorDetails = ({ procurementData,
                 <h2 className={styles.title}>Vendor Details</h2>
             </div>
             <div className={styles.detailscontainer}>
-                <span className={styles.superChilliVendors}>
+                <span className={styles.superChilliVendors} style={{ whiteSpace: "pre-line" }}>
                     {materials[0]?.vendor ? materials[0]?.vendor : "----"}
                 </span>
             </div>

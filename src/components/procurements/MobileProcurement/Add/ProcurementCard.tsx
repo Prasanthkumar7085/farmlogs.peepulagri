@@ -14,6 +14,7 @@ import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 import RejectedTextDrawer from "../../MaterialCore/RejectTextDrawer";
 import { useRouter } from "next/router";
 import { addItems, removeItems } from "@/Redux/Modules/Otp";
+import VendorTextDrawer from "../../MaterialCore/VendorText";
 
 const ProcurementCard = ({
   procurementData,
@@ -47,7 +48,8 @@ const ProcurementCard = ({
   const userDetails = useSelector(
     (state: any) => state.auth.userDetails?.user_details
   );
-
+  const [vendorDetails, setVendotDetails] = useState<any>()
+  const [vendorTextOpen, setVendorTextOpen] = useState<boolean>()
   const selectedItems = useSelector((state: any) => state.otp.selectedItems);
 
   const handleChange = (itemId: any) => {
@@ -67,9 +69,8 @@ const ProcurementCard = ({
     if (value) {
       setLoading(true);
       try {
-        const url = `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/procurement-requests/materials/${selectedRow}/${"reject"}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL
+          }/procurement-requests/materials/${selectedRow}/${"reject"}`;
 
         const options = {
           method: "PATCH",
@@ -147,6 +148,16 @@ const ProcurementCard = ({
       >
         {formatMoney(item?.price)}
       </p>
+      <IconButton onClick={() => {
+        setVendorTextOpen(true)
+        setVendotDetails(item?.vendor)
+      }}
+        sx={{
+          display: item.status == "REJECTED" || !item.price ? "none" : "",
+        }}>
+        <Image alt="" src="/component-29.svg" height={18} width={18} />
+      </IconButton>
+
 
       {item?.status !== "PENDING" && item?.status !== "REJECTED" ? (
         ""
@@ -155,7 +166,7 @@ const ProcurementCard = ({
           sx={{
             display:
               procurementData?.status == "PURCHASED" ||
-              procurementData?.tracking_details?._id
+                procurementData?.tracking_details?._id
                 ? "none !important"
                 : "",
           }}
@@ -191,7 +202,7 @@ const ProcurementCard = ({
       )}
 
       {userDetails?.user_type == "central_team" ||
-      userDetails?.user_type == "manager" ? (
+        userDetails?.user_type == "manager" ? (
         <div
           style={{
             display: procurementData?.tracking_details?._id ? "none" : "",
@@ -229,10 +240,10 @@ const ProcurementCard = ({
               cursor: "pointer",
               display:
                 procurementData?.status == "PURCHASED" ||
-                procurementData?.tracking_details?._id ||
-                router.pathname.includes("edit") ||
-                item?.approved_by?.name ||
-                !router.query.procurement_id
+                  procurementData?.tracking_details?._id ||
+                  router.pathname.includes("edit") ||
+                  item?.approved_by?.name ||
+                  !router.query.procurement_id
                   ? "none"
                   : "",
             }}
@@ -295,6 +306,11 @@ const ProcurementCard = ({
         rejectedReasonText={rejectedReasonTextOpen}
         setRejectReasonTextOpen={setRejectReasonTextOpen}
         reasonText={reasonText}
+      />
+      <VendorTextDrawer
+        vendorTextOpen={vendorTextOpen}
+        setVendorTextOpen={setVendorTextOpen}
+        vendorText={vendorDetails}
       />
 
       <MobileAddMaterialDrawer

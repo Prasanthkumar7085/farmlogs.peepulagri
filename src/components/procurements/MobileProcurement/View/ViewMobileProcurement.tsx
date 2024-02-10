@@ -86,6 +86,7 @@ const ViewMobileProcurement = () => {
 
         setMaterials(remaining);
         setRejectedMaterial(RejectFilterData);
+
       } else if (response?.status == 401) {
         toast.error(response?.message);
       } else {
@@ -348,7 +349,7 @@ const ViewMobileProcurement = () => {
             ""
           )}
         </div>
-        <div className={styles.vendarDetailsBlock}>
+        {/* <div className={styles.vendarDetailsBlock}>
           {materials?.some(
             (obj: any) =>
               obj.hasOwnProperty("vendor") &&
@@ -360,7 +361,7 @@ const ViewMobileProcurement = () => {
           ) : (
             ""
           )}
-        </div>
+        </div> */}
         <div className={styles.trackingDetailsBlock}>
           {data?.status == "PURCHASED" || data?.tracking_details?._id ? (
             <TrackingDetails

@@ -165,8 +165,8 @@ const MobileAllProcurements = () => {
                         page: page + 1,
                         limit: router.query.limit as string,
                         search_string: searchString,
-                        sortBy: router.query.order_by as string,
-                        sortType: router.query.order_type as string,
+                        sortBy: router.query.sort_by as string,
+                        sortType: router.query.sort_type as string,
                         selectedFarmId: router.query.farm_id as string,
                         status: router.query.status as string,
                         priority: router.query.priority as string,
@@ -191,8 +191,8 @@ const MobileAllProcurements = () => {
                 page: 1,
                 limit: router.query.limit as string,
                 search_string: searchString,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
+                sortBy: router.query.sort_by as string,
+                sortType: router.query.sort_type as string,
                 selectedFarmId: router.query.farm_id as string,
                 status: router.query.status as string,
                 priority: router.query.priority as string,
@@ -215,8 +215,8 @@ const MobileAllProcurements = () => {
                     page: 1,
                     limit: router.query.limit as string,
                     search_string: searchString,
-                    sortBy: router.query.order_by as string,
-                    sortType: router.query.order_type as string,
+                    sortBy: router.query.sort_by as string,
+                    sortType: router.query.sort_type as string,
                     selectedFarmId: router.query.farm_id as string,
                     status: router.query.status as string,
                     priority: router.query.priority as string,
@@ -239,41 +239,41 @@ const MobileAllProcurements = () => {
 
     //userdropdown onChange event
     const onUserChange = async (
-      value: string[] | [],
-      isMyProcurements = false
+        value: string[] | [],
+        isMyProcurements = false
     ) => {
-      getAllProcurements({
-        page: 1,
-        limit: router.query.limit as string,
-        search_string: searchString,
-        createdAt: dateFilter,
-        sortBy: router.query.order_by as string,
-        sortType: router.query.order_type as string,
-        selectedFarmId: router.query.farm_id as string,
-        status: router.query.status as string,
-        userId: value,
-        isMyProcurements: isMyProcurements,
-      });
+        getAllProcurements({
+            page: 1,
+            limit: router.query.limit as string,
+            search_string: searchString,
+            createdAt: dateFilter,
+            sortBy: router.query.sort_by as string,
+            sortType: router.query.sort_type as string,
+            selectedFarmId: router.query.farm_id as string,
+            status: router.query.status as string,
+            userId: value,
+            isMyProcurements: isMyProcurements,
+        });
     };
 
     //status onChange Event
     const onStatusChange = async (value: any) => {
-      getAllProcurements({
-        page: 1,
-        limit: router.query.limit as string,
-        search_string: searchString,
-        createdAt: dateFilter,
-        sortBy: router.query.order_by as string,
-        sortType: router.query.order_type as string,
-        selectedFarmId: router.query.farm_id as string,
-        status: value,
-        userId: router.query.requested_by
-          ? Array.isArray(router.query.requested_by)
-            ? (router.query.requested_by as string[])
-            : ([router.query.requested_by] as string[])
-          : [],
-        isMyProcurements: router.query?.is_my_procurement as string,
-      });
+        getAllProcurements({
+            page: 1,
+            limit: router.query.limit as string,
+            search_string: searchString,
+            createdAt: dateFilter,
+            sortBy: router.query.sort_by as string,
+            sortType: router.query.sort_type as string,
+            selectedFarmId: router.query.farm_id as string,
+            status: value,
+            userId: router.query.requested_by
+                ? Array.isArray(router.query.requested_by)
+                    ? (router.query.requested_by as string[])
+                    : ([router.query.requested_by] as string[])
+                : [],
+            isMyProcurements: router.query?.is_my_procurement as string,
+        });
     };
 
     return (
@@ -303,8 +303,8 @@ const MobileAllProcurements = () => {
                                 page: router.query.page as string,
                                 limit: router.query.limit as string,
                                 search_string: searchString,
-                                sortBy: router.query.order_by as string,
-                                sortType: router.query.order_type as string,
+                                sortBy: router.query.sort_by as string,
+                                sortType: router.query.sort_type as string,
                                 selectedFarmId: router.query.farm_id as string,
                                 status: router.query.status as string,
                                 userId: [],

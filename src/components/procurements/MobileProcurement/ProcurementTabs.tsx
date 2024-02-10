@@ -48,18 +48,14 @@ const ProcurementTabs = ({ onStatusChange }: { onStatusChange: (value: any) => v
             if (router.query.farm_id) {
                 queryParams["farm_id"] = router.query.farm_id;
             }
-            if (router.query.status) {
-              if (router.query.status !== "ALL") {
-                queryParams["status"] = router.query.status;
-              }
-            }
+
             if (router.query.requested_by) {
-              queryParams["requested_by"] = router.query.requested_by
-                ? Array.isArray(router.query.requested_by)
-                  ? (router.query.requested_by as string[])
-                  : ([router.query.requested_by] as string[])
-                : [];
-              // queryParams["created_by"] = userId;
+                queryParams["requested_by"] = router.query.requested_by
+                    ? Array.isArray(router.query.requested_by)
+                        ? (router.query.requested_by as string[])
+                        : ([router.query.requested_by] as string[])
+                    : [];
+                // queryParams["created_by"] = userId;
             }
 
             const paramString = prepareURLEncodedParamsWithArray("", queryParams);

@@ -30,6 +30,7 @@
 
 .trackingDetailsBlock {
     margin-top: 30px;
+    margin-bottom: 1.5rem;
     display: flex;
     flex-Direction: column;
     justify-content: center;

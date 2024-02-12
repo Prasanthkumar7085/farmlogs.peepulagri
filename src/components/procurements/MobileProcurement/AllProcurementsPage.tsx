@@ -104,7 +104,6 @@ const MobileAllProcurements = () => {
             queryParams["is_my_procurement"] = true;
         }
 
-
         const {
             page: pageCount,
             limit: limitCount,
@@ -190,7 +189,7 @@ const MobileAllProcurements = () => {
             getAllProcurements({
                 page: 1,
                 limit: router.query.limit as string,
-                search_string: searchString,
+                search_string: router.query.search_string,
                 sortBy: router.query.sort_by as string,
                 sortType: router.query.sort_type as string,
                 selectedFarmId: router.query.farm_id as string,
@@ -208,13 +207,13 @@ const MobileAllProcurements = () => {
 
 
     useEffect(() => {
-        if (router.isReady && accessToken) {
+        if (router.isReady && accessToken && searchString) {
             let delay = 500;
             let debounce = setTimeout(() => {
                 getAllProcurements({
                     page: 1,
                     limit: router.query.limit as string,
-                    search_string: searchString,
+                    search_string: searchString || router.query.search_string,
                     sortBy: router.query.sort_by as string,
                     sortType: router.query.sort_type as string,
                     selectedFarmId: router.query.farm_id as string,
@@ -242,18 +241,36 @@ const MobileAllProcurements = () => {
         value: string[] | [],
         isMyProcurements = false
     ) => {
-        getAllProcurements({
-            page: 1,
-            limit: router.query.limit as string,
-            search_string: searchString,
-            createdAt: dateFilter,
-            sortBy: router.query.sort_by as string,
-            sortType: router.query.sort_type as string,
-            selectedFarmId: router.query.farm_id as string,
-            status: router.query.status as string,
-            userId: value,
-            isMyProcurements: isMyProcurements,
-        });
+        if (value.length) {
+            getAllProcurements({
+                page: 1,
+                limit: router.query.limit as string,
+                search_string: searchString,
+                createdAt: dateFilter,
+                sortBy: router.query.sort_by as string,
+                sortType: router.query.sort_type as string,
+                selectedFarmId: router.query.farm_id as string,
+                status: router.query.status as string,
+                userId: value,
+                priority: router.query.priority as string,
+                isMyProcurements: isMyProcurements,
+            });
+        }
+        else {
+            getAllProcurements({
+                page: 1,
+                limit: router.query.limit as string,
+                search_string: searchString,
+                createdAt: dateFilter,
+                sortBy: router.query.sort_by as string,
+                sortType: router.query.sort_type as string,
+                selectedFarmId: router.query.farm_id as string,
+                status: router.query.status as string,
+                userId: [],
+                priority: router.query.priority as string,
+                isMyProcurements: isMyProcurements,
+            });
+        }
     };
 
     //status onChange Event

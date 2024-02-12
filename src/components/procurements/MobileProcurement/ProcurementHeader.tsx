@@ -104,7 +104,7 @@ const ProcurementHeader = ({
           ? (router.query.requested_by as string[])
           : ([router.query.requested_by] as string[])
         : [],
-      isMyTasks: router.query?.is_my_task as string,
+      isMyProcurements: router.query?.is_my_procurement as string,
     });
     setSortBy(sortBy);
     setSortType(sortType);
@@ -442,9 +442,9 @@ const ProcurementHeader = ({
               getOptionDisabled={(option) => {
                 let selectedOption = usersArray?.length
                   ? usersArray?.some(
-                      (item: userTaskType) =>
-                        item?._id === option?._id && item?.name === option?.name
-                    )
+                    (item: userTaskType) =>
+                      item?._id === option?._id && item?.name === option?.name
+                  )
                   : false;
                 return selectedOption;
               }}

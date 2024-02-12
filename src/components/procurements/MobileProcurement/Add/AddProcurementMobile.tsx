@@ -1,4 +1,4 @@
-import { Button, Chip, MenuItem, Select, TextField } from "@mui/material";
+import { Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import styles from "./addProcurementMobile.module.css";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -53,6 +53,7 @@ const AddProcurementMobile = () => {
   ]);
 
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
+    setOptionsLoading(true)
     let location_id = "";
     try {
       let response = await ListAllFarmForDropDownService(
@@ -65,6 +66,9 @@ const AddProcurementMobile = () => {
       }
     } catch (err) {
       console.error(err);
+    }
+    finally {
+      setOptionsLoading(false)
     }
   };
 
@@ -320,24 +324,24 @@ const AddProcurementMobile = () => {
               >
                 {router.query.procurement_id && editFarms?.length
                   ? editFarms.map((item, index) => {
-                      return (
-                        <div
-                          key={index}
-                          style={{
-                            display: "flex",
-                            marginBottom: "5px",
-                            marginRight: "5px",
-                          }}
-                        >
-                          <Chip
-                            label={item.title}
-                            key={item._id}
-                            clickable
-                            onDelete={() => deleteEditedFarms(item._id)}
-                          />
-                        </div>
-                      );
-                    })
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          marginBottom: "5px",
+                          marginRight: "5px",
+                        }}
+                      >
+                        <Chip
+                          label={item.title}
+                          key={item._id}
+                          clickable
+                          onDelete={() => deleteEditedFarms(item._id)}
+                        />
+                      </div>
+                    );
+                  })
                   : ""}
               </div>
             </div>
@@ -360,6 +364,7 @@ const AddProcurementMobile = () => {
                 onChange={(e: any) => setPriority(e.target.value)}
                 value={priority}
               >
+
                 {options?.length &&
                   options.map(
                     (item: { value: string; title: string }, index: number) => {
@@ -432,7 +437,7 @@ const AddProcurementMobile = () => {
           {afterProcurement && procurementData?._id ? (
             <Button
               variant="contained"
-              className={styles.submitBtn}
+              className={materialCount >= 1 ? styles.submitBtn : ""}
               disabled={materialCount >= 1 ? false : true}
               onClick={() => {
                 router.back();

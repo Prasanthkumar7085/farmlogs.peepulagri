@@ -6,9 +6,10 @@ const deleteProcurmentByIdService = async ({
   token: string;
 }) => {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${procurmentId}`;
-  const options = {
+  const options: any = {
     method: "DELETE",
     headers: new Headers({
+      'Content-Type': 'application/json',
       authorization: token,
     }),
   };

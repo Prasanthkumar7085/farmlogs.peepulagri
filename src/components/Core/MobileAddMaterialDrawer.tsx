@@ -270,54 +270,50 @@ const MobileAddMaterialDrawer = ({
                                     src={"/procurement-1.svg"}
                                 />
                                 <div className={styles.row}>
-                                    <TextField
-                                        size="small"
-                                        sx={{
-                                            width: "100%",
-                                            background: "#fff",
-                                        }}
-                                        placeholder="Required"
-                                        variant="outlined"
-                                        value={requiredQty}
-                                        onInput={handleInput}
-                                        onChange={(e: any) => setRequiredQty(e.target.value)}
-                                    />
-                                    <FormControl variant="outlined" sx={{ width: "100%" }}>
-                                        <InputLabel color="primary" />
-                                        <Select
+                                    <div>
+
+                                        <TextField
+                                            size="small"
                                             sx={{
+                                                width: "100%",
                                                 background: "#fff",
                                             }}
-                                            size="small"
-                                            defaultValue="Litres"
-                                            value={requiredUnits}
-                                            onChange={(e: any) => setRequiredUnits(e.target.value)}
-                                        >
-                                            <MenuItem value="Litres">Litres</MenuItem>
-                                            <MenuItem value="Kilograms">Kilograms</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                            placeholder="Required"
+                                            variant="outlined"
+                                            value={requiredQty}
+                                            onInput={handleInput}
+                                            onChange={(e: any) => setRequiredQty(e.target.value)}
+                                        />
+                                        <ErrorMessages
+                                            errorMessages={errorMessages}
+                                            keyname={"required_qty"}
+                                        />
+                                    </div>
+                                    <div>
+
+                                        <FormControl variant="outlined" sx={{ width: "100%" }}>
+                                            <InputLabel color="primary" />
+                                            <Select
+                                                sx={{
+                                                    background: "#fff",
+                                                }}
+                                                size="small"
+                                                defaultValue="Litres"
+                                                value={requiredUnits}
+                                                onChange={(e: any) => setRequiredUnits(e.target.value)}
+                                            >
+                                                <MenuItem value="Litres">Litres</MenuItem>
+                                                <MenuItem value="Kilograms">Kilograms</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <ErrorMessages
+                                            errorMessages={errorMessages}
+                                            keyname={"required_units"}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div
-                                style={{
-                                    marginLeft: "40px",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    width: "100%",
-                                }}
-                            >
-                                <ErrorMessages
-                                    errorMessages={errorMessages}
-                                    keyname={"required_qty"}
-                                />
-                                <div style={{ marginLeft: "30%" }}>
-                                    <ErrorMessages
-                                        errorMessages={errorMessages}
-                                        keyname={"required_units"}
-                                    />
-                                </div>
-                            </div>
+
 
                             <div className={styles.required}>
                                 <img className={styles.icon} alt="" src={"/approved-1.svg"} />

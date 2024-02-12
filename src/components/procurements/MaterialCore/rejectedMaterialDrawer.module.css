@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-column-gap: 1rem;
-    margin-top: 1rem;
+    margin-block: 1rem;
     padding-inline: 1rem;
 }
 
@@ -10,6 +10,9 @@
     border: 1px solid #D0D5DD !important;
     color: #344054 !important;
     background-color: #fff !important;
+    text-transform: capitalize !important;
+    font-family: "Inter", sans-serif !important;
+    font-size: clamp(14px, 2.5vw, 16px) !important;
 }
 
 .procurementFormBtn .cancelBtn:hover {
@@ -22,6 +25,9 @@
     background-color: #D94841 !important;
     color: #fff !important;
     box-shadow: none !important;
+    text-transform: capitalize !important;
+    font-family: "Inter", sans-serif !important;
+    font-size: clamp(13px, 2.5vw, 16px) !important;
 
 }
 
@@ -38,6 +44,11 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #dddddd
+}
+
+.drawerHeader p {
+    font-size: clamp(14px, 2.5vw, 16px) !important;
+    font-weight: 500 !important;
 }
 
 .textfieldBlock {

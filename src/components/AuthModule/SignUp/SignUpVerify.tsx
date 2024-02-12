@@ -22,6 +22,8 @@ const SignUpVerify = () => {
 
   const otpCountDown = useSelector((state: any) => state.otp.resendOtpIn);
 
+
+
   const [mobile, setMobile] = useState<string>();
   const [otp, setOtp] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState<any>({});
@@ -110,10 +112,10 @@ const SignUpVerify = () => {
 
       if (response?.data?.user_details?.user_type == "ADMIN") {
         router.push("/scouts");
-      } 
+      }
       else if ((response?.data?.user_details?.user_type == "USER" || response?.data?.user_details?.user_type == "AGRONOMIST")) {
         router.push("/farm");
-       
+
       }
     } else if (response.status == 422) {
       if ("errors" in response) {

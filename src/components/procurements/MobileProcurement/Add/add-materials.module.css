@@ -85,6 +85,9 @@
   align-items: center;
 }
 
+.row p {
+  white-space: nowrap;
+}
 
 .required {
   display: grid;

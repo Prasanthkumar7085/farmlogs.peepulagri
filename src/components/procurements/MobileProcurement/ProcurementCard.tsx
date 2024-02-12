@@ -144,7 +144,7 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
                   <div className={styles.datestatus}>
                     <div className={styles.date}>
                       <p className={styles.duedate}>
-                        {" "}
+
                         {moment(item.deadline).format("DD-MM-YYYY")}
                       </p>
                     </div>

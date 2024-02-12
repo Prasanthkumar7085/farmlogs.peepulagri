@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import getSingleMaterilsService from "../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import updateMaterialsByIdService from "../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
 import LoadingComponent from "./LoadingComponent";
+import Image from "next/image";
 
 
 interface ApiCallService {
@@ -300,7 +301,7 @@ const MobileAddMaterialDrawer = ({
                             </div>
 
                             <div className={styles.required} >
-                                <img className={styles.icon} alt="" src={"/approved-1.svg"} />
+                                <Image className={styles.icon} alt="" src={"/approved-1.svg"} height={15} width={15} />
                                 <div className={styles.row} >
                                     <TextField
 

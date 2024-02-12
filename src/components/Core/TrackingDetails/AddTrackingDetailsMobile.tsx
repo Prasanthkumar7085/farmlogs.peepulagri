@@ -169,6 +169,7 @@ const AddTrackingDetailsMobile = ({
               setPhoneNumber("")
               setDate(null)
               setTrackingId("")
+              setErrorMessages([]);
             }}
           >
             <Clear sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }} />
@@ -338,6 +339,8 @@ const AddTrackingDetailsMobile = ({
               setDate(null)
               setPhoneNumber("")
               setTrackingId("")
+                            setErrorMessages([]);
+
 
             }}
             size="small"

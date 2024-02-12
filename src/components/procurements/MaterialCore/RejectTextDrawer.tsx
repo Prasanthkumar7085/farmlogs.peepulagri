@@ -31,7 +31,7 @@ const RejectedTextDrawer = ({ rejectedReasonText, setRejectReasonTextOpen, reaso
         }}
       >
         <div className={styles.rejectReasonDrawerHeading}      >
-          <Typography className={styles.CommentsTitle}>{"Reason"}</Typography>
+          <Typography className={styles.CommentsTitle} color="white">{"Reason"}</Typography>
           <IconButton
             onClick={() => {
               setRejectReasonTextOpen(false);

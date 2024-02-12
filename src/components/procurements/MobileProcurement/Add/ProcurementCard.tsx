@@ -259,7 +259,10 @@ const ProcurementCard = ({
               onClick={() => {
                 if (item?.status == "REJECTED") {
                   onStatusChangeEvent("approve", item?._id);
-                } else {
+
+
+                }
+                else {
                   setRejectDilogOpen(true);
                   setSelectedRow(item?._id);
                 }
@@ -285,7 +288,8 @@ const ProcurementCard = ({
         </div>
       ) : (
         ""
-      )}
+      )
+      }
 
       <MobileViewMaterialDrawer
         openMaterialDrawer={openMaterialDrawer}
@@ -321,7 +325,7 @@ const ProcurementCard = ({
         editMaterialId={editMaterialId}
         setEditMaterialId={setEditMaterialId}
       />
-    </div>
+    </div >
   );
 };
 export default ProcurementCard;

@@ -1,4 +1,4 @@
-import { Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Autocomplete, Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import styles from "./addProcurementMobile.module.css";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -41,7 +41,7 @@ const AddProcurementMobile = () => {
     { title: string; _id: string }[] | []
   >([]);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [priority, setPriority] = useState("NONE");
+  const [priority, setPriority] = useState<any>("");
   const [procurementData, setProcurementData] = useState<any>({});
   const [afterProcurement, setAfterProcurement] = useState<any>(false);
   const [materialCount, setMaterialCount] = useState<any>();
@@ -349,7 +349,7 @@ const AddProcurementMobile = () => {
               <div className={styles.lable}>
                 <label className={styles.label}>Priority </label>
               </div>
-              <Select
+              {/* <Select
                 size="small"
                 sx={{
                   marginBottom: "8px",
@@ -384,7 +384,29 @@ const AddProcurementMobile = () => {
                       );
                     }
                   )}
-              </Select>
+              </Select> */}
+              <Autocomplete
+                size="small"
+                options={options}
+                getOptionLabel={(option) => option.title}
+                sx={{ width: "100%" }}
+                renderInput={(params: any) => (
+                  <TextField
+                    {...params}
+                    placeholder="Select Priority"
+                    variant="outlined"
+                    inputProps={{
+                      ...params.inputProps,
+
+                    }}
+                    sx={{ width: "100%", background: "#fff" }}
+
+                  />
+                )}
+                onChange={(e, value) => setPriority(value ? value.value : null)}
+                value={options.find((option) => option.value === priority) || null}
+              />
+
             </div>
             <div className={styles.dateofoperation}>
               <div className={styles.lable}>

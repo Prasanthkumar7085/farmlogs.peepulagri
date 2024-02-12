@@ -517,7 +517,7 @@ const ProcurementHeader = ({
           >
             Clear
           </Button>
-          <Button
+          {/* <Button
             className={
               !usersArray?.length
                 ? styles.disabledFilterDrawerApplyBtn
@@ -530,7 +530,7 @@ const ProcurementHeader = ({
             }}
           >
             Apply
-          </Button>
+          </Button> */}
         </div>
       </Drawer>
       <React.Fragment>

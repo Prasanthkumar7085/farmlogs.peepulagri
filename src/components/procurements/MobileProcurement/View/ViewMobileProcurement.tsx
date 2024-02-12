@@ -48,6 +48,9 @@ const ViewMobileProcurement = () => {
         status: status,
         accessToken,
       });
+      if (response?.success) {
+        toast.success(response?.message)
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -101,6 +104,7 @@ const ViewMobileProcurement = () => {
           (obj: any) => obj.hasOwnProperty("price") && obj.price !== null
         );
 
+
         if (
           allPurchaseOrNot &&
           filteredData?.length &&
@@ -108,7 +112,10 @@ const ViewMobileProcurement = () => {
         ) {
           await procurementStatusChange("PURCHASED");
           await afterMaterialStatusChange(true);
-        } else {
+        }
+
+
+        else {
           afterMaterialStatusChange(true);
         }
       }

@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import getSingleMaterilsService from "../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import updateMaterialsByIdService from "../../../lib/services/ProcurementServices/MaterialService/updateMaterialsByIdService";
 import LoadingComponent from "./LoadingComponent";
+import Image from "next/image";
 
 
 interface ApiCallService {
@@ -194,232 +195,232 @@ const MobileAddMaterialDrawer = ({
 
 
     return (
-      <Drawer
-        anchor={"bottom"}
-        open={openMaterialDrawer}
-        sx={{
-          zIndex: "1300 !important",
-          "& .MuiPaper-root": {
-            width: "100%",
-            maxWidth: "500px",
-            margin: "0 auto",
-            borderRadius: "20px 20px 0 0 ",
-          },
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "0.5rem 1rem",
-            borderBottom: "1px solid #dddddd",
-          }}
-        >
-          <Typography
+        <Drawer
+            anchor={"bottom"}
+            open={openMaterialDrawer}
             sx={{
-              fontSize: "14px",
-              fontFamily: "'Inter', sans-serif",
-              color: "#000",
-              fontWeight: "500",
+                zIndex: "1300 !important",
+                "& .MuiPaper-root": {
+                    width: "100%",
+                    maxWidth: "500px",
+                    margin: "0 auto",
+                    borderRadius: "20px 20px 0 0 ",
+                },
             }}
-          >
-            {editMaterialId ? "Edit Material" : "Add Material"}
-          </Typography>
-          <IconButton
-            sx={{ paddingInline: "0" }}
-            onClick={() => {
-              setOpenMaterialDrawer(false);
-              setAvailableQty("");
-              setAvailableUnits("");
-              setRequiredQty("");
-              setRequiredUnits("");
-              setName("");
-              setEditMaterialId("");
-              setErrorMessages({});
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </div>
-        <form className={styles.addmaterials} style={{ padding: "1rem" }}>
-          <div className={styles.formfieldscontainer}>
-            <div className={styles.materialformfields}>
-              <label className={styles.label}>{"Material Name"}</label>
-              <div style={{ width: "100%" }}>
-                <TextField
-                  size="small"
-                  placeholder="Please enter the material title"
-                  variant="outlined"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  sx={{
-                    background: "#fff",
-                    borderRadius: "4px",
-                    width: "100%",
-                  }}
-                />
-                <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
-              </div>
-              <div className={styles.group}>
-                <div className={styles.required}>
-                  <img
-                    className={styles.icon}
-                    alt=""
-                    src={"/procurement-1.svg"}
-                  />
-                  <div className={styles.row}>
-                    <TextField
-                      size="small"
-                      sx={{
-                        width: "100%",
-                        background: "#fff",
-                      }}
-                      placeholder="Required"
-                      variant="outlined"
-                      value={requiredQty}
-                      onInput={handleInput}
-                      onChange={(e: any) => setRequiredQty(e.target.value)}
-                    />
-                    <FormControl variant="outlined" sx={{ width: "100%" }}>
-                      <InputLabel color="primary" />
-                      <Select
-                        sx={{
-                          background: "#fff",
-                        }}
-                        size="small"
-                        defaultValue="Litres"
-                        value={requiredUnits}
-                        onChange={(e: any) => setRequiredUnits(e.target.value)}
-                      >
-                        <MenuItem value="Litres">Litres</MenuItem>
-                        <MenuItem value="Kilograms">Kilograms</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    marginLeft: "40px",
+        >
+            <div
+                style={{
                     display: "flex",
-                    flexDirection: "row",
-                    width: "100%",
-                  }}
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "0.5rem 1rem",
+                    borderBottom: "1px solid #dddddd",
+                }}
+            >
+                <Typography
+                    sx={{
+                        fontSize: "14px",
+                        fontFamily: "'Inter', sans-serif",
+                        color: "#000",
+                        fontWeight: "500",
+                    }}
                 >
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname={"required_qty"}
-                  />
-                  <div style={{ marginLeft: "30%" }}>
-                    <ErrorMessages
-                      errorMessages={errorMessages}
-                      keyname={"required_units"}
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.required}>
-                  <img className={styles.icon} alt="" src={"/approved-1.svg"} />
-                  <div className={styles.row}>
-                    <TextField
-                      size="small"
-                      sx={{
-                        width: "100%",
-                        background: "#fff",
-                      }}
-                      placeholder="Availble"
-                      variant="outlined"
-                      value={availableQty}
-                      onInput={handleInput}
-                      onChange={(e: any) => setAvailableQty(e.target.value)}
-                    />
-                    <FormControl variant="outlined" sx={{ width: "100%" }}>
-                      <InputLabel color="primary" />
-                      <Select
-                        sx={{
-                          background: "#fff",
-                        }}
-                        size="small"
-                        defaultValue="Litres"
-                        value={requiredUnits}
-                        onChange={(e: any) => setRequiredUnits(e.target.value)}
-                      >
-                        <MenuItem value="Litres">Litres</MenuItem>
-                        <MenuItem value="Kilograms">Kilograms</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    marginLeft: "40px",
-                    display: "flex",
-                    flexDirection: "row",
-                    width: "100%",
-                  }}
+                    {editMaterialId ? "Edit Material" : "Add Material"}
+                </Typography>
+                <IconButton
+                    sx={{ paddingInline: "0" }}
+                    onClick={() => {
+                        setOpenMaterialDrawer(false);
+                        setAvailableQty("");
+                        setAvailableUnits("");
+                        setRequiredQty("");
+                        setRequiredUnits("");
+                        setName("");
+                        setEditMaterialId("");
+                        setErrorMessages({});
+                    }}
                 >
-                  <ErrorMessages
-                    errorMessages={errorMessages}
-                    keyname={"available_qty"}
-                  />
-                  <div style={{ marginLeft: "30%" }}>
-                    <ErrorMessages
-                      errorMessages={errorMessages}
-                      keyname={"available_units"}
-                    />
-                  </div>
-                </div>
-              </div>
+                    <CloseIcon />
+                </IconButton>
             </div>
-          </div>
+            <form className={styles.addmaterials} style={{ padding: "1rem" }}>
+                <div className={styles.formfieldscontainer}>
+                    <div className={styles.materialformfields}>
+                        <label className={styles.label}>{"Material Name"}</label>
+                        <div style={{ width: "100%" }}>
+                            <TextField
+                                size="small"
+                                placeholder="Please enter the material title"
+                                variant="outlined"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                sx={{
+                                    background: "#fff",
+                                    borderRadius: "4px",
+                                    width: "100%",
+                                }}
+                            />
+                            <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
+                        </div>
+                        <div className={styles.group}>
+                            <div className={styles.required}>
+                                <img
+                                    className={styles.icon}
+                                    alt=""
+                                    src={"/procurement-1.svg"}
+                                />
+                                <div className={styles.row}>
+                                    <TextField
+                                        size="small"
+                                        sx={{
+                                            width: "100%",
+                                            background: "#fff",
+                                        }}
+                                        placeholder="Required"
+                                        variant="outlined"
+                                        value={requiredQty}
+                                        onInput={handleInput}
+                                        onChange={(e: any) => setRequiredQty(e.target.value)}
+                                    />
+                                    <FormControl variant="outlined" sx={{ width: "100%" }}>
+                                        <InputLabel color="primary" />
+                                        <Select
+                                            sx={{
+                                                background: "#fff",
+                                            }}
+                                            size="small"
+                                            defaultValue="Litres"
+                                            value={requiredUnits}
+                                            onChange={(e: any) => setRequiredUnits(e.target.value)}
+                                        >
+                                            <MenuItem value="Litres">Litres</MenuItem>
+                                            <MenuItem value="Kilograms">Kilograms</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </div>
+                            <div
+                                style={{
+                                    marginLeft: "40px",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    width: "100%",
+                                }}
+                            >
+                                <ErrorMessages
+                                    errorMessages={errorMessages}
+                                    keyname={"required_qty"}
+                                />
+                                <div style={{ marginLeft: "30%" }}>
+                                    <ErrorMessages
+                                        errorMessages={errorMessages}
+                                        keyname={"required_units"}
+                                    />
+                                </div>
+                            </div>
 
-          <div
-            className={styles.buttons}
-            style={{ width: "100%", marginTop: "0" }}
-          >
-            <Button
-              className={styles.cancel}
-              name="back"
-              size="medium"
-              variant="outlined"
-              onClick={() => {
-                setOpenMaterialDrawer(false);
-                setOpenMaterialDrawer(false);
-                setAvailableQty("");
-                setAvailableUnits("");
-                setRequiredQty("");
-                setRequiredUnits("");
-                setName("");
-                setEditMaterialId("");
-                setErrorMessages({});
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className={styles.submit}
-              color="primary"
-              name="submit"
-              variant="contained"
-              onClick={() => {
-                if (editMaterialId) {
-                  updateMaterialById();
-                } else {
-                  addMaterial();
-                }
-              }}
-            >
-              {loading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-              ) : (
-                "Submit"
-              )}{" "}
-            </Button>
-          </div>
-          {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
-          <LoadingComponent loading={loading} />
-        </form>
-      </Drawer>
+                            <div className={styles.required}>
+                                <img className={styles.icon} alt="" src={"/approved-1.svg"} />
+                                <div className={styles.row}>
+                                    <TextField
+                                        size="small"
+                                        sx={{
+                                            width: "100%",
+                                            background: "#fff",
+                                        }}
+                                        placeholder="Availble"
+                                        variant="outlined"
+                                        value={availableQty}
+                                        onInput={handleInput}
+                                        onChange={(e: any) => setAvailableQty(e.target.value)}
+                                    />
+                                    <FormControl variant="outlined" sx={{ width: "100%" }}>
+                                        <InputLabel color="primary" />
+                                        <Select
+                                            sx={{
+                                                background: "#fff",
+                                            }}
+                                            size="small"
+                                            defaultValue="Litres"
+                                            value={requiredUnits}
+                                            onChange={(e: any) => setRequiredUnits(e.target.value)}
+                                        >
+                                            <MenuItem value="Litres">Litres</MenuItem>
+                                            <MenuItem value="Kilograms">Kilograms</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </div>
+                            <div
+                                style={{
+                                    marginLeft: "40px",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    width: "100%",
+                                }}
+                            >
+                                <ErrorMessages
+                                    errorMessages={errorMessages}
+                                    keyname={"available_qty"}
+                                />
+                                <div style={{ marginLeft: "30%" }}>
+                                    <ErrorMessages
+                                        errorMessages={errorMessages}
+                                        keyname={"available_units"}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    className={styles.buttons}
+                    style={{ width: "100%", marginTop: "0" }}
+                >
+                    <Button
+                        className={styles.cancel}
+                        name="back"
+                        size="medium"
+                        variant="outlined"
+                        onClick={() => {
+                            setOpenMaterialDrawer(false);
+                            setOpenMaterialDrawer(false);
+                            setAvailableQty("");
+                            setAvailableUnits("");
+                            setRequiredQty("");
+                            setRequiredUnits("");
+                            setName("");
+                            setEditMaterialId("");
+                            setErrorMessages({});
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        className={styles.submit}
+                        color="primary"
+                        name="submit"
+                        variant="contained"
+                        onClick={() => {
+                            if (editMaterialId) {
+                                updateMaterialById();
+                            } else {
+                                addMaterial();
+                            }
+                        }}
+                    >
+                        {loading ? (
+                            <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                        ) : (
+                            "Submit"
+                        )}{" "}
+                    </Button>
+                </div>
+                {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
+                <LoadingComponent loading={loading} />
+            </form>
+        </Drawer>
     );
 }
 export default MobileAddMaterialDrawer;

@@ -34,3 +34,17 @@
     flex-Direction: column;
     justify-content: center;
 }
+
+.addMaterialBtn {
+    font-size: clamp(13px, 2vw, 15px) !important;
+    font-family: "Inter", sans-serif !important;
+    color: #45A845 !important;
+    text-transform: capitalize !important;
+    box-shadow: none !important;
+}
+
+.addMaterialBtn:hover {
+    color: #45A845 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}

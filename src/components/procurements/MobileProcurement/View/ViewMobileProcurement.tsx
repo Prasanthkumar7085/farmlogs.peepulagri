@@ -333,12 +333,13 @@ const ViewMobileProcurement = () => {
               >
                 <Image
                   src={"/NoMaterialsImage.svg"}
-                  height={250}
+                  height={150}
                   width={250}
                   alt="no materials"
                 />
 
                 <Button
+                  className={styles.addMaterialBtn}
                   onClick={() => {
                     setOpenMaterialDrawer(true);
                   }}

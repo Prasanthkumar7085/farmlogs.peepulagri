@@ -64,7 +64,7 @@ const SideBarMenu = ({ children }: any) => {
       toolTitle: "Tasks",
     },
     {
-      src: "/support-icon.svg",
+      src: "/procurement-side-menu-icon.svg",
       link: "/procurements",
       isVisible: true,
       active: router.pathname.includes("/procurements"),

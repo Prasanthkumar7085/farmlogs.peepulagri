@@ -151,7 +151,7 @@ const AddTrackingDetailsMobile = ({
   }
 
   return (
-    <Drawer
+    <><Drawer
       open={open}
       anchor={router.pathname.includes("/users-procurements") ? "bottom" : "right"}
       sx={{
@@ -168,11 +168,12 @@ const AddTrackingDetailsMobile = ({
           </h6>
           <IconButton
             onClick={() => {
-              setTrackingDialogOpen(false)
-              setServiceName("")
-              setPhoneNumber("")
-              setDate(null)
-              setTrackingId("")
+              setTrackingDialogOpen(false);
+              setServiceName("");
+              setPhoneNumber("");
+              setDate(null);
+              setTrackingId("");
+              setErrorMessages([]);
             }}
           >
             <Clear sx={{ color: "#000", fontSize: "1.5rem", fontWeight: "200" }} />
@@ -194,13 +195,17 @@ const AddTrackingDetailsMobile = ({
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "clamp(12px, 0.72vw, 14px)",
                   borderRadius: "8px !important"
-
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#D0D5DD !important",
                   borderWidth: "1px !important",
                   borderRadius: "8px !important"
                 },
+                '& .MuiFormHelperText-root': {
+                  fontSize: "12px",
+                  fontFamily: "'Inter', sans-serif",
+                  marginLeft: "0"
+                }
               }}
               value={service_name}
               onChange={(e) => setServiceName(e.target.value)}
@@ -210,12 +215,9 @@ const AddTrackingDetailsMobile = ({
               placeholder="Service Name"
               variant="outlined"
               error={Boolean(errorMessages?.["service_name"])}
-              helperText={
-                errorMessages?.["service_name"]
-                  ? errorMessages?.["service_name"]
-                  : ""
-              }
-            />
+              helperText={errorMessages?.["service_name"]
+                ? errorMessages?.["service_name"]
+                : ""} />
           </div>
           <div className={styles.eachFormField} id="tracking-details-datePicker">
             <p className={styles.label}>Delivery Date</p>
@@ -232,7 +234,6 @@ const AddTrackingDetailsMobile = ({
                     fontFamily: "'Inter', sans-serif",
                     fontSize: "clamp(12px, 0.72vw, 14px)",
                     borderRadius: "8px !important"
-
                   },
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#D0D5DD !important",
@@ -244,14 +245,11 @@ const AddTrackingDetailsMobile = ({
                 disablePast
                 format="DD-MM-YYYY"
 
-                onChange={setDate}
-
-              />
+                onChange={setDate} />
             </LocalizationProvider>
             <ErrorMessages
               errorMessages={errorMessages}
-              keyname="delivery_date"
-            />
+              keyname="delivery_date" />
           </div>
           <div className={styles.eachFormField}>
 
@@ -267,13 +265,17 @@ const AddTrackingDetailsMobile = ({
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "clamp(12px, 0.72vw, 14px)",
                   borderRadius: "8px !important"
-
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#D0D5DD !important",
                   borderWidth: "1px !important",
                   borderRadius: "8px !important"
                 },
+                '& .MuiFormHelperText-root': {
+                  fontSize: "12px",
+                  fontFamily: "'Inter', sans-serif",
+                  marginLeft: "0"
+                }
               }}
               size="small"
               fullWidth
@@ -283,30 +285,13 @@ const AddTrackingDetailsMobile = ({
               onChange={(e: any) => setPhoneNumber(e.target.value)}
               error={Boolean(errorMessages?.["contact_number"])}
 
-              helperText={
-                errorMessages?.["contact_number"]
-                  ? errorMessages?.["contact_number"]
-                  : ""
-              }
-
-            />
+              helperText={errorMessages?.["contact_number"]
+                ? errorMessages?.["contact_number"]
+                : ""} />
           </div>
           <div className={styles.eachFormField}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignSelf: "stretch",
-                alignItems: "center",
-              }}
-            >
-              <p className={styles.label}>Tracking Id</p>
-              <div>
-                <Button className={styles.generateIdBtn} variant="text" onClick={generateUUID}>
-                  Generate Id
-                </Button>
-              </div>
-            </div>
+            <p className={styles.label}>Tracking Id</p>
+
             <TextField
               sx={{
                 "& .MuiInputBase-root": {
@@ -318,13 +303,17 @@ const AddTrackingDetailsMobile = ({
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "clamp(12px, 0.72vw, 14px)",
                   borderRadius: "8px !important"
-
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#D0D5DD !important",
                   borderWidth: "1px !important",
                   borderRadius: "8px !important"
                 },
+                '& .MuiFormHelperText-root': {
+                  fontSize: "12px",
+                  fontFamily: "'Inter', sans-serif",
+                  marginLeft: "0"
+                }
               }}
               fullWidth
               disabled
@@ -333,60 +322,111 @@ const AddTrackingDetailsMobile = ({
               placeholder="Tracking Id"
               variant="outlined"
               error={Boolean(errorMessages?.["tracking_id"])}
-              helperText={
-                errorMessages?.["tracking_id"]
-                  ? errorMessages?.["tracking_id"]
-                  : ""
-              }
-            />
+              helperText={errorMessages?.["tracking_id"]
+                ? errorMessages?.["tracking_id"]
+                : ""} />
           </div>
-          <div className={styles.drawerBtnGrp}>
-            <Button
-              className={styles.buttonCancel}
-              onClick={() => {
-                setTrackingDialogOpen(false)
-                setServiceName("")
-                setDate(null)
-                setPhoneNumber("")
-                setTrackingId("")
+        </div>
+        {/* <div className={styles.drawerBtnGrp}>
+          <Button
+            className={styles.buttonCancel}
+            onClick={() => {
+              setTrackingDialogOpen(false);
+              setServiceName("");
+              setDate(null);
+              setPhoneNumber("");
+              setTrackingId("");
+              setErrorMessages([]);
 
-              }}
-              size="small"
-            >
-              <div className={styles.text}>Cancel</div>
-            </Button>
-            <Button
-              className={styles.buttonSubmit}
-              variant="contained"
-              color="info"
-              size="small"
-              disabled={loading}
-              onClick={() => {
 
-                addTrackingDetails()
+            }}
+            size="small"
+          >
+            <div className={styles.text}>Cancel</div>
+          </Button>
 
-              }
-              }
-              sx={{
-                "&.Mui-disabled": {
-                  background: "#c62828",
-                  color: "#000",
-                },
-              }}
-            >
-              <div className={styles.text}>
-                {trackingLoading ? (
-                  <CircularProgress size="1.3rem" sx={{ color: "white" }} />
-                ) : (
-                  data?.tracking_details?._id ? "Update" : "Submit"
-                )}
-              </div>
-            </Button>
-          </div>
+          <Button className={styles.text}>
+            {trackingLoading ? (
+              <CircularProgress size="1.3rem" sx={{ color: "white" }} />
+            ) : (
+              data?.tracking_details?._id ? "Update" : "Submit"
+            )}
+          </Button>
+        </div>
+        <TextField
+          sx={{
+            "& .MuiInputBase-root": {
+              background: "#fff",
+            },
+            "& .MuiInputBase-input": {
+              padding: "8px 14px",
+              height: "inherit",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "clamp(12px, 0.72vw, 14px)",
+              borderRadius: "8px !important"
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#D0D5DD !important",
+              borderWidth: "1px !important",
+              borderRadius: "8px !important"
+            },
+          }}
+          fullWidth
+          disabled
+          value={trackingId}
+          size="small"
+          placeholder="Tracking Id"
+          variant="outlined"
+          error={Boolean(errorMessages?.["tracking_id"])}
+          helperText={errorMessages?.["tracking_id"]
+            ? errorMessages?.["tracking_id"]
+            : ""} /> */}
+        <div className={styles.drawerBtnGrp}>
+          <Button
+            className={styles.buttonCancel}
+            onClick={() => {
+              setTrackingDialogOpen(false);
+              setServiceName("");
+              setDate(null);
+              setPhoneNumber("");
+              setTrackingId("");
+
+            }}
+            size="small"
+          >
+            <div className={styles.text}>Cancel</div>
+          </Button>
+          <Button
+            className={styles.buttonSubmit}
+            variant="contained"
+            color="info"
+            size="small"
+            disabled={loading}
+            onClick={() => {
+
+              addTrackingDetails();
+
+            }}
+            sx={{
+              "&.Mui-disabled": {
+                background: "#c62828",
+                color: "#000",
+              },
+            }}
+          >
+            <div className={styles.text}>
+              {trackingLoading ? (
+                <CircularProgress size="1.3rem" sx={{ color: "white" }} />
+              ) : (
+                data?.tracking_details?._id ? "Update" : "Submit"
+              )}
+            </div>
+          </Button>
         </div>
       </div>
       <LoadingComponent loading={loading1} />
     </Drawer>
+    </>
   );
 };
 

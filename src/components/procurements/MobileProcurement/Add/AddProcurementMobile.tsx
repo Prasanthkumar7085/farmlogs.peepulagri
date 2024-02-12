@@ -1,4 +1,4 @@
-import { Button, Chip, MenuItem, Select, TextField } from "@mui/material";
+import { Autocomplete, Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import styles from "./addProcurementMobile.module.css";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -41,7 +41,7 @@ const AddProcurementMobile = () => {
     { title: string; _id: string }[] | []
   >([]);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [priority, setPriority] = useState("NONE");
+  const [priority, setPriority] = useState<any>("");
   const [procurementData, setProcurementData] = useState<any>({});
   const [afterProcurement, setAfterProcurement] = useState<any>(false);
   const [materialCount, setMaterialCount] = useState<any>();
@@ -53,6 +53,7 @@ const AddProcurementMobile = () => {
   ]);
 
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
+    setOptionsLoading(true)
     let location_id = "";
     try {
       let response = await ListAllFarmForDropDownService(
@@ -65,6 +66,9 @@ const AddProcurementMobile = () => {
       }
     } catch (err) {
       console.error(err);
+    }
+    finally {
+      setOptionsLoading(false)
     }
   };
 
@@ -314,21 +318,30 @@ const AddProcurementMobile = () => {
                     router.query.procurement_id && editFarms?.length
                       ? "flex"
                       : "none",
+                  flexWrap: "wrap",
+                  marginTop: "10px",
                 }}
               >
                 {router.query.procurement_id && editFarms?.length
                   ? editFarms.map((item, index) => {
-                      return (
-                        <div key={index} style={{ display: "flex" }}>
-                          <Chip
-                            label={item.title}
-                            key={item._id}
-                            clickable
-                            onDelete={() => deleteEditedFarms(item._id)}
-                          />
-                        </div>
-                      );
-                    })
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          marginBottom: "5px",
+                          marginRight: "5px",
+                        }}
+                      >
+                        <Chip
+                          label={item.title}
+                          key={item._id}
+                          clickable
+                          onDelete={() => deleteEditedFarms(item._id)}
+                        />
+                      </div>
+                    );
+                  })
                   : ""}
               </div>
             </div>
@@ -336,7 +349,7 @@ const AddProcurementMobile = () => {
               <div className={styles.lable}>
                 <label className={styles.label}>Priority </label>
               </div>
-              <Select
+              {/* <Select
                 size="small"
                 sx={{
                   marginBottom: "8px",
@@ -351,6 +364,7 @@ const AddProcurementMobile = () => {
                 onChange={(e: any) => setPriority(e.target.value)}
                 value={priority}
               >
+
                 {options?.length &&
                   options.map(
                     (item: { value: string; title: string }, index: number) => {
@@ -370,7 +384,29 @@ const AddProcurementMobile = () => {
                       );
                     }
                   )}
-              </Select>
+              </Select> */}
+              <Autocomplete
+                size="small"
+                options={options}
+                getOptionLabel={(option) => option.title}
+                sx={{ width: "100%" }}
+                renderInput={(params: any) => (
+                  <TextField
+                    {...params}
+                    placeholder="Select Priority"
+                    variant="outlined"
+                    inputProps={{
+                      ...params.inputProps,
+
+                    }}
+                    sx={{ width: "100%", background: "#fff" }}
+
+                  />
+                )}
+                onChange={(e, value) => setPriority(value ? value.value : null)}
+                value={options.find((option) => option.value === priority) || null}
+              />
+
             </div>
             <div className={styles.dateofoperation}>
               <div className={styles.lable}>
@@ -423,7 +459,7 @@ const AddProcurementMobile = () => {
           {afterProcurement && procurementData?._id ? (
             <Button
               variant="contained"
-              className={styles.submitBtn}
+              className={materialCount >= 1 ? styles.submitBtn : ""}
               disabled={materialCount >= 1 ? false : true}
               onClick={() => {
                 router.back();

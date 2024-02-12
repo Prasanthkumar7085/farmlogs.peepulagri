@@ -10,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import getSingleMaterilsService from "../../../lib/services/ProcurementServices/getSingleMaterilsService";
 import addMaterialParchaseService from "../../../lib/services/ProcurementServices/addMaterialPurchaseService";
 import Image from "next/image";
+import LoadingComponent from "./LoadingComponent";
 
 
 interface ApiCallService {
@@ -105,7 +106,7 @@ const MobileViewMaterialDrawer = ({
 
     //get the single material
     const getSingleMaterials = async () => {
-        setUpdateLoading(true);
+        setLoading(true);
         try {
             let response = await getSingleMaterilsService({
                 token: accessToken,
@@ -129,7 +130,7 @@ const MobileViewMaterialDrawer = ({
         } catch (err) {
             console.error(err);
         } finally {
-            setUpdateLoading(false);
+            setLoading(false);
         }
     };
 
@@ -187,7 +188,7 @@ const MobileViewMaterialDrawer = ({
             }}
         >
             <div className={styles.addPurchaseDrawerHeader}           >
-                <Typography >{"Add Purchase "}</Typography>
+                <Typography >{editMaterialId ? "Edit Purchase" : "Add Purchase "}</Typography>
                 <IconButton
                     onClick={() => {
                         setOpenMaterialDrawer(false);
@@ -197,6 +198,7 @@ const MobileViewMaterialDrawer = ({
                         setRequiredUnits("");
                         setName("");
                         setEditMaterialId("")
+                        setErrorMessages({});
 
                     }}
                 >
@@ -368,6 +370,8 @@ const MobileViewMaterialDrawer = ({
                             setRequiredUnits("");
                             setName("");
                             setEditMaterialId("")
+                            setErrorMessages({});
+
 
                         }}
                     >
@@ -391,6 +395,7 @@ const MobileViewMaterialDrawer = ({
                             : 'Submit'}
                     </Button>
                 </div>
+                <LoadingComponent loading={loading} />
                 {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
             </form>
         </Drawer >

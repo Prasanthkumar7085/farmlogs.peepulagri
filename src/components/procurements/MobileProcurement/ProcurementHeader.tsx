@@ -104,7 +104,7 @@ const ProcurementHeader = ({
           ? (router.query.requested_by as string[])
           : ([router.query.requested_by] as string[])
         : [],
-      isMyTasks: router.query?.is_my_task as string,
+      isMyProcurements: router.query?.is_my_procurement as string,
     });
     setSortBy(sortBy);
     setSortType(sortType);
@@ -145,8 +145,7 @@ const ProcurementHeader = ({
   }, [router.isReady, accessToken]);
 
   useEffect(() => {
-    if (!router.query.is_my_procurement) {
-      onUserChange([]);
+    if (router.query.is_my_procurement) {
       setUsersArray([]);
     }
   }, [router.query.is_my_procurement])
@@ -339,7 +338,9 @@ const ProcurementHeader = ({
           ) : (
             ""
           )}
-          {!(router.query.is_my_task == "true") ? (
+          {router.query.is_my_procurement ? (
+            ""
+          ) : (
             <Badge
               badgeContent={
                 router.query.requested_by
@@ -360,6 +361,7 @@ const ProcurementHeader = ({
                 className={styles.filter}
                 onClick={() => setUsersDrawerOpen(true)}
               >
+                {" "}
                 <img
                   className={styles.funnel1Icon}
                   alt=""
@@ -367,8 +369,6 @@ const ProcurementHeader = ({
                 />
               </div>
             </Badge>
-          ) : (
-            ""
           )}
           <Badge
             badgeContent={1}
@@ -517,7 +517,7 @@ const ProcurementHeader = ({
           >
             Clear
           </Button>
-          <Button
+          {/* <Button
             className={
               !usersArray?.length
                 ? styles.disabledFilterDrawerApplyBtn
@@ -530,7 +530,7 @@ const ProcurementHeader = ({
             }}
           >
             Apply
-          </Button>
+          </Button> */}
         </div>
       </Drawer>
       <React.Fragment>
@@ -539,13 +539,13 @@ const ProcurementHeader = ({
           anchor={"bottom"}
           open={state}
           sx={{
-            '& .MuiPaper-root': {
+            "& .MuiPaper-root": {
               overflowY: "auto",
-              borderRadius: '20px 20px 0 0',
-              background: '#F5F7FA',
-              maxWidth: '500px',
-              margin: ' 0 auto',
-            }
+              borderRadius: "20px 20px 0 0",
+              background: "#F5F7FA",
+              maxWidth: "500px",
+              margin: " 0 auto",
+            },
           }}
         >
           <Box>

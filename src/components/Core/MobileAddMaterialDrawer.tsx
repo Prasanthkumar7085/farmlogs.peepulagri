@@ -200,9 +200,12 @@ const MobileAddMaterialDrawer = ({
             open={openMaterialDrawer}
             sx={{
                 zIndex: "1300 !important",
-                '& .MuiPaper-root': {
-                    width: "100%", maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0 "
-                }
+                "& .MuiPaper-root": {
+                    width: "100%",
+                    maxWidth: "500px",
+                    margin: "0 auto",
+                    borderRadius: "20px 20px 0 0 ",
+                },
             }}
         >
             <div
@@ -214,7 +217,16 @@ const MobileAddMaterialDrawer = ({
                     borderBottom: "1px solid #dddddd",
                 }}
             >
-                <Typography sx={{ fontSize: "14px", fontFamily: "'Inter', sans-serif", color: "#000", fontWeight: "500" }}>{editMaterialId ? "Edit Material" : "Add Material"}</Typography>
+                <Typography
+                    sx={{
+                        fontSize: "14px",
+                        fontFamily: "'Inter', sans-serif",
+                        color: "#000",
+                        fontWeight: "500",
+                    }}
+                >
+                    {editMaterialId ? "Edit Material" : "Add Material"}
+                </Typography>
                 <IconButton
                     sx={{ paddingInline: "0" }}
                     onClick={() => {
@@ -224,8 +236,8 @@ const MobileAddMaterialDrawer = ({
                         setRequiredQty("");
                         setRequiredUnits("");
                         setName("");
-                        setEditMaterialId("")
-
+                        setEditMaterialId("");
+                        setErrorMessages({});
                     }}
                 >
                     <CloseIcon />
@@ -233,11 +245,8 @@ const MobileAddMaterialDrawer = ({
             </div>
             <form className={styles.addmaterials} style={{ padding: "1rem" }}>
                 <div className={styles.formfieldscontainer}>
-
                     <div className={styles.materialformfields}>
-                        <label className={styles.label} >
-                            {"Material Name"}
-                        </label>
+                        <label className={styles.label}>{"Material Name"}</label>
                         <div style={{ width: "100%" }}>
                             <TextField
                                 size="small"
@@ -248,21 +257,24 @@ const MobileAddMaterialDrawer = ({
                                 sx={{
                                     background: "#fff",
                                     borderRadius: "4px",
-                                    width: "100%"
+                                    width: "100%",
                                 }}
                             />
                             <ErrorMessages errorMessages={errorMessages} keyname={"name"} />
                         </div>
                         <div className={styles.group}>
-                            <div className={styles.required} >
-                                <img className={styles.icon} alt="" src={"/procurement-1.svg"} />
-                                <div className={styles.row} >
+                            <div className={styles.required}>
+                                <img
+                                    className={styles.icon}
+                                    alt=""
+                                    src={"/procurement-1.svg"}
+                                />
+                                <div className={styles.row}>
                                     <TextField
-
                                         size="small"
                                         sx={{
-                                            width: "100%", background: "#fff",
-
+                                            width: "100%",
+                                            background: "#fff",
                                         }}
                                         placeholder="Required"
                                         variant="outlined"
@@ -275,7 +287,6 @@ const MobileAddMaterialDrawer = ({
                                         <Select
                                             sx={{
                                                 background: "#fff",
-
                                             }}
                                             size="small"
                                             defaultValue="Litres"
@@ -285,30 +296,37 @@ const MobileAddMaterialDrawer = ({
                                             <MenuItem value="Litres">Litres</MenuItem>
                                             <MenuItem value="Kilograms">Kilograms</MenuItem>
                                         </Select>
-
                                     </FormControl>
                                 </div>
                             </div>
-                            <div className={styles.group} style={{ marginLeft: "40px" }}>
-                                <div className={styles.required} >
-                                    <div className={styles.row} >
-
-                                        <ErrorMessages errorMessages={errorMessages} keyname={"required_qty"} />
-                                        <ErrorMessages errorMessages={errorMessages} keyname={"required_units"} />
-
-                                    </div>
+                            <div
+                                style={{
+                                    marginLeft: "40px",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    width: "100%",
+                                }}
+                            >
+                                <ErrorMessages
+                                    errorMessages={errorMessages}
+                                    keyname={"required_qty"}
+                                />
+                                <div style={{ marginLeft: "30%" }}>
+                                    <ErrorMessages
+                                        errorMessages={errorMessages}
+                                        keyname={"required_units"}
+                                    />
                                 </div>
                             </div>
 
-                            <div className={styles.required} >
-                                <Image className={styles.icon} alt="" src={"/approved-1.svg"} height={15} width={15} />
-                                <div className={styles.row} >
+                            <div className={styles.required}>
+                                <img className={styles.icon} alt="" src={"/approved-1.svg"} />
+                                <div className={styles.row}>
                                     <TextField
-
                                         size="small"
                                         sx={{
-                                            width: "100%", background: "#fff",
-
+                                            width: "100%",
+                                            background: "#fff",
                                         }}
                                         placeholder="Availble"
                                         variant="outlined"
@@ -321,7 +339,6 @@ const MobileAddMaterialDrawer = ({
                                         <Select
                                             sx={{
                                                 background: "#fff",
-
                                             }}
                                             size="small"
                                             defaultValue="Litres"
@@ -331,31 +348,51 @@ const MobileAddMaterialDrawer = ({
                                             <MenuItem value="Litres">Litres</MenuItem>
                                             <MenuItem value="Kilograms">Kilograms</MenuItem>
                                         </Select>
-
                                     </FormControl>
                                 </div>
                             </div>
+                            <div
+                                style={{
+                                    marginLeft: "40px",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    width: "100%",
+                                }}
+                            >
+                                <ErrorMessages
+                                    errorMessages={errorMessages}
+                                    keyname={"available_qty"}
+                                />
+                                <div style={{ marginLeft: "30%" }}>
+                                    <ErrorMessages
+                                        errorMessages={errorMessages}
+                                        keyname={"available_units"}
+                                    />
+                                </div>
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
 
-                <div className={styles.buttons} style={{ width: "100%", marginTop: "0" }}>
+                <div
+                    className={styles.buttons}
+                    style={{ width: "100%", marginTop: "0" }}
+                >
                     <Button
                         className={styles.cancel}
                         name="back"
                         size="medium"
                         variant="outlined"
                         onClick={() => {
-                            setOpenMaterialDrawer(false)
+                            setOpenMaterialDrawer(false);
                             setOpenMaterialDrawer(false);
                             setAvailableQty("");
                             setAvailableUnits("");
                             setRequiredQty("");
                             setRequiredUnits("");
                             setName("");
-                            setEditMaterialId("")
+                            setEditMaterialId("");
+                            setErrorMessages({});
                         }}
                     >
                         Cancel
@@ -367,10 +404,9 @@ const MobileAddMaterialDrawer = ({
                         variant="contained"
                         onClick={() => {
                             if (editMaterialId) {
-                                updateMaterialById()
-                            }
-                            else {
-                                addMaterial()
+                                updateMaterialById();
+                            } else {
+                                addMaterial();
                             }
                         }}
                     >
@@ -378,12 +414,13 @@ const MobileAddMaterialDrawer = ({
                             <CircularProgress size="1.5rem" sx={{ color: "white" }} />
                         ) : (
                             "Submit"
-                        )}                    </Button>
+                        )}{" "}
+                    </Button>
                 </div>
                 {/* <ButtonGroup fillButton="Submit" buttonGroupGap="1rem" /> */}
                 <LoadingComponent loading={loading} />
             </form>
         </Drawer>
-    )
+    );
 }
 export default MobileAddMaterialDrawer;

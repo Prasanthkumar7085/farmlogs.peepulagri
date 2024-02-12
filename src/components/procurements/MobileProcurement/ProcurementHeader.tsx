@@ -145,8 +145,7 @@ const ProcurementHeader = ({
   }, [router.isReady, accessToken]);
 
   useEffect(() => {
-    if (!router.query.is_my_procurement) {
-      onUserChange([]);
+    if (router.query.is_my_procurement) {
       setUsersArray([]);
     }
   }, [router.query.is_my_procurement])

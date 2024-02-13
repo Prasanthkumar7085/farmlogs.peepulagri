@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import ErrorMessages from "../ErrorMessages";
 import { DatePicker, Stack } from 'rsuite';
 import "rsuite/dist/rsuite.css";
-import isBefore from 'date-fns/isBefore';
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -15,6 +14,7 @@ import getProcurementByIdService from "../../../../lib/services/ProcurementServi
 import LoadingComponent from "../LoadingComponent";
 import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 
 
@@ -30,6 +30,9 @@ const AddTrackingDetailsMobile = ({
 
   const router = useRouter()
 
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
   const [errorMessages, setErrorMessages] = useState<any>([])
   const [phoneNumber, setPhoneNumber] = useState<any>()
   const [date, setDate] = useState<any>()
@@ -69,7 +72,6 @@ const AddTrackingDetailsMobile = ({
         setPhoneNumber(data?.tracking_details?.contact_number)
         if (data?.tracking_details?.delivery_date) {
           setDate(new Date(data?.tracking_details?.delivery_date))
-
         } else {
           setDate(null)
 
@@ -166,6 +168,7 @@ const AddTrackingDetailsMobile = ({
             {data?.tracking_details?._id ?
               "Edit Tracking Details" : "Add Tracking Details"}
           </h6>
+
           <IconButton
             onClick={() => {
               setTrackingDialogOpen(false);
@@ -183,7 +186,7 @@ const AddTrackingDetailsMobile = ({
 
           <div className={styles.eachFormField}>
 
-            <p className={styles.label}>Service Name</p>
+            <p className={styles.label}>Service Name<b style={{ color: "red" }}>*</b></p>
             <TextField
               sx={{
                 "& .MuiInputBase-root": {
@@ -220,7 +223,7 @@ const AddTrackingDetailsMobile = ({
                 : ""} />
           </div>
           <div className={styles.eachFormField} id="tracking-details-datePicker">
-            <p className={styles.label}>Delivery Date</p>
+            <p className={styles.label}>Delivery Date<b style={{ color: "red" }}>*</b></p>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <MobileDatePicker
                 sx={{
@@ -241,7 +244,7 @@ const AddTrackingDetailsMobile = ({
                     borderRadius: "8px !important"
                   },
                 }}
-                value={date}
+                value={dayjs(date)}
                 disablePast
                 format="DD-MM-YYYY"
 
@@ -253,7 +256,7 @@ const AddTrackingDetailsMobile = ({
           </div>
           <div className={styles.eachFormField}>
 
-            <p className={styles.label}>Contact Number</p>
+            <p className={styles.label}>Contact Number<b style={{ color: "red" }}>*</b></p>
             <TextField
               sx={{
                 "& .MuiInputBase-root": {
@@ -290,8 +293,27 @@ const AddTrackingDetailsMobile = ({
                 : ""} />
           </div>
           <div className={styles.eachFormField}>
-            <p className={styles.label}>Tracking Id</p>
-
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignSelf: "stretch",
+                alignItems: "center",
+              }}
+            >
+              <p className={styles.label}>
+                Tracking Id<b style={{ color: "red" }}>*</b>
+              </p>
+              <div>
+                <Button
+                  className={styles.generateIdBtn}
+                  variant="text"
+                  onClick={generateUUID}
+                >
+                  Generate Id
+                </Button>
+              </div>
+            </div>
             <TextField
               sx={{
                 "& .MuiInputBase-root": {

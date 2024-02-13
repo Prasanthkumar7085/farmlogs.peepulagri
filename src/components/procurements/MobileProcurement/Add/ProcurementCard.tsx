@@ -258,6 +258,7 @@ const ProcurementCard = ({
               disabled={selectMaterial ? true : false}
               onClick={() => {
                 if (item?.status == "REJECTED") {
+
                   onStatusChangeEvent("approve", item?._id);
 
 

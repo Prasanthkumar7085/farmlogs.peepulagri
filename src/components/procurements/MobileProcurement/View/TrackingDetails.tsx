@@ -9,6 +9,7 @@ import Image from "next/image";
 import timePipe from "@/pipes/timePipe";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import AddIcon from '@mui/icons-material/Add';
+import ImageComponent from "@/components/Core/ImageComponent";
 const TrackingDetails = ({
   procurementData,
   materials,
@@ -45,6 +46,29 @@ const TrackingDetails = ({
           width={20}
         />
         <h2 className={styles.title}>Tracking Details</h2>
+        {procurementData?.tracking_details?._id &&
+          userDetails?.user_type == "central_team" &&
+          procurementData?.status !== "DELIVERED" &&
+          procurementData?.status !== "COMPLETED" ? (
+          <div className={styles.trackingid}>
+            <IconButton
+              onClick={() => {
+                setTrackingDialogOpen(true);
+              }}
+            >
+              <ImageComponent
+                src={
+                  "/viewProcurement/procurement-edit-icon.svg"
+                }
+                height={15}
+                width={15}
+                alt=""
+              />
+            </IconButton>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <div className={styles.detailscontainer}>

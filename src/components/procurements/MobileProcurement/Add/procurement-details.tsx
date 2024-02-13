@@ -255,8 +255,8 @@ const ProcurementDetailsMobile = ({
             }}
           >
             {userDetails?.user_type == "central_team" ||
-            userDetails?.user_type == "agronomist" ||
-            userDetails?._id == procurementData?.requested_by?._id ? (
+              userDetails?.user_type == "agronomist" ||
+              userDetails?._id == procurementData?.requested_by?._id ? (
               <MenuItem
                 onClick={() => {
                   setOpenMaterialDrawer(true);
@@ -268,7 +268,7 @@ const ProcurementDetailsMobile = ({
                   minHeight: "inherit",
                   display:
                     router.query.procurement_id &&
-                    !router.pathname.includes("edit")
+                      !router.pathname.includes("edit")
                       ? ""
                       : "none !important",
                 }}
@@ -289,9 +289,9 @@ const ProcurementDetailsMobile = ({
               Select
             </MenuItem>
             {procurementData?.status == "PENDING" &&
-            userDetails?.user_type == "central_team" &&
-            materials?.length &&
-            router.query.procurement_id ? (
+              userDetails?.user_type == "central_team" &&
+              materials?.length &&
+              router.query.procurement_id ? (
               <MenuItem
                 className={styles.signleMenuItem}
                 sx={{
@@ -299,7 +299,7 @@ const ProcurementDetailsMobile = ({
                   minHeight: "inherit",
                   display:
                     router.query.procurement_id &&
-                    !router.pathname.includes("edit")
+                      !router.pathname.includes("edit")
                       ? ""
                       : "none !important",
                 }}
@@ -378,7 +378,7 @@ const ProcurementDetailsMobile = ({
                   openMaterialDrawer={openMaterialDrawer}
                   getAllProcurementMaterials={getAllProcurementMaterials}
                   procurementStatusChange={procurementStatusChange}
-                  materials={materials}
+                  materials={rejectedMaterials}
                   collectMaterialsForDelete={collectMaterialsForDelete}
                   onStatusChangeEvent={onStatusChangeEvent}
                 />

@@ -335,16 +335,10 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                         onInput={handleInput}
                         onChange={(e: any) => setAvailableQty(e.target.value)}
                       />
-                      <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"available_qty"}
-                      />
                     </div>
                     <div>
-                      <FormControl
-                        variant="outlined"
-                        sx={{ width: "100%" }}
-                      >
+
+                      <FormControl variant="outlined" sx={{ width: "100%" }}>
                         <InputLabel color="primary" />
                         <Select
                           sx={{
@@ -361,12 +355,17 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                           <MenuItem value="Kilograms">Kilograms</MenuItem>
                         </Select>
                       </FormControl>
-                      <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"required_units"}
-                      />
                     </div>
                   </div>
+                </div>
+                <div className={styles.required}>
+                  <div>
+
+                  </div>
+                  <ErrorMessages
+                    errorMessages={errorMessages}
+                    keyname={"available_qty"}
+                  />
                 </div>
               </div>
             </div>

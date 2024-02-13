@@ -80,41 +80,41 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
   };
 
 
-  // Add event listener for page reload
-  useEffect(() => {
-    const confirmationHandler = (event: any) => {
-      event.preventDefault();
+  // // Add event listener for page reload
+  // useEffect(() => {
+  //   const confirmationHandler = (event: any) => {
+  //     event.preventDefault();
 
-      // Ask for confirmation
-      const confirmationMessage = 'Are you sure you want to reload the page?';
-      event.returnValue = confirmationMessage; // For legacy browsers
-      return confirmationMessage;
-    };
+  //     // Ask for confirmation
+  //     const confirmationMessage = 'Are you sure you want to reload the page?';
+  //     event.returnValue = confirmationMessage; // For legacy browsers
+  //     return confirmationMessage;
+  //   };
 
-    window.addEventListener('beforeunload', confirmationHandler);
+  //   window.addEventListener('beforeunload', confirmationHandler);
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('beforeunload', confirmationHandler);
-    };
-  }, []);
+  //   // Clean up the event listener when the component unmounts
+  //   return () => {
+  //     window.removeEventListener('beforeunload', confirmationHandler);
+  //   };
+  // }, []);
 
-  // Add event listener for confirmation of reload
-  useEffect(() => {
-    const unloadHandler = (event: any) => {
-      event.preventDefault();
+  // // Add event listener for confirmation of reload
+  // useEffect(() => {
+  //   const unloadHandler = (event: any) => {
+  //     event.preventDefault();
 
-      // Call the API when the user confirms the reload
-      deleteProcurment();
-    };
+  //     // Call the API when the user confirms the reload
+  //     deleteProcurment();
+  //   };
 
-    window.addEventListener('unload', unloadHandler);
+  //   window.addEventListener('unload', unloadHandler);
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('unload', unloadHandler);
-    };
-  }, []);
+  //   // Clean up the event listener when the component unmounts
+  //   return () => {
+  //     window.removeEventListener('unload', unloadHandler);
+  //   };
+  // }, []);
 
 
   const getAllProcurementMaterials = async () => {

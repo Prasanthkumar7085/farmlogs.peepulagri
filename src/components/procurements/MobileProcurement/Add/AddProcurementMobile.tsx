@@ -149,7 +149,7 @@ const AddProcurementMobile = () => {
         toast.success(response?.message);
         setProcurementData(response?.data);
         setAfterProcurement(true);
-
+        router.push(`/users-procurements/add?material=true&procurement_id=${response?.data?._id}`)
         // setTimeout(() => {
         //   router.push(`/procurements/${response?.data?._id}/edit`);
         // }, 1000);
@@ -199,6 +199,8 @@ const AddProcurementMobile = () => {
         toast.success(response?.message);
         setFarm([]);
         setAfterProcurement(true);
+        router.push(`/users-procurements/${procurementData?._id || router.query.procurement_id}/edit?material=true`)
+
         await getProcurementData();
         setIsDisabled(true);
       } else if (response.status == 422) {
@@ -227,12 +229,12 @@ const AddProcurementMobile = () => {
     <div>
       <ViewProcurementHeader
         title={
-          router.query.procurement_id ? "Edit Procurement" : "Add Procurement"
+          router.query.procurement_id && router.pathname.includes("edit") ? "Edit Procurement" : "Add Procurement"
         }
       />
 
       <div className={styles.addprocurment}>
-        {afterProcurement == false ? (
+        {afterProcurement == false && !router.query.material ? (
           <div className={styles.formfieds}>
             <div className={styles.dateofoperation}>
               <div className={styles.lable}>
@@ -456,13 +458,13 @@ const AddProcurementMobile = () => {
             </Button>
           )}
 
-          {afterProcurement && procurementData?._id ? (
+          {(afterProcurement || router.query.procurement_id) && procurementData?._id ? (
             <Button
               variant="contained"
               className={materialCount >= 1 ? styles.submitBtn : ""}
               disabled={materialCount >= 1 ? false : true}
               onClick={() => {
-                router.back();
+                router.push("/users-procurements");
               }}
             >
               Submit

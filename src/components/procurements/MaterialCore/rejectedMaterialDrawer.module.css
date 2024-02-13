@@ -46,6 +46,16 @@
     border-bottom: 1px solid #dddddd
 }
 
+.CommentsTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: clamp(14px, 2.5vw, 16px) !important;
+    font-weight: 500 !important;
+    font-family: "Inter", sans-serif !important;
+
+}
+
 .drawerHeader p {
     font-size: clamp(14px, 2.5vw, 16px) !important;
     font-weight: 500 !important;

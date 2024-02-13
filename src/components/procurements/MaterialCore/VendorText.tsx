@@ -33,7 +33,7 @@ const VendorTextDrawer = ({ vendorTextOpen, setVendorTextOpen, vendorText }: any
             >
                 <div className={styles.rejectReasonDrawerHeading}      >
 
-                    <Typography className={styles.CommentsTitle} color="white">  <Image alt="" src="/component-29.svg" height={18} width={18} />  {"Vendor Details"}</Typography>
+                    <Typography className={styles.CommentsTitle} color="white">  <Image alt="" src="/vendor-drawer-icon.svg" height={20} width={20} />  {"Vendor Details"}</Typography>
                     <IconButton
                         onClick={() => {
                             setVendorTextOpen(false);

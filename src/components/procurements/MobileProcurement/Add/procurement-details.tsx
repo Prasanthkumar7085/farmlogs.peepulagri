@@ -268,7 +268,7 @@ const ProcurementDetailsMobile = ({
                   minHeight: "inherit",
                   display:
                     router.query.procurement_id &&
-                      !router.pathname.includes("edit")
+                      (!router.pathname.includes("edit") && !router.pathname.includes("add"))
                       ? ""
                       : "none !important",
                 }}

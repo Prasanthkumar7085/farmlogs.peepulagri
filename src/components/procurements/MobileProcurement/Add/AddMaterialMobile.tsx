@@ -123,7 +123,7 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
       let response = await getMaterialsByProcurementIdService({
         token: accessToken,
         procurementId:
-          (router.query.procurement_id as string) || procurementData?._id,
+          (router.query.procurement_id as string),
       });
       if (response?.status == 200 || response?.status == 201) {
         const RejectFilterData = response?.data.filter(
@@ -149,10 +149,11 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
   };
 
   useEffect(() => {
-    if (router.isReady && accessToken) {
+    if (router.isReady && accessToken && router.query.procurement_id) {
       getAllProcurementMaterials();
+      getProcurementData()
     }
-  }, [router.isReady, accessToken]);
+  }, [router.isReady, accessToken, router.query.procurement_id]);
 
   const addMaterial = async () => {
     setLoading(true);
@@ -200,7 +201,6 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
     const value = event.target.value.replace(/\D/g, "");
     event.target.value = value.slice(0, 20);
   };
-  console.log(materials, "DSf0");
 
   return (
     <div

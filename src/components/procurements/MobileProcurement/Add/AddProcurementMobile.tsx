@@ -87,6 +87,7 @@ const AddProcurementMobile = () => {
     if (router.isReady && accessToken) {
       if (router.query.procurement_id) {
         getProcurementData();
+        setFarm([])
       }
       let delay = 500;
       let debounce = setTimeout(() => {
@@ -136,9 +137,14 @@ const AddProcurementMobile = () => {
           : "",
         remarks: remarks,
         priority: priority ? priority : "NONE",
-        farm_ids: farm?.length
-          ? farm.map((item: { _id: string }) => item._id)
-          : [],
+        farm_ids: [
+          ...(farm?.length
+            ? farm.map((item: { _id: string }) => item._id)
+            : []),
+          ...(editFarms?.length
+            ? editFarms.map((item: { _id: string }) => item._id)
+            : []),
+        ],
       };
 
       const response = await addProcurementService({
@@ -199,8 +205,12 @@ const AddProcurementMobile = () => {
         toast.success(response?.message);
         setFarm([]);
         setAfterProcurement(true);
-        router.push(`/users-procurements/${procurementData?._id || router.query.procurement_id}/edit?material=true`)
-
+        if (router.pathname.includes("/edit")) {
+          router.push(`/users-procurements/${procurementData?._id || router.query.procurement_id}/edit?material=true`)
+        }
+        else {
+          router.push(`/users-procurements/add?material=true&procurement_id=${procurementData?._id || router.query.procurement_id}`)
+        }
         await getProcurementData();
         setIsDisabled(true);
       } else if (response.status == 422) {
@@ -434,13 +444,19 @@ const AddProcurementMobile = () => {
         )}
 
         <div className={styles.procurementFormBtn}>
-          {afterProcurement && procurementData?._id ? (
+          {(afterProcurement || router.query.material) && procurementData?._id ? (
             <Button
               className={styles.cancelBtn}
               color="primary"
               variant="outlined"
               onClick={() => {
                 setAfterProcurement(false);
+                if (router.pathname.includes("/edit")) {
+                  router.push(`/users-procurements/${procurementData?._id || router.query.procurement_id}/edit`)
+                }
+                else {
+                  router.push(`/users-procurements/add?procurement_id=${procurementData._id || router.query.procurement_id}`)
+                }
               }}
             >
               Prev
@@ -458,7 +474,7 @@ const AddProcurementMobile = () => {
             </Button>
           )}
 
-          {(afterProcurement || router.query.procurement_id) && procurementData?._id ? (
+          {(afterProcurement || router.query.material) && procurementData?._id ? (
             <Button
               variant="contained"
               className={materialCount >= 1 ? styles.submitBtn : ""}
@@ -474,8 +490,8 @@ const AddProcurementMobile = () => {
               className={styles.submitBtn}
               variant="contained"
               onClick={() => {
-                router.query.procurement_id || procurementData?._id
-                  ? updateProcurement()
+                router.pathname.includes("edit") || router.query.procurement_id ?
+                  updateProcurement()
                   : addProcurement();
               }}
             >

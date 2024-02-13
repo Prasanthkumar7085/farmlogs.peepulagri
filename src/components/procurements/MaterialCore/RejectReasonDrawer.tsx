@@ -51,7 +51,10 @@ const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMateri
                                 borderRadius: "10px !important"
                             }
                         }}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setRemarks(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            const newValue = e.target.value.replace(/^\s+/, "");
+                            setRemarks(newValue)
+                        }}
                         onKeyDown={(e: any) => e.key == 'Enter' ? afterRejectingMaterial() : ""}
                     />
                     {validations ? <Typography variant='caption' color="error">{validations}</Typography> : ""}
@@ -64,7 +67,7 @@ const RejectedReasonDrawer = ({ dialog, setRejectDilogOpen, afterRejectingMateri
                         onClick={() => {
                             setRejectDilogOpen(false)
                             setRemarks("")
-                               setValidations("");
+                            setValidations("");
 
 
                         }}

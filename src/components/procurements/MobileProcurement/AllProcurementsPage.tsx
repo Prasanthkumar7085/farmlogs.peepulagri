@@ -123,9 +123,11 @@ const MobileAllProcurements = () => {
 
     if (response?.success) {
       if (page == 1 || page == "1") {
+        console.log("fdasdf")
         setHasMore(response?.has_more);
         setData(response.data);
       } else {
+        console.log("32ewq")
         setHasMore(response?.has_more);
         setData([...data, ...response.data]);
       }
@@ -160,6 +162,7 @@ const MobileAllProcurements = () => {
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore && data.length > 0) {
           setPage((prevPageNumber) => prevPageNumber + 1);
+          console.log(page, "Dfdss")
           getAllProcurements({
             page: page + 1,
             limit: router.query.limit as string,

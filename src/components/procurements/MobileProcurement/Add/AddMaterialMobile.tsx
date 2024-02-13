@@ -322,35 +322,50 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                     height={30}
                   />
                   <div className={styles.row}>
-                    <TextField
-                      size="small"
-                      sx={{
-                        width: "100%",
-                        background: "#fff",
-                      }}
-                      placeholder="Availble"
-                      variant="outlined"
-                      value={availableQty}
-                      onInput={handleInput}
-                      onChange={(e: any) => setAvailableQty(e.target.value)}
-                    />
-                    <FormControl variant="outlined" sx={{ width: "100%" }}>
-                      <InputLabel color="primary" />
-                      <Select
+                    <div>
+                      <TextField
+                        size="small"
                         sx={{
+                          width: "100%",
                           background: "#fff",
                         }}
-                        size="small"
-                        defaultValue="Litres"
-                        value={requiredUnits}
-                        onChange={(e: any) =>
-                          setRequiredUnits(e.target.value)
-                        }
+                        placeholder="Availble"
+                        variant="outlined"
+                        value={availableQty}
+                        onInput={handleInput}
+                        onChange={(e: any) => setAvailableQty(e.target.value)}
+                      />
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname={"available_qty"}
+                      />
+                    </div>
+                    <div>
+                      <FormControl
+                        variant="outlined"
+                        sx={{ width: "100%" }}
                       >
-                        <MenuItem value="Litres">Litres</MenuItem>
-                        <MenuItem value="Kilograms">Kilograms</MenuItem>
-                      </Select>
-                    </FormControl>
+                        <InputLabel color="primary" />
+                        <Select
+                          sx={{
+                            background: "#fff",
+                          }}
+                          size="small"
+                          defaultValue="Litres"
+                          value={requiredUnits}
+                          onChange={(e: any) =>
+                            setRequiredUnits(e.target.value)
+                          }
+                        >
+                          <MenuItem value="Litres">Litres</MenuItem>
+                          <MenuItem value="Kilograms">Kilograms</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <ErrorMessages
+                        errorMessages={errorMessages}
+                        keyname={"required_units"}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

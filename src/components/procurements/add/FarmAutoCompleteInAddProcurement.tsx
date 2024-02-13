@@ -1,5 +1,5 @@
 import { setFarmTitleTemp } from "@/Redux/Modules/Farms";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, ClickAwayListener, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -44,49 +44,51 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
   return (
     <div>
       {!autoCompleteLoading ? (
-        <Autocomplete
-          multiple
-          // groupBy={(option) => option?.user_id?.full_name}
-          value={defaultValueSet}
-          disablePortal
-          size="small"
-          id="combo-box-demo"
-          sx={{ width: "100%", background: "#fff" }}
-          options={options && options?.length ? options : []}
-          loading={optionsLoading}
-          getOptionLabel={(option: any) =>
-            option[label] ? option[label]?.toUpperCase() : ""
-          }
-          getOptionDisabled={(option) =>
-            Boolean(editFarms?.some((item) => item._id == option._id))
-          }
-          renderOption={(props, option) => {
-            return (
-              <li {...props} key={option?._id}>
-                {option?.title}
-              </li>
-            );
-          }}
-          onChange={(e: any, value: any, reason: any) => {
-            if (value) {
-              onSelectFarmFromDropDown(value, reason);
-              setDefaultValueSet(value);
-            } else {
-              onSelectFarmFromDropDown("", reason);
-              setDefaultValueSet(null);
+        <ClickAwayListener onClickAway={() => setSearchString("")}>
+
+          <Autocomplete
+            multiple
+            // groupBy={(option) => option?.user_id?.full_name}
+            value={defaultValueSet}
+            disablePortal
+            size="small"
+            id="combo-box-demo"
+            sx={{ width: "100%", background: "#fff" }}
+            options={options && options?.length ? options : []}
+            loading={optionsLoading}
+            getOptionLabel={(option: any) =>
+              option[label] ? option[label]?.toUpperCase() : ""
             }
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              placeholder={placeholder}
-              sx={{ width: "100%", background: "#fff" }}
-              onChange={(e) => {
-                setOptionsLoading(true);
-                setSearchString(e.target.value);
-              }}
-            />
-          )}
+            getOptionDisabled={(option) =>
+              Boolean(editFarms?.some((item) => item._id == option._id))
+            }
+            renderOption={(props, option) => {
+              return (
+                <li {...props} key={option?._id}>
+                  {option?.title}
+                </li>
+              );
+            }}
+            onChange={(e: any, value: any, reason: any) => {
+              if (value) {
+                onSelectFarmFromDropDown(value, reason);
+                setDefaultValueSet(value);
+              } else {
+                onSelectFarmFromDropDown("", reason);
+                setDefaultValueSet(null);
+              }
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder={placeholder}
+                sx={{ width: "100%", background: "#fff" }}
+                onChange={(e) => {
+                  setOptionsLoading(true);
+                  setSearchString(e.target.value);
+                }}
+              />
+            )}
 
           // sx={{
           //     width: '1000%',
@@ -99,7 +101,8 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
 
           //     }
           // }}
-        />
+          />
+        </ClickAwayListener>
       ) : (
         ""
       )}

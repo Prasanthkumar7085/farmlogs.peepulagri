@@ -141,9 +141,17 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         const filteredData = response?.data.filter((obj: any) => obj.status !== "REJECTED" && obj.hasOwnProperty('price'));
         const allPurchaseOrNot = filteredData.every((obj: any) => obj.hasOwnProperty('price') && obj.price !== null);
 
+        const allApprovedOrNot = response?.data.every((obj: any) => obj.status === "APPROVED") && data?.status === "PENDING";
+
         if (allPurchaseOrNot && filteredData?.length) {
           await procurementStatusChange("PURCHASED")
           await afterMaterialStatusChange(true)
+        }
+
+        else if (allApprovedOrNot && response?.data?.length) {
+          await procurementStatusChange("APPROVED");
+          await afterMaterialStatusChange(true);
+
         }
         else {
           afterMaterialStatusChange(true)

@@ -104,7 +104,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
             <div className={styles.procurementDateLabel}>Date Of Operation</div>
             <div className={styles.datecontainer}>
               <p className={styles.dateBlock}>
-                {timePipe(data?.date_of_operation, "DD, MMM YYYY  hh:mm A")}
+                {timePipe(data?.date_of_operation, "DD, MMM YYYY ")}
               </p>
             </div>
           </div>
@@ -119,33 +119,33 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
               >
                 {data?.farm_ids.length < 10
                   ? data?.farm_ids?.map((item: any, index: any) => (
+                    <Chip
+                      sx={{
+                        color: "#000",
+                        fontSize: "clamp(12px, 0.72vw, 14px)",
+                        fontFamily: "'Inter', sans-serif",
+                        background: "#CBFFE6",
+                        padding: "2px 8px",
+                        height: "inherit",
+                        minWidth: "inherit",
+                        "& .MuiChip-label": {
+                          paddingInline: "0",
+                        },
+                      }}
+                      key={index}
+                      label={item.title}
+                    />
+                  ))
+                  : data?.farm_ids
+                    .slice(0, 9)
+                    ?.map((item: any, index: any) => (
                       <Chip
-                        sx={{
-                          color: "#000",
-                          fontSize: "clamp(12px, 0.72vw, 14px)",
-                          fontFamily: "'Inter', sans-serif",
-                          background: "#CBFFE6",
-                          padding: "2px 8px",
-                          height: "inherit",
-                          minWidth: "inherit",
-                          "& .MuiChip-label": {
-                            paddingInline: "0",
-                          },
-                        }}
+                        size="small"
+                        color="success"
                         key={index}
                         label={item.title}
                       />
-                    ))
-                  : data?.farm_ids
-                      .slice(0, 9)
-                      ?.map((item: any, index: any) => (
-                        <Chip
-                          size="small"
-                          color="success"
-                          key={index}
-                          label={item.title}
-                        />
-                      ))}
+                    ))}
               </div>
             ) : (
               data?.farm_ids?.map((item: any, index: any) => (
@@ -221,9 +221,9 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
               </Typography>
 
               {data?.tracking_details?._id &&
-              userDetails?.user_type == "central_team" &&
-              data?.status !== "DELIVERED" &&
-              data?.status !== "COMPLETED" ? (
+                userDetails?.user_type == "central_team" &&
+                data?.status !== "DELIVERED" &&
+                data?.status !== "COMPLETED" ? (
                 <div className={styles.trackingid}>
                   <Button
                     className={styles.addTrackingDetailsBtn}
@@ -305,8 +305,8 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
           ""
         )}
         {data?.status == "PURCHASED" &&
-        userDetails?.user_type == "central_team" &&
-        !data?.tracking_details?.service_name ? (
+          userDetails?.user_type == "central_team" &&
+          !data?.tracking_details?.service_name ? (
           <div className={styles.trackingid}>
             <Typography variant="h6" className={styles.trackingBlockHeading}>
               Tracking Details

@@ -7,6 +7,7 @@ import updateStatusService from "../../../../lib/services/ProcurementServices/up
 import styles from "./shipped-status.module.css";
 import TrackingDetailsDilog from "@/components/Core/TrackingDetails/TrackingDetailsDilog";
 import { toast } from "sonner";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 const ShippedStatus = ({ data, afterStatusChange }: any) => {
   const router = useRouter();
@@ -151,6 +152,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           ""
         )}
       </div>
+      <LoadingComponent loading={loading} />
       {data?.status == "DELIVERED" ?
         <AlertStautsChange
           open={dialogOpen}

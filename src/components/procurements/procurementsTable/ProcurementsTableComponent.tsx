@@ -263,7 +263,7 @@ const ProcurementsTableComponent = ({
       id: "date_of_operation",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {timePipe(info.getValue(), "DD-MM-YYYY hh:mm A")}
+          {timePipe(info.getValue(), "DD-MM-YYYY")}
         </span>
       ),
       header: () => <span>Date of Operation</span>,
@@ -364,7 +364,7 @@ const ProcurementsTableComponent = ({
                   (userDetails?._id == info.row.original?.requested_by?._id ||
                     userDetails?.user_type == "agronomist" ||
                     userDetails?.user_type == "central_team") &&
-                  info.row.original?.status == "PENDING"
+                    info.row.original?.status == "PENDING"
                     ? "Edit"
                     : "You dont't have permission for this action"
                 }
@@ -375,7 +375,7 @@ const ProcurementsTableComponent = ({
                     (userDetails?._id == info.row.original?.requested_by?._id ||
                       userDetails?.user_type == "agronomist" ||
                       userDetails?.user_type == "central_team") &&
-                    info.row.original?.status == "PENDING"
+                      info.row.original?.status == "PENDING"
                       ? false
                       : true
                   }
@@ -403,7 +403,7 @@ const ProcurementsTableComponent = ({
                   (userDetails?._id == info.row.original?.requested_by?._id ||
                     userDetails?.user_type == "agronomist" ||
                     userDetails?.user_type == "central_team") &&
-                  info.row.original?.status == "PENDING"
+                    info.row.original?.status == "PENDING"
                     ? "Delete"
                     : "You dont't have permission for this action"
                 }
@@ -413,7 +413,7 @@ const ProcurementsTableComponent = ({
                     (userDetails?._id == info.row.original?.requested_by?._id ||
                       userDetails?.user_type == "agronomist" ||
                       userDetails?.user_type == "central_team") &&
-                    info.row.original?.status == "PENDING"
+                      info.row.original?.status == "PENDING"
                       ? false
                       : true
                   }
@@ -429,7 +429,7 @@ const ProcurementsTableComponent = ({
                         info.row.original?.requested_by?._id ||
                         userDetails?.user_type == "agronomist" ||
                         userDetails?.user_type == "central_team") &&
-                      info.row.original?.status == "PENDING"
+                        info.row.original?.status == "PENDING"
                         ? "/viewTaskIcons/task-table-delete.svg"
                         : "/viewTaskIcons/task-table-delete-disable.svg"
                     }

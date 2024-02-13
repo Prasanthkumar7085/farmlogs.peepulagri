@@ -114,6 +114,7 @@ const AddMaterialDrawer = ({
                             setAvailableQty("");
                             setAvailableUnits("");
                             setAddMaterialOpen(false)
+                            setErrorMessages({})
                         }}
                     >
                         <Clear />
@@ -187,15 +188,16 @@ const AddMaterialDrawer = ({
                         }}
 
                     />
-
-                    <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"required_qty"}
-                    />
-                    <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"required_units"}
-                    />
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                        <ErrorMessages
+                            errorMessages={errorMessages}
+                            keyname={"required_qty"}
+                        />
+                        <ErrorMessages
+                            errorMessages={errorMessages}
+                            keyname={"required_units"}
+                        />
+                    </div>
                 </div>
                 <div className={styles.eachInputField}>
                     <label className={styles.inputLabel}>
@@ -235,14 +237,18 @@ const AddMaterialDrawer = ({
                             ),
                         }}
                     />
-                    <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"available_qty"}
-                    />
-                    <ErrorMessages
-                        errorMessages={errorMessages}
-                        keyname={"available_units"}
-                    />
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+
+                        <ErrorMessages
+                            errorMessages={errorMessages}
+                            keyname={"available_qty"}
+                        />
+                        <ErrorMessages
+                            errorMessages={errorMessages}
+                            keyname={"required_units"}
+                        />
+                    </div>
+
                 </div>
                 <div className={styles.procurementFormBtn}>
                     <Button
@@ -255,6 +261,8 @@ const AddMaterialDrawer = ({
                             setAvailableQty("");
                             setAvailableUnits("");
                             setAddMaterialOpen(false)
+                            setErrorMessages({})
+
                         }}
                     >
                         Cancel

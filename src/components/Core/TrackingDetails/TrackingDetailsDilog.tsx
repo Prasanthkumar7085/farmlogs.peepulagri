@@ -130,6 +130,8 @@ const TrackingDetailsDilog = ({
         toast.success(responseData?.message)
         setTrackingDialogOpen(false)
         addTracking(true)
+        setErrorMessages([]);
+
       }
       if (responseData.status == 422) {
         setErrorMessages(responseData?.errors)

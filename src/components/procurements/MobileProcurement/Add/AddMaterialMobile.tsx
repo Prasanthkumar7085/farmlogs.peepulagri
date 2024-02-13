@@ -323,7 +323,6 @@ const AddMaterialMobile = ({ procurementData, checkMaterialsListCount, getProcur
                   />
                   <div className={styles.row}>
                     <div>
-
                       <TextField
                         size="small"
                         sx={{

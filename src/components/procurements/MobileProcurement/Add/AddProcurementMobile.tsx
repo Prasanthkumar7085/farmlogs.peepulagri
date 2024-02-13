@@ -235,6 +235,7 @@ const AddProcurementMobile = () => {
     setEditFarms(data);
   };
 
+  console.log(router.query.material, "sdfasf")
   return (
     <div>
       <ViewProcurementHeader
@@ -246,8 +247,8 @@ const AddProcurementMobile = () => {
       />
 
       <div className={styles.addprocurment}>
-        {!router.query.material ? (
-          <div className={styles.formfieds}>
+        {!router.query.material && router.isReady ? (
+          <div className={styles.formfieds} >
             <div className={styles.dateofoperation}>
               <div className={styles.lable}>
                 <label className={styles.label}>

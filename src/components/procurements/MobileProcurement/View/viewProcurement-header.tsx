@@ -88,24 +88,7 @@ const ViewProcurementHeader = ({ title, data, status }: any) => {
           }}
 
         >
-          <MenuItem
-            sx={{
-              paddingBlock: "5px",
-              fontFamily: "'Inter', sans-serif",
-              minHeight: "inherit",
-            }}
-            disabled={
-              (userDetails?._id == data?.requested_by?._id ||
-                userDetails?.user_type == "agronomist" ||
-                userDetails?.user_type == "central_team") &&
-                data?.status == "PENDING"
-                ? false
-                : true
-            }
-            onClick={() => setDialogOpen(true)}
-          >
-            Delete
-          </MenuItem>
+
           <MenuItem
             sx={{
               paddingBlock: "0",
@@ -125,6 +108,24 @@ const ViewProcurementHeader = ({ title, data, status }: any) => {
             }}
           >
             Edit
+          </MenuItem>
+          <MenuItem
+            sx={{
+              paddingBlock: "5px",
+              fontFamily: "'Inter', sans-serif",
+              minHeight: "inherit",
+            }}
+            disabled={
+              (userDetails?._id == data?.requested_by?._id ||
+                userDetails?.user_type == "agronomist" ||
+                userDetails?.user_type == "central_team") &&
+                data?.status == "PENDING"
+                ? false
+                : true
+            }
+            onClick={() => setDialogOpen(true)}
+          >
+            Delete
           </MenuItem>
         </Menu>
         <AlertDelete

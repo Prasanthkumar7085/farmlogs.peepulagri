@@ -5,7 +5,7 @@ const RemarksBlock = ({ procurementData }: any) => {
   return (
     <section className={styles.vendordetails}>
       <div className={styles.titlevendor}>
-        <FormatListBulletedIcon />
+        <FormatListBulletedIcon sx={{ fontSize: "1.2rem" }} />
         <h2 className={styles.title}>Remarks</h2>
       </div>
       <div className={styles.detailscontainer}>

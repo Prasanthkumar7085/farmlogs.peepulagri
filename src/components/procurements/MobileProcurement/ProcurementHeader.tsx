@@ -47,6 +47,7 @@ const ProcurementHeader = ({
 
   const [textFieldAutoFocus, setTextFieldAutoFocus] = useState(false);
   const [usersArray, setUsersArray] = useState<userTaskType[]>([]);
+  console.log(usersArray, "fsdd")
   const [renderField, setRenderField] = useState(true);
 
   const [state, setState] = useState(false);
@@ -58,7 +59,12 @@ const ProcurementHeader = ({
     const response = await getAllUsersService({ token: accessToken });
     if (response?.success) {
       setUsers(response?.data);
-      setSelectedValue(response?.data);
+      if (router.query.is_my_procurement) {
+        setSelectedValue([]);
+
+      } else {
+        setSelectedValue(response?.data);
+      }
     }
   };
   const setSelectedValue = (usersData: userTaskType[]) => {
@@ -147,6 +153,7 @@ const ProcurementHeader = ({
   useEffect(() => {
     if (router.query.is_my_procurement) {
       setUsersArray([]);
+
     }
   }, [router.query.is_my_procurement])
 
@@ -370,28 +377,18 @@ const ProcurementHeader = ({
               </div>
             </Badge>
           )}
-          <Badge
-            badgeContent={1}
-            color="error"
-            sx={{
-              "& .MuiBadge-badge": {
-                fontWeight: "600",
-                fontFamily: "'Inter', sans-serif",
-              },
-            }}
+
+          <span
+            className={styles.sortIconBtn}
+            onClick={() => toggleDrawer(true)}
           >
-            <span
-              className={styles.sortIconBtn}
-              onClick={() => toggleDrawer(true)}
-            >
-              <img
-                src="/mobileIcons/tasks/SortIcon.svg"
-                alt=""
-                width={"24px"}
-                className={styles.sortIconBtnImage}
-              />
-            </span>
-          </Badge>
+            <img
+              src="/mobileIcons/tasks/SortIcon.svg"
+              alt=""
+              width={"24px"}
+              className={styles.sortIconBtnImage}
+            />
+          </span>
         </div>
       </div>
 

@@ -239,6 +239,7 @@ const AddProcurementMobile = () => {
   return (
     <div>
       <ViewProcurementHeader
+        setAfterProcurement={setAfterProcurement}
         title={
           router.query.procurement_id && router.pathname.includes("edit")
             ? "Edit Procurement"

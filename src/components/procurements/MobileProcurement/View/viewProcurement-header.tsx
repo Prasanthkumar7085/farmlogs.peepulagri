@@ -10,7 +10,7 @@ import { Toaster, toast } from "sonner";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import deleteAddProcurementService from "../../../../../lib/services/ProcurementServices/deleteAddProcurementService";
 
-const ViewProcurementHeader = ({ title, data, status }: any) => {
+const ViewProcurementHeader = ({ title, data, status, setAfterProcurement }: any) => {
   const router = useRouter();
 
   const userId = useSelector(
@@ -59,7 +59,24 @@ const ViewProcurementHeader = ({ title, data, status }: any) => {
   return (
     <header className={styles.header}>
       <div className={styles.actions}>
-        <IconButton sx={{ padding: "0" }} onClick={() => router.back()}>
+        <IconButton sx={{ padding: "0" }} onClick={() => {
+          setAfterProcurement(false)
+          if (router.pathname.includes("/edit") && router.query.material) {
+            router.push(
+              `/users-procurements/${data?._id || router.query.procurement_id
+              }/edit`
+            );
+          } else if (router.pathname.includes("/add") && router.query.material) {
+            router.push(
+              `/users-procurements/add?procurement_id=${data?._id || router.query.procurement_id
+              }`
+            );
+          }
+          else {
+            router.push("/users-procurements")
+          }
+
+        }}>
           <img alt="" src="/arrowdownbold-1@2x.png" width="24px" />{" "}
         </IconButton>
         <p className={styles.headerTitle}>{title}</p>

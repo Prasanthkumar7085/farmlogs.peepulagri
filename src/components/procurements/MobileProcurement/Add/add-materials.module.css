@@ -82,7 +82,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-column-gap: 0.5rem;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .row p {

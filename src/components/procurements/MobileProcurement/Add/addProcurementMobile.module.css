@@ -54,9 +54,9 @@
 }
 
 .cancelBtn:hover {
-    border: 1px solid var(--Gray-300, #D0D5DD) !important;
-    background: var(--White, #FFF) !important;
-    color: #344054 !important;
+    border: 1px solid #D94841 !important;
+    background: transparent !important;
+    color: #D94841 !important;
 }
 
 .procurementFormBtn {
@@ -86,7 +86,11 @@
     padding: 8px 60px !important;
 
 }
-
+.submitDisabled {
+    color: #fff !important;
+        background: #d3d3d3 !important;
+        padding: 8px 60px !important;
+}
 .submitBtn:hover {
     color: #fff !important;
     border: 1px solid #D94841 !important;

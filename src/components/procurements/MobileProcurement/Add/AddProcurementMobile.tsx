@@ -338,24 +338,24 @@ const AddProcurementMobile = () => {
               >
                 {router.query.procurement_id && editFarms?.length
                   ? editFarms.map((item, index) => {
-                      return (
-                        <div
-                          key={index}
-                          style={{
-                            display: "flex",
-                            marginBottom: "5px",
-                            marginRight: "5px",
-                          }}
-                        >
-                          <Chip
-                            label={item.title}
-                            key={item._id}
-                            clickable
-                            onDelete={() => deleteEditedFarms(item._id)}
-                          />
-                        </div>
-                      );
-                    })
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          marginBottom: "5px",
+                          marginRight: "5px",
+                        }}
+                      >
+                        <Chip
+                          label={item.title}
+                          key={item._id}
+                          clickable
+                          onDelete={() => deleteEditedFarms(item._id)}
+                        />
+                      </div>
+                    );
+                  })
                   : ""}
               </div>
             </div>
@@ -446,7 +446,7 @@ const AddProcurementMobile = () => {
 
         <div className={styles.procurementFormBtn}>
           {(afterProcurement || router.query.material) &&
-          procurementData?._id ? (
+            procurementData?._id ? (
             <Button
               className={styles.cancelBtn}
               color="primary"
@@ -455,14 +455,12 @@ const AddProcurementMobile = () => {
                 setAfterProcurement(false);
                 if (router.pathname.includes("/edit")) {
                   router.push(
-                    `/users-procurements/${
-                      procurementData?._id || router.query.procurement_id
+                    `/users-procurements/${procurementData?._id || router.query.procurement_id
                     }/edit`
                   );
                 } else {
                   router.push(
-                    `/users-procurements/add?procurement_id=${
-                      procurementData._id || router.query.procurement_id
+                    `/users-procurements/add?procurement_id=${procurementData._id || router.query.procurement_id
                     }`
                   );
                 }
@@ -484,10 +482,10 @@ const AddProcurementMobile = () => {
           )}
 
           {(afterProcurement || router.query.material) &&
-          procurementData?._id ? (
+            procurementData?._id ? (
             <Button
               variant="contained"
-              className={materialCount >= 1 ? styles.submitBtn : ""}
+              className={materialCount >= 1 ? styles.submitBtn : styles.submitDisabled}
               disabled={materialCount >= 1 ? false : true}
               onClick={() => {
                 router.push("/users-procurements");

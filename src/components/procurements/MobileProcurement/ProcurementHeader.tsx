@@ -47,7 +47,6 @@ const ProcurementHeader = ({
 
   const [textFieldAutoFocus, setTextFieldAutoFocus] = useState(false);
   const [usersArray, setUsersArray] = useState<userTaskType[]>([]);
-  console.log(usersArray, "fsdd")
   const [renderField, setRenderField] = useState(true);
 
   const [state, setState] = useState(false);

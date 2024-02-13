@@ -476,7 +476,7 @@ const AddProcurementMobile = () => {
               color="primary"
               variant="outlined"
               onClick={() => {
-                router.back();
+                router.push("/users-procurements");
               }}
             >
               Cancel

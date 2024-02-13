@@ -162,7 +162,6 @@ const MobileAllProcurements = () => {
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore && data.length > 0) {
           setPage((prevPageNumber) => prevPageNumber + 1);
-          console.log(page, "Dfdss")
           getAllProcurements({
             page: page + 1,
             limit: router.query.limit as string,
@@ -190,7 +189,7 @@ const MobileAllProcurements = () => {
   useEffect(() => {
     if (router.isReady && accessToken) {
       setSearchString(router.query.search_string as string);
-
+      setPage(1)
       getAllProcurements({
         page: 1,
         limit: router.query.limit as string,
@@ -214,6 +213,7 @@ const MobileAllProcurements = () => {
     if (router.isReady && accessToken && searchString) {
       let delay = 500;
       let debounce = setTimeout(() => {
+        setPage(1)
         getAllProcurements({
           page: 1,
           limit: router.query.limit as string,
@@ -241,6 +241,7 @@ const MobileAllProcurements = () => {
       setSearchString(search);
     } else {
       setSearchString("");
+      setPage(1)
       getAllProcurements({
         page: 1,
         limit: router.query.limit as string,
@@ -266,6 +267,7 @@ const MobileAllProcurements = () => {
     isMyProcurements = false
   ) => {
     if (value.length) {
+      setPage(1)
       getAllProcurements({
         page: 1,
         limit: router.query.limit as string,
@@ -280,6 +282,7 @@ const MobileAllProcurements = () => {
         isMyProcurements: isMyProcurements,
       });
     } else {
+      setPage(1)
       getAllProcurements({
         page: 1,
         limit: router.query.limit as string,
@@ -298,6 +301,7 @@ const MobileAllProcurements = () => {
 
   //status onChange Event
   const onStatusChange = async (value: any) => {
+    setPage(1)
     getAllProcurements({
       page: 1,
       limit: router.query.limit as string,
@@ -342,8 +346,9 @@ const MobileAllProcurements = () => {
                 setData([]);
                 setUser([]);
                 setSelectedUsers([]);
+                setPage(1)
                 getAllProcurements({
-                  page: router.query.page as string,
+                  page: 1,
                   limit: router.query.limit as string,
                   search_string: router.query.search_string as string,
                   sortBy: router.query.sort_by as string,
@@ -369,6 +374,7 @@ const MobileAllProcurements = () => {
                 }
                 setData([]);
                 setUser([]);
+                setPage(1)
                 setSelectedUsers([]);
                 onUserChange([userId], true);
               }}

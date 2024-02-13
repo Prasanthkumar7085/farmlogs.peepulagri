@@ -115,7 +115,7 @@ const ViewMobileProcurement = () => {
           await afterMaterialStatusChange(true);
         }
 
-        else if (allApprovedOrNot) {
+        else if (allApprovedOrNot && response?.data?.length) {
           await procurementStatusChange("APPROVED");
           await afterMaterialStatusChange(true);
 

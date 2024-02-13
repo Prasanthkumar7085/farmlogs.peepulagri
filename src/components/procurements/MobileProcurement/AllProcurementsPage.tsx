@@ -122,7 +122,7 @@ const MobileAllProcurements = () => {
     });
 
     if (response?.success) {
-      if (page == 1) {
+      if (page == 1 || page == "1") {
         setHasMore(response?.has_more);
         setData(response.data);
       } else {

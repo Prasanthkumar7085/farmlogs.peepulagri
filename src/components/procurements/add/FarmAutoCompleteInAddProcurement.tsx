@@ -52,7 +52,6 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
           size="small"
           id="combo-box-demo"
           sx={{ width: "100%", background: "#fff" }}
-
           options={options && options?.length ? options : []}
           loading={optionsLoading}
           getOptionLabel={(option: any) =>
@@ -89,17 +88,17 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
             />
           )}
 
-        // sx={{
-        //     width: '1000%',
-        //     background: "#fff",
-        //     "& .MuiInputBase-input ": {
-        //         fontSize: "13px",
-        //         fontWeight: "400",
-        //         fontFamily: "'inter', sans-serif ",
-        //         color: "#000",
+          // sx={{
+          //     width: '1000%',
+          //     background: "#fff",
+          //     "& .MuiInputBase-input ": {
+          //         fontSize: "13px",
+          //         fontWeight: "400",
+          //         fontFamily: "'inter', sans-serif ",
+          //         color: "#000",
 
-        //     }
-        // }}
+          //     }
+          // }}
         />
       ) : (
         ""

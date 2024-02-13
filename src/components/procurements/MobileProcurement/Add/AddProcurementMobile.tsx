@@ -239,12 +239,14 @@ const AddProcurementMobile = () => {
     <div>
       <ViewProcurementHeader
         title={
-          router.query.procurement_id && router.pathname.includes("edit") ? "Edit Procurement" : "Add Procurement"
+          router.query.procurement_id && router.pathname.includes("edit")
+            ? "Edit Procurement"
+            : "Add Procurement"
         }
       />
 
       <div className={styles.addprocurment}>
-        {afterProcurement == false && !router.query.material ? (
+        {!router.query.material ? (
           <div className={styles.formfieds}>
             <div className={styles.dateofoperation}>
               <div className={styles.lable}>
@@ -336,24 +338,24 @@ const AddProcurementMobile = () => {
               >
                 {router.query.procurement_id && editFarms?.length
                   ? editFarms.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        style={{
-                          display: "flex",
-                          marginBottom: "5px",
-                          marginRight: "5px",
-                        }}
-                      >
-                        <Chip
-                          label={item.title}
-                          key={item._id}
-                          clickable
-                          onDelete={() => deleteEditedFarms(item._id)}
-                        />
-                      </div>
-                    );
-                  })
+                      return (
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                            marginBottom: "5px",
+                            marginRight: "5px",
+                          }}
+                        >
+                          <Chip
+                            label={item.title}
+                            key={item._id}
+                            clickable
+                            onDelete={() => deleteEditedFarms(item._id)}
+                          />
+                        </div>
+                      );
+                    })
                   : ""}
               </div>
             </div>
@@ -409,16 +411,15 @@ const AddProcurementMobile = () => {
                     variant="outlined"
                     inputProps={{
                       ...params.inputProps,
-
                     }}
                     sx={{ width: "100%", background: "#fff" }}
-
                   />
                 )}
                 onChange={(e, value) => setPriority(value ? value.value : null)}
-                value={options.find((option) => option.value === priority) || null}
+                value={
+                  options.find((option) => option.value === priority) || null
+                }
               />
-
             </div>
             <div className={styles.dateofoperation}>
               <div className={styles.lable}>
@@ -444,7 +445,8 @@ const AddProcurementMobile = () => {
         )}
 
         <div className={styles.procurementFormBtn}>
-          {(afterProcurement || router.query.material) && procurementData?._id ? (
+          {(afterProcurement || router.query.material) &&
+          procurementData?._id ? (
             <Button
               className={styles.cancelBtn}
               color="primary"
@@ -452,10 +454,17 @@ const AddProcurementMobile = () => {
               onClick={() => {
                 setAfterProcurement(false);
                 if (router.pathname.includes("/edit")) {
-                  router.push(`/users-procurements/${procurementData?._id || router.query.procurement_id}/edit`)
-                }
-                else {
-                  router.push(`/users-procurements/add?procurement_id=${procurementData._id || router.query.procurement_id}`)
+                  router.push(
+                    `/users-procurements/${
+                      procurementData?._id || router.query.procurement_id
+                    }/edit`
+                  );
+                } else {
+                  router.push(
+                    `/users-procurements/add?procurement_id=${
+                      procurementData._id || router.query.procurement_id
+                    }`
+                  );
                 }
               }}
             >
@@ -474,7 +483,8 @@ const AddProcurementMobile = () => {
             </Button>
           )}
 
-          {(afterProcurement || router.query.material) && procurementData?._id ? (
+          {(afterProcurement || router.query.material) &&
+          procurementData?._id ? (
             <Button
               variant="contained"
               className={materialCount >= 1 ? styles.submitBtn : ""}
@@ -490,8 +500,8 @@ const AddProcurementMobile = () => {
               className={styles.submitBtn}
               variant="contained"
               onClick={() => {
-                router.pathname.includes("edit") || router.query.procurement_id ?
-                  updateProcurement()
+                router.pathname.includes("edit") || router.query.procurement_id
+                  ? updateProcurement()
                   : addProcurement();
               }}
             >

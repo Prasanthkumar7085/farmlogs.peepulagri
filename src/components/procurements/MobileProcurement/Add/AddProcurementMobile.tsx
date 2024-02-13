@@ -16,6 +16,8 @@ import AddMaterialMobile from "./AddMaterialMobile";
 import getProcurementByIdService from "../../../../../lib/services/ProcurementServices/getProcurementByIdService";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import updateProcurementService from "../../../../../lib/services/ProcurementServices/updateProcurementService";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import deleteAddProcurementService from "../../../../../lib/services/ProcurementServices/deleteAddProcurementService";
 
 interface ApiProps {
   page: number;
@@ -28,6 +30,7 @@ const AddProcurementMobile = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [dateOfOperation, setDataOfOperation] = useState<Date | null>(null);
   const [remarks, setRemarks] = useState("");
@@ -40,6 +43,7 @@ const AddProcurementMobile = () => {
   const [editFarms, setEditFarms] = useState<
     { title: string; _id: string }[] | []
   >([]);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [priority, setPriority] = useState<any>("");
   const [procurementData, setProcurementData] = useState<any>({});
@@ -234,6 +238,32 @@ const AddProcurementMobile = () => {
       : [];
     setEditFarms(data);
   };
+
+
+  const deleteProcurementApi = async () => {
+    try {
+      const response = await deleteAddProcurementService({
+        procurementId: router.query.procurement_id,
+        token: accessToken,
+      });
+      if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.message);
+        router.push("/users-procurements");
+      } else if (response?.status == 401) {
+        toast.error(response?.message);
+      } else {
+        toast.error("Something went wrong");
+        throw response;
+      }
+
+      setDeleteLoading(true);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
 
   console.log(router.query.material, "sdfasf")
   return (
@@ -476,7 +506,11 @@ const AddProcurementMobile = () => {
               color="primary"
               variant="outlined"
               onClick={() => {
-                router.push("/users-procurements");
+                if (procurementData?._id || router.query.procurement_id) {
+                  setDeleteOpen(true);
+                } else {
+                  router.push("/users-procurements");
+                }
               }}
             >
               Cancel
@@ -509,6 +543,13 @@ const AddProcurementMobile = () => {
             </Button>
           )}
         </div>
+        <AlertDelete
+          open={deleteOpen}
+          deleteFarm={deleteProcurementApi}
+          setDialogOpen={setDeleteOpen}
+          loading={deleteLoading}
+          deleteTitleProp={"Procurement"}
+        />
         {/* <ButtonGroup fillButton="Next" buttonGroupGap="1rem" /> */}
       </div>
       <LoadingComponent loading={loading} />

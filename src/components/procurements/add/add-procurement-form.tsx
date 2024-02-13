@@ -55,6 +55,7 @@ const AddProcurementForm = () => {
   const [afterProcurement, setAfterProcurement] = useState<any>(false);
 
   const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
+    setOptionsLoading(true)
     let location_id = "";
     try {
       let response = await ListAllFarmForDropDownService(
@@ -67,6 +68,10 @@ const AddProcurementForm = () => {
       }
     } catch (err) {
       console.error(err);
+    }
+    finally {
+      setOptionsLoading(false)
+
     }
   };
 
@@ -113,6 +118,7 @@ const AddProcurementForm = () => {
         toast.success(response?.message);
         setProcurementData(response?.data);
         setAfterProcurement(true);
+        router.push(`/procurements/add?material=true&procurement_id=${response?.data?._id}`)
 
         // setTimeout(() => {
         //   router.push(`/procurements/${response?.data?._id}/edit`);
@@ -165,6 +171,12 @@ const AddProcurementForm = () => {
         toast.success(response?.message);
         setFarm([]);
         setAfterProcurement(true);
+        if (router.pathname.includes("/edit")) {
+          router.push(`/procurements/${procurementData?._id || router.query.procurement_id}/edit?material=true`)
+        }
+        else {
+          router.push(`/procurements/add?material=true&procurement_id=${procurementData?._id || router.query.procurement_id}`)
+        }
         await getProcurementData();
         setIsDisabled(true);
       } else if (response.status == 422) {
@@ -225,7 +237,7 @@ const AddProcurementForm = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         toast.success(response?.message);
-        router.back();
+        router.push("/procurements");
       } else if (response?.status == 401) {
         toast.error(response?.message);
       } else if (response?.status == 403) {
@@ -261,7 +273,7 @@ const AddProcurementForm = () => {
 
   return (
     <div style={{ paddingTop: "2rem" }}>
-      <AddProcurementHeader afterProcurement={afterProcurement} />
+      <AddProcurementHeader data={procurementData} afterProcurement={afterProcurement} setAfterProcurement={setAfterProcurement} setDialogOpen={setDeleteOpen} />
 
       <form
         className={styles.addprocurementform}
@@ -269,7 +281,7 @@ const AddProcurementForm = () => {
       >
         <div style={{ width: "100%" }}>
           <div style={{ padding: "1rem" }}>
-            {afterProcurement ? (
+            {router.query.material && router.isReady ? (
               <MaterialsRequired
                 procurementData={procurementData}
                 checkMaterialsListCount={checkMaterialsListCount}
@@ -304,13 +316,25 @@ const AddProcurementForm = () => {
 
             <div className={styles.formButtons}>
               <div className={styles.procurementFormBtn}>
-                {afterProcurement && procurementData?._id ? (
+                {(afterProcurement || router.query.material) &&
+                  procurementData?._id ? (
                   <Button
                     className={styles.cancelBtn}
                     color="primary"
                     variant="outlined"
                     onClick={() => {
                       setAfterProcurement(false);
+                      if (router.pathname.includes("/edit")) {
+                        router.push(
+                          `/procurements/${procurementData?._id || router.query.procurement_id
+                          }/edit`
+                        );
+                      } else {
+                        router.push(
+                          `/procurements/add?procurement_id=${procurementData._id || router.query.procurement_id
+                          }`
+                        );
+                      }
                     }}
                   >
                     Previous
@@ -324,7 +348,7 @@ const AddProcurementForm = () => {
                       if (procurementData?._id || router.query.procurement_id) {
                         setDeleteOpen(true);
                       } else {
-                        router.back();
+                        router.push("/procurements");
                       }
                     }}
                   >
@@ -342,7 +366,7 @@ const AddProcurementForm = () => {
                     }
                     disabled={materialCount >= 1 ? false : true}
                     onClick={() => {
-                      router.back();
+                      router.push("/procurements");
                     }}
                   >
                     Submit
@@ -352,7 +376,7 @@ const AddProcurementForm = () => {
                     className={styles.submitBtn}
                     variant="contained"
                     onClick={() => {
-                      router.query.procurement_id || procurementData?._id
+                      router.pathname.includes("edit") || router.query.procurement_id
                         ? updateProcurement()
                         : addProcurement();
                     }}

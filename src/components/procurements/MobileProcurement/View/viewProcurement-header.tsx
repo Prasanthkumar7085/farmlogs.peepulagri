@@ -73,10 +73,16 @@ const ViewProcurementHeader = ({ title, data, status, setAfterProcurement }: any
             );
           }
           else {
-            router.push("/users-procurements")
+            if (data?._id || router.query.procurement_id) {
+              setDialogOpen(true);
+            } else {
+              router.push("/users-procurements");
+            }
           }
+        }
+        }
 
-        }}>
+        >
           <img alt="" src="/arrowdownbold-1@2x.png" width="24px" />{" "}
         </IconButton>
         <p className={styles.headerTitle}>{title}</p>
@@ -154,7 +160,7 @@ const ViewProcurementHeader = ({ title, data, status, setAfterProcurement }: any
         />
         <Toaster richColors position="top-right" closeButton />
       </div>
-    </header>
+    </header >
   );
 };
 

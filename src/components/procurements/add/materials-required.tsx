@@ -415,22 +415,24 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
           <div className={styles.eachMaterialBlock}>
             <h6 className={styles.label}>Material Available (Qty)(optional)</h6>
             <div style={{ display: "flex" }}>
-              <TextField
-                size="small"
-                placeholder="Availble"
-                variant="outlined"
-                value={availableQty}
-                onInput={handleInput}
-                onChange={(e: any) => setAvailableQty(e.target.value)}
-                sx={{
-                  width: "100%",
-                  background: "#fff",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderWidth: "1px 0 1px 1px !important",
-                    borderRadius: "4px 0 0 4px !important",
-                  },
-                }}
-              />
+              <div>
+                <TextField
+                  size="small"
+                  placeholder="Availble"
+                  variant="outlined"
+                  value={availableQty}
+                  onInput={handleInput}
+                  onChange={(e: any) => setAvailableQty(e.target.value)}
+                  sx={{
+                    width: "100%",
+                    background: "#fff",
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderWidth: "1px 0 1px 1px !important",
+                      borderRadius: "4px 0 0 4px !important",
+                    },
+                  }}
+                />
+              </div>
               <FormControl variant="outlined" sx={{ width: "100%" }}>
                 <InputLabel color="primary" />
                 <Select
@@ -438,7 +440,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                     background: "#fff",
                     "& .MuiOutlinedInput-notchedOutline": {
                       borderWidth: "1px 1px 1px 0 !important",
-                      borderRadius: "0 4px 4px 0 !important",
+                      borderRadius: "1px 4px 4px 0 !important",
                     },
                   }}
                   size="small"
@@ -450,6 +452,17 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
               </FormControl>
+            </div>
+
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              <ErrorMessages
+                errorMessages={errorMessages}
+                keyname={"available_qty"}
+              />
+              <ErrorMessages
+                errorMessages={errorMessages}
+                keyname={"required_units"}
+              />
             </div>
           </div>
         </div>
@@ -540,10 +553,10 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                             <Tooltip title={item?.name ? item?.name : ""}>
                               {item?.name?.length > 20
                                 ? item?.name?.slice(0, 1).toUpperCase() +
-                                  item?.name?.slice(1, 15) +
-                                  "..."
+                                item?.name?.slice(1, 15) +
+                                "..."
                                 : item?.name?.slice(0, 1).toUpperCase() +
-                                  item?.name?.slice(1)}
+                                item?.name?.slice(1)}
                             </Tooltip>
                           </TableCell>
                           <TableCell

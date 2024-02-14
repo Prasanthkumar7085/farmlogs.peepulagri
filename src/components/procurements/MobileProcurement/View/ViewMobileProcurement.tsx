@@ -26,6 +26,7 @@ import styles from "./ViewProcurementMobile.module.css";
 import MobileAddMaterialDrawer from "@/components/Core/MobileAddMaterialDrawer";
 import { removeItems } from "@/Redux/Modules/Otp";
 import RemarksBlock from "./RemarksBlock";
+import ViewProcurementHeaderPage from "./ViewProcurementHeader";
 
 const ViewMobileProcurement = () => {
   const router = useRouter();
@@ -279,7 +280,7 @@ const ViewMobileProcurement = () => {
 
   return (
     <div>
-      <ViewProcurementHeader data={data} title={"View Procurement"} />
+      <ViewProcurementHeaderPage data={data} title={"View Procurement"} />
       <div className={styles.viewProcurementPage}>
         {data?.status ? (
           <Stack

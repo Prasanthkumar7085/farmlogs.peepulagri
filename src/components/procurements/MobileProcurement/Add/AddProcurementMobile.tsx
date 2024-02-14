@@ -89,10 +89,6 @@ const AddProcurementMobile = () => {
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      if (router.query.procurement_id) {
-        getProcurementData();
-        setFarm([])
-      }
       let delay = 500;
       let debounce = setTimeout(() => {
         getFarmOptions({ searchString: searchString });
@@ -100,6 +96,13 @@ const AddProcurementMobile = () => {
       return () => clearTimeout(debounce);
     }
   }, [router.isReady, accessToken, searchString]);
+
+  useEffect(() => {
+    if (router.query.procurement_id) {
+      getProcurementData();
+      setFarm([]);
+    }
+  }, []);
 
   const getProcurementData = async () => {
     setLoading(true);

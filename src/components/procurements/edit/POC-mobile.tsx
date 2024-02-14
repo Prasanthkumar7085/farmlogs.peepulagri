@@ -148,7 +148,7 @@ const POCMobile = ({
   return (
     <div style={{ width: "100%" }}>
       <div className={styles.personofcontactMobile}>
-        <h3 className={styles.labelMobile}>Person of Contact (POC)</h3>
+        <h3 className={styles.labelMobile}>Point of Contact (POC)</h3>
         <div className={styles.pocSelectBlockMobile} style={{ display: "grid", gridTemplateColumns: poc?.name || procurementData?.point_of_contact?._id ? "1fr 80px" : "1fr" }}>
           {poc?.name || procurementData?.point_of_contact?._id ? (
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>

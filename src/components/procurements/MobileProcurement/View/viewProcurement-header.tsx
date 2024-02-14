@@ -73,12 +73,10 @@ const ViewProcurementHeader = ({ title, data, status, setAfterProcurement }: any
             );
           }
           else {
-            if (data?._id || router.query.procurement_id) {
-              setDialogOpen(true);
-            } else {
-              router.push("/users-procurements");
-            }
+
+            router.push("/users-procurements");
           }
+
         }
         }
 

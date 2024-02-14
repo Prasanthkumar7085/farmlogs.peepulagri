@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { Button, Typography } from '@mui/material';
+import { Button, ButtonBase, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from "./google-map.module.css";
 import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
@@ -8,9 +8,11 @@ import { useSelector } from 'react-redux';
 import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
 import { Toaster, toast } from 'sonner';
 import LoadingComponent from '@/components/Core/LoadingComponent';
+import FarmsListDrawer from './FarmsListDrawer';
 const GoogleMapMarkerComponent = () => {
     const router = useRouter();
     const [data, setData] = useState<any>();
+    const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState(true);
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
@@ -32,6 +34,7 @@ const GoogleMapMarkerComponent = () => {
     const autocompleteRef: any = useRef(null);
 
     const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
+
 
 
     //add custom control for the live location button
@@ -232,6 +235,10 @@ const GoogleMapMarkerComponent = () => {
         // Set the polygon on the map
         newPolygon.setMap(map);
         setPolygon(newPolygon);
+
+        const markerPosition = { lat: polygonCoords[0]?.lat, lng: polygonCoords[0]?.lng }; // Replace with your desired coordinates
+        const markerTitle = "Hello World!";
+        const marker = createMarker(map, maps, markerPosition, markerTitle);
     };
 
 
@@ -306,6 +313,22 @@ const GoogleMapMarkerComponent = () => {
     }
 
 
+
+    //create marker 
+    const createMarker = (map: any, maps: any, position: { lat: number, lng: number }, title: string) => {
+        const marker = new maps.Marker({
+            position: position,
+            map: map,
+            title: title,
+        });
+
+        marker.addListener("click", () => {
+            console.log("Marker clicked!");
+        });
+
+        return marker;
+    };
+
     //call the single farms details
     useEffect(() => {
         if (router.isReady && accessToken) {
@@ -355,7 +378,7 @@ const GoogleMapMarkerComponent = () => {
 
     return (
         <div>
-
+            <Button onClick={() => setDrawerOpen(true)}>asfasd</Button>
             <div style={{ width: '100%', height: "100vh", marginTop: "5px" }}>
                 <GoogleMapReact
                     bootstrapURLKeys={{
@@ -419,6 +442,7 @@ const GoogleMapMarkerComponent = () => {
             </div>
 
             <LoadingComponent loading={loading} />
+            <FarmsListDrawer setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen} />
             <Toaster richColors position="top-right" closeButton />
         </div>
     );

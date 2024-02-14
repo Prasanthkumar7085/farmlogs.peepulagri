@@ -1,0 +1,109 @@
+.polygonIcon {
+  width: 3.09rem;
+  position: relative;
+  height: 3.13rem;
+}
+.polygoncontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.northSideChilli {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: inherit;
+  line-height: 100%;
+  font-weight: 400;
+  font-family: inherit;
+}
+.morebuttonoutline {
+  width: 1.25rem;
+  position: relative;
+}
+.nameandaction {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.88rem;
+}
+.cropName,
+.morenumber {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+  font-family: inherit;
+}
+.cropName {
+  font-size: inherit;
+  font-weight: 400;
+}
+.morenumber {
+  font-size: 0.63rem;
+  font-weight: 500;
+  color: #45a845;
+}
+.cropscontainer {
+  width: 11.19rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 0.25rem;
+}
+.acres {
+  margin: 0;
+  position: relative;
+  font-size: 0.75rem;
+  line-height: 100%;
+  font-weight: 500;
+  color: #000;
+}
+.cropsacres {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: #6a7185;
+}
+.createddate {
+  margin: 0;
+  position: relative;
+  line-height: 100%;
+}
+.locatedate {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+.detailscontainer,
+.farmcard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.detailscontainer {
+  flex: 1;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.farmcard {
+  align-self: stretch;
+  border-radius: 4px;
+  background-color: #fee;
+  flex-direction: row;
+  padding: 0.63rem;
+  gap: 1rem;
+  text-align: left;
+  font-size: 1rem;
+  color: #000;
+  font-family: Inter;
+}

@@ -114,6 +114,9 @@ const ProcurementDetailsMobile = ({
       });
       if (response.success) {
         toast.success(response.message);
+        setSelectMaterial(false);
+        handleClose();
+        dispatch(removeItems([]));
         await getAllProcurementMaterials();
       }
     } catch (err) {

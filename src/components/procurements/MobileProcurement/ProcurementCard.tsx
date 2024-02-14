@@ -73,7 +73,7 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
     <div className={styles.allProcurementContainer}>
       {data?.length ? (
         data?.map((item: any, index: any) => {
-          if (data.length === index + 1) {
+          if (data.length === index + 1 && hasMore == true) {
             return (
               <div
                 className={styles.procurementcard}

@@ -266,8 +266,9 @@ const ProcurementHeader = ({
             <TextField
               value={search}
               onChange={(e) => {
-                setSearch(e.target.value);
-                onChangeSearch(e.target.value);
+                const newValue = e.target.value.replace(/^\s+/, "");
+                setSearch(newValue);
+                onChangeSearch(newValue);
               }}
               color="primary"
               size="small"

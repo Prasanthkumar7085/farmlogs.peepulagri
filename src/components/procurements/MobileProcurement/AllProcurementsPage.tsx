@@ -130,7 +130,7 @@ const MobileAllProcurements = () => {
         setData([...data, ...response.data]);
       }
     } else {
-      setHasMore(false);
+      setHasMore(response?.has_more);
       setData(response.data);
     }
     if (response.status == 401) {
@@ -160,9 +160,10 @@ const MobileAllProcurements = () => {
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore && data.length > 0) {
           setPage((prevPageNumber) => prevPageNumber + 1);
+
           getAllProcurements({
             page: page + 1,
-            limit: router.query.limit as string,
+            limit: 15,
             search_string: router.query.search_string as string,
             sortBy: router.query.sort_by as string,
             sortType: router.query.sort_type as string,
@@ -190,7 +191,7 @@ const MobileAllProcurements = () => {
       setPage(1)
       getAllProcurements({
         page: 1,
-        limit: router.query.limit as string,
+        limit: 15,
         search_string: router.query.search_string,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
@@ -214,7 +215,7 @@ const MobileAllProcurements = () => {
         setPage(1)
         getAllProcurements({
           page: 1,
-          limit: router.query.limit as string,
+          limit: 15,
           search_string: searchString,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
@@ -236,13 +237,13 @@ const MobileAllProcurements = () => {
   //on change the search string event
   const onChangeSearch = (search: string) => {
     if (search) {
-      setSearchString(search);
+      setSearchString(search.trim());
     } else {
       setSearchString("");
       setPage(1)
       getAllProcurements({
         page: 1,
-        limit: router.query.limit as string,
+        limit: 15,
         search_string: "",
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
@@ -268,7 +269,7 @@ const MobileAllProcurements = () => {
       setPage(1)
       getAllProcurements({
         page: 1,
-        limit: router.query.limit as string,
+        limit: 15,
         search_string: router.query.search_string as string,
         createdAt: dateFilter,
         sortBy: router.query.sort_by as string,
@@ -283,7 +284,7 @@ const MobileAllProcurements = () => {
       setPage(1)
       getAllProcurements({
         page: 1,
-        limit: router.query.limit as string,
+        limit: 15,
         search_string: router.query.search_string as string,
         createdAt: dateFilter,
         sortBy: router.query.sort_by as string,
@@ -302,7 +303,7 @@ const MobileAllProcurements = () => {
     setPage(1)
     getAllProcurements({
       page: 1,
-      limit: router.query.limit as string,
+      limit: 15,
       search_string: router.query.search_string as string,
       createdAt: dateFilter,
       sortBy: router.query.sort_by as string,
@@ -347,7 +348,7 @@ const MobileAllProcurements = () => {
                 setPage(1)
                 getAllProcurements({
                   page: 1,
-                  limit: router.query.limit as string,
+                  limit: 15,
                   search_string: router.query.search_string as string,
                   sortBy: router.query.sort_by as string,
                   sortType: router.query.sort_type as string,

@@ -226,7 +226,7 @@ const ProcurementDetailsMobile = ({
           </div>
           <IconButton
             sx={{
-              display: materials[0]?.approved_by?.name ? "none!important" : "",
+              display: procurementData?.status == "PENDING" ? "" : "none!important",
             }}
             onClick={(e) => {
               handleClick(e);

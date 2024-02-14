@@ -122,21 +122,12 @@ const MobileAllProcurements = () => {
     });
 
     if (response?.success) {
-      if (response?.has_more) {
-        if (page !== 1) {
-          setHasMore(response?.has_more);
-          setData([...data, ...response.data]);
-        } else {
-          setHasMore(response?.has_more);
-          setData(response.data);
-        }
-      } else if (page == 1) {
-        setData(response?.data)
-        setHasMore(response?.has_more)
+      if (page == 1 || page == "1") {
+        setHasMore(response?.has_more);
+        setData(response.data);
       } else {
-        setHasMore(false);
-        let temp = [...data, ...response.data];
-        setData(temp);
+        setHasMore(response?.has_more);
+        setData([...data, ...response.data]);
       }
     } else {
       setHasMore(false);

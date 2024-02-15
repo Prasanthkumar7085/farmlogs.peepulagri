@@ -5,64 +5,29 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import styles from "./farmsDrawer.module.css";
+import styles from "./farmsBlock.module.css";
 import { Clear } from "@mui/icons-material";
 import FarmListCard from "./FarmListCard";
 import { useEffect, useState } from "react";
 import ListAllFarmForDropDownService from "../../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 
 interface ApiProps {
   page: number;
   searchString: string;
 }
 
-const FarmsListBlock = ({ drawerOpen, setDrawerOpen }: any) => {
+const FarmsListBlock = ({
+  getFarmLocation,
+  farmOptions,
+  searchString,
+  setSearchString,
+}: any) => {
   const [loading, setLoading] = useState(false);
-  const [farmOptions, setFarmOptions] = useState([]);
-  const [searchString, setSearchString] = useState("");
 
   const router = useRouter();
-
-  const accessToken = useSelector(
-    (state: any) => state.auth.userDetails?.access_token
-  );
-
-  const getFarmOptions = async ({ searchString }: Partial<ApiProps>) => {
-    setLoading(true);
-    let location_id = "";
-    try {
-      let response = await ListAllFarmForDropDownService(
-        searchString as string,
-        accessToken,
-        location_id
-      );
-      if (response.success) {
-        setFarmOptions(response?.data);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      let delay = 500;
-      let debounce = setTimeout(() => {
-        getFarmOptions({ searchString: searchString });
-      }, delay);
-      return () => clearTimeout(debounce);
-    }
-  }, [router.isReady, accessToken, searchString]);
-
-  useEffect(() => {
-    if (accessToken && router.isReady) {
-      getFarmOptions({});
-    }
-  }, []);
 
   return (
     <div className={styles.detailsslidebarfarmslist}>
@@ -77,6 +42,7 @@ const FarmsListBlock = ({ drawerOpen, setDrawerOpen }: any) => {
             color="primary"
             size="medium"
             placeholder="Search farm"
+            type="search"
             variant="outlined"
             value={searchString}
             onChange={(e) => {
@@ -97,16 +63,10 @@ const FarmsListBlock = ({ drawerOpen, setDrawerOpen }: any) => {
           >
             Filter
           </Button>
-          <Button
-            disableElevation={true}
-            color="primary"
-            variant="contained"
-            sx={{ borderRadius: "0px 0px 0px 0px" }}
-          />
         </div>
       </header>
       <div className={styles.listview}>
-        <FarmListCard data={farmOptions} />
+        <FarmListCard data={farmOptions} getFarmLocation={getFarmLocation} />
       </div>
       <div className={styles.buttoncontainer}>
         <Button
@@ -119,6 +79,7 @@ const FarmsListBlock = ({ drawerOpen, setDrawerOpen }: any) => {
           Add Farm
         </Button>
       </div>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

@@ -3,14 +3,14 @@ import { Button, Icon, IconButton } from "@mui/material";
 import styles from "./farmListCard.module.css";
 import timePipe from "@/pipes/timePipe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-const FarmListCard = ({ data }: any) => {
+const FarmListCard = ({ data, getFarmLocation }: any) => {
   return (
     <>
       {data?.map((item: any, index: number) => {
         return (
           <div className={styles.farmcard} key={index}>
             <div className={styles.polygoncontainer}>
-              <img className={styles.polygonIcon} alt="" src="/polygon.svg" />
+              <img className={styles.polygonIcon} alt="" src="/marker.svg" />
             </div>
             <div className={styles.detailscontainer}>
               <div className={styles.nameandaction}>
@@ -38,7 +38,13 @@ const FarmListCard = ({ data }: any) => {
               <div className={styles.locatedate}>
                 <IconButton
                   color="primary"
-                  sx={{ borderRadius: "0px 0px 0px 0px" }}
+                  sx={{
+                    borderRadius: "0px 0px 0px 0px",
+                    display: item?.geometry?.coordinates?.length ? "" : "none",
+                  }}
+                  onClick={() => {
+                    getFarmLocation(item.geometry.coordinates, item._id);
+                  }}
                 >
                   <LocationOnIcon />
                 </IconButton>

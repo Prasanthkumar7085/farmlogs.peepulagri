@@ -1,0 +1,170 @@
+.label {
+  color: #000;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 3.25vw, 14px);
+  font-weight: 500;
+}
+
+.inputfarmname p {
+  margin: 0;
+}
+
+.farmname {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.text {
+  color: #101828;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(14px, 3.5vw, 16px);
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.supportingText {
+  color: #6A7185;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(12px, 3.2vw, 14px);
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.locationheading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--gap-5xs);
+}
+
+.button {
+  text-transform: capitalize;
+  color: #FFF;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(10px, 3vw, 12px);
+  font-weight: 500;
+  border-radius: 4px;
+  border: 1px solid #05A155;
+  background: #05A155;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: none;
+}
+
+.addlocationbutton {
+  display: flex;
+  align-items: center;
+
+}
+
+.formfields {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+  width: 100%;
+}
+
+.back {
+  border-radius: 4px !important;
+  border: 1px solid #d94841 !important;
+  background: #FFF !important;
+  box-shadow: none !important;
+  padding: 8px 20px !important;
+  color: #d94841 !important;
+  font-family: Inter !important;
+  font-size: clamp(15px, 3.5vw, 16px) !important;
+  font-weight: 400 !important;
+  text-transform: capitalize !important;
+
+}
+
+.submit {
+  border-radius: 4px !important;
+  border: 1px solid #d94841 !important;
+  background: #d94841 !important;
+  box-shadow: 4px 4px 10px 0px #0202460d !important;
+  color: #FFF !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(15px, 3.5vw, 16px) !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
+}
+
+.addfarmform,
+.buttons {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.addfarmform {
+  flex-direction: column;
+  align-items: center;
+}
+
+.addfarmform {
+  border-radius: var(--br-5xs) var(--br-5xs) 0 0;
+  align-items: flex-start;
+  padding: 2rem 1rem 0;
+  gap: var(--gap-13xl);
+  text-align: left;
+  font-size: var(--text-sm-medium-size);
+  color: #fff;
+  font-family: var(--text-sm-medium);
+}
+
+.addLocationBtn {
+  background-color: #CCEBCC;
+  box-shadow: 0px 0px 0px 0.5px #05a155;
+  color: #05A155;
+  padding: 6px 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.iconsiconArrowLeft {
+  width: 25px;
+}
+
+.viewFarm {
+  color: #fff !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: clamp(18px, 3.5vw, 20px) !important;
+  font-weight: 500 !important;
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.headericon {
+  width: 32px;
+  text-align: end;
+}
+
+.header {
+  background-color: #45A845;
+  justify-content: space-between;
+  padding: 16px 1rem;
+}

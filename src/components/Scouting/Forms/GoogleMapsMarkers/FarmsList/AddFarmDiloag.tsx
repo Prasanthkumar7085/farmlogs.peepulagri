@@ -28,6 +28,8 @@ const AddFarmDilog = ({
   drawerOpen,
   polygonCoords,
   setPolygonCoords,
+  getFarmOptions,
+  setPolygon
 }: any) => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -67,7 +69,10 @@ const AddFarmDilog = ({
     if (response?.success) {
       setAlertMessage(response?.message);
       setAlertType(true);
+      setDrawerOpen(false);
       setPolygonCoords([]);
+      getFarmOptions({})
+      setPolygon(null)
     } else if (response?.status == 422) {
       if (response?.errors) {
         setErrorMessages(response?.errors);
@@ -87,6 +92,10 @@ const AddFarmDilog = ({
       title: title,
       area: area,
       location_id: location_id ? location_id : "",
+      geometry: {
+        type: "Polygon",
+        coordinates: polygonCoords.map((obj: any) => Object.values(obj)),
+      },
     };
 
     let response = await addFarmService(obj, accessToken);
@@ -98,6 +107,10 @@ const AddFarmDilog = ({
       title: data?.title,
       area: data?.area,
       location_id: data?.location_id,
+      geometry: {
+        type: "Polygon",
+        coordinates: polygonCoords.map((obj: any) => Object.values(obj)),
+      },
     };
 
     Object.keys(obj).map((item: string) => {

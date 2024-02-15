@@ -13,6 +13,7 @@ import FarmsListBlock from "./FarmsList/FarmsListBlock";
 import AddFarmDilog from "./FarmsList/AddFarmDiloag";
 import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 const GoogleMapMarkerComponent = () => {
+
   const router = useRouter();
   const [data, setData] = useState<any>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
@@ -40,6 +41,7 @@ const GoogleMapMarkerComponent = () => {
   const [selectedPolygon, setSelectedPolygon] = useState();
   const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
   const [viewPolygonsCoord, setViewPolygonsCoord] = useState<any>([]);
+  const [markerObjects, setMarkerObjects] = useState([]);
 
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
@@ -254,71 +256,81 @@ const GoogleMapMarkerComponent = () => {
     }, 0.1);
     newPolygon.setMap(map);
     setPolygon(newPolygon);
-
-    const markerPosition = {
-      lat: polygonCoords[0]?.lat,
-      lng: polygonCoords[0]?.lng,
-    }; // Replace with your desired coordinates
-    const markerTitle = "Hello World!";
-    const marker = createMarker(map, maps, markerPosition, markerTitle);
   };
 
-  const [markerObjects, setMarkerObjects] = useState([]);
 
-  // useEffect(() => {
-  //   if (map && googleMaps && viewPolygonsCoord.length) {
-  //     // Create markers and polygons for each item in the data array
-  //     const newMarkers: any = [];
-  //     const newPolygons = viewPolygonsCoord
-  //       .map((item: any) => {
-  //         if (item?.cor?.length === 0) return null; // Skip if there are no coordinates
+  //get the farm details
+  const getFarmDataById = async () => {
+    const response: any = await getFarmByIdService(
+      router.query.farm_id as string,
+      accessToken as string
+    );
 
-  //         // Create polygon for the coordinates
-  //         const polygon = new googleMaps.Polygon({
-  //           paths: item?.cor?.map((cor: any) => ({ lat: cor[0], lng: cor[1] })),
-  //           strokeColor: "#FF0000",
-  //           strokeOpacity: 0.8,
-  //           strokeWeight: 2,
-  //           fillColor: "#FF0000",
-  //           fillOpacity: 0.35,
-  //           map: null,
-  //         });
+    if (response?.success) {
+      setData(response?.data);
+    }
+    setLoading(false);
+  };
 
-  //         // Calculate centroid of the polygon
-  //         const centroid = calculatePolygonCentroid(item.cor);
+  //go to the farm location when the farm was selected
+  const getFarmLocation = (value: any, id: any) => {
+    setSelectedPolygon(id);
+  }
 
-  //         // Create marker at the centroid
-  //         const marker = new googleMaps.Marker({
-  //           position: { lat: centroid.lat, lng: centroid.lng },
-  //           map: map,
-  //         });
-  //         newMarkers.push(marker); // Push marker to the markers array
+  //get the farm list 
+  const getFarmOptions = async ({ searchString }: any) => {
+    setLoading(true);
+    let location_id = "";
+    try {
+      let response = await ListAllFarmForDropDownService(
+        searchString as string,
+        accessToken,
+        location_id
+      );
+      if (response.success) {
+        setFarmOptions(response?.data);
+        const newData = response.data.map((item: any) => ({
+          _id: item._id,
+          cor: item?.geometry?.coordinates?.length
+            ? item?.geometry?.coordinates
+            : [],
+        }));
+        setViewPolygonsCoord(newData);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  //         return polygon;
-  //       })
-  //       .filter(Boolean); // Filter out null polygons
 
-  //     // Set the markers and polygons
-  //     setMarkerObjects(newMarkers);
-  //     setViewPolygonsCoord(newPolygons);
-  //   }
-  // }, [map, googleMaps, viewPolygonsCoord]);
+  const centerMapToPlace = (place: any) => {
+    if (mapRef.current && place && place.geometry && place.geometry.location) {
+      mapRef.current.panTo(place.geometry.location);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (map && googleMaps && selectedPolygon !== null) {
-  //     // Display the selected polygon on the map and zoom to fit it
-  //     const selectedPoly = viewPolygonsCoord.find(
-  //       (item: any) => item._id == selectedPolygon
-  //     );
-  //     const bounds = new googleMaps.LatLngBounds();
-  //     selectedPoly?.getPath().forEach((coord: any) => {
-  //       bounds.extend(coord);
-  //     });
-  //     map.fitBounds(bounds);
-  //   }
-  // }, [map, googleMaps, selectedPolygon]);
+  //drodown marker
+  const Marker = ({ text }: any) => (
+    <div
+      style={{
+        color: "white",
+        background: "grey",
+        padding: "5px 10px",
+        display: "inline-flex",
+        textAlign: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: "50%",
+        transform: "translate(-50%, -50%)",
+      }}
+    >
+      {text}
+    </div>
+  );
 
-  // Function to calculate centroid of a polygon
+  //calculate the centroid of the polygon
   const calculatePolygonCentroid = (coordinates: any) => {
     let x = 0,
       y = 0;
@@ -350,38 +362,76 @@ const GoogleMapMarkerComponent = () => {
     }
   };
 
-  //get the farm details
-  const getFarmDataById = async () => {
-    const response: any = await getFarmByIdService(
-      router.query.farm_id as string,
-      accessToken as string
-    );
 
-    if (response?.success) {
-      setData(response?.data);
+  useEffect(() => {
+    if (map && googleMaps && viewPolygonsCoord.length) {
+      console.log(viewPolygonsCoord, "sdf")
+      // Create markers and polygons for each item in the data array
+      const newMarkers: any = [];
+      const newPolygons = viewPolygonsCoord
+        .map((item: any) => {
+          if (item?.cor?.length === 0) return null; // Skip if there are no coordinates
+
+          // // Create polygon for the coordinates
+          const polygon = new googleMaps.Polygon({
+            paths: item?.cor?.map((cor: any) => ({ lat: cor[0], lng: cor[1] })),
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            map: map,
+          });
+
+          // Calculate centroid of the polygon
+          const centroid = calculatePolygonCentroid(item.cor);
+
+          // Create marker at the centroid
+          const marker = new googleMaps.Marker({
+            position: { lat: centroid.lat, lng: centroid.lng },
+            map: map,
+          });
+          newMarkers.push(marker); // Push marker to the markers array
+
+          return polygon;
+        })
+        .filter(Boolean); // Filter out null polygons
+
+      // Set the markers and polygons
+      setMarkerObjects(newMarkers);
     }
-    setLoading(false);
-  };
+  }, [map, googleMaps, viewPolygonsCoord]);
 
-  //create marker
-  const createMarker = (map: any, maps: any, position: any, title: string) => {
-    const marker = new maps.Marker({
-      position: position,
-      map: map,
-      title: title,
-    });
+  //redirect to the polygon
+  useEffect(() => {
+    if (map && googleMaps && selectedPolygon !== null) {
+      // // Display the selected polygon on the map and zoom to fit it
+      const selectedPoly = viewPolygonsCoord.find(
+        (item: any) => item._id == selectedPolygon
+      );
+      const bounds = new googleMaps.LatLngBounds();
+      selectedPoly?.cor?.forEach((coord: any) => {
+        const latLng = new googleMaps.LatLng(coord[0], coord[1]);
+        bounds.extend(latLng);
+      });
+      map.fitBounds(bounds);
+    }
+  }, [map, googleMaps, selectedPolygon]);
 
-    marker.addListener("click", () => {
-      console.log("Marker clicked!");
-    });
-
-    return marker;
-  };
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      let delay = 500;
+      let debounce = setTimeout(() => {
+        getFarmOptions({ searchString: searchString });
+      }, delay);
+      return () => clearTimeout(debounce);
+    }
+  }, [router.isReady, accessToken, searchString]);
 
   //call the single farms details
   useEffect(() => {
     if (router.isReady && accessToken) {
-      getFarmDataById();
+      // getFarmDataById();
     }
   }, [router.isReady, accessToken]);
 
@@ -397,99 +447,9 @@ const GoogleMapMarkerComponent = () => {
     }
   }, []);
 
-  const centerMapToPlace = (place: any) => {
-    if (mapRef.current && place && place.geometry && place.geometry.location) {
-      mapRef.current.panTo(place.geometry.location);
-    }
-  };
-
-  //drodown marker
-  const Marker = ({ text }: any) => (
-    <div
-      style={{
-        color: "white",
-        background: "grey",
-        padding: "5px 10px",
-        display: "inline-flex",
-        textAlign: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "50%",
-        transform: "translate(-50%, -50%)",
-      }}
-    >
-      {text}
-    </div>
-  );
-
-  //go to the farm location when the farm was selected
-  const getFarmLocation = (value: any, id: any) => {
-    let updatedArray = value.map((item: any) => {
-      return {
-        lat: item[0],
-        lng: item[1],
-      };
-    });
-
-    setSelectedPolygon(id);
-    // setLatLong({ lat: temp[0], long: temp[1] });
-  };
-
-  const calculateCenterOfPolygon = (coordinates: any) => {
-    if (coordinates.length === 0) {
-      return null; // Handle empty array case
-    }
-
-    // Calculate average latitude and longitude
-    const avgLat =
-      coordinates.reduce((sum: any, coord: any) => sum + coord.lat, 0) /
-      coordinates.length;
-    const avgLng =
-      coordinates.reduce((sum: any, coord: any) => sum + coord.lng, 0) /
-      coordinates.length;
-
-    return { lat: avgLat, lng: avgLng };
-  };
-
-  const getFarmOptions = async ({ searchString }: any) => {
-    setLoading(true);
-    let location_id = "";
-    try {
-      let response = await ListAllFarmForDropDownService(
-        searchString as string,
-        accessToken,
-        location_id
-      );
-      if (response.success) {
-        setFarmOptions(response?.data);
-        const newData = response.data.map((item: any) => ({
-          _id: item._id,
-          cor: item?.geometry?.coordinates?.length
-            ? item?.geometry?.coordinates
-            : [],
-        }));
-        setViewPolygonsCoord(newData);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      let delay = 500;
-      let debounce = setTimeout(() => {
-        getFarmOptions({ searchString: searchString });
-      }, delay);
-      return () => clearTimeout(debounce);
-    }
-  }, [router.isReady, accessToken, searchString]);
-
   return (
     <div
-      style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      style={{ display: "flex", flexDirection: "row", alignItems: "center", }}
     >
       <div style={{ width: "75%", height: "100vh", marginTop: "5px" }}>
         <GoogleMapReact
@@ -577,6 +537,8 @@ const GoogleMapMarkerComponent = () => {
         drawerOpen={drawerOpen}
         polygonCoords={polygonCoords}
         setPolygonCoords={setPolygonCoords}
+        getFarmOptions={getFarmOptions}
+        setPolygon={setPolygon}
       />
     </div>
   );

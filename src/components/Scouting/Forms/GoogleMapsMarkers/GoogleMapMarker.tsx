@@ -12,6 +12,7 @@ import FarmsListDrawer from "./FarmsList/FarmsListBlock";
 import FarmsListBlock from "./FarmsList/FarmsListBlock";
 import AddFarmDilog from "./FarmsList/AddFarmDiloag";
 import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
+import ViewFarmDetails from './ViewFarmDetails.tsx/ViewFarmDetails';
 const GoogleMapMarkerComponent = () => {
 
   const router = useRouter();
@@ -42,6 +43,8 @@ const GoogleMapMarkerComponent = () => {
   const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
   const [viewPolygonsCoord, setViewPolygonsCoord] = useState<any>([]);
   const [markerObjects, setMarkerObjects] = useState([]);
+  const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false)
+  const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>()
 
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
@@ -260,9 +263,9 @@ const GoogleMapMarkerComponent = () => {
 
 
   //get the farm details
-  const getFarmDataById = async () => {
+  const getFarmDataById = async (id: any) => {
     const response: any = await getFarmByIdService(
-      router.query.farm_id as string,
+      id as string,
       accessToken as string
     );
 
@@ -307,7 +310,7 @@ const GoogleMapMarkerComponent = () => {
 
   const centerMapToPlace = (place: any) => {
     if (mapRef.current && place && place.geometry && place.geometry.location) {
-      mapRef.current.panTo(place.geometry.location);
+      mapRef.current.panTo(place.geometry);
     }
   };
 
@@ -365,8 +368,9 @@ const GoogleMapMarkerComponent = () => {
 
   useEffect(() => {
     if (map && googleMaps && viewPolygonsCoord.length) {
-      console.log(viewPolygonsCoord, "sdf")
       // Create markers and polygons for each item in the data array
+
+
       const newMarkers: any = [];
       const newPolygons = viewPolygonsCoord
         .map((item: any) => {
@@ -391,7 +395,45 @@ const GoogleMapMarkerComponent = () => {
             position: { lat: centroid.lat, lng: centroid.lng },
             map: map,
           });
+
+          const markerInfo = {
+            id: item._id, // Example: ID associated with the marker
+            name: "FArm1", // Example: Name associated with the marker
+            description: "This is a marker", // Example: Description associated with the marker
+            // Add any other relevant information here
+          };
+          marker.markerInfo = markerInfo;
+
           newMarkers.push(marker); // Push marker to the markers array
+          marker.addListener("click", () => {
+
+            const markerPosition = marker.getPosition();
+            const markerInformation = marker.markerInfo;
+
+            const latitude = markerPosition.lat(); // Get the latitude
+            const longitude = markerPosition.lng();
+
+            const geocoder = new google.maps.Geocoder();
+            const latlng = { lat: latitude, lng: longitude };
+
+            geocoder.geocode({ location: latlng }, (results: any, status) => {
+              if (status === google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                  const locationName = results[0].formatted_address; // Get the formatted address
+                  setFarmLoactionDetails({ "locationName": locationName, latlng: latlng })
+                } else {
+                  console.log("No results found");
+                }
+              } else {
+                console.log("Geocoder failed due to: " + status);
+              }
+            });
+
+            setOpenFarmDetails(true)
+            getFarmDataById(markerInformation.id);
+
+
+          });
 
           return polygon;
         })
@@ -416,6 +458,32 @@ const GoogleMapMarkerComponent = () => {
       });
       map.fitBounds(bounds);
     }
+    // else {
+    //   let selectedPoly = [
+    //     [
+    //       15.158527049662059,
+    //       79.84746538102627
+    //     ],
+    //     [
+    //       15.157811545553262,
+    //       79.847168661654
+    //     ],
+    //     [
+    //       15.157674334176644,
+    //       79.8475569114089
+    //     ],
+    //     [
+    //       15.158385308199133,
+    //       79.84786670655012
+    //     ]
+    //   ]
+    //   const bounds = new googleMaps.LatLngBounds();
+    //   selectedPoly?.forEach((coord: any) => {
+    //     const latLng = new googleMaps.LatLng(coord[0], coord[1]);
+    //     bounds.extend(latLng);
+    //   });
+    //   map.fitBounds(bounds);
+    // }
   }, [map, googleMaps, selectedPolygon]);
 
   useEffect(() => {
@@ -428,12 +496,6 @@ const GoogleMapMarkerComponent = () => {
     }
   }, [router.isReady, accessToken, searchString]);
 
-  //call the single farms details
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      // getFarmDataById();
-    }
-  }, [router.isReady, accessToken]);
 
   //call the places api
   useEffect(() => {
@@ -523,12 +585,19 @@ const GoogleMapMarkerComponent = () => {
       </div>
 
       <div style={{ width: "25%", height: "100vh", marginTop: "5px" }}>
-        <FarmsListBlock
-          getFarmLocation={getFarmLocation}
-          farmOptions={farmOptions}
-          searchString={searchString}
-          setSearchString={setSearchString}
-        />
+        {openFarmDetails ?
+          <ViewFarmDetails
+            setOpenFarmDetails={setOpenFarmDetails}
+            farmDetails={data}
+            FarmlocationDetails={FarmlocationDetails}
+          /> :
+          <FarmsListBlock
+            getFarmLocation={getFarmLocation}
+            farmOptions={farmOptions}
+            searchString={searchString}
+            setSearchString={setSearchString}
+          />}
+
       </div>
       <LoadingComponent loading={loading} />
       <Toaster richColors position="top-right" closeButton />

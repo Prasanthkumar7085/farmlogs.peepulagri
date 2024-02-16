@@ -282,9 +282,9 @@ const GoogleMapMarkerComponent = () => {
   }
 
   //get the farm list 
-  const getFarmOptions = async ({ searchString }: any) => {
+  const getFarmOptions = async ({ searchString, location }: any) => {
     setLoading(true);
-    let location_id = "";
+    let location_id = location ? location : "";
     try {
 
       let response = await ListAllFarmForDropDownService(
@@ -306,6 +306,7 @@ const GoogleMapMarkerComponent = () => {
         setTimeout(() => {
           setRenderField(false);
         }, 0.1);
+
         setViewPolygonsCoord(newData);
       }
     } catch (err) {
@@ -317,8 +318,11 @@ const GoogleMapMarkerComponent = () => {
 
 
   const centerMapToPlace = (place: any) => {
-    if (mapRef.current) {
-      mapRef.current.panTo(place.geometry);
+    if (mapRef.current && place.geometry && place.geometry.location) {
+      const location = place.geometry.location;
+      const latLng = new google.maps.LatLng(location.lat(), location.lng());
+      mapRef.current.setCenter(latLng);
+      mapRef.current.setZoom(15);
     }
   };
 
@@ -399,8 +403,6 @@ const GoogleMapMarkerComponent = () => {
   useEffect(() => {
     if (map && googleMaps && viewPolygonsCoord.length) {
       // Create markers and polygons for each item in the data array
-
-
       const newMarkers: any = [];
       const newPolygons = viewPolygonsCoord
         .map((item: any) => {
@@ -550,11 +552,10 @@ const GoogleMapMarkerComponent = () => {
     }
   }
 
-  // Assume this function is called when the "Add Polygon" button is clicked
   function handleAddPolygonButtonClick() {
-    // Call setPolygonDrawingMode function
     setPolygonDrawingMode();
   }
+
   return (
     <div
       style={{ display: "flex", flexDirection: "row", alignItems: "center", }}

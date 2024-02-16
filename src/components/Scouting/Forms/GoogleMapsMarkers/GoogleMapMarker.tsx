@@ -39,12 +39,13 @@ const GoogleMapMarkerComponent = () => {
   const [searchString, setSearchString] = useState("");
   const [searchedPlaces, setSearchedPlaces] = useState<any>([]);
   const autocompleteRef: any = useRef(null);
-  const [selectedPolygon, setSelectedPolygon] = useState();
+  const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
   const [viewPolygonsCoord, setViewPolygonsCoord] = useState<any>([]);
   const [markerObjects, setMarkerObjects] = useState([]);
   const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false)
   const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>()
+  const [editFarmDetails, setEditFarmsDetails] = useState<any>()
 
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
@@ -219,6 +220,7 @@ const GoogleMapMarkerComponent = () => {
     drawingManager.setMap(map);
     drawingManagerRef.current = drawingManager;
 
+
     maps.event.addListener(drawingManager, "overlaycomplete", (event: any) => {
       if (event.type === "polygon") {
         const paths = event.overlay.getPath().getArray();
@@ -253,10 +255,8 @@ const GoogleMapMarkerComponent = () => {
     });
 
     // Set the polygon on the map
-    setRenderField(false);
-    setTimeout(() => {
-      setRenderField(true);
-    }, 0.1);
+    // Set the polygon on the map
+
     newPolygon.setMap(map);
     setPolygon(newPolygon);
   };
@@ -271,6 +271,7 @@ const GoogleMapMarkerComponent = () => {
 
     if (response?.success) {
       setData(response?.data);
+
     }
     setLoading(false);
   };
@@ -285,6 +286,7 @@ const GoogleMapMarkerComponent = () => {
     setLoading(true);
     let location_id = "";
     try {
+
       let response = await ListAllFarmForDropDownService(
         searchString as string,
         accessToken,
@@ -292,12 +294,18 @@ const GoogleMapMarkerComponent = () => {
       );
       if (response.success) {
         setFarmOptions(response?.data);
+
         const newData = response.data.map((item: any) => ({
           _id: item._id,
           cor: item?.geometry?.coordinates?.length
             ? item?.geometry?.coordinates
             : [],
         }));
+
+        setRenderField(true);
+        setTimeout(() => {
+          setRenderField(false);
+        }, 0.1);
         setViewPolygonsCoord(newData);
       }
     } catch (err) {
@@ -309,7 +317,7 @@ const GoogleMapMarkerComponent = () => {
 
 
   const centerMapToPlace = (place: any) => {
-    if (mapRef.current && place && place.geometry && place.geometry.location) {
+    if (mapRef.current) {
       mapRef.current.panTo(place.geometry);
     }
   };
@@ -354,6 +362,7 @@ const GoogleMapMarkerComponent = () => {
         (coord: any) => new (googleMaps as any).LatLng(coord.lat, coord.lng)
       );
       polygon.setPath(path);
+
     }
   };
 
@@ -365,7 +374,28 @@ const GoogleMapMarkerComponent = () => {
     }
   };
 
+  //get the edit polygon details
+  const editPolygonDetails = (value: any) => {
+    setRenderField(true);
+    setTimeout(() => {
+      setRenderField(false);
+    }, 0.1);
+    setViewPolygonsCoord([]);
 
+    setEditFarmsDetails(value)
+    let updatedArray = value?.geometry?.coordinates?.map((item: any) => {
+      return {
+        lat: item[0],
+        lng: item[1]
+      }
+    })
+    setPolygonCoords(updatedArray)
+    const polygonCenter = { lat: value?.geometry?.coordinates[0][0], lng: value?.geometry?.coordinates[0][1] };
+    map.setCenter(polygonCenter);
+    map.setZoom(16);
+  }
+
+  //show the list all farms markers and polygons
   useEffect(() => {
     if (map && googleMaps && viewPolygonsCoord.length) {
       // Create markers and polygons for each item in the data array
@@ -397,16 +427,30 @@ const GoogleMapMarkerComponent = () => {
           });
 
           const markerInfo = {
-            id: item._id, // Example: ID associated with the marker
-            name: "FArm1", // Example: Name associated with the marker
-            description: "This is a marker", // Example: Description associated with the marker
-            // Add any other relevant information here
+            id: item._id,
+            name: item.title,
+            acres: item.area,
+            description: "This is a marker",
           };
           marker.markerInfo = markerInfo;
 
-          newMarkers.push(marker); // Push marker to the markers array
-          marker.addListener("click", () => {
+          newMarkers.push(marker);
+          //       googleMaps.event.addListener(marker, 'mouseover', function () {
+          //         // Create a new InfoWindow
+          //         const infoWindow = new googleMaps.InfoWindow({
+          //           content: `
+          //   <div>
+          //     <h4>${marker.markerInfo?._id}</h4>
+          //     <p>${marker.markerInfo?.acres}</p>
+          //   </div>
+          // `
+          //         });
 
+          //         // Open the InfoWindow above the marker
+          //         infoWindow.open(map, marker);
+          //       });
+          marker.addListener("click", () => {
+            setSelectedPolygon(markerInfo.id)
             const markerPosition = marker.getPosition();
             const markerInformation = marker.markerInfo;
 
@@ -446,44 +490,34 @@ const GoogleMapMarkerComponent = () => {
 
   //redirect to the polygon
   useEffect(() => {
-    if (map && googleMaps && selectedPolygon !== null) {
-      // // Display the selected polygon on the map and zoom to fit it
-      const selectedPoly = viewPolygonsCoord.find(
-        (item: any) => item._id == selectedPolygon
-      );
-      const bounds = new googleMaps.LatLngBounds();
-      selectedPoly?.cor?.forEach((coord: any) => {
-        const latLng = new googleMaps.LatLng(coord[0], coord[1]);
-        bounds.extend(latLng);
-      });
-      map.fitBounds(bounds);
+    if (map && googleMaps) {
+      if (selectedPolygon !== null) {
+        // // Display the selected polygon on the map and zoom to fit it
+        const selectedPoly = viewPolygonsCoord.find(
+          (item: any) => item._id == selectedPolygon
+        );
+        const bounds = new googleMaps.LatLngBounds();
+        selectedPoly?.cor?.forEach((coord: any) => {
+          const latLng = new googleMaps.LatLng(coord[0], coord[1]);
+          bounds.extend(latLng);
+        });
+        map.fitBounds(bounds);
+      }
+      else {
+        if (editFarmDetails?._id) {
+          // Set default map view to India
+          const indiaCenter = { lat: editFarmDetails?.geometry?.coordinates[0][0], lng: editFarmDetails?.geometry?.coordinates[0][1] };
+          map.setCenter(indiaCenter);
+          map.setZoom(17);
+        }
+        else {
+          // Set default map view to India
+          const indiaCenter = { lat: 20.5937, lng: 78.9629 };
+          map.setCenter(indiaCenter);
+          map.setZoom(5); // Adjust the zoom level as needed
+        }
+      }
     }
-    // else {
-    //   let selectedPoly = [
-    //     [
-    //       15.158527049662059,
-    //       79.84746538102627
-    //     ],
-    //     [
-    //       15.157811545553262,
-    //       79.847168661654
-    //     ],
-    //     [
-    //       15.157674334176644,
-    //       79.8475569114089
-    //     ],
-    //     [
-    //       15.158385308199133,
-    //       79.84786670655012
-    //     ]
-    //   ]
-    //   const bounds = new googleMaps.LatLngBounds();
-    //   selectedPoly?.forEach((coord: any) => {
-    //     const latLng = new googleMaps.LatLng(coord[0], coord[1]);
-    //     bounds.extend(latLng);
-    //   });
-    //   map.fitBounds(bounds);
-    // }
   }, [map, googleMaps, selectedPolygon]);
 
   useEffect(() => {
@@ -509,80 +543,94 @@ const GoogleMapMarkerComponent = () => {
     }
   }, []);
 
+  function setPolygonDrawingMode() {
+    const drawingManager: any = drawingManagerRef.current;
+    if (drawingManager) {
+      drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+    }
+  }
+
+  // Assume this function is called when the "Add Polygon" button is clicked
+  function handleAddPolygonButtonClick() {
+    // Call setPolygonDrawingMode function
+    setPolygonDrawingMode();
+  }
   return (
     <div
       style={{ display: "flex", flexDirection: "row", alignItems: "center", }}
     >
-      <div style={{ width: "75%", height: "100vh", marginTop: "5px" }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{
-            key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
-            libraries: ["drawing", "places"],
-          }}
-          defaultCenter={{
-            lat: latLong?.lat ? latLong?.lat : 15.1534671,
-            lng: latLong?.long ? latLong?.long : 79.8478049,
-          }}
-          options={{
-            mapTypeId: mapType,
+      {renderField == false ?
+        <div style={{ width: "75%", height: "100vh", marginTop: "5px" }}>
 
-            streetViewControl: true,
-            rotateControl: true,
-          }}
-          defaultZoom={8}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-        >
-          {searchedPlaces.map((place: any) => (
-            <Marker
-              key={place.id}
-              lat={place.geometry.location.lat()}
-              lng={place.geometry.location.lng()}
-              text={place.name}
-            />
-          ))}
-        </GoogleMapReact>
-
-        {polygonCoords.length === 0 ? (
-          ""
-        ) : (
-          <div
-            style={{
-              position: "absolute",
-              top: "22%",
-              right: "25%",
+          <GoogleMapReact
+            bootstrapURLKeys={{
+              key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
+              libraries: ["drawing", "places"],
             }}
-          >
-            <Button
-              onClick={clearAllPoints}
-              variant="outlined"
-              sx={{ backgroundColor: "orange" }}
-              disabled={polygonCoords.length === 0}
-            >
-              <img src={"/blue-delete.png"} width={25} height={25} /> Clear
-            </Button>
-            <Button
-              onClick={() => {
-                setDrawerOpen(true);
-              }}
-              variant="outlined"
-              sx={{ backgroundColor: "orange" }}
-              disabled={polygonCoords.length === 0}
-            >
-              Save
-            </Button>
+            defaultCenter={{
+              lat: latLong?.lat ? latLong?.lat : 15.2224299,
+              lng: latLong?.long ? latLong?.long : 79.8784533,
+            }}
+            options={{
+              mapTypeId: mapType,
 
-            <Button
-              onClick={undoLastPoint}
-              variant="outlined"
-              sx={{ backgroundColor: "orange" }}
-              disabled={polygonCoords.length === 0}
+              streetViewControl: true,
+              rotateControl: true,
+            }}
+            defaultZoom={8}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+          >
+            {searchedPlaces.map((place: any) => (
+              <Marker
+                key={place.id}
+                lat={place.geometry.location.lat()}
+                lng={place.geometry.location.lng()}
+                text={place.name}
+              />
+            ))}
+          </GoogleMapReact>
+
+          {polygonCoords.length === 0 ? (
+            ""
+          ) : (
+            <div
+              style={{
+                position: "absolute",
+                top: "22%",
+                right: "25%",
+              }}
             >
-              <img src={"/undo-icon.png"} width={25} height={25} /> Undo
-            </Button>
-          </div>
-        )}
-      </div>
+              <Button
+                onClick={clearAllPoints}
+                variant="outlined"
+                sx={{ backgroundColor: "orange" }}
+                disabled={polygonCoords.length === 0}
+              >
+                <img src={"/blue-delete.png"} width={25} height={25} /> Clear
+              </Button>
+              <Button
+                onClick={() => {
+                  setDrawerOpen(true);
+                }}
+                variant="outlined"
+                sx={{ backgroundColor: "orange" }}
+                disabled={polygonCoords.length === 0}
+              >
+                {editFarmDetails?._id ? "Update" : "Save"}
+              </Button>
+
+              <Button
+                onClick={undoLastPoint}
+                variant="outlined"
+                sx={{ backgroundColor: "orange" }}
+                disabled={polygonCoords.length === 0}
+              >
+                <img src={"/undo-icon.png"} width={25} height={25} /> Undo
+              </Button>
+            </div>
+          )}
+        </div> : ""}
 
       <div style={{ width: "25%", height: "100vh", marginTop: "5px" }}>
         {openFarmDetails ?
@@ -596,6 +644,12 @@ const GoogleMapMarkerComponent = () => {
             farmOptions={farmOptions}
             searchString={searchString}
             setSearchString={setSearchString}
+            editPolygonDetails={editPolygonDetails}
+            setEditFarmsDetails={setEditFarmsDetails}
+            editFarmDetails={editFarmDetails}
+            setPolygonCoords={setPolygonCoords}
+            getFarmOptions={getFarmOptions}
+            handleAddPolygonButtonClick={handleAddPolygonButtonClick}
           />}
 
       </div>
@@ -608,6 +662,9 @@ const GoogleMapMarkerComponent = () => {
         setPolygonCoords={setPolygonCoords}
         getFarmOptions={getFarmOptions}
         setPolygon={setPolygon}
+        farm_id={editFarmDetails?._id}
+        setEditFarmsDetails={setEditFarmsDetails}
+
       />
     </div>
   );

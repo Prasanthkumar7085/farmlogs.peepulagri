@@ -3,7 +3,11 @@ import { Button, Icon, IconButton } from "@mui/material";
 import styles from "./farmListCard.module.css";
 import timePipe from "@/pipes/timePipe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-const FarmListCard = ({ data, getFarmLocation }: any) => {
+const FarmListCard = ({
+  data, getFarmLocation, editPolygonDetails, setEditFarmsDetails, editFarmDetails,
+  setPolygonCoords, getFarmOptions
+
+}: any) => {
   return (
     <>
       {data?.map((item: any, index: number) => {
@@ -15,18 +19,21 @@ const FarmListCard = ({ data, getFarmLocation }: any) => {
             <div className={styles.detailscontainer}>
               <div className={styles.nameandaction}>
                 <h2 className={styles.northSideChilli}>{item.title}</h2>
-                <Button
-                  className={styles.morebuttonoutline}
-                  disableElevation={true}
-                  color="primary"
-                  variant="text"
-                  startIcon={<Icon>refresh_sharp</Icon>}
-                  sx={{
-                    borderRadius: "0px 0px 0px 0px",
-                    width: 20,
-                    height: 20,
-                  }}
-                />
+                {item?.geometry?.coordinates?.length ?
+                  <IconButton onClick={() => {
+                    if (editFarmDetails?._id) {
+                      setEditFarmsDetails(null)
+                      setPolygonCoords([])
+                      getFarmOptions({})
+                    } else {
+                      editPolygonDetails(item)
+                    }
+                  }}>
+                    {editFarmDetails?._id == item?._id ?
+                      <img alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
+                      :
+                      <img alt="" src="/editicon.svg" width={15} height={15} />}
+                  </IconButton> : ""}
               </div>
               <div className={styles.cropsacres}>
                 <div className={styles.cropscontainer}>
@@ -36,18 +43,28 @@ const FarmListCard = ({ data, getFarmLocation }: any) => {
                 <p className={styles.acres}>{item.area}ac</p>
               </div>
               <div className={styles.locatedate}>
-                <IconButton
-                  color="primary"
-                  sx={{
-                    borderRadius: "0px 0px 0px 0px",
-                    display: item?.geometry?.coordinates?.length ? "" : "none",
-                  }}
-                  onClick={() => {
-                    getFarmLocation(item.geometry.coordinates, item._id);
-                  }}
-                >
-                  <LocationOnIcon />
-                </IconButton>
+                {item?.geometry?.coordinates?.length ?
+                  <IconButton
+                    color="primary"
+                    sx={{
+                      borderRadius: "0px 0px 0px 0px",
+                      display: item?.geometry?.coordinates?.length ? "" : "none",
+                    }}
+                    onClick={() => {
+                      getFarmLocation(item.geometry.coordinates, item._id);
+                    }}
+                  >
+                    <LocationOnIcon />
+                  </IconButton> :
+                  <IconButton
+                    color="primary"
+                    sx={{
+                      borderRadius: "0px 0px 0px 0px",
+                    }}
+
+                  >
+                    +
+                  </IconButton>}
                 <p className={styles.createddate}>
                   {timePipe(item.createdAt, "DD-MM-YYYY")}
                 </p>

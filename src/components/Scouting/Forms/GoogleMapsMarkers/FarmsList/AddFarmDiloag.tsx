@@ -29,8 +29,11 @@ const AddFarmDilog = ({
   polygonCoords,
   setPolygonCoords,
   getFarmOptions,
-  setPolygon
+  setPolygon,
+  farm_id,
+  setEditFarmsDetails
 }: any) => {
+
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -67,12 +70,15 @@ const AddFarmDilog = ({
 
   const detailsAfterResponse = (response: any) => {
     if (response?.success) {
+      toast.success("Farm Details updated successfuly")
       setAlertMessage(response?.message);
       setAlertType(true);
       setDrawerOpen(false);
       setPolygonCoords([]);
       getFarmOptions({})
       setPolygon(null)
+      setEditFarmsDetails(null)
+      setPolygonCoords([])
     } else if (response?.status == 422) {
       if (response?.errors) {
         setErrorMessages(response?.errors);
@@ -104,22 +110,20 @@ const AddFarmDilog = ({
   };
   const edtiFarm = async (obj: any) => {
     let editedData: any = {
-      title: data?.title,
-      area: data?.area,
-      location_id: data?.location_id,
+      title: obj?.title,
+      area: obj?.area,
+      location_id: obj?.location_id,
       geometry: {
         type: "Polygon",
         coordinates: polygonCoords.map((obj: any) => Object.values(obj)),
       },
     };
 
-    Object.keys(obj).map((item: string) => {
-      editedData[item] = obj[item];
-    });
+
     const response = await editFarmService(
       editedData,
       accessToken,
-      router.query.farm_id as string
+      farm_id as string
     );
     setDrawerOpen(false);
     detailsAfterResponse(response);
@@ -140,7 +144,7 @@ const AddFarmDilog = ({
       },
     };
 
-    if (router.query.farm_id) {
+    if (farm_id) {
       edtiFarm(obj);
     } else {
       addFarm(obj);
@@ -168,11 +172,12 @@ const AddFarmDilog = ({
     }
   };
 
+  //get the farm details by id
   const getFarmDataById = async () => {
     setLoading(true);
 
     const response: any = await getFarmByIdService(
-      router.query.farm_id as string,
+      farm_id as string,
       accessToken as string
     );
 
@@ -191,13 +196,19 @@ const AddFarmDilog = ({
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      if (router.query.farm_id) {
-        getFarmDataById();
-      } else if (router.query.location) {
+      if (router.query.location) {
         getLocations(router.query.location as string);
       }
     }
   }, [router.isReady, accessToken, router.query.location]);
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      if (farm_id) {
+        getFarmDataById()
+      }
+    }
+  }, [farm_id])
 
   useEffect(() => {
     setHiddenLoading(true);

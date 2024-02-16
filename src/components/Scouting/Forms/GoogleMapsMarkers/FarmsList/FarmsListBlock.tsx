@@ -24,6 +24,12 @@ const FarmsListBlock = ({
   farmOptions,
   searchString,
   setSearchString,
+  editPolygonDetails,
+  setEditFarmsDetails,
+  editFarmDetails,
+  setPolygonCoords,
+  getFarmOptions,
+  handleAddPolygonButtonClick
 }: any) => {
   const [loading, setLoading] = useState(false);
 
@@ -66,7 +72,13 @@ const FarmsListBlock = ({
         </div>
       </header>
       <div className={styles.listview}>
-        <FarmListCard data={farmOptions} getFarmLocation={getFarmLocation} />
+        <FarmListCard data={farmOptions}
+          getFarmLocation={getFarmLocation}
+          editPolygonDetails={editPolygonDetails}
+          setEditFarmsDetails={setEditFarmsDetails}
+          editFarmDetails={editFarmDetails}
+          setPolygonCoords={setPolygonCoords}
+          getFarmOptions={getFarmOptions} />
       </div>
       <div className={styles.buttoncontainer}>
         <Button
@@ -75,6 +87,7 @@ const FarmsListBlock = ({
           color="success"
           variant="contained"
           sx={{ borderRadius: "0px 0px 0px 0px" }}
+          onClick={handleAddPolygonButtonClick}
         >
           Add Farm
         </Button>

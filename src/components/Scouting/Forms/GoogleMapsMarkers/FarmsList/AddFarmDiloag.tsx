@@ -498,12 +498,12 @@ const AddFarmDilog = ({
           ""
         )}
         <LoadingComponent loading={loading} />
-        <AlertComponent
+        {/* <AlertComponent
           alertMessage={alertMessage}
           alertType={alertType}
           setAlertMessage={setAlertMessage}
           mobile={true}
-        />
+        /> */}
         <AddLocationDialog
           open={addLocationOpen}
           captureResponseDilog={captureResponseDilog}

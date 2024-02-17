@@ -31,7 +31,8 @@ const FarmsListBlock = ({
   editFarmDetails,
   setPolygonCoords,
   getFarmOptions,
-  handleAddPolygonButtonClick
+  handleAddPolygonButtonClick,
+  setSelectedPolygon
 }: any) => {
   const router = useRouter();
 
@@ -89,11 +90,13 @@ const FarmsListBlock = ({
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
+      console.log("p0p")
       setLocation({ title: "All", _id: "1" });
       getFarmOptions({ search_string: searchString })
       return;
     }
     if (value) {
+      console.log('32ssd')
       setLocation(value);
       getFarmOptions({
         search_string: searchString,
@@ -137,14 +140,7 @@ const FarmsListBlock = ({
           />
 
 
-          <Button
-            disableElevation={true}
-            color="primary"
-            variant="contained"
-            sx={{ borderRadius: "0px 0px 0px 0px" }}
-          >
-            Filter
-          </Button>
+
         </div>
         {!settingLocationLoading ? (
           <Autocomplete
@@ -194,7 +190,9 @@ const FarmsListBlock = ({
           setEditFarmsDetails={setEditFarmsDetails}
           editFarmDetails={editFarmDetails}
           setPolygonCoords={setPolygonCoords}
-          getFarmOptions={getFarmOptions} />
+          getFarmOptions={getFarmOptions}
+          setSelectedPolygon={setSelectedPolygon}
+        />
       </div>
       <div className={styles.buttoncontainer}>
         <Button

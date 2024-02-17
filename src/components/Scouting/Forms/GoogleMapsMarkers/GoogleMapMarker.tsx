@@ -278,11 +278,14 @@ const GoogleMapMarkerComponent = () => {
 
   //go to the farm location when the farm was selected
   const getFarmLocation = (value: any, id: any) => {
+    setEditFarmsDetails(null)
+    setPolygonCoords([])
     setSelectedPolygon(id);
   }
 
   //get the farm list 
   const getFarmOptions = async ({ searchString, location }: any) => {
+    console.log("0001")
     setLoading(true);
     let location_id = location ? location : "";
     try {
@@ -301,6 +304,7 @@ const GoogleMapMarkerComponent = () => {
             ? item?.geometry?.coordinates
             : [],
         }));
+
 
         setRenderField(true);
         setTimeout(() => {
@@ -383,9 +387,7 @@ const GoogleMapMarkerComponent = () => {
     setRenderField(true);
     setTimeout(() => {
       setRenderField(false);
-    }, 0.1);
-    setViewPolygonsCoord([]);
-
+    }, 100);
     setEditFarmsDetails(value)
     let updatedArray = value?.geometry?.coordinates?.map((item: any) => {
       return {
@@ -394,9 +396,7 @@ const GoogleMapMarkerComponent = () => {
       }
     })
     setPolygonCoords(updatedArray)
-    const polygonCenter = { lat: value?.geometry?.coordinates[0][0], lng: value?.geometry?.coordinates[0][1] };
-    map.setCenter(polygonCenter);
-    map.setZoom(16);
+
   }
 
   //show the list all farms markers and polygons
@@ -506,21 +506,27 @@ const GoogleMapMarkerComponent = () => {
         map.fitBounds(bounds);
       }
       else {
-        if (editFarmDetails?._id) {
-          // Set default map view to India
-          const indiaCenter = { lat: editFarmDetails?.geometry?.coordinates[0][0], lng: editFarmDetails?.geometry?.coordinates[0][1] };
-          map.setCenter(indiaCenter);
-          map.setZoom(17);
-        }
-        else {
-          // Set default map view to India
+        if (editFarmDetails?._id == null) {
+          console.log("dsfsdfasg")
           const indiaCenter = { lat: 20.5937, lng: 78.9629 };
           map.setCenter(indiaCenter);
-          map.setZoom(5); // Adjust the zoom level as needed
+          map.setZoom(5);
         }
       }
     }
   }, [map, googleMaps, selectedPolygon]);
+
+
+  useEffect(() => {
+    if (map && googleMaps) {
+      if (editFarmDetails?._id) {
+        const indiaCenter = { lat: editFarmDetails?.geometry?.coordinates[0][0], lng: editFarmDetails?.geometry?.coordinates[0][1] };
+        console.log(indiaCenter, "mlkj")
+        map.setCenter(indiaCenter);
+        map.setZoom(15);
+      }
+    }
+  }, [map, googleMaps, editFarmDetails,])
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -651,6 +657,7 @@ const GoogleMapMarkerComponent = () => {
             setPolygonCoords={setPolygonCoords}
             getFarmOptions={getFarmOptions}
             handleAddPolygonButtonClick={handleAddPolygonButtonClick}
+            setSelectedPolygon={setSelectedPolygon}
           />}
 
       </div>

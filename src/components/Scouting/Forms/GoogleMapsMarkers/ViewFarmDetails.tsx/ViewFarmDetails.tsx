@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { CropTypeResponse } from "@/types/cropTypes";
 import { useRouter } from "next/router";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails }: any) => {
+const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails, setSelectedPolygon }: any) => {
 
     const router = useRouter();
     const accessToken = useSelector(
@@ -60,6 +60,7 @@ const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails 
                 <IconButton
                     onClick={() => {
                         setOpenFarmDetails(false)
+                        setSelectedPolygon(null)
                     }}
                     sx={{ borderRadius: "0px 0px 0px 0px" }}
                 >

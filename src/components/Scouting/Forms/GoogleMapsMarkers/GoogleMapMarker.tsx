@@ -13,6 +13,18 @@ import FarmsListBlock from "./FarmsList/FarmsListBlock";
 import AddFarmDilog from "./FarmsList/AddFarmDiloag";
 import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import ViewFarmDetails from './ViewFarmDetails.tsx/ViewFarmDetails';
+import { prepareURLEncodedParams } from '../../../../../lib/requestUtils/urlEncoder';
+import getAllFarmsService from '../../../../../lib/services/FarmsService/getAllFarmsServiceMobile';
+
+interface callFarmsProps {
+  search_string: string;
+  location: any;
+  userId: string;
+  page: number | string;
+  limit: number | string;
+  sortBy: string;
+  sortType: string;
+}
 const GoogleMapMarkerComponent = () => {
 
   const router = useRouter();
@@ -284,18 +296,53 @@ const GoogleMapMarkerComponent = () => {
   }
 
   //get the farm list 
-  const getFarmOptions = async ({ searchString, location }: any) => {
-    console.log("0001")
-    setLoading(true);
-    let location_id = location ? location : "";
-    try {
 
-      let response = await ListAllFarmForDropDownService(
-        searchString as string,
-        accessToken,
-        location_id
-      );
-      if (response.success) {
+  const getFarmOptions = async ({
+    search_string = "",
+    location,
+    userId,
+    page = 1,
+    limit = 20,
+    sortBy,
+    sortType,
+  }: callFarmsProps) => {
+    setLoading(true);
+    try {
+      let url = `farms/${page}/${limit}`;
+      let queryParam: any = {
+
+      };
+      if (page) {
+        queryParam["page"] = page;
+      }
+      if (limit) {
+        queryParam["limit"] = limit;
+      }
+      if (sortBy) {
+        queryParam["sort_by"] = sortBy;
+      }
+      if (sortType) {
+        queryParam["sort_type"] = sortType;
+      }
+      if (search_string) {
+        queryParam["search_string"] = search_string;
+
+      }
+
+      if (location != 1 && location) {
+        queryParam["location_id"] = location;
+      }
+
+      if (userId) {
+        queryParam["user_id"] = userId;
+      }
+      router.push({ pathname: "/farm/markers", query: queryParam });
+      url = prepareURLEncodedParams(url, queryParam);
+
+      const response = await getAllFarmsService(url, accessToken);
+
+      if (response?.success) {
+        const { data, ...rest } = response;
         setFarmOptions(response?.data);
 
         const newData = response.data.map((item: any) => ({
@@ -312,14 +359,14 @@ const GoogleMapMarkerComponent = () => {
         }, 0.1);
 
         setViewPolygonsCoord(newData);
+
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
-
 
   const centerMapToPlace = (place: any) => {
     if (mapRef.current && place.geometry && place.geometry.location) {
@@ -532,7 +579,15 @@ const GoogleMapMarkerComponent = () => {
     if (router.isReady && accessToken) {
       let delay = 500;
       let debounce = setTimeout(() => {
-        getFarmOptions({ searchString: searchString });
+        getFarmOptions({
+          search_string: searchString as string,
+          location: router.query.location_id as string,
+          userId: router.query.user_id as string,
+          page: 1,
+          limit: 20,
+          sortBy: router.query.sort_by as string,
+          sortType: router.query.sort_type as string,
+        });
       }, delay);
       return () => clearTimeout(debounce);
     }
@@ -645,20 +700,28 @@ const GoogleMapMarkerComponent = () => {
             setOpenFarmDetails={setOpenFarmDetails}
             farmDetails={data}
             FarmlocationDetails={FarmlocationDetails}
-          /> :
-          <FarmsListBlock
-            getFarmLocation={getFarmLocation}
-            farmOptions={farmOptions}
-            searchString={searchString}
-            setSearchString={setSearchString}
-            editPolygonDetails={editPolygonDetails}
-            setEditFarmsDetails={setEditFarmsDetails}
-            editFarmDetails={editFarmDetails}
-            setPolygonCoords={setPolygonCoords}
-            getFarmOptions={getFarmOptions}
-            handleAddPolygonButtonClick={handleAddPolygonButtonClick}
             setSelectedPolygon={setSelectedPolygon}
-          />}
+
+          /> :
+          map ?
+            <FarmsListBlock
+              getFarmLocation={getFarmLocation}
+              farmOptions={farmOptions}
+              searchString={searchString}
+              setSearchString={setSearchString}
+              editPolygonDetails={editPolygonDetails}
+              setEditFarmsDetails={setEditFarmsDetails}
+              editFarmDetails={editFarmDetails}
+              setPolygonCoords={setPolygonCoords}
+              getFarmOptions={getFarmOptions}
+              handleAddPolygonButtonClick={handleAddPolygonButtonClick}
+              setSelectedPolygon={setSelectedPolygon}
+              map={map}
+              googleMaps={googleMaps}
+              setOpenFarmDetails={setOpenFarmDetails}
+              getFarmDataById={getFarmDataById}
+
+            /> : ""}
 
       </div>
       <LoadingComponent loading={loading} />

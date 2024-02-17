@@ -5,7 +5,9 @@ import timePipe from "@/pipes/timePipe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 const FarmListCard = ({
   data, getFarmLocation, editPolygonDetails, setEditFarmsDetails, editFarmDetails,
-  setPolygonCoords, getFarmOptions, setSelectedPolygon
+  setPolygonCoords, getFarmOptions, setSelectedPolygon,
+  setOpenFarmDetails,
+  getFarmDataById
 
 }: any) => {
   return (
@@ -41,31 +43,13 @@ const FarmListCard = ({
                       <img alt="" src="/editicon.svg" width={15} height={15} />
                     </IconButton>
 
-                  // <IconButton onClick={() => {
-                  //   if (editFarmDetails?._id) {
-                  //     console.log("3445")
-                  //     setSelectedPolygon(null)
-                  //     setEditFarmsDetails(null)
-                  //     setPolygonCoords([])
-                  //     getFarmOptions({})
-                  //   } else {
-                  //     console.log("9876")
-                  //     
-                  //   }
-                  // }}>
-                  //   {editFarmDetails?._id == item?._id ?
-                  //     <img alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
-                  //     :
-                  //     <img alt="" src="/editicon.svg" width={15} height={15} />}
-                  // </IconButton> : ""}
                   : ""}
 
 
               </div>
               <div className={styles.cropsacres}>
                 <div className={styles.cropscontainer}>
-                  <h3 className={styles.cropName}>Firestorm Peppers</h3>
-                  <h4 className={styles.morenumber}>+1 More</h4>
+                  <h3 className={styles.cropName}>{item?.location_id?.title}</h3>
                 </div>
                 <p className={styles.acres}>{item.area}ac</p>
               </div>
@@ -92,6 +76,13 @@ const FarmListCard = ({
                   >
                     +
                   </IconButton>}
+                <p className={styles.createddate} onClick={() => {
+                  setOpenFarmDetails(true)
+                  getFarmDataById(item?._id)
+                  setSelectedPolygon(item?._id)
+                }}>
+                  View Details
+                </p>
                 <p className={styles.createddate}>
                   {timePipe(item.createdAt, "DD-MM-YYYY")}
                 </p>

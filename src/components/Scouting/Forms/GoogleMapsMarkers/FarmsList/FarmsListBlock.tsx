@@ -15,7 +15,8 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
-
+import ReactDOM from "react-dom";
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 interface ApiProps {
   page: number;
   searchString: string;
@@ -32,7 +33,11 @@ const FarmsListBlock = ({
   setPolygonCoords,
   getFarmOptions,
   handleAddPolygonButtonClick,
-  setSelectedPolygon
+  setSelectedPolygon,
+  map,
+  googleMaps,
+  setOpenFarmDetails,
+  getFarmDataById
 }: any) => {
   const router = useRouter();
 
@@ -92,18 +97,30 @@ const FarmsListBlock = ({
     if (reason == "clear") {
       console.log("p0p")
       setLocation({ title: "All", _id: "1" });
-      getFarmOptions({ search_string: searchString })
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: "" as string,
+        userId: router.query.user_id as string,
+        page: 1,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+      });
       return;
     }
     if (value) {
-      console.log('32ssd')
       setLocation(value);
       getFarmOptions({
-        search_string: searchString,
+        search_string: router.query.search_string as string,
         location: value?._id as string,
+        userId: router.query.user_id as string,
+        page: 1,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
       });
+
     }
-    e
   };
 
   useEffect(() => {
@@ -111,6 +128,57 @@ const FarmsListBlock = ({
       getLocations()
     }
   }, [accessToken])
+
+
+  useEffect(() => {
+    // Create a custom control element
+    const controlDiv = document.createElement('div');
+
+    // Add Autocomplete component to the control element
+    const autocompleteComponent = (
+      <Autocomplete
+        sx={{
+          width: '250px',
+          maxWidth: '250px',
+          borderRadius: '4px',
+        }}
+        size="small"
+        fullWidth
+        noOptionsText="No such location"
+        value={location}
+        isOptionEqualToValue={(option, value) => option.title === value.title}
+        getOptionLabel={(option) => option.title}
+        options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
+        onChange={onChangeLocation}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder="Search by locations"
+            variant="outlined"
+            size="small"
+            sx={{
+              '& .MuiInputBase-root': {
+                fontSize: 'clamp(.875rem, 1vw, 1.125rem)',
+                backgroundColor: '#fff',
+                border: 'none',
+              },
+            }}
+          />
+        )}
+      />
+    );
+
+    ReactDOM.render(autocompleteComponent, controlDiv);
+
+
+    // Append the custom control element to the map
+    map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
+
+    // Clean up when component unmounts
+
+  }, [map, googleMaps]); // Re-render the control when location changes
+
+
 
   return (
     <div className={styles.detailsslidebarfarmslist}>
@@ -133,7 +201,9 @@ const FarmsListBlock = ({
             }}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start"></InputAdornment>
+                <InputAdornment position="start">
+                  <TravelExploreIcon />
+                </InputAdornment>
               ),
             }}
             sx={{ "& .MuiInputBase-root": { height: "32px" } }}
@@ -142,46 +212,7 @@ const FarmsListBlock = ({
 
 
         </div>
-        {!settingLocationLoading ? (
-          <Autocomplete
-            sx={{
-              width: "250px",
-              maxWidth: "250px",
-              borderRadius: "4px",
-            }}
-            id="size-small-outlined-multi"
-            size="small"
-            fullWidth
-            noOptionsText={"No such location"}
-            value={location}
-            isOptionEqualToValue={(option, value) =>
-              option.title === value.title
-            }
-            getOptionLabel={(option: { title: string; _id: string }) =>
-              option.title
-            }
-            options={locations}
-            loading={optionsLoading}
-            onChange={onChangeLocation}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Search by locations"
-                variant="outlined"
-                size="small"
-                sx={{
-                  "& .MuiInputBase-root": {
-                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                    backgroundColor: "#fff",
-                    border: "none",
-                  },
-                }}
-              />
-            )}
-          />
-        ) : (
-          ""
-        )}
+
       </header>
       <div className={styles.listview}>
         <FarmListCard data={farmOptions}
@@ -192,6 +223,8 @@ const FarmsListBlock = ({
           setPolygonCoords={setPolygonCoords}
           getFarmOptions={getFarmOptions}
           setSelectedPolygon={setSelectedPolygon}
+          setOpenFarmDetails={setOpenFarmDetails}
+          getFarmDataById={getFarmDataById}
         />
       </div>
       <div className={styles.buttoncontainer}>

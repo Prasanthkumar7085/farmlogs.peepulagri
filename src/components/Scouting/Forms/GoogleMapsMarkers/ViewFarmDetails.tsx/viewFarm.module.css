@@ -231,8 +231,9 @@
 .slidebarfarmdetails {
     border-radius: 8px;
     background-color: #fff;
-    height: 56rem;
-    padding: 1rem 1rem 0.5rem;
+height: 82vh;
+    max-height: 100vh;
+        padding: 1rem 1rem 0.5rem;
     box-sizing: border-box;
     text-align: left;
     font-size: 0.88rem;

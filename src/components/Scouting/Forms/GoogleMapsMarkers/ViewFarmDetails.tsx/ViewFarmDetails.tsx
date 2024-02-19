@@ -6,12 +6,24 @@ import timePipe from "@/pipes/timePipe";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { prepareURLEncodedParams } from "../../../../../../lib/requestUtils/urlEncoder";
 import getAllCropsService from "../../../../../../lib/services/CropServices/getAllCropsService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { CropTypeResponse } from "@/types/cropTypes";
 import { useRouter } from "next/router";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails, setSelectedPolygon }: any) => {
+import deleteFarmService from "../../../../../../lib/services/FarmsService/deleteFarmService";
+import { useCookies } from "react-cookie";
+import { removeUserDetails } from "@/Redux/Modules/Auth";
+import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { toast } from "sonner";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import DeleteIcon from '@mui/icons-material/Delete';
+const ViewFarmDetails = ({ setOpenFarmDetails,
+    farmDetails,
+    FarmlocationDetails,
+    setSelectedPolygon,
+    setMap,
+    getFarmOptions }: any) => {
 
     const router = useRouter();
     const accessToken = useSelector(
@@ -19,6 +31,25 @@ const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails,
     );
     const [cropsData, setCropsData] = useState<Array<CropTypeResponse>>([]);
     const [loading, setLoading] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const [, , removeCookie] = useCookies(["userType_v2"]);
+    const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
+
+    const dispatch = useDispatch();
+
+    const logout = async () => {
+        try {
+            removeCookie("userType_v2");
+            loggedIn_v2("loggedIn_v2");
+            router.push("/");
+            await dispatch(removeUserDetails());
+            await dispatch(deleteAllMessages());
+        } catch (err: any) {
+            console.error(err);
+        }
+    };
+
 
     const getCropsByFarmId = async (
         farmId: string,
@@ -48,6 +79,41 @@ const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails,
         }
     };
 
+
+    //delete farm
+    const deleteFarm = async () => {
+        try {
+            setLoading(true)
+            const response = await deleteFarmService(farmDetails?._id, accessToken);
+
+            if (response.success) {
+                setDeleteDialogOpen(false);
+                setOpenFarmDetails(false)
+                toast.success(response.message)
+                getFarmOptions({
+                    search_string: router.query.search_string as string,
+                    location: router.query.location_id as string,
+                    userId: router.query.user_id as string,
+                    page: 1,
+                    limit: 20,
+                    sortBy: router.query.sort_by as string,
+                    sortType: router.query.sort_type as string,
+                });
+
+            } else if (response?.statusCode == 403) {
+                await logout();
+            } else {
+                toast.error("Something went wrong")
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setLoading(false)
+        }
+    };
+
     useEffect(() => {
         if (router.isReady && accessToken) {
             getCropsByFarmId(farmDetails?._id)
@@ -61,6 +127,8 @@ const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails,
                     onClick={() => {
                         setOpenFarmDetails(false)
                         setSelectedPolygon(null)
+
+
                     }}
                     sx={{ borderRadius: "0px 0px 0px 0px" }}
                 >
@@ -69,8 +137,11 @@ const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails,
                 <IconButton
                     className={styles.moreoptionsbutton}
                     sx={{ borderRadius: "0px 0px 0px 0px", width: 24, height: 24 }}
+                    onClick={() => {
+                        setDeleteDialogOpen(true)
+                    }}
                 >
-                    <MoreVertIcon />
+                    <DeleteIcon />
                 </IconButton>
             </header>
             <div className={styles.detailscontainer}>
@@ -96,7 +167,7 @@ const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails,
                 <div className={styles.locationdetails}>
                     <img className={styles.locationicon} alt="" src="/location-farm.svg" />
                     <p className={styles.location}>{
-                        `Latitude :${FarmlocationDetails?.latlng?.lat}° N, Longitude: ${FarmlocationDetails?.latlng?.lng}° ,${FarmlocationDetails?.locationName}`}
+                        `Latitude :${farmDetails?.geometry?.coordinates?.[0][0] ? farmDetails?.geometry?.coordinates?.[0][0] : "---"}° N, Longitude: ${farmDetails?.geometry?.coordinates?.[0][1] ? farmDetails?.geometry?.coordinates?.[0][1] : "---"}° ,${farmDetails?.location_id?.title ? farmDetails?.location_id?.title : "----"}`}
                     </p>
                 </div>
                 <div className={styles.acresdetails}>
@@ -148,6 +219,13 @@ const ViewFarmDetails = ({ setOpenFarmDetails, farmDetails, FarmlocationDetails,
                     </div>
                 </div>
             </div>
+            <AlertDelete
+                deleteFarm={deleteFarm}
+                setDialogOpen={setDeleteDialogOpen}
+                open={deleteDialogOpen}
+                loading={loading}
+                deleteTitleProp={"Farm"}
+            />
             <LoadingComponent loading={loading} />
         </div>
     )

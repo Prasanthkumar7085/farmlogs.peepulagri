@@ -75,10 +75,17 @@ const AddFarmDilog = ({
       setAlertType(true);
       setDrawerOpen(false);
       setPolygonCoords([]);
-      getFarmOptions({})
-      setPolygon(null)
       setEditFarmsDetails(null)
-      setPolygonCoords([])
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: router.query.location_id as string,
+        userId: router.query.user_id as string,
+        page: 1,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+      });
+
     } else if (response?.status == 422) {
       if (response?.errors) {
         setErrorMessages(response?.errors);
@@ -208,7 +215,7 @@ const AddFarmDilog = ({
         getFarmDataById()
       }
     }
-  }, [farm_id])
+  }, [farm_id, drawerOpen])
 
   useEffect(() => {
     setHiddenLoading(true);
@@ -478,6 +485,9 @@ const AddFarmDilog = ({
                   variant="outlined"
                   onClick={() => {
                     setDrawerOpen(false);
+                    setTitle("")
+                    setLocation(null)
+                    setArea("")
                   }}
                 >
                   Cancel

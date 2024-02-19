@@ -37,7 +37,9 @@ const FarmsListBlock = ({
   map,
   googleMaps,
   setOpenFarmDetails,
-  getFarmDataById
+  getFarmDataById,
+  addPolyToExisting,
+  farmOptionsLoading
 }: any) => {
   const router = useRouter();
 
@@ -174,7 +176,7 @@ const FarmsListBlock = ({
     // Append the custom control element to the map
     map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
 
-    // Clean up when component unmounts
+
 
   }, [map, googleMaps]); // Re-render the control when location changes
 
@@ -225,6 +227,8 @@ const FarmsListBlock = ({
           setSelectedPolygon={setSelectedPolygon}
           setOpenFarmDetails={setOpenFarmDetails}
           getFarmDataById={getFarmDataById}
+          addPolyToExisting={addPolyToExisting}
+          farmOptionsLoading={farmOptionsLoading}
         />
       </div>
       <div className={styles.buttoncontainer}>

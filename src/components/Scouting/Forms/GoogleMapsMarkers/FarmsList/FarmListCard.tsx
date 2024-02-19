@@ -40,6 +40,7 @@ const FarmListCard = ({
                           setPolygonCoords([])
                           getFarmOptions({
                             search_string: router.query.search_string as string,
+
                             location: router.query.location_id as string,
                             userId: router.query.user_id as string,
                             page: 1,
@@ -52,7 +53,6 @@ const FarmListCard = ({
                       </IconButton> :
                       <IconButton onClick={() => {
                         setSelectedPolygon(null)
-                        setPolygonCoords([])
                         setEditFarmsDetails(null)
                         editPolygonDetails(item)
                       }}>

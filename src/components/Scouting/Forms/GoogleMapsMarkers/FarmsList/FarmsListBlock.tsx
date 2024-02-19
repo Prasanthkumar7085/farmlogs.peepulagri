@@ -58,15 +58,15 @@ const FarmsListBlock = ({
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const getLocations = async (newLocation = "") => {
+  const getLocations = async (newLocationId = "") => {
     try {
       const response = await getAllLocationsService(accessToken);
       if (response?.success) {
         setLocations(response?.data);
-        if (newLocation) {
+        if (newLocationId) {
           setSettingLocationLoading(true);
           const newLocationObject = response?.data?.find(
-            (item: any) => item?.title == newLocation
+            (item: any) => item?._id == newLocationId
           );
 
           setLocation(newLocationObject);
@@ -127,9 +127,14 @@ const FarmsListBlock = ({
 
   useEffect(() => {
     if (accessToken) {
-      getLocations()
+      if (router.query.location_id) {
+        getLocations(router.query.location_id as string)
+      }
+      else {
+        getLocations()
+      }
     }
-  }, [accessToken])
+  }, [accessToken, router.isReady])
 
 
   useEffect(() => {
@@ -199,7 +204,13 @@ const FarmsListBlock = ({
             variant="outlined"
             value={searchString}
             onChange={(e) => {
-              setSearchString(e.target.value);
+              if (e.target.value) {
+                setSearchString(e.target.value);
+              }
+              else {
+                setSearchString("");
+
+              }
             }}
             InputProps={{
               startAdornment: (

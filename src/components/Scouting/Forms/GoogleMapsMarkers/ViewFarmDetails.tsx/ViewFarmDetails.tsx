@@ -32,6 +32,7 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
     const [cropsData, setCropsData] = useState<Array<CropTypeResponse>>([]);
     const [loading, setLoading] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [statsData, setStatsData] = useState<any>([]);
 
     const [, , removeCookie] = useCookies(["userType_v2"]);
     const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
@@ -114,9 +115,47 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
         }
     };
 
+    //get the stats count of farm
+    const getStatsCount = async () => {
+        setLoading(true);
+        try {
+            let urls = [
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmDetails?._id}/crops-count`,
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmDetails?._id}/images-count`,
+            ];
+            let tempResult: any = [];
+
+            const responses = await Promise.allSettled(
+                urls.map(async (url) => {
+                    const response = await fetch(url, {
+                        method: "GET",
+                        headers: new Headers({
+                            authorization: accessToken,
+                        }),
+                    });
+                    return response.json();
+                })
+            );
+
+            responses.forEach((result, num) => {
+                if (result.status === "fulfilled") {
+                    tempResult.push(result.value);
+                }
+                if (result.status === "rejected") {
+                }
+            });
+            setStatsData(tempResult);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         if (router.isReady && accessToken) {
             getCropsByFarmId(farmDetails?._id)
+            getStatsCount()
         }
     }, [accessToken, farmDetails?._id])
 
@@ -125,9 +164,16 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
             <header className={styles.header}>
                 <IconButton
                     onClick={() => {
+                        getFarmOptions({
+                            search_string: router.query.search_string as string,
+                            location: router.query.location_id as string,
+                            userId: router.query.user_id as string,
+                            page: 1,
+                            limit: 20,
+                            sortBy: router.query.sort_by as string,
+                            sortType: router.query.sort_type as string,
+                        });
                         setOpenFarmDetails(false)
-                        setSelectedPolygon(null)
-
 
                     }}
                     sx={{ borderRadius: "0px 0px 0px 0px" }}
@@ -147,6 +193,34 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
             <div className={styles.detailscontainer}>
                 <div className={styles.mapandname}>
                     <h2 className={styles.farmname}>{farmDetails?.title}</h2>
+
+                    <div className={styles.overViewBtns}>
+                        <div
+                            className={styles.farmOverView}
+                            style={{ background: "#D94841" }}
+                        >
+                            <img src="/mobileIcons/farms/Crop.svg" alt="" width={"24px"} />
+                            <div className={styles.overViewText}>
+                                <h6>{statsData[0]?.data}</h6>
+                                <span>Crops</span>
+                            </div>
+                        </div>
+                        <div
+                            className={styles.farmOverView}
+                            style={{ background: "#05A155" }}
+                        >
+                            <img
+                                src="/mobileIcons/farms/image-fill.svg"
+                                alt=""
+                                width={"24px"}
+                            />
+                            <div className={styles.overViewText}>
+                                <h6>{statsData[1]?.data}</h6>
+                                <span>Images</span>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* {cropsData.some((obj: any) => obj.hasOwnProperty('url')) ?
                         <div className={styles.collage} >
                             {cropsData?.map((item, index) => {

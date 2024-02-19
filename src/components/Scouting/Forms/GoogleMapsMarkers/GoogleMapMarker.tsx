@@ -450,7 +450,6 @@ const GoogleMapMarkerComponent = () => {
     if (drawingManager) {
       drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
     }
-    setEditFarmsDetails(null)
   };
 
   //get the edit polygon details

@@ -258,3 +258,29 @@ height: 82vh;
         flex-shrink: 0;
         object-fit: cover;
 }
+.overViewBtns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0;
+    gap: 1rem;
+    width: 100%;
+
+}
+.farmOverView {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.8rem;
+    padding: 0 1rem;
+    border-radius: 2rem;
+    padding-block: 0.15em;
+    width: 100%;
+}
+.overViewText h6 {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(16px, 2vw, 24px);
+    font-family: "Inter", sans-serif;
+}

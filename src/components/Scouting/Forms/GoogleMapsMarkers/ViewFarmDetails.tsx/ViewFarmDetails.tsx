@@ -11,13 +11,6 @@ import { useEffect, useState } from "react";
 import { CropTypeResponse } from "@/types/cropTypes";
 import { useRouter } from "next/router";
 import LoadingComponent from "@/components/Core/LoadingComponent";
-import deleteFarmService from "../../../../../../lib/services/FarmsService/deleteFarmService";
-import { useCookies } from "react-cookie";
-import { removeUserDetails } from "@/Redux/Modules/Auth";
-import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import { toast } from "sonner";
-import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import DeleteIcon from '@mui/icons-material/Delete';
 const ViewFarmDetails = ({ setOpenFarmDetails,
     farmDetails,
     FarmlocationDetails,
@@ -31,24 +24,8 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
     );
     const [cropsData, setCropsData] = useState<Array<CropTypeResponse>>([]);
     const [loading, setLoading] = useState(false)
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [statsData, setStatsData] = useState<any>([]);
 
-    const [, , removeCookie] = useCookies(["userType_v2"]);
-    const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-
-    const dispatch = useDispatch();
-
-    const logout = async () => {
-        try {
-            removeCookie("userType_v2");
-            loggedIn_v2("loggedIn_v2");
-            router.push("/");
-            await dispatch(removeUserDetails());
-            await dispatch(deleteAllMessages());
-        } catch (err: any) {
-            console.error(err);
-        }
-    };
 
 
     const getCropsByFarmId = async (
@@ -80,43 +57,48 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
     };
 
 
-    //delete farm
-    const deleteFarm = async () => {
+
+    //get the stats count of farm
+    const getStatsCount = async () => {
+        setLoading(true);
         try {
-            setLoading(true)
-            const response = await deleteFarmService(farmDetails?._id, accessToken);
+            let urls = [
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmDetails?._id}/crops-count`,
+                `${process.env.NEXT_PUBLIC_API_URL}/farms/${farmDetails?._id}/images-count`,
+            ];
+            let tempResult: any = [];
 
-            if (response.success) {
-                setDeleteDialogOpen(false);
-                setOpenFarmDetails(false)
-                toast.success(response.message)
-                getFarmOptions({
-                    search_string: router.query.search_string as string,
-                    location: router.query.location_id as string,
-                    userId: router.query.user_id as string,
-                    page: 1,
-                    limit: 20,
-                    sortBy: router.query.sort_by as string,
-                    sortType: router.query.sort_type as string,
-                });
+            const responses = await Promise.allSettled(
+                urls.map(async (url) => {
+                    const response = await fetch(url, {
+                        method: "GET",
+                        headers: new Headers({
+                            authorization: accessToken,
+                        }),
+                    });
+                    return response.json();
+                })
+            );
 
-            } else if (response?.statusCode == 403) {
-                await logout();
-            } else {
-                toast.error("Something went wrong")
-            }
-        }
-        catch (err) {
-            console.log(err)
-        }
-        finally {
-            setLoading(false)
+            responses.forEach((result, num) => {
+                if (result.status === "fulfilled") {
+                    tempResult.push(result.value);
+                }
+                if (result.status === "rejected") {
+                }
+            });
+            setStatsData(tempResult);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         if (router.isReady && accessToken) {
             getCropsByFarmId(farmDetails?._id)
+            getStatsCount()
         }
     }, [accessToken, farmDetails?._id])
 
@@ -125,28 +107,55 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
             <header className={styles.header}>
                 <IconButton
                     onClick={() => {
+                        getFarmOptions({
+                            search_string: router.query.search_string as string,
+                            location: router.query.location_id as string,
+                            userId: router.query.user_id as string,
+                            page: 1,
+                            limit: 20,
+                            sortBy: router.query.sort_by as string,
+                            sortType: router.query.sort_type as string,
+                        });
                         setOpenFarmDetails(false)
-                        setSelectedPolygon(null)
-
 
                     }}
                     sx={{ borderRadius: "0px 0px 0px 0px" }}
                 >
                     <ArrowBackIosIcon />
                 </IconButton>
-                <IconButton
-                    className={styles.moreoptionsbutton}
-                    sx={{ borderRadius: "0px 0px 0px 0px", width: 24, height: 24 }}
-                    onClick={() => {
-                        setDeleteDialogOpen(true)
-                    }}
-                >
-                    <DeleteIcon />
-                </IconButton>
+
             </header>
             <div className={styles.detailscontainer}>
                 <div className={styles.mapandname}>
                     <h2 className={styles.farmname}>{farmDetails?.title}</h2>
+
+                    <div className={styles.overViewBtns}>
+                        <div
+                            className={styles.farmOverView}
+                            style={{ background: "#D94841" }}
+                        >
+                            <img src="/mobileIcons/farms/Crop.svg" alt="" width={"24px"} />
+                            <div className={styles.overViewText}>
+                                <h6>{statsData[0]?.data}</h6>
+                                <span>Crops</span>
+                            </div>
+                        </div>
+                        <div
+                            className={styles.farmOverView}
+                            style={{ background: "#05A155" }}
+                        >
+                            <img
+                                src="/mobileIcons/farms/image-fill.svg"
+                                alt=""
+                                width={"24px"}
+                            />
+                            <div className={styles.overViewText}>
+                                <h6>{statsData[1]?.data}</h6>
+                                <span>Images</span>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* {cropsData.some((obj: any) => obj.hasOwnProperty('url')) ?
                         <div className={styles.collage} >
                             {cropsData?.map((item, index) => {
@@ -219,13 +228,7 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
                     </div>
                 </div>
             </div>
-            <AlertDelete
-                deleteFarm={deleteFarm}
-                setDialogOpen={setDeleteDialogOpen}
-                open={deleteDialogOpen}
-                loading={loading}
-                deleteTitleProp={"Farm"}
-            />
+
             <LoadingComponent loading={loading} />
         </div>
     )

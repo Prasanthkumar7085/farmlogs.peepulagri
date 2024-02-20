@@ -17,6 +17,8 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
 import ReactDOM from "react-dom";
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import Image from "next/image";
+import AddIcon from '@mui/icons-material/Add';
 interface ApiProps {
   page: number;
   searchString: string;
@@ -189,11 +191,11 @@ const FarmsListBlock = ({
         </div>
         <div className={styles.actionsbar}>
           <TextField
-            className={styles.searchbar}
-            color="primary"
-            size="medium"
+            fullWidth
+            size="small"
             placeholder="Search farm"
             type="search"
+            name="search"
             variant="outlined"
             value={searchString}
             onChange={(e) => {
@@ -208,19 +210,24 @@ const FarmsListBlock = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <TravelExploreIcon />
+                  <Image src="/markers/farm-search.svg" alt="" height={15} width={15} />
                 </InputAdornment>
               ),
             }}
-            sx={{ "& .MuiInputBase-root": { height: "32px" } }}
+            sx={{
+              "& .MuiInputBase-root": {
+                height: "32px", borderRadius: '2px',
+                background: ' #DADADA', color: "#000", fontSize: "12px"
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: "0"
+              }
+            }}
           />
-
-
-
         </div>
 
       </header>
-      <div className={styles.listview}>
+      <div id={styles.listview} className="scrollbar">
         <FarmListCard data={farmOptions}
           getFarmLocation={getFarmLocation}
           editPolygonDetails={editPolygonDetails}
@@ -237,11 +244,10 @@ const FarmsListBlock = ({
       </div>
       <div className={styles.buttoncontainer}>
         <Button
+          startIcon={<AddIcon />}
           className={styles.addfarmbutton}
           disableElevation={true}
-          color="success"
           variant="contained"
-          sx={{ borderRadius: "0px 0px 0px 0px" }}
           onClick={handleAddPolygonButtonClick}
         >
           Add Farm

@@ -110,6 +110,7 @@ const FarmListCard = ({
 
                     editFarmDetails?._id == item?._id ?
                       <IconButton
+                        sx={{ padding: "0" }}
                         onClick={() => {
                           setSelectedPolygon(null)
                           setEditFarmsDetails(null)
@@ -125,9 +126,9 @@ const FarmListCard = ({
                             sortType: router.query.sort_type as string,
                           });
                         }}>
-                        <img alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
+                        <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
                       </IconButton> :
-                      <IconButton onClick={() => {
+                      <IconButton sx={{ padding: "0" }} onClick={() => {
                         setSelectedPolygon(null)
                         setEditFarmsDetails(null)
                         editPolygonDetails(item)
@@ -138,7 +139,7 @@ const FarmListCard = ({
                     : ""}
                   <IconButton
                     className={styles.moreoptionsbutton}
-                    sx={{ borderRadius: "0px 0px 0px 0px", width: 24, height: 24 }}
+                    sx={{ borderRadius: "0px 0px 0px 0px", padding: "0", width: 24, height: 24 }}
                     onClick={() => {
                       setDeleteDialogOpen(true)
                       setDeleteID(item?._id)
@@ -154,8 +155,9 @@ const FarmListCard = ({
                     <h3 className={styles.cropName}>
                       {item?.geometry?.coordinates?.length ?
                         <IconButton
-                          color="primary"
+
                           sx={{
+                            padding: "0", paddingRight: "8px",
                             borderRadius: "0px 0px 0px 0px",
                             display: item?.geometry?.coordinates?.length && !editFarmDetails?._id ? "" : "none",
                           }}
@@ -163,11 +165,12 @@ const FarmListCard = ({
                             getFarmLocation(item.geometry.coordinates, item._id);
                           }}
                         >
-                          <LocationOnIcon />
+                          <Image src="/markers/marker-location-icon.svg" alt="" height={17} width={17} />
                         </IconButton> :
 
                         editFarmDetails?._id == item?._id ?
                           <IconButton
+                            sx={{ padding: "0" }}
                             onClick={() => {
                               setSelectedPolygon(null)
                               setEditFarmsDetails(null)
@@ -182,7 +185,7 @@ const FarmListCard = ({
                                 sortType: router.query.sort_type as string,
                               });
                             }}>
-                            <img alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
+                            <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
                           </IconButton> :
                           <IconButton
                             color="primary"
@@ -211,15 +214,15 @@ const FarmListCard = ({
                   <p className={styles.createddate}>
                     {timePipe(item.createdAt, "DD-MM-YYYY")}
                   </p>
-                  <div>
-                    <Button className={styles.createddate} onClick={() => {
+                  <div className={styles.farmCardButtonGrp}>
+                    <Button className={styles.cropsBtn} onClick={() => {
                       setOpenFarmDetails(true)
                       getFarmDataById(item?._id)
                       setSelectedPolygon(item?._id)
                     }}>
                       crops
                     </Button>
-                    <Button className={styles.createddate} onClick={() => {
+                    <Button className={styles.viewBtn} onClick={() => {
                       router.push(`/scouts?include=tags&page=1&limit=50&farm_id=${item?._id}`)
 
                     }}>

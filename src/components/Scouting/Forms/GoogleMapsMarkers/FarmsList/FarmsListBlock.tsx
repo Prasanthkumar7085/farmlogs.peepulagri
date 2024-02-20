@@ -249,6 +249,11 @@ const FarmsListBlock = ({
           disableElevation={true}
           variant="contained"
           onClick={handleAddPolygonButtonClick}
+          sx={{
+            '& .MuiButton-startIcon': {
+              marginRight: "4px !important"
+            }
+          }}
         >
           Add Farm
         </Button>

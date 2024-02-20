@@ -14,11 +14,11 @@
 .northSideChilli {
   margin: 0;
   flex: 1;
-  position: relative;
-  font-size: inherit;
-  line-height: 100%;
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13px, 0.83vw, 16px);
   font-weight: 400;
-  font-family: inherit;
+  line-height: 100%;
 }
 
 .morebuttonoutline {
@@ -91,8 +91,7 @@
 .locatedate {
   align-self: stretch;
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   font-size: 0.75rem;
 }

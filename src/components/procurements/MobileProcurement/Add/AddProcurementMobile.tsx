@@ -102,7 +102,7 @@ const AddProcurementMobile = () => {
       getProcurementData();
       setFarm([]);
     }
-  }, []);
+  }, [router.query.procurement_id]);
 
   const getProcurementData = async () => {
     setLoading(true);

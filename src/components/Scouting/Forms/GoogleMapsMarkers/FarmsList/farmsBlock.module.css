@@ -79,7 +79,7 @@
 }
 
 #listview {
-  height: calc(100vh - 165px);
+  height: calc(100vh - 220px);
   overflow-y: auto;
   gap: 0.35rem;
   margin: 1rem 0.5rem;
@@ -95,7 +95,6 @@
   line-height: 100% !important;
   text-transform: capitalize !important;
   width: 100% !important;
-  margin-inline: 0.5rem !important;
   padding-block: 0.8rem !important;
 }
 
@@ -114,6 +113,10 @@
   justify-content: flex-start;
 }
 
+.buttoncontainer {
+  padding-inline: 0.5rem;
+}
+
 .detailsslidebarfarmslist {
   border-radius: 8px;
   background-color: #fff;
@@ -122,4 +125,13 @@
   font-size: 1rem;
   color: #000;
   font-family: 'Inter', sans-serif;
+}
+
+.acresCount {
+  color: #45A845;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 0.72vw, 14px);
+  font-weight: 400;
+  line-height: 100%;
+  text-decoration-line: underline;
 }

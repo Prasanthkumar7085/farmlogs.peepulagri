@@ -9,17 +9,16 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0 0.75rem;
+    padding: 1rem 0.7rem;
+    border-bottom: 1px solid #ECECEC;
 }
 
 .farmname {
     margin: 0;
-    align-self: stretch;
-    position: relative;
-    font-size: inherit;
-    line-height: 100%;
+    color: #000;
+    font-size: clamp(13px, 0.83vw, 16px);
     font-weight: 500;
-    font-family: inherit;
+    line-height: 100%;
 }
 
 .mapLocationcontainerIcon {
@@ -39,8 +38,6 @@
     align-items: flex-start;
     justify-content: flex-start;
     padding: 0.75rem 0 1rem;
-    gap: 1rem;
-    font-size: 1rem;
 }
 
 .locationicon {
@@ -54,7 +51,9 @@
 .location {
     margin: 0;
     flex: 1;
-    position: relative;
+    color: #D94841;
+    font-size: clamp(12px, 0.72vw, 14px);
+    font-weight: 400;
     line-height: 140%;
 }
 
@@ -72,7 +71,9 @@
 .acres {
     margin: 0;
     flex: 1;
-    position: relative;
+    color: #A05148;
+    font-size: clamp(12px, 0.72vw, 14px);
+    font-weight: 400;
     line-height: 100%;
 }
 
@@ -163,10 +164,11 @@
 .cropsdetails {
     align-self: stretch;
     flex-direction: row;
-    padding: 1rem 0 0;
+    padding: 1rem 0.8rem;
     gap: 0.5rem;
     font-size: 1rem;
     color: #45a845;
+    border-bottom: 1px solid #ECECEC;
 }
 
 .viewScouting {
@@ -199,11 +201,12 @@
     flex: 1;
     border-radius: 60px;
     flex-direction: column;
-    padding: 1.13rem 1.5rem;
-    background-image: url("/scouting-button-bg.jpg");
+    padding: 13px 1.5rem;
+    /* background-image: url("/scouting-button-bg.jpg"); */
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url("/scouting-button-bg.jpg"), lightgray 50% / cover no-repeat;
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: top;
+    background-position: center;
 }
 
 .buttoncontainer,
@@ -217,7 +220,7 @@
 
 .buttoncontainer {
     flex-direction: row;
-    padding: 3.06rem 0 0;
+    padding: 1.3rem 0.8rem 1rem;
     font-size: 1.13rem;
     color: #fff;
     cursor: pointer;
@@ -228,18 +231,28 @@
     flex-direction: column;
 }
 
+.detailscontainer {
+    height: calc(100vh - 100px);
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.locationDetailsContainer {
+    padding-inline: 0.8rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ECECEC;
+}
+
 .slidebarfarmdetails {
     border-radius: 8px;
     background-color: #fff;
-height: 82vh;
-    max-height: 100vh;
-        padding: 1rem 1rem 0.5rem;
-    box-sizing: border-box;
     text-align: left;
     font-size: 0.88rem;
     color: #000;
-    font-family: Inter;
+    font-family: 'Inter', sans-serif;
+
 }
+
 .collage {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -251,13 +264,14 @@ height: 82vh;
     height: auto;
     display: block;
     align-self: stretch;
-        position: relative;
-        max-width: 100%;
-        overflow: hidden;
-        height: 11.19rem;
-        flex-shrink: 0;
-        object-fit: cover;
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    height: 11.19rem;
+    flex-shrink: 0;
+    object-fit: cover;
 }
+
 .overViewBtns {
     display: flex;
     align-items: center;
@@ -267,6 +281,7 @@ height: 82vh;
     width: 100%;
 
 }
+
 .farmOverView {
     display: grid;
     grid-template-columns: 2rem 1fr;
@@ -278,9 +293,15 @@ height: 82vh;
     padding-block: 0.15em;
     width: 100%;
 }
+
 .overViewText h6 {
     margin: 0;
     font-weight: 400;
     font-size: clamp(16px, 2vw, 24px);
     font-family: "Inter", sans-serif;
+    color: #fff;
+}
+
+.overViewText span {
+    color: #fff;
 }

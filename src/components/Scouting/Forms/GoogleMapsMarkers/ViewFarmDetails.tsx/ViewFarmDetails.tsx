@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { CropTypeResponse } from "@/types/cropTypes";
 import { useRouter } from "next/router";
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import Image from "next/image";
 const ViewFarmDetails = ({ setOpenFarmDetails,
     farmDetails,
     FarmlocationDetails,
@@ -106,6 +107,7 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
         <div className={styles.slidebarfarmdetails}>
             <header className={styles.header}>
                 <IconButton
+                    sx={{ padding: "0.2rem" }}
                     onClick={() => {
                         getFarmOptions({
                             search_string: router.query.search_string as string,
@@ -119,44 +121,47 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
                         setOpenFarmDetails(false)
 
                     }}
-                    sx={{ borderRadius: "0px 0px 0px 0px" }}
+
                 >
-                    <ArrowBackIosIcon />
+                    <ArrowBackIosIcon sx={{ fontSize: "1.2rem" }} />
                 </IconButton>
 
             </header>
             <div className={styles.detailscontainer}>
-                <div className={styles.mapandname}>
-                    <h2 className={styles.farmname}>{farmDetails?.title}</h2>
+                <div className={styles.locationDetailsContainer}>
 
-                    <div className={styles.overViewBtns}>
-                        <div
-                            className={styles.farmOverView}
-                            style={{ background: "#D94841" }}
-                        >
-                            <img src="/mobileIcons/farms/Crop.svg" alt="" width={"24px"} />
-                            <div className={styles.overViewText}>
-                                <h6>{statsData[0]?.data}</h6>
-                                <span>Crops</span>
+                    <div className={styles.mapandname}>
+                        <h2 className={styles.farmname}>{farmDetails?.title}</h2>
+
+                        <div className={styles.overViewBtns}>
+                            <div
+                                className={styles.farmOverView}
+                                style={{ background: "#D94841" }}
+                            >
+                                <Image src="/mobileIcons/farms/Crop.svg" alt="" width={24} height={24} />
+                                <div className={styles.overViewText}>
+                                    <h6>{statsData[0]?.data}</h6>
+                                    <span>Crops</span>
+                                </div>
+                            </div>
+                            <div
+                                className={styles.farmOverView}
+                                style={{ background: "#05A155" }}
+                            >
+                                <Image
+                                    src="/mobileIcons/farms/image-fill.svg"
+                                    alt=""
+                                    width={24}
+                                    height={24}
+                                />
+                                <div className={styles.overViewText}>
+                                    <h6>{statsData[1]?.data}</h6>
+                                    <span>Images</span>
+                                </div>
                             </div>
                         </div>
-                        <div
-                            className={styles.farmOverView}
-                            style={{ background: "#05A155" }}
-                        >
-                            <img
-                                src="/mobileIcons/farms/image-fill.svg"
-                                alt=""
-                                width={"24px"}
-                            />
-                            <div className={styles.overViewText}>
-                                <h6>{statsData[1]?.data}</h6>
-                                <span>Images</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* {cropsData.some((obj: any) => obj.hasOwnProperty('url')) ?
+                        {/* {cropsData.some((obj: any) => obj.hasOwnProperty('url')) ?
                         <div className={styles.collage} >
                             {cropsData?.map((item, index) => {
                                 return (
@@ -172,23 +177,25 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
                         <div style={{ height: "100px", display: "flex", justifyContent: "center" }} >
                             <p> No Images are available</p>
                         </div>} */}
+                    </div>
+                    <div className={styles.locationdetails}>
+                        <Image className={styles.locationicon} alt="" src="/location-farm.svg" width={17} height={17} />
+                        <p className={styles.location}>{
+                            `Latitude :${farmDetails?.geometry?.coordinates?.[0][0] ? farmDetails?.geometry?.coordinates?.[0][0] : "---"}° N, Longitude: ${farmDetails?.geometry?.coordinates?.[0][1] ? farmDetails?.geometry?.coordinates?.[0][1] : "---"}° ,${farmDetails?.location_id?.title ? farmDetails?.location_id?.title : "----"}`}
+                        </p>
+                    </div>
+                    <div className={styles.acresdetails}>
+                        <Image className={styles.locationicon} alt="" src="/acres.svg" width={17} height={17} />
+                        <p className={styles.acres}>{farmDetails?.area} acres</p>
+                    </div>
+                    <div className={styles.createddetails}>
+                        <Image className={styles.locationicon} alt="" src="/viewTaskIcons/calender-icon.svg" width={17} height={17} />
+                        <p className={styles.acres}>{timePipe(farmDetails?.createdAt, "DD,MMM YYYY")}</p>
+                    </div>
                 </div>
-                <div className={styles.locationdetails}>
-                    <img className={styles.locationicon} alt="" src="/location-farm.svg" />
-                    <p className={styles.location}>{
-                        `Latitude :${farmDetails?.geometry?.coordinates?.[0][0] ? farmDetails?.geometry?.coordinates?.[0][0] : "---"}° N, Longitude: ${farmDetails?.geometry?.coordinates?.[0][1] ? farmDetails?.geometry?.coordinates?.[0][1] : "---"}° ,${farmDetails?.location_id?.title ? farmDetails?.location_id?.title : "----"}`}
-                    </p>
-                </div>
-                <div className={styles.acresdetails}>
-                    <img className={styles.locationicon} alt="" src="/acres.svg" />
-                    <p className={styles.acres}>{farmDetails?.area} acres</p>
-                </div>
-                <div className={styles.createddetails}>
-                    <img className={styles.locationicon} alt="" src="/viewTaskIcons/calender-icon.svg" />
-                    <p className={styles.acres}>{timePipe(farmDetails?.createdAt, "DD,MMM YYYY")}</p>
-                </div>
+
                 <div className={styles.cropsdetails}>
-                    <img className={styles.locationicon} alt="" src="/cropsIcons.svg" />
+                    <Image className={styles.locationicon} alt="" src="/cropsIcons.svg" width={17} height={17} />
                     <div className={styles.cropcolumn}>
                         <div className={styles.overallcount}>
                             <h3 className={styles.crops245ac}>

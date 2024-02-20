@@ -12,6 +12,7 @@ import AddFarmDilog from "./FarmsList/AddFarmDiloag";
 import ViewFarmDetails from './ViewFarmDetails.tsx/ViewFarmDetails';
 import { prepareURLEncodedParams } from '../../../../../lib/requestUtils/urlEncoder';
 import getAllFarmsService from '../../../../../lib/services/FarmsService/getAllFarmsServiceMobile';
+import Image from 'next/image';
 
 interface callFarmsProps {
   search_string: string;
@@ -686,7 +687,7 @@ const GoogleMapMarkerComponent = () => {
                 sx={{ backgroundColor: "orange" }}
                 disabled={polygonCoords?.length === 0}
               >
-                <img src={"/blue-delete.png"} width={25} height={25} /> Clear
+                <Image src={"/blue-delete.png"} width={25} height={25} alt="" /> Clear
               </Button>
               <Button
                 onClick={() => {
@@ -705,7 +706,7 @@ const GoogleMapMarkerComponent = () => {
                 sx={{ backgroundColor: "orange" }}
                 disabled={polygonCoords?.length === 0}
               >
-                <img src={"/undo-icon.png"} width={25} height={25} /> Undo
+                <Image src={"/undo-icon.png"} width={25} height={25} alt='' /> Undo
               </Button>
             </div>
           )}

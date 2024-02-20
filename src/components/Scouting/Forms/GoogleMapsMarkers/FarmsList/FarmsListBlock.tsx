@@ -198,7 +198,7 @@ const FarmsListBlock = ({
       <header className={styles.header}>
         <div className={styles.headingcontainer}>
           <h2 className={styles.heading}>Farms</h2>
-          <h2 className={styles.heading}>Total Farms: {paginationDetails?.total}</h2>
+          <h2 className={styles.acresCount}>Total Farms: {paginationDetails?.total}</h2>
 
         </div>
 
@@ -258,12 +258,18 @@ const FarmsListBlock = ({
       <div className={styles.buttoncontainer}>
         <Pagination shape="circular"
           sx={{
+            marginBottom: "0.5rem", width: "100%",
+            '& .MuiPagination-ul': {
+              width: "100%",
+              justifyContent: "center"
+            },
             '& .MuiButtonBase-root': {
               height: "25px !important",
               width: "25px !important",
               minWidth: "inherit",
 
             },
+
           }}
           page={+paginationDetails?.page}
           count={paginationDetails?.total_pages}

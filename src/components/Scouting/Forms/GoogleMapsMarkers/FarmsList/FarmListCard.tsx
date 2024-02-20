@@ -126,26 +126,26 @@ const FarmListCard = ({
                             sortType: router.query.sort_type as string,
                           });
                         }}>
-                        <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
+                        <Image alt="" src="/markers/marker-delete-icon.svg" width={15} height={15} />
                       </IconButton> :
                       <IconButton sx={{ padding: "0" }} onClick={() => {
                         setSelectedPolygon(null)
                         setEditFarmsDetails(null)
                         editPolygonDetails(item)
                       }}>
-                        <img alt="" src="/editicon.svg" width={15} height={15} />
+                        <Image alt="" src="/markers/marker-edit-icon.svg" width={15} height={15} />
                       </IconButton>
 
                     : ""}
                   <IconButton
                     className={styles.moreoptionsbutton}
-                    sx={{ borderRadius: "0px 0px 0px 0px", padding: "0", width: 24, height: 24 }}
+                    sx={{ padding: "0" }}
                     onClick={() => {
                       setDeleteDialogOpen(true)
                       setDeleteID(item?._id)
                     }}
                   >
-                    <DeleteIcon />
+                    <Image alt="" src="/markers/marker-delete-icon.svg" width={15} height={15} />
                   </IconButton>
 
                 </div>
@@ -170,7 +170,7 @@ const FarmListCard = ({
 
                         editFarmDetails?._id == item?._id ?
                           <IconButton
-                            sx={{ padding: "0" }}
+                            sx={{ padding: "0", marginRight: "0.5rem" }}
                             onClick={() => {
                               setSelectedPolygon(null)
                               setEditFarmsDetails(null)
@@ -185,12 +185,12 @@ const FarmListCard = ({
                                 sortType: router.query.sort_type as string,
                               });
                             }}>
-                            <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
+                            <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={14} height={14} />
                           </IconButton> :
                           <IconButton
-                            color="primary"
+
                             sx={{
-                              borderRadius: "0px 0px 0px 0px",
+                              padding: "0", marginRight: "0.5rem", color: "#45A845"
                             }}
 
 

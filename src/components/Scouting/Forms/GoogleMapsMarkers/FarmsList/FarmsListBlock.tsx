@@ -4,6 +4,7 @@ import {
   Drawer,
   IconButton,
   InputAdornment,
+  Pagination,
   TextField,
 } from "@mui/material";
 import styles from "./farmsBlock.module.css";
@@ -17,6 +18,8 @@ import LoadingComponent from "@/components/Core/LoadingComponent";
 import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
 import ReactDOM from "react-dom";
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import { createRoot } from 'react-dom/client'
+
 interface ApiProps {
   page: number;
   searchString: string;
@@ -39,13 +42,16 @@ const FarmsListBlock = ({
   setOpenFarmDetails,
   getFarmDataById,
   addPolyToExisting,
-  farmOptionsLoading
+  farmOptionsLoading,
+  paginationDetails,
+  capturePageNum
 }: any) => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
+  const [pageNum, setPageNum] = useState<number | string>();
 
   const [location, setLocation] = useState<{
     title: string;
@@ -97,7 +103,6 @@ const FarmsListBlock = ({
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
-      console.log("p0p")
       setLocation({ title: "All", _id: "1" });
       getFarmOptions({
         search_string: router.query.search_string as string,
@@ -111,6 +116,7 @@ const FarmsListBlock = ({
       return;
     }
     if (value) {
+      setSelectedPolygon(null)
       setLocation(value);
       getFarmOptions({
         search_string: router.query.search_string as string,
@@ -175,16 +181,14 @@ const FarmsListBlock = ({
       />
     );
 
-    ReactDOM.render(autocompleteComponent, controlDiv);
-
+    createRoot(controlDiv).render(autocompleteComponent)
 
     // Append the custom control element to the map
     map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
 
 
 
-  }, [map, googleMaps]); // Re-render the control when location changes
-
+  }, [map, googleMaps]);
 
 
   return (
@@ -192,7 +196,10 @@ const FarmsListBlock = ({
       <header className={styles.header}>
         <div className={styles.headingcontainer}>
           <h2 className={styles.heading}>Farms</h2>
+          <h2 className={styles.heading}>Total Farms: {paginationDetails?.total}</h2>
+
         </div>
+
         <div className={styles.actionsbar}>
           <TextField
             className={styles.searchbar}
@@ -242,6 +249,22 @@ const FarmsListBlock = ({
         />
       </div>
       <div className={styles.buttoncontainer}>
+        <Pagination shape="circular"
+          sx={{
+            '& .MuiButtonBase-root': {
+              height: "25px !important",
+              width: "25px !important",
+              minWidth: "inherit",
+
+            },
+          }}
+          page={+paginationDetails?.page}
+          count={paginationDetails?.total_pages}
+          onChange={(event: any, value: any) => {
+            capturePageNum(value)
+            setPageNum(+value)
+          }}
+        />
         <Button
           className={styles.addfarmbutton}
           disableElevation={true}

@@ -58,8 +58,8 @@ const GoogleMapMarkerComponent = () => {
   const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false)
   const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>()
   const [editFarmDetails, setEditFarmsDetails] = useState<any>(null)
+  const [paginationDetails, setPaginationDetails] = useState<any>()
 
-  console.log(editFarmDetails, "Safgher")
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
     const controlDiv = document.createElement("div");
@@ -269,10 +269,12 @@ const GoogleMapMarkerComponent = () => {
     });
 
     // Set the polygon on the map
-    // Set the polygon on the map
+
 
     newPolygon.setMap(map);
     setPolygon(newPolygon);
+
+
   };
 
 
@@ -346,7 +348,7 @@ const GoogleMapMarkerComponent = () => {
       if (response?.success) {
         const { data, ...rest } = response;
         setFarmOptions(response?.data);
-
+        setPaginationDetails(rest)
         const newData = response.data.map((item: any) => ({
           _id: item._id,
           cor: item?.geometry?.coordinates?.length
@@ -378,25 +380,6 @@ const GoogleMapMarkerComponent = () => {
       mapRef.current.setZoom(15);
     }
   };
-
-  //drodown marker
-  const Marker = ({ text }: any) => (
-    <div
-      style={{
-        color: "white",
-        background: "grey",
-        padding: "5px 10px",
-        display: "inline-flex",
-        textAlign: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "50%",
-        transform: "translate(-50%, -50%)",
-      }}
-    >
-      {text}
-    </div>
-  );
 
   //calculate the centroid of the polygon
   const calculatePolygonCentroid = (coordinates: any) => {
@@ -508,20 +491,7 @@ const GoogleMapMarkerComponent = () => {
           marker.markerInfo = markerInfo;
 
           newMarkers.push(marker);
-          //       googleMaps.event.addListener(marker, 'mouseover', function () {
-          //         // Create a new InfoWindow
-          //         const infoWindow = new googleMaps.InfoWindow({
-          //           content: `
-          //   <div>
-          //     <h4>${marker.markerInfo?._id}</h4>
-          //     <p>${marker.markerInfo?.acres}</p>
-          //   </div>
-          // `
-          //         });
 
-          //         // Open the InfoWindow above the marker
-          //         infoWindow.open(map, marker);
-          //       });
           marker.addListener("click", () => {
             setSelectedPolygon(markerInfo.id)
             const markerPosition = marker.getPosition();
@@ -605,7 +575,7 @@ const GoogleMapMarkerComponent = () => {
           search_string: searchString as string,
           location: router.query.location_id as string,
           userId: router.query.user_id as string,
-          page: 1,
+          page: router.query.page as string,
           limit: 20,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
@@ -660,6 +630,19 @@ const GoogleMapMarkerComponent = () => {
     setPolygonDrawingMode();
 
   }
+
+  //get the capture page number
+  const capturePageNum = (value: string | number) => {
+    getFarmOptions({
+      search_string: searchString as string,
+      location: router.query.location_id as string,
+      userId: router.query.user_id as string,
+      page: value,
+      limit: 20,
+      sortBy: router.query.sort_by as string,
+      sortType: router.query.sort_type as string,
+    });
+  };
 
   return (
     <div
@@ -761,6 +744,8 @@ const GoogleMapMarkerComponent = () => {
               getFarmDataById={getFarmDataById}
               addPolyToExisting={addPolyToExisting}
               farmOptionsLoading={loading}
+              paginationDetails={paginationDetails}
+              capturePageNum={capturePageNum}
 
             /> : ""}
 

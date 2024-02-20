@@ -5,13 +5,10 @@ import { useRouter } from 'next/router';
 import styles from "./google-map.module.css";
 import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
 import { useSelector } from 'react-redux';
-import editFarmService from '../../../../../lib/services/FarmsService/editFarmService';
 import { Toaster, toast } from 'sonner';
 import LoadingComponent from '@/components/Core/LoadingComponent';
-import FarmsListDrawer from "./FarmsList/FarmsListBlock";
 import FarmsListBlock from "./FarmsList/FarmsListBlock";
 import AddFarmDilog from "./FarmsList/AddFarmDiloag";
-import ListAllFarmForDropDownService from "../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
 import ViewFarmDetails from './ViewFarmDetails.tsx/ViewFarmDetails';
 import { prepareURLEncodedParams } from '../../../../../lib/requestUtils/urlEncoder';
 import getAllFarmsService from '../../../../../lib/services/FarmsService/getAllFarmsServiceMobile';
@@ -663,11 +660,11 @@ const GoogleMapMarkerComponent = () => {
   }
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "row", alignItems: "center", }}
+    <div className={styles.markersPageWeb}
+
     >
       {renderField == false ?
-        <div style={{ width: "75%", height: "100vh", marginTop: "5px" }}>
+        <div className={styles.googleMapBlock} >
 
           <GoogleMapReact
             bootstrapURLKeys={{
@@ -732,7 +729,7 @@ const GoogleMapMarkerComponent = () => {
           )}
         </div> : ""}
 
-      <div style={{ width: "25%", height: "100vh", marginTop: "5px" }}>
+      <div className={styles.rightFarmDtailsContainer} >
         {openFarmDetails ?
           <ViewFarmDetails
             setOpenFarmDetails={setOpenFarmDetails}

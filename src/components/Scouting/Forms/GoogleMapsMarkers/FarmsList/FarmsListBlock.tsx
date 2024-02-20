@@ -169,15 +169,9 @@ const FarmsListBlock = ({
         )}
       />
     );
-
     ReactDOM.render(autocompleteComponent, controlDiv);
-
-
     // Append the custom control element to the map
     map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
-
-
-
   }, [map, googleMaps]); // Re-render the control when location changes
 
 

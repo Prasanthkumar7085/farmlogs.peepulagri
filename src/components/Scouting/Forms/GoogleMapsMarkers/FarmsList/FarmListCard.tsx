@@ -5,6 +5,7 @@ import timePipe from "@/pipes/timePipe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
 import { useRouter } from "next/router";
+import Image from "next/image";
 const FarmListCard = ({
   data, getFarmLocation, editPolygonDetails, setEditFarmsDetails, editFarmDetails,
   setPolygonCoords, getFarmOptions, setSelectedPolygon,
@@ -24,7 +25,7 @@ const FarmListCard = ({
           return (
             <div className={styles.farmcard} key={index}>
               <div className={styles.polygoncontainer}>
-                <img className={styles.polygonIcon} alt="" src="/marker.svg" />
+                <Image className={styles.polygonIcon} height={40} width={40} alt="" src="/marker.svg" />
               </div>
               <div className={styles.detailscontainer}>
                 <div className={styles.nameandaction}>

@@ -54,6 +54,7 @@ const FarmsListBlock = ({
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [pageNum, setPageNum] = useState<number | string>();
+  const [autocompleteCreated, setAutocompleteCreated] = useState(false);
 
   const [location, setLocation] = useState<{
     title: string;
@@ -105,6 +106,7 @@ const FarmsListBlock = ({
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
+      setSelectedPolygon(null)
       setLocation({ title: "All", _id: "1" });
       getFarmOptions({
         search_string: router.query.search_string as string,
@@ -146,51 +148,54 @@ const FarmsListBlock = ({
 
 
   useEffect(() => {
-    // Create a custom control element
-    const controlDiv = document.createElement('div');
+    if (map && googleMaps) {
+      // Create a custom control element
+      const controlDiv = document.createElement('div');
 
-    // Add Autocomplete component to the control element
-    const autocompleteComponent = (
-      <Autocomplete
-        sx={{
-          width: '250px',
-          maxWidth: '250px',
-          borderRadius: '4px',
-        }}
-        size="small"
-        fullWidth
-        noOptionsText="No such location"
-        value={location}
-        isOptionEqualToValue={(option, value) => option.title === value.title}
-        getOptionLabel={(option) => option.title}
-        options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
-        onChange={onChangeLocation}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder="Search by locations"
-            variant="outlined"
-            size="small"
-            sx={{
-              '& .MuiInputBase-root': {
-                fontSize: 'clamp(.875rem, 1vw, 1.125rem)',
-                backgroundColor: '#fff',
-                border: 'none',
-              },
-            }}
-          />
-        )}
-      />
-    );
+      // Add Autocomplete component to the control element
+      const autocompleteComponent = (
+        <Autocomplete
+          sx={{
+            width: '350px',
+            maxWidth: '400px',
+          }}
+          size="small"
+          fullWidth
+          noOptionsText="No such location"
+          value={location}
+          isOptionEqualToValue={(option, value) => option.title === value.title}
+          getOptionLabel={(option) => option.title}
+          options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
+          onChange={onChangeLocation}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Search by Farm locations"
+              variant="outlined"
+              size="small"
+              sx={{
+                '& .MuiInputBase-root': {
+                  fontSize: 'clamp(.875rem, 1vw, 1.125rem)',
+                  backgroundColor: '#fff',
+                  border: 'none',
+                  borderRadius: "10px 10px 10px 10px",
+                  padding: "13px",
+                  marginBottom: "10px"
+                },
+              }}
+            />
+          )}
+        />
+      );
 
-    createRoot(controlDiv).render(autocompleteComponent)
+      createRoot(controlDiv).render(autocompleteComponent)
 
-    // Append the custom control element to the map
-    map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
+      // Append the custom control element to the map
+      map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
+      setAutocompleteCreated(true);
+    }
 
-
-
-  }, [map, googleMaps]);
+  }, [map, googleMaps, autocompleteCreated]);
 
 
   return (

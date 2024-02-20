@@ -513,3 +513,10 @@ left: 10px !important;
 .MuiPopper-root {
     z-index: 2000 !important;
 }
+.pac-container:after {
+    content: none !important;
+   
+}
+.pac-container{
+border-radius: 10px 10px 16px 16px;
+}

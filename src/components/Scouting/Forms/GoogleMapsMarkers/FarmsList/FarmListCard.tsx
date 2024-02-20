@@ -74,7 +74,7 @@ const FarmListCard = ({
       } else if (response?.statusCode == 403) {
         await logout();
       } else {
-        toast.error("Something went wrong")
+        toast.error(response?.message)
       }
     }
     catch (err) {
@@ -126,7 +126,7 @@ const FarmListCard = ({
                             sortType: router.query.sort_type as string,
                           });
                         }}>
-                        <Image alt="" src="/markers/marker-delete-icon.svg" width={15} height={15} />
+                        <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
                       </IconButton> :
                       <IconButton sx={{ padding: "0" }} onClick={() => {
                         setSelectedPolygon(null)

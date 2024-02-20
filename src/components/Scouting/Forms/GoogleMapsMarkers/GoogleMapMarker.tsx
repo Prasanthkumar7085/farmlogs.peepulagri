@@ -192,16 +192,17 @@ const GoogleMapMarkerComponent = () => {
     searchInput.setAttribute("id", "searchInput");
     searchInput.setAttribute("placeholder", "Search for a place...");
     searchInput.style.marginBottom = "10px";
-    searchInput.style.padding = "10px";
+    searchInput.style.padding = "13px";
     searchInput.style.width = "200%";
     searchInput.style.margin = "auto";
-    searchInput.style.borderRadius = "20px";
+    searchInput.style.borderRadius = "10px 10px 10px 10px";
 
     customAutocompleteDiv.appendChild(searchInput);
     map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
     // Create Autocomplete for input field
-    const autocomplete = new maps.places.Autocomplete(searchInput);
-    autocomplete.bindTo("bounds", map);
+    const autocomplete = new maps.places.Autocomplete(searchInput, {
+      placeAutocompleteOptions: { strictBounds: false } // Setting strictBounds to true removes the attribution
+    });
 
     const onPlaceChanged = () => {
       const place = autocomplete.getPlace();
@@ -527,6 +528,7 @@ const GoogleMapMarkerComponent = () => {
       // Set the markers and polygons
       setMarkerObjects(newMarkers);
     }
+
   }, [map, googleMaps, viewPolygonsCoord]);
 
   //redirect to the polygon

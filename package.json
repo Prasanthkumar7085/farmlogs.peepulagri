@@ -60,6 +60,7 @@
     "react-modal": "^3.16.1",
     "react-pdf": "^7.5.0",
     "react-photoswipe-gallery": "^2.2.7",
+    "react-places-autocomplete": "^7.3.0",
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.2",
     "react-responsive-carousel": "^3.2.23",
@@ -84,6 +85,7 @@
     "@types/google-map-react": "^2.1.10",
     "@types/react-image-gallery": "^1.2.1",
     "@types/react-modal": "^3.16.1",
+    "@types/react-places-autocomplete": "^7.2.14",
     "@types/uuid": "^9.0.7",
     "eslint": "^8.47.0"
   }

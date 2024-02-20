@@ -119,6 +119,7 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
                             sortType: router.query.sort_type as string,
                         });
                         setOpenFarmDetails(false)
+                        setSelectedPolygon(null)
 
                     }}
 

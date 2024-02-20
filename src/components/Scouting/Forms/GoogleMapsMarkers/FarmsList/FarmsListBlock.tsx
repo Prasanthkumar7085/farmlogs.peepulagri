@@ -192,7 +192,6 @@ const FarmsListBlock = ({
       <header className={styles.header}>
         <div className={styles.headingcontainer}>
           <h2 className={styles.heading}>Farms</h2>
-          <p className={styles.totalacres}>24.94 ha</p>
         </div>
         <div className={styles.actionsbar}>
           <TextField

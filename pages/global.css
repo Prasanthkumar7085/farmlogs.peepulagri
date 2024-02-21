@@ -55,7 +55,8 @@ input[type=number] {
 .rs-picker-menu {
     z-index: 9999 !important;
 }
-.rs-picker-daterange-header{
+
+.rs-picker-daterange-header {
     display: none;
 }
 
@@ -377,6 +378,16 @@ input[type=number] {
     position: relative;
 }
 
+#markerGoogleMapBlock #searchInput {
+    background-color: #fff !important;
+    margin: auto !important;
+    padding: 11px !important;
+    width: 150% !important;
+    border-radius: 6px !important;
+    margin-top: 1rem !important;
+    margin-left: 1rem !important;
+    border: 0 !important;
+}
 
 
 .addFormPositionIcon {
@@ -513,10 +524,12 @@ left: 10px !important;
 .MuiPopper-root {
     z-index: 2000 !important;
 }
+
 .pac-container:after {
     content: none !important;
-   
+
 }
-.pac-container{
-border-radius: 10px 10px 16px 16px;
+
+.pac-container {
+    border-radius: 10px 10px 16px 16px;
 }

@@ -1,8 +1,8 @@
 .label {
-  color: #000;
   font-family: "Inter", sans-serif;
-  font-size: clamp(12px, 3.25vw, 14px);
+  font-size: clamp(12px, 0.625vw, 14px);
   font-weight: 500;
+  color: #344054;
 }
 
 .inputfarmname p {
@@ -70,47 +70,65 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: var(--gap-base);
+  gap: 0.5rem;
   width: 100%;
 }
 
 .back {
   border-radius: 4px !important;
   border: 1px solid #d94841 !important;
-  background: #FFF !important;
+  background: transparent !important;
   box-shadow: none !important;
-  padding: 8px 20px !important;
+  padding: 4px 15px !important;
   color: #d94841 !important;
-  font-family: Inter !important;
-  font-size: clamp(15px, 3.5vw, 16px) !important;
-  font-weight: 400 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(12px, 0.625vw, 14px) !important;
+  font-weight: 500 !important;
   text-transform: capitalize !important;
+  min-width: inherit !important;
 
+}
+
+.back:hover {
+  border: 1px solid #d94841 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #d94841 !important;
 }
 
 .submit {
   border-radius: 4px !important;
   border: 1px solid #d94841 !important;
   background: #d94841 !important;
-  box-shadow: 4px 4px 10px 0px #0202460d !important;
+  box-shadow: none !important;
   color: #FFF !important;
   font-family: "Inter", sans-serif !important;
-  font-size: clamp(15px, 3.5vw, 16px) !important;
+  font-size: clamp(12px, 0.625vw, 14px) !important;
   font-weight: 500 !important;
   text-transform: capitalize !important;
+  padding: 4px 15px !important;
+  min-width: inherit !important;
 }
 
-.addfarmform,
-.buttons {
+.submit:hover {
+  border: 1px solid #d94841 !important;
+  background: #d94841 !important;
+  box-shadow: none !important;
+  color: #FFF !important;
+}
+
+.addfarmform {
   align-self: stretch;
   display: flex;
   justify-content: flex-start;
 }
 
 .buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
@@ -120,9 +138,10 @@
 }
 
 .addfarmform {
-  border-radius: var(--br-5xs) var(--br-5xs) 0 0;
+  border-radius: 4px;
+  background: #FEE;
   align-items: flex-start;
-  padding: 2rem 1rem 0;
+  padding: 1rem;
   gap: var(--gap-13xl);
   text-align: left;
   font-size: var(--text-sm-medium-size);
@@ -131,14 +150,16 @@
 }
 
 .addLocationBtn {
-  background-color: #CCEBCC;
+  background-color: #CCEBCC !important;
   box-shadow: 0px 0px 0px 0.5px #05a155;
-  color: #05A155;
-  padding: 6px 20px;
+  color: #05A155 !important;
+  padding: 6px 10px;
   border-radius: 4px;
   display: flex;
   align-items: center;
   gap: 5px;
+  text-transform: capitalize !important;
+  font-size: clamp(10px, 0.625vw, 12px);
 }
 
 .iconsiconArrowLeft {

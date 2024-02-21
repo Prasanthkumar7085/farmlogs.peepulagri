@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { Button, ButtonBase, Typography } from '@mui/material';
+import { Button, ButtonBase, Tooltip, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from "./google-map.module.css";
 import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
@@ -649,7 +649,7 @@ const GoogleMapMarkerComponent = () => {
 
     >
       {renderField == false ?
-        <div className={styles.googleMapBlock} >
+        <div className={styles.googleMapBlock} id='markerGoogleMapBlock'>
 
           <GoogleMapReact
             bootstrapURLKeys={{
@@ -677,39 +677,46 @@ const GoogleMapMarkerComponent = () => {
             ""
           ) : (
             <div
+              className={styles.updateFarmButtonGrp}
               style={{
                 position: "absolute",
                 top: "22%",
                 right: "25%",
               }}
             >
-              <Button
-                onClick={clearAllPoints}
-                variant="outlined"
-                sx={{ backgroundColor: "orange" }}
-                disabled={polygonCoords?.length === 0}
-              >
-                <Image src={"/blue-delete.png"} width={25} height={25} alt="" /> Clear
-              </Button>
-              <Button
-                onClick={() => {
-                  setDrawerOpen(true);
-                }}
-                variant="outlined"
-                sx={{ backgroundColor: "orange" }}
-                disabled={polygonCoords?.length === 0}
-              >
-                {editFarmDetails?._id ? "Update" : "Save"}
-              </Button>
+              <Tooltip title="Clear">
 
-              <Button
-                onClick={undoLastPoint}
-                variant="outlined"
-                sx={{ backgroundColor: "orange" }}
-                disabled={polygonCoords?.length === 0}
-              >
-                <Image src={"/undo-icon.png"} width={25} height={25} alt='' /> Undo
-              </Button>
+                <Button
+                  onClick={clearAllPoints}
+                  variant="contained"
+                  disabled={polygonCoords?.length === 0}
+                >
+                  <Image src="/markers/clear-icon.svg" alt="" width={20} height={20} />
+                </Button>
+              </Tooltip>
+              <Tooltip title={editFarmDetails?._id ? "Update" : "Save"}>
+
+                <Button
+                  onClick={() => {
+                    setDrawerOpen(true);
+                  }}
+                  variant="contained"
+                  disabled={polygonCoords?.length === 0}
+                >
+                  {/* {editFarmDetails?._id ? "Update" : "Save"} */}
+                  <Image src={editFarmDetails?._id ? "/markers/update-icon.svg" : "/markers/save-icon.svg"} alt="" width={20} height={20} />
+                </Button>
+              </Tooltip>
+              <Tooltip title="Undo">
+
+                <Button
+                  onClick={undoLastPoint}
+                  variant="contained"
+                  disabled={polygonCoords?.length === 0}
+                >
+                  <Image src="/markers/undo-icon.svg" alt="" width={20} height={20} />
+                </Button>
+              </Tooltip>
             </div>
           )}
         </div> : ""}

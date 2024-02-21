@@ -156,8 +156,8 @@ const FarmsListBlock = ({
       const autocompleteComponent = (
         <Autocomplete
           sx={{
-            width: '350px',
-            maxWidth: '400px',
+            width: '300px',
+            maxWidth: '350px',
           }}
           size="small"
           fullWidth
@@ -174,13 +174,18 @@ const FarmsListBlock = ({
               variant="outlined"
               size="small"
               sx={{
+                marginTop: "1rem",
                 '& .MuiInputBase-root': {
-                  fontSize: 'clamp(.875rem, 1vw, 1.125rem)',
+                  fontSize: 'clamp(.75rem, 0.83vw, 18px)',
                   backgroundColor: '#fff',
                   border: 'none',
-                  borderRadius: "10px 10px 10px 10px",
-                  padding: "13px",
+                  borderRadius: "6px !important",
+                  padding: "10px",
                   marginBottom: "10px"
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#fff !important", borderRadius: "6px !important"
+
                 },
               }}
             />

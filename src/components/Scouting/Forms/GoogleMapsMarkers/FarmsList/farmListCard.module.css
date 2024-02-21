@@ -120,3 +120,41 @@
   color: #000;
   font-family: Inter;
 }
+
+.farmCardButtonGrp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.farmCardButtonGrp .cropsBtn {
+  border-radius: 33px !important;
+  background: #DCEEDC !important;
+  color: #45A845 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(10px, 0.625vw, 13px) !important;
+  font-weight: 400 !important;
+  line-height: 100% !important;
+  text-transform: capitalize !important;
+  padding: 5px 10px !important;
+  min-width: inherit !important;
+}
+
+.farmCardButtonGrp .cropsBtn:hover {
+  border-radius: 33px !important;
+  background: #DCEEDC !important;
+  color: #45A845 !important;
+}
+
+.farmCardButtonGrp .viewBtn {
+  border-radius: 33px !important;
+  background: #FED8D8 !important;
+  color: #FE3143 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(10px, 0.625vw, 13px) !important;
+  font-weight: 400 !important;
+  line-height: 100% !important;
+  text-transform: capitalize !important;
+  padding: 5px 10px !important;
+  min-width: inherit !important;
+}

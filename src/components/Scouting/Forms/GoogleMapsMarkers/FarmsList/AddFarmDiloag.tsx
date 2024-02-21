@@ -299,14 +299,17 @@ const AddFarmDilog = ({
                   sx={{
                     "& .MuiInputBase-root": {
                       background: "#fff",
+                      borderRadius: "8px !important"
+
                     },
                     "& .MuiInputBase-input": {
-                      padding: "11.5px 14px",
+                      padding: "10px 14px",
                       height: "inherit",
                       fontFamily: "'Inter', sans-serif",
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "grey !important",
+                      borderColor: "#fff !important", borderRadius: "8px !important"
+
                     },
                   }}
                   {...register("title")}
@@ -344,7 +347,7 @@ const AddFarmDilog = ({
                       setAddLocationOpen(true);
                     }}
                   >
-                    <AddIcon sx={{ fontSize: "1.2rem" }} /> ADD
+                    <AddIcon sx={{ fontSize: "1rem" }} />ADD
                   </span>
                 </div>
 
@@ -419,14 +422,18 @@ const AddFarmDilog = ({
                         sx={{
                           "& .MuiInputBase-root": {
                             background: "#fff",
+                            borderRadius: "8px !important"
+
                           },
                           "& .MuiInputBase-input": {
-                            padding: "5.5px 14px !important",
+                            padding: "4px 14px !important",
                             height: "inherit",
                             fontFamily: "'Inter', sans-serif",
                           },
                           "& .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "grey !important",
+                            borderColor: "#fff !important",
+                            borderRadius: "8px !important"
+
                           },
                         }}
                       />
@@ -446,14 +453,16 @@ const AddFarmDilog = ({
                   sx={{
                     "& .MuiInputBase-root": {
                       background: "#fff",
+                      borderRadius: "8px !important"
                     },
                     "& .MuiInputBase-input": {
-                      padding: "12px 14px",
+                      padding: "10px 14px",
                       height: "inherit",
                       fontFamily: "'Inter', sans-serif",
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "grey !important",
+                      borderColor: "#fff !important",
+                      borderRadius: "8px !important"
                     },
                   }}
                   {...register("area")}
@@ -478,6 +487,7 @@ const AddFarmDilog = ({
                 />
               </div>
               <div className={styles.buttons}>
+
                 <Button
                   className={styles.back}
                   name="back"

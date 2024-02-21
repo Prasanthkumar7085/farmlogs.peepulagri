@@ -141,9 +141,11 @@ const SideBarMenu = ({ children }: any) => {
               })}
               <ListItem className={styles.menuItem}>
                 <Tooltip title="Search">
-                  <IconButton onClick={() => {
-                    setGlobalSearchOpen(true)
-                  }}>
+                  <IconButton
+                    sx={{ display: router.pathname.includes("/scouts") ? "none" : "" }}
+                    onClick={() => {
+                      setGlobalSearchOpen(true)
+                    }}>
                     <Image src="/markers/global-search-menu-icon.svg" alt="" width={20} height={20} />
                   </IconButton>
                 </Tooltip>

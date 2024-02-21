@@ -35,6 +35,15 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
     const [changed, setChanged] = useState(false);
     const [farmOptions, setFarmOptions] = useState([]);
     const [farm, setFarm] = useState<any>();
+    const [defaultValueSet, setDefaultValueSet] = useState<any>();
+    const [autoCompleteLoading, setAutoCompleteLoading] = useState(false);
+
+    useEffect(() => {
+        setAutoCompleteLoading(true);
+        setTimeout(() => {
+            setAutoCompleteLoading(false);
+        }, 1);
+    }, []);
 
     const getLocations = async (newLocation = "") => {
         setOptionsLoading(true);
@@ -79,7 +88,7 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
             setChanged(true);
             setLocation(value);
             setFarm(null);
-
+            setDefaultValueSet(null)
             getAllFarms({
                 farmId: '',
                 searchString: '',
@@ -118,11 +127,6 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
 
 
         try {
-            // if (searchString) {
-            //   router.push({
-            //     query: { ...router.query, farm_search_string: searchString },
-            //   });
-            // }
             const response = await ListAllFarmForDropDownService(
                 searchString,
                 accessToken,
@@ -289,7 +293,7 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                     )}
                 />
 
-                <Autocomplete
+                {/* <Autocomplete
                     sx={{
                         width: "40%",
 
@@ -333,8 +337,80 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                             }}
                         />
                     )}
+                /> */}
+
+                <Autocomplete
+                    sx={{
+                        width: "40%",
+
+                        borderRadius: "4px", '& .MuiSvgIcon-root': {
+                            color: "#fff"
+                        }
+
+                    }}
+                    value={defaultValueSet}
+                    id="size-small-outlined-multi"
+                    size="small"
+                    fullWidth
+                    noOptionsText={"No such Farms"}
+                    options={farmOptions && farmOptions?.length ? farmOptions : []}
+                    loading={optionsLoading}
+                    getOptionLabel={(option: any) =>
+                        option["title"] ? option["title"]?.toUpperCase() : ""
+                    }
+
+                    // onClose={() => setSearchString("")}
+                    renderOption={(props, option) => {
+                        return (
+                            <li {...props} key={option?._id}>
+                                {option?.title}
+                            </li>
+                        );
+                    }}
+                    onChange={(e: any, value: any, reason: any) => {
+                        if (value) {
+                            onSelectFarmFromDropDown(value, reason);
+                            setDefaultValueSet(value);
+                        } else {
+                            onSelectFarmFromDropDown("", reason);
+                            setDefaultValueSet(null);
+                        }
+                    }}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            placeholder={"Search by farms"}
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                                    backgroundColor: "#ABABAB",
+                                    border: "none",
+                                    color: "#fff",
+                                    paddingBlock: "2.5px !important"
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: "0 !important", borderRadius: "4px !important"
+                                }
+                            }} value={searchString}
+                            onChange={(e) => {
+                                setOptionsLoading(true);
+                                setSearchString(e.target.value);
+                            }}
+                        />
+                    )}
+
+
                 />
-                <Button variant='contained' className={styles.globalSearchButton}>
+                <Button variant='contained'
+                    onClick={() => {
+                        router.push(`/scouts?include=tags&page=1&limit=50&farm_id=${farm?._id}&farm_search_string=${farm?.title}&location_id=${location?._id}`)
+                        setGlobalSearchOpen(false)
+                        setDefaultValueSet(null);
+                        setLocation(null);
+                        setFarm(null)
+
+                    }}
+                    className={styles.globalSearchButton}>
                     Search
                 </Button>
             </div>

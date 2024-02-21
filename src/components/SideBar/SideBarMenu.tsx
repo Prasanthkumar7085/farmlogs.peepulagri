@@ -13,6 +13,8 @@ import styles from "./side-bar-menu.module.css";
 import { Logout } from "@mui/icons-material";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
+import { useState } from "react";
+import GlobalSearch from "../Core/GlobalSearch/GlobalSearch";
 
 interface ItemProps {
   src: string;
@@ -29,6 +31,7 @@ const SideBarMenu = ({ children }: any) => {
 
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
+  const [globalSearchOpen, setGlobalSearchOpen] = useState<boolean>(false)
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -102,6 +105,7 @@ const SideBarMenu = ({ children }: any) => {
 
               }}
             />
+
             <List>
               {menuListItems.map((item: any, index: number) => {
                 if (item?.isVisible) {
@@ -130,10 +134,22 @@ const SideBarMenu = ({ children }: any) => {
                           </ListItemButton>
                         </Link>
                       </Tooltip>
+
                     </ListItem>
                   );
                 }
               })}
+              <ListItem className={styles.menuItem}>
+                <Tooltip title="Search">
+                  <IconButton
+                    sx={{ display: router.pathname.includes("/scouts") ? "none" : "" }}
+                    onClick={() => {
+                      setGlobalSearchOpen(true)
+                    }}>
+                    <Image src="/markers/global-search-menu-icon.svg" alt="" width={20} height={20} />
+                  </IconButton>
+                </Tooltip>
+              </ListItem>
             </List>
           </nav>
           <div className={styles.profileBtnGroup}>
@@ -196,6 +212,10 @@ const SideBarMenu = ({ children }: any) => {
           </div>
         )}
       </div> */}
+      <GlobalSearch
+        globalSearchOpen={globalSearchOpen}
+        setGlobalSearchOpen={setGlobalSearchOpen}
+      />
     </div>
   );
 };

@@ -1,56 +1,44 @@
+.markersPageWeb {
+    background-color: #2f5345;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 0.5rem;
+}
 
-.header {
+.markersPageWeb .googleMapBlock {
+    width: 77%;
+    height: 100vh;
+}
+
+.markersPageWeb .rightFarmDtailsContainer {
+    width: 23%;
+    height: calc(100vh - 1rem);
+    border: 1px solid yellow;
+    border-radius: 8px;
+    background-color: #fff;
+    min-width: 270px;
+}
+
+.updateFarmButtonGrp {
     display: flex;
     align-items: center;
-}
-.headericon {
-    width: 32px;
-    text-align: end;
+    gap: 0.5rem;
 }
 
-.viewFarm {
-    color: #fff !important;
-    font-family: "Inter", sans-serif !important;
-    font-size: clamp(18px, 3.5vw, 20px) !important;
-    font-weight: 500 !important;
-}
-
-.addfarmform,
-.buttons {
-    align-self: stretch;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.header {
-    background-color: #45A845;
-    justify-content: space-between;
-    padding: 16px 1rem;
-}
-.iconsiconArrowLeft {
-    width: 25px;
-}
-.back {
-    border-radius: 4px !important;
-    border: 1px solid #d94841 !important;
-    background: #FFF !important;
-    box-shadow: none !important;
-    padding: 8px 20px !important;
-    color: #d94841 !important;
-    font-family: Inter !important;
-    font-size: clamp(15px, 3.5vw, 16px) !important;
-    font-weight: 400 !important;
-    text-transform: capitalize !important;
-
-}
-.submit {
-    border-radius: 4px !important;
-    border: 1px solid #d94841 !important;
-    background: #d94841 !important;
-    box-shadow: 4px 4px 10px 0px #0202460d !important;
-    color: #FFF !important;
-    font-family: "Inter", sans-serif !important;
-    font-size: clamp(15px, 3.5vw, 16px) !important;
+.updateFarmButtonGrp button {
+    font-size: clamp(12px, 0.72vw, 14px) !important;
+    border-radius: 6px !important;
+    padding: 8px 10px !important;
     font-weight: 500 !important;
     text-transform: capitalize !important;
+    font-family: "Inter", sans-serif !important;
+    min-width: inherit !important;
+    background-color: #fff !important;
+
+
+}
+
+.updateFarmButtonGrp button:hover {
+    background-color: #fff !important;
 }

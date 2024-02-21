@@ -16,9 +16,10 @@ import deleteFarmService from "../../../../../../lib/services/FarmsService/delet
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import DeleteIcon from '@mui/icons-material/Delete';
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 const FarmListCard = ({
   data, getFarmLocation, editPolygonDetails, setEditFarmsDetails, editFarmDetails,
-  setPolygonCoords, getFarmOptions, setSelectedPolygon,
+  getFarmOptions, setSelectedPolygon,
   setOpenFarmDetails,
   getFarmDataById,
   addPolyToExisting,
@@ -26,6 +27,7 @@ const FarmListCard = ({
 
 }: any) => {
 
+  const dispatch = useDispatch()
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -36,7 +38,6 @@ const FarmListCard = ({
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
-  const dispatch = useDispatch();
 
   const logout = async () => {
     try {
@@ -94,30 +95,33 @@ const FarmListCard = ({
           return (
             <div className={styles.farmcard} key={index}>
               <div className={styles.polygoncontainer}>
-                <Image className={styles.polygonIcon} height={40} width={40} alt="" src="/marker.svg" />
+                <Image
+                  className={styles.polygonIcon}
+                  height={40}
+                  width={40}
+                  alt=""
+                  src="/marker.svg"
+                />
               </div>
               <div className={styles.detailscontainer}>
                 <div className={styles.nameandaction}>
                   <h2 className={styles.northSideChilli}>
                     {item.title.length > 16
                       ? item.title.slice(0, 1).toUpperCase() +
-                      item.title.slice(1, 12) +
-                      "..."
+                        item.title.slice(1, 12) +
+                        "..."
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
-                  {item?.geometry?.coordinates?.length ?
-
-
-                    editFarmDetails?._id == item?._id ?
+                  {item?.geometry?.coordinates?.length ? (
+                    editFarmDetails?._id == item?._id ? (
                       <IconButton
                         sx={{ padding: "0" }}
                         onClick={() => {
-                          setSelectedPolygon(null)
-                          setEditFarmsDetails(null)
-                          setPolygonCoords([])
+                          setSelectedPolygon(null);
+                          setEditFarmsDetails(null);
+                          dispatch(storeEditPolygonCoords([]));
                           getFarmOptions({
                             search_string: router.query.search_string as string,
-
                             location: router.query.location_id as string,
                             userId: router.query.user_id as string,
                             page: 1,
@@ -125,107 +129,155 @@ const FarmListCard = ({
                             sortBy: router.query.sort_by as string,
                             sortType: router.query.sort_type as string,
                           });
-                        }}>
-                        <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={15} height={15} />
-                      </IconButton> :
-                      <IconButton sx={{ padding: "0" }} onClick={() => {
-                        setSelectedPolygon(null)
-                        setEditFarmsDetails(null)
-                        editPolygonDetails(item)
-                      }}>
-                        <Image alt="" src="/markers/marker-edit-icon.svg" width={15} height={15} />
+                        }}
+                      >
+                        <Image
+                          alt=""
+                          src="/viewProcurement/procurement-delete-icon.svg"
+                          width={15}
+                          height={15}
+                        />
                       </IconButton>
-
-                    : ""}
+                    ) : (
+                      <IconButton
+                        sx={{
+                          padding: "0",
+                          display: editFarmDetails?._id ? "none" : "",
+                        }}
+                        onClick={() => {
+                          setSelectedPolygon(null);
+                          setEditFarmsDetails(null);
+                          dispatch(storeEditPolygonCoords([]));
+                          editPolygonDetails(item);
+                        }}
+                      >
+                        <Image
+                          alt=""
+                          src="/markers/marker-edit-icon.svg"
+                          width={15}
+                          height={15}
+                        />
+                      </IconButton>
+                    )
+                  ) : (
+                    ""
+                  )}
                   <IconButton
                     className={styles.moreoptionsbutton}
-                    sx={{ padding: "0" }}
+                    sx={{
+                      padding: "0",
+                      display: editFarmDetails?._id ? "none" : "",
+                    }}
                     onClick={() => {
-                      setDeleteDialogOpen(true)
-                      setDeleteID(item?._id)
+                      setDeleteDialogOpen(true);
+                      setDeleteID(item?._id);
                     }}
                   >
-                    <Image alt="" src="/markers/marker-delete-icon.svg" width={15} height={15} />
+                    <Image
+                      alt=""
+                      src="/markers/marker-delete-icon.svg"
+                      width={15}
+                      height={15}
+                    />
                   </IconButton>
-
                 </div>
                 <div className={styles.cropsacres}>
                   <div className={styles.cropscontainer}>
-
                     <h3 className={styles.cropName}>
-                      {item?.geometry?.coordinates?.length ?
+                      {item?.geometry?.coordinates?.length ? (
                         <IconButton
-
                           sx={{
-                            padding: "0", paddingRight: "8px",
+                            padding: "0",
+                            paddingRight: "8px",
                             borderRadius: "0px 0px 0px 0px",
-                            display: item?.geometry?.coordinates?.length && !editFarmDetails?._id ? "" : "none",
+                            display:
+                              item?.geometry?.coordinates?.length &&
+                              !editFarmDetails?._id
+                                ? ""
+                                : "none",
                           }}
                           onClick={() => {
-                            getFarmLocation(item.geometry.coordinates, item._id);
+                            getFarmLocation(
+                              item.geometry.coordinates,
+                              item._id
+                            );
                           }}
                         >
-                          <Image src="/markers/marker-location-icon.svg" alt="" height={17} width={17} />
-                        </IconButton> :
-
-                        editFarmDetails?._id == item?._id ?
-                          <IconButton
-                            sx={{ padding: "0", marginRight: "0.5rem" }}
-                            onClick={() => {
-                              setSelectedPolygon(null)
-                              setEditFarmsDetails(null)
-                              setPolygonCoords([])
-                              getFarmOptions({
-                                search_string: router.query.search_string as string,
-                                location: router.query.location_id as string,
-                                userId: router.query.user_id as string,
-                                page: 1,
-                                limit: 20,
-                                sortBy: router.query.sort_by as string,
-                                sortType: router.query.sort_type as string,
-                              });
-                            }}>
-                            <Image alt="" src="/viewProcurement/procurement-delete-icon.svg" width={14} height={14} />
-                          </IconButton> :
-                          <IconButton
-
-                            sx={{
-                              padding: "0", marginRight: "0.5rem", color: "#45A845"
-                            }}
-
-
-                            onClick={() => {
-                              addPolyToExisting(item)
-                            }}
-
-
-
-                          >
-                            +
-                          </IconButton>}
+                          <Image
+                            src="/markers/marker-location-icon.svg"
+                            alt=""
+                            height={17}
+                            width={17}
+                          />
+                        </IconButton>
+                      ) : editFarmDetails?._id == item?._id ? (
+                        <IconButton
+                          sx={{ padding: "0", marginRight: "0.5rem" }}
+                          onClick={() => {
+                            setSelectedPolygon(null);
+                            setEditFarmsDetails(null);
+                            dispatch(storeEditPolygonCoords([]));
+                            getFarmOptions({
+                              search_string: router.query
+                                .search_string as string,
+                              location: router.query.location_id as string,
+                              userId: router.query.user_id as string,
+                              page: 1,
+                              limit: 20,
+                              sortBy: router.query.sort_by as string,
+                              sortType: router.query.sort_type as string,
+                            });
+                          }}
+                        >
+                          <Image
+                            alt=""
+                            src="/viewProcurement/procurement-delete-icon.svg"
+                            width={14}
+                            height={14}
+                          />
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          sx={{
+                            padding: "0",
+                            marginRight: "0.5rem",
+                            color: "#45A845",
+                          }}
+                          onClick={() => {
+                            addPolyToExisting(item);
+                          }}
+                        >
+                          +
+                        </IconButton>
+                      )}
                       {item?.location_id?.title}
                     </h3>
                   </div>
                   <p className={styles.acres}>{item.area}ac</p>
                 </div>
                 <div className={styles.locatedate}>
-
-
                   <p className={styles.createddate}>
                     {timePipe(item.createdAt, "DD-MM-YYYY")}
                   </p>
                   <div className={styles.farmCardButtonGrp}>
-                    <Button className={styles.cropsBtn} onClick={() => {
-                      setOpenFarmDetails(true)
-                      getFarmDataById(item?._id)
-                      setSelectedPolygon(item?._id)
-                    }}>
+                    <Button
+                      className={styles.cropsBtn}
+                      onClick={async () => {
+                        setOpenFarmDetails(true);
+                        await getFarmDataById(item?._id);
+                        setSelectedPolygon(item?._id);
+                      }}
+                    >
                       crops
                     </Button>
-                    <Button className={styles.viewBtn} onClick={() => {
-                      router.push(`/scouts?include=tags&page=1&limit=50&farm_id=${item?._id}`)
-
-                    }}>
+                    <Button
+                      className={styles.viewBtn}
+                      onClick={() => {
+                        router.push(
+                          `/scouts?include=tags&page=1&limit=50&farm_id=${item?._id}`
+                        );
+                      }}
+                    >
                       view
                     </Button>
                   </div>

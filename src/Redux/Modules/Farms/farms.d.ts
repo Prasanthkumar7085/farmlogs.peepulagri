@@ -5,10 +5,11 @@ declare namespace Farms {
     singleFarm: any;
     filesList: any;
     cropName: string;
-    farmName:string;
-    taskFilterOpen:any;
-    summaryFarmTitle:string;
-    summaryCropTitle:string;
+    farmName: string;
+    taskFilterOpen: any;
+    summaryFarmTitle: string;
+    summaryCropTitle: string;
+    polygonCoords: any
   }
 
 }

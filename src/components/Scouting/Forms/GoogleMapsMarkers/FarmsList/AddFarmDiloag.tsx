@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./add-farm-dilog.module.css";
 import { toast } from "sonner";
@@ -23,17 +23,18 @@ import editFarmService from "../../../../../../lib/services/FarmsService/editFar
 import getFarmByIdService from "../../../../../../lib/services/FarmsService/getFarmByIdService";
 import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
 import addLocationService from "../../../../../../lib/services/Locations/addLocationService";
+import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 const AddFarmDilog = ({
   setDrawerOpen,
   drawerOpen,
   polygonCoords,
-  setPolygonCoords,
   getFarmOptions,
   setPolygon,
   farm_id,
   setEditFarmsDetails
 }: any) => {
 
+  const dispatch = useDispatch()
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -74,13 +75,13 @@ const AddFarmDilog = ({
       setAlertMessage(response?.message);
       setAlertType(true);
       setDrawerOpen(false);
-      setPolygonCoords([]);
+      dispatch(storeEditPolygonCoords([]));
       setEditFarmsDetails(null)
       getFarmOptions({
         search_string: router.query.search_string as string,
         location: router.query.location_id as string,
         userId: router.query.user_id as string,
-        page: 1,
+        page: router.query.page,
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,

@@ -35,7 +35,6 @@ const FarmsListBlock = ({
   editPolygonDetails,
   setEditFarmsDetails,
   editFarmDetails,
-  setPolygonCoords,
   getFarmOptions,
   handleAddPolygonButtonClick,
   setSelectedPolygon,
@@ -156,8 +155,9 @@ const FarmsListBlock = ({
       const autocompleteComponent = (
         <Autocomplete
           sx={{
-            width: '300px',
-            maxWidth: '350px',
+            width: '250px',
+            maxWidth: '400px',
+            display: farmOptionsLoading ? "none !important" : ""
           }}
           size="small"
           fullWidth
@@ -256,7 +256,6 @@ const FarmsListBlock = ({
           editPolygonDetails={editPolygonDetails}
           setEditFarmsDetails={setEditFarmsDetails}
           editFarmDetails={editFarmDetails}
-          setPolygonCoords={setPolygonCoords}
           getFarmOptions={getFarmOptions}
           setSelectedPolygon={setSelectedPolygon}
           setOpenFarmDetails={setOpenFarmDetails}

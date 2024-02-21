@@ -105,13 +105,7 @@ const SideBarMenu = ({ children }: any) => {
 
               }}
             />
-            <Tooltip title="Logout">
-              <IconButton onClick={() => {
-                setGlobalSearchOpen(true)
-              }}>
-                <LogoutIcon sx={{ color: "white" }} />
-              </IconButton>
-            </Tooltip>
+
             <List>
               {menuListItems.map((item: any, index: number) => {
                 if (item?.isVisible) {
@@ -145,6 +139,15 @@ const SideBarMenu = ({ children }: any) => {
                   );
                 }
               })}
+              <ListItem className={styles.menuItem}>
+                <Tooltip title="Search">
+                  <IconButton onClick={() => {
+                    setGlobalSearchOpen(true)
+                  }}>
+                    <Image src="/markers/global-search-menu-icon.svg" alt="" width={20} height={20} />
+                  </IconButton>
+                </Tooltip>
+              </ListItem>
             </List>
           </nav>
           <div className={styles.profileBtnGroup}>

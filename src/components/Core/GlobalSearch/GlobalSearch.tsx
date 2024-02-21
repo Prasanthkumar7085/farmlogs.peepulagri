@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from "./gloabalSearch.module.css";
-import { Autocomplete, Dialog, DialogContent, IconButton, TextField } from '@mui/material';
+import { Autocomplete, Button, Dialog, DialogContent, IconButton, TextField } from '@mui/material';
 import Image from 'next/image';
 import getAllLocationsService from '../../../../lib/services/Locations/getAllLocationsService';
 import { useDispatch, useSelector } from 'react-redux';
@@ -238,8 +238,8 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                         setGlobalSearchOpen(false)
                     }}>
                     <Image src={"/caret-left 2.svg"}
-                        width={12}
-                        height={12}
+                        width={15}
+                        height={15}
                         alt=""
                     />
                 </IconButton>
@@ -247,7 +247,10 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                     sx={{
                         width: "40%",
 
-                        borderRadius: "4px",
+                        borderRadius: "4px", '& .MuiSvgIcon-root': {
+                            color: "#fff"
+                        }
+
                     }}
                     id="size-small-outlined-multi"
                     size="small"
@@ -269,29 +272,71 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                             placeholder="Search by location"
                             variant="outlined"
                             size="small"
+
                             sx={{
                                 "& .MuiInputBase-root": {
                                     fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                                    backgroundColor: "#fff",
+                                    backgroundColor: "#ABABAB",
                                     border: "none",
+                                    color: "#fff",
+                                    paddingBlock: "2.5px !important"
                                 },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: "0 !important", borderRadius: "4px !important"
+                                }
                             }}
                         />
                     )}
                 />
 
+                <Autocomplete
+                    sx={{
+                        width: "40%",
 
-                <FarmAutoCompleteInAllScouting
-                    options={farmOptions}
-                    onSelectFarmFromDropDown={onSelectFarmFromDropDown}
-                    label={"title"}
-                    placeholder={"Select Farm here"}
-                    defaultValue={farm}
-                    optionsLoading={optionsLoading}
-                    setOptionsLoading={setOptionsLoading}
-                    searchString={searchString}
-                    setSearchString={setSearchString}
+                        borderRadius: "4px", '& .MuiSvgIcon-root': {
+                            color: "#fff"
+                        }
+
+                    }}
+                    id="size-small-outlined-multi"
+                    size="small"
+                    fullWidth
+                    noOptionsText={"No such location"}
+                    value={location}
+                    isOptionEqualToValue={(option, value) =>
+                        option.title === value.title
+                    }
+                    getOptionLabel={(option: { title: string; _id: string }) =>
+                        option.title
+                    }
+                    options={locations}
+                    loading={optionsLoading}
+                    onChange={onChangeLocation}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            placeholder="Search by location"
+                            variant="outlined"
+                            size="small"
+
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                                    backgroundColor: "#ABABAB",
+                                    border: "none",
+                                    color: "#fff",
+                                    paddingBlock: "2.5px !important"
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: "0 !important", borderRadius: "4px !important"
+                                }
+                            }}
+                        />
+                    )}
                 />
+                <Button variant='contained' className={styles.globalSearchButton}>
+                    Search
+                </Button>
             </div>
             {/* Other content of the dialog */}
         </Dialog>

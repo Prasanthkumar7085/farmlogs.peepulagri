@@ -598,8 +598,23 @@ const GoogleMapMarkerComponent = () => {
         });
       }, delay);
       return () => clearTimeout(debounce);
+    } else {
+      let delay = 500;
+      let debounce = setTimeout(() => {
+        getFarmOptions({
+          search_string: "",
+          location: router.query.location_id as string,
+          userId: router.query.user_id as string,
+          page: 1,
+          limit: 20,
+          sortBy: router.query.sort_by as string,
+          sortType: router.query.sort_type as string,
+        });
+      }, delay);
+      return () => clearTimeout(debounce);
     }
   }, [router.isReady, accessToken, searchString]);
+
   useEffect(() => {
     if (router.isReady && accessToken) {
       setSearchString(router.query.search_string as string);

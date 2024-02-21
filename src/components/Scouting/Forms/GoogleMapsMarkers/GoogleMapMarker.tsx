@@ -15,6 +15,7 @@ import getAllFarmsService from '../../../../../lib/services/FarmsService/getAllF
 import Image from 'next/image';
 import { storeEditPolygonCoords } from '@/Redux/Modules/Farms';
 import AddPolygonDialog from './AddPolygonDialog';
+import getFarmsByLocation from '../../../../../lib/services/FarmsService/getFarmsByLocation';
 
 interface callFarmsProps {
   search_string: string;
@@ -220,6 +221,8 @@ const GoogleMapMarkerComponent = () => {
 
       setSearchedPlaces([place]);
       centerMapToPlace(place);
+      let location = place.formatted_address.split(",")
+      getLocationBasedFarms(location[0])
     };
 
     autocomplete.addListener("place_changed", onPlaceChanged);
@@ -294,15 +297,22 @@ const GoogleMapMarkerComponent = () => {
 
   //get the farm details
   const getFarmDataById = async (id: any) => {
-    const response: any = await getFarmByIdService(
-      id as string,
-      accessToken as string
-    );
+    try {
+      const response: any = await getFarmByIdService(
+        id as string,
+        accessToken as string
+      );
 
-    if (response?.success) {
-      setData(response?.data);
+      if (response?.success) {
+        setData(response?.data);
+      }
     }
-    setLoading(false);
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false);
+    }
   };
 
   //go to the farm location when the farm was selected
@@ -312,8 +322,24 @@ const GoogleMapMarkerComponent = () => {
     setSelectedPolygon(id);
   };
 
-  //get the farm list
+  //get the location of farms
+  const getLocationBasedFarms = async (location: string) => {
+    try {
+      const response: any = await getFarmsByLocation(location, accessToken)
 
+      if (response?.success) {
+        setFarmOptions(response?.data);
+      }
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false);
+
+    }
+  }
+  //get the farm list
   const getFarmOptions = async ({
     search_string = "",
     location,

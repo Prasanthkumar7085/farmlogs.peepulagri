@@ -161,6 +161,9 @@ const FarmsListBlock = ({
             width: "250px",
             maxWidth: "400px",
             display: farmOptionsLoading ? "none !important" : "",
+            '& .MuiInputBase-root': {
+              paddingBlock: "7px !important"
+            }
           }}
           size="small"
           fullWidth

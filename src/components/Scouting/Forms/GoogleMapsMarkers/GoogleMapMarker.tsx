@@ -4,7 +4,7 @@ import { Button, ButtonBase, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from "./google-map.module.css";
 import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Toaster, toast } from 'sonner';
 import LoadingComponent from '@/components/Core/LoadingComponent';
 import FarmsListBlock from "./FarmsList/FarmsListBlock";
@@ -13,6 +13,7 @@ import ViewFarmDetails from './ViewFarmDetails.tsx/ViewFarmDetails';
 import { prepareURLEncodedParams } from '../../../../../lib/requestUtils/urlEncoder';
 import getAllFarmsService from '../../../../../lib/services/FarmsService/getAllFarmsServiceMobile';
 import Image from 'next/image';
+import { storeEditPolygonCoords } from '@/Redux/Modules/Farms';
 
 interface callFarmsProps {
   search_string: string;
@@ -26,17 +27,20 @@ interface callFarmsProps {
 const GoogleMapMarkerComponent = () => {
 
   const router = useRouter();
+  const dispatch = useDispatch();
   const [data, setData] = useState<any>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+
+  const polygonCoords = useSelector((state: any) => state.farms.polygonCoords)
+
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const [map, setMap] = useState<any>(null);
   const [googleMaps, setGoogleMaps] = useState<any>(null);
   const [polygon, setPolygon] = useState<any>(null);
-  const [polygonCoords, setPolygonCoords] = useState<any>([]);
   const drawingManagerRef = React.useRef(null);
   const pathRef = useRef([]);
   const [mapType, setMapType] = useState("hybrid"); // 'satellite' is the normal map view
@@ -52,10 +56,12 @@ const GoogleMapMarkerComponent = () => {
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
   const [viewPolygonsCoord, setViewPolygonsCoord] = useState<any>([]);
+  console.log("w-=32", viewPolygonsCoord)
   const [markerObjects, setMarkerObjects] = useState([]);
   const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false)
   const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>()
   const [editFarmDetails, setEditFarmsDetails] = useState<any>(null)
+  console.log(editFarmDetails, "ppw")
   const [paginationDetails, setPaginationDetails] = useState<any>()
 
   //add custom control for the live location button
@@ -241,7 +247,7 @@ const GoogleMapMarkerComponent = () => {
           lng: coord.lng(),
         }));
         setPolygon(event.overlay);
-        setPolygonCoords(updatedCoords);
+        dispatch(storeEditPolygonCoords(updatedCoords))
         stopDrawingMode()
       }
     });
@@ -264,7 +270,7 @@ const GoogleMapMarkerComponent = () => {
         .getPath()
         .getArray()
         .map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
-      setPolygonCoords(updatedCoords);
+      dispatch(storeEditPolygonCoords(updatedCoords))
     });
 
     // Set the polygon on the map
@@ -293,8 +299,9 @@ const GoogleMapMarkerComponent = () => {
 
   //go to the farm location when the farm was selected
   const getFarmLocation = (value: any, id: any) => {
+
     setEditFarmsDetails(null)
-    setPolygonCoords([])
+    dispatch(storeEditPolygonCoords([]))
     setSelectedPolygon(id);
   }
 
@@ -348,6 +355,7 @@ const GoogleMapMarkerComponent = () => {
         const { data, ...rest } = response;
         setFarmOptions(response?.data);
         setPaginationDetails(rest)
+        dispatch(storeEditPolygonCoords([]))
         const newData = response.data.map((item: any) => ({
           _id: item._id,
           cor: item?.geometry?.coordinates?.length
@@ -375,7 +383,7 @@ const GoogleMapMarkerComponent = () => {
     if (mapRef.current && place.geometry && place.geometry.location) {
       const location = place.geometry.location;
       const latLng = new google.maps.LatLng(location.lat(), location.lng());
-      mapRef.current.setCenter(latLng);
+      mapRef.current.panTo(latLng);
       mapRef.current.setZoom(15);
     }
   };
@@ -395,7 +403,7 @@ const GoogleMapMarkerComponent = () => {
     if (googleMaps && polygon) {
       const updatedCoords = [...polygonCoords];
       updatedCoords.pop(); // Remove the last point from the copied coordinates
-      setPolygonCoords(updatedCoords);
+      dispatch(storeEditPolygonCoords(updatedCoords));
 
       const path = updatedCoords.map(
         (coord: any) => new (googleMaps as any).LatLng(coord.lat, coord.lng)
@@ -419,7 +427,7 @@ const GoogleMapMarkerComponent = () => {
   //clear all points when the polygon is draw
   const clearAllPoints = () => {
     if (googleMaps && polygon) {
-      setPolygonCoords([]);
+      dispatch(storeEditPolygonCoords([]));
       polygon.setPath([]);
     }
 
@@ -436,10 +444,12 @@ const GoogleMapMarkerComponent = () => {
 
   //get the edit polygon details
   const editPolygonDetails = (value: any) => {
+    console.log("9052")
     setRenderField(true);
     setTimeout(() => {
       setRenderField(false);
     }, 100);
+
     setViewPolygonsCoord([])
     setEditFarmsDetails(value)
     let updatedArray = value?.geometry?.coordinates?.map((item: any) => {
@@ -448,20 +458,24 @@ const GoogleMapMarkerComponent = () => {
         lng: item[1]
       }
     })
-    setPolygonCoords(updatedArray)
+    dispatch(storeEditPolygonCoords(updatedArray))
 
+    const indiaCenter = { lat: value?.geometry?.coordinates[0][0], lng: value?.geometry?.coordinates[0][1] };
+    mapRef.current.setCenter(indiaCenter);
+    mapRef.current.setZoom(15);
+    console.log(indiaCenter, "+789")
   }
+
 
   //show the list all farms markers and polygons
   useEffect(() => {
     if (map && googleMaps && viewPolygonsCoord.length) {
+      console.log("yes1")
       // Create markers and polygons for each item in the data array
       const newMarkers: any = [];
       const newPolygons = viewPolygonsCoord
         .map((item: any) => {
           if (item?.cor?.length === 0) return null; // Skip if there are no coordinates
-
-          // // Create polygon for the coordinates
           const polygon = new googleMaps.Polygon({
             paths: item?.cor?.map((cor: any) => ({ lat: cor[0], lng: cor[1] })),
             strokeColor: "#FF0000",
@@ -535,7 +549,7 @@ const GoogleMapMarkerComponent = () => {
   useEffect(() => {
     if (map && googleMaps) {
       if (selectedPolygon !== null) {
-        // // Display the selected polygon on the map and zoom to fit it
+        console.log("963")
         const selectedPoly = viewPolygonsCoord.find(
           (item: any) => item._id == selectedPolygon
         );
@@ -548,24 +562,16 @@ const GoogleMapMarkerComponent = () => {
       }
       else {
         if (editFarmDetails?._id == null) {
+          console.log("wrqtwt")
           const indiaCenter = { lat: 20.5937, lng: 78.9629 };
           map.setCenter(indiaCenter);
           map.setZoom(5);
         }
       }
     }
-  }, [map, googleMaps, selectedPolygon]);
+  }, [selectedPolygon]);
 
 
-  useEffect(() => {
-    if (map && googleMaps) {
-      if (editFarmDetails?._id && editFarmDetails?.geometry?.coordinates?.length) {
-        const indiaCenter = { lat: editFarmDetails?.geometry?.coordinates[0][0], lng: editFarmDetails?.geometry?.coordinates[0][1] };
-        map.setCenter(indiaCenter);
-        map.setZoom(15);
-      }
-    }
-  }, [map, googleMaps, editFarmDetails,])
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -644,11 +650,111 @@ const GoogleMapMarkerComponent = () => {
     });
   };
 
+  //google api event
+  const handleApiEditLoaded = (map: any, maps: any) => {
+    setMap(map);
+    setGoogleMaps(maps);
+    mapRef.current = map;
+
+    addCustomControl(map, maps);
+    createInfoWindow(map);
+    placesService.current = new maps.places.PlacesService(map);
+
+    const mapTypeControlDiv: any = document.createElement("div");
+    const mapTypeControl = MapTypeControl();
+    mapTypeControlDiv.index = 1;
+    map.controls[maps.ControlPosition.BOTTOM_CENTER].push(mapTypeControlDiv);
+    mapTypeControlDiv.appendChild(mapTypeControl);
+
+    // Create a container for the custom autocomplete control
+    const customAutocompleteDiv = document.createElement("div");
+    const searchInput = document.createElement("input");
+    searchInput.setAttribute("type", "search");
+    searchInput.setAttribute("id", "searchInput");
+    searchInput.setAttribute("placeholder", "Search for a place...");
+    searchInput.style.marginBottom = "10px";
+    searchInput.style.padding = "10px";
+    searchInput.style.width = "140%";
+    searchInput.style.margin = "auto";
+    searchInput.style.borderRadius = "20px"
+
+    customAutocompleteDiv.appendChild(searchInput);
+    map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
+    // Create Autocomplete for input field
+    const autocomplete = new maps.places.Autocomplete(searchInput);
+    autocomplete.bindTo("bounds", map);
+
+    const onPlaceChanged = () => {
+      const place = autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location) {
+        console.error("No place data available");
+        return;
+      }
+
+      setSearchedPlaces([place]);
+      centerMapToPlace(place);
+    };
+
+    autocomplete.addListener("place_changed", onPlaceChanged);
+
+    const drawingManager = new maps.drawing.DrawingManager({
+      drawingControl: polygonCoords?.length ? false : true,
+      drawingControlOptions: {
+        position: maps.ControlPosition.TOP_RIGHT,
+        drawingModes: [maps.drawing.OverlayType.POLYGON],
+      },
+      polygonOptions: {
+        editable: true,
+        draggable: false,
+      },
+    });
+
+    drawingManager.setMap(map);
+    drawingManagerRef.current = drawingManager;
+
+    maps.event.addListener(drawingManager, 'overlaycomplete', (event: any) => {
+      if (event.type === 'polygon') {
+        const paths = event.overlay.getPath().getArray();
+        const updatedCoords = paths.map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
+        setPolygon(event.overlay);
+        dispatch(storeEditPolygonCoords(updatedCoords))
+      }
+    });
+
+
+    // Create a new polygon
+    const newPolygon = new maps.Polygon({
+      paths: polygonCoords,
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      editable: true, // Set the polygon as editable
+      draggable: true,
+      map: map // Assuming 'map' is your Google Map instance
+
+    });
+
+    maps.event.addListener(newPolygon, 'mouseup', () => {
+      const updatedCoords = newPolygon.getPath().getArray().map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
+      dispatch(storeEditPolygonCoords(updatedCoords))
+    });
+
+    // Set the polygon on the map
+    setRenderField(false);
+    setTimeout(() => {
+      setRenderField(true);
+    }, 0.1);
+    newPolygon.setMap(map);
+    setPolygon(newPolygon);
+
+  };
   return (
     <div className={styles.markersPageWeb}
 
     >
-      {renderField == false ?
+      {renderField == false && editFarmDetails == null ?
         <div className={styles.googleMapBlock} >
 
           <GoogleMapReact
@@ -657,16 +763,16 @@ const GoogleMapMarkerComponent = () => {
               libraries: ["drawing", "places"],
             }}
             defaultCenter={{
-              lat: latLong?.lat ? latLong?.lat : 15.2224299,
-              lng: latLong?.long ? latLong?.long : 79.8784533,
+              lat: 20.5937,
+              lng: 78.9629,
             }}
             options={{
               mapTypeId: mapType,
-
+              fullscreenControl: false,
               streetViewControl: true,
               rotateControl: true,
             }}
-            defaultZoom={8}
+            defaultZoom={5}
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
           >
@@ -712,7 +818,71 @@ const GoogleMapMarkerComponent = () => {
               </Button>
             </div>
           )}
-        </div> : ""}
+        </div> :
+
+        <div className={styles.googleMapBlock} >
+          <GoogleMapReact
+            bootstrapURLKeys={{
+              key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
+              libraries: ["drawing", "places"],
+            }}
+            defaultCenter={{
+              lat: 20.5937,
+              lng: 78.9629,
+            }}
+            options={{
+              mapTypeId: mapType,
+              fullscreenControl: false,
+              streetViewControl: true,
+              rotateControl: true,
+            }}
+            defaultZoom={5}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({ map, maps }) => handleApiEditLoaded(map, maps)}
+          >
+
+          </GoogleMapReact>
+
+          {polygonCoords?.length === 0 ? (
+            ""
+          ) : (
+            <div
+              style={{
+                position: "absolute",
+                top: "22%",
+                right: "25%",
+              }}
+            >
+              <Button
+                onClick={clearAllPoints}
+                variant="outlined"
+                sx={{ backgroundColor: "orange" }}
+                disabled={polygonCoords?.length === 0}
+              >
+                <Image src={"/blue-delete.png"} width={25} height={25} alt="" /> Clear
+              </Button>
+              <Button
+                onClick={() => {
+                  setDrawerOpen(true);
+                }}
+                variant="outlined"
+                sx={{ backgroundColor: "orange" }}
+                disabled={polygonCoords?.length === 0}
+              >
+                {editFarmDetails?._id ? "Update" : "Save"}
+              </Button>
+
+              <Button
+                onClick={undoLastPoint}
+                variant="outlined"
+                sx={{ backgroundColor: "orange" }}
+                disabled={polygonCoords?.length === 0}
+              >
+                <Image src={"/undo-icon.png"} width={25} height={25} alt='' /> Undo
+              </Button>
+            </div>
+          )}
+        </div>}
 
       <div className={styles.rightFarmDtailsContainer} >
         {openFarmDetails ?
@@ -734,7 +904,6 @@ const GoogleMapMarkerComponent = () => {
               editPolygonDetails={editPolygonDetails}
               setEditFarmsDetails={setEditFarmsDetails}
               editFarmDetails={editFarmDetails}
-              setPolygonCoords={setPolygonCoords}
               getFarmOptions={getFarmOptions}
               handleAddPolygonButtonClick={handleAddPolygonButtonClick}
               setSelectedPolygon={setSelectedPolygon}
@@ -756,7 +925,6 @@ const GoogleMapMarkerComponent = () => {
         setDrawerOpen={setDrawerOpen}
         drawerOpen={drawerOpen}
         polygonCoords={polygonCoords}
-        setPolygonCoords={setPolygonCoords}
         getFarmOptions={getFarmOptions}
         setPolygon={setPolygon}
         farm_id={editFarmDetails?._id}

@@ -16,9 +16,10 @@ import deleteFarmService from "../../../../../../lib/services/FarmsService/delet
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
 import DeleteIcon from '@mui/icons-material/Delete';
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 const FarmListCard = ({
   data, getFarmLocation, editPolygonDetails, setEditFarmsDetails, editFarmDetails,
-  setPolygonCoords, getFarmOptions, setSelectedPolygon,
+  getFarmOptions, setSelectedPolygon,
   setOpenFarmDetails,
   getFarmDataById,
   addPolyToExisting,
@@ -26,6 +27,7 @@ const FarmListCard = ({
 
 }: any) => {
 
+  const dispatch = useDispatch()
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -36,7 +38,6 @@ const FarmListCard = ({
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
 
-  const dispatch = useDispatch();
 
   const logout = async () => {
     try {
@@ -114,10 +115,9 @@ const FarmListCard = ({
                         onClick={() => {
                           setSelectedPolygon(null)
                           setEditFarmsDetails(null)
-                          setPolygonCoords([])
+                          dispatch(storeEditPolygonCoords([]))
                           getFarmOptions({
                             search_string: router.query.search_string as string,
-
                             location: router.query.location_id as string,
                             userId: router.query.user_id as string,
                             page: 1,
@@ -131,7 +131,9 @@ const FarmListCard = ({
                       <IconButton sx={{ padding: "0" }} onClick={() => {
                         setSelectedPolygon(null)
                         setEditFarmsDetails(null)
+                        dispatch(storeEditPolygonCoords([]))
                         editPolygonDetails(item)
+
                       }}>
                         <Image alt="" src="/markers/marker-edit-icon.svg" width={15} height={15} />
                       </IconButton>
@@ -174,7 +176,7 @@ const FarmListCard = ({
                             onClick={() => {
                               setSelectedPolygon(null)
                               setEditFarmsDetails(null)
-                              setPolygonCoords([])
+                              dispatch(storeEditPolygonCoords([]))
                               getFarmOptions({
                                 search_string: router.query.search_string as string,
                                 location: router.query.location_id as string,
@@ -215,9 +217,9 @@ const FarmListCard = ({
                     {timePipe(item.createdAt, "DD-MM-YYYY")}
                   </p>
                   <div className={styles.farmCardButtonGrp}>
-                    <Button className={styles.cropsBtn} onClick={() => {
+                    <Button className={styles.cropsBtn} onClick={async () => {
                       setOpenFarmDetails(true)
-                      getFarmDataById(item?._id)
+                      await getFarmDataById(item?._id)
                       setSelectedPolygon(item?._id)
                     }}>
                       crops

@@ -35,7 +35,6 @@ const FarmsListBlock = ({
   editPolygonDetails,
   setEditFarmsDetails,
   editFarmDetails,
-  setPolygonCoords,
   getFarmOptions,
   handleAddPolygonButtonClick,
   setSelectedPolygon,
@@ -156,8 +155,9 @@ const FarmsListBlock = ({
       const autocompleteComponent = (
         <Autocomplete
           sx={{
-            width: '350px',
+            width: '250px',
             maxWidth: '400px',
+            display: farmOptionsLoading ? "none !important" : ""
           }}
           size="small"
           fullWidth
@@ -182,6 +182,9 @@ const FarmsListBlock = ({
                   padding: "13px",
                   marginBottom: "10px"
                 },
+                '& ..MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
+                  paddingTop: "0 !important"
+                }
               }}
             />
           )}
@@ -251,7 +254,6 @@ const FarmsListBlock = ({
           editPolygonDetails={editPolygonDetails}
           setEditFarmsDetails={setEditFarmsDetails}
           editFarmDetails={editFarmDetails}
-          setPolygonCoords={setPolygonCoords}
           getFarmOptions={getFarmOptions}
           setSelectedPolygon={setSelectedPolygon}
           setOpenFarmDetails={setOpenFarmDetails}

@@ -9,10 +9,11 @@ export const initialState: Farms.FarmsData = {
   singleFarm: {},
   filesList: [],
   cropName: '',
-  farmName:"",
-  taskFilterOpen:{},
-  summaryFarmTitle:"",
-  summaryCropTitle:""
+  farmName: "",
+  taskFilterOpen: {},
+  summaryFarmTitle: "",
+  summaryCropTitle: "",
+  polygonCoords: []
 };
 
 export const farmsSlice = createSlice({
@@ -50,15 +51,18 @@ export const farmsSlice = createSlice({
     setToInitialState: (state: any) => {
       state = initialState;
     },
-    changeTaskFilterUserOpen:(state:any,action:any)=>{
+    changeTaskFilterUserOpen: (state: any, action: any) => {
       state.taskFilterOpen = action.payload
     },
-    setSummaryFarmName:(state:any, action:any) => {
-      state.summaryFarmTitle=action.payload
+    setSummaryFarmName: (state: any, action: any) => {
+      state.summaryFarmTitle = action.payload
     },
-    setSummaryCropName:(state:any, action:any) => {
-      state.summaryCropTitle=action.payload
+    setSummaryCropName: (state: any, action: any) => {
+      state.summaryCropTitle = action.payload
 
+    },
+    storeEditPolygonCoords: (state: any, action: any) => {
+      state.polygonCoords = action.payload
     }
   },
 });
@@ -73,7 +77,8 @@ export const {
   setToInitialState,
   changeTaskFilterUserOpen,
   setSummaryFarmName,
-  setSummaryCropName
+  setSummaryCropName,
+  storeEditPolygonCoords
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
 

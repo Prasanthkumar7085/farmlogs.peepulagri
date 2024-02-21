@@ -1,7 +1,12 @@
-import { Button, Dialog, Drawer } from "@mui/material";
+import { Button, Dialog, Drawer, IconButton } from "@mui/material";
 import styles from "./addPolygonDialog.module.css";
 import Image from "next/image";
-const AddPolygonDialog = ({ addPolygonOpen, setAddPolygonOpen }: any) => {
+import { Clear } from "@mui/icons-material";
+const AddPolygonDialog = ({
+  addPolygonOpen,
+  setAddPolygonOpen,
+  handleAddPolygonButtonClick,
+}: any) => {
   return (
     <div>
       <Dialog
@@ -17,6 +22,14 @@ const AddPolygonDialog = ({ addPolygonOpen, setAddPolygonOpen }: any) => {
           },
         }}
       >
+        <IconButton
+          sx={{ justifyContent: "start", width: "50px" }}
+          onClick={() => {
+            setAddPolygonOpen(false);
+          }}
+        >
+          <Clear />
+        </IconButton>
         <div className={styles.dialogDiv}>
           <div className={styles.contentDiv}>
             <Image
@@ -33,7 +46,14 @@ const AddPolygonDialog = ({ addPolygonOpen, setAddPolygonOpen }: any) => {
               </p>
             </div>
           </div>
-          <div className={styles.buttons}>Draw Feild</div>
+          <div
+            className={styles.buttons}
+            onClick={() => {
+              handleAddPolygonButtonClick();
+            }}
+          >
+            Draw Feild
+          </div>
         </div>
       </Dialog>
     </div>

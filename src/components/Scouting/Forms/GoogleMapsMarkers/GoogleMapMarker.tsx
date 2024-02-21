@@ -26,7 +26,6 @@ interface callFarmsProps {
   sortType: string;
 }
 const GoogleMapMarkerComponent = () => {
-
   const router = useRouter();
   const dispatch = useDispatch();
   const [data, setData] = useState<any>();
@@ -36,7 +35,7 @@ const GoogleMapMarkerComponent = () => {
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const polygonCoords = useSelector((state: any) => state.farms.polygonCoords)
+  const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
 
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const [map, setMap] = useState<any>(null);
@@ -57,14 +56,15 @@ const GoogleMapMarkerComponent = () => {
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
   const [viewPolygonsCoord, setViewPolygonsCoord] = useState<any>([]);
-  console.log("w-=32", viewPolygonsCoord)
+  console.log("w-=32", viewPolygonsCoord);
   const [markerObjects, setMarkerObjects] = useState([]);
-  const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false)
-  const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>()
-  const [editFarmDetails, setEditFarmsDetails] = useState<any>(null)
-  console.log(editFarmDetails, "ppw")
-  const [paginationDetails, setPaginationDetails] = useState<any>()
-const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
+  const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false);
+  const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>();
+  const [editFarmDetails, setEditFarmsDetails] = useState<any>(null);
+  console.log(editFarmDetails, "ppw");
+  const [paginationDetails, setPaginationDetails] = useState<any>();
+  const [addPolygonOpen, setAddPolygonOpen] = useState<boolean>(false);
+  const [drawingOpen, setDrawingOpen] = useState<boolean>(false);
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
     const controlDiv = document.createElement("div");
@@ -208,7 +208,7 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
     map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
     // Create Autocomplete for input field
     const autocomplete = new maps.places.Autocomplete(searchInput, {
-      placeAutocompleteOptions: { strictBounds: false } // Setting strictBounds to true removes the attribution
+      placeAutocompleteOptions: { strictBounds: false }, // Setting strictBounds to true removes the attribution
     });
 
     const onPlaceChanged = () => {
@@ -239,7 +239,6 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
     drawingManager.setMap(map);
     drawingManagerRef.current = drawingManager;
 
-
     maps.event.addListener(drawingManager, "overlaycomplete", (event: any) => {
       if (event.type === "polygon") {
         const paths = event.overlay.getPath().getArray();
@@ -248,11 +247,24 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
           lng: coord.lng(),
         }));
         setPolygon(event.overlay);
-        dispatch(storeEditPolygonCoords(updatedCoords))
-        stopDrawingMode()
+        dispatch(storeEditPolygonCoords(updatedCoords));
+        stopDrawingMode();
       }
     });
+    google.maps.event.addListener(
+      drawingManager,
+      "drawingmode_changed",
+      function () {
+        // Check the current drawing mode
+        const currentDrawingMode = drawingManager.getDrawingMode();
 
+        if (currentDrawingMode === null) {
+          setDrawingOpen(false);
+        } else {
+          setDrawingOpen(true);
+        }
+      }
+    );
     // Create a new polygon
     const newPolygon = new maps.Polygon({
       paths: polygonCoords,
@@ -271,18 +283,14 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
         .getPath()
         .getArray()
         .map((coord: any) => ({ lat: coord.lat(), lng: coord.lng() }));
-      dispatch(storeEditPolygonCoords(updatedCoords))
+      dispatch(storeEditPolygonCoords(updatedCoords));
     });
 
     // Set the polygon on the map
 
-
     newPolygon.setMap(map);
     setPolygon(newPolygon);
-
-
   };
-
 
   //get the farm details
   const getFarmDataById = async (id: any) => {
@@ -293,20 +301,18 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
 
     if (response?.success) {
       setData(response?.data);
-
     }
     setLoading(false);
   };
 
   //go to the farm location when the farm was selected
   const getFarmLocation = (value: any, id: any) => {
-
-    setEditFarmsDetails(null)
-    dispatch(storeEditPolygonCoords([]))
+    setEditFarmsDetails(null);
+    dispatch(storeEditPolygonCoords([]));
     setSelectedPolygon(id);
-  }
+  };
 
-  //get the farm list 
+  //get the farm list
 
   const getFarmOptions = async ({
     search_string = "",
@@ -320,9 +326,7 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
     setLoading(true);
     try {
       let url = `farms/${page}/${limit}`;
-      let queryParam: any = {
-
-      };
+      let queryParam: any = {};
       if (page) {
         queryParam["page"] = page;
       }
@@ -337,7 +341,6 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
       }
       if (search_string) {
         queryParam["search_string"] = search_string;
-
       }
 
       if (location != 1 && location) {
@@ -355,8 +358,8 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
       if (response?.success) {
         const { data, ...rest } = response;
         setFarmOptions(response?.data);
-        setPaginationDetails(rest)
-        dispatch(storeEditPolygonCoords([]))
+        setPaginationDetails(rest);
+        dispatch(storeEditPolygonCoords([]));
         const newData = response.data.map((item: any) => ({
           _id: item._id,
           cor: item?.geometry?.coordinates?.length
@@ -364,14 +367,12 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
             : [],
         }));
 
-
         setRenderField(true);
         setTimeout(() => {
           setRenderField(false);
         }, 0.1);
 
         setViewPolygonsCoord(newData);
-
       }
     } catch (err: any) {
       console.error(err);
@@ -414,13 +415,15 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
         const drawingManager: any = drawingManagerRef.current;
         if (drawingManager) {
           drawingManager.setOptions({
-            drawingControl: true // show drawing options
+            drawingControl: true, // show drawing options
           });
         }
         if (drawingManager) {
-          drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+          drawingManager.setDrawingMode(
+            google.maps.drawing.OverlayType.POLYGON
+          );
         }
-        setEditFarmsDetails(null)
+        setEditFarmsDetails(null);
       }
     }
   };
@@ -435,7 +438,7 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
     const drawingManager: any = drawingManagerRef.current;
     if (drawingManager) {
       drawingManager.setOptions({
-        drawingControl: true // show drawing options
+        drawingControl: true, // show drawing options
       });
     }
     if (drawingManager) {
@@ -445,42 +448,42 @@ const [addPolygonOpen,setAddPolygonOpen]=useState<boolean>(false)
 
   //get the edit polygon details
   const editPolygonDetails = (value: any) => {
-    console.log("9052")
+    console.log("9052");
     setRenderField(true);
     setTimeout(() => {
       setRenderField(false);
     }, 100);
 
-    setViewPolygonsCoord([])
-    setEditFarmsDetails(value)
+    setViewPolygonsCoord([]);
+    setEditFarmsDetails(value);
     let updatedArray = value?.geometry?.coordinates?.map((item: any) => {
       return {
         lat: item[0],
-        lng: item[1]
-      }
-    })
-    dispatch(storeEditPolygonCoords(updatedArray))
-  }
-
-useEffect(() => {
-  if (map && googleMaps) {
-    if (
-      editFarmDetails?._id &&
-      editFarmDetails?.geometry?.coordinates?.length
-    ) {
-      const indiaCenter = {
-        lat: editFarmDetails?.geometry?.coordinates[0][0],
-        lng: editFarmDetails?.geometry?.coordinates[0][1],
+        lng: item[1],
       };
-      map.setCenter(indiaCenter);
-      map.setZoom(15);
+    });
+    dispatch(storeEditPolygonCoords(updatedArray));
+  };
+
+  useEffect(() => {
+    if (map && googleMaps) {
+      if (
+        editFarmDetails?._id &&
+        editFarmDetails?.geometry?.coordinates?.length
+      ) {
+        const indiaCenter = {
+          lat: editFarmDetails?.geometry?.coordinates[0][0],
+          lng: editFarmDetails?.geometry?.coordinates[0][1],
+        };
+        map.setCenter(indiaCenter);
+        map.setZoom(15);
+      }
     }
-  }
-}, [map, googleMaps, editFarmDetails]);
+  }, [map, googleMaps, editFarmDetails]);
   //show the list all farms markers and polygons
   useEffect(() => {
     if (map && googleMaps && viewPolygonsCoord.length) {
-      console.log("yes1")
+      console.log("yes1");
       // Create markers and polygons for each item in the data array
       const newMarkers: any = [];
       const newPolygons = viewPolygonsCoord
@@ -516,7 +519,7 @@ useEffect(() => {
           newMarkers.push(marker);
 
           marker.addListener("click", () => {
-            setSelectedPolygon(markerInfo.id)
+            setSelectedPolygon(markerInfo.id);
             const markerPosition = marker.getPosition();
             const markerInformation = marker.markerInfo;
 
@@ -530,7 +533,10 @@ useEffect(() => {
               if (status === google.maps.GeocoderStatus.OK) {
                 if (results[0]) {
                   const locationName = results[0].formatted_address; // Get the formatted address
-                  setFarmLoactionDetails({ "locationName": locationName, latlng: latlng })
+                  setFarmLoactionDetails({
+                    locationName: locationName,
+                    latlng: latlng,
+                  });
                 } else {
                   console.log("No results found");
                 }
@@ -539,10 +545,8 @@ useEffect(() => {
               }
             });
 
-            setOpenFarmDetails(true)
+            setOpenFarmDetails(true);
             getFarmDataById(markerInformation.id);
-
-
           });
 
           return polygon;
@@ -552,14 +556,13 @@ useEffect(() => {
       // Set the markers and polygons
       setMarkerObjects(newMarkers);
     }
-
   }, [map, googleMaps, viewPolygonsCoord]);
 
   //redirect to the polygon
   useEffect(() => {
     if (map && googleMaps) {
       if (selectedPolygon !== null) {
-        console.log("963")
+        console.log("963");
         const selectedPoly = viewPolygonsCoord.find(
           (item: any) => item._id == selectedPolygon
         );
@@ -569,10 +572,9 @@ useEffect(() => {
           bounds.extend(latLng);
         });
         map.fitBounds(bounds);
-      }
-      else {
+      } else {
         if (editFarmDetails?._id == null) {
-          console.log("wrqtwt")
+          console.log("wrqtwt");
           const indiaCenter = { lat: 20.5937, lng: 78.9629 };
           map.setCenter(indiaCenter);
           map.setZoom(5);
@@ -581,17 +583,15 @@ useEffect(() => {
     }
   }, [selectedPolygon]);
 
-
-
   useEffect(() => {
-    if (router.isReady && accessToken) {
+    if (router.isReady && accessToken && searchString) {
       let delay = 500;
       let debounce = setTimeout(() => {
         getFarmOptions({
           search_string: searchString as string,
           location: router.query.location_id as string,
           userId: router.query.user_id as string,
-          page: router.query.page as string,
+          page: 1,
           limit: 20,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
@@ -600,7 +600,20 @@ useEffect(() => {
       return () => clearTimeout(debounce);
     }
   }, [router.isReady, accessToken, searchString]);
-
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      setSearchString(router.query.search_string as string);
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: router.query.location_id as string,
+        userId: router.query.user_id as string,
+        page: router.query.page as string,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+      });
+    }
+  }, [router.isReady, accessToken]);
 
   //call the places api
   useEffect(() => {
@@ -620,6 +633,7 @@ useEffect(() => {
     if (drawingManager) {
       drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
     }
+    setDrawingOpen(true);
   }
 
   //stop the drawing mode
@@ -630,22 +644,28 @@ useEffect(() => {
     }
     if (drawingManager) {
       drawingManager.setOptions({
-        drawingControl: false // Hide drawing options
+        drawingControl: false, // Hide drawing options
       });
     }
-  }
+  };
 
-  //add polygon to existing farm 
+  //close drawing
+  const closeDrawing = () => {
+    const drawingManager: any = drawingManagerRef.current;
+    if (drawingManager) {
+      drawingManager.setDrawingMode(null); // Setting drawing mode to null stops the drawing
+    }
+  };
+
+  //add polygon to existing farm
   const addPolyToExisting = (value: any) => {
     setPolygonDrawingMode();
-    setEditFarmsDetails(value)
-  }
-
+    setEditFarmsDetails(value);
+  };
 
   function handleAddPolygonButtonClick() {
     setPolygonDrawingMode();
-    setAddPolygonOpen(true)
-
+    setAddPolygonOpen(false);
   }
 
   //get the capture page number
@@ -660,7 +680,6 @@ useEffect(() => {
       sortType: router.query.sort_type as string,
     });
   };
-
 
   return (
     <div className={styles.markersPageWeb}>
@@ -773,7 +792,6 @@ useEffect(() => {
             setEditFarmsDetails={setEditFarmsDetails}
             editFarmDetails={editFarmDetails}
             getFarmOptions={getFarmOptions}
-            handleAddPolygonButtonClick={handleAddPolygonButtonClick}
             setSelectedPolygon={setSelectedPolygon}
             map={map}
             googleMaps={googleMaps}
@@ -783,6 +801,12 @@ useEffect(() => {
             farmOptionsLoading={loading}
             paginationDetails={paginationDetails}
             capturePageNum={capturePageNum}
+            setAddPolygonOpen={setAddPolygonOpen}
+            drawingOpen={drawingOpen}
+            setDrawingOpen={setDrawingOpen}
+            stopDrawingMode={stopDrawingMode}
+            closeDrawing={closeDrawing}
+            clearAllPoints={clearAllPoints}
           />
         ) : (
           ""
@@ -799,7 +823,11 @@ useEffect(() => {
         farm_id={editFarmDetails?._id}
         setEditFarmsDetails={setEditFarmsDetails}
       />
-      <AddPolygonDialog addPolygonOpen={addPolygonOpen} setAddPolygonOpen={ setAddPolygonOpen} />
+      <AddPolygonDialog
+        addPolygonOpen={addPolygonOpen}
+        setAddPolygonOpen={setAddPolygonOpen}
+        handleAddPolygonButtonClick={handleAddPolygonButtonClick}
+      />
     </div>
   );
 };

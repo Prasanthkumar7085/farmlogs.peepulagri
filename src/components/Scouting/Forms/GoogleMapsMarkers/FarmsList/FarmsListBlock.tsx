@@ -12,15 +12,16 @@ import { Clear } from "@mui/icons-material";
 import FarmListCard from "./FarmListCard";
 import { useEffect, useState } from "react";
 import ListAllFarmForDropDownService from "../../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
 import ReactDOM from "react-dom";
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import Image from "next/image";
-import AddIcon from '@mui/icons-material/Add';
-import { createRoot } from 'react-dom/client'
+import AddIcon from "@mui/icons-material/Add";
+import { createRoot } from "react-dom/client";
+import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 
 interface ApiProps {
   page: number;
@@ -36,7 +37,6 @@ const FarmsListBlock = ({
   setEditFarmsDetails,
   editFarmDetails,
   getFarmOptions,
-  handleAddPolygonButtonClick,
   setSelectedPolygon,
   map,
   googleMaps,
@@ -45,15 +45,23 @@ const FarmsListBlock = ({
   addPolyToExisting,
   farmOptionsLoading,
   paginationDetails,
-  capturePageNum
+  capturePageNum,
+  setAddPolygonOpen,
+  drawingOpen,
+  setDrawingOpen,
+  stopDrawingMode,
+  closeDrawing,
+  clearAllPoints,
 }: any) => {
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [pageNum, setPageNum] = useState<number | string>();
   const [autocompleteCreated, setAutocompleteCreated] = useState(false);
+
+  const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
 
   const [location, setLocation] = useState<{
     title: string;
@@ -101,11 +109,9 @@ const FarmsListBlock = ({
     }
   };
 
-
-
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
-      setSelectedPolygon(null)
+      setSelectedPolygon(null);
       setLocation({ title: "All", _id: "1" });
       getFarmOptions({
         search_string: router.query.search_string as string,
@@ -119,7 +125,7 @@ const FarmsListBlock = ({
       return;
     }
     if (value) {
-      setSelectedPolygon(null)
+      setSelectedPolygon(null);
       setLocation(value);
       getFarmOptions({
         search_string: router.query.search_string as string,
@@ -130,34 +136,31 @@ const FarmsListBlock = ({
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
       });
-
     }
   };
 
   useEffect(() => {
     if (accessToken) {
       if (router.query.location_id) {
-        getLocations(router.query.location_id as string)
-      }
-      else {
-        getLocations()
+        getLocations(router.query.location_id as string);
+      } else {
+        getLocations();
       }
     }
-  }, [accessToken, router.isReady])
-
+  }, [accessToken, router.isReady]);
 
   useEffect(() => {
     if (map && googleMaps) {
       // Create a custom control element
-      const controlDiv = document.createElement('div');
+      const controlDiv = document.createElement("div");
 
       // Add Autocomplete component to the control element
       const autocompleteComponent = (
         <Autocomplete
           sx={{
-            width: '250px',
-            maxWidth: '400px',
-            display: farmOptionsLoading ? "none !important" : ""
+            width: "250px",
+            maxWidth: "400px",
+            display: farmOptionsLoading ? "none !important" : "",
           }}
           size="small"
           fullWidth
@@ -175,17 +178,17 @@ const FarmsListBlock = ({
               size="small"
               sx={{
                 marginTop: "1rem",
-                '& .MuiInputBase-root': {
-                  fontSize: 'clamp(.75rem, 0.83vw, 18px)',
-                  backgroundColor: '#fff',
-                  border: 'none',
+                "& .MuiInputBase-root": {
+                  fontSize: "clamp(.75rem, 0.83vw, 18px)",
+                  backgroundColor: "#fff",
+                  border: "none",
                   borderRadius: "6px !important",
                   padding: "10px",
-                  marginBottom: "10px"
+                  marginBottom: "10px",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#fff !important", borderRadius: "6px !important"
-
+                  borderColor: "#fff !important",
+                  borderRadius: "6px !important",
                 },
               }}
             />
@@ -193,23 +196,22 @@ const FarmsListBlock = ({
         />
       );
 
-      createRoot(controlDiv).render(autocompleteComponent)
+      createRoot(controlDiv).render(autocompleteComponent);
 
       // Append the custom control element to the map
       map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
       setAutocompleteCreated(true);
     }
-
   }, [map, googleMaps, autocompleteCreated]);
-
 
   return (
     <div className={styles.detailsslidebarfarmslist}>
       <header className={styles.header}>
         <div className={styles.headingcontainer}>
           <h2 className={styles.heading}>Farms</h2>
-          <h2 className={styles.acresCount}>Total Farms: {paginationDetails?.total}</h2>
-
+          <h2 className={styles.acresCount}>
+            Total Farms: {paginationDetails?.total}
+          </h2>
         </div>
 
         <div className={styles.actionsbar}>
@@ -224,34 +226,49 @@ const FarmsListBlock = ({
             onChange={(e) => {
               if (e.target.value) {
                 setSearchString(e.target.value);
-              }
-              else {
+              } else {
                 setSearchString("");
-
+                getFarmOptions({
+                  search_string: "",
+                  location: router.query.location_id as string,
+                  userId: router.query.user_id as string,
+                  page: 1,
+                  limit: 20,
+                  sortBy: router.query.sort_by as string,
+                  sortType: router.query.sort_type as string,
+                });
               }
             }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Image src="/markers/farm-search.svg" alt="" height={15} width={15} />
+                  <Image
+                    src="/markers/farm-search.svg"
+                    alt=""
+                    height={15}
+                    width={15}
+                  />
                 </InputAdornment>
               ),
             }}
             sx={{
               "& .MuiInputBase-root": {
-                height: "32px", borderRadius: '2px',
-                background: ' #DADADA', color: "#000", fontSize: "12px"
+                height: "32px",
+                borderRadius: "2px",
+                background: " #DADADA",
+                color: "#000",
+                fontSize: "12px",
               },
-              '& .MuiOutlinedInput-notchedOutline': {
-                border: "0"
-              }
+              "& .MuiOutlinedInput-notchedOutline": {
+                border: "0",
+              },
             }}
           />
         </div>
-
       </header>
       <div id={styles.listview} className="scrollbar">
-        <FarmListCard data={farmOptions}
+        <FarmListCard
+          data={farmOptions}
           getFarmLocation={getFarmLocation}
           editPolygonDetails={editPolygonDetails}
           setEditFarmsDetails={setEditFarmsDetails}
@@ -265,42 +282,68 @@ const FarmsListBlock = ({
         />
       </div>
       <div className={styles.buttoncontainer}>
-        <Pagination shape="circular"
+        <Pagination
+          shape="circular"
           sx={{
-            marginBottom: "0.5rem", width: "100%",
-            '& .MuiPagination-ul': {
+            marginBottom: "0.5rem",
+            width: "100%",
+            "& .MuiPagination-ul": {
               width: "100%",
-              justifyContent: "center"
+              justifyContent: "center",
             },
-            '& .MuiButtonBase-root': {
+            "& .MuiButtonBase-root": {
               height: "25px !important",
               width: "25px !important",
               minWidth: "inherit",
-
             },
-
           }}
           page={+paginationDetails?.page}
           count={paginationDetails?.total_pages}
           onChange={(event: any, value: any) => {
-            capturePageNum(value)
-            setPageNum(+value)
+            capturePageNum(value);
+            setPageNum(+value);
           }}
         />
-        <Button
-          startIcon={<AddIcon />}
-          className={styles.addfarmbutton}
-          disableElevation={true}
-          variant="contained"
-          onClick={handleAddPolygonButtonClick}
-          sx={{
-            '& .MuiButton-startIcon': {
-              marginRight: "4px !important"
+        {drawingOpen ? (
+          <Button
+            className={styles.closefarmbutton}
+            variant="contained"
+            onClick={() => {
+              setDrawingOpen(false);
+              clearAllPoints();
+              closeDrawing();
+            }}
+            sx={{
+              "& .MuiButton-startIcon": {
+                marginRight: "4px !important",
+              },
+            }}
+          >
+            Stop Drawing
+          </Button>
+        ) : (
+          <Button
+            startIcon={<AddIcon />}
+            className={
+              editFarmDetails?._id
+                ? styles.addfarmbutton_disable
+                : styles.addfarmbutton
             }
-          }}
-        >
-          Add Farm
-        </Button>
+            disableElevation={true}
+            disabled={editFarmDetails?._id ? true : false}
+            variant="contained"
+            onClick={() => {
+              setAddPolygonOpen(true);
+            }}
+            sx={{
+              "& .MuiButton-startIcon": {
+                marginRight: "4px !important",
+              },
+            }}
+          >
+            Add Farm
+          </Button>
+        )}
       </div>
       <LoadingComponent loading={loading} />
     </div>

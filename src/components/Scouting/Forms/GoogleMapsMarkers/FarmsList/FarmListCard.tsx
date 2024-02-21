@@ -263,9 +263,7 @@ const FarmListCard = ({
                     <Button
                       className={styles.cropsBtn}
                       onClick={async () => {
-                        setOpenFarmDetails(true);
-                        await getFarmDataById(item?._id);
-                        setSelectedPolygon(item?._id);
+                       router.push(`/farm/${item?._id}/crops`);
                       }}
                     >
                       crops

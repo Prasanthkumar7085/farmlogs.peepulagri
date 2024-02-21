@@ -42,4 +42,5 @@ align-items: center;
 gap: 6px;
 border-radius: 8px;
 background: #45A845;
+cursor: pointer;
 }

@@ -362,6 +362,8 @@ const GoogleMapMarkerComponent = () => {
         dispatch(storeEditPolygonCoords([]));
         const newData = response.data.map((item: any) => ({
           _id: item._id,
+          title: item?.title,
+          area: item?.area,
           cor: item?.geometry?.coordinates?.length
             ? item?.geometry?.coordinates
             : [],
@@ -516,7 +518,24 @@ const GoogleMapMarkerComponent = () => {
           };
           marker.markerInfo = markerInfo;
 
+
           newMarkers.push(marker);
+
+          const infoWindowRef = new googleMaps.InfoWindow();
+
+          googleMaps.event.addListener(marker, 'mouseover', function () {
+            infoWindowRef.setContent(`
+        <div>
+            <h4>${marker.markerInfo?.name}</h4>
+            <p> acres: ${marker.markerInfo?.acres}</p>
+        </div>
+    `);
+            infoWindowRef.open(map, marker);
+          });
+
+          googleMaps.event.addListener(marker, 'mouseout', function () {
+            infoWindowRef.close();
+          });
 
           marker.addListener("click", () => {
             setSelectedPolygon(markerInfo.id);
@@ -549,6 +568,8 @@ const GoogleMapMarkerComponent = () => {
             getFarmDataById(markerInformation.id);
           });
 
+
+          // Append the title div to the map container
           return polygon;
         })
         .filter(Boolean); // Filter out null polygons

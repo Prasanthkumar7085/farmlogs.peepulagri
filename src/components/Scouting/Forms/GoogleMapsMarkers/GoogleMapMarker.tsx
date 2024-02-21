@@ -615,20 +615,6 @@ const GoogleMapMarkerComponent = () => {
     }
   }, [router.isReady, accessToken, searchString]);
 
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      setSearchString(router.query.search_string as string);
-      getFarmOptions({
-        search_string: router.query.search_string as string,
-        location: router.query.location_id as string,
-        userId: router.query.user_id as string,
-        page: router.query.page as string,
-        limit: 20,
-        sortBy: router.query.sort_by as string,
-        sortType: router.query.sort_type as string,
-      });
-    }
-  }, [router.isReady, accessToken]);
 
   //call the places api
   useEffect(() => {

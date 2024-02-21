@@ -303,6 +303,17 @@ const FarmsListBlock = ({
               setDrawingOpen(false);
               clearAllPoints();
               closeDrawing();
+              setEditFarmsDetails(null)
+              getFarmOptions({
+                search_string: router.query.search_string as string,
+                location: router.query.location_id as string,
+                userId: router.query.user_id as string,
+                page: 1,
+                limit: 20,
+                sortBy: router.query.sort_by as string,
+                sortType: router.query.sort_type as string,
+              });
+
             }}
             sx={{
               "& .MuiButton-startIcon": {

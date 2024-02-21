@@ -39,7 +39,8 @@ const SideBarMenu = ({ children }: any) => {
       isVisible: true,
       active:
         router.pathname.includes("/farm") &&
-        !router.pathname.includes("/scouts"),
+        !router.pathname.includes("/scouts") &&
+        !router.pathname.includes("/markers"),
       toolTitle: "Farms",
     },
     // {
@@ -69,6 +70,13 @@ const SideBarMenu = ({ children }: any) => {
       isVisible: true,
       active: router.pathname.includes("/procurements"),
       toolTitle: "Procurements",
+    },
+    {
+      src: "/location-marker.svg",
+      link: "/farm/markers",
+      isVisible: true,
+      active: router.pathname.includes("/markers"),
+      toolTitle: "Markers",
     },
     { src: '/calendaricon.svg', link: "/" },
     { src: '/graph-icon.svg', link: "/" },

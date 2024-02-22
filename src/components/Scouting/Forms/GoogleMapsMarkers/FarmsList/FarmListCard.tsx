@@ -277,7 +277,7 @@ const FarmListCard = ({
                       className={styles.viewBtn}
                       onClick={() => {
                         router.push(
-                          `/scouts?include=tags&page=1&limit=50&farm_id=${item?._id}`
+                          `/scouts?include=tags&page=1&limit=50&farm_search_string=${item?.title}&farm_id=${item?._id}`
                         );
                       }}
                     >

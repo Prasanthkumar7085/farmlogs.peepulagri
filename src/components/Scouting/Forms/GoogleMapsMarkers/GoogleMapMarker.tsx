@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { Button, ButtonBase, Tooltip, Typography } from '@mui/material';
+import { Autocomplete, Button, ButtonBase, TextField, Tooltip, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from "./google-map.module.css";
 import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
@@ -16,6 +16,8 @@ import Image from 'next/image';
 import { storeEditPolygonCoords, storeSearchLocation } from '@/Redux/Modules/Farms';
 import AddPolygonDialog from './AddPolygonDialog';
 import getFarmsByLocation from '../../../../../lib/services/FarmsService/getFarmsByLocation';
+import { createRoot } from 'react-dom/client';
+import getAllLocationsService from '../../../../../lib/services/Locations/getAllLocationsService';
 
 interface callFarmsProps {
   search_string: string;
@@ -67,6 +69,98 @@ const GoogleMapMarkerComponent = () => {
   const [addPolygonOpen, setAddPolygonOpen] = useState<boolean>(false);
   const [drawingOpen, setDrawingOpen] = useState<boolean>(false);
   const [googleSearch, setGoogleSearch] = useState<string>()
+  const [settingLocationLoading, setSettingLocationLoading] = useState(false);
+  const [optionsLoading, setOptionsLoading] = useState(false);
+
+  const [location, setLocation] = useState<any>();
+  const [locations, setLocations] = useState<any>([]);
+
+  const getLocations = async (newLocationId = "") => {
+    try {
+      const response = await getAllLocationsService(accessToken);
+      if (response?.success) {
+        setLocations(response?.data);
+        if (newLocationId) {
+          setSettingLocationLoading(true);
+          const newLocationObject = response?.data?.find(
+            (item: any) => item?._id == newLocationId
+          );
+
+          setLocation(newLocationObject);
+          setTimeout(() => {
+            setSettingLocationLoading(false);
+          }, 1);
+        } else {
+          setSettingLocationLoading(true);
+
+          setTimeout(() => {
+            setSettingLocationLoading(false);
+          }, 1);
+        }
+      }
+      if (response?.data?.length) {
+        setLocations([{ title: "All", _id: "1" }, ...response?.data]);
+      } else {
+        setLocations([{ title: "All", _id: "1" }]);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setOptionsLoading(false);
+    }
+  };
+
+  const onChangeLocation = (e: any, value: any, reason: any) => {
+    if (reason == "clear") {
+      setSelectedPolygon(null);
+      setLocation({ title: "All", _id: "1" });
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: "" as string,
+        userId: router.query.user_id as string,
+        page: 1,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+        locationName: router.query.location_name
+
+      });
+      return;
+    }
+    if (value) {
+      setSelectedPolygon(null);
+      setLocation(value);
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: value?._id as string,
+        userId: router.query.user_id as string,
+        page: 1,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+        locationName: router.query.location_name
+
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.location_id && map && googleMaps && location?.coordinates?.length) {
+      const indiaCenter = { lat: location?.coordinates?.[0], lng: location?.coordinates?.[1] };
+      map.setCenter(indiaCenter);
+      map.setZoom(17);
+    }
+  }, [map, googleMaps, router.query.location_id])
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      if (router.query.location_id) {
+        getLocations(router.query.location_id as string);
+      } else {
+        getLocations();
+      }
+    }
+  }, [accessToken, router.isReady]);
 
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
@@ -180,6 +274,64 @@ const GoogleMapMarkerComponent = () => {
     return controlDiv;
   };
 
+  const customLocationAutoComplete = (map: any, maps: any) => {
+    if (map && googleMaps) {
+      // Create a custom control element
+      const controlDiv = document.createElement("div");
+
+      // Add Autocomplete component to the control element
+      const autocompleteComponent = (
+        <Autocomplete
+          disabled={editFarmDetails?._id || router.query.location_name ? true : false}
+          sx={{
+            width: "250px",
+            maxWidth: "400px",
+            display: loading ? "none !important" : "",
+            '& .MuiInputBase-root': {
+              paddingBlock: "7px !important"
+            }
+          }}
+          size="small"
+          fullWidth
+          noOptionsText="No such location"
+          value={location}
+          isOptionEqualToValue={(option, value) => option.title === value.title}
+          getOptionLabel={(option) => option.title}
+          options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
+          onChange={onChangeLocation}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Search by Farm locations"
+              variant="outlined"
+              size="small"
+              sx={{
+                marginTop: "1rem",
+                "& .MuiInputBase-root": {
+                  fontSize: "clamp(.75rem, 0.83vw, 18px)",
+                  backgroundColor: "#fff",
+                  border: "none",
+                  borderRadius: "6px !important",
+                  padding: "10px",
+                  marginBottom: "10px",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#fff !important",
+                  borderRadius: "6px !important",
+                },
+              }}
+            />
+          )}
+        />
+      );
+
+      createRoot(controlDiv).render(autocompleteComponent);
+
+      // Append the custom control element to the map
+      map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
+    }
+  }
+
   //google api running event
   const handleApiLoaded = (map: any, maps: any) => {
     setMap(map);
@@ -187,7 +339,7 @@ const GoogleMapMarkerComponent = () => {
     mapRef.current = map;
 
     addCustomControl(map, maps);
-
+    customLocationAutoComplete(map, maps)
     createInfoWindow(map);
     placesService.current = new maps.places.PlacesService(map);
 
@@ -316,9 +468,14 @@ const GoogleMapMarkerComponent = () => {
               let locationName = results[0].formatted_address;
               locationName = locationName?.split(",")[0]
               let afterRemoveingSpaces = locationName.split(" ")[1]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, '')
+              // Accessing latitude and longitude from lastCoord object
+              const latitude = lastCoord.lat(); // Get the latitude
+              const longitude = lastCoord.lng();
+              const geocoder = new google.maps.Geocoder();
+              const latlngs = { lat: latitude, lng: longitude };
               setFarmLoactionDetails({
                 locationName: afterRemoveingSpaces,
-                latlng: latLong,
+                latlng: [latlngs.lat, latlngs.lng],
                 areaInAcres: updatedArea
               });
               setPolygon(event.overlay);
@@ -722,10 +879,14 @@ const GoogleMapMarkerComponent = () => {
 
 
   useEffect(() => {
-    if (router.query.location_name) {
-      centerMapToPlace(googleSearchLocation)
+    if (map && googleMaps) {
+      if (router.query.location_name) {
+        centerMapToPlace(googleSearchLocation)
+      }
     }
   }, [map, googleMaps, googleSearchLocation?.name])
+
+
 
   //redirect to the polygon
   useEffect(() => {
@@ -742,7 +903,6 @@ const GoogleMapMarkerComponent = () => {
         map.fitBounds(bounds);
       } else {
         if (editFarmDetails?._id == null) {
-          console.log("123")
           const indiaCenter = { lat: 20.5937, lng: 78.9629 };
           map.setCenter(indiaCenter);
           map.setZoom(5);
@@ -769,25 +929,39 @@ const GoogleMapMarkerComponent = () => {
       }, delay);
       return () => clearTimeout(debounce);
     }
-  }, [searchString]);
-
-  useEffect(() => {
-    if (router.isReady && accessToken) {
-      setSearchString(router.query.search_string as string)
-      getFarmOptions({
-        search_string: router.query.search_string as string,
-        location: router.query.location_id as string,
-        userId: router.query.user_id as string,
-        page: router.query.page,
-        limit: 20,
-        sortBy: router.query.sort_by as string,
-        sortType: router.query.sort_type as string,
-        locationName: router.query.location_name
-
-      });
-
+    else {
+      if (router.isReady && accessToken) {
+        getFarmOptions({
+          search_string: "" as string,
+          location: router.query.location_id as string,
+          userId: router.query.user_id as string,
+          page: 1,
+          limit: 20,
+          sortBy: router.query.sort_by as string,
+          sortType: router.query.sort_type as string,
+          locationName: router.query.location_name
+        });
+      }
     }
-  }, [router.isReady, accessToken,])
+  }, [router.isReady, accessToken, searchString]);
+
+  // useEffect(() => {
+  //   if (router.isReady && accessToken) {
+  //     setSearchString(router.query.search_string as string)
+  //     getFarmOptions({
+  //       search_string: router.query.search_string as string,
+  //       location: router.query.location_id as string,
+  //       userId: router.query.user_id as string,
+  //       page: router.query.page,
+  //       limit: 20,
+  //       sortBy: router.query.sort_by as string,
+  //       sortType: router.query.sort_type as string,
+  //       locationName: router.query.location_name
+
+  //     });
+
+  //   }
+  // }, [router.isReady, accessToken])
 
 
   //call the places api
@@ -836,6 +1010,13 @@ const GoogleMapMarkerComponent = () => {
   const addPolyToExisting = (value: any) => {
     setPolygonDrawingMode();
     setEditFarmsDetails(value);
+    if (value?.location_id?.coordinates?.length) {
+      console.log(value, "7956")
+      const indiaCenter = { lat: value?.location_id?.coordinates?.[0], lng: value?.location_id?.coordinates?.[1] };
+      map.setCenter(indiaCenter);
+      map.setZoom(17);
+    }
+
   };
 
   function handleAddPolygonButtonClick() {

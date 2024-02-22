@@ -63,13 +63,8 @@ const FarmsListBlock = ({
 
   const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
 
-  const [location, setLocation] = useState<{
-    title: string;
-    _id: string;
-  } | null>();
-  const [locations, setLocations] = useState<
-    Array<{ title: string; _id: string }>
-  >([]);
+  const [location, setLocation] = useState<any>();
+  const [locations, setLocations] = useState<any>([]);
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -144,7 +139,15 @@ const FarmsListBlock = ({
   };
 
   useEffect(() => {
-    if (accessToken) {
+    if (router.query.location_id && map && googleMaps && location?.coordinates?.length) {
+      const indiaCenter = { lat: location?.coordinates?.[0], lng: location?.coordinates?.[1] };
+      map.setCenter(indiaCenter);
+      map.setZoom(17);
+    }
+  }, [map, googleMaps, router.query.location_id])
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
       if (router.query.location_id) {
         getLocations(router.query.location_id as string);
       } else {
@@ -153,64 +156,7 @@ const FarmsListBlock = ({
     }
   }, [accessToken, router.isReady]);
 
-  useEffect(() => {
-    if (map && googleMaps) {
-      // Create a custom control element
-      const controlDiv = document.createElement("div");
 
-      // Add Autocomplete component to the control element
-      const autocompleteComponent = (
-        <Autocomplete
-          disabled={editFarmDetails?._id || router.query.location_name ? true : false}
-          sx={{
-            width: "250px",
-            maxWidth: "400px",
-            display: farmOptionsLoading ? "none !important" : "",
-            '& .MuiInputBase-root': {
-              paddingBlock: "7px !important"
-            }
-          }}
-          size="small"
-          fullWidth
-          noOptionsText="No such location"
-          value={location}
-          isOptionEqualToValue={(option, value) => option.title === value.title}
-          getOptionLabel={(option) => option.title}
-          options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
-          onChange={onChangeLocation}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              placeholder="Search by Farm locations"
-              variant="outlined"
-              size="small"
-              sx={{
-                marginTop: "1rem",
-                "& .MuiInputBase-root": {
-                  fontSize: "clamp(.75rem, 0.83vw, 18px)",
-                  backgroundColor: "#fff",
-                  border: "none",
-                  borderRadius: "6px !important",
-                  padding: "10px",
-                  marginBottom: "10px",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#fff !important",
-                  borderRadius: "6px !important",
-                },
-              }}
-            />
-          )}
-        />
-      );
-
-      createRoot(controlDiv).render(autocompleteComponent);
-
-      // Append the custom control element to the map
-      map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
-      setAutocompleteCreated(true);
-    }
-  }, [map, googleMaps, autocompleteCreated]);
 
   return (
     <div className={styles.detailsslidebarfarmslist}>

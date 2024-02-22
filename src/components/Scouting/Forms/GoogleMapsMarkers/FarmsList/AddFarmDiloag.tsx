@@ -66,6 +66,7 @@ const AddFarmDilog = ({
   const [addLocation, setAddLocation] = useState<any>();
   const [searchInput, setSearchInput] = useState<string>()
 
+
   const {
     register,
     handleSubmit,
@@ -232,6 +233,7 @@ const AddFarmDilog = ({
     if (router.isReady && accessToken) {
       setArea(FarmlocationDetails?.areaInAcres ? FarmlocationDetails?.areaInAcres?.toFixed(2) : "")
       setSearchInput(FarmlocationDetails?.locationName?.split(",")[0]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, ''))
+      getLocations("");
       if (farm_id) {
         getFarmDataById()
       }
@@ -261,6 +263,15 @@ const AddFarmDilog = ({
             setSettingLocationLoading(false);
           }, 1);
         }
+        if (FarmlocationDetails?.locationName) {
+          const captureLocation = response?.data?.find((item: any) => item?.title == FarmlocationDetails?.locationName)
+          if (captureLocation) {
+            setLocation(captureLocation);
+          }
+          else {
+            addNewLocation(FarmlocationDetails?.locationName)
+          }
+        }
       }
     } catch (e) {
     } finally {
@@ -287,7 +298,11 @@ const AddFarmDilog = ({
   const addNewLocation = async (location: string) => {
     setAddLocationLoading(true);
 
-    const response = await addLocationService({ title: location }, accessToken);
+    let body = {
+      title: location,
+      "coordinates": FarmlocationDetails?.latlng
+    }
+    const response = await addLocationService(body, accessToken);
     if (response?.success) {
       setAlertMessage(response?.message);
       setAlertType(true);

@@ -10,6 +10,7 @@ import {
 } from "redux-persist";
 import { configureStore, createAction } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
+import { getDefaultMiddleware } from '@reduxjs/toolkit';
 
 
 import pesistStorage from "./persistateStore"
@@ -29,9 +30,8 @@ export const makeStore = ({ isServer }: any) => {
             reducer: combinedReducer,
             middleware: (getDefaultMiddleware) =>
                 getDefaultMiddleware({
-                    serializableCheck: {
-                        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-                    },
+                    serializableCheck: false
+
                 }),
 
         });

@@ -161,11 +161,11 @@ const FarmsListBlock = ({
       // Add Autocomplete component to the control element
       const autocompleteComponent = (
         <Autocomplete
-          disabled={editFarmDetails?._id ? true : false}
+          disabled={editFarmDetails?._id || router.query.location_name ? true : false}
           sx={{
             width: "250px",
             maxWidth: "400px",
-            display: farmOptionsLoading || router.query.location_name ? "none !important" : "",
+            display: farmOptionsLoading ? "none !important" : "",
             '& .MuiInputBase-root': {
               paddingBlock: "7px !important"
             }

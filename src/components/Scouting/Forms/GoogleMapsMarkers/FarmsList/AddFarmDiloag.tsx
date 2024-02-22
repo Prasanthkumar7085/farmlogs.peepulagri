@@ -94,7 +94,7 @@ const AddFarmDilog = ({
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
-        locationName: router.query.locationName as string
+        locationName: router.query.location_name as string
       });
 
     } else if (response?.status == 422) {
@@ -219,7 +219,6 @@ const AddFarmDilog = ({
     setLoading(false);
   };
 
-  console.log(FarmlocationDetails)
   useEffect(() => {
     if (router.isReady && accessToken) {
       if (router.query.location) {
@@ -231,7 +230,6 @@ const AddFarmDilog = ({
 
   useEffect(() => {
     if (router.isReady && accessToken) {
-      console.log("0363")
       setArea(FarmlocationDetails?.areaInAcres ? FarmlocationDetails?.areaInAcres?.toFixed(2) : "")
       setSearchInput(FarmlocationDetails?.locationName?.split(",")[0]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, ''))
       if (farm_id) {
@@ -271,8 +269,7 @@ const AddFarmDilog = ({
   };
 
   const addInputValue = (e: any, newValue: string) => {
-    console.log("SDafdsafasdfqw43514")
-    console.log(newValue)
+
     setSearchInput(newValue)
     setNewLocation(newValue);
   };
@@ -309,7 +306,6 @@ const AddFarmDilog = ({
     setAddLocationLoading(false);
   };
 
-  console.log(FarmlocationDetails?.areaInAcres)
   return (
     <Dialog
       open={drawerOpen}

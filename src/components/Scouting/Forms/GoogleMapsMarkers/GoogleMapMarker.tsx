@@ -211,7 +211,7 @@ const GoogleMapMarkerComponent = () => {
     searchInput.style.width = "calc(100% - 12px)"; // Adjust width to accommodate icon
     searchInput.style.margin = "auto";
     searchInput.style.borderRadius = "10px"; // Rounded corners
-    searchInput.disabled = editFarmDetails?._id ? true : false;
+    searchInput.disabled = editFarmDetails?._id || router.query.location_id ? true : false;
 
     // Create a custom icon
     const icon = document.createElement("div");
@@ -307,9 +307,6 @@ const GoogleMapMarkerComponent = () => {
         }));
         // Calculate and log the initial area of the polygon
         const updatedArea = calculatePolygonArea(paths);
-        console.log("Initial Area:", updatedArea, "square meters");
-
-
 
         const geocoder = new maps.Geocoder();
         const lastCoord = paths[paths.length - 1]; // Accessing the last point of the polygon
@@ -318,9 +315,7 @@ const GoogleMapMarkerComponent = () => {
             if (results[0]) {
               let locationName = results[0].formatted_address;
               locationName = locationName?.split(",")[0]
-              console.log(locationName, ";pwe")
               let afterRemoveingSpaces = locationName.split(" ")[1]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, '')
-              console.log(afterRemoveingSpaces, "afte")
               setFarmLoactionDetails({
                 locationName: afterRemoveingSpaces,
                 latlng: latLong,
@@ -509,11 +504,17 @@ const GoogleMapMarkerComponent = () => {
         }, 0.1);
 
         setViewPolygonsCoord(newData);
-        if (locationName) {
-          console.log(googleSearchLocation)
-          centerMapToPlace(googleSearchLocation);
-        }
 
+      }
+      if (response?.status == 400) {
+        setFarmOptions([]);
+        setPaginationDetails(null);
+        setRenderField(true);
+        setTimeout(() => {
+          setRenderField(false);
+        }, 0.1);
+        setViewPolygonsCoord([]);
+        centerMapToPlace(googleSearchLocation)
       }
 
     }
@@ -525,12 +526,11 @@ const GoogleMapMarkerComponent = () => {
   };
 
   const centerMapToPlace = (place: any) => {
-
-    if (map.current && place.geometry && place.geometry.location) {
+    if (mapRef.current && place?.geometry && place.geometry.location) {
       const location = place.geometry.location;
       const latLng = new google.maps.LatLng(location.lat(), location.lng());
-      map.current.panTo(latLng);
-      map.current.setZoom(15);
+      mapRef.current.panTo(latLng);
+      mapRef.current.setZoom(15);
     }
   };
 
@@ -626,7 +626,6 @@ const GoogleMapMarkerComponent = () => {
   //show the list all farms markers and polygons
   useEffect(() => {
     if (map && googleMaps && viewPolygonsCoord.length) {
-      console.log("yes1");
       // Create markers and polygons for each item in the data array
       const newMarkers: any = [];
       const newPolygons = viewPolygonsCoord
@@ -717,8 +716,16 @@ const GoogleMapMarkerComponent = () => {
 
       // Set the markers and polygons
       setMarkerObjects(newMarkers);
+
     }
   }, [map, googleMaps, viewPolygonsCoord]);
+
+
+  useEffect(() => {
+    if (router.query.location_name) {
+      centerMapToPlace(googleSearchLocation)
+    }
+  }, [map, googleMaps, googleSearchLocation?.name])
 
   //redirect to the polygon
   useEffect(() => {
@@ -735,10 +742,12 @@ const GoogleMapMarkerComponent = () => {
         map.fitBounds(bounds);
       } else {
         if (editFarmDetails?._id == null) {
+          console.log("123")
           const indiaCenter = { lat: 20.5937, lng: 78.9629 };
           map.setCenter(indiaCenter);
           map.setZoom(5);
         }
+
       }
     }
   }, [selectedPolygon]);
@@ -755,29 +764,30 @@ const GoogleMapMarkerComponent = () => {
           limit: 20,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
-          locationName: router.query.locationName
-        });
-      }, delay);
-      return () => clearTimeout(debounce);
-    } else {
-      let delay = 500;
-      let debounce = setTimeout(() => {
-        getFarmOptions({
-          search_string: router.query.search_string as string,
-          location: router.query.location_id as string,
-          userId: router.query.user_id as string,
-          page: router.query.page,
-          limit: 20,
-          sortBy: router.query.sort_by as string,
-          sortType: router.query.sort_type as string,
           locationName: router.query.location_name
-
         });
-
       }, delay);
       return () => clearTimeout(debounce);
     }
-  }, [router.isReady, accessToken, searchString]);
+  }, [searchString]);
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      setSearchString(router.query.search_string as string)
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: router.query.location_id as string,
+        userId: router.query.user_id as string,
+        page: router.query.page,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+        locationName: router.query.location_name
+
+      });
+
+    }
+  }, [router.isReady, accessToken,])
 
 
   //call the places api

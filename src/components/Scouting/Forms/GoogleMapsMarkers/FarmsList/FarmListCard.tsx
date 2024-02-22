@@ -70,6 +70,7 @@ const FarmListCard = ({
           limit: 20,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
+          locationName: router.query.location_name
         });
 
       } else if (response?.statusCode == 403) {
@@ -108,8 +109,8 @@ const FarmListCard = ({
                   <h2 className={styles.northSideChilli}>
                     {item.title.length > 16
                       ? item.title.slice(0, 1).toUpperCase() +
-                        item.title.slice(1, 12) +
-                        "..."
+                      item.title.slice(1, 12) +
+                      "..."
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
                   {item?.geometry?.coordinates?.length ? (
@@ -128,6 +129,8 @@ const FarmListCard = ({
                             limit: 20,
                             sortBy: router.query.sort_by as string,
                             sortType: router.query.sort_type as string,
+                            locationName: router.query.location_name
+
                           });
                         }}
                       >
@@ -192,7 +195,7 @@ const FarmListCard = ({
                             borderRadius: "0px 0px 0px 0px",
                             display:
                               item?.geometry?.coordinates?.length &&
-                              !editFarmDetails?._id
+                                !editFarmDetails?._id
                                 ? ""
                                 : "none",
                           }}
@@ -226,6 +229,8 @@ const FarmListCard = ({
                               limit: 20,
                               sortBy: router.query.sort_by as string,
                               sortType: router.query.sort_type as string,
+                              locationName: router.query.location_name
+
                             });
                           }}
                         >
@@ -253,7 +258,7 @@ const FarmListCard = ({
                       {item?.location_id?.title}
                     </h3>
                   </div>
-                  <p className={styles.acres}>{item.area}ac</p>
+                  <p className={styles.acres}>{item.area?.toFixed(2)}ac</p>
                 </div>
                 <div className={styles.locatedate}>
                   <p className={styles.createddate}>
@@ -263,7 +268,7 @@ const FarmListCard = ({
                     <Button
                       className={styles.cropsBtn}
                       onClick={async () => {
-                       router.push(`/farm/${item?._id}/crops`);
+                        router.push(`/farm/${item?._id}/crops`);
                       }}
                     >
                       crops
@@ -276,7 +281,7 @@ const FarmListCard = ({
                         );
                       }}
                     >
-                      view
+                      scouts
                     </Button>
                   </div>
                 </div>

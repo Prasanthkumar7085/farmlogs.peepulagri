@@ -31,7 +31,10 @@ const AddFarmDilog = ({
   getFarmOptions,
   setPolygon,
   farm_id,
-  setEditFarmsDetails
+  setEditFarmsDetails,
+  googleSearch,
+  FarmlocationDetails,
+  setFarmLoactionDetails
 }: any) => {
 
   const dispatch = useDispatch()
@@ -61,6 +64,7 @@ const AddFarmDilog = ({
   const [addLocationLoading, setAddLocationLoading] = useState(false);
   const [newLocation, setNewLocation] = useState("");
   const [addLocation, setAddLocation] = useState<any>();
+  const [searchInput, setSearchInput] = useState<string>()
 
   const {
     register,
@@ -77,6 +81,11 @@ const AddFarmDilog = ({
       setDrawerOpen(false);
       dispatch(storeEditPolygonCoords([]));
       setEditFarmsDetails(null)
+      setArea("")
+      setTitle("")
+      setNewLocation("")
+      setLocation(null)
+      setFarmLoactionDetails(null)
       getFarmOptions({
         search_string: router.query.search_string as string,
         location: router.query.location_id as string,
@@ -85,6 +94,7 @@ const AddFarmDilog = ({
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
+        locationName: router.query.locationName as string
       });
 
     } else if (response?.status == 422) {
@@ -159,6 +169,7 @@ const AddFarmDilog = ({
     }
   };
 
+
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
     const allowedCharacters = [
@@ -191,17 +202,24 @@ const AddFarmDilog = ({
 
     if (response.success) {
       setData(response.data);
-
-      setArea(response?.data?.area);
       setTitle(response?.data?.title);
       const locationFromResponse = response?.data?.location_id;
       // const locationObjFromResponse = locationFromResponse.find((item: {name:string,_id:string})=>item.name==locationFromResponse);
       // setLocation(locationObjFromResponse);
       await getLocations(locationFromResponse);
+      if (FarmlocationDetails?.areaInAcres || FarmlocationDetails?.locationName) {
+        setArea(FarmlocationDetails?.areaInAcres?.toFixed(2));
+      }
+      else {
+        setArea(response?.data?.area);
+
+      }
+
     }
     setLoading(false);
   };
 
+  console.log(FarmlocationDetails)
   useEffect(() => {
     if (router.isReady && accessToken) {
       if (router.query.location) {
@@ -210,13 +228,17 @@ const AddFarmDilog = ({
     }
   }, [router.isReady, accessToken, router.query.location]);
 
+
   useEffect(() => {
     if (router.isReady && accessToken) {
+      console.log("0363")
+      setArea(FarmlocationDetails?.areaInAcres ? FarmlocationDetails?.areaInAcres?.toFixed(2) : "")
+      setSearchInput(FarmlocationDetails?.locationName?.split(",")[0]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, ''))
       if (farm_id) {
         getFarmDataById()
       }
     }
-  }, [farm_id, drawerOpen])
+  }, [drawerOpen, FarmlocationDetails?.locationName])
 
   useEffect(() => {
     setHiddenLoading(true);
@@ -249,7 +271,10 @@ const AddFarmDilog = ({
   };
 
   const addInputValue = (e: any, newValue: string) => {
-    setNewLocation(newValue.toUpperCase());
+    console.log("SDafdsafasdfqw43514")
+    console.log(newValue)
+    setSearchInput(newValue)
+    setNewLocation(newValue);
   };
 
   const captureResponseDilog = (value: any) => {
@@ -284,6 +309,7 @@ const AddFarmDilog = ({
     setAddLocationLoading(false);
   };
 
+  console.log(FarmlocationDetails?.areaInAcres)
   return (
     <Dialog
       open={drawerOpen}
@@ -357,6 +383,7 @@ const AddFarmDilog = ({
                     id="asynchronous-demo"
                     open={open}
                     fullWidth
+                    inputValue={searchInput ? searchInput : FarmlocationDetails?.locationName}
                     onOpen={() => {
                       getLocations("");
                       setOpen(true);
@@ -376,9 +403,7 @@ const AddFarmDilog = ({
                       </div>
                     }
                     value={location}
-                    isOptionEqualToValue={(option, value) =>
-                      option.title === value.title
-                    }
+
                     getOptionLabel={(option: { title: string; _id: string }) =>
                       option.title.toUpperCase()
                     }
@@ -496,9 +521,13 @@ const AddFarmDilog = ({
                   variant="outlined"
                   onClick={() => {
                     setDrawerOpen(false);
-                    setTitle("")
-                    setLocation(null)
                     setArea("")
+                    setTitle("")
+                    setNewLocation("")
+                    setLocation(null)
+                    if (!farm_id) {
+                      setEditFarmsDetails(null)
+                    }
                   }}
                 >
                   Cancel

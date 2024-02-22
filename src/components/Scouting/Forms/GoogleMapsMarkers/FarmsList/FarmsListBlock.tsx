@@ -121,6 +121,8 @@ const FarmsListBlock = ({
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
+        locationName: router.query.location_name
+
       });
       return;
     }
@@ -135,6 +137,8 @@ const FarmsListBlock = ({
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
+        locationName: router.query.location_name
+
       });
     }
   };
@@ -157,10 +161,11 @@ const FarmsListBlock = ({
       // Add Autocomplete component to the control element
       const autocompleteComponent = (
         <Autocomplete
+          disabled={editFarmDetails?._id ? true : false}
           sx={{
             width: "250px",
             maxWidth: "400px",
-            display: farmOptionsLoading ? "none !important" : "",
+            display: farmOptionsLoading || router.query.location_name ? "none !important" : "",
             '& .MuiInputBase-root': {
               paddingBlock: "7px !important"
             }
@@ -230,7 +235,19 @@ const FarmsListBlock = ({
               if (e.target.value) {
                 setSearchString(e.target.value);
               } else {
+
                 setSearchString("");
+                getFarmOptions({
+                  search_string: "",
+                  location: router.query.location_id as string,
+                  userId: router.query.user_id as string,
+                  page: router.query.page,
+                  limit: 20,
+                  sortBy: router.query.sort_by as string,
+                  sortType: router.query.sort_type as string,
+                  locationName: router.query.location_name
+
+                });
               }
             }}
             InputProps={{
@@ -278,7 +295,9 @@ const FarmsListBlock = ({
       <div className={styles.buttoncontainer}>
         <Pagination
           shape="circular"
+          disabled={editFarmDetails?._id ? true : false}
           sx={{
+            display: paginationDetails?.total_pages ? "" : 'none',
             marginBottom: "0.5rem",
             width: "100%",
             "& .MuiPagination-ul": {
@@ -315,6 +334,8 @@ const FarmsListBlock = ({
                 limit: 20,
                 sortBy: router.query.sort_by as string,
                 sortType: router.query.sort_type as string,
+                locationName: router.query.location_name
+
               });
 
             }}

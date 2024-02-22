@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { removeUserDetails } from '@/Redux/Modules/Auth';
 import { deleteAllMessages } from '@/Redux/Modules/Conversations';
 import FarmAutoCompleteInAllScouting from '@/components/ScoutingWeb/ListScoutsComponents/FarmAutoCompleteInAllScouting';
+import { prepareURLEncodedParams } from '../../../../lib/requestUtils/urlEncoder';
 
 const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
     const router = useRouter();
@@ -292,53 +293,6 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                         />
                     )}
                 />
-
-                {/* <Autocomplete
-                    sx={{
-                        width: "40%",
-
-                        borderRadius: "4px", '& .MuiSvgIcon-root': {
-                            color: "#fff"
-                        }
-
-                    }}
-                    id="size-small-outlined-multi"
-                    size="small"
-                    fullWidth
-                    noOptionsText={"No such location"}
-                    value={location}
-                    isOptionEqualToValue={(option, value) =>
-                        option.title === value.title
-                    }
-                    getOptionLabel={(option: { title: string; _id: string }) =>
-                        option.title
-                    }
-                    options={locations}
-                    loading={optionsLoading}
-                    onChange={onChangeLocation}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            placeholder="Search by location"
-                            variant="outlined"
-                            size="small"
-
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                                    backgroundColor: "#ABABAB",
-                                    border: "none",
-                                    color: "#fff",
-                                    paddingBlock: "2.5px !important"
-                                },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    border: "0 !important", borderRadius: "4px !important"
-                                }
-                            }}
-                        />
-                    )}
-                /> */}
-
                 <Autocomplete
                     sx={{
                         width: "40%",
@@ -403,7 +357,21 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                 />
                 <Button variant='contained'
                     onClick={() => {
-                        router.push(`/scouts?include=tags&page=1&limit=50&farm_id=${farm?._id}&farm_search_string=${farm?.title}&location_id=${location?._id}`)
+                        let queryParams: any = { "include": "tags" };
+
+
+                        if (farm?._id) {
+                            queryParams["farm_id"] = farm?._id;
+                        }
+                        if (farm?.title) {
+                            queryParams["farm_search_string"] = farm?.title;
+                        }
+                        if (location?._id) {
+                            queryParams["location_id"] = location?._id
+                        }
+                        let url = "/scouts"
+                        url = prepareURLEncodedParams(url, queryParams);
+                        router.push(url)
                         setGlobalSearchOpen(false)
                         setDefaultValueSet(null);
                         setLocation(null);

@@ -13,7 +13,8 @@ export const initialState: Farms.FarmsData = {
   taskFilterOpen: {},
   summaryFarmTitle: "",
   summaryCropTitle: "",
-  polygonCoords: []
+  polygonCoords: [],
+  searchLocation: {}
 };
 
 export const farmsSlice = createSlice({
@@ -63,7 +64,11 @@ export const farmsSlice = createSlice({
     },
     storeEditPolygonCoords: (state: any, action: any) => {
       state.polygonCoords = action.payload
+    },
+    storeSearchLocation: (state: any, action: any) => {
+      state.searchLocation = action.payload
     }
+
   },
 });
 
@@ -78,7 +83,8 @@ export const {
   changeTaskFilterUserOpen,
   setSummaryFarmName,
   setSummaryCropName,
-  storeEditPolygonCoords
+  storeEditPolygonCoords,
+  storeSearchLocation
 }: any = farmsSlice.actions;
 export const farmsSliceReducer = { [reducerName]: farmsSlice.reducer };
 

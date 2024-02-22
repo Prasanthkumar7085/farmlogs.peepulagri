@@ -1,7 +1,7 @@
 
 const getFarmsByLocation = async (location: string, accessToken: string) => {
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/locations/${location}/farms/all`
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/${location}`
     let options = {
         method: "GET",
         headers: new Headers({

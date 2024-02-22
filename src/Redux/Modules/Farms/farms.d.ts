@@ -10,6 +10,7 @@ declare namespace Farms {
     summaryFarmTitle: string;
     summaryCropTitle: string;
     polygonCoords: any
+    searchLocation: any
   }
 
 }

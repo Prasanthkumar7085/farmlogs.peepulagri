@@ -117,6 +117,8 @@ const ViewFarmDetails = ({ setOpenFarmDetails,
                             limit: 20,
                             sortBy: router.query.sort_by as string,
                             sortType: router.query.sort_type as string,
+                            locationName: router.query.location_name
+
                         });
                         setOpenFarmDetails(false)
                         setSelectedPolygon(null)

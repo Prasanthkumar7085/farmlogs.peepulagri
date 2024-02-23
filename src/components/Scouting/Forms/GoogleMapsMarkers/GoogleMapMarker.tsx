@@ -34,7 +34,7 @@ const GoogleMapMarkerComponent = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState<any>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -160,7 +160,7 @@ const GoogleMapMarkerComponent = () => {
         getLocations();
       }
     }
-  }, [accessToken, router.isReady]);
+  }, []);
 
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
@@ -275,7 +275,7 @@ const GoogleMapMarkerComponent = () => {
   };
 
   const customLocationAutoComplete = (map: any, maps: any) => {
-    if (map && googleMaps) {
+    if (map && maps) {
       // Create a custom control element
       const controlDiv = document.createElement("div");
 
@@ -328,7 +328,7 @@ const GoogleMapMarkerComponent = () => {
       createRoot(controlDiv).render(autocompleteComponent);
 
       // Append the custom control element to the map
-      map.controls[googleMaps.ControlPosition.TOP_CENTER].push(controlDiv);
+      map.controls[maps.ControlPosition.TOP_CENTER].push(controlDiv);
     }
   }
 
@@ -913,7 +913,7 @@ const GoogleMapMarkerComponent = () => {
   }, [selectedPolygon]);
 
   useEffect(() => {
-    if (router.isReady && accessToken && searchString) {
+    if (router.isReady && accessToken) {
       let delay = 500;
       let debounce = setTimeout(() => {
         getFarmOptions({
@@ -929,39 +929,12 @@ const GoogleMapMarkerComponent = () => {
       }, delay);
       return () => clearTimeout(debounce);
     }
-    else {
-      if (router.isReady && accessToken) {
-        getFarmOptions({
-          search_string: "" as string,
-          location: router.query.location_id as string,
-          userId: router.query.user_id as string,
-          page: 1,
-          limit: 20,
-          sortBy: router.query.sort_by as string,
-          sortType: router.query.sort_type as string,
-          locationName: router.query.location_name
-        });
-      }
-    }
-  }, [router.isReady, accessToken, searchString]);
 
-  // useEffect(() => {
-  //   if (router.isReady && accessToken) {
-  //     setSearchString(router.query.search_string as string)
-  //     getFarmOptions({
-  //       search_string: router.query.search_string as string,
-  //       location: router.query.location_id as string,
-  //       userId: router.query.user_id as string,
-  //       page: router.query.page,
-  //       limit: 20,
-  //       sortBy: router.query.sort_by as string,
-  //       sortType: router.query.sort_type as string,
-  //       locationName: router.query.location_name
+  }, [searchString]);
 
-  //     });
-
-  //   }
-  // }, [router.isReady, accessToken])
+  useEffect(() => {
+    setSearchString(router.query.search_string as string);
+  }, [router.query.search_string]);
 
 
   //call the places api
@@ -1027,7 +1000,7 @@ const GoogleMapMarkerComponent = () => {
   //get the capture page number
   const capturePageNum = (value: string | number) => {
     getFarmOptions({
-      search_string: searchString as string,
+      search_string: router.query.search_string as string,
       location: router.query.location_id as string,
       userId: router.query.user_id as string,
       page: value,
@@ -1058,7 +1031,7 @@ const GoogleMapMarkerComponent = () => {
               streetViewControl: true,
               rotateControl: true,
             }}
-            defaultZoom={5}
+            defaultZoom={6}
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
           ></GoogleMapReact>

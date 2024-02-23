@@ -164,7 +164,7 @@ const FarmsListBlock = ({
         <div className={styles.headingcontainer}>
           <h2 className={styles.heading}>Farms</h2>
           <h2 className={styles.acresCount}>
-            Total Farms: {paginationDetails?.total}
+            Total Farms: {paginationDetails?.total ? paginationDetails?.total : "--"}
           </h2>
         </div>
 
@@ -181,19 +181,11 @@ const FarmsListBlock = ({
               if (e.target.value) {
                 setSearchString(e.target.value);
               } else {
-
                 setSearchString("");
-                getFarmOptions({
-                  search_string: "",
-                  location: router.query.location_id as string,
-                  userId: router.query.user_id as string,
-                  page: router.query.page,
-                  limit: 20,
-                  sortBy: router.query.sort_by as string,
-                  sortType: router.query.sort_type as string,
-                  locationName: router.query.location_name
-
-                });
+                let temp = { ...router.query }
+                delete temp.search_string
+                console.log(temp, "p0")
+                router.push(temp)
               }
             }}
             InputProps={{

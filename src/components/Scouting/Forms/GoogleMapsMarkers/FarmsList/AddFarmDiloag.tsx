@@ -230,7 +230,7 @@ const AddFarmDilog = ({
 
 
   useEffect(() => {
-    if (router.isReady && accessToken) {
+    if (router.isReady && accessToken && drawerOpen) {
       setArea(FarmlocationDetails?.areaInAcres ? FarmlocationDetails?.areaInAcres?.toFixed(2) : "")
       setSearchInput(FarmlocationDetails?.locationName?.split(",")[0]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, ''))
       getLocations("");

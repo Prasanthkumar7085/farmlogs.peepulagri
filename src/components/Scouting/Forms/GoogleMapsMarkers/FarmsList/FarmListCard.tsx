@@ -88,7 +88,6 @@ const FarmListCard = ({
   };
   const router = useRouter();
 
-  console.log(data, "ds")
   return (
     <>
       {data?.length ?

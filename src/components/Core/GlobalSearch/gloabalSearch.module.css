@@ -40,3 +40,19 @@
     background: #45A845 !important;
     color: #FFF !important;
 }
+.globalSearchButtonDiable {
+    border-radius: 6px !important;
+    background: grey !important;
+    color: #FFF !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(13px, 0.83vw, 16px) !important;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+    text-transform: capitalize !important;
+    padding: 9px 20px !important;
+}
+
+.globalSearchButtonDiable:hover {
+    background:grey !important;
+    color: #FFF !important;
+}

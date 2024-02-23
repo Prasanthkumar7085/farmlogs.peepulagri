@@ -59,7 +59,7 @@ const AddPolygonDialog = ({
               handleAddPolygonButtonClick();
             }}
           >
-            Draw Feild
+            Draw Field
           </div>
         </div>
       </Dialog>

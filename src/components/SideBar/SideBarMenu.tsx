@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 import GlobalSearch from "../Core/GlobalSearch/GlobalSearch";
+import { storeSearchLocation } from "@/Redux/Modules/Farms";
 
 interface ItemProps {
   src: string;
@@ -124,6 +125,7 @@ const SideBarMenu = ({ children }: any) => {
                           <ListItemButton
                             onClick={() => {
                               dispatch(QueryParamsForScouting(""))
+                              dispatch(storeSearchLocation(null))
 
                             }}
                             className={
@@ -152,6 +154,7 @@ const SideBarMenu = ({ children }: any) => {
                   <IconButton
                     sx={{ display: router.pathname.includes("/scouts") ? "none" : "" }}
                     onClick={() => {
+                      dispatch(storeSearchLocation(null))
                       setGlobalSearchOpen(true)
                     }}>
                     <Image src="/markers/global-search-menu-icon.svg" alt="" width={20} height={20} />
@@ -172,6 +175,7 @@ const SideBarMenu = ({ children }: any) => {
               onClick={() => {
                 router.push("/profile")
                 dispatch(QueryParamsForScouting(""))
+                dispatch(storeSearchLocation(null))
               }}
             >
               <div className={styles.profile1}>

@@ -207,11 +207,11 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
             }
         }, 500);
         return () => clearInterval(debounce);
-    }, [searchString]);
+    }, [searchString,]);
 
 
     useEffect(() => {
-        if (router.isReady && accessToken && !mounted) {
+        if (router.isReady && accessToken && globalSearchOpen) {
             setMounted(true);
             getAllFarms({
                 farmId: router.query.farm_id as string,
@@ -221,7 +221,7 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
             getLocations(router.query.location_id as string);
 
         }
-    }, [router.isReady, accessToken]);
+    }, [router.isReady, accessToken, globalSearchOpen]);
 
     return (
         <Dialog open={globalSearchOpen} fullScreen sx={{
@@ -355,6 +355,7 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                     />
                 </ClickAwayListener>
                 <Button variant='contained'
+                    disabled={location?._id || farm?._id ? false : true}
                     onClick={() => {
                         let queryParams: any = { "include": "tags" };
 
@@ -375,9 +376,10 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                         setDefaultValueSet(null);
                         setLocation(null);
                         setFarm(null)
+                        setFarmOptions([])
 
                     }}
-                    className={styles.globalSearchButton}>
+                    className={farm?.title || location?._id ? styles.globalSearchButton : styles.globalSearchButtonDiable}>
                     Search
                 </Button>
             </div>

@@ -692,9 +692,15 @@ const GoogleMapMarkerComponent = () => {
   const centerMapToPlace = (place: any) => {
     if (mapRef.current && place?.geometry && place.geometry.location) {
       const location = place.geometry.location;
-      const latLng = new google.maps.LatLng(location.lat(), location.lng());
-      mapRef.current.panTo(latLng);
-      mapRef.current.setZoom(15);
+      console.log("lo", location)
+      if (location && typeof location.lat === 'function' && typeof location.lng === 'function') {
+        const latLng = new google.maps.LatLng(location.lat(), location.lng());
+        mapRef.current.panTo(latLng);
+        mapRef.current.setZoom(15);
+      }
+      else {
+        console.error('Invalid location object');
+      }
     }
   };
 

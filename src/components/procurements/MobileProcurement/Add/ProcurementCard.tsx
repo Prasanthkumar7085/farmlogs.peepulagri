@@ -167,7 +167,7 @@ const ProcurementCard = ({
             display:
               procurementData?.status == "PURCHASED" ||
                 procurementData?.tracking_details?._id
-                ? "none !important"
+                ? "none"
                 : "",
           }}
           disabled={selectMaterial ? true : false}

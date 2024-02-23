@@ -736,13 +736,14 @@ const GoogleMapMarkerComponent = () => {
           drawingManager.setOptions({
             drawingControl: true, // show drawing options
           });
+
         }
         if (drawingManager) {
           drawingManager.setDrawingMode(
             google.maps.drawing.OverlayType.POLYGON
           );
         }
-        setEditFarmsDetails(null);
+        setAddPolygonOpen(false)
       }
     }
   };
@@ -1086,7 +1087,7 @@ const GoogleMapMarkerComponent = () => {
                     setDrawerOpen(true);
                   }}
                   variant="contained"
-                  disabled={polygonCoords?.length === 0}
+                  disabled={polygonCoords?.length >= 3 ? false : true}
                 >
                   {/* {editFarmDetails?._id ? "Update" : "Save"} */}
                   <Image

@@ -744,6 +744,7 @@ const GoogleMapMarkerComponent = () => {
     }
     if (drawingManager) {
       drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+      setAddPolygonOpen(false)
     }
   };
 

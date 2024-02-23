@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Button, Icon, IconButton } from "@mui/material";
+import { Button, Icon, IconButton, Tooltip } from "@mui/material";
 import styles from "./farmListCard.module.css";
 import timePipe from "@/pipes/timePipe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -107,10 +107,14 @@ const FarmListCard = ({
               <div className={styles.detailscontainer}>
                 <div className={styles.nameandaction}>
                   <h2 className={styles.northSideChilli}>
+
                     {item.title.length > 16
-                      ? item.title.slice(0, 1).toUpperCase() +
-                      item.title.slice(1, 12) +
-                      "..."
+                      ?
+                      <Tooltip title={item.title}>
+                        <p>{item.title.slice(0, 1).toUpperCase() +
+                          item.title.slice(1, 12) +
+                          "..."}</p>
+                      </Tooltip>
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
                   {item?.geometry?.coordinates?.length ? (
@@ -255,7 +259,17 @@ const FarmListCard = ({
                           +
                         </IconButton>
                       )}
-                      {item?.location_id?.title}
+
+                      {item?.location_id?.title.length > 16
+                        ?
+                        <Tooltip title={item?.location_id?.title}>
+                          <p>{
+                            item?.location_id?.title.slice(0, 12).toUpperCase() +
+                            "..."}</p>
+                        </Tooltip>
+                        : item?.location_id?.title.toUpperCase()}
+
+
                     </h3>
                   </div>
                   <p className={styles.acres}>{item.area?.toFixed(2)}ac</p>

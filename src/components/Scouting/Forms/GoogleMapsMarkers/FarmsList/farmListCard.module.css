@@ -55,7 +55,6 @@
 }
 
 .cropscontainer {
-  width: 11.19rem;
   display: flex;
   flex-direction: row;
   align-items: flex-end;

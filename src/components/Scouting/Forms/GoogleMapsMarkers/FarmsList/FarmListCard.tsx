@@ -118,104 +118,113 @@ const FarmListCard = ({
                   </h2>
                   {item?.geometry?.coordinates?.length ? (
                     editFarmDetails?._id == item?._id ? (
-                      <IconButton
-                        sx={{ padding: "0" }}
-                        onClick={() => {
-                          setSelectedPolygon(null);
-                          setEditFarmsDetails(null);
-                          dispatch(storeEditPolygonCoords([]));
-                          getFarmOptions({
-                            search_string: router.query.search_string as string,
-                            location: router.query.location_id as string,
-                            userId: router.query.user_id as string,
-                            page: 1,
-                            limit: 20,
-                            sortBy: router.query.sort_by as string,
-                            sortType: router.query.sort_type as string,
-                            locationName: router.query.location_name
+                      <Tooltip title={"Remove edit"} followCursor>
+                        <IconButton
+                          sx={{ padding: "0" }}
+                          onClick={() => {
+                            setSelectedPolygon(null);
+                            setEditFarmsDetails(null);
+                            dispatch(storeEditPolygonCoords([]));
+                            getFarmOptions({
+                              search_string: router.query.search_string as string,
+                              location: router.query.location_id as string,
+                              userId: router.query.user_id as string,
+                              page: 1,
+                              limit: 20,
+                              sortBy: router.query.sort_by as string,
+                              sortType: router.query.sort_type as string,
+                              locationName: router.query.location_name
 
-                          });
-                        }}
-                      >
-                        <Image
-                          alt=""
-                          src="/viewProcurement/procurement-delete-icon.svg"
-                          width={15}
-                          height={15}
-                        />
-                      </IconButton>
+                            });
+                          }}
+                        >
+                          <Image
+                            alt=""
+                            src="/viewProcurement/procurement-delete-icon.svg"
+                            width={15}
+                            height={15}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     ) : (
-                      <IconButton
-                        sx={{
-                          padding: "0",
-                          display: editFarmDetails?._id ? "none" : "",
-                        }}
-                        onClick={() => {
-                          setSelectedPolygon(null);
-                          setEditFarmsDetails(null);
-                          dispatch(storeEditPolygonCoords([]));
-                          editPolygonDetails(item);
-                        }}
-                      >
-                        <Image
-                          alt=""
-                          src="/markers/marker-edit-icon.svg"
-                          width={15}
-                          height={15}
-                        />
-                      </IconButton>
+                      <Tooltip title={"Edit farm"} followCursor>
+
+                        <IconButton
+                          sx={{
+                            padding: "0",
+                            display: editFarmDetails?._id ? "none" : "",
+                          }}
+                          onClick={() => {
+                            setSelectedPolygon(null);
+                            setEditFarmsDetails(null);
+                            dispatch(storeEditPolygonCoords([]));
+                            editPolygonDetails(item);
+                          }}
+                        >
+                          <Image
+                            alt=""
+                            src="/markers/marker-edit-icon.svg"
+                            width={15}
+                            height={15}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     )
                   ) : (
                     ""
                   )}
-                  <IconButton
-                    className={styles.moreoptionsbutton}
-                    sx={{
-                      padding: "0",
-                      display: editFarmDetails?._id ? "none" : "",
-                    }}
-                    onClick={() => {
-                      setDeleteDialogOpen(true);
-                      setDeleteID(item?._id);
-                    }}
-                  >
-                    <Image
-                      alt=""
-                      src="/markers/marker-delete-icon.svg"
-                      width={15}
-                      height={15}
-                    />
-                  </IconButton>
+                  <Tooltip title={"Delete farm"} followCursor>
+                    <IconButton
+                      className={styles.moreoptionsbutton}
+                      sx={{
+                        padding: "0",
+                        display: editFarmDetails?._id ? "none" : "",
+                      }}
+                      onClick={() => {
+                        setDeleteDialogOpen(true);
+                        setDeleteID(item?._id);
+                      }}
+                    >
+                      <Image
+                        alt=""
+                        src="/markers/marker-delete-icon.svg"
+                        width={15}
+                        height={15}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </div>
                 <div className={styles.cropsacres}>
                   <div className={styles.cropscontainer}>
                     <h3 className={styles.cropName}>
                       {item?.geometry?.coordinates?.length ? (
-                        <IconButton
-                          sx={{
-                            padding: "0",
-                            paddingRight: "8px",
-                            borderRadius: "0px 0px 0px 0px",
-                            display:
-                              item?.geometry?.coordinates?.length &&
-                                !editFarmDetails?._id
-                                ? ""
-                                : "none",
-                          }}
-                          onClick={() => {
-                            getFarmLocation(
-                              item.geometry.coordinates,
-                              item._id
-                            );
-                          }}
-                        >
-                          <Image
-                            src="/markers/marker-location-icon.svg"
-                            alt=""
-                            height={17}
-                            width={17}
-                          />
-                        </IconButton>
+                        <Tooltip title={"Locate"} followCursor>
+                          <IconButton
+                            sx={{
+                              padding: "0",
+                              paddingRight: "8px",
+                              borderRadius: "0px 0px 0px 0px",
+                              display:
+                                item?.geometry?.coordinates?.length &&
+                                  !editFarmDetails?._id
+                                  ? ""
+                                  : "none",
+                            }}
+                            onClick={() => {
+                              getFarmLocation(
+                                item.geometry.coordinates,
+                                item._id
+                              );
+                            }}
+                          >
+                            <Image
+                              src="/markers/marker-location-icon.svg"
+                              alt=""
+                              height={17}
+                              width={17}
+                            />
+                          </IconButton>
+                        </Tooltip>
                       ) : editFarmDetails?._id == item?._id ? (
                         <IconButton
                           sx={{ padding: "0", marginRight: "0.5rem" }}
@@ -245,18 +254,20 @@ const FarmListCard = ({
                           />
                         </IconButton>
                       ) : (
-                        <IconButton
-                          sx={{
-                            padding: "0",
-                            marginRight: "0.5rem",
-                            color: "#45A845",
-                          }}
-                          onClick={() => {
-                            addPolyToExisting(item);
-                          }}
-                        >
-                          +
-                        </IconButton>
+                        <Tooltip title={"Add polygon"} followCursor>
+                          <IconButton
+                            sx={{
+                              padding: "0",
+                              marginRight: "0.5rem",
+                              color: "#45A845",
+                            }}
+                            onClick={() => {
+                              addPolyToExisting(item);
+                            }}
+                          >
+                            +
+                          </IconButton>
+                        </Tooltip>
                       )}
 
                       {item?.location_id?.title.length > 16

@@ -36,7 +36,10 @@ const AddLocationDialog = ({ open, captureResponseDilog, loading, defaultTitle, 
             size="small"
             placeholder="Add Location"
             variant="outlined"
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value.replace(/^\s+/, "");
+              setLocation(newValue)
+            }}
             value={location}
             onKeyDown={(e: any) => { if (e.key == 'Enter') { captureResponseDilog(location) } }}
             sx={{

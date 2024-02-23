@@ -22,7 +22,7 @@ import Image from "next/image";
 import AddIcon from "@mui/icons-material/Add";
 import { createRoot } from "react-dom/client";
 import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
-
+import ClearIcon from '@mui/icons-material/Clear';
 interface ApiProps {
   page: number;
   searchString: string;
@@ -173,7 +173,6 @@ const FarmsListBlock = ({
             fullWidth
             size="small"
             placeholder="Search farm"
-            type="search"
             name="search"
             variant="outlined"
             value={searchString}
@@ -184,7 +183,6 @@ const FarmsListBlock = ({
                 setSearchString("");
                 let temp = { ...router.query }
                 delete temp.search_string
-                console.log(temp, "p0")
                 router.push(temp)
               }
             }}
@@ -197,6 +195,24 @@ const FarmsListBlock = ({
                     height={15}
                     width={15}
                   />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  {searchString && (
+                    <IconButton
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setSearchString("");
+                        let temp = { ...router.query }
+                        delete temp.search_string
+                        router.push(temp)
+                      }}
+
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  )}
                 </InputAdornment>
               ),
             }}

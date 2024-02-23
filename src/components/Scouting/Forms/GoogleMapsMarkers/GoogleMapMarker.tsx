@@ -453,15 +453,17 @@ const GoogleMapMarkerComponent = () => {
     maps.event.addListener(drawingManager, "overlaycomplete", (event: any) => {
       if (event.type === "polygon") {
         const paths = event.overlay.getPath().getArray();
-        const updatedCoords = paths.map((coord: any) => ({
+        let updatedCoords = paths.map((coord: any) => ({
           lat: coord.lat(),
           lng: coord.lng(),
         }));
         // Calculate and log the initial area of the polygon
-        const updatedArea = calculatePolygonArea(paths);
+        let updatedArea = calculatePolygonArea(paths);
 
         const geocoder = new maps.Geocoder();
         const lastCoord = paths[paths.length - 1]; // Accessing the last point of the polygon
+
+
         geocoder.geocode({ location: lastCoord }, (results: any, status: any) => {
           if (status === "OK") {
             if (results[0]) {
@@ -478,9 +480,11 @@ const GoogleMapMarkerComponent = () => {
                 latlng: [latlngs.lat, latlngs.lng],
                 areaInAcres: updatedArea
               });
+
               setPolygon(event.overlay);
               dispatch(storeEditPolygonCoords(updatedCoords));
               stopDrawingMode();
+
             } else {
               console.log("No results found");
             }
@@ -492,20 +496,6 @@ const GoogleMapMarkerComponent = () => {
     });
 
 
-    google.maps.event.addListener(
-      drawingManager,
-      "drawingmode_changed",
-      function () {
-        // Check the current drawing mode
-        const currentDrawingMode = drawingManager.getDrawingMode();
-
-        if (currentDrawingMode === null) {
-          setDrawingOpen(false);
-        } else {
-          setAddPolygonOpen(true)
-        }
-      }
-    );
     // Create a new polygon
     const newPolygon = new maps.Polygon({
       paths: polygonCoords,
@@ -520,6 +510,7 @@ const GoogleMapMarkerComponent = () => {
     });
 
     maps.event.addListener(newPolygon, "mouseup", () => {
+      console.log("We")
       const updatedCoords = newPolygon
         .getPath()
         .getArray()
@@ -548,6 +539,22 @@ const GoogleMapMarkerComponent = () => {
 
     newPolygon.setMap(map);
     setPolygon(newPolygon);
+
+
+    google.maps.event.addListener(
+      drawingManager,
+      "drawingmode_changed",
+      function () {
+        // Check the current drawing mode
+        const currentDrawingMode = drawingManager.getDrawingMode();
+
+        if (currentDrawingMode === null) {
+          setDrawingOpen(false);
+        } else {
+          setAddPolygonOpen(true)
+        }
+      }
+    );
   };
 
   function calculatePolygonArea(paths: any) {
@@ -711,6 +718,11 @@ const GoogleMapMarkerComponent = () => {
       const path = updatedCoords.map(
         (coord: any) => new (googleMaps as any).LatLng(coord.lat, coord.lng)
       );
+      const area = calculatePolygonArea(updatedCoords);
+      setFarmLoactionDetails((prev: any) => ({
+        ...prev,
+        areaInAcres: area
+      }))
       polygon.setPath(path);
       if (updatedCoords?.length == 0) {
         const drawingManager: any = drawingManagerRef.current;

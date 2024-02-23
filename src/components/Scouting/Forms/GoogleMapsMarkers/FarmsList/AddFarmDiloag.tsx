@@ -86,6 +86,7 @@ const AddFarmDilog = ({
       setTitle("")
       setNewLocation("")
       setLocation(null)
+      setErrorMessages([])
       setFarmLoactionDetails(null)
       getFarmOptions({
         search_string: router.query.search_string as string,
@@ -263,9 +264,13 @@ const AddFarmDilog = ({
             setSettingLocationLoading(false);
           }, 1);
         }
-        if (FarmlocationDetails?.locationName) {
+        if (FarmlocationDetails?.locationName && !newLocation) {
           const captureLocation = response?.data?.find((item: any) => item?.title == FarmlocationDetails?.locationName)
           if (captureLocation) {
+            setSettingLocationLoading(true);
+            setTimeout(() => {
+              setSettingLocationLoading(false);
+            }, 1);
             setLocation(captureLocation);
           }
           else {
@@ -311,7 +316,7 @@ const AddFarmDilog = ({
       getLocations(response?.data);
       setNewLocation("");
     } else if (response?.status == 422) {
-      toast.error("Location already exists");
+      toast.error(response?.errors?.title);
       setAlertMessage(response?.errors?.title);
       setAlertType(false);
     } else {
@@ -355,14 +360,17 @@ const AddFarmDilog = ({
                   fullWidth
                   className={styles.inputfarmname}
                   size="small"
-                  placeholder="Farm Name"
+                  placeholder="Farm Title"
                   variant="outlined"
                   error={Boolean(errorMessages?.["title"])}
                   helperText={
                     errorMessages?.["title"] ? errorMessages?.["title"] : ""
                   }
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => {
+                    const newValue = e.target.value.replace(/^\s+/, "");
+                    setTitle(newValue)
+                  }}
                 />
               </div>
 
@@ -536,6 +544,7 @@ const AddFarmDilog = ({
                     setTitle("")
                     setNewLocation("")
                     setLocation(null)
+                    setErrorMessages([])
                     if (!farm_id) {
                       setEditFarmsDetails(null)
                     }

@@ -167,7 +167,7 @@ const ProcurementCard = ({
             display:
               procurementData?.status == "PURCHASED" ||
                 procurementData?.tracking_details?._id
-                ? "none"
+                ? "none !important"
                 : "",
           }}
           disabled={selectMaterial ? true : false}
@@ -213,7 +213,7 @@ const ProcurementCard = ({
               className={styles.iconButton}
               sx={{
                 display:
-                  item?.status == "REJECTED" || (item?.price && item?.vendor)
+                  item?.status == "REJECTED"
                     ? "none"
                     : "",
                 background: item?.price && item?.vendor ? "#D94841" : "#56CCF2",

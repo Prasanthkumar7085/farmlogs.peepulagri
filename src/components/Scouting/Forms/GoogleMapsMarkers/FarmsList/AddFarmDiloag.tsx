@@ -232,7 +232,7 @@ const AddFarmDilog = ({
   useEffect(() => {
     if (router.isReady && accessToken && drawerOpen) {
       setArea(FarmlocationDetails?.areaInAcres ? FarmlocationDetails?.areaInAcres?.toFixed(2) : "")
-      setSearchInput(FarmlocationDetails?.locationName?.split(",")[0]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, ''))
+      setSearchInput(FarmlocationDetails?.locationName?.toUpperCase())
       getLocations("");
       if (farm_id) {
         getFarmDataById()
@@ -394,7 +394,7 @@ const AddFarmDilog = ({
                     id="asynchronous-demo"
                     open={open}
                     fullWidth
-                    inputValue={searchInput ? searchInput : FarmlocationDetails?.locationName}
+                    inputValue={searchInput}
                     onOpen={() => {
                       getLocations("");
                       setOpen(true);

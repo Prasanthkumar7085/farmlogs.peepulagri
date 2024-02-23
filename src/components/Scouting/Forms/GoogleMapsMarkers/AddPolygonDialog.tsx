@@ -6,6 +6,8 @@ const AddPolygonDialog = ({
   addPolygonOpen,
   setAddPolygonOpen,
   handleAddPolygonButtonClick,
+  closeDrawing,
+  setDrawingOpen
 }: any) => {
   return (
     <div>
@@ -28,6 +30,8 @@ const AddPolygonDialog = ({
             sx={{ marginTop: "1rem", marginRight: "1rem" }}
             onClick={() => {
               setAddPolygonOpen(false);
+              closeDrawing()
+              setDrawingOpen(false)
             }}
           >
             <Clear />

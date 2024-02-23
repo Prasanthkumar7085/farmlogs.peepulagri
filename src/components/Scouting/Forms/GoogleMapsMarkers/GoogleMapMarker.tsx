@@ -502,7 +502,7 @@ const GoogleMapMarkerComponent = () => {
         if (currentDrawingMode === null) {
           setDrawingOpen(false);
         } else {
-          setDrawingOpen(true);
+          setAddPolygonOpen(true)
         }
       }
     );
@@ -920,7 +920,7 @@ const GoogleMapMarkerComponent = () => {
           search_string: searchString as string,
           location: router.query.location_id as string,
           userId: router.query.user_id as string,
-          page: 1,
+          page: router.query.page,
           limit: 20,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
@@ -1161,6 +1161,8 @@ const GoogleMapMarkerComponent = () => {
         addPolygonOpen={addPolygonOpen}
         setAddPolygonOpen={setAddPolygonOpen}
         handleAddPolygonButtonClick={handleAddPolygonButtonClick}
+        closeDrawing={closeDrawing}
+        setDrawingOpen={setDrawingOpen}
       />
     </div>
   );

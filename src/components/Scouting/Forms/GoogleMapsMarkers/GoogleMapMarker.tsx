@@ -160,7 +160,7 @@ const GoogleMapMarkerComponent = () => {
         getLocations();
       }
     }
-  }, []);
+  }, [router.query, accessToken]);
 
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {

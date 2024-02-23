@@ -931,7 +931,7 @@ const GoogleMapMarkerComponent = () => {
       return () => clearTimeout(debounce);
     }
 
-  }, [searchString]);
+  }, [searchString, router.isReady, accessToken]);
 
   useEffect(() => {
     setSearchString(router.query.search_string as string);

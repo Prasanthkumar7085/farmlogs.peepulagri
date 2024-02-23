@@ -27,10 +27,7 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
     const [locations, setLocations] = useState<
         Array<{ title: string; _id: string }>
     >([]);
-    const [location, setLocation] = useState<{
-        _id: string;
-        title: string;
-    } | null>();
+    const [location, setLocation] = useState<any>();
     const [optionsLoading, setOptionsLoading] = useState(false);
     const [settingLocationLoading, setSettingLocationLoading] = useState(false);
     const [changed, setChanged] = useState(false);
@@ -100,7 +97,7 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
         }
         else {
             setFarm(null);
-
+            setDefaultValueSet(null)
             setChanged(true);
             setLocation(null);
             getAllFarms({

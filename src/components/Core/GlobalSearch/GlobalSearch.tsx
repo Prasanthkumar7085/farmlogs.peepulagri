@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from "./gloabalSearch.module.css";
-import { Autocomplete, Button, Dialog, DialogContent, IconButton, TextField } from '@mui/material';
+import { Autocomplete, Button, ClickAwayListener, Dialog, DialogContent, IconButton, TextField } from '@mui/material';
 import Image from 'next/image';
 import getAllLocationsService from '../../../../lib/services/Locations/getAllLocationsService';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,7 +44,6 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
     }, []);
 
     const getLocations = async (newLocation = "") => {
-        setOptionsLoading(true);
         try {
             const response = await getAllLocationsService(accessToken);
             if (response?.success) {
@@ -75,8 +74,6 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
             }
         } catch (e) {
             console.error(e);
-        } finally {
-            setOptionsLoading(false);
         }
     };
 
@@ -123,6 +120,7 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
         clearOrNot: boolean;
     }>) => {
 
+        setOptionsLoading(true);
 
         try {
             const response = await ListAllFarmForDropDownService(
@@ -149,6 +147,9 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
             }
         } catch (err) {
             console.error(err);
+        }
+        finally {
+            setOptionsLoading(false);
         }
     };
 
@@ -266,7 +267,6 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                         option.title
                     }
                     options={locations}
-                    loading={optionsLoading}
                     onChange={onChangeLocation}
                     renderInput={(params) => (
                         <TextField
@@ -290,68 +290,70 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                         />
                     )}
                 />
-                <Autocomplete
-                    sx={{
-                        width: "40%",
+                <ClickAwayListener onClickAway={() => setSearchString("")}>
 
-                        borderRadius: "4px", '& .MuiSvgIcon-root': {
-                            color: "#fff"
+                    <Autocomplete
+                        sx={{
+                            width: "40%",
+
+                            borderRadius: "4px", '& .MuiSvgIcon-root': {
+                                color: "#fff"
+                            }
+
+                        }}
+                        value={defaultValueSet}
+                        id="size-small-outlined-multi"
+                        size="small"
+                        fullWidth
+                        noOptionsText={"No such Farms"}
+                        options={farmOptions && farmOptions?.length ? farmOptions : []}
+                        loading={optionsLoading}
+                        getOptionLabel={(option: any) =>
+                            option["title"] ? option["title"]?.toUpperCase() : ""
                         }
 
-                    }}
-                    value={defaultValueSet}
-                    id="size-small-outlined-multi"
-                    size="small"
-                    fullWidth
-                    noOptionsText={"No such Farms"}
-                    options={farmOptions && farmOptions?.length ? farmOptions : []}
-                    loading={optionsLoading}
-                    getOptionLabel={(option: any) =>
-                        option["title"] ? option["title"]?.toUpperCase() : ""
-                    }
-
-                    // onClose={() => setSearchString("")}
-                    renderOption={(props, option) => {
-                        return (
-                            <li {...props} key={option?._id}>
-                                {option?.title}
-                            </li>
-                        );
-                    }}
-                    onChange={(e: any, value: any, reason: any) => {
-                        if (value) {
-                            onSelectFarmFromDropDown(value, reason);
-                            setDefaultValueSet(value);
-                        } else {
-                            onSelectFarmFromDropDown("", reason);
-                            setDefaultValueSet(null);
-                        }
-                    }}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            placeholder={"Search by farms"}
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    fontSize: "clamp(.875rem, 1vw, 1.125rem)",
-                                    backgroundColor: "#ABABAB",
-                                    border: "none",
-                                    color: "#fff",
-                                    paddingBlock: "2.5px !important"
-                                },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    border: "0 !important", borderRadius: "4px !important"
-                                }
-                            }} value={searchString}
-                            onChange={(e) => {
-                                setOptionsLoading(true);
-                                setSearchString(e.target.value);
-                            }}
-                        />
-                    )}
+                        // onClose={() => setSearchString("")}
+                        renderOption={(props, option) => {
+                            return (
+                                <li {...props} key={option?._id}>
+                                    {option?.title}
+                                </li>
+                            );
+                        }}
+                        onChange={(e: any, value: any, reason: any) => {
+                            if (value) {
+                                onSelectFarmFromDropDown(value, reason);
+                                setDefaultValueSet(value);
+                            } else {
+                                onSelectFarmFromDropDown("", reason);
+                                setDefaultValueSet(null);
+                            }
+                        }}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                placeholder={"Search by farms"}
+                                sx={{
+                                    "& .MuiInputBase-root": {
+                                        fontSize: "clamp(.875rem, 1vw, 1.125rem)",
+                                        backgroundColor: "#ABABAB",
+                                        border: "none",
+                                        color: "#fff",
+                                        paddingBlock: "2.5px !important"
+                                    },
+                                    '& .MuiOutlinedInput-notchedOutline': {
+                                        border: "0 !important", borderRadius: "4px !important"
+                                    }
+                                }} value={searchString}
+                                onChange={(e) => {
+                                    setSearchString(e.target.value);
+                                }}
+                            />
+                        )}
 
 
-                />
+                    />
+                </ClickAwayListener>
                 <Button variant='contained'
                     onClick={() => {
                         let queryParams: any = { "include": "tags" };

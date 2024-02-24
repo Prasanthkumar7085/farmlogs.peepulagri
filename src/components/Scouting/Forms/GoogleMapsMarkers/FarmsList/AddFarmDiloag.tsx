@@ -337,7 +337,7 @@ const AddFarmDilog = ({
           <div className={styles.addfarmform} id="add-farm">
             <div className={styles.formfields} id="form-fields">
               <div className={styles.farmname} id="farm-name">
-                <div className={styles.label}>Title</div>
+                <div className={styles.label}>Title <span style={{ color: "red" }}>*</span></div>
                 <TextField
                   sx={{
                     "& .MuiInputBase-root": {
@@ -354,6 +354,9 @@ const AddFarmDilog = ({
                       borderColor: "#fff !important", borderRadius: "8px !important"
 
                     },
+                    '& .MuiFormHelperText-root ': {
+                      fontSize: "12px"
+                    }
                   }}
                   {...register("title")}
                   name="title"
@@ -381,11 +384,10 @@ const AddFarmDilog = ({
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "flex-end",
-                    marginBottom: "0.5rem",
                     width: "100%",
                   }}
                 >
-                  <span>Location</span>
+                  <span>Location <span style={{ color: "red" }}>*</span></span>
                   <span
                     className={styles.addLocationBtn}
                     onClick={() => {
@@ -480,6 +482,9 @@ const AddFarmDilog = ({
                             borderRadius: "8px !important"
 
                           },
+                          '& .MuiFormHelperText-root ': {
+                            fontSize: "12px"
+                          }
                         }}
                       />
                     )}
@@ -493,7 +498,7 @@ const AddFarmDilog = ({
                 id="acres"
                 style={{ paddingTop: "1rem" }}
               >
-                <div className={styles.label}>Total Land (acres)</div>
+                <div className={styles.label}>Total Land (acres) <span style={{ color: "red" }}>*</span></div>
                 <TextField
                   sx={{
                     "& .MuiInputBase-root": {
@@ -509,6 +514,9 @@ const AddFarmDilog = ({
                       borderColor: "#fff !important",
                       borderRadius: "8px !important"
                     },
+                    '& .MuiFormHelperText-root ': {
+                      fontSize: "12px"
+                    }
                   }}
                   {...register("area")}
                   className={styles.inputfarmname}

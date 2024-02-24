@@ -360,9 +360,11 @@ const GoogleMapMarkerComponent = () => {
     searchInput.setAttribute("value", googleSearchLocation?.formatted_address as string || ""); // Set the default value here
     searchInput.style.marginBottom = "10px";
     searchInput.style.padding = "13px";
-    searchInput.style.width = "calc(100% - 12px)"; // Adjust width to accommodate icon
+    searchInput.style.width = "calc(100% - 32px)"; // Adjust width to accommodate icon (assuming icon width is 32px)
     searchInput.style.margin = "auto";
     searchInput.style.borderRadius = "10px"; // Rounded corners
+    searchInput.style.overflow = "hidden";
+    searchInput.style.textOverflow = "ellipsis";
     searchInput.disabled = editFarmDetails?._id || router.query.location_id ? true : false;
 
     // Create a custom icon
@@ -370,7 +372,7 @@ const GoogleMapMarkerComponent = () => {
     icon.innerHTML = "&#10060;"; // Unicode for custom icon, you can replace it with your desired icon
     icon.style.position = "absolute";
     icon.style.top = "60%";
-    icon.style.right = "-60%";
+    icon.style.right = "-70%";
     icon.style.transform = "translateY(-50%)"; // Center vertically
     icon.style.padding = "10px";
     icon.style.cursor = "pointer";

@@ -18,6 +18,7 @@ import AddPolygonDialog from './AddPolygonDialog';
 import getFarmsByLocation from '../../../../../lib/services/FarmsService/getFarmsByLocation';
 import { createRoot } from 'react-dom/client';
 import getAllLocationsService from '../../../../../lib/services/Locations/getAllLocationsService';
+import { SelectPicker } from 'rsuite';
 
 interface callFarmsProps {
   search_string: string;
@@ -74,7 +75,7 @@ const GoogleMapMarkerComponent = () => {
 
   const [location, setLocation] = useState<any>();
   const [locations, setLocations] = useState<any>([]);
-
+  const [autoCompleteOpen, setAutoCompleteOpen] = useState(false);
   const getLocations = async (newLocationId = "") => {
     try {
       const response = await getAllLocationsService(accessToken);
@@ -87,6 +88,7 @@ const GoogleMapMarkerComponent = () => {
           );
 
           setLocation(newLocationObject);
+          setSettingLocationLoading(true)
           setTimeout(() => {
             setSettingLocationLoading(false);
           }, 1);
@@ -112,6 +114,8 @@ const GoogleMapMarkerComponent = () => {
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
+      handleCloseDropdown()
+      setAutoCompleteOpen(false)
       setSelectedPolygon(null);
       setLocation({ title: "All", _id: "1" });
       getFarmOptions({
@@ -274,64 +278,21 @@ const GoogleMapMarkerComponent = () => {
     return controlDiv;
   };
 
-  const customLocationAutoComplete = (map: any, maps: any) => {
-    if (map && maps) {
-      // Create a custom control element
-      const controlDiv = document.createElement("div");
 
-      // Add Autocomplete component to the control element
-      const autocompleteComponent = (
-        <Autocomplete
-          disabled={editFarmDetails?._id || router.query.location_name ? true : false}
-          sx={{
-            width: "250px",
-            maxWidth: "400px",
-            marginRight: "90px",
-            display: loading ? "none !important" : "",
-            '& .MuiInputBase-root': {
-              paddingBlock: "7px !important"
-            }
-          }}
-          size="small"
-          fullWidth
-          noOptionsText="No such location"
-          value={location}
-          isOptionEqualToValue={(option, value) => option.title === value.title}
-          getOptionLabel={(option) => option.title}
-          options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
-          onChange={onChangeLocation}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              placeholder="Search by Farm locations"
-              variant="outlined"
-              size="small"
-              sx={{
-                marginTop: "1rem",
-                "& .MuiInputBase-root": {
-                  fontSize: "clamp(.75rem, 0.83vw, 18px)",
-                  backgroundColor: "#fff",
-                  border: "none",
-                  borderRadius: "6px !important",
-                  padding: "10px",
-                  marginBottom: "10px",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#fff !important",
-                  borderRadius: "6px !important",
-                },
-              }}
-            />
-          )}
-        />
-      );
-
-      createRoot(controlDiv).render(autocompleteComponent);
-
-      // Append the custom control element to the map
-      map.controls[maps.ControlPosition.TOP_CENTER].push(controlDiv);
+  const handleClose = (event: any, reason: any) => {
+    if (reason === 'toggleInput') {
+      // Keep the dropdown open when the input is toggled (e.g., clicking clear)
+      return;
     }
-  }
+    // Handle other cases where the dropdown should close
+  };
+  const locationAutocompleteRef: any = useRef(null);
+
+  const handleCloseDropdown = () => {
+    if (locationAutocompleteRef.current) {
+      locationAutocompleteRef.current.blur();
+    }
+  };
 
 
   //google api running event
@@ -341,7 +302,6 @@ const GoogleMapMarkerComponent = () => {
     mapRef.current = map;
 
     addCustomControl(map, maps);
-    customLocationAutoComplete(map, maps)
     createInfoWindow(map);
     placesService.current = new maps.places.PlacesService(map);
 
@@ -1105,6 +1065,66 @@ const GoogleMapMarkerComponent = () => {
             onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
           ></GoogleMapReact>
 
+          <div
+
+            className={styles.updateFarmButtonGrp}
+            style={{
+              position: "absolute",
+              top: "0",
+              left: "25%",
+              display: renderField == false ? "" : "none"
+            }}
+          >
+
+            <Autocomplete
+              disabled={editFarmDetails?._id || router.query.location_name ? true : false}
+
+              sx={{
+                width: "250px",
+                maxWidth: "400px",
+                marginRight: "90px",
+                '& .MuiInputBase-root': {
+                  paddingBlock: "7px !important"
+                },
+                '& .MuiAutocomplete-endAdornment ': {
+                  top: "0"
+                }
+              }}
+              size="small"
+              fullWidth
+              noOptionsText="No such location"
+              value={location}
+              disableCloseOnSelect={false}
+              isOptionEqualToValue={(option, value) => option.title === value.title}
+              getOptionLabel={(option) => option.title}
+              options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
+              onChange={onChangeLocation}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search by Farm locations"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    marginTop: "1rem",
+                    "& .MuiInputBase-root": {
+                      fontSize: "clamp(.75rem, 0.83vw, 18px)",
+                      backgroundColor: "#fff",
+                      border: "none",
+                      borderRadius: "6px !important",
+                      padding: "10px",
+                      marginBottom: "10px",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#fff !important",
+                      borderRadius: "6px !important",
+                    },
+                  }}
+                />
+              )}
+            />
+          </div>
+
           {polygonCoords?.length === 0 ? (
             ""
           ) : (
@@ -1172,6 +1192,7 @@ const GoogleMapMarkerComponent = () => {
       ) : (
         ""
       )}
+
 
       <div className={styles.rightFarmDtailsContainer}>
         {openFarmDetails ? (

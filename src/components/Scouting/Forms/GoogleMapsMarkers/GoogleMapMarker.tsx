@@ -1135,6 +1135,7 @@ const GoogleMapMarkerComponent = () => {
                   }}
                   variant="contained"
                   disabled={polygonCoords?.length >= 3 ? false : true}
+                  sx={{ display: polygonCoords?.length >= 3 ? "" : "none" }}
                 >
                   {/* {editFarmDetails?._id ? "Update" : "Save"} */}
                   <Image

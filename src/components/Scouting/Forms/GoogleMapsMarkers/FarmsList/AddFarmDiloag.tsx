@@ -265,7 +265,7 @@ const AddFarmDilog = ({
           }, 1);
         }
         if (FarmlocationDetails?.locationName && !newLocation) {
-          const captureLocation = response?.data?.find((item: any) => item?.title == FarmlocationDetails?.locationName)
+          const captureLocation = response?.data?.find((item: any) => item?.title == FarmlocationDetails?.locationName.toUpperCase())
           if (captureLocation) {
             setSettingLocationLoading(true);
             setTimeout(() => {

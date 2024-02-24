@@ -199,7 +199,7 @@ const GoogleMapComponent = () => {
         drawingModes: [maps.drawing.OverlayType.POLYGON],
       },
       polygonOptions: {
-        editable: true,
+        editable: false,
         draggable: false,
       },
     });

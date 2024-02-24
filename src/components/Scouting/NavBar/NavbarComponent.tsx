@@ -50,13 +50,13 @@ export default function ScoutingHeader({ children }: any) {
 
           <Button
             className={
-              router.pathname.includes("/farms")
+              router.pathname.includes("/farms") && !router.pathname.includes("/markers")
                 ? styles.navButtonActive
                 : styles.navButton
             }
             onClick={() => router.push("/farms")}
           >
-            {router.pathname.includes("/farms") ? (
+            {router.pathname.includes("/farms") && !router.pathname.includes("/markers") ? (
               <Image
                 src="/mobileIcons/navTabs/farms-mobile-active.svg"
                 alt=""
@@ -74,6 +74,31 @@ export default function ScoutingHeader({ children }: any) {
 
           </Button>
 
+          <Button
+            className={
+              router.pathname.includes("/markers")
+                ? styles.navButtonActive
+                : styles.navButton
+            }
+            onClick={() => router.push("/farms/markers")}
+          >
+            {router.pathname.includes("/farms/markers") ? (
+              <Image
+                src="/marker-active.svg"
+                alt=""
+                width={23}
+                height={23}
+              />
+            ) : (
+              <Image
+                src="/marker-notActive.svg"
+                alt=""
+                width={20}
+                height={20}
+              />
+            )}
+
+          </Button>
 
 
           <Button

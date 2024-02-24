@@ -126,7 +126,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
         const RejectFilterData = response?.data.filter((obj: any) => obj.status == "REJECTED")
         const remaining = response?.data.filter((obj: any) => obj.status !== "REJECTED");
 
-        setMaterials(remaining);
+        setMaterials(remaining.reverse());
         setRejectedMaterial(RejectFilterData)
       } else if (response?.status == 401) {
         toast.error(response?.message);

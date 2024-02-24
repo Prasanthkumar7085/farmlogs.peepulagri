@@ -18,6 +18,7 @@ import AddPolygonDialog from './AddPolygonDialog';
 import getFarmsByLocation from '../../../../../lib/services/FarmsService/getFarmsByLocation';
 import { createRoot } from 'react-dom/client';
 import getAllLocationsService from '../../../../../lib/services/Locations/getAllLocationsService';
+import MobileFarmsListBlock from './FarmsList/MobileFarmListBlock';
 
 interface callFarmsProps {
     search_string: string;
@@ -71,7 +72,7 @@ const MobileGoogleMarkers = () => {
     const [googleSearch, setGoogleSearch] = useState<string>()
     const [settingLocationLoading, setSettingLocationLoading] = useState(false);
     const [optionsLoading, setOptionsLoading] = useState(false);
-
+    const [mobileFarmListOpen, setMobileFarmListOpen] = useState<boolean>(false)
     const [location, setLocation] = useState<any>();
     const [locations, setLocations] = useState<any>([]);
 
@@ -160,7 +161,7 @@ const MobileGoogleMarkers = () => {
                 getLocations();
             }
         }
-    }, []);
+    }, [router.query, accessToken]);
 
     //add custom control for the live location button
     const addCustomControl = (map: any, maps: any) => {
@@ -282,7 +283,6 @@ const MobileGoogleMarkers = () => {
             // Add Autocomplete component to the control element
             const autocompleteComponent = (
                 <Autocomplete
-                    disabled={editFarmDetails?._id || router.query.location_name ? true : false}
                     sx={{
                         width: "250px",
                         maxWidth: "400px",
@@ -306,7 +306,7 @@ const MobileGoogleMarkers = () => {
                             variant="outlined"
                             size="small"
                             sx={{
-                                marginTop: "1rem",
+                                marginTop: "0.4rem",
                                 "& .MuiInputBase-root": {
                                     fontSize: "clamp(.75rem, 0.83vw, 18px)",
                                     backgroundColor: "#fff",
@@ -328,6 +328,7 @@ const MobileGoogleMarkers = () => {
             createRoot(controlDiv).render(autocompleteComponent);
 
             // Append the custom control element to the map
+            map.controls[maps.ControlPosition.TOP_LEFT].push(controlDiv);
         }
     }
 
@@ -352,24 +353,26 @@ const MobileGoogleMarkers = () => {
         // Create a container for the custom autocomplete control
         const customAutocompleteDiv = document.createElement("div");
         customAutocompleteDiv.style.position = "relative"; // Make the container relative to position the icon
-
+        customAutocompleteDiv.style.width = "100%"
         const searchInput = document.createElement("input");
         searchInput.setAttribute("id", "searchInput");
         searchInput.setAttribute("placeholder", "Search for a place...");
         searchInput.setAttribute("value", googleSearchLocation?.formatted_address as string || ""); // Set the default value here
-        searchInput.style.marginBottom = "10px";
+        searchInput.style.marginTop = "50px";
         searchInput.style.padding = "13px";
-        searchInput.style.width = "calc(100% - 12px)"; // Adjust width to accommodate icon
-        searchInput.style.margin = "auto";
+        searchInput.style.width = "calc(100% - 32px)"; // Adjust width to accommodate icon (assuming icon width is 32px)
+
         searchInput.style.borderRadius = "10px"; // Rounded corners
+        searchInput.style.overflow = "hidden";
+        searchInput.style.textOverflow = "ellipsis";
         searchInput.disabled = editFarmDetails?._id || router.query.location_id ? true : false;
 
         // Create a custom icon
         const icon = document.createElement("div");
         icon.innerHTML = "&#10060;"; // Unicode for custom icon, you can replace it with your desired icon
         icon.style.position = "absolute";
-        icon.style.top = "60%";
-        icon.style.right = "-60%";
+        icon.style.top = "75%";
+        icon.style.left = "90%"
         icon.style.transform = "translateY(-50%)"; // Center vertically
         icon.style.padding = "10px";
         icon.style.cursor = "pointer";
@@ -401,7 +404,7 @@ const MobileGoogleMarkers = () => {
         customAutocompleteDiv.appendChild(searchInput);
         customAutocompleteDiv.appendChild(icon);
 
-        map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
+        map.controls[maps.ControlPosition.TOP_CENTER].push(customAutocompleteDiv);
         // Create Autocomplete for input field
         const autocomplete = new maps.places.Autocomplete(searchInput, {
             placeAutocompleteOptions: { strictBounds: false }, // Setting strictBounds to true removes the attribution
@@ -452,15 +455,17 @@ const MobileGoogleMarkers = () => {
         maps.event.addListener(drawingManager, "overlaycomplete", (event: any) => {
             if (event.type === "polygon") {
                 const paths = event.overlay.getPath().getArray();
-                const updatedCoords = paths.map((coord: any) => ({
+                let updatedCoords = paths.map((coord: any) => ({
                     lat: coord.lat(),
                     lng: coord.lng(),
                 }));
                 // Calculate and log the initial area of the polygon
-                const updatedArea = calculatePolygonArea(paths);
+                let updatedArea = calculatePolygonArea(paths);
 
                 const geocoder = new maps.Geocoder();
                 const lastCoord = paths[paths.length - 1]; // Accessing the last point of the polygon
+
+
                 geocoder.geocode({ location: lastCoord }, (results: any, status: any) => {
                     if (status === "OK") {
                         if (results[0]) {
@@ -477,9 +482,11 @@ const MobileGoogleMarkers = () => {
                                 latlng: [latlngs.lat, latlngs.lng],
                                 areaInAcres: updatedArea
                             });
+
                             setPolygon(event.overlay);
                             dispatch(storeEditPolygonCoords(updatedCoords));
                             stopDrawingMode();
+
                         } else {
                             console.log("No results found");
                         }
@@ -487,24 +494,55 @@ const MobileGoogleMarkers = () => {
                         console.log("Geocoder failed due to:", status);
                     }
                 });
+
+                const updatePolygonDetails = () => {
+                    const paths = event.overlay.getPath().getArray();
+                    let updatedCoords = paths.map((coord: any) => ({
+                        lat: coord.lat(),
+                        lng: coord.lng(),
+                    }));
+                    // Calculate and log the initial area of the polygon
+                    let updatedArea = calculatePolygonArea(paths);
+
+                    const geocoder = new maps.Geocoder();
+                    const lastCoord = paths[paths.length - 1]; // Accessing the last point of the polygon
+
+
+                    geocoder.geocode({ location: lastCoord }, (results: any, status: any) => {
+                        if (status === "OK") {
+                            if (results[0]) {
+                                let locationName = results[0].formatted_address;
+                                locationName = locationName?.split(",")[0]
+                                let afterRemoveingSpaces = locationName.split(" ")[1]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, '')
+                                // Accessing latitude and longitude from lastCoord object
+                                const latitude = lastCoord.lat(); // Get the latitude
+                                const longitude = lastCoord.lng();
+                                const geocoder = new google.maps.Geocoder();
+                                const latlngs = { lat: latitude, lng: longitude };
+                                setFarmLoactionDetails({
+                                    locationName: afterRemoveingSpaces,
+                                    latlng: [latlngs.lat, latlngs.lng],
+                                    areaInAcres: updatedArea
+                                });
+
+                                setPolygon(event.overlay);
+                                dispatch(storeEditPolygonCoords(updatedCoords));
+                                stopDrawingMode();
+
+                            } else {
+                                console.log("No results found");
+                            }
+                        } else {
+                            console.log("Geocoder failed due to:", status);
+                        }
+                    });
+                }
+                maps.event.addListener(event.overlay, "mouseup", updatePolygonDetails);
+
             }
         });
 
 
-        google.maps.event.addListener(
-            drawingManager,
-            "drawingmode_changed",
-            function () {
-                // Check the current drawing mode
-                const currentDrawingMode = drawingManager.getDrawingMode();
-
-                if (currentDrawingMode === null) {
-                    setDrawingOpen(false);
-                } else {
-                    setAddPolygonOpen(true)
-                }
-            }
-        );
         // Create a new polygon
         const newPolygon = new maps.Polygon({
             paths: polygonCoords,
@@ -519,6 +557,7 @@ const MobileGoogleMarkers = () => {
         });
 
         maps.event.addListener(newPolygon, "mouseup", () => {
+            console.log("We")
             const updatedCoords = newPolygon
                 .getPath()
                 .getArray()
@@ -547,6 +586,22 @@ const MobileGoogleMarkers = () => {
 
         newPolygon.setMap(map);
         setPolygon(newPolygon);
+
+
+        google.maps.event.addListener(
+            drawingManager,
+            "drawingmode_changed",
+            function () {
+                // Check the current drawing mode
+                const currentDrawingMode = drawingManager.getDrawingMode();
+
+                if (currentDrawingMode === null) {
+                    setDrawingOpen(false);
+                } else {
+                    setAddPolygonOpen(true)
+                }
+            }
+        );
     };
 
     function calculatePolygonArea(paths: any) {
@@ -684,9 +739,15 @@ const MobileGoogleMarkers = () => {
     const centerMapToPlace = (place: any) => {
         if (mapRef.current && place?.geometry && place.geometry.location) {
             const location = place.geometry.location;
-            const latLng = new google.maps.LatLng(location.lat(), location.lng());
-            mapRef.current.panTo(latLng);
-            mapRef.current.setZoom(15);
+            console.log("lo", location)
+            if (location && typeof location.lat === 'function' && typeof location.lng === 'function') {
+                const latLng = new google.maps.LatLng(location.lat(), location.lng());
+                mapRef.current.panTo(latLng);
+                mapRef.current.setZoom(15);
+            }
+            else {
+                console.error('Invalid location object');
+            }
         }
     };
 
@@ -710,6 +771,11 @@ const MobileGoogleMarkers = () => {
             const path = updatedCoords.map(
                 (coord: any) => new (googleMaps as any).LatLng(coord.lat, coord.lng)
             );
+            const area = calculatePolygonArea(updatedCoords);
+            setFarmLoactionDetails((prev: any) => ({
+                ...prev,
+                areaInAcres: area
+            }))
             polygon.setPath(path);
             if (updatedCoords?.length == 0) {
                 const drawingManager: any = drawingManagerRef.current;
@@ -717,13 +783,14 @@ const MobileGoogleMarkers = () => {
                     drawingManager.setOptions({
                         drawingControl: true, // show drawing options
                     });
+
                 }
                 if (drawingManager) {
                     drawingManager.setDrawingMode(
                         google.maps.drawing.OverlayType.POLYGON
                     );
                 }
-                setEditFarmsDetails(null);
+                setAddPolygonOpen(false)
             }
         }
     };
@@ -743,6 +810,7 @@ const MobileGoogleMarkers = () => {
         }
         if (drawingManager) {
             drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+            setAddPolygonOpen(false)
         }
     };
 
@@ -929,7 +997,7 @@ const MobileGoogleMarkers = () => {
             return () => clearTimeout(debounce);
         }
 
-    }, [router.isReady, accessToken, searchString]);
+    }, [searchString, router.isReady, accessToken]);
 
     useEffect(() => {
         setSearchString(router.query.search_string as string);
@@ -1066,7 +1134,8 @@ const MobileGoogleMarkers = () => {
                                         setDrawerOpen(true);
                                     }}
                                     variant="contained"
-                                    disabled={polygonCoords?.length === 0}
+                                    disabled={polygonCoords?.length >= 3 ? false : true}
+                                    sx={{ display: polygonCoords?.length >= 3 ? "" : "none" }}
                                 >
                                     {/* {editFarmDetails?._id ? "Update" : "Save"} */}
                                     <Image
@@ -1102,6 +1171,34 @@ const MobileGoogleMarkers = () => {
                 ""
             )}
 
+
+            <MobileFarmsListBlock
+                getFarmLocation={getFarmLocation}
+                farmOptions={farmOptions}
+                searchString={searchString}
+                setSearchString={setSearchString}
+                editPolygonDetails={editPolygonDetails}
+                setEditFarmsDetails={setEditFarmsDetails}
+                editFarmDetails={editFarmDetails}
+                getFarmOptions={getFarmOptions}
+                setSelectedPolygon={setSelectedPolygon}
+                map={map}
+                googleMaps={googleMaps}
+                setOpenFarmDetails={setOpenFarmDetails}
+                getFarmDataById={getFarmDataById}
+                addPolyToExisting={addPolyToExisting}
+                farmOptionsLoading={loading}
+                paginationDetails={paginationDetails}
+                capturePageNum={capturePageNum}
+                setAddPolygonOpen={setAddPolygonOpen}
+                drawingOpen={drawingOpen}
+                setDrawingOpen={setDrawingOpen}
+                stopDrawingMode={stopDrawingMode}
+                closeDrawing={closeDrawing}
+                clearAllPoints={clearAllPoints}
+                mobileFarmListOpen={mobileFarmListOpen}
+                setMobileFarmListOpen={setMobileFarmListOpen}
+            />
 
             <LoadingComponent loading={loading} />
             <Toaster richColors position="top-right" closeButton />

@@ -217,16 +217,7 @@ const DashboardPage = () => {
         <div style={{ minHeight: "75vh" }}></div>
       )}
       <div className="addFormPositionIcon" style={{ gap: "1.5rem" }}>
-        <IconButton
-          size="large"
-          className={styles.AddFarmBtn}
-          aria-label="add to shopping cart"
-          onClick={() => {
-            router.push("/farms/markers")
-          }}
-        >
-          <span>Google</span>
-        </IconButton>
+
         <IconButton
           size="large"
           className={styles.AddFarmBtn}

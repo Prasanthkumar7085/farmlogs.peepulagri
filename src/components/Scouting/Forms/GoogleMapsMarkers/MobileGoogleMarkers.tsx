@@ -230,7 +230,29 @@ const MobileGoogleMarkers = () => {
         map.controls[maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
     };
 
+    const gotoFarms = (map: any, maps: any) => {
+        const controlDiv = document.createElement("div");
+        const controlUI = document.createElement("img");
 
+        controlUI.src = "/info-icon1.svg";
+        controlUI.style.backgroundColor = "#fff";
+        controlUI.style.border = "1px solid #ccc";
+        controlUI.style.padding = "5px";
+        controlUI.style.cursor = "pointer";
+        controlUI.style.textAlign = "center";
+        controlUI.style.width = "23px";
+        controlUI.style.height = "23px";
+        controlUI.style.marginBottom = "8rem";
+        controlUI.style.marginLeft = "-70px";
+        controlUI.title = "Click to pan to current location";
+        controlDiv.appendChild(controlUI);
+
+        controlUI.addEventListener("click", () => {
+            setMobileFarmListOpen(true)
+        });
+
+        map.controls[maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
+    };
     //create Info for the google map
     const createInfoWindow = (map: any) => {
         const infoWindow = new (window as any).google.maps.InfoWindow();
@@ -339,6 +361,7 @@ const MobileGoogleMarkers = () => {
         mapRef.current = map;
 
         addCustomControl(map, maps);
+        gotoFarms(map, maps)
         customLocationAutoComplete(map, maps)
         createInfoWindow(map);
         placesService.current = new maps.places.PlacesService(map);

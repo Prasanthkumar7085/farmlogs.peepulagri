@@ -23,6 +23,7 @@ import { createRoot } from "react-dom/client";
 import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 import ClearIcon from '@mui/icons-material/Clear';
 import { Clear } from "@mui/icons-material";
+import MobileFarmListCard from "./MobileFarmList";
 interface ApiProps {
     page: number;
     searchString: string;
@@ -162,7 +163,7 @@ const MobileFarmsListBlock = ({
 
     return (
         <Drawer open={mobileFarmListOpen} anchor="bottom">
-            <div className={styles.detailsslidebarfarmslist}>
+            <div className={styles.detailsslidebarfarmslist} style={{ height: "60%" }}>
                 <header className={styles.header}>
                     <div className={styles.headingcontainer}>
                         <h2 className={styles.heading}>Farms</h2>
@@ -240,7 +241,7 @@ const MobileFarmsListBlock = ({
                     </div>
                 </header>
                 <div id={styles.listview} className="scrollbar">
-                    <FarmListCard
+                    <MobileFarmListCard
                         data={farmOptions}
                         getFarmLocation={getFarmLocation}
                         editPolygonDetails={editPolygonDetails}
@@ -252,6 +253,8 @@ const MobileFarmsListBlock = ({
                         getFarmDataById={getFarmDataById}
                         addPolyToExisting={addPolyToExisting}
                         farmOptionsLoading={farmOptionsLoading}
+                        mobileFarmListOpen={mobileFarmListOpen}
+                        setMobileFarmListOpen={setMobileFarmListOpen}
                     />
                 </div>
                 <div className={styles.buttoncontainer}>

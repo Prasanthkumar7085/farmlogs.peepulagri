@@ -157,15 +157,10 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
 
         if (reason == "clear") {
 
-            let routerData = { ...router.query };
-            delete routerData?.farm_id;
-            delete routerData?.crop_id;
-            delete routerData?.farm_search_string;
-            delete routerData?.location_id;
-            router.push({ query: routerData });
+
             setFarm(null);
 
-            getAllFarms({ clearOrNot: true, location_id: router.query.location_id as string });
+            // getAllFarms({ clearOrNot: true, location_id: router.query.location_id as string });
 
 
             return;
@@ -214,11 +209,11 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
         if (router.isReady && accessToken && globalSearchOpen) {
             setMounted(true);
             getAllFarms({
-                farmId: router.query.farm_id as string,
-                searchString: router.query.farm_search_string as string,
-                location_id: router.query.location_id as string
+                farmId: "",
+                searchString: "",
+                location_id: ""
             });
-            getLocations(router.query.location_id as string);
+            getLocations("");
 
         }
     }, [router.isReady, accessToken, globalSearchOpen]);
@@ -239,6 +234,11 @@ const GlobalSearch = ({ globalSearchOpen, setGlobalSearchOpen }: any) => {
                     className={styles.icon}
                     onClick={() => {
                         setGlobalSearchOpen(false)
+                        setGlobalSearchOpen(false)
+                        setDefaultValueSet(null);
+                        setLocation(null);
+                        setFarm(null)
+                        setFarmOptions([])
                     }}>
                     <Image src={"/caret-left 2.svg"}
                         width={15}

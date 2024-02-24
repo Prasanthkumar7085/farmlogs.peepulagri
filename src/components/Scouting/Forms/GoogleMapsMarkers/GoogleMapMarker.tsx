@@ -160,7 +160,7 @@ const GoogleMapMarkerComponent = () => {
         getLocations();
       }
     }
-  }, [router.query, accessToken]);
+  }, [router.query, accessToken, router.query.location_id]);
 
   //add custom control for the live location button
   const addCustomControl = (map: any, maps: any) => {
@@ -286,6 +286,7 @@ const GoogleMapMarkerComponent = () => {
           sx={{
             width: "250px",
             maxWidth: "400px",
+            marginRight: "90px",
             display: loading ? "none !important" : "",
             '& .MuiInputBase-root': {
               paddingBlock: "7px !important"
@@ -331,6 +332,7 @@ const GoogleMapMarkerComponent = () => {
       map.controls[maps.ControlPosition.TOP_CENTER].push(controlDiv);
     }
   }
+
 
   //google api running event
   const handleApiLoaded = (map: any, maps: any) => {

@@ -310,7 +310,7 @@ const FarmsListBlock = ({
                 : styles.addfarmbutton
             }
             disableElevation={true}
-            disabled={editFarmDetails?._id ? true : false}
+            disabled={editFarmDetails?._id || polygonCoords?.length ? true : false}
             variant="contained"
             onClick={() => {
               setAddPolygonOpen(true);

@@ -494,6 +494,51 @@ const GoogleMapMarkerComponent = () => {
             console.log("Geocoder failed due to:", status);
           }
         });
+
+        const updatePolygonDetails = () => {
+          const paths = event.overlay.getPath().getArray();
+          let updatedCoords = paths.map((coord: any) => ({
+            lat: coord.lat(),
+            lng: coord.lng(),
+          }));
+          // Calculate and log the initial area of the polygon
+          let updatedArea = calculatePolygonArea(paths);
+
+          const geocoder = new maps.Geocoder();
+          const lastCoord = paths[paths.length - 1]; // Accessing the last point of the polygon
+
+
+          geocoder.geocode({ location: lastCoord }, (results: any, status: any) => {
+            if (status === "OK") {
+              if (results[0]) {
+                let locationName = results[0].formatted_address;
+                locationName = locationName?.split(",")[0]
+                let afterRemoveingSpaces = locationName.split(" ")[1]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, '')
+                // Accessing latitude and longitude from lastCoord object
+                const latitude = lastCoord.lat(); // Get the latitude
+                const longitude = lastCoord.lng();
+                const geocoder = new google.maps.Geocoder();
+                const latlngs = { lat: latitude, lng: longitude };
+                setFarmLoactionDetails({
+                  locationName: afterRemoveingSpaces,
+                  latlng: [latlngs.lat, latlngs.lng],
+                  areaInAcres: updatedArea
+                });
+
+                setPolygon(event.overlay);
+                dispatch(storeEditPolygonCoords(updatedCoords));
+                stopDrawingMode();
+
+              } else {
+                console.log("No results found");
+              }
+            } else {
+              console.log("Geocoder failed due to:", status);
+            }
+          });
+        }
+        maps.event.addListener(event.overlay, "mouseup", updatePolygonDetails);
+
       }
     });
 

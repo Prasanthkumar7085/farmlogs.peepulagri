@@ -734,10 +734,10 @@ const MobileGoogleMarkers = () => {
                         : [],
                 }));
 
-                setRenderField(true);
-                setTimeout(() => {
-                    setRenderField(false);
-                }, 0.1);
+                // setRenderField(true);
+                // setTimeout(() => {
+                //     setRenderField(false);
+                // }, 0.1);
 
                 setViewPolygonsCoord(newData);
 
@@ -913,28 +913,31 @@ const MobileGoogleMarkers = () => {
 
                     const infoWindowRef = new googleMaps.InfoWindow();
 
+
                     googleMaps.event.addListener(marker, 'click', function () {
-                        infoWindowRef.setContent(`
-                      
+                        const content = `
         <div>
             <h4>${marker.markerInfo?.name}</h4>
-             <p> location: ${marker.markerInfo?.location}</p>
+            <p> location: ${marker.markerInfo?.location}</p>
             <p> acres: ${marker.markerInfo?.acres}</p>
+            <div style="display:flex;justify-content:space-between">
+            <a href="/farms/${marker?.markerInfo?.id}" style="text-decoration: none; ">View</a>
+              <a href="/farms/${marker?.markerInfo?.id}/crops?search_string=${marker.markerInfo?.name}" style="text-decoration: none; ">Crops</a>
+</div>
         </div>
-    `);
-
+    `;
+                        infoWindowRef.setContent(content);
 
                         infoWindowRef.open(map, marker);
+                        // Add event listeners to the buttons after the content is set
+
+
                     });
 
 
-                    googleMaps.event.addListener(marker, 'mouseout', function () {
-                        infoWindowRef.close();
-                    });
 
                     marker.addListener("click", () => {
                         setSelectedPolygon(markerInfo.id);
-                        setSelectedPolygonOpen(true)
                         const markerPosition = marker.getPosition();
                         const markerInformation = marker.markerInfo;
 
@@ -975,6 +978,16 @@ const MobileGoogleMarkers = () => {
 
         }
     }, [map, googleMaps, viewPolygonsCoord]);
+
+    const InfoWindowContent = ({ markerInfo, }: any) => {
+        return (
+            <div>
+                <h4>{markerInfo.name}</h4>
+                <p>Location: {markerInfo.location}</p>
+                <p>Acresss: {markerInfo.acres}</p>
+            </div>
+        );
+    };
 
 
     useEffect(() => {

@@ -5,9 +5,13 @@ import styles from "./footer.module.css";
 import { useRouter } from 'next/router';
 import { Button } from "@mui/material";
 import Image from 'next/image';
+import { useDispatch } from 'react-redux';
+import { storeSearchLocation } from '@/Redux/Modules/Farms';
 
 export default function ScoutingHeader({ children }: any) {
   const router = useRouter()
+  const dispatch = useDispatch();
+
   return (
     <div className={styles.footer}>
       {children}
@@ -28,7 +32,10 @@ export default function ScoutingHeader({ children }: any) {
                 ? styles.navButtonActive
                 : styles.navButton
             }
-            onClick={() => router.push("/dashboard")}
+            onClick={() => {
+              dispatch(storeSearchLocation(null))
+              router.push("/dashboard")
+            }}
           >
             {router.pathname.includes("/dashboard") ? (
               <Image
@@ -54,7 +61,10 @@ export default function ScoutingHeader({ children }: any) {
                 ? styles.navButtonActive
                 : styles.navButton
             }
-            onClick={() => router.push("/farms")}
+            onClick={() => {
+              dispatch(storeSearchLocation(null))
+              router.push("/farms")
+            }}
           >
             {router.pathname.includes("/farms") && !router.pathname.includes("/markers") ? (
               <Image
@@ -80,18 +90,21 @@ export default function ScoutingHeader({ children }: any) {
                 ? styles.navButtonActive
                 : styles.navButton
             }
-            onClick={() => router.push("/farms/markers")}
+            onClick={() => {
+              dispatch(storeSearchLocation(null))
+              router.push("/farms/markers")
+            }}
           >
             {router.pathname.includes("/farms/markers") ? (
               <Image
-                src="/marker-active.svg"
+                src="/mobileIcons/navTabs/marker-active.svg"
                 alt=""
                 width={23}
                 height={23}
               />
             ) : (
               <Image
-                src="/marker-notActive.svg"
+                src="/mobileIcons/navTabs/marker-notActive.svg"
                 alt=""
                 width={20}
                 height={20}
@@ -107,7 +120,10 @@ export default function ScoutingHeader({ children }: any) {
                 ? styles.navButtonActive
                 : styles.navButton
             }
-            onClick={() => router.push("/summary")}
+            onClick={() => {
+              dispatch(storeSearchLocation(null))
+              router.push("/summary")
+            }}
           >
             {router.pathname.includes("/summary") ? (
               <Image
@@ -131,7 +147,10 @@ export default function ScoutingHeader({ children }: any) {
                 ? styles.navButtonActive
                 : styles.navButton
             }
-            onClick={() => router.push("/users-tasks")}
+            onClick={() => {
+              dispatch(storeSearchLocation(null))
+              router.push("/users-tasks")
+            }}
           >
             {router.pathname.includes("/users-tasks") ? (
               <Image
@@ -157,7 +176,10 @@ export default function ScoutingHeader({ children }: any) {
                 ? styles.navButtonActive
                 : styles.navButton
             }
-            onClick={() => router.push("/users-procurements")}
+            onClick={() => {
+              dispatch(storeSearchLocation(null))
+              router.push("/users-procurements")
+            }}
           >
             {router.pathname.includes("/users-procurements") ? (
               <Image
@@ -182,7 +204,11 @@ export default function ScoutingHeader({ children }: any) {
                 ? styles.navButtonActive
                 : styles.navButton
             }
-            onClick={() => router.push("/profile/user")}
+            onClick={() => {
+              dispatch(storeSearchLocation(null))
+              router.push("/profile/user")
+            }
+            }
           >
             {router.pathname.includes("/profile") ? (
               <Image

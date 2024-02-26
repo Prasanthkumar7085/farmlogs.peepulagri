@@ -26,6 +26,7 @@ const MobileFarmListCard = ({
     farmOptionsLoading,
     setMobileFarmListOpen
 
+
 }: any) => {
 
     const dispatch = useDispatch()
@@ -130,7 +131,7 @@ const MobileFarmListCard = ({
                                                             search_string: router.query.search_string as string,
                                                             location: router.query.location_id as string,
                                                             userId: router.query.user_id as string,
-                                                            page: 1,
+                                                            page: router.query.page,
                                                             limit: 20,
                                                             sortBy: router.query.sort_by as string,
                                                             sortType: router.query.sort_type as string,
@@ -198,7 +199,7 @@ const MobileFarmListCard = ({
                                 </div>
                                 <div className={styles.cropsacres}>
                                     <div className={styles.cropscontainer}>
-                                        <h3 className={styles.cropName}>
+                                        <h3 className={styles.cropName} style={{ display: "flex", alignItems: "center" }}>
                                             {item?.geometry?.coordinates?.length ? (
                                                 <Tooltip title={"Locate"} followCursor>
                                                     <IconButton
@@ -277,9 +278,9 @@ const MobileFarmListCard = ({
                                             {item?.location_id?.title.length > 16
                                                 ?
                                                 <Tooltip title={item?.location_id?.title}>
-                                                    <p>{
+                                                    <span>{
                                                         item?.location_id?.title.slice(0, 12).toUpperCase() +
-                                                        "..."}</p>
+                                                        "..."}</span>
                                                 </Tooltip>
                                                 : item?.location_id?.title.toUpperCase()}
 

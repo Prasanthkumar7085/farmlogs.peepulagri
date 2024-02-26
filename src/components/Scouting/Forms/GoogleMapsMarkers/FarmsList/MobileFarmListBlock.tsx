@@ -164,7 +164,8 @@ const MobileFarmsListBlock = ({
     return (
         <Drawer open={mobileFarmListOpen} anchor="bottom" sx={{
             '& .MuiPaper-root ': {
-                borderRadius: "20px 20px 0 0"
+                borderRadius: "20px 20px 0 0",
+                width: "100%", maxWidth: "500px", margin: "0 auto"
             }
         }}>
             <div className={styles.detailsslidebarfarmslist} style={{ height: "60%" }}>
@@ -217,9 +218,6 @@ const MobileFarmsListBlock = ({
                                                 sx={{ cursor: "pointer" }}
                                                 onClick={() => {
                                                     setSearchString("");
-                                                    let temp = { ...router.query }
-                                                    delete temp.search_string
-                                                    router.push(temp)
                                                 }}
 
                                             >

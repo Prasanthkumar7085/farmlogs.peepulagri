@@ -734,10 +734,10 @@ const MobileGoogleMarkers = () => {
                         : [],
                 }));
 
-                // setRenderField(true);
-                // setTimeout(() => {
-                //     setRenderField(false);
-                // }, 0.1);
+                setRenderField(true);
+                setTimeout(() => {
+                    setRenderField(false);
+                }, 0.1);
 
                 setViewPolygonsCoord(newData);
 

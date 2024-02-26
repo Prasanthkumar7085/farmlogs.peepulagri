@@ -406,7 +406,6 @@ const AddFarmDilog = ({
                     fullWidth
                     inputValue={searchInput}
                     onOpen={() => {
-                      getLocations("");
                       setOpen(true);
                     }}
                     onClose={() => {

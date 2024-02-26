@@ -265,6 +265,7 @@ const MobileFarmListCard = ({
                                                             color: "#45A845",
                                                         }}
                                                         onClick={() => {
+                                                            setMobileFarmListOpen(false)
                                                             addPolyToExisting(item);
                                                         }}
                                                     >

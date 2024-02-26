@@ -1145,6 +1145,36 @@ const MobileGoogleMarkers = () => {
                                 right: "25%",
                             }}
                         >
+                            {editFarmDetails?._id ?
+                                <Tooltip title="Clear">
+                                    <Button
+                                        onClick={() => {
+                                            setSelectedPolygon(null);
+                                            setEditFarmsDetails(null);
+                                            dispatch(storeEditPolygonCoords([]));
+                                            getFarmOptions({
+                                                search_string: router.query.search_string as string,
+                                                location: router.query.location_id as string,
+                                                userId: router.query.user_id as string,
+                                                page: 1,
+                                                limit: 20,
+                                                sortBy: router.query.sort_by as string,
+                                                sortType: router.query.sort_type as string,
+                                                locationName: router.query.location_name
+
+                                            });
+                                        }}
+                                        variant="contained"
+                                        disabled={polygonCoords?.length === 0}
+                                    >
+                                        <Image
+                                            src="/viewProcurement/procurement-delete-icon.svg"
+                                            alt=""
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </Button>
+                                </Tooltip> : ""}
                             <Tooltip title="Clear">
                                 <Button
                                     onClick={clearAllPoints}

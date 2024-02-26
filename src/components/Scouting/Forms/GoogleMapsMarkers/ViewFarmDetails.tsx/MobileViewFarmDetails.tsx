@@ -109,12 +109,10 @@ const MobileViewFarmDetails = ({ setOpenFarmDetails,
         <Drawer open={selectedPolygonOpen ? true : false} anchor="bottom" sx={{
             '& .MuiPaper-root ': {
                 borderRadius: "20px 20px 0 0",
-                height: "50%"
+                height: "70%"
             }
         }}>
-            <div className={styles.slidebarfarmdetails} style={{
-                height: "50% !important"
-            }}>
+            <div className={styles.slidebarfarmdetails} >
                 <header className={styles.header}>
                     <IconButton
                         sx={{ padding: "0.2rem" }}
@@ -141,8 +139,8 @@ const MobileViewFarmDetails = ({ setOpenFarmDetails,
                     </IconButton>
 
                 </header>
-                <div className={styles.detailscontainer}>
-                    <div className={styles.locationDetailsContainer}>
+                <div className={styles.detailscontainer} style={{ height: "100%" }}>
+                    <div className={styles.locationDetailsContainer} >
 
                         <div className={styles.mapandname}>
                             <h2 className={styles.farmname}>{farmDetails?.title}</h2>

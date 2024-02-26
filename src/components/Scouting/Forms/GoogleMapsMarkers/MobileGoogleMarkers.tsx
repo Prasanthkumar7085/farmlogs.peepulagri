@@ -382,6 +382,7 @@ const MobileGoogleMarkers = () => {
         searchInput.setAttribute("placeholder", "Search for a place...");
         searchInput.setAttribute("value", googleSearchLocation?.formatted_address as string || ""); // Set the default value here
         searchInput.style.marginTop = "10px";
+        searchInput.style.marginLeft = "2.5px";
         searchInput.style.padding = "13px";
         searchInput.style.width = "calc(100% - 32px)"; // Adjust width to accommodate icon (assuming icon width is 32px)
 

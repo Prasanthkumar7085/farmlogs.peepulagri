@@ -1113,7 +1113,7 @@ const MobileGoogleMarkers = () => {
     return (
         <div >
             {renderField == false ? (
-                <div style={{ width: '100%', height: "95vh" }}>
+                <div style={{ width: '100%', height: "90vh" }}>
                     <GoogleMapReact
                         bootstrapURLKeys={{
                             key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,

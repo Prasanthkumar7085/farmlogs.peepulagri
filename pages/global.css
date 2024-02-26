@@ -32,6 +32,10 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
+.gmnoprint {
+    margin-top: 15px!important;
+    /* Adjust the margin-top value as needed */
+}
 
 .MuiTabs-indicator {
     display: none !important;

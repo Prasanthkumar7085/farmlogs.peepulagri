@@ -2,7 +2,12 @@ import MobileGoogleMarkers from "@/components/Scouting/Forms/GoogleMapsMarkers/M
 
 const MobileGoogleMarkersPage = () => {
     return (
-        <MobileGoogleMarkers />
+        <div style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}>
+
+            <MobileGoogleMarkers />
+        </div>
+
+
     )
 }
 export default MobileGoogleMarkersPage;

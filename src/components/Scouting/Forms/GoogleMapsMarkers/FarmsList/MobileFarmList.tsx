@@ -295,21 +295,12 @@ const MobileFarmListCard = ({
                                         <Button
                                             className={styles.cropsBtn}
                                             onClick={async () => {
-                                                router.push(`/farm/${item?._id}/crops`);
+                                                router.push(`/farms/${item?._id}/crops?search_string=${item?.title}`);
                                             }}
                                         >
                                             crops
                                         </Button>
-                                        <Button
-                                            className={styles.viewBtn}
-                                            onClick={() => {
-                                                router.push(
-                                                    `/scouts?include=tags&page=1&limit=50&farm_search_string=${item?.title}&farm_id=${item?._id}`
-                                                );
-                                            }}
-                                        >
-                                            scouts
-                                        </Button>
+
                                     </div>
                                 </div>
                             </div>

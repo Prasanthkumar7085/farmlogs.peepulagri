@@ -437,7 +437,7 @@ const AllCropsComponent = () => {
             className={styles.iconsiconArrowLeft}
             alt=""
             src="/iconsiconarrowleft.svg"
-            onClick={() => router.push("/farms")}
+            onClick={() => router.back()}
           />
           <Typography className={styles.viewFarm}>My Crops</Typography>
           <div className={styles.headericon} id="header-icon"></div>

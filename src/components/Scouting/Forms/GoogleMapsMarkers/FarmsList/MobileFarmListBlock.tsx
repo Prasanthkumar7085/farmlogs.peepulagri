@@ -162,7 +162,11 @@ const MobileFarmsListBlock = ({
 
 
     return (
-        <Drawer open={mobileFarmListOpen} anchor="bottom">
+        <Drawer open={mobileFarmListOpen} anchor="bottom" sx={{
+            '& .MuiPaper-root ': {
+                borderRadius: "20px 20px 0 0"
+            }
+        }}>
             <div className={styles.detailsslidebarfarmslist} style={{ height: "60%" }}>
                 <header className={styles.header}>
                     <div className={styles.headingcontainer}>
@@ -238,9 +242,48 @@ const MobileFarmsListBlock = ({
                                 },
                             }}
                         />
+                        <Autocomplete
+                            disabled={editFarmDetails?._id || router.query.location_name ? true : false}
+
+                            sx={{
+                                width: "300px",
+                                maxWidth: "400px",
+                                display: loading ? "none !important" : "",
+
+                            }}
+                            size="small"
+                            fullWidth
+                            noOptionsText="No such location"
+                            value={location}
+                            disableCloseOnSelect={false}
+                            isOptionEqualToValue={(option, value) => option.title === value.title}
+                            getOptionLabel={(option) => option.title}
+                            options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
+                            onChange={onChangeLocation}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    placeholder="Search by Farm locations"
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{
+                                        "& .MuiInputBase-root": {
+                                            height: "32px",
+                                            borderRadius: "2px",
+                                            background: " #DADADA",
+                                            color: "#000",
+                                            fontSize: "12px",
+                                        },
+
+                                    }}
+                                />
+                            )}
+                        />
+
                     </div>
+
                 </header>
-                <div id={styles.listview} className="scrollbar">
+                <div id={styles.listview} className="scrollbar" style={{ height: "calc(100vh - 350px)" }}>
                     <MobileFarmListCard
                         data={farmOptions}
                         getFarmLocation={getFarmLocation}
@@ -285,6 +328,7 @@ const MobileFarmsListBlock = ({
                     {drawingOpen ? (
                         <Button
                             className={styles.closefarmbutton}
+                            style={{ marginBottom: "1rem" }}
                             variant="contained"
                             onClick={() => {
                                 setDrawingOpen(false);
@@ -314,6 +358,8 @@ const MobileFarmsListBlock = ({
                         </Button>
                     ) : (
                         <Button
+                            style={{ marginBottom: "1rem" }}
+
                             startIcon={<AddIcon />}
                             className={
                                 editFarmDetails?._id
@@ -324,6 +370,7 @@ const MobileFarmsListBlock = ({
                             disabled={editFarmDetails?._id || polygonCoords?.length ? true : false}
                             variant="contained"
                             onClick={() => {
+                                setMobileFarmListOpen(false)
                                 setAddPolygonOpen(true);
                             }}
                             sx={{

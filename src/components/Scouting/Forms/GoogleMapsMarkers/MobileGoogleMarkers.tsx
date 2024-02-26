@@ -19,6 +19,7 @@ import getFarmsByLocation from '../../../../../lib/services/FarmsService/getFarm
 import { createRoot } from 'react-dom/client';
 import getAllLocationsService from '../../../../../lib/services/Locations/getAllLocationsService';
 import MobileFarmsListBlock from './FarmsList/MobileFarmListBlock';
+import MobileViewFarmDetails from './ViewFarmDetails.tsx/MobileViewFarmDetails';
 
 interface callFarmsProps {
     search_string: string;
@@ -75,7 +76,7 @@ const MobileGoogleMarkers = () => {
     const [mobileFarmListOpen, setMobileFarmListOpen] = useState<boolean>(false)
     const [location, setLocation] = useState<any>();
     const [locations, setLocations] = useState<any>([]);
-
+    const [selectedPolygonOpen, setSelectedPolygonOpen] = useState<boolean>(false)
     const getLocations = async (newLocationId = "") => {
         try {
             const response = await getAllLocationsService(accessToken);
@@ -234,7 +235,7 @@ const MobileGoogleMarkers = () => {
         const controlDiv = document.createElement("div");
         const controlUI = document.createElement("img");
 
-        controlUI.src = "/info-icon1.svg";
+        controlUI.src = "/farms-icon3.png";
         controlUI.style.backgroundColor = "#fff";
         controlUI.style.border = "1px solid #ccc";
         controlUI.style.padding = "5px";
@@ -362,7 +363,6 @@ const MobileGoogleMarkers = () => {
 
         addCustomControl(map, maps);
         gotoFarms(map, maps)
-        customLocationAutoComplete(map, maps)
         createInfoWindow(map);
         placesService.current = new maps.places.PlacesService(map);
 
@@ -376,12 +376,12 @@ const MobileGoogleMarkers = () => {
         // Create a container for the custom autocomplete control
         const customAutocompleteDiv = document.createElement("div");
         customAutocompleteDiv.style.position = "relative"; // Make the container relative to position the icon
-        customAutocompleteDiv.style.width = "100%"
+        customAutocompleteDiv.style.width = "70%"
         const searchInput = document.createElement("input");
         searchInput.setAttribute("id", "searchInput");
         searchInput.setAttribute("placeholder", "Search for a place...");
         searchInput.setAttribute("value", googleSearchLocation?.formatted_address as string || ""); // Set the default value here
-        searchInput.style.marginTop = "50px";
+        searchInput.style.marginTop = "10px";
         searchInput.style.padding = "13px";
         searchInput.style.width = "calc(100% - 32px)"; // Adjust width to accommodate icon (assuming icon width is 32px)
 
@@ -394,8 +394,8 @@ const MobileGoogleMarkers = () => {
         const icon = document.createElement("div");
         icon.innerHTML = "&#10060;"; // Unicode for custom icon, you can replace it with your desired icon
         icon.style.position = "absolute";
-        icon.style.top = "75%";
-        icon.style.left = "90%"
+        icon.style.top = "61%";
+        icon.style.left = "87%"
         icon.style.transform = "translateY(-50%)"; // Center vertically
         icon.style.padding = "10px";
         icon.style.cursor = "pointer";
@@ -427,7 +427,7 @@ const MobileGoogleMarkers = () => {
         customAutocompleteDiv.appendChild(searchInput);
         customAutocompleteDiv.appendChild(icon);
 
-        map.controls[maps.ControlPosition.TOP_CENTER].push(customAutocompleteDiv);
+        map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
         // Create Autocomplete for input field
         const autocomplete = new maps.places.Autocomplete(searchInput, {
             placeAutocompleteOptions: { strictBounds: false }, // Setting strictBounds to true removes the attribution
@@ -727,6 +727,7 @@ const MobileGoogleMarkers = () => {
                     _id: item._id,
                     title: item?.title,
                     area: item?.area,
+                    location: item?.location_id?.title,
                     cor: item?.geometry?.coordinates?.length
                         ? item?.geometry?.coordinates
                         : [],
@@ -901,6 +902,7 @@ const MobileGoogleMarkers = () => {
                         id: item._id,
                         name: item.title,
                         acres: item.area,
+                        location: item.location,
                         description: "This is a marker",
                     };
                     marker.markerInfo = markerInfo;
@@ -910,15 +912,20 @@ const MobileGoogleMarkers = () => {
 
                     const infoWindowRef = new googleMaps.InfoWindow();
 
-                    googleMaps.event.addListener(marker, 'mouseover', function () {
+                    googleMaps.event.addListener(marker, 'click', function () {
                         infoWindowRef.setContent(`
+                      
         <div>
             <h4>${marker.markerInfo?.name}</h4>
+             <p> location: ${marker.markerInfo?.location}</p>
             <p> acres: ${marker.markerInfo?.acres}</p>
         </div>
     `);
+
+
                         infoWindowRef.open(map, marker);
                     });
+
 
                     googleMaps.event.addListener(marker, 'mouseout', function () {
                         infoWindowRef.close();
@@ -926,6 +933,7 @@ const MobileGoogleMarkers = () => {
 
                     marker.addListener("click", () => {
                         setSelectedPolygon(markerInfo.id);
+                        setSelectedPolygonOpen(true)
                         const markerPosition = marker.getPosition();
                         const markerInformation = marker.markerInfo;
 
@@ -1222,6 +1230,17 @@ const MobileGoogleMarkers = () => {
                 mobileFarmListOpen={mobileFarmListOpen}
                 setMobileFarmListOpen={setMobileFarmListOpen}
             />
+            {selectedPolygonOpen ?
+                <MobileViewFarmDetails
+                    setOpenFarmDetails={setOpenFarmDetails}
+                    farmDetails={data}
+                    FarmlocationDetails={FarmlocationDetails}
+                    setSelectedPolygon={setSelectedPolygon}
+                    setMap={setMap}
+                    getFarmOptions={getFarmOptions}
+                    selectedPolygonOpen={selectedPolygonOpen}
+                    setSelectedPolygonOpen={setSelectedPolygonOpen}
+                /> : ""}
 
             <LoadingComponent loading={loading} />
             <Toaster richColors position="top-right" closeButton />

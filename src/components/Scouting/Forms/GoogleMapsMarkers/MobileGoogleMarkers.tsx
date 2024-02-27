@@ -235,7 +235,7 @@ const MobileGoogleMarkers = () => {
         const controlDiv = document.createElement("div");
         const controlUI = document.createElement("img");
 
-        controlUI.src = "/farms-icon3.png";
+        controlUI.src = "/Switchicon.svg";
         controlUI.style.backgroundColor = "#fff";
         controlUI.style.border = "1px solid #ccc";
         controlUI.style.padding = "5px";

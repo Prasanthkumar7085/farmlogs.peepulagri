@@ -76,7 +76,7 @@ const AddFarmDilog = ({
 
   const detailsAfterResponse = (response: any) => {
     if (response?.success) {
-      toast.success("Farm Details updated successfuly")
+      toast.success(response?.message)
       setAlertMessage(response?.message);
       setAlertType(true);
       setDrawerOpen(false);

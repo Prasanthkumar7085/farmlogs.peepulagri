@@ -196,7 +196,7 @@ const FarmListCard = ({
                 </div>
                 <div className={styles.cropsacres}>
                   <div className={styles.cropscontainer}>
-                    <h3 className={styles.cropName}>
+                    <h3 className={styles.cropName} style={{ display: "flex", alignItems: "center" }}>
                       {item?.geometry?.coordinates?.length ? (
                         <Tooltip title={"Locate"} followCursor>
                           <IconButton

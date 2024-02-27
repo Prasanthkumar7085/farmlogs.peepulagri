@@ -145,7 +145,6 @@ const AddFarmDilog = ({
       accessToken,
       farm_id as string
     );
-    setDrawerOpen(false);
     detailsAfterResponse(response);
     setLoading(false);
   };

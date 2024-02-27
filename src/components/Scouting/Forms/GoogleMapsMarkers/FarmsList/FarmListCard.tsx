@@ -110,9 +110,9 @@ const FarmListCard = ({
                     {item.title.length > 16
                       ?
                       <Tooltip title={item.title}>
-                        <p>{item.title.slice(0, 1).toUpperCase() +
+                        <span>{item.title.slice(0, 1).toUpperCase() +
                           item.title.slice(1, 12) +
-                          "..."}</p>
+                          "..."}</span>
                       </Tooltip>
                       : item.title[0].toUpperCase() + item.title.slice(1)}
                   </h2>
@@ -273,9 +273,9 @@ const FarmListCard = ({
                       {item?.location_id?.title.length > 16
                         ?
                         <Tooltip title={item?.location_id?.title}>
-                          <p>{
+                          <span>{
                             item?.location_id?.title.slice(0, 12).toUpperCase() +
-                            "..."}</p>
+                            "..."}</span>
                         </Tooltip>
                         : item?.location_id?.title.toUpperCase()}
 

@@ -112,9 +112,9 @@ const MobileFarmListCard = ({
                                         {item.title.length > 16
                                             ?
                                             <Tooltip title={item.title}>
-                                                <p>{item.title.slice(0, 1).toUpperCase() +
+                                                <span>{item.title.slice(0, 1).toUpperCase() +
                                                     item.title.slice(1, 12) +
-                                                    "..."}</p>
+                                                    "..."}</span>
                                             </Tooltip>
                                             : item.title[0].toUpperCase() + item.title.slice(1)}
                                     </h2>

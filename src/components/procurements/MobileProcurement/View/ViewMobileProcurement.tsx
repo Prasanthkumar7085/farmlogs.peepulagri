@@ -34,6 +34,11 @@ const ViewMobileProcurement = () => {
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
+
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
+
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [materials, setMaterials] = useState([]);
@@ -343,15 +348,18 @@ const ViewMobileProcurement = () => {
                   width={250}
                   alt="no materials"
                 />
+                {userDetails?.user_type == "central_team" ||
+                  userDetails?.user_type == "agronomist" ||
+                  userDetails?._id == data?.requested_by?._id ?
+                  <Button
+                    className={styles.addMaterialBtn}
+                    onClick={() => {
+                      setOpenMaterialDrawer(true);
+                    }}
+                  >
+                    Add Material
+                  </Button> : ""}
 
-                <Button
-                  className={styles.addMaterialBtn}
-                  onClick={() => {
-                    setOpenMaterialDrawer(true);
-                  }}
-                >
-                  Add Material
-                </Button>
               </div>
             )
           )}

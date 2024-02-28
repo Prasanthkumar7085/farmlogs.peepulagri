@@ -144,7 +144,7 @@ const ViewProucrementMobileDetails = ({
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Typography className={styles.approvedBy}>Approved by</Typography>
           <Typography>
-            {materials[0]?.approved_by?.name
+            {materials[0]?.approved_by?.name && data?.status !== "PENDING"
               ? materials[0]?.approved_by?.name
               : "---"}
           </Typography>

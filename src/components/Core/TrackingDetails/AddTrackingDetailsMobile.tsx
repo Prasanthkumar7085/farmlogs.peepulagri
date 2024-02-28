@@ -180,9 +180,8 @@ const AddTrackingDetailsMobile = ({
       if (responseData.success) {
         toast.success(responseData?.message)
         setTrackingDialogOpen(false)
-        addTracking(true)
+        await getAllProcurementMaterials()
         setErrorMessages([]);
-
       }
       if (responseData.status == 422) {
         setErrorMessages(responseData?.errors)

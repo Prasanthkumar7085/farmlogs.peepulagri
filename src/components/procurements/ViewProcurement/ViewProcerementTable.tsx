@@ -620,8 +620,13 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                 }}
 
                                 onClick={() => {
-                                  setMaterialId(row?._id);
-                                  setMaterialOpen(true)
+                                  if (data?.status == "APPROVED" || data?.status == "PURCHASED") {
+                                    setMaterialId(row?._id);
+                                    setMaterialOpen(true)
+                                  }
+                                  else {
+                                    toast.info("Please delete or approve remaining materials")
+                                  }
                                 }
                                 }
                               >

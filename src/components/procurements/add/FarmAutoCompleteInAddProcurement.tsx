@@ -48,6 +48,7 @@ const FarmAutoCompleteInAddProcurement: React.FC<PropsTypes> = ({
 
           <Autocomplete
             multiple
+            limitTags={router.pathname.includes("/users-procurements") ? 2 : 3}
             // groupBy={(option) => option?.user_id?.full_name}
             value={defaultValueSet}
             disablePortal

@@ -173,6 +173,8 @@
   font-style: normal;
   font-weight: 400;
   line-height: 140%;
+  white-space: pre-wrap;
+    white-space: pre-line;
   /* 19.6px */
 }
 

@@ -228,6 +228,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
                 <div className={styles.trackingid}>
                   <Button
                     className={styles.addTrackingDetailsBtn}
+                    sx={{ display: "flex", gap: "0.5rem" }}
                     variant="text"
                     onClick={() => {
                       setTrackingDialogOpen(true);
@@ -240,7 +241,7 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
                       height={15}
                       width={15}
                       alt=""
-                    /> Edit Tracking Details
+                    />    <p>Edit Tracking Details</p>
                   </Button>
                 </div>
               ) : (

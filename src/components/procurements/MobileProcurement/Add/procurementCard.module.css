@@ -77,3 +77,43 @@
     background: #ffffffe6 !important;
     color: #D94841 !important;
 }
+.iconButtonPay {
+    border-radius: 4px !important;
+    border: 1px solid #0000001a !important;
+    background:#45A845 !important;
+    color: #D94841 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 3vw, 14px) !important;
+    font-weight: 400;
+    line-height: 100%;
+    text-transform: capitalize !important;
+    display: flex;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.iconButtonPay:hover {
+    border: 1px solid #0000001a !important;
+    background: #ffffffe6 !important;
+    color: #D94841 !important;
+}
+.iconButtonEdit {
+    border-radius: 4px !important;
+    border: 1px solid #0000001a !important;
+    background: #D94841 !important;
+    color: #D94841 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(12px, 3vw, 14px) !important;
+    font-weight: 400;
+    line-height: 100%;
+    text-transform: capitalize !important;
+    display: flex;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.iconButtonEdit:hover {
+    border: 1px solid #0000001a !important;
+    background: #ffffffe6 !important;
+    color: #D94841 !important;
+}

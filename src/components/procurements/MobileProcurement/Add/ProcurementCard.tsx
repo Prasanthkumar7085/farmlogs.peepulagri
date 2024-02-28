@@ -137,7 +137,7 @@ const ProcurementCard = ({
           <h2 className={styles.materialname}>{item?.name}</h2>
         </div>
         <p className={styles.procurement}>
-          Procurement : {item.required_qty} {item.required_units}
+          Proc : {item.required_qty} {item.required_units == "Kilograms" ? "Kgs" : "lts"}
         </p>
       </div>
       <p
@@ -183,7 +183,6 @@ const ProcurementCard = ({
             width={13}
             height={13}
           />{" "}
-          Edit
         </IconButton>
       )}
 
@@ -210,16 +209,16 @@ const ProcurementCard = ({
         >
           {item?.status !== "PENDING" && item?.status !== "REJECTED" ? (
             <IconButton
-              className={styles.iconButton}
+              className={item?.price && item?.vendor ? styles.iconButtonEdit : styles.iconButtonPay}
               sx={{
                 display:
                   item?.status == "REJECTED"
                     ? "none"
                     : "",
-                background: item?.price && item?.vendor ? "#D94841" : "#56CCF2",
+                background: item?.price && item?.vendor ? "#D94841" : "#45A845 !important",
                 "&:hover": {
                   background:
-                    item?.price && item?.vendor ? "#D94841" : "#56CCF2",
+                    item?.price && item?.vendor ? "#D94841" : "45A845",
                 },
               }}
               onClick={() => {
@@ -228,8 +227,18 @@ const ProcurementCard = ({
                 setOpenMaterialDrawer(true);
               }}
             >
-              <CurrencyRupeeIcon />{" "}
-              {item?.price && item?.vendor ? "Edit " : "Pay "}
+              {item?.price && item?.vendor ? <Image
+                src="/currency-inr-edit.svg"
+                alt="edit"
+                width={13}
+                height={13}
+              /> :
+                <Image
+                  src="/currency-inr.svg"
+                  alt="edit"
+                  width={13}
+                  height={13}
+                />}{" "}
             </IconButton>
           ) : (
             ""

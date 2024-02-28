@@ -132,6 +132,7 @@ const ViewProucrementMobileDetails = ({
           )}
         </div>
       </div>
+
       <div className={styles.approvedByBlock}>
         <Image
           src="/mobileIcons/procurement/approve-icon.svg"

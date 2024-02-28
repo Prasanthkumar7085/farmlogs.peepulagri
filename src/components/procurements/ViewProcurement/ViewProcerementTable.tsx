@@ -876,7 +876,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
       {data?.remarks ?
         <div className={styles.remarks}>
           <label className={styles.remarksLabel}>Remarks</label>
-          <Typography className={styles.remarksText}>{data?.remarks}</Typography>
+          <Typography className={styles.remarksText} >{data?.remarks}</Typography>
         </div> : ""}
 
       <LoadingComponent loading={loading} />

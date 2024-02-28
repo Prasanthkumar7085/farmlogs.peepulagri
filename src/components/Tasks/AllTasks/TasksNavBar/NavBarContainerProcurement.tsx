@@ -158,9 +158,9 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
           <Image
             className={styles.note1Icon}
             alt=""
-            src="/support-icon-procurement.svg"
-            width={15}
-            height={15}
+            src="/procurement-side-menu-icon-main.svg"
+            width={35}
+            height={35}
           />
           <h1 className={styles.taskManagement}>{titleName}</h1>
         </div>

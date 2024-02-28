@@ -139,6 +139,7 @@ const ProcurementCard = ({
         <p className={styles.procurement}>
           Proc : {item.required_qty} {item.required_units == "Kilograms" ? "Kgs" : "lts"}
         </p>
+
       </div>
       <p
         className={styles.price}
@@ -226,9 +227,14 @@ const ProcurementCard = ({
                 },
               }}
               onClick={() => {
-                setOpenMaterialDrawer(true);
-                setEditMaterialId(item?._id);
-                setOpenMaterialDrawer(true);
+                if (procurementData?.status == "APPROVED" || procurementData?.status == "PURCHASED") {
+                  setOpenMaterialDrawer(true);
+                  setEditMaterialId(item?._id);
+                  setOpenMaterialDrawer(true);
+                }
+                else {
+                  toast.info("Please delete or approve remaining materials")
+                }
 
               }}
             >

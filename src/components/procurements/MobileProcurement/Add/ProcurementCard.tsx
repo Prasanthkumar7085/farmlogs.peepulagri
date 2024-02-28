@@ -225,6 +225,7 @@ const ProcurementCard = ({
                 setOpenMaterialDrawer(true);
                 setEditMaterialId(item?._id);
                 setOpenMaterialDrawer(true);
+
               }}
             >
               {item?.price && item?.vendor ? <Image

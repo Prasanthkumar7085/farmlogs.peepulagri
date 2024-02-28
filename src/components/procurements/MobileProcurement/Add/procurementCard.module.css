@@ -94,7 +94,7 @@
 
 .iconButtonPay:hover {
     border: 1px solid #0000001a !important;
-    background: #ffffffe6 !important;
+    background: #45A845 !important;
     color: #D94841 !important;
 }
 .iconButtonEdit {
@@ -114,6 +114,6 @@
 
 .iconButtonEdit:hover {
     border: 1px solid #0000001a !important;
-    background: #ffffffe6 !important;
+    background: #D94841 !important;
     color: #D94841 !important;
 }

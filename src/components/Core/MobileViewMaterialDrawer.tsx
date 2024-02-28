@@ -48,7 +48,7 @@ const MobileViewMaterialDrawer = ({
     const [availableUnits, setAvailableUnits] = useState("");
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState({});
-    const [materials, setMaterials] = useState([]);
+    const [materials, setMaterials] = useState<any>();
     const [deleteMaterialOpen, setDeleteMaterialOpen] = useState(false);
     const [deleteMaterialId, setDeleteMaterialId] = useState("");
     const [deleteLoading, setDeleteLoading] = useState(false);
@@ -120,6 +120,7 @@ const MobileViewMaterialDrawer = ({
                 setName(response?.data?.name);
                 setPrice(response?.data?.price)
                 setNameVendor(response?.data?.vendor)
+                setMaterials(response?.data)
             } else if (response?.status == 401) {
                 toast.error(response?.message);
             } else {
@@ -148,7 +149,7 @@ const MobileViewMaterialDrawer = ({
             setPrice("")
             setNameVendor("")
         }
-    }, [editMaterialId, accessToken])
+    }, [editMaterialId, accessToken, openMaterialDrawer])
 
 
 
@@ -188,7 +189,7 @@ const MobileViewMaterialDrawer = ({
             }}
         >
             <div className={styles.addPurchaseDrawerHeader}           >
-                <Typography >{editMaterialId ? "Edit Purchase" : "Add Purchase "}</Typography>
+                <Typography >{materials?.price && materials?.vendor ? "Edit Purchase" : "Add Purchase"}</Typography>
                 <IconButton
                     onClick={() => {
                         setOpenMaterialDrawer(false);

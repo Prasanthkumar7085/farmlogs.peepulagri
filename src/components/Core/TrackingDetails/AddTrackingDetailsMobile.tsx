@@ -135,8 +135,54 @@ const AddTrackingDetailsMobile = ({
         setTrackingDialogOpen(false)
         await procurementStatusChange("SHIPPED")
         await getAllProcurementMaterials()
+        setErrorMessages([]);
         toast.success(responseData?.message)
         addTracking(true)
+      }
+      if (responseData.status == 422) {
+        setErrorMessages(responseData?.errors)
+      }
+
+    }
+    catch (err) {
+      console.error(err)
+    }
+    finally {
+      setTrackingLoading(false)
+
+    }
+  }
+
+  const EditTrackingDetails = async () => {
+
+    setTrackingLoading(true)
+    let body = {
+      "service_name": service_name,
+      "delivery_date": date,
+      "contact_number": phoneNumber,
+      "tracking_id": trackingId
+    }
+    try {
+      let options = {
+        method: "PATCH",
+        headers: new Headers({
+          "content-type": "application/json",
+          authorization: accessToken,
+        }),
+        body: JSON.stringify(body),
+      };
+
+      let response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${router.query.procurement_id}/tracking-details`,
+        options
+      );
+      let responseData = await response.json();
+      if (responseData.success) {
+        toast.success(responseData?.message)
+        setTrackingDialogOpen(false)
+        addTracking(true)
+        setErrorMessages([]);
+
       }
       if (responseData.status == 422) {
         setErrorMessages(responseData?.errors)
@@ -412,6 +458,7 @@ const AddTrackingDetailsMobile = ({
               setDate(null);
               setPhoneNumber("");
               setTrackingId("");
+              setErrorMessages([]);
 
             }}
             size="small"
@@ -425,8 +472,12 @@ const AddTrackingDetailsMobile = ({
             size="small"
             disabled={loading}
             onClick={() => {
-
-              addTrackingDetails();
+              if (data?.tracking_details?._id) {
+                EditTrackingDetails()
+              }
+              else {
+                addTrackingDetails();
+              }
 
             }}
             sx={{

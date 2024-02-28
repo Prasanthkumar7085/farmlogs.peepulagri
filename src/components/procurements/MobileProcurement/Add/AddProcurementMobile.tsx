@@ -268,7 +268,6 @@ const AddProcurementMobile = () => {
   };
 
 
-  console.log(router.query.material, "sdfasf")
   return (
     <div>
       <ViewProcurementHeader

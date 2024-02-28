@@ -519,7 +519,6 @@ const GoogleMapMarkerComponent = () => {
     });
 
     maps.event.addListener(newPolygon, "mouseup", () => {
-      console.log("We")
       const updatedCoords = newPolygon
         .getPath()
         .getArray()
@@ -701,7 +700,6 @@ const GoogleMapMarkerComponent = () => {
   const centerMapToPlace = (place: any) => {
     if (mapRef.current && place?.geometry && place.geometry.location) {
       const location = place.geometry.location;
-      console.log("lo", location)
       if (location && typeof location.lat === 'function' && typeof location.lng === 'function') {
         const latLng = new google.maps.LatLng(location.lat(), location.lng());
         mapRef.current.panTo(latLng);
@@ -1013,7 +1011,6 @@ const GoogleMapMarkerComponent = () => {
     setPolygonDrawingMode();
     setEditFarmsDetails(value);
     if (value?.location_id?.coordinates?.length) {
-      console.log(value, "7956")
       const indiaCenter = { lat: value?.location_id?.coordinates?.[0], lng: value?.location_id?.coordinates?.[1] };
       map.setCenter(indiaCenter);
       map.setZoom(17);

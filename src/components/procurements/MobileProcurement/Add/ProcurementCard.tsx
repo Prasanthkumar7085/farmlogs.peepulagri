@@ -217,8 +217,8 @@ const ProcurementCard = ({
               className={item?.price && item?.vendor ? styles.iconButtonEdit : styles.iconButtonPay}
               sx={{
                 display:
-                  item?.status == "REJECTED"
-                    ? "none"
+                  item?.status == "REJECTED" || router.pathname.includes("edit")
+                    ? "none !important"
                     : "",
                 background: item?.price && item?.vendor ? "#D94841" : "#45A845 !important",
                 "&:hover": {

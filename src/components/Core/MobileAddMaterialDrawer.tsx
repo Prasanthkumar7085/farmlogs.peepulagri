@@ -326,7 +326,7 @@ const MobileAddMaterialDrawer = ({
                                                 width: "100%",
                                                 background: "#fff",
                                             }}
-                                            placeholder="Availble"
+                                            placeholder="Available"
                                             variant="outlined"
                                             value={availableQty}
                                             onInput={handleInput}

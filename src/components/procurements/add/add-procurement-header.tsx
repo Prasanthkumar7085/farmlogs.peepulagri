@@ -53,11 +53,9 @@ const AddProcurementHeader = ({ data, afterProcurement, setAfterProcurement }: a
       );
     }
     else {
-      if (data?._id || router.query.procurement_id) {
-        setDeleteOpen(true);
-      } else {
-        router.push("/procurements");
-      }
+
+      router.push("/procurements");
+
     }
 
   }, []);

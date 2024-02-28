@@ -227,21 +227,26 @@ const ProcurementDetailsMobile = ({
               <p className={styles.count}>{materials?.length}</p>
             </div>
           </div>
-          <IconButton
-            sx={{
-              display: procurementData?.status == "PENDING" ? "" : "none!important",
-            }}
-            onClick={(e) => {
-              handleClick(e);
-            }}
-          >
-            <Image
-              src="/mobileIcons/procurement/menu-icon-width-box.svg"
-              alt=""
-              width={20}
-              height={20}
-            />
-          </IconButton>
+          {userDetails?.user_type == "central_team" ||
+            userDetails?.user_type == "agronomist" ||
+            userDetails?._id == procurementData?.requested_by?._id ?
+
+            <IconButton
+              sx={{
+                display: procurementData?.status == "PENDING" ? "" : "none!important",
+              }}
+              onClick={(e) => {
+                handleClick(e);
+              }}
+            >
+              <Image
+                src="/mobileIcons/procurement/menu-icon-width-box.svg"
+                alt=""
+                width={20}
+                height={20}
+              />
+            </IconButton> : ""}
+
           <Menu
             id="demo-positioned-menu"
             aria-labelledby="demo-positioned-button"

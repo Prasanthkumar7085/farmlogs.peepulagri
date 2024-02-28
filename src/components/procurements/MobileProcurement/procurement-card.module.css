@@ -138,7 +138,6 @@
   margin-top: 10px;
 }
 .allProcurementContainer{
-  height: calc(100vh - 250px);
     padding: 1rem;
     overflow-y: auto;
     

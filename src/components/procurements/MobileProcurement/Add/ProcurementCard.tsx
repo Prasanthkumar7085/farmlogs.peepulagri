@@ -159,31 +159,35 @@ const ProcurementCard = ({
       </IconButton>
 
 
+
       {item?.status !== "PENDING" && item?.status !== "REJECTED" ? (
         ""
       ) : (
-        <IconButton
-          sx={{
-            display:
-              procurementData?.status == "PURCHASED" ||
-                procurementData?.tracking_details?._id
-                ? "none !important"
-                : "",
-          }}
-          disabled={selectMaterial ? true : false}
-          className={styles.iconButton}
-          onClick={() => {
-            setEditMaterialOpen(true);
-            setEditMaterialId(item?._id);
-          }}
-        >
-          <Image
-            src="/pencil-simple-line 1.svg"
-            alt="edit"
-            width={13}
-            height={13}
-          />{" "}
-        </IconButton>
+        userDetails?.user_type == "central_team" ||
+          userDetails?.user_type == "agronomist" ||
+          userDetails?._id == procurementData?.requested_by?._id ?
+          <IconButton
+            sx={{
+              display:
+                procurementData?.status == "PURCHASED" ||
+                  procurementData?.tracking_details?._id
+                  ? "none !important"
+                  : "",
+            }}
+            disabled={selectMaterial ? true : false}
+            className={styles.iconButton}
+            onClick={() => {
+              setEditMaterialOpen(true);
+              setEditMaterialId(item?._id);
+            }}
+          >
+            <Image
+              src="/pencil-simple-line 1.svg"
+              alt="edit"
+              width={13}
+              height={13}
+            />{" "}
+          </IconButton> : ""
       )}
 
       {item?.status == "REJECTED" ? (

@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Button,
   Icon,
+  IconButton,
   InputAdornment,
   Menu,
   TextField,
@@ -16,6 +17,8 @@ import SelectComponent from "@/components/Core/SelectComponent";
 import AddIcon from "@mui/icons-material/Add";
 import getAllUsersService from "../../../../../lib/services/Users/getAllUsersService";
 import Image from "next/image";
+import ClearIcon from '@mui/icons-material/Clear';
+
 interface PropTypes {
   onChangeSearch: (search: string) => void;
   searchString: string;
@@ -326,11 +329,21 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                 },
               }}
               variant="outlined"
-              type="search"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Icon>search_sharp</Icon>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">
+                    {searchString ?
+                      <IconButton onClick={() => {
+                        setSearch("");
+                        onChangeSearch("");
+                      }}>
+                        <ClearIcon />
+                      </IconButton> : ""}
                   </InputAdornment>
                 ),
               }}

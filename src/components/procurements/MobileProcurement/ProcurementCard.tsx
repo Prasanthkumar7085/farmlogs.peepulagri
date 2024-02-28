@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import styles from "./procurement-card.module.css";
 import { useState } from "react";
 import { deepOrange } from "@mui/material/colors";
+import { useSelector } from "react-redux";
 
 const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loading }: any) => {
 
@@ -14,6 +15,9 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
 
   const [viewMoreId, setViewMoreId] = useState("");
 
+  const userDetails = useSelector(
+    (state: any) => state.auth.userDetails?.user_details
+  );
   const FarmTitleComponent = (info: any) => {
     let value = info?.farm_ids;
     let id = info?._id;
@@ -70,7 +74,9 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
     return temp.charAt(0).toUpperCase() + temp.slice(1);
   };
   return (
-    <div className={styles.allProcurementContainer}>
+    <div className={styles.allProcurementContainer} style={{ height: userDetails?.user_type == "central_team" ? "calc(100vh - 180px)" : "calc(100vh - 250px)" }}>
+      {/* height: calc(100vh - 250px); */}
+
       {data?.length ? (
         data?.map((item: any, index: any) => {
           if (data.length === index + 1 && hasMore == true) {

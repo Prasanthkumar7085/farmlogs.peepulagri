@@ -400,7 +400,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   </Select>
                 </FormControl>
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.2rem" }}>
                 <ErrorMessages
                   errorMessages={errorMessages}
                   keyname={"required_qty"}
@@ -418,7 +418,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
               <div>
                 <TextField
                   size="small"
-                  placeholder="Availble"
+                  placeholder="Available"
                   variant="outlined"
                   value={availableQty}
                   onInput={handleInput}
@@ -451,7 +451,12 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                   <MenuItem value="Litres">Litres</MenuItem>
                   <MenuItem value="Kilograms">Kilograms</MenuItem>
                 </Select>
+                <ErrorMessages
+                  errorMessages={errorMessages}
+                  keyname={"required_units"}
+                />
               </FormControl>
+
             </div>
 
             <div style={{ display: "flex", flexWrap: "wrap" }}>
@@ -459,10 +464,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                 errorMessages={errorMessages}
                 keyname={"available_qty"}
               />
-              <ErrorMessages
-                errorMessages={errorMessages}
-                keyname={"required_units"}
-              />
+
             </div>
           </div>
         </div>
@@ -585,42 +587,47 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                             className={styles.tableBodyCell}
                             style={{ borderBlock: "1px solid #E9EDF1" }}
                           >
-                            <IconButton
-                              sx={{ paddingBlock: "3px" }}
-                              onClick={() => {
-                                setEditAvailableQty(item.available_qty);
-                                setEditAvailableUnits(item.available_units);
-                                setEditRequiredQty(item.required_qty);
-                                setEditRequiredUnits(item.required_units);
-                                setEditNameValue(item.name);
+                            <Tooltip title={"Edit"} followCursor>
+                              <IconButton
+                                sx={{ paddingBlock: "3px" }}
+                                onClick={() => {
+                                  setEditAvailableQty(item.available_qty);
+                                  setEditAvailableUnits(item.available_units);
+                                  setEditRequiredQty(item.required_qty);
+                                  setEditRequiredUnits(item.required_units);
+                                  setEditNameValue(item.name);
 
-                                setEditMaterialId(item._id);
-                                setEditMaterialOpen(true);
-                              }}
-                            >
-                              <picture>
-                                <img
-                                  src="/pencil-icon.svg"
-                                  alt=""
-                                  width={"15px"}
-                                />
-                              </picture>
-                            </IconButton>
-                            <IconButton
-                              sx={{ paddingBlock: "3px" }}
-                              onClick={() => {
-                                setDeleteMaterialId(item._id);
-                                setDeleteMaterialOpen(true);
-                              }}
-                            >
-                              <picture>
-                                <img
-                                  src="/trast-icon.svg"
-                                  alt=""
-                                  width="15px"
-                                />
-                              </picture>
-                            </IconButton>
+                                  setEditMaterialId(item._id);
+                                  setEditMaterialOpen(true);
+                                }}
+                              >
+                                <picture>
+                                  <img
+                                    src="/pencil-icon.svg"
+                                    alt=""
+                                    width={"15px"}
+                                  />
+                                </picture>
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title={"Delete"} followCursor>
+
+                              <IconButton
+                                sx={{ paddingBlock: "3px" }}
+                                onClick={() => {
+                                  setDeleteMaterialId(item._id);
+                                  setDeleteMaterialOpen(true);
+                                }}
+                              >
+                                <picture>
+                                  <img
+                                    src="/trast-icon.svg"
+                                    alt=""
+                                    width="15px"
+                                  />
+                                </picture>
+                              </IconButton>
+                            </Tooltip>
                           </TableCell>
                         </TableRow>
                       );

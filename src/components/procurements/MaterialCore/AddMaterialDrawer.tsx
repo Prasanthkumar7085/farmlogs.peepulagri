@@ -214,7 +214,7 @@ const AddMaterialDrawer = ({
                                 fontSize: "clamp(12px, 0.72vw, 14px)",
                                 fontFamily: "'Inter', sans-serif"
                             }
-                        }} placeholder="Enter Availble Quantity"
+                        }} placeholder="Enter Available Quantity"
                         variant="outlined"
                         onInput={handleInput}
                         value={availableQty}

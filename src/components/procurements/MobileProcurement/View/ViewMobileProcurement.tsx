@@ -72,6 +72,8 @@ const ViewMobileProcurement = () => {
       });
       if (response.status == 200 || response.status == 201) {
         setData(response?.data);
+
+
       }
     } catch (err) {
       console.error(err);
@@ -109,8 +111,7 @@ const ViewMobileProcurement = () => {
         const allPurchaseOrNot = filteredData.every(
           (obj: any) => obj.hasOwnProperty("price") && obj.price !== null
         );
-        const allApprovedOrNot = response?.data.every((obj: any) => obj.status === "APPROVED") && data?.status === "PENDING";
-
+        const allApprovedOrNot = response?.data.every((obj: any) => obj.status === "APPROVED");
 
         if (
           allPurchaseOrNot &&
@@ -152,10 +153,11 @@ const ViewMobileProcurement = () => {
   useEffect(() => {
     if (router.isReady && accessToken) {
       getProcurementById();
-      getAllProcurementMaterials();
+      getAllProcurementMaterials()
       dispatch(removeItems([]));
     }
   }, [router.isReady, accessToken]);
+
 
   const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {

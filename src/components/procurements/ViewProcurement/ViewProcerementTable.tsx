@@ -722,13 +722,15 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                           ? row?.required_qty + " " + row.required_units
                           : "---"}
                       </TableCell>
-                      <TableCell className={styles.tableBodyCell}>
+                      <TableCell className={styles.tableBodyCell} >
                         {row?.status ? capitalizeFirstLetter(row?.status) : "---"}
+
                         {row?.status == "REJECTED" ?
                           <Tooltip title={row?.reason}>
                             <InfoIcon />
                           </Tooltip>
                           : ""}</TableCell>
+
                       <TableCell className={styles.tableBodyCell}>
                         {row?.approved_by?.name ? row?.approved_by?.name : "---"}
                       </TableCell>

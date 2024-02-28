@@ -118,11 +118,11 @@ const ListProcurments = () => {
             let delay = 500;
             let debounce = setTimeout(() => {
                 getAllProcurements({
-                    page: 1,
+                    page: searchString ? 1 : router.query.page as string,
                     limit: router.query.limit as string,
                     search_string: searchString,
-                    sortBy: router.query.order_by as string,
-                    sortType: router.query.order_type as string,
+                    sortBy: router.query.sort_by as string,
+                    sortType: router.query.sort_type as string,
                     selectedFarmId: router.query.farm_id as string,
                     status: router.query.status as string,
                     priority: router.query.priority as string,
@@ -153,8 +153,8 @@ const ListProcurments = () => {
                 page: 1,
                 limit: router.query.limit as string,
                 search_string: searchString,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
+                sortBy: router.query.sort_by as string,
+                sortType: router.query.sort_type as string,
                 selectedFarmId: value?._id,
                 status: router.query.status as string,
                 priority: router.query.priority as string,
@@ -172,8 +172,8 @@ const ListProcurments = () => {
                 page: 1,
                 limit: router.query.limit as string,
                 search_string: searchString,
-                sortBy: router.query.order_by as string,
-                sortType: router.query.order_type as string,
+                sortBy: router.query.sort_by as string,
+                sortType: router.query.sort_type as string,
                 selectedFarmId: "",
                 status: router.query.status as string,
                 priority: router.query.priority as string,
@@ -192,8 +192,8 @@ const ListProcurments = () => {
             page: 1,
             limit: router.query.limit as string,
             search_string: searchString,
-            sortBy: router.query.order_by as string,
-            sortType: router.query.order_type as string,
+            sortBy: router.query.sort_by as string,
+            sortType: router.query.sort_type as string,
             selectedFarmId: router.query.farm_id as string,
             status: value,
             priority: router.query.priority as string,
@@ -212,8 +212,8 @@ const ListProcurments = () => {
             page: 1,
             limit: router.query.limit as string,
             search_string: searchString,
-            sortBy: router.query.order_by as string,
-            sortType: router.query.order_type as string,
+            sortBy: router.query.sort_by as string,
+            sortType: router.query.sort_type as string,
             selectedFarmId: router.query.farm_id as string,
             status: router.query.status as string,
             priority: value,
@@ -232,8 +232,8 @@ const ListProcurments = () => {
             page: 1,
             limit: router.query.limit as string,
             search_string: searchString,
-            sortBy: router.query.order_by as string,
-            sortType: router.query.order_type as string,
+            sortBy: router.query.sort_by as string,
+            sortType: router.query.sort_type as string,
             selectedFarmId: router.query.farm_id as string,
             status: router.query.status as string,
             priority: router.query.priority as string,
@@ -272,7 +272,7 @@ const ListProcurments = () => {
                     }}
                 >
                     <ImageComponent
-                        src="/no-tasks-data.svg"
+                        src="/No_data_procurement.svg"
                         height={500}
                         width={500}
                         alt="no-tasks"

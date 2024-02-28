@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "src/components/Scouting/Comments/threads.module.css";
 import { Markup } from "interweave";
@@ -57,6 +57,19 @@ const ThreadsForProcurement = ({
       setReplyOpen(false);
     }
   }, [afterReply]);
+
+  const lastCommentRef = useRef<any>(null);
+
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [details]);
+
+  const scrollToBottom = () => {
+    if (lastCommentRef.current) {
+      lastCommentRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const setDeleteIdOnClick = (id: string) => {
     setDeleteId(id);
@@ -119,14 +132,14 @@ const ThreadsForProcurement = ({
             const timeDifferenceInMinutes =
               timeDifferenceInMilliseconds / (1000 * 60);
             return (
-              <div className={styles.inMessage} key={index}>
+              <div className={styles.inMessage} key={index} ref={index === details.length - 1 ? lastCommentRef : null}>
                 {item?.commented_by?.user_type == "farmer" ? (
-                  <Avatar sx={{ bgcolor: "chocolate" }}>
+                  <Avatar sx={{ bgcolor: "#D94841", height: "30px", width: "31px", fontSize: "9px" }}>
                     {item?.commented_by?.name?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 ) : (
-                  <Avatar sx={{ bgcolor: "green" }}>
-                    {item?.commented_by?.name?.slice(0, 2)?.toUpperCase()}
+                  <Avatar sx={{ bgcolor: "green", height: "30px", width: "31px", fontSize: "9px" }}>
+                    {item?.commented_by?.name?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 )}
                 <div className={styles.messagebox}>
@@ -272,12 +285,12 @@ const ThreadsForProcurement = ({
                         >
                           <Image
                             alt="Delete"
-                            height={20}
-                            width={20}
+                            height={15}
+                            width={15}
                             src="/icons/comment-reply.svg"
                             style={{ borderRadius: "5%" }}
                           />
-                          <span>Reply in thread</span>
+                          <span>Reply</span>
                         </div>
                       ) : index == replyIndex ? (
                         <div
@@ -450,14 +463,14 @@ const ThreadsForProcurement = ({
                       return (
                         <div className={styles.inMessage1} key={index}>
                           {row?.commented_by?.user_type == "farmer" ? (
-                            <Avatar sx={{ bgcolor: "chocolate" }}>
+                            <Avatar sx={{ bgcolor: "chocolate", height: "30px", width: "31px", fontSize: "9px" }}>
                               {row?.commented_by?.name
                                 ?.slice(0, 2)
                                 .toUpperCase()}
                             </Avatar>
                           ) : (
-                            <Avatar sx={{ bgcolor: "green" }}>
-                              {row?.commented_by?.name?.slice(0, 2)}
+                            <Avatar sx={{ bgcolor: "green", height: "30px", width: "31px", fontSize: "9px" }}>
+                              {row?.commented_by?.name?.slice(0, 2).toUpperCase()}
                             </Avatar>
                           )}{" "}
                           <div className={styles.messagebox1}>

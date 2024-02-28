@@ -44,7 +44,9 @@ const TanStackTableProcurmentComponent = ({
       header.id == "farm_id.title" ||
       header.id == "assigned_to" ||
       header.id == "status" ||
-      header.id == "priority"
+      header.id == "priority" ||
+      header.id == "id" ||
+      header.id == "requested_by.name"
     ) {
       return;
     }
@@ -174,7 +176,8 @@ const TanStackTableProcurmentComponent = ({
                                   alt="image"
                                 />
                               )
-                            ) : header.id == "farm_id.title" ||
+                            ) : header.id == "farm_id.title" || header.id == "id" ||
+                              header.id == "requested_by.name" || header.id == "point_of_contact.name" ||
                               header.id == "status" || header.id == "priority" ? (
                               ""
                             ) : (

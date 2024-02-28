@@ -2,7 +2,8 @@ import { removeOneAttachmentElement, removeTheAttachementsFilesFromStore, storeA
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
-import { Box, Button, IconButton, LinearProgress, TextField } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, InputAdornment, LinearProgress, TextField } from "@mui/material";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -258,19 +259,35 @@ const CommentFormForProcrument = ({ afterCommentAdd, replyThreadEvent, procureme
         variant="outlined"
         multiline
         value={comment ? comment : ""}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              {loading ?
+                <CircularProgress size="1.5rem" sx={{ color: "black" }} /> :
+                comment ?
+                  <Image
+                    style={{ cursor: "pointer" }}
+                    src={"./send-icon.svg"}
+                    height={20}
+                    width={20}
+                    alt="send"
+                    onClick={() =>
+                      replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
+                    } /> : <Image
+                    style={{ cursor: "pointer" }}
+                    src={"./send-icon-disable.svg"}
+                    height={20}
+                    width={20}
+                    alt="send"
+                  />
+              }
+            </InputAdornment>
+          ),
+        }}
         onChange={(e) => {
           const newValue = e.target.value.replace(/^\s+/, "");
           setComment(newValue);
         }}
-      // onKeyDown={(e: any) => {
-      //   if (e.key === "Enter" && !e.shiftKey) {
-      //     e.preventDefault();
-      //     comment &&
-      //       (replyThreadEvent
-      //         ? replyThreads(replyThreadEvent)
-      //         : addComment());
-      //   }
-      // }}
       />
 
       {multipleFiles &&
@@ -403,7 +420,7 @@ const CommentFormForProcrument = ({ afterCommentAdd, replyThreadEvent, procureme
           </label>
         </div> */}
 
-        <Button
+        {/* <Button
           className={
             comment && !loading ? styles.sendbutton : styles.sendbuttonDisable
           } size="medium"
@@ -414,7 +431,7 @@ const CommentFormForProcrument = ({ afterCommentAdd, replyThreadEvent, procureme
           }
         >
           {loading ? "Sending..." : "Send"}
-        </Button>
+        </Button> */}
       </div>
       <LoadingComponent loading={loading} />
     </div>

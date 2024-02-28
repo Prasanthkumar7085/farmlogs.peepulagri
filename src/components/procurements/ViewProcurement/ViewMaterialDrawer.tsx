@@ -242,7 +242,7 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         Vendor Details <b style={{ color: "red" }}>*</b>
                     </label>
                     <TextField
-                        size="small" placeholder="Enter Name Of Vendor"
+                        size="small" placeholder="Enter Vendor Details"
                         variant="outlined"
                         rows={5}
                         multiline

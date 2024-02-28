@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LoadingComponent from "@/components/Core/LoadingComponent";
+import ImageComponent from "@/components/Core/ImageComponent";
 
 // type ShippedStatusformType = {
 //   fARM1?: string;
@@ -232,7 +233,14 @@ const ShippedStatusform = ({ data, afterStatusChange }: any) => {
                       setTrackingDialogOpen(true);
                     }}
                   >
-                    + Edit Tracking Details
+                    <ImageComponent
+                      src={
+                        "/viewProcurement/procurement-edit-icon.svg"
+                      }
+                      height={15}
+                      width={15}
+                      alt=""
+                    /> Edit Tracking Details
                   </Button>
                 </div>
               ) : (

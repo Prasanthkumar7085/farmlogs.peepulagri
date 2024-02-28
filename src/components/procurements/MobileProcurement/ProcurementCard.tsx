@@ -204,7 +204,7 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
             justifyContent: "center",
           }}
         >
-          <Image src="/viewTaskIcons/No-Data-Tasks.svg" alt="" height={150} width={300} />
+          <Image src="/No_data_procurement.svg" alt="" height={150} width={300} />
           <p
             style={{
               margin: "0",

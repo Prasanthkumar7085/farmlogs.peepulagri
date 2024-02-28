@@ -204,7 +204,7 @@ const DrawerCommentsForProcurment = ({ drawerClose, rowDetails, drawerOpen }: an
         "& .MuiPaper-root": {
           minWidth: router.pathname?.includes("/users-tasks")
             ? "100px"
-            : "600px",
+            : "400px",
           maxWidth: router.pathname?.includes("/users-tasks")
             ? "500px"
             : "600px",
@@ -251,14 +251,15 @@ const DrawerCommentsForProcurment = ({ drawerClose, rowDetails, drawerOpen }: an
           deleteLoading={deleteLoading}
         />
       </div>
-
-      <CommentFormForProcrument
-        farmID={rowDetails?.farm_id?._id}
-        procurementId={rowDetails?._id}
-        afterCommentAdd={afterCommentAdd}
-        scoutDetails={rowDetails}
-        attachement={""}
-      />
+      <div>
+        <CommentFormForProcrument
+          farmID={rowDetails?.farm_id?._id}
+          procurementId={rowDetails?._id}
+          afterCommentAdd={afterCommentAdd}
+          scoutDetails={rowDetails}
+          attachement={""}
+        />
+      </div>
 
       {/* <LoadingComponent loading={loading} /> */}
       <Toaster position="top-right" closeButton richColors />

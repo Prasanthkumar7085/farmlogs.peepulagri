@@ -45,12 +45,14 @@ const ViewMobileProcurement = () => {
   const [rejectedMaterials, setRejectedMaterial] = useState<any>();
   const [openMaterialDrawer, setOpenMaterialDrawer] = useState<boolean>();
   const [editMaterialId, setEditMaterialId] = useState("");
+
+  let responseStatus: any;
   //overall status change
   const procurementStatusChange = async (status: string) => {
     setLoading(true);
     try {
       const response = await updateStatusService({
-        procurement_id: data?._id,
+        procurement_id: data?._id || router.query.procurement_id,
         status: status,
         accessToken,
       });
@@ -73,7 +75,7 @@ const ViewMobileProcurement = () => {
       if (response.status == 200 || response.status == 201) {
         setData(response?.data);
 
-
+        responseStatus = response?.data?.status
       }
     } catch (err) {
       console.error(err);
@@ -111,7 +113,7 @@ const ViewMobileProcurement = () => {
         const allPurchaseOrNot = filteredData.every(
           (obj: any) => obj.hasOwnProperty("price") && obj.price !== null
         );
-        const allApprovedOrNot = response?.data.every((obj: any) => obj.status === "APPROVED");
+        const allApprovedOrNot = response?.data.every((obj: any) => obj.status === "APPROVED") && responseStatus == "PENDING";
 
         if (
           allPurchaseOrNot &&

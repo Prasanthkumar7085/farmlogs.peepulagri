@@ -24,6 +24,7 @@ const ProcurementDetailsMobile = ({
   procurementData,
   getAllProcurementMaterials,
   rejectedMaterials,
+  getProcurementById
 }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -143,7 +144,8 @@ const ProcurementDetailsMobile = ({
       });
 
       if (response.success) {
-        getAllProcurementMaterials();
+        await getProcurementById()
+        await getAllProcurementMaterials();
         toast.success(response?.message);
       } else if (response?.status == 401) {
         toast.error(response?.message);

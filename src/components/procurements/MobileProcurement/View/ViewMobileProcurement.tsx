@@ -335,6 +335,8 @@ const ViewMobileProcurement = () => {
               procurementData={data}
               getAllProcurementMaterials={getAllProcurementMaterials}
               rejectedMaterials={rejectedMaterials}
+              getProcurementById={getProcurementById}
+
             />
           ) : (
             loading == false && (

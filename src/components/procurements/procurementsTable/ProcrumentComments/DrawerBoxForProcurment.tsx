@@ -135,6 +135,7 @@ const DrawerCommentsForProcurment = ({ drawerClose, rowDetails, drawerOpen }: an
       );
       let responseData = await response.json();
       if (responseData.success == true) {
+        toast.success(responseData?.message)
         getAllScoutComments();
       }
     } catch (err) {

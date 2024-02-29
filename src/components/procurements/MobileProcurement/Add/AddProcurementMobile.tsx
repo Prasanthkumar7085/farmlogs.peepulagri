@@ -508,11 +508,9 @@ const AddProcurementMobile = () => {
               color="primary"
               variant="outlined"
               onClick={() => {
-                if (procurementData?._id || router.query.procurement_id) {
-                  setDeleteOpen(true);
-                } else {
-                  router.push("/users-procurements");
-                }
+
+                router.push("/users-procurements");
+
               }}
             >
               Cancel

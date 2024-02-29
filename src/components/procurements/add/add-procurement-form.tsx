@@ -352,11 +352,9 @@ const AddProcurementForm = () => {
                     color="primary"
                     variant="outlined"
                     onClick={() => {
-                      if (procurementData?._id || router.query.procurement_id) {
-                        setDeleteOpen(true);
-                      } else {
-                        router.push("/procurements");
-                      }
+
+                      router.push("/procurements");
+
                     }}
                   >
                     Cancel

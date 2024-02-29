@@ -365,16 +365,15 @@ const ThreadsForProcurement = ({
                             <div>
                               {editMode[0] == true &&
                                 editMode[1] == item._id ? (
-                                <Button
+                                <p
                                   className={styles.edit1}
-                                  disabled={editComment ? false : true}
                                   onClick={() => {
                                     setEditMode([false, item._id]);
                                     afterUpdateComment(item._id, editComment);
                                   }}
                                 >
                                   Update
-                                </Button>
+                                </p>
                               ) : (
                                 <p
                                   className={styles.edit1}
@@ -393,7 +392,7 @@ const ThreadsForProcurement = ({
                         {editMode[0] == true && editMode[1] == item._id ? (
                           <div className={styles.edit}>
                             <div className={styles.editChild} />
-                            <Button
+                            <p
                               className={styles.edit1}
                               onClick={() => {
                                 setEditMode([false, item._id]);
@@ -401,7 +400,7 @@ const ThreadsForProcurement = ({
                               }}
                             >
                               Close
-                            </Button>
+                            </p>
                           </div>
                         ) : (
                           <div

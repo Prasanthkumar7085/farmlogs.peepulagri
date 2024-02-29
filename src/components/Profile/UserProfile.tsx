@@ -144,7 +144,7 @@ const UserProfile = () => {
         <div className={styles.profiledetailscontainer}>
           <div className={styles.profiledetailscontainer}>
             <div className={styles.container}>
-              <Image className={styles.imageIcon} width={140} height={140} alt="" src={data?.url} />
+              <Image className={styles.imageIcon} width={140} height={140} alt="" src={data?.url ? data?.url : "/mirchi-profile.jpg"} />
               <div className={styles.uploadimage}>
                 <label style={{ height: "20px" }}>
                   <Image alt="" src="/camera-1.svg" width={20} height={20} />

@@ -49,7 +49,7 @@ const ViewProucrementMobileDetails = ({
       >
         {visibleTitles
           .map((item: { _id: string; title: string }) => item.title)
-          .join(", ")}
+          .join(" | ")}
         {value.length > 2 && (
           <div
             style={{

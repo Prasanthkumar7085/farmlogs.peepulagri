@@ -69,9 +69,15 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
             });
 
             if (response?.status == 200 || response?.status == 201) {
+                if (materials?.price && materials?.vendor) {
+                    toast.success("Vendor Details updated succesfully");
 
+                }
+                else {
+                    toast.success(response?.message);
 
-                toast.success(response?.message);
+                }
+
                 getAllProcurementMaterials();
                 setNameVendor('');
                 setPrice('');
@@ -286,7 +292,7 @@ const ViewMaterialDrawer = ({ materialId, materialOpen, setMaterialOpen, getAllP
                         onClick={() => {
 
                             setMaterialOpen(false);
-                                                        setErrorMessages({});
+                            setErrorMessages({});
 
                         }}
                     >

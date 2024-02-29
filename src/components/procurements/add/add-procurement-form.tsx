@@ -256,9 +256,6 @@ const AddProcurementForm = () => {
   };
   useEffect(() => {
     if (router.isReady && accessToken) {
-      if (router.query.procurement_id) {
-        getProcurementData();
-      }
       let delay = 500;
       let debounce = setTimeout(() => {
         getFarmOptions({ searchString: searchString });
@@ -266,6 +263,14 @@ const AddProcurementForm = () => {
       return () => clearTimeout(debounce);
     }
   }, [router.isReady, accessToken, searchString]);
+
+
+  useEffect(() => {
+    if (router.query.procurement_id) {
+      getProcurementData();
+      setFarm([]);
+    }
+  }, [router.query.procurement_id]);
 
   const checkMaterialsListCount = (value: any) => {
     setMaterialCount(value?.length);
@@ -322,6 +327,8 @@ const AddProcurementForm = () => {
                     className={styles.cancelBtn}
                     color="primary"
                     variant="outlined"
+
+
                     onClick={() => {
                       setAfterProcurement(false);
                       if (router.pathname.includes("/edit")) {
@@ -356,11 +363,12 @@ const AddProcurementForm = () => {
                   </Button>
                 )}
 
-                {afterProcurement && procurementData?._id ? (
+                {(afterProcurement || router.query.material) &&
+                  procurementData?._id ? (
                   <Button
                     variant="contained"
                     className={
-                      router.query.procurement_id || procurementData?._id
+                      materialCount >= 1
                         ? styles.disBtn
                         : styles.submitBtn
                     }

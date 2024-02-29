@@ -41,15 +41,15 @@ export default function ScoutingHeader({ children }: any) {
               <Image
                 src="/mobileIcons/navTabs/house-fill.svg"
                 alt=""
-                width={23}
-                height={23}
+                width={30}
+                height={30}
               />
             ) : (
               <Image
                 src="/mobileIcons/navTabs/dashboard-mobile.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={27}
+                height={27}
               />
             )}
 
@@ -70,15 +70,15 @@ export default function ScoutingHeader({ children }: any) {
               <Image
                 src="/mobileIcons/navTabs/farms-mobile-active.svg"
                 alt=""
-                width={23}
-                height={23}
+                width={30}
+                height={30}
               />
             ) : (
               <Image
                 src="/mobileIcons/navTabs/farms-mobile.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={27}
+                height={27}
               />
             )}
 
@@ -99,15 +99,15 @@ export default function ScoutingHeader({ children }: any) {
               <Image
                 src="/mobileIcons/navTabs/marker-active.svg"
                 alt=""
-                width={23}
-                height={23}
+                width={30}
+                height={30}
               />
             ) : (
               <Image
                 src="/mobileIcons/navTabs/marker-notActive.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={27}
+                height={27}
               />
             )}
 
@@ -128,16 +128,16 @@ export default function ScoutingHeader({ children }: any) {
             {router.pathname.includes("/summary") ? (
               <Image
                 src="/mobileIcons/navTabs/list-dashes-fill.svg"
-                width={23}
-                height={23}
+                width={30}
+                height={30}
                 alt=""
               />
             ) : (
               <Image
                 src="/mobileIcons/navTabs/summary-mobile.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={27}
+                height={27}
               />
             )}
           </Button>
@@ -156,15 +156,15 @@ export default function ScoutingHeader({ children }: any) {
               <Image
                 src="/mobileIcons/navTabs/Task filled.svg"
                 alt=""
-                width={23}
-                height={23}
+                width={30}
+                height={30}
               />
             ) : (
               <Image
                 src="/mobileIcons/navTabs/Task.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={27}
+                height={27}
               />
             )}
 
@@ -185,15 +185,15 @@ export default function ScoutingHeader({ children }: any) {
               <Image
                 src="/mobileIcons/navTabs/procurement-active-icon.svg"
                 alt=""
-                width={23}
-                height={23}
+                width={30}
+                height={30}
               />
             ) : (
               <Image
                 src="/mobileIcons/navTabs/procurement-icon.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={27}
+                height={27}
               />
             )}
 
@@ -214,15 +214,15 @@ export default function ScoutingHeader({ children }: any) {
               <Image
                 src="/mobileIcons/navTabs/user-fill.svg"
                 alt=""
-                width={23}
-                height={23}
+                width={30}
+                height={30}
               />
             ) : (
               <img
                 src="/mobileIcons/navTabs/profile-mobile.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={27}
+                height={27}
               />
             )}
 

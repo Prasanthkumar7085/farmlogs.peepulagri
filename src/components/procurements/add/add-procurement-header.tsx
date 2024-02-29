@@ -66,13 +66,30 @@ const AddProcurementHeader = ({ data, afterProcurement, setAfterProcurement }: a
         className={styles.backbutton}
         color="primary"
         variant="contained"
-        onClick={onBackButtonClick}
-      >
+        onClick={() => {
+          setAfterProcurement(false)
+          if (router.pathname.includes("/edit") && router.query.material) {
+            router.push(
+              `/procurements/${data?._id || router.query.procurement_id
+              }/edit`
+            );
+          } else if (router.pathname.includes("/add") && router.query.material) {
+            router.push(
+              `/procurements/add?procurement_id=${data?._id || router.query.procurement_id
+              }`
+            );
+          }
+          else {
+
+            router.push("/procurements");
+          }
+
+        }
+        }      >
         <img src="/arrow-left-back-white-black.svg" alt="" width={"18px"} />
       </Button>
       <div className={styles.textwrapper}>
-        {afterProcurement ? "" : <p className={styles.backText}>Back To List</p>}
-        <h2 className={styles.largetext}>{router.query.procurement_id ? "Edit Procurement" : "Add Procurement"}</h2>
+        <h2 className={styles.largetext}>{router.query.procurement_id && router.pathname.includes("/edit") ? "Edit Procurement" : "Add Procurement"}</h2>
       </div>
       <AlertDelete
         open={deleteOpen}

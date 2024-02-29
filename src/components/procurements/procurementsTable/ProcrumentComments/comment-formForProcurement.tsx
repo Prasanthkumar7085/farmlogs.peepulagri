@@ -245,7 +245,7 @@ const CommentFormForProcrument = ({ afterCommentAdd, replyThreadEvent, procureme
 
   return (
     <div className={styles.commentform} style={{
-      paddingInline: router.pathname?.includes("/users-tasks")
+      paddingInline: router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements")
         ? "1rem"
         : "0"
     }}>
@@ -267,7 +267,7 @@ const CommentFormForProcrument = ({ afterCommentAdd, replyThreadEvent, procureme
                 comment ?
                   <Image
                     style={{ cursor: "pointer" }}
-                    src={"./send-icon.svg"}
+                    src={"/send-icon.svg"}
                     height={20}
                     width={20}
                     alt="send"
@@ -275,7 +275,7 @@ const CommentFormForProcrument = ({ afterCommentAdd, replyThreadEvent, procureme
                       replyThreadEvent ? replyThreads(replyThreadEvent) : addComment()
                     } /> : <Image
                     style={{ cursor: "pointer" }}
-                    src={"./send-icon-disable.svg"}
+                    src={"/send-icon-disable.svg"}
                     height={20}
                     width={20}
                     alt="send"

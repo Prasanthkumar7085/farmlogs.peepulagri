@@ -27,7 +27,7 @@
     font-family: "Inter", sans-serif !important;
     color: #05a155 !important;
     min-width: inherit !important;
-    padding: 4px 8px !important;
+    padding: 12px 8px !important;
 }
 
 
@@ -38,5 +38,5 @@
     font-weight: 400 !important;
     font-family: "Inter", sans-serif !important;
     min-width: inherit !important;
-    padding: 4px 8px !important;
+    padding: 12spx 8px !important;
 }

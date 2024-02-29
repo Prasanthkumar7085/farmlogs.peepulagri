@@ -198,21 +198,21 @@ const DrawerCommentsForProcurment = ({ drawerClose, rowDetails, drawerOpen }: an
 
   return (
     <Drawer
-      anchor={router.pathname?.includes("/users-tasks") ? "bottom" : "right"}
+      anchor={router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements") ? "bottom" : "right"}
       open={drawerOpen}
       sx={{
         "& .MuiPaper-root": {
-          minWidth: router.pathname?.includes("/users-tasks")
+          minWidth: router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements")
             ? "100px"
             : "400px",
-          maxWidth: router.pathname?.includes("/users-tasks")
+          maxWidth: router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements")
             ? "500px"
             : "600px",
-          margin: router.pathname?.includes("/users-tasks")
+          margin: router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements")
             ? "0 auto"
             : "inherit",
-          padding: router.pathname?.includes("/users-tasks") ? "0" : "1rem",
-          borderRadius: router.pathname?.includes("/users-tasks")
+          padding: router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements") ? "0" : "1rem",
+          borderRadius: router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements")
             ? "10px 10px 0px 0px"
             : "none",
         },
@@ -233,8 +233,7 @@ const DrawerCommentsForProcurment = ({ drawerClose, rowDetails, drawerOpen }: an
       <div
         className={styles.threadsDrawerTasks}
         id={
-          router.pathname?.includes("/users-tasks")
-            ? styles.commentDrawerDivMobile
+          router.pathname?.includes("/users-tasks") || router.pathname?.includes("/users-procurements") ? styles.commentDrawerDivMobile
             : styles.commentDrawerDivWeb
         }
       >

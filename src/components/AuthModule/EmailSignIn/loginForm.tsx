@@ -206,11 +206,11 @@ export default function SigninEmail() {
             ) : (
               ""
             )}
-            <div style={{ textAlign: "end" }}>
+            {/* <div style={{ textAlign: "end" }}>
               <div onClick={forgotButton} className={styles.forgotBtn}>
                 Forgot Password?
               </div>
-            </div>
+            </div> */}
           </div>
 
           <Button

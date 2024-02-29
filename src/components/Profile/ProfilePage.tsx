@@ -329,24 +329,24 @@ const ProfilePage = () => {
               <div className={styles.eachDetailGrp}>
                 <label className={styles.lable1}>Full Name</label>
 
-                <p className={styles.content} style={{ color: "#35353D" }}>{capitalizeFirstLetter(data?.name)}</p>
+                <p className={styles.content} style={{ color: "#35353D" }}>{data?.name ? capitalizeFirstLetter(data?.name) : "---"}</p>
               </div>
               <div className={styles.eachDetailGrp}>
                 <label className={styles.lable1}>Role</label>
-                <p className={styles.content} style={{ color: "#FF8D00" }}>{capitalizeFirstLetter(data?.user_type)}</p>
+                <p className={styles.content} style={{ color: "#FF8D00" }}>{data?.user_type ? capitalizeFirstLetter(data?.user_type) : "---"}</p>
               </div>
               <div className={styles.eachDetailGrp}>
                 <label className={styles.lable1}>Email</label>
-                <p className={styles.content} style={{ color: "#35353D" }}>{data?.email}</p>
+                <p className={styles.content} style={{ color: "#35353D" }}>{data?.email ? data?.email : "---"}</p>
               </div>
               <div className={styles.eachDetailGrp}>
                 <label className={styles.lable1}>Mobile Number</label>
-                <p className={styles.content} style={{ color: "#35353D", fontWeight: 500 }}>{data?.phone}</p>
+                <p className={styles.content} style={{ color: "#35353D", fontWeight: 500 }}>{data?.phone ? data?.phone : "---"}</p>
               </div>
             </div>
           </section>}
 
-        <div className={styles.password}>
+        {/* <div className={styles.password}>
           <div className={styles.passwordBlock}>
             <h2 className={styles.heading1}>Password</h2>
             {changePassword ?
@@ -357,7 +357,7 @@ const ProfilePage = () => {
               :
               <Button variant="outlined" className={styles.changePasswordBtn} onClick={() => setChangePassword(true)}>Change Password</Button>}
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.logoutBtnBlock}>
           <Button variant="outlined"

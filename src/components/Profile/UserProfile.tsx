@@ -194,12 +194,12 @@ const UserProfile = () => {
             width={100}
             height={1}
           />
-          <div className={styles.editprofile} onClick={() => {
+          {/* <div className={styles.editprofile} onClick={() => {
             router.push("/profile/update-password")
           }}>
             <Image className={styles.camera1Icon} width={20} height={20} alt="" src="/passwordicon.svg" />
             <p className={styles.editProfile}>{`Change Password `}</p>
-          </div>
+          </div> */}
           <Image
             className={styles.optionscontainerChild}
             alt=""

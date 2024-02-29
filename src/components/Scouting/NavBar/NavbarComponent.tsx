@@ -84,7 +84,7 @@ export default function ScoutingHeader({ children }: any) {
 
           </Button>
 
-          <Button
+          {/* <Button
             className={
               router.pathname.includes("/markers")
                 ? styles.navButtonActive
@@ -111,7 +111,7 @@ export default function ScoutingHeader({ children }: any) {
               />
             )}
 
-          </Button>
+          </Button> */}
 
 
           <Button

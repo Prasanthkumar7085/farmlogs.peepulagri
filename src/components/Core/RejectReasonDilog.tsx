@@ -19,12 +19,14 @@ const RejectReasonDilog = ({ dialog, setRejectDilogOpen, afterRejectingMaterial,
     const [loading, setLoading] = useState<any>()
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<any>()
     const accessToken = useSelector(
         (state: any) => state.auth.userDetails?.access_token
     );
     const handleClose = () => {
         setRemarks('')
         setRejectDilogOpen(false)
+        setErrorMessage("")
     };
 
 
@@ -61,15 +63,22 @@ const RejectReasonDilog = ({ dialog, setRejectDilogOpen, afterRejectingMaterial,
                         }}
                         onKeyDown={(e: any) => e.key == 'Enter' ? afterRejectingMaterial() : ""}
                     />
-                    {validations ? <Typography variant='caption' color="error">{validations}</Typography> : ""}
+                    {errorMessage ? <Typography variant='caption' color="error">{errorMessage}</Typography> : ""}
 
                 </DialogContent>
                 <DialogActions className={styles.dialogBtnGrp}>
                     <Button className={styles.cancelBtn} onClick={handleClose}>Cancel</Button>
                     <Button className={styles.submitBtn} onClick={() => {
-                        afterRejectingMaterial(remarks)
-                        setRejectDilogOpen(false)
-                        setRemarks('')
+                        if (remarks) {
+                            afterRejectingMaterial(remarks)
+                            setRejectDilogOpen(false)
+                            setRemarks('')
+                            setErrorMessage("")
+                        }
+                        else {
+                            setErrorMessage("Reason is Required")
+                        }
+
 
 
                     }} >{rejectLoading ?

@@ -577,7 +577,7 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                             style={{ border: "1px solid #E9EDF1" }}
                           >
                             {item.available_qty
-                              ? getModifiedCount(+item.required_qty)
+                              ? getModifiedCount(+item.available_qty)
                               : ""}
                             {item.available_units
                               ? `(${item.available_units})`
@@ -596,7 +596,6 @@ const MaterialsRequired = ({ procurementData, checkMaterialsListCount, getProcur
                                   setEditRequiredQty(item.required_qty);
                                   setEditRequiredUnits(item.required_units);
                                   setEditNameValue(item.name);
-
                                   setEditMaterialId(item._id);
                                   setEditMaterialOpen(true);
                                 }}

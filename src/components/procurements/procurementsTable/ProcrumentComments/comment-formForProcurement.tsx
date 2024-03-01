@@ -106,7 +106,7 @@ const CommentFormForProcrument = ({ afterCommentAdd, replyThreadEvent, procureme
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/procurement-requests/${procurementId}/comment`, options)
       let responseData = await response.json()
       if (responseData.success == true) {
-        toast.success("Comment added successfully")
+        toast.success(responseData?.message)
         setComment("")
         afterCommentAdd(true)
         setMultipleFiles([])

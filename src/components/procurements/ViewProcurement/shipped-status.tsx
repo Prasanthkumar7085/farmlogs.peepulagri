@@ -117,8 +117,6 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
               onClick={() => {
                 if (data?.status == "PURCHASED") {
                   setTrackingDialogOpen(true);
-                } else {
-                  setDialogOpen(true)
                 }
               }}
             >
@@ -133,6 +131,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
 
         </div>
         <img className={styles.statusrowChild} alt="" src="/line-3@2x.png" />
+
         {data?.status == "SHIPPED" && userDetails?._id == data.requested_by?._id ? (
           <div
             className={styles.materialsreceivedcheckbox}
@@ -151,6 +150,26 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
         ) : (
           ""
         )}
+        {data?.status == "DELIVERED" && userDetails?.user_type == "central_team" ? (
+          <div
+            className={styles.materialsreceivedcheckbox}
+            onClick={onMaterialsReceivedCheckboxClick}
+          >
+            <FormControlLabel sx={{
+              marginLeft: "0 !important", marginRight: "0 !important", '& .MuiButtonBase-root': {
+                padding: "0 !important"
+              }
+            }}
+              label=""
+              control={<Checkbox color="primary" />}
+            />
+            <p className={styles.materialsReceived}>Completed</p>
+          </div>
+        ) : (
+          ""
+        )}
+
+
       </div>
       <LoadingComponent loading={loading} />
       {data?.status == "DELIVERED" ?

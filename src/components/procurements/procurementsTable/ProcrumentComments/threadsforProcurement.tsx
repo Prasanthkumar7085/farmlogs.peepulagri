@@ -606,11 +606,9 @@ const ThreadsForProcurement = ({
 
                                         {editMode[0] == true &&
                                           editMode[1] == row._id ? (
-                                          <Button
+                                          <p
                                             className={styles.edit1}
-                                            disabled={
-                                              editComment ? false : true
-                                            }
+
                                             onClick={() => {
                                               setEditMode([false, row._id]);
                                               afterUpdateComment(
@@ -620,7 +618,7 @@ const ThreadsForProcurement = ({
                                             }}
                                           >
                                             Update
-                                          </Button>
+                                          </p>
                                         ) : (
                                           <p
                                             className={styles.edit1}
@@ -649,7 +647,7 @@ const ThreadsForProcurement = ({
                                     {editMode[0] == true &&
                                       editMode[1] == row._id ? (
                                       <div className={styles.edit}>
-                                        <Button
+                                        <p
                                           className={styles.edit1}
                                           onClick={() => {
                                             setEditMode([false, row._id]);
@@ -657,7 +655,7 @@ const ThreadsForProcurement = ({
                                           }}
                                         >
                                           Close
-                                        </Button>
+                                        </p>
                                       </div>
                                     ) : (
                                       <div

@@ -565,7 +565,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                       >
                         {row?.status !== "PENDING" && row?.status !== "REJECTED" ? "" :
                           <>
-                            <Tooltip title={"Edit"}>
+                            <Tooltip title={"Edit"} followCursor>
                               <IconButton
                                 onClick={() => {
                                   setEditMaterialId(row._id);
@@ -582,7 +582,7 @@ const ViewProcurementTable = ({ data, afterMaterialStatusChange }: any) => {
                                 />
                               </IconButton>
                             </Tooltip>
-                            <Tooltip title={"Delete"}>
+                            <Tooltip title={"Delete"} followCursor>
 
                               <IconButton
                                 onClick={() => {

@@ -178,7 +178,7 @@ const ProcurementCard = ({ data, lastBookElementRef, hasMore, lastItemRef, loadi
                           {FarmTitleComponent(item)}
                         </p>
                         <div className={styles.prioritycontainer}>
-                          <p className={styles.duedate}>{item.priority}</p>
+                          <p className={styles.duedate}>{item.priority == "NONE" ? "---" : item.priority}</p>
                         </div>
                       </div>
                       <div className={styles.profile}>

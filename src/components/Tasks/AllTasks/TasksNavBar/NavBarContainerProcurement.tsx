@@ -417,11 +417,7 @@ const ProcurementNavBarContainer: React.FC<PropTypes> = ({
                     selectedFarmId: router.query.farm_id as string,
                     status: router.query.status as string,
                     priority: router.query.priority as string,
-                    userId: router.query.requested_by
-                      ? Array.isArray(router.query.requested_by)
-                        ? (router.query.requested_by as string[])
-                        : ([router.query.requested_by] as string[])
-                      : [],
+                    userId: [],
                     isMyTasks: false,
                   });
                 }}

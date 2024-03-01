@@ -80,8 +80,8 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
 
   //to captlize the upercase text
   const capitalizeFirstLetter = (string: any) => {
-    let temp = string.toLowerCase();
-    return temp.charAt(0).toUpperCase() + temp.slice(1);
+    let temp = string?.toLowerCase();
+    return temp?.charAt(0)?.toUpperCase() + temp?.slice(1);
   };
 
 
@@ -105,7 +105,7 @@ const ShippedStatus = ({ data, afterStatusChange }: any) => {
           <label className={styles.label}>Priority</label>
           <div className={styles.prioritycontainer}>
             <p className={styles.priorityBtn}>
-              {data?.priority ? capitalizeFirstLetter(data?.priority) : "---"}
+              {data?.priority == "NONE" ? "----" : capitalizeFirstLetter(data?.priority)}
             </p>
           </div>
         </div>

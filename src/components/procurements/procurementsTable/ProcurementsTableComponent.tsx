@@ -309,7 +309,7 @@ const ProcurementsTableComponent = ({
       id: "priority",
       cell: (info: any) => (
         <span style={{ padding: "40px 10px 40px 10px" }}>
-          {capitalizeFirstLetter(info.getValue())}
+          {info.getValue() == "NONE" ? "----" : capitalizeFirstLetter(info.getValue())}
         </span>
       ),
       header: () => <span>Priority</span>,

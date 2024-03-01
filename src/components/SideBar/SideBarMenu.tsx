@@ -75,13 +75,13 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/procurements"),
       toolTitle: "Procurements",
     },
-    // {
-    //   src: "/location-marker.svg",
-    //   link: "/farm/markers",
-    //   isVisible: true,
-    //   active: router.pathname.includes("/markers"),
-    //   toolTitle: "Markers",
-    // },
+    {
+      src: "/location-marker.svg",
+      link: "/farm/markers",
+      isVisible: true,
+      active: router.pathname.includes("/markers"),
+      toolTitle: "Markers",
+    },
     { src: '/calendaricon.svg', link: "/" },
     { src: '/graph-icon.svg', link: "/" },
   ];
@@ -149,7 +149,7 @@ const SideBarMenu = ({ children }: any) => {
                   );
                 }
               })}
-              {/* <ListItem className={styles.menuItem}>
+              <ListItem className={styles.menuItem}>
                 <Tooltip title="Search">
                   <IconButton
                     sx={{ display: router.pathname.includes("/scouts") ? "none" : "" }}
@@ -160,7 +160,7 @@ const SideBarMenu = ({ children }: any) => {
                     <Image src="/markers/global-search-menu-icon.svg" alt="" width={20} height={20} />
                   </IconButton>
                 </Tooltip>
-              </ListItem> */}
+              </ListItem>
             </List>
           </nav>
           <div className={styles.profileBtnGroup}>

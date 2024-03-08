@@ -5,10 +5,10 @@ import styles from "./home.module.css";
 import { useRouter } from "next/router";
 import getLiveStreamingService from "../../../lib/services/StreamingServices/getLiveStreamingService";
 import ReactPlayer from "react-player";
+import stautsLiveStreamingService from "../../../lib/services/StreamingServices/stautsLiveStreamingService";
 const Home: FunctionComponent = () => {
   const router = useRouter();
   const id = router.query.id
-  console.log(id);
 
   // const navigate = useNavigate();
 
@@ -17,6 +17,7 @@ const Home: FunctionComponent = () => {
   // }, [navigate]);
 
   const [data, setData] = useState<any>();
+  const [statusData, setStatusData] = useState<any>();
 
   const getLiveStream = async () => {
     try {
@@ -25,8 +26,19 @@ const Home: FunctionComponent = () => {
 
 
       if (response?.success) {
-        console.log(response, 'asas');
         setData(response.data)
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
+  const statusAPI = async () => {
+    try {
+
+      let response: any = await stautsLiveStreamingService();
+      if (response?.success) {
+        setStatusData(response.data)
       }
     } catch (err) {
       console.error(err);
@@ -35,7 +47,17 @@ const Home: FunctionComponent = () => {
   }
 
   useEffect(() => {
+
+    const intervalId = setInterval(statusAPI, 15000);
+    return () => clearInterval(intervalId);
+  }, [])
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    setCount((prev: number) => prev + 1)
+  }, [])
+  useEffect(() => {
     getLiveStream();
+    statusAPI();
   }, [])
 
   return (
@@ -195,7 +217,7 @@ const Home: FunctionComponent = () => {
               <h2 className={styles.headinglable}>Camera</h2>
               <div className={styles.statuscontainer}>
                 <h2 className={styles.headinglable}>Status :</h2>
-                <p className={styles.status}>OFF</p>
+                <p className={styles.status}>{statusData?.status_message}</p>
               </div>
             </div>
             <img

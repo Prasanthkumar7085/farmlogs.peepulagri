@@ -58,7 +58,9 @@ const IpAddressPage: FunctionComponent = () => {
       <div className={styles.coontainer}>
         <header className={styles.header}>
           <div className={styles.pageheadingcontainer}>
-            <button className={styles.backbutton}>
+            <button className={styles.backbutton}
+              onClick={() => router.back()}
+            >
               <img
                 className={styles.arrowLeft1Icon}
                 alt=""

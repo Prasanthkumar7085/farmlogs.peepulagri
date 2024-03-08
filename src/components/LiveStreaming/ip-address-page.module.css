@@ -1,0 +1,258 @@
+.arrowLeft1Icon {
+  width: 1.656rem;
+  position: relative;
+  height: 1.656rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.backbutton {
+  cursor: pointer;
+  border: 0;
+  padding: 0.86rem;
+  background-color: #fff;
+  border-radius: 82.53px;
+  box-shadow: 0 2.6px 7.92px rgba(255, 255, 255, 0.25) inset,
+    0 1.2px 28.17px -1.17px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(136.01px);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.pagename {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 100%;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.pageheadingcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0 2rem;
+}
+
+.cameraIcon {
+  width: 2rem;
+  position: relative;
+  height: 2rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.camersstatus {
+  border-radius: 62.31px;
+  background-color: #fff;
+  box-shadow: 0 2px 5.98px rgba(255, 255, 255, 0.25) inset,
+    0 0.9px 21.27px -0.89px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(102.68px);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0.649rem;
+}
+
+.settingsicon {
+  width: 2.075rem;
+  position: relative;
+  height: 2.075rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.navitems,
+.settings {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.settings {
+  border-radius: 62.31px;
+  background-color: #fff;
+  box-shadow: 0 2px 5.98px rgba(255, 255, 255, 0.25) inset,
+    0 0.9px 21.27px -0.89px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(102.68px);
+  padding: 0.649rem;
+  cursor: pointer;
+}
+
+.navitems {
+  gap: 0 2rem;
+  column-gap: clamp(16px, 1.66vw, 64px);
+}
+
+.header,
+.inputbox,
+.label {
+  align-self: stretch;
+  font-family: Inter;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 1.75rem;
+  color: #000;
+}
+
+.inputbox,
+.label {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.label {
+  cursor: pointer;
+  position: relative;
+  color: #2a2a2a;
+  text-align: left;
+}
+
+.inputbox {
+  border: 0;
+  background-color: transparent;
+  color: #707070;
+}
+
+.devicename {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem 0;
+}
+
+.inputbox5 {
+  border: 0;
+  background-color: transparent;
+  align-self: stretch;
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #959595;
+}
+
+.textfields {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem 0;
+}
+
+.action {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: Inter;
+  color: #e64930;
+  text-align: center;
+}
+
+.cancelbutton {
+  cursor: pointer;
+  border: 1px solid #e64931;
+  padding: 0.75rem 0.625rem;
+  background-color: #fff;
+  flex: 1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.action1 {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: Inter;
+  color: #fff;
+  text-align: center;
+}
+
+.connectbutton {
+  cursor: pointer;
+  border: 0;
+  padding: 0.75rem 0.625rem;
+  background-color: transparent;
+  flex: 1;
+  border-radius: 8px;
+  background: linear-gradient(90.73deg, #ec4a2a, #d94841 52%, #ec4a2a);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.09);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonsgroup,
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0 1rem;
+  max-width: 23.75rem;
+}
+
+.form {
+  margin: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3rem 0;
+  max-width: 30rem;
+}
+
+.settingscontainer {
+  border-radius: 30px;
+  background-color: #fff;
+  height: 48.188rem;
+  padding: 2.5rem;
+  box-sizing: border-box;
+}
+
+.coontainer,
+.ipaddresspage,
+.settingscontainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.coontainer {
+  gap: 1.5rem 0;
+}
+
+.ipaddresspage {
+  overflow: auto;
+  padding: 1.5rem 2.5rem 2.5rem;
+  background-image: url(/public/ipaddresspage@3x.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+}

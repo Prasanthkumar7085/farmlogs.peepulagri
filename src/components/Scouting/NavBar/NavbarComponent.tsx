@@ -201,35 +201,6 @@ export default function ScoutingHeader({ children }: any) {
           </Button>
           <Button
             className={
-              router.pathname.includes("/add-stream-urls") || router.pathname.includes("/live-streaming")
-                ? styles.navButtonActive
-                : styles.navButton
-            }
-            onClick={() => {
-              dispatch(storeSearchLocation(null))
-              router.push("/add-stream-urls")
-            }}
-          >
-            {/* {router.pathname.includes("/live-stream") ? ( */}
-            <LiveTvIcon />
-            {/* <Image
-                src="/mobileIcons/navTabs/procurement-active-icon.svg"
-                alt=""
-                width={30}
-                height={30}
-              />
-            ) : (
-              <Image
-                src="/mobileIcons/navTabs/procurement-icon.svg"
-                alt=""
-                width={27}
-                height={27}
-              />
-            )} */}
-
-          </Button>
-          <Button
-            className={
               router.pathname.includes("/profile")
                 ? styles.navButtonActive
                 : styles.navButton

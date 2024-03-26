@@ -32,6 +32,7 @@ const TaskHeader = ({
   searchString,
   onUserChange,
   getAllTasks,
+  setPage
 }: any) => {
   const router = useRouter();
   const accessToken = useSelector(
@@ -108,6 +109,8 @@ const TaskHeader = ({
     });
     setSortBy(sortBy);
     setSortType(sortType);
+    setPage(1)
+
   };
 
   const sortMethod = (value: number) => {

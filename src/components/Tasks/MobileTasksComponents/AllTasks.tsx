@@ -245,6 +245,7 @@ const AllTasks = () => {
         : [],
       isMyTasks: router.query?.is_my_task as string,
     });
+    setPage(1)
   };
 
   const onUserChange = async (value: string[] | [], isMyTasks = false) => {
@@ -260,6 +261,7 @@ const AllTasks = () => {
       userId: value,
       isMyTasks: isMyTasks,
     });
+    setPage(1)
   };
 
   const lastItemRef = useRef<HTMLDivElement>(null);
@@ -318,6 +320,7 @@ const AllTasks = () => {
         searchString={searchString}
         onUserChange={onUserChange}
         getAllTasks={getAllTasks}
+        setPage={setPage}
       />
       <div className={styles.allTasksPage}>
         <div className={styles.TabButtonGrp}>

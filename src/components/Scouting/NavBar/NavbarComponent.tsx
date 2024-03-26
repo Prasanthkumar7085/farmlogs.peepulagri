@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { storeSearchLocation } from '@/Redux/Modules/Farms';
+import LiveTvIcon from '@mui/icons-material/LiveTv';
 
 export default function ScoutingHeader({ children }: any) {
   const router = useRouter()

@@ -1,24 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react';
-import GoogleMapReact from 'google-map-react';
-import { Autocomplete, Button, ButtonBase, TextField, Tooltip, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
+import React, { useEffect, useRef, useState } from "react";
+import GoogleMapReact from "google-map-react";
+import {
+  Autocomplete,
+  Button,
+  ButtonBase,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/router";
 import styles from "./google-map.module.css";
-import getFarmByIdService from '../../../../../lib/services/FarmsService/getFarmByIdService';
-import { useDispatch, useSelector } from 'react-redux';
-import { Toaster, toast } from 'sonner';
-import LoadingComponent from '@/components/Core/LoadingComponent';
+import getFarmByIdService from "../../../../../lib/services/FarmsService/getFarmByIdService";
+import { useDispatch, useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
+import LoadingComponent from "@/components/Core/LoadingComponent";
 import FarmsListBlock from "./FarmsList/FarmsListBlock";
 import AddFarmDilog from "./FarmsList/AddFarmDiloag";
-import ViewFarmDetails from './ViewFarmDetails.tsx/ViewFarmDetails';
-import { prepareURLEncodedParams } from '../../../../../lib/requestUtils/urlEncoder';
-import getAllFarmsService from '../../../../../lib/services/FarmsService/getAllFarmsServiceMobile';
-import Image from 'next/image';
-import { storeEditPolygonCoords, storeSearchLocation } from '@/Redux/Modules/Farms';
-import AddPolygonDialog from './AddPolygonDialog';
-import getFarmsByLocation from '../../../../../lib/services/FarmsService/getFarmsByLocation';
-import { createRoot } from 'react-dom/client';
-import getAllLocationsService from '../../../../../lib/services/Locations/getAllLocationsService';
-import { SelectPicker } from 'rsuite';
+import ViewFarmDetails from "./ViewFarmDetails.tsx/ViewFarmDetails";
+import { prepareURLEncodedParams } from "../../../../../lib/requestUtils/urlEncoder";
+import getAllFarmsService from "../../../../../lib/services/FarmsService/getAllFarmsServiceMobile";
+import Image from "next/image";
+import {
+  storeEditPolygonCoords,
+  storeSearchLocation,
+} from "@/Redux/Modules/Farms";
+import AddPolygonDialog from "./AddPolygonDialog";
+import getFarmsByLocation from "../../../../../lib/services/FarmsService/getFarmsByLocation";
+import { createRoot } from "react-dom/client";
+import getAllLocationsService from "../../../../../lib/services/Locations/getAllLocationsService";
+import { SelectPicker } from "rsuite";
 
 interface callFarmsProps {
   search_string: string;
@@ -41,7 +51,9 @@ const GoogleMapMarkerComponent = () => {
   );
 
   const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
-  const googleSearchLocation = useSelector((state: any) => state.farms.searchLocation);
+  const googleSearchLocation = useSelector(
+    (state: any) => state.farms.searchLocation
+  );
 
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const [map, setMap] = useState<any>(null);
@@ -69,7 +81,7 @@ const GoogleMapMarkerComponent = () => {
   const [paginationDetails, setPaginationDetails] = useState<any>();
   const [addPolygonOpen, setAddPolygonOpen] = useState<boolean>(false);
   const [drawingOpen, setDrawingOpen] = useState<boolean>(false);
-  const [googleSearch, setGoogleSearch] = useState<string>()
+  const [googleSearch, setGoogleSearch] = useState<string>();
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
 
@@ -88,7 +100,7 @@ const GoogleMapMarkerComponent = () => {
           );
 
           setLocation(newLocationObject);
-          setSettingLocationLoading(true)
+          setSettingLocationLoading(true);
           setTimeout(() => {
             setSettingLocationLoading(false);
           }, 1);
@@ -114,8 +126,8 @@ const GoogleMapMarkerComponent = () => {
 
   const onChangeLocation = (e: any, value: any, reason: any) => {
     if (reason == "clear") {
-      handleCloseDropdown()
-      setAutoCompleteOpen(false)
+      handleCloseDropdown();
+      setAutoCompleteOpen(false);
       setSelectedPolygon(null);
       setLocation({ title: "All", _id: "1" });
       getFarmOptions({
@@ -126,8 +138,7 @@ const GoogleMapMarkerComponent = () => {
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
-        locationName: router.query.location_name
-
+        locationName: router.query.location_name,
       });
       return;
     }
@@ -142,19 +153,26 @@ const GoogleMapMarkerComponent = () => {
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
-        locationName: router.query.location_name
-
+        locationName: router.query.location_name,
       });
     }
   };
 
   useEffect(() => {
-    if (router.query.location_id && map && googleMaps && location?.coordinates?.length) {
-      const indiaCenter = { lat: location?.coordinates?.[0], lng: location?.coordinates?.[1] };
+    if (
+      router.query.location_id &&
+      map &&
+      googleMaps &&
+      location?.coordinates?.length
+    ) {
+      const indiaCenter = {
+        lat: location?.coordinates?.[0],
+        lng: location?.coordinates?.[1],
+      };
       map.setCenter(indiaCenter);
       map.setZoom(17);
     }
-  }, [map, googleMaps, router.query.location_id])
+  }, [map, googleMaps, router.query.location_id]);
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -167,72 +185,71 @@ const GoogleMapMarkerComponent = () => {
   }, [router.query, accessToken, router.query.location_id]);
 
   //add custom control for the live location button
-  const addCustomControl = (map: any, maps: any) => {
-    const controlDiv = document.createElement("div");
-    const controlUI = document.createElement("img");
+  // const addCustomControl = (map: any, maps: any) => {
+  //   const controlDiv = document.createElement("div");
+  //   const controlUI = document.createElement("img");
 
-    controlUI.src = "/live-location.png";
-    controlUI.style.backgroundColor = "#fff";
-    controlUI.style.border = "1px solid #ccc";
-    controlUI.style.padding = "5px";
-    controlUI.style.cursor = "pointer";
-    controlUI.style.textAlign = "center";
-    controlUI.style.width = "23px";
-    controlUI.style.height = "23px";
-    controlUI.style.marginBottom = "2rem";
-    controlUI.style.marginLeft = "-70px";
-    controlUI.title = "Click to pan to current location";
-    controlDiv.appendChild(controlUI);
+  //   controlUI.src = "/live-location.png";
+  //   controlUI.style.backgroundColor = "#fff";
+  //   controlUI.style.border = "1px solid #ccc";
+  //   controlUI.style.padding = "5px";
+  //   controlUI.style.cursor = "pointer";
+  //   controlUI.style.textAlign = "center";
+  //   controlUI.style.width = "23px";
+  //   controlUI.style.height = "23px";
+  //   controlUI.style.marginBottom = "2rem";
+  //   controlUI.style.marginLeft = "-70px";
+  //   controlUI.title = "Click to pan to current location";
+  //   controlDiv.appendChild(controlUI);
 
-    controlUI.addEventListener("click", () => {
-      if (navigator.geolocation && mapRef.current) {
-        const options = {
-          enableHighAccuracy: true, // Request high accuracy if available
-          timeout: 5000, // Set a timeout (milliseconds) for the request
-          maximumAge: 0, // Force a fresh location request
-        };
+  //   controlUI.addEventListener("click", () => {
+  //     if (navigator.geolocation && mapRef.current) {
+  //       const options = {
+  //         enableHighAccuracy: true, // Request high accuracy if available
+  //         timeout: 5000, // Set a timeout (milliseconds) for the request
+  //         maximumAge: 0, // Force a fresh location request
+  //       };
 
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const currentPosition = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            };
+  //       navigator.geolocation.getCurrentPosition(
+  //         (position) => {
+  //           const currentPosition = {
+  //             lat: position.coords.latitude,
+  //             lng: position.coords.longitude,
+  //           };
 
-            mapRef.current.panTo(currentPosition);
-            mapRef.current.setZoom(15); // Optionally set the zoom level as needed
+  //           mapRef.current.panTo(currentPosition);
+  //           mapRef.current.setZoom(15); // Optionally set the zoom level as needed
 
-            const infoWindow = infoWindowRef.current;
-            infoWindow.setPosition(currentPosition);
-            infoWindow.setContent("Location found.");
-            infoWindow.open(mapRef.current);
-          },
-          (error) => {
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                console.error("User denied the request for Geolocation.");
-                break;
-              case error.POSITION_UNAVAILABLE:
-                console.error("Location information is unavailable.");
-                break;
-              case error.TIMEOUT:
-                console.error("The request to get user location timed out.");
-                break;
-              default:
-                console.error("An unknown error occurred.");
-                break;
-            }
-          },
-          options // Pass the options to getCurrentPosition
-        );
-      } else {
-        console.error("Geolocation is not supported");
-      }
-    });
+  //           const infoWindow = infoWindowRef.current;
+  //           infoWindow.setPosition(currentPosition);
+  //           infoWindow.setContent("Location found.");
+  //           infoWindow.open(mapRef.current);
+  //         },
+  //         (error) => {
+  //           switch (error.code) {
+  //             case error.PERMISSION_DENIED:
+  //               console.error("User denied the request for Geolocation.");
+  //               break;
+  //             case error.POSITION_UNAVAILABLE:
+  //               console.error("Location information is unavailable.");
+  //               break;
+  //             case error.TIMEOUT:
+  //               console.error("The request to get user location timed out.");
+  //               break;
+  //             default:
+  //               console.error("An unknown error occurred.");
+  //               break;
+  //           }
+  //         },
+  //         options // Pass the options to getCurrentPosition
+  //       );
+  //     } else {
+  //       console.error("Geolocation is not supported");
+  //     }
+  //   });
 
-    map.controls[maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
-  };
-
+  //   map.controls[maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
+  // };
 
   //create Info for the google map
   const createInfoWindow = (map: any) => {
@@ -278,9 +295,8 @@ const GoogleMapMarkerComponent = () => {
     return controlDiv;
   };
 
-
   const handleClose = (event: any, reason: any) => {
-    if (reason === 'toggleInput') {
+    if (reason === "toggleInput") {
       // Keep the dropdown open when the input is toggled (e.g., clicking clear)
       return;
     }
@@ -294,110 +310,114 @@ const GoogleMapMarkerComponent = () => {
     }
   };
 
-
   //google api running event
   const handleApiLoaded = (map: any, maps: any) => {
     setMap(map);
     setGoogleMaps(maps);
     mapRef.current = map;
 
-    addCustomControl(map, maps);
+    // addCustomControl(map, maps);
     createInfoWindow(map);
-    placesService.current = new maps.places.PlacesService(map);
+    // placesService.current = new maps.places.PlacesService(map);
 
-    const mapTypeControlDiv: any = document.createElement("div");
-    const mapTypeControl = MapTypeControl();
-    mapTypeControlDiv.index = 1;
-    map.controls[maps.ControlPosition.BOTTOM_CENTER].push(mapTypeControlDiv);
-    mapTypeControlDiv.appendChild(mapTypeControl);
+    // const mapTypeControlDiv: any = document.createElement("div");
+    // const mapTypeControl = MapTypeControl();
+    // mapTypeControlDiv.index = 1;
+    // map.controls[maps.ControlPosition.BOTTOM_CENTER].push(mapTypeControlDiv);
+    // mapTypeControlDiv.appendChild(mapTypeControl);
 
-    // Create a container for the custom autocomplete control
-    // Create a container for the custom autocomplete control
-    const customAutocompleteDiv = document.createElement("div");
-    customAutocompleteDiv.style.position = "relative"; // Make the container relative to position the icon
+    // // Create a container for the custom autocomplete control
+    // // Create a container for the custom autocomplete control
+    // const customAutocompleteDiv = document.createElement("div");
+    // customAutocompleteDiv.style.position = "relative"; // Make the container relative to position the icon
 
-    const searchInput = document.createElement("input");
-    searchInput.setAttribute("id", "searchInput");
-    searchInput.setAttribute("placeholder", "Search for a place...");
-    searchInput.setAttribute("value", googleSearchLocation?.formatted_address as string || ""); // Set the default value here
-    searchInput.style.marginBottom = "10px";
-    searchInput.style.padding = "13px";
-    searchInput.style.width = "calc(100% - 32px)"; // Adjust width to accommodate icon (assuming icon width is 32px)
-    searchInput.style.margin = "auto";
-    searchInput.style.borderRadius = "10px"; // Rounded corners
-    searchInput.style.overflow = "hidden";
-    searchInput.style.textOverflow = "ellipsis";
-    searchInput.disabled = editFarmDetails?._id || router.query.location_id ? true : false;
+    // const searchInput = document.createElement("input");
+    // searchInput.setAttribute("id", "searchInput");
+    // // searchInput.setAttribute("placeholder", "Search for a place...");
+    // searchInput.setAttribute(
+    //   "value",
+    //   (googleSearchLocation?.formatted_address as string) || ""
+    // ); // Set the default value here
+    // searchInput.style.marginBottom = "10px";
+    // searchInput.style.padding = "13px";
+    // searchInput.style.width = "calc(100% - 32px)"; // Adjust width to accommodate icon (assuming icon width is 32px)
+    // searchInput.style.margin = "auto";
+    // searchInput.style.borderRadius = "10px"; // Rounded corners
+    // searchInput.style.overflow = "hidden";
+    // searchInput.style.textOverflow = "ellipsis";
+    // searchInput.disabled =
+    //   editFarmDetails?._id || router.query.location_id ? true : false;
 
-    // Create a custom icon
-    const icon = document.createElement("div");
-    icon.innerHTML = "&#10060;"; // Unicode for custom icon, you can replace it with your desired icon
-    icon.style.position = "absolute";
-    icon.style.top = "60%";
-    icon.style.right = "-70%";
-    icon.style.transform = "translateY(-50%)"; // Center vertically
-    icon.style.padding = "10px";
-    icon.style.cursor = "pointer";
-    icon.style.display = searchInput.value ? "block" : "none"; // Initially hide the icon if the input field is empty
+    // // Create a custom icon
+    // const icon = document.createElement("div");
+    // icon.innerHTML = "&#10060;"; // Unicode for custom icon, you can replace it with your desired icon
+    // icon.style.position = "absolute";
+    // icon.style.top = "60%";
+    // icon.style.right = "-70%";
+    // icon.style.transform = "translateY(-50%)"; // Center vertically
+    // icon.style.padding = "10px";
+    // icon.style.cursor = "pointer";
+    // icon.style.display = searchInput.value ? "block" : "none"; // Initially hide the icon if the input field is empty
 
-    // Attach click event to the icon
-    icon.addEventListener("click", () => {
-      searchInput.value = ""
-      icon.style.display = "none";
-      setGoogleSearch("")
-      dispatch(storeSearchLocation(null))
-      getFarmOptions({
-        search_string: "",
-        location: router.query.location_id as string,
-        userId: router.query.user_id as string,
-        page: 1,
-        limit: 20,
-        sortBy: router.query.sort_by as string,
-        sortType: router.query.sort_type as string,
-        locationName: ""
-      });
+    // // Attach click event to the icon
+    // icon.addEventListener("click", () => {
+    //   searchInput.value = "";
+    //   icon.style.display = "none";
+    //   setGoogleSearch("");
+    //   dispatch(storeSearchLocation(null));
+    //   getFarmOptions({
+    //     search_string: "",
+    //     location: router.query.location_id as string,
+    //     userId: router.query.user_id as string,
+    //     page: 1,
+    //     limit: 20,
+    //     sortBy: router.query.sort_by as string,
+    //     sortType: router.query.sort_type as string,
+    //     locationName: "",
+    //   });
+    // });
 
-    });
+    // searchInput.addEventListener("input", () => {
+    //   icon.style.display = searchInput.value ? "block" : "none";
+    // });
 
-    searchInput.addEventListener("input", () => {
-      icon.style.display = searchInput.value ? "block" : "none";
-    });
+    // customAutocompleteDiv.appendChild(searchInput);
+    // customAutocompleteDiv.appendChild(icon);
 
-    customAutocompleteDiv.appendChild(searchInput);
-    customAutocompleteDiv.appendChild(icon);
+    // map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
+    // // Create Autocomplete for input field
+    // const autocomplete = new maps.places.Autocomplete(searchInput, {
+    //   placeAutocompleteOptions: { strictBounds: false }, // Setting strictBounds to true removes the attribution
+    // });
 
-    map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
-    // Create Autocomplete for input field
-    const autocomplete = new maps.places.Autocomplete(searchInput, {
-      placeAutocompleteOptions: { strictBounds: false }, // Setting strictBounds to true removes the attribution
-    });
+    // const onPlaceChanged = () => {
+    //   // const place = autocomplete.getPlace();
+    //   if (!place.geometry || !place.geometry.location) {
+    //     console.error("No place data available");
+    //     return;
+    //   }
 
-    const onPlaceChanged = () => {
-      const place = autocomplete.getPlace();
-      if (!place.geometry || !place.geometry.location) {
-        console.error("No place data available");
-        return;
-      }
+    //   setSearchedPlaces([place]);
+    //   dispatch(storeSearchLocation(place));
 
-      setSearchedPlaces([place]);
-      dispatch(storeSearchLocation(place))
+    //   let location = place.formatted_address.split(",");
+    //   setGoogleSearch(place.formatted_address.split(","));
+    //   getFarmOptions({
+    //     search_string: "",
+    //     location: router.query.location_id as string,
+    //     userId: router.query.user_id as string,
+    //     page: 1,
+    //     limit: 20,
+    //     sortBy: router.query.sort_by as string,
+    //     sortType: router.query.sort_type as string,
+    //     locationName: location[0].replace(
+    //       /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g,
+    //       ""
+    //     ),
+    //   });
+    // };
 
-
-      let location = place.formatted_address.split(",")
-      setGoogleSearch(place.formatted_address.split(","))
-      getFarmOptions({
-        search_string: "",
-        location: router.query.location_id as string,
-        userId: router.query.user_id as string,
-        page: 1,
-        limit: 20,
-        sortBy: router.query.sort_by as string,
-        sortType: router.query.sort_type as string,
-        locationName: location[0].replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, '')
-      });
-    };
-
-    autocomplete.addListener("place_changed", onPlaceChanged);
+    // autocomplete.addListener("place_changed", onPlaceChanged);
 
     const drawingManager = new maps.drawing.DrawingManager({
       drawingControl: polygonCoords?.length === 0 ? true : false,
@@ -427,35 +447,38 @@ const GoogleMapMarkerComponent = () => {
         const geocoder = new maps.Geocoder();
         const lastCoord = paths[paths.length - 1]; // Accessing the last point of the polygon
 
+        geocoder.geocode(
+          { location: lastCoord },
+          (results: any, status: any) => {
+            if (status === "OK") {
+              if (results[0]) {
+                let locationName = results[0].formatted_address;
+                locationName = locationName?.split(",")[0];
+                let afterRemoveingSpaces = locationName
+                  .split(" ")[1]
+                  ?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, "");
+                // Accessing latitude and longitude from lastCoord object
+                const latitude = lastCoord.lat(); // Get the latitude
+                const longitude = lastCoord.lng();
+                const geocoder = new google.maps.Geocoder();
+                const latlngs = { lat: latitude, lng: longitude };
+                setFarmLoactionDetails({
+                  locationName: afterRemoveingSpaces,
+                  latlng: [latlngs.lat, latlngs.lng],
+                  areaInAcres: updatedArea,
+                });
 
-        geocoder.geocode({ location: lastCoord }, (results: any, status: any) => {
-          if (status === "OK") {
-            if (results[0]) {
-              let locationName = results[0].formatted_address;
-              locationName = locationName?.split(",")[0]
-              let afterRemoveingSpaces = locationName.split(" ")[1]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, '')
-              // Accessing latitude and longitude from lastCoord object
-              const latitude = lastCoord.lat(); // Get the latitude
-              const longitude = lastCoord.lng();
-              const geocoder = new google.maps.Geocoder();
-              const latlngs = { lat: latitude, lng: longitude };
-              setFarmLoactionDetails({
-                locationName: afterRemoveingSpaces,
-                latlng: [latlngs.lat, latlngs.lng],
-                areaInAcres: updatedArea
-              });
-
-              setPolygon(event.overlay);
-              dispatch(storeEditPolygonCoords(updatedCoords));
-              stopDrawingMode();
-
+                setPolygon(event.overlay);
+                dispatch(storeEditPolygonCoords(updatedCoords));
+                stopDrawingMode();
+              } else {
+                console.log("No results found");
+              }
             } else {
-              console.log("No results found");
+              console.log("Geocoder failed due to:", status);
             }
-          } else {
-            console.log("Geocoder failed due to:", status);
           }
-        });
+        );
 
         const updatePolygonDetails = () => {
           const paths = event.overlay.getPath().getArray();
@@ -469,41 +492,42 @@ const GoogleMapMarkerComponent = () => {
           const geocoder = new maps.Geocoder();
           const lastCoord = paths[paths.length - 1]; // Accessing the last point of the polygon
 
+          geocoder.geocode(
+            { location: lastCoord },
+            (results: any, status: any) => {
+              if (status === "OK") {
+                if (results[0]) {
+                  let locationName = results[0].formatted_address;
+                  locationName = locationName?.split(",")[0];
+                  let afterRemoveingSpaces = locationName
+                    .split(" ")[1]
+                    ?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, "");
+                  // Accessing latitude and longitude from lastCoord object
+                  const latitude = lastCoord.lat(); // Get the latitude
+                  const longitude = lastCoord.lng();
+                  const geocoder = new google.maps.Geocoder();
+                  const latlngs = { lat: latitude, lng: longitude };
+                  setFarmLoactionDetails({
+                    locationName: afterRemoveingSpaces,
+                    latlng: [latlngs.lat, latlngs.lng],
+                    areaInAcres: updatedArea,
+                  });
 
-          geocoder.geocode({ location: lastCoord }, (results: any, status: any) => {
-            if (status === "OK") {
-              if (results[0]) {
-                let locationName = results[0].formatted_address;
-                locationName = locationName?.split(",")[0]
-                let afterRemoveingSpaces = locationName.split(" ")[1]?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, '')
-                // Accessing latitude and longitude from lastCoord object
-                const latitude = lastCoord.lat(); // Get the latitude
-                const longitude = lastCoord.lng();
-                const geocoder = new google.maps.Geocoder();
-                const latlngs = { lat: latitude, lng: longitude };
-                setFarmLoactionDetails({
-                  locationName: afterRemoveingSpaces,
-                  latlng: [latlngs.lat, latlngs.lng],
-                  areaInAcres: updatedArea
-                });
-
-                setPolygon(event.overlay);
-                dispatch(storeEditPolygonCoords(updatedCoords));
-                stopDrawingMode();
-
+                  setPolygon(event.overlay);
+                  dispatch(storeEditPolygonCoords(updatedCoords));
+                  stopDrawingMode();
+                } else {
+                  console.log("No results found");
+                }
               } else {
-                console.log("No results found");
+                console.log("Geocoder failed due to:", status);
               }
-            } else {
-              console.log("Geocoder failed due to:", status);
             }
-          });
-        }
+          );
+        };
         maps.event.addListener(event.overlay, "mouseup", updatePolygonDetails);
-
       }
     });
-
 
     // Create a new polygon
     const newPolygon = new maps.Polygon({
@@ -538,7 +562,7 @@ const GoogleMapMarkerComponent = () => {
       setFarmLoactionDetails({
         locationName: "",
         latlng: latLong,
-        areaInAcres: updatedArea
+        areaInAcres: updatedArea,
       });
       dispatch(storeEditPolygonCoords(updatedCoords));
     });
@@ -547,7 +571,6 @@ const GoogleMapMarkerComponent = () => {
 
     newPolygon.setMap(map);
     setPolygon(newPolygon);
-
 
     google.maps.event.addListener(
       drawingManager,
@@ -559,7 +582,7 @@ const GoogleMapMarkerComponent = () => {
         if (currentDrawingMode === null) {
           setDrawingOpen(false);
         } else {
-          setAddPolygonOpen(true)
+          setAddPolygonOpen(true);
         }
       }
     );
@@ -582,11 +605,9 @@ const GoogleMapMarkerComponent = () => {
       if (response?.success) {
         setData(response?.data);
       }
-    }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
+    } catch (err) {
+      console.log(err);
+    } finally {
       setLoading(false);
     }
   };
@@ -598,7 +619,6 @@ const GoogleMapMarkerComponent = () => {
     setSelectedPolygon(id);
   };
 
-
   //get the farm list
   const getFarmOptions = async ({
     search_string = "",
@@ -608,12 +628,10 @@ const GoogleMapMarkerComponent = () => {
     limit = 20,
     sortBy,
     sortType,
-    locationName = ""
+    locationName = "",
   }: any) => {
     setLoading(true);
     try {
-
-
       let queryParam: any = {};
       if (page) {
         queryParam["page"] = page;
@@ -636,19 +654,13 @@ const GoogleMapMarkerComponent = () => {
       }
       if (locationName) {
         queryParam["location_name"] = locationName;
-
       }
 
       if (userId) {
         queryParam["user_id"] = userId;
       }
 
-      const {
-        page: pagenum,
-        limit: limitnum,
-        ...restParams
-
-      } = queryParam;
+      const { page: pagenum, limit: limitnum, ...restParams } = queryParam;
 
       let url = `farms/${page}/${limit}`;
       router.push({ pathname: "/farm/markers", query: queryParam });
@@ -676,7 +688,6 @@ const GoogleMapMarkerComponent = () => {
         }, 0.1);
 
         setViewPolygonsCoord(newData);
-
       }
       if (response?.status == 400) {
         setFarmOptions([]);
@@ -686,11 +697,9 @@ const GoogleMapMarkerComponent = () => {
           setRenderField(false);
         }, 0.1);
         setViewPolygonsCoord([]);
-        centerMapToPlace(googleSearchLocation)
+        centerMapToPlace(googleSearchLocation);
       }
-
-    }
-    catch (err: any) {
+    } catch (err: any) {
       console.error(err);
     } finally {
       setLoading(false);
@@ -700,13 +709,16 @@ const GoogleMapMarkerComponent = () => {
   const centerMapToPlace = (place: any) => {
     if (mapRef.current && place?.geometry && place.geometry.location) {
       const location = place.geometry.location;
-      if (location && typeof location.lat === 'function' && typeof location.lng === 'function') {
+      if (
+        location &&
+        typeof location.lat === "function" &&
+        typeof location.lng === "function"
+      ) {
         const latLng = new google.maps.LatLng(location.lat(), location.lng());
         mapRef.current.panTo(latLng);
         mapRef.current.setZoom(15);
-      }
-      else {
-        console.error('Invalid location object');
+      } else {
+        console.error("Invalid location object");
       }
     }
   };
@@ -734,8 +746,8 @@ const GoogleMapMarkerComponent = () => {
       const area = calculatePolygonArea(updatedCoords);
       setFarmLoactionDetails((prev: any) => ({
         ...prev,
-        areaInAcres: area
-      }))
+        areaInAcres: area,
+      }));
       polygon.setPath(path);
       if (updatedCoords?.length == 0) {
         const drawingManager: any = drawingManagerRef.current;
@@ -743,14 +755,13 @@ const GoogleMapMarkerComponent = () => {
           drawingManager.setOptions({
             drawingControl: true, // show drawing options
           });
-
         }
         if (drawingManager) {
           drawingManager.setDrawingMode(
             google.maps.drawing.OverlayType.POLYGON
           );
         }
-        setAddPolygonOpen(false)
+        setAddPolygonOpen(false);
       }
     }
   };
@@ -770,7 +781,7 @@ const GoogleMapMarkerComponent = () => {
     }
     if (drawingManager) {
       drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
-      setAddPolygonOpen(false)
+      setAddPolygonOpen(false);
     }
   };
 
@@ -842,12 +853,11 @@ const GoogleMapMarkerComponent = () => {
           };
           marker.markerInfo = markerInfo;
 
-
           newMarkers.push(marker);
 
           const infoWindowRef = new googleMaps.InfoWindow();
 
-          googleMaps.event.addListener(marker, 'mouseover', function () {
+          googleMaps.event.addListener(marker, "mouseover", function () {
             infoWindowRef.setContent(`
         <div>
             <h4>${marker.markerInfo?.name}</h4>
@@ -857,7 +867,7 @@ const GoogleMapMarkerComponent = () => {
             infoWindowRef.open(map, marker);
           });
 
-          googleMaps.event.addListener(marker, 'mouseout', function () {
+          googleMaps.event.addListener(marker, "mouseout", function () {
             infoWindowRef.close();
           });
 
@@ -892,7 +902,6 @@ const GoogleMapMarkerComponent = () => {
             getFarmDataById(markerInformation.id);
           });
 
-
           // Append the title div to the map container
           return polygon;
         })
@@ -900,20 +909,16 @@ const GoogleMapMarkerComponent = () => {
 
       // Set the markers and polygons
       setMarkerObjects(newMarkers);
-
     }
   }, [map, googleMaps, viewPolygonsCoord]);
-
 
   useEffect(() => {
     if (map && googleMaps) {
       if (router.query.location_name) {
-        centerMapToPlace(googleSearchLocation)
+        centerMapToPlace(googleSearchLocation);
       }
     }
-  }, [map, googleMaps, googleSearchLocation?.name])
-
-
+  }, [map, googleMaps, googleSearchLocation?.name]);
 
   //redirect to the polygon
   useEffect(() => {
@@ -934,7 +939,6 @@ const GoogleMapMarkerComponent = () => {
           map.setCenter(indiaCenter);
           map.setZoom(5);
         }
-
       }
     }
   }, [selectedPolygon]);
@@ -951,18 +955,16 @@ const GoogleMapMarkerComponent = () => {
           limit: 20,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
-          locationName: router.query.location_name
+          locationName: router.query.location_name,
         });
       }, delay);
       return () => clearTimeout(debounce);
     }
-
   }, [searchString, router.isReady, accessToken]);
 
   useEffect(() => {
     setSearchString(router.query.search_string as string);
   }, [router.query.search_string]);
-
 
   //call the places api
   useEffect(() => {
@@ -1011,11 +1013,13 @@ const GoogleMapMarkerComponent = () => {
     setPolygonDrawingMode();
     setEditFarmsDetails(value);
     if (value?.location_id?.coordinates?.length) {
-      const indiaCenter = { lat: value?.location_id?.coordinates?.[0], lng: value?.location_id?.coordinates?.[1] };
+      const indiaCenter = {
+        lat: value?.location_id?.coordinates?.[0],
+        lng: value?.location_id?.coordinates?.[1],
+      };
       map.setCenter(indiaCenter);
       map.setZoom(17);
     }
-
   };
 
   function handleAddPolygonButtonClick() {
@@ -1033,8 +1037,7 @@ const GoogleMapMarkerComponent = () => {
       limit: 20,
       sortBy: router.query.sort_by as string,
       sortType: router.query.sort_type as string,
-      locationName: router.query.location_name
-
+      locationName: router.query.location_name,
     });
   };
 
@@ -1054,7 +1057,7 @@ const GoogleMapMarkerComponent = () => {
             options={{
               mapTypeId: mapType,
               fullscreenControl: false,
-              streetViewControl: true,
+              // streetViewControl: true,
               rotateControl: true,
             }}
             defaultZoom={6}
@@ -1063,36 +1066,39 @@ const GoogleMapMarkerComponent = () => {
           ></GoogleMapReact>
 
           <div
-
             className={styles.updateFarmButtonGrp}
             style={{
               position: "absolute",
               top: "0",
-              left: "25%",
-              display: renderField == false ? "" : "none"
+              left: "1%",
+              display: renderField == false ? "" : "none",
             }}
           >
-
             <Autocomplete
-              disabled={editFarmDetails?._id || router.query.location_name ? true : false}
-
+              disabled={
+                editFarmDetails?._id || router.query.location_name
+                  ? true
+                  : false
+              }
               sx={{
                 width: "250px",
                 maxWidth: "400px",
-                marginRight: "90px",
-                '& .MuiInputBase-root': {
-                  paddingBlock: "7px !important"
+                // marginRight: "90px",
+                "& .MuiInputBase-root": {
+                  // paddingBlock: "7px !important",
                 },
-                '& .MuiAutocomplete-endAdornment ': {
-                  top: "0"
-                }
+                "& .MuiAutocomplete-endAdornment ": {
+                  top: "0",
+                },
               }}
               size="small"
               fullWidth
               noOptionsText="No such location"
               value={location}
               disableCloseOnSelect={false}
-              isOptionEqualToValue={(option, value) => option.title === value.title}
+              isOptionEqualToValue={(option, value) =>
+                option.title === value.title
+              }
               getOptionLabel={(option) => option.title}
               options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
               onChange={onChangeLocation}
@@ -1109,7 +1115,7 @@ const GoogleMapMarkerComponent = () => {
                       backgroundColor: "#fff",
                       border: "none",
                       borderRadius: "6px !important",
-                      padding: "10px",
+                      // padding: "10px",
                       marginBottom: "10px",
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
@@ -1189,7 +1195,6 @@ const GoogleMapMarkerComponent = () => {
       ) : (
         ""
       )}
-
 
       <div className={styles.rightFarmDtailsContainer}>
         {openFarmDetails ? (

@@ -1,31 +1,41 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import {
-  TextField,
-  Autocomplete,
-  InputAdornment,
-} from "@mui/material";
+import { TextField, Autocomplete, InputAdornment } from "@mui/material";
 import styles from "./FarmsNavBar.module.css";
 import { useRouter } from "next/router";
 import getAllLocationsService from "../../../../lib/services/Locations/getAllLocationsService";
 import { useSelector } from "react-redux";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import getAllUsersService from "../../../../lib/services/Users/getAllUsersService";
 
-
 export interface pageProps {
-  getFarmsData:
-  ({ search_string, location, userId, page, limit, sortBy, sortType }:
-    { search_string: string, location: string, userId: string, page: string | number, limit: string | number, sortBy: string, sortType: string }) => void;
+  getFarmsData: ({
+    search_string,
+    location,
+    userId,
+    page,
+    limit,
+    sortBy,
+    sortType,
+  }: {
+    search_string: string;
+    location: string;
+    userId: string;
+    page: string | number;
+    limit: string | number;
+    sortBy: string;
+    sortType: string;
+  }) => void;
 }
 const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
-
-  const accessToken = useSelector((state: any) => state.auth.userDetails?.access_token);
+  const accessToken = useSelector(
+    (state: any) => state.auth.userDetails?.access_token
+  );
   const userType_v2 = useSelector(
     (state: any) => state.auth.userDetails?.user_details?.user_type
   );
 
   const router = useRouter();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [changed, setChanged] = useState(false);
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [location, setLocation] = useState<{
@@ -51,10 +61,8 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
       return;
     }
     if (value) {
-
       setChanged(true);
       setLocation(value);
-
 
       getFarmsData({
         search_string: search,
@@ -100,7 +108,7 @@ const FarmsNavBarWeb = ({ getFarmsData }: pageProps) => {
           search_string: search,
           location: location?._id as string,
           userId: router.query.user_id as string,
-          page: router.query.page as string,
+          page: 1,
           limit: router.query.limit as string,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,

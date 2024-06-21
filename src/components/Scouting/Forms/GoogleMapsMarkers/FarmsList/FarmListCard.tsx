@@ -14,30 +14,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import deleteFarmService from "../../../../../../lib/services/FarmsService/deleteFarmService";
 import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 const FarmListCard = ({
-  data, getFarmLocation, editPolygonDetails, setEditFarmsDetails, editFarmDetails,
-  getFarmOptions, setSelectedPolygon,
+  data,
+  getFarmLocation,
+  editPolygonDetails,
+  setEditFarmsDetails,
+  editFarmDetails,
+  getFarmOptions,
+  setSelectedPolygon,
   setOpenFarmDetails,
   getFarmDataById,
   addPolyToExisting,
-  farmOptionsLoading
-
+  farmOptionsLoading,
 }: any) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteId, setDeleteID] = useState<any>()
+  const [deleteId, setDeleteID] = useState<any>();
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-
 
   const logout = async () => {
     try {
@@ -51,17 +53,16 @@ const FarmListCard = ({
     }
   };
 
-
   //delete farm
   const deleteFarm = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await deleteFarmService(deleteId, accessToken);
 
       if (response.success) {
         setDeleteDialogOpen(false);
-        setOpenFarmDetails(false)
-        toast.success(response.message)
+        setOpenFarmDetails(false);
+        toast.success(response.message);
         getFarmOptions({
           search_string: router.query.search_string as string,
           location: router.query.location_id as string,
@@ -70,27 +71,24 @@ const FarmListCard = ({
           limit: 20,
           sortBy: router.query.sort_by as string,
           sortType: router.query.sort_type as string,
-          locationName: router.query.location_name
+          locationName: router.query.location_name,
         });
-
       } else if (response?.statusCode == 403) {
         await logout();
       } else {
-        toast.error(response?.message)
+        toast.error(response?.message);
       }
-    }
-    catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
   const router = useRouter();
 
   return (
     <>
-      {data?.length ?
+      {data?.length ? (
         data?.map((item: any, index: number) => {
           return (
             <div className={styles.farmcard} key={index}>
@@ -106,15 +104,18 @@ const FarmListCard = ({
               <div className={styles.detailscontainer}>
                 <div className={styles.nameandaction}>
                   <h2 className={styles.northSideChilli}>
-
-                    {item.title.length > 16
-                      ?
+                    {item?.title?.length > 16 ? (
                       <Tooltip title={item.title}>
-                        <span>{item.title.slice(0, 1).toUpperCase() +
-                          item.title.slice(1, 12) +
-                          "..."}</span>
+                        <span>
+                          {item.title.slice(0, 1).toUpperCase() +
+                            item.title.slice(1, 12) +
+                            "..."}
+                        </span>
                       </Tooltip>
-                      : item.title[0].toUpperCase() + item.title.slice(1)}
+                    ) : (
+                      item?.title
+                      // item?.title?.toUpperCase() + item?.title?.slice(1)
+                    )}
                   </h2>
                   {item?.geometry?.coordinates?.length ? (
                     editFarmDetails?._id == item?._id ? (
@@ -126,15 +127,15 @@ const FarmListCard = ({
                             setEditFarmsDetails(null);
                             dispatch(storeEditPolygonCoords([]));
                             getFarmOptions({
-                              search_string: router.query.search_string as string,
+                              search_string: router.query
+                                .search_string as string,
                               location: router.query.location_id as string,
                               userId: router.query.user_id as string,
                               page: router.query.page,
                               limit: 20,
                               sortBy: router.query.sort_by as string,
                               sortType: router.query.sort_type as string,
-                              locationName: router.query.location_name
-
+                              locationName: router.query.location_name,
                             });
                           }}
                         >
@@ -148,7 +149,6 @@ const FarmListCard = ({
                       </Tooltip>
                     ) : (
                       <Tooltip title={"Edit farm"} followCursor>
-
                         <IconButton
                           sx={{
                             padding: "0",
@@ -196,7 +196,10 @@ const FarmListCard = ({
                 </div>
                 <div className={styles.cropsacres}>
                   <div className={styles.cropscontainer}>
-                    <h3 className={styles.cropName} style={{ display: "flex", alignItems: "center" }}>
+                    <h3
+                      className={styles.cropName}
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
                       {item?.geometry?.coordinates?.length ? (
                         <Tooltip title={"Locate"} followCursor>
                           <IconButton
@@ -206,11 +209,12 @@ const FarmListCard = ({
                               borderRadius: "0px 0px 0px 0px",
                               display:
                                 item?.geometry?.coordinates?.length &&
-                                  !editFarmDetails?._id
+                                !editFarmDetails?._id
                                   ? ""
                                   : "none",
                             }}
                             onClick={() => {
+                              console.log("coo", item.geometry?.coordinates);
                               getFarmLocation(
                                 item.geometry.coordinates,
                                 item._id
@@ -241,8 +245,7 @@ const FarmListCard = ({
                               limit: 20,
                               sortBy: router.query.sort_by as string,
                               sortType: router.query.sort_type as string,
-                              locationName: router.query.location_name
-
+                              locationName: router.query.location_name,
                             });
                           }}
                         >
@@ -270,16 +273,17 @@ const FarmListCard = ({
                         </Tooltip>
                       )}
 
-                      {item?.location_id?.title.length > 16
-                        ?
+                      {item?.location_id?.title.length > 16 ? (
                         <Tooltip title={item?.location_id?.title}>
-                          <span>{
-                            item?.location_id?.title.slice(0, 12).toUpperCase() +
-                            "..."}</span>
+                          <span>
+                            {item?.location_id?.title
+                              .slice(0, 12)
+                              .toUpperCase() + "..."}
+                          </span>
                         </Tooltip>
-                        : item?.location_id?.title.toUpperCase()}
-
-
+                      ) : (
+                        item?.location_id?.title.toUpperCase()
+                      )}
                     </h3>
                   </div>
                   <p className={styles.acres}>{item.area?.toFixed(2)}ac</p>
@@ -313,13 +317,26 @@ const FarmListCard = ({
             </div>
           );
         })
-        :
-        !farmOptionsLoading ?
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", height: "calc(100vh - 180px)", width: "100%" }}>
-            <NoDataMobileComponent noData={!Boolean(data.length)} noDataImg={"/NoDataImages/No_Farms.svg"} />
-            <p className="noSummaryText">No Farms</p>
-          </div>
-          : ""}
+      ) : !farmOptionsLoading ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            height: "calc(100vh - 180px)",
+            width: "100%",
+          }}
+        >
+          <NoDataMobileComponent
+            noData={!Boolean(data?.length)}
+            noDataImg={"/NoDataImages/No_Farms.svg"}
+          />
+          <p className="noSummaryText">No Farms</p>
+        </div>
+      ) : (
+        ""
+      )}
       <AlertDelete
         deleteFarm={deleteFarm}
         setDialogOpen={setDeleteDialogOpen}
@@ -328,7 +345,6 @@ const FarmListCard = ({
         deleteTitleProp={"Farm"}
       />
       <LoadingComponent loading={loading} />
-
     </>
   );
 };

@@ -1,11 +1,14 @@
-import { QueryParamsForScouting, removeUserDetails } from "@/Redux/Modules/Auth";
+import {
+  QueryParamsForScouting,
+  removeUserDetails,
+} from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
-import LogoutIcon from '@mui/icons-material/Logout';
-import NorthWestIcon from '@mui/icons-material/NorthWest';
+import LogoutIcon from "@mui/icons-material/Logout";
+import NorthWestIcon from "@mui/icons-material/NorthWest";
 import { Button, IconButton, Tooltip } from "@mui/material";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +35,7 @@ const SideBarMenu = ({ children }: any) => {
 
   const [, , removeCookie] = useCookies(["userType_v2"]);
   const [, , loggedIn_v2] = useCookies(["loggedIn_v2"]);
-  const [globalSearchOpen, setGlobalSearchOpen] = useState<boolean>(false)
+  const [globalSearchOpen, setGlobalSearchOpen] = useState<boolean>(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -75,15 +78,20 @@ const SideBarMenu = ({ children }: any) => {
       active: router.pathname.includes("/procurements"),
       toolTitle: "Procurements",
     },
+    // {
+    //   src: "/location-marker.svg",
+    //   link: "/farm/markers",
+    //   isVisible: true,
+    //   active: router.pathname.includes("/markers"),
+    //   toolTitle: "Markers",
+    // },
+    { src: "/calendaricon.svg", link: "/" },
     {
-      src: "/location-marker.svg",
-      link: "/farm/markers",
+      src: "/graph-icon.svg",
+      // link: "/",
+      link: "/leaflet-map",
       isVisible: true,
-      active: router.pathname.includes("/markers"),
-      toolTitle: "Markers",
     },
-    { src: '/calendaricon.svg', link: "/" },
-    { src: '/graph-icon.svg', link: "/" },
   ];
 
   const logout = async () => {
@@ -109,9 +117,8 @@ const SideBarMenu = ({ children }: any) => {
               width={20}
               height={20}
               onClick={() => {
-                router.push("/farm")
-                dispatch(QueryParamsForScouting(""))
-
+                router.push("/farm");
+                dispatch(QueryParamsForScouting(""));
               }}
             />
 
@@ -124,9 +131,8 @@ const SideBarMenu = ({ children }: any) => {
                         <Link href={item?.link}>
                           <ListItemButton
                             onClick={() => {
-                              dispatch(QueryParamsForScouting(""))
-                              dispatch(storeSearchLocation(null))
-
+                              dispatch(QueryParamsForScouting(""));
+                              dispatch(storeSearchLocation(null));
                             }}
                             className={
                               item?.active
@@ -144,7 +150,6 @@ const SideBarMenu = ({ children }: any) => {
                           </ListItemButton>
                         </Link>
                       </Tooltip>
-
                     </ListItem>
                   );
                 }
@@ -152,12 +157,22 @@ const SideBarMenu = ({ children }: any) => {
               <ListItem className={styles.menuItem}>
                 <Tooltip title="Search">
                   <IconButton
-                    sx={{ display: router.pathname.includes("/scouts") ? "none" : "" }}
+                    sx={{
+                      display: router.pathname.includes("/scouts")
+                        ? "none"
+                        : "",
+                    }}
                     onClick={() => {
-                      dispatch(storeSearchLocation(null))
-                      setGlobalSearchOpen(true)
-                    }}>
-                    <Image src="/markers/global-search-menu-icon.svg" alt="" width={20} height={20} />
+                      dispatch(storeSearchLocation(null));
+                      setGlobalSearchOpen(true);
+                    }}
+                  >
+                    <Image
+                      src="/markers/global-search-menu-icon.svg"
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
                   </IconButton>
                 </Tooltip>
               </ListItem>
@@ -173,9 +188,9 @@ const SideBarMenu = ({ children }: any) => {
             <button
               className={styles.profile}
               onClick={() => {
-                router.push("/profile")
-                dispatch(QueryParamsForScouting(""))
-                dispatch(storeSearchLocation(null))
+                router.push("/profile");
+                dispatch(QueryParamsForScouting(""));
+                dispatch(storeSearchLocation(null));
               }}
             >
               <div className={styles.profile1}>

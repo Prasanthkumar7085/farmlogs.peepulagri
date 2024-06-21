@@ -28,16 +28,16 @@ const AddFarmDilog = ({
   setDrawerOpen,
   drawerOpen,
   polygonCoords,
+  polyCoordinates,
   getFarmOptions,
   setPolygon,
   farm_id,
   setEditFarmsDetails,
   googleSearch,
   FarmlocationDetails,
-  setFarmLoactionDetails
+  setFarmLoactionDetails,
 }: any) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const router = useRouter();
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
@@ -64,8 +64,7 @@ const AddFarmDilog = ({
   const [addLocationLoading, setAddLocationLoading] = useState(false);
   const [newLocation, setNewLocation] = useState("");
   const [addLocation, setAddLocation] = useState<any>();
-  const [searchInput, setSearchInput] = useState<string>()
-
+  const [searchInput, setSearchInput] = useState<string>();
 
   const {
     register,
@@ -76,18 +75,18 @@ const AddFarmDilog = ({
 
   const detailsAfterResponse = (response: any) => {
     if (response?.success) {
-      toast.success(response?.message)
+      toast.success(response?.message);
       setAlertMessage(response?.message);
       setAlertType(true);
       setDrawerOpen(false);
       dispatch(storeEditPolygonCoords([]));
-      setEditFarmsDetails(null)
-      setArea("")
-      setTitle("")
-      setNewLocation("")
-      setLocation(null)
-      setErrorMessages([])
-      setFarmLoactionDetails(null)
+      setEditFarmsDetails(null);
+      setArea("");
+      setTitle("");
+      setNewLocation("");
+      setLocation(null);
+      setErrorMessages([]);
+      setFarmLoactionDetails(null);
       getFarmOptions({
         search_string: router.query.search_string as string,
         location: router.query.location_id as string,
@@ -96,9 +95,8 @@ const AddFarmDilog = ({
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
-        locationName: router.query.location_name as string
+        locationName: router.query.location_name as string,
       });
-
     } else if (response?.status == 422) {
       if (response?.errors) {
         setErrorMessages(response?.errors);
@@ -120,7 +118,7 @@ const AddFarmDilog = ({
       location_id: location_id ? location_id : "",
       geometry: {
         type: "Polygon",
-        coordinates: polygonCoords.map((obj: any) => Object.values(obj)),
+        coordinates: polyCoordinates.map((obj: any) => Object.values(obj)),
       },
     };
 
@@ -138,7 +136,6 @@ const AddFarmDilog = ({
         coordinates: polygonCoords.map((obj: any) => Object.values(obj)),
       },
     };
-
 
     const response = await editFarmService(
       editedData,
@@ -169,7 +166,6 @@ const AddFarmDilog = ({
       addFarm(obj);
     }
   };
-
 
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
@@ -208,14 +204,14 @@ const AddFarmDilog = ({
       // const locationObjFromResponse = locationFromResponse.find((item: {name:string,_id:string})=>item.name==locationFromResponse);
       // setLocation(locationObjFromResponse);
       await getLocations(locationFromResponse);
-      if (FarmlocationDetails?.areaInAcres || FarmlocationDetails?.locationName) {
+      if (
+        FarmlocationDetails?.areaInAcres ||
+        FarmlocationDetails?.locationName
+      ) {
         setArea(FarmlocationDetails?.areaInAcres?.toFixed(2));
-      }
-      else {
+      } else {
         setArea(response?.data?.area);
-
       }
-
     }
     setLoading(false);
   };
@@ -228,17 +224,16 @@ const AddFarmDilog = ({
     }
   }, [router.isReady, accessToken, router.query.location]);
 
-
   useEffect(() => {
     if (router.isReady && accessToken && drawerOpen) {
-      setArea(FarmlocationDetails?.areaInAcres ? FarmlocationDetails?.areaInAcres?.toFixed(2) : "")
-      setSearchInput(FarmlocationDetails?.locationName?.toUpperCase())
+      setArea(FarmlocationDetails?.areaInAcres);
+      setSearchInput(FarmlocationDetails?.locationName?.toUpperCase());
       getLocations("");
       if (farm_id) {
-        getFarmDataById()
+        getFarmDataById();
       }
     }
-  }, [drawerOpen, FarmlocationDetails?.locationName])
+  }, [drawerOpen, FarmlocationDetails?.locationName]);
 
   useEffect(() => {
     setHiddenLoading(true);
@@ -264,16 +259,18 @@ const AddFarmDilog = ({
           }, 1);
         }
         if (FarmlocationDetails?.locationName && !newLocation) {
-          const captureLocation = response?.data?.find((item: any) => item?.title == FarmlocationDetails?.locationName.toUpperCase())
+          const captureLocation = response?.data?.find(
+            (item: any) =>
+              item?.title == FarmlocationDetails?.locationName.toUpperCase()
+          );
           if (captureLocation) {
             setSettingLocationLoading(true);
             setTimeout(() => {
               setSettingLocationLoading(false);
             }, 1);
             setLocation(captureLocation);
-          }
-          else {
-            addNewLocation(FarmlocationDetails?.locationName)
+          } else {
+            addNewLocation(FarmlocationDetails?.locationName);
           }
         }
       }
@@ -284,8 +281,7 @@ const AddFarmDilog = ({
   };
 
   const addInputValue = (e: any, newValue: string) => {
-
-    setSearchInput(newValue)
+    setSearchInput(newValue);
     setNewLocation(newValue);
   };
 
@@ -304,8 +300,8 @@ const AddFarmDilog = ({
 
     let body = {
       title: location,
-      "coordinates": FarmlocationDetails?.latlng
-    }
+      coordinates: FarmlocationDetails?.latlng,
+    };
     const response = await addLocationService(body, accessToken);
     if (response?.success) {
       setAlertMessage(response?.message);
@@ -336,13 +332,14 @@ const AddFarmDilog = ({
           <div className={styles.addfarmform} id="add-farm">
             <div className={styles.formfields} id="form-fields">
               <div className={styles.farmname} id="farm-name">
-                <div className={styles.label}>Title <span style={{ color: "red" }}>*</span></div>
+                <div className={styles.label}>
+                  Title <span style={{ color: "red" }}>*</span>
+                </div>
                 <TextField
                   sx={{
                     "& .MuiInputBase-root": {
                       background: "#fff",
-                      borderRadius: "8px !important"
-
+                      borderRadius: "8px !important",
                     },
                     "& .MuiInputBase-input": {
                       padding: "10px 14px",
@@ -350,12 +347,12 @@ const AddFarmDilog = ({
                       fontFamily: "'Inter', sans-serif",
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#fff !important", borderRadius: "8px !important"
-
+                      borderColor: "#fff !important",
+                      borderRadius: "8px !important",
                     },
-                    '& .MuiFormHelperText-root ': {
-                      fontSize: "12px"
-                    }
+                    "& .MuiFormHelperText-root ": {
+                      fontSize: "12px",
+                    },
                   }}
                   {...register("title")}
                   name="title"
@@ -371,7 +368,7 @@ const AddFarmDilog = ({
                   value={title}
                   onChange={(e) => {
                     const newValue = e.target.value.replace(/^\s+/, "");
-                    setTitle(newValue)
+                    setTitle(newValue);
                   }}
                 />
               </div>
@@ -386,7 +383,9 @@ const AddFarmDilog = ({
                     width: "100%",
                   }}
                 >
-                  <span>Location <span style={{ color: "red" }}>*</span></span>
+                  <span>
+                    Location <span style={{ color: "red" }}>*</span>
+                  </span>
                   <span
                     className={styles.addLocationBtn}
                     onClick={() => {
@@ -394,7 +393,8 @@ const AddFarmDilog = ({
                       setAddLocationOpen(true);
                     }}
                   >
-                    <AddIcon sx={{ fontSize: "1rem" }} />ADD
+                    <AddIcon sx={{ fontSize: "1rem" }} />
+                    ADD
                   </span>
                 </div>
 
@@ -422,7 +422,6 @@ const AddFarmDilog = ({
                       </div>
                     }
                     value={location}
-
                     getOptionLabel={(option: { title: string; _id: string }) =>
                       option.title.toUpperCase()
                     }
@@ -467,8 +466,7 @@ const AddFarmDilog = ({
                         sx={{
                           "& .MuiInputBase-root": {
                             background: "#fff",
-                            borderRadius: "8px !important"
-
+                            borderRadius: "8px !important",
                           },
                           "& .MuiInputBase-input": {
                             padding: "4px 14px !important",
@@ -477,12 +475,11 @@ const AddFarmDilog = ({
                           },
                           "& .MuiOutlinedInput-notchedOutline": {
                             borderColor: "#fff !important",
-                            borderRadius: "8px !important"
-
+                            borderRadius: "8px !important",
                           },
-                          '& .MuiFormHelperText-root ': {
-                            fontSize: "12px"
-                          }
+                          "& .MuiFormHelperText-root ": {
+                            fontSize: "12px",
+                          },
                         }}
                       />
                     )}
@@ -496,12 +493,14 @@ const AddFarmDilog = ({
                 id="acres"
                 style={{ paddingTop: "1rem" }}
               >
-                <div className={styles.label}>Total Land (acres) <span style={{ color: "red" }}>*</span></div>
+                <div className={styles.label}>
+                  Total Land (acres) <span style={{ color: "red" }}>*</span>
+                </div>
                 <TextField
                   sx={{
                     "& .MuiInputBase-root": {
                       background: "#fff",
-                      borderRadius: "8px !important"
+                      borderRadius: "8px !important",
                     },
                     "& .MuiInputBase-input": {
                       padding: "10px 14px",
@@ -510,11 +509,11 @@ const AddFarmDilog = ({
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
                       borderColor: "#fff !important",
-                      borderRadius: "8px !important"
+                      borderRadius: "8px !important",
                     },
-                    '& .MuiFormHelperText-root ': {
-                      fontSize: "12px"
-                    }
+                    "& .MuiFormHelperText-root ": {
+                      fontSize: "12px",
+                    },
                   }}
                   {...register("area")}
                   className={styles.inputfarmname}
@@ -538,7 +537,6 @@ const AddFarmDilog = ({
                 />
               </div>
               <div className={styles.buttons}>
-
                 <Button
                   className={styles.back}
                   name="back"
@@ -546,13 +544,13 @@ const AddFarmDilog = ({
                   variant="outlined"
                   onClick={() => {
                     setDrawerOpen(false);
-                    setArea("")
-                    setTitle("")
-                    setNewLocation("")
-                    setLocation(null)
-                    setErrorMessages([])
+                    setArea("");
+                    setTitle("");
+                    setNewLocation("");
+                    setLocation(null);
+                    setErrorMessages([]);
                     if (!farm_id) {
-                      setEditFarmsDetails(null)
+                      setEditFarmsDetails(null);
                     }
                   }}
                 >

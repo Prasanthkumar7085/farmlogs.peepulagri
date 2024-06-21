@@ -22,7 +22,7 @@ import Image from "next/image";
 import AddIcon from "@mui/icons-material/Add";
 import { createRoot } from "react-dom/client";
 import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 interface ApiProps {
   page: number;
   searchString: string;
@@ -116,8 +116,7 @@ const FarmsListBlock = ({
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
-        locationName: router.query.location_name
-
+        locationName: router.query.location_name,
       });
       return;
     }
@@ -132,19 +131,26 @@ const FarmsListBlock = ({
         limit: 20,
         sortBy: router.query.sort_by as string,
         sortType: router.query.sort_type as string,
-        locationName: router.query.location_name
-
+        locationName: router.query.location_name,
       });
     }
   };
 
   useEffect(() => {
-    if (router.query.location_id && map && googleMaps && location?.coordinates?.length) {
-      const indiaCenter = { lat: location?.coordinates?.[0], lng: location?.coordinates?.[1] };
+    if (
+      router.query.location_id &&
+      map &&
+      googleMaps &&
+      location?.coordinates?.length
+    ) {
+      const indiaCenter = {
+        lat: location?.coordinates?.[0],
+        lng: location?.coordinates?.[1],
+      };
       map.setCenter(indiaCenter);
       map.setZoom(17);
     }
-  }, [map, googleMaps, router.query.location_id])
+  }, [map, googleMaps, router.query.location_id]);
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -156,15 +162,14 @@ const FarmsListBlock = ({
     }
   }, [accessToken, router.isReady]);
 
-
-
   return (
     <div className={styles.detailsslidebarfarmslist}>
       <header className={styles.header}>
         <div className={styles.headingcontainer}>
           <h2 className={styles.heading}>Farms</h2>
           <h2 className={styles.acresCount}>
-            Total Farms: {paginationDetails?.total ? paginationDetails?.total : "--"}
+            Total Farms:{" "}
+            {paginationDetails?.total ? paginationDetails?.total : "--"}
           </h2>
         </div>
 
@@ -181,9 +186,9 @@ const FarmsListBlock = ({
                 setSearchString(e.target.value);
               } else {
                 setSearchString("");
-                let temp = { ...router.query }
-                delete temp.search_string
-                router.push(temp)
+                let temp = { ...router.query };
+                delete temp.search_string;
+                router.push(temp);
               }
             }}
             InputProps={{
@@ -204,11 +209,10 @@ const FarmsListBlock = ({
                       sx={{ cursor: "pointer" }}
                       onClick={() => {
                         setSearchString("");
-                        let temp = { ...router.query }
-                        delete temp.search_string
-                        router.push(temp)
+                        let temp = { ...router.query };
+                        delete temp.search_string;
+                        router.push(temp);
                       }}
-
                     >
                       <ClearIcon />
                     </IconButton>
@@ -251,7 +255,7 @@ const FarmsListBlock = ({
           shape="circular"
           disabled={editFarmDetails?._id ? true : false}
           sx={{
-            display: paginationDetails?.total_pages ? "" : 'none',
+            display: paginationDetails?.total_pages ? "" : "none",
             marginBottom: "0.5rem",
             width: "100%",
             "& .MuiPagination-ul": {
@@ -271,59 +275,6 @@ const FarmsListBlock = ({
             setPageNum(+value);
           }}
         />
-        {drawingOpen ? (
-          <Button
-            className={styles.closefarmbutton}
-            variant="contained"
-            onClick={() => {
-              setDrawingOpen(false);
-              clearAllPoints();
-              closeDrawing();
-              setEditFarmsDetails(null)
-              getFarmOptions({
-                search_string: router.query.search_string as string,
-                location: router.query.location_id as string,
-                userId: router.query.user_id as string,
-                page: 1,
-                limit: 20,
-                sortBy: router.query.sort_by as string,
-                sortType: router.query.sort_type as string,
-                locationName: router.query.location_name
-
-              });
-
-            }}
-            sx={{
-              "& .MuiButton-startIcon": {
-                marginRight: "4px !important",
-              },
-            }}
-          >
-            Stop Drawing
-          </Button>
-        ) : (
-          <Button
-            startIcon={<AddIcon />}
-            className={
-              editFarmDetails?._id
-                ? styles.addfarmbutton_disable
-                : styles.addfarmbutton
-            }
-            disableElevation={true}
-            disabled={editFarmDetails?._id || polygonCoords?.length ? true : false}
-            variant="contained"
-            onClick={() => {
-              setAddPolygonOpen(true);
-            }}
-            sx={{
-              "& .MuiButton-startIcon": {
-                marginRight: "4px !important",
-              },
-            }}
-          >
-            Add Farm
-          </Button>
-        )}
       </div>
       <LoadingComponent loading={loading} />
     </div>

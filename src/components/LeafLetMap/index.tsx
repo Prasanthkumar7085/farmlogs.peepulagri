@@ -12,25 +12,14 @@ import {
   MapContainer,
   Polygon,
   TileLayer,
-  // useMap,
 } from "react-leaflet";
-import { useMap } from "react-leaflet";
 
-import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsServiceMobile";
-import FarmsListBlock from "../Scouting/Forms/GoogleMapsMarkers/FarmsList/FarmsListBlock";
 import getFarmByIdService from "../../../lib/services/FarmsService/getFarmByIdService";
-import * as turf from "@turf/turf";
-// import { EditControl } from "react-leaflet-draw";
-// import "./styles.css";
-// import "react-leaflet-fullscreen/dist/styles.css";
-// import FullscreenControl from "react-leaflet-fullscreen";
-// import PrintControlDefault from "react-leaflet-easyprint";
-
-// const PrintControl = withLeaflet(PrintControlDefault);
+import FarmsListBlock from "../Scouting/Forms/GoogleMapsMarkers/FarmsList/FarmsListBlock";
 
 const MAP_PROVIDERS = {
   google: {
@@ -49,14 +38,14 @@ const tiles = [
   {
     attribution: "&copy; Google",
     name: MAP_PROVIDERS.google.satellite,
-    checked: false,
+    checked: true,
     url: "//mt.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
     crs: L.CRS.EPSG3857,
   },
   {
     attribution: "&copy; Google",
     name: MAP_PROVIDERS.google.roadmap,
-    checked: true,
+    checked: false,
     url: "//mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
     crs: L.CRS.EPSG3857,
   },
@@ -86,11 +75,6 @@ const tiles = [
 ];
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-  const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
-  const googleSearchLocation = useSelector(
-    (state: any) => state.farms.searchLocation
-  );
   const accessToken = useSelector(
     (state: any) => state.auth.userDetails?.access_token
   );
@@ -101,18 +85,9 @@ const HomePage = () => {
   const [searchString, setSearchString] = useState("");
   const [renderField, setRenderField] = useState(false);
   const [viewPolygonsCoord, setViewPolygonsCoord] = useState<any>([]);
-  const mapRef: any = useRef(null);
-  const infoWindowRef: any = useRef(null);
-  const placesService: any = useRef(null);
-  const drawingManagerRef = useRef(null);
-
-  const [map, setMap] = useState<any>(null);
-  const [googleMaps, setGoogleMaps] = useState<any>(null);
   const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>();
   const [polygon, setPolygon] = useState<any>(null);
-  const [drawingOpen, setDrawingOpen] = useState<boolean>(false);
-  const [addPolygonOpen, setAddPolygonOpen] = useState<boolean>(false);
-  const [latLong, setLatLong] = useState<{ lat: number; long: number }>();
+
   const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const [farmData, setFarmData] = useState<any>([]);
@@ -123,6 +98,7 @@ const HomePage = () => {
   const [isrendered, setIsRendered] = useState(false);
   const [editPolyCoordinates, setEditPolyCoordinates] = useState<any>();
   const [polyCoordinates, setPolyCoordinates] = useState<any>([]);
+  const [farmId, setFarmId] = useState<any>();
 
   const router = useRouter();
   typeof window !== "undefined";
@@ -196,6 +172,8 @@ const HomePage = () => {
 
             return {
               type: "Polygon",
+              id: item._id,
+              title: item.title,
               coordinates: [coordinates], // Wrap in an additional array to nest it correctly
             };
           }
@@ -203,53 +181,18 @@ const HomePage = () => {
           return {
             type: "Polygon",
             coordinates: [],
+            id: item._id,
+            title: item.title,
           };
         });
         setFarmOptions(newData);
-
-        // setRenderField(true);
-        // setTimeout(() => {
-        //   setRenderField(false);
-        // }, 0.1);
-
-        // setViewPolygonsCoord(newData);
       }
-      // if (response?.status == 400) {
-      //   setFarmOptions([]);
-      //   setPaginationDetails(null);
-      //   setRenderField(true);
-      //   setTimeout(() => {
-      //     // setRenderField(false);
-      //   }, 0.1);
-      //   // setViewPolygonsCoord([]);
-      //   centerMapToPlace(googleSearchLocation);
-      // }
     } catch (err: any) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
-  function setPolygonDrawingMode() {
-    const drawingManager: any = drawingManagerRef.current;
-    if (drawingManager) {
-      drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
-    }
-    setDrawingOpen(true);
-  }
-
-  // const addPolyToExisting = (value: any) => {
-  //   setPolygonDrawingMode();
-  //   setEditFarmsDetails(value);
-  //   if (value?.location_id?.coordinates?.length) {
-  //     const indiaCenter = {
-  //       lat: value?.location_id?.coordinates?.[0],
-  //       lng: value?.location_id?.coordinates?.[1],
-  //     };
-  //     map.setCenter(indiaCenter);
-  //     map.setZoom(17);
-  //   }
-  // };
 
   const capturePageNum = (value: string | number) => {
     getFarmOptions({
@@ -287,8 +230,9 @@ const HomePage = () => {
     zoom: zoom,
   };
   const getFarmLocation = (value: any, id: any) => {
+    setEditPolyCoordinates(value);
+    setFarmId(id);
     const centroid = calculateCentroid(value);
-    console.log(`Centroid coordinates: ${centroid[0]}, ${centroid[1]}`);
     setLat(centroid[0]);
     setLng(centroid[1]);
     setZoom(18);
@@ -333,8 +277,8 @@ const HomePage = () => {
       };
     });
     setPolyCoordinates(updatedArray);
-    // dispatch(storeEditPolygonCoords(updatedArray));
   };
+
   const markersRef: any = useRef([]);
 
   useEffect(() => {
@@ -357,7 +301,6 @@ const HomePage = () => {
       {!isrendered ? (
         <>
           <Fragment>
-            {/* <GlobalStateProvider> */}
             <div id="map-wrapper" style={{ height: "700px", width: "150vh" }}>
               <MapContainer
                 center={[mapConfig?.lat, mapConfig?.lng]}
@@ -370,12 +313,10 @@ const HomePage = () => {
                   FarmlocationDetails={FarmlocationDetails}
                   setEditFarmsDetails={setEditFarmsDetails}
                   editPolyCoordinates={editPolyCoordinates}
-                  editPolygonDetails={editPolygonDetails}
-                  setEditPolyCoordinates={setEditPolyCoordinates}
                   setPolyCoordinates={setPolyCoordinates}
                   polyCoordinates={polyCoordinates}
+                  farmId={farmId}
                 />
-                {/* <Test /> */}
                 <LayersControl position="topleft">
                   {tiles.map(
                     ({ attribution, checked, name, subdomains, url }) => {
@@ -384,9 +325,6 @@ const HomePage = () => {
                         url,
                         name,
                       };
-                      // if (subdomains) {
-                      //   tileLayerProps.subdomains = subdomains;
-                      // }
                       return (
                         <LayersControl.BaseLayer
                           checked={!!checked}
@@ -412,7 +350,6 @@ const HomePage = () => {
                 ))}
               </MapContainer>
             </div>
-            {/* </GlobalStateProvider> */}
           </Fragment>
         </>
       ) : (
@@ -421,7 +358,6 @@ const HomePage = () => {
       <div style={{ width: "50vh" }}>
         <FarmsListBlock
           getFarmLocation={getFarmLocation}
-          // farmOptions={farmOptions}
           searchString={searchString}
           setSearchString={setSearchString}
           setEditFarmsDetails={setEditFarmsDetails}

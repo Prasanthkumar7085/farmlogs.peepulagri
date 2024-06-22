@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import L from "leaflet";
-import { TileLayer, FeatureGroup, MapContainer, Polygon } from "react-leaflet";
-import { EditControl } from "react-leaflet-draw";
-import "leaflet/dist/leaflet.css";
-import "leaflet-draw/dist/leaflet.draw.css";
+import AddFarmDilog from "@/components/Scouting/Forms/GoogleMapsMarkers/FarmsList/AddFarmDiloag";
 import * as turf from "@turf/turf";
 import axios from "axios";
-import AddFarmDilog from "@/components/Scouting/Forms/GoogleMapsMarkers/FarmsList/AddFarmDiloag";
+import L from "leaflet";
+import "leaflet-draw/dist/leaflet.draw.css";
+import "leaflet/dist/leaflet.css";
+import { useState } from "react";
+import { FeatureGroup, Polygon } from "react-leaflet";
+import { EditControl } from "react-leaflet-draw";
 import { useSelector } from "react-redux";
 
 const DrawTools = ({
@@ -16,10 +16,9 @@ const DrawTools = ({
   FarmlocationDetails,
   setEditFarmsDetails,
   editPolyCoordinates,
-  setEditPolyCoordinates,
-  editPolygonDetails,
   setPolyCoordinates,
   polyCoordinates,
+  farmId,
 }: any) => {
   const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
 
@@ -37,43 +36,60 @@ const DrawTools = ({
       return null;
     }
   };
-
-  // const _onEdited = (e: any) => {
-  //   let numEdited = 0;
-  //   const editedCoords: any = [];
-  //   e.layers.eachLayer((layer: any) => {
-  //     numEdited += 1;
-  //     const latlngs = layer.getLatLngs();
-  //     const updatedLatlngs = latlngs.map((latlng: any) => [
-  //       latlng.lat,
-  //       latlng.lng,
-  //     ]);
-  //     editedCoords.push(updatedLatlngs);
-  //   });
-  //   console.log(`_onEdited: edited ${numEdited} layers`, e);
-  //   setEditPolyCoordinates(editedCoords.flat());
-  //   setDrawerOpen(true);
-  // };
-
-  const _onEdited = (e: any) => {
-    let numEdited = 0;
-    e.layers.eachLayer((layer: any) => {
-      numEdited += 1;
+  const _onEdited = async (e: any) => {
+    const { layers } = e;
+    layers.eachLayer((layer: any) => {
+      if (layer instanceof L.Polygon) {
+        const newCoordinates: any = layer.getLatLngs()[0];
+        const updateLatlngs = newCoordinates
+          .flat()
+          .map((latlng: any) => [latlng.lat, latlng.lng]);
+        setPolyCoordinates(updateLatlngs);
+        let coordinates = [...updateLatlngs];
+        if (
+          coordinates.length > 0 &&
+          (coordinates[0][0] !== coordinates[coordinates.length - 1][0] ||
+            coordinates[0][1] !== coordinates[coordinates.length - 1][1])
+        ) {
+          coordinates.push(coordinates[0]);
+        }
+        // Calculate area in acres
+        const polygon = turf.polygon([coordinates]);
+        const areaSqMeters = turf.area(polygon);
+        const areaAcres = areaSqMeters / 4046.86;
+        const centroid = turf.centroid(polygon);
+        const [lng, lat] = centroid.geometry.coordinates;
+        getLocationFromCordinates(lng, lat, areaAcres, coordinates);
+      }
     });
-    console.log(`_onEdited: edited ${numEdited} layers`, e);
+  };
+  const getLocationFromCordinates = async (
+    lng: any,
+    lat: any,
+    areaAcres: any,
+    coordinates: any
+  ) => {
+    const placeName = await reverseGeocode(
+      coordinates[0][0],
+      coordinates[0][1]
+    );
+    let afterRemoveingSpaces = placeName
+      .split(",")[1]
+      ?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, "");
+    setFarmLoactionDetails({
+      locationName: afterRemoveingSpaces,
+      latlng: [lng, lat],
+      areaInAcres: +areaAcres.toFixed(2),
+      farm_id: farmId,
+    });
     setDrawerOpen(true);
-
-    // this._onChange();
   };
 
   const _onCreated = async (e: any) => {
     let type = e.layerType;
     let layer = e.layer;
-
     const layerGeoJson = layer.toGeoJSON();
     const latlngs = layer.getLatLngs();
-    console.log(latlngs.flat(), "lat");
-
     let updateLatlngs = latlngs.flat().map((item: any) => {
       return [item.lat, item.lng];
     });
@@ -119,6 +135,7 @@ const DrawTools = ({
         locationName: afterRemoveingSpaces,
         latlng: [lng, lat],
         areaInAcres: areaAcres.toFixed(2),
+        farm_id: farmId,
       });
     }
 
@@ -141,7 +158,8 @@ const DrawTools = ({
   };
 
   const _onEditStart = (e: any) => {
-    console.log("_onEditStart", e);
+    if (editPolyCoordinates != null) {
+    }
   };
 
   const _onEditStop = (e: any) => {
@@ -169,6 +187,7 @@ const DrawTools = ({
           onEdited={_onEdited}
           onCreated={_onCreated}
           onDeleted={_onDeleted}
+          onEditStart={_onEditStart}
           draw={{
             polyline: {
               icon: new L.DivIcon({
@@ -182,9 +201,9 @@ const DrawTools = ({
             polygon: true,
           }}
         />
-        {/* {editPolyCoordinates?.length > 0 && (
+        {editPolyCoordinates?.length > 0 && (
           <Polygon positions={editPolyCoordinates} />
-        )} */}
+        )}
       </FeatureGroup>
       <div>
         <AddFarmDilog
@@ -195,12 +214,8 @@ const DrawTools = ({
           setPolygon={setPolygon}
           setFarmLoactionDetails={setFarmLoactionDetails}
           FarmlocationDetails={FarmlocationDetails}
-          // farm_id={editFarmDetails?._id}
           setEditFarmsDetails={setEditFarmsDetails}
           polyCoordinates={polyCoordinates}
-          // googleSearch={googleSearch}
-          // FarmlocationDetails={FarmlocationDetails}
-          // setFarmLoactionDetails={setFarmLoactionDetails}
         />
       </div>
     </div>

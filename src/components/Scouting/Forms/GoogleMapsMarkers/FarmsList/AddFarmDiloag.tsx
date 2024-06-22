@@ -1,5 +1,4 @@
 import AddLocationDialog from "@/components/Core/AddLocationDialog/AddLocationDialog";
-import AlertComponent from "@/components/Core/AlertComponent";
 import LoadingComponent from "@/components/Core/LoadingComponent";
 import { FarmDataType } from "@/types/farmCardTypes";
 import AddIcon from "@mui/icons-material/Add";
@@ -9,21 +8,20 @@ import {
   CircularProgress,
   Dialog,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
-import styles from "./add-farm-dilog.module.css";
+import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
 import { toast } from "sonner";
 import addFarmService from "../../../../../../lib/services/FarmsService/addFarmService";
 import editFarmService from "../../../../../../lib/services/FarmsService/editFarmService";
 import getFarmByIdService from "../../../../../../lib/services/FarmsService/getFarmByIdService";
-import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
 import addLocationService from "../../../../../../lib/services/Locations/addLocationService";
-import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
+import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
+import styles from "./add-farm-dilog.module.css";
 const AddFarmDilog = ({
   setDrawerOpen,
   drawerOpen,
@@ -31,7 +29,6 @@ const AddFarmDilog = ({
   polyCoordinates,
   getFarmOptions,
   setPolygon,
-  farm_id,
   setEditFarmsDetails,
   googleSearch,
   FarmlocationDetails,
@@ -133,14 +130,14 @@ const AddFarmDilog = ({
       location_id: obj?.location_id,
       geometry: {
         type: "Polygon",
-        coordinates: polygonCoords.map((obj: any) => Object.values(obj)),
+        coordinates: polyCoordinates.map((obj: any) => Object.values(obj)),
       },
     };
 
     const response = await editFarmService(
       editedData,
       accessToken,
-      farm_id as string
+      FarmlocationDetails.farm_id as string
     );
     detailsAfterResponse(response);
     setLoading(false);
@@ -160,12 +157,13 @@ const AddFarmDilog = ({
       },
     };
 
-    if (farm_id) {
+    if (FarmlocationDetails.farm_id) {
       edtiFarm(obj);
     } else {
       addFarm(obj);
     }
   };
+  console.log(FarmlocationDetails, "poiuytrew");
 
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;
@@ -193,7 +191,7 @@ const AddFarmDilog = ({
     setLoading(true);
 
     const response: any = await getFarmByIdService(
-      farm_id as string,
+      FarmlocationDetails.farm_id as string,
       accessToken as string
     );
 
@@ -229,7 +227,7 @@ const AddFarmDilog = ({
       setArea(FarmlocationDetails?.areaInAcres);
       setSearchInput(FarmlocationDetails?.locationName?.toUpperCase());
       getLocations("");
-      if (farm_id) {
+      if (FarmlocationDetails.farm_id) {
         getFarmDataById();
       }
     }
@@ -549,7 +547,7 @@ const AddFarmDilog = ({
                     setNewLocation("");
                     setLocation(null);
                     setErrorMessages([]);
-                    if (!farm_id) {
+                    if (!FarmlocationDetails.farm_id) {
                       setEditFarmsDetails(null);
                     }
                   }}

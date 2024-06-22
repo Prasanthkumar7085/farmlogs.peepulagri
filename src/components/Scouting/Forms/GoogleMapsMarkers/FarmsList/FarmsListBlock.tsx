@@ -1,28 +1,18 @@
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
-  Autocomplete,
-  Button,
-  Drawer,
   IconButton,
   InputAdornment,
   Pagination,
   TextField,
 } from "@mui/material";
-import styles from "./farmsBlock.module.css";
-import { Clear } from "@mui/icons-material";
-import FarmListCard from "./FarmListCard";
-import { useEffect, useState } from "react";
-import ListAllFarmForDropDownService from "../../../../../../lib/services/FarmsService/ListAllFarmForDropDownService";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
-import ReactDOM from "react-dom";
-import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import Image from "next/image";
-import AddIcon from "@mui/icons-material/Add";
-import { createRoot } from "react-dom/client";
-import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
-import ClearIcon from "@mui/icons-material/Clear";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import getAllLocationsService from "../../../../../../lib/services/Locations/getAllLocationsService";
+import FarmListCard from "./FarmListCard";
+import styles from "./farmsBlock.module.css";
 interface ApiProps {
   page: number;
   searchString: string;

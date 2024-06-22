@@ -1,22 +1,19 @@
-import type { NextPage } from "next";
-import { Button, Icon, IconButton, Tooltip } from "@mui/material";
-import styles from "./farmListCard.module.css";
-import timePipe from "@/pipes/timePipe";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import { toast } from "sonner";
 import { removeUserDetails } from "@/Redux/Modules/Auth";
 import { deleteAllMessages } from "@/Redux/Modules/Conversations";
+import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
+import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
+import LoadingComponent from "@/components/Core/LoadingComponent";
+import NoDataMobileComponent from "@/components/Core/NoDataMobileComponent";
+import timePipe from "@/pipes/timePipe";
+import { Button, IconButton, Tooltip } from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { toast } from "sonner";
 import deleteFarmService from "../../../../../../lib/services/FarmsService/deleteFarmService";
-import AlertDelete from "@/components/Core/DeleteAlert/alert-delete";
-import DeleteIcon from "@mui/icons-material/Delete";
-import LoadingComponent from "@/components/Core/LoadingComponent";
-import { storeEditPolygonCoords } from "@/Redux/Modules/Farms";
+import styles from "./farmListCard.module.css";
 const FarmListCard = ({
   data,
   getFarmLocation,
@@ -148,27 +145,30 @@ const FarmListCard = ({
                         </IconButton>
                       </Tooltip>
                     ) : (
-                      <Tooltip title={"Edit farm"} followCursor>
-                        <IconButton
-                          sx={{
-                            padding: "0",
-                            display: editFarmDetails?._id ? "none" : "",
-                          }}
-                          onClick={() => {
-                            setSelectedPolygon(null);
-                            setEditFarmsDetails(null);
-                            dispatch(storeEditPolygonCoords([]));
-                            editPolygonDetails(item);
-                          }}
-                        >
-                          <Image
-                            alt=""
-                            src="/markers/marker-edit-icon.svg"
-                            width={15}
-                            height={15}
-                          />
-                        </IconButton>
-                      </Tooltip>
+                      // (
+                      //   <Tooltip title={"Edit farm"} followCursor>
+                      //     <IconButton
+                      //       sx={{
+                      //         padding: "0",
+                      //         display: editFarmDetails?._id ? "none" : "",
+                      //       }}
+                      //       onClick={() => {
+                      //         setSelectedPolygon(null);
+                      //         setEditFarmsDetails(null);
+                      //         dispatch(storeEditPolygonCoords([]));
+                      //         editPolygonDetails(item);
+                      //       }}
+                      //     >
+                      //       <Image
+                      //         alt=""
+                      //         src="/markers/marker-edit-icon.svg"
+                      //         width={15}
+                      //         height={15}
+                      //       />
+                      //     </IconButton>
+                      //   </Tooltip>
+                      // )
+                      ""
                     )
                   ) : (
                     ""

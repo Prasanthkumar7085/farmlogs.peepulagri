@@ -1100,7 +1100,7 @@ const GoogleMapMarkerComponent = () => {
                 option.title === value.title
               }
               getOptionLabel={(option) => option.title}
-              options={locations?.length ? locations : []} // Assuming `locations` is an array of location objects
+              options={locations?.length ? locations : []}
               onChange={onChangeLocation}
               renderInput={(params) => (
                 <TextField
@@ -1257,6 +1257,7 @@ const GoogleMapMarkerComponent = () => {
         closeDrawing={closeDrawing}
         setDrawingOpen={setDrawingOpen}
       />
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

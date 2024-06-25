@@ -20,6 +20,9 @@ import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import getFarmByIdService from "../../../lib/services/FarmsService/getFarmByIdService";
 import FarmsListBlock from "../Scouting/Forms/GoogleMapsMarkers/FarmsList/FarmsListBlock";
+import { Autocomplete, TextField } from "@mui/material";
+import getAllLocationsService from "../../../lib/services/Locations/getAllLocationsService";
+import LoadingComponent from "../Core/LoadingComponent";
 
 const MAP_PROVIDERS = {
   google: {
@@ -87,7 +90,7 @@ const HomePage = () => {
   const [viewPolygonsCoord, setViewPolygonsCoord] = useState<any>([]);
   const [FarmlocationDetails, setFarmLoactionDetails] = useState<any>();
   const [polygon, setPolygon] = useState<any>(null);
-
+  const [locations, setLocations] = useState<any>([]);
   const [openFarmDetails, setOpenFarmDetails] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const [farmData, setFarmData] = useState<any>([]);
@@ -99,9 +102,34 @@ const HomePage = () => {
   const [editPolyCoordinates, setEditPolyCoordinates] = useState<any>();
   const [polyCoordinates, setPolyCoordinates] = useState<any>([]);
   const [farmId, setFarmId] = useState<any>();
+  const [location, setLocation] = useState<any>();
+  const markersRef: any = useRef([]);
 
   const router = useRouter();
   typeof window !== "undefined";
+
+  const getLocations = async (newLocationId = "") => {
+    try {
+      const response = await getAllLocationsService(accessToken);
+      if (response?.success) {
+        setLocations(response?.data);
+        if (newLocationId) {
+          const newLocationObject = response?.data?.find(
+            (item: any) => item?._id == newLocationId
+          );
+          setLocation(newLocationObject);
+        }
+      }
+      if (response?.data?.length) {
+        setLocations([{ title: "All", _id: "1" }, ...response?.data]);
+      } else {
+        setLocations([{ title: "All", _id: "1" }]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const getFarmOptions = async ({
     search_string = "",
     location,
@@ -145,7 +173,7 @@ const HomePage = () => {
       const { page: pagenum, limit: limitnum, ...restParams } = queryParam;
 
       let url = `farms/${page}/${limit}`;
-      // router.push({ pathname: "/farm/markers", query: queryParam });
+      router.push({ pathname: "/leaflet-map", query: queryParam });
       url = prepareURLEncodedParams(url, restParams);
 
       const response = await getAllFarmsService(url, accessToken);
@@ -154,13 +182,10 @@ const HomePage = () => {
         setFarmData(response?.data);
         const { data, ...rest } = response;
         setPaginationDetails(rest);
-        // Assuming response.data is an array of objects with 'geometry' property that contains 'coordinates'
         const newData = response.data.map((item: any) => {
           const coordinates = item?.geometry?.coordinates;
 
-          // Ensure coordinates are in the correct nested array format
           if (coordinates && coordinates.length) {
-            // Ensure the polygon coordinates form a closed ring
             const firstCoordinate = coordinates[0];
             const lastCoordinate = coordinates[coordinates.length - 1];
             if (
@@ -256,6 +281,51 @@ const HomePage = () => {
 
     return [centroidLat, centroidLng];
   };
+  const onChangeLocation = (e: any, value: any, reason: any) => {
+    if (reason == "clear") {
+      setSelectedPolygon(null);
+      setLocation({ title: "All", _id: "1" });
+      setLat(19.6908126);
+      setLng(61.030192);
+      setZoom(12);
+      setIsRendered(true);
+      setTimeout(() => {
+        setIsRendered(false);
+      }, 1);
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: "" as string,
+        userId: router.query.user_id as string,
+        page: 1,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+        locationName: router.query.location_name,
+      });
+      return;
+    }
+    if (value) {
+      setSelectedPolygon(null);
+      setLocation(value);
+      setLat(value.coordinates?.[0] || 12.0);
+      setLng(value?.coordinates?.[1] || 13.0);
+      setZoom(18);
+      setIsRendered(true);
+      setTimeout(() => {
+        setIsRendered(false);
+      }, 1);
+      getFarmOptions({
+        search_string: router.query.search_string as string,
+        location: value?._id as string,
+        userId: router.query.user_id as string,
+        page: 1,
+        limit: 20,
+        sortBy: router.query.sort_by as string,
+        sortType: router.query.sort_type as string,
+        locationName: router.query.location_name,
+      });
+    }
+  };
 
   //get the edit polygon details
   const editPolygonDetails = (value: any) => {
@@ -279,8 +349,6 @@ const HomePage = () => {
     setPolyCoordinates(updatedArray);
   };
 
-  const markersRef: any = useRef([]);
-
   useEffect(() => {
     const markers: any = document.getElementsByClassName("leaflet-marker-icon");
     markersRef.current = markers;
@@ -290,8 +358,37 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    getFarmOptions({});
-  }, []);
+    if (router.isReady && accessToken) {
+      let delay = 500;
+      let debounce = setTimeout(() => {
+        getFarmOptions({
+          search_string: searchString as string,
+          location: router.query.location_id as string,
+          userId: router.query.user_id as string,
+          page: router.query.page,
+          limit: 20,
+          sortBy: router.query.sort_by as string,
+          sortType: router.query.sort_type as string,
+          locationName: router.query.location_name,
+        });
+      }, delay);
+      return () => clearTimeout(debounce);
+    }
+  }, [searchString, router.isReady, accessToken]);
+
+  useEffect(() => {
+    setSearchString(router.query.search_string as string);
+  }, [router.query.search_string]);
+
+  useEffect(() => {
+    if (router.isReady && accessToken) {
+      if (router.query.location_id) {
+        getLocations(router.query.location_id as string);
+      } else {
+        getLocations();
+      }
+    }
+  }, [router.query, accessToken, router.query.location_id]);
   useEffect(() => {
     setSearchString(router.query.search_string as string);
   }, [router.query.search_string]);
@@ -306,6 +403,67 @@ const HomePage = () => {
                 center={[mapConfig?.lat, mapConfig?.lng]}
                 zoom={mapConfig?.zoom}
               >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "0",
+                    left: "5%",
+                    zIndex: 1000,
+                  }}
+                >
+                  <Autocomplete
+                    disabled={
+                      editFarmDetails?._id || router.query.location_name
+                        ? true
+                        : false
+                    }
+                    sx={{
+                      width: "250px",
+                      maxWidth: "400px",
+                      // marginRight: "90px",
+                      "& .MuiInputBase-root": {
+                        // paddingBlock: "7px !important",
+                      },
+                      "& .MuiAutocomplete-endAdornment ": {
+                        top: "0",
+                      },
+                    }}
+                    size="small"
+                    fullWidth
+                    noOptionsText="No such location"
+                    value={location}
+                    disableCloseOnSelect={false}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option.title === value.title
+                    }
+                    getOptionLabel={(option: any) => option.title}
+                    options={locations?.length ? locations : []}
+                    onChange={onChangeLocation}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="Search by Farm locations"
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          marginTop: "1rem",
+                          "& .MuiInputBase-root": {
+                            fontSize: "clamp(.75rem, 0.83vw, 18px)",
+                            backgroundColor: "#fff",
+                            border: "none",
+                            borderRadius: "6px !important",
+                            // padding: "10px",
+                            marginBottom: "10px",
+                          },
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#fff !important",
+                            borderRadius: "6px !important",
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </div>
                 <DrawTools
                   getFarmOptions={getFarmOptions}
                   setPolygon={setPolygon}
@@ -331,7 +489,7 @@ const HomePage = () => {
                           key={name}
                           name={name}
                         >
-                          <TileLayer maxNativeZoom={19} {...tileLayerProps} />
+                          <TileLayer maxNativeZoom={21} {...tileLayerProps} />
                         </LayersControl.BaseLayer>
                       );
                     }
@@ -372,6 +530,7 @@ const HomePage = () => {
           editPolygonDetails={editPolygonDetails}
         />
       </div>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };

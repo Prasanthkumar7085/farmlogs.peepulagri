@@ -4,7 +4,7 @@ import axios from "axios";
 import L from "leaflet";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet/dist/leaflet.css";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FeatureGroup, Polygon } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import { useSelector } from "react-redux";
@@ -102,7 +102,6 @@ const DrawTools = ({
         latlng.lat,
       ]);
 
-      // Ensure the polygon is closed by checking if the first and last coordinates are the same
       if (
         coordinates.length > 0 &&
         (coordinates[0][0] !== coordinates[coordinates.length - 1][0] ||
@@ -114,20 +113,11 @@ const DrawTools = ({
       const polygon = turf.polygon([coordinates]);
       const areaSqMeters = turf.area(polygon);
       const areaAcres = areaSqMeters / 4046.86;
-      console.log(
-        "Area of the polygon/rectangle:",
-        areaAcres.toFixed(2),
-        "acres"
-      );
 
-      // Calculate the centroid of the polygon
       const centroid = turf.centroid(polygon);
       const [lng, lat] = centroid.geometry.coordinates;
-      console.log(centroid, "cent");
 
-      // Get place name using reverse geocoding
       const placeName = await reverseGeocode(lat, lng);
-      console.log("Place name of the polygon:", placeName);
       let afterRemoveingSpaces = placeName
         .split(",")[1]
         ?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, "");
@@ -140,9 +130,6 @@ const DrawTools = ({
     }
 
     setDrawerOpen(true);
-
-    console.log("Geojson", layerGeoJson);
-    console.log("coords", latlngs);
   };
 
   const _onDeleted = (e: any) => {
@@ -150,7 +137,6 @@ const DrawTools = ({
     e.layers.eachLayer((layer: any) => {
       numDeleted += 1;
     });
-    console.log(`onDeleted: removed ${numDeleted} layers`, e);
   };
 
   const _onMounted = (drawControl: any) => {
@@ -177,11 +163,19 @@ const DrawTools = ({
   const _onDrawStart = (e: any) => {
     console.log("_onDrawStart", e);
   };
+  const editControlRef: any = useRef(null);
+
+  // Function to start drawing polygon programmatically
+  const startDrawingPolygon = () => {
+    console.log(editControlRef, "what");
+    editControlRef.current.leafletElement._toolbars.draw._modes.polygon.handler.enable();
+  };
 
   return (
     <div>
       <FeatureGroup>
         <EditControl
+          ref={editControlRef}
           onDrawStart={_onDrawStart}
           position="topleft"
           onEdited={_onEdited}
@@ -189,16 +183,12 @@ const DrawTools = ({
           onDeleted={_onDeleted}
           onEditStart={_onEditStart}
           draw={{
-            polyline: {
-              icon: new L.DivIcon({
-                iconSize: new L.Point(8, 8),
-                className: "leaflet-div-icon leaflet-editing-icon",
-              }),
-            },
+            polyline: false,
             rectangle: true,
-            circlemarker: false,
             circle: false,
+            circlemarker: false,
             polygon: true,
+            marker: false,
           }}
         />
         {editPolyCoordinates?.length > 0 && (
@@ -218,6 +208,7 @@ const DrawTools = ({
           polyCoordinates={polyCoordinates}
         />
       </div>
+      <button onClick={startDrawingPolygon}>Start Drawing Polygon</button>
     </div>
   );
 };

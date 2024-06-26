@@ -163,7 +163,6 @@ const AddFarmDilog = ({
       addFarm(obj);
     }
   };
-  console.log(FarmlocationDetails, "poiuytrew");
 
   const handleKeyPress = (event: any) => {
     const keyPressed = event.key;

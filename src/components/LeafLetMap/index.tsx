@@ -2,7 +2,7 @@ import L from "leaflet";
 import { Fragment, useEffect, useRef, useState } from "react";
 // import ReactDOM from "react-dom";
 import DrawTools from "./MapEditorSidebar/DrawTools";
-
+import RoomIcon from "@mui/icons-material/Room";
 // import { GlobalStateProvider, useGlobalState } from "./services/Store";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet/dist/leaflet.css";
@@ -10,8 +10,11 @@ import {
   LayersControl,
   // withLeaflet,
   MapContainer,
+  Marker,
   Polygon,
+  Popup,
   TileLayer,
+  Tooltip,
 } from "react-leaflet";
 
 import { useRouter } from "next/router";
@@ -23,6 +26,7 @@ import FarmsListBlock from "../Scouting/Forms/GoogleMapsMarkers/FarmsList/FarmsL
 import { Autocomplete, TextField } from "@mui/material";
 import getAllLocationsService from "../../../lib/services/Locations/getAllLocationsService";
 import LoadingComponent from "../Core/LoadingComponent";
+import { Toaster, toast } from "sonner";
 
 const MAP_PROVIDERS = {
   google: {
@@ -97,7 +101,7 @@ const HomePage = () => {
   const [paginationDetails, setPaginationDetails] = useState<any>();
   const [lat, setLat] = useState<any>(15.2161);
   const [lng, setLng] = useState<any>(79.9049);
-  const [zoom, setZoom] = useState<any>(3);
+  const [zoom, setZoom] = useState<any>(5);
   const [isrendered, setIsRendered] = useState(false);
   const [editPolyCoordinates, setEditPolyCoordinates] = useState<any>();
   const [polyCoordinates, setPolyCoordinates] = useState<any>([]);
@@ -118,6 +122,14 @@ const HomePage = () => {
             (item: any) => item?._id == newLocationId
           );
           setLocation(newLocationObject);
+
+          if (newLocationObject?.coordinates?.length > 0) {
+            setLanAndLattoMap(
+              newLocationObject?.coordinates[0],
+              newLocationObject?.coordinates[1],
+              18
+            );
+          }
         }
       }
       if (response?.data?.length) {
@@ -199,7 +211,8 @@ const HomePage = () => {
               type: "Polygon",
               id: item._id,
               title: item.title,
-              coordinates: [coordinates], // Wrap in an additional array to nest it correctly
+              area: item.area,
+              coordinates: [coordinates],
             };
           }
 
@@ -232,6 +245,13 @@ const HomePage = () => {
     });
   };
 
+  const customMarkerIcon = L.icon({
+    iconUrl: "./marker-icon-2x.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
   // get the farm details
   const getFarmDataById = async (id: any) => {
     try {
@@ -258,13 +278,7 @@ const HomePage = () => {
     setEditPolyCoordinates(value);
     setFarmId(id);
     const centroid = calculateCentroid(value);
-    setLat(centroid[0]);
-    setLng(centroid[1]);
-    setZoom(18);
-    setIsRendered(true);
-    setTimeout(() => {
-      setIsRendered(false);
-    }, 1);
+    setLanAndLattoMap(centroid[0], centroid[1], 18);
   };
 
   const calculateCentroid = (coords: any) => {
@@ -281,17 +295,26 @@ const HomePage = () => {
 
     return [centroidLat, centroidLng];
   };
-  const onChangeLocation = (e: any, value: any, reason: any) => {
-    if (reason == "clear") {
-      setSelectedPolygon(null);
-      setLocation({ title: "All", _id: "1" });
-      setLat(19.6908126);
-      setLng(61.030192);
-      setZoom(12);
+
+  const setLanAndLattoMap = (lat: any, lan: any, zoom: any) => {
+    if (lat) {
+      setLat(lat);
+      setLng(lan);
+      setZoom(zoom);
       setIsRendered(true);
       setTimeout(() => {
         setIsRendered(false);
       }, 1);
+    } else {
+      toast.error("Location coordinates not found");
+    }
+  };
+
+  const onChangeLocation = (e: any, value: any, reason: any) => {
+    if (reason == "clear") {
+      setSelectedPolygon(null);
+      setLocation({ title: "All", _id: "1" });
+      setLanAndLattoMap(16.0725381, 80.3219856, 10);
       getFarmOptions({
         search_string: router.query.search_string as string,
         location: "" as string,
@@ -307,13 +330,7 @@ const HomePage = () => {
     if (value) {
       setSelectedPolygon(null);
       setLocation(value);
-      setLat(value.coordinates?.[0] || 12.0);
-      setLng(value?.coordinates?.[1] || 13.0);
-      setZoom(18);
-      setIsRendered(true);
-      setTimeout(() => {
-        setIsRendered(false);
-      }, 1);
+      setLanAndLattoMap(value.coordinates?.[0], value?.coordinates?.[1], 18);
       getFarmOptions({
         search_string: router.query.search_string as string,
         location: value?._id as string,
@@ -329,7 +346,6 @@ const HomePage = () => {
 
   //get the edit polygon details
   const editPolygonDetails = (value: any) => {
-    console.log("val", value.geometry.coordinates);
     let edit = value.geometry.coordinates;
     setEditPolyCoordinates(edit);
 
@@ -349,13 +365,26 @@ const HomePage = () => {
     setPolyCoordinates(updatedArray);
   };
 
-  useEffect(() => {
-    const markers: any = document.getElementsByClassName("leaflet-marker-icon");
-    markersRef.current = markers;
-    for (let i = 0; i < markers.length; i++) {
-      markers[i].src = "./marker.png";
+  const calculateCentroidForMarker = (coordinates: any) => {
+    let sumX = 0;
+    let sumY = 0;
+    const numPoints = coordinates.length;
+    if (numPoints == 0) {
+      return [];
+    } else {
+      coordinates.forEach((point: any) => {
+        sumX += point[0];
+        sumY += point[1];
+      });
+
+      const centroidX = sumX / numPoints;
+      const centroidY = sumY / numPoints;
+      return [centroidX || 0, centroidY || 0];
     }
-  }, []);
+  };
+  const addPolyToExisting = () => {
+    console.log("oiuh");
+  };
 
   useEffect(() => {
     if (router.isReady && accessToken) {
@@ -394,11 +423,13 @@ const HomePage = () => {
   }, [router.query.search_string]);
 
   return (
-    <div style={{ display: "flex" }}>
+    <div
+      style={{ display: "grid", gridTemplateColumns: "3fr 1fr", width: "100%" }}
+    >
       {!isrendered ? (
         <>
           <Fragment>
-            <div id="map-wrapper" style={{ height: "700px", width: "150vh" }}>
+            <div id="map-wrapper" style={{ width: "100%" }}>
               <MapContainer
                 center={[mapConfig?.lat, mapConfig?.lng]}
                 zoom={mapConfig?.zoom}
@@ -495,17 +526,35 @@ const HomePage = () => {
                     }
                   )}
                 </LayersControl>
-                {farmOptions?.map((polygon: any, index: any) => (
-                  <Polygon
-                    key={index}
-                    positions={polygon.coordinates}
-                    pathOptions={{
-                      color: "red",
-                      fillColor: "red",
-                      fillOpacity: 0.5,
-                    }}
-                  />
-                ))}
+                {farmOptions?.map((polygon: any, index: any) => {
+                  const center: any = calculateCentroidForMarker(
+                    polygon.coordinates.flat()
+                  );
+                  return (
+                    <div key={index}>
+                      <Polygon
+                        positions={polygon.coordinates}
+                        pathOptions={{
+                          color: "red",
+                          fillColor: "red",
+                          fillOpacity: 0.5,
+                        }}
+                      >
+                        {center?.length > 0 ? (
+                          <Marker position={center} icon={customMarkerIcon}>
+                            <Popup>
+                              <div>
+                                {polygon.title} - {polygon?.area}ar
+                              </div>
+                            </Popup>
+                          </Marker>
+                        ) : (
+                          ""
+                        )}
+                      </Polygon>
+                    </div>
+                  );
+                })}
               </MapContainer>
             </div>
           </Fragment>
@@ -513,7 +562,7 @@ const HomePage = () => {
       ) : (
         ""
       )}
-      <div style={{ width: "50vh" }}>
+      <div style={{ width: "100%" }}>
         <FarmsListBlock
           getFarmLocation={getFarmLocation}
           searchString={searchString}
@@ -528,8 +577,10 @@ const HomePage = () => {
           paginationDetails={paginationDetails}
           capturePageNum={capturePageNum}
           editPolygonDetails={editPolygonDetails}
+          addPolyToExisting={addPolyToExisting}
         />
       </div>
+      <Toaster richColors position="top-right" closeButton />
       <LoadingComponent loading={loading} />
     </div>
   );

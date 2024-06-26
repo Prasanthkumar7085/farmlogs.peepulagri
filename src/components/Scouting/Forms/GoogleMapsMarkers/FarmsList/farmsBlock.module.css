@@ -79,7 +79,7 @@
 }
 
 #listview {
-  height: calc(100vh - 220px);
+  height: calc(100vh - 155px);
   overflow-y: auto;
   gap: 0.35rem;
   margin: 1rem 0.5rem;

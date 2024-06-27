@@ -1,8 +1,7 @@
 import L from "leaflet";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import ReactDOM from "react-dom";
 import DrawTools from "./MapEditorSidebar/DrawTools";
-import RoomIcon from "@mui/icons-material/Room";
 // import { GlobalStateProvider, useGlobalState } from "./services/Store";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet/dist/leaflet.css";
@@ -14,19 +13,18 @@ import {
   Polygon,
   Popup,
   TileLayer,
-  Tooltip,
 } from "react-leaflet";
 
+import { Autocomplete, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import { Toaster, toast } from "sonner";
 import { prepareURLEncodedParams } from "../../../lib/requestUtils/urlEncoder";
 import getAllFarmsService from "../../../lib/services/FarmsService/getAllFarmsServiceMobile";
 import getFarmByIdService from "../../../lib/services/FarmsService/getFarmByIdService";
-import FarmsListBlock from "../Scouting/Forms/GoogleMapsMarkers/FarmsList/FarmsListBlock";
-import { Autocomplete, TextField } from "@mui/material";
 import getAllLocationsService from "../../../lib/services/Locations/getAllLocationsService";
 import LoadingComponent from "../Core/LoadingComponent";
-import { Toaster, toast } from "sonner";
+import FarmsListBlock from "../Scouting/Forms/GoogleMapsMarkers/FarmsList/FarmsListBlock";
 
 const MAP_PROVIDERS = {
   google: {
@@ -113,16 +111,16 @@ const HomePage = () => {
   typeof window !== "undefined";
 
   const getLocations = async (newLocationId = "") => {
+    console.log(newLocationId, "Fsdafds323232");
     try {
       const response = await getAllLocationsService(accessToken);
       if (response?.success) {
         setLocations(response?.data);
-        if (newLocationId) {
+        if (newLocationId || router.query.location_id) {
           const newLocationObject = response?.data?.find(
             (item: any) => item?._id == newLocationId
           );
           setLocation(newLocationObject);
-
           if (newLocationObject?.coordinates?.length > 0) {
             setLanAndLattoMap(
               newLocationObject?.coordinates[0],
@@ -382,8 +380,18 @@ const HomePage = () => {
       return [centroidX || 0, centroidY || 0];
     }
   };
-  const addPolyToExisting = () => {
-    console.log("oiuh");
+  const addPolyToExisting = (value: any) => {
+    setFarmId(value?._id);
+    getFarmOptions({
+      search_string: router.query.search_string as string,
+      location: value?.location_id?._id as string,
+      userId: router.query.user_id as string,
+      page: 1,
+      limit: 20,
+      sortBy: router.query.sort_by as string,
+      sortType: router.query.sort_type as string,
+      locationName: router.query.location_name,
+    });
   };
 
   useEffect(() => {
@@ -427,138 +435,133 @@ const HomePage = () => {
       style={{ display: "grid", gridTemplateColumns: "3fr 1fr", width: "100%" }}
     >
       {!isrendered ? (
-        <>
-          <Fragment>
-            <div id="map-wrapper" style={{ width: "100%" }}>
-              <MapContainer
-                center={[mapConfig?.lat, mapConfig?.lng]}
-                zoom={mapConfig?.zoom}
-              >
-                <div
-                  style={{
-                    position: "absolute",
+        <div id="map-wrapper" style={{ width: "100%" }}>
+          <MapContainer
+            center={[mapConfig?.lat, mapConfig?.lng]}
+            zoom={mapConfig?.zoom}
+          >
+            <DrawTools
+              getFarmOptions={getFarmOptions}
+              setPolygon={setPolygon}
+              setFarmLoactionDetails={setFarmLoactionDetails}
+              FarmlocationDetails={FarmlocationDetails}
+              setEditFarmsDetails={setEditFarmsDetails}
+              editPolyCoordinates={editPolyCoordinates}
+              setPolyCoordinates={setPolyCoordinates}
+              polyCoordinates={polyCoordinates}
+              farmId={farmId}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: "0",
+                left: "5%",
+                zIndex: 1000,
+              }}
+            >
+              <Autocomplete
+                disabled={
+                  editFarmDetails?._id || router.query.location_name
+                    ? true
+                    : false
+                }
+                sx={{
+                  width: "250px",
+                  maxWidth: "400px",
+                  // marginRight: "90px",
+                  "& .MuiInputBase-root": {
+                    // paddingBlock: "7px !important",
+                  },
+                  "& .MuiAutocomplete-endAdornment ": {
                     top: "0",
-                    left: "5%",
-                    zIndex: 1000,
-                  }}
-                >
-                  <Autocomplete
-                    disabled={
-                      editFarmDetails?._id || router.query.location_name
-                        ? true
-                        : false
-                    }
+                  },
+                }}
+                size="small"
+                fullWidth
+                noOptionsText="No such location"
+                value={location}
+                disableCloseOnSelect={false}
+                isOptionEqualToValue={(option: any, value: any) =>
+                  option.title === value.title
+                }
+                getOptionLabel={(option: any) => option.title}
+                options={locations?.length ? locations : []}
+                onChange={onChangeLocation}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Search by Farm locations"
+                    variant="outlined"
+                    size="small"
                     sx={{
-                      width: "250px",
-                      maxWidth: "400px",
-                      // marginRight: "90px",
+                      marginTop: "1rem",
                       "& .MuiInputBase-root": {
-                        // paddingBlock: "7px !important",
+                        fontSize: "clamp(.75rem, 0.83vw, 18px)",
+                        backgroundColor: "#fff",
+                        border: "none",
+                        borderRadius: "6px !important",
+                        // padding: "10px",
+                        marginBottom: "10px",
                       },
-                      "& .MuiAutocomplete-endAdornment ": {
-                        top: "0",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#fff !important",
+                        borderRadius: "6px !important",
                       },
                     }}
-                    size="small"
-                    fullWidth
-                    noOptionsText="No such location"
-                    value={location}
-                    disableCloseOnSelect={false}
-                    isOptionEqualToValue={(option: any, value: any) =>
-                      option.title === value.title
-                    }
-                    getOptionLabel={(option: any) => option.title}
-                    options={locations?.length ? locations : []}
-                    onChange={onChangeLocation}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="Search by Farm locations"
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                          marginTop: "1rem",
-                          "& .MuiInputBase-root": {
-                            fontSize: "clamp(.75rem, 0.83vw, 18px)",
-                            backgroundColor: "#fff",
-                            border: "none",
-                            borderRadius: "6px !important",
-                            // padding: "10px",
-                            marginBottom: "10px",
-                          },
-                          "& .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "#fff !important",
-                            borderRadius: "6px !important",
-                          },
-                        }}
-                      />
-                    )}
                   />
-                </div>
-                <DrawTools
-                  getFarmOptions={getFarmOptions}
-                  setPolygon={setPolygon}
-                  setFarmLoactionDetails={setFarmLoactionDetails}
-                  FarmlocationDetails={FarmlocationDetails}
-                  setEditFarmsDetails={setEditFarmsDetails}
-                  editPolyCoordinates={editPolyCoordinates}
-                  setPolyCoordinates={setPolyCoordinates}
-                  polyCoordinates={polyCoordinates}
-                  farmId={farmId}
-                />
-                <LayersControl position="topleft">
-                  {tiles.map(
-                    ({ attribution, checked, name, subdomains, url }) => {
-                      const tileLayerProps = {
-                        attribution,
-                        url,
-                        name,
-                      };
-                      return (
-                        <LayersControl.BaseLayer
-                          checked={!!checked}
-                          key={name}
-                          name={name}
-                        >
-                          <TileLayer maxNativeZoom={21} {...tileLayerProps} />
-                        </LayersControl.BaseLayer>
-                      );
-                    }
-                  )}
-                </LayersControl>
-                {farmOptions?.map((polygon: any, index: any) => {
-                  const center: any = calculateCentroidForMarker(
-                    polygon.coordinates.flat()
-                  );
-                  return (
-                    <div key={index}>
-                      <Polygon
-                        positions={polygon.coordinates}
-                        pathOptions={{
-                          color: "red",
-                          fillColor: "red",
-                          fillOpacity: 0.5,
-                        }}
-                      >
-                        {center?.length > 0 ? (
-                          <Marker position={center} icon={customMarkerIcon}>
-                            <Popup>
-                              <div>
-                                {polygon.title} - {polygon?.area}ar
-                              </div>
-                            </Popup>
-                          </Marker>
-                        ) : (
-                          ""
-                        )}
-                      </Polygon>
-                    </div>
-                  );
-                })}
-              </MapContainer>
+                )}
+              />
             </div>
-          </Fragment>
-        </>
+
+            <LayersControl position="topleft">
+              {tiles.map(({ attribution, checked, name, subdomains, url }) => {
+                const tileLayerProps = {
+                  attribution,
+                  url,
+                  name,
+                };
+                return (
+                  <LayersControl.BaseLayer
+                    checked={!!checked}
+                    key={name}
+                    name={name}
+                  >
+                    <TileLayer maxNativeZoom={21} {...tileLayerProps} />
+                  </LayersControl.BaseLayer>
+                );
+              })}
+            </LayersControl>
+            {farmOptions?.map((polygon: any, index: any) => {
+              const center: any = calculateCentroidForMarker(
+                polygon.coordinates.flat()
+              );
+              return (
+                <div key={index}>
+                  <Polygon
+                    positions={polygon.coordinates}
+                    pathOptions={{
+                      color: "red",
+                      fillColor: "red",
+                      fillOpacity: 0.5,
+                    }}
+                  >
+                    {center?.length > 0 ? (
+                      <Marker position={center} icon={customMarkerIcon}>
+                        <Popup>
+                          <div>
+                            {polygon.title} - {polygon?.area}ar
+                          </div>
+                        </Popup>
+                      </Marker>
+                    ) : (
+                      ""
+                    )}
+                  </Polygon>
+                </div>
+              );
+            })}
+          </MapContainer>
+        </div>
       ) : (
         ""
       )}

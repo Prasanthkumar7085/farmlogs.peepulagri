@@ -214,7 +214,6 @@ const FarmListCard = ({
                                   : "none",
                             }}
                             onClick={() => {
-                              console.log("coo", item.geometry?.coordinates);
                               getFarmLocation(
                                 item.geometry.coordinates,
                                 item._id

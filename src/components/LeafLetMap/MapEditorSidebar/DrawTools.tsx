@@ -85,7 +85,7 @@ const DrawTools = ({
     setDrawerOpen(true);
   };
 
-  const _onCreated = async (e: any) => {
+  const _onCreated = async (e: any, farmId: any) => {
     let type = e.layerType;
     let layer = e.layer;
     const layerGeoJson = layer.toGeoJSON();
@@ -121,14 +121,14 @@ const DrawTools = ({
       let afterRemoveingSpaces = placeName
         .split(",")[1]
         ?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, "");
+
       setFarmLoactionDetails({
         locationName: afterRemoveingSpaces,
         latlng: [lng, lat],
-        areaInAcres: areaAcres.toFixed(2),
+        areaInAcres: +areaAcres.toFixed(2),
         farm_id: farmId,
       });
     }
-
     setDrawerOpen(true);
   };
 
@@ -163,31 +163,23 @@ const DrawTools = ({
   const _onDrawStart = (e: any) => {
     console.log("_onDrawStart", e);
   };
-  const editControlRef: any = useRef(null);
-
-  // Function to start drawing polygon programmatically
-  const startDrawingPolygon = () => {
-    console.log(editControlRef, "what");
-    editControlRef.current.leafletElement._toolbars.draw._modes.polygon.handler.enable();
-  };
 
   return (
     <div>
       <FeatureGroup>
         <EditControl
-          ref={editControlRef}
           onDrawStart={_onDrawStart}
           position="topleft"
           onEdited={_onEdited}
-          onCreated={_onCreated}
+          onCreated={(e) => _onCreated(e, farmId)}
           onDeleted={_onDeleted}
           onEditStart={_onEditStart}
           draw={{
             polyline: false,
-            rectangle: true,
+            rectangle: farmId ? false : true,
             circle: false,
             circlemarker: false,
-            polygon: true,
+            polygon: farmId ? false : true,
             marker: false,
           }}
         />
@@ -206,9 +198,9 @@ const DrawTools = ({
           FarmlocationDetails={FarmlocationDetails}
           setEditFarmsDetails={setEditFarmsDetails}
           polyCoordinates={polyCoordinates}
+          farmId={farmId}
         />
       </div>
-      <button onClick={startDrawingPolygon}>Start Drawing Polygon</button>
     </div>
   );
 };

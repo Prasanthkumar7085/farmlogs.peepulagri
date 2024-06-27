@@ -33,7 +33,9 @@ const AddFarmDilog = ({
   googleSearch,
   FarmlocationDetails,
   setFarmLoactionDetails,
+  farmId,
 }: any) => {
+  console.log(FarmlocationDetails, "Fdsafsdfasd3e33232");
   const dispatch = useDispatch();
   const router = useRouter();
   const accessToken = useSelector(
@@ -137,7 +139,7 @@ const AddFarmDilog = ({
     const response = await editFarmService(
       editedData,
       accessToken,
-      FarmlocationDetails.farm_id as string
+      (FarmlocationDetails.farm_id as string) || farmId
     );
     detailsAfterResponse(response);
     setLoading(false);
@@ -157,7 +159,7 @@ const AddFarmDilog = ({
       },
     };
 
-    if (FarmlocationDetails.farm_id) {
+    if (FarmlocationDetails.farm_id || farmId) {
       edtiFarm(obj);
     } else {
       addFarm(obj);
@@ -190,7 +192,7 @@ const AddFarmDilog = ({
     setLoading(true);
 
     const response: any = await getFarmByIdService(
-      FarmlocationDetails.farm_id as string,
+      (FarmlocationDetails.farm_id as string) || farmId,
       accessToken as string
     );
 
@@ -226,7 +228,7 @@ const AddFarmDilog = ({
       setArea(FarmlocationDetails?.areaInAcres);
       setSearchInput(FarmlocationDetails?.locationName?.toUpperCase());
       getLocations("");
-      if (FarmlocationDetails.farm_id) {
+      if (FarmlocationDetails.farm_id || farmId) {
         getFarmDataById();
       }
     }

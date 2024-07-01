@@ -49,10 +49,6 @@ const FarmsListBlock = ({
   const [settingLocationLoading, setSettingLocationLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [pageNum, setPageNum] = useState<number | string>();
-  const [autocompleteCreated, setAutocompleteCreated] = useState(false);
-
-  const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
-
   const [location, setLocation] = useState<any>();
   const [locations, setLocations] = useState<any>([]);
   const accessToken = useSelector(

@@ -133,6 +133,7 @@ const DrawTools = ({
   };
 
   const _onDeleted = (e: any) => {
+    console.log(e, "T");
     let numDeleted = 0;
     e.layers.eachLayer((layer: any) => {
       numDeleted += 1;
@@ -176,10 +177,10 @@ const DrawTools = ({
           onEditStart={_onEditStart}
           draw={{
             polyline: false,
-            rectangle: farmId ? false : true,
+            rectangle: editPolyCoordinates?.length ? false : true,
             circle: false,
             circlemarker: false,
-            polygon: farmId ? false : true,
+            polygon: editPolyCoordinates?.length ? false : true,
             marker: false,
           }}
         />

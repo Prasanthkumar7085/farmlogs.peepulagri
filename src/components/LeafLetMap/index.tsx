@@ -111,7 +111,6 @@ const HomePage = () => {
   typeof window !== "undefined";
 
   const getLocations = async (newLocationId = "") => {
-    console.log(newLocationId, "Fsdafds323232");
     try {
       const response = await getAllLocationsService(accessToken);
       if (response?.success) {
@@ -273,8 +272,6 @@ const HomePage = () => {
     zoom: zoom,
   };
   const getFarmLocation = (value: any, id: any) => {
-    setEditPolyCoordinates(value);
-    setFarmId(id);
     const centroid = calculateCentroid(value);
     setLanAndLattoMap(centroid[0], centroid[1], 18);
   };
@@ -344,23 +341,10 @@ const HomePage = () => {
 
   //get the edit polygon details
   const editPolygonDetails = (value: any) => {
-    let edit = value.geometry.coordinates;
-    setEditPolyCoordinates(edit);
-
-    setRenderField(true);
-    setTimeout(() => {
-      setRenderField(false);
-    }, 100);
-
-    setViewPolygonsCoord([]);
-    setEditFarmsDetails(value);
-    let updatedArray = value?.geometry?.coordinates?.map((item: any) => {
-      return {
-        lat: item[0],
-        lng: item[1],
-      };
-    });
-    setPolyCoordinates(updatedArray);
+    setEditPolyCoordinates(value?.geometry?.coordinates);
+    setFarmId(value?._id);
+    const centroid = calculateCentroid(value?.geometry?.coordinates);
+    setLanAndLattoMap(centroid[0], centroid[1], 18);
   };
 
   const calculateCentroidForMarker = (coordinates: any) => {

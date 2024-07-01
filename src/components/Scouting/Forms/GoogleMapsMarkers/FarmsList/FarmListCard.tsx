@@ -145,30 +145,27 @@ const FarmListCard = ({
                         </IconButton>
                       </Tooltip>
                     ) : (
-                      // (
-                      //   <Tooltip title={"Edit farm"} followCursor>
-                      //     <IconButton
-                      //       sx={{
-                      //         padding: "0",
-                      //         display: editFarmDetails?._id ? "none" : "",
-                      //       }}
-                      //       onClick={() => {
-                      //         setSelectedPolygon(null);
-                      //         setEditFarmsDetails(null);
-                      //         dispatch(storeEditPolygonCoords([]));
-                      //         editPolygonDetails(item);
-                      //       }}
-                      //     >
-                      //       <Image
-                      //         alt=""
-                      //         src="/markers/marker-edit-icon.svg"
-                      //         width={15}
-                      //         height={15}
-                      //       />
-                      //     </IconButton>
-                      //   </Tooltip>
-                      // )
-                      ""
+                      <Tooltip title={"Edit farm"} followCursor>
+                        <IconButton
+                          sx={{
+                            padding: "0",
+                            display: editFarmDetails?._id ? "none" : "",
+                          }}
+                          onClick={() => {
+                            setSelectedPolygon(null);
+                            setEditFarmsDetails(item);
+                            dispatch(storeEditPolygonCoords([]));
+                            editPolygonDetails(item);
+                          }}
+                        >
+                          <Image
+                            alt=""
+                            src="/markers/marker-edit-icon.svg"
+                            width={15}
+                            height={15}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     )
                   ) : (
                     ""

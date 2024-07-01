@@ -25,6 +25,7 @@ import getFarmByIdService from "../../../lib/services/FarmsService/getFarmByIdSe
 import getAllLocationsService from "../../../lib/services/Locations/getAllLocationsService";
 import LoadingComponent from "../Core/LoadingComponent";
 import FarmsListBlock from "../Scouting/Forms/GoogleMapsMarkers/FarmsList/FarmsListBlock";
+import { Lan } from "@mui/icons-material";
 
 const MAP_PROVIDERS = {
   google: {
@@ -119,14 +120,12 @@ const HomePage = () => {
           const newLocationObject = response?.data?.find(
             (item: any) => item?._id == newLocationId
           );
+
           setLocation(newLocationObject);
-          if (newLocationObject?.coordinates?.length > 0) {
-            setLanAndLattoMap(
-              newLocationObject?.coordinates[0],
-              newLocationObject?.coordinates[1],
-              18
-            );
-          }
+          setIsRendered(true);
+          setTimeout(() => {
+            setIsRendered(false);
+          }, 1);
         }
       }
       if (response?.data?.length) {
@@ -221,6 +220,7 @@ const HomePage = () => {
           };
         });
         setFarmOptions(newData);
+        setEditPolyCoordinates([]);
       }
     } catch (err: any) {
       console.error(err);
@@ -271,9 +271,19 @@ const HomePage = () => {
     lng: lng,
     zoom: zoom,
   };
-  const getFarmLocation = (value: any, id: any) => {
+  const getFarmLocation = (value: any, item: any) => {
     const centroid = calculateCentroid(value);
     setLanAndLattoMap(centroid[0], centroid[1], 18);
+    getFarmOptions({
+      search_string: router.query.search_string as string,
+      location: item?.location_id?._id as string,
+      userId: router.query.user_id as string,
+      page: 1,
+      limit: 20,
+      sortBy: router.query.sort_by as string,
+      sortType: router.query.sort_type as string,
+      locationName: router.query.location_name,
+    });
   };
 
   const calculateCentroid = (coords: any) => {
@@ -366,6 +376,11 @@ const HomePage = () => {
   };
   const addPolyToExisting = (value: any) => {
     setFarmId(value?._id);
+    setLanAndLattoMap(
+      value?.location_id?.coordinates[0],
+      value?.location_id?.coordinates[1],
+      18
+    );
     getFarmOptions({
       search_string: router.query.search_string as string,
       location: value?.location_id?._id as string,
@@ -434,6 +449,7 @@ const HomePage = () => {
               setPolyCoordinates={setPolyCoordinates}
               polyCoordinates={polyCoordinates}
               farmId={farmId}
+              setFarmId={setFarmId}
             />
             <div
               style={{

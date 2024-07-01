@@ -87,7 +87,7 @@ const SideBarMenu = ({ children }: any) => {
     // },
     { src: "/calendaricon.svg", link: "/" },
     {
-      src: "/graph-icon.svg",
+      src: "/location-marker.svg",
       // link: "/",
       link: "/leaflet-map",
       isVisible: true,

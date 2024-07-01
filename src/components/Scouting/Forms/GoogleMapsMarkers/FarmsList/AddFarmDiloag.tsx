@@ -34,8 +34,8 @@ const AddFarmDilog = ({
   FarmlocationDetails,
   setFarmLoactionDetails,
   farmId,
+  setFarmId,
 }: any) => {
-  console.log(FarmlocationDetails, "Fdsafsdfasd3e33232");
   const dispatch = useDispatch();
   const router = useRouter();
   const accessToken = useSelector(
@@ -86,6 +86,7 @@ const AddFarmDilog = ({
       setLocation(null);
       setErrorMessages([]);
       setFarmLoactionDetails(null);
+      setFarmId(null);
       getFarmOptions({
         search_string: router.query.search_string as string,
         location: router.query.location_id as string,

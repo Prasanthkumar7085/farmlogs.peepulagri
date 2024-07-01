@@ -19,6 +19,7 @@ const DrawTools = ({
   setPolyCoordinates,
   polyCoordinates,
   farmId,
+  setFarmId,
 }: any) => {
   const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
 
@@ -121,7 +122,6 @@ const DrawTools = ({
       let afterRemoveingSpaces = placeName
         .split(",")[1]
         ?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, "");
-
       setFarmLoactionDetails({
         locationName: afterRemoveingSpaces,
         latlng: [lng, lat],
@@ -133,7 +133,6 @@ const DrawTools = ({
   };
 
   const _onDeleted = (e: any) => {
-    console.log(e, "T");
     let numDeleted = 0;
     e.layers.eachLayer((layer: any) => {
       numDeleted += 1;
@@ -200,6 +199,7 @@ const DrawTools = ({
           setEditFarmsDetails={setEditFarmsDetails}
           polyCoordinates={polyCoordinates}
           farmId={farmId}
+          setFarmId={setFarmId}
         />
       </div>
     </div>

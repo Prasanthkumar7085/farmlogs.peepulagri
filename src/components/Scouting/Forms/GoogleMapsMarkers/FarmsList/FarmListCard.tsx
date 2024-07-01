@@ -211,10 +211,7 @@ const FarmListCard = ({
                                   : "none",
                             }}
                             onClick={() => {
-                              getFarmLocation(
-                                item.geometry.coordinates,
-                                item._id
-                              );
+                              getFarmLocation(item.geometry.coordinates, item);
                             }}
                           >
                             <Image

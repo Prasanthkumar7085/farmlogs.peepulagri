@@ -169,10 +169,7 @@ const FarmsListBlock = ({
               if (e.target.value) {
                 setSearchString(e.target.value);
               } else {
-                setSearchString("");
-                let temp = { ...router.query };
-                delete temp.search_string;
-                router.push(temp);
+                setSearchString(e.target.value);
               }
             }}
             InputProps={{
@@ -193,9 +190,6 @@ const FarmsListBlock = ({
                       sx={{ cursor: "pointer" }}
                       onClick={() => {
                         setSearchString("");
-                        let temp = { ...router.query };
-                        delete temp.search_string;
-                        router.push(temp);
                       }}
                     >
                       <ClearIcon />

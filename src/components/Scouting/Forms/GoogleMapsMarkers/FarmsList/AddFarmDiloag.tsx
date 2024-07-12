@@ -311,7 +311,7 @@ const AddFarmDilog = ({
       getLocations(response?.data);
       setNewLocation("");
     } else if (response?.status == 422) {
-      toast.error(response?.errors?.title);
+      // toast.error(response?.errors?.title);
       setAlertMessage(response?.errors?.title);
       setAlertType(false);
     } else {

@@ -311,7 +311,7 @@ const HomePage = () => {
         setIsRendered(false);
       }, 1);
     } else {
-      toast.error("Location coordinates not found");
+      toast.error("Location not found");
     }
   };
 
@@ -411,10 +411,6 @@ const HomePage = () => {
       return () => clearTimeout(debounce);
     }
   }, [searchString, router.isReady, accessToken]);
-
-  useEffect(() => {
-    setSearchString(router.query.search_string as string);
-  }, [router.query.search_string]);
 
   useEffect(() => {
     if (router.isReady && accessToken) {

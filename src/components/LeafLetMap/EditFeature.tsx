@@ -19,8 +19,6 @@ const EditFeature = () => {
     e.layers.eachLayer((layer: any) => {
       numEdited += 1;
     });
-    console.log(`_onEdited: edited ${numEdited} layers`, e);
-
     // this._onChange();
   };
 
@@ -31,16 +29,9 @@ const EditFeature = () => {
     let layer = e.layer;
     if (type === "marker") {
       // Do marker specific actions
-      console.log("_onCreated: marker created", e);
     } else {
       console.log("_onCreated: something else created:", type, e);
     }
-
-    console.log("Geojson", layer.toGeoJSON());
-    console.log("coords", layer.getLatLngs());
-    // Do whatever else you need to. (save to db; etc)
-
-    // this._onChange();
   };
 
   const _onDeleted = (e: any) => {
@@ -48,8 +39,6 @@ const EditFeature = () => {
     e.layers.eachLayer((layer: any) => {
       numDeleted += 1;
     });
-    console.log(`onDeleted: removed ${numDeleted} layers`, e);
-
     // this._onChange();
   };
 
@@ -77,20 +66,6 @@ const EditFeature = () => {
     console.log("_onDrawStart", e);
   };
 
-  /*onEdited	function	hook to leaflet-draw's draw:edited event
-onCreated	function	hook to leaflet-draw's draw:created event
-onDeleted	function	hook to leaflet-draw's draw:deleted event
-onMounted	function	hook to leaflet-draw's draw:mounted event
-onEditStart	function	hook to leaflet-draw's draw:editstart event
-onEditStop	function	hook to leaflet-draw's draw:editstop event
-onDeleteStart	function	hook to leaflet-draw's draw:deletestart event
-onDeleteStop	function	hook to leaflet-draw's draw:deletestop event
-onDrawStart	function	hook to leaflet-draw's draw:drawstart event
-onDrawStop	function	hook to leaflet-draw's draw:drawstop event
-onDrawVertex	function	hook to leaflet-draw's draw:drawvertex event
-onEditMove	function	hook to leaflet-draw's draw:editmove event
-onEditResize	function	hook to leaflet-draw's draw:editresize event
-onEditVertex	function	hook to leaflet-draw's draw:editvertex event*/
   return (
     <FeatureGroup>
       <EditControl

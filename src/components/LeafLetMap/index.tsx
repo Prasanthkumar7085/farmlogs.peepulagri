@@ -98,13 +98,13 @@ const HomePage = () => {
   const [data, setData] = useState<any>();
   const [farmData, setFarmData] = useState<any>([]);
   const [paginationDetails, setPaginationDetails] = useState<any>();
-  const [lat, setLat] = useState<any>(15.2161);
-  const [lng, setLng] = useState<any>(79.9049);
-  const [zoom, setZoom] = useState<any>(5);
+  const [lat, setLat] = useState<any>(16.0725381);
+  const [lng, setLng] = useState<any>(80.3219856);
+  const [zoom, setZoom] = useState<any>(14);
   const [isrendered, setIsRendered] = useState(false);
   const [editPolyCoordinates, setEditPolyCoordinates] = useState<any>();
   const [polyCoordinates, setPolyCoordinates] = useState<any>([]);
-  const [farmId, setFarmId] = useState<any>();
+  const [farmId, setFarmId] = useState<any>(null);
   const [location, setLocation] = useState<any>();
   const markersRef: any = useRef([]);
 
@@ -377,8 +377,8 @@ const HomePage = () => {
   const addPolyToExisting = (value: any) => {
     setFarmId(value?._id);
     setLanAndLattoMap(
-      value?.location_id?.coordinates[0],
-      value?.location_id?.coordinates[1],
+      value?.location_id?.coordinates?.[0],
+      value?.location_id?.coordinates?.[1],
       18
     );
     getFarmOptions({
@@ -450,6 +450,7 @@ const HomePage = () => {
               polyCoordinates={polyCoordinates}
               farmId={farmId}
               setFarmId={setFarmId}
+              setLanAndLattoMap={setLanAndLattoMap}
             />
             <div
               style={{
@@ -526,7 +527,7 @@ const HomePage = () => {
                     key={name}
                     name={name}
                   >
-                    <TileLayer maxNativeZoom={21} {...tileLayerProps} />
+                    <TileLayer maxNativeZoom={23} {...tileLayerProps} />
                   </LayersControl.BaseLayer>
                 );
               })}
@@ -581,6 +582,10 @@ const HomePage = () => {
           capturePageNum={capturePageNum}
           editPolygonDetails={editPolygonDetails}
           addPolyToExisting={addPolyToExisting}
+          setFarmId={setFarmId}
+          setEditPolyCoordinates={setEditPolyCoordinates}
+          setFarmLoactionDetails={setFarmLoactionDetails}
+          setLanAndLattoMap={setLanAndLattoMap}
         />
       </div>
       <Toaster richColors position="top-right" closeButton />

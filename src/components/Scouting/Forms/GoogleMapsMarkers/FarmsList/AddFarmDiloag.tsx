@@ -35,6 +35,7 @@ const AddFarmDilog = ({
   setFarmLoactionDetails,
   farmId,
   setFarmId,
+  setLanAndLattoMap,
 }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -85,8 +86,9 @@ const AddFarmDilog = ({
       setNewLocation("");
       setLocation(null);
       setErrorMessages([]);
-      setFarmLoactionDetails(null);
+      setFarmLoactionDetails({});
       setFarmId(null);
+      setLanAndLattoMap(16.0725381, 80.3219856, 10);
       getFarmOptions({
         search_string: router.query.search_string as string,
         location: router.query.location_id as string,
@@ -201,8 +203,6 @@ const AddFarmDilog = ({
       setData(response.data);
       setTitle(response?.data?.title);
       const locationFromResponse = response?.data?.location_id;
-      // const locationObjFromResponse = locationFromResponse.find((item: {name:string,_id:string})=>item.name==locationFromResponse);
-      // setLocation(locationObjFromResponse);
       await getLocations(locationFromResponse);
       if (
         FarmlocationDetails?.areaInAcres ||
@@ -549,6 +549,9 @@ const AddFarmDilog = ({
                     setNewLocation("");
                     setLocation(null);
                     setErrorMessages([]);
+                    setFarmLoactionDetails({});
+                    setFarmId(null);
+                    setLanAndLattoMap(16.0725381, 80.3219856, 10);
                     if (!FarmlocationDetails.farm_id) {
                       setEditFarmsDetails(null);
                     }

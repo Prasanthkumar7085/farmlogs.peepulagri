@@ -20,6 +20,7 @@ const DrawTools = ({
   polyCoordinates,
   farmId,
   setFarmId,
+  setLanAndLattoMap,
 }: any) => {
   const polygonCoords = useSelector((state: any) => state.farms.polygonCoords);
 
@@ -122,6 +123,7 @@ const DrawTools = ({
       let afterRemoveingSpaces = placeName
         .split(",")[1]
         ?.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/g, "");
+
       setFarmLoactionDetails({
         locationName: afterRemoveingSpaces,
         latlng: [lng, lat],
@@ -129,6 +131,7 @@ const DrawTools = ({
         farm_id: farmId,
       });
     }
+
     setDrawerOpen(true);
   };
 
@@ -161,7 +164,7 @@ const DrawTools = ({
   };
 
   const _onDrawStart = (e: any) => {
-    console.log("_onDrawStart", e);
+    // console.log("_onDrawStart", e);
   };
 
   return (
@@ -200,6 +203,7 @@ const DrawTools = ({
           polyCoordinates={polyCoordinates}
           farmId={farmId}
           setFarmId={setFarmId}
+          setLanAndLattoMap={setLanAndLattoMap}
         />
       </div>
     </div>

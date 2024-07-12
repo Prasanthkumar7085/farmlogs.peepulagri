@@ -36,12 +36,10 @@ const FarmsListBlock = ({
   farmOptionsLoading,
   paginationDetails,
   capturePageNum,
-  setAddPolygonOpen,
-  drawingOpen,
-  setDrawingOpen,
-  stopDrawingMode,
-  closeDrawing,
-  clearAllPoints,
+  setFarmId,
+  setEditPolyCoordinates,
+  setFarmLoactionDetails,
+  setLanAndLattoMap,
 }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -234,6 +232,10 @@ const FarmsListBlock = ({
           getFarmDataById={getFarmDataById}
           addPolyToExisting={addPolyToExisting}
           farmOptionsLoading={farmOptionsLoading}
+          setFarmId={setFarmId}
+          setEditPolyCoordinates={setEditPolyCoordinates}
+          setFarmLoactionDetails={setFarmLoactionDetails}
+          setLanAndLattoMap={setLanAndLattoMap}
         />
       </div>
       <div className={styles.buttoncontainer}>

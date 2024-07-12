@@ -26,6 +26,10 @@ const FarmListCard = ({
   getFarmDataById,
   addPolyToExisting,
   farmOptionsLoading,
+  setFarmId,
+  setEditPolyCoordinates,
+  setFarmLoactionDetails,
+  setLanAndLattoMap,
 }: any) => {
   const dispatch = useDispatch();
   const accessToken = useSelector(
@@ -122,6 +126,9 @@ const FarmListCard = ({
                           onClick={() => {
                             setSelectedPolygon(null);
                             setEditFarmsDetails(null);
+                            setFarmId(null);
+                            setEditPolyCoordinates([]);
+                            setFarmLoactionDetails({});
                             dispatch(storeEditPolygonCoords([]));
                             getFarmOptions({
                               search_string: router.query
@@ -134,6 +141,7 @@ const FarmListCard = ({
                               sortType: router.query.sort_type as string,
                               locationName: router.query.location_name,
                             });
+                            setLanAndLattoMap(16.0725381, 80.3219856, 10);
                           }}
                         >
                           <Image
@@ -180,6 +188,11 @@ const FarmListCard = ({
                       onClick={() => {
                         setDeleteDialogOpen(true);
                         setDeleteID(item?._id);
+                        setLanAndLattoMap(
+                          item?.geometry?.coordinates[0][0],
+                          item?.geometry?.coordinates[0][1],
+                          18
+                        );
                       }}
                     >
                       <Image
@@ -240,6 +253,10 @@ const FarmListCard = ({
                               sortType: router.query.sort_type as string,
                               locationName: router.query.location_name,
                             });
+                            setFarmId(null);
+                            setEditPolyCoordinates([]);
+                            setFarmLoactionDetails({});
+                            setLanAndLattoMap(16.0725381, 80.3219856, 10);
                           }}
                         >
                           <Image
@@ -256,9 +273,11 @@ const FarmListCard = ({
                               padding: "0",
                               marginRight: "0.5rem",
                               color: "#45A845",
+                              display: editFarmDetails?._id ? "none" : "",
                             }}
                             onClick={() => {
                               addPolyToExisting(item);
+                              setEditFarmsDetails(item);
                             }}
                           >
                             +

@@ -451,9 +451,8 @@ const MobileGoogleMarkers = () => {
     customAutocompleteDiv.appendChild(icon);
 
     map.controls[maps.ControlPosition.TOP_LEFT].push(customAutocompleteDiv);
-    // Create Autocomplete for input field
     const autocomplete = new maps.places.Autocomplete(searchInput, {
-      placeAutocompleteOptions: { strictBounds: false }, // Setting strictBounds to true removes the attribution
+      placeAutocompleteOptions: { strictBounds: false },
     });
 
     const onPlaceChanged = () => {

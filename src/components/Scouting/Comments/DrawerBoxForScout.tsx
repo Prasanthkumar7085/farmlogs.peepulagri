@@ -135,7 +135,6 @@ const DrawerComponentForScout = ({
       if (responseData.success == true) {
         getAllScoutComments();
         toast.success(responseData?.message);
-
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -168,7 +167,6 @@ const DrawerComponentForScout = ({
       if (responseData.success == true) {
         getAllScoutComments();
         toast.success(responseData?.message);
-
       } else if (responseData?.statusCode == 403) {
         await logout();
       }
@@ -238,9 +236,12 @@ const DrawerComponentForScout = ({
       open={openCommentsBox}
       sx={{
         zIndex: "1300 !important",
-        '& .MuiPaper-root': {
-          width: "100%", maxWidth: "500px", margin: "0 auto", borderRadius: "20px 20px 0 0 "
-        }
+        "& .MuiPaper-root": {
+          width: "90%",
+          maxWidth: "300px",
+          margin: "0 auto",
+          borderRadius: "20px 20px 0 0 ",
+        },
       }}
     >
       <div

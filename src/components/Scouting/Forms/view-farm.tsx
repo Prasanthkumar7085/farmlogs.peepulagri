@@ -14,6 +14,7 @@ import deleteFarmService from "../../../../lib/services/FarmsService/deleteFarmS
 import getFarmByIdService from "../../../../lib/services/FarmsService/getFarmByIdService";
 import styles from "./view-farm.module.css";
 import GoogleMapViewComponent from "./GoogleMapsPolygon/GooglePolygonView";
+import { getSingleMapDetailsAPI, getPlaceDetailsAPI } from "@/services/maps"; // Adjust imports as per your API services
 
 const ViewFarmPage = () => {
   const router = useRouter();
@@ -113,7 +114,7 @@ const ViewFarmPage = () => {
 
   // Crop.svg
   return (
-    <div >
+    <div>
       <div className={styles.header} id="header">
         <img
           className={styles.iconsiconArrowLeft}
@@ -174,7 +175,6 @@ const ViewFarmPage = () => {
                       gap: "0.5rem",
                       minHeight: "inherit",
                       fontFamily: "'Inter', sans-serif",
-
                     },
                   }}
                 >
@@ -271,7 +271,6 @@ const ViewFarmPage = () => {
           {/* <div style={{ marginTop: "20px", height: "40vh" }}>
             <GoogleMapViewComponent />
           </div> */}
-
         </div>
       ) : (
         ""
